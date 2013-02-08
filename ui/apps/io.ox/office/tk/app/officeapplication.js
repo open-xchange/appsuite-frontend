@@ -23,6 +23,20 @@ define('io.ox/office/tk/app/officeapplication',
     // private static functions ===============================================
 
     /**
+     * Returns the document type from the passed application module name.
+     * The document type equals the last directory name of the module name.
+     *
+     * @param {String} moduleName
+     *  The application module name.
+     *
+     * @returns {String}
+     *  The document type of the passed module name.
+     */
+    function getDocumentType(moduleName) {
+        return moduleName.substr(moduleName.lastIndexOf('/') + 1);
+    }
+
+    /**
      * Tries to find a running application which is working on a file described
      * in the passed options object.
      *
@@ -83,7 +97,12 @@ define('io.ox/office/tk/app/officeapplication',
         var // the icon shown in the top bar launcher
             icon = Utils.getStringOption(launchOptions, 'icon', ''),
             // the base application object
-            app = ox.ui.createApp({ name: moduleName, userContent: icon.length > 0, userContentIcon: icon });
+            app = ox.ui.createApp({
+                name: moduleName,
+                userContent: icon.length > 0,
+                userContentIcon: icon,
+                userContentClass: getDocumentType(moduleName) + '-launcher'
+            });
 
         // mix-in constructor for additional application methods
         ApplicationClass.call(app, launchOptions);
@@ -281,6 +300,19 @@ define('io.ox/office/tk/app/officeapplication',
         }
 
         // public methods -----------------------------------------------------
+
+        /**
+         * Returns the document type supported by this application. The
+         * document type equals the directory name of the application.
+         *
+         * @returns {String}
+         *  The document type of this application.
+         */
+        this.getDocumentType = function () {
+            var name = this.getName(),
+                pos = name.lastIndexOf('/');
+            return name.substr(pos + 1);
+        };
 
         /**
          * Returns the document model instance of this application.
