@@ -430,6 +430,7 @@ $(window).load(function () {
                     appendSession: (cacheKey === 'userconfig')
                 })
                 .done(function (data) {
+                    serverUp = false;
                     configCache.add(cacheKey, data);
                     updateServerConfig(data);
                     def.resolve();
@@ -438,6 +439,7 @@ $(window).load(function () {
                     getCachedServerConfig(configCache, cacheKey, def);
                 });
             } else {
+                serverUp = true; // kinda
                 getCachedServerConfig(configCache, cacheKey, def);
             }
         }).fail(function () {
@@ -465,6 +467,16 @@ $(window).load(function () {
         $('#background_loader').idle().fadeOut(DURATION);
     }
 
+    // TODO: This might have to be removed when we have a good offline mode
+    var serverUp = false;
+    setTimeout(function () {
+        if (!serverUp) {
+            serverDown();
+        }
+    }, 6000);
+
+    
+
     /**
      * Auto login
      */
@@ -482,14 +494,6 @@ $(window).load(function () {
                     return require([ox.base + '/pre-core.js']);
                 });
             });
-        }
-        var serverUp = false;
-        if (Modernizr.IE) {
-            setTimeout(function () {
-                if (!serverUp) {
-                    serverDown();
-                }
-            }, 6000);
         }
 
         require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
