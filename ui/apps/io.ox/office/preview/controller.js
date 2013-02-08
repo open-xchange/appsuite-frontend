@@ -32,7 +32,10 @@ define('io.ox/office/preview/controller',
      */
     function PreviewController(app) {
 
-        var // all the little controller items
+        var // self reference
+            self = this,
+
+            // all the little controller items
             items = {
 
                 'pages/first': {
@@ -76,7 +79,7 @@ define('io.ox/office/preview/controller',
 
         // register item definitions
         this.registerDefinitions(items)
-            .registerDoneHandler(function () { view.grabFocus(); });
+            .registerDoneHandler(function () { self.getView().grabFocus(); });
 
     } // class PreviewController
 
