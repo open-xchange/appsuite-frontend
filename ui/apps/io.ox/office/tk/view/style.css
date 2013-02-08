@@ -698,15 +698,21 @@ i[class^="icon-"], i[class^=" icon-"] {
 }
 
 /* ========================================================================= */
+
+} /* end of .io-ox-office-main */
+
+/* ========================================================================= */
 /* alerts                                                                    */
 /* ========================================================================= */
 
-.alert {
+body .window-body .window-content.io-ox-office-main .alert {
     position: absolute;
     .box-sizing(border-box);
+    top: 0;
     left: 0;
     right: 0;
-    top: 0;
+    width: auto;
+    margin: 0;
     padding: 4px 13px;
     z-index: 100;
     .border-radius(0);
@@ -729,7 +735,3 @@ i[class^="icon-"], i[class^=" icon-"] {
         right: 0;
     }
 }
-
-/* ========================================================================= */
-
-} /* end of .io-ox-office-main */
