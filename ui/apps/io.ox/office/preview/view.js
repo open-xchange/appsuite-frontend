@@ -66,6 +66,13 @@ define('io.ox/office/preview/view',
             self.insertContentNode(app.getModel().getNode());
         }
 
+        // methods ------------------------------------------------------------
+
+        this.grabFocus = function () {
+            app.getModel().getNode().focus();
+            return this;
+        };
+
         // initialization -----------------------------------------------------
 
         // initialization after construction

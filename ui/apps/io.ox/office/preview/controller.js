@@ -75,7 +75,8 @@ define('io.ox/office/preview/controller',
         // initialization -----------------------------------------------------
 
         // register item definitions
-        this.registerDefinitions(items);
+        this.registerDefinitions(items)
+            .registerDoneHandler(function () { view.grabFocus(); });
 
     } // class PreviewController
 

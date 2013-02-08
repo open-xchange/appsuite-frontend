@@ -30,7 +30,7 @@ define('io.ox/office/preview/model',
     function PreviewModel(app) {
 
         var // the root node containing the previewed document
-            node = $('<div>').addClass('page');
+            node = $('<div>', { tabindex: 0 }).addClass('page');
 
         // base constructor ---------------------------------------------------
 
