@@ -24,7 +24,7 @@ function () {
         endTime: 18,
         defaultReminder: 15,
         viewView: 'week:workweek',
-        showDeclinedAppointments: false,
+        showDeclinedAppointments: true,
         notifyNewModifiedDeleted: true,
         notifyAcceptedDeclinedAsCreator: false,
         notifyAcceptedDeclinedAsParticipant: false,
