@@ -42,7 +42,7 @@ define("io.ox/mail/main",
             if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 //sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
-                app.saveSortSettings('sort', option);
+                app.updateGridSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
@@ -66,10 +66,9 @@ define("io.ox/mail/main",
         right,
         scrollpane;
 
-    //for saving the persistent settings
-    app.saveSortSettings = function (type, value) {
-        settings.set(type, value);
-        settings.save();
+    // for saving the persistent settings
+    app.updateGridSettings = function (type, value) {
+        settings.set('vgrid/' + type, value).save();
     };
 
     // launcher
@@ -110,10 +109,9 @@ define("io.ox/mail/main",
         var options = ext.point('io.ox/mail/vgrid/options').options();
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
-
+        options.editable = settings.get('vgrid/editable', true);
 
         grid = new VGrid(left, options);
-
 
         // add template
         grid.addTemplate(tmpl.main);
@@ -124,7 +122,7 @@ define("io.ox/mail/main",
         sortSettings.unread = settings.get('unread', false);
         sortSettings.order = settings.get('order', 'desc');
 
-        if (sortSettings.sort === 'thread' && options.threadView === false) {//check if folder actually supports threadview
+        if (sortSettings.sort === 'thread' && options.threadView === false) { //check if folder actually supports threadview
             sortSettings.sort = '610';
         }
 
@@ -132,13 +130,15 @@ define("io.ox/mail/main",
         grid.prop('sort', sortSettings.sort)
             .prop('order', sortSettings.order)
             .prop('unread', sortSettings.unread);
-        //temp variable not needed anymore
+        // temp variable not needed anymore
         sortSettings = null;
 
-        //sort property is special and needs special handling because of the auto toggling if threadview is not uspported
-        //look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) {app.saveSortSettings('unread', value); });
-        grid.on('change:prop:order', function (e, value) {app.saveSortSettings('order', value); });
+        // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
+        // look into hToolbarOptions function for this
+        grid.on('change:prop:unread', function (e, value) { app.updateGridSettings('unread', value); });
+        grid.on('change:prop:order', function (e, value) { app.updateGridSettings('order', value); });
+        grid.on('change:prop:editable', function (e, value) { app.updateGridSettings('editable', value); });
+
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);

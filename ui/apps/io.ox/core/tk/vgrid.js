@@ -322,11 +322,9 @@ define('io.ox/core/tk/vgrid',
             // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
             mult = Modernizr.touch ? 6 : 3,
             // properties
-            props = {},
+            props = { editable: false },
             // shortcut
             isArray = _.isArray,
-            // edit mode
-            editable = false,
             // private methods
             scrollToLabel,
             hScrollToLabel,
@@ -958,18 +956,18 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getEditable = function () {
-            return editable;
+            return this.prop('editable');
         };
 
         this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
                 this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
-                editable = true;
+                this.prop('editable', true);
             } else {
                 node.removeClass('editable');
                 this.selection.setEditable(false);
-                editable = false;
+                this.prop('editable', false);
             }
         };
 
