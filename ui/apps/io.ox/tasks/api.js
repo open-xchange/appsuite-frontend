@@ -105,14 +105,59 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                      timezone: 'UTC'},
             data: task,
             appendColumns: false
+        }).done(function (response) {
+            api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
+            return response;
         });
     };
     
     api.checkForNotifications = function (ids, modifications) {
+        if (modifications.folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
+            api.getTasks();
+            require(['io.ox/core/api/reminder'], function (reminderApi) {
+                reminderApi.getReminders();
+            });
+            return;
+        }
+        
         var addArray = [],
             removeArray = [];
         if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
             modifications.status = parseInt(modifications.status, 10);
+        }
+        
+        if (modifications.participants) {
+            var myId = configApi.get('identifier'),
+                triggered = false;
+            _(modifications.participants).each(function (obj) { //user is added to a task
+                if (obj.id === myId) {
+                    triggered = true;
+                    api.getTasks();
+                }
+            });
+            //get all data if not already triggered
+            if (!triggered) {
+                api.get(ids[0]).done(function (data) {//only occurs if only one task is given
+                    if (data.participants.length > 0) {//all participants are removed
+                        api.trigger('remove-task-confirmation-notification', ids);
+                    } else {
+                        _(data.participants).each(function (obj) {
+                            if (obj.id === myId) { //user is in participants so there must already be a notification
+                                triggered = true;
+                            }
+                        });
+                        if (!triggered) { //user is not in participants anymore
+                            api.trigger('remove-task-confirmation-notification', ids);
+                        }
+                    }
+                });
+            }
+        }
+        
+        if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
+            require(['io.ox/core/api/reminder'], function (reminderApi) {
+                reminderApi.getReminders();
+            });
         }
         //check overdue
         if (modifications.status === 3 || modifications.end_date === null) {
@@ -159,6 +204,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 if (useFolder === undefined) {//if no folder is given use default
                     useFolder = api.getDefaultFolder();
                 }
+                
+                if (task.status === 3 || task.status === '3') {
+                    task.date_completed = _.now();
+                } else if (task.status !== 3 && task.status !== '3') {
+                    task.date_completed = null;
+                }
+                
                 var key = useFolder + '.' + task.id;
                 return http.PUT({
                     module: 'tasks',
@@ -295,7 +347,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     //for notification view
     api.getTasks = function () {
 
-        return http.GET({
+        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed (lots of requests)
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),

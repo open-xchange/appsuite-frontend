@@ -339,9 +339,11 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderApi
-                .on('reminder-calender', function (e, reminder) {
-                    var tmp = [];
-                    _(reminder).each(function (remObj) {
+                .on('reminder-calendar', function (e, reminder) {
+                    var tmp = [],
+                        counter = reminder.length;
+                    
+                    _(reminder).each(function (remObj, index) {
                         var obj = {
                             id: remObj.target_id,
                             folder: remObj.folder,
@@ -357,14 +359,18 @@ define('plugins/notifications/calendar/register',
                                 remdata: remObj,
                                 caldata: data
                             };
-
+                            
                             // do not add user suppressed ('remind me later') reminders
                             if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                 tmp.push(inObj);
                             }
+                            counter--;
+                            
+                            if (counter === 0) {//all data processed. Update Collection
+                                ReminderNotifications.collection.reset(tmp);
+                            }
                         });
                     });
-                    ReminderNotifications.collection.reset(tmp);
                 })
                 .on('remove-calendar-notifications', removeReminders)
                 .getReminders();

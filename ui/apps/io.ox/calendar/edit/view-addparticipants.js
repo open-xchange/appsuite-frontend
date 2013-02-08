@@ -59,7 +59,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                         // updating baton-data-node
                         self.trigger('update');
                         var baton = $.data(self.$el, 'baton') || {list: []},
-                            hash = {};
+                            hash = {},
+                            list;
                         _(baton.list).each(function (obj) {
                             // handle contacts/external contacts
                             if (obj.type === 1 || obj.type === 5) {
@@ -72,7 +73,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                         });
 
                         // filter doublets
-                        data = _(data).filter(function (recipient) {
+                        list = _(data).filter(function (recipient) {
                             var type;
                             switch (recipient.type) {
                             case 'user':
@@ -89,7 +90,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                             return !hash[type + '|' + recipient.data.id] && !hash[type + '|' + recipient.data.internal_userid || ''] && !hash[recipient.email];
                         });
 
-                        return data;
+                        //return number of query hits and the filtered list
+                        return { list: list, hits: data.length };
                     },
                     draw: function (obj) {
                         if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {

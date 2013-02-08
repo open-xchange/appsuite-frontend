@@ -28,12 +28,15 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         }
     };
 
+    var getParts = function (key) {
+        return _.isArray(key) ? key : String(key).split(/\//);
+    };
+
     var get = function (source, path, defaultValue) {
         // no argument?
         if (path === undefined) { return clone(source); }
         // get parts
-        var key = String(path),
-            parts = key.split(/\//), tmp = clone(source) || {};
+        var key, parts = getParts(path), tmp = clone(source) || {};
         while (parts.length) {
             key = parts.shift();
             tmp = tmp[key];
@@ -64,8 +67,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         };
 
         this.contains = function (path) {
-            var key = String(path),
-                parts = key.split(/\//), tmp = tree || {};
+            var key, parts = getParts(path), tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
                 if (parts.length) {
@@ -81,9 +83,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         };
 
         var resolve = function (path, callback, create) {
-            var key = String(path),
-                parts = key.split(/\//),
-                tmp = tree || {};
+            var key, parts = getParts(path), tmp = tree || {};
             while (parts.length) {
                 key = parts.shift();
                 if (_.isObject(tmp)) {

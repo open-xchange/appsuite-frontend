@@ -56,6 +56,8 @@ define("io.ox/core/main",
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     // whatever ...
+    gt('Portal');
+    gt('Mail');
     gt('Address Book');
     gt('Calendar');
     gt('Tasks');

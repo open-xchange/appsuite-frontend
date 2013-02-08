@@ -111,7 +111,7 @@ define("io.ox/mail/main",
         var options = ext.point('io.ox/mail/vgrid/options').options();
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
-        
+
 
         grid = new VGrid(left, options);
 

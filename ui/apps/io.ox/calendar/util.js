@@ -602,15 +602,16 @@ define("io.ox/calendar/util",
                         returnArray.push({
                             display_name: single.display_name,
                             folder_id: single.folder_id,
-                            id: single.id,
+                            id: single.contact_id,
                             mail: single.email1,
                             mail_field: 1
                         });
                     }
                 });
+                def.resolve({distribution_list: returnArray});
             });
 
-            def.resolve({distribution_list: returnArray});
+
         }
     };
 

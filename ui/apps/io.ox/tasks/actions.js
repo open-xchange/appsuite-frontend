@@ -109,13 +109,15 @@ define('io.ox/tasks/actions',
         if (state === 3) {
             mods = {label: gt('Undone'),
                     data: {status: 1,
-                           percent_completed: 0
+                           percent_completed: 0,
+                           date_completed: null
                           }
                    };
         } else {
             mods = {label: gt('Done'),
                     data: {status: 3,
-                           percent_completed: 100
+                           percent_completed: 100,
+                           date_completed: _.now()
                           }
                    };
         }
@@ -127,7 +129,7 @@ define('io.ox/tasks/actions',
                             //update detailview
                             api.trigger('update:' + encodeURIComponent(item.folder_id + '.' + item.id));
                         });
-                        
+
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
@@ -161,7 +163,7 @@ define('io.ox/tasks/actions',
                     function (dialogs, views, api) {
                 //build popup
                 var popup = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text('Move'))
+                    .header($('<h3>').text(gt('Move')))
                     .addPrimaryButton('ok', gt('Move'))
                     .addButton('cancel', gt('Cancel'));
                 popup.getBody().css({ height: '250px' });
@@ -201,7 +203,7 @@ define('io.ox/tasks/actions',
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/confirm', {
         id: 'confirm',
         requires: function (args) {
@@ -410,7 +412,7 @@ define('io.ox/tasks/actions',
                                 modifications = {end_date: endDate.getTime(),
                                                  id: e.data.task.id,
                                                  folder_id: e.data.task.folder_id || e.data.task.folder};
-                            
+
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -458,7 +460,7 @@ define('io.ox/tasks/actions',
         label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'confirm',
         index: 600,

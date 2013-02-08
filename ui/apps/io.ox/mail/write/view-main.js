@@ -203,15 +203,19 @@ define("io.ox/mail/write/view-main",
                     .autocomplete({
                         api: autocompleteAPI,
                         reduce: function (data) {
+                            var hash = {},
+                                list;
                             // remove duplicates
-                            var hash = {};
                             node.find('input[name=' + id + ']').map(function () {
                                 var rcpt = mailUtil.parseRecipient($(this).val())[1];
                                 hash[rcpt] = true;
                             });
-                            return _(data).filter(function (o) {
+                            list = _(data).filter(function (o) {
                                 return hash[o.email] === undefined;
                             });
+
+                            //return number of query hits and the filtered list
+                            return { list: list, hits: data.length };
                         },
                         stringify: function (data) {
                             return data.display_name ?
@@ -263,6 +267,10 @@ define("io.ox/mail/write/view-main",
                                 primaryaddress: alias,
                                 displayname: aliases[0]
                             });
+                            // this code runs after setFrom in main.js, so we need to pre-select here
+                            if (alias === settings.get('defaultSendAddress')) {
+                                option.attr('selected', 'selected');
+                            }
                             select.append(option);
                         });
                     });
@@ -479,7 +487,7 @@ define("io.ox/mail/write/view-main",
             };
 
             if (!Modernizr.touch) {
-                var format = settings.get('messageFormat');
+                var format = settings.get('messageFormat', 'html');
                 this.addSection('format', gt('Text format'), true, false)
                     .append(
                         $('<div>').addClass('change-format').append(
@@ -490,13 +498,8 @@ define("io.ox/mail/write/view-main",
                             $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
                             $('<a>', { href: '#' })
                                 .text(gt('HTML'))
-                                .addClass(format === 'html' ? 'active' : '')
-                                .on('click', { format: 'html' }, fnChangeFormat),
-                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
-                            $('<a>', { href: '#' })
-                                .text(gt('Both'))
-                                .addClass(format === 'alternative' ? 'active' : '')
-                                .on('click', { format: 'alternative' }, fnChangeFormat)
+                                .addClass(format === 'html' || format === 'alternative' ? 'active' : '')
+                                .on('click', { format: 'html' }, fnChangeFormat)
                         )
                     );
             }

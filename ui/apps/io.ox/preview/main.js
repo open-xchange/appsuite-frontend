@@ -180,9 +180,7 @@ define("io.ox/preview/main",
     }
 
     function previewFailed() {
-        $(this).closest('div').empty().append(
-            $('<div class="alert alert-info">').text(gt("Preview could not be loaded"))
-        );
+        $(this).closest('div').empty();
     }
 
     // if available register office typed renderer

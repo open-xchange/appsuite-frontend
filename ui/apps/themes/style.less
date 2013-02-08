@@ -749,12 +749,13 @@ a.button {
     float: left;
     display: none;
     cursor: pointer;
-    margin-left: -13px;
-    padding-left: 13px;
+    margin: -5px 0 -5px -13px;
+    padding: 5px 0 6px 13px;
 }
 
 .vgrid-cell-checkbox label {
-  margin-bottom: 0px; /* reset bootstrap */
+    display: inline;
+    margin-bottom: 0px; /* reset bootstrap */
 }
 
 .vgrid-cell-checkbox input {
@@ -859,7 +860,7 @@ a.button {
 
 .person, .person-link {
     color: @personLinkColor;
-    word-break: break-all;
+    word-break: normal;
 }
 
 .ellipsis {
@@ -1344,6 +1345,10 @@ input.nice-input {
 
         .folder .shared-by {
             margin-top: -13px;
+        }
+
+        .folder-label {
+            display: block;
         }
     }
 }

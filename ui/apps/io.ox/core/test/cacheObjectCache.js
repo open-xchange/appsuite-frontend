@@ -389,6 +389,28 @@ define("io.ox/core/test/cacheObjectCache",
                     });
                 });
 
+                j.it('should be indifferent about key types', function () {
+                    var loaded = new Done(),
+                        c = new cache.ObjectCache('my_cooltest', true, function (o) { return String(o.id); });
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+
+                    $.when(
+                        // add objects (with id … values are strings)
+                        c.add({id: "100"}),
+                        c.add({id: "102"})
+                    ).then(function () {
+                        c.size().done(function (r) {
+                            j.expect(r).toBe(2);
+                        });
+                        // remove ids … (common use-case, values are numbers)
+                        c.remove([100]).then(function () {
+                            c.size().done(function (r) {
+                                j.expect(r).toBe(1);
+                                loaded.yep();
+                            });
+                        });
+                    });
+                });
 
             });
 

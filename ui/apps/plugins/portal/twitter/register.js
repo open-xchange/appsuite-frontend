@@ -196,9 +196,68 @@ define('plugins/portal/twitter/register',
             });
     };
 
+    var drawPreview = function (baton) {
+        var content = baton.contentNode;
+        if (baton.data.length === 0) {
+            content.append(
+                $('<div class="paragraph">').text(gt('No tweets yet.'))
+            );
+
+        } else if (baton.data.errors && baton.data.errors.length > 0) {
+            content.removeClass('pointer');
+            $('<div class="paragraph">').text(gt('Twitter reported the following errors:')).appendTo(content);
+            _(baton.data.errors).each(function (myError) {
+                $('<div class="error">').text("(" + myError.code + ") " + myError.message).appendTo(content);
+                handleError(myError.code, this, baton).appendTo(content);
+            });
+
+        } else {
+            content.addClass('pointer');
+            _(baton.data).each(function (tweet) {
+                var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
+                content.append(
+                    $('<div class="paragraph">').append(
+                        $('<span class="bold">').text('@' + tweet.user.name + ': '),
+                        $('<span class="normal">').html(message)
+                    )
+                );
+            });
+        }
+    };
+
+    var handleError = function (errorCode, baton) {
+        if (errorCode === 32 || errorCode === 89 || errorCode === 135) {
+            var account = keychain.getStandardAccount('twitter');
+
+            return $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                keychain.submodules.twitter.reauthorize(account).done(function () {
+                    console.log(gt("You have reauthorized this %s account.", 'Twitter'));
+                }).fail(function () {
+                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Twitter'));
+                });
+            });
+        } else if (errorCode === 88 || errorCode === 130) {
+            return $('<a class="solution">').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+        } else {
+            return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+        }
+    };
+
     ext.point('io.ox/portal/widget/twitter').extend({
 
         title: "Twitter",
+
+        initialize: function (baton) {
+            keychain.submodules.twitter.on('update create delete', function () {
+                loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
+                    baton.data = data;
+                    if (baton.contentNode) {
+                        baton.contentNode.empty();
+                        drawPreview(baton);
+                    }
+                });
+            });
+        },
 
         action: function (baton) {
             window.open('https://twitter.com/', 'twitter');
@@ -224,29 +283,10 @@ define('plugins/portal/twitter/register',
         },
 
         preview: function (baton) {
-            // TODO missing error handling
-            // if oauth token expires this will simply crash as baton.data does not contain
-            // valid tweets
             if (!baton.data) { return; }
-
             var content = $('<div class="content pointer">');
-
-            if (baton.data.length === 0) {
-                content.append(
-                    $('<div class="paragraph">').text(gt('No tweets yet.'))
-                );
-            } else {
-                _(baton.data).each(function (tweet) {
-                    var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
-                    content.append(
-                        $('<div class="paragraph">').append(
-                            $('<span class="bold">').text('@' + tweet.user.name + ': '),
-                            $('<span class="normal">').html(message)
-                        )
-                    );
-                });
-            }
-
+            baton.contentNode = content;
+            drawPreview(baton);
             this.append(content);
         },
 

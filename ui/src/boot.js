@@ -23,12 +23,14 @@ if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
 }
 
-
-$(document).ready(function () {
+// not document.ready casue we wait for CSS to be loaded
+$(window).load(function () {
 
     'use strict';
 
-    require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
+    if (!ox.signin) {
+        require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
+    }
 
     // animations
     var DURATION = 250,
@@ -43,6 +45,7 @@ $(document).ready(function () {
         fnSubmit,
         fnChangeLanguage,
         changeLanguage,
+        forcedLanguage,
         setDefaultLanguage,
         autoLogin,
         initialize,
@@ -51,7 +54,6 @@ $(document).ready(function () {
         enc = encodeURIComponent;
 
     // suppress context menu
-
     contextmenu_blacklist = [
         '#io-ox-topbar',
         '.vgrid',
@@ -73,6 +75,7 @@ $(document).ready(function () {
         '.carousel',
         '.mediaplayer'
     ];
+
     if (!ox.debug) {
         $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {
             e.preventDefault();
@@ -80,7 +83,6 @@ $(document).ready(function () {
     }
 
     // Disable attachments and uploads for specific clients
-    //
     if (!_.browser.iOS) {
         ox.uploadsEnabled = true;
     }
@@ -101,6 +103,11 @@ $(document).ready(function () {
         $('#io-ox-login-feedback').empty().append(
             $('<div class="alert alert-block alert-' + type + ' selectable-text">').append(node)
         );
+    }
+
+    // gettext for stupids
+    function gt(id) {
+        return $('#io-ox-login-feedback-strings').find('[data-i18n-id="' + id + '"]').text();
     }
 
     // continuation
@@ -197,7 +204,7 @@ $(document).ready(function () {
                 $('#io-ox-login-form').css('opacity', '');
                 // show error
                 if (error && error.error === '0 general') {
-                    error = { error: $('#io-ox-login-feedback-strings').find('[data-i18n-id="no-connection"]').text() };
+                    error = { error: gt('no-connection') };
                 }
                 feedback('info', $.txt(_.formatError(error, '%1$s')));
                 // restore form
@@ -214,17 +221,18 @@ $(document).ready(function () {
         $('#io-ox-login-feedback').busy().empty();
         // user name and password shouldn't be empty
         if ($.trim(username).length === 0) {
-            return fail({ error: 'Please enter your credentials.', code: 'UI-0001' }, 'username');
+            return fail({ error: gt('enter-credentials'), code: 'UI-0001' }, 'username');
         }
         if ($.trim(password).length === 0 && ox.online) {
-            return fail({ error: 'Please enter your password.', code: 'UI-0002' }, 'password');
+            return fail({ error: gt('enter-password'), code: 'UI-0002' }, 'password');
         }
         // login
         require(['io.ox/core/session']).done(function (session) {
             session.login(
                 username,
                 password,
-                $('#io-ox-login-store-box').prop('checked')
+                $('#io-ox-login-store-box').prop('checked'),
+                forcedLanguage || ox.language || 'en_US'
             )
             .done(function () {
                 // success
@@ -255,31 +263,22 @@ $(document).ready(function () {
                     }
                 });
                 // Set Cookie
-                _.setCookie('language', id);
-
+                _.setCookie('language', (ox.language = id));
                 // update placeholder (IE9 fix)
                 if (_.browser.IE) {
                     $('input[type=text], input[type=password]').val('').placeholder();
-                }
-
-                if ($('#io-ox-current-language').length > 0) {
-                    $('#io-ox-current-language').text(ox.serverConfig.languages[id]).append($('<span class="caret">'));
-                }
-                if ($('#io-ox-login-footer select').length > 0) {
-                    $('#io-ox-login-footer select option[value="' + id + '"]').attr('selected', 'selected');
                 }
             }
         });
     };
 
     fnChangeLanguage = function (e) {
-
         // stop event
         e.preventDefault();
         // change language
         changeLanguage(e.data.id);
         // the user forced a language
-        ox.forcedLanguage = e.data.id;
+        forcedLanguage = e.data.id;
     };
 
     var getBrowserLanguage = function () {
@@ -298,12 +297,9 @@ $(document).ready(function () {
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {},
             lang = 'en_US', id = '', found = false, langCookie = _.getCookie('language');
-
-
         if (langCookie) {
             return changeLanguage(langCookie);
         }
-
         for (id in languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
@@ -430,11 +426,11 @@ $(document).ready(function () {
             if (ox.online) {
                 http.GET({
                     module: 'apps/manifests',
-                    params: {
-                        action: 'config'
-                    }
+                    params: { action: 'config' },
+                    appendSession: (cacheKey === 'userconfig')
                 })
                 .done(function (data) {
+                    serverUp = false;
                     configCache.add(cacheKey, data);
                     updateServerConfig(data);
                     def.resolve();
@@ -443,6 +439,7 @@ $(document).ready(function () {
                     getCachedServerConfig(configCache, cacheKey, def);
                 });
             } else {
+                serverUp = true; // kinda
                 getCachedServerConfig(configCache, cacheKey, def);
             }
         }).fail(function () {
@@ -470,6 +467,16 @@ $(document).ready(function () {
         $('#background_loader').idle().fadeOut(DURATION);
     }
 
+    // TODO: This might have to be removed when we have a good offline mode
+    var serverUp = false;
+    setTimeout(function () {
+        if (!serverUp) {
+            serverDown();
+        }
+    }, 6000);
+
+    
+
     /**
      * Auto login
      */
@@ -488,18 +495,10 @@ $(document).ready(function () {
                 });
             });
         }
-        var serverUp = false;
-        if (Modernizr.IE) {
-            setTimeout(function () {
-                if (!serverUp) {
-                    serverDown();
-                }
-            }, 6000);
-        }
 
         require(['io.ox/core/session', 'io.ox/core/capabilities']).done(function (session, capabilities) {
             serverUp = true;
-            var useAutoLogin = (true || capabilities.has('autologin')) && ox.online, initialized;
+            var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -562,69 +561,60 @@ $(document).ready(function () {
         // shortcut
         var sc = ox.serverConfig,
             lang = sc.languages,
-            caps = require("io.ox/core/capabilities"),
+            capabilities = require("io.ox/core/capabilities"),
             node,
             id = '',
             footer = '',
             i = 0,
             cl = $('#io-ox-current-language').parent(),
-            maxLang = 10;
+            maxLang = 20;
         // show languages
         if (!_.isEmpty(lang)) {
             var langCount = _.size(lang);
             node = $('#io-ox-language-list');
 
-            // Display inline list of languages if there are up to "maxLang" languages, else display bs dropup menu, but if a mobile device is detected display native select element
-            if (langCount > maxLang && !Modernizr.touch) {
-                require(['io.ox/core/bootstrap/basics']);
-            } else {
-                node.removeClass('dropdown-menu').appendTo(cl.parent());
-                cl.remove();
-            }
+            // Display native select box for languages if there are up to "maxLang" languages
 
-            if(!Modernizr.touch) {
-                for (id in lang) {
-                    var li;
+            var langSorted = _.toArray(_.invert(lang)).sort();
+            if (langCount < maxLang) {
+                for (id in langSorted) {
+                    var link;
                     i++;
                     node.append(
-                        li = $('<li>').append(
-                            $('<a href="#">')
-                            .on('click', { id: id }, fnChangeLanguage)
-                            .text(lang[id])
-                        )
+                        $('<a href="#">')
+                            .on('click', { id: langSorted[id] }, fnChangeLanguage)
+                            .text(lang[langSorted[id]])
                     );
                     if (i < langCount && langCount < maxLang) {
-                        li.append(document.createTextNode('\u00A0\u2022\u00A0'));
+                        node.append($('<span class="language-delimiter">').text('\u00A0\u00A0\u2022\u00A0 '));
                     }
                 }
             } else {
                 var sel = $('<select>').change(function() {
                     changeLanguage($(this).val());
-                    ox.forcedLanguage = $(this).val();
+                    forcedLanguage = $(this).val();
                 });
                 for (id in lang) {
-                    var li;
                     sel.append(
                         $('<option>').attr('value', id)
-                            .text(lang[id])
-
+                            .text(lang[langSorted[id]])
                     );
                 }
-                $('#io-ox-language-list').replaceWith(sel);
+                $('#io-ox-language-list').append(sel);
             }
         } else {
-            $('#io-ox-login-footer div:first-child').remove();
+            $("#io-ox-languages").remove();
         }
         // update header
-        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '') + ' ');
-        $('#io-ox-login-header-label').text(sc.pageHeader || '');
+        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ');
+        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0');
         // update footer
         footer = sc.copyright ? sc.copyright + ' ' : '';
         footer += sc.version ? 'Version: ' + sc.version + ' ' : '';
         footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
         $('#io-ox-copyright').text(footer);
         // hide checkbox?
-        if (sc.autoLogin === false || !caps.has("autologin")) {
+        if (!capabilities.has("autologin")) {
             $('#io-ox-login-store').remove();
         }
         // hide forgot password?
@@ -718,7 +708,6 @@ $(document).ready(function () {
                     themes.set(ox.serverConfig.signinTheme || 'login');
                 });
             }
-
             // continue
             autoLogin();
         });
@@ -742,8 +731,8 @@ $(document).ready(function () {
 
     // handle document visiblity
     $(window).on('blur focus', function (e) {
-            ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
-        });
+        ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
+    });
 
     // clear persistent caches due to update?
     // TODO: add indexedDB once it's getting used

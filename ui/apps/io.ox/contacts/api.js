@@ -308,6 +308,7 @@ define('io.ox/contacts/api',
     * @return {deferred} deferred returns exactyl one contact object
     */
     api.getByEmailadress = function (address) {
+        address = address || '';
         return fetchCache.get(address).pipe(function (data) {
             if (data !== null) {
                 return data;

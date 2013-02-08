@@ -146,11 +146,10 @@ define('io.ox/mail/view-detail',
 
     var delayedRead = function (data, node) {
         setTimeout(function () {
-            node.removeClass('unread');
             api.tracker.applyAutoRead(data);
             ext.point('io.ox/mail/detail/notification').invoke('action', node, data);
             node = data = null;
-        }, 1000); // 1 second(s)
+        }, 0); // without visual transition
     };
 
     var blockquoteMore, blockquoteClickOpen, blockquoteClickClose, blockquoteCollapsedHeight, mailTo;
@@ -451,10 +450,14 @@ define('io.ox/mail/view-detail',
                     node.addClass('by-myself');
                 }
 
-                if (api.tracker.isUnseen(data)) {
+                var isUnseen = api.tracker.isUnseen(data),
+                    canAutoRead = api.tracker.canAutoRead(data);
+
+                if (isUnseen && !canAutoRead) {
                     node.addClass('unread');
                 }
-                if (api.tracker.canAutoRead(data)) {
+
+                if (canAutoRead) {
                     delayedRead(data, node);
                 }
 
@@ -775,13 +778,13 @@ define('io.ox/mail/view-detail',
         index: 130,
         id: 'subject',
         draw: function (baton) {
-            var data = baton.data;
             this.append(
-                $('<div>')
-                    .addClass('subject clear-title')
+                $('<div class="subject clear-title">').append(
+                    $('<i class="icon-bookmark">'),
                     // inject some zero width spaces for better word-break
-                    .text(_.noI18n(data.subject ? $.trim(data.subject) : '\u00A0'))
-                    .append($('<span>').addClass('priority').append(util.getPriority(data)))
+                    $.txt(_.noI18n($.trim(baton.data.subject) || '\u00A0')),
+                    $('<span class="priority">').append(util.getPriority(baton.data))
+                )
             );
         }
     });

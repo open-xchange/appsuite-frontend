@@ -200,7 +200,6 @@ define('io.ox/core/tk/selection',
             var key, id;
             if (!e.isDefaultPrevented()) {
                 key = $(this).attr('data-obj-id');
-
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {
@@ -570,7 +569,8 @@ define('io.ox/core/tk/selection',
         };
 
         this.contains = function (ids) {
-            return _([].concat(ids)).inject(function (memo, id) {
+            var list = [].concat(ids);
+            return !!list.length && _(list).inject(function (memo, id) {
                 return memo && id in observedItemsIndex;
             }, true);
         };

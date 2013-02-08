@@ -13,23 +13,31 @@
 /*global
 define: true, _: true
 */
+
+define(_.identity('io.ox/settings/accounts/settings/pane/plugins'), ox.withPluginsFor('keychainSettings', []));
+
 define('io.ox/settings/accounts/settings/pane',
-      ox.withPluginsFor('keychainSettings',
-            ['io.ox/core/extensions',
+        ['io.ox/core/extensions',
            'io.ox/core/tk/dialogs',
            "io.ox/keychain/api",
            "io.ox/keychain/model",
            "io.ox/core/api/folder",
            'text!io.ox/settings/accounts/email/tpl/account_select.html',
-           'text!io.ox/settings/accounts/email/tpl/listbox.html'
-
-
-       ]), function (ext, dialogs, api, keychainModel, folderAPI, tmpl, listboxtmpl) {
+           'text!io.ox/settings/accounts/email/tpl/listbox.html',
+           'gettext!io.ox/settings/accounts',
+           'io.ox/settings/accounts/settings/pane/plugins'
+       ], function (ext, dialogs, api, keychainModel, folderAPI, tmpl, listboxtmpl, gt) {
 
 
     'use strict';
 
     var collection,
+        staticStrings =  {
+            BUTTON_ADD: gt('Add'),
+            BUTTON_EDIT: gt('Edit'),
+            BUTTON_DELETE: gt('Delete'),
+            TITLE: gt('Mail and Social Accounts')
+        },
 
         createExtpointForSelectedAccount = function (args) {
             if (args.data.id !== undefined && args.data.accountType !== undefined) {
@@ -64,10 +72,8 @@ define('io.ox/settings/accounts/settings/pane',
 
             _modelBinder: undefined,
             initialize: function (options) {
-
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
-
             },
             render: function () {
                 var self = this;
@@ -122,7 +128,9 @@ define('io.ox/settings/accounts/settings/pane',
                     render: function () {
                         var self = this,
                             $dropDown;
-                        self.$el.empty().append(self.template({}));
+                        self.$el.empty().append(self.template({
+                            strings: staticStrings
+                        }));
                         this.collection.each(function (item) {
                             self.$el.find('.listbox').append(
                                 new AccountSelectView({ model: item }).render().el

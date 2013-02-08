@@ -145,7 +145,7 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/settings/accounts',
                     settings: true,
-                    title: 'Keyring'
+                    title: gt('Mail and Social Accounts')
                 });
 
                 // Extend the above list by custom plugins

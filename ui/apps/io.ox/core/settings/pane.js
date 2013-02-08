@@ -100,6 +100,12 @@ define('io.ox/core/settings/pane',
         // Themes
         var availableThemes = settingOptions.tree.themes;
 
+        //  until we get translated themes from backend
+        if (settingOptions.tree.themes['default']) {
+            settingOptions.tree.themes['default'] = gt('Default Theme');
+        }
+
+
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
             point.extend(new forms.SelectControlGroup({
                 id: 'theme',

@@ -54,8 +54,7 @@ define('io.ox/files/mediaplayer',
             this.restore();
             this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
 
-            if (this.list.length > 0)
-            {
+            if (this.list.length > 0) {
                 this.show();
                 this.eventHandler();
             }
@@ -119,9 +118,7 @@ define('io.ox/files/mediaplayer',
             return $.grep(list, function (o) {
                 if (videoSupport) {
                     return (new RegExp(pattern, 'i')).test(o.filename);
-                }
-                else
-                {
+                } else {
                     return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
                 }
             });
@@ -319,8 +316,7 @@ define('io.ox/files/mediaplayer',
         },
 
         close: function () {
-            if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0)
-            {
+            if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
                 this.mediaelement.pause();
                 this.player.empty().remove();
                 this.trackdisplay.remove(); // no empty; kills inner stuff

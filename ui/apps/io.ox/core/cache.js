@@ -85,7 +85,7 @@ define('io.ox/core/cache',
                     } else {
                         layer = fluentCache;
                     }
-                    id = 'cache.' + (ox.user || '_') + '.' + (name || '');
+                    id = 'appsuite.cache.' + (ox.user || 'anonymous') + '.' + (ox.language || 'en_US') + '.' + (name || '');
 
                     instance = layer.getInstance(id);
                     return instance;
