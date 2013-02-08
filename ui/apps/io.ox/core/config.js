@@ -10,12 +10,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/config',
-    ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
     'use strict';
 
     var config = {}, configCache;
+
+    console.error('require.define() for "io.ox/core/config" called more than once! Causes empty config.');
 
     var get = function (key) {
         var parts = typeof key === 'string' ? key.split(/\./) : key,
@@ -128,7 +129,7 @@ define('io.ox/core/config',
                         processResponse: false
                     })
                     .done(function (data) {
-                        config = data !== undefined ? data.data : {};
+                        config = (data !== undefined ? data.data : {});
                         configCache.add('default', config);
                     });
                 };
