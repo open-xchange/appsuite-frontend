@@ -158,7 +158,7 @@ define('io.ox/files/icons/perspective',
         if (!app.getWindow().search.active) {
             return api.getAll({ folder: app.folder.get() });
         } else {
-            return api.search(app.getWindow().search.query, { folder: app.folder.get() });
+            return api.search(app.getWindow().search.query);
         }
     }
 
