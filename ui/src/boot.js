@@ -634,10 +634,10 @@ $(window).load(function () {
             if (!_.isEmpty(lang)) {
                 var langCount = _.size(lang);
                 node = $('#io-ox-language-list');
-
                 // Display native select box for languages if there are up to "maxLang" languages
-
-                var langSorted = _.toArray(_.invert(lang)).sort();
+                var langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
+                    return lang[a] <= lang[b] ? -1 : +1;
+                });
                 if (langCount < maxLang) {
                     for (id in langSorted) {
                         var link;
