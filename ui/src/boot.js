@@ -186,6 +186,8 @@ $(window).load(function () {
     var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
     function serverUp() {
+        $('body').removeClass('down'); // to be safe
+        serverDown = $.noop;
         clearTimeout(serverTimeout);
     }
 
