@@ -519,10 +519,16 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             }
         };
 
+        this.resetLastIndex = function () {
+            lastValidIndex = -1;
+        };
+
         this.selectLastIndex = function () {
-            var item = observedItems[lastValidIndex] || _.last(observedItems);
-            if (item !== undefined) {
-                this.select(item);
+            if (lastValidIndex !== -1) {
+                var item = observedItems[lastValidIndex] || _.last(observedItems);
+                if (item !== undefined) {
+                    this.select(item);
+                }
             }
         };
 
