@@ -758,6 +758,7 @@ $(window).load(function () {
                 // if manifest has changed, we have to swap caches and reload
                 if (ac.status === ac.UPDATEREADY) {
                     clear();
+                    serverUp(); // avoid error
                     location.reload();
                 }
             };

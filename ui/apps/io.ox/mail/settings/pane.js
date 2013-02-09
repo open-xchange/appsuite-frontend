@@ -62,17 +62,7 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings,
-        itemList = [];
-
-    /* TODO: only the default account can have multiple aliases for now
-     * all other accounts can only have one address (the primary address)
-     * So the option is only for the default account, for now. This should
-     * be changed in the future
-     */
-    api.getSenderAddresses(0).done(function (aliases) {
-        return Array.prototype.push.apply(itemList, aliases[1]);
-    });
+        mailViewSettings;
 
     var MailSettingsView = Backbone.View.extend({
         tagName: "div",
@@ -83,13 +73,17 @@ define('io.ox/mail/settings/pane',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(tmpl.render('io.ox/mail/settings', {
-                strings: staticStrings,
-                optionsAutoSaveMinutes: optionsAutoSave,
-                optionsAllAccountes: itemList
-            }));
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            self._modelBinder.bind(self.model, self.el, defaultBindings);
+            api.getAllSenderAddresses().done(function (addresses) {
+                self.$el.empty().append(
+                    tmpl.render('io.ox/mail/settings', {
+                        strings: staticStrings,
+                        optionsAutoSaveMinutes: optionsAutoSave,
+                        optionsAllAccounts: addresses.map(function (address) { return address[1]; })
+                    })
+                );
+                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+                self._modelBinder.bind(self.model, self.el, defaultBindings);
+            });
             return self;
         }
     });
