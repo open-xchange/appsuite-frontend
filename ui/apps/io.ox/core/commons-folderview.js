@@ -74,7 +74,7 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></a>'),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog accent-color"></a>'),
                         ul = $('<ul class="dropdown-menu">').append(
                             $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
                         )

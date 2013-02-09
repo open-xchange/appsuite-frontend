@@ -299,7 +299,7 @@ define('io.ox/calendar/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus">');
+            return $('<i class="icon-plus accent-color">');
         }
     });
 
