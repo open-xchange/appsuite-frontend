@@ -671,6 +671,8 @@ $(window).load(function () {
             // update footer
             footer = sc.copyright ? sc.copyright + ' ' : '';
             footer += sc.version ? 'Version: ' + sc.version + ' ' : '';
+            var revision = 'revision' in sc ? sc.revision : ('Rev' + ox.revision);
+            footer += revision !== '' ? revision + ' ' : '';
             footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
             $('#io-ox-copyright').text(footer);
             // hide checkbox?

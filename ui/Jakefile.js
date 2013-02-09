@@ -204,6 +204,7 @@ utils.copy(utils.list("src/"));
 function htmlFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
+        .replace(/@\s?revision\s?@/g, rev)
         .replace(/@base@/g, 'v=' + version)
         .replace(/@debug@/g, debug);
 }
@@ -742,13 +743,13 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
+
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
             .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
         file = path.join(dest, 'debian/control');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        
+
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
