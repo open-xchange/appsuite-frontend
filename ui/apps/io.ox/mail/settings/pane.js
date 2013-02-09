@@ -12,14 +12,15 @@
  */
 
 define('io.ox/mail/settings/pane',
-       ['settings!io.ox/mail', 'io.ox/mail/settings/model',
-        'dot!io.ox/mail/settings/form.html', 'io.ox/core/extensions',
-        'io.ox/core/notifications',
-        'gettext!io.ox/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+   ['settings!io.ox/mail',
+    'io.ox/mail/settings/model',
+    'dot!io.ox/mail/settings/form.html',
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'gettext!io.ox/mail',
+    'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
-
-
 
     var mailSettings =  settings.createModel(mailSettingsModel),
 

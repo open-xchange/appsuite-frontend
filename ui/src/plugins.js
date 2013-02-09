@@ -361,4 +361,11 @@ define("gettext", function (gettext) {
         }
     });
 
+    define('withPluginsFor', {
+        load: function (name, parentRequire, loaded, config) {
+            console.log('withPluginsFor', name);
+            parentRequire(ox.withPluginsFor(name, []), loaded);
+        }
+    });
+
 }());
