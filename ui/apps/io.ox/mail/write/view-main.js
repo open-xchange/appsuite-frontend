@@ -351,6 +351,17 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
+            this.addSection('replyTo', gt('Reply to'), false, true)
+                .append($('<div>').addClass('fieldset').append(
+                    $('<label>', {'for': 'writer_field_replyTo'}).addClass('wrapping-label'),
+                    $('<input>', {
+                        'type' : 'email',
+                        'id' : 'writer_field_replyTo',
+                        'name' : 'replyTo'
+                    })
+                ));
+            this.addLink('replyTo', gt('Reply to'));
+
             // Attachments (unless we're on iOS)
             if (ox.uploadsEnabled) {
                 this.fileCount = 0;
