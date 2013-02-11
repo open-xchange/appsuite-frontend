@@ -694,23 +694,6 @@ $(window).load(function () {
             } else {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
-            // supported browser?
-            if (!browserCheck()) {
-                // warn user
-                feedback('info', $(
-                        '<b>Your browser is currently not supported!</b> ' +
-                        '<div>Please use <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a> for best results.</di>'
-                    ));
-            } else if (_.browser.IE <= 8) {
-                // recommend chrome frame?
-                var link = 'http://www.google.com/chromeframe/?user=true';
-                feedback('info', $(
-                    '<b>Your browser is slow and outdated!</b> ' +
-                    'Try <a href="' + link + '" target="_blank">Google Chrome Frame</a> ' +
-                    'for much better performance. It&rsquo;s awesome! ' +
-                    'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
-                ));
-            }
 
             return $.when(
                     // load extensions
@@ -719,6 +702,21 @@ $(window).load(function () {
                     setDefaultLanguage()
                 )
                 .always(function () {
+                    // supported browser?
+                    if (!browserCheck()) {
+                        // warn user
+                        feedback('info', $(
+                            _.browser.Chrome ?
+                            '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
+                            '<b>' + gt('browser') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
+                        ));
+                    } else if (_.browser.IE <= 8) {
+                        // recommend chrome frame?
+                        var link = 'http://www.google.com/chromeframe/?user=true';
+                        feedback('info', $(
+                            '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
+                        ));
+                    }
                     // show login dialog
                     $('#io-ox-login-blocker').on('mousedown', false);
                     $('#io-ox-login-form').on('submit', fnSubmit);
