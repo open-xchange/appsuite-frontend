@@ -487,6 +487,16 @@ define('io.ox/core/tk/vgrid',
                     }
                 }
 
+                // remove undefined data
+                for (i = 0, $i = data.length; i < $i;) {
+                    if (!data[i]) {
+                        data.splice(i, 1);
+                        $i--;
+                    } else {
+                        i++;
+                    }
+                }
+
                 // loop
                 for (i = 0, $i = data.length; i < $i; i++) {
                     // shift?
@@ -494,19 +504,13 @@ define('io.ox/core/tk/vgrid',
                     if (index !== undefined) {
                         shift += labels.list[index].height || labelHeight;
                     }
-                    // no data? (happens if list request fails)
-                    if (!data[i]) {
-                        pool[i] = cloneRow(template);
-                    }
                     row = pool[i];
                     row.appendTo(container);
                     // reset class name
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
-                    if (data[i]) {
-                        // update fields
-                        row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
-                    }
+                    // update fields
+                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
                     node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }
