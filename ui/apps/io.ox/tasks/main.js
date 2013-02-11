@@ -14,6 +14,7 @@
 define('io.ox/tasks/main',
     ['io.ox/tasks/api',
      'io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/tk/vgrid',
      'io.ox/tasks/view-grid-template',
@@ -21,7 +22,7 @@ define('io.ox/tasks/main',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks'
-    ], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings) {
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings) {
 
     'use strict';
 
@@ -214,6 +215,13 @@ define('io.ox/tasks/main',
         updateGridOptions();
 
         commons.addGridToolbarFolder(app, grid);
+
+        // drag & drop
+        win.nodes.outer.on('drop', function (e, baton) {
+            if (baton.dragType === 'mail') {
+                actions.invoke('io.ox/tasks/actions/move', null, baton);
+            }
+        });
 
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks')

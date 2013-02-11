@@ -155,51 +155,69 @@ define('io.ox/tasks/actions',
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'some',
-        action: function (baton) {
+        requires: 'some delete',
+        multiple: function (list, baton) {
             var task = baton.data,
-                numberOfTasks = task.length || 1;
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api'],
-                    function (dialogs, views, api) {
-                //build popup
-                var popup = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(gt('Move')))
-                    .addPrimaryButton('ok', gt('Move'))
-                    .addButton('cancel', gt('Cancel'));
-                popup.getBody().css({ height: '250px' });
-                var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
-                    id = String(task.folder || task.folder_id);
-                //go
-                popup.show(function () {
-                    tree.paint().done(function () {
-                        tree.select(id);
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var node = $('.io-ox-multi-selection');
-                        node.hide();
-                        node.parent().busy();
-                        var target = _(tree.selection.get()).first();
-                        // move only if folder differs from old folder
-                        if (target && target !== id) {
-                            // move action
-                            api.move(task, target)
-                            .done(function () {
-                                node.show();
-                                node.parent().idle();
-                                notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
-                            })
-                            .fail(function (response) {
-                                node.show();
-                                node.parent().idle();
-                                notifications.yell('error', gt('A severe error occured!'));
-                            });
+                numberOfTasks = task.length || 1,
+                vGrid = baton.grid || (baton.app && baton.app.getGrid());
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'],
+                    function (dialogs, views, api, folderAPI) {
+
+                function commit(target) {
+                    if (vGrid) vGrid.busy();
+                    api.move(list, target).then(
+                        function () {
+                            notifications.yell('success', gt('Tasks have been moved'));
+                            folderAPI.reload(target, list);
+                            if (vGrid) vGrid.idle();
+                        },
+                        notifications.yell
+                    );
+                }
+
+                if (baton.target) {
+                    commit(baton.target);
+                } else {
+                    //build popup
+                    var popup = new dialogs.ModalDialog({ easyOut: true })
+                        .header($('<h3>').text(gt('Move')))
+                        .addPrimaryButton('ok', gt('Move'))
+                        .addButton('cancel', gt('Cancel'));
+                    popup.getBody().css({ height: '250px' });
+                    var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
+                        id = String(task.folder || task.folder_id);
+                    //go
+                    popup.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var node = $('.io-ox-multi-selection');
+                            node.hide();
+                            node.parent().busy();
+                            var target = _(tree.selection.get()).first();
+                            // move only if folder differs from old folder
+                            if (target && target !== id) {
+                                // move action
+                                api.move(task, target)
+                                .done(function () {
+                                    node.show();
+                                    node.parent().idle();
+                                    notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
+                                })
+                                .fail(function (response) {
+                                    node.show();
+                                    node.parent().idle();
+                                    notifications.yell('error', gt('A severe error occured!'));
+                                });
+                            }
                         }
-                    }
-                    tree.destroy();
-                    tree = popup = null;
-                });
+                        tree.destroy();
+                        tree = popup = null;
+                    });
+                }
             });
         }
     });
