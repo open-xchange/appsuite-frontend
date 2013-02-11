@@ -25,7 +25,6 @@ define('io.ox/core/tk/selection',
     }
 
     function defaultMessage(items) {
-        console.log(items);
         var title = joinTextNodes(this.find('.selected .drag-title'), ', ');
         return title || gt.format(gt.ngettext('1 item', '%1$d items', items.length), items.length);
     }
