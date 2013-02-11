@@ -202,12 +202,13 @@ define('io.ox/mail/util',
          * @return the email address or a string like "Display Name" <email@address.example>
          */
         formatSender: function (name, address) {
-            if (_.isArray(arguments[0])) {
-                name = arguments[0][0];
-                address = arguments[0][1];
+            var args = _(arguments).toArray();
+            if (_.isArray(args[0])) {
+                name = args[0][0];
+                address = args[0][1];
             }
             name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
-            address = address.toLowerCase();
+            address = $.trim(address || '').toLowerCase();
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 
