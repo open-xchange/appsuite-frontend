@@ -514,7 +514,6 @@ define("io.ox/mail/main",
 
         // drag & drop
         win.nodes.outer.on('drop', function (e, baton) {
-            console.log('Drop!', baton);
             if (baton.dragType === 'mail') {
                 actions.invoke('io.ox/mail/actions/move', null, baton);
             }

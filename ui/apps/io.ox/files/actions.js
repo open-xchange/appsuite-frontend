@@ -813,6 +813,4 @@ define('io.ox/files/actions',
         label: gt('Play video files'),
         ref: 'io.ox/files/icons/videoplayer'
     }));
-
-
 });

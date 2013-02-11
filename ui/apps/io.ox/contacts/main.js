@@ -21,11 +21,12 @@ define("io.ox/contacts/main",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "io.ox/core/extensions",
+     "io.ox/core/extPatterns/actions",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt, settings) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings) {
 
     "use strict";
 
@@ -208,6 +209,13 @@ define("io.ox/contacts/main",
         app.getGrid = function () {
             return grid;
         };
+
+         // drag & drop
+        win.nodes.outer.on('drop', function (e, baton) {
+            if (baton.dragType === 'mail') {
+                actions.invoke('io.ox/contacts/actions/move', null, baton);
+            }
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'contacts', options.folder)

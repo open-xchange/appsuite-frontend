@@ -18,7 +18,8 @@ define('io.ox/contacts/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
-     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt) {
+     'gettext!io.ox/contacts',
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt, settings) {
 
     'use strict';
 
@@ -111,55 +112,73 @@ define('io.ox/contacts/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title, success) {
-        return function (list) {
-            require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
 
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(title))
-                    .addPrimaryButton('ok', title)
-                    .addButton('cancel', gt('Cancel')),
-                    item = _(list).first(),
-                    id = String(item.folder_id || item.folder),
-                    tree = new views.FolderList(dialog.getBody().css('height', '250px'), { type: type });
+    function moveAndCopy(type, label, success, requires) {
 
-                dialog
-                    .show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var selectedFolder = tree.selection.get();
-                            if (selectedFolder.length === 1) {
-                                // move action
-                                api[apiAction](list, selectedFolder[0]).then(
-                                    function () {
-                                        notifications.yell('success', success);
-                                    },
-                                    notifications.yell
-                                );
+        new Action('io.ox/contacts/actions/' + type, {
+            id: type,
+            requires: requires,
+            multiple: function (list, baton) {
+
+                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
+
+                    function commit(target) {
+                        if (type === "move" && vGrid) vGrid.busy();
+                        api[type](list, target).then(
+                            function () {
+                                notifications.yell('success', success);
+                                folderAPI.reload(target, list);
+                                if (type === "move" && vGrid) vGrid.idle();
+                            },
+                            notifications.yell
+                        );
+                    }
+
+                    if (baton.target) {
+                        commit(baton.target);
+                    } else {
+                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h3>').text(label))
+                            .addPrimaryButton("ok", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().css({ height: '250px' });
+                        var folderId = String(list[0].folder_id),
+                            id = settings.get('folderpopup/last') || folderId,
+                            tree = new views.FolderTree(dialog.getBody(), {
+                                type: 'contacts',
+                                open: settings.get('folderpopup/open', []),
+                                toggle: function (open) {
+                                    settings.set('folderpopup/open', open).save();
+                                },
+                                select: function (id) {
+                                    settings.set('folderpopup/last', id).save();
+                                }
+                            });
+                        dialog.show(function () {
+                            tree.paint().done(function () {
+                                tree.select(id);
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'ok') {
+                                var target = _(tree.selection.get()).first();
+                                if (target && target !== folderId) {
+                                    commit(target);
+                                }
                             }
-                        }
-                        tree.destroy();
-                        tree = dialog = null;
-                    });
-            });
-        };
-    };
+                            tree.destroy();
+                            tree = dialog = null;
+                        });
+                    }
+                });
+            }
+        });
+    }
 
-    new Action('io.ox/contacts/actions/move', {
-        id: 'move',
-        requires: 'some delete',
-        multiple: copyMove('contacts', 'move', gt('Move'), gt('Contacts have been moved'))
-    });
-
-    new Action('io.ox/contacts/actions/copy', {
-        id: 'copy',
-        requires: 'some read',
-        multiple: copyMove('contacts', 'copy', gt('Copy'), gt('Contacts have been copied'))
-    });
+    moveAndCopy('move', gt('Move'), gt('Contacts have been moved'), 'some delete');
+    moveAndCopy('copy', gt('Copy'), gt('Contacts have been copied'), 'some read');
 
     new Action('io.ox/contacts/actions/send', {
 
