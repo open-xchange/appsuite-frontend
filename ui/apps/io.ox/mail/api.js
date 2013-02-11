@@ -549,6 +549,19 @@ define("io.ox/mail/api",
         api.trigger('refresh.list');
     });
 
+
+    api.expunge = function (folder_id) {
+        // new clear
+        return http.PUT({
+            module: "mail",
+            appendColumns: false,
+            params: {
+                action: "expunge"
+            },
+            data: [folder_id]
+        });
+    };
+
     api.changeColor = function (list, label, local) {
 
         list = [].concat(list);

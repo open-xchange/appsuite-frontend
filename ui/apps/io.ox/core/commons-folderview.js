@@ -343,6 +343,32 @@ define('io.ox/core/commons-folderview',
             });
         }
 
+        function expungeFolder(e) {
+            e.preventDefault();
+            var baton = e.data.baton,
+                id = _(baton.app.folderView.selection.get()).first();
+            require(['io.ox/mail/api'], function (mail) {
+                mail.expunge(id);
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'expunge',
+            index: 75,
+            draw: function (baton) {
+                if (baton.options.type === 'mail') {
+                    var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
+                    this.append($('<li>').append(link));
+                    if (api.can('delete', baton.data)) {
+                        link.on('click', { baton: baton }, expungeFolder);
+                    } else {
+                        link.addClass('disabled').on('click', $.preventDefault);
+                    }
+                    this.append($('<li class="divider">'));
+                }
+            }
+        });
+
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'move',
             index: 200,
