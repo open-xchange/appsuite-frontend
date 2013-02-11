@@ -225,12 +225,12 @@ define('io.ox/calendar/week/view',
                 var self = this,
                     obj = _.cid($(e.currentTarget).data('cid') + '');
                 if (!cT.hasClass('current')) {
-                    self.trigger('showAppointment', e, obj);
                     $('.appointment', self.$el)
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
                         .addClass('opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
+                    self.trigger('showAppointment', e, obj);
                 } else {
                     $('.appointment', self.$el).removeClass('opac');
                 }

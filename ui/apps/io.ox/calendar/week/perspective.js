@@ -17,7 +17,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
-     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -44,6 +45,9 @@ define('io.ox/calendar/week/perspective',
                     .show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
+            }).fail(function () {
+                notifications.yell('error', gt('An error occured. Please try again.'));
+                $('.appointment', self.main).removeClass('opac current');
             });
         },
 
@@ -174,6 +178,8 @@ define('io.ox/calendar/week/perspective',
                             return m;
                         }));
                     collection = null;
+                }).fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
                 });
             }
         },
