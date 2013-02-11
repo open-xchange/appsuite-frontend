@@ -29,7 +29,8 @@ define("io.ox/mail/main",
      "io.ox/core/api/account",
      "settings!io.ox/mail",
      "io.ox/mail/actions",
-     "less!io.ox/mail/style.css"
+     "less!io.ox/mail/style.css",
+     'io.ox/mail/folderview-extensions'
     ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
 
     'use strict';

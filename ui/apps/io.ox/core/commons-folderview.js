@@ -134,69 +134,6 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        function addAccount(e) {
-            e.preventDefault();
-            require(['io.ox/mail/accounts/settings'], function (m) {
-                m.mailAutoconfigDialog(e);
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
-            id: 'add-account',
-            index: 200,
-            draw: function (baton) {
-                if (baton.options.type === 'mail') {
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
-                    ));
-                }
-            }
-        });
-
-        function subscribeIMAPFolder(e) {
-            e.preventDefault();
-            e.data.app.folderView.subscribe(e.data);
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
-            id: 'subscribe-folder',
-            index: 300,
-            draw: function (baton) {
-                if (baton.options.type === 'mail') {
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
-                        .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
-                    ));
-                }
-            }
-        });
-
-        function markMailFolderRead(e) {
-            e.preventDefault();
-            require(['io.ox/mail/api'], function (mail) {
-                var items = _(e.data.app.getGrid().getData()).map(function (item) {
-                    return {id: item.id, folder: item.folder_id};
-                });
-                mail.markRead(items).done(function () {
-                    mail.trigger("remove-unseen-mails", items); //remove notifications in notification area
-                    api.trigger('update:unread', items[0].folder);
-                });
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'mark-folder-read',
-            index: 50,
-            draw: function (baton) {
-                if (baton.options.type !== 'mail') return;
-
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="markfolderread">').text(gt('Mark all mails as read'))
-                    .on('click', { app: baton.app }, markMailFolderRead)
-                ));
-            }
-        });
-
         function renameFolder(e) {
             e.preventDefault();
             e.data.app.folderView.rename();
@@ -368,32 +305,6 @@ define('io.ox/core/commons-folderview',
                 });
             });
         }
-
-        function expungeFolder(e) {
-            e.preventDefault();
-            var baton = e.data.baton,
-                id = _(baton.app.folderView.selection.get()).first();
-            require(['io.ox/mail/api'], function (mail) {
-                mail.expunge(id);
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'expunge',
-            index: 75,
-            draw: function (baton) {
-                if (baton.options.type === 'mail') {
-                    var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
-                    this.append($('<li>').append(link));
-                    if (api.can('delete', baton.data)) {
-                        link.on('click', { baton: baton }, expungeFolder);
-                    } else {
-                        link.addClass('disabled').on('click', $.preventDefault);
-                    }
-                    this.append($('<li class="divider">'));
-                }
-            }
-        });
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'move',
