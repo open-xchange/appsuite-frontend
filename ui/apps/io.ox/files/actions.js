@@ -366,46 +366,71 @@ define('io.ox/files/actions',
     });
 
 
-    var copyMove = function (type, apiAction, title) {
-        return function (list) {
-            require(['io.ox/files/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(title))
-                    .addPrimaryButton('ok', title)
-                    .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var item = _(list).first(),
-                    tree = new views.FolderTree(dialog.getBody(), { type: type, rootFolderId: '9', skipRoot: true });
-                tree.paint();
-                dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api[apiAction](list, selectedFolder[0]).fail(require('io.ox/core/notifications').yell);
-                        }
+    function moveAndCopy(type, label, success, requires) {
+        new Action('io.ox/files/actions/' + type, {
+            id: type,
+            requires: requires,
+            multiple: function (list, baton) {
+
+                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
+
+                    function commit(target) {
+                        if (type === "move" && vGrid) vGrid.busy();
+                        api[type](list, target).then(
+                            function () {
+                                notifications.yell('success', success);
+                                folderAPI.reload(target, list);
+                                if (type === "move" && vGrid) vGrid.idle();
+                            },
+                            notifications.yell
+                        );
                     }
-                    tree.destroy();
-                    tree = dialog = null;
+
+                    if (baton.target) {
+                        commit(baton.target);
+                    } else {
+                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h3>').text(label))
+                            .addPrimaryButton("ok", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().css({ height: '250px' });
+                        var folderId = String(list[0].folder_id),
+                            id = settings.get('folderpopup/last') || folderId,
+                            tree = new views.FolderTree(dialog.getBody(), {
+                                type: 'infostore',
+                                open: settings.get('folderpopup/open', []),
+                                toggle: function (open) {
+                                    settings.set('folderpopup/open', open).save();
+                                },
+                                select: function (id) {
+                                    settings.set('folderpopup/last', id).save();
+                                }
+                            });
+                        dialog.show(function () {
+                            tree.paint().done(function () {
+                                tree.select(id);
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'ok') {
+                                var target = _(tree.selection.get()).first();
+                                if (target && target !== folderId) {
+                                    commit(target);
+                                }
+                            }
+                            tree.destroy();
+                            tree = dialog = null;
+                        });
+                    }
                 });
-            });
-        };
-    };
+            }
+        });
+    }
 
-    new Action('io.ox/files/actions/move', {
-        id: 'move',
-        requires: 'some delete',
-        multiple: copyMove('infostore', 'move', gt('Move'))
-    });
-
-    new Action('io.ox/files/actions/copy', {
-        id: 'copy',
-        requires: 'some read',
-        multiple: copyMove('infostore', 'copy', gt('Copy'))
-    });
+    moveAndCopy('move', gt('Move'), gt('Files have been moved'), 'some delete');
+    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'), 'some read');
 
     new Action('io.ox/files/actions/add-to-portal', {
         require: function (e) {
