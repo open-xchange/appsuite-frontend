@@ -17,18 +17,16 @@ define("io.ox/calendar/api",
     ["io.ox/core/http",
      "io.ox/core/event",
      "io.ox/core/config",
-     "io.ox/core/api/user",
      "io.ox/core/notifications",
-     "io.ox/core/api/factory"], function (http, Events, config, userAPI, notifications, factory) {
+     "io.ox/core/api/factory"], function (http, Events, config, notifications, factory) {
 
     "use strict";
 
     // really stupid caching for speed
     var all_cache = {},
         get_cache = {},
-        participant_cache = {};
-
-    var DAY = 60000 * 60 * 24;
+        participant_cache = {},
+        DAY = 60000 * 60 * 24;
 
     var api = {
 

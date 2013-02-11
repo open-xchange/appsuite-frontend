@@ -309,7 +309,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1035": "pop3_storage ",
             "1036": "pop3_path",
             "1037": "personal",
-            "1038": "reply_to"
+            "1038": "reply_to",
+            "1039": "addresses"
         },
         "attachment": {
             "1": "id",
@@ -368,6 +369,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             // get id
             column = columns[i];
             id = ids[column] || column;
+            if (id === undefined) {
+                console.error('Undefined column', data, module, columns, 'index', i);
+            }
             // extend object
             obj[id] = data[i];
         }

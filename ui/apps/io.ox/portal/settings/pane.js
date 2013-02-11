@@ -208,7 +208,8 @@ define('io.ox/portal/settings/pane',
 
         onChangeColor: function (e) {
             e.preventDefault();
-            var node = $(e.target), color = node.attr('data-color');
+            var node = $(e.target),
+                color = node.attr('data-color') ? node.attr('data-color') : node.parent().attr('data-color');
             this.model.set('color', color);
             this.render();
         },

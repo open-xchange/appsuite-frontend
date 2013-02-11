@@ -204,6 +204,7 @@ utils.copy(utils.list("src/"));
 function htmlFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
+        .replace(/@\s?revision\s?@/g, rev)
         .replace(/@base@/g, 'v=' + version)
         .replace(/@debug@/g, debug);
 }
@@ -384,6 +385,16 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 // Ace editor
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
+
+//online help
+
+var helpDir = process.env.helpDir || utils.builddir;
+_.each(fs.readdirSync('help'), function (Lang) {
+    var lang = Lang.toLowerCase().replace(/_/g, '-');
+    utils.copy(utils.list(path.join('help', Lang + '/')), {
+        to: helpDir.replace(/@lang@/g, lang)
+    });
+});
 
 // external apps
 
@@ -711,7 +722,7 @@ directory(distDest, ["clean"]);
 desc("Creates source packages");
 task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
-        return /^(tmp|ox.pot|build)$/.test(f);
+        return /^(tmp|ox\.pot|build|local\.conf)$/.test(f);
     });
     var tarName = pkgName + '-' + ver;
     var debName = pkgName + '_' + ver;
@@ -732,13 +743,13 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
+
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
             .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
         file = path.join(dest, 'debian/control');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        
+
         if (path.existsSync('i18n/languagenames.json')) {
             var languageNames = _.extend(
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),

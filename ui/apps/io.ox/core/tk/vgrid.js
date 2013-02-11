@@ -239,7 +239,7 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
-        options = _.extend({ simple: true, editable: true }, options || {});
+        options = _.extend({ simple: true, editable: true, multiple: true }, options || {});
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -250,7 +250,7 @@ define('io.ox/core/tk/vgrid',
             loaded = false,
             responsiveChange = true,
             firstRun = true,
-            firstAutoSelect = true,
+            selectFirstAllowed = true,
             paused = false,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
@@ -323,11 +323,9 @@ define('io.ox/core/tk/vgrid',
             // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
             mult = Modernizr.touch ? 6 : 3,
             // properties
-            props = {},
+            props = { editable: options.editable || false },
             // shortcut
             isArray = _.isArray,
-            // edit mode
-            editable = false,
             // private methods
             scrollToLabel,
             hScrollToLabel,
@@ -619,57 +617,68 @@ define('io.ox/core/tk/vgrid',
             return paint(offset);
         }
 
+        // might be overwritten
         deserialize = function (cid) {
             return _.cid(cid);
         };
 
-        function autoSelect() {
-            return options.selectFirstItem !== false && $(document).width() > 700;
-        }
+        var updateSelection = (function () {
 
-        function updateSelection(changed) {
-            // vars
-            var id = _.url.hash('id'), ids, cid, index, selectionChanged;
-            // use url?
-            ids = id !== undefined ? id.split(/,/) : [];
-            if (all.length) {
-                //console.debug('updateSelection', ids, 'contains', self.selection.contains(ids));
-                if (ids.length && self.selection.contains(ids)) {
-                    // convert ids to objects first - avoids problems with
-                    // non-existing items that cannot be resolved in selections
-                    //console.debug('case #1:', ids);
-                    ids = _(ids).map(deserialize);
-                    selectionChanged = !self.selection.equals(ids);
-                    if (selectionChanged) {
-                        // set
-                        self.selection.set(ids);
-                        firstAutoSelect = false;
+            function getIds() {
+                var id = _.url.hash('id');
+                return id !== undefined ? id.split(/,/) : [];
+            }
+
+            function restoreSelection(ids, changed) {
+                // convert ids to objects first - avoids problems with
+                // non-existing items that cannot be resolved in selections
+                // console.debug('case #1:', ids);
+                ids = _(ids).map(deserialize);
+                var selectionChanged = !self.selection.equals(ids), cid, index;
+                if (selectionChanged) {
+                    // set
+                    self.selection.set(ids);
+                    selectFirstAllowed = false;
+                }
+                if (selectionChanged || changed) {
+                    // scroll to first selected item
+                    cid = _(ids).first();
+                    index = self.selection.getIndex(cid) || 0;
+                    if (!isVisible(index)) {
+                        setIndex(index - 2); // not at the very top
                     }
-                    //changed = true;
-                    if (selectionChanged || changed) {
-                        // scroll to first selected item
-                        cid = _(ids).first();
-                        index = self.selection.getIndex(cid) || 0;
-                        if (!isVisible(index)) {
-                            setIndex(index - 2); // not at the very top
+                }
+            }
+
+            function autoSelectAllowed() {
+                return options.selectFirstItem !== false && $(document).width() > 700;
+            }
+
+            return function updateSelection(changed) {
+                if (all.length) {
+                    var ids = getIds();
+                    if (self.selection.contains(ids)) {
+                        // if ids are given and still part of the selection
+                        // we can restore that state
+                        restoreSelection(ids, changed);
+                    }
+                    else if (autoSelectAllowed()) {
+                        // select first?
+                        if (selectFirstAllowed) {
+                            // console.debug('case #2: first');
+                            self.selection.selectFirst();
+                            selectFirstAllowed = false;
                         }
-                    }
-                } else {
-                    if (autoSelect()) {
-                        if (firstAutoSelect) {
-                            // select first or previous selection
-                            //console.debug('case #2: smart');
-                            self.selection.selectSmart();
-                            firstAutoSelect = false;
-                        } else {
+                        else {
                             // set selection based on last index
-                            //console.debug('case #3: last index');
+                            // console.debug('case #3: last index');
                             self.selection.selectLastIndex();
                         }
                     }
                 }
-            }
-        }
+            };
+
+        }());
 
         loadAll = (function () {
 
@@ -677,7 +686,6 @@ define('io.ox/core/tk/vgrid',
                 // is detailed error message enabled
                 list = list.categories === 'PERMISSION_DENIED' ? list : {};
                 list = isArray(list) ? _.first(list) : list;
-
                 // clear grid
                 apply([]);
                 // inform user
@@ -721,7 +729,6 @@ define('io.ox/core/tk/vgrid',
                             self.idle();
                         })
                         .done(function () {
-                            firstAutoSelect = firstAutoSelect || list.length === 0;
                             updateSelection(list.length !== all.length || !_.isEqual(all, list));
                         });
                 } else {
@@ -905,11 +912,12 @@ define('io.ox/core/tk/vgrid',
             // we don't check for currentModule but always refresh
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
+            var previous = currentMode;
             currentMode = mode;
-            this.trigger('change:mode', currentMode);
             _.url.hash('id', null);
-            firstAutoSelect = true;
+            selectFirstAllowed = false;
             responsiveChange = true;
+            this.trigger('change:mode', currentMode, previous);
             return this.refresh();
         };
 
@@ -958,33 +966,37 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getEditable = function () {
-            return editable;
+            return this.prop('editable');
         };
 
         this.setEditable = function (flag, selector) {
-            if (flag) {
-                node.addClass('editable');
-                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
-                editable = true;
-            } else {
-                node.removeClass('editable');
-                this.selection.setEditable(false);
-                editable = false;
+            if (options.multiple === true) {
+                if (flag) {
+                    node.addClass('editable');
+                    this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
+                    this.prop('editable', true);
+                } else {
+                    node.removeClass('editable');
+                    this.selection.setEditable(false);
+                    this.prop('editable', false);
+                }
             }
         };
 
         this.setMultiple = function (flag) {
-            this.selection.setMultiple(flag);
-            toolbar[flag ? 'show' : 'detach']();
+            console.warn('deprecated', flag);
         };
 
         this.prop = function (key, value) {
             if (key !== undefined) {
                 if (value !== undefined) {
-                    props[key] = value;
-                    this.trigger('change:prop', key, value);
-                    this.trigger('change:prop:' + key, value);
-                    responsiveChange = true;
+                    var previous = props[key];
+                    if (value !== previous) {
+                        props[key] = value;
+                        this.trigger('change:prop', key, value, previous);
+                        this.trigger('change:prop:' + key, value, previous);
+                        responsiveChange = true;
+                    }
                     return this;
                 } else {
                     return props[key];
@@ -1036,11 +1048,31 @@ define('io.ox/core/tk/vgrid',
         };
 
         // apply options
-        if (options.editable) {
-            this.setEditable(true);
+        if (options.multiple) {
+            if (options.editable) {
+                this.setEditable(true);
+            }
+            this.selection.setMultiple(true);
+            toolbar.show();
+        } else {
+            this.selection.setMultiple(false);
+            toolbar.detach();
         }
 
         node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+
+        this.on('change:prop:folder', function (e, value, previous) {
+            if (previous !== undefined) {
+                selectFirstAllowed = false;
+                self.selection.resetLastIndex();
+            }
+        });
+
+        this.on('change:mode', function (e, value, previous) {
+            self.selection.clear();
+            self.selection.resetLastIndex();
+            selectFirstAllowed = (value === 'search');
+        });
     };
 
     // make Template accessible

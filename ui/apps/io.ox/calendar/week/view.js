@@ -72,7 +72,12 @@ define('io.ox/calendar/week/view',
             this.initSettings();
         },
 
-        // set or get week reference start date
+        /**
+         * set week reference start date
+         * @param {string|number} opt
+         *        number: Timestamp of a date in the reference week. Now if empty
+         *        string: {'next', 'prev'} set next or previous week
+         */
         setStartDate: function (opt) {
             if (opt && typeof opt === 'string') {
                 switch (opt) {
@@ -107,7 +112,9 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // setup setting params
+        /**
+         * setup setting params
+         */
         initSettings: function () {
             // init settings
             this.gridSize = 60 / settings.get('interval', this.gridSize);
@@ -130,7 +137,10 @@ define('io.ox/calendar/week/view',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
-        // handler for hover effect
+        /**
+         * handler for hover effect
+         * @param  {MouseEvent} e Hover event (mouseenter, mouseleave)
+         */
         onHover: function (e) {
             if (!this.lasso) {
                 var cid = _.cid($(e.currentTarget).data('cid') + ''),
@@ -148,7 +158,10 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // handler for clickevents in toolbar
+        /**
+         * handler for clickevents in toolbar
+         * @param  {MouseEvent} e Clickevent
+         */
         onControlView: function (e) {
             e.preventDefault();
             var cT = $(e.currentTarget),
@@ -168,7 +181,10 @@ define('io.ox/calendar/week/view',
             this.trigger('onRefresh');
         },
 
-        // handler for key events in view
+        /**
+         * handler for key events in view
+         * @param  {KeyEvent} e Keyboard event
+         */
         onKey: function (e) {
             e.preventDefault();
             switch (e.which) {
@@ -185,15 +201,24 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * unbind onKey handler on keyup event from document
+         */
         unbindKeys: function () {
             $(document).off('keyup', this.onKey);
         },
 
+        /**
+         * bin onKey handler on keyup event to document
+         */
         bindKeys: function () {
             $(document).on('keyup', $.proxy(this.onKey, this));
         },
 
-        // handler for single- and double-click events on appointments
+        /**
+         * handler for single- and double-click events on appointments
+         * @param  {KeyEvent} e Keyboard event
+         */
         onClickAppointment: function (e) {
             var cT = $(e.currentTarget);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('private')) {
@@ -228,13 +253,10 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        onEditAppointment: function (e) {
-            var cid = $(e.currentTarget).data('cid'),
-                obj = _.cid(cid + '');
-            this.trigger('openEditAppointment', e, obj);
-        },
-
-        // handler for double-click events on grid
+        /**
+         * handler for double-click events on grid to create new appointments
+         * @param  {MouseEvent} e double click event
+         */
         onCreateAppointment: function (e) {
             if (!folderAPI.can('create', this.folder())) {
                 return;
@@ -252,12 +274,20 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * handler for appointment updates
+         * @param  {Object} obj appointment object
+         */
         onUpdateAppointment: function (obj) {
             if (obj.start_date && obj.end_date && obj.start_date < obj.end_date) {
                 this.trigger('updateAppointment', obj);
             }
         },
 
+        /**
+         * handler for lasso function in grid
+         * @param  {MouseEvent} e mouseevents on day container
+         */
         onLasso: function (e) {
             if (!folderAPI.can('create', this.folder())) {
                 return;
@@ -411,6 +441,10 @@ define('io.ox/calendar/week/view',
             return;
         },
 
+        /**
+         * render the week view
+         * @return {Backbone.View} this view
+         */
         render: function () {
 
             // create timelabels
@@ -505,10 +539,12 @@ define('io.ox/calendar/week/view',
                         this.pane.empty().append(timeLabel, weekCon)
                     )
             );
-
             return this;
         },
 
+        /**
+         * move the calendar window scrolling position, so that the working hours are centered
+         */
         setScrollPos: function () {
             var slotHeight = this.cellHeight * this.fragmentation,
                 workHeight = slotHeight * (this.workEnd - this.workStart),
@@ -517,11 +553,18 @@ define('io.ox/calendar/week/view',
             this.pane.scrollTop((slotHeight * this.workStart) - newPos);
         },
 
+        /**
+         * change the timeline css top value to the current time position
+         * @param  {Object} tl Timeline as jQuery object
+         */
         renderTimeline: function (tl) {
             var d = new date.Local();
             tl.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
         },
 
+        /**
+         * clear all appointments from current week and render all appointments form collection
+         */
         renderAppointments: function () {
             this.showDeclined = settings.get('showDeclinedAppointments', false);
 
@@ -1133,7 +1176,11 @@ define('io.ox/calendar/week/view',
                 });
         },
 
-        // render an single appointment
+        /**
+         * render an single appointment
+         * @param  {Backbone.Model} a Appointment Model
+         * @return {Object}   a jQuery object of the appointment
+         */
         renderAppointment: function (a) {
             var el = $('<div>')
                 .addClass('appointment')
@@ -1148,6 +1195,10 @@ define('io.ox/calendar/week/view',
             return el;
         },
 
+        /**
+         * redraw a rendered appointment
+         * @param  {Backbone.Model} a Appointment Model
+         */
         redrawAppointment: function (a) {
             var positionFieldChanged = _(['start_date', 'end_date', 'full_time'])
                 .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
@@ -1160,7 +1211,12 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        // round an integer to the next grid size
+        /**
+         * round an integer to the next grid size
+         * @param  {number} pos position as integer
+         * @param  {String} typ specifies the used rounding algorithm {n=floor, s=ceil, else round}
+         * @return {number}     rounded value
+         */
         roundToGrid: function (pos, typ) {
             var h = this.gridHeight();
             switch (typ) {
@@ -1177,7 +1233,11 @@ define('io.ox/calendar/week/view',
             return Math[typ](pos / h) * h;
         },
 
-        // calculate css position paramter (top and left) of an appointment
+        /**
+         * calculate css position paramter (top and left) of an appointment
+         * @param  {Object} ap jQuery object of the appointment
+         * @return {Object}    object containin top and height values
+         */
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
@@ -1192,27 +1252,47 @@ define('io.ox/calendar/week/view',
             };
         },
 
-        // get timestamp from date marker
+        /**
+         * get timestamp from date marker
+         * @param  {number} tag value of the day [0 - 6] for week view
+         * @return {number}     timestamp
+         */
         getTimeFromDateTag: function (tag)  {
             return this.startDate.getTime() + (tag * date.DAY);
         },
 
-        // calc daily timestamp from mouse position
+        /**
+         * calc daily timestamp from mouse position
+         * @param  {number} pos       mouse x position
+         * @param  {String} roundType specifies the used rounding algorithm {n=floor, s=ceil, else round}
+         * @return {number}           closest grid position
+         */
         getTimeFromPos: function (pos, roundType) {
             roundType = roundType || '';
             return this.roundToGrid(pos, roundType) / this.height() * date.DAY;
         },
 
-        // calculate complete height of the grid
+        /**
+         * calculate complete height of the grid
+         * @return {number} height of the grid
+         */
         height: function () {
             return this.cellHeight * this.slots * this.fragmentation;
         },
 
-        // calculate height of a single grid fragment
+        /**
+         * calculate height of a single grid fragment
+         * @return {number} height of a single grid fragment
+         */
         gridHeight: function () {
             return this.cellHeight * this.fragmentation / this.gridSize;
         },
 
+        /**
+         * get and set property of showAll checkbox
+         * @param  {Boolean} opt display option of the showAll checkbox
+         * @return {Boolean}     value of the showAllPrivateAppointments setting (only when opt param === undefined)
+         */
         showAll: function (opt) {
             if (typeof opt === 'boolean') {
                 this.showAllCon[opt ? 'show': 'hide']();
@@ -1223,6 +1303,12 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * get or set current folder data
+         * @param  {Object} data folder data
+         * @return {Object}      if (data === undefined) current folder data
+         *                       else object containing start and end timestamp of the current week
+         */
         folder: function (data) {
             if (data) {
                 this.folderData = data;
@@ -1243,11 +1329,17 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        /**
+         * save current scrollposition for the view instance
+         */
         save: function () {
             // save scrollposition
             this.restoreCache.scrollPosition = this.pane.scrollTop();
         },
 
+        /**
+         * restore scrollposition for the view instance
+         */
         restore: function () {
             // restore scrollposition
             if (this.restoreCache.scrollPosition) {

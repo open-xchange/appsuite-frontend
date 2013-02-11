@@ -257,23 +257,18 @@ define("io.ox/mail/write/view-main",
         createSenderField: function () {
             var node = $('<div>').addClass('fromselect-wrapper'),
                 select = $('<select>').css('width', '100%');
-            accountAPI.all().done(function (array) {
-                _.each(array, function (obj, index) {
-                    accountAPI.getSenderAddresses(obj.id).done(function (aliases) {
-                        _.each(aliases[1], function (alias) {
-                            var option = $('<option>').text(_.noI18n(mailUtil.formatSender(aliases[0], alias)));
-
-                            option.data({
-                                primaryaddress: alias,
-                                displayname: aliases[0]
-                            });
-                            // this code runs after setFrom in main.js, so we need to pre-select here
-                            if (alias === settings.get('defaultSendAddress')) {
-                                option.attr('selected', 'selected');
-                            }
-                            select.append(option);
-                        });
+            accountAPI.getAllSenderAddresses().done(function (addresses) {
+                _(addresses).each(function (address) {
+                    var option = $('<option>').text(_.noI18n(mailUtil.formatSender(address)));
+                    option.data({
+                        displayname: address[0],
+                        primaryaddress: address[1]
                     });
+                    // this code runs after setFrom in main.js, so we need to pre-select here
+                    if (address[1] === settings.get('defaultSendAddress')) {
+                        option.attr('selected', 'selected');
+                    }
+                    select.append(option);
                 });
             });
             return node.append(select);
@@ -428,53 +423,41 @@ define("io.ox/mail/write/view-main",
 
             }());
 
-
-
             // FROM
-            this.addSection('from', gt('From'), false, true)
+            this.addLink('from', gt('Sender'));
+            this.addSection('from', gt('Sender'), false, true)
                 .append(this.createSenderField());
 
-
-            accountAPI.getSenderAddresses(0).done(function (array) {
-                if (array[1].length > 1) {
-                    self.addLink('from', gt('Sender'));
-                } else {
-                    // As soon as the field "addresses" comes from the backend we should change this
-                    accountAPI.all().done(function (array) {
-                        if (array[1]) {
-                            self.addLink('from', gt('Sender'));
-                        }
-                    });
+            accountAPI.getAllSenderAddresses().done(function (addresses) {
+                if (addresses.length <= 1) {
+                    self.scrollpane.find('a[data-section-link="from"]').parent().remove();
                 }
             });
 
             // Options
-            this.addSection('options', gt('Options'), false, true)
+            this.addSection('options', gt('Options'), false, true).append(
+                // Priority
+                $('<div>').addClass('section-item')
+                .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
                 .append(
-                    // Priority
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
-                    .append(
-                        $('<span>').addClass('group-label').text(gt('Priority'))
-                    )
-                    .append(createRadio('priority', '1', gt('High')))
-                    .append(createRadio('priority', '3', gt('Normal'), true))
-                    .append(createRadio('priority', '5', gt('Low')))
-                    .on('change', 'input', function () {
-                        var radio = $(this);
-                        if (radio.val() === '1' && radio.prop('checked')) {
-                            self.applyHighPriority(true);
-                        } else {
-                            self.applyHighPriority(false);
-                        }
-                    })
+                    $('<span>').addClass('group-label').text(gt('Priority'))
                 )
-                .append(
-                    // Attach vCard
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('vcard', gt('Attach vCard')))
-                );
+                .append(createRadio('priority', '1', gt('High')))
+                .append(createRadio('priority', '3', gt('Normal'), true))
+                .append(createRadio('priority', '5', gt('Low')))
+                .on('change', 'input', function () {
+                    var radio = $(this);
+                    if (radio.val() === '1' && radio.prop('checked')) {
+                        self.applyHighPriority(true);
+                    } else {
+                        self.applyHighPriority(false);
+                    }
+                }),
+                // Attach vCard
+                $('<div>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '1em' })
+                .append(createCheckbox('vcard', gt('Attach vCard')))
+            );
 
             this.addLink('options', gt('More'));
 

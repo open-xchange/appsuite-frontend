@@ -50,33 +50,86 @@ define('plugins/portal/facebook/register',
             JSON.stringify(post));
     };
 
-    var handleError = function (node, baton) {
-        var resultsets = baton.data;
-        console.error("Facebook error occurred", resultsets.error);
-        node.append(
-            $('<div class="content error">').append(
-                $('<div class="error bold">').text(gt('Facebook reported an error:')),
-                    $('<div class="errormessage">').text(resultsets.error.message)
-            )
-        ).addClass('error-occurred');
-        if (resultsets.error.message.indexOf('authorize') !== -1) {
-            var account = keychain.getStandardAccount('facebook');
-
-            node.find('.content.error').append(
-                $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
-                    keychain.submodules.facebook.reauthorize(account).done(function () {
-                        console.log(gt("You have reauthorized this %s account.", 'Facebook'));
-                    }).fail(function () {
-                        console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
-                    });
+    var loadFromFacebook = function (baton) {
+        return proxy.request({
+                api: 'facebook',
+                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
+                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
-            );
+            })
+            .pipe(JSON.parse);
+    };
+
+    var drawPreview = function (baton) {
+        var resultsets = baton.data,
+            content = baton.contentNode;
+
+        if (resultsets.error) {
+            handleError(content, baton);
+            return content;
+        }
+
+        content.addClass('pointer');
+        var wall = resultsets.data[0].fql_result_set,
+            profiles = resultsets.data[1].fql_result_set;
+
+        if (!wall || wall.length === 0) {
+            content.append(
+                $('<div class="paragraph">').text(gt('No wall posts yet.')));
+        } else {
+            _(wall).each(function (post) {
+                var message = strings.shorten(post.message || post.description || '', 150);
+                content.append(
+                    $('<div class="paragraph">').append(
+                        $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
+                        $('<span class="normal">').text(message)
+                    )
+                );
+            });
+        }
+        return content;
+    };
+
+    var handleError = function (node, baton) {
+        var resultsets = baton.data,
+            account = keychain.getStandardAccount('facebook'),
+            $reauthorizeLink = $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                keychain.submodules.facebook.reauthorize(account).done(function () {
+                    keychain.submodules.facebook.trigger('update');
+                }).fail(function () {
+                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
+                });
+            });
+
+        node.append(
+            $('<div class="error bold">').text(gt('Facebook reported an error:')),
+            $('<div class="errormessage">').text(resultsets.error.message),
+            '<br />'
+        ).addClass('error-occurred error');
+
+        if (resultsets.error.message.indexOf('authorize') !== -1) {
+            node.append($reauthorizeLink);
+        } else  if (resultsets.error.message.indexOf('606') !== -1) {
+            node.append($reauthorizeLink);
         }
     };
 
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: 'Facebook',
+
+        initialize: function (baton) {
+            keychain.submodules.facebook.on('update create delete', function () {
+                loadFromFacebook().done(function (data) {
+                    baton.data = data;
+                    if (baton.contentNode) {
+                        baton.contentNode.empty();
+                        drawPreview(baton);
+                    }
+                });
+            });
+        },
 
         action: function (baton) {
             window.open('https://www.facebook.com/me', 'facebook');
@@ -96,29 +149,10 @@ define('plugins/portal/facebook/register',
         },
 
         preview: function (baton) {
-            var resultsets = baton.data;
-            if (resultsets.error) {
-                handleError(this, baton);
-                return;
-            }
-            var wall = resultsets.data[0].fql_result_set,
-                profiles = resultsets.data[1].fql_result_set,
-                $content = $('<div class="content pointer">');
-            if (!wall || wall.length === 0) {
-                $content.append(
-                    $('<div class="paragraph">').text(gt('No wall posts yet.')));
-            } else {
-                _(wall).each(function (post) {
-                    var message = strings.shorten(post.message || post.description || '', 150);
-                    $content.append(
-                        $('<div class="paragraph">').append(
-                            $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
-                            $('<span class="normal">').text(message)
-                        )
-                    );
-                });
-            }
-            this.append($content);
+            var content = $('<div class="content">');
+            baton.contentNode = content;
+            drawPreview(baton);
+            this.append(content);
         },
 
         load: function (baton) {
@@ -136,7 +170,6 @@ define('plugins/portal/facebook/register',
         },
 
         draw: function (baton) {
-
             var resultsets = baton.data,
                 wall = resultsets.data[0].fql_result_set,
                 profiles = resultsets.data[1].fql_result_set;
@@ -214,13 +247,6 @@ define('plugins/portal/facebook/register',
                     $('<span>').text(gt('Add your account'))),
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="icon-remove io-ox-portal-action">'))
-            );
-        },
-
-        recover: function () {
-            var $node = $(this);
-            $node.empty().append(
-                $('<div>').text("THIS TOTALLY FAILED!")
             );
         }
     });

@@ -10,8 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/config',
-    ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
     'use strict';
 
@@ -128,7 +127,7 @@ define('io.ox/core/config',
                         processResponse: false
                     })
                     .done(function (data) {
-                        config = data !== undefined ? data.data : {};
+                        config = (data !== undefined ? data.data : {});
                         configCache.add('default', config);
                     });
                 };

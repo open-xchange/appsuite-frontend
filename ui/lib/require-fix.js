@@ -46,7 +46,6 @@ define.async = (function () {
 **/
 (function () {
 
-    var defined = {};
     var originalDefine = define;
 
     window.define = function () {
@@ -65,9 +64,8 @@ define.async = (function () {
                 definitionFunction = arguments[2];
             }
             // already defined?
-            if (!(name in defined)) {
+            if (!requirejs.defined(name)) {
                 var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
-                defined[name] = true;
                 return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
             } else {
                 return;

@@ -156,6 +156,27 @@ define('io.ox/core/api/account',
         return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
     };
 
+    function getAddressArray(name, address) {
+        name = $.trim(name || '');
+        address = $.trim(address).toLowerCase();
+        return [name !== address ? name : '', address];
+    }
+
+    function getSenderAddress(account) {
+        // just for robustness
+        if (!account) return [];
+        // no addresses?
+        if (account.addresses === null) {
+            return [getAddressArray(account.personal, account.primary_address)];
+        }
+        // looks like addresses continas primary address plus aliases
+        var addresses = String(account.addresses || '').split(',');
+        // build common array of [display_name, email]
+        return _(addresses).map(function (address) {
+            return getAddressArray(account.personal, address);
+        });
+    }
+
     /**
      * Get a list of addresses that can be used when sending mails.
      *
@@ -165,18 +186,14 @@ define('io.ox/core/api/account',
      * @return - the personal name and a list of (alias) addresses usable for sending
      */
     api.getSenderAddresses = function (accountId) {
-        return this.get(accountId || 0).pipe(function (account) {
-            if (!account) return null;
+        return this.get(accountId || 0).pipe(getSenderAddress);
+    };
 
-            if (accountId === 0) {
-                //TODO: remove, once aliases are handled also for accounts
-                return [account.personal || '', config.get('modules.mail.addresses')];
-            }
-
-            var aliases = account.addresses || '';
-            aliases = aliases.split(', ');
-            aliases.push(account.primary_address);
-            return [account.personal || account.name || '', _(aliases).compact()];
+    api.getAllSenderAddresses = function () {
+        return api.all().pipe(function (list) {
+            return $.when.apply($, _(list).map(getSenderAddress)).pipe(function () {
+                return _(arguments).flatten(true);
+            });
         });
     };
 
@@ -187,6 +204,7 @@ define('io.ox/core/api/account',
     var accountsAllCache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); });
 
     api.all = function () {
+
         var getter = function () {
             return http.GET({
                 module: 'account',

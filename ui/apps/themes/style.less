@@ -476,6 +476,7 @@
     }
 
     & > a i { color: @linkOnDark; }
+    & > a i.accent-color { color: @linkAccentColor; }
     &:hover > a i { color: @linkColor; text-decoration: none; }
     & > a.disabled i { color: #555; cursor: default; }
 
@@ -1376,6 +1377,11 @@ input.nice-input {
             .folder.selectable.dnd-over,
             .folder.selectable:hover { background-color: #555; }
 
+            .io-ox-fail {
+                background-color: #2a2a2a;
+                padding: 1em 0;
+            }
+
             .folder.selected {
                 background-image: none !important;
                 background-color: #2a2a2a !important;
@@ -1425,7 +1431,10 @@ a.toolbar-action {
 
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
-a.toolbar-action, .toolbar-action > a { color: @linkOnDark; text-decoration: none; outline: 0; }
+a.toolbar-action, .toolbar-action > a {
+    color: @linkOnDark; text-decoration: none; outline: 0;
+    i.accent-color { color: @linkAccentColor; }
+}
 .toolbar-action.pull-left { margin-right: 1px; }
 .toolbar-action.pull-right { margin-left: 1px; }
 .toolbar-action ul { text-align: left; }

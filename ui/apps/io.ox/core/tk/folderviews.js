@@ -85,9 +85,12 @@ define('io.ox/core/tk/folderviews',
                     //    return def;
                     // })
                     .fail(function (error) {
-                        // reset folder and show global error
-                        nodes.sub.idle().hide();
-                        notifications.yell(error);
+                        // reset folder and show local error
+                        nodes.sub.idle().empty().append(
+                            $.fail(gt('Couldn\'t load subfolders.'), function () {
+                                drawChildren(reload, method);
+                            })
+                        );
                     })
                     .pipe(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.

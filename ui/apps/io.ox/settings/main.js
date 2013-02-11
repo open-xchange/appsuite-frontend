@@ -108,7 +108,7 @@ define('io.ox/settings/main',
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
 
-        grid = new VGrid(left);
+        grid = new VGrid(left, { multiple: false });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -165,8 +165,6 @@ define('io.ox/settings/main',
 
             return def;
         });
-
-        grid.setMultiple(false);
 
         var showSettings = function (obj) {
             var settingsPath = obj.id + '/settings/pane',
