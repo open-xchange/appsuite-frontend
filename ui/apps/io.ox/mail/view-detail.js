@@ -442,7 +442,8 @@ define('io.ox/mail/view-detail',
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
                         container.replaceWith(self.draw(tmp));
-                    });
+                    }),
+                drawnAlternatively = false;
 
             try {
 
@@ -463,7 +464,15 @@ define('io.ox/mail/view-detail',
                 }
 
                 // invoke extensions
-                ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                ext.point("io.ox/mail/detail/alternatives").each(function (ext) {
+                    if (ext.accept(baton) && !drawnAlternatively) {
+                        drawnAlternatively = true;
+                        ext.invoke('draw', node, baton, ext.point("io.ox/mail/detail"));
+                    }
+                });
+                if (!drawnAlternatively) {
+                    ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                }
 
             } catch (e) {
                 console.error('mail.draw', e.message, e, baton);
