@@ -59,13 +59,12 @@ define('io.ox/mail/folderview-extensions',
 
     function markMailFolderRead(e) {
         e.preventDefault();
-        var items = _(e.data.app.getGrid().getData()).map(function (item) {
-            return {id: item.id, folder: item.folder_id};
-        });
-        mailAPI.markRead(items).done(function () {
+        var item = {folder: e.data.app.folder.get()};
+
+        mailAPI.markRead(item).done(function () {
             // TODO: unify events?
-            mailAPI.trigger("remove-unseen-mails", items); //remove notifications in notification area
-            folderAPI.trigger('update:unread', items[0].folder);
+            mailAPI.trigger("remove-unseen-mails", item); //remove notifications in notification area
+            folderAPI.trigger('update:unread', item);
         });
     }
 
