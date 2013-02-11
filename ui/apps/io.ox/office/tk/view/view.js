@@ -47,9 +47,9 @@ define('io.ox/office/tk/view/view',
      *      of the application container node is locked and synchronized with
      *      the size of the application pane (with regard to padding, see the
      *      option 'options.appPanePadding').
-     *  @param {Number} [options.padding=0]
-     *      The padding between the fixed application pane and the embedded
-     *      application container node.
+     *  @param {String} [options.margin='0']
+     *      The margin between the fixed application pane and the embedded
+     *      application container node, as CSS 'margin' attribute.
      */
     function View(app, options) {
 
@@ -541,7 +541,7 @@ define('io.ox/office/tk/view/view',
         appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
         appPane.getNode()
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', Utils.getIntegerOption(options, 'padding', 0, 0) + 'px'));
+            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
 
         // add the main application pane to the application window
         app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());

@@ -29,29 +29,11 @@ define('io.ox/office/preview/model',
      */
     function PreviewModel(app) {
 
-        var // the root node containing the previewed document
-            node = $('<div>', { tabindex: 0 }).addClass('page');
-
         // base constructor ---------------------------------------------------
 
         Model.call(this, app);
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Returns the root DOM element representing this previewer.
-         */
-        this.getNode = function () {
-            return node;
-        };
-
-        /**
-         * Inserts the passed HTML source code into the root node of this
-         * document model.
-         */
-        this.renderPage = function (html) {
-            node[0].innerHTML = html;
-        };
 
     } // class PreviewModel
 

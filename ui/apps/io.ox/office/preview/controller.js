@@ -35,28 +35,39 @@ define('io.ox/office/preview/controller',
         var // self reference
             self = this,
 
+            // the view instance
+            view = null,
+
             // all the little controller items
             items = {
 
+                'document/valid': {
+                    enable: function () { return app.getPageCount() > 0; }
+                },
+
                 'pages/first': {
-                    enable: function () { return app.getPage() > 1; },
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (app.getPage() > 1); },
                     set: function () { app.firstPage(); }
                 },
                 'pages/previous': {
-                    enable: function () { return app.getPage() > 1; },
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (app.getPage() > 1); },
                     set: function () { app.previousPage(); }
                 },
                 'pages/next': {
-                    enable: function () { return app.getPage() < app.getPageCount(); },
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (app.getPage() < app.getPageCount()); },
                     set: function () { app.nextPage(); }
                 },
                 'pages/last': {
-                    enable: function () { return app.getPage() < app.getPageCount(); },
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (app.getPage() < app.getPageCount()); },
                     set: function () { app.lastPage(); }
                 },
 
                 'pages/current': {
-                    enable: function () { return app.getPageCount() > 0; },
+                    parent: 'document/valid',
                     get: function () {
                         // the gettext comments must be located directly before gt(), but
                         // 'return' cannot be the last token in a line
@@ -66,6 +77,30 @@ define('io.ox/office/preview/controller',
                             //#. %2$s is the number of pages in office document preview
                             //#, c-format
                             gt('%1$s of %2$s', app.getPage(), app.getPageCount());
+                        return label;
+                    }
+                },
+
+                'zoom/dec': {
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (view.getZoomLevel() > view.getMinZoomLevel()); },
+                    set: function () { view.decreaseZoom(); }
+                },
+                'zoom/inc': {
+                    parent: 'document/valid',
+                    enable: function (enabled) { return enabled && (view.getZoomLevel() < view.getMaxZoomLevel()); },
+                    set: function () { view.increaseZoom(); }
+                },
+                'zoom/current': {
+                    parent: 'document/valid',
+                    get: function () {
+                        // the gettext comments must be located directly before gt(), but
+                        // 'return' cannot be the last token in a line
+                        // -> use a temporary variable to store the result
+                        var label =
+                            //#. %1$d is the current zoom factor, in percent
+                            //#, c-format
+                            gt('%1$d%', view.getZoomFactor());
                         return label;
                     }
                 }
@@ -79,7 +114,13 @@ define('io.ox/office/preview/controller',
 
         // register item definitions
         this.registerDefinitions(items)
-            .registerDoneHandler(function () { self.getView().grabFocus(); });
+            .registerDoneHandler(function () { view.grabFocus(); });
+
+        // initialization after construction
+        app.on('docs:init', function () {
+            // view is not available at construction time
+            view = app.getView();
+        });
 
     } // class PreviewController
 

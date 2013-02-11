@@ -61,7 +61,7 @@ define('io.ox/office/tk/app/controller',
         function Item(key, definition) {
 
             var // self reference
-                self = this,
+                item = this,
                 // global enabled state of the item
                 enabled = true,
                 // parent item whose value/state is needed to resolve the own value/state
@@ -84,7 +84,7 @@ define('io.ox/office/tk/app/controller',
 
                 // if the required value does not exist yet, resolve it via the passed handler
                 if (!(type in result)) {
-                    result[type] = handler.call(self, parentValue);
+                    result[type] = handler.call(item, parentValue);
                 }
                 return result[type];
             }
@@ -156,16 +156,15 @@ define('io.ox/office/tk/app/controller',
                 if (this.isEnabled()) {
                     if (async) {
                         this.enable(false);
-                        setHandler.call(self, value).always(function () {
+                        setHandler.call(item, value).always(function () {
                             enabled = true;
                             self.update(); // updates enable+value
                         });
                     } else {
-                        setHandler.call(self, value);
-                        this.update(value);
+                        setHandler.call(item, value);
                     }
                 }
-                doneHandler.call(self);
+                doneHandler.call(item);
                 return this;
             };
 
@@ -246,6 +245,7 @@ define('io.ox/office/tk/app/controller',
             if (key in items) {
                 clearResultCache();
                 items[key].change(value);
+                self.update();
             } else {
                 callDoneHandlers();
             }

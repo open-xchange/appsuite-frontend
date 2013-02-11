@@ -104,6 +104,7 @@ i.io-ox-office-icon {
 /* give standard Bootstrap icons a minimum width */
 i[class^="icon-"], i[class^=" icon-"] {
     min-width: @icon-size;
+    font-size: 16px;
     text-align: center;
 }
 
