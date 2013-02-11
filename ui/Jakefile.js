@@ -755,6 +755,7 @@ task("dist", [distDest], function () {
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
                 JSON.parse(fs.readFileSync('i18n/overrides.json', 'utf8')));
             _.each(i18n.languages(), function (Lang) {
+                if (!(Lang in languageNames)) fail('Unknown language: ' + Lang);
                 var lang = Lang.toLowerCase().replace(/_/g, '-');
                 fs.writeFileSync(path.join(dest, 'i18n',
                         'open-xchange-appsuite-l10n-' + lang + '.properties'),
