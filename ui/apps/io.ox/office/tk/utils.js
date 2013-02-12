@@ -1911,6 +1911,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             label = Utils.createControl('label', undefined, options);
 
         Utils.setControlCaption(label, options);
+        // must catch mouse events, otherwise IE9 enlarges width of labels to window size...
+        label.on('mousedown mouseup', false);
         return label;
     };
 

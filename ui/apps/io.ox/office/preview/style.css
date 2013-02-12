@@ -13,4 +13,11 @@
  */
 
 .io-ox-office-preview-main {
+    
+.page {
+    &, &:focus, &:active {
+        outline: none;
+    }
+}
+
 }
