@@ -51,7 +51,6 @@
             return;
         }
         var queue = [];
-        var timeout = null;
         var deps = window.dependencies;
         window.dependencies = undefined;
         req.load = function (context, modulename, url) {
@@ -62,13 +61,12 @@
                 }
                 url = url.slice(prefix.length);
             }
-            if (timeout === null) timeout = setTimeout(loaded, 0);
+            req.nextTick(null, loaded);
             var next = deps[modulename];
-            if (next && next.length) req(deps[modulename]);
+            if (next && next.length) context.require(next);
             queue.push(url);
-
+            
             function loaded() {
-                timeout = null;
                 var q = queue;
                 queue = [];
                 oldload(context, modulename,
@@ -76,17 +74,7 @@
                 if (queue.length) console.error('recursive require', queue);
             }
         };
-
-        var classicRequire = req.config({
-            context: "classic",
-            baseUrl: ox.base + "/apps"
-        });
-        classicRequire.load = oldload;
-
-        define('classic', {load: function (name, parentRequire, load, config) {
-            classicRequire([name], load, load.error);
-        } });
-
+        
         define('text', { load: function (name, parentRequire, load, config) {
             req(['/text;' + name], load, load.error);
         } });
@@ -363,7 +351,6 @@ define("gettext", function (gettext) {
 
     define('withPluginsFor', {
         load: function (name, parentRequire, loaded, config) {
-            console.log('withPluginsFor', name);
             parentRequire(ox.withPluginsFor(name, []), loaded);
         }
     });
