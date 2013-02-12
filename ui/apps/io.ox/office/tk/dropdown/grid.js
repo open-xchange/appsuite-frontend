@@ -41,11 +41,14 @@ define('io.ox/office/tk/dropdown/grid',
      *  A map of options to control the properties of the grid. Supports all
      *  options of the DropDown base class. Additionally, the following options
      *  are supported:
+     *  @param {Number} [options.columns=10]
+     *      The number of columns in the grid layout.
      *  @param {Function} [options.itemValueResolver]
      *      The function that returns the current value of a clicked list item.
      *      Will be passed to the method Group.registerChangeHandler() called
      *      at the internal button group that contains the list items in the
-     *      drop-down menu.
+     *      drop-down menu. If omitted, defaults to the static method
+     *      Utils.getControlValue().
      *  @param {String} [options.itemDesign='framed']
      *      The design mode of the list items. See the option 'options.design'
      *      supported by the Group class constructor for details.
@@ -59,14 +62,11 @@ define('io.ox/office/tk/dropdown/grid',
         var // self reference (the Group instance)
             self = this,
 
-            // sorted list items
-            sorted = Utils.getBooleanOption(options, 'sorted', false),
-
-            // functor used to sort the items
-            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
-
             // the group in the drop-down menu representing the list items
-            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+            gridItemGroup = new Group({ design: Utils.getStringOption(options, 'itemDesign', 'framed') }),
+
+            // number of items per row
+            columns = Utils.getIntegerOption(options, 'columns', 10, 1),
 
             // handler called after a new item has been created
             itemCreateHandler = Utils.getFunctionOption(options, 'itemCreateHandler', $.noop);
@@ -119,21 +119,21 @@ define('io.ox/office/tk/dropdown/grid',
          * Returns the group instance containing all list items.
          */
         this.getListItemGroup = function () {
-            return listItemGroup;
+            return gridItemGroup;
         };
 
         /**
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
-            return listItemGroup.getNode().children(Utils.BUTTON_SELECTOR);
+            return gridItemGroup.getNode().children(Utils.BUTTON_SELECTOR);
         };
 
         /**
          * Removes all list items from the drop-down menu.
          */
         this.clearListItems = function () {
-            listItemGroup.getNode().empty();
+            gridItemGroup.getNode().empty();
             return this;
         };
 
@@ -155,33 +155,14 @@ define('io.ox/office/tk/dropdown/grid',
          */
         this.createListItem = function (options) {
 
-            var // all existing list items
-                buttons = self.getListItems(),
-                // create the button element representing the list item
-                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
-                // insertion index for sorted lists
-                index = -1;
+            var // create the button element representing the list item
+                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS);
 
             // add tool tip
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
-            // find insertion index for sorted lists
-            if (sorted) {
-                index = _.chain(buttons.get())
-                    // convert array of button elements to strings returned by sort functor
-                    .map(function (button) { return sortFunctor.call(self, $(button)); })
-                    // calculate the insertion index of the new list item
-                    .sortedIndex(sortFunctor.call(this, button))
-                    // exit the call chain, returns result of sortedIndex()
-                    .value();
-            }
-
             // insert the new list item element
-            if ((0 <= index) && (index < buttons.length)) {
-                buttons.eq(index).before(button);
-            } else {
-                listItemGroup.getNode().append(button);
-            }
+            gridItemGroup.getNode().append(button);
 
             // call external handler
             itemCreateHandler.call(this, button);
@@ -191,17 +172,11 @@ define('io.ox/office/tk/dropdown/grid',
         // initialization -----------------------------------------------------
 
         // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(listItemGroup);
-
-        // default sort functor: sort by button label text, case insensitive
-        sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
-            var label = Utils.getControlLabel(button);
-            return _.isString(label) ? label.toLowerCase() : '';
-        };
+        this.addPrivateMenuGroup(gridItemGroup);
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);
-        listItemGroup
+        gridItemGroup
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: Utils.getFunctionOption(options, 'itemValueResolver') })
             .getNode().on('keydown keypress keyup', listKeyHandler);
 

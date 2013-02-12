@@ -58,7 +58,8 @@ define('io.ox/office/tk/dropdown/list',
      *      The function that returns the current value of a clicked list item.
      *      Will be passed to the method Group.registerChangeHandler() called
      *      at the internal button group that contains the list items in the
-     *      drop-down menu.
+     *      drop-down menu. If omitted, defaults to the static method
+     *      Utils.getControlValue().
      *  @param {String} [options.itemDesign='default']
      *      The design mode of the list items. See the option 'options.design'
      *      supported by the Group class constructor for details.
