@@ -1432,7 +1432,10 @@ a.toolbar-action {
 .toolbar-action i.enabled { color: #888; }
 .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
 a.toolbar-action, .toolbar-action > a {
-    color: @linkOnDark; text-decoration: none; outline: 0;
+    color: @linkOnDark;
+    outline: 0;
+    text-decoration: none;
+    &:hover { text-decoration: none; }
     i.accent-color { color: @linkAccentColor; }
 }
 .toolbar-action.pull-left { margin-right: 1px; }

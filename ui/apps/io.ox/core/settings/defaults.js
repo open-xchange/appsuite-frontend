@@ -22,6 +22,10 @@ define('io.ox/core/settings/defaults', function (ext) {
 	} else {
 		defaultLanguage = _(ox.serverConfig.languages).contains("en_US") ? 'en_US' : ox.serverConfig.languages[0];
 	}
+	var cookieLanguage = _.getCookie('language');
+	if (cookieLanguage) {
+		defaultLanguage = cookieLanguage;
+	}
 
 	return {
 		language: defaultLanguage,

@@ -60,7 +60,12 @@ define('io.ox/core/settings/pane',
         index: 100,
         attribute: 'language',
         label: gt("Language"),
-        selectOptions: ox.serverConfig.languages || {}
+        selectOptions: ox.serverConfig.languages || {},
+        updateModel: function () {
+            var value = this.nodes.element.val();
+            this.model.set(this.attribute, value);
+            _.setCookie('language', value);
+        }
     }));
 
     http.GET({
