@@ -20,10 +20,10 @@ define('io.ox/office/preview/view',
 
     'use strict';
 
-    var // minimum zoom factor (25%)
+    var // minimum zoom level (25%)
         MIN_ZOOM = -4,
 
-        // maximum zoom factor (1600%)
+        // maximum zoom level (1600%)
         MAX_ZOOM = 8;
 
     // class PreviewView ======================================================
@@ -38,10 +38,16 @@ define('io.ox/office/preview/view',
         var // self reference
             self = this,
 
+            // the preview model
+            model = null,
+
             // the root node containing the current page contents
             pageNode = $('<div>', { tabindex: 0 }).addClass('page'),
 
-            // current zoom factor
+            // current page index (one-based!)
+            page = 0,
+
+            // current zoom level (0 means 100%, in steps of sqrt(2) up and down)
             zoom = 0;
 
         // base constructor ---------------------------------------------------
@@ -58,6 +64,8 @@ define('io.ox/office/preview/view',
 
             var // the tool pane for tool boxes
                 toolPane = self.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
+
+            model = app.getModel();
 
             toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
                 .addGroupContainer(function () {
@@ -81,6 +89,42 @@ define('io.ox/office/preview/view',
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);
+        }
+
+        function showPage(newPage) {
+
+            var // a timeout for the window busy call
+                busyTimeout = null;
+
+            // check that the page changes inside the allowed page range
+            if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
+                return;
+            }
+            page = newPage;
+
+            // switch window to busy state after a short delay
+            busyTimeout = app.executeDelayed(function () {
+                app.getWindow().busy();
+                busyTimeout = null;
+            }, 500);
+
+            // load the requested page
+            model.loadPage(page)
+            .done(function (html) {
+                pageNode[0].innerHTML = html;
+                updateZoom();
+            })
+            .fail(function () {
+                self.showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
+            })
+            .always(function () {
+                app.getController().update();
+                if (busyTimeout) {
+                    app.cancelDelayed(busyTimeout);
+                } else {
+                    app.getWindow().idle();
+                }
+            });
         }
 
         function updateZoom() {
@@ -116,17 +160,44 @@ define('io.ox/office/preview/view',
             return pageNode;
         };
 
-        /**
-         * Inserts the passed HTML source code into the page node.
-         */
-        this.renderPage = function (html) {
-            pageNode[0].innerHTML = html;
-            updateZoom();
-        };
-
         this.grabFocus = function () {
             pageNode.focus();
             return this;
+        };
+
+        /**
+         * Returns the one-based index of the page currently shown.
+         */
+        this.getPage = function () {
+            return page;
+        };
+
+        /**
+         * Shows the first page of the current document.
+         */
+        this.showFirstPage = function () {
+            showPage(1);
+        };
+
+        /**
+         * Shows the previous page of the current document.
+         */
+        this.showPreviousPage = function () {
+            showPage(page - 1);
+        };
+
+        /**
+         * Shows the next page of the current document.
+         */
+        this.showNextPage = function () {
+            showPage(page + 1);
+        };
+
+        /**
+         * Shows the last page of the current document.
+         */
+        this.showLastPage = function () {
+            showPage(model.getPageCount());
         };
 
         this.getZoomLevel = function () {
@@ -141,22 +212,31 @@ define('io.ox/office/preview/view',
             return MAX_ZOOM;
         };
 
-        this.getZoomFactor = function () {
-            return Math.round(100 * Math.pow(Math.sqrt(2), zoom));
-        };
-
-        this.decreaseZoom = function () {
+        this.decreaseZoomLevel = function () {
             if (zoom > MIN_ZOOM) {
                 zoom -= 1;
                 updateZoom();
             }
         };
 
-        this.increaseZoom = function () {
+        this.increaseZoomLevel = function () {
             if (zoom < MAX_ZOOM) {
                 zoom += 1;
                 updateZoom();
             }
+        };
+
+        this.getZoomFactor = function () {
+            return Utils.roundSignificantDigits(100 * Math.pow(Math.SQRT2, zoom), 2);
+        };
+
+        this.getSavePoint = function () {
+            return { page: page, zoom: zoom };
+        };
+
+        this.restoreFromSavePoint = function (point) {
+            zoom = Utils.getIntegerOption(point, 'zoom', 0, MIN_ZOOM, MAX_ZOOM);
+            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));
         };
 
         // initialization -----------------------------------------------------

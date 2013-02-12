@@ -39,66 +39,13 @@ define('io.ox/office/preview/main',
             self = this,
 
             // the unique job identifier to be used for page requests
-            jobId = null,
-
-            // the total page count of the document
-            pageCount = 0,
-
-            // current page index (one-based!)
-            page = 0;
+            jobId = null;
 
         // base constructor ---------------------------------------------------
 
         OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions);
 
         // private methods ----------------------------------------------------
-
-        function showPage(newPage) {
-
-            var // a timeout for the window busy call
-                busyTimeout = null;
-
-            // check that the page changes inside the allowed page range
-            if ((page === newPage) || (newPage < 1) || (newPage > pageCount)) {
-                return;
-            }
-            page = newPage;
-
-            // switch window to busy state after a short delay
-            busyTimeout = window.setTimeout(function () {
-                self.getWindow().busy();
-                busyTimeout = null;
-            }, 500);
-
-            // load the requested page
-            self.sendConverterRequest({
-                params: {
-                    action: 'convertdocument',
-                    job_id: jobId,
-                    convert_format: 'html',
-                    convert_action: 'getpage',
-                    page_number: page
-                },
-                resultFilter: function (data) {
-                    // extract HTML source, returning undefined will reject the entire request
-                    return Utils.getStringOption(data, 'HTMLPages');
-                }
-            })
-            .done(function (html) {
-                self.getView().renderPage(html);
-            })
-            .fail(function () {
-                self.getView().showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
-            })
-            .always(function () {
-                self.getController().update();
-                if (busyTimeout) {
-                    window.clearTimeout(busyTimeout);
-                } else {
-                    self.getWindow().idle();
-                }
-            });
-        }
 
         /**
          * Loads the first page of the document described in the current file
@@ -139,55 +86,18 @@ define('io.ox/office/preview/main',
 
                 // show a page of the document
                 jobId = data.JobID;
-                pageCount = data.PageCount;
-                page = 0;
-                showPage(Utils.getIntegerOption(point, 'page', 1));
+                self.getModel().setPageCount(data.PageCount);
+                self.getView().restoreFromSavePoint(point);
             })
             .promise();
         }
 
         // methods ------------------------------------------------------------
 
-        /**
-         * Returns the one-based index of the page currently shown.
-         */
-        this.getPage = function () {
-            return page;
-        };
-
-        /**
-         * Returns the total number of pages contained by the current document.
-         */
-        this.getPageCount = function () {
-            return pageCount;
-        };
-
-        /**
-         * Shows the first page of the current document.
-         */
-        this.firstPage = function () {
-            showPage(1);
-        };
-
-        /**
-         * Shows the previous page of the current document.
-         */
-        this.previousPage = function () {
-            showPage(page - 1);
-        };
-
-        /**
-         * Shows the next page of the current document.
-         */
-        this.nextPage = function () {
-            showPage(page + 1);
-        };
-
-        /**
-         * Shows the last page of the current document.
-         */
-        this.lastPage = function () {
-            showPage(pageCount);
+        this.sendPreviewRequest = function (options) {
+            return _.isNumber(jobId) ? this.sendConverterRequest(Utils.extendOptions({
+                params: { action: 'convertdocument', job_id: jobId }
+            }, options)) : $.Deferred().reject();
         };
 
         /**
@@ -195,22 +105,13 @@ define('io.ox/office/preview/main',
          * been closed.
          */
         this.sendCloseNotification = function () {
-            if (jobId) {
-                self.sendConverterRequest({
-                    params: {
-                        action: 'convertdocument',
-                        convert_format: 'html',
-                        convert_action: 'endconvert',
-                        job_id: jobId
-                    }
-                });
-            }
+            this.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
         };
 
         // initialization -----------------------------------------------------
 
         // fail-save handler returns data needed to restore the application after browser refresh
-        this.registerFailSaveHandler(function () { return { page: page }; });
+        this.registerFailSaveHandler(function () { return self.getView().getSavePoint(); });
 
         // send notification to server on quit
         this.on('docs:quit', function () { self.sendCloseNotification(); });

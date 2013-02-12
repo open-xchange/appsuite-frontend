@@ -184,6 +184,22 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Rounds the passed floating-point number to the specified number of
+     * significant digits, independent from the number of digits before and
+     * after the decimal point.
+     *
+     * @param {Number} value
+     *  The value to be rounded.
+     *
+     * @param {Number} digits
+     *  The number of significant digits. Must be positive.
+     */
+    Utils.roundSignificantDigits = function (value, digits) {
+        var pow10 = Math.pow(10, Math.floor(Math.log(value) / Math.log(10)));
+        return Utils.roundDigits(value / pow10, digits - 1) * pow10;
+    };
+
+    /**
      * Converts a length value from an absolute CSS measurement unit into
      * another absolute CSS measurement unit.
      *

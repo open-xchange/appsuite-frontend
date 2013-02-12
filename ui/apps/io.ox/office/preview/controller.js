@@ -32,8 +32,8 @@ define('io.ox/office/preview/controller',
      */
     function PreviewController(app) {
 
-        var // self reference
-            self = this,
+        var // the model instance
+            model = null,
 
             // the view instance
             view = null,
@@ -42,28 +42,28 @@ define('io.ox/office/preview/controller',
             items = {
 
                 'document/valid': {
-                    enable: function () { return app.getPageCount() > 0; }
+                    enable: function () { return model.getPageCount() > 0; }
                 },
 
                 'pages/first': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (app.getPage() > 1); },
-                    set: function () { app.firstPage(); }
+                    enable: function (enabled) { return enabled && (view.getPage() > 1); },
+                    set: function () { view.showFirstPage(); }
                 },
                 'pages/previous': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (app.getPage() > 1); },
-                    set: function () { app.previousPage(); }
+                    enable: function (enabled) { return enabled && (view.getPage() > 1); },
+                    set: function () { view.showPreviousPage(); }
                 },
                 'pages/next': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (app.getPage() < app.getPageCount()); },
-                    set: function () { app.nextPage(); }
+                    enable: function (enabled) { return enabled && (view.getPage() < model.getPageCount()); },
+                    set: function () { view.showNextPage(); }
                 },
                 'pages/last': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (app.getPage() < app.getPageCount()); },
-                    set: function () { app.lastPage(); }
+                    enable: function (enabled) { return enabled && (view.getPage() < model.getPageCount()); },
+                    set: function () { view.showLastPage(); }
                 },
 
                 'pages/current': {
@@ -76,7 +76,7 @@ define('io.ox/office/preview/controller',
                             //#. %1$s is the current page index in office document preview
                             //#. %2$s is the number of pages in office document preview
                             //#, c-format
-                            gt('%1$s of %2$s', app.getPage(), app.getPageCount());
+                            gt('%1$s of %2$s', view.getPage(), model.getPageCount());
                         return label;
                     }
                 },
@@ -84,12 +84,12 @@ define('io.ox/office/preview/controller',
                 'zoom/dec': {
                     parent: 'document/valid',
                     enable: function (enabled) { return enabled && (view.getZoomLevel() > view.getMinZoomLevel()); },
-                    set: function () { view.decreaseZoom(); }
+                    set: function () { view.decreaseZoomLevel(); }
                 },
                 'zoom/inc': {
                     parent: 'document/valid',
                     enable: function (enabled) { return enabled && (view.getZoomLevel() < view.getMaxZoomLevel()); },
-                    set: function () { view.increaseZoom(); }
+                    set: function () { view.increaseZoomLevel(); }
                 },
                 'zoom/current': {
                     parent: 'document/valid',
@@ -118,7 +118,8 @@ define('io.ox/office/preview/controller',
 
         // initialization after construction
         app.on('docs:init', function () {
-            // view is not available at construction time
+            // model and view are not available at construction time
+            model = app.getModel();
             view = app.getView();
         });
 
