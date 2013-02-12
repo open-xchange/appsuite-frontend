@@ -179,12 +179,7 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
-                var vGrid;
-                if (list.length > 1) {
-                    vGrid = baton.grid;
-                } else {
-                    vGrid = baton.app.getGrid();
-                }
+                var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                     var dialog = new dialogs.ModalDialog({ easyOut: true })
                         .header($('<h3>').text(label))
