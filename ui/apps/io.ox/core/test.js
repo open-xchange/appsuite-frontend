@@ -15,7 +15,8 @@ define("io.ox/core/test",
      "io.ox/core/test/cacheSimpleCache",
      "io.ox/core/test/cacheObjectCache",
      "io.ox/core/test/date",
-     "io.ox/core/test/model"], function () {
+     "io.ox/core/test/model",
+     "io.ox/core/test/mailfilter"], function () {
 
     'use strict';
 
