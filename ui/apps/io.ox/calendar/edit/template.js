@@ -385,7 +385,7 @@ define('io.ox/calendar/edit/template',
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('id'), type: item.get('type')});
+                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
                     });
                     $.data(node, 'baton', baton);
                 });
@@ -396,6 +396,8 @@ define('io.ox/calendar/edit/template',
                     alreadyParticipant = collection.any(function (item) {
                         if (data.type === 5) {
                             return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
+                        } else if (data.type === 1) {
+                            return item.get('id') ===  data.internal_userid;
                         } else {
                             return (item.id === data.id && item.get('type') === data.type);
                         }
