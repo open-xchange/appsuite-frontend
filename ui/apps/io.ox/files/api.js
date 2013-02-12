@@ -24,24 +24,61 @@ define('io.ox/files/api',
     'use strict';
 
     var mime_types = {
+        // images
         'jpg' : 'image/jpeg',
         'jpeg': 'image/jpeg',
         'png' : 'image/png',
         'gif' : 'image/gif',
         'tif' : 'image/tiff',
         'tiff': 'image/tiff',
+        // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
         'ogv' : 'video/ogg',
         'ogm' : 'video/ogg',
-        'webm': 'video/webm'
+        'webm': 'video/webm',
+        // open office
+        'odc':  'application/vnd.oasis.opendocument.chart',
+        'odb': 'application/vnd.oasis.opendocument.database',
+        'odf': 'application/vnd.oasis.opendocument.formula',
+        'odg': 'application/vnd.oasis.opendocument.graphics',
+        'otg': 'application/vnd.oasis.opendocument.graphics-template',
+        'odi': 'application/vnd.oasis.opendocument.image',
+        'odp': 'application/vnd.oasis.opendocument.presentation',
+        'otp': 'application/vnd.oasis.opendocument.presentation-template',
+        'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+        'ots': 'application/vnd.oasis.opendocument.spreadsheet-template',
+        'odt': 'application/vnd.oasis.opendocument.text',
+        'odm': 'application/vnd.oasis.opendocument.text-master',
+        'ott': 'application/vnd.oasis.opendocument.text-template',
+        'oth': 'application/vnd.oasis.opendocument.text-web',
+        // pdf
+        'pdf': 'application/pdf',
+        // microsoft office
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'doc': 'application/msword',
+        'dot': 'application/msword',
+        'xls': 'application/vnd.ms-excel',
+        'xlb': 'application/vnd.ms-excel',
+        'xlt': 'application/vnd.ms-excel',
+        'ppt': 'application/vnd.ms-powerpoint',
+        'pps': 'application/vnd.ms-powerpoint'
     };
+
+    var regFixContentType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
 
     var fixContentType = function (data) {
         if (data) {
-            if (data.file_mimetype === 'application/octet-stream') {
+            if (regFixContentType.test(data.file_mimetype)) {
                 var ext = _((data.filename || '').split('.')).last().toLowerCase();
                 if (ext in mime_types) {
                     data.file_mimetype = mime_types[ext];
