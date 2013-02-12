@@ -106,8 +106,8 @@ define('io.ox/core/commons',
                 return api[getList || 'getList'](ids);
             });
             // handle 'not-found'
-            api.on('not-found', function () {
-                grid.selection.selectFirst();
+            api.on('not-found', function (params) {
+                grid.selection.clear(); // not selectFirst, cause it might be the first
             });
         },
 

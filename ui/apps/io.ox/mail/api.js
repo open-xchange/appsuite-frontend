@@ -38,10 +38,7 @@ define("io.ox/mail/api",
 
             // track mails that are manually marked as unseen
             explicitUnseen = {},
-            unseen = {},
-
-            // track mails that should be ignored
-            ignored = {};
+            unseen = {};
 
         var extend = function (a, b) {
             return _.extend(a, { flags: b.flags, color_label: b.color_label });
@@ -153,18 +150,15 @@ define("io.ox/mail/api",
              * @param {object|string} obj (id, folder_id) or string (cid)
              * @returns {void}
              */
-            ignore: function (obj) {
-                var cid = getCID(obj);
-                ignored[cid] = true;
-            },
-
-            /**
-             * @param {object|string} obj (id, folder_id) or string (cid)
-             * @returns {boolean}
-             */
-            isIgnored: function (obj) {
-                var cid = getCID(obj);
-                return !!ignored[cid];
+            remove: function (obj) {
+                var cid = getCID(obj),
+                    root = this.getThreadCID(cid),
+                    thread;
+                if (root) {
+                    threads[root] = _(threads[root]).filter(function (item) {
+                        return cid !== getCID(item);
+                    });
+                }
             },
 
             // use this to check if mails in a thread are unseen
@@ -545,7 +539,7 @@ define("io.ox/mail/api",
     }());
 
     api.on('not-found', function (e, obj) {
-        tracker.ignore(obj);
+        tracker.remove(obj);
         api.trigger('refresh.list');
     });
 
