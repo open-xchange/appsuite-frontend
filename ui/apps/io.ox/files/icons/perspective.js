@@ -136,7 +136,7 @@ define('io.ox/files/icons/perspective',
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, iconError);
             } else if (Caps.has('document_preview') &&
                     (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
-                    (/^text\/.*(rtf).*$/i).test(file.file_mimetype)) {
+                    (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
                 iElement = drawGeneric(file.filename);
                 wrap.append(iElement);
                 img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
