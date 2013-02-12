@@ -42,9 +42,9 @@ define("plugins/portal/tasks/register",
             var tasks = _(baton.data).filter(function (task) {
                 return task.end_date !== null && task.status !== 3;
             });
-            
+
             if (tasks.length === 0) {
-                this.append(content.text(gt("You don't have any tasks")));
+                this.append(content.text(gt("You don't have any tasks that are due soon.")));
                 return;
             }
 
@@ -69,14 +69,14 @@ define("plugins/portal/tasks/register",
         draw: function (baton) {
             var popup = this.busy(),
                 content;
-            
+
             require(['io.ox/tasks/view-detail', 'io.ox/tasks/api'], function (view, api) {
-                
+
                 function contentCheck(e) {
                     popup.parent().parent().find('button').trigger('click');
                     popup = null;
                     api.off('removePopup', contentCheck);
-                    
+
                 }
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
