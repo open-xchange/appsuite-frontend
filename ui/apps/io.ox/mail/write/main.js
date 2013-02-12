@@ -747,7 +747,8 @@ define('io.ox/mail/write/main',
                         .map(function (recipient) {
                             return ['"' + recipient[0] + '"', recipient[1]];
                         });
-                };
+                },
+                replyTo = parse(data.replyTo)[0] || [];
 
             data.from = this.getFrom();
 
@@ -773,6 +774,7 @@ define('io.ox/mail/write/main',
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
+                reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
