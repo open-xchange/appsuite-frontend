@@ -220,11 +220,15 @@ define('io.ox/files/icons/perspective',
                         dropZone.update();
                     }
                     popup.append(viewDetail.draw(file));
-                    self.selection.set([file]);
                 });
             }
 
             dialog.delegate(iconview, '.file-icon', iconClick);
+
+            iconview.on('hover', '.selectable', function () {
+                var o = _.cid($(this).attr('data-obj-id'));
+                self.selection.set([o]);
+            });
 
             drawIcon = function (file) {
                 var node = $('<div>');
