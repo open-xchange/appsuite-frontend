@@ -349,6 +349,7 @@ define('io.ox/core/permissions/permissions',
 
                         autocomplete.render({
                             parentSelector: '.permissions-dialog > .modal-footer',
+                            autoselect: true,
                             users: true,
                             contacts: false,
                             groups: true,

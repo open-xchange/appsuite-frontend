@@ -51,6 +51,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
             self.autoparticipants = self.$el.find('.add-participant')
                 .autocomplete({
+                    autoselect: options.autoselect,
                     parentSelector: options.parentSelector,
                     api: autocompleteAPI,
                     // reduce suggestion list
