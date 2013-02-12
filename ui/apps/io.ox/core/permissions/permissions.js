@@ -355,6 +355,14 @@ define('io.ox/core/permissions/permissions',
                             resources: false,
                             distributionlists: false
                         });
+                        //add recipents to baton-data-node; used to filter sugestions list in view
+                        autocomplete.on('update', function () {
+                            var baton = {list: []};
+                            collection.any(function (item) {
+                                baton.list.push({id: item.get('entity'), type: item.get('isGroup') ? 2 : 1});
+                            });
+                            $.data(node, 'baton', baton);
+                        });
                         autocomplete.on('select', function (data) {
                             var isGroup = data.type === 2,
                                 obj = {
