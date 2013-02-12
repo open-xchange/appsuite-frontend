@@ -12,6 +12,7 @@
 
 define('io.ox/core/permissions/permissions',
     ['io.ox/core/extensions',
+     'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
@@ -19,7 +20,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/contacts/util',
      'io.ox/calendar/edit/view-addparticipants',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.css'], function (ext, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
+     'less!io.ox/core/permissions/style.css'], function (ext, notifications, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
 
     'use strict';
 
@@ -371,9 +372,14 @@ define('io.ox/core/permissions/permissions',
                                     bits: 257, // default is 'view folder' plus 'read all'
                                     group: isGroup
                                 };
-                            // duplicate check
-                            if (!collection.any(function (item) { return item.entity === obj.entity; })) {
-                                collection.add(new Permission(obj));
+                            if (!obj.entity)
+                                notifications.yell('error', data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.'));
+                            else
+                            {
+                                // duplicate check
+                                if (!collection.any(function (item) { return item.entity === obj.entity; })) {
+                                    collection.add(new Permission(obj));
+                                }
                             }
                         });
                         dialog.getFooter().prepend(node);
