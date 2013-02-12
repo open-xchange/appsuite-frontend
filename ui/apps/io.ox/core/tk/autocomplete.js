@@ -86,14 +86,15 @@ define('io.ox/core/tk/autocomplete',
                 }
             },
 
-            select = function (i, update) {
+            select = function (i, processData) {
+                    processData = typeof processData === 'undefined' ? true : processData;
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
                         children.removeClass('selected')
                             .eq(i).addClass('selected')
                             .intoViewport(popup);
                         index = i;
-                        if (!!update)
+                        if (processData)
                             update();
                     }
                 },
