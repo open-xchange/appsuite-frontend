@@ -31,24 +31,25 @@ define("io.ox/core/main",
         DURATION = 250;
 
     var logout = function () {
-        return session.logout()
-            .always(function () {
-                $("#background_loader").fadeIn(DURATION, function () {
-                    $("#io-ox-core").hide();
-                    var deferreds = [];
-                    ext.point("io.ox/core/logout").each(function (extension) {
-                        if (ext.logout) {
-                            var def = ext.logout();
-                            if (def) {
-                                deferreds.push(def);
-                            }
-                        }
-                    });
-                    $.when.apply($, deferreds).always(function () {
-                        _.url.redirect("signin");
-                    });
+        $("#background_loader").fadeIn(DURATION, function () {
+            $("#io-ox-core").hide();
+
+            var deferreds = [];
+            ext.point("io.ox/core/logout").each(function (extension) {
+                if (extension.logout) {
+                    var def = extension.logout();
+                    if (def) {
+                        deferreds.push(def);
+                    }
+                }
+            });
+
+            $.when.apply($, deferreds).always(function () {
+                session.logout().always(function () {
+                    _.url.redirect("signin");
                 });
             });
+        });
     };
 
     var topbar = $('#io-ox-topbar'),
