@@ -35,17 +35,15 @@ define('io.ox/office/tk/control/radiolist',
      *  mix-in class. Additionally, the following options are supported:
      *  @param {Boolean|Function} [options.highlight=false]
      *      If set to true, the drop-down button will be highlighted if a list
-     *      item in the drop-down menu is active. If set to false, the drop-down
-     *      button will never be highlighted, even if a list item in the
-     *      drop-down menu is active.
-     *      OR
-     *      A function that will be called after a list item has been
-     *      activated. The highlighting of the drop-down button will be updated
-     *      with this handler in the 'updateHighlightHandler' option. Receives the
-     *      listStyleId of the selected/activated list item in the first
-     *      parameter (also if this value does not correspond to any existing
-     *      list item).
-     *      Will be called in the context of this radio group instance.
+     *      item in the drop-down menu is active. If set to false, the
+     *      drop-down button will never be highlighted, even if a list item in
+     *      the drop-down menu is active. If set to a function, it will be
+     *      called every time after when list item will be activated. The
+     *      drop-down button will be highlighted if this handler function
+     *      returns true. Receives the value of the selected/activated list
+     *      item as first parameter (also if this value does not correspond to
+     *      any existing list item). Will be called in the context of this
+     *      radio group instance.
      *  @param [options.toggleValue]
      *      If set to a value different to null or undefined, the option button
      *      that is currently active can be clicked to be switched off. In that
