@@ -2,13 +2,10 @@
 (function () {
     var waiting = 0, finalCallback = null;
     require.nextTick = function (fn, finalCb) {
-        console.log('nextTick', !!fn, !!finalCb);
         if (finalCb) finalCallback = finalCb;
         if (!fn && waiting) return;
         waiting++;
-        console.log('setTimeout', waiting);
         setTimeout(function () {
-            console.log('timeout', waiting, !!finalCallback);
             if (fn) fn();
             if (--waiting || !finalCallback) return;
             var cb = finalCallback;
