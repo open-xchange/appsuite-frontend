@@ -12,11 +12,12 @@
  */
 
 define('io.ox/office/tk/app/officeapplication',
-    ['io.ox/files/api',
+    ['io.ox/core/extensions',
+     'io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',
      'gettext!io.ox/office/main'
-    ], function (FilesAPI, Utils, IO, gt) {
+    ], function (ext, FilesAPI, Utils, IO, gt) {
 
     'use strict';
 
@@ -119,18 +120,19 @@ define('io.ox/office/tk/app/officeapplication',
      * Triggers the events supported by the base class ox.ui.App, and the
      * following additional events:
      * - 'docs:init': Once during launch, after this application instance has
-     *      been constructed completely, before the registered launch handlers
-     *      will be called. Note that the calling order of the event listeners
-     *      is not defined. See method OfficeApplication.registerInitHandler()
-     *      for an alternative.
-     * - 'docs:init:after': Once during launch, after the registered launch
-     *      handlers have been called.
+     *      been constructed completely, before the registered initialization
+     *      handlers will be called. Note that the calling order of the event
+     *      listeners is not defined. See method
+     *      OfficeApplication.registerInitHandler() for an alternative.
+     * - 'docs:init:after': Once during launch, after the registered
+     *      initialization handlers have been called.
      * - 'docs:init:success': Directly after the event 'docs:init:after', if
      *      all initialization handlers returned successfully.
      * - 'docs:init:error': Directly after the event 'docs:init:after', if any
      *      initialization handler failed.
      * - 'docs:import:before': Once during launch before the document described
-     *      in the file descriptor will be imported.
+     *      in the file descriptor will be imported by calling the import
+     *      handler function passed to the constructor.
      * - 'docs:import:after': Once during launch, after the document described
      *      in the file descriptor has been imported (successfully or not).
      * - 'docs:import:success': Directly after the event 'docs:import:after',
@@ -140,11 +142,12 @@ define('io.ox/office/tk/app/officeapplication',
      *      if an error occurred while importing the document described in the
      *      file descriptor.
      * - 'docs:quit': Before the application will be really closed, after all
-     *      registered before-quit handlers have been called, and none has
-     *      rejected quitting, and before the application will be destroyed.
+     *      registered before-quit handlers have been called, and none was
+     *      rejected, after all registered quit handlers have been called, and
+     *      before the application will finally be destroyed.
      * - 'docs:resume': After all registered before-quit handlers have been
-     *      called, and at least one has rejected quitting. The application
-     *      continues to run normally.
+     *      called, and at least one was rejected. The application continues to
+     *      run normally.
      *
      * @constructor
      *
@@ -215,6 +218,9 @@ define('io.ox/office/tk/app/officeapplication',
 
             // all registered before-quit handlers
             beforeQuitHandlers = [],
+
+            // all registered quit handlers
+            quitHandlers = [],
 
             // all registered fail-save handlers
             failSaveHandlers = [],
@@ -619,6 +625,29 @@ define('io.ox/office/tk/app/officeapplication',
         };
 
         /**
+         * Registers a quit handler function that will be executed before the
+         * application will be destroyed. This may happen if the application
+         * has been closed normally, if the user logs out from the entire app
+         * suite, or before the browser window or browser tab will be closed or
+         * refreshed. If the quit handlers return a Deferred object, closing
+         * the application, and logging out will be deferred until the Deferred
+         * objects have been resolved or rejected.
+         *
+         * @param {Function} quitHandler
+         *  A function that will be called before the application will be
+         *  closed. Will be called in the context of this application instance.
+         *  May return a Deferred object, which must be resolved or rejected by
+         *  the quit handler function.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
+         */
+        this.registerQuitHandler = function (quitHandler) {
+            quitHandlers.push(quitHandler);
+            return this;
+        };
+
+        /**
          * Registers a handler function that will be executed when the
          * application creates a new restore point.
          *
@@ -765,6 +794,19 @@ define('io.ox/office/tk/app/officeapplication',
                     return directCallback.apply(self, _.toArray(arguments));
                 }
             };
+        };
+
+        /**
+         * Executes all registered quit handlers and returns a Deferred object
+         * that will be resolved or rejected according to the rasults of the
+         * handlers.
+         *
+         * @internal
+         *  Not for external use. Only used from the implementation of the
+         *  'io.ox/core/logout' extension point.
+         */
+        this.executeQuitHandlers = function () {
+            return callHandlers(quitHandlers);
         };
 
         // application runtime ------------------------------------------------
@@ -961,6 +1003,9 @@ define('io.ox/office/tk/app/officeapplication',
             // set the window at the application instance
             self.setWindow(win);
 
+            // wait for unload events and execute quit handlers
+            self.registerEventHandler(window, 'unload', function () { callHandlers(quitHandlers); });
+
             // create the MVC instances
             model = new ModelClass(self);
             view = new ViewClass(self);
@@ -1017,16 +1062,24 @@ define('io.ox/office/tk/app/officeapplication',
         // call all registered quit handlers
         this.setQuit(function () {
 
-            return callHandlers(beforeQuitHandlers)
-                .done(function () {
+            var // the result deferred (rejecting means resume application)
+                def = $.Deferred();
 
-                    // cancel all running timeouts
-                    _(delayTimeouts).each(function (timeout) {
-                        window.clearTimeout(timeout);
-                    });
-                    _(debounceTimeouts).each(function (timeout) {
-                        window.clearTimeout(timeout);
-                    });
+            // call all before-quit handlers, rejecting one will resume application
+            callHandlers(beforeQuitHandlers)
+            .done(function () {
+
+                // cancel all running timeouts
+                _(delayTimeouts).each(function (timeout) {
+                    window.clearTimeout(timeout);
+                });
+                _(debounceTimeouts).each(function (timeout) {
+                    window.clearTimeout(timeout);
+                });
+
+                // execute quit handlers, simply defer without caring about the result
+                callHandlers(quitHandlers)
+                .always(function () {
 
                     // base application does not trigger 'quit' events
                     self.trigger('docs:quit');
@@ -1036,11 +1089,18 @@ define('io.ox/office/tk/app/officeapplication',
                     view.destroy();
                     model.destroy();
                     model = view = controller = delayTimeouts = debounceTimeouts = null;
-                })
-                .fail(function () {
-                    self.trigger('docs:resume');
-                })
-                .promise();
+
+                    // always resolve (really close the application), regardless
+                    // of the result of the quit handlers
+                    def.resolve();
+                });
+            })
+            .fail(function () {
+                self.trigger('docs:resume');
+                def.reject();
+            });
+
+            return def.promise();
         });
 
         // prevent usage of these methods in derived classes
@@ -1091,6 +1151,7 @@ define('io.ox/office/tk/app/officeapplication',
      */
     OfficeApplication.createLauncher = function (moduleName, ApplicationClass, defaultLaunchOptions) {
 
+        // executed when a new application will be launched via ox.launch()
         function launchApp(launchOptions) {
 
             var // try to find a running application
@@ -1104,6 +1165,17 @@ define('io.ox/office/tk/app/officeapplication',
 
             return app;
         }
+
+        // listen to user logout and notify all running applications
+        ext.point('io.ox/core/logout').extend({
+            id: 'office-' + getDocumentType(moduleName) + '-logout',
+            logout: function () {
+                var deferreds = _(ox.ui.App.get(moduleName)).map(function (app) {
+                    return app.executeQuitHandlers();
+                });
+                return $.when.apply($, deferreds);
+            }
+        });
 
         // ox.launch() expects an object with the method getApp()
         return { getApp: launchApp };

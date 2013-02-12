@@ -12,15 +12,14 @@
  */
 
 define('io.ox/office/preview/main',
-    ['io.ox/core/extensions',
-     'io.ox/office/tk/utils',
+    ['io.ox/office/tk/utils',
      'io.ox/office/tk/app/officeapplication',
      'io.ox/office/preview/model',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (ext, Utils, OfficeApplication, PreviewModel, PreviewView, PreviewController, gt) {
+    ], function (Utils, OfficeApplication, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
 
@@ -67,9 +66,6 @@ define('io.ox/office/preview/main',
             // disable FF spell checking
             $('body').attr('spellcheck', false);
 
-            // wait for unload events and send notification to server
-            self.registerEventHandler(window, 'unload', function () { self.sendCloseNotification(); });
-
             // load the file
             return self.sendConverterRequest({
                 params: {
@@ -92,6 +88,14 @@ define('io.ox/office/preview/main',
             .promise();
         }
 
+        /**
+         * Sends a close notification to the server, before the application
+         * will be really closed.
+         */
+        function quitHandler() {
+            self.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
+        }
+
         // methods ------------------------------------------------------------
 
         this.sendPreviewRequest = function (options) {
@@ -100,34 +104,13 @@ define('io.ox/office/preview/main',
             }, options)) : $.Deferred().reject();
         };
 
-        /**
-         * Sends a close notification to the server, when the application has
-         * been closed.
-         */
-        this.sendCloseNotification = function () {
-            this.sendPreviewRequest({ params: { convert_action: 'endconvert' } });
-        };
-
         // initialization -----------------------------------------------------
 
         // fail-save handler returns data needed to restore the application after browser refresh
-        this.registerFailSaveHandler(function () { return self.getView().getSavePoint(); });
-
-        // send notification to server on quit
-        this.on('docs:quit', function () { self.sendCloseNotification(); });
+        this.registerQuitHandler(quitHandler)
+            .registerFailSaveHandler(function () { return self.getView().getSavePoint(); });
 
     }}); // class PreviewApplication
-
-    // global initialization ==================================================
-
-    // listen to user logout and notify all running applications
-    ext.point("io.ox/core/logout").extend({
-        id: 'office-logout',
-        logout: function () {
-            _(ox.ui.App.get('io.ox/office/preview')).invoke('sendCloseNotification');
-            return $.when();
-        }
-    });
 
     // exports ================================================================
 
