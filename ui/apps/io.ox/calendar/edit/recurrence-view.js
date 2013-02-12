@@ -273,6 +273,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     daily: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> days</a>. '), {
                         id: 'daily',
                         phrase: function (n) {
+                            if (n === 1) {
+                                //#. as in: The appointment is repeated every day
+                                //#. This is inserted into an HTML construct and is the form without the number
+                                return gt("every day");
+                            }
+
                             //#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
                             //#. This is inserted into an HTML construct.
                             gt.format(gt.ngettext('every day',
@@ -288,6 +294,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'weekly',
                         interval: {
                             phrase: function (n) {
+                                if (n === 1) {
+                                    //#. as in: The appointment is repeated every week
+                                    //#. This is inserted into an HTML construct and is the form without the number
+                                    return gt("every week");
+                                }
                                 //#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
                                 //#. This is inserted into an HTML construct.
                                 gt.format(gt.ngettext('every week',
@@ -305,6 +316,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'monthlyDate',
                         interval: {
                             phrase: function (n) {
+                                if (n === 1) {
+                                    //#. as in: The appointment is repeated every month
+                                    //#. This is inserted into an HTML construct and is the form without the number
+                                    return gt("every month");
+                                }
                                 //#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
                                 //#. This is inserted into an HTML construct.
                                 gt.format(gt.ngettext('every month',
