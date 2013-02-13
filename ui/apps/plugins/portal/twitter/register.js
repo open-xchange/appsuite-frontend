@@ -66,6 +66,7 @@ define('plugins/portal/twitter/register',
                     elem: $('<a>', {href: myLink}).text(myLink),
                     indices: [index, index + length]
                 };
+            }
         });
 
         var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
