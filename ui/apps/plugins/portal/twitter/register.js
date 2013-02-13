@@ -31,7 +31,8 @@ define('plugins/portal/twitter/register',
     var $busyIndicator = $('<div>').html('&nbsp;');
 
     var parseTweet = function (text, entities) {
-        var offsets = {};
+        var offsets = {},
+            linkMatches;
 
         _(entities.hashtags).each(function (hashtag) {
             var elem = $('<a>', {href: 'https://twitter.com/#!/search/%23' + hashtag.text, target: '_blank'}).text('#' + hashtag.text);
@@ -55,8 +56,20 @@ define('plugins/portal/twitter/register',
             };
         });
 
-        var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
+        //hack to highligh some t.co-URLs that Twitter does not identify as such:
+        linkMatches = text.match(/http:\/\/t\.co\/\w+/gi);
+        _(linkMatches).each(function (myLink) {
+            var index = text.indexOf(myLink),
+                length = myLink.length;
+            if (_(offsets).keys().indexOf(index.toString()) === -1) { //make sure there is nothing planned for this part already
+                offsets[index] = {
+                    elem: $('<a>', {href: myLink}).text(myLink),
+                    indices: [index, index + length]
+                };
+            }
+        });
 
+        var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
         var bob = $('<span>');
         var cursor = 0;
         _(keySet).each(function (key) {
@@ -71,6 +84,7 @@ define('plugins/portal/twitter/register',
 
         return bob;
     };
+
     var loadFromTwitter = function (params) {
         var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
         return def.pipe(function (response) {

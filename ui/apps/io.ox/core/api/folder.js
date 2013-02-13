@@ -754,6 +754,7 @@ define('io.ox/core/api/folder',
                         var equalUnread = a.unread === b.unread,
                             equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
                         api.trigger('update:unread', id, b);
+                        api.trigger('update:unread:' + id, b);
                         if (!equalData) {
                             api.trigger('update', id, id, b);
                         }
@@ -810,15 +811,15 @@ define('io.ox/core/api/folder',
 
     api.setUnread = function (folder, unread) {
         return folderCache.get(folder).pipe(function (data) {
-                if (data) {
-                    data.unread = Math.max(0, unread);
-                    return folderCache.add(folder, data).done(function () {
-                        api.trigger('change:' + folder);
-                    });
-                } else {
-                    return $.when();
-                }
-            });
+            if (data) {
+                data.unread = Math.max(0, unread);
+                return folderCache.add(folder, data).done(function () {
+                    api.trigger('change:' + folder);
+                });
+            } else {
+                return $.when();
+            }
+        });
     };
 
     api.decUnread = function (folder) {

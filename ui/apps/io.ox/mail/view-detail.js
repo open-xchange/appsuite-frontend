@@ -549,7 +549,7 @@ define('io.ox/mail/view-detail',
                     if (list.length > 1) {
                         inline = $('<div class="thread-inline-actions">');
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
-                        inline.find('.dropdown > a').addClass('btn btn-primary');
+                        inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
                         frag.appendChild(inline.get(0));
 
                         //replace delete action with one excluding the sent folder

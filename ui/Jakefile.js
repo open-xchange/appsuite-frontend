@@ -133,9 +133,7 @@ function jsFilter (data) {
     // UglifyJS
     if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
-    tree = pro.ast_mangle(tree, { defines: {
-        STATIC_APPS: parse(process.env.STATIC_APPS || 'false')[1][0][1]
-    } });
+    tree = pro.ast_mangle(tree);
     tree = pro.ast_squeeze(tree, { make_seqs: false });
     // use split_lines
     return catchParseErrors(function (data) {
@@ -242,10 +240,8 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     debug ? utils.string(';\nSTATIC_APPS = (' +
-                          (process.env.STATIC_APPS || 'false') + ');\n')
-           : utils.string(';\n'),
-     "src/plugins.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
+     utils.string(';\n'), "src/plugins.js", "src/jquery.plugins.js",
+     "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 
@@ -266,108 +262,7 @@ utils.concat("boot.js", [
         "lib/backbone.validation.js",
         "lib/backbone.custom.js",
         "lib/doT.js",
-        "apps/io.ox/core/event.js",
-        "apps/io.ox/core/http.js",
-        "apps/io.ox/core/session.js",
-        "apps/io.ox/core/gettext.js",
-        "apps/io.ox/core/async.js",
-        "apps/io.ox/core/extensions.js",
-        "apps/io.ox/core/cache.js",
-        "apps/io.ox/core/cache/simple.js",
-        "apps/io.ox/core/cache/localstorage.js",
-        "apps/io.ox/core/cache/indexeddb.js",
-        "apps/io.ox/core/capabilities.js",
-        "apps/io.ox/core/manifests.js",
         "tmp/boot.js"]);
-
-utils.concat("pre-core.js",
-    utils.list("apps", [
-        "io.ox/core/settings.js", // settings plugin
-        "io.ox/core/config.js",
-        "io.ox/core/tk/selection.js",
-        "io.ox/core/tk/vgrid.js",
-        "io.ox/core/tk/model.js",
-        "io.ox/core/tk/upload.js",
-        "io.ox/core/api/factory.js",
-        "io.ox/core/api/user.js",
-        "io.ox/core/api/resource.js",
-        "io.ox/core/api/group.js",
-        "io.ox/core/api/account.js",
-        "io.ox/core/api/folder.js",
-        "io.ox/core/api/apps.js",
-        "io.ox/core/api/reminder",
-        "io.ox/core/desktop.js",
-        "io.ox/core/commons.js",
-        "io.ox/core/commons-folderview.js",
-        "io.ox/core/collection.js",
-        "io.ox/core/notifications.js",
-        "io.ox/core/extPatterns/actions.js",
-        "io.ox/core/extPatterns/links.js",
-        "io.ox/core/extPatterns/stage.js",
-        "io.ox/core/extPatterns/dnd.js",
-        "io.ox/core/tk/folderviews",
-        "io.ox/mail/api.js",
-        "io.ox/mail/util.js",
-        "io.ox/contacts/api.js",
-        "io.ox/tasks/api.js",
-        "io.ox/tasks/util.js",
-        "io.ox/calendar/api.js",
-        "io.ox/calendar/util.js",
-        "io.ox/core/date.js",
-        "plugins/notifications/mail/register.js",
-        "plugins/notifications/calendar/register.js",
-        "plugins/notifications/taks/register.js"
-    ]), { type: "source" }
-);
-
-// statically concatenated apps
-
-(function () {
-    var root = utils.dest('apps/io.ox');
-    function rel(list) {
-        list.dir = root;
-        return list;
-    }
-
-    utils.concat('apps/io.ox/static/core.js', rel([
-            'core/bootstrap/basics.js',
-            'mail/actions.js',
-            'core/settings/defaults.js',
-            'core/main.js'
-        ]), { type: 'none' }
-    );
-
-    utils.concat('apps/io.ox/static/mail.js',
-        rel(['contacts/api.js',
-             'mail/util.js',
-             'mail/api.js',
-             'mail/actions.js',
-             'mail/view-grid-template.js',
-             'mail/view-detail.js',
-             'mail/settings/defaults.js',
-             'mail/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/contacts.js',
-        rel(['contacts/api.js', 'contacts/actions.js', 'contacts/util.js',
-             'contacts/view-detail.js', 'help/hints.js', 'contacts/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/tasks.js',
-        rel(['tasks/util.js', 'tasks/actions.js', 'tasks/api.js',
-             'tasks/view-detail.js', 'tasks/view-grid-template.js',
-             'tasks/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/files.js',
-        rel(['files/api.js', 'files/actions.js', 'files/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/calendar.js',
-        rel(['contacts/api.js', 'calendar/util.js', 'calendar/actions.js',
-             'calendar/main.js']),
-        { type: 'none' });
-}());
 
 // Twitter Bootstrap
 utils.copy(utils.list("lib/bootstrap", ["img/*"]),

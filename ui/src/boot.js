@@ -11,13 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-// init require.js
-require({
-    // inject version
-    baseUrl: ox.base + "/apps",
-    waitSeconds: 30 //_.browser.IE ? 20 : 10
-});
-
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
@@ -555,12 +548,8 @@ $(window).load(function () {
                 // Set user's language (as opposed to the browser's language)
                 // Load core plugins
                 gettext.setLanguage(ox.language);
-                if (!ox.online) {
-                    return require([ox.base + '/pre-core.js']);
-                }
-                return manifests.manager.loadPluginsFor('core').pipe(function () {
-                    return require([ox.base + '/pre-core.js']);
-                });
+                if (!ox.online) return $.when();
+                return manifests.manager.loadPluginsFor('core');
             }
 
             var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;

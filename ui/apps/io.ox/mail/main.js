@@ -403,15 +403,8 @@ define("io.ox/mail/main",
             // which mode?
             if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
-                var thread, baton;
-
-                //remove ignored messages
-                thread = _(api.getThread(obj)).filter(function (item) {
-                    return !api.tracker.isIgnored(item);
-                });
-
-                baton = ext.Baton({ data: thread, app: app });
-
+                var thread = api.getThread(obj),
+                    baton = ext.Baton({ data: thread, app: app });
                 // get first mail first
                 api.get(api.reduce(thread[0]))
                     .done(_.lfo(drawThread, baton))
@@ -444,16 +437,6 @@ define("io.ox/mail/main",
                 })
             );
         };
-
-        var repaint = function () {
-            var sel = grid.selection.get();
-            if (sel.length === 1) {
-                right.css('height', '');
-                showMail(sel[0]);
-            }
-        };
-
-        api.on('delete', repaint);
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right, api);
         commons.wireGridAndWindow(grid, win);

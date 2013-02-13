@@ -1,3 +1,29 @@
+// Override nextTick to enable collection of dependencies for concatenation.
+(function () {
+    var waiting = 0, finalCallback = null;
+    require.nextTick = function (fn, finalCb) {
+        if (finalCb) finalCallback = finalCb;
+        if (!fn && waiting) return;
+        waiting++;
+        setTimeout(function () {
+            if (fn) fn();
+            if (--waiting || !finalCallback) return;
+            var cb = finalCallback;
+            finalCallback = null;
+            cb();
+        }, 4);
+    };
+    _.each(require.s.contexts, function(context) {
+        context.nextTick = require.nextTick;
+    });
+}());
+
+// init require.js
+require({
+    // inject version
+    baseUrl: ox.base + "/apps",
+    waitSeconds: 30 //_.browser.IE ? 20 : 10
+});
 
 // jQuery AMD fix
 define('jquery', function () { return $; });

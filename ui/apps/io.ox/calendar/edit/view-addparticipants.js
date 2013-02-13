@@ -51,6 +51,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
             self.autoparticipants = self.$el.find('.add-participant')
                 .autocomplete({
+                    autoselect: options.autoselect,
                     parentSelector: options.parentSelector,
                     api: autocompleteAPI,
                     // reduce suggestion list
@@ -64,7 +65,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                         _(baton.list).each(function (obj) {
                             // handle contacts/external contacts
                             if (obj.type === 1 || obj.type === 5) {
-                                obj.type = 5;
                                 hash[obj.email] = true;
                                 hash[obj.type + '|' + obj.id] = true;
                             } else {
@@ -74,9 +74,11 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                         // filter doublets
                         list = _(data).filter(function (recipient) {
-                            var type;
+                            var type, uniqueId, uniqueMail;
                             switch (recipient.type) {
                             case 'user':
+                                type = 1;
+                                break;
                             case 'contact':
                                 type = 5;
                                 break;
@@ -87,7 +89,9 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 type = 3;
                                 break;
                             }
-                            return !hash[type + '|' + recipient.data.id] && !hash[type + '|' + recipient.data.internal_userid || ''] && !hash[recipient.email];
+                            uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id];
+                            uniqueMail = !hash[recipient.email];
+                            return uniqueId && uniqueMail;
                         });
 
                         //return number of query hits and the filtered list

@@ -33,6 +33,7 @@ define('io.ox/core/tk/autocomplete',
                 blur: $.noop,
                 click: $.noop,
                 parentSelector: 'body',
+                autoselect: false,
                 api: null,
                 node: null,
 
@@ -85,14 +86,16 @@ define('io.ox/core/tk/autocomplete',
                 }
             },
 
-            select = function (i) {
+            select = function (i, processData) {
+                    processData = typeof processData === 'undefined' ? true : processData;
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
                         children.removeClass('selected')
                             .eq(i).addClass('selected')
                             .intoViewport(popup);
                         index = i;
-                        update();
+                        if (processData)
+                            update();
                     }
                 },
 
@@ -163,8 +166,10 @@ define('io.ox/core/tk/autocomplete',
                         });
                         // leads to results
                         emptyPrefix = "\u0000";
-                        //open();
                         index = -1;
+                        //select first element without updating input field
+                        if (o.autoselect)
+                            select(0, false);
                     } else {
                         // leads to no results if returned data wasn't filtered before (allready participant)
                         emptyPrefix = data.hits ? emptyPrefix : query;

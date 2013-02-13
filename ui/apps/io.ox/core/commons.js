@@ -105,10 +105,6 @@ define('io.ox/core/commons',
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
             });
-            // handle 'not-found'
-            api.on('not-found', function () {
-                grid.selection.selectFirst();
-            });
         },
 
         /**
@@ -165,15 +161,35 @@ define('io.ox/core/commons',
                 app.getWindow().search.stop();
             }
 
+            // disable for 7.0.1
+            var isMail = false && app.get('name') === 'io.ox/mail';
+
+            function updateUnreadCount(id, data) {
+                var unread = data.unread,
+                    node = grid.getToolbar().find('.folder-unread-count[data-folder-id="' + id + '"]');
+                node[unread > 0 ? 'show' : 'hide']().text(unread);
+            }
+
+            function drawFolderName(folder_id) {
+                var link = $('<a href="#" data-action="open-folderview">')
+                    .append(folderAPI.getTextNode(folder_id))
+                    .on('click', fnOpen);
+                if (isMail) {
+                    folderAPI.get({ folder: folder_id }).done(function (data) {
+                        link.after(
+                            $.txt(' '),
+                            $('<b class="label folder-unread-count">').attr('data-folder-id', folder_id).hide()
+                        );
+                    });
+                }
+                return link;
+            }
+
             grid.on('change:prop:folder change:mode', function (e, value) {
                 var folder_id = grid.prop('folder'), mode = grid.getMode(),
                     node = grid.getToolbar().find('.grid-info').empty();
                 if (mode === 'all') {
-                    node.append(
-                        $('<a href="#" data-action="open-folderview">')
-                        .append(folderAPI.getTextNode(folder_id))
-                        .on('click', fnOpen)
-                    );
+                    node.append(drawFolderName(folder_id));
                 } else if (mode === 'search') {
                     node.append(
                         $('<a href="#" data-action="cancel-search">')
@@ -183,6 +199,13 @@ define('io.ox/core/commons',
                     );
                 }
             });
+
+            // unread counter for mail
+            if (isMail) {
+                folderAPI.on('update:unread', function (e, id, data) {
+                    updateUnreadCount(id, data);
+                });
+            }
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
         },

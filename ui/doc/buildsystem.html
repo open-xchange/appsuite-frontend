@@ -58,7 +58,7 @@ sources.
 </p>
 <pre class="nocode prettyprint">
 <code class="typ"># </code><code class="pln">echo deb http://software.open-xchange.com/products/appsuite/\
-stable/backend/DebianSqueeze/ / &gt; /etc/apt/sources.list.d/ox.list</code>
+stable/appsuiteui/DebianSqueeze/ / &gt;&gt; /etc/apt/sources.list.d/ox.list</code>
 <code class="typ"># </code><code class="pln">aptitude update</code>
 </pre>
 <p>
@@ -191,11 +191,12 @@ automatically by an IDE or a directory monitoring tool. Since the builds are
 incremental, the task can be called after every source modification.
 </p><p>
 For quickest roundtrip times, the directory with the generated files of the app
-should be made available through a web server and overlay an existing
-OX App Suite installation, for example, by symlinking it.
+should be made available through the OX App Suite back end by overlaying
+an existing OX App Suite installation, for example, by symlinking it.
 </p>
 <pre class="nocode prettyprint">
-<code class="typ"># </code><code class="pln">ln -s $(readlink -m build/apps/com.example) /var/www/appsuite/apps/com.example</code>
+<code class="typ"># </code><code class="pln">ln -s $(readlink -m build/apps/com.example) \
+/opt/open-xchange/appsuite/apps/com.example</code>
 </pre>
 <p>
 To make the manifest accessible to the backend, it should be symlinked into the
@@ -272,7 +273,8 @@ the <code>clean</code> task, which simply deletes all generated files.
 </p><p>
 WARNING: This can be potentially dangerous, since the <code>clean</code> task
 simply deletes the directories specified by the variables <code>builddir</code>,
-<code>destDir</code>, <code>l10nDir</code>, and <code>manifestDir</code>.
+<code>destDir</code>, <code>l10nDir</code>, <code>manifestDir</code>, and
+<code>helpDir</code>.
 </p>
 
 <h4>dist</h4>
@@ -286,7 +288,9 @@ prepares such source archives.
 The <code>dist</code> task creates an archive with the source (the one ending in
 <code>.orig.tar.bz2</code>) and a few additional files necessary for Debian
 packaging. RPM packages can be generated using the same source archive and
-the <code>.spec</code> file created by <code>init-packaging</code>.
+the <code>.spec</code> file created by <code>init-packaging</code>. The version
+of the package is extracted from the newest entry in the file
+<code>debian/changelog</code>.
 </p>
 <p>
 Debian packages can also be generated manually either from the temporary
@@ -296,7 +300,7 @@ not recommended, although the <code>.gitignore</code> file created by
 <code>init-packaging</code> can handle these generated files.
 </p>
 <pre class="nocode prettyprint">
-<code class="typ">$ </code><code class="pln">build-appsuite dist version=0.0.1 revision=1</code>
+<code class="typ">$ </code><code class="pln">build-appsuite dist</code>
 <code class="typ">$ </code><code class="pln">ls tmp/packaging/
 example-app-0.0.1                   example-app_0.0.1-1.dsc
 example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
@@ -385,6 +389,22 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
     <dd>
         <p>The root of the printed dependency tree between Jake tasks.</p>
         <p><b>Used by:</b> <code>jakedeps</code>.</p>
+    </dd>
+</dl>
+<dl>
+    <dt>helpDir</dt>
+    <dd>
+        <p>The location of online help files.</p>
+        <p>
+            <b>Used by:</b> <code>clean</code>, <code>default</code>,
+            <code>dist</code>.
+        </p>
+        <p><b>Default:</b> same as <code>builddir</code></p>
+        <p>
+            If the value contains the string <code>@lang@</code>, it will be
+            replaced by the lowercase language code (e.g. <code>en-us</code>) to
+            allow per-language directories.
+        </p>
     </dd>
 </dl>
 <dl>
@@ -502,23 +522,6 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
     </dd>
 </dl>
 <dl>
-    <dt>STATIC_APPS</dt>
-    <dd>
-        <p>
-            A JavaScript expression for the constant STATIC_APPS.
-        </p>
-        <p><b>Used by:</b> <code>app</code>, <code>default</code>.</p>
-        <p><b>Default:</b> <code>false</code></p>
-        <p>
-            When source compression is enabled, the expression is evaluated at
-            build time and is used to eliminate dead code. This constant is used
-            to switch between direct loading of modules (<code>true</code>) and
-            server-side concatenation of multiple modules in a single HTTP
-            request (<code>false</code>).
-        </p>
-    </dd>
-</dl>
-<dl>
     <dt>tag</dt>
     <dd>
         <p>The Subversion tag of the CLDR to checkout.</p>
@@ -544,7 +547,7 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
             <b>Used by:</b> <code>app</code>, <code>default</code>,
             <code>dist</code>, <code>init-packaging</code>.
         </p>
-        <p><b>Default:</b> <code>7.0.0</code></p>
+        <p><b>Default:</b> <code>0.0.1</code></p>
         <p>
             The version should consist of a major, minor and patch version
             separated by dots.
@@ -553,7 +556,7 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
 </dl>
 <h3>Tasks</h3>
 <p>
-An up-to-date list of task can be printed using the -T command line option.
+An up-to-date list of tasks can be printed using the -T command line option.
 </p>
 <dl>
     <dt>app</dt>
@@ -564,8 +567,7 @@ An up-to-date list of task can be printed using the -T command line option.
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
                 <code>debug</code>, <code>l10nDir</code>,
                 <code>manifestDir</code>, <code>package</code>,
-                <code>revision</code>, <code>STATIC_APPS</code>,
-                <code>version</code>.
+                <code>revision</code>, <code>version</code>.
             </li>
         </ul>
         <p>This is the main task used to build external apps.</p>
@@ -608,8 +610,7 @@ An up-to-date list of task can be printed using the -T command line option.
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
                 <code>debug</code>, <code>l10nDir</code>,
                 <code>manifestDir</code>, <code>package</code>,
-                <code>revision</code>, <code>STATIC_APPS</code>,
-                <code>version</code>.
+                <code>revision</code>, <code>version</code>.
             </li>
         </ul>
         <p>
@@ -770,7 +771,7 @@ An up-to-date list of task can be printed using the -T command line option.
             <li>
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
                 <code>debug</code>, <code>package</code>, <code>revision</code>,
-                <code>STATIC_APPS</code>, <code>version</code>.
+                <code>version</code>.
             </li>
         </ul>
         <p>

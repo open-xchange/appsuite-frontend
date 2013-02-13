@@ -179,8 +179,7 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
-
-                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+                var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
 
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
 
