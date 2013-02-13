@@ -136,12 +136,14 @@ define('plugins/notifications/mail/register',
         }
     });
 
+    /* Mail notifications disabled for release-7.0.1 see Bug 24938 and 24953
+
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
         index: 200,
         register: function (controller) {
             var notifications = controller.get('io.ox/mail', NotificationsView);
-            
+
             function addMails(e, mails) {//adds mails to notificationview
                 var mailsToAdd = [];
                 for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present
@@ -158,7 +160,7 @@ define('plugins/notifications/mail/register',
                     notifications.collection.remove(notifications.collection._byId[mail.id]);
                 });
             }
-            
+
             api.on('new-mail', function (e, mails) {
                 addMails(e, mails);
                 notifications.collection.trigger('reset');
@@ -175,6 +177,7 @@ define('plugins/notifications/mail/register',
             api.checkInbox();
         }
     });
+    */
 
     return true;
 });
