@@ -369,7 +369,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         interval: {
                             phrase: function (n) {
-                                return gt.format(gt.ngettext('every month', 'every %1$d months', n), n);
+                                if (n === 1) {
+                                    return gt("every month");
+                                }
+                                return gt.format(gt.ngettext('every %1$d month', 'every %1$d months', n), n);
                             },
                             initial: 1,
                             gt: gt
