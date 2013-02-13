@@ -29,9 +29,15 @@ define('io.ox/office/preview/view',
     // class PreviewView ======================================================
 
     /**
+     * The view of the OX Preview application. Shows pages of the previewed
+     * document with a specific zoom factor.
+     *
      * @constructor
      *
      * @extends View
+     *
+     * @param {PreviewApplication} app
+     *  The OX Preview application that has created this view instance.
      */
     function PreviewView(app) {
 
@@ -91,6 +97,13 @@ define('io.ox/office/preview/view',
             self.insertContentNode(pageNode);
         }
 
+        /**
+         * Fetches the specified page from the preview model and shows it with
+         * the current zoom level in the page node.
+         *
+         * @param {Number} newPage
+         *  The one-based index of the page to be shown.
+         */
         function showPage(newPage) {
 
             var // a timeout for the window busy call
@@ -127,6 +140,10 @@ define('io.ox/office/preview/view',
             });
         }
 
+        /**
+         * Recalculates the CSS zoom and margins, according to the current page
+         * size and zoom level.
+         */
         function updateZoom() {
 
             var // the current zoom factor
@@ -153,13 +170,11 @@ define('io.ox/office/preview/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the root DOM element containing the contents of the current
-         * page.
+         * Sets the browser focus to the page node.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
          */
-        this.getPageNode = function () {
-            return pageNode;
-        };
-
         this.grabFocus = function () {
             pageNode.focus();
             return this;
@@ -167,6 +182,9 @@ define('io.ox/office/preview/view',
 
         /**
          * Returns the one-based index of the page currently shown.
+         *
+         * @returns {Number}
+         *  The one-based index of the current page.
          */
         this.getPage = function () {
             return page;
@@ -174,51 +192,100 @@ define('io.ox/office/preview/view',
 
         /**
          * Shows the first page of the current document.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
          */
         this.showFirstPage = function () {
             showPage(1);
+            return this;
         };
 
         /**
          * Shows the previous page of the current document.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
          */
         this.showPreviousPage = function () {
             showPage(page - 1);
+            return this;
         };
 
         /**
          * Shows the next page of the current document.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
          */
         this.showNextPage = function () {
             showPage(page + 1);
+            return this;
         };
 
         /**
          * Shows the last page of the current document.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
          */
         this.showLastPage = function () {
             showPage(model.getPageCount());
+            return this;
         };
 
+        /**
+         * Returns the current zoom level. A value of 0 represents a zoom
+         * factor of 100%. Positive values will zoom in the page in steps of
+         * sqrt(2), negative values will zoom out.
+         *
+         * @returns {Number}
+         *  The current zoom level.
+         */
         this.getZoomLevel = function () {
             return zoom;
         };
 
+        /**
+         * Returns the minimum zoom level.
+         *
+         * @returns {Number}
+         *  The minimum zoom level.
+         */
         this.getMinZoomLevel = function () {
             return MIN_ZOOM;
         };
 
+        /**
+         * Returns the maximum zoom level.
+         *
+         * @returns {Number}
+         *  The maximum zoom level.
+         */
         this.getMaxZoomLevel = function () {
             return MAX_ZOOM;
         };
 
+        /**
+         * Decreases the current zoom level by one, and updates the view.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
         this.decreaseZoomLevel = function () {
             if (zoom > MIN_ZOOM) {
                 zoom -= 1;
                 updateZoom();
             }
+            return this;
         };
 
+        /**
+         * Increases the current zoom level by one, and updates the view.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
         this.increaseZoomLevel = function () {
             if (zoom < MAX_ZOOM) {
                 zoom += 1;
@@ -226,14 +293,35 @@ define('io.ox/office/preview/view',
             }
         };
 
+        /**
+         * Returns the current zoom factor in percent.
+         *
+         * @returns {Number}
+         *  The current zoom factor in percent, rounded to two significant
+         *  digits.
+         */
         this.getZoomFactor = function () {
             return Utils.roundSignificantDigits(100 * Math.pow(Math.SQRT2, zoom), 2);
         };
 
+        /**
+         * Returns a save point containing all settings needed to restore the
+         * current view settings.
+         *
+         * @returns {Object}
+         *  A save point with all view settings.
+         */
         this.getSavePoint = function () {
             return { page: page, zoom: zoom };
         };
 
+        /**
+         * Restores the view from the passed save point.
+         *
+         * @param {Object} point
+         *  A save point that has been created before by the method
+         *  PreviewView.getSavePoint().
+         */
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, MIN_ZOOM, MAX_ZOOM);
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));

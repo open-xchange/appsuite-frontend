@@ -74,7 +74,7 @@ define('io.ox/office/tk/control/combofield',
             if (!self.isReadOnly()) {
                 self.getTextFieldNode().focus();
             }
-            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
+            scrollToListItem(Utils.getSelectedButtons(self.getItems()));
         }
 
         /**
@@ -83,7 +83,7 @@ define('io.ox/office/tk/control/combofield',
         function itemUpdateHandler(value) {
 
             var // activate a button representing a list item
-                button = Utils.selectOptionButton(self.getListItems(), value);
+                button = Utils.selectOptionButton(self.getItems(), value);
 
             // scroll to make the element visible
             scrollToListItem(button);
@@ -101,7 +101,7 @@ define('io.ox/office/tk/control/combofield',
             function moveListItem(delta) {
 
                 var // all list items (button elements)
-                    buttons = self.getListItems(),
+                    buttons = self.getItems(),
                     // index of the active list item
                     index = buttons.index(Utils.getSelectedButtons(buttons));
 
@@ -173,7 +173,7 @@ define('io.ox/office/tk/control/combofield',
             }
 
             // find the first button whose label starts with the entered text
-            button = self.getListItems().filter(function () {
+            button = self.getItems().filter(function () {
                 var label = Utils.getControlLabel($(this));
                 return _.isString(label) && (label.length >= value.length) && (label.substr(0, value.length).toLowerCase() === value.toLowerCase());
             }).first();
@@ -210,7 +210,7 @@ define('io.ox/office/tk/control/combofield',
          */
         this.addListEntry = function (value, options) {
             options = Utils.extendOptions({ label: this.valueToText(value) }, options);
-            this.createListItem(Utils.extendOptions(options, { value: value }));
+            this.createItem(Utils.extendOptions(options, { value: value }));
             // the inserted list item may match the value in the text field
             itemUpdateHandler(this.getFieldValue());
             return this;

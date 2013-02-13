@@ -14,8 +14,9 @@
 define('io.ox/office/tk/control/radiolist',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/tk/dropdown/list'
-    ], function (Utils, Group, List) {
+     'io.ox/office/tk/dropdown/list',
+     'io.ox/office/tk/dropdown/grid'
+    ], function (Utils, Group, List, Grid) {
 
     'use strict';
 
@@ -27,7 +28,7 @@ define('io.ox/office/tk/control/radiolist',
      * @constructor
      *
      * @extends Group
-     * @extends List
+     * @extends List|Grid
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
@@ -92,12 +93,15 @@ define('io.ox/office/tk/control/radiolist',
             updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
 
             // custom update handler for the caption of the menu button
-            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
+            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler'),
+
+            // the mix-in class for the drop-down menu
+            DropDownClass = Utils.getBooleanOption(options, 'itemGrid', false) ? Grid : List;
 
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-        List.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
+        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
 
         // private methods ----------------------------------------------------
 
@@ -114,7 +118,7 @@ define('io.ox/office/tk/control/radiolist',
          * Handles 'menuopen' events.
          */
         function menuOpenHandler() {
-            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
+            scrollToListItem(Utils.getSelectedButtons(self.getItems()));
         }
 
         /**
@@ -127,7 +131,7 @@ define('io.ox/office/tk/control/radiolist',
         function itemUpdateHandler(value) {
 
             var // activate a radio button
-                button = Utils.selectOptionButton(self.getListItems(), value),
+                button = Utils.selectOptionButton(self.getItems(), value),
                 // the options used to create the list item button
                 buttonOptions = button.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
@@ -175,7 +179,7 @@ define('io.ox/office/tk/control/radiolist',
          * Removes all option buttons from this control.
          */
         this.clearOptionButtons = function () {
-            this.clearListItems();
+            this.clearItems();
         };
 
         /**
@@ -188,8 +192,8 @@ define('io.ox/office/tk/control/radiolist',
          * @param {Object} [options]
          *  A map of options to control the properties of the new option
          *  button. Supports all options supported by the method
-         *  List.createListItem(), except 'options.value' which will be set to
-         *  the 'value' parameter passed to this method.
+         *  List.createItem(), except 'options.value' which will be set to the
+         *  'value' parameter passed to this method.
          *
          * @returns {RadioList}
          *  A reference to this instance.
@@ -200,7 +204,7 @@ define('io.ox/office/tk/control/radiolist',
                 buttonOptions = Utils.extendOptions(options, { value: value });
 
             // the new button (button options needed for updating the drop-down menu button)
-            this.createListItem(buttonOptions).data('options', buttonOptions);
+            this.createItem(buttonOptions).data('options', buttonOptions);
             return this;
         };
 
