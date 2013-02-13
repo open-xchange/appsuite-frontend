@@ -97,7 +97,7 @@ define('io.ox/office/tk/dropdown/list',
         // initialization -----------------------------------------------------
 
         // additional formatting for vertical list items
-        this.getItemGroup().getNode().addClass('button-list');
+        this.getItemGroup().getNode().addClass('list');
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);

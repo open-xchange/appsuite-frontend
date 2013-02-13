@@ -73,7 +73,7 @@ define('io.ox/office/tk/dropdown/items',
             self = this,
 
             // the group in the drop-down menu containing the menu items
-            itemGroup = new Group({ design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+            itemGroup = new Group({ classes: 'item-buttons', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
 
             // handler called to insert a new item element into the item group
             itemInserter = Utils.getFunctionOption(options, 'itemInserter'),

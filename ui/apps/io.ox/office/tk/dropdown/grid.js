@@ -125,7 +125,7 @@ define('io.ox/office/tk/dropdown/grid',
         // initialization -----------------------------------------------------
 
         // additional formatting for grid layout
-        this.getItemGroup().getNode().addClass('button-grid');
+        this.getItemGroup().getNode().addClass('grid');
 
         // register event handlers
         this.getItemGroup().getNode().on('keydown keypress keyup', gridKeyHandler);

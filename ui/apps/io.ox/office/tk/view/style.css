@@ -334,11 +334,10 @@ i[class^="icon-"], i[class^=" icon-"] {
             }
         }
 
-        /* vertical button lists ------------------------------------------- */
+        /* item buttons in drop-down menus --------------------------------- */
 
-        &.button-list {
-            padding: 5px 0;
-
+        &.item-buttons {
+    
             a.button {
                 display: block;
                 width: 100%;
@@ -346,11 +345,23 @@ i[class^="icon-"], i[class^=" icon-"] {
                 line-height: @list-item-height;
                 text-align: left;
             }
+
+            /* list drop-downs */
+            &.list {
+            }
+
+            /* grid drop-downs */
+            &.grid {
+                > table > tbody > tr > td {
+                    padding: 0;
+                }
+            }
         }
 
         /* group designs --------------------------------------------------- */
 
-        &.design-default.button-list {
+        &.design-default.item-buttons {
+            padding: 5px 0;
 
             a.button {
                 border: 1px solid transparent;
@@ -404,8 +415,8 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
-            &.button-list {
-                padding: 4px;
+            &.item-buttons {
+                padding: 5px;
 
                 a.button {
                     height: @control-height + 2 * @framed-border-width;
