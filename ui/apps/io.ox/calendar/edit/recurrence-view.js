@@ -223,9 +223,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
     };
 
     // Mark a few translations, so the buildsystem picks up on them
-    gt.ngettext("every day", "every %1$d days", 2);
-    gt.ngettext("every week", "every %1$d weeks", 2);
-    gt.ngettext("every month", "every %1$d months", 2);
+    gt.ngettext("every %1$d day", "every %1$d days", 2);
+    gt.ngettext("every %1$d week", "every %1$d weeks", 2);
+    gt.ngettext("every %1$d month", "every %1$d months", 2);
     gt.ngettext("after %1$d appointment", 'after %1$d appointments', 2);
 
     var RecurrenceView = function (options) {
@@ -281,10 +281,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                             //#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
                             //#. This is inserted into an HTML construct.
-                            gt.format(gt.ngettext('every day',
+                            gt.format(gt.ngettext('every %1$d day',
                                 'every %1$d days', n), n);
 
-                            return gt.format(gt.ngettext('every day',
+                            return gt.format(gt.ngettext('every %1$d day',
                                 'every %1$d days', n), n);
                         },
                         initial: 1,
@@ -301,10 +301,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                 }
                                 //#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
                                 //#. This is inserted into an HTML construct.
-                                gt.format(gt.ngettext('every week',
+                                gt.format(gt.ngettext('every %1$d week',
                                     'every %1$d weeks', n), n);
 
-                                return gt.format(gt.ngettext('every week',
+                                return gt.format(gt.ngettext('every %1$d week',
                                     'every %1$d weeks', n), n);
                             },
                             initial: 1,
@@ -323,9 +323,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                 }
                                 //#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
                                 //#. This is inserted into an HTML construct.
-                                gt.format(gt.ngettext('every month',
+                                gt.format(gt.ngettext('every %1$d month',
                                     'every %1$d months', n), n);
-                                return gt.format(gt.ngettext('every month',
+                                return gt.format(gt.ngettext('every %1$d month',
                                     'every %1$d months', n), n);
                             },
                             initial: 1,
