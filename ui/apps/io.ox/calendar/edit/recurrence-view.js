@@ -705,16 +705,17 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         var monthly =  {
                             recurrence_type: RECURRENCE_TYPES.MONTHLY
                         };
-                        if (this.choice.id === "monthlyDay") {
-                            _.extend(monthly, {
-                                day_in_month: this.choice.ordinal,
-                                days: this.choice.day,
-                                interval: this.choice.interval
-                            });
-                        } else if (this.choice.id === "monthlyDate") {
+                        if (this.choice.id === "monthlyDate") {
                             _.extend(monthly, {
                                 recurrence_type: RECURRENCE_TYPES.MONTHLY,
                                 day_in_month: this.choice.dayInMonth,
+                                interval: this.choice.interval
+                            });
+                        } else {
+                            this.setChoice(this.sentences.monthlyDay);
+                            _.extend(monthly, {
+                                day_in_month: this.choice.ordinal,
+                                days: this.choice.day,
                                 interval: this.choice.interval
                             });
                         }
@@ -724,17 +725,17 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         var yearly =  {
                             recurrence_type: RECURRENCE_TYPES.YEARLY
                         };
-
-                        if (this.choice.id === "yearlyDay") {
+                        if (this.choice.id === "yearlyDate") {
                             _.extend(yearly, {
-                                day_in_month: this.choice.ordinal,
-                                days: this.choice.day,
+                                day_in_month: this.choice.dayInMonth,
                                 month: this.choice.month,
                                 interval: 1
                             });
-                        } else if (this.choice.id === "yearlyDate") {
+                        } else {
+                            this.setChoice(this.sentences.yearlyDay);
                             _.extend(yearly, {
-                                day_in_month: this.choice.dayInMonth,
+                                day_in_month: this.choice.ordinal,
+                                days: this.choice.day,
                                 month: this.choice.month,
                                 interval: 1
                             });
