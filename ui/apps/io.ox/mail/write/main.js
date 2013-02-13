@@ -387,6 +387,12 @@ define('io.ox/mail/write/main',
             }
         };
 
+        app.setReplyTo = function (value) {
+            if (config.get('ui.mail.replyTo.configurable', false) === false) return;
+
+            view.form.find('input#writer_field_replyTo').val(value);
+        };
+
         app.setAttachments = function (list) {
             // look for real attachments
             var found = false;
@@ -496,6 +502,7 @@ define('io.ox/mail/write/main',
             this.setTo(data.to);
             this.setCC(data.cc);
             this.setBCC(data.bcc);
+            this.setReplyTo(data.headers && data.headers['Reply-To']);
             this.setAttachments(data.attachments);
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
@@ -747,7 +754,8 @@ define('io.ox/mail/write/main',
                         .map(function (recipient) {
                             return ['"' + recipient[0] + '"', recipient[1]];
                         });
-                };
+                },
+                replyTo = parse(data.replyTo)[0] || [];
 
             data.from = this.getFrom();
 
@@ -773,6 +781,7 @@ define('io.ox/mail/write/main',
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
+                reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
