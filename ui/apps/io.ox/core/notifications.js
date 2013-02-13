@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'settings!io.ox/core'], function (ext, plugins, settings) {
+define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'settings!io.ox/core', 'gettext!io.ox/core'], function (ext, plugins, settings, gt) {
 
     'use strict';
 
@@ -84,6 +84,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                         self.subviews[type] = new category.ListView({ collection: category.collection});
                     }
                 });
+            } else {
+                self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
             }
 
             _(self.subviews).each(function (category) {
@@ -131,7 +133,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                     }
                 })
             );
-            
+
             //auto open on new notification
             this.badges.push(badgeView);
             var set = settings.get('autoOpenNotification', true);
@@ -144,12 +146,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                     badgeView.off('newNotifications');
                 }
             }
-            
+
             toggle(set);
             settings.on('change:autoOpenNotification', function (e, value) {
                 toggle(value);
             });
-            
+
             //close if count set to 0
             badgeView.on('lastItemDeleted', function () {
                 var overlay = $('#io-ox-notifications-overlay');
@@ -159,7 +161,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
                     self.hideList();
                 }
             });
-            
+
             // invoke plugins
             plugins.loading.done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
@@ -215,7 +217,11 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
 
             _.each(this.badges, function (badgeView) {
                 badgeView.setCount(count || 0);
+                if (count === 0) {
+                    badgeView.setNotifier(false);
+                }
             });
+
             $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
         },
         toggleList: function () {
