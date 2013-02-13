@@ -225,6 +225,9 @@ define('io.ox/office/tk/app/officeapplication',
             // all registered fail-save handlers
             failSaveHandlers = [],
 
+            // Deferred object of the current call to Application.quit()
+            currentQuitDef = null,
+
             // the document model instance
             model = null,
 
@@ -1062,8 +1065,13 @@ define('io.ox/office/tk/app/officeapplication',
         // call all registered quit handlers
         this.setQuit(function () {
 
-            var // the result deferred (rejecting means resume application)
-                def = $.Deferred();
+            // return existing Deferred if a quit request is already running
+            if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
+                return currentQuitDef.promise();
+            }
+
+            // create the result deferred (rejecting means resume application)
+            currentQuitDef = $.Deferred();
 
             // call all before-quit handlers, rejecting one will resume application
             callHandlers(beforeQuitHandlers)
@@ -1092,15 +1100,15 @@ define('io.ox/office/tk/app/officeapplication',
 
                     // always resolve (really close the application), regardless
                     // of the result of the quit handlers
-                    def.resolve();
+                    currentQuitDef.resolve();
                 });
             })
             .fail(function () {
                 self.trigger('docs:resume');
-                def.reject();
+                currentQuitDef.reject();
             });
 
-            return def.promise();
+            return currentQuitDef.always(function () { currentQuitDef = null; }).promise();
         });
 
         // prevent usage of these methods in derived classes
