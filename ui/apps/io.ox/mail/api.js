@@ -259,9 +259,7 @@ define("io.ox/mail/api",
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true).done(function () {
-                        api.trigger('not-found', params);
-                    });
+                    api.remove([params], true);
                 }
             }
         },
@@ -417,19 +415,17 @@ define("io.ox/mail/api",
 
     // ~ list
     api.getThreads = function (ids) {
-
-        return this.getList(ids)
-            .pipe(function (data) {
-                // clone not to mess up with searches
-                data = _.deepClone(data);
-                // inject thread size
-                var i = 0, obj;
-                for (; (obj = data[i]); i++) {
-                    obj.threadSize = tracker.getThreadSize(obj);
-                    obj.unreadCount = tracker.getUnreadCount(obj);
-                }
-                return data;
-            });
+        return this.getList(ids).pipe(function (data) {
+            // clone not to mess up with searches
+            data = _.deepClone(data);
+            // inject thread size
+            var i = 0, obj;
+            for (; (obj = data[i]); i++) {
+                obj.threadSize = tracker.getThreadSize(obj);
+                obj.unreadCount = tracker.getUnreadCount(obj);
+            }
+            return data;
+        });
     };
 
     var update = function (list, data, apiAction) {
@@ -537,11 +533,6 @@ define("io.ox/mail/api",
             }));
         };
     }());
-
-    api.on('not-found', function (e, obj) {
-        tracker.remove(obj);
-        api.trigger('refresh.list');
-    });
 
     api.changeColor = function (list, label, local) {
 

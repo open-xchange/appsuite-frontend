@@ -436,16 +436,6 @@ define("io.ox/mail/main",
             );
         };
 
-        var repaint = function () {
-            var sel = grid.selection.get();
-            if (sel.length === 1) {
-                right.css('height', '');
-                showMail(sel[0]);
-            }
-        };
-
-        api.on('delete', repaint);
-
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right, api);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
