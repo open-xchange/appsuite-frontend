@@ -605,7 +605,14 @@ define("io.ox/mail/api",
             })
             .done(function () { api.trigger('refresh.list'); }),
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                folderAPI.reload(list);
+                _(list).chain()
+                    .map(function (elem) {
+                        return elem.folder || elem.folder_id;
+                    })
+                    .uniq()
+                    .each(function (elem) {
+                        folderAPI.reload(elem);
+                    });
             })
         );
     };
