@@ -1014,6 +1014,12 @@ define('io.ox/office/tk/app/officeapplication',
             view = new ViewClass(self);
             controller = new ControllerClass(self);
 
+            // disable FF spell checking
+            win.on({
+                show: function () { $('body').attr('spellcheck', false); },
+                hide: function () { $('body').removeAttr('spellcheck'); }
+            });
+
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
                 win.busy();

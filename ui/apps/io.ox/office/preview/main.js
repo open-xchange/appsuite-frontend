@@ -63,9 +63,6 @@ define('io.ox/office/preview/main',
             // disable drop events
             self.getWindowNode().on('drop dragstart dragover', false);
 
-            // disable FF spell checking
-            $('body').attr('spellcheck', false);
-
             // load the file
             return self.sendConverterRequest({
                 params: {
