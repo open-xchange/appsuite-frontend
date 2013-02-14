@@ -327,7 +327,8 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var helpLink = "help/" + ox.language + "/index.html";
+                var lang = ox.language.slice(0, 2) === 'de' ? 'de_DE' : 'en_US';
+                var helpLink = "help/" + lang + "/index.html";
                 this.append(
                     $('<li>').append(
                         $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
