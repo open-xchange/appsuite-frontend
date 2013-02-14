@@ -15,11 +15,12 @@
 define('io.ox/core/import',
     ['io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
+    'io.ox/core/tk/attachments',
     'io.ox/core/api/folder',
     'io.ox/core/notifications',
     'io.ox/core/config',
     'gettext!io.ox/core',
-    'less!io.ox/backbone/forms.less'], function (ext, dialogs, folderApi, notifications, config, gt) {
+    'less!io.ox/backbone/forms.less'], function (ext, dialogs, attachments, folderApi, notifications, config, gt) {
 
     'use strict';
 
@@ -40,6 +41,15 @@ define('io.ox/core/import',
             this.append(
                 folderApi.getBreadcrumb(id, { prefix: prefix || '' })
                 .css({'padding-top': '5px', 'padding-left': '5px'})
+            );
+        }
+    });
+
+    ext.point('io.ox/core/import/file_upload').extend({
+        id: 'default',
+        draw: function () {
+            this.append(
+                attachments.fileUploadWidget({displayLabel: true})
             );
         }
     });
@@ -69,6 +79,8 @@ define('io.ox/core/import',
                         //body
                         ext.point('io.ox/core/import/breadcrumb')
                             .invoke('draw', this.getContentNode(), id, gt('Path'));
+                        ext.point('io.ox/core/import/file_upload')
+                            .invoke('draw', this.getContentNode());
                         //buttons
                         ext.point('io.ox/core/import/buttons')
                             .invoke('draw', this);
