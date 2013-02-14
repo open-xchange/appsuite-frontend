@@ -501,6 +501,8 @@ define('io.ox/files/icons/perspective',
                     dropZone.remove();
                     if (dropZone) dropZone.include();
                 }
+                app.getWindow().search.close();
+                that.main.closest('.search-open').removeClass('search-open');
                 that.main.empty();
                 that.draw(app);
             });
