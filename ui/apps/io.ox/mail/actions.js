@@ -384,7 +384,7 @@ define('io.ox/mail/actions',
                 // download zip file
                 url = api.getUrl(list, 'zip');
             }
-            window.open(url);
+            window.location.assign(url);
         }
     });
 
