@@ -33,7 +33,7 @@ define('io.ox/files/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
-            title: gt('Files'),
+            title: 'Files',
             toolbar: true,
             search: true
         }));

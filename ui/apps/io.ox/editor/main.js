@@ -51,7 +51,7 @@ define("io.ox/editor/main",
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
-                title: gt('Simple Pad'),
+                title: 'Simple Pad',
                 close: true,
                 search: false
             }));

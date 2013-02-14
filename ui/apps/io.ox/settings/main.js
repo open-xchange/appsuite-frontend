@@ -75,7 +75,7 @@ define('io.ox/settings/main',
 
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
-            title: gt('Settings'),
+            title: 'Settings',
             chromeless: true
         }));
 

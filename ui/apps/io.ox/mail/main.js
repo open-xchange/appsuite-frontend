@@ -79,7 +79,7 @@ define("io.ox/mail/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
-            title: gt("Inbox"),
+            title: "Inbox",
             search: true
         });
 

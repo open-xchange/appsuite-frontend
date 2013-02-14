@@ -24,7 +24,7 @@ define('io.ox/calendar/edit/main',
 
     function createInstance() {
 
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment'), userContent: true }),
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true }),
 
             controller = _.extend(app, {
                 start: function () {
@@ -189,7 +189,7 @@ define('io.ox/calendar/edit/main',
                         // create app window
                         var win = ox.ui.createWindow({
                             name: 'io.ox/calendar/edit',
-                            title: gt('Create Appointment'),
+                            title: 'Create Appointment',
                             chromeless: true
                         });
 
