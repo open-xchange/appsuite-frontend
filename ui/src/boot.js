@@ -21,6 +21,10 @@ $(window).load(function () {
 
     'use strict';
 
+    if (_.url.hash("cacheBusting")) {
+        ox.base = ox.base + _.now();
+    }
+
     if (!ox.signin) {
         require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
     }
