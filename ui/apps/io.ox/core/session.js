@@ -30,17 +30,20 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         return language in languages ? language : false;
     };
 
-    var set = function (data, language) {
+    var set = function (data, language, store) {
         ox.session = data.session || '';
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        return store ? that.store().then(finished, finished) : finished();
+        function finished() { return $.when(data); }
     };
 
     var that = {
 
         autoLogin: function () {
+            var store = false;
             // GET request
             return http.GET({
                 module: 'login',
@@ -72,13 +75,17 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 }).then(function (response) { return response.data; });
             })
             .done(function () {
+                store = _.url.hash('store');
                 _.url.hash({
                     jsessionid: null,
                     serverToken: null,
-                    clientToken: null
+                    clientToken: null,
+                    store: null
                 });
             })
-            .done(set);
+            .then(function (data) {
+                return set(data, undefined, store);
+            });
         },
 
         login: (function () {
@@ -127,16 +134,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            set(data, language);
-                            // set permanent cookie
-                            if (store) {
-                                that.store().always(function (e) {
-                                    // we don't care if this fails
-                                    def.resolve(data);
-                                });
-                            } else {
-                                def.resolve(data);
-                            }
+                            set(data, language, store).done(def.resolve(data));
                         })
                         .fail(def.reject);
                     }

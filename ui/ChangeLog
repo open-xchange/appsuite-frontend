@@ -1,6 +1,7 @@
 * 2013-02-14 - viktor.pracht@open-xchange.com
 
  - Fixed bug 24955: Missing translation/fallback for online help
+ - Fixed bug 23752: New session everytime you select an email or an appointment
 
 * 2013-02-12 - viktor.pracht@open-xchange.com
 
