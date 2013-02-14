@@ -220,6 +220,27 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function importData(e) {
+            e.preventDefault();
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'import',
+            index: 800,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="import">').text(gt('Import'));
+                this.append(
+                    $('<li>').append(link)
+                );
+
+                if (api.can('import', baton.data)) {
+                    link.on('click', { baton: baton }, importData);
+                } else {
+                    link.addClass('disabled').on('click', $.preventDefault);
+                }
+            }
+        });
+
         function setFolderPermissions(e) {
             e.preventDefault();
             require(['io.ox/core/permissions/permissions'], function (permissions) {
