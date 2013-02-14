@@ -45,6 +45,28 @@ define('io.ox/core/import',
         }
     });
 
+    ext.point('io.ox/core/import/select').extend({
+        id: 'select',
+        draw: function (baton) {
+            var nodes = {}, formats;
+            nodes.row = $('<div class="row-fluid">').appendTo($(this));
+
+            //lable and select
+            nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
+            nodes.select = $('<select>').appendTo(nodes.row);
+
+            //add option
+            formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
+            formats.forEach(function (node) {
+                if (node)
+                    node.appendTo(nodes.select);
+            });
+
+            //avoid find
+            baton.nodes.select = nodes.select;
+        }
+    });
+
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function () {
@@ -79,6 +101,8 @@ define('io.ox/core/import',
                         //body
                         ext.point('io.ox/core/import/breadcrumb')
                             .invoke('draw', this.getContentNode(), id, gt('Path'));
+                        ext.point('io.ox/core/import/select')
+                            .invoke('draw', this.getContentNode(), baton);
                         ext.point('io.ox/core/import/file_upload')
                             .invoke('draw', this.getContentNode());
                         //buttons
