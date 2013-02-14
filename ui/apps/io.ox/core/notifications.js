@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'settings!io.ox/core', 'gettext!io.ox/core'], function (ext, plugins, settings, gt) {
+define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/core', 'gettext!io.ox/core'], function (ext, settings, gt) {
 
     'use strict';
 
@@ -163,7 +163,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'plugins', 'setting
             });
 
             // invoke plugins
-            plugins.loading.done(function () {
+            ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
 

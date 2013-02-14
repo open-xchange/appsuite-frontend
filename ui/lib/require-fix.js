@@ -81,6 +81,10 @@ define.async = (function () {
         // Is this a define statement we understand?
         if (_.isString(arguments[0])) {
             var name = arguments[0];
+            // FIXME
+            if (name === "io.ox/core/notifications") {
+                return originalDefine.apply(this, arguments);
+            }
             var dependencies = arguments[1];
             var definitionFunction = $.noop;
             if (_.isFunction(dependencies)) {
