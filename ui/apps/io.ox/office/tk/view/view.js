@@ -116,12 +116,20 @@ define('io.ox/office/tk/view/view',
                 var position = paneNode.data('pane-pos'),
                     horizontal = (position === 'top') || (position === 'bottom'),
                     leading = (position === 'top') || (position === 'left'),
+                    sizeAttr = horizontal ? 'height' : 'width',
                     paneOffsets = _.clone(offsets);
 
                 paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
-                paneNode.css(paneOffsets);
-                if ((paneNode.css('display') !== 'none') && !paneNode.hasClass(OVERLAY_CLASS)) {
-                    offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                if (paneNode.css('display') !== 'none') {
+                    paneNode.css(paneOffsets);
+                    if (!paneNode.hasClass(OVERLAY_CLASS)) {
+                        offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                    }
+                    if (!leading && paneNode.hasClass(OVERLAY_CLASS) && (paneNode[sizeAttr]() === 0)) {
+                        paneNode.css(sizeAttr, 'auto');
+                        paneNode.css(horizontal ? 'bottom' : 'right', paneNode[sizeAttr]());
+                        paneNode.css(sizeAttr, 0);
+                    }
                 }
             });
 
@@ -163,7 +171,7 @@ define('io.ox/office/tk/view/view',
          */
         this.insertContentNode = function (contentNode) {
             appContainerNode.append(contentNode);
-            return this;
+            return this.refreshPaneLayout();
         };
 
         /**
@@ -269,7 +277,7 @@ define('io.ox/office/tk/view/view',
          *  Whether the specified view pane is currently visible.
          */
         this.isPaneVisible = function (id) {
-            return  (id in panesById) && panesById[id].isVisible();
+            return (id in panesById) && panesById[id].isVisible();
         };
 
         /**
@@ -282,11 +290,7 @@ define('io.ox/office/tk/view/view',
          *  A reference to this instance.
          */
         this.showPane = function (id) {
-            if (id in panesById) {
-                panesById[id].getNode().show();
-                refreshPaneLayout();
-            }
-            return this;
+            return this.togglePane(id, false);
         };
 
         /**
@@ -299,11 +303,7 @@ define('io.ox/office/tk/view/view',
          *  A reference to this instance.
          */
         this.hidePane = function (id) {
-            if (id in panesById) {
-                panesById[id].getNode().hide();
-                refreshPaneLayout();
-            }
-            return this;
+            return this.togglePane(id, true);
         };
 
         /**
@@ -330,6 +330,14 @@ define('io.ox/office/tk/view/view',
         };
 
         /**
+         * Adjusts the positions of all view pane nodes.
+         */
+        this.refreshPaneLayout = function () {
+            refreshPaneLayout();
+            return this;
+        };
+
+        /**
          * Returns whether an alert banner is currently visible.
          *
          * @returns {Boolean}
@@ -348,10 +356,13 @@ define('io.ox/office/tk/view/view',
          * @param {String} id
          *  The unique identifier of the first view pane drawn after an alert
          *  banner.
+         *
+         * @returns {View}
+         *  A reference to this instance.
          */
         this.showAlertsBeforePane = function (id) {
             alertsBeforePaneId = _.isString(id) ? id : null;
-            refreshPaneLayout();
+            return this.refreshPaneLayout();
         };
 
         /**

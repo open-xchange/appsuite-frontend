@@ -457,10 +457,9 @@ i[class^="icon-"], i[class^=" icon-"] {
         /* size the tool box according to its floated children */
         overflow: hidden;
 
-        /* inline mode, e.g. multiple tool boxes side-by-side in top pane */
-        &.inline {
-            display: inline-block;
-            vertical-align: top;
+        /* float at right border */
+        &.right {
+            float: right;
         }
 
         .group, > .group-container {

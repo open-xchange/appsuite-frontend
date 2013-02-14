@@ -58,7 +58,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app, { scrollable: true, margin: '52px 30px 30px' });
+        View.call(this, app, { scrollable: true, margin: '30px 30px 52px' });
 
         // private methods ----------------------------------------------------
 
@@ -68,12 +68,17 @@ define('io.ox/office/preview/view',
          */
         function initHandler() {
 
-            var // the tool pane for tool boxes
-                toolPane = self.createPane('toolpane', 'top', { overlay: true, transparent: true, css: { textAlign: 'center' } });
+            var // the tool pane for upper tool boxes
+                topPane = self.createPane('toppane', 'top', { overlay: true, transparent: true }),
+                // the tool pane for lower tool boxes
+                bottomPane = self.createPane('bottompane', 'bottom', { overlay: true, transparent: true });
 
             model = app.getModel();
 
-            toolPane.createToolBox({ hoverEffect: true, classes: 'inline' })
+            topPane.createToolBox({ hoverEffect: true, classes: 'right' })
+                .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+
+            bottomPane.createToolBox({ hoverEffect: true, classes: 'right' })
                 .addGroupContainer(function () {
                     this.addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
                         .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
@@ -87,11 +92,8 @@ define('io.ox/office/preview/view',
                         .addButton('zoom/inc',    { icon: 'icon-zoom-in',  tooltip: gt('Zoom in') });
                 });
 
-            toolPane.createToolBox({ hoverEffect: true, css: { float: 'right', paddingRight: '26px' } })
-                .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
-
             // show alert banners above the overlay pane (floating buttons below alert banners)
-            self.showAlertsBeforePane('toolpane');
+            self.showAlertsBeforePane('toppane');
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);
