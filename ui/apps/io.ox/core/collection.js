@@ -63,7 +63,6 @@ define('io.ox/core/collection',
                     .map(getFolderId)
                     .filter(function (item) { return !!item; }) // null, undefined, 0, ''
                     .value();
-
             // mail specific: toplevel? (in contrast to nested mails)
             props.toplevel = _(collection).reduce(function (memo, item) {
                 // nested mails don't have a folder_id but a filename
@@ -71,6 +70,8 @@ define('io.ox/core/collection',
             }, true);
 
             if (folders.length === 0) {
+                props.unknown = true;
+                props.read = props.modify = props['delete'] = false;
                 return $.Deferred().resolve(props);
             }
 
