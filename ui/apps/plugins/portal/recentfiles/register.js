@@ -80,7 +80,7 @@ define('plugins/portal/recentfiles/register',
                     text = gt("%1$s was modified by %2$s");
                 }
                 text = text
-                    .replace("%1$s", '<a>' + (file.filename || file.title) + '</a>')
+                    .replace("%1$s", '<b>' + (file.filename || file.title) + '</b>')
                     .replace("%2$s", file.modified_by.display_name);
 
                 $('<div class="entry">').html(text).appendTo(content);
@@ -106,12 +106,11 @@ define('plugins/portal/recentfiles/register',
                 } else {
                     text = gt("Modified by:");
                 }
-
                 $('<div class="entry">').append(
-                    $('<a>').text(file.filename || file.title),
+                    $('<a>', {href: "#!&app=io.ox/files&folder=" + file.folder_id + "&id=" + file.folder_id + "." + file.id + "&perspective=list"}).text(file.filename || file.title),
                     '<br/>',
                     $('<span class="uploader">').text(text),
-                    $('<a class="uploader">').text(file.modified_by.display_name),
+                    $('<b class="uploader">').text(file.modified_by.display_name), //TODO halo here?
                     '<br/>',
                     $('<span class="date">').text(myDate),
                     $('<span class="type">').text(file.mime_type),
@@ -119,7 +118,6 @@ define('plugins/portal/recentfiles/register',
                     '<br />'
                 ).appendTo(content);
 
-                console.log("DEBUG", file);
             });
 
         }
