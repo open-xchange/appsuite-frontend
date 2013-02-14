@@ -459,7 +459,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
-                isAutoLogin = o.module === "login" && o.data && /^(autologin|store)$/.test(o.data.action);
+                isAutoLogin = o.module === "login" && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
             if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
                 ox.session = '';
