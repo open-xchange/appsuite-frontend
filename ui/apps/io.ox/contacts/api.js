@@ -315,31 +315,20 @@ define('io.ox/contacts/api',
             } else if (address === '') {
                 return {};
             } else {
+                //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
                 return http.PUT({
                     module: 'contacts',
                     params: {
-                        action: 'advancedSearch',
+                        action: 'search',
                         columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592'
                     },
+                    sort: 609,
                     data: {
-                        filter: [
-                            'or',
-                            [
-                                '=',
-                                {'field': 'email1'},
-                                address
-                            ],
-                            [
-                                '=',
-                                {'field': 'email2'},
-                                address
-                            ],
-                            [
-                                '=',
-                                {'field': 'email3'},
-                                address
-                            ]
-                        ]
+                        'email1': address,
+                        'email2': address,
+                        'email3': address,
+                        'orSearch': true,
+                        'exactMatch': true
                     }
                 }).pipe(function (data) {
                     //TODO: use smarter server request instead
