@@ -700,7 +700,7 @@ define('io.ox/core/api/folder',
                 return (rights & 127) >= 2 && this.is('calendar|contacts|tasks', data);
             case 'export':
                 // export data (not allowed for shared folders)
-                return !this.is('shared', data) && this.is('contacts|calendar', data);
+                return !this.is('shared', data) && this.is('contacts|calendar|tasks', data);
             case 'empty':
                 // empty folder
                 return (rights >> 21 & 127) && this.is('mail', data);

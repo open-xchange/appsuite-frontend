@@ -158,7 +158,7 @@ define('io.ox/core/export',
         id: 'ical',
         index: 300,
         draw: function (baton) {
-            if (baton.module === 'calendar') {
+            if (baton.module === 'calendar' || baton.module === 'tasks') {
                 baton.format.ical = { getDeferred: function () { return api.getICAL(baton.id, baton.simulate); } };
                 return $('<option value="ical">iCalendar</option>');
             }
