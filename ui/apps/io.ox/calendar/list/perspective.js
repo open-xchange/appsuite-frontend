@@ -164,15 +164,22 @@ define('io.ox/calendar/list/perspective',
                     folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
                 }).pipe(function (data) {
-                    if (settings.get('showDeclinedAppointments', false)) {
-                        return data;
-                    } else {
-                        return _.filter(data, function (obj) {
+                    var now = _.now();
+                    if (!settings.get('showDeclinedAppointments', false)) {
+                        data = _.filter(data, function (obj) {
                             var hash = util.getConfirmations(obj),
                                 conf = hash[ox.user_id] || { status: 1, comment: "" };
                             return conf.status !== 2;
                         });
                     }
+                    _.map(data, function (obj) {
+                        // show pending appointments under today label
+                        if (obj.start_date < now) {
+                            obj.start_date = now;
+                        }
+                        return obj;
+                    });
+                    return data;
                 });
             });
         });

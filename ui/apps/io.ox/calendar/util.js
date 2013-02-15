@@ -151,10 +151,6 @@ define("io.ox/calendar/util",
                 diff = 0,
                 diffWeek = 0;
 
-            if (d.getTime() < now.getTime()) {
-                d = now;
-            }
-
             // normalize
             d.setHours(0, 0, 0, 0);
             now.setHours(0, 0, 0, 0);
