@@ -14,7 +14,7 @@
 define('io.ox/mail/mailfilter/settings/register', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
-    // gt needs to be reanabled
+    // gt needs to be reenabled
 
     ext.point("io.ox/settings/pane").extend({
         id: 'vacation',
@@ -27,7 +27,25 @@ define('io.ox/mail/mailfilter/settings/register', ['io.ox/core/extensions'], fun
         index: 100,
         draw: function () {
             var $node = this;
-            $node.append($('<div>'));
+            require(["io.ox/mail/mailfilter/settings/filter"], function (filters) {
+                filters.editVacationtNotice($node);
+//                filters.editCurrentUser($node).done(function (filter) {
+//
+//                    filter.on('update', function () {
+//                        require("io.ox/core/notifications").yell("success", "Your data has been saved");
+//                    });
+//                }).done(function () {
+//                    $node.find('[data-action="discard"]').hide();
+//                }).fail(function () {
+//                    $node.append(
+//                        $.fail("Couldn't load your contact data.", function () {
+//                            filters.editCurrentUser($node).done(function () {
+//                                $node.find('[data-action="discard"]').hide();
+//                            });
+//                        })
+//                    );
+//                });
+            });
         }
     });
 });
