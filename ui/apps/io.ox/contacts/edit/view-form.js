@@ -228,7 +228,7 @@ define('io.ox/contacts/edit/view-form', [
             id: 'inline-actions',
             ref: ref + '/edit/view/inline',
             customizeNode: function ($node) {
-                $node.addClass("span9");
+                $node.addClass("span7");
                 $node.css({marginBottom: '20px'});
             }
         }));
