@@ -18,6 +18,9 @@ define('io.ox/office/preview/model',
 
     'use strict';
 
+    var // maximum number of pages in page cache
+        CACHE_SIZE = 100;
+
     // class PreviewModel =====================================================
 
     /**
@@ -34,7 +37,10 @@ define('io.ox/office/preview/model',
             pageCount = 0,
 
             // the page cache, mapped by one-based page number
-            pageCache = {};
+            pageCache = {},
+
+            // last shown pages, in order of visiting
+            lastPages = [];
 
         // base constructor ---------------------------------------------------
 
@@ -52,6 +58,7 @@ define('io.ox/office/preview/model',
         this.setPageCount = function (count) {
             pageCount = count;
             pageCache = {};
+            lastPages = [];
         };
 
         /**
@@ -96,8 +103,12 @@ define('io.ox/office/preview/model',
             })
             .done(function (html) {
                 // store page in cache
-                // TODO: restrict cache size?
                 pageCache[page] = html;
+                lastPages = _(lastPages).without(page);
+                lastPages.push(page);
+                if (lastPages.length > CACHE_SIZE) {
+                    delete pageCache[lastPages.shift()];
+                }
             });
         };
 

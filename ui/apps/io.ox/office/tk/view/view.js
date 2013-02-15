@@ -157,6 +157,10 @@ define('io.ox/office/tk/view/view',
             return appPane.getNode();
         };
 
+        this.getAppContainerNode = function () {
+            return appContainerNode;
+        };
+
         /**
          * Inserts new DOM nodes into the container node of the application
          * pane.

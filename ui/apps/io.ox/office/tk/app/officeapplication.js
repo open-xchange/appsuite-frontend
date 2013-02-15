@@ -201,6 +201,9 @@ define('io.ox/office/tk/app/officeapplication',
      *  @param {Boolean} [launchOptions.search=false]
      *      If set to true, the application will show and use the global search
      *      tool bar.
+     *  @param {Boolean} [launchOptions.chromeless=true]
+     *      If set to true, the application window will not contain the main
+     *      tool bar attached to the left or bottom border.
      *  @param {Boolean} [launchOptions.detachable=true]
      *      If set to false, the application window will not be detached from
      *      the DOM while it is hidden.
@@ -322,9 +325,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  The document type of this application.
          */
         this.getDocumentType = function () {
-            var name = this.getName(),
-                pos = name.lastIndexOf('/');
-            return name.substr(pos + 1);
+            return getDocumentType(this.getName());
         };
 
         /**
@@ -720,14 +721,15 @@ define('io.ox/office/tk/app/officeapplication',
          *  A reference to this application instance.
          */
         this.registerWindowResizeHandler = function (resizeHandler) {
-            this.getWindow()
-                .on('show', function () {
+            this.getWindow().on({
+                show: function () {
                     $(window).on('resize', resizeHandler);
                     resizeHandler();
-                })
-                .on('hide', function () {
+                },
+                hide: function () {
                     $(window).off('resize', resizeHandler);
-                });
+                }
+            });
             return this;
         };
 
@@ -1001,7 +1003,8 @@ define('io.ox/office/tk/app/officeapplication',
                 // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
-                    search: Utils.getBooleanOption(launchOptions, 'search', false)
+                    search: Utils.getBooleanOption(launchOptions, 'search', false),
+                    chromeless: Utils.getBooleanOption(launchOptions, 'chromeless', false)
                 });
 
             // do not detach window if specified

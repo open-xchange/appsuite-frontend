@@ -111,6 +111,6 @@ define('io.ox/office/preview/main',
 
     // exports ================================================================
 
-    return OfficeApplication.createLauncher('io.ox/office/preview', PreviewApplication);
+    return OfficeApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
 
 });
