@@ -54,8 +54,11 @@ define('io.ox/files/views/create', [
                             folder: folder
                         }).done(function () {
                             notifications.yell('success', gt('This file has been added'));
-                        }).fail(function () {
-                            notifications.yell('error', gt('This file has not been added'));
+                        }).fail(function (e) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('!!!This file has not been added'));
                         });
                     }
                 });
