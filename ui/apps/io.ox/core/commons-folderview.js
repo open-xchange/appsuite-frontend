@@ -171,6 +171,26 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function createPublicFolder(e) {
+            e.preventDefault();
+            //public folder has the magic id 2
+            e.data.app.folderView.add("2", {module: e.data.module});
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-public-folder',
+            index: 50,
+            draw: function (baton) {
+                var type = baton.options.type;
+                if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
+
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'))
+                    .on('click', {app: baton.app, module: type}, createPublicFolder)
+                ));
+            }
+        });
+
         function renameFolder(e) {
             e.preventDefault();
             e.data.app.folderView.rename();
