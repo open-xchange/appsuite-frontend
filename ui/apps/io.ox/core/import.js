@@ -69,9 +69,10 @@ define('io.ox/core/import',
 
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
-        draw: function () {
+        draw: function (baton) {
+            baton.nodes.file_upload = attachments.fileUploadWidget({displayLabel: true});
             this.append(
-                attachments.fileUploadWidget({displayLabel: true})
+                baton.nodes.file_upload
             );
         }
     });
@@ -104,7 +105,7 @@ define('io.ox/core/import',
                         ext.point('io.ox/core/import/select')
                             .invoke('draw', this.getContentNode(), baton);
                         ext.point('io.ox/core/import/file_upload')
-                            .invoke('draw', this.getContentNode());
+                            .invoke('draw', this.getContentNode(), baton);
                         //buttons
                         ext.point('io.ox/core/import/buttons')
                             .invoke('draw', this);
