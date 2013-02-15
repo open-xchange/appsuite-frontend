@@ -51,6 +51,8 @@ define('io.ox/office/preview/model',
          */
         this.renderPage = function (html) {
             node[0].innerHTML = html;
+            var svgNode = node.children().first();
+            node.width(svgNode.width()).height(svgNode.height());
         };
 
     } // class PreviewModel
