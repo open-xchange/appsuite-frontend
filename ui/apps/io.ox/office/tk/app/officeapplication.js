@@ -284,9 +284,13 @@ define('io.ox/office/tk/app/officeapplication',
                 .done(function () {
                     self.trigger('docs:import:success');
                 })
-                .fail(function () {
+                .fail(function (result) {
                     Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
-                    view.showError(gt('Load Error'), gt('An error occurred while loading the document.'));
+                    if (result && result.error === 'documentSizeExceeded') {
+                        view.showError(gt('Load Error'), gt('Document content size exceeded.'));
+                    } else {
+                        view.showError(gt('Load Error'), gt('An error occurred while loading the document.'));
+                    }
                     self.trigger('docs:import:error');
                 })
                 .always(function () {
