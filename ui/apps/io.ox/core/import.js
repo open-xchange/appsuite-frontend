@@ -59,6 +59,16 @@ define('io.ox/core/import',
         }
     });
 
+    ext.point('io.ox/core/import/format').extend({
+        id: 'ical',
+        index: 100,
+        draw: function (baton) {
+            if (baton.module === 'calendar') {
+                return $('<option value="ical">').text(gt('iCal'));
+            }
+        }
+    });
+
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
