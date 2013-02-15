@@ -117,9 +117,6 @@ define('io.ox/office/preview/main',
             // disable drop events
             self.getWindowNode().on('drop dragstart dragover', false);
 
-            // disable FF spell checking
-            $('body').attr('spellcheck', false);
-
             // wait for unload events and send notification to server
             self.registerEventHandler(window, 'unload', sendCloseNotification);
 
