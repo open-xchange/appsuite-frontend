@@ -291,7 +291,7 @@ define('io.ox/core/tk/attachments',
                         $('<span>').addClass('btn btn-file').append(
                             $('<span>').addClass('fileupload-new').text(gt('Select file')),
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
-                            (options.multi ? $('<input type="file" multiple="multiple">') : $('<input type="file">'))
+                            (options.multi ? $('<input type="file" name="file" multiple="multiple">') : $('<input name="file" type="file">'))
                         ),
                         $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Remove')),
                         (options.displayButton ? $('<button>', { 'data-action': 'add' }).addClass('btn').text(gt('Upload file')) : '')

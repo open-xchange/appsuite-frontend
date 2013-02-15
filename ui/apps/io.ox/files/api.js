@@ -216,6 +216,9 @@ define('io.ox/files/api',
 
             // good old form post
             fixOptions();
+            if (options.form) {
+                options.form.off('submit');
+            }
             return http.FORM({ form: options.form, data: options.json }).pipe(success);
         }
     };
