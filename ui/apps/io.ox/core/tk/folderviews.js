@@ -506,15 +506,23 @@ define('io.ox/core/tk/folderviews',
             }
         }
 
-        this.addProcess = function (folder, title) {
-            var self = this;
+        /**
+         * @param folder {string} (optional) folder id
+         * @param title {string} (optional) title
+         * @param opt {object} (optional) options object can contain only
+         * a module name, for now
+         */
+        this.addProcess = function (folder, title, opt) {
+            var self = this,
+            opt = opt || {};
             // be responsive
             this.busy();
             // call API
             return api.create({
                 folder: folder,
                 data: {
-                    title: $.trim(title) || gt('New folder')
+                    title: $.trim(title) || gt('New folder'),
+                    module: opt.module
                 }
             })
             .done(function (data) {
@@ -524,9 +532,15 @@ define('io.ox/core/tk/folderviews',
             });
         };
 
-        this.add = function (folder) {
+        /**
+         * @param folder {string} (optional) folder id
+         * @param opt {object} (optional) options object - will be forwarded
+         * to folder API
+         */
+        this.add = function (folder, opt) {
             var self = this,
-            folder = String(this.selection.get());
+            folder = folder || String(this.selection.get()),
+            opt = opt || {};
             if (folder) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
@@ -554,7 +568,7 @@ define('io.ox/core/tk/folderviews',
                     })
                     .done(function (action) {
                         if (action === 'add') {
-                            self.addProcess(folder, this.find('input').val());
+                            self.addProcess(folder, this.find('input').val(), opt);
                         }
                     });
                 });

@@ -401,6 +401,7 @@ define('io.ox/core/api/folder',
                 return http.PUT({
                     module: 'folders',
                     params: {
+                        module: module,
                         action: 'new',
                         folder_id: opt.folder,
                         tree: '1'
