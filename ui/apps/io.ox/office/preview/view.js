@@ -58,7 +58,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app, { scrollable: true, margin: '30px 30px 52px' });
+        View.call(this, app, { scrollable: true, margin: '52px 30px' });
 
         // private methods ----------------------------------------------------
 
@@ -165,14 +165,16 @@ define('io.ox/office/preview/view',
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
             // if browser zoom is not 100%) regardless of existing SVG, must
             // set its size explicitly to see anything...
-            pageNode.css({
-                width: svgNode.width(),
-                height: svgNode.height(),
+            svgNode.css({
                 '-webkit-transform': scale,
                 '-moz-transform': scale,
                 '-ms-transform': scale,
                 transform: scale,
                 margin: vMargin + 'px ' + hMargin + 'px'
+            });
+            pageNode.css({
+                width: svgNode.width() * factor,
+                height: svgNode.height() * factor
             });
         }
 
