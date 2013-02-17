@@ -36,8 +36,6 @@ define('io.ox/office/tk/view/pane',
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
-     *  @param {Boolean} [options.transparent=false]
-     *      If set to true, the background of the pane will be transparent.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of the
      *      view pane.
@@ -120,11 +118,6 @@ define('io.ox/office/tk/view/pane',
             });
             node = components = null;
         };
-
-        // initialization -----------------------------------------------------
-
-        // additional CSS classes
-        node.toggleClass('transparent', Utils.getBooleanOption(options, 'transparent', false));
 
     } // class Pane
 

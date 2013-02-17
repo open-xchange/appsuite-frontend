@@ -53,23 +53,26 @@ define('io.ox/office/tk/view/view',
      */
     function View(app, options) {
 
-        var // centered application pane
+        var // self reference
+            self = this,
+
+            // centered application pane
             appPane = null,
 
             // root application container node
             appContainerNode = $('<div>').addClass('app-container'),
 
-            // all pane instances, in insertion order
-            panes = [],
+            // all fixed view panes, in insertion order
+            fixedPanes = [],
 
-            // all pane instances, mapped by identifier
+            // all overlay view panes, in insertion order
+            overlayPanes = [],
+
+            // all view panes, mapped by identifier
             panesById = {},
 
             // inner shadows for application pane
             shadowNodes = {},
-
-            // identifier of the view pane following an alert banner
-            alertsBeforePaneId = null,
 
             // alert banner currently shown
             currentAlert = null,
@@ -84,54 +87,61 @@ define('io.ox/office/tk/view/view',
 
         // private methods ----------------------------------------------------
 
+        function isHorizontalPosition(position) {
+            return (position === 'top') || (position === 'bottom');
+        }
+
+        function isLeadingPosition(position) {
+            return (position === 'top') || (position === 'left');
+        }
+
         /**
          * Adjusts the positions of all view pane nodes.
          */
         function refreshPaneLayout() {
 
-            var // all pane nodes and the alert banner
-                paneNodes = [],
-                // current offsets representing available space in the application window
+            var // current offsets representing available space in the application window
                 offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-            // callback function for _.any(), tries to insert currentAlert into the paneNodes array
-            function insertCurrentAlert(pane, index) {
-                if (pane.getIdentifier() === alertsBeforePaneId) {
-                    paneNodes.splice(index, 0, currentAlert);
-                    return true;
-                }
-            }
-
-            // extract the nodes of all view panes
-            paneNodes = _(panes).map(function (pane) { return pane.getNode(); });
-
-            // insert the current alert banner at the configured position, otherwise append it
-            if (currentAlert && !_(panes).any(insertCurrentAlert)) {
-                paneNodes.push(currentAlert);
-            }
-
-            // update the position of all panes (updates the 'offsets' object accordingly)
-            _(paneNodes).each(function (paneNode) {
+            function updatePaneNode(paneNode) {
 
                 var position = paneNode.data('pane-pos'),
-                    horizontal = (position === 'top') || (position === 'bottom'),
-                    leading = (position === 'top') || (position === 'left'),
+                    horizontal = isHorizontalPosition(position),
+                    leading = isLeadingPosition(position),
+                    visible = paneNode.css('display') !== 'none',
+                    sizeFunc = _.bind(horizontal ? paneNode.outerHeight : paneNode.outerWidth, paneNode),
+                    transparent = visible && paneNode.hasClass(OVERLAY_CLASS) && (sizeFunc() === 0),
                     sizeAttr = horizontal ? 'height' : 'width',
                     paneOffsets = _.clone(offsets);
 
+                // remove the position attribute at the opposite border of the pane position
                 paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
-                if (paneNode.css('display') !== 'none') {
-                    paneNode.css(paneOffsets);
-                    if (!paneNode.hasClass(OVERLAY_CLASS)) {
-                        offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
-                    }
-                    if (!leading && paneNode.hasClass(OVERLAY_CLASS) && (paneNode[sizeAttr]() === 0)) {
-                        paneNode.css(sizeAttr, 'auto');
-                        paneNode.css(horizontal ? 'bottom' : 'right', paneNode[sizeAttr]());
-                        paneNode.css(sizeAttr, 0);
+
+                // transparent overlay panes: temporarily set to auto size, adjust position of trailing panes
+                if (transparent) {
+                    paneNode.css(sizeAttr, 'auto');
+                    if (!leading) {
+                        paneOffsets[position] += sizeFunc();
                     }
                 }
-            });
+
+                // set pane position, adjust global offsets
+                paneNode.css(paneOffsets);
+                if (visible) {
+                    offsets[position] += sizeFunc();
+                }
+
+                // transparent overlay panes: set zero size
+                if (transparent) {
+                    paneNode.css(sizeAttr, 0);
+                }
+            }
+
+            // update fixed view panes and fixed alert banner
+            _(fixedPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
+            if (currentAlert && !currentAlert.hasClass(OVERLAY_CLASS)) {
+                updatePaneNode(currentAlert);
+            }
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
@@ -139,6 +149,20 @@ define('io.ox/office/tk/view/view',
             shadowNodes.bottom.css({ bottom: offsets.bottom - 10, height: 10, left: offsets.left, right: offsets.right });
             shadowNodes.left.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
             shadowNodes.right.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
+
+            // skip scroll bars of application pane for overlay panes
+            if (Utils.hasVerticalScrollBar(self.getAppPaneNode())) {
+                offsets.right += Utils.SCROLLBAR_WIDTH;
+            }
+            if (Utils.hasHorizontalScrollBar(self.getAppPaneNode())) {
+                offsets.bottom += Utils.SCROLLBAR_HEIGHT;
+            }
+
+            // update overlay alert banner and overlay view panes
+            if (currentAlert && currentAlert.hasClass(OVERLAY_CLASS)) {
+                updatePaneNode(currentAlert);
+            }
+            _(overlayPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
         }
 
         // methods ------------------------------------------------------------
@@ -195,19 +219,30 @@ define('io.ox/office/tk/view/view',
          *      If set to true, the pane will float over the other panes and
          *      application contents instead of reserving and consuming the
          *      space needed for its size.
+         *  @param {Boolean} [options.transparent=false]
+         *      If set to true, the background of an overlay pane will be
+         *      transparent. Has no effect if the pane is not in overlay mode.
          *
          * @returns {View}
          *  A reference to this instance.
          */
         this.addPane = function (pane, position, options) {
 
+            var // overlay pane or fixed pane
+                overlay = Utils.getBooleanOption(options, 'overlay', false),
+                // the root node of the view pane
+                paneNode = pane.getNode();
+
             // insert the pane
             panesById[pane.getIdentifier()] = pane;
-            panes.push(pane);
-            app.getWindowNode().append(pane.getNode());
+            (overlay ? overlayPanes : fixedPanes).push(pane);
+            app.getWindowNode().append(paneNode);
 
             // overlay mode and position
-            pane.getNode().toggleClass(OVERLAY_CLASS, Utils.getBooleanOption(options, 'overlay', false));
+            paneNode.toggleClass(OVERLAY_CLASS, overlay);
+            if (Utils.getBooleanOption(options, 'transparent', false)) {
+                paneNode[isHorizontalPosition(position) ? 'height' : 'width'](0);
+            }
             return this.setPanePosition(pane.getIdentifier(), position);
         };
 
@@ -349,24 +384,6 @@ define('io.ox/office/tk/view/view',
          */
         this.hasAlert = function () {
             return _.isObject(currentAlert);
-        };
-
-        /**
-         * Registers the identifier of the first view pane that will be
-         * rendered after/below an alert banner. By default, an alert banner
-         * will be drawn after all registered view panes, but above the
-         * application pane.
-         *
-         * @param {String} id
-         *  The unique identifier of the first view pane drawn after an alert
-         *  banner.
-         *
-         * @returns {View}
-         *  A reference to this instance.
-         */
-        this.showAlertsBeforePane = function (id) {
-            alertsBeforePaneId = _.isString(id) ? id : null;
-            return this.refreshPaneLayout();
         };
 
         /**
@@ -545,9 +562,10 @@ define('io.ox/office/tk/view/view',
 
         this.destroy = function () {
             this.events.destroy();
-            _(panes).invoke('destroy');
+            _(overlayPanes).invoke('destroy');
+            _(fixedPanes).invoke('destroy');
             appPane.destroy();
-            appPane = panes = panesById = null;
+            appPane = fixedPanes = overlayPanes = panesById = null;
         };
 
         // initialization -----------------------------------------------------

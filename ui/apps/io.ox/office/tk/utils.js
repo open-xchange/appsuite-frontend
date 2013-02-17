@@ -1275,13 +1275,21 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     (function () {
 
         var // dummy container used to calculate the scroll bar sizes
-            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
+            node = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
 
-        $('body').append(outerDiv);
-        Utils.SCROLLBAR_WIDTH = 100 - outerDiv[0].clientWidth;
-        Utils.SCROLLBAR_HEIGHT = 100 - outerDiv[0].clientHeight;
-        outerDiv.remove();
+        $('body').append(node);
+        Utils.SCROLLBAR_WIDTH = node.width() - node[0].clientWidth;
+        Utils.SCROLLBAR_HEIGHT = node.height() - node[0].clientHeight;
+        node.remove();
     }());
+
+    Utils.hasVerticalScrollBar = function (node) {
+        return $(node).width() > Utils.getDomNode(node).clientWidth;
+    };
+
+    Utils.hasHorizontalScrollBar = function (node) {
+        return $(node).height() > Utils.getDomNode(node).clientHeight;
+    };
 
     /**
      * Returns the position and size of the specified node inside visible area

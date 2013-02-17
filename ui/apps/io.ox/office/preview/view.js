@@ -92,9 +92,6 @@ define('io.ox/office/preview/view',
                         .addButton('zoom/inc',    { icon: 'icon-zoom-in',  tooltip: gt('Zoom in') });
                 });
 
-            // show alert banners above the overlay pane (floating buttons below alert banners)
-            self.showAlertsBeforePane('toppane');
-
             // insert the page node into the application pane
             self.insertContentNode(pageNode);
         }
@@ -176,6 +173,9 @@ define('io.ox/office/preview/view',
                 width: svgNode.width() * factor,
                 height: svgNode.height() * factor
             });
+
+            // refresh view (scroll bars may have appeared or vanished)
+            self.refreshPaneLayout();
         }
 
         // methods ------------------------------------------------------------

@@ -130,15 +130,6 @@ i[class^="icon-"], i[class^=" icon-"] {
     background: @pane-fill-color;
     line-height: 0;
 
-    /* transparent panes */
-    &.transparent {
-        background: none;
-
-        &.overlay {
-            height: 0;
-        }
-    }
-
     /* the application pane in the middle between all view panes */
     &.app-pane {
         .box-sizing(content-box);
