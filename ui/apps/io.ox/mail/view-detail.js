@@ -774,12 +774,11 @@ define('io.ox/mail/view-detail',
             );
         }
     });
-    
+
     ext.point('io.ox/mail/detail').extend({
         index: 135,
         id: 'account',
         draw: function (baton) {
-            console.log('baton', baton);
             if (!folder.is('unifiedmail', baton.data.folder_id)) return;
             this.append(
                 $('<div>').addClass('account-name label label-info')
