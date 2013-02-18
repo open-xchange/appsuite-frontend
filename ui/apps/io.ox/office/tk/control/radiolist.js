@@ -136,15 +136,15 @@ define('io.ox/office/tk/control/radiolist',
                 buttonOptions = button.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
                 captionOptions = _.clone(options),
+                // whether the drop-down button will be highlighted
                 isHighlighted = false;
 
-            // highlight the drop-down button
-            if (_.isFunction(updateHighlightHandler)) {  // call custom update handler, if available
+            // highlight the drop-down button (call custom handler, if available)
+            if (_.isFunction(updateHighlightHandler)) {
                 isHighlighted = updateHighlightHandler.call(self, value);
             } else {
                 isHighlighted = highlight && (button.length > 0);
             }
-
             Utils.toggleButtons(self.getMenuButton(), isHighlighted);
 
             // update the caption of the drop-down menu button

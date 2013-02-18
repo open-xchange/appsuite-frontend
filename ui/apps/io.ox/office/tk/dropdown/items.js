@@ -50,8 +50,9 @@ define('io.ox/office/tk/dropdown/items',
      *  @param {Function} [options.itemCreateHandler]
      *      A function that will be called after a new menu item has been added
      *      to the drop-down menu. The function receives the button control
-     *      representing the new item (jQuery object) as first parameter. Will
-     *      be called in the context of this group instance.
+     *      representing the new item (jQuery object) as first parameter, and
+     *      the options map passed to the method Items.createItem() as second
+     *      parameter. Will be called in the context of this group instance.
      *  @param {Boolean} [options.sorted=false]
      *      If set to true, the drop-down menu items will be sorted according
      *      to the registered sort functor (see 'options.sortFunctor').
@@ -167,7 +168,7 @@ define('io.ox/office/tk/dropdown/items',
             }
 
             // call external handler
-            itemCreateHandler.call(this, button);
+            itemCreateHandler.call(this, button, options);
             return button;
         };
 
