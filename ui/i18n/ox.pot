@@ -90,6 +90,51 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/office/preview/view.js:79
+msgid "Close document"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:83
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:84
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:85
+msgid "Current page and total page count"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:86
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:87
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:90
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:91
+msgid "Current zoom factor"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:92
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:130
+#: apps/io.ox/office/tk/app/officeapplication.js:291
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:130
+msgid "An error occurred while loading the page."
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -2900,57 +2945,12 @@ msgstr ""
 msgid "Click to open."
 msgstr ""
 
-#: apps/io.ox/office/preview/view.js:133
-#: apps/io.ox/office/tk/app/officeapplication.js:291
-msgid "Load Error"
-msgstr ""
-
 #: apps/io.ox/office/tk/app/officeapplication.js:292
 msgid "An error occurred while loading the document."
 msgstr ""
 
 #: apps/io.ox/office/tk/app/officeapplication.js:466
 msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:79
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:83
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:84
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:85
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:86
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:87
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:90
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:91
-msgid "Current zoom factor"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:92
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:133
-msgid "An error occurred while loading the page."
 msgstr ""
 
 #. %1$d is the current zoom factor, in percent
