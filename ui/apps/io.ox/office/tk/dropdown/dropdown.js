@@ -74,8 +74,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
 
             // the icon for the drop-down caret
-            // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-            caretIcon = Utils.createIcon('caret-icon', groupNode.hasClass('white-icons')).addClass('down'),
+            caretIcon = Utils.createIcon('icon-caret-down'),
 
             // the drop-down caret
             caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),

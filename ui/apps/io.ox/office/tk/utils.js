@@ -2025,14 +2025,17 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new text input field.
-     *  Supports all generic options supported by the method
-     *  Utils.createControl().
+     *  Supports all generic options supported by the Utils.createControl()
+     *  method. Additionally, the following options are supported:
+     *  @param {String} [options.placeholder='']
+     *      A place holder text that will be shown in an empty text field.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        return Utils.createControl('input', { type: 'text' }, options);
+        var textField = Utils.createControl('input', { type: 'text' }, options);
+        return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
     /**

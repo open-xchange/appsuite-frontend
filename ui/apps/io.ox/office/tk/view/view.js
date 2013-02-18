@@ -590,7 +590,7 @@ define('io.ox/office/tk/view/view',
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {
-            app.getWindowNode().find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
+            app.getWindowNode().find('.toolbox .group a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
         });
 
     } // class View

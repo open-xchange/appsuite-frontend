@@ -61,7 +61,7 @@ define('io.ox/office/tk/view/toolbox',
             headingLabel = Utils.getStringOption(options, 'label'),
 
             // the heading button that collapses/expands the tool box
-            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', icon: 'caret-icon down', label: headingLabel }) : null,
+            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', label: headingLabel }) : null,
 
             // whether the heading button can collapse the tool box
             canCollapse = Utils.getBooleanOption(options, 'collapse', false),
@@ -84,9 +84,7 @@ define('io.ox/office/tk/view/toolbox',
         function expandToolBox(expand) {
             if (headingButton) {
                 self.getNode().toggleClass(COLLAPSED_CLASS, !expand);
-                headingButton
-                    .setIcon('caret-icon ' + (expand ? 'down' : 'right'))
-                    .enable(expand ? canCollapse : canExpand);
+                headingButton.enable(expand ? canCollapse : canExpand);
             }
         }
 

@@ -83,14 +83,6 @@ i.io-ox-office-icon {
         background-position: -(20px * @x) -(20px * @y);
     }
 
-    &.caret-icon {
-        width: @caret-width;
-        &.down              { .icon-position(0, 0); }
-        &.up                { .icon-position(1, 0); }
-        &.left              { .icon-position(2, 0); }
-        &.right             { .icon-position(3, 0); }
-    }
-
     &.arrow-first           { .icon-position(4, 0); }
     &.arrow-previous        { .icon-position(5, 0); }
     &.arrow-next            { .icon-position(6, 0); }
@@ -106,6 +98,11 @@ i[class^="icon-"], i[class^=" icon-"] {
     min-width: @icon-size;
     font-size: 16px;
     text-align: center;
+}
+
+i[class^="icon-caret-"], i[class^=" icon-caret-"] {
+    min-width: 0;
+    font-size: 12px;
 }
 
 /* ========================================================================= */
@@ -528,11 +525,6 @@ i[class^="icon-"], i[class^=" icon-"] {
                 line-height: @control-height - 2px;
             }
 
-            input:not(:last-child) {
-                border-right: none;
-                + * { border-left: none; }
-            }
-
             /* raise hovered/focused control to make all borders visible */
             &:not(.disabled) {
                 a.button, input {
@@ -548,15 +540,6 @@ i[class^="icon-"], i[class^=" icon-"] {
                 }
             }
 
-            /* glow effects for groups with text boxes */
-            &.text-focus:not(.disabled) {
-                .box-shadow(@focus-glow-effect);
-
-                input, a.button {
-                    border-color: @selectedBackground;
-                }
-            }
-
             /* add specific design properties for white on dark design */
             &.design-default {
                 background: @pane-fill-color;
@@ -565,9 +548,18 @@ i[class^="icon-"], i[class^=" icon-"] {
                     color: white;
                 }
 
+                /* color of place holder in text fields */
+                input {
+                    .placeholder-color() { color: lighten(@pane-fill-color, 15%); }
+                    &::-webkit-input-placeholder { .placeholder-color(); }
+                    &:-moz-placeholder { .placeholder-color(); }
+                    &::-moz-placeholder { .placeholder-color(); }
+                    &:-ms-input-placeholder { .placeholder-color(); }
+                }
+
                 /* selected toggle/radio buttons */
                 a.button.selected {
-                    background: fade(@selectedBackground, 60%);
+                    background: fade(@selectedBackground, 50%);
                 }
 
                 /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
@@ -587,8 +579,8 @@ i[class^="icon-"], i[class^=" icon-"] {
                         &.selected {
                             .box-shadow(@selected-button-shadow-effect);
 
-                            &:hover { background: fade(@selectedBackground, 70%); }
-                            &:active { background: fade(@selectedBackground, 50%); }
+                            &:hover { background: fade(@selectedBackground, 60%); }
+                            &:active { background: fade(@selectedBackground, 40%); }
 
                             &:focus:not(:active) {
                                 .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
@@ -598,21 +590,40 @@ i[class^="icon-"], i[class^=" icon-"] {
 
                     /* text fields without white background as long as not focused */
                     input:not(.disabled) {
-                        &:hover:not(:focus) { background: fade(white, 5%); }
+
+                        &:not(:focus) {
+                            .box-shadow(@button-shadow-effect);
+                            &:hover { background: fade(white, 5%); }
+                        }
 
                         &:focus, &:active {
                             background: white;
                             color: @textColor;
+
+                            /* color of place holder in text fields */
+                            .placeholder-color() { color: #ccc; }
+                            &::-webkit-input-placeholder { .placeholder-color(); }
+                            &:-moz-placeholder { .placeholder-color(); }
+                            &::-moz-placeholder { .placeholder-color(); }
+                            &:-ms-input-placeholder { .placeholder-color(); }
                         }
                     }
-                }
-            }
+                    
+                    /* effects for all elements in groups with text boxes (ComboField) */
+                    &.text-focus {
+                        .box-shadow(@focus-glow-effect);
+        
+                        input, a.button {
+                            &, &:hover, &:focus, &:active {
+                                background: white;
+                                color: @textColor;
+                                border-color: @selectedBackground;
+                            }
+                        }
 
-            /* add specific design properties for white background design */
-            &.design-white {
-                label, a.button, input {
-                    background: white;
-                    color: @textColor;
+                        > input:not(:last-child) { border-right-color: transparent; }
+                        > input + a.button { border-left-color: transparent; }
+}
                 }
             }
 
@@ -641,6 +652,7 @@ i[class^="icon-"], i[class^=" icon-"] {
                     font-size: 12px;
                     font-weight: bold;
                     color: white;
+                    text-align: center;
                 }
 
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
