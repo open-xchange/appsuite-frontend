@@ -24,8 +24,7 @@ define('io.ox/calendar/model',
     "use strict";
 
     var defStart = new date.Local();
-    defStart.setMinutes(0);
-    defStart.setHours(defStart.getHours() + 1);
+    defStart.setHours(defStart.getHours() + 1, 0, 0, 0);
 
     var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
 
@@ -234,8 +233,8 @@ define('io.ox/calendar/model',
         },
         applyAutoLengthMagic: function (model) {
             // End date automatically shifts with start date
-            var length = model.get('end_date') - model.get('start_date');
-            var updating = false;
+            var length = model.get('end_date') - model.get('start_date'),
+                updating = false;
             model.on('change:start_date', function () {
                 if (length < 0) {
                     return;
