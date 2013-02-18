@@ -32,10 +32,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editVacationtNotice: function ($node) {
             // Load the vacationnotice
             api.getRules('vacation').done(function (data) {
-                console.log(data[0].actioncmds[0]);
-                var vacatioData = data[0].actioncmds[0];
+//                console.log(data[0]);
+                var vacationData = data[0].actioncmds[0];
+                vacationData.active = data[0].active;
 
-                $node.append(new VacationEdit({model: factory.create(vacatioData)}).render().$el);
+                $node.append(new VacationEdit({model: factory.create(vacationData)}).render().$el);
 
 
 

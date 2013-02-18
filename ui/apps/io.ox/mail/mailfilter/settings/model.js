@@ -33,7 +33,8 @@ define('io.ox/mail/mailfilter/settings/model',
 
         Validators.validationFor(ref, {
             subject: { format: 'string'},
-            text: { format: 'string' }
+            text: { format: 'string' },
+            days: { format: 'string' }
         });
         return factory;
 
@@ -41,7 +42,9 @@ define('io.ox/mail/mailfilter/settings/model',
 
     var fields = {
         subject: 'Subject',
-        text: 'Text'
+        text: 'Text',
+        days: 'Days',
+        active: 'aktive'
     };
 
 //    var factory = buildFactory('io.ox/mail/mailfilter/settings/model', api);

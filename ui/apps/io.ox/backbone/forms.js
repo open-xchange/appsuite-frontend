@@ -506,6 +506,18 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
+    function Header(options) {
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                this.$el.append($('<div>').append(
+                      $('<div>').addClass('clear-title').text(options.label),
+                      $('<div>').addClass('settings sectiondelimiter')
+                  ));
+            }
+        }, options);
+    }
+
     // Form Sections made up of horizontal forms
 
     function Section(options) {
@@ -947,6 +959,7 @@ define('io.ox/backbone/forms',
         SelectControlGroup: SelectControlGroup,
         DateControlGroup: DateControlGroup,
         Section: Section,
+        Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,

@@ -29,19 +29,11 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                 className: 'edit-vacation'
             });
 
-
-        point.basicExtend(new links.InlineLinks({
+        point.extend(new forms.Header({
             index: 50,
             id: 'headline',
-            ref: ref + '/edit/view/headline',
-            customizeNode: function ($node) {
-                $node.append(
-                    $('<div>').append(
-                        $('<div>').addClass('clear-title').text(gt('Vacation Notice')),
-                        $('<div>').addClass('settings sectiondelimiter')
-                    )
-                );
-            }
+            label: gt('Vacation Notice')
+
         }));
 
         // Show backend errors
@@ -93,18 +85,25 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             }
         });
 
+        point.extend(new forms.CheckBoxField({
+            id: ref + '/edit/view/aktiv',
+            index: 250,
+            label: model.fields.active,
+            attribute: 'active',
+            customizeNode: function () {
+                this.$el.css({
+                    clear: 'both'
+                });
+            }
+
+        }));
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/subject',
             index: 250,
             label: model.fields.subject,
             control: '<input type="text" class="input-xlarge" name="' + 'subject' + '">',
-            attribute: 'subject',
-            customizeNode: function () {
-                this.$el.css({
-                    clear: 'both'
-                });
-            }
+            attribute: 'subject'
         }));
 
         point.extend(new forms.ControlGroup({
@@ -115,6 +114,13 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             attribute: 'text'
         }));
 
+        point.extend(new forms.SelectBoxField({
+            id: ref + '/edit/view/days',
+            index: 250,
+            label: model.fields.days,
+            attribute: 'days',
+            selectOptions: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8'}
+        }));
 
 
         var index = 400;
