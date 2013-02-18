@@ -1,3 +1,7 @@
+* 2013-02-18 - viktor.pracht@open-xchange.com
+
+ - Implemented story 44078307: User can use unified mail
+
 * 2013-02-14 - viktor.pracht@open-xchange.com
 
  - Fixed bug 24955: Missing translation/fallback for online help

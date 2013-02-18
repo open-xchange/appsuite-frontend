@@ -22,9 +22,10 @@ define('io.ox/mail/view-detail',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
+     'io.ox/core/api/folder',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
-    ], function (ext, links, util, api, config, http, account, settings, gt) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
 
     'use strict';
 
@@ -744,7 +745,7 @@ define('io.ox/mail/view-detail',
     }
 
     ext.point('io.ox/mail/detail').extend({
-        index: 105,
+        index: 130,
         id: 'flag',
         draw: function (baton) {
             var data = baton.data,
@@ -773,12 +774,26 @@ define('io.ox/mail/view-detail',
             );
         }
     });
+    
+    ext.point('io.ox/mail/detail').extend({
+        index: 135,
+        id: 'account',
+        draw: function (baton) {
+            console.log('baton', baton);
+            if (!folder.is('unifiedmail', baton.data.folder_id)) return;
+            this.append(
+                $('<div>').addClass('account-name label label-info')
+                .text(_.noI18n(baton.data.account_name))
+            );
+        }
+    });
 
     ext.point('io.ox/mail/detail').extend({
-        index: 130,
+        index: 140,
         id: 'subject',
         draw: function (baton) {
             this.append(
+                $('<div>').addClass('mail-detail-clear-left'),
                 $('<div class="subject clear-title">').append(
                     $('<i class="icon-bookmark">'),
                     // inject some zero width spaces for better word-break
@@ -813,6 +828,7 @@ define('io.ox/mail/view-detail',
 
             if (show) {
                 this.append(
+                    $('<div>').addClass('mail-detail-clear-left'),
                     container.append(
                         // TO
                         $('<span>').addClass('io-ox-label').append(

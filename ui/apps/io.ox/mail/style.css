@@ -248,6 +248,11 @@
         height: 200px;
     }
 
+    .mail-detail-clear-left {
+        clear: left;
+        height: 0px;
+    }
+    
     .mail-detail-clear-both {
         clear: both;
         height: 0px;
@@ -271,7 +276,6 @@
         color: #888;
         display: block;
         float: right;
-        margin-right: -56px;
     }
 
     .subject {
@@ -316,11 +320,15 @@
         margin-left: 0.5em;
     }
 
+    .account-name {
+        margin: 18px 0 18px 1em;
+        float: right;
+    }
+    
     .flag-dropdown {
         width: 30px;
         height: 24px;
-        margin-left: 1em;
-        margin-top: 40px;
+        margin: 18px 0 18px 1em;
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
         float:right;
