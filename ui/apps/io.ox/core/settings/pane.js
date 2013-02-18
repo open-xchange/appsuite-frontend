@@ -169,7 +169,7 @@ define('io.ox/core/settings/pane',
         if (settings.isConfigurable('autoOpenNotificationarea')) {
             point.extend(new forms.ControlGroup({
                 id: 'autoOpenNotfication',
-                index: 600,
+                index: 700,
                 attribute: 'autoOpenNotification',
                 label: gt("Automatic opening of notification area on new notifications."),
                 control: $('<input type="checkbox">'),
@@ -193,6 +193,27 @@ define('io.ox/core/settings/pane',
                 }
             }));
         }
+    }());
+
+    // Auto Logout
+
+    (function () {
+        var MINUTES = 60000,
+            options = {};
+
+        options[0] = gt("Off");
+        options[5 * MINUTES] = gt("5 minutes");
+        options[10 * MINUTES] = gt("10 minutes");
+        options[15 * MINUTES] = gt("15 minutes");
+        options[30 * MINUTES] = gt("30 minutes");
+
+        point.extend(new forms.SelectControlGroup({
+            id: 'autoLogout',
+            index: 600,
+            attribute: 'autoLogout',
+            label: gt("Auto Logout"),
+            selectOptions: options
+        }));
     }());
 
     point.basicExtend({

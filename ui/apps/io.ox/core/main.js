@@ -218,6 +218,39 @@ define("io.ox/core/main",
 
     }());
 
+
+    (function () {
+
+        var interval =  parseInt(settings.get('autoLogout', 0), 10),
+            timeout = null,
+            changed = false;
+
+        // clear current timeout and reset activity status
+        var resetTimeout = function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(logout, interval);
+            changed = false;
+        };
+
+        // check activity status
+        var check = function () {
+            if (changed) {
+                resetTimeout();
+            }
+        };
+
+        if (interval > 0) {
+            $(document).on('mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove', function () {
+                changed = true;
+            });
+            // start
+            resetTimeout();
+            // check every 10 seconds to reduce setTimeout operations
+            setInterval(check, 10000);
+        }
+
+    }());
+
     function launch() {
 
         /**
