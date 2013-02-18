@@ -298,7 +298,7 @@ define('io.ox/core/permissions/permissions',
     return {
         show: function (folder) {
             folder_id = String(folder);
-            api.get({ folder: folder_id }).done(function (data) {
+            api.get({ folder: folder_id, cache: false }).done(function (data) {
                 try {
 
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;

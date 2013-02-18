@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-14 11:20+0100\n"
-"Last-Translator: Antje Faber\n"
+"PO-Revision-Date: 2013-02-15 14:54+0100\n"
+"Last-Translator: Robert Krátký <kratky@rob.cz>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.4\n"
 
 #: apps/io.ox/tasks/settings/pane.js:36
 msgid "5"
@@ -75,27 +75,24 @@ msgid "Please enter your password."
 msgstr "Zadejte, prosím, své heslo."
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "Váš prohlížeč nepodporuje AJAX."
+msgstr "Verze vašeho prohlížeče není podporovaná."
 
 #: html/core_body.html:95
-#, fuzzy
 msgid "Your browser is not supported!"
-msgstr "Váš prohlížeč nepodporuje AJAX."
+msgstr "Váš prohlížeč není podporovaný."
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "Zadejte, prosím, své heslo."
+msgstr "Aktualizujte, prosím, svůj prohlížeč."
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "Chcete-li dosáhnout nejlepších výsledků, používejte "
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "Váš prohlížeč je pomalý a starý."
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -114,19 +111,17 @@ msgid "Close"
 msgstr "Zavřít"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
-#, fuzzy
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] "Každých %1$d dní"
-msgstr[1] "Každých %1$d dní"
-msgstr[2] "Každých %1$s dní"
+msgstr[0] "každý den"
+msgstr[1] "každé %1$d dny"
+msgstr[2] "každých %1$s dní"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "každý týden"
@@ -137,12 +132,11 @@ msgstr[2] "každých %1$d týdnů"
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "každý měsíc"
-msgstr[1] "každý %1$d měsíc"
-msgstr[2] "každý %1$d měsíc"
+msgstr[1] "každé %1$d měsíce"
+msgstr[2] "každých %1$d měsíců"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:229
 #: apps/io.ox/calendar/edit/recurrence-view.js:481
@@ -191,7 +185,6 @@ msgstr ""
 "\"interval\">každé <span class=\"number-control\">2</span> dny</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
 msgstr "každý den"
 
@@ -207,7 +200,6 @@ msgstr ""
 "href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">pondělí</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
 msgstr "každý týden"
 
@@ -225,7 +217,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
 msgstr "každý měsíc"
 
@@ -2348,12 +2339,11 @@ msgstr "Uživatel má práva administrátora"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " není platný uživatel nebo skupina."
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "Toto není platná poštovní adresa"
+msgstr "Toto není platný uživatel nebo skupina."
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2521,9 +2511,8 @@ msgid "Close all"
 msgstr "Zavřít vše"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "Nepodařilo se načíst složky."
+msgstr "Nepodařilo se načíst podsložky."
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3446,14 +3435,12 @@ msgid "Click here to add your account"
 msgstr "Klikněte sem pro přidání svého účtu"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "Při načítání strany došlo k chybě."
+msgstr "Došlo k chybě. Chybová zpráva:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "Klikněte, chcete-li to zkusit později znovu."
+msgstr "Klikněte, chcete-li to zkusit znovu."
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4155,9 +4142,9 @@ msgid "Please enter a feed URL."
 msgstr "Zadejte, prosím, URL kanálu."
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "V blízké budoucnosti nemáte žádné schůzky."
+msgstr ""
+"Nemáte žádné úkoly, které by bylo nutné brzy dokončit nebo již mají zpoždění."
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59

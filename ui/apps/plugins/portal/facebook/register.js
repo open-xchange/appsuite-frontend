@@ -101,16 +101,14 @@ define('plugins/portal/facebook/register',
                     console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
                 });
             });
-
+        console.error('Facebook reported an error', resultsets.error);
         node.append(
             $('<div class="error bold">').text(gt('Facebook reported an error:')),
             $('<div class="errormessage">').text(resultsets.error.message),
             '<br />'
         ).addClass('error-occurred error');
 
-        if (resultsets.error.message.indexOf('authorize') !== -1) {
-            node.append($reauthorizeLink);
-        } else  if (resultsets.error.message.indexOf('606') !== -1) {
+        if (resultsets.error.message.indexOf('authorize') !== -1 || resultsets.error.message.indexOf('changed the password') !== -1 || resultsets.error.type === 'OAuthException' || resultsets.error.message.indexOf('606') !== -1) {
             node.append($reauthorizeLink);
         }
     };

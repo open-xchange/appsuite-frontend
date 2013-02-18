@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-12 13:11+1000\n"
+"PO-Revision-Date: 2013-02-16 22:33+1000\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "MIME-Version: 1.0\n"
@@ -70,26 +70,24 @@ msgid "Please enter your password."
 msgstr "请输入您的密码。"
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "会话已过期"
+msgstr "不支持您的浏览器版本。"
 
 #: html/core_body.html:95
 msgid "Your browser is not supported!"
-msgstr ""
+msgstr "不支持您的浏览器！"
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "请输入您的密码。"
+msgstr "请更新您的浏览器。"
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "为了最好的结果，请使用"
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "您的浏览器又慢又过时！"
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -110,30 +108,27 @@ msgstr "关闭"
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
-#, fuzzy
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] "服务器名"
-msgstr[1] "每天"
+msgstr[0] "每 %1$d 天"
+msgstr[1] "每 %1$d 天"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
-msgstr[0] "非常弱"
-msgstr[1] "每周"
+msgstr[0] "每 %1$d 周"
+msgstr[1] "每 %1$d 周"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:228
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
-msgstr[0] "服务器端口"
-msgstr[1] "每月"
+msgstr[0] "每 %1$d 月"
+msgstr[1] "每 %1$d 月"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:229
 #: apps/io.ox/calendar/edit/recurrence-view.js:481
@@ -181,9 +176,8 @@ msgstr ""
 "widget=\"number\" data-attribute=\"interval\"> 重复 。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
-msgstr "服务器名"
+msgstr "每天"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:293
 msgid ""
@@ -197,9 +191,8 @@ msgstr ""
 "widget=\"number\" data-attribute=\"interval\"> 重复。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
-msgstr "非常弱"
+msgstr "每周"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:315
 msgid ""
@@ -214,9 +207,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
-msgstr "服务器端口"
+msgstr "每月"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:336
 msgid ""
@@ -2311,12 +2303,11 @@ msgstr "此用户有管理权"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr "不是一个有效的用户或组。"
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "这不是有效的电子邮件地址"
+msgstr "这不是有效的用户或组。"
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2483,9 +2474,8 @@ msgid "Close all"
 msgstr "关闭全部"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "加载文件夹失败。"
+msgstr "加载子文件夹失败。"
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3403,14 +3393,12 @@ msgid "Click here to add your account"
 msgstr "点击此处添加户口"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "加载页面时发生一个错误。"
+msgstr "发生一个错误。消息为："
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "请稍后重试。"
+msgstr "请单击重试。"
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4108,9 +4096,8 @@ msgid "Please enter a feed URL."
 msgstr "请输入一个 feed URL。"
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "您在稍后没有任何约会。"
+msgstr "您没有任何快到期或过期约会。"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59

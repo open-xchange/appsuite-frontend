@@ -116,12 +116,20 @@ define('io.ox/files/list/perspective',
                 win.busy();
             },
             progress: function (file) {
-                return api.uploadFile({ file: file, folder: app.folder.get() }).done(function (data) {
-                    // select new item
-                    grid.selection.set([data]);
-                    grid.refresh();
-                    // TODO: Error Handling
-                });
+                return api.uploadFile({ file: file, folder: app.folder.get() })
+                    .done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    }).fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('This file has not been added'));
+                        });
+                    });
             },
             stop: function () {
                 win.idle();
@@ -144,6 +152,13 @@ define('io.ox/files/list/perspective',
                         grid.selection.set([data]);
                         grid.refresh();
                         // TODO: Error Handling
+                    }).fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('This file has not been added'));
+                        });
                     });
             },
             stop: function () {

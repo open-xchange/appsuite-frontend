@@ -21,8 +21,9 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
-     'io.ox/core/tk/selection'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, Selection) {
+     'io.ox/core/tk/selection',
+     'io.ox/core/notifications'
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
 
@@ -330,9 +331,15 @@ define('io.ox/files/icons/perspective',
                 progress: function (file, position, files) {
                     var pct = position / files.length;
                     win.busy(pct, 0);
-                    return api.uploadFile({ file: file, folder: app.folder.get() }).progress(function (e) {
+                    return api.uploadFile({ file: file, folder: app.folder.get() })
+                    .progress(function (e) {
                         var sub = e.loaded / e.total;
                         win.busy(pct + sub / files.length, sub);
+                    }).fail(function (e) {
+                        if (e && e.code && e.code === 'UPL-0005')
+                            notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                        else
+                            notifications.yell('error', gt('This file has not been added'));
                     });
                 },
                 stop: function () {
@@ -345,12 +352,22 @@ define('io.ox/files/icons/perspective',
                 start: function () {
                     win.busy(0);
                 },
-                progress: function (data) {
+                progress: function (file, position, files) {
+                    var pct = position / files.length;
+                    win.busy(pct, 0);
                     return api.uploadNewVersion({
-                            file: data,
+                            file: file,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder_id,
                             timestamp: app.currentFile.last_modified
+                        }).progress(function (e) {
+                            var sub = e.loaded / e.total;
+                            win.busy(pct + sub / files.length, sub);
+                        }).fail(function (e) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('This file has not been added'));
                         });
                 },
                 stop: function () {

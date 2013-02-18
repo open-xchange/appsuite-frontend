@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-13 01:11-0800\n"
+"PO-Revision-Date: 2013-02-14 08:00-0800\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "MIME-Version: 1.0\n"
@@ -77,27 +77,24 @@ msgid "Please enter your password."
 msgstr "Wprowadź hasło."
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "Twoja wyszukiwarka nie obsługuje AJAXa."
+msgstr "Twoja wersja przeglądarki nie jest obsługiwana"
 
 #: html/core_body.html:95
-#, fuzzy
 msgid "Your browser is not supported!"
-msgstr "Twoja wyszukiwarka nie obsługuje AJAXa."
+msgstr "Twoja przeglądarka nie jest obsługiwana"
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "Wprowadź hasło."
+msgstr "Zaktualizuj przeglądarkę."
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "Aby uzyskać najlepsze rezultaty, użyj "
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "Twoja przeglądarka jest powolna i przestarzała"
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -118,20 +115,18 @@ msgstr "Zamknij"
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
-#, fuzzy
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] "codziennie"
+msgstr[0] "co %1$d dzień"
 msgstr[1] "co %1$d dni"
 msgstr[2] "co %1$d dni"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
-msgstr[0] "co tydzień"
+msgstr[0] "co %1$d tydzień"
 msgstr[1] "co %1$d tygodnie"
 msgstr[2] "co %1$d tygodni"
 
@@ -139,10 +134,9 @@ msgstr[2] "co %1$d tygodni"
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
-msgstr[0] "co miesiąc"
+msgstr[0] "co %1$d miesiąc"
 msgstr[1] "co %1$d miesiące"
 msgstr[2] "co %1$d miesięcy"
 
@@ -193,7 +187,6 @@ msgstr ""
 "attribute=\"interval\">co <span class=\"number-control\">2</span> dni</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
 msgstr "codziennie"
 
@@ -210,7 +203,6 @@ msgstr ""
 "\">poniedziałek</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
 msgstr "co tydzień"
 
@@ -228,7 +220,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
 msgstr "co miesiąc"
 
@@ -658,7 +649,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js:120
 msgid "Invalid data"
-msgstr "Nieprawidłowa data"
+msgstr "Nieprawidłowe dane"
 
 #: apps/io.ox/backbone/forms.js:54
 msgid "An error occurred"
@@ -2357,12 +2348,11 @@ msgstr "Użytkownik ma uprawnienia administracyjne"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " nie jest prawidłowym użytkownikiem lub grupą."
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "To nie jest prawidłowy adres e-mail"
+msgstr "To nie jest prawidłowy użytkownik lub grupa."
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2532,9 +2522,8 @@ msgid "Close all"
 msgstr "Zamknij wszystko"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "Nie można wczytać folderów."
+msgstr "Nie można wczytać podfolderów."
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3465,14 +3454,12 @@ msgid "Click here to add your account"
 msgstr "Kliknij tutaj, aby dodać własne konto"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "W trakcie wczytywania strony wystąpił błąd."
+msgstr "Wystąpił błąd. Komunikat był następujący:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "Kliknij, aby spróbować ponownie później."
+msgstr "Kliknij, aby spróbować ponownie."
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4177,9 +4164,8 @@ msgid "Please enter a feed URL."
 msgstr "Podaj adres URL kanału."
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "W najbliższej przyszłości nie masz żadnych spotkań."
+msgstr "Nie masz żadnych zadań ze zbliżającym się lub przekroczonym terminem."
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-12 02:10+0100\n"
+"PO-Revision-Date: 2013-02-16 02:00+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <hu@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
@@ -74,26 +74,24 @@ msgid "Please enter your password."
 msgstr "Adja meg jelszavát."
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "A munkafolyamat lejárt"
+msgstr "A böngésző verziója nem támogatott"
 
 #: html/core_body.html:95
 msgid "Your browser is not supported!"
-msgstr ""
+msgstr "A böngészője nem támogatott"
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "Adja meg jelszavát."
+msgstr "Frissítse böngészőjét."
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "A legjobb eredmények érdekében használja a következőt: "
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "A böngészője lassú és elavult"
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -114,7 +112,6 @@ msgstr "Bezárás"
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
-#, fuzzy
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "minden nap"
@@ -123,7 +120,6 @@ msgstr[1] "%1$d naponta"
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "minden héten"
@@ -133,7 +129,6 @@ msgstr[1] "%1$d hetente"
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "minden hónapban"
@@ -185,7 +180,6 @@ msgstr ""
 "\"><span class=\"number-control\">2</span> naponta</a> ismétlődik. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
 msgstr "minden nap"
 
@@ -201,7 +195,6 @@ msgstr ""
 "\"  data-widget=\"custom\" data-attribute=\"days\">hétfőnként</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
 msgstr "minden héten"
 
@@ -219,7 +212,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
 msgstr "minden hónapban"
 
@@ -2331,12 +2323,11 @@ msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " nem érvényes felhasználó vagy csoport."
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "Ez nem egy érvényes e-mail cím"
+msgstr "Ez nem érvényes felhasználó vagy csoport."
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2505,9 +2496,8 @@ msgid "Close all"
 msgstr "Minden bezárása"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "A mappák nem tölthetők be."
+msgstr "Az almappák nem tölthetők be."
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3430,14 +3420,12 @@ msgid "Click here to add your account"
 msgstr "A fiók felvételéhez kattintson ide"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "Hiba történt az oldal betöltése közben."
+msgstr "Hiba történt. Az üzenet:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "Kattintson a későbbi újrapróbálkozáshoz."
+msgstr "Kattintson az újrapróbálkozáshoz."
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4137,9 +4125,8 @@ msgid "Please enter a feed URL."
 msgstr "Adjon meg egy hírforrás URL-t."
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "A közeljövőben nincsenek találkozói."
+msgstr "Nincsenek hamarosan esedékes vagy lejárt feladatai."
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59

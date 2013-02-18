@@ -100,6 +100,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                     draw: function (obj) {
                         if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
                             switch (obj.type) {
+                            case 'user':
                             case 'contact':
                                 if (obj.data.internal_userid && obj.data.email1 === obj.email) {
                                     obj.data.type = 1; //user

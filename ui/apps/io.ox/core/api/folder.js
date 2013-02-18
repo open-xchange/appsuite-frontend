@@ -401,6 +401,7 @@ define('io.ox/core/api/folder',
                 return http.PUT({
                     module: 'folders',
                     params: {
+                        module: module,
                         action: 'new',
                         folder_id: opt.folder,
                         tree: '1'
@@ -639,8 +640,6 @@ define('io.ox/core/api/folder',
          * Can?
          */
         can: function (action, data, obj) {
-            // is my folder?
-            var compareValue = (obj && ox.user_id === _.firstOf(obj.created_by, 0)) ? 0 : 1;
             // check multiple folder?
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
@@ -653,7 +652,8 @@ define('io.ox/core/api/folder',
                 rights = data.own_rights,
                 isSystem = data.standard_folder || this.is('system', data),
                 isAdmin = perm(rights, 28) === 1,
-                isMail = data.module === 'mail';
+                isMail = data.module === 'mail',
+                compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0; // is my folder ?
             // switch
             switch (action) {
             case 'read':
@@ -661,7 +661,9 @@ define('io.ox/core/api/folder',
                 // 256 = read own, 512 = read all, 8192 = admin
                 // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > compareValue || (!this.is('system', data) && this.is('public', data) && data.folder_id !== '10') && rights !== 1;
+                return perm(rights, 7) > 0 ||
+                        (!isSystem && this.is('public', data) && data.folder_id !== '10') &&
+                        rights !== 1;
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;
