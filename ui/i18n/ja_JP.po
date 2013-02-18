@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-14 13:37+0900\n"
+"PO-Revision-Date: 2013-02-18 17:02+0900\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,8 @@ msgid "User name"
 msgstr "ユーザ名"
 
 #: apps/io.ox/mail/accounts/view-form.js:35
-#: apps/io.ox/mail/accounts/view-form.js:45 html/core_body.html:65
+#: apps/io.ox/mail/accounts/view-form.js:45
+#: html/core_body.html:65
 msgid "Password"
 msgstr "パスワード"
 
@@ -62,55 +63,51 @@ msgid "Forgot your password?"
 msgstr "パスワードをお忘れですか？"
 
 #: html/core_body.html:91
-msgid ""
-"No connection to server. Please check your internet connection and retry."
-msgstr ""
-"サーバへの接続がありません。インターネット接続をチェックして、もう一度やり直"
-"してください。"
+msgid "No connection to server. Please check your internet connection and retry."
+msgstr "サーバへの接続がありません。インターネット接続をチェックして、もう一度やり直してください。"
 
 #: html/core_body.html:92
-#, fuzzy
 msgid "Please enter your credentials."
-msgstr "サブレディットを入力してください"
+msgstr "認証情報を入力してください。"
 
 #: html/core_body.html:93
-#, fuzzy
 msgid "Please enter your password."
-msgstr "サブレディットを入力してください"
+msgstr "パスワードを入力してください。"
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "ブラウザが、AJAXをサポートしていません。"
+msgstr "ご利用のブラウザのバージョンはサポートされていません。"
 
 #: html/core_body.html:95
-#, fuzzy
 msgid "Your browser is not supported!"
-msgstr "ブラウザが、AJAXをサポートしていません。"
+msgstr "ご利用のブラウザはサポートされていません。"
 
 #: html/core_body.html:96
 msgid "Please update your browser."
-msgstr ""
+msgstr "ご利用のブラウザを更新してください。"
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "最良の結果を得るために、使用することをおすすめします。"
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "ご利用のブラウザはバージョンが古いため、処理が低速です。"
 
 #: html/core_body.html:108
 msgid "Languages"
 msgstr "言語"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:93 apps/io.ox/core/about.js:40
+#: apps/io.ox/calendar/edit/recurrence-view.js:93
+#: apps/io.ox/core/about.js:40
 #: apps/io.ox/core/commons-folderview.js:284
 #: apps/io.ox/core/permissions/permissions.js:387
-#: apps/io.ox/core/tk/dialogs.js:352 apps/io.ox/files/carousel.js:46
+#: apps/io.ox/core/tk/dialogs.js:352
+#: apps/io.ox/files/carousel.js:46
 #: apps/io.ox/files/mediaplayer.js:220
 #: apps/io.ox/mail/accounts/settings.js:255
-#: apps/io.ox/mail/accounts/settings.js:279 apps/io.ox/mail/actions.js:152
+#: apps/io.ox/mail/accounts/settings.js:279
+#: apps/io.ox/mail/actions.js:152
 #: apps/io.ox/office/preview/actions.js:44
 #: apps/io.ox/publications/wizard.js:57
 msgid "Close"
@@ -119,27 +116,24 @@ msgstr "閉じる"
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
-#, fuzzy
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] "1 日"
+msgstr[0] "%1$d 日ごとに"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
-msgstr[0] "1 週"
+msgstr[0] "%1$d 週ごとに"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:228
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
-msgstr[0] "1 か月"
+msgstr[0] "%1$d か月ごとに"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:229
 #: apps/io.ox/calendar/edit/recurrence-view.js:481
@@ -151,7 +145,8 @@ msgstr[0] "%1$d 回のアポイント"
 #: apps/io.ox/calendar/edit/recurrence-view.js:241
 #: apps/io.ox/calendar/edit/recurrence-view.js:833
 #: apps/io.ox/calendar/edit/recurrence-view.js:836
-#: apps/io.ox/contacts/actions.js:338 apps/io.ox/files/actions.js:533
+#: apps/io.ox/contacts/actions.js:338
+#: apps/io.ox/files/actions.js:533
 #: apps/io.ox/mail/actions.js:678
 #: apps/io.ox/mail/settings/signatures/register.js:293
 #: apps/io.ox/portal/settings/pane.js:152
@@ -177,68 +172,33 @@ msgid "Yearly"
 msgstr "年"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:273
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>. "
-msgstr ""
-"このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> 日</a> ごとに繰り返され"
-"ます。"
+msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> days</a>. "
+msgstr "このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> 日ごとに</a> 繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
-msgstr "1 日"
+msgstr "毎日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:293
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</"
-"a>. "
-msgstr ""
-"このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> 週</a> ごとの <a href="
-"\"#\"  data-widget=\"custom\" data-attribute=\"days\">月曜日</a> に繰り返され"
-"ます。"
+msgid "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</a>. "
+msgstr "このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> 週ごと</a> の <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">月曜日</a> に繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
-msgstr "1 週"
+msgstr "毎週"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:315
-msgid ""
-"The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" "
-"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
-"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
-"months</a>. "
-msgstr ""
-"このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> か月</a> ごとの <a href="
-"\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> 日に繰り返"
-"されます。"
+msgid "The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+msgstr "このアポイントは <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> か月ごと</a> の <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> 日に繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
-msgstr "1 か月"
+msgstr "毎月"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:336
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>. "
-msgstr ""
-"このアポイントは <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> か月</a> ごとの <a href="
-"\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第 2</a> <a href=\"#"
-"\" data-widget=\"options\" data-attribute=\"day\">水曜日</a> に繰り返されま"
-"す。"
+msgid "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+msgstr "このアポイントは <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> か月ごと</a> の <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第 2</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</a> に繰り返されます。"
 
 #. #-#-#-#-#-#-#-#-#-#
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -291,56 +251,64 @@ msgstr "第 4"
 #: apps/io.ox/calendar/edit/recurrence-view.js:353
 #: apps/io.ox/calendar/edit/recurrence-view.js:412
 #: apps/io.ox/calendar/edit/recurrence-view.js:415
-#: apps/io.ox/calendar/util.js:29 apps/io.ox/calendar/util.js:30
+#: apps/io.ox/calendar/util.js:29
+#: apps/io.ox/calendar/util.js:30
 msgid "last"
-msgstr "最終の"
+msgstr "最終"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:358
 #: apps/io.ox/calendar/edit/recurrence-view.js:417
 #: apps/io.ox/calendar/edit/recurrence-view.js:420
-#: apps/io.ox/calendar/model.js:165 apps/io.ox/calendar/util.js:312
+#: apps/io.ox/calendar/model.js:165
+#: apps/io.ox/calendar/util.js:312
 msgid "Sunday"
 msgstr "日曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:359
 #: apps/io.ox/calendar/edit/recurrence-view.js:418
 #: apps/io.ox/calendar/edit/recurrence-view.js:421
-#: apps/io.ox/calendar/model.js:166 apps/io.ox/calendar/util.js:315
+#: apps/io.ox/calendar/model.js:166
+#: apps/io.ox/calendar/util.js:315
 msgid "Monday"
 msgstr "月曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:360
 #: apps/io.ox/calendar/edit/recurrence-view.js:419
 #: apps/io.ox/calendar/edit/recurrence-view.js:422
-#: apps/io.ox/calendar/model.js:167 apps/io.ox/calendar/util.js:318
+#: apps/io.ox/calendar/model.js:167
+#: apps/io.ox/calendar/util.js:318
 msgid "Tuesday"
 msgstr "火曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:361
 #: apps/io.ox/calendar/edit/recurrence-view.js:420
 #: apps/io.ox/calendar/edit/recurrence-view.js:423
-#: apps/io.ox/calendar/model.js:168 apps/io.ox/calendar/util.js:321
+#: apps/io.ox/calendar/model.js:168
+#: apps/io.ox/calendar/util.js:321
 msgid "Wednesday"
 msgstr "水曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:362
 #: apps/io.ox/calendar/edit/recurrence-view.js:421
 #: apps/io.ox/calendar/edit/recurrence-view.js:424
-#: apps/io.ox/calendar/model.js:169 apps/io.ox/calendar/util.js:324
+#: apps/io.ox/calendar/model.js:169
+#: apps/io.ox/calendar/util.js:324
 msgid "Thursday"
 msgstr "木曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:363
 #: apps/io.ox/calendar/edit/recurrence-view.js:422
 #: apps/io.ox/calendar/edit/recurrence-view.js:425
-#: apps/io.ox/calendar/model.js:170 apps/io.ox/calendar/util.js:327
+#: apps/io.ox/calendar/model.js:170
+#: apps/io.ox/calendar/util.js:327
 msgid "Friday"
 msgstr "金曜日"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:364
 #: apps/io.ox/calendar/edit/recurrence-view.js:423
 #: apps/io.ox/calendar/edit/recurrence-view.js:426
-#: apps/io.ox/calendar/model.js:171 apps/io.ox/calendar/util.js:330
+#: apps/io.ox/calendar/model.js:171
+#: apps/io.ox/calendar/util.js:330
 msgid "Saturday"
 msgstr "土曜日"
 
@@ -355,14 +323,8 @@ msgid "day of the weekend"
 msgstr "週末"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:381
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\"  data-widget="
-"\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
-"\"options\" data-attribute=\"month\">october</a>. "
-msgstr ""
-"このアポイントは毎年 <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"month\">10 月</a> の <a href=\"#\"  data-widget=\"custom\" data-attribute="
-"\"dayInMonth\">10</a> 日に繰り返されます。"
+msgid "The appointment is repeated every year on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgstr "このアポイントは毎年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">10 月</a> の <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> 日に繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:386
 msgid "January"
@@ -413,16 +375,8 @@ msgid "December"
 msgstr "12 月"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:402
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>. "
-msgstr ""
-"このアポイントは <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">10 月</a> の <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">第一</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">水曜日</a> ごとに繰り返されます。"
+msgid "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">wednesday</a> in <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgstr "このアポイントは <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">10 月</a> の <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第 1</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</a> ごとに繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:434
 msgid "january"
@@ -490,33 +444,16 @@ msgid "ends"
 msgstr "終了"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:463
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-attribute=\"ending\" data-widget="
-"\"options\">期限なし</a> に設定されています。"
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">never ends</a>."
+msgstr "この定期的なアポイントは <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">期限なし</a> に設定されています。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:471
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-"\">11/03/2013</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"custom\">2013 年 3 月 11 日</a> に <a href=\"#\" data-attribute=\"ending\" "
-"data-widget=\"options\">終了</a>します。"
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">11/03/2013</a>."
+msgstr "この定期的なアポイントは <a href=\"#\" data-attribute=\"until\" data-widget=\"custom\">2013 年 3 月 11 日</a> に <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</a>します。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:476
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-attribute=\"occurrences\" data-"
-"widget=\"number\"><span class=\"number-control\">2</span> 回のアポイント</a> "
-"で <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</a> "
-"します。"
+msgid "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+msgstr "この定期的なアポイントは <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\"><span class=\"number-control\">2</span> 回のアポイント</a> で <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</a> します。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:547
 #: apps/io.ox/calendar/edit/recurrence-view.js:550
@@ -530,44 +467,51 @@ msgstr "値を変更するには、リンクをクリックします。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:565
 msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "アポイントを繰り返すタイミングを選ぶには文をクリックしてください。"
+msgstr "アポイントを繰り返すタイミングを選ぶには項目から 1 つクリックしてください。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:811
 msgid "Please choose a sentence below."
-msgstr "次の項目から 1 つを選択してください"
+msgstr "次の項目から 1 つ選択してください"
 
 #: apps/io.ox/mail/view-detail.js:247
 msgid "This mail has no content"
 msgstr "このメールには内容がありません。"
 
-#: apps/io.ox/mail/view-detail.js:328 apps/io.ox/mail/view-detail.js:339
+#: apps/io.ox/mail/view-detail.js:328
+#: apps/io.ox/mail/view-detail.js:339
 msgid "Document"
 msgstr "ドキュメント"
 
 #: apps/io.ox/calendar/view-detail.js:359
-#: apps/io.ox/contacts/view-detail.js:359 apps/io.ox/mail/view-detail.js:333
+#: apps/io.ox/contacts/view-detail.js:359
+#: apps/io.ox/mail/view-detail.js:333
 #: apps/io.ox/mail/view-detail.js:344
 msgid "Folder"
 msgstr "フォルダ"
 
-#: apps/io.ox/backbone/forms.js:618 apps/io.ox/mail/view-detail.js:397
+#: apps/io.ox/backbone/forms.js:618
+#: apps/io.ox/mail/view-detail.js:397
 msgid "Show more"
 msgstr "詳細表示"
 
-#: apps/io.ox/core/settings/pane.js:156 apps/io.ox/core/tk/attachments.js:233
+#: apps/io.ox/core/settings/pane.js:156
+#: apps/io.ox/core/tk/attachments.js:233
 #: apps/io.ox/mail/view-detail.js:725
 msgid "None"
 msgstr "なし"
 
-#: apps/io.ox/mail/view-detail.js:726 apps/io.ox/portal/settings/pane.js:104
+#: apps/io.ox/mail/view-detail.js:726
+#: apps/io.ox/portal/settings/pane.js:104
 msgid "Red"
 msgstr "赤"
 
-#: apps/io.ox/mail/view-detail.js:727 apps/io.ox/portal/settings/pane.js:109
+#: apps/io.ox/mail/view-detail.js:727
+#: apps/io.ox/portal/settings/pane.js:109
 msgid "Blue"
 msgstr "青"
 
-#: apps/io.ox/mail/view-detail.js:728 apps/io.ox/portal/settings/pane.js:107
+#: apps/io.ox/mail/view-detail.js:728
+#: apps/io.ox/portal/settings/pane.js:107
 msgid "Green"
 msgstr "緑"
 
@@ -575,23 +519,28 @@ msgstr "緑"
 msgid "Grey"
 msgstr "グレー"
 
-#: apps/io.ox/mail/view-detail.js:730 apps/io.ox/portal/settings/pane.js:110
+#: apps/io.ox/mail/view-detail.js:730
+#: apps/io.ox/portal/settings/pane.js:110
 msgid "Purple"
 msgstr "紫"
 
-#: apps/io.ox/mail/view-detail.js:731 apps/io.ox/portal/settings/pane.js:106
+#: apps/io.ox/mail/view-detail.js:731
+#: apps/io.ox/portal/settings/pane.js:106
 msgid "Light green"
 msgstr "薄い緑"
 
-#: apps/io.ox/mail/view-detail.js:732 apps/io.ox/portal/settings/pane.js:105
+#: apps/io.ox/mail/view-detail.js:732
+#: apps/io.ox/portal/settings/pane.js:105
 msgid "Orange"
 msgstr "オレンジ"
 
-#: apps/io.ox/mail/view-detail.js:733 apps/io.ox/portal/settings/pane.js:111
+#: apps/io.ox/mail/view-detail.js:733
+#: apps/io.ox/portal/settings/pane.js:111
 msgid "Pink"
 msgstr "ピンク"
 
-#: apps/io.ox/mail/view-detail.js:734 apps/io.ox/portal/settings/pane.js:108
+#: apps/io.ox/mail/view-detail.js:734
+#: apps/io.ox/portal/settings/pane.js:108
 msgid "Light blue"
 msgstr "薄い青"
 
@@ -599,7 +548,8 @@ msgstr "薄い青"
 msgid "Yellow"
 msgstr "黄"
 
-#: apps/io.ox/mail/main.js:481 apps/io.ox/mail/view-detail.js:817
+#: apps/io.ox/mail/main.js:481
+#: apps/io.ox/mail/view-detail.js:817
 #: apps/io.ox/mail/write/view-main.js:339
 msgid "To"
 msgstr "宛先"
@@ -634,15 +584,14 @@ msgstr "スレッド全体"
 
 #: apps/io.ox/mail/view-detail.js:963
 msgid "Warning: This message might be a phishing or scam mail"
-msgstr "警告: このメッセージは詐欺メールの疑いがあります"
+msgstr "警告: このメッセージは詐欺メールの疑いがあります。"
 
 #: apps/io.ox/mail/view-detail.js:984
 msgid "Show images"
 msgstr "画像を表示"
 
 #: apps/io.ox/mail/view-detail.js:987
-msgid ""
-"External images have been blocked to protect you against potential spam!"
+msgid "External images have been blocked to protect you against potential spam!"
 msgstr "スパムの危険性を回避するため、画像のダウンロードをブロックしました。"
 
 #: apps/io.ox/backbone/basicModel.js:120
@@ -651,7 +600,7 @@ msgstr "無効な日付"
 
 #: apps/io.ox/backbone/forms.js:54
 msgid "An error occurred"
-msgstr "エラーが発生しました"
+msgstr "エラーが発生しました。"
 
 #: apps/io.ox/backbone/forms.js:57
 msgid "An error occurred. Please try again later"
@@ -661,7 +610,8 @@ msgstr "エラーが発生しました。後でもう一度やり直してくだ
 msgid "Show less"
 msgstr "簡易表示"
 
-#: apps/io.ox/backbone/validation.js:46 apps/io.ox/backbone/validation.js:53
+#: apps/io.ox/backbone/validation.js:46
+#: apps/io.ox/backbone/validation.js:53
 msgid "Please enter a valid date"
 msgstr "有効な日付を入力してください"
 
@@ -674,50 +624,62 @@ msgid "Please enter a valid email address"
 msgstr "有効なメール アドレスを入力してください"
 
 #: apps/io.ox/backbone/validation.js:116
-#, fuzzy
 msgid "Please enter a value"
-msgstr "有効な日付を入力してください"
+msgstr "値を入力してください"
 
-#: apps/io.ox/calendar/acceptdeny.js:27 apps/io.ox/tasks/actions.js:468
+#: apps/io.ox/calendar/acceptdeny.js:27
+#: apps/io.ox/tasks/actions.js:468
 msgid "Change confirmation status"
 msgstr "出欠の状態を変更"
 
 #: apps/io.ox/calendar/acceptdeny.js:28
-msgid ""
-"You are about to change your confirmation status. Please leave a comment for "
-"other participants."
-msgstr ""
-"出欠の状態を変更しようとしています。他の出席者に送信するコメントを入力してく"
-"ださい。"
+msgid "You are about to change your confirmation status. Please leave a comment for other participants."
+msgstr "出欠の状態を変更しようとしています。他の出席者に送信するコメントを入力してください。"
 
 #: apps/io.ox/calendar/acceptdeny.js:32
 msgid "Comment:"
 msgstr "コメント: "
 
-#: apps/io.ox/calendar/acceptdeny.js:41 apps/io.ox/calendar/actions.js:125
-#: apps/io.ox/calendar/actions.js:186 apps/io.ox/calendar/actions.js:203
-#: apps/io.ox/calendar/actions.js:258 apps/io.ox/calendar/edit/main.js:47
+#: apps/io.ox/calendar/acceptdeny.js:41
+#: apps/io.ox/calendar/actions.js:125
+#: apps/io.ox/calendar/actions.js:186
+#: apps/io.ox/calendar/actions.js:203
+#: apps/io.ox/calendar/actions.js:258
+#: apps/io.ox/calendar/edit/main.js:47
 #: apps/io.ox/calendar/edit/template.js:116
 #: apps/io.ox/calendar/month/perspective.js:86
 #: apps/io.ox/calendar/week/perspective.js:72
 #: apps/io.ox/calendar/week/perspective.js:115
-#: apps/io.ox/contacts/actions.js:50 apps/io.ox/contacts/actions.js:121
+#: apps/io.ox/contacts/actions.js:50
+#: apps/io.ox/contacts/actions.js:121
 #: apps/io.ox/contacts/distrib/main.js:163
 #: apps/io.ox/contacts/edit/main.js:130
 #: apps/io.ox/core/commons-folderview.js:312
 #: apps/io.ox/core/permissions/permissions.js:342
-#: apps/io.ox/core/tk/folderviews.js:550 apps/io.ox/core/tk/folderviews.js:579
-#: apps/io.ox/core/tk/folderviews.js:626 apps/io.ox/core/tk/folderviews.js:683
-#: apps/io.ox/editor/main.js:221 apps/io.ox/files/actions.js:215
-#: apps/io.ox/files/actions.js:245 apps/io.ox/files/actions.js:301
-#: apps/io.ox/files/actions.js:354 apps/io.ox/files/actions.js:375
-#: apps/io.ox/files/actions.js:456 apps/io.ox/files/views/create.js:40
-#: apps/io.ox/mail/accounts/settings.js:215 apps/io.ox/mail/actions.js:70
-#: apps/io.ox/mail/actions.js:187 apps/io.ox/mail/actions.js:570
-#: apps/io.ox/mail/write/main.js:979 apps/io.ox/office/tk/view/dialogs.js:49
-#: apps/io.ox/portal/settings/pane.js:237 apps/io.ox/tasks/actions.js:54
-#: apps/io.ox/tasks/actions.js:168 apps/io.ox/tasks/actions.js:420
-#: apps/io.ox/tasks/edit/main.js:150 apps/io.ox/tasks/edit/util.js:145
+#: apps/io.ox/core/tk/folderviews.js:550
+#: apps/io.ox/core/tk/folderviews.js:579
+#: apps/io.ox/core/tk/folderviews.js:626
+#: apps/io.ox/core/tk/folderviews.js:683
+#: apps/io.ox/editor/main.js:221
+#: apps/io.ox/files/actions.js:215
+#: apps/io.ox/files/actions.js:245
+#: apps/io.ox/files/actions.js:301
+#: apps/io.ox/files/actions.js:354
+#: apps/io.ox/files/actions.js:375
+#: apps/io.ox/files/actions.js:456
+#: apps/io.ox/files/views/create.js:40
+#: apps/io.ox/mail/accounts/settings.js:215
+#: apps/io.ox/mail/actions.js:70
+#: apps/io.ox/mail/actions.js:187
+#: apps/io.ox/mail/actions.js:570
+#: apps/io.ox/mail/write/main.js:979
+#: apps/io.ox/office/tk/view/dialogs.js:49
+#: apps/io.ox/portal/settings/pane.js:237
+#: apps/io.ox/tasks/actions.js:54
+#: apps/io.ox/tasks/actions.js:168
+#: apps/io.ox/tasks/actions.js:420
+#: apps/io.ox/tasks/edit/main.js:150
+#: apps/io.ox/tasks/edit/util.js:145
 #: apps/plugins/portal/flickr/register.js:207
 #: apps/plugins/portal/rss/register.js:143
 #: apps/plugins/portal/tumblr/register.js:177
@@ -725,11 +687,13 @@ msgstr "コメント: "
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: apps/io.ox/calendar/acceptdeny.js:42 apps/io.ox/tasks/edit/util.js:165
+#: apps/io.ox/calendar/acceptdeny.js:42
+#: apps/io.ox/tasks/edit/util.js:165
 msgid "Decline"
 msgstr "辞退"
 
-#: apps/io.ox/calendar/acceptdeny.js:43 apps/io.ox/tasks/edit/util.js:166
+#: apps/io.ox/calendar/acceptdeny.js:43
+#: apps/io.ox/tasks/edit/util.js:166
 #: apps/io.ox/tasks/view-detail.js:161
 msgid "Tentative"
 msgstr "仮の予定"
@@ -740,12 +704,8 @@ msgstr "承諾"
 
 #: apps/io.ox/calendar/actions.js:120
 #: apps/io.ox/calendar/week/perspective.js:111
-msgid ""
-"Do you want to edit the whole series or just one appointment within the "
-"series?"
-msgstr ""
-"定期的なアポイント全体を編集しますか、それともこのアポイントのみを編集します"
-"か？"
+msgid "Do you want to edit the whole series or just one appointment within the series?"
+msgstr "定期的なアポイント全体を編集しますか、それともこのアポイントのみを編集しますか？"
 
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -760,12 +720,8 @@ msgid "Appointment"
 msgstr "アポイント"
 
 #: apps/io.ox/calendar/actions.js:183
-msgid ""
-"Do you want to delete the whole series or just one appointment within the "
-"series?"
-msgstr ""
-"定期的なアポイント全体を削除しますか、それともこのアポイントのみを削除します"
-"か？"
+msgid "Do you want to delete the whole series or just one appointment within the series?"
+msgstr "定期的なアポイント全体を削除しますか、それともこのアポイントのみを削除しますか？"
 
 #: apps/io.ox/calendar/actions.js:184
 msgid "Delete appointment"
@@ -779,64 +735,83 @@ msgstr "定期的なアポイント全体を削除"
 msgid "Do you want to delete this appointment?"
 msgstr "このアポイントを削除しますか？"
 
-#: apps/io.ox/calendar/actions.js:202 apps/io.ox/calendar/actions.js:393
-#: apps/io.ox/contacts/actions.js:49 apps/io.ox/contacts/actions.js:346
+#: apps/io.ox/calendar/actions.js:202
+#: apps/io.ox/calendar/actions.js:393
+#: apps/io.ox/contacts/actions.js:49
+#: apps/io.ox/contacts/actions.js:346
 #: apps/io.ox/core/commons-folderview.js:203
-#: apps/io.ox/core/tk/folderviews.js:578 apps/io.ox/files/actions.js:244
-#: apps/io.ox/files/actions.js:455 apps/io.ox/files/actions.js:606
-#: apps/io.ox/mail/actions.js:69 apps/io.ox/mail/actions.js:749
+#: apps/io.ox/core/tk/folderviews.js:578
+#: apps/io.ox/files/actions.js:244
+#: apps/io.ox/files/actions.js:455
+#: apps/io.ox/files/actions.js:606
+#: apps/io.ox/mail/actions.js:69
+#: apps/io.ox/mail/actions.js:749
 #: apps/io.ox/mail/settings/signatures/register.js:297
 #: apps/io.ox/portal/settings/pane.js:236
 #: apps/io.ox/settings/accounts/settings/pane.js:35
-#: apps/io.ox/tasks/actions.js:53 apps/io.ox/tasks/actions.js:366
+#: apps/io.ox/tasks/actions.js:53
+#: apps/io.ox/tasks/actions.js:366
 msgid "Delete"
 msgstr "削除"
 
-#: apps/io.ox/calendar/actions.js:257 apps/io.ox/calendar/actions.js:293
-#: apps/io.ox/calendar/actions.js:385 apps/io.ox/contacts/actions.js:155
+#: apps/io.ox/calendar/actions.js:257
+#: apps/io.ox/calendar/actions.js:293
+#: apps/io.ox/calendar/actions.js:385
+#: apps/io.ox/contacts/actions.js:155
 #: apps/io.ox/contacts/actions.js:360
-#: apps/io.ox/core/commons-folderview.js:350 apps/io.ox/files/actions.js:401
-#: apps/io.ox/files/actions.js:591 apps/io.ox/mail/actions.js:233
-#: apps/io.ox/mail/actions.js:724 apps/io.ox/tasks/actions.js:166
-#: apps/io.ox/tasks/actions.js:167 apps/io.ox/tasks/actions.js:460
+#: apps/io.ox/core/commons-folderview.js:350
+#: apps/io.ox/files/actions.js:401
+#: apps/io.ox/files/actions.js:591
+#: apps/io.ox/mail/actions.js:233
+#: apps/io.ox/mail/actions.js:724
+#: apps/io.ox/tasks/actions.js:166
+#: apps/io.ox/tasks/actions.js:167
+#: apps/io.ox/tasks/actions.js:460
 msgid "Move"
 msgstr "移動"
 
 #: apps/io.ox/calendar/actions.js:276
 msgid "Appointment has been moved"
 msgid_plural "Appointments have been moved"
-msgstr[0] "アポイントを移動しました"
+msgstr[0] "アポイントを移動しました。"
 
 #: apps/io.ox/calendar/actions.js:277
 msgid "Appointment has been copied"
 msgid_plural "Appointments have been copied"
-msgstr[0] "アポイントをコピーしました"
+msgstr[0] "アポイントをコピーしました。"
 
-#: apps/io.ox/calendar/actions.js:309 apps/io.ox/calendar/settings/pane.js:37
+#: apps/io.ox/calendar/actions.js:309
+#: apps/io.ox/calendar/settings/pane.js:37
 msgid "New appointment"
 msgstr "新規アポイント"
 
-#: apps/io.ox/calendar/actions.js:326 apps/io.ox/calendar/settings/pane.js:60
-#: apps/io.ox/calendar/settings/pane.js:66 apps/io.ox/calendar/util.js:308
+#: apps/io.ox/calendar/actions.js:326
+#: apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/util.js:308
 msgid "Day"
 msgstr "日"
 
-#: apps/io.ox/calendar/actions.js:333 apps/io.ox/calendar/settings/pane.js:61
+#: apps/io.ox/calendar/actions.js:333
+#: apps/io.ox/calendar/settings/pane.js:61
 #: apps/io.ox/calendar/settings/pane.js:67
 msgid "Workweek"
 msgstr "稼働日"
 
-#: apps/io.ox/calendar/actions.js:340 apps/io.ox/calendar/settings/pane.js:62
+#: apps/io.ox/calendar/actions.js:340
+#: apps/io.ox/calendar/settings/pane.js:62
 #: apps/io.ox/calendar/settings/pane.js:69
 msgid "Week"
 msgstr "週"
 
-#: apps/io.ox/calendar/actions.js:347 apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/actions.js:347
+#: apps/io.ox/calendar/settings/pane.js:63
 #: apps/io.ox/calendar/settings/pane.js:68
 msgid "Month"
 msgstr "月"
 
-#: apps/io.ox/calendar/actions.js:354 apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/actions.js:354
+#: apps/io.ox/calendar/settings/pane.js:64
 #: apps/io.ox/files/actions.js:505
 msgid "List"
 msgstr "リスト"
@@ -849,7 +824,8 @@ msgstr "状態を変更"
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
 
-#: apps/io.ox/calendar/actions.js:416 apps/io.ox/mail/actions.js:825
+#: apps/io.ox/calendar/actions.js:416
+#: apps/io.ox/mail/actions.js:825
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
@@ -861,20 +837,25 @@ msgstr "競合が検出されました"
 msgid "Edit Appointment"
 msgstr "アポイントを編集"
 
-#: apps/io.ox/calendar/edit/main.js:45 apps/io.ox/contacts/distrib/main.js:161
-#: apps/io.ox/contacts/edit/main.js:128 apps/io.ox/editor/main.js:219
+#: apps/io.ox/calendar/edit/main.js:45
+#: apps/io.ox/contacts/distrib/main.js:161
+#: apps/io.ox/contacts/edit/main.js:128
+#: apps/io.ox/editor/main.js:219
 #: apps/io.ox/tasks/edit/main.js:148
 msgid "Do you really want to discard your changes?"
 msgstr "変更を破棄しますか？"
 
-#: apps/io.ox/calendar/edit/main.js:46 apps/io.ox/calendar/edit/template.js:68
+#: apps/io.ox/calendar/edit/main.js:46
+#: apps/io.ox/calendar/edit/template.js:68
 #: apps/io.ox/contacts/distrib/create-dist-view.js:58
 #: apps/io.ox/contacts/distrib/main.js:162
 #: apps/io.ox/contacts/edit/main.js:129
-#: apps/io.ox/contacts/edit/view-form.js:252 apps/io.ox/editor/main.js:87
+#: apps/io.ox/contacts/edit/view-form.js:252
+#: apps/io.ox/editor/main.js:87
 #: apps/io.ox/editor/main.js:220
 #: apps/io.ox/mail/settings/signatures/register.js:107
-#: apps/io.ox/mail/write/main.js:977 apps/io.ox/mail/write/view-main.js:62
+#: apps/io.ox/mail/write/main.js:977
+#: apps/io.ox/mail/write/view-main.js:62
 #: apps/io.ox/tasks/edit/view.js:206
 msgid "Discard"
 msgstr "破棄"
@@ -895,17 +876,21 @@ msgstr "アポイントを作成"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:43
 #: apps/io.ox/contacts/edit/view-form.js:264
 #: apps/io.ox/core/permissions/permissions.js:342
-#: apps/io.ox/core/tk/folderviews.js:684 apps/io.ox/editor/main.js:85
-#: apps/io.ox/files/actions.js:353 apps/io.ox/files/views/create.js:39
+#: apps/io.ox/core/tk/folderviews.js:684
+#: apps/io.ox/editor/main.js:85
+#: apps/io.ox/files/actions.js:353
+#: apps/io.ox/files/views/create.js:39
 #: apps/io.ox/mail/settings/signatures/register.js:111
-#: apps/io.ox/mail/write/view-main.js:54 apps/io.ox/tasks/edit/view.js:201
+#: apps/io.ox/mail/write/view-main.js:54
+#: apps/io.ox/tasks/edit/view.js:201
 #: apps/plugins/portal/flickr/register.js:206
 #: apps/plugins/portal/rss/register.js:142
 #: apps/plugins/portal/tumblr/register.js:176
 msgid "Save"
 msgstr "保存"
 
-#: apps/io.ox/calendar/edit/template.js:61 apps/io.ox/tasks/edit/view.js:197
+#: apps/io.ox/calendar/edit/template.js:61
+#: apps/io.ox/tasks/edit/view.js:197
 msgid "Create"
 msgstr "作成"
 
@@ -915,10 +900,13 @@ msgstr "作成"
 msgid "Ignore conflicts"
 msgstr "競合を無視"
 
-#: apps/io.ox/calendar/edit/template.js:155 apps/io.ox/mail/actions.js:580
-#: apps/io.ox/mail/main.js:174 apps/io.ox/mail/main.js:481
+#: apps/io.ox/calendar/edit/template.js:155
+#: apps/io.ox/mail/actions.js:580
+#: apps/io.ox/mail/main.js:174
+#: apps/io.ox/mail/main.js:481
 #: apps/io.ox/mail/write/view-main.js:514
-#: apps/io.ox/tasks/edit/view-template.js:36 apps/io.ox/tasks/main.js:239
+#: apps/io.ox/tasks/edit/view-template.js:36
+#: apps/io.ox/tasks/main.js:239
 msgid "Subject"
 msgstr "件名"
 
@@ -940,7 +928,8 @@ msgid "All day"
 msgstr "終日"
 
 #: apps/io.ox/calendar/edit/template.js:220
-#: apps/io.ox/contacts/view-detail.js:218 apps/io.ox/files/actions.js:322
+#: apps/io.ox/contacts/view-detail.js:218
+#: apps/io.ox/files/actions.js:322
 #: apps/io.ox/tasks/edit/view-template.js:47
 #: apps/plugins/portal/flickr/register.js:201
 #: apps/plugins/portal/rss/register.js:137
@@ -973,7 +962,8 @@ msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d 週"
 
-#: apps/io.ox/calendar/edit/template.js:290 apps/io.ox/mail/actions.js:757
+#: apps/io.ox/calendar/edit/template.js:290
+#: apps/io.ox/mail/actions.js:757
 #: apps/plugins/notifications/calendar/register.js:38
 #: apps/plugins/notifications/tasks/register.js:198
 msgid "Reminder"
@@ -984,19 +974,23 @@ msgstr "アラーム"
 msgid "Shown as"
 msgstr "公開方法"
 
-#: apps/io.ox/calendar/edit/template.js:306 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:306
+#: apps/io.ox/calendar/util.js:33
 msgid "Reserved"
 msgstr "予定あり"
 
-#: apps/io.ox/calendar/edit/template.js:307 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:307
+#: apps/io.ox/calendar/util.js:33
 msgid "Temporary"
 msgstr "仮の予定"
 
-#: apps/io.ox/calendar/edit/template.js:308 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:308
+#: apps/io.ox/calendar/util.js:34
 msgid "Absent"
 msgstr "欠席"
 
-#: apps/io.ox/calendar/edit/template.js:309 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:309
+#: apps/io.ox/calendar/util.js:34
 msgid "Free"
 msgstr "空き時間"
 
@@ -1006,13 +1000,15 @@ msgstr "タイプ"
 
 #: apps/io.ox/calendar/edit/template.js:322
 #: apps/io.ox/calendar/view-grid-template.js:66
-#: apps/io.ox/contacts/model.js:309 apps/io.ox/core/tk/folderviews.js:853
+#: apps/io.ox/contacts/model.js:309
+#: apps/io.ox/core/tk/folderviews.js:853
 #: apps/io.ox/tasks/edit/view-template.js:125
 msgid "Private"
 msgstr "プライベート"
 
 #: apps/io.ox/calendar/edit/template.js:333
-#: apps/io.ox/calendar/view-detail.js:227 apps/io.ox/tasks/edit/view.js:72
+#: apps/io.ox/calendar/view-detail.js:227
+#: apps/io.ox/tasks/edit/view.js:72
 #: apps/io.ox/tasks/view-detail.js:193
 msgid "Participants"
 msgstr "出席者"
@@ -1031,19 +1027,20 @@ msgstr "添付ファイル"
 #: apps/io.ox/calendar/edit/template.js:491
 #: apps/io.ox/tasks/edit/view-template.js:546
 msgid "Drop here to upload a <b>new attachment</b>"
-msgstr ""
-"<b>新規添付ファイル</b> をアップロードするには、ここにドロップしてください。"
+msgstr "<b>新規添付ファイル</b> をアップロードするには、ここにドロップしてください。"
 
 #: apps/io.ox/calendar/list/perspective.js:85
 msgid "Couldn't load appointment data."
 msgstr "アポイントのデータを読み込めませんでした。"
 
-#: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:176
+#: apps/io.ox/calendar/list/perspective.js:129
+#: apps/io.ox/mail/main.js:176
 #: apps/io.ox/tasks/main.js:242
 msgid "Ascending"
 msgstr "昇順"
 
-#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:177
+#: apps/io.ox/calendar/list/perspective.js:130
+#: apps/io.ox/mail/main.js:177
 #: apps/io.ox/tasks/main.js:243
 msgid "Descending"
 msgstr "降順"
@@ -1054,19 +1051,17 @@ msgstr "降順"
 msgid "show all"
 msgstr "すべてを表示"
 
-#: apps/io.ox/calendar/model.js:126 apps/io.ox/calendar/model.js:127
-#: apps/io.ox/tasks/model.js:98 apps/io.ox/tasks/model.js:99
+#: apps/io.ox/calendar/model.js:126
+#: apps/io.ox/calendar/model.js:127
+#: apps/io.ox/tasks/model.js:98
+#: apps/io.ox/tasks/model.js:99
 msgid "The start date must be before the end date."
-msgstr "開始日は終了日より前である必要があります。"
+msgstr "開始日は終了日より前の日付でなければなりません。"
 
 #: apps/io.ox/calendar/month/perspective.js:104
 #: apps/io.ox/calendar/week/perspective.js:106
-msgid ""
-"By changing the date of this appointment you are creating an appointment "
-"exception to the series. Do you want to continue?"
-msgstr ""
-"アポイントの日付を変更すると、定期的なアポイントにアポイントの例外が作成され"
-"ます。続行しますか？"
+msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
+msgstr "アポイントの日付を変更すると、定期的なアポイントにアポイントの例外が作成されます。続行しますか？"
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
@@ -1095,7 +1090,8 @@ msgid "No"
 msgstr "いいえ"
 
 #: apps/io.ox/calendar/month/perspective.js:330
-#: apps/io.ox/calendar/util.js:176 apps/io.ox/calendar/week/view.js:520
+#: apps/io.ox/calendar/util.js:176
+#: apps/io.ox/calendar/week/view.js:520
 #: apps/plugins/portal/birthdays/register.js:91
 msgid "Today"
 msgstr "今日"
@@ -1104,7 +1100,8 @@ msgstr "今日"
 msgid "CW"
 msgstr "CW"
 
-#: apps/io.ox/calendar/settings/pane.js:27 apps/io.ox/core/main.js:51
+#: apps/io.ox/calendar/settings/pane.js:27
+#: apps/io.ox/core/main.js:51
 #: apps/io.ox/launchpad/main.js:30
 msgid "Calendar"
 msgstr "予定表"
@@ -1129,7 +1126,8 @@ msgstr "稼働時間の終了時刻"
 msgid "Default calendar view"
 msgstr "予定表の既定のビュー"
 
-#: apps/io.ox/calendar/settings/pane.js:33 apps/io.ox/files/actions.js:489
+#: apps/io.ox/calendar/settings/pane.js:33
+#: apps/io.ox/files/actions.js:489
 msgid "View"
 msgstr "ビュー"
 
@@ -1283,7 +1281,8 @@ msgstr "終日"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:220 apps/io.ox/core/date.js:106
+#: apps/io.ox/calendar/util.js:220
+#: apps/io.ox/core/date.js:106
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -1337,7 +1336,8 @@ msgstr "指定曜日 %s %s 指定月 %s"
 msgid "Resources"
 msgstr "設備"
 
-#: apps/io.ox/calendar/view-detail.js:320 apps/io.ox/tasks/edit/view.js:76
+#: apps/io.ox/calendar/view-detail.js:320
+#: apps/io.ox/tasks/edit/view.js:76
 msgid "Details"
 msgstr "詳細"
 
@@ -1359,8 +1359,10 @@ msgstr "競合: "
 
 #: apps/io.ox/calendar/week/perspective.js:49
 #: apps/io.ox/calendar/week/perspective.js:182
-#: apps/io.ox/mail/write/main.js:607 apps/io.ox/mail/write/main.js:644
-#: apps/io.ox/mail/write/main.js:688 apps/io.ox/mail/write/main.js:714
+#: apps/io.ox/mail/write/main.js:607
+#: apps/io.ox/mail/write/main.js:644
+#: apps/io.ox/mail/write/main.js:688
+#: apps/io.ox/mail/write/main.js:714
 msgid "An error occured. Please try again."
 msgstr "エラーが発生しました。もう一度やり直してください。"
 
@@ -1382,21 +1384,24 @@ msgstr "この連絡先を削除しますか？"
 
 #: apps/io.ox/contacts/actions.js:155
 msgid "Contacts have been moved"
-msgstr "連絡先を移動しました"
+msgstr "連絡先を移動しました。"
 
-#: apps/io.ox/contacts/actions.js:161 apps/io.ox/contacts/actions.js:367
-#: apps/io.ox/files/actions.js:407 apps/io.ox/files/actions.js:598
-#: apps/io.ox/mail/actions.js:234 apps/io.ox/mail/actions.js:732
+#: apps/io.ox/contacts/actions.js:161
+#: apps/io.ox/contacts/actions.js:367
+#: apps/io.ox/files/actions.js:407
+#: apps/io.ox/files/actions.js:598
+#: apps/io.ox/mail/actions.js:234
+#: apps/io.ox/mail/actions.js:732
 msgid "Copy"
 msgstr "コピー"
 
 #: apps/io.ox/contacts/actions.js:161
 msgid "Contacts have been copied"
-msgstr "連絡先をコピーしました"
+msgstr "連絡先をコピーしました。"
 
 #: apps/io.ox/contacts/actions.js:277
 msgid "This distribution list has been added to the portal"
-msgstr "この配布リストをポータルに追加しました"
+msgstr "この配布リストをポータルに追加しました。"
 
 #: apps/io.ox/contacts/actions.js:303
 msgid "Add contact"
@@ -1410,11 +1415,13 @@ msgstr "配布リストを追加"
 msgid "Send mail"
 msgstr "メールを送信"
 
-#: apps/io.ox/contacts/actions.js:330 apps/io.ox/mail/actions.js:832
+#: apps/io.ox/contacts/actions.js:330
+#: apps/io.ox/mail/actions.js:832
 msgid "Invite to appointment"
 msgstr "アポイントへの出席を依頼"
 
-#: apps/io.ox/contacts/actions.js:353 apps/io.ox/files/actions.js:614
+#: apps/io.ox/contacts/actions.js:353
+#: apps/io.ox/files/actions.js:614
 #: apps/io.ox/mail/actions.js:765
 msgid "Add to portal"
 msgstr "ポータルを追加"
@@ -1446,7 +1453,7 @@ msgstr "メール アドレス"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:199
 #: apps/io.ox/contacts/view-detail.js:284
 msgid "This list has no members yet"
-msgstr "このリストにはメンバが追加されていません"
+msgstr "このリストにはメンバが追加されていません。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:319
 msgid "Couldn't load all contact images."
@@ -1500,7 +1507,8 @@ msgstr "その他の住所"
 msgid "Job description"
 msgstr "職務内容"
 
-#: apps/io.ox/contacts/edit/view-form.js:88 apps/io.ox/contacts/model.js:229
+#: apps/io.ox/contacts/edit/view-form.js:88
+#: apps/io.ox/contacts/model.js:229
 #: apps/io.ox/files/views/create.js:96
 msgid "Comment"
 msgstr "コメント"
@@ -1519,24 +1527,22 @@ msgstr "その他"
 #. This string is simply split at spaces (can be more or less than 26 characters)
 #: apps/io.ox/contacts/main.js:50
 msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-msgstr ""
-"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z あ か さ た な は ま や "
-"ら わ"
+msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z あ か さ た な は ま や ら わ"
 
-#: apps/io.ox/contacts/main.js:104 apps/io.ox/contacts/model.js:302
-#: apps/io.ox/contacts/view-detail.js:152 apps/io.ox/participants/views.js:127
+#: apps/io.ox/contacts/main.js:104
+#: apps/io.ox/contacts/model.js:302
+#: apps/io.ox/contacts/view-detail.js:152
+#: apps/io.ox/participants/views.js:127
 msgid "Distribution list"
 msgstr "配布リスト"
 
 #: apps/io.ox/contacts/main.js:115
-#, fuzzy
 msgid "Empty name and description found."
-msgstr "説明を入力してください"
+msgstr "名前と説明が未入力です。"
 
 #: apps/io.ox/contacts/main.js:116
-#, fuzzy
 msgid "Edit to set a name."
-msgstr "名前を入力する"
+msgstr "編集して名前を設定"
 
 #: apps/io.ox/contacts/main.js:166
 msgid "Couldn't load contact data."
@@ -1562,31 +1568,37 @@ msgstr "ミドル ネーム"
 msgid "Suffix"
 msgstr "敬称"
 
-#: apps/io.ox/contacts/model.js:216 apps/io.ox/files/views/create.js:77
+#: apps/io.ox/contacts/model.js:216
+#: apps/io.ox/files/views/create.js:77
 msgid "Title"
 msgstr "肩書き"
 
-#: apps/io.ox/contacts/model.js:217 apps/io.ox/contacts/model.js:234
+#: apps/io.ox/contacts/model.js:217
+#: apps/io.ox/contacts/model.js:234
 #: apps/io.ox/contacts/model.js:248
 msgid "Street"
 msgstr "番地"
 
-#: apps/io.ox/contacts/model.js:218 apps/io.ox/contacts/model.js:235
+#: apps/io.ox/contacts/model.js:218
+#: apps/io.ox/contacts/model.js:235
 #: apps/io.ox/contacts/model.js:250
 msgid "Postcode"
 msgstr "郵便番号"
 
-#: apps/io.ox/contacts/model.js:219 apps/io.ox/contacts/model.js:236
+#: apps/io.ox/contacts/model.js:219
+#: apps/io.ox/contacts/model.js:236
 #: apps/io.ox/contacts/model.js:249
 msgid "Town"
 msgstr "市区町村"
 
-#: apps/io.ox/contacts/model.js:220 apps/io.ox/contacts/model.js:237
+#: apps/io.ox/contacts/model.js:220
+#: apps/io.ox/contacts/model.js:237
 #: apps/io.ox/contacts/model.js:303
 msgid "State"
 msgstr "都道府県"
 
-#: apps/io.ox/contacts/model.js:221 apps/io.ox/contacts/model.js:238
+#: apps/io.ox/contacts/model.js:221
+#: apps/io.ox/contacts/model.js:238
 #: apps/io.ox/contacts/model.js:251
 msgid "Country"
 msgstr "国"
@@ -1603,7 +1615,8 @@ msgstr "既婚/未婚"
 msgid "Children"
 msgstr "子供"
 
-#: apps/io.ox/contacts/model.js:225 apps/io.ox/contacts/view-detail.js:238
+#: apps/io.ox/contacts/model.js:225
+#: apps/io.ox/contacts/view-detail.js:238
 msgid "Profession"
 msgstr "職業"
 
@@ -1619,11 +1632,13 @@ msgstr "配偶者名"
 msgid "Anniversary"
 msgstr "記念日"
 
-#: apps/io.ox/contacts/model.js:230 apps/io.ox/contacts/view-detail.js:236
+#: apps/io.ox/contacts/model.js:230
+#: apps/io.ox/contacts/view-detail.js:236
 msgid "Department"
 msgstr "部署"
 
-#: apps/io.ox/contacts/model.js:231 apps/io.ox/contacts/view-detail.js:237
+#: apps/io.ox/contacts/model.js:231
+#: apps/io.ox/contacts/view-detail.js:237
 msgid "Position"
 msgstr "役職"
 
@@ -1679,7 +1694,8 @@ msgstr "電話番号"
 msgid "Phone alt"
 msgstr "電話 (予備)"
 
-#: apps/io.ox/contacts/model.js:254 apps/io.ox/contacts/model.js:260
+#: apps/io.ox/contacts/model.js:254
+#: apps/io.ox/contacts/model.js:260
 msgid "Fax"
 msgstr "FAX"
 
@@ -1731,7 +1747,8 @@ msgstr "メール 2"
 msgid "Email 3"
 msgstr "メール 3"
 
-#: apps/io.ox/contacts/model.js:268 apps/plugins/portal/rss/register.js:135
+#: apps/io.ox/contacts/model.js:268
+#: apps/plugins/portal/rss/register.js:135
 msgid "URL"
 msgstr "URL"
 
@@ -1775,7 +1792,8 @@ msgstr "IP 電話"
 msgid "Phone (assistant)"
 msgstr "秘書の電話"
 
-#: apps/io.ox/contacts/model.js:279 apps/io.ox/tasks/view-detail.js:135
+#: apps/io.ox/contacts/model.js:279
+#: apps/io.ox/tasks/view-detail.js:135
 msgid "Company"
 msgstr "会社"
 
@@ -1887,7 +1905,8 @@ msgstr "住所 (勤務先)"
 msgid "Address Other"
 msgstr "住所 (その他)"
 
-#: apps/io.ox/contacts/settings/pane.js:23 apps/io.ox/core/main.js:50
+#: apps/io.ox/contacts/settings/pane.js:23
+#: apps/io.ox/core/main.js:50
 #: apps/io.ox/launchpad/main.js:29
 msgid "Address Book"
 msgstr "アドレス帳"
@@ -1896,7 +1915,8 @@ msgstr "アドレス帳"
 msgid "Show contacts from administrator group"
 msgstr "管理者グループの連絡先を表示"
 
-#: apps/io.ox/contacts/view-detail.js:153 apps/io.ox/participants/views.js:111
+#: apps/io.ox/contacts/view-detail.js:153
+#: apps/io.ox/participants/views.js:111
 msgid "Resource"
 msgstr "設備"
 
@@ -1946,7 +1966,8 @@ msgstr "QR コードを表示"
 msgid "Contact: %1$s"
 msgstr "連絡先: %1$s"
 
-#: apps/io.ox/core/about.js:37 apps/io.ox/core/main.js:368
+#: apps/io.ox/core/about.js:37
+#: apps/io.ox/core/main.js:368
 msgid "About"
 msgstr "バージョン情報"
 
@@ -1969,7 +1990,8 @@ msgid "Subscribe IMAP folders"
 msgstr "IMAP フォルダを登録"
 
 #: apps/io.ox/core/commons-folderview.js:183
-#: apps/io.ox/core/tk/folderviews.js:627 apps/io.ox/files/actions.js:300
+#: apps/io.ox/core/tk/folderviews.js:627
+#: apps/io.ox/files/actions.js:300
 #: apps/io.ox/files/actions.js:577
 msgid "Rename"
 msgstr "名前を変更"
@@ -2115,11 +2137,13 @@ msgstr[0] "%d 分"
 msgid "There are unsaved changes."
 msgstr "まだ保存されていない変更があります。"
 
-#: apps/io.ox/core/desktop.js:799 apps/io.ox/core/desktop.js:945
+#: apps/io.ox/core/desktop.js:799
+#: apps/io.ox/core/desktop.js:945
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
-#: apps/io.ox/core/desktop.js:1197 apps/plugins/portal/flickr/register.js:197
+#: apps/io.ox/core/desktop.js:1197
+#: apps/plugins/portal/flickr/register.js:197
 msgid "Search"
 msgstr "検索"
 
@@ -2128,28 +2152,28 @@ msgid "Toggle search"
 msgstr "検索を起動"
 
 #: apps/io.ox/core/desktop.js:1295
-msgid ""
-"Failed to start application. Maybe you have connection problems. Please try "
-"again."
-msgstr ""
-"アプリケーションの起動に失敗しました。接続に問題がある可能性があります。もう"
-"一度やり直してください。"
+msgid "Failed to start application. Maybe you have connection problems. Please try again."
+msgstr "アプリケーションの起動に失敗しました。接続に問題がある可能性があります。もう一度やり直してください。"
 
 #: apps/io.ox/core/extPatterns/links.js:194
 #: apps/io.ox/mail/write/view-main.js:462
 msgid "More"
 msgstr "さらに表示"
 
-#: apps/io.ox/core/main.js:48 apps/io.ox/launchpad/main.js:27
+#: apps/io.ox/core/main.js:48
+#: apps/io.ox/launchpad/main.js:27
 msgid "Portal"
 msgstr "ポータル"
 
-#: apps/io.ox/core/main.js:49 apps/io.ox/launchpad/main.js:28
-#: apps/io.ox/mail/settings/pane.js:28 apps/io.ox/mail/write/main.js:539
+#: apps/io.ox/core/main.js:49
+#: apps/io.ox/launchpad/main.js:28
+#: apps/io.ox/mail/settings/pane.js:28
+#: apps/io.ox/mail/write/main.js:539
 msgid "Mail"
 msgstr "メール"
 
-#: apps/io.ox/core/main.js:52 apps/io.ox/launchpad/main.js:31
+#: apps/io.ox/core/main.js:52
+#: apps/io.ox/launchpad/main.js:31
 #: apps/io.ox/tasks/settings/pane.js:26
 #: apps/plugins/notifications/tasks/register.js:199
 #: apps/plugins/portal/tasks/register.js:26
@@ -2157,27 +2181,34 @@ msgstr "メール"
 msgid "Tasks"
 msgstr "仕事"
 
-#: apps/io.ox/core/main.js:53 apps/io.ox/files/main.js:35
-#: apps/io.ox/files/settings/pane.js:23 apps/io.ox/launchpad/main.js:32
+#: apps/io.ox/core/main.js:53
+#: apps/io.ox/files/main.js:35
+#: apps/io.ox/files/settings/pane.js:23
+#: apps/io.ox/launchpad/main.js:32
 msgid "Files"
 msgstr "ファイル"
 
-#: apps/io.ox/core/main.js:54 apps/io.ox/launchpad/main.js:33
+#: apps/io.ox/core/main.js:54
+#: apps/io.ox/launchpad/main.js:33
 #: apps/io.ox/mail/main.js:170
 msgid "Conversations"
 msgstr "スレッド"
 
-#: apps/io.ox/core/main.js:317 apps/io.ox/launchpad/main.js:34
+#: apps/io.ox/core/main.js:317
+#: apps/io.ox/launchpad/main.js:34
 #: apps/io.ox/settings/main.js:78
 msgid "Settings"
 msgstr "設定"
 
-#: apps/io.ox/core/main.js:333 apps/io.ox/help/center.js:104
+#: apps/io.ox/core/main.js:333
+#: apps/io.ox/help/center.js:104
 msgid "Help"
 msgstr "ヘルプ"
 
-#: apps/io.ox/core/main.js:346 apps/io.ox/core/main.js:349
-#: apps/io.ox/core/main.js:354 apps/io.ox/files/actions.js:773
+#: apps/io.ox/core/main.js:346
+#: apps/io.ox/core/main.js:349
+#: apps/io.ox/core/main.js:354
+#: apps/io.ox/files/actions.js:773
 msgid "Fullscreen"
 msgstr "フルスクリーン"
 
@@ -2195,23 +2226,19 @@ msgstr "最新の状態にする"
 
 #: apps/io.ox/core/main.js:463
 msgid "Your session is expired"
-msgstr "セッションが期限切れです"
+msgstr "セッションが期限切れです。"
 
 #: apps/io.ox/core/main.js:464
 msgid "Please sign in again to continue"
-msgstr "続行するには、再度サイン インしてください"
+msgstr "続行するには、再度サイン インしてください。"
 
 #: apps/io.ox/core/main.js:576
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
 #: apps/io.ox/core/main.js:578
-msgid ""
-"The following applications can be restored. Just remove the restore point if "
-"you don't want it to be restored."
-msgstr ""
-"次のアプリケーションを復元できます。復元しない場合は、その復元ポイントを削除"
-"してください。"
+msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
+msgstr "次のアプリケーションを復元できます。復元しない場合は、その復元ポイントを削除してください。"
 
 #: apps/io.ox/core/main.js:582
 msgid "Continue"
@@ -2319,24 +2346,22 @@ msgstr "管理者権限の付与"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " は、有効なユーザ、またはグループではありません。"
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "このメール アドレスは無効です"
+msgstr "これは有効なユーザ、またはグループではありません。"
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
 msgstr "設定を保存しました。"
 
 #: apps/io.ox/core/settings/pane.js:47
-msgid ""
-"The setting has been saved and will become active when you enter the "
-"application the next time."
+msgid "The setting has been saved and will become active when you enter the application the next time."
 msgstr "設定を保存しました。次回アプリケーションを起動する時に有効になります。"
 
-#: apps/io.ox/core/settings/pane.js:51 apps/io.ox/settings/main.js:137
+#: apps/io.ox/core/settings/pane.js:51
+#: apps/io.ox/settings/main.js:137
 msgid "Basic settings"
 msgstr "基本設定"
 
@@ -2349,19 +2374,20 @@ msgid "Timezone"
 msgstr "タイム ゾーン"
 
 #: apps/io.ox/core/settings/pane.js:110
-#, fuzzy
 msgid "Default Theme"
-msgstr "既定のチーム："
+msgstr "既定のテーマ"
 
 #: apps/io.ox/core/settings/pane.js:119
 msgid "Theme"
 msgstr "テーマ"
 
-#: apps/io.ox/core/settings/pane.js:131 apps/io.ox/mail/settings/pane.js:64
+#: apps/io.ox/core/settings/pane.js:131
+#: apps/io.ox/mail/settings/pane.js:64
 msgid "5 minutes"
 msgstr "5 分"
 
-#: apps/io.ox/core/settings/pane.js:132 apps/io.ox/mail/settings/pane.js:65
+#: apps/io.ox/core/settings/pane.js:132
+#: apps/io.ox/mail/settings/pane.js:65
 msgid "10 minutes"
 msgstr "10 分"
 
@@ -2378,9 +2404,8 @@ msgid "Automatic opening of notification area on new notifications."
 msgstr "新規の通知を自動的に通知エリアに表示"
 
 #: apps/io.ox/core/settings/pane.js:203
-#, fuzzy
 msgid "Clear cache"
-msgstr "クリアする"
+msgstr "キャッシュをクリア"
 
 #: apps/io.ox/core/settings/register.js:20
 #: apps/plugins/portal/userSettings/register.js:102
@@ -2390,7 +2415,7 @@ msgstr "マイ連絡先データ"
 #: apps/io.ox/core/settings/register.js:32
 #: apps/plugins/portal/userSettings/register.js:27
 msgid "Your data has been saved"
-msgstr "データを保存しました"
+msgstr "データを保存しました。"
 
 #: apps/io.ox/core/settings/register.js:38
 #: apps/plugins/portal/userSettings/register.js:32
@@ -2449,14 +2474,18 @@ msgstr "YB"
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
-#: apps/io.ox/core/tk/attachments.js:252 apps/io.ox/mail/actions.js:797
+#: apps/io.ox/core/tk/attachments.js:252
+#: apps/io.ox/mail/actions.js:797
 #: apps/io.ox/tasks/actions.js:483
 msgid "Open in new tab"
 msgstr "新規タブで開く"
 
-#: apps/io.ox/core/tk/attachments.js:259 apps/io.ox/files/actions.js:549
-#: apps/io.ox/files/actions.js:631 apps/io.ox/mail/actions.js:804
-#: apps/io.ox/tasks/actions.js:490 apps/plugins/portal/updater/register.js:35
+#: apps/io.ox/core/tk/attachments.js:259
+#: apps/io.ox/files/actions.js:549
+#: apps/io.ox/files/actions.js:631
+#: apps/io.ox/mail/actions.js:804
+#: apps/io.ox/tasks/actions.js:490
+#: apps/plugins/portal/updater/register.js:35
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -2493,9 +2522,8 @@ msgid "Close all"
 msgstr "すべて閉じる"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "ファイル データを読み込めませんでした。"
+msgstr "サブフォルダを読み込めませんでした。"
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -2505,7 +2533,8 @@ msgstr "新規フォルダ"
 msgid "Add new subfolder"
 msgstr "新規サブフォルダの追加"
 
-#: apps/io.ox/core/tk/folderviews.js:544 apps/io.ox/core/tk/folderviews.js:620
+#: apps/io.ox/core/tk/folderviews.js:544
+#: apps/io.ox/core/tk/folderviews.js:620
 msgid "Folder name"
 msgstr "フォルダ名"
 
@@ -2534,9 +2563,8 @@ msgid "Shared"
 msgstr "共有"
 
 #: apps/io.ox/core/tk/folderviews.js:923
-#, fuzzy
 msgid "Couldn't load folders."
-msgstr "ファイル データを読み込めませんでした。"
+msgstr "フォルダを読み込めませんでした。"
 
 #: apps/io.ox/core/tk/vgrid.js:613
 msgid "Empty"
@@ -2558,19 +2586,22 @@ msgstr "エラー"
 msgid "Document saved in folder \"%1$s\""
 msgstr "ドキュメントをフォルダ \"%1$s\"に保存しました "
 
-#: apps/io.ox/files/actions.js:154 apps/io.ox/files/actions.js:188
+#: apps/io.ox/files/actions.js:154
+#: apps/io.ox/files/actions.js:188
 msgid "File: %1$s"
 msgstr "ファイル: %1$s"
 
-#: apps/io.ox/files/actions.js:154 apps/io.ox/files/actions.js:188
+#: apps/io.ox/files/actions.js:154
+#: apps/io.ox/files/actions.js:188
 msgid "Direct link: %1$s"
 msgstr "ダイレクト リンク: %1$s"
 
 #: apps/io.ox/files/actions.js:194
 msgid "copy to clipboard"
-msgstr ""
+msgstr "クリップボードにコピー"
 
-#: apps/io.ox/files/actions.js:225 apps/io.ox/files/actions.js:447
+#: apps/io.ox/files/actions.js:225
+#: apps/io.ox/files/actions.js:447
 msgid "Do you really want to delete this file?"
 msgid_plural "Do you really want to delete these files?"
 msgstr[0] "このファイルを削除しますか？"
@@ -2578,7 +2609,7 @@ msgstr[0] "このファイルを削除しますか？"
 #: apps/io.ox/files/actions.js:230
 msgid "This file has been deleted"
 msgid_plural "These files have been deleted"
-msgstr[0] "このファイルを削除しました"
+msgstr[0] "このファイルを削除しました。"
 
 #: apps/io.ox/files/actions.js:235
 msgid "This file has not been deleted"
@@ -2587,7 +2618,7 @@ msgstr[0] "このファイルを削除できませんでした"
 
 #: apps/io.ox/files/actions.js:421
 msgid "This file has been added to the portal"
-msgstr "このファイルをポータルに追加しました"
+msgstr "このファイルをポータルに追加しました。"
 
 #: apps/io.ox/files/actions.js:480
 msgid "Upload new file"
@@ -2597,7 +2628,8 @@ msgstr "新規ファイルをアップロード"
 msgid "Icons"
 msgstr "アイコン"
 
-#: apps/io.ox/files/actions.js:541 apps/io.ox/files/actions.js:624
+#: apps/io.ox/files/actions.js:541
+#: apps/io.ox/files/actions.js:624
 msgid "Open"
 msgstr "開く"
 
@@ -2627,19 +2659,15 @@ msgstr "バージョンを削除"
 
 #: apps/io.ox/files/actions.js:655
 msgid "Drop here to upload a <b>new file</b>"
-msgstr ""
-"<b>新規ファイル</b> をアップロードするには、ここにドロップしてください。"
+msgstr "<b>新規ファイル</b> をアップロードするには、ここにドロップしてください。"
 
 #: apps/io.ox/files/actions.js:669
 msgid "Drop here to upload a <b>new version</b> of \"%1$s\""
-msgstr ""
-"<b>新規バージョン</b> の \"%1$s\" をアップロードするには、ここにドロップして"
-"ください。"
+msgstr "<b>新規バージョン</b> の \"%1$s\" をアップロードするには、ここにドロップしてください。"
 
 #: apps/io.ox/files/actions.js:675
 msgid "Drop here to upload a <b>new version</b>"
-msgstr ""
-"<b>新規バージョン</b> をアップロードするには、ここにドロップしてください。"
+msgstr "<b>新規バージョン</b> をアップロードするには、ここにドロップしてください。"
 
 #: apps/io.ox/files/actions.js:764
 msgid "View Slideshow"
@@ -2664,7 +2692,7 @@ msgstr "ファイル データを読み込めませんでした。"
 
 #: apps/io.ox/files/list/perspective.js:205
 msgid "This folder has publications"
-msgstr "このフォルダには公開アイテムがあります"
+msgstr "このフォルダには公開アイテムがあります。"
 
 #: apps/io.ox/files/list/view-detail.js:140
 msgid "Upload a new version"
@@ -2684,7 +2712,7 @@ msgstr "新規バージョンをアップロード"
 
 #: apps/io.ox/files/list/view-detail.js:175
 msgid "Uploading..."
-msgstr "アップロード中..."
+msgstr "アップロードしています..."
 
 #: apps/io.ox/files/list/view-detail.js:259
 msgid "File versions"
@@ -2724,7 +2752,7 @@ msgstr "新規ファイルを追加"
 
 #: apps/io.ox/files/views/create.js:56
 msgid "This file has been added"
-msgstr "このファイルを追加しました"
+msgstr "このファイルを追加しました。"
 
 #: apps/io.ox/files/views/create.js:58
 msgid "This file has not been added"
@@ -2735,7 +2763,6 @@ msgid "Click here to quit the help center"
 msgstr "ヘルプ センターを終了するには、ここをクリックします"
 
 #: apps/io.ox/launchpad/main.js:35
-#, fuzzy
 msgid "Documents"
 msgstr "ドキュメント"
 
@@ -2765,12 +2792,11 @@ msgstr "メール アカウントを自動構成しています"
 
 #: apps/io.ox/mail/accounts/settings.js:119
 msgid "There was no suitable server found for this mail/password combination"
-msgstr ""
-"このメール/パスワードの組み合わせが保存されている適切なサーバがありません"
+msgstr "このメール/パスワードの組み合わせが保存されている適切なサーバがありません。"
 
 #: apps/io.ox/mail/accounts/settings.js:139
 msgid "Failed to connect."
-msgstr "接続に失敗しました"
+msgstr "接続に失敗しました。"
 
 #: apps/io.ox/mail/accounts/settings.js:184
 msgid "Your mail address"
@@ -2792,7 +2818,7 @@ msgstr "このメール アドレスは無効です"
 
 #: apps/io.ox/mail/accounts/settings.js:258
 msgid "Account added successfully"
-msgstr "アカウントの追加に成功しました"
+msgstr "アカウントの追加に成功しました。"
 
 #: apps/io.ox/mail/accounts/view-form.js:24
 msgid "Account Settings"
@@ -2852,9 +2878,7 @@ msgstr "サーバにメッセージを残す"
 
 #: apps/io.ox/mail/accounts/view-form.js:38
 msgid "Deleting messages on local storage also deletes them on server"
-msgstr ""
-"ローカル ストレージ上のメッセージを削除すると、サーバ上のメッセージも削除され"
-"ます"
+msgstr "ローカル ストレージ上のメッセージを削除すると、サーバ上のメッセージも削除されます。"
 
 #: apps/io.ox/mail/accounts/view-form.js:39
 msgid "Outgoing Server Settings (SMTP)"
@@ -2875,26 +2899,26 @@ msgstr "メールの件名"
 
 #: apps/io.ox/mail/actions.js:233
 msgid "Mails have been moved"
-msgstr "メールを移動しました"
+msgstr "メールを移動しました。"
 
 #: apps/io.ox/mail/actions.js:234
 msgid "Mails have been copied"
-msgstr "メールをコピーしました"
+msgstr "メールをコピーしました。"
 
 #: apps/io.ox/mail/actions.js:394
-#, fuzzy
 msgid "Attachments have been saved"
 msgstr "添付ファイルを保存しました。"
 
 #: apps/io.ox/mail/actions.js:419
 msgid "This mail has been added to the portal"
-msgstr "このメールはポータルに追加されました"
+msgstr "このメールをポータルに追加しました。"
 
 #: apps/io.ox/mail/actions.js:569
 msgid "Create reminder"
 msgstr "アラームを作成"
 
-#: apps/io.ox/mail/actions.js:575 apps/io.ox/mail/actions.js:596
+#: apps/io.ox/mail/actions.js:575
+#: apps/io.ox/mail/actions.js:596
 #: apps/io.ox/tasks/edit/view.js:159
 msgid "Remind me"
 msgstr "通知"
@@ -2911,17 +2935,18 @@ msgstr "通知内容"
 msgid "Mail reminder for"
 msgstr "件名"
 
-#: apps/io.ox/mail/actions.js:589 apps/io.ox/mail/main.js:172
+#: apps/io.ox/mail/actions.js:589
+#: apps/io.ox/mail/main.js:172
 #: apps/io.ox/mail/main.js:481
 msgid "From"
 msgstr "差出人"
 
 #: apps/io.ox/mail/actions.js:622
-#, fuzzy
 msgid "Reminder has been created"
-msgstr "メールをインポートしました"
+msgstr "アラームを作成しました。"
 
-#: apps/io.ox/mail/actions.js:643 apps/io.ox/mail/write/main.js:462
+#: apps/io.ox/mail/actions.js:643
+#: apps/io.ox/mail/write/main.js:462
 msgid "Compose new mail"
 msgstr "新規メールを作成"
 
@@ -2929,12 +2954,14 @@ msgstr "新規メールを作成"
 msgid "Reply All"
 msgstr "全員に返信"
 
-#: apps/io.ox/mail/actions.js:661 apps/io.ox/mail/write/main.js:464
+#: apps/io.ox/mail/actions.js:661
+#: apps/io.ox/mail/write/main.js:464
 #: apps/plugins/portal/twitter/register.js:175
 msgid "Reply"
 msgstr "返信"
 
-#: apps/io.ox/mail/actions.js:669 apps/io.ox/mail/write/main.js:465
+#: apps/io.ox/mail/actions.js:669
+#: apps/io.ox/mail/write/main.js:465
 msgid "Forward"
 msgstr "転送"
 
@@ -2958,12 +2985,14 @@ msgstr "ファイルとして保存"
 msgid "Slideshow"
 msgstr "スライドショー"
 
-#: apps/io.ox/mail/actions.js:790 apps/io.ox/mail/write/view-main.js:614
+#: apps/io.ox/mail/actions.js:790
+#: apps/io.ox/mail/write/view-main.js:614
 #: apps/io.ox/tasks/actions.js:476
 msgid "Preview"
 msgstr "プレビュー"
 
-#: apps/io.ox/mail/actions.js:811 apps/io.ox/tasks/actions.js:497
+#: apps/io.ox/mail/actions.js:811
+#: apps/io.ox/tasks/actions.js:497
 msgid "Save in file store"
 msgstr "ファイル ストアに保存"
 
@@ -2975,12 +3004,14 @@ msgstr "新規メールを送信"
 msgid "Drop here to import this mail"
 msgstr "このメールをインポートするには、ここにドロップしてください"
 
-#: apps/io.ox/mail/main.js:80 apps/plugins/portal/mail/register.js:28
+#: apps/io.ox/mail/main.js:80
+#: apps/plugins/portal/mail/register.js:28
 #: apps/plugins/portal/mail/register.js:75
 msgid "Inbox"
 msgstr "受信トレイ"
 
-#: apps/io.ox/mail/main.js:171 apps/io.ox/tasks/edit/view-template.js:491
+#: apps/io.ox/mail/main.js:171
+#: apps/io.ox/tasks/edit/view-template.js:491
 msgid "Date"
 msgstr "日時"
 
@@ -2997,7 +3028,8 @@ msgid "%1$d mail"
 msgid_plural "%1$d mails"
 msgstr[0] "%1$d 通のメール"
 
-#: apps/io.ox/mail/main.js:419 apps/io.ox/mail/main.js:433
+#: apps/io.ox/mail/main.js:419
+#: apps/io.ox/mail/main.js:433
 msgid "Couldn't load that email."
 msgstr "このメールを読み込めませんでした"
 
@@ -3011,7 +3043,7 @@ msgstr "このフォルダにメールはありません。"
 
 #: apps/io.ox/mail/main.js:464
 msgid "Mail has been imported"
-msgstr "メールをインポートしました"
+msgstr "メールをインポートしました。"
 
 #: apps/io.ox/mail/main.js:481
 msgid "CC"
@@ -3021,52 +3053,59 @@ msgstr "CC"
 msgid "Mail text"
 msgstr "メールの本文"
 
-#: apps/io.ox/mail/settings/old_pane.js:42 apps/io.ox/mail/settings/pane.js:29
+#: apps/io.ox/mail/settings/old_pane.js:42
+#: apps/io.ox/mail/settings/pane.js:29
 #: apps/io.ox/tasks/settings/pane.js:27
 msgid "Common"
 msgstr "共通項目"
 
-#: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:30
+#: apps/io.ox/mail/settings/old_pane.js:46
+#: apps/io.ox/mail/settings/pane.js:30
 msgid "Permanently remove deleted E-Mails?"
 msgstr "削除済みのメールを完全に削除"
 
-#: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:31
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"sending?"
+#: apps/io.ox/mail/settings/old_pane.js:47
+#: apps/io.ox/mail/settings/pane.js:31
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending?"
 msgstr "メールの送信中に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
 
-#: apps/io.ox/mail/settings/old_pane.js:48 apps/io.ox/mail/settings/pane.js:32
-msgid ""
-"Automatically collect contacts in the folder \"Collected addresses\" while "
-"reading?"
+#: apps/io.ox/mail/settings/old_pane.js:48
+#: apps/io.ox/mail/settings/pane.js:32
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading?"
 msgstr "メールの表示中に \"収集済みアドレス\" フォルダに連絡先を自動的に収集"
 
-#: apps/io.ox/mail/settings/old_pane.js:49 apps/io.ox/mail/settings/pane.js:34
+#: apps/io.ox/mail/settings/old_pane.js:49
+#: apps/io.ox/mail/settings/pane.js:34
 msgid "Use fixed-width font for text mails"
 msgstr "テキスト メールに固定幅フォントを使用"
 
-#: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:35
+#: apps/io.ox/mail/settings/old_pane.js:79
+#: apps/io.ox/mail/settings/pane.js:35
 msgid "Compose"
 msgstr "作成"
 
-#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:36
+#: apps/io.ox/mail/settings/old_pane.js:81
+#: apps/io.ox/mail/settings/pane.js:36
 msgid "Append vcard"
 msgstr "vCard を添付"
 
-#: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:37
+#: apps/io.ox/mail/settings/old_pane.js:82
+#: apps/io.ox/mail/settings/pane.js:37
 msgid "Insert the original E-Mail text to a reply"
 msgstr "返信に元のメールの本文を残す"
 
-#: apps/io.ox/mail/settings/old_pane.js:93 apps/io.ox/mail/settings/pane.js:38
+#: apps/io.ox/mail/settings/old_pane.js:93
+#: apps/io.ox/mail/settings/pane.js:38
 msgid "Forward E-Mails as:"
 msgstr "メールの転送方法: "
 
-#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:39
+#: apps/io.ox/mail/settings/old_pane.js:95
+#: apps/io.ox/mail/settings/pane.js:39
 msgid "Inline"
 msgstr "インライン"
 
-#: apps/io.ox/mail/settings/old_pane.js:96 apps/io.ox/mail/settings/pane.js:40
+#: apps/io.ox/mail/settings/old_pane.js:96
+#: apps/io.ox/mail/settings/pane.js:40
 msgid "Attachment"
 msgstr "添付ファイル"
 
@@ -3076,7 +3115,8 @@ msgid "Format E-Mails as:"
 msgstr "メールのフォーマット: "
 
 #: apps/io.ox/mail/settings/old_pane.js:107
-#: apps/io.ox/mail/settings/pane.js:42 apps/io.ox/mail/write/view-main.js:483
+#: apps/io.ox/mail/settings/pane.js:42
+#: apps/io.ox/mail/write/view-main.js:483
 msgid "HTML"
 msgstr "HTML"
 
@@ -3220,9 +3260,8 @@ msgid "No subject"
 msgstr "件名なし"
 
 #: apps/io.ox/mail/write/main.js:858
-#, fuzzy
 msgid "Mail has been sent"
-msgstr "メールをインポートしました"
+msgstr "メールを送信しました。"
 
 #: apps/io.ox/mail/write/main.js:889
 msgid "Mail has empty subject. Send it anyway?"
@@ -3238,7 +3277,7 @@ msgstr "件名を追加"
 
 #: apps/io.ox/mail/write/main.js:938
 msgid "Mail saved as draft"
-msgstr "メールの下書きを保存しました"
+msgstr "メールの下書きを保存しました。"
 
 #: apps/io.ox/mail/write/main.js:976
 msgid "Do you really want to discard this mail?"
@@ -3282,7 +3321,8 @@ msgid "Options"
 msgstr "オプション"
 
 #: apps/io.ox/mail/write/view-main.js:443
-#: apps/io.ox/tasks/edit/view-template.js:116 apps/io.ox/tasks/main.js:240
+#: apps/io.ox/tasks/edit/view-template.js:116
+#: apps/io.ox/tasks/main.js:240
 msgid "Priority"
 msgstr "優先度"
 
@@ -3390,7 +3430,8 @@ msgstr "グループ"
 msgid "Resource group"
 msgstr "設備グループ"
 
-#: apps/io.ox/participants/views.js:119 apps/io.ox/participants/views.js:123
+#: apps/io.ox/participants/views.js:119
+#: apps/io.ox/participants/views.js:123
 msgid "External user"
 msgstr "外部ユーザ"
 
@@ -3413,21 +3454,19 @@ msgstr "このページをカスタマイズ"
 #. Portal. Logged in as user
 #: apps/io.ox/portal/main.js:79
 msgid "Signed in as %1$s"
-msgstr "%1$s としてサイン インしています"
+msgstr "サイン イン ユーザ: %1$s"
 
 #: apps/io.ox/portal/main.js:224
 msgid "Click here to add your account"
 msgstr "ここをクリックしてアカウントを追加"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "ページの読み込み中にエラーが発生しました。"
+msgstr "エラーが発生しました。メッセージを次に示します:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "開くにはクリックします。"
+msgstr "クリックすると、再試行します。"
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -3473,14 +3512,14 @@ msgstr "ウィジェットを無効化"
 msgid "Settings saved."
 msgstr "設定を保存しました。"
 
-#: apps/io.ox/portal/widgets.js:199 apps/io.ox/portal/widgets.js:211
+#: apps/io.ox/portal/widgets.js:199
+#: apps/io.ox/portal/widgets.js:211
 msgid "Could not save settings."
 msgstr "設定を保存できませんでした。"
 
 #: apps/io.ox/preview/main.js:75
 msgid "Click to open. Drag to your desktop to download."
-msgstr ""
-"クリックすると開きます。ダウンロードするにはデスクトップにドラッグします。"
+msgstr "クリックすると開きます。ダウンロードするにはデスクトップにドラッグします。"
 
 #: apps/io.ox/preview/main.js:77
 msgid "Click to open."
@@ -3492,7 +3531,7 @@ msgstr "新規の公開アイテム"
 
 #: apps/io.ox/publications/wizard.js:50
 msgid "Publication created"
-msgstr "公開アイテムが作成されました"
+msgstr "公開アイテムが作成されました。"
 
 #: apps/io.ox/publications/wizard.js:59
 msgid "Send email"
@@ -3500,9 +3539,8 @@ msgstr "メールを送信"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:36
 #: apps/io.ox/settings/main.js:148
-#, fuzzy
 msgid "Mail and Social Accounts"
-msgstr "メール アカウント"
+msgstr "メール アカウントとソーシャル アカウント"
 
 #: apps/io.ox/settings/main.js:93
 msgid "Expert mode"
@@ -3519,26 +3557,29 @@ msgid_plural "Tasks have been deleted!"
 msgstr[0] "仕事を削除しました。"
 
 #: apps/io.ox/tasks/actions.js:71
-#, fuzzy
 msgid "Task was already deleted!"
-msgstr "仕事を削除しました。"
+msgstr "仕事は既に削除されています。"
 
 #: apps/io.ox/tasks/actions.js:76
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
 msgstr[0] "仕事を削除できませんでした。"
 
-#: apps/io.ox/tasks/actions.js:110 apps/io.ox/tasks/actions.js:382
+#: apps/io.ox/tasks/actions.js:110
+#: apps/io.ox/tasks/actions.js:382
 msgid "Undone"
 msgstr "未完了"
 
-#: apps/io.ox/tasks/actions.js:117 apps/io.ox/tasks/actions.js:374
-#: apps/io.ox/tasks/edit/view-template.js:82 apps/io.ox/tasks/util.js:208
+#: apps/io.ox/tasks/actions.js:117
+#: apps/io.ox/tasks/actions.js:374
+#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/io.ox/tasks/util.js:208
 #: apps/plugins/notifications/tasks/register.js:50
 msgid "Done"
 msgstr "完了"
 
-#: apps/io.ox/tasks/actions.js:147 apps/io.ox/tasks/actions.js:196
+#: apps/io.ox/tasks/actions.js:147
+#: apps/io.ox/tasks/actions.js:196
 msgid "A severe error occured!"
 msgstr "深刻なエラーが発生しました。"
 
@@ -3553,7 +3594,7 @@ msgstr[0] "仕事を移動しました。"
 
 #: apps/io.ox/tasks/actions.js:289
 msgid "No preview available"
-msgstr "表示できるプレビューがありません"
+msgstr "表示できるプレビューがありません。"
 
 #: apps/io.ox/tasks/actions.js:331
 msgid "Attachments have been saved!"
@@ -3583,18 +3624,21 @@ msgstr "期限を開始日の前に設定することはできません。開始
 
 #: apps/io.ox/tasks/actions.js:433
 msgid "Canceled"
-msgstr "キャンセルされました"
+msgstr "キャンセルされました。"
 
-#: apps/io.ox/tasks/actions.js:438 apps/io.ox/tasks/actions.js:446
+#: apps/io.ox/tasks/actions.js:438
+#: apps/io.ox/tasks/actions.js:446
 msgid "Changed due date"
 msgstr "期限が変更されました。"
 
-#: apps/io.ox/tasks/edit/main.js:26 apps/io.ox/tasks/edit/view.js:186
+#: apps/io.ox/tasks/edit/main.js:26
+#: apps/io.ox/tasks/edit/view.js:186
 #: apps/io.ox/tasks/edit/view.js:202
 msgid "Edit task"
 msgstr "仕事を編集"
 
-#: apps/io.ox/tasks/edit/main.js:104 apps/io.ox/tasks/edit/view.js:188
+#: apps/io.ox/tasks/edit/main.js:104
+#: apps/io.ox/tasks/edit/view.js:188
 #: apps/io.ox/tasks/edit/view.js:198
 msgid "Create task"
 msgstr "仕事を作成"
@@ -3619,23 +3663,28 @@ msgstr "確認"
 msgid "Confirmation message"
 msgstr "出欠メッセージ"
 
-#: apps/io.ox/tasks/edit/view-template.js:80 apps/io.ox/tasks/util.js:220
+#: apps/io.ox/tasks/edit/view-template.js:80
+#: apps/io.ox/tasks/util.js:220
 msgid "Not started"
 msgstr "未開始"
 
-#: apps/io.ox/tasks/edit/view-template.js:81 apps/io.ox/tasks/util.js:224
+#: apps/io.ox/tasks/edit/view-template.js:81
+#: apps/io.ox/tasks/util.js:224
 msgid "In progress"
 msgstr "進行中"
 
-#: apps/io.ox/tasks/edit/view-template.js:83 apps/io.ox/tasks/util.js:228
+#: apps/io.ox/tasks/edit/view-template.js:83
+#: apps/io.ox/tasks/util.js:228
 msgid "Waiting"
 msgstr "待機中"
 
-#: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/util.js:232
+#: apps/io.ox/tasks/edit/view-template.js:84
+#: apps/io.ox/tasks/util.js:232
 msgid "Deferred"
 msgstr "延期"
 
-#: apps/io.ox/tasks/edit/view-template.js:86 apps/io.ox/tasks/main.js:237
+#: apps/io.ox/tasks/edit/view-template.js:86
+#: apps/io.ox/tasks/main.js:237
 msgid "Status"
 msgstr "進捗状況"
 
@@ -3694,7 +3743,8 @@ msgstr "会社"
 msgid "Please enter a valid date."
 msgstr "有効な日付を入力してください。"
 
-#: apps/io.ox/tasks/edit/view-template.js:474 apps/io.ox/tasks/main.js:238
+#: apps/io.ox/tasks/edit/view-template.js:474
+#: apps/io.ox/tasks/main.js:238
 msgid "Due date"
 msgstr "期限"
 
@@ -3703,7 +3753,8 @@ msgid "Expand form"
 msgstr "フォームを展開"
 
 #. %1$s is the number of currently attached attachments
-#: apps/io.ox/tasks/edit/view.js:75 apps/io.ox/tasks/edit/view.js:95
+#: apps/io.ox/tasks/edit/view.js:75
+#: apps/io.ox/tasks/edit/view.js:95
 #, c-format
 msgid "Attachments (%1$s)"
 msgstr "添付ファイル (%1$s)"
@@ -3863,7 +3914,6 @@ msgid "Could not load all participants for this task."
 msgstr "この仕事の出席者を一部読み込めませんでした。"
 
 #: apps/io.ox/tasks/view-detail.js:224
-#, fuzzy
 msgid "Attachments   "
 msgstr "添付ファイル"
 
@@ -3876,9 +3926,8 @@ msgid "Could not load attachments for this task."
 msgstr "この仕事の添付ファイルを読み込めませんでした。"
 
 #: apps/plugins/halo/appointments/register.js:40
-#, fuzzy
 msgid "Shared Appointments"
-msgstr "アポイント"
+msgstr "共有アポイント"
 
 #: apps/plugins/halo/mail/register.js:41
 msgid "Recent conversations"
@@ -3942,7 +3991,7 @@ msgstr "次の誕生日"
 #: apps/plugins/portal/birthdays/register.js:64
 #: apps/plugins/portal/birthdays/register.js:133
 msgid "No birthdays within the next %1$d weeks"
-msgstr "%1$d 週間先まで誕生日はありません"
+msgstr "%1$d 週間先まで誕生日はありません。"
 
 #: apps/plugins/portal/birthdays/register.js:71
 msgid "Buy a gift"
@@ -3977,19 +4026,18 @@ msgstr "まだウォール ポストがありません。"
 #: apps/plugins/portal/facebook/register.js:97
 #: apps/plugins/portal/linkedIn/register.js:108
 #: apps/plugins/portal/twitter/register.js:246
-#, fuzzy
 msgid "Click to authorize your account again"
-msgstr "ここをクリックしてアカウントを追加"
+msgstr "クリックしてアカウントを再認証"
 
 #: apps/plugins/portal/facebook/register.js:101
 #: apps/plugins/portal/linkedIn/register.js:112
 #: apps/plugins/portal/twitter/register.js:250
 msgid "Something went wrong reauthorizing the %s account."
-msgstr ""
+msgstr "%s アカウントの再承認中にエラーが発生しました。"
 
 #: apps/plugins/portal/facebook/register.js:106
 msgid "Facebook reported an error:"
-msgstr "Facebook は次のエラーを報告しました。"
+msgstr "Facebook が次のエラーを報告しました:"
 
 #: apps/plugins/portal/facebook/register.js:247
 #: apps/plugins/portal/linkedIn/register.js:231
@@ -3998,9 +4046,8 @@ msgid "Add your account"
 msgstr "アカウントを追加"
 
 #: apps/plugins/portal/facebook/register.js:357
-#, fuzzy
 msgid "Liked a link: %s"
-msgstr "ダイレクト リンク: %1$s"
+msgstr "次のリンクを「いいね！」に設定: %s"
 
 #: apps/plugins/portal/facebook/register.js:473
 msgid "Facebook"
@@ -4040,24 +4087,21 @@ msgid "Hello World"
 msgstr "Hello World"
 
 #: apps/plugins/portal/linkedIn/register.js:102
-#, fuzzy
 msgid "LinkedIn reported an error:"
-msgstr "Facebook は次のエラーを報告しました。"
+msgstr "LinkedIn が次のエラーを報告しました:"
 
 #: apps/plugins/portal/linkedIn/register.js:110
 #: apps/plugins/portal/twitter/register.js:248
 msgid "You have reauthorized this %s account."
-msgstr ""
+msgstr "この %s アカウントを再承認しました。"
 
 #: apps/plugins/portal/linkedIn/register.js:119
-msgid ""
-"Sorry, we cannot help you here. Your provider needs to obtain a key from "
-"LinkedIn with the permission to do read messages."
-msgstr ""
+msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
+msgstr "ご利用のプロバイダは、メッセージの表示権限のあるキーを LinkedIn から入手する必要があります。"
 
 #: apps/plugins/portal/linkedIn/register.js:177
 msgid "You have no new messages"
-msgstr "新規メッセージはありません"
+msgstr "新規メッセージはありません。"
 
 #: apps/plugins/portal/linkedIn/register.js:189
 msgid "LinkedIn Network Updates"
@@ -4127,9 +4171,8 @@ msgid "Please enter a feed URL."
 msgstr "フィードの URL を入力してください"
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "近い将来に予定されているアポイントはありません。"
+msgstr "期限が近い仕事、または期限が過ぎた仕事はありません。"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59
@@ -4195,17 +4238,15 @@ msgstr "まだツイートがありません。"
 
 #: apps/plugins/portal/twitter/register.js:222
 msgid "Twitter reported the following errors:"
-msgstr ""
+msgstr "Twitter が次のエラーを報告しました:"
 
 #: apps/plugins/portal/twitter/register.js:254
-#, fuzzy
 msgid "Click to retry later."
-msgstr "開くにはクリックします。"
+msgstr "クリックすると、後で再試行します。"
 
 #: apps/plugins/portal/twitter/register.js:256
-#, fuzzy
 msgid "Click to retry"
-msgstr "開くにはクリックします。"
+msgstr "クリックして再試行"
 
 #: apps/plugins/portal/twitter/register.js:338
 msgid "Tweet"
@@ -4216,16 +4257,8 @@ msgid "Twitter"
 msgstr "Twitter"
 
 #: apps/plugins/portal/updater/register.js:30
-msgid ""
-"The updater provides a simple installation wizard. Follow the instructions "
-"to install the application. The updater will inform you of any updates for "
-"the Connector for Microsoft Outlook and the Notifier. You can download the "
-"updates from within the updater."
-msgstr ""
-"アップデータでは、インストールが容易にできるウィザードが提供されます。指示に"
-"従ってアプリケーションをインストールしてください。アップデータを使用すれば、"
-"Connector for Microsoft Outlook と Notifier のすべての更新が通知されます。こ"
-"れらの更新は、アップデータ内からダウンロードできます。"
+msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook and the Notifier. You can download the updates from within the updater."
+msgstr "アップデータでは、インストールが容易にできるウィザードが提供されます。指示に従ってアプリケーションをインストールしてください。アップデータを使用すれば、Connector for Microsoft Outlook と Notifier のすべてのアップデートが通知されます。これらの更新は、アップデータ内からダウンロードできます。"
 
 #: apps/plugins/portal/updater/register.js:43
 msgid "Updater"
@@ -4249,7 +4282,7 @@ msgstr "パスワードを変更"
 
 #: apps/plugins/portal/userSettings/register.js:75
 msgid "Your passward has been changed"
-msgstr "パスワードが変更されました"
+msgstr "パスワードが変更されました。"
 
 #: apps/plugins/portal/userSettings/register.js:95
 #: apps/plugins/portal/userSettings/register.js:120
@@ -4300,7 +4333,7 @@ msgstr "マイ パスワード"
 #~ msgstr "%s 週間以内に開始: "
 
 #~ msgid "You don't have any tasks"
-#~ msgstr "仕事がありません"
+#~ msgstr "仕事がありません。"
 
 #~ msgid "Preview could not be loaded"
 #~ msgstr "プレビューを読み込めませんでした"
@@ -4492,11 +4525,13 @@ msgstr "マイ パスワード"
 #~ msgstr "i18n test string"
 
 #~ msgid "%1$d column"
+
 #~ msgid_plural "%1$d columns"
 #~ msgstr[0] "%1$d 列"
 #~ msgstr[1] "%1$d 列"
 
 #~ msgid "%1$d row"
+
 #~ msgid_plural "%1$d rows"
 #~ msgstr[0] "%1$d 行"
 #~ msgstr[1] "%1$d 行"
@@ -4505,7 +4540,7 @@ msgstr "マイ パスワード"
 #~ msgstr "読み取り専用モード"
 
 #~ msgid "You don't have permissions to change this document"
-#~ msgstr "このドキュメントを変更する権限がありません"
+#~ msgstr "このドキュメントを変更する権限がありません。"
 
 #~ msgid "Read Only Mode"
 #~ msgstr "読み取り専用モード"
@@ -4752,7 +4787,7 @@ msgstr "マイ パスワード"
 #~ msgstr "変更を保存しています"
 
 #~ msgid "All changes saved"
-#~ msgstr "すべての変更を保存しました"
+#~ msgstr "すべての変更を保存しました。"
 
 #~ msgid "Rename Document"
 #~ msgstr "ドキュメントの名前を変更"
@@ -4935,12 +4970,12 @@ msgstr "マイ パスワード"
 #~ msgstr "完成率"
 
 #~ msgid "% done:"
-#~ msgstr "完成率："
+#~ msgstr "完成率:"
 
 #~ msgid "% finished"
 #~ msgstr "進捗率"
-
 #~ msgctxt "datetime"
+
 #~ msgid "%1$s %2$s"
 #~ msgstr "%1$s %2$s"
 
@@ -4960,16 +4995,19 @@ msgstr "マイ パスワード"
 #~ msgstr "%2$s, %1$s"
 
 #~ msgid "%d appointment"
+
 #~ msgid_plural "%d appointments"
 #~ msgstr[0] "%dアポイント "
 #~ msgstr[1] "%dアポイント "
 
 #~ msgid "%d info item"
+
 #~ msgid_plural "%d info items"
 #~ msgstr[0] "%dインフォ アイテム "
 #~ msgstr[1] "%dインフォ アイテム  "
 
 #~ msgid "%d task"
+
 #~ msgid_plural "%d tasks"
 #~ msgstr[0] "%d仕事 "
 #~ msgstr[1] "%d仕事 "
@@ -5017,7 +5055,7 @@ msgstr "マイ パスワード"
 #~ msgstr "&表示"
 
 #~ msgid "(may be slow on old machines)"
-#~ msgstr "（古いマシン上では速度が低下する場合があります）"
+#~ msgstr "(古いマシン上では速度が低下する場合があります)"
 
 #~ msgid ", "
 #~ msgstr ", "
@@ -5036,7 +5074,7 @@ msgstr "マイ パスワード"
 #~ "functionality. Future releases will work significantly faster."
 #~ msgstr ""
 #~ "<b>登録に要するおよその時間</b><br/><br/> 別の Open-Xchange Server (OXMF) "
-#~ "で配信されないアイテムの登録には、しばらく時間がかかるかも知れません。 "
+#~ "で配信されないアイテムの登録には、しばらく時間がかかるかも知れません。"
 #~ "<br/>例えば、Xingから連絡先を100ヶ所インポートするのにおよそ5分かかりま"
 #~ "す。<br/><br/>Open-Xchange社は、引き続き当機能の改善に努めます。今後、リ"
 #~ "リース毎に大幅に高速動作が見込めます。"
@@ -5063,7 +5101,7 @@ msgstr "マイ パスワード"
 #~ msgstr "アカウントのアップグレード"
 
 #~ msgid "Account:"
-#~ msgstr "アカウント："
+#~ msgstr "アカウント:"
 
 #~ msgid "Accounts"
 #~ msgstr "アカウント"
@@ -5084,10 +5122,10 @@ msgstr "マイ パスワード"
 #~ msgstr "Ccに追加 →"
 
 #~ msgid "Add E-Mail account ..."
-#~ msgstr "メール アカウントを追加する ..."
+#~ msgstr "メール アカウントを追加する..."
 
 #~ msgid "Add Member..."
-#~ msgstr "メンバーを追加する ..."
+#~ msgstr "メンバーを追加する..."
 
 #~ msgid "Add To →"
 #~ msgstr "宛先に追加 →"
@@ -5129,13 +5167,13 @@ msgstr "マイ パスワード"
 #~ msgstr "追加情報"
 
 #~ msgid "Additional:"
-#~ msgstr "追加情報："
+#~ msgstr "追加情報:"
 
 #~ msgid "Address"
 #~ msgstr "住所"
 
 #~ msgid "Address (private)"
-#~ msgstr "住所 （プライベート）"
+#~ msgstr "住所 (プライベート)"
 
 #~ msgid "Admin"
 #~ msgstr "管理"
@@ -5163,7 +5201,7 @@ msgstr "マイ パスワード"
 #~ msgstr "すべて"
 
 #~ msgid "All Categories..."
-#~ msgstr "すべてのカテゴリ ..."
+#~ msgstr "すべてのカテゴリ..."
 
 #~ msgid "All appointments"
 #~ msgstr "すべてのアポイント"
@@ -5187,7 +5225,7 @@ msgstr "マイ パスワード"
 #~ msgstr "アングイラ"
 
 #~ msgid "Anniversary:"
-#~ msgstr "記念日："
+#~ msgstr "記念日:"
 
 #~ msgid "Answered"
 #~ msgstr "回答済み"
@@ -5202,10 +5240,10 @@ msgstr "マイ パスワード"
 #~ msgstr "アポイント表示"
 
 #~ msgid "Appointments in personal calendars: set status to"
-#~ msgstr "パーソナル予定表のアポイント： ステイタスを次の通りに設定"
+#~ msgstr "パーソナル予定表のアポイント: ステータスを次の通りに設定"
 
 #~ msgid "Appointments in public calendars: set status to"
-#~ msgstr "パブリック予定表のアポイント： ステイタスは次の通りに設定"
+#~ msgstr "パブリック予定表のアポイント: ステータスは次の通りに設定"
 
 #~ msgid "Appointments:"
 #~ msgstr "アポイント:"
@@ -5230,6 +5268,7 @@ msgstr "マイ パスワード"
 #~ msgstr "選択されたメールを本当に削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected account?"
+
 #~ msgid_plural "Are you sure you want to delete the selected accounts?"
 #~ msgstr[0] "選択されたアカウントを本当に削除しますか？"
 #~ msgstr[1] "選択されたアカウントを本当に削除しますか？"
@@ -5238,6 +5277,7 @@ msgstr "マイ パスワード"
 #~ msgstr "選択された添付ファイルを本当に削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected contact?"
+
 #~ msgid_plural "Are you sure you want to delete the selected contacts?"
 #~ msgstr[0] "選択された連絡先を本当に削除しますか？"
 #~ msgstr[1] "選択された連絡先を本当に削除しますか？"
@@ -5252,16 +5292,19 @@ msgstr "マイ パスワード"
 #~ msgstr "選択されたアイテムを本当に削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected publication?"
+
 #~ msgid_plural "Are you sure you want to delete the selected publications?"
 #~ msgstr[0] "選択された公開を本当に削除しますか？"
 #~ msgstr[1] "選択された公開を本当に削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected resource?"
+
 #~ msgid_plural "Are you sure you want to delete the selected resources?"
 #~ msgstr[0] "選択された設備を本当に削除しますか？"
 #~ msgstr[1] "選択された設備を本当に削除しますか？"
 
 #~ msgid "Are you sure you want to delete the selected rule?"
+
 #~ msgid_plural "Are you sure you want to delete the selected rules?"
 #~ msgstr[0] "選択されたルールを本当に削除しますか？"
 #~ msgstr[1] "選択されたルールを本当に削除しますか？"
@@ -5274,7 +5317,7 @@ msgstr "マイ パスワード"
 #~ " (all versions of the file will be removed)"
 #~ msgstr ""
 #~ "本当に現在のインフォアイテムからファイルを取り除きますか？\n"
-#~ " (ファイルのすべてのバージョンが取り除かれます）"
+#~ " (ファイルのすべてのバージョンが取り除かれます)"
 
 #~ msgid ""
 #~ "Are you sure you want to permanently delete all E-Mails from this folder? "
@@ -5296,7 +5339,7 @@ msgstr "マイ パスワード"
 #~ msgstr "新しい会議出席依頼を出すように要求する"
 
 #~ msgid "Assistant:"
-#~ msgstr "秘書："
+#~ msgstr "秘書:"
 
 #~ msgid "Attach InfoItem"
 #~ msgstr "インフォアイテムを添付する"
@@ -5323,19 +5366,19 @@ msgstr "マイ パスワード"
 #~ msgstr "連絡先を自動的に収集する"
 
 #~ msgid "Autorefresh:"
-#~ msgstr "自動更新："
+#~ msgstr "自動更新:"
 
 #~ msgid "Availability"
 #~ msgstr "空き時間の確認"
 
 #~ msgid "Available Categories:"
-#~ msgstr "利用可能なカテゴリ："
+#~ msgstr "利用可能なカテゴリ:"
 
 #~ msgid "Available Teams:"
-#~ msgstr "利用可能なチーム："
+#~ msgstr "利用可能なチーム:"
 
 #~ msgid "Available UWA modules:"
-#~ msgstr "利用可能な UWA モジュール："
+#~ msgstr "利用可能な UWA モジュール:"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "アゼルバイジャン"
@@ -5371,10 +5414,10 @@ msgstr "マイ パスワード"
 #~ msgstr "Bcc"
 
 #~ msgid "Bcc..."
-#~ msgstr "Bcc ..."
+#~ msgstr "Bcc..."
 
 #~ msgid "Bcc:"
-#~ msgstr "Bcc："
+#~ msgstr "Bcc:"
 
 #~ msgid "Be a participant when creating appointments?"
 #~ msgstr "アポイントを作成する場合、常に出席する"
@@ -5416,7 +5459,7 @@ msgstr "マイ パスワード"
 #~ msgstr "ブーヴェ島"
 
 #~ msgid "Branches:"
-#~ msgstr "支店："
+#~ msgstr "支店:"
 
 #~ msgid "Brazil"
 #~ msgstr "ブラジル"
@@ -5446,7 +5489,7 @@ msgstr "マイ パスワード"
 #~ msgstr "CSV"
 
 #~ msgid "CSV (Contacts)"
-#~ msgstr "CSV（連絡先）"
+#~ msgstr "CSV (連絡先)"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "予定表のカスタム ビュー"
@@ -5487,16 +5530,16 @@ msgstr "マイ パスワード"
 #~ msgstr "カテゴリには名前が必要です"
 
 #~ msgid "Categories..."
-#~ msgstr "カテゴリ ..."
+#~ msgstr "カテゴリ..."
 
 #~ msgid "Categories:"
-#~ msgstr "カテゴリ："
+#~ msgstr "カテゴリ:"
 
 #~ msgid "Category"
 #~ msgstr "カテゴリ"
 
 #~ msgid "Category names must be unique"
-#~ msgstr "カテゴリ名はユニークでなければなりません"
+#~ msgstr "カテゴリ名はユニークでなければなりません。"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "ケイマン諸島"
@@ -5505,19 +5548,19 @@ msgstr "マイ パスワード"
 #~ msgstr "Cc"
 
 #~ msgid "Cc..."
-#~ msgstr "Cc ..."
+#~ msgstr "Cc..."
 
 #~ msgid "Cc:"
-#~ msgstr "Cc："
+#~ msgstr "Cc:"
 
 #~ msgid "Cell phone (private)"
 #~ msgstr "携帯電話 (プライベート)"
 
 #~ msgid "Cell phone (private):"
-#~ msgstr "携帯電話 (プライベート)："
+#~ msgstr "携帯電話 (プライベート):"
 
 #~ msgid "Cell phone:"
-#~ msgstr "携帯電話："
+#~ msgstr "携帯電話:"
 
 #~ msgid "Central African Republic"
 #~ msgstr "中央アフリカ共和国"
@@ -5544,10 +5587,10 @@ msgstr "マイ パスワード"
 #~ msgstr "'n'分ごとに新しいメールをチェックする"
 
 #~ msgid "Check for:"
-#~ msgstr "対象にチェックを入れてください："
+#~ msgstr "対象にチェックを入れてください:"
 
 #~ msgid "Children:"
-#~ msgstr "子供："
+#~ msgstr "子供:"
 
 #~ msgid "Chile"
 #~ msgstr "チリ"
@@ -5568,13 +5611,13 @@ msgstr "マイ パスワード"
 #~ msgstr "市区町村"
 
 #~ msgid "City (business)"
-#~ msgstr "市区町村 （ビジネス）"
+#~ msgstr "市区町村 (ビジネス)"
 
 #~ msgid "City (private)"
-#~ msgstr "市区町村 （プライベート）"
+#~ msgstr "市区町村 (プライベート)"
 
 #~ msgid "City:"
-#~ msgstr "市区町村："
+#~ msgstr "市区町村:"
 
 #~ msgid "Classic"
 #~ msgstr "クラシック"
@@ -5624,22 +5667,22 @@ msgstr "マイ パスワード"
 #~ msgstr "CSVファイル"
 
 #~ msgid "Comments:"
-#~ msgstr "コメント："
+#~ msgstr "コメント:"
 
 #~ msgid "Commercial Register:"
-#~ msgstr "商業登記："
+#~ msgstr "商業登記:"
 
 #~ msgid "Compact panel"
 #~ msgstr "コンパクト パネル"
 
 #~ msgid "Company:"
-#~ msgstr "会社："
+#~ msgstr "会社:"
 
 #~ msgid "Configuration"
 #~ msgstr "構成"
 
 #~ msgid "Configuration changed"
-#~ msgstr "構成が変更されました"
+#~ msgstr "構成が変更されました。"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "構成ががダメージを受けました、管理者に知らせてください。"
@@ -5654,7 +5697,7 @@ msgstr "マイ パスワード"
 #~ msgstr "コンゴ"
 
 #~ msgid "Connection failed! Please check your settings: "
-#~ msgstr "接続に失敗しました。設定を確認してください："
+#~ msgstr "接続に失敗しました。次の設定を確認してください。"
 
 #~ msgid "Connector for Microsoft Outlook"
 #~ msgstr "Connector for Microsoft Outlook"
@@ -5663,7 +5706,7 @@ msgstr "マイ パスワード"
 #~ msgstr "連絡先"
 
 #~ msgid "Contact folder..."
-#~ msgstr "連絡先フォルダ ..."
+#~ msgstr "連絡先フォルダ..."
 
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
@@ -5678,7 +5721,7 @@ msgstr "マイ パスワード"
 #~ msgstr "コンテンツ"
 
 #~ msgid "Content-Type:"
-#~ msgstr "コンテンツのタイプ："
+#~ msgstr "コンテンツのタイプ:"
 
 #~ msgid "Cook Islands"
 #~ msgstr "クック諸島"
@@ -5690,13 +5733,13 @@ msgstr "マイ パスワード"
 #~ msgstr "コートジボアール"
 
 #~ msgid "Country (other)"
-#~ msgstr "国 （その他）"
+#~ msgstr "国 (その他)"
 
 #~ msgid "Country (other):"
-#~ msgstr "国 （その他）："
+#~ msgstr "国 (その他):"
 
 #~ msgid "Country:"
-#~ msgstr "国："
+#~ msgstr "国:"
 
 #~ msgid "Create a filter"
 #~ msgstr "フィルターを作成する"
@@ -5705,7 +5748,7 @@ msgstr "マイ パスワード"
 #~ msgstr "パブリック アポイントを作成する"
 
 #~ msgid "Created By:"
-#~ msgstr "作成者："
+#~ msgstr "作成者:"
 
 #~ msgid "Created by"
 #~ msgstr "作成者"
@@ -5714,7 +5757,7 @@ msgstr "マイ パスワード"
 #~ msgstr "休暇通知によって作成された"
 
 #~ msgid "Created by:"
-#~ msgstr "作成者："
+#~ msgstr "作成者:"
 
 #~ msgid "Created on"
 #~ msgstr "作成日"
@@ -5726,10 +5769,10 @@ msgstr "マイ パスワード"
 #~ msgstr "%1$sに%2$sによって作成され、%3$sに%4$sによって最新変更。"
 
 #~ msgid "Created on:"
-#~ msgstr "作成日："
+#~ msgstr "作成日:"
 
 #~ msgid "Creation date:"
-#~ msgstr "作成日："
+#~ msgstr "作成日:"
 
 #~ msgid "Croatia"
 #~ msgstr "クロアチア"
@@ -5738,16 +5781,16 @@ msgstr "マイ パスワード"
 #~ msgstr "キューバ"
 
 #~ msgid "Current Costs:"
-#~ msgstr "現在のコスト："
+#~ msgstr "現在のコスト:"
 
 #~ msgid "Current costs:"
-#~ msgstr "現在のコスト："
+#~ msgstr "現在のコスト:"
 
 #~ msgid "Current date"
 #~ msgstr "今日"
 
 #~ msgid "Current duration:"
-#~ msgstr "現在の期間："
+#~ msgstr "現在の期間:"
 
 #~ msgid "Current week"
 #~ msgstr "今週"
@@ -5783,13 +5826,13 @@ msgstr "マイ パスワード"
 #~ msgstr "DKK"
 
 #~ msgid "Date format:"
-#~ msgstr "日付フォーマット："
+#~ msgstr "日付フォーマット:"
 
 #~ msgid "Date of birth:"
-#~ msgstr "生年月日："
+#~ msgstr "生年月日:"
 
 #~ msgid "Date:"
-#~ msgstr "日時："
+#~ msgstr "日時:"
 
 #~ msgid "Dec"
 #~ msgstr "12月"
@@ -5804,10 +5847,10 @@ msgstr "マイ パスワード"
 #~ msgstr "既定のメールフォントを使用する"
 
 #~ msgid "Default Signature:"
-#~ msgstr "既定の署名："
+#~ msgstr "既定の署名:"
 
 #~ msgid "Default view for Spam folder:"
-#~ msgstr "スパム フォルダー用の既定表示："
+#~ msgstr "スパム フォルダー用の既定表示:"
 
 #~ msgid "Delay before a hover is displayed"
 #~ msgstr "ホバーを表示するまでの遅延時間"
@@ -5828,16 +5871,19 @@ msgstr "マイ パスワード"
 #~ msgstr "フォルダを削除する"
 
 #~ msgid "Delete Publication"
+
 #~ msgid_plural "Delete Publications"
 #~ msgstr[0] "公開を削除する"
 #~ msgstr[1] "公開を削除する"
 
 #~ msgid "Delete Resource"
+
 #~ msgid_plural "Delete Resources"
 #~ msgstr[0] "設備を削除する"
 #~ msgstr[1] "設備を削除する"
 
 #~ msgid "Delete Rule"
+
 #~ msgid_plural "Delete Rules"
 #~ msgstr[0] "ルールを削除する"
 #~ msgstr[1] "ルールを削除する"
@@ -5846,16 +5892,19 @@ msgstr "マイ パスワード"
 #~ msgstr "仕事を削除する"
 
 #~ msgid "Delete account"
+
 #~ msgid_plural "Delete accounts"
 #~ msgstr[0] "アカウントを削除する"
 #~ msgstr[1] "アカウントを削除する"
 
 #~ msgid "Delete contact"
+
 #~ msgid_plural "Delete contacts"
 #~ msgstr[0] "連絡先を削除する"
 #~ msgstr[1] "連絡先を削除する"
 
 #~ msgid "Delete distribution list"
+
 #~ msgid_plural "Delete distribution lists"
 #~ msgstr[0] "配布リストを削除する"
 #~ msgstr[1] "配布リストを削除する"
@@ -5870,16 +5919,16 @@ msgstr "マイ パスワード"
 #~ msgstr "開封通知"
 
 #~ msgid "Department:"
-#~ msgstr "部署："
+#~ msgstr "部署:"
 
 #~ msgid "Description:"
-#~ msgstr "説明："
+#~ msgstr "説明:"
 
 #~ msgid "Destination"
 #~ msgstr "送付先"
 
 #~ msgid "Destination folder:"
-#~ msgstr "送付先フォルダ："
+#~ msgstr "送付先フォルダ:"
 
 #~ msgid "Detach file"
 #~ msgstr "ファイルを取り除く"
@@ -5907,7 +5956,7 @@ msgstr "マイ パスワード"
 #~ "ト節で確認できます。"
 
 #~ msgid "Details:"
-#~ msgstr "詳細："
+#~ msgstr "詳細:"
 
 #~ msgid "Direct link"
 #~ msgstr "ダイレクト リンク"
@@ -5922,7 +5971,7 @@ msgstr "マイ パスワード"
 #~ msgstr "名前を付けて表示"
 
 #~ msgid "Display as:"
-#~ msgstr "名前を付けて表示する："
+#~ msgstr "名前を付けて表示する:"
 
 #~ msgid "Displayed name"
 #~ msgstr "表示名"
@@ -5931,7 +5980,7 @@ msgstr "マイ パスワード"
 #~ msgstr "ジブチ"
 
 #~ msgid "Do the following:"
-#~ msgstr "以下を行います："
+#~ msgstr "以下を行います:"
 
 #~ msgid ""
 #~ "Do you want to delete the whole recurrence or a single instance of the "
@@ -6014,9 +6063,10 @@ msgstr "マイ パスワード"
 #~ msgstr "ドロップダウン"
 
 #~ msgid "Due date:"
-#~ msgstr "締切日："
+#~ msgstr "締切日:"
 
 #~ msgid "Due in %d day."
+
 #~ msgid_plural "Due in %d days."
 #~ msgstr[0] "締切日まで%d日です。"
 #~ msgstr[1] "締切日まで%d日です。"
@@ -6025,28 +6075,28 @@ msgstr "マイ パスワード"
 #~ msgstr "今日が期限です。"
 
 #~ msgid "Dynamic resizing..."
-#~ msgstr "ダイナミック リサイズ中です ..."
+#~ msgstr "ダイナミック リサイズしています..."
 
 #~ msgid "E-Mail"
 #~ msgstr "メール"
 
 #~ msgid "E-Mail (business):"
-#~ msgstr "電子メール （ビジネス）："
+#~ msgstr "電子メール (ビジネス):"
 
 #~ msgid "E-Mail (other)"
-#~ msgstr "電子メール （その他）"
+#~ msgstr "電子メール (その他)"
 
 #~ msgid "E-Mail (other):"
-#~ msgstr "電子メール （その他）："
+#~ msgstr "電子メール (その他):"
 
 #~ msgid "E-Mail (private)"
-#~ msgstr "電子メール （プライベート）"
+#~ msgstr "電子メール (プライベート)"
 
 #~ msgid "E-Mail (private):"
-#~ msgstr "電子メール （プライベート）："
+#~ msgstr "電子メール (プライベート):"
 
 #~ msgid "E-Mail:"
-#~ msgstr "メール："
+#~ msgstr "メール:"
 
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
@@ -6076,7 +6126,7 @@ msgstr "マイ パスワード"
 #~ msgstr "下書きを編集"
 
 #~ msgid "Editor feature set:"
-#~ msgstr "編集機能セット："
+#~ msgstr "編集機能セット:"
 
 #~ msgid "Editor toolbar"
 #~ msgstr "編集用ツールバー"
@@ -6088,7 +6138,7 @@ msgstr "マイ パスワード"
 #~ msgstr "エンべデッド ウィンドウ"
 
 #~ msgid "Employee ID:"
-#~ msgstr "社員ID："
+#~ msgstr "社員 ID:"
 
 #~ msgid "Empty folder"
 #~ msgstr "フォルダを空にする"
@@ -6124,7 +6174,7 @@ msgstr "マイ パスワード"
 #~ msgstr "視覚効果を有効にする"
 
 #~ msgid "Enabled"
-#~ msgstr "有効になりました"
+#~ msgstr "有効"
 
 #~ msgid ""
 #~ "Enables offline access to e-mail, calendar, tasks, and contacts folders. "
@@ -6133,7 +6183,7 @@ msgstr "マイ パスワード"
 #~ msgstr ""
 #~ "メール、予定表、仕事、連絡先フォルダへのオフライン アクセスを有効にする。"
 #~ "Microsoft Outlookオフラインを使用して加えられたすべての変更は、次回オンラ"
-#~ "インになった際に自動的に同期されます："
+#~ "インになった際に自動的に同期されます:"
 
 #~ msgid "End"
 #~ msgstr "終了"
@@ -6145,19 +6195,19 @@ msgstr "マイ パスワード"
 #~ msgstr "終了日が、開始日よりも先になっています"
 
 #~ msgid "End date:"
-#~ msgstr "終了日時："
+#~ msgstr "終了日時:"
 
 #~ msgid "End time is before start time"
 #~ msgstr "終了時刻が、開始時刻よりも先になっています"
 
 #~ msgid "End:"
-#~ msgstr "終了："
+#~ msgstr "終了:"
 
 #~ msgid "Ends at"
 #~ msgstr "終了"
 
 #~ msgid "Ends at:"
-#~ msgstr "終了時刻："
+#~ msgstr "終了時刻:"
 
 #~ msgid "Enhanced"
 #~ msgstr "拡張機能"
@@ -6175,7 +6225,7 @@ msgstr "マイ パスワード"
 #~ msgstr "個人データを入力する"
 
 #~ msgid "Enter your version comment:"
-#~ msgstr "バージョンに関するコメントを入力してください："
+#~ msgstr "バージョンに関するコメントを入力してください:"
 
 #~ msgid "Envelope-To"
 #~ msgstr "エンベロープTo"
@@ -6187,22 +6237,22 @@ msgstr "マイ パスワード"
 #~ msgstr "エリトレア"
 
 #~ msgid "Error-ID: %1$s"
-#~ msgstr "エラー-ID： %1$s"
+#~ msgstr "エラー ID: %1$s"
 
 #~ msgid "Error: %1$s doesn't support routing from %2$s"
-#~ msgstr "エラー： %1$s は、 %2$s からの配信をサポートしません。"
+#~ msgstr "エラー: %1$s は、 %2$s からの配信をサポートしません。"
 
 #~ msgid "Error: %1$s doesn't support routing to %2$s"
-#~ msgstr "エラー： %1$s は、 %2$s への配信をサポートしません。"
+#~ msgstr "エラー: %1$s は、 %2$s への配信をサポートしません。"
 
 #~ msgid "Error: %2$s"
-#~ msgstr "エラー： %2$s"
+#~ msgstr "エラー: %2$s"
 
 #~ msgid "Estimated Costs:"
-#~ msgstr "予測されるコスト："
+#~ msgstr "予測されるコスト:"
 
 #~ msgid "Estimated Duration:"
-#~ msgstr "予測される期間："
+#~ msgstr "予測される期間:"
 
 #~ msgid "Estonia"
 #~ msgstr "エストニア"
@@ -6229,296 +6279,202 @@ msgstr "マイ パスワード"
 #~ msgctxt "friday"
 #~ msgid "F"
 #~ msgstr "金"
-
 #~ msgid "FAQ"
 #~ msgstr "よくある質問"
-
 #~ msgid "Falkland Islands (Malvinas)"
 #~ msgstr "フォークランド諸島"
-
 #~ msgid "Faroe Islands"
 #~ msgstr "フェロー諸島"
-
 #~ msgid "Fax (business)"
-#~ msgstr "FAX （ビジネス）"
-
+#~ msgstr "FAX (ビジネス)"
 #~ msgid "Fax (business):"
-#~ msgstr "FAX （ビジネス）："
-
+#~ msgstr "FAX (ビジネス):"
 #~ msgid "Fax (other)"
-#~ msgstr "FAX （その他）"
-
+#~ msgstr "FAX (その他)"
 #~ msgid "Fax (other):"
-#~ msgstr "FAX （その他）："
-
+#~ msgstr "FAX (その他):"
 #~ msgid "Fax (private):"
-#~ msgstr "FAX (プライベート)："
-
+#~ msgstr "FAX (プライベート):"
 #~ msgid "Fax:"
-#~ msgstr "Fax："
-
+#~ msgstr "FAX :"
 #~ msgid "Feature not available!"
 #~ msgstr "機能が利用できません！"
-
 #~ msgid "Feb"
 #~ msgstr "2月"
-
 #~ msgid "Field may not be empty"
-#~ msgstr "フィールドに空きがないかも知れません"
-
+#~ msgstr "フィールドに空きがないかも知れません。"
 #~ msgid "Fiji"
 #~ msgstr "フィジー"
-
 #~ msgid "File name"
 #~ msgstr "ファイル名"
-
 #~ msgid "File type:"
-#~ msgstr "ファイル タイプ："
-
+#~ msgstr "ファイル タイプ:"
 #~ msgid "File..."
-#~ msgstr "ファイル ..."
-
+#~ msgstr "ファイル..."
 #~ msgid "Filter"
 #~ msgstr "フィルター"
-
 #~ msgid "Fine grid"
 #~ msgstr "ファイン グリッド"
-
 #~ msgid "Finland"
 #~ msgstr "フィンランド"
-
 #~ msgid "First name:"
-#~ msgstr "名："
-
+#~ msgstr "名:"
 #~ msgid "Flag"
 #~ msgstr "フラグ"
-
 #~ msgid "Flag #%d"
 #~ msgstr "フラグ #%d"
-
 #~ msgid "Flag mail with"
 #~ msgstr "次のフラグをメールに付ける"
-
 #~ msgid "Flags"
 #~ msgstr "フラグ"
-
 #~ msgid "Folder Name"
 #~ msgstr "フォルダ名"
-
 #~ msgid "Folder Properties"
 #~ msgstr "フォルダ プロパティ"
-
 #~ msgid "Folder Properties: %s"
-#~ msgstr "フォルダー プロパティ： %s"
-
+#~ msgstr "フォルダー プロパティ: %s"
 #~ msgid "Folder admin"
 #~ msgstr "フォルダ管理"
-
 #~ msgid "Folder path"
 #~ msgstr "フォルダパス"
-
 #~ msgid "Folder tree"
 #~ msgstr "フォルダ ツリー"
-
 #~ msgid "Folder..."
-#~ msgstr "フォルダ ..."
-
+#~ msgstr "フォルダ..."
 #~ msgid "Folder:"
-#~ msgstr "フォルダ："
-
+#~ msgstr "フォルダ:"
 #~ msgid "Folders"
 #~ msgstr "フォルダ"
-
 #~ msgid "Follow the instructions and install the updater."
 #~ msgstr "指示に従って updaterをインストールください。"
-
 #~ msgid "For an incoming message that matches:"
-#~ msgstr "下記に一致するメッセージにアクション処理をする："
-
+#~ msgstr "下記に一致するメッセージにアクション処理をする:"
 #~ msgid "Free trial..."
-#~ msgstr "無償評価版 ..."
-
+#~ msgstr "無償評価版..."
 #~ msgid "French Guiana"
 #~ msgstr "仏領ギアナ"
-
 #~ msgid "French Polynesia"
 #~ msgstr "仏領ポリネシア"
-
 #~ msgid "French Southern Territories"
 #~ msgstr "フランス南部領土"
-
 #~ msgid "Fri"
 #~ msgstr "金"
-
 #~ msgid "From %s"
 #~ msgstr "差出人 %s"
-
 #~ msgctxt "when"
 #~ msgid "From:"
-#~ msgstr "開始時刻："
-
+#~ msgstr "開始時刻:"
 #~ msgctxt "who"
 #~ msgid "From:"
-#~ msgstr "差出人："
-
+#~ msgstr "差出人:"
 #~ msgid "Furigana..."
 #~ msgstr "フリガナ..."
-
 #~ msgid "GBP"
 #~ msgstr "GBP"
-
 #~ msgid "Gabon"
 #~ msgstr "ガボン"
-
 #~ msgid "Gambia"
 #~ msgstr "ガンビア"
-
 #~ msgid "General"
 #~ msgstr "全般について"
-
 #~ msgid "Georgia"
 #~ msgstr "ジョージア"
-
 #~ msgid "Get directions"
 #~ msgstr "案内を得る"
-
 #~ msgid "Ghana"
 #~ msgstr "ガーナ"
-
 #~ msgid "Gibraltar"
 #~ msgstr "ジブラルタル"
-
 #~ msgid "Go"
 #~ msgstr "Go"
-
 #~ msgid "Good"
 #~ msgstr "妥当です"
-
 #~ msgid "Greenland"
 #~ msgstr "グリーンランド"
-
 #~ msgid "Grenada"
 #~ msgstr "グレナダ"
-
 #~ msgid "Grid"
 #~ msgstr "グリッド"
-
 #~ msgid "Group Administration"
 #~ msgstr "グループ管理"
-
 #~ msgid "Group Member"
 #~ msgstr "グループ メンバ"
-
 #~ msgid "Group Members"
 #~ msgstr "グループ メンバ"
-
 #~ msgid "Group appointment"
 #~ msgstr "グループ アポイント"
-
 #~ msgid "Group name"
 #~ msgstr "グループ名"
-
 #~ msgid "Group task"
 #~ msgstr "グループでの仕事"
-
 #~ msgid "Groups"
 #~ msgstr "グループ"
-
 #~ msgid "Guadeloupe"
 #~ msgstr "グアドループ"
-
 #~ msgid "Guam"
 #~ msgstr "グアム"
-
 #~ msgid "Guatemala"
 #~ msgstr "グアテマラ"
-
 #~ msgid "Guinea"
 #~ msgstr "ギニア"
-
 #~ msgid "Guinea-Bissau"
 #~ msgstr "ギニア－ビサウ"
-
 #~ msgid "Guyana"
 #~ msgstr "ガイアナ"
-
 #~ msgctxt "teamview"
 #~ msgid "H"
 #~ msgstr "H"
-
 #~ msgid "H-Split"
 #~ msgstr "水平分割"
-
 #~ msgctxt "dayview"
 #~ msgid "HH"
 #~ msgstr "HH"
-
 #~ msgid "HH:mm"
 #~ msgstr "HH:mm"
-
 #~ msgctxt "dayview"
 #~ msgid "HH:mm"
 #~ msgstr "HH:mm"
-
 #~ msgid "HTML-only mail"
 #~ msgstr "HTMLだけで書かれたメール"
-
 #~ msgid "Haiti"
 #~ msgstr "ハイチ"
-
 #~ msgid "Header"
 #~ msgstr "ヘッダー"
-
 #~ msgid "Heard Island and McDonald Islands"
 #~ msgstr "ハード島およびマクドナルド諸島"
-
 #~ msgid ""
 #~ "Here you can import tasks, appointments or contacts from iCal, vCard or "
 #~ "CSV files."
 #~ msgstr ""
 #~ "ここで、仕事、アポイント、連絡先を iCal、vCard、CSV ファイルからインポート"
 #~ "することができます。"
-
 #~ msgid "Hide non-working time"
 #~ msgstr "稼働時間以外を隠す"
-
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "チーム表示では稼働時間以外を隠す"
-
 #~ msgid "History of error messages"
 #~ msgstr "エラー メッセージの履歴"
-
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "教皇庁(バチカン市国州)"
-
 #~ msgid "Honduras"
 #~ msgstr "ホンジュラス"
-
 #~ msgid "Hong Kong"
 #~ msgstr "香港"
-
 #
 #~ msgid "IM"
 #~ msgstr "メッセンジャー"
-
 #~ msgid "IM (private)"
-#~ msgstr "メッセンジャー （プライベート）"
-
+#~ msgstr "メッセンジャー (プライベート)"
 #~ msgid "IM (private):"
-#~ msgstr "メッセンジャー （プライベート）："
-
+#~ msgstr "メッセンジャー (プライベート):"
 #~ msgid "IMAP Mail Server"
 #~ msgstr "IMAP メール サーバ"
-
 #~ msgid "IP phone (private)"
-#~ msgstr "IP電話 （プライベート）"
-
+#~ msgstr "IP 電話 (プライベート)"
 #~ msgid "IP phone (private):"
-#~ msgstr "IP電話 （プライベート）："
-
+#~ msgstr "IP 電話 (プライベート):"
 #~ msgid "Iceland"
 #~ msgstr "アイスランド"
-
 #~ msgid ""
 #~ "If the authorization expired or was revoked, you can repeat the "
 #~ "authorization process by clicking on the button below. The authorization "
@@ -6527,31 +6483,22 @@ msgstr "マイ パスワード"
 #~ "許可が期限切れになったか、取り消されたならば、下記のボタンをクリックするこ"
 #~ "とによって、許可プロセスを繰り返すことができます。許可プロセスは、別のウィ"
 #~ "ンドウで進行します。"
-
 #~ msgid "Ignore"
 #~ msgstr "無視する"
-
 #~ msgid "Illegal Date in remind date"
 #~ msgstr "不正なアラーム日時"
-
 #~ msgid "Illegal Date in start date"
 #~ msgstr "不正な開始日時"
-
 #~ msgid "Illegal date in due date"
 #~ msgstr "不正な締切日"
-
 #~ msgid "Illegal entry in reminder hour field"
 #~ msgstr "不正な時刻フィールドにあるエントリー"
-
 #~ msgid "Import"
 #~ msgstr "インポート"
-
 #~ msgid "Import Status"
 #~ msgstr "インポート ステータス"
-
 #~ msgid "In a public folder there must be at least one participant."
 #~ msgstr "パブリック フォルダには、1 名以上の出席者が必要です。"
-
 #~ msgid ""
 #~ "In order to assign categories to the objects selected, use the control "
 #~ "fields on the left of the categories. In order to edit a category select "
@@ -6560,679 +6507,458 @@ msgstr "マイ パスワード"
 #~ "選択されたオブジェクトに対して、カテゴリを割り振るためには、カテゴリの左手"
 #~ "のコントロール フィールドを使います。また、カテゴリを編集するには、それを"
 #~ "選択し、右手にあるボタンを操作ください。"
-
 #~ msgid "Incorrect input, only numbers are allowed."
 #~ msgstr "間違った入力です、数字だけが許可されています。"
-
 #~ msgid "Incorrect input."
 #~ msgstr "間違った入力。"
-
 #~ msgid "India"
 #~ msgstr "インド"
-
 #~ msgid "Indonesia"
 #~ msgstr "インドネシア"
-
 #~ msgid "InfoItem"
 #~ msgstr "インフォアイテム"
-
 #~ msgid "InfoStore"
 #~ msgstr "インフォストア"
-
 #~ msgid "InfoStore:"
-#~ msgstr "インフォストア："
-
+#~ msgstr "インフォストア:"
 #~ msgid "Infoitem"
 #~ msgstr "インフォアイテム"
-
 #~ msgid "Infostore"
 #~ msgstr "インフォストア"
-
 #~ msgid "Initialization ..."
-#~ msgstr "初期化中です ..."
-
+#~ msgstr "初期化しています..."
 #~ msgid "Instant Messenger:"
-#~ msgstr "インスタント メッセンジャー："
-
+#~ msgstr "インスタント メッセンジャー:"
 #~ msgid "Internal Error: The server didn't provide any data."
-#~ msgstr "内部エラー： サーバがいかなるデータも供給しませんでした。"
-
+#~ msgstr "内部エラー: サーバがいかなるデータも供給しませんでした。"
 #~ msgid "Internal Error: Unable to open the Attachment (%s)."
-#~ msgstr "内部エラー： 添付ファイルを開くことができません (%s)"
-
+#~ msgstr "内部エラー: 添付ファイルを開くことができません (%s)"
 #~ msgid "Invalid Signature"
 #~ msgstr "無効な署名"
-
 #~ msgid "Invalid Team"
 #~ msgstr "無効なチーム"
-
 #~ msgid "Invalid date format for birthday."
 #~ msgstr "誕生日に対して無効なデータフォーマットです。"
-
 #~ msgid "Invalid date format. The valid format is %s"
 #~ msgstr "無効な日付フォーマットです。有効なフォーマットは、 %s"
-
 #~ msgid "Invalid date!"
 #~ msgstr "無効な日付!"
-
 #~ msgid "Invalid date."
 #~ msgstr "無効な日時。"
-
 #~ msgid "Invalid tag name. Tags may not contain the character '%s'."
 #~ msgstr "無効なタグ名。タグが文字 '%s'. を含んでいないようです。"
-
 #~ msgid "Invalid time!"
 #~ msgstr "無効な時刻!"
-
 #~ msgid "Invalid time."
 #~ msgstr "無効な時間。"
-
 #~ msgid "Iran"
 #~ msgstr "イラン"
-
 #~ msgid "Iraq"
 #~ msgstr "イラク"
-
 #~ msgid "Ireland"
 #~ msgstr "アイルランド"
-
 #~ msgid "Is at least"
 #~ msgstr "少なくとも"
-
 #~ msgid "Is at most"
 #~ msgstr "最大でも"
-
 #~ msgid "Is bigger than"
 #~ msgstr "より大"
-
 #~ msgid "Is exactly"
 #~ msgstr "完全一致"
-
 #~ msgid "Is not exactly"
 #~ msgstr "おおよそ"
-
 #~ msgid "Is smaller than"
 #~ msgstr "より小"
-
 #~ msgid "Isle of Man"
 #~ msgstr "マン島"
-
 #~ msgid "Israel"
 #~ msgstr "イスラエル"
-
 #~ msgid "JPY"
 #~ msgstr "JPY"
-
 #~ msgid "Jamaica"
 #~ msgstr "ジャマイカ"
-
 #~ msgid "Jan"
 #~ msgstr "1月"
-
 #~ msgid "Japan"
 #~ msgstr "日本"
-
 #~ msgid "Japanese Yen"
 #~ msgstr "日本円"
-
 #~ msgid "Jersey"
 #~ msgstr "ジャージー"
-
 #~ msgid "Jordan"
 #~ msgstr "ヨルダン"
-
 #~ msgid "Jul"
 #~ msgstr "7月"
-
 #~ msgid "Jun"
 #~ msgstr "6月"
-
 #~ msgid "Kazakhstan"
 #~ msgstr "カザフスタン"
-
 #~ msgid "Keep"
 #~ msgstr "保持する"
-
 #~ msgid "Kenya"
 #~ msgstr "ケニヤ"
-
 #~ msgid "Kiribati"
 #~ msgstr "キリバス"
-
 #~ msgid "Korea, Democratic People's Republic of"
 #~ msgstr "北朝鮮"
-
 #~ msgid "Korea, Republic of"
 #~ msgstr "韓国"
-
 #~ msgid "Kuwait"
 #~ msgstr "クウェート"
-
 #~ msgid "Kyrgyzstan"
 #~ msgstr "キルギスタン"
-
 #~ msgid "Language and region"
 #~ msgstr "言語と地域"
-
 #~ msgid "Lao People's Democratic Republic"
 #~ msgstr "ラオス人民民主共和国"
-
 #~ msgid "Last changed on %1$s by %2$s"
 #~ msgstr "%1$sに%2$sによって最新変更"
-
 #~ msgid "Last day"
 #~ msgstr "最終日"
-
 #~ msgid "Last modified"
 #~ msgstr "最新更新日"
-
 #~ msgid "Last name:"
-#~ msgstr "姓："
-
+#~ msgstr "姓:"
 #~ msgid "Latvia"
 #~ msgstr "ラトビア"
-
 #~ msgid "Layout"
 #~ msgstr "レイアウト"
-
 #~ msgid "Lebanon"
 #~ msgstr "レバノン"
-
 #~ msgid "Lesotho"
 #~ msgstr "レソト"
-
 #~ msgid "Liberia"
 #~ msgstr "リベリア"
-
 #~ msgid "Libyan Arab Jamahiriya"
 #~ msgstr "リビア アラブ ジャマヒリヤ"
-
 #~ msgid "Liechtenstein"
 #~ msgstr "リヒテンシュタイン"
-
 #~ msgid "Link / URL:"
-#~ msgstr "リンク / URL："
-
+#~ msgstr "リンク / URL:"
 #~ msgid "Link/Url"
 #~ msgstr "リンク/URL"
-
 #~ msgid "Lithuania"
 #~ msgstr "リトアニア"
-
 #~ msgid "Load Contents..."
-#~ msgstr "コンテンツをロードします ..."
-
+#~ msgstr "コンテンツを読み込みます..."
 #~ msgid "Location:"
-#~ msgstr "場所："
-
+#~ msgstr "場所:"
 #~ msgid "Lock"
 #~ msgstr "ロック"
-
 #~ msgid "Locked:"
-#~ msgstr "ロックされました："
-
+#~ msgstr "ロックされました:"
 #
 #~ msgctxt "username"
 #~ msgid "Login"
 #~ msgstr "ログイン"
-
 #~ msgctxt "verb"
 #~ msgid "Login"
 #~ msgstr "ログイン"
-
 #~ msgid ""
 #~ "Login failed. Please check your user name and password and try again."
 #~ msgstr ""
 #~ "ログインに失敗しました。ユーザ名とパスワードをチェックして、もう一度試して"
 #~ "ください。"
-
 #~ msgid "Login not possible at the moment, please try again later."
 #~ msgstr "現在、ログインすることはできません。後でもう一度試してください。"
-
 #~ msgid "Logout"
 #~ msgstr "ログアウト"
-
 #~ msgid "Long"
 #~ msgstr "長い"
-
 #~ msgid "Luxembourg"
 #~ msgstr "ルクセンブルク"
-
 #
 #~ msgctxt "monday"
 #~ msgid "M"
 #~ msgstr "月"
-
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
-
 #~ msgid "M/d/yyyy"
 #~ msgstr "M/d/yyyy"
-
 #~ msgid "MM/dd"
 #~ msgstr "MM/dd"
-
 #~ msgid "MM/dd/yy"
 #~ msgstr "MM/dd/yy"
-
 #~ msgid "MM/dd/yyyy"
 #~ msgstr "MM/dd/yyyy"
-
 #~ msgid "Macao"
 #~ msgstr "マカオ"
-
 #~ msgid "Macedonia"
 #~ msgstr "マケドニア"
-
 #~ msgid "Madagascar"
 #~ msgstr "マダガスカル"
-
 #~ msgid "Mail filter"
 #~ msgstr "メール フィルター"
-
 #~ msgid "Mailing list"
 #~ msgstr "メーリング リスト"
-
 #~ msgid "Mailing list %s"
 #~ msgstr "メーリング リスト %s"
-
 #~ msgid "Main window"
 #~ msgstr "メイン ウィンドウ"
-
 #~ msgid "Malawi"
 #~ msgstr "マラウイ"
-
 #~ msgid "Malaysia"
 #~ msgstr "マレーシア"
-
 #~ msgid "Maldives"
 #~ msgstr "モルディヴ"
-
 #~ msgid "Mali"
 #~ msgstr "マリ"
-
 #~ msgid "Malta"
 #~ msgstr "マルタ"
-
 #~ msgid "Manager:"
-#~ msgstr "上司："
-
+#~ msgstr "上司:"
 #~ msgid "Mandatory Field(s) missing!"
 #~ msgstr "入力必須フィールドに入力漏れがあります！"
-
 #~ msgid "Mar"
 #~ msgstr "3月"
-
 #~ msgid "Marital status:"
-#~ msgstr "既婚 / 未婚："
-
+#~ msgstr "既婚 / 未婚:"
 #~ msgid "Mark as"
 #~ msgstr "印を付ける"
-
 #~ msgid "Mark as Done"
 #~ msgstr "完了の印を付ける"
-
 #~ msgid "Mark folder read"
 #~ msgstr "フォルダに既読の印を付ける"
-
 #~ msgid "Mark mail as"
 #~ msgstr "次の印をメール付ける"
-
 #~ msgid "Marshall Islands"
 #~ msgstr "マーシャル諸島"
-
 #~ msgid "Martinique"
 #~ msgstr "マルティニク"
-
 #~ msgid "Matches (wildcards allowed)"
 #~ msgstr "一致 (ワイルドカード使用可)"
-
 #~ msgid "Matches regex"
 #~ msgstr "正規表現での一致"
-
 #~ msgid "Mauritania"
 #~ msgstr "モーリタニア"
-
 #~ msgid "Mauritius"
 #~ msgstr "モーリシャス"
-
 #~ msgid "Maximum"
 #~ msgstr "最大"
-
 #~ msgid "Mayotte"
 #~ msgstr "メイヨット"
-
 #~ msgid "Members of %s"
 #~ msgstr "%sのメンバ"
-
 #~ msgid "Members of group"
 #~ msgstr "グループのメンバー"
-
 #~ msgid "Members:"
-#~ msgstr "メンバー："
-
+#~ msgstr "メンバー:"
 #~ msgid "Message"
 #~ msgstr "メッセージ"
-
 #~ msgid "Mexico"
 #~ msgstr "メキシコ"
-
 #~ msgid "Micronesia"
 #~ msgstr "ミクロネシア"
-
 #~ msgid "Microsoft Outlook"
 #~ msgstr "Microsoft Outlook"
-
 #~ msgid "Middle name:"
-#~ msgstr "ミドル ネーム："
-
+#~ msgstr "ミドル ネーム:"
 #~ msgid "Mime Type"
 #~ msgstr "MIMEタイプ"
-
 #~ msgid "Mime type"
 #~ msgstr "MIMEタイプ"
-
 #~ msgid "Minimum password length is %1$s."
 #~ msgstr "パスワードは最低 %1$s文字必要です。"
-
 #~ msgid "Mobile (private):"
-#~ msgstr "携帯電話 （プライベート）："
-
+#~ msgstr "携帯電話 (プライベート):"
 #~ msgid "Mobile:"
-#~ msgstr "携帯電話："
-
+#~ msgstr "携帯電話:"
 #~ msgid "Modified By:"
-#~ msgstr "修正者："
-
+#~ msgstr "修正者:"
 #~ msgid "Modified by:"
-#~ msgstr "修正者："
-
+#~ msgstr "修正者:"
 #~ msgid "Modify"
 #~ msgstr "修正する"
-
 #~ msgid "Modify all"
 #~ msgstr "すべてを修正"
-
 #~ msgid "Modify objects"
 #~ msgstr "オブジェクトを修正する"
-
 #~ msgid "Modify own"
 #~ msgstr "自分のものを修正"
-
 #~ msgid "Modify your account information."
 #~ msgstr "アカウント情報を修正する。"
-
 #~ msgid "Module"
 #~ msgstr "モジュール"
-
 #~ msgid "Moldova"
 #~ msgstr "モルドヴァ"
-
 #~ msgid "Mon"
 #~ msgstr "月"
-
 #~ msgid "Monaco"
 #~ msgstr "モナコ"
-
 #~ msgid "Mongolia"
 #~ msgstr "モンゴル"
-
 #~ msgid "Montenegro"
 #~ msgstr "モンテネグロ"
-
 #~ msgid "Morocco"
 #~ msgstr "モロッコ"
-
 #~ msgid "Mozambique"
 #~ msgstr "モザンビーク"
-
 #~ msgid "My Infostore"
 #~ msgstr "マイ インフォストア"
-
 #~ msgid "My OX Social"
 #~ msgstr "マイOXソーシャル"
-
 #~ msgid "My Social Configuration"
 #~ msgstr "マイ ソーシャルの構成"
-
 #~ msgid "Myanmar"
 #~ msgstr "ミャンマー"
-
 #~ msgid "Name of the Distribution List:"
-#~ msgstr "配布リストの名前："
-
+#~ msgstr "配布リストの名前:"
 #~ msgid "Name:"
-#~ msgstr "名前："
-
+#~ msgstr "名前:"
 #~ msgid "Namibia"
 #~ msgstr "ナミビア"
-
 #~ msgid "Nauru"
 #~ msgstr "ナウル"
-
 #~ msgid "Nepal"
 #~ msgstr "ネパール"
-
 #~ msgid "Netherlands Antilles"
 #~ msgstr "オランダ領アンティル"
-
 #~ msgid "Never"
 #~ msgstr "期限なし"
-
 #~ msgid "New Appointment"
 #~ msgstr "新しいアポイント"
-
 #~ msgid "New Caledonia"
 #~ msgstr "ニューカレドニア"
-
 #~ msgid "New Distribution List"
 #~ msgstr "新しい配布リスト"
-
 #~ msgid "New InfoItem"
 #~ msgstr "新しいインフォアイテム"
-
 #~ msgid "New Infoitem"
 #~ msgstr "新しいインフォ アイテム"
-
 #~ msgid "New Task"
 #~ msgstr "新しい仕事"
-
 #~ msgid "New Team"
 #~ msgstr "新しいチーム"
-
 #~ msgid "New Zealand"
 #~ msgstr "ニュージーランド"
-
 #~ msgid "New message"
 #~ msgstr "新しいメッセージ"
-
 #~ msgid "New messaging service"
 #~ msgstr "新しいメッセージング サービス"
-
 #~ msgid "New rule"
 #~ msgstr "新しいルール"
-
 #~ msgid "New task"
 #~ msgstr "新しい仕事"
-
 #~ msgid "New..."
-#~ msgstr "新規作成 ..."
-
+#~ msgstr "新規作成..."
 #~ msgid "Next"
 #~ msgstr "次へ"
-
 #~ msgid "Nicaragua"
 #~ msgstr "ニカラグア"
-
 #~ msgid "Nickname:"
-#~ msgstr "ニックネーム："
-
+#~ msgstr "ニックネーム:"
 #~ msgid "Niger"
 #~ msgstr "ニジェール"
-
 #~ msgid "Nigeria"
 #~ msgstr "ナイジェリア"
-
 #~ msgid "Niue"
 #~ msgstr "ニウエ"
-
 #~ msgid "No Appointment selected."
 #~ msgstr "アポイントが選択されていません。"
-
 #~ msgid "No Attachments available"
-#~ msgstr "利用可能な添付ファイルはありません"
-
+#~ msgstr "利用可能な添付ファイルはありません。"
 #~ msgid "No Info Items in this folder"
-#~ msgstr "このフォルダーには、新しいインフォ アイテムはありません"
-
+#~ msgstr "このフォルダーには、新しいインフォ アイテムはありません。"
 #~ msgid "No Members"
 #~ msgstr "メンバーはいません"
-
 #~ msgid "No Messaging accounts configured."
 #~ msgstr "メッセージング アカウントが構成されていません。"
-
 #~ msgid "No accounts available"
 #~ msgstr "利用可能なアカウントはありません"
-
 #~ msgid "No accounts created"
 #~ msgstr "アカウントは作成されませんでした"
-
 #~ msgid "No addresses available"
 #~ msgstr "利用可能な住所はありません"
-
 #~ msgid "No appointments today"
 #~ msgstr "今日はアポイントはありません"
-
 #~ msgid "No attachments available"
 #~ msgstr "利用可能な添付ファイルはありません"
-
 #~ msgid "No contacts in this folder"
 #~ msgstr "このフォルダには、連絡先はありません"
-
 #~ msgid "No groups available"
 #~ msgstr "利用できるグループはありません"
-
 #~ msgid "No participants available"
 #~ msgstr "出席可能者はいません"
-
 #~ msgid "No publications added"
 #~ msgstr "公開の追加はありません"
-
 #~ msgid "No recurrence"
 #~ msgstr "定期的なアポイントはありません"
-
 #~ msgid "No resources available"
 #~ msgstr "利用可能な設備はありません"
-
 #~ msgid "No route planner registered."
 #~ msgstr "ルート プランナーが登録されていません。"
-
 #~ msgid "No routing data available"
 #~ msgstr "利用可能なルーティング データがありません"
-
 #~ msgid "No search result found for the string provided"
 #~ msgstr "入力した文字列に一致する結果は見つかりませんでした"
-
 #~ msgid "No server connection"
 #~ msgstr "サーバーに接続できません"
-
 #~ msgid "No subscription added"
 #~ msgstr "登録の追加はありません"
-
 #~ msgid "No subscription selected"
 #~ msgstr "登録が選択されていません"
-
 #~ msgid "No subscriptions configured"
 #~ msgstr "登録が構成されていません。"
-
 #~ msgid "No tasks today"
 #~ msgstr "今日は仕事はありません"
-
 #~ msgid "No text"
 #~ msgstr "テキスト形式ではありません"
-
 #~ msgid "No versions available"
 #~ msgstr "利用可能なバージョンはありません"
-
 #~ msgid "No, not now"
 #~ msgstr "いいえ、今は結構です"
-
 #~ msgid "Norfolk Island"
 #~ msgstr "ノーフォーク島"
-
 #~ msgid "Northern Mariana Islands"
 #~ msgstr "北マリアナ諸島"
-
 #~ msgid "Norway"
 #~ msgstr "ノルウェー"
-
 #~ msgid "Not Spam"
 #~ msgstr "スパムではありません"
-
 #~ msgid "Not enough rights"
 #~ msgstr "十分な権限がありません"
-
 #~ msgid "Not set"
 #~ msgstr "未設定"
-
 #~ msgid "Note: Attachments are not viewable when composing a new message"
-#~ msgstr "注：メッセージ作成中は、添付ファイルを見ることはできません。"
-
+#~ msgstr "注: メッセージ作成中は、添付ファイルを見ることはできません。"
 #~ msgid "Notifier"
 #~ msgstr "Notifier"
-
 #~ msgid ""
 #~ "Notifier informs the user about the current status of emails and "
 #~ "appointments without having to display the user interface."
 #~ msgstr ""
 #~ "Notifierがユーザにメールとアポイントの現在の状態を通知します。ユーザ イン"
 #~ "ターフェースを表示する必要はありません。"
-
 #~ msgid "Notify on delivery receipt?"
 #~ msgstr "受領メッセージを通知する"
-
 #~ msgid "Notify participants by E-Mail"
 #~ msgstr "メールで出席者に通知する"
-
 #~ msgid "Nov"
 #~ msgstr "11月"
-
 #~ msgid "Nr:"
-#~ msgstr "No："
-
+#~ msgstr "No:"
 #~ msgid "Number of concurrent appointments shown in custom view"
 #~ msgstr "カスタム表示で表示させる現在のアポイント数"
-
 #~ msgid "Number of concurrent appointments shown in day view"
 #~ msgstr "日ビューで表示させる現在のアポイント数"
-
 #~ msgid "Number of concurrent appointments shown in workweek view"
 #~ msgstr "稼働日ビューで表示させる現在のアポイント数"
-
 #~ msgid "Number of days between vacation notices to the same sender"
 #~ msgstr "同じ差出人に対する休暇通知の通知周期"
-
 #~ msgid "Number of days in custom view"
 #~ msgstr "カスタム ビュー内の日数"
-
 #~ msgid "Number of days in work week"
 #~ msgstr "稼働日数"
-
 #~ msgid "Number of rows to be displayed in card view:"
-#~ msgstr "カード表示内に表示される列の数："
-
+#~ msgstr "カード表示内に表示される列の数:"
 #~ msgid "Oct"
 #~ msgstr "10月"
-
 #~ msgid "Of the following conditions:"
-#~ msgstr "の下記条件を満たすメッセージに対して："
-
+#~ msgstr "の下記条件を満たすメッセージに対して:"
 #~ msgid "Old Password is wrong."
 #~ msgstr "古いパスワードが間違っています。"
-
 #~ msgid "Oman"
 #~ msgstr "オマーン"
-
 #~ msgid ""
 #~ "Only use this option if this computer is used solely by you. Your "
 #~ "credentials are locally saved for the current working day. You can use "
@@ -7242,893 +6968,611 @@ msgstr "マイ パスワード"
 #~ "このコンピュータがあなたによってのみ使用されている場合に限り、このオプショ"
 #~ "ンを使用してください。あなたの証明書は現在の稼働日に対してローカルに保存さ"
 #~ "れます。グループウェアで作業をするにあたって、いくつかのブラウザウィンドウ"
-#~ "を利用することができます。また、第三者のコンピュータ上（例えば、インター"
-#~ "ネットカフェ内）で利用している場合には、このオプションは使用しないでくださ"
+#~ "を利用することができます。また、第三者のコンピュータ上 (例えば、インター"
+#~ "ネットカフェ内) で利用している場合には、このオプションは使用しないでくださ"
 #~ "い。"
-
 #~ msgid "Open attachment"
 #~ msgstr "添付ファイルを開く"
-
 #~ msgid "Open error report"
 #~ msgstr "エラーレポートを開く"
-
 #~ msgid "Open-Xchange Server"
 #~ msgstr "Open-Xchangeサーバ"
-
 #~ msgid "Optional %d"
 #~ msgstr "オプション %d"
-
 #~ msgid "Optional Fields:"
-#~ msgstr "オプション フィールド："
-
+#~ msgstr "オプション フィールド:"
 #~ msgid "Order by:"
-#~ msgstr "並べ替え："
-
+#~ msgstr "並べ替え:"
 #~ msgid "Organization"
 #~ msgstr "組織"
-
 #~ msgid "Organizer:"
-#~ msgstr "開催者："
-
+#~ msgstr "開催者:"
 #~ msgid "Original Message"
 #~ msgstr "オリジナル メッセージ"
-
 #~ msgid "Others"
 #~ msgstr "その他"
-
 #~ msgid "Outlook file"
 #~ msgstr "Outlook ファイル"
-
 #~ msgid "Overdue by %d day."
 #~ msgid_plural "Overdue by %d days."
 #~ msgstr[0] "%d日期限を過ぎています。"
 #~ msgstr[1] "%d日間期限を過ぎています。"
-
 #~ msgid "Overdue by yesterday."
 #~ msgstr "昨日に期限が過ぎる仕事"
-
 #~ msgid "Overview Subscriptions"
 #~ msgstr "登録の概要"
-
 #~ msgid "PLN"
 #~ msgstr "PLN"
-
 #~ msgid "PM"
 #~ msgstr "午後"
-
 #~ msgid "POP3 Mail Server"
 #~ msgstr "POP3 メール サーバ"
-
 #~ msgid "Pager:"
-#~ msgstr "ポケベル："
-
+#~ msgstr "ポケベル:"
 #~ msgid "Pakistan"
 #~ msgstr "パキスタン"
-
 #~ msgid "Palau"
 #~ msgstr "パラウ"
-
 #~ msgid "Palestinian Territory, Occupied"
 #~ msgstr "パレスチナ"
-
 #~ msgid "Panama"
 #~ msgstr "パナマ"
-
 #~ msgid "Panel is shown as"
 #~ msgstr "パネルの表示様式"
-
 #~ msgid "Papua New Guinea"
 #~ msgstr "パプアニューギニア"
-
 #~ msgid "Parameter:"
-#~ msgstr "パラメータ："
-
+#~ msgstr "パラメータ:"
 #~ msgid "Participant"
 #~ msgstr "出席者"
-
 #~ msgid "Participant:"
-#~ msgstr "出席者："
-
+#~ msgstr "出席者:"
 #~ msgid "Participants/Resources"
 #~ msgstr "出席者/設備"
-
 #~ msgid "Participants:"
-#~ msgstr "出席者："
-
+#~ msgstr "出席者:"
 #~ msgid "Password has changed"
-#~ msgstr "パスワードが変更されました"
-
+#~ msgstr "パスワードが変更されました。"
 #~ msgid "Password length must be between %1$s and %2$s characters."
 #~ msgstr "パスワードは %1$s 以上 %2$s 以内の文字数にする必要がある。"
-
 #~ msgid "Password strength"
 #~ msgstr "パスワード長"
-
 #~ msgid "Password:"
-#~ msgstr "パスワード："
-
+#~ msgstr "パスワード:"
 #~ msgid "Paste"
 #~ msgstr "貼り付け"
-
 #~ msgid "Permanently remove your deleted E-Mails?"
 #~ msgstr "削除されたメールを完全削除する"
-
 #~ msgid "Personal Data"
 #~ msgstr "パーソナル データ"
-
 #~ msgid "Peru"
 #~ msgstr "ペルー"
-
 #~ msgid "Philippines"
 #~ msgstr "フィリピン"
-
 #~ msgid "Phone (business):"
-#~ msgstr "電話 （ビジネス）："
-
+#~ msgstr "電話 (ビジネス):"
 #~ msgid "Phone (car):"
-#~ msgstr "電話 （自動車）："
-
+#~ msgstr "電話 (自動車):"
 #~ msgid "Phone (company):"
-#~ msgstr "電話 （会社代表電話）："
-
+#~ msgstr "電話 (会社代表電話):"
 #~ msgid "Phone (other):"
-#~ msgstr "電話 （その他）："
-
+#~ msgstr "電話 (その他):"
 #~ msgid "Phone (private 2)"
-#~ msgstr "電話 （プライベート2）"
-
+#~ msgstr "電話 (プライベート 2)"
 #~ msgid "Phone (private 2):"
-#~ msgstr "電話 (プライベート2)："
-
+#~ msgstr "電話 (プライベート 2):"
 #~ msgid "Phone (private):"
-#~ msgstr "電話 (プライベート)："
-
+#~ msgstr "電話 (プライベート):"
 #~ msgid "Phone 2"
 #~ msgstr "電話 2"
-
 #~ msgid "Phone 2:"
-#~ msgstr "電話 2："
-
+#~ msgstr "電話 2:"
 #~ msgid "Phone:"
-#~ msgstr "電話："
-
+#~ msgstr "電話:"
 #~ msgid "Pitcairn"
 #~ msgstr "ピトケアン"
-
 #~ msgid "Place"
 #~ msgstr "署名の位置"
-
 #~ msgid "Place of Signature:"
-#~ msgstr "署名の場所："
-
+#~ msgstr "署名の場所:"
 #~ msgid "Please choose"
 #~ msgstr "選択してください"
-
 #~ msgid "Please enter your old password and twice the new password."
 #~ msgstr "古いパスワードを入力し、新しいパスワードを2回入力してください。"
-
 #~ msgid ""
 #~ "Please have a look at the %sInteresting UWA modules%s page. It shows a "
 #~ "list of widgets and their associated data."
 #~ msgstr ""
 #~ "%sInteresting UWA modules%s のページをご覧ください。ウィジットやその関連"
-#~ "データのリストが見れます。 "
-
+#~ "データのリストが見れます。"
 #~ msgid ""
 #~ "Please note: All messages received from the POP3 account will be stored "
 #~ "to a folder on your local IMAP account."
 #~ msgstr ""
-#~ "注意： POP3 アカウントから受け取ったすべてのメッセージは、ローカル IMAP ア"
+#~ "注意: POP3 アカウントから受け取ったすべてのメッセージは、ローカル IMAP ア"
 #~ "カウント上のフォルダーに格納されます。"
-
 #~ msgid ""
 #~ "Please note: You are the creator of this appointment. If you delete this "
 #~ "appointment it will be removed for all participants."
 #~ msgstr ""
-#~ "注意： あなたはこのアポイントの作成者です。このアポイントの削除は、すべて"
+#~ "注意: あなたはこのアポイントの作成者です。このアポイントの削除は、すべて"
 #~ "の出席者にとっての削除となります。"
-
 #~ msgid ""
 #~ "Please only use HTML signatures if you are familiar with HTML. Using "
 #~ "wrong HTML tags might result in partly or completely garbled signatures."
 #~ msgstr ""
 #~ "HTML の知識がある場合のみ、HTML 署名を使用してください。誤った HTML タグを"
 #~ "使用すると、全部または一部の署名が文字化けを起こすおそれがあります。"
-
 #~ msgid "Please provide a site name."
 #~ msgstr "サイト名を入力してください。"
-
 #~ msgid "Please select a country for the destination address"
 #~ msgstr "送付先住所に国名を選択してください"
-
 #~ msgid "Please select a country for the start address"
 #~ msgstr "送信元住所に国名を選択ください"
-
 #~ msgid "Please select a file to import"
 #~ msgstr "インポートするファイルを選択してください"
-
 #~ msgid "Please select at least one E-Mail address."
 #~ msgstr "少なくとも一つ以上のメール アドレスを選択してください。"
-
 #~ msgid "Please select at least one task!"
 #~ msgstr "少なくとも一つの仕事を選択して下さい！"
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "公開を一つだけ選択してください"
-
 #~ msgid "Please select only one subscription"
 #~ msgstr "登録を一つだけ選択してください"
-
 #~ msgid "Please set valid folder!"
 #~ msgstr "利用可能なフォルダをセットしてください！"
-
 #~ msgid "Please wait ..."
-#~ msgstr "お待ち下さい ..."
-
+#~ msgstr "お待ち下さい..."
 #~ msgid ""
 #~ "Please wait while checking the connection ... This may take a while ..."
 #~ msgstr ""
-#~ "接続を確認する間お待ちください ... しばらく時間がかかる場合があります ... "
-
+#~ "接続を確認する間お待ちください... しばらく時間がかかる場合があります... "
 #~ msgid "Please wait while you are being redirected to the start page ..."
-#~ msgstr "スタート ページに戻るまでしばらくお待ち下さい ..."
-
+#~ msgstr "スタート ページに戻るまでしばらくお待ち下さい..."
 #~ msgid "Poland"
 #~ msgstr "ポーランド"
-
 #~ msgid "Popups"
 #~ msgstr "ポップアップ"
-
 #~ msgid "Portugal"
 #~ msgstr "ポルトガル"
-
 #~ msgid "Position:"
-#~ msgstr "役職："
-
+#~ msgstr "役職:"
 #~ msgid "Pound sterling"
 #~ msgstr "スターリング・ポンド"
-
 #~ msgid "Preferences"
 #~ msgstr "環境設定"
-
 #~ msgid "Premium features"
 #~ msgstr "プレミアム機能"
-
 #~ msgid "Principal:"
-#~ msgstr "主催者："
-
+#~ msgstr "主催者:"
 #~ msgid "Priority:"
-#~ msgstr "優先度："
-
+#~ msgstr "優先度:"
 #~ msgid "Privacy Notice"
 #~ msgstr "プライバシーに関する注意"
-
 #~ msgid "Private calendars"
 #~ msgstr "プライベート予定表"
-
 #~ msgid "Private computer"
 #~ msgstr "プライベート コンピュータ"
-
 #~ msgid "Private contacts"
 #~ msgstr "プライベート連絡先"
-
 #~ msgid "Private folders"
 #~ msgstr "プライベート フォルダ"
-
 #~ msgid "Private task"
 #~ msgstr "プライベート仕事"
-
 #~ msgid "Private tasks"
 #~ msgstr "プライベート仕事"
-
 #~ msgid "Private:"
-#~ msgstr "プライベート："
-
+#~ msgstr "プライベート:"
 #~ msgid "Process subsequent rules even when this rule matches"
 #~ msgstr "このルールに一致しても、以降のルールを処理する"
-
 #~ msgid "Profession:"
-#~ msgstr "職業："
-
+#~ msgstr "職業:"
 #~ msgid "Public calendars"
 #~ msgstr "パブリック予定表"
-
 #~ msgid "Public contacts"
 #~ msgstr "パブリック連絡先"
-
 #~ msgid "Public folder %s"
 #~ msgstr "パブリック フォルダ %s"
-
 #~ msgid "Public folders"
 #~ msgstr "パブリック フォルダ "
-
 #~ msgid "Public or shared computer"
 #~ msgstr "パブリック、または、共有コンピュータ"
-
 #~ msgid "Public tasks"
 #~ msgstr "パブリック仕事"
-
 #~ msgid "Publication status"
 #~ msgstr "公開状況"
-
 #~ msgid "Puerto Rico"
 #~ msgstr "プエルトリコ"
-
 #~ msgid "Quick config"
 #~ msgstr "クイック構成"
-
 #~ msgid "Quota Exceed"
 #~ msgstr "割当て超過"
-
 #~ msgid "RMB"
 #~ msgstr "RMB"
-
 #~ msgid "RUB"
 #~ msgstr "RUB"
-
 #~ msgctxt "to"
 #~ msgid "Read"
 #~ msgstr "既読"
-
 #~ msgid "Read all"
 #~ msgstr "すべてを読む"
-
 #~ msgid "Read own"
 #~ msgstr "自分のものを読む"
-
 #~ msgid "Read/Unread"
 #~ msgstr "既読/未読"
-
 #~ msgid "Rebuild Tree..."
-#~ msgstr "ツリーを再構築します ..."
-
+#~ msgstr "ツリーを再構築します..."
 #~ msgid "Received:"
-#~ msgstr "受信日時："
-
+#~ msgstr "受信日時:"
 #~ msgid "Recurrence"
 #~ msgstr "定期的なアポイント"
-
 #~ msgid "Recurrence Pattern"
 #~ msgstr "定期的なアポイントのパターン"
-
 #~ msgid "Recurrence Settings"
 #~ msgstr "パターン設定"
-
 #~ msgctxt "calendar"
 #~ msgid "Recurrence..."
 #~ msgstr "定期的なアポイント..."
-
 #~ msgctxt "tasks"
 #~ msgid "Recurrence..."
-#~ msgstr "定期的なアポイント ..."
-
+#~ msgstr "定期的なアポイント..."
 #~ msgid "Recurrence:"
-#~ msgstr "定期的なアポイント："
-
+#~ msgstr "定期的なアポイント:"
 #~ msgid "Recurring appointment"
 #~ msgstr "定期的なアポイント"
-
 #~ msgid "Recurring task"
 #~ msgstr "定期的な仕事"
-
 #~ msgid "Redirect to"
 #~ msgstr "次へ 転送"
-
 #~ msgid "Reject with reason"
 #~ msgstr "次の理由を付けて拒否する"
-
 #~ msgid "Reload current view every:"
-#~ msgstr "現在の表示のリロードの頻度："
-
+#~ msgstr "現在の表示のリロードの頻度:"
 #~ msgid "Reminder:"
-#~ msgstr "アラーム："
-
+#~ msgstr "アラーム:"
 #~ msgid "Remove Member"
 #~ msgstr "メンバーを削除する"
-
 #~ msgid "Remove attachment"
 #~ msgstr "添付ファイルを削除する"
-
 #~ msgid "Remove flag"
 #~ msgstr "フラグを削除"
-
 #~ msgid "Remove participant"
 #~ msgstr "出席者を削除する"
-
 #~ msgid "Remove picture"
 #~ msgstr "写真を削除する"
-
 #~ msgid "Renminbi"
 #~ msgstr "人民元"
-
 #~ msgid "Reply-to"
 #~ msgstr "返信先"
-
 #~ msgid "Reply-to Address"
 #~ msgstr "返信先アドレス"
-
 #~ msgid "Resource email"
 #~ msgstr "設備メール"
-
 #~ msgid "Resource name"
 #~ msgstr "設備名"
-
 #~ msgid "Resources:"
-#~ msgstr "設備："
-
+#~ msgstr "設備:"
 #~ msgid "Results for \"%s\""
 #~ msgstr "\"%s\" に対する結果"
-
 #~ msgid "Retweet new"
 #~ msgstr "今すぐRetweetを開始"
-
 #~ msgid "Retweet sent successfully"
 #~ msgstr "Retweetの送信に成功"
-
 #~ msgid "Reunion"
 #~ msgstr "レユニオン島"
-
 #~ msgid "Room number:"
-#~ msgstr "ルームナンバー："
-
+#~ msgstr "ルームナンバー:"
 #~ msgid "Route Planning"
 #~ msgstr "ルート プランニング"
-
 #~ msgid "Rule Details"
 #~ msgstr "ルールの詳細"
-
 #~ msgid "Rule Name"
 #~ msgstr "ルール名"
-
 #~ msgid "Rules"
 #~ msgstr "ルール"
-
 #~ msgid "Russian Federation"
 #~ msgstr "ロシア連邦"
-
 #~ msgid "Rwanda"
 #~ msgstr "ルワンダ"
-
 #
 #~ msgctxt "saturday"
 #~ msgid "S"
 #~ msgstr "土"
-
 #
 #~ msgctxt "sunday"
 #~ msgid "S"
 #~ msgstr "日"
-
 #~ msgid "SEK"
 #~ msgstr "SEK"
-
 #~ msgid "Saint Barthelemy"
 #~ msgstr "サン・バルテルミー島"
-
 #~ msgid "Saint Helena"
 #~ msgstr "セントヘレナ"
-
 #~ msgid "Saint Kitts and Nevis"
 #~ msgstr "セントキッツ‐ネヴィス"
-
 #~ msgid "Saint Lucia"
 #~ msgstr "セントルシア"
-
 #~ msgid "Saint Martin (French part)"
 #~ msgstr "セイントマーティン(フランス)"
-
 #~ msgid "Saint Pierre and Miquelon"
 #~ msgstr "サンピエールエミクロン"
-
 #~ msgid "Saint Vincent and the Grenadines"
 #~ msgstr "セントビンセントおよびグレナディーン"
-
 #~ msgid "Sales Volume:"
-#~ msgstr "売上規模："
-
+#~ msgstr "売上規模:"
 #~ msgid "Samoa"
 #~ msgstr "サモア"
-
 #~ msgid "Sample:"
-#~ msgstr "サンプル："
-
+#~ msgstr "サンプル:"
 #~ msgid "San Marino"
 #~ msgstr "サンマリノ"
-
 #~ msgid "Sao Tome and Principe"
 #~ msgstr "サントーメ‐プリンシペ"
-
 #~ msgid "Sat"
 #~ msgstr "土曜日"
-
 #~ msgid "Saudi Arabia"
 #~ msgstr "サウジアラビア"
-
 #~ msgid "Save attachment"
 #~ msgstr "添付ファイルを保存する"
-
 #~ msgid "Save configuration before every logout?"
 #~ msgstr "毎回のログアウト前に構成を保存する"
-
 #~ msgid "Save version"
 #~ msgstr "バージョンを保存"
-
 #~ msgid "Schedule an all-day event"
 #~ msgstr "終日イベントを予定"
-
 #~ msgid "Search all contact folders"
 #~ msgstr "すべての連絡先フォルダを検索する"
-
 #~ msgid "Search:"
-#~ msgstr "検索："
-
+#~ msgstr "検索:"
 #~ msgid "Security"
 #~ msgstr "セキュリティ"
-
 #~ msgid "Select Attachments"
 #~ msgstr "添付ファイルを選択してください"
-
 #~ msgid "Select Contacts"
 #~ msgstr "連絡先を選択してください"
-
 #~ msgid "Select Members"
 #~ msgstr "メンバを選択してください"
-
 #~ msgid "Select Participants and Resources"
 #~ msgstr "出席者と設備を選択してください"
-
 #~ msgid "Select Recipients"
 #~ msgstr "宛先を選択してください"
-
 #~ msgid "Select Users"
 #~ msgstr "ユーザーを選択してください"
-
 #~ msgid "Select a contact category"
 #~ msgstr "連絡先のカテゴリを選択する"
-
 #~ msgid "Select a folder for import"
 #~ msgstr "インポート用のフォルダーを選択してください"
-
 #~ msgid "Select a task category"
 #~ msgstr "仕事のカテゴリーを選択してください"
-
 #~ msgid "Select a type"
 #~ msgstr "タイプを選択する"
-
 #~ msgid "Select an infostore category"
 #~ msgstr "インフォストア カテゴリーを選択する"
-
 #~ msgid "Select appointment display type"
 #~ msgstr "アポイントの表示タイプを選択してください"
-
 #~ msgid "Select confirmation"
 #~ msgstr "ステータスを選択してください"
-
 #~ msgid "Select from the list and add selected as members"
 #~ msgstr "メンバーをリストから選択し、追加してください"
-
 #~ msgid "Select from the list and add selected as participants"
 #~ msgstr "出席者をリストから選択し、追加してください"
-
 #~ msgid "Select from the list and add selected as participants or resources"
 #~ msgstr "出席者、設備をリストから選択し、追加してください。"
-
 #~ msgid "Select from the list and add selected as recipients"
-#~ msgstr "リストから選択し選択された宛先に加えてください "
-
+#~ msgstr "リストから選択し選択された宛先に加えてください"
 #~ msgid "Select from the list and add selected as users"
 #~ msgstr "ユーザーをリストから選択し、追加してください"
-
 #~ msgid "Select the appointment path"
 #~ msgstr "アポイント パスを選択する"
-
 #~ msgid "Select the number of items to be displayed in the module panes."
 #~ msgstr "モジュール ペインに表示させるアイテム数を選択してください"
-
 #~ msgid "Send Attachment"
 #~ msgstr "添付ファイルを送信する"
-
 #~ msgid "Send E-Mail about this publication"
 #~ msgstr "この公開についてメールを送信してください"
-
 #~ msgid "Send E-Mail to all"
 #~ msgstr "全員にメールを送る"
-
 #~ msgid "Send as E-Mail"
 #~ msgstr "メールで送る"
-
 #~ msgid "Send as attachment"
 #~ msgstr "添付ファイルとして送信"
-
 #~ msgid "Send as vCard"
 #~ msgstr "vCard として送信"
-
 #~ msgid "Sender/From"
 #~ msgstr "差出人"
-
 #~ msgid "Senegal"
 #~ msgstr "セネガル"
-
 #~ msgid "Sent"
 #~ msgstr "送信日時"
-
 #~ msgid "Sep"
 #~ msgstr "9月"
-
 #~ msgid "Separator"
 #~ msgstr "表示方法"
-
 #~ msgid "Serbia"
 #~ msgstr "セルビア"
-
 #~ msgid "Service"
 #~ msgstr "サービス"
-
 #~ msgid "Seychelles"
 #~ msgstr "セイシェル"
-
 #~ msgid "Share calendar"
 #~ msgstr "予定表を共有する"
-
 #~ msgid "Share tasks"
 #~ msgstr "仕事を共有する"
-
 #~ msgid "Share your contacts"
 #~ msgstr "連絡先を共有する  "
-
 #~ msgid "Shared calendars"
 #~ msgstr "共有予定表"
-
 #~ msgid "Shared contacts"
 #~ msgstr "共有連絡先  "
-
 #~ msgid "Show 10 elements"
 #~ msgstr "10件を表示"
-
 #~ msgid "Show 15 elements"
 #~ msgstr "15件を表示"
-
 #~ msgid "Show 20 elements"
 #~ msgstr "20件を表示"
-
 #~ msgid "Show 5 elements"
 #~ msgstr "5件を表示"
-
 #~ msgid "Show External Participants"
 #~ msgstr "外部出席者を表示する"
-
 #~ msgid "Show Group Members"
 #~ msgstr "グループ メンバーを表示"
-
 #~ msgid "Show all my appointments from all calendars"
 #~ msgstr "予定表全体から自分のアポイントすべてを表示する"
-
 #~ msgid "Show confirmation popup for new appointments?"
 #~ msgstr "新しいアポイントに対するステータスのポップアップを表示する"
-
 #~ msgid "Show contacts"
 #~ msgstr "連絡先を表示する"
-
 #~ msgid "Show in Calendar"
 #~ msgstr "予定表に表示する"
-
 #~ msgid "Show in calendar"
 #~ msgstr "予定表に表示する"
-
 #~ msgid "Show mails"
 #~ msgstr "メールを表示する"
-
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
-#~ msgstr "宛先とCcのフィールドにメール アドレスの代わりに名前を表示する："
-
+#~ msgstr "宛先とCcのフィールドにメール アドレスの代わりに名前を表示する:"
 #~ msgid "Show sender image?"
 #~ msgstr "差出人の画像を表示する"
-
 #~ msgid "Show tasks"
 #~ msgstr "仕事を表示する"
-
 #~ msgid "Sierra Leone"
 #~ msgstr "シエラレオネ"
-
 #~ msgid "Signature:"
-#~ msgstr "署名："
-
+#~ msgstr "署名:"
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr ""
 #~ "繰り返されるアポイントにつき、さらに競合を引き起こすかも知れません。"
-
 #~ msgid "Size"
 #~ msgstr "サイズ"
-
 #~ msgid "Size (bytes)"
 #~ msgstr "サイズ (バイト)"
-
 #~ msgid "Slovakia"
 #~ msgstr "スロヴァキア"
-
 #~ msgid "Slovenia"
 #~ msgstr "スロヴェニア"
-
 #~ msgid "Social"
 #~ msgstr "ソーシャル"
-
 #~ msgid "Social Messaging accounts"
 #~ msgstr "ソーシャル メッセージング アカウント"
-
 #~ msgid "Solomon Islands"
 #~ msgstr "ソロモン諸島"
-
 #~ msgid "Somalia"
 #~ msgstr "ソマリア"
-
 #~ msgid "Source"
 #~ msgstr "ソース"
-
 #~ msgid "South Africa"
 #~ msgstr "南アフリカ"
-
 #~ msgid "South Georgia and the South Sandwich Islands"
 #~ msgstr "サウスジョージアとサウスサンドイッチ諸島"
-
 #~ msgid "Spam"
 #~ msgstr "スパム"
-
 #~ msgid "Spam folder"
 #~ msgstr "スパム フォルダ"
-
 #~ msgid "Spouse's name:"
-#~ msgstr "配偶者名："
-
+#~ msgstr "配偶者名:"
 #~ msgid "Sri Lanka"
 #~ msgstr "スリランカ"
-
 #~ msgid "Start"
 #~ msgstr "開始"
-
 #~ msgid "Start Page"
 #~ msgstr "スタート ページ"
-
 #~ msgid "Start date:"
-#~ msgstr "開始日時："
-
+#~ msgstr "開始日時:"
 #~ msgid "Start page"
 #~ msgstr "スタート ページ"
-
 #~ msgid "Start time"
 #~ msgstr "開始時刻"
-
 #~ msgid "Start:"
-#~ msgstr "開始："
-
+#~ msgstr "開始:"
 #~ msgid "Starts at"
 #~ msgstr "開始"
-
 #~ msgid "Starts at:"
-#~ msgstr "開始時刻："
-
+#~ msgstr "開始時刻:"
 #~ msgid "Starts on %1$s, due on %2$s."
 #~ msgstr "%1$s に開始し、期限は %2$s です。"
-
 #~ msgid "Starts on %s."
 #~ msgstr "%s に開始。"
-
 #~ msgid "State (business)"
-#~ msgstr "都道府県 （ビジネス）"
-
+#~ msgstr "都道府県 (ビジネス)"
 #~ msgid "State (other)"
-#~ msgstr "都道府県 （その他）"
-
+#~ msgstr "都道府県 (その他)"
 #~ msgid "State (other):"
-#~ msgstr "都道府県 （その他）："
-
+#~ msgstr "都道府県 (その他):"
 #~ msgid "State (private)"
-#~ msgstr "都道府県 (プライベート)："
-
+#~ msgstr "都道府県 (プライベート):"
 #~ msgid "State:"
-#~ msgstr "都道府県："
-
+#~ msgstr "都道府県:"
 #~ msgid "Static resizing..."
-#~ msgstr "スタティック リサイズ中です ..."
-
+#~ msgstr "スタティック リサイズしています..."
 #~ msgid "Status:"
-#~ msgstr "ステータス："
-
+#~ msgstr "ステータス:"
 #~ msgid "Street (business)"
-#~ msgstr "番地 （ビジネス）"
-
+#~ msgstr "番地 (ビジネス)"
 #~ msgid "Street (other)"
-#~ msgstr "番地 （その他）"
-
+#~ msgstr "番地 (その他)"
 #~ msgid "Street (other):"
-#~ msgstr "番地 （その他）："
-
+#~ msgstr "番地 (その他):"
 #~ msgid "Street (private)"
-#~ msgstr "番地 （プライベート）"
-
+#~ msgstr "番地 (プライベート)"
 #~ msgid "Street:"
-#~ msgstr "番地："
-
+#~ msgstr "番地:"
 #~ msgid "Subject:"
-#~ msgstr "件名："
-
+#~ msgstr "件名:"
 #~ msgid "Subscribe"
 #~ msgstr "登録する"
-
 #~ msgid "Subscribe Folder"
 #~ msgstr "フォルダを登録する"
-
 #~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
-#~ msgstr "LinkedIn, Facebook, Google ... から連絡先を登録する"
-
+#~ msgstr "LinkedIn, Facebook, Google... から連絡先を登録する"
 #~ msgid "Subscribe into:"
-#~ msgstr "登録先："
-
+#~ msgstr "登録先:"
 #~ msgid "Subscribed"
 #~ msgstr "登録済"
-
 #~ msgid "Subscription status"
 #~ msgstr "登録状況"
-
 #~ msgid "Subscriptions successfully migrated"
-#~ msgstr "登録の移行に成功しました"
-
+#~ msgstr "登録が正しく移行されました。"
 #~ msgid "Successfully imported: %d"
-#~ msgstr "インポートに成功しました： %d"
-
+#~ msgstr "次のインポートに成功しました: %d"
 #~ msgid "Sudan"
 #~ msgstr "スーダン"
-
 #~ msgid "Suffix:"
-#~ msgstr "称号："
-
+#~ msgstr "称号:"
 #~ msgid "Sun"
 #~ msgstr "日曜日"
-
 #~ msgid ""
 #~ "Supported Outlook versions (Connector 2 for Microsoft Outlook): Latest "
 #~ "Versions of Microsoft Outlook 2003, Microsoft Outlook 2007, Outlook 2010 "
 #~ "(no support of \"Office 2010 Click-to-Run\", \"Office Home and Business "
 #~ "2010 Testversion\")"
 #~ msgstr ""
-#~ "（Connector 2 for Microsoft Outlookにより）サポートされるOutlookのバージョ"
-#~ "ン： Microsoft Outlook 2003、Microsoft Outlook 2007、Outlook 2010の最新"
+#~ "(Connector 2 for Microsoft Outlookにより) サポートされる Outlook のバージョ"
+#~ "ン: Microsoft Outlook 2003、Microsoft Outlook 2007、Outlook 2010の最新"
 #~ "バージョン(\"Office 2010クイック実行\"、\"Office HomeおよびBusiness 2010の"
 #~ "テストバージョン\"はサポートされません)。"
-
 #~ msgid "Suriname"
 #~ msgstr "スリナム"
-
 #~ msgid "Svalbard and Jan Mayen"
 #~ msgstr "スヴァールバルおよびヤンマイエン"
-
 #~ msgid "Swaziland"
 #~ msgstr "スワジランド"
-
 #~ msgid "Sweden"
 #~ msgstr "スウェーデン"
-
 #~ msgid "Swiss franc"
 #~ msgstr "スイスフラン"
-
 #~ msgid "Switzerland"
 #~ msgstr "スイス"
-
 #~ msgid "Sync with mobile phone"
 #~ msgstr "モバイル フォンと同期する"
-
 #~ msgid "Synchronization"
 #~ msgstr "同期"
-
 #~ msgid "Synchronize with Outlook"
 #~ msgstr "Outlookと同期する"
-
 #~ msgid ""
 #~ "Syntax error in config: \n"
 #~ "%s"
 #~ msgstr ""
-#~ "構成における構文エラー： \n"
+#~ "構成における構文エラー: \n"
 #~ "%s"
-
 #~ msgid ""
 #~ "Syntax error in server response (%s): \"%s\"\n"
 #~ "\n"
@@ -8138,168 +7582,124 @@ msgstr "マイ パスワード"
 #~ "\n"
 #~ "Response: %s"
 #~ msgstr ""
-#~ "サーバ レスポンスにおける構文エラー (%s)： \"%s\"\n"
+#~ "サーバ レスポンスにおける構文エラー (%s): \"%s\"\n"
 #~ "\n"
-#~ "URL： %s\n"
+#~ "URL: %s\n"
 #~ "\n"
-#~ "データ： %s\n"
+#~ "データ: %s\n"
 #~ "\n"
-#~ "レスポンス： %s"
-
+#~ "レスポンス: %s"
 #~ msgid "Syrian Arab Republic"
 #~ msgstr "シリアアラブ共和国"
-
 #~ msgid "System"
 #~ msgstr "システム"
-
 #
 #~ msgctxt "thursday"
 #~ msgid "T"
 #~ msgstr "木"
-
 #
 #~ msgctxt "tuesday"
 #~ msgid "T"
 #~ msgstr "火"
-
 #~ msgid "TAX ID:"
-#~ msgstr "タックスID："
-
+#~ msgstr "タックスID:"
 #~ msgid "TTY/TDD:"
-#~ msgstr "TTY/TDD："
-
+#~ msgstr "TTY/TDD:"
 #~ msgid "Tab-based panel"
 #~ msgstr "タブ形式パネル"
-
 #~ msgid "Tag mail with"
 #~ msgstr "次のタグをメールに付ける"
-
 #~ msgid "Taiwan"
 #~ msgstr "台湾"
-
 #~ msgid "Tajikistan"
 #~ msgstr "タジキスタン"
-
 #~ msgid "Tanzania"
 #~ msgstr "タンザニア"
-
 #~ msgid "Target"
 #~ msgstr "対象"
-
 #~ msgid "Task"
 #~ msgstr "仕事"
-
 #~ msgid "Tasks:"
 #~ msgstr "仕事:"
-
 #~ msgid "Team"
 #~ msgstr "チーム"
-
 #~ msgid "Team Members"
 #~ msgstr "チーム メンバー"
-
 #~ msgid "Telex:"
-#~ msgstr "テレックス："
-
+#~ msgstr "テレックス:"
 #~ msgid "Tell me more..."
-#~ msgstr "詳細を見る ..."
-
+#~ msgstr "詳細を見る..."
 #~ msgid "Thailand"
 #~ msgstr "タイ"
-
 #~ msgid "The E-Mail address \"%s\" is not valid."
 #~ msgstr "メール アドレス \"%s\" は、有効ではありません。"
-
 #~ msgid ""
 #~ "The E-Mail address you have entered seems not to be valid. Would you like "
 #~ "to add it anyway?"
 #~ msgstr ""
 #~ "入力されたメール アドレスは、有効で無いようです。とりあえずこのまま加えま"
 #~ "すか？"
-
 #~ msgid "The E-Mail module is not available"
 #~ msgstr "メール モジュールを利用することはできません"
-
 #~ msgid ""
 #~ "The configuration could not be saved, because of the following error:"
-#~ msgstr "構成を保存することができませんでした。次のエラーが理由です："
-
+#~ msgstr "構成を保存することができませんでした。次のエラーが理由です:"
 #~ msgid "The connection was successful."
 #~ msgstr "接続に成功しました。"
-
 #~ msgid ""
 #~ "The entered value for %s is not within the allowed range. Please use a "
 #~ "value from -130000 to 130000."
 #~ msgstr ""
 #~ "%s に対する入力値は許容範囲を超えています。数値は、 -130000 から 130000　"
 #~ "までの範囲で使用してください。"
-
 #~ msgid ""
 #~ "The following addresses are already on the list of participants and "
 #~ "therefore not been added: %s"
 #~ msgstr ""
 #~ "次のアドレスは、出席者のリストにすでに存在しているため追加できませんでし"
-#~ "た：%s"
-
+#~ "た:%s"
 #~ msgid "The following appointment already started:"
-#~ msgstr "次のアポイントは既に開始しています："
-
+#~ msgstr "次のアポイントは既に開始しています:"
 #~ msgid "The following task is already past due:"
-#~ msgstr "以下の仕事は、既に締切を過ぎています："
-
+#~ msgstr "以下の仕事は、既に締切を過ぎています:"
 #~ msgid "The following task is due in %s:"
-#~ msgstr "以下の仕事は%sが締切日です："
-
+#~ msgstr "以下の仕事は%sが締切日です:"
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "入力必須のフィールド %1$s が入力されていません。"
-
 #~ msgid "The new folder tree setting will take effect after a new login."
 #~ msgstr "新しいフォルダ ツリーは、次のログオン以降有効になります。"
-
 #~ msgid "The panel setting will take effect after a new login."
 #~ msgstr "パネル設定は、次のログイン以降有効になります。"
-
 #~ msgid "The publication %s is now disabled"
 #~ msgstr "公開サイト %s は無効化されました。"
-
 #~ msgid "The publication %s is now enabled"
 #~ msgstr "公開サイト %s は有効化されました。"
-
 #~ msgid ""
 #~ "The published data will be accessible to everyone on the Internet. Please "
 #~ "consider, which data you want to publish."
 #~ msgstr ""
 #~ "公開されたデータは、インターネット上で、誰からでもアクセス可能です。どの"
 #~ "データを公開するのかを考慮ください。"
-
 #~ msgid "The repeat interval must be an integer number"
 #~ msgstr "繰り返しの間隔は、整数でなければなりません"
-
 #~ msgid "The search pattern requires at least %s characters."
 #~ msgstr "検索パターンには少なくとも %s 文字必要です。"
-
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr "選択されたフィルター ルールは、未知のフォルダ '%s' を参照します。"
-
 #~ msgid "The server didn't respond!"
 #~ msgstr "サーバーは反応しませんでした！"
-
 #~ msgid "The subscription %s is now disabled"
-#~ msgstr "登録URL %s は無効化されてました。 "
-
+#~ msgstr "登録URL %s は無効化されてました。"
 #~ msgid "The subscription %s is now enabled"
 #~ msgstr "登録URL %s は有効化されました。"
-
 #~ msgid "The two newly entered passwords do not match."
 #~ msgstr "これら2つの新たに入力されたパスワードが一致しません。"
-
 #~ msgid ""
 #~ "The updater will inform you of any updates for the Connector for "
 #~ "Microsoft Outlook and Notifier."
 #~ msgstr ""
 #~ "Updaterが、Connector for Microsoft OutlookとNotifierに対するいかなる更新も"
 #~ "通知します。"
-
 #~ msgid ""
 #~ "The window could not be opened. Most likely it has been blocked by a pop-"
 #~ "up or advertisement blocker. Please check your browser settings and make "
@@ -8308,215 +7708,152 @@ msgstr "マイ パスワード"
 #~ "ウィンドウを開くことができませんでした。ポップアップや広告ブロッカーによっ"
 #~ "てブロックされたものと考えられます。ブラウザーの設定を確認するとともに、こ"
 #~ "のドメインに対してポップアップを許可してください。"
-
 #~ msgid "Theme will be applied after a new login."
 #~ msgstr "テーマは、次のログオン以降適用されます。"
-
 #~ msgid "This Signature name already exists"
 #~ msgstr "この署名は既に存在します"
-
 #~ msgid "This Team name already exists"
 #~ msgstr "このチーム名は、既に存在します"
-
 #~ msgid "This feature is not available"
 #~ msgstr "この機能は利用できません"
-
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールは、公開するURLを含んでいます。"
-
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
 #~ msgstr "このオブジェクトはファイルを含んでいません、リンクを送信しますか？"
-
 #~ msgid "This session will be terminated in %d second."
 #~ msgid_plural "This session will be terminated in %d seconds."
 #~ msgstr[0] "このセッションは、%d 秒後に終了します。"
 #~ msgstr[1] "このセッションは、%d 秒後に終了します。"
-
 #~ msgid "This session will be terminated."
 #~ msgstr "このセッションを終了します。"
-
 #~ msgid "Thu"
 #~ msgstr "木"
-
 #~ msgid "Time Range"
 #~ msgstr "時間軸"
-
 #~ msgid "Timor-Leste"
 #~ msgstr "東ティモール"
-
 #~ msgctxt "salutation"
 #~ msgid "Title"
 #~ msgstr "肩書き"
-
 #~ msgctxt "description"
 #~ msgid "Title:"
-#~ msgstr "件名："
-
+#~ msgstr "件名:"
 #
 #~ msgctxt "salutation"
 #~ msgid "Title:"
-#~ msgstr "件名："
-
+#~ msgstr "件名:"
 #~ msgid "To %s"
 #~ msgstr "宛先 %s"
-
 #~ msgid "To view attachment you must first save your e-mail as a draft."
 #~ msgstr ""
 #~ "添付ファイルを表示するには、まずメールを下書きとして保存する必要がありま"
 #~ "す。"
-
 #~ msgid "To..."
-#~ msgstr "宛先 ..."
-
+#~ msgstr "宛先..."
 #~ msgid "To:"
-#~ msgstr "宛先："
-
+#~ msgstr "宛先:"
 #~ msgid "Togo"
 #~ msgstr "トーゴ"
-
 #~ msgid "Tokelau"
 #~ msgstr "トケラウ"
-
 #~ msgid "Tonga"
 #~ msgstr "トンガ"
-
 #~ msgid "Too short"
 #~ msgstr "短すぎです"
-
 #~ msgid "Trash folder"
 #~ msgstr "ごみ箱フォルダ"
-
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "トリニダードトバゴ"
-
 #~ msgid "Tue"
 #~ msgstr "火"
-
 #~ msgid "Tunisia"
 #~ msgstr "チュニジア"
-
 #~ msgid "Turkey"
 #~ msgstr "トルコ"
-
 #~ msgid "Turkmenistan"
 #~ msgstr "トルクメニスタン"
-
 #~ msgid "Turks and Caicos Islands"
 #~ msgstr "タークスアンドケーコス諸島"
-
 #~ msgid "Tuvalu"
 #~ msgstr "トゥヴァル"
-
 #~ msgid "Type:"
-#~ msgstr "タイプ："
-
+#~ msgstr "タイプ:"
 #~ msgid "URI"
 #~ msgstr "URI"
-
 #~ msgid "URI:"
-#~ msgstr "URI："
-
+#~ msgstr "URI:"
 #~ msgid "US dollar"
 #~ msgstr "米ドル"
-
 #~ msgid "USD"
 #~ msgstr "USD"
-
 #~ msgid "UWA Modules"
 #~ msgstr "UWA モジュール"
-
 #~ msgid "UWA Widgets..."
-#~ msgstr "UWA ウィジット ..."
-
+#~ msgstr "UWA ウィジット..."
 #~ msgid "Uganda"
 #~ msgstr "ウガンダ"
-
 #~ msgid "Ukraine"
 #~ msgstr "ウクライナ"
-
 #~ msgid "Unable to create a new subscription folder."
 #~ msgstr "新しい登録フォルダを作成できません。"
-
 #~ msgid "Unable to display E-Mail source."
 #~ msgstr "メール ソースを表示することができません。"
-
 #~ msgid ""
 #~ "Unable to establish a connection to the E-Mail server. Possible reasons: "
 #~ "the mail server is (temporarily) down or there are network connection "
 #~ "problems. To prevent further errors the module has been disabled. Please "
 #~ "contact your administrator."
 #~ msgstr ""
-#~ "メール サーバへの接続を確立することができません。考えられる理由： メール"
-#~ "サーバが（一時的に）ダウンしているか、または、ネットワーク接続に問題があり"
+#~ "メール サーバへの接続を確立することができません。考えられる理由: メール"
+#~ "サーバが (一時的に) ダウンしているか、または、ネットワーク接続に問題があり"
 #~ "ます。更なるエラーを防ぐため、モジュールは無効化されました。システム管理者"
 #~ "に連絡ください。"
-
 #~ msgid "Unanswered"
 #~ msgstr "未回答"
-
 #~ msgid "Undeleted"
 #~ msgstr "未削除"
-
 #~ msgid ""
 #~ "Unexpected: Unable to load data because the server response was empty! "
 #~ "Please try again later or contact the system administrator!"
 #~ msgstr ""
-#~ "予期せぬ出来事が生じました： サーバ レスポンスがなかったため、データをロー"
+#~ "予期せぬ出来事が生じました: サーバ レスポンスがなかったため、データをロー"
 #~ "ドすることができません。後でもう一度試すか、システム管理者に連絡してくださ"
 #~ "い。"
-
 #~ msgid "Unified Mail"
 #~ msgstr "ユニファイド メール"
-
 #~ msgid "United Arab Emirates"
 #~ msgstr "アラブ首長国連邦"
-
 #~ msgid "United Kingdom"
 #~ msgstr "イギリス"
-
 #~ msgid "United States"
 #~ msgstr "アメリカ合衆国"
-
 #~ msgid "United States Minor Outlying Islands"
 #~ msgstr "合衆国領有小離島"
-
 #~ msgid "Unknown"
 #~ msgstr "不明な"
-
 #~ msgid "Unlock"
 #~ msgstr "アンロック"
-
 #~ msgid "Unnamed signature"
 #~ msgstr "署名が無記名になっています"
-
 #~ msgid "Until:"
-#~ msgstr "終了時刻："
-
+#~ msgstr "終了時刻:"
 #~ msgid "Up"
 #~ msgstr "上へ"
-
 #~ msgid "Update"
 #~ msgstr "更新する"
-
 #~ msgid "Upload a picture"
 #~ msgstr "写真をアップロードする"
-
 #~ msgid "Uruguay"
 #~ msgstr "ウルグアイ"
-
 #~ msgid "Use \"Standalone\" Mode:"
-#~ msgstr "\"Standalone\" モードを使用してください："
-
+#~ msgstr "\"Standalone\" モードを使用してください:"
 #~ msgid "Use as template"
 #~ msgstr "テンプレートに使用"
-
 #~ msgid "Use for appointment"
 #~ msgstr "アポイントに戻る"
-
 #~ msgid "Use the expert mode?"
 #~ msgstr "エキスパート モードを使用する"
-
 #~ msgid ""
 #~ "Use this option when logging in to the server from a public or shared "
 #~ "computer. Your credentials are not saved locally. You can only use one "
@@ -8528,119 +7865,83 @@ msgstr "マイ パスワード"
 #~ "パブリック、または、共有コンピュータからサーバにログインしている場合は、こ"
 #~ "のオプションを使用してください。あなたの証明書は、ローカルに保存されませ"
 #~ "ん。グループウェアで作業をするにあたって、一つのブラウザ ウィンドウが利用"
-#~ "できるのみです。ブラウザ ウィンドウを再ロードすることはできません。 グルー"
+#~ "できるのみです。ブラウザ ウィンドウの再読み込みはできません。 グルー"
 #~ "プウェアでの作業を終了するためには、まず、サーバからログアウトしてくださ"
 #~ "い。ブラウザ ウィンドウを閉じてください。これは、あなたのグループウェア "
 #~ "データへの許可されていないアクセスを防ぎます。"
-
 #~ msgid "User"
 #~ msgstr "ユーザ"
-
 #~ msgid "Users"
 #~ msgstr "ユーザ"
-
 #~ msgid "Uzbekistan"
 #~ msgstr "ウズベキスタン"
-
 #~ msgid "V-Split"
 #~ msgstr "垂直分割"
-
 #~ msgid "V-split view"
 #~ msgstr "垂直分割表示"
-
 #~ msgid "Vacation Notice"
 #~ msgstr "休暇通知"
-
 #~ msgid "Vacation notice is active"
 #~ msgstr "休暇通知が有効になっています"
-
 #~ msgid "Vanuatu"
 #~ msgstr "ヴァヌアトゥ"
-
 #~ msgid "Venezuela"
 #~ msgstr "ベネズエラ"
-
 #~ msgid "Version"
 #~ msgstr "バージョン"
-
 #~ msgid "Version comment"
 #~ msgstr "バージョンに関するコメント"
-
 #~ msgid "Very high"
 #~ msgstr "非常に高い"
-
 #~ msgid "Very low"
 #~ msgstr "非常に低い"
-
 #~ msgid "Very strong"
 #~ msgstr "非常に強固です"
-
 #~ msgid "Viet Nam"
 #~ msgstr "ベトナム"
-
 #~ msgid "View all appointments from all available calendars"
 #~ msgstr "利用できる予定表全体からすべてのアポイントを見る"
-
 #~ msgid "View all attachments"
 #~ msgstr "すべての添付ファイルを見る"
-
 #~ msgid "View the previous week"
 #~ msgstr "前週を見る"
-
 #~ msgid "Virgin Islands, British"
-#~ msgstr "ヴァージン諸島（英国）"
-
+#~ msgstr "ヴァージン諸島 (英国)"
 #~ msgid "Virgin Islands, U.S."
-#~ msgstr "ヴァージン諸島（米国）"
-
+#~ msgstr "ヴァージン諸島 (米国)"
 #~ msgid "Visibility"
 #~ msgstr "可視性"
-
 #~ msgid "Visible folder"
 #~ msgstr "可視フォルダ"
-
 #~ msgid "Visual effects"
 #~ msgstr "視覚効果"
-
 #
 #~ msgctxt "wednesday"
 #~ msgid "W"
 #~ msgstr "水"
-
 #~ msgid "Wallis and Futuna"
 #~ msgstr "ワリーエフトゥーナ"
-
 #~ msgid "Warning"
 #~ msgstr "警告"
-
 #~ msgid "Warning: %2$s"
-#~ msgstr "警告： %2$s"
-
+#~ msgstr "警告: %2$s"
 #~ msgid "Warnings:"
-#~ msgstr "警告："
-
+#~ msgstr "警告:"
 #~ msgid "Weak"
 #~ msgstr "脆弱です"
-
 #~ msgid "Wed"
 #~ msgstr "水"
-
 #~ msgid "Week(s) on"
 #~ msgstr "週おき"
-
 #~ msgid "Western Sahara"
 #~ msgstr "西サハラ"
-
 #~ msgid "When \"Reply all\":"
-#~ msgstr "\"全員に返信する\"際："
-
+#~ msgstr "\"全員に返信する\"際:"
 #~ msgid "When activating this option an installation wizard will be launched."
 #~ msgstr ""
 #~ "このオプションを有効にすると、インストール ウィザードが立ち上がります。"
-
 #~ msgid "When switching to another view"
 #~ msgstr "他の表示に切り替える際"
-
 #~ msgid ""
 #~ "When using this publish feature, you as the current owner of the data are "
 #~ "responsible for being careful with privacy rules and for complying with "
@@ -8660,9 +7961,9 @@ msgstr "マイ パスワード"
 #~ "protection, e.g. by proper password protection."
 #~ msgstr ""
 #~ "この公開機能を使用する場合、現在のデータ所有者として、プライバシー規則や法"
-#~ "律義務（著作権法や個人情報法）に従う必要があります。\n"
+#~ "律義務 (著作権法や個人情報法) に従う必要があります。\n"
 #~ "\n"
-#~ "特に、個人情報を公開するする場合、連邦データ保護法（BDSG、ドイツ）、また"
+#~ "特に、個人情報を公開するする場合、連邦データ保護法 (BDSG、ドイツ)、また"
 #~ "は、当製品使用国の個人情報に関する法令に従う責任を負うことになります。\n"
 #~ "\n"
 #~ "ヨーロッパおよびその他の国家規則により当事者としてデータ経済に責任を負って"
@@ -8672,61 +7973,47 @@ msgstr "マイ パスワード"
 #~ "とを促します。つまり、個人データをどこに保存するか、そして、誰に転送するか"
 #~ "を慎重に考慮ください。例えば、適切なパスワード保護を行うことで、適切なアク"
 #~ "セス保護を確実に行ってください。"
-
 #~ msgid "Windows are shown as"
 #~ msgstr "ウィンドウの表示様式"
-
 #~ msgid "Work week starts on"
 #~ msgstr "稼働日の開始曜日"
-
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "次の誕生日を定期的なアポイントとして作成します"
-
 #~ msgid "Yemen"
 #~ msgstr "イエメン"
-
 #~ msgid "Yes, upgrade my account"
 #~ msgstr "はい、アカウントをアップグレードします"
-
 #~ msgid "You can download the updates from within the updater."
 #~ msgstr "updaterの内部から、更新をダウンロードすることができます。"
-
 #~ msgid "You can't create a new recurrence in a modified appointment."
 #~ msgstr ""
 #~ "修正されたアポイントに、新たな定期的なアポイントを作成することはできませ"
 #~ "ん。"
-
 #~ msgid ""
 #~ "You cannot remove the owner of the shared folder from this appointment."
 #~ msgstr "このアポイントから共有フォルダの所有者を削除することはできません。"
-
 #~ msgid "You cannot remove yourself from this appointment."
 #~ msgstr "このアポイントからあなた自身を削除することはできません。"
-
 #~ msgid "You did not enter a subject. Would you like to enter a subject now?"
 #~ msgstr "件名が入力されていません。今、件名を入力しますか？"
-
 #~ msgid ""
 #~ "You do not have write permission for this folder. The new contact will be "
 #~ "saved in your personal contacts folder. "
 #~ msgstr ""
 #~ "このフォルダーに対する書き込み権限がありません。新しい連絡先は、個人連絡先"
 #~ "フォルダーに保存されます。"
-
 #~ msgid ""
 #~ "You don't have enough rights to create objects in this folder. Do you "
 #~ "want to create the object in your default folder?"
 #~ msgstr ""
 #~ "このフォルダにオブジェクトを作成するのに十分な権限がありません。既定のフォ"
 #~ "ルダにオブジェクトを作成しますか？"
-
 #~ msgid ""
 #~ "You entered an E-Mail address with IDN domain. In some environments IDN "
 #~ "domains will not work as expected. Would you like to add it nevertheless?"
 #~ msgstr ""
 #~ "メール アドレスがIDN ドメインによって入力されました。ある環境においては、"
 #~ "IDN ドメインが、期待通りに動作しません。このまま加えますか？"
-
 #~ msgid ""
 #~ "You have set up an external E-Mail account. The sole responsibility for "
 #~ "the availability of the external E-Mail account lies with the service "
@@ -8734,44 +8021,33 @@ msgstr "マイ パスワード"
 #~ msgstr ""
 #~ "外部のメール アカウントが作成されました。外部のメール アカウントが利用でき"
 #~ "るかどうかに対する唯一の責任は、サービスプロバイダにあります。"
-
 #~ msgid "You have the following appointment in %s:"
-#~ msgstr "%sの中に次のアポイントがあります："
-
+#~ msgstr "%s の中に次のアポイントがあります:"
 #~ msgid "You have to enable cookies to use this application."
 #~ msgstr ""
 #~ "このアプリケーションを使用するには、クッキーを有効にする必要があります。"
-
 #~ msgid "You have unconfirmed appointments"
 #~ msgstr "確認されていないアポイントがあります"
-
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "ジャンプするには、メール アドレスを指定しなければなりません。"
-
 #~ msgid ""
 #~ "You need to authorize %1$s to use your account. Please click on the "
 #~ "button below and the authorization will proceed in a separate window."
 #~ msgstr ""
 #~ "%1$s に、あなたのアカウント使用を許可する必要があります。下記のボタンをク"
 #~ "リックしてください。 許可プロセスが別のウィンドウで進行します。"
-
 #~ msgid "You seem to have been inactive for %d minute."
 #~ msgid_plural "You seem to have been inactive for %d minutes."
 #~ msgstr[0] "%d 分間、稼動していません。"
 #~ msgstr[1] "%d 分間、稼動していません。"
-
 #~ msgid "You wanted to be reminded about the following InfoItem:"
-#~ msgstr "以下のインフォアイテムに関してアラームが要求されました："
-
+#~ msgstr "以下のインフォアイテムに関してアラームが要求されました:"
 #~ msgid "You will need to re-login for the change to take effect."
 #~ msgstr "変更を有効にするには再ログインする必要があります。"
-
 #~ msgid "You're not allowed to delete this attachment!"
 #~ msgstr "この添付ファイルを削除することは禁止されています！"
-
 #~ msgid "Your contact information have been saved."
 #~ msgstr "連絡先情報が保存されました。"
-
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "
 #~ "additional E-Mail accounts enter your old password. This only has to be "
@@ -8782,194 +8058,135 @@ msgstr "マイ パスワード"
 #~ "に、パスワードを入力してください。これは一度だけで完了します。今、入力を"
 #~ "キャンセルした場合、すべての登録、ならびに、メールアカウント追加を新たに行"
 #~ "う必要があります。"
-
 #~ msgid ""
 #~ "Your password is more secure if it also contains capital letters, "
 #~ "numbers, and special characters like %1$s."
 #~ msgstr ""
 #~ "パスワードは、%1$s のように大文字、数字および特殊文字を入れることによって"
 #~ "より安全になります。"
-
 #~ msgid "Your personal data cannot be saved!"
 #~ msgstr "個人データを保存することはできません!"
-
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "
 #~ "scheduled appointments."
 #~ msgstr ""
 #~ "予定したアポイントメントが、それ以前に予定された一つ以上のアポイントと競合"
 #~ "しています。"
-
 #~ msgid "Your selected picture will be displayed after saving"
 #~ msgstr "選択された写真は保存後に表示されます"
-
 #~ msgid "Your session has expired. Please log in again."
 #~ msgstr "セッションが期限切れです。もう一度ログインしてください。"
-
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "セッションが期限切れです。このウィンドウを閉じる必要があります。"
-
 #~ msgid "ZIP"
 #~ msgstr "郵便番号"
-
 #~ msgid "ZIP (business)"
-#~ msgstr "郵便番号 （ビジネス）"
-
+#~ msgstr "郵便番号 (ビジネス)"
 #~ msgid "ZIP (private)"
-#~ msgstr "郵便番号 （プライベート）"
-
+#~ msgstr "郵便番号 (プライベート)"
 #~ msgid "ZIP / City"
 #~ msgstr "郵便番号 / 市区町村"
-
 #~ msgid "ZIP / City (other)"
-#~ msgstr "郵便番号 / 市区町村 （他）"
-
+#~ msgstr "郵便番号 / 市区町村 (その他)"
 #~ msgid "ZIP:"
-#~ msgstr "郵便番号："
-
+#~ msgstr "郵便番号:"
 #~ msgid "Zambia"
 #~ msgstr "ザンビア"
-
 #~ msgid "Zimbabwe"
 #~ msgstr "ジンバブエ"
-
 #~ msgid "Zloty"
 #~ msgstr "Zloty"
-
 #~ msgid "Zoom"
 #~ msgstr "ズーム"
-
 #~ msgid "above"
 #~ msgstr "本文の上"
-
 #~ msgid "absent on business"
 #~ msgstr "外出中"
-
 #~ msgid "accepted"
 #~ msgstr "承諾"
-
 #~ msgid "after"
 #~ msgstr "回数指定"
-
 #~ msgid "any"
 #~ msgstr "いずれか"
-
 #~ msgid "appointments"
 #~ msgstr "アポイント"
-
 #~ msgid "attachment"
 #~ msgstr "添付ファイル"
-
 #~ msgid "auto"
 #~ msgstr "自動"
-
 #~ msgid "back"
 #~ msgstr "戻る"
-
 #~ msgid "below"
 #~ msgstr "本文の下"
-
 #~ msgid "booked"
-#~ msgstr "予約されました"
-
+#~ msgstr "予定あり"
 #~ msgid "by %1$s until %2$s"
-#~ msgstr "%1$sによって  %2$sまでに"
-
+#~ msgstr "%1$s によって %2$s までに"
 #~ msgid "bytes"
 #~ msgstr "bytes"
-
 #~ msgid "created by %s"
 #~ msgstr "%s によって作成された"
-
 #~ msgid "d.M.yy"
 #~ msgstr "d.M.yy"
-
 #~ msgid "d.M.yyyy"
 #~ msgstr "d.M.yyyy"
-
 #~ msgid "d.MM.yy"
 #~ msgstr "d.MM.yy"
-
 #~ msgid "day every"
 #~ msgstr "日。　毎"
-
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
-
 #~ msgid "dd.MM.yy"
 #~ msgstr "dd.MM.yy"
-
 #~ msgid "dd.MM.yyyy"
 #~ msgstr "dd.MM.yyyy"
-
 #~ msgid "dd/MM/yy"
 #~ msgstr "dd/MM/yy"
-
 #~ msgid "dd/MM/yyyy"
 #~ msgstr "dd/MM/yyyy"
-
 #~ msgid "default"
 #~ msgstr "デフォルト"
-
 #~ msgid "estimated costs"
 #~ msgstr "見込まれるコスト"
-
 #~ msgid "forward"
 #~ msgstr "進む"
-
 #~ msgid "free"
 #~ msgstr "空き時間"
-
 #~ msgid "iCal"
 #~ msgstr "iCal"
-
 #~ msgid "iCalendar"
 #~ msgstr "iCalendar"
-
 #~ msgid "in"
 #~ msgstr "指定月"
-
 #~ msgid "is on"
 #~ msgstr "日付指定"
-
 #~ msgid "locked by"
-#~ msgstr "施錠（ロック）者"
-
+#~ msgstr "施錠 (ロック) 者"
 #~ msgctxt "dayview"
 #~ msgid "mm"
 #~ msgstr "mm"
-
 #~ msgid "month"
 #~ msgstr "月"
-
 #~ msgid "not sent"
 #~ msgstr "未送信"
-
 #~ msgid "on"
 #~ msgstr "期日指定"
-
 #~ msgid "organized by %s"
-#~ msgstr "開催者： %s"
-
+#~ msgstr "開催者: %s"
 #~ msgid "please select"
 #~ msgstr "選択してください"
-
 #~ msgid "predefined"
 #~ msgstr "予め定義された表示"
-
 #~ msgid "route planner"
 #~ msgstr "ルート プランナー"
-
 #~ msgid "set the last used time range of the new view"
 #~ msgstr "前回使用された時間軸を新しい表示に設定する"
-
 #~ msgid ""
 #~ "street\n"
 #~ "postal_code city"
 #~ msgstr ""
 #~ "postal_code state\n"
 #~ "city street"
-
 #~ msgid ""
 #~ "street\n"
 #~ "postal_code city\n"
@@ -8980,455 +8197,311 @@ msgstr "マイ パスワード"
 #~ "city\n"
 #~ "street\n"
 #~ "country"
-
 #~ msgid "street,postal_code/city,country,state"
 #~ msgstr "postal_code/state,city,street,country"
-
 #~ msgid "tasks"
 #~ msgstr "仕事"
-
 #~ msgid "tentative"
 #~ msgstr "未定"
-
 #~ msgid "to"
 #~ msgstr "宛先"
-
 #~ msgid "unknown"
 #~ msgstr "不明な"
-
 #~ msgid "unkown"
 #~ msgstr "不明な"
-
 #~ msgid "vCard"
 #~ msgstr "vCard"
-
 #~ msgid "waiting"
 #~ msgstr "待機中"
-
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"
-
 #~ msgid "yyyy-MM-dd"
 #~ msgstr "yyyy-MM-dd"
-
 # default date format
 #~ msgctxt "label"
 #~ msgid "yyyy-MM-dd"
 #~ msgstr "yyyy-MM-dd"
-
 #~ msgid "Aland Islands"
 #~ msgstr "オーランド諸島"
-
 #~ msgid "Client PC operating system: Windows XP, Windows Vista, Windows 7"
 #~ msgstr ""
-#~ "クライアントPCのオペレーティング システム： Windows XP, Windows Vista, "
+#~ "クライアントPCのオペレーティング システム: Windows XP, Windows Vista, "
 #~ "Windows 7"
-
 #~ msgid "Download updater for the Connector for Microsoft Outlook"
 #~ msgstr "updater for the Connector for Microsoft Outlookをダウンロードする"
-
 #~ msgid "Elements of this week only"
 #~ msgstr "今週の用件のみ"
-
 #~ msgid "Hide later elements"
 #~ msgstr "以降の用件を隠す"
-
 #~ msgid "Later tasks:"
-#~ msgstr "明日以降の仕事："
-
+#~ msgstr "明日以降の仕事:"
 #~ msgid "Step %d. Download Updater"
 #~ msgstr "手順 %d. Updaterをダウンロードする。"
-
 #~ msgid "reserved"
 #~ msgstr "予定あり"
-
 #~ msgid "temporary"
 #~ msgstr "仮の予定"
-
 #~ msgid "&Distributionlist"
 #~ msgstr "&配布リスト"
-
 #~ msgid "Add from adressbook"
 #~ msgstr "アドレス帳から追加する"
-
 #~ msgid ""
 #~ "Supported Outlook versions (Connector for Microsoft Outlook): Microsoft "
 #~ "Outlook 2003, Microsoft Outlook 2007"
 #~ msgstr ""
 #~ "Connector for Microsoft OutlookによってサポートされるOutlookのバージョ"
-#~ "ン： Microsoft Outlook 2003, Microsoft Outlook 2007"
-
+#~ "ン: Microsoft Outlook 2003, Microsoft Outlook 2007"
 #~ msgid "... or create a fresh one for your profile"
 #~ msgstr "... または、プロファイルとして新しいものを一つ作成します。"
-
 #~ msgid "Add Facebook/Twitter ..."
-#~ msgstr "FacebookやTwitterを追加する ..."
-
+#~ msgstr "FacebookやTwitterを追加する..."
 #~ msgid "No activity"
 #~ msgstr "アクティビティがありません"
-
 #~ msgid "Once"
 #~ msgstr "一回限り"
-
 #~ msgid "New account..."
-#~ msgstr "新しいアカウント ..."
-
+#~ msgstr "新しいアカウント..."
 #~ msgid "OAuth Accounts"
 #~ msgstr "OAuth アカウント"
-
 #~ msgid "No recipients have been added"
 #~ msgstr "宛先が加えられていません。"
-
 #~ msgid "Please select a contact to add"
 #~ msgstr "追加する連絡先を選択して下さい"
-
 #~ msgid "Select a contact"
 #~ msgstr "連絡先を選択してください"
-
 #~ msgid "All emails"
 #~ msgstr "すべてのメール"
-
 #~ msgid "(32-bit only)"
-#~ msgstr "(32ビット機に限る)"
-
+#~ msgstr "(32 ビット機に限る)"
 #~ msgid "Accept Party-Crasher"
 #~ msgstr "会議出席依頼受領者以外を受け容れる"
-
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "アポイント '%s' は見つかりません。"
-
 #~ msgid "No series"
 #~ msgstr "定期的なアポイントはありません"
-
 #~ msgid "Series Duration"
 #~ msgstr "定期的なアポイントを作成する期間"
-
 #~ msgid "Series appointment"
 #~ msgstr "定期的なアポイント"
-
 #~ msgctxt "calendar"
 #~ msgid "Series..."
 #~ msgstr "定期的なアポイント..."
-
 #~ msgctxt "tasks"
 #~ msgid "Series..."
 #~ msgstr "定期的なアポイント..."
-
 #~ msgid "Series:"
 #~ msgstr "定期的なアポイント:"
-
 #~ msgid "Tags"
 #~ msgstr "タグ"
-
 #~ msgid "This mail contains a reply to an invitation."
 #~ msgstr "このメールは、出席依頼に対する返信を含んでいます。"
-
 #~ msgid "This mail contains an invitation to an appointment."
 #~ msgstr "このメールには、アポイントへの出席依頼が含まれています。"
-
 #~ msgid "Update appointment"
 #~ msgstr "アポイントを更新する"
-
 #~ msgid "Update successful"
-#~ msgstr "更新に成功しました"
-
+#~ msgstr "更新に成功しました。"
 #~ msgid "Company (business)"
-#~ msgstr "会社 （ビジネス）"
-
+#~ msgstr "会社 (ビジネス)"
 #~ msgid "E-Mail (business)"
-#~ msgstr "電子メール （ビジネス）"
-
+#~ msgstr "電子メール (ビジネス)"
 #~ msgid "Enter business data"
 #~ msgstr "ビジネス データを入力する"
-
 #~ msgid "IM (business)"
 #~ msgstr "IM (ビジネス)"
-
 #~ msgid "IM (business):"
-#~ msgstr "IM (ビジネス)："
-
+#~ msgstr "IM (ビジネス):"
 #~ msgid "Matches"
 #~ msgstr "一致する"
-
 #~ msgid "Mobile (private)"
 #~ msgstr "携帯電話 (プライベート)"
-
 #~ msgid "Phone (business 2)"
-#~ msgstr "電話 (ビジネス2)"
-
+#~ msgstr "電話 (ビジネス 2)"
 #~ msgid "Phone (business 2):"
-#~ msgstr "電話 (ビジネス2):"
-
+#~ msgstr "電話 (ビジネス 2):"
 #~ msgid "Show 0 elements"
 #~ msgstr "0件を表示する"
-
 #~ msgid "Personal:"
-#~ msgstr "パーソナル："
-
+#~ msgstr "パーソナル:"
 #~ msgid "Create new series"
 #~ msgstr "新しい定期的なアポイントを作成する"
-
 #~ msgid "Get premium!"
 #~ msgstr "プレミアムを手に入れる!"
-
 #~ msgid "Syntax error in server reply: no error provided"
-#~ msgstr "サーバ応答時の構文エラー：エラーは発生しませんでした。"
-
+#~ msgstr "サーバ応答時の構文エラー:エラーは発生しませんでした。"
 #~ msgid "No Items available"
 #~ msgstr "利用できるアイテムはありません"
-
 #~ msgid "Delete UWA Modules"
 #~ msgstr "UWAモジュールを消去する"
-
 #~ msgid "Line wrap after:"
-#~ msgstr "行を折り返す場合の文字数："
-
+#~ msgstr "行を折り返す場合の文字数:"
 #~ msgid "but you can upgrade your account right now!"
 #~ msgstr "今すぐアカウントをアップグレードすることもできます"
-
 #~ msgid "who|From"
 #~ msgstr "差出人"
-
 #~ msgid "\"Bcc\"-Field"
 #~ msgstr "\"Bcc\"-フィールド"
-
 #~ msgid "\"Cc\"-Field"
 #~ msgstr "\"Cc\"-フィールド"
-
 #~ msgid "\"From\"-Field"
 #~ msgstr "\"差出人\"-フィールド"
-
 #~ msgid "Allow access for other users"
 #~ msgstr "他のユーザにアクセスを許可する"
-
 #~ msgid "As link"
 #~ msgstr "リンクとして"
-
 #~ msgid "As vCard"
 #~ msgstr "vCard として"
-
 #~ msgid "Calendar views"
 #~ msgstr "予定表の表示"
-
 #~ msgid "Collapse"
 #~ msgstr "折りたたむ"
-
 #~ msgid "Create a new E-Mail"
 #~ msgstr "新しいメールを作成する"
-
 #~ msgid "Create a new InfoItem"
 #~ msgstr "新しいインフォ アイテムを作成する"
-
 #~ msgid "Create a new appointment"
 #~ msgstr "新しいアポイントを作成する"
-
 #~ msgid "Create a new contact"
 #~ msgstr "新しい連絡先を作成する"
-
 #~ msgid "Day view"
 #~ msgstr "日ビュー"
-
 #~ msgid "Deny access to other users"
 #~ msgstr "他のユーザへのアクセスを拒否する"
-
 #~ msgid "Display list view"
 #~ msgstr "リストで表示する"
-
 #~ msgid "Display the list view"
 #~ msgstr "リストで表示する"
-
 #~ msgid "Edit Draft"
 #~ msgstr "下書きを編集する"
-
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張する"
-
 #~ msgid "H Split"
 #~ msgstr "水平分割"
-
 #~ msgid "Horizontally split"
 #~ msgstr "水平に分割する"
-
 #~ msgid "InfoBox"
 #~ msgstr "インフォボックス"
-
 #~ msgid "Lock object"
 #~ msgstr "オブジェクトをロックする"
-
 #~ msgid "Member"
 #~ msgstr "メンバー"
-
 #~ msgid "Open the card view"
 #~ msgstr "カード表示で開く"
-
 #~ msgid "Open the list view"
 #~ msgstr "リスト表示で開く"
-
 #~ msgid "Print selected E-Mails"
 #~ msgstr "選択されたメールを印刷する"
-
 #~ msgid "Print the currently selected contact"
 #~ msgstr "現在選択されている連絡先を印刷する"
-
 #~ msgid "Print the selected appointments"
 #~ msgstr "選択したアポイントを印刷"
-
 #~ msgid "Print the selected objects"
 #~ msgstr "選択されたオブジェクトを印刷する"
-
 #~ msgid "Print the selected tasks"
 #~ msgstr "選択された仕事を印刷する"
-
 #~ msgid "Save Draft"
 #~ msgstr "下書きを保存する"
-
 #~ msgid "Select the functions for the dynamic field"
 #~ msgstr "ダイナミック フィールドにするための機能を選択してください"
-
 #~ msgid "Split Horizontally"
 #~ msgstr "水平分割する"
-
 #~ msgid "Split horizontally"
 #~ msgstr "水平分割する"
-
 #~ msgid "Split vertically"
 #~ msgstr "垂直分割する"
-
 #~ msgid "Structure"
 #~ msgstr "構造"
-
 #~ msgid "Subscribe this publication..."
 #~ msgstr "この公開を登録する..."
-
 #~ msgid "Team member"
 #~ msgstr "チーム メンバー"
-
 #~ msgid "Threaded"
 #~ msgstr "スレッド表示"
-
 #~ msgid "Threaded E-Mail view"
 #~ msgstr "スレッド メール表示"
-
 #~ msgid "Threaded E-mail view"
 #~ msgstr "スレッド メール表示"
-
 #~ msgid "Unlock object"
 #~ msgstr "オブジェクトのロックを解除する"
-
 #~ msgid "Unthreaded E-Mail view"
 #~ msgstr "非スレッド メール表示"
-
 #~ msgid "V Split"
 #~ msgstr "垂直分割"
-
 #~ msgid "View appointments in custom view"
 #~ msgstr "カスタム表示でアポイントを見る"
-
 #~ msgid "View appointments in day view"
 #~ msgstr "日ビューでアポイントを見る"
-
 #~ msgid "View appointments in month view"
 #~ msgstr "月ビューでアポイントを見る"
-
 #~ msgid "View appointments in one of the calendar views"
 #~ msgstr "予定表ビューの一つでアポイントを見る"
-
 #~ msgid "View appointments in one of the team views"
 #~ msgstr "チーム ビューのひとつでアポイントを見る"
-
 #~ msgid "View appointments in week view"
 #~ msgstr "週ビューでアポイントを見る"
-
 #~ msgid "View appointments in work week view"
 #~ msgstr "稼働日ビューでアポイントを見る"
-
 #~ msgid "View the currently selected appointment"
 #~ msgstr "現在選択されているアポイントを見る"
-
 #~ msgid "View the currently selected contact"
 #~ msgstr "現在選択されている連絡先を見る"
-
 #~ msgid "Views"
 #~ msgstr "表示"
-
 #~ msgid "Week view"
 #~ msgstr "週ビュー"
-
 #~ msgid "Window"
 #~ msgstr "ウィンドウ"
-
 #~ msgid "Work week view"
 #~ msgstr "稼働日表示"
-
 #~ msgid "Hide module window"
 #~ msgstr "モジュール ウィンドウを隠します"
-
 #~ msgid ""
 #~ "Syntax error in server reply:\n"
 #~ "%s"
 #~ msgstr ""
 #~ "サーバ リプライにおけるシンタックス エラー:\n"
 #~ "%s"
-
 #~ msgid "%s Please wait..."
-#~ msgstr "%s お待ち下さい ..."
-
+#~ msgstr "%s お待ち下さい..."
 #~ msgid "Distributionlist"
 #~ msgstr "配布リスト"
-
 #~ msgid "Tagging"
 #~ msgstr "タグ付け"
-
 #~ msgid "Loading Scripts and Content ... Please Wait ..."
 #~ msgstr ""
-#~ "スクリプトとコンテンツをロードしています ・・・ 少々お待ち下さい ..."
-
+#~ "スクリプトとコンテンツを読み込んでいます... 少々お待ち下さい..."
 #~ msgid "Outlook OXtender"
 #~ msgstr "Outlook OXtender"
-
 #~ msgid "InfoStore Item"
 #~ msgstr "インフォストア アイテム"
-
 #~ msgid "Private machine"
 #~ msgstr "プライベート マシン"
-
 #~ msgid "Previous month"
 #~ msgstr "前月"
-
 #~ msgid "Next year"
 #~ msgstr "翌年"
-
 #~ msgid "Default for Quick settings"
 #~ msgstr "クイック設定についての既定値"
-
 #~ msgid "Show QuickInfo after Login"
 #~ msgstr "ログイン後にクイックインフォを表示する"
-
 #~ msgid "Show InfoBox after Login"
 #~ msgstr "ログイン後にインフォボックスを表示する"
-
 #~ msgid "Show MiniCalendar after Login"
 #~ msgstr "ログイン後にミニカレンダーを表示する"
-
 #~ msgid "No unread E-Mail."
 #~ msgstr "未読のメールはありません。"
-
 #~ msgid "You have %s unread E-Mail."
 #~ msgid_plural "You have %s unread E-Mails."
 #~ msgstr[0] "%s 通の未読メールがあります。"
 #~ msgstr[1] "%s 通の未読メールがあります。"
-
 #~ msgid "Show QuickInfo"
 #~ msgstr "クイックインフォを表示"
-
 #~ msgid "Show Minicalendar"
 #~ msgstr "ミニカレンダーを表示"
-
 #~ msgid ""
 #~ "You create a new subfolder, do you want to add rights of the superior "
 #~ "folder?"
 #~ msgstr "新しい サブフォルダを作成します、上位フォルダの権限を追加しますか？"
-
 #~ msgid ""
 #~ "Private folders are under your control and by default no other user has "
 #~ "access to your private folders. You may share your private folders to let "
@@ -9440,14 +8513,12 @@ msgstr "マイ パスワード"
 #~ "共有したり、他人にプライベート フォルダを公開することが可能です。その場"
 #~ "合、あなたは、他人が内容を編集することを許可することになり、それらの変更は"
 #~ "あなたの名前で行なわれることになります。"
-
 #~ msgid ""
 #~ "Private folders are under your control and no other user has access to "
 #~ "your private folders."
 #~ msgstr ""
 #~ "プライベート フォルダーは、完全にあなたの支配下にあり、他のユーザにアクセ"
 #~ "スされることはありません。"
-
 #~ msgid ""
 #~ "Public folders are available for all users or selected user groups as "
 #~ "determined by the administrator. The access rights can be denied for "
@@ -9460,14 +8531,12 @@ msgstr "マイ パスワード"
 #~ "ザ、あるいは、ユーザ グループに、拒否されることがあります。ユーザがパブ"
 #~ "リック フォルダーにオブジェクトを作成する場合、作成者は、自身の代表として"
 #~ "活動し、オブジェクトは作成者の名前のもとで作成されます。"
-
 #~ msgid ""
 #~ "Public folders are readable for all users or selected user groups as "
 #~ "determined by the administrator."
 #~ msgstr ""
 #~ "パブリック フォルダは、すべてのユーザ、あるいは、管理者に決定されている選"
 #~ "択されたユーザ グループによって読み取り可能となっています。"
-
 #~ msgid ""
 #~ "Shared folders are folders where another user has given you access. In "
 #~ "case you are allowed to modify items in a shared folder, you make these "
@@ -9476,17 +8545,14 @@ msgstr "マイ パスワード"
 #~ "共有フォルダは、他のユーザがアクセスを供与しているフォルダです。共有フォル"
 #~ "ダのアイテムを編集することを許可されている場合、フォルダ所有者の代表として"
 #~ "それらの変更を行なうことになります。"
-
 #~ msgid ""
 #~ "Document sharing, storage & management - The centralisation of documents "
 #~ "is the key to teamwork. Combined with version control an organisation can "
 #~ "work from a united vision that is always up-to-date."
 #~ msgstr ""
-#~ "ドキュメント共有とストレージ、および、マネジメント－　ドキュメントの中央管"
-#~ "理こそチームワークの鍵となります。バージョン コントロールとともに、企業"
-#~ "は、常に最新の状態に更新された結合されたビジョンをもとに作業する事が可能で"
-#~ "す。"
-
+#~ "ドキュメントの共有、保管、および管理 - ドキュメントの中央管理こそ"
+#~ "チームワークの鍵となります。バージョン管理とともに、企業は、"
+#~ "常に最新の状態に更新された結合されたビジョンをもとに作業できます。"
 #~ msgid ""
 #~ "The UserStore includes all shared personal InfoStore folders from other "
 #~ "users. This means, if an user shared his InfoStore folder or the "
@@ -9496,990 +8562,664 @@ msgstr "マイ パスワード"
 #~ "フォルダを含みます。これは、あるユーザーがインフォストア フォルダ、あるい"
 #~ "は、サブフォルダ構造を共有した場合、ユーザは、オブジェクトを見ることが可能"
 #~ "になることを意味します。"
-
 #~ msgid ""
 #~ "Other InfoStore folders contain shared subfolders from parent folders "
 #~ "that are not accessible to you."
 #~ msgstr ""
 #~ "他のインフォストア フォルダは、あなたがアクセスできない親フォルダから共有"
 #~ "サブフォルダを含みます。"
-
 #~ msgid "Overview Subscribtions"
 #~ msgstr "登録の概要"
-
 #~ msgid "Delete your entry"
 #~ msgstr "入力を削除します"
-
 #~ msgid "Show MiniCalendar"
 #~ msgstr "ミニカレンダー表示"
-
 #~ msgid "Select contact folder"
 #~ msgstr "連絡先フォルダを選択して下さい"
-
 #~ msgid "]"
 #~ msgstr "]"
-
 #~ msgid "Remember me"
 #~ msgstr "アラームを通知する"
-
 #~ msgid "show all my appointments from all calendars"
 #~ msgstr "すべての予定表からすべてのアポイントを表示します"
-
 #~ msgid "View the previous day"
 #~ msgstr "前日を見る"
-
 #~ msgid "View the next day"
 #~ msgstr "翌日を見る"
-
 #~ msgid "View all day events"
 #~ msgstr "終日のイベントを見る"
-
 #~ msgid "Team Member"
 #~ msgstr "チーム メンバー"
-
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "
 #~ "scheduled appointments:"
 #~ msgstr ""
 #~ "予定したアポイントが、それ以前に予定された一つ以上のアポイントと競合してい"
-#~ "ます："
-
+#~ "ます:"
 #~ msgid "description|Title:"
-#~ msgstr "説明|タイトル："
-
+#~ msgstr "説明|タイトル:"
 #~ msgid "Direct Link:"
 #~ msgstr "直接リンク"
-
 #~ msgid "Tags:"
-#~ msgstr "タグ："
-
+#~ msgstr "タグ:"
 #~ msgid "%s"
 #~ msgstr "%s"
-
 #~ msgid "InfoStore folder %s"
 #~ msgstr "インフォストア フォルダ %s"
-
 #~ msgid "Africa/Abidjan"
 #~ msgstr "アフリカ/アビジャン"
-
 #~ msgid "Africa/Accra"
 #~ msgstr "アフリカ/アクラ"
-
 #~ msgid "Africa/Addis Ababa"
 #~ msgstr "アフリカ/アジスアベバ"
-
 #~ msgid "Africa/Algiers"
 #~ msgstr "アフリカ/アルジェ"
-
 #~ msgid "Africa/Asmera"
 #~ msgstr "アフリカ/アスメラ"
-
 #~ msgid "Africa/Bangui"
 #~ msgstr "アフリカ/バングイ"
-
 #~ msgid "Africa/Banjul"
 #~ msgstr "アフリカ/バンジュール"
-
 #~ msgid "Africa/Bissau"
 #~ msgstr "アフリカ/ビサウ"
-
 #~ msgid "Africa/Blantyre"
 #~ msgstr "アフリカ/ブランタイヤ"
-
 #~ msgid "Africa/Bujumbura"
 #~ msgstr "アフリカ/ブジュンブラ"
-
 #~ msgid "Africa/Cairo"
 #~ msgstr "アフリカ/カイロ"
-
 #~ msgid "Africa/Casablanca"
 #~ msgstr "アフリカ/カサブランカ"
-
 #~ msgid "Africa/Conakry"
 #~ msgstr "アフリカ/コナクリ"
-
 #~ msgid "Africa/Dakar"
 #~ msgstr "アフリカ/ダカール"
-
 #~ msgid "Africa/Dar es Salaam"
 #~ msgstr "アフリカ/ダルエスサラーム"
-
 #~ msgid "Africa/Djibouti"
 #~ msgstr "アフリカ/ジブチ"
-
 #~ msgid "Africa/Douala"
 #~ msgstr "アフリカ/ドゥアラ"
-
 #~ msgid "Africa/Freetown"
 #~ msgstr "アフリカ/フリータウン"
-
 #~ msgid "Africa/Gaborone"
 #~ msgstr "アフリカ/ガボローン"
-
 #~ msgid "Africa/Harare"
 #~ msgstr "アフリカ/ハラレ"
-
 #~ msgid "Africa/Johannesburg"
 #~ msgstr "アフリカ/ヨハネスバーグ"
-
 #~ msgid "Africa/Kampala"
 #~ msgstr "アフリカ/カンパラ"
-
 #~ msgid "Africa/Khartoum"
 #~ msgstr "アフリカ/ハルツーム"
-
 #~ msgid "Africa/Kigali"
 #~ msgstr "アフリカ/キガリ"
-
 #~ msgid "Africa/Kinshasa"
 #~ msgstr "アフリカ/キンシャサ"
-
 #~ msgid "Africa/Lagos"
 #~ msgstr "アフリカ/ラゴス"
-
 #~ msgid "Africa/Libreville"
 #~ msgstr "アフリカ/リーブルビル"
-
 #~ msgid "Africa/Lome"
 #~ msgstr "アフリカ/ロメ"
-
 #~ msgid "Africa/Luanda"
 #~ msgstr "アフリカ/ルアンダ"
-
 #~ msgid "Africa/Lubumbashi"
 #~ msgstr "アフリカ/ルブンバシ"
-
 #~ msgid "Africa/Lusaka"
 #~ msgstr "アフリカ/ルサカ"
-
 #~ msgid "Africa/Malabo"
 #~ msgstr "アフリカ/マラボ"
-
 #~ msgid "Africa/Maputo"
 #~ msgstr "アフリカ/マプト"
-
 #~ msgid "Africa/Maseru"
 #~ msgstr "アフリカ/マセル"
-
 #~ msgid "Africa/Mbabane"
 #~ msgstr "アフリカ/ムババネ"
-
 #~ msgid "Africa/Mogadishu"
 #~ msgstr "アフリカ/モガディシュ"
-
 #~ msgid "Africa/Monrovia"
 #~ msgstr "アフリカ/モンロビア"
-
 #~ msgid "Africa/Nairobi"
 #~ msgstr "アフリカ/ナイロビ"
-
 #~ msgid "Africa/Ndjamena"
 #~ msgstr "アフリカ/ヌジャメナ"
-
 #~ msgid "Africa/Niamey"
 #~ msgstr "アフリカ/ニアメー"
-
 #~ msgid "Africa/Nouakchott"
 #~ msgstr "アフリカ/ヌアクショット"
-
 #~ msgid "Africa/Ouagadougou"
 #~ msgstr "アフリカ/ワガドゥグ "
-
 #~ msgid "Africa/Porto-Novo"
 #~ msgstr "アフリカ/ポルトノボ"
-
 #~ msgid "Africa/Sao Tome"
 #~ msgstr "アフリカ/サントメ"
-
 #~ msgid "Africa/Timbuktu"
 #~ msgstr "アフリカ/ティンブクトゥ"
-
 #~ msgid "Africa/Tripoli"
 #~ msgstr "アフリカ/トリポリ"
-
 #~ msgid "Africa/Tunis"
 #~ msgstr "アフリカ/チュニス"
-
 #~ msgid "Africa/Windhoek"
 #~ msgstr "アフリカ/ウィントフーク"
-
 #~ msgid "America/Adak"
 #~ msgstr "アメリカ/アダック"
-
 #~ msgid "America/Anchorage"
 #~ msgstr "アメリカ/アンカレジ"
-
 #~ msgid "America/Anguilla"
 #~ msgstr "アメリカ/アンギラ"
-
 #~ msgid "America/Antigua"
 #~ msgstr "アメリカ/アンティグア島"
-
 #~ msgid "America/Aruba"
 #~ msgstr "アメリカ/アルバ島"
-
 #~ msgid "America/Asuncion"
 #~ msgstr "アメリカ/アスンシオン"
-
 #~ msgid "America/Barbados"
 #~ msgstr "アメリカ/バルバドス"
-
 #~ msgid "America/Belize"
 #~ msgstr "アメリカ/ベリーズ"
-
 #~ msgid "America/Bogota"
 #~ msgstr "アメリカ/ボゴタ"
-
 #~ msgid "America/Buenos Aires"
 #~ msgstr "アメリカ/ブエノスアイレス"
-
 #~ msgid "America/Caracas"
 #~ msgstr "アメリカ/カラカス"
-
 #~ msgid "America/Cayenne"
 #~ msgstr "アメリカ/カイエンヌ"
-
 #~ msgid "America/Cayman"
 #~ msgstr "アメリカ/ケイマン諸島"
-
 #~ msgid "America/Chicago"
 #~ msgstr "アメリカ/シカゴ"
-
 #~ msgid "America/Costa Rica"
 #~ msgstr "アメリカ/コスタリカ"
-
 #~ msgid "America/Cuiaba"
 #~ msgstr "アメリカ/クイアバ"
-
 #~ msgid "America/Curacao"
 #~ msgstr "アメリカ/キュラソー島"
-
 #~ msgid "America/Dawson Creek"
 #~ msgstr "アメリカ/ドーソンクリーク"
-
 #~ msgid "America/Denver"
 #~ msgstr "アメリカ/デンバー"
-
 #~ msgid "America/Dominica"
 #~ msgstr "アメリカ/ドミニカ"
-
 #~ msgid "America/Edmonton"
 #~ msgstr "アメリカ/エドモントン"
-
 #~ msgid "America/El Salvador"
 #~ msgstr "アメリカ/エルサルバドル"
-
 #~ msgid "America/Fortaleza"
 #~ msgstr "アメリカ/フォルタレザ"
-
 #~ msgid "America/Godthab"
 #~ msgstr "アメリカ/ゴッドホープ"
-
 #~ msgid "America/Grand Turk"
 #~ msgstr "アメリカ/グランドターク"
-
 #~ msgid "America/Grenada"
 #~ msgstr "アメリカ/グレナダ"
-
 #~ msgid "America/Guadeloupe"
 #~ msgstr "アメリカ/グアダループ"
-
 #~ msgid "America/Guatemala"
 #~ msgstr "アメリカ/グアテマラ"
-
 #~ msgid "America/Guayaquil"
 #~ msgstr "アメリカ/グアヤキル"
-
 #~ msgid "America/Guyana"
 #~ msgstr "アメリカ/ガイアナ"
-
 #~ msgid "America/Halifax"
 #~ msgstr "アメリカ/ハリファクス"
-
 #~ msgid "America/Havana"
 #~ msgstr "アメリカ/ハバナ"
-
 #~ msgid "America/Indianapolis"
 #~ msgstr "アメリカ/インディアナポリス"
-
 #~ msgid "America/Jamaica"
 #~ msgstr "アメリカ/ジャマイカ"
-
 #~ msgid "America/La Paz"
 #~ msgstr "アメリカ/ラパス"
-
 #~ msgid "America/Lima"
 #~ msgstr "アメリカ/リマ"
-
 #~ msgid "America/Los Angeles"
 #~ msgstr "アメリカ/ロサンゼルス"
-
 #~ msgid "America/Managua"
 #~ msgstr "アメリカ/マナグア"
-
 #~ msgid "America/Manaus"
 #~ msgstr "アメリカ/マナオス"
-
 #~ msgid "America/Martinique"
 #~ msgstr "アメリカ/マルティニーク島 "
-
 #~ msgid "America/Mazatlan"
 #~ msgstr "アメリカ/マサトラン"
-
 #~ msgid "America/Mexico City"
 #~ msgstr "アメリカ/メキシコシティ"
-
 #~ msgid "America/Miquelon"
 #~ msgstr "アメリカ/ミクロン島"
-
 #~ msgid "America/Montevideo"
 #~ msgstr "アメリカ/モンテビデオ"
-
 #~ msgid "America/Montreal"
 #~ msgstr "アメリカ/モントリオール"
-
 #~ msgid "America/Montserrat"
 #~ msgstr "アメリカ/モントセラト島"
-
 #~ msgid "America/Nassau"
 #~ msgstr "アメリカ/ナッソー"
-
 #~ msgid "America/New York"
 #~ msgstr "アメリカ/ニューヨーク"
-
 #~ msgid "America/Noronha"
 #~ msgstr "アメリカ/ノローニャ諸島"
-
 #~ msgid "America/Panama"
 #~ msgstr "アメリカ/パナマ"
-
 #~ msgid "America/Paramaribo"
 #~ msgstr "アメリカ/パラマリボ"
-
 #~ msgid "America/Phoenix"
 #~ msgstr "アメリカ/フェニックス"
-
 #~ msgid "America/Port-au-Prince"
 #~ msgstr "アメリカ/ポルトープランス "
-
 #~ msgid "America/Port of Spain"
 #~ msgstr "アメリカ/ポートオブスペイン"
-
 #~ msgid "America/Porto Acre"
 #~ msgstr "アメリカ/ポルトエーカー"
-
 #~ msgid "America/Puerto Rico"
 #~ msgstr "アメリカ/プエルトリコ"
-
 #~ msgid "America/Regina"
 #~ msgstr "アメリカ/レジーナ"
-
 #~ msgid "America/Rio Branco"
 #~ msgstr "アメリカ/リオブランコ"
-
 #~ msgid "America/Santiago"
 #~ msgstr "アメリカ/サンティアゴ"
-
 #~ msgid "America/Santo Domingo"
 #~ msgstr "アメリカ/サントドミンゴ"
-
 #~ msgid "America/Sao Paulo"
 #~ msgstr "アメリカ/サンパウロ"
-
 #~ msgid "America/Scoresbysund"
 #~ msgstr "アメリカ/スコルズビスーン"
-
 #~ msgid "America/St Johns"
 #~ msgstr "アメリカ/セントジョンズ"
-
 #~ msgid "America/St Kitts"
 #~ msgstr "アメリカ/セイントキッツ"
-
 #~ msgid "America/St Lucia"
 #~ msgstr "アメリカ/セントルシア"
-
 #~ msgid "America/St Thomas"
 #~ msgstr "アメリカ/セントトーマス"
-
 #~ msgid "America/St Vincent"
 #~ msgstr "アメリカ/セントビンセント"
-
 #~ msgid "America/Tegucigalpa"
 #~ msgstr "アメリカ/テグシガルパ"
-
 #~ msgid "America/Thule"
 #~ msgstr "アメリカ/トゥーレ"
-
 #~ msgid "America/Tijuana"
 #~ msgstr "アメリカ/ティファナ"
-
 #~ msgid "America/Tortola"
 #~ msgstr "アメリカ/トルトラ"
-
 #~ msgid "America/Vancouver"
 #~ msgstr "アメリカ/バンクーバ"
-
 #~ msgid "America/Winnipeg"
 #~ msgstr "アメリカ/ウィニペグ"
-
 #~ msgid "Antarctica/Casey"
 #~ msgstr "南極/ケーシー"
-
 #~ msgid "Antarctica/DumontDUrville"
 #~ msgstr "南極/デュモンデュルヴィル"
-
 #~ msgid "Antarctica/Mawson"
 #~ msgstr "南極/モーソン"
-
 #~ msgid "Antarctica/McMurdo"
 #~ msgstr "南極/マクマード"
-
 #~ msgid "Antarctica/Palmer"
 #~ msgstr "南極/パーマー"
-
 #~ msgid "Asia/Aden"
 #~ msgstr "アジア/アーデン"
-
 #~ msgid "Asia/Almaty"
 #~ msgstr "アジア/アルマトイ"
-
 #~ msgid "Asia/Amman"
 #~ msgstr "アジア/アンマン"
-
 #~ msgid "Asia/Anadyr"
 #~ msgstr "アジア/アナドゥイリ"
-
 #~ msgid "Asia/Aqtau"
 #~ msgstr "アジア/アクタウ"
-
 #~ msgid "Asia/Aqtobe"
 #~ msgstr "アジア/アクトベ"
-
 #~ msgid "Asia/Ashkhabad"
 #~ msgstr "アジア/アシハバード"
-
 #~ msgid "Asia/Baghdad"
 #~ msgstr "アジア/バグダッド"
-
 #~ msgid "Asia/Bahrain"
 #~ msgstr "アジア/バーレーン"
-
 #~ msgid "Asia/Baku"
 #~ msgstr "アジア/バク"
-
 #~ msgid "Asia/Bangkok"
 #~ msgstr "アジア/バンコク"
-
 #~ msgid "Asia/Beirut"
 #~ msgstr "アジア/ベイルート"
-
 #~ msgid "Asia/Bishkek"
 #~ msgstr "アジア/ビシケク"
-
 #~ msgid "Asia/Brunei"
 #~ msgstr "アジア/ブルネイ"
-
 #~ msgid "Asia/Calcutta"
 #~ msgstr "アジア/カルカッタ"
-
 #~ msgid "Asia/Colombo"
 #~ msgstr "アジア/コロンボ"
-
 #~ msgid "Asia/Dacca"
 #~ msgstr "アジア/ダッカ"
-
 #~ msgid "Asia/Damascus"
 #~ msgstr "アジア/ダマスカス"
-
 #~ msgid "Asia/Dhaka"
 #~ msgstr "アジア/ダッカ"
-
 #~ msgid "Asia/Dubai"
 #~ msgstr "アジア/ドバイ"
-
 #~ msgid "Asia/Dushanbe"
 #~ msgstr "アジア/ドゥシャンベ "
-
 #~ msgid "Asia/Hong Kong"
 #~ msgstr "アジア/香港"
-
 #~ msgid "Asia/Irkutsk"
 #~ msgstr "アジア/イルクーツク"
-
 #~ msgid "Asia/Jakarta"
 #~ msgstr "アジア/ジャカルタ"
-
 #~ msgid "Asia/Jayapura"
 #~ msgstr "アジア/ジャヤプラ"
-
 #~ msgid "Asia/Jerusalem"
 #~ msgstr "アジア/エルサレム"
-
 #~ msgid "Asia/Kabul"
 #~ msgstr "アジア/カブール"
-
 #~ msgid "Asia/Kamchatka"
 #~ msgstr "アジア/カムチャツカ"
-
 #~ msgid "Asia/Karachi"
 #~ msgstr "アジア/カラチ"
-
 #~ msgid "Asia/Katmandu"
 #~ msgstr "アジア/カトマンズ"
-
 #~ msgid "Asia/Krasnoyarsk"
 #~ msgstr "アジア/クラスノヤルスク"
-
 #~ msgid "Asia/Kuala Lumpur"
 #~ msgstr "アジア/クアラルンプール"
-
 #~ msgid "Asia/Kuwait"
 #~ msgstr "アジア/クエート"
-
 #~ msgid "Asia/Macao"
 #~ msgstr "アジア/マカオ"
-
 #~ msgid "Asia/Magadan"
 #~ msgstr "アジア/マガダン"
-
 #~ msgid "Asia/Manila"
 #~ msgstr "アジア/マニラ"
-
 #~ msgid "Asia/Muscat"
 #~ msgstr "アジア/マスカット"
-
 #~ msgid "Asia/Nicosia"
 #~ msgstr "アジア/ニコシア"
-
 #~ msgid "Asia/Novosibirsk"
 #~ msgstr "アジア/ノボシビルスク"
-
 #~ msgid "Asia/Phnom Penh"
 #~ msgstr "アジア/プノンペン"
-
 #~ msgid "Asia/Pyongyang"
 #~ msgstr "アジア/ピョンヤン"
-
 #~ msgid "Asia/Qatar"
 #~ msgstr "アジア/カタール"
-
 #~ msgid "Asia/Rangoon"
 #~ msgstr "アジア/ラングーン"
-
 #~ msgid "Asia/Riyadh"
 #~ msgstr "アジア/リヤド"
-
 #~ msgid "Asia/Saigon"
 #~ msgstr "アジア/サイゴン"
-
 #~ msgid "Asia/Seoul"
 #~ msgstr "アジア/ソウル"
-
 #~ msgid "Asia/Shanghai"
 #~ msgstr "アジア/シャンハイ"
-
 #~ msgid "Asia/Singapore"
 #~ msgstr "アジア/シンガポール"
-
 #~ msgid "Asia/Taipei"
 #~ msgstr "アジア/タイペイ"
-
 #~ msgid "Asia/Tashkent"
 #~ msgstr "アジア/タシケント"
-
 #~ msgid "Asia/Tbilisi"
 #~ msgstr "アジア/トビリシ"
-
 #~ msgid "Asia/Tehran"
 #~ msgstr "アジア/テヘラン"
-
 #~ msgid "Asia/Thimbu"
 #~ msgstr "アジア/チンプー"
-
 #~ msgid "Asia/Tokyo"
 #~ msgstr "アジア/東京"
-
 #~ msgid "Asia/Ujung Pandang"
 #~ msgstr "アジア/ウジュンパンダン"
-
 #~ msgid "Asia/Ulaanbaatar"
 #~ msgstr "アジア/ウランバートル"
-
 #~ msgid "Asia/Vientiane"
 #~ msgstr "アジア/ビエンチャン"
-
 #~ msgid "Asia/Vladivostok"
 #~ msgstr "アジア/ウラジオストク"
-
 #~ msgid "Asia/Yakutsk"
 #~ msgstr "アジア/ヤクーツカ"
-
 #~ msgid "Asia/Yekaterinburg"
 #~ msgstr "アジア/エカテリンブルグ"
-
 #~ msgid "Asia/Yerevan"
 #~ msgstr "アジア/エレヴァン"
-
 #~ msgid "Atlantic/Azores"
 #~ msgstr "アトランティック/アソーレス諸島"
-
 #~ msgid "Atlantic/Bermuda"
 #~ msgstr "アトランティック/バミューダ諸島"
-
 #~ msgid "Atlantic/Canary"
 #~ msgstr "アトランティック/カナリー諸島"
-
 #~ msgid "Atlantic/Cape Verde"
 #~ msgstr "大西洋/カーボベルデ"
-
 #~ msgid "Atlantic/Faeroe"
 #~ msgstr "アトランティック/フェロー諸島"
-
 #~ msgid "Atlantic/Jan Mayen"
 #~ msgstr "大西洋/ヤンマイエン島"
-
 #~ msgid "Atlantic/Reykjavik"
 #~ msgstr "アトランティック/レイキャビック"
-
 #~ msgid "Atlantic/South Georgia"
 #~ msgstr "大西洋/サウス・ジョージア"
-
 #~ msgid "Atlantic/St Helena"
 #~ msgstr "大西洋/セントヘレナ"
-
 #~ msgid "Atlantic/Stanley"
 #~ msgstr "アトランティック/スタンリー"
-
 #~ msgid "Australia/Adelaide"
 #~ msgstr "オーストラリア/アデレード"
-
 #~ msgid "Australia/Brisbane"
 #~ msgstr "オーストラリア/ブリスベン"
-
 #~ msgid "Australia/Broken Hill"
 #~ msgstr "オーストラリア/ブロークンヒル"
-
 #~ msgid "Australia/Darwin"
 #~ msgstr "オーストラリア/ダーウイン"
-
 #~ msgid "Australia/Hobart"
 #~ msgstr "オーストラリア/ホーバート"
-
 #~ msgid "Australia/Lord Howe"
 #~ msgstr "オーストラリア/ロード・ハウ島"
-
 #~ msgid "Australia/Perth"
 #~ msgstr "オーストラリア/パース"
-
 #~ msgid "Australia/Sydney"
 #~ msgstr "オーストラリア/シドニー"
-
 #~ msgid "Europe/Amsterdam"
 #~ msgstr "ヨーロッパ/アムステルダム"
-
 #~ msgid "Europe/Andorra"
 #~ msgstr "ヨーロッパ/アンドラ"
-
 #~ msgid "Europe/Athens"
 #~ msgstr "ヨーロッパ/アセンス"
-
 #~ msgid "Europe/Belgrade"
 #~ msgstr "ヨーロッパ/ベルグレード"
-
 #~ msgid "Europe/Berlin"
 #~ msgstr "ヨーロッパ/ベルリン"
-
 #~ msgid "Europe/Brussels"
 #~ msgstr "ヨーロッパ/ブリュッセル"
-
 #~ msgid "Europe/Bucharest"
 #~ msgstr "ヨーロッパ/ブカレスト"
-
 #~ msgid "Europe/Budapest"
 #~ msgstr "ヨーロッパ/ブダペスト"
-
 #~ msgid "Europe/Chisinau"
 #~ msgstr "ヨーロッパ/キシナウ"
-
 #~ msgid "Europe/Copenhagen"
 #~ msgstr "ヨーロッパ/コペンハーゲン"
-
 #~ msgid "Europe/Dublin"
 #~ msgstr "ヨーロッパ/ダブリン"
-
 #~ msgid "Europe/Gibraltar"
 #~ msgstr "ヨーロッパ/ジブラルタル"
-
 #~ msgid "Europe/Helsinki"
 #~ msgstr "ヨーロッパ/ヘルシンキ"
-
 #~ msgid "Europe/Istanbul"
 #~ msgstr "ヨーロッパ/イスタンブール"
-
 #~ msgid "Europe/Kaliningrad"
 #~ msgstr "ヨーロッパ/カリーニングラード"
-
 #~ msgid "Europe/Kiev"
 #~ msgstr "ヨーロッパ/キエフ"
-
 #~ msgid "Europe/Lisbon"
 #~ msgstr "ヨーロッパ/リスボン"
-
 #~ msgid "Europe/London"
 #~ msgstr "ヨーロッパ/ロンドン"
-
 #~ msgid "Europe/Luxembourg"
 #~ msgstr "ヨーロッパ/ルクセンブルク"
-
 #~ msgid "Europe/Madrid"
 #~ msgstr "ヨーロッパ/マドリッド"
-
 #~ msgid "Europe/Malta"
 #~ msgstr "ヨーロッパ/マルタ島"
-
 #~ msgid "Europe/Minsk"
 #~ msgstr "ヨーロッパ/ミンスク"
-
 #~ msgid "Europe/Monaco"
 #~ msgstr "ヨーロッパ/モナコ"
-
 #~ msgid "Europe/Moscow"
 #~ msgstr "ヨーロッパ/モスクワ"
-
 #~ msgid "Europe/Oslo"
 #~ msgstr "ヨーロッパ/オスロ"
-
 #~ msgid "Europe/Paris"
 #~ msgstr "ヨーロッパ/パリス"
-
 #~ msgid "Europe/Prague"
 #~ msgstr "ヨーロッパ/プラハ"
-
 #~ msgid "Europe/Riga"
 #~ msgstr "ヨーロッパ/リガ"
-
 #~ msgid "Europe/Rome"
 #~ msgstr "ヨーロッパ/ローマ"
-
 #~ msgid "Europe/Samara"
 #~ msgstr "ヨーロッパ/サマーラ"
-
 #~ msgid "Europe/Simferopol"
 #~ msgstr "ヨーロッパ/シンフェロポリ"
-
 #~ msgid "Europe/Sofia"
 #~ msgstr "ヨーロッパ/ソフィア"
-
 #~ msgid "Europe/Stockholm"
 #~ msgstr "ヨーロッパ/ストックホルム"
-
 #~ msgid "Europe/Tallinn"
 #~ msgstr "ヨーロッパ/タリン"
-
 #~ msgid "Europe/Tirane"
 #~ msgstr "ヨーロッパ/ティラナ"
-
 #~ msgid "Europe/Vaduz"
 #~ msgstr "ヨーロッパ/ファドゥーツ"
-
 #~ msgid "Europe/Vienna"
 #~ msgstr "ヨーロッパ/ビエナ"
-
 #~ msgid "Europe/Vilnius"
 #~ msgstr "ヨーロッパ/ビリニュス "
-
 #~ msgid "Europe/Warsaw"
 #~ msgstr "ヨーロッパ/ワルシャワ"
-
 #~ msgid "Europe/Zurich"
 #~ msgstr "ヨーロッパ/チューリッヒ"
-
 #~ msgid "GMT"
 #~ msgstr "グリニッジ標準時 "
-
 #~ msgid "Indian/Antananarivo"
 #~ msgstr "インディアン/アンタナナリボ"
-
 #~ msgid "Indian/Chagos"
 #~ msgstr "インディアン/チャゴス諸島"
-
 #~ msgid "Indian/Christmas"
 #~ msgstr "インド洋/クリスマス島"
-
 #~ msgid "Indian/Cocos"
 #~ msgstr "インド洋/ココス諸島"
-
 #~ msgid "Indian/Comoro"
 #~ msgstr "インド洋/コモロ諸島"
-
 #~ msgid "Indian/Kerguelen"
 #~ msgstr "インド洋/ケルゲレン諸島"
-
 #~ msgid "Indian/Mahe"
 #~ msgstr "インド洋/マヘ島"
-
 #~ msgid "Indian/Maldives"
 #~ msgstr "インド洋/モルディブ"
-
 #~ msgid "Indian/Mauritius"
 #~ msgstr "インド洋/モーリシャス"
-
 #~ msgid "Indian/Mayotte"
 #~ msgstr "インド洋/マヨット島"
-
 #~ msgid "Indian/Reunion"
 #~ msgstr "インド洋/レユニオン島"
-
 #~ msgid "Pacific/Apia"
 #~ msgstr "太平洋/アピア"
-
 #~ msgid "Pacific/Auckland"
 #~ msgstr "太平洋/オークランド"
-
 #~ msgid "Pacific/Chatham"
 #~ msgstr "太平洋/チャタム諸島"
-
 #~ msgid "Pacific/Easter"
 #~ msgstr "太平洋/イースター島"
-
 #~ msgid "Pacific/Efate"
 #~ msgstr "太平洋/エファテ島"
-
 #~ msgid "Pacific/Enderbury"
 #~ msgstr "太平洋/エンダーベリー島"
-
 #~ msgid "Pacific/Fakaofo"
 #~ msgstr "太平洋/ファカオフォ"
-
 #~ msgid "Pacific/Fiji"
 #~ msgstr "太平洋/フィジー諸島"
-
 #~ msgid "Pacific/Funafuti"
 #~ msgstr "太平洋/フナフティ"
-
 #~ msgid "Pacific/Galapagos"
 #~ msgstr "太平洋/ガラパゴス"
-
 #~ msgid "Pacific/Gambier"
 #~ msgstr "太平洋/ガンビア"
-
 #~ msgid "Pacific/Guadalcanal"
 #~ msgstr "太平洋/ガダルカナル島"
-
 #~ msgid "Pacific/Guam"
 #~ msgstr "太平洋/グアム"
-
 #~ msgid "Pacific/Honolulu"
 #~ msgstr "太平洋/ホノルル"
-
 #~ msgid "Pacific/Kiritimati"
 #~ msgstr "太平洋/クリスマス島"
-
 #~ msgid "Pacific/Kosrae"
 #~ msgstr "太平洋/コスラエ"
-
 #~ msgid "Pacific/Majuro"
 #~ msgstr "太平洋/マーシャル諸島"
-
 #~ msgid "Pacific/Marquesas"
 #~ msgstr "太平洋/マルケサス諸島"
-
 #~ msgid "Pacific/Nauru"
 #~ msgstr "太平洋/ナウル共和国"
-
 #~ msgid "Pacific/Niue"
 #~ msgstr "太平洋/ニウエ島"
-
 #~ msgid "Pacific/Norfolk"
 #~ msgstr "太平洋/ノーフォーク島"
-
 #~ msgid "Pacific/Noumea"
 #~ msgstr "太平洋/ヌメア"
-
 #~ msgid "Pacific/Pago Pago"
 #~ msgstr "太平洋/パゴパゴ"
-
 #~ msgid "Pacific/Palau"
 #~ msgstr "太平洋/パラオ"
-
 #~ msgid "Pacific/Pitcairn"
 #~ msgstr "太平洋/ピトケアン諸島"
-
 #~ msgid "Pacific/Ponape"
 #~ msgstr "太平洋/ポナペ"
-
 #~ msgid "Pacific/Port Moresby"
 #~ msgstr "太平洋/ポートモレスビー"
-
 #~ msgid "Pacific/Rarotonga"
 #~ msgstr "太平洋/ラロトンガ"
-
 #~ msgid "Pacific/Saipan"
 #~ msgstr "太平洋/サイパン"
-
 #~ msgid "Pacific/Tahiti"
 #~ msgstr "太平洋/タヒチ"
-
 #~ msgid "Pacific/Tarawa"
 #~ msgstr "太平洋/タラワ"
-
 #~ msgid "Pacific/Tongatapu"
 #~ msgstr "太平洋/トンガ"
-
 #~ msgid "Pacific/Truk"
 #~ msgstr "太平洋/チューク"
-
 #~ msgid "Pacific/Wake"
 #~ msgstr "太平洋/ウエーキ島"
-
 #~ msgid "Pacific/Wallis"
 #~ msgstr "太平洋/ウォリス"
-
 #~ msgid "UTC"
 #~ msgstr "協定世界時"
-
 #~ msgid "WET"
 #~ msgstr "西ヨーロッパ時間"
-
 #~ msgid "Do you want to save your layout changes?"
 #~ msgstr "レイアウト変更を保存しますか？"
-
 #~ msgid "Details of task"
 #~ msgstr "タスクの詳細"
-
 #~ msgid "History"
 #~ msgstr "履歴"
-
 #~ msgid "Deny"
 #~ msgstr "否定"
-
 #~ msgid "Created from:"
-#~ msgstr "作成元："
-
+#~ msgstr "作成元:"
 #~ msgid "Creating date:"
-#~ msgstr "作成日："
-
+#~ msgstr "作成日:"
 #~ msgid "Changed from:"
-#~ msgstr "変更元："
-
+#~ msgstr "変更元:"
 #~ msgid "Last changing date:"
-#~ msgstr "最終更新日："
-
+#~ msgstr "最終更新日:"
 #~ msgid "You have an unconfirmed appointment"
 #~ msgstr "確認されていないアポイントメントがあります"
-
 #~ msgid "You have an unconfirmed task"
 #~ msgstr "確認されていないタスクがあります"
-
 #~ msgid "Start time:"
-#~ msgstr "開始時刻："
-
+#~ msgstr "開始時刻:"
 #~ msgid "End time:"
-#~ msgstr "終了時刻："
-
+#~ msgstr "終了時刻:"
 #~ msgid "Tags..."
 #~ msgstr "タグ…"
-
 #, fuzzy
 #~ msgid "Confirmation status for new appointments in a personal folder"
 #~ msgstr "新しいアポイントに対して確認のポップアップを表示しますか？"
@@ -10492,10 +9232,10 @@ msgstr "マイ パスワード"
 #~ "使用することができるキーワードです。"
 
 #~ msgid "Display name:"
-#~ msgstr "名前の表示："
+#~ msgstr "名前の表示:"
 
 #~ msgid "Title:"
-#~ msgstr "タイトル："
+#~ msgstr "タイトル:"
 
 #~ msgid "Calendar month view"
 #~ msgstr "カレンダーで1ヶ月の予定を見る"
@@ -10522,10 +9262,10 @@ msgstr "マイ パスワード"
 #~ msgstr "リストの週を見る"
 
 #~ msgid "New Tag:"
-#~ msgstr "新しいタグ："
+#~ msgstr "新しいタグ:"
 
 #~ msgid "This Tag already exists in your private tag list"
-#~ msgstr "このタグはあなたのプライベートタグリストの中で既に存在します"
+#~ msgstr "このタグはプライベートのタグ リストに既に存在します"
 
 #, fuzzy
 #~ msgid "Versions (%s)"
@@ -10552,7 +9292,7 @@ msgstr "マイ パスワード"
 
 #, fuzzy
 #~ msgid "Display name *"
-#~ msgstr "名前の表示："
+#~ msgstr "名前の表示:"
 
 #, fuzzy
 #~ msgid "Second name"
@@ -10564,23 +9304,23 @@ msgstr "マイ パスワード"
 
 #, fuzzy
 #~ msgid "Street (Home)"
-#~ msgstr "ストリートアドレス（その他）："
+#~ msgstr "ストリート アドレス (その他):"
 
 #, fuzzy
 #~ msgid "City (Home)"
-#~ msgstr "郵便番号/都市（その他）："
+#~ msgstr "郵便番号/都市 (その他):"
 
 #, fuzzy
 #~ msgid "State (Home)"
-#~ msgstr "都道府県（その他）："
+#~ msgstr "都道府県 (その他):"
 
 #, fuzzy
 #~ msgid "Street (Business)"
-#~ msgstr "住所（ビジネス）："
+#~ msgstr "住所 (ビジネス):"
 
 #, fuzzy
 #~ msgid "Postal Code (Business)"
-#~ msgstr "電話番号（ビジネス）："
+#~ msgstr "電話番号 (ビジネス):"
 
 #, fuzzy
 #~ msgid "City (Business)"
@@ -10588,14 +9328,14 @@ msgstr "マイ パスワード"
 
 #, fuzzy
 #~ msgid "Telephone (Business)"
-#~ msgstr "電話番号（ビジネス）："
+#~ msgstr "電話番号 (ビジネス):"
 
 #, fuzzy
 #~ msgid "Fax (Business)"
-#~ msgstr "FAX番号（ビジネス）："
+#~ msgstr "FAX番号 (ビジネス):"
 
 #~ msgid "No Folder rights"
-#~ msgstr "フォルダー権利はありません"
+#~ msgstr "フォルダ権限がありません"
 
 #~ msgid "Create Objects"
 #~ msgstr "オブジェクトを作成します"
