@@ -2954,7 +2954,7 @@ msgstr "Als gelesen markieren"
 
 #: apps/io.ox/mail/actions.js:741
 msgid "View source"
-msgstr "Quelle anzeigen"
+msgstr "Quelldaten anzeigen"
 
 #: apps/io.ox/mail/actions.js:774
 msgid "Save as file"
