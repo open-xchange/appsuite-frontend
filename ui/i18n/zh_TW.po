@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-12 00:40+0800\n"
+"PO-Revision-Date: 2013-02-14 20:37+0800\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "MIME-Version: 1.0\n"
@@ -70,26 +70,24 @@ msgid "Please enter your password."
 msgstr "請輸入您的密碼。"
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "登入階段已過期"
+msgstr "不支援您的瀏覽器版本！"
 
 #: html/core_body.html:95
 msgid "Your browser is not supported!"
-msgstr ""
+msgstr "不支援您的瀏覽器！"
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "請輸入您的密碼。"
+msgstr "請更新您的瀏覽器。"
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "為了能有最佳效果，請使用"
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "您的瀏覽器已經過時！"
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -110,7 +108,6 @@ msgstr "關閉"
 #: apps/io.ox/calendar/edit/recurrence-view.js:226
 #: apps/io.ox/calendar/edit/recurrence-view.js:284
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
-#, fuzzy
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "每天"
@@ -119,7 +116,6 @@ msgstr[1] "每 %1$d 天"
 #: apps/io.ox/calendar/edit/recurrence-view.js:227
 #: apps/io.ox/calendar/edit/recurrence-view.js:304
 #: apps/io.ox/calendar/edit/recurrence-view.js:307
-#, fuzzy
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "每周"
@@ -129,7 +125,6 @@ msgstr[1] "每 %1$d 周"
 #: apps/io.ox/calendar/edit/recurrence-view.js:326
 #: apps/io.ox/calendar/edit/recurrence-view.js:328
 #: apps/io.ox/calendar/edit/recurrence-view.js:375
-#, fuzzy
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "每月"
@@ -181,7 +176,6 @@ msgstr ""
 "<span class=\"number-control\">2</span> 天</a> 重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:279
-#, fuzzy
 msgid "every day"
 msgstr "每天"
 
@@ -197,7 +191,6 @@ msgstr ""
 "\"custom\" data-attribute=\"days\">星期一</a> 重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:300
-#, fuzzy
 msgid "every week"
 msgstr "每周"
 
@@ -214,7 +207,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: apps/io.ox/calendar/edit/recurrence-view.js:373
-#, fuzzy
 msgid "every month"
 msgstr "每月"
 
@@ -2311,12 +2303,11 @@ msgstr "使用者有管理員全線"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr "不是有效的使用者或群組"
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "這是無效的電子郵件位址"
+msgstr "這是無效的使用者或群組。"
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2483,9 +2474,8 @@ msgid "Close all"
 msgstr "全部關閉"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "無法載入資料夾。"
+msgstr "無法載入子資料夾。"
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3403,14 +3393,12 @@ msgid "Click here to add your account"
 msgstr "點擊此處新增帳號"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "載入頁面時發生錯誤。"
+msgstr "發生錯誤。訊息是:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "點擊以稍後重試。"
+msgstr "點擊以再試一次。"
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4107,9 +4095,8 @@ msgid "Please enter a feed URL."
 msgstr "請輸入資訊來源網址。"
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "近期內您沒有約會。"
+msgstr "您沒有快要到期或已過期的任務。"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59
