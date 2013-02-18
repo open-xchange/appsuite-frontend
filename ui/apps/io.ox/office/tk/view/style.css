@@ -435,9 +435,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         @heading-height: 32px;
 
         /* default 3D effect for buttons */
-        @button-shadow-effect: 5px 20px 20px -20px fade(white, 20%) inset;
+        @button-shadow-effect: 10px 20px 20px -20px fade(white, 20%) inset;
         /* default 3D effect for selected buttons */
-        @selected-button-shadow-effect: 5px 20px 20px -20px fade(white, 50%) inset;
+        @selected-button-shadow-effect: 10px 20px 20px -20px fade(white, 50%) inset;
+        /* default 3D effect for text fields */
+        @textfield-shadow-effect: -10px -20px 20px -20px fade(white, 10%) inset;
 
         display: block;
         .box-sizing(content-box);
@@ -592,7 +594,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                     input:not(.disabled) {
 
                         &:not(:focus) {
-                            .box-shadow(@button-shadow-effect);
+                            .box-shadow(@textfield-shadow-effect);
                             &:hover { background: fade(white, 5%); }
                         }
 
