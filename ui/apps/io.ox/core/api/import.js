@@ -50,7 +50,7 @@ define('io.ox/core/api/import',
         var def = $.Deferred();
 
         import_file_call(data).done(function (res) {
-            if (res.data[0].error) {
+            if (res.data[0] && res.data[0].error) {
                 def.reject(res.data[0]);
             } else {
                 def.resolve(res.data[0]);
