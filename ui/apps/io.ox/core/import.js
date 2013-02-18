@@ -17,10 +17,11 @@ define('io.ox/core/import',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/attachments',
     'io.ox/core/api/folder',
+    'io.ox/core/api/import',
     'io.ox/core/notifications',
     'io.ox/core/config',
     'gettext!io.ox/core',
-    'less!io.ox/backbone/forms.less'], function (ext, dialogs, attachments, folderApi, notifications, config, gt) {
+    'less!io.ox/backbone/forms.less'], function (ext, dialogs, attachments, folderApi, api, notifications, config, gt) {
 
     'use strict';
 
@@ -40,7 +41,8 @@ define('io.ox/core/import',
         draw: function (id, prefix) {
             this.append(
                 folderApi.getBreadcrumb(id, { prefix: prefix || '' })
-                .css({'padding-top': '5px', 'padding-left': '5px'})
+                .css({'padding-top': '5px', 'padding-left': '5px'}),
+                $('<input type="hidden" name="folder">').val(id)
             );
         }
     });
@@ -53,7 +55,7 @@ define('io.ox/core/import',
 
             //lable and select
             nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select>').appendTo(nodes.row);
+            nodes.select = $('<select name="action">').appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
@@ -91,33 +93,53 @@ define('io.ox/core/import',
         show: function (module, id) {
             var id = String(id),
                 dialog = new dialogs.ModalDialog({width: 500}),
-                baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
+                baton = {id: id, module: module, simulate: true, format: {}, nodes: {}},
+                form;
 
             //get folder and process
             folderApi.get({ folder: id}).done(function (folder) {
                 dialog.build(function () {
-                        //header
-                        ext.point('io.ox/core/import/title')
-                            .invoke('draw', this.getHeader(), gt('Import'));
-                        //body
-                        ext.point('io.ox/core/import/breadcrumb')
-                            .invoke('draw', this.getContentNode(), id, gt('Path'));
-                        ext.point('io.ox/core/import/select')
-                            .invoke('draw', this.getContentNode(), baton);
-                        ext.point('io.ox/core/import/file_upload')
-                            .invoke('draw', this.getContentNode(), baton);
-                        //buttons
-                        ext.point('io.ox/core/import/buttons')
-                            .invoke('draw', this);
+                    form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
+                    this.getContentNode().append(form);
+
+                    //header
+                    ext.point('io.ox/core/import/title')
+                        .invoke('draw', this.getHeader(), gt('Import'));
+                    //body
+                    ext.point('io.ox/core/import/breadcrumb')
+                        .invoke('draw', form, id, gt('Path'));
+                    ext.point('io.ox/core/import/select')
+                        .invoke('draw', form, baton);
+                    ext.point('io.ox/core/import/file_upload')
+                        .invoke('draw', form, baton);
+                    //buttons
+                    ext.point('io.ox/core/import/buttons')
+                        .invoke('draw', this);
+                })
+                .show()
+                .done(function (action) {
+                    var type;
+
+                    if (action !== 'import') {
+                        dialog = null;
+                        return;
+                    }
+
+                    type = baton.nodes.select.val() || '';
+
+                    api.import_file({
+                        file: baton.nodes.file_upload.find('input[type=file]')[0].files[0],
+                        form: form,
+                        type: type,
+                        folder: id
                     })
-                    .show()
-                    .done(
-                        function (action) {
-                            if (action !== 'import') {
-                                dialog = null;
-                                return;
-                            }
-                        });
+                    .done(function (res) {
+                        notifications.yell('success', gt('Data imported successfully'));
+                    })
+                    .fail(function (res) {
+                        notifications.yell('error', res && res.error || gt('An unknown error occurred'));
+                    });
+                });
             });
         }
     };
