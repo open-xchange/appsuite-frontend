@@ -511,6 +511,8 @@ define('io.ox/mail/write/main',
             this.setSendType(data.sendtype);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
+            // add files (from contacts)
+            this.addFiles(data.contacts_ids);
             // app title
             var title = windowTitles[composeMode = mail.mode];
             win.nodes.main.find('h1.title').text(title);
@@ -811,9 +813,12 @@ define('io.ox/mail/write/main',
                 } else if ('File' in window && file instanceof window.File) {
                     // add dropped file
                     files.push(file);
-                } else if (file && 'id' in file) {
+                } else if (file && ('id' in file) && ('size' in file)) {
                     // infostore id
                     (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                } else if (file && ('id' in file) && ('display_name' in file)) {
+                    // contacts id
+                    (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
                 } else if (this.files && this.files.length) {
                     // process normal upload
                     _(this.files).each(function (file) {
@@ -840,6 +845,10 @@ define('io.ox/mail/write/main',
             // get flat ids for data.infostore_ids
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
+            // get flat cids for data.contacts_ids
+            if (mail.data.contacts_ids) {
+                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
             }
             // move nested messages into attachment array
             _(mail.data.nested_msgs).each(function (obj) {
@@ -930,6 +939,10 @@ define('io.ox/mail/write/main',
             // get flat ids for data.infostore_ids
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
+            // get flat cids for data.contacts_ids
+            if (mail.data.contacts_ids) {
+                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
             }
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;

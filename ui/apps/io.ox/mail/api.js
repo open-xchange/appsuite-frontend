@@ -804,6 +804,17 @@ define("io.ox/mail/api",
         data.cc = _(data.cc).map(flatten).join(', ');
         data.bcc = _(data.bcc).map(flatten).join(', ');
 
+        function mapArgs(obj) {
+            return {
+                "args": [{"com.openexchange.groupware.contact.pairs": [{'folder': obj.folder_id, 'id': obj.id}]}],
+                "identifier": "com.openexchange.contact"
+            };
+        }
+
+        if (data.contacts_ids) {
+            data.datasources = _.chain(data.contacts_ids).map(mapArgs).value();
+        }
+
         if (Modernizr.file && 'FormData' in window) {
             deferred = handleSendXHR2(data, files, deferred);
         } else {

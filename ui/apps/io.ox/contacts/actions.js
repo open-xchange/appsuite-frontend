@@ -226,6 +226,34 @@ define('io.ox/contacts/actions',
         }
     });
 
+    new Action('io.ox/contacts/actions/vcard', {
+
+        requires: function (e) {
+            if (!capabilities.has('webmail')) {
+                return false;
+            } else {
+                var list = [].concat(e.context);
+                return api.getList(list).pipe(function (list) {
+                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                    }, 0).value() > 0;
+                });
+            }
+        },
+
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                require(['io.ox/mail/write/main'], function (m) {
+                    api.getList(list).done(function (list) {
+                        m.getApp().launch().done(function () {
+                            this.compose({ contacts_ids: list });
+                        });
+                    });
+                });
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/invite', {
 
         requires: function (e) {
@@ -340,6 +368,14 @@ define('io.ox/contacts/actions',
         prio: 'hi',
         label: gt('Send mail'),
         ref: 'io.ox/contacts/actions/send'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'vcard',
+        index: INDEX += 100,
+        prio: 'hi',
+        label: gt('Send vCard'),
+        ref: 'io.ox/contacts/actions/vcard'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({

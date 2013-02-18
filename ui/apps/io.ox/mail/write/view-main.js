@@ -604,6 +604,8 @@ define("io.ox/mail/write/view-main",
         // is not local?
         if (file.message) {
             return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
+        } else if (file.display_name) {
+            return true;
         } else {
             return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
         }
@@ -628,6 +630,11 @@ define("io.ox/mail/write/view-main",
                 preview.appendTo(popup);
                 popup.append($('<div>').text(_.noI18n('\u00A0')));
             }
+        } else if (file.display_name) {
+            // if is vCard
+            require(['io.ox/contacts/view-detail'], function (view) {
+                popup.append(view.draw(file));
+            });
         } else {
             // inject image as data-url
             reader = new FileReader();
@@ -672,17 +679,28 @@ define("io.ox/mail/write/view-main",
             // loop over all attachments
             _(list).each(function (file) {
                 // get size
-                var size = file.size || file.file_size;
+                var size = file.size || file.file_size,
+                info = '';
                 size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+
+                // if file get size
+                if (file.size || file.file_size) {
+                    // filesize
+                    info = $('<span>').addClass('filesize').text(size);
+                } else {
+                    // vcard
+                    info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                }
+
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
+                        (file.filename || file.name ? $('<i>').addClass('icon-paper-clip') : $('<i>').addClass('icon-list-alt')),
                         // filename
-                        $('<div class="row-1">').text(_.noI18n(file.filename || file.name || '')),
+                        $('<div class="row-1">').text(_.noI18n(file.filename || file.name || file.display_name || '')),
                         // filesize / preview
                         $('<div class="row-2">').append(
-                            // filesize
-                            $('<span>').addClass('filesize').text(size),
+                            info,
                             // preview?
                             supportsPreview(file) ? createPreview(file) : $(),
                             // nbsp

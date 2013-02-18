@@ -260,12 +260,16 @@
 }
 
 .io-ox-mail-write .section-item.file {
-    background-image: url(../images/attachment.png);
-    background-repeat: no-repeat;
-    background-position: 10px center;
     position: relative;
     height: 3em;
     line-height: 1.5em;
+}
+
+.io-ox-mail-write .section-item > i {
+    position: absolute;
+    font-size: 20px;
+    top: 15px;
+    left: 11px;
 }
 
 .io-ox-mail-write .section-item .row-1 {
