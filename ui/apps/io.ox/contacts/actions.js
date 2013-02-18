@@ -183,14 +183,16 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/send', {
 
         requires: function (e) {
-            if (!capabilities.has('webmail')) {
+            var ctx = e.context;
+            if (!capabilities.has('webmail') || (ctx.id === 0 && ctx.folder_id === 0)) {
                 return false;
             } else {
-                var list = [].concat(e.context);
+                var list = [].concat(ctx);
                 return api.getList(list).pipe(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
+                    }, 0).value() > 0);
+                    return test;
                 });
             }
         },
@@ -257,10 +259,11 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/invite', {
 
         requires: function (e) {
-            if (!capabilities.has('calendar')) {
+            var ctx = e.context;
+            if (!capabilities.has('calendar') || (ctx.id === 0 && ctx.folder_id === 0)) {
                 return false;
             } else {
-                var list = [].concat(e.context);
+                var list = [].concat(ctx);
                 return api.getList(list).pipe(function (list) {
                     return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
@@ -322,6 +325,28 @@ define('io.ox/contacts/actions',
                     title: baton.data.display_name
                 });
                 notifications.yell('success', gt('This distribution list has been added to the portal'));
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/add-to-contactlist', {
+        requires: function (e) {
+            return e.collection.has('one') && !e.context.folder_id && !e.context.id;
+        },
+        action: function (baton) {
+            require(['io.ox/contacts/edit/main'], function (m) {
+                var def = $.Deferred(),
+                    contact = baton.data;
+                contact.folder_id = config.get('folder.contacts') + '';
+                _.map(contact, function (value, key, contact) {
+                    if (!!!value) {
+                        delete contact[key];
+                    }
+                });
+                m.getApp(contact).launch(def);
+                def.done(function (data) {
+                    // baton.app.getGrid().selection.set(data);
+                });
             });
         }
     });
@@ -421,5 +446,12 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         label: gt('Copy'),
         ref: 'io.ox/contacts/actions/copy'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-contactlist',
+        index: INDEX += 100,
+        label: gt('Add to contact list'),
+        ref: 'io.ox/contacts/actions/add-to-contactlist'
     }));
 });
