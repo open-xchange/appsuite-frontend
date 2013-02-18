@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-14 11:13+0100\n"
-"Last-Translator: Antje Faber\n"
-"Language-Team: American English <kde-i18n-de@kde.org>\n"
+"PO-Revision-Date: 2013-02-14 15:42+0100\n"
+"Last-Translator: Éric Bischoff <eric@bureau-cornavin.com>\n"
+"Language-Team: French <fr@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/tasks/settings/pane.js:36
 msgid "5"
@@ -76,27 +76,24 @@ msgid "Please enter your password."
 msgstr "Veuillez saisir votre mot de passe."
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "Votre navigateur ne prend pas en charge AJAX."
+msgstr "Cette version de votre navigateur n'est pas prise en charge."
 
 #: html/core_body.html:95
-#, fuzzy
 msgid "Your browser is not supported!"
-msgstr "Votre navigateur ne prend pas en charge AJAX."
+msgstr "Votre navigateur n'est pas pris en charge."
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "Veuillez saisir votre mot de passe."
+msgstr "Veuillez mettre à jour votre mot de navigateur."
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "Pour les meilleurs résultats, veuillez utiliser "
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "Votre navigateur est lent et trop ancien."
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -2332,12 +2329,11 @@ msgstr "L'utilisateur a des droits administratifs"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " n'est pas un utilisateur ou un groupe valide."
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "Ce n'est pas une adresse électronique valide"
+msgstr "Ce n'est pas un utilisateur ou un groupe valide."
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2508,9 +2504,8 @@ msgid "Close all"
 msgstr "Tout fermer"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "Impossible de charger les dossiers."
+msgstr "Impossible de charger les sous-dossiers."
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -3440,14 +3435,12 @@ msgid "Click here to add your account"
 msgstr "Cliquez ici pour ajouter votre compte"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "Une erreur s'est produite pendant le chargement de la page."
+msgstr "Une erreur s'est produite. Le message était :"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "Cliquez pour réessayer ultérieurement."
+msgstr "Cliquez pour réessayer."
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4148,9 +4141,10 @@ msgid "Please enter a feed URL."
 msgstr "Veuillez saisir l'URL d'un flux."
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "Vous n'avez pas de rendez-vous dans le futur immédiat."
+msgstr ""
+"Vous n'avez pas de tâches qui arriveront bientôt à échéance ou sont déjà "
+"échues."
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59

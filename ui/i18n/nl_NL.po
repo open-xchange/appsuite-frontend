@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-14 11:10+0100\n"
-"Last-Translator: Antje Faber\n"
+"PO-Revision-Date: 2013-02-17 14:06+0100\n"
+"Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com >\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/tasks/settings/pane.js:36
 msgid "5"
@@ -76,27 +76,24 @@ msgid "Please enter your password."
 msgstr "Voer alstublieft uw wachtwoord in."
 
 #: html/core_body.html:94
-#, fuzzy
 msgid "Your browser version is not supported!"
-msgstr "Uw browser ondersteunt AJAX niet."
+msgstr "Uw browserversie wordt niet ondersteunt."
 
 #: html/core_body.html:95
-#, fuzzy
 msgid "Your browser is not supported!"
-msgstr "Uw browser ondersteunt AJAX niet."
+msgstr "Uw browser wordt niet ondersteunt."
 
 #: html/core_body.html:96
-#, fuzzy
 msgid "Please update your browser."
-msgstr "Voer alstublieft uw wachtwoord in."
+msgstr "Download alstublieft de laatste versie van uw browser."
 
 #: html/core_body.html:97
 msgid "For best results, please use "
-msgstr ""
+msgstr "Voor het beste resultaat gebruikt u "
 
 #: html/core_body.html:98
 msgid "Your browser is slow and outdated!"
-msgstr ""
+msgstr "Uw browser is langzaam en verouderd!"
 
 #: html/core_body.html:108
 msgid "Languages"
@@ -627,7 +624,7 @@ msgstr "Alle bijlagen"
 
 #: apps/io.ox/mail/view-detail.js:943
 msgid "Entire thread"
-msgstr "Gehele draad"
+msgstr "Gehele conversatie"
 
 #: apps/io.ox/mail/view-detail.js:963
 msgid "Warning: This message might be a phishing or scam mail"
@@ -1641,7 +1638,7 @@ msgstr "Kamernummer"
 
 #: apps/io.ox/contacts/model.js:239
 msgid "Employee ID"
-msgstr "Werknemeridentificatie"
+msgstr "Werknemersidentificatie"
 
 #: apps/io.ox/contacts/model.js:240
 msgid "Sales Volume"
@@ -1710,11 +1707,11 @@ msgstr "Telefoon (Thuis alt.)"
 
 #: apps/io.ox/contacts/model.js:261
 msgid "Cell phone"
-msgstr "Mobiletelefoon"
+msgstr "Mobieletelefoon"
 
 #: apps/io.ox/contacts/model.js:262
 msgid "Cell phone alt"
-msgstr "Mobiletelefoon alt."
+msgstr "Mobieltelefoon alt."
 
 #: apps/io.ox/contacts/model.js:263
 msgid "Phone (other)"
@@ -2337,12 +2334,11 @@ msgstr "De gebruiker heeft beheerdersrechten"
 
 #: apps/io.ox/core/permissions/permissions.js:376
 msgid " is not a valid user or group."
-msgstr ""
+msgstr " is geen geldige gebruiker of groep."
 
 #: apps/io.ox/core/permissions/permissions.js:376
-#, fuzzy
 msgid "This is not a valid user or group."
-msgstr "Dit is geen geldig e-mailadres!"
+msgstr "Dit is geen geldige gebruiker of groep."
 
 #: apps/io.ox/core/settings/pane.js:45
 msgid "The setting has been saved."
@@ -2512,9 +2508,8 @@ msgid "Close all"
 msgstr "Alles sluiten"
 
 #: apps/io.ox/core/tk/folderviews.js:90
-#, fuzzy
 msgid "Couldn't load subfolders."
-msgstr "Kan mappen niet laden"
+msgstr "Kan submappen niet laden."
 
 #: apps/io.ox/core/tk/folderviews.js:517
 msgid "New folder"
@@ -2664,7 +2659,7 @@ msgstr "Diashow Weergeven"
 
 #: apps/io.ox/files/actions.js:781
 msgid "Play audio files"
-msgstr "Afspelen audio-bestand"
+msgstr "Afspelen audio-bestanden"
 
 #: apps/io.ox/files/actions.js:788
 msgid "Play video files"
@@ -3161,7 +3156,7 @@ msgstr " tekens"
 
 #: apps/io.ox/mail/settings/pane.js:55
 msgid "Thread view"
-msgstr "Draadoverzicht"
+msgstr "Conversatieoverzicht"
 
 #: apps/io.ox/mail/settings/pane.js:56
 msgid "Enabled for inbox only"
@@ -3441,14 +3436,12 @@ msgid "Click here to add your account"
 msgstr "Klik hier om uw account toe te voegen"
 
 #: apps/io.ox/portal/main.js:252
-#, fuzzy
 msgid "An error occurred. The message was:"
-msgstr "Er is een fout ontstaan tijdens het lezen van de laatste pagina."
+msgstr "Er is een fout ontstaan. De melding was:"
 
 #: apps/io.ox/portal/main.js:255
-#, fuzzy
 msgid "Click to try again."
-msgstr "Klik om het later opnieuw te proberen."
+msgstr "Klik om het opnieuw te proberen."
 
 #: apps/io.ox/portal/settings/pane.js:49
 msgid "Portal settings"
@@ -4000,7 +3993,7 @@ msgstr "Geen "
 #: apps/plugins/portal/linkedIn/register.js:108
 #: apps/plugins/portal/twitter/register.js:246
 msgid "Click to authorize your account again"
-msgstr "Klik hier om uw account opnieuw te authoriseren"
+msgstr "Klik hier om uw account opnieuw te bevestigen"
 
 #: apps/plugins/portal/facebook/register.js:101
 #: apps/plugins/portal/linkedIn/register.js:112
@@ -4150,9 +4143,8 @@ msgid "Please enter a feed URL."
 msgstr "Voer een feed URL in."
 
 #: apps/plugins/portal/tasks/register.js:47
-#, fuzzy
 msgid "You don't have any tasks that are either due soon or overdue."
-msgstr "U heeft geen afspraken in de nabije toekomst."
+msgstr "U heeft geen taken die binnenkort af moeten zijn of die te laat zijn."
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:59
@@ -4243,9 +4235,9 @@ msgid ""
 "the Connector for Microsoft Outlook and the Notifier. You can download the "
 "updates from within the updater."
 msgstr ""
-"De updater bied een eenvoudige installatie-wizard aan. Volg de instructiesom "
+"De updater bied een eenvoudige installatie-wizard aan. Volg de instructies om "
 "de toepassing te installeren. De updater zal u op de hoogte van alle updates "
-"voorde Connector voor Microsoft Outlook en de Notifier. U kunt deupdates "
+"voorde Connector voor Microsoft Outlook en de Notifier. U kunt de updates "
 "vanuit de updater downloaden."
 
 #: apps/plugins/portal/updater/register.js:43
