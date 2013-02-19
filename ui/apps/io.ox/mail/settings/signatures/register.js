@@ -71,7 +71,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         $('<label>').text(gt('Signature insertion:')),
                         $insertion = $('<select>').append(
                             $('<option value="above">').text(gt('Above content')),
-                            $('<option value="below">').text(gt('Below content'))
+                            $('<option value="below">').text(gt('Below content')).attr('selected', true)
                         )
                     )
                 ).appendTo($pane);
