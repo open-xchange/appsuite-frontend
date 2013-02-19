@@ -129,7 +129,7 @@ define("io.ox/preview/main",
                     autoplay: false
                 }).hide().appendTo(this);
                 var self = this;
-                require(['mediaelement/mediaelement-and-player',
+                require(['apps/mediaelement/mediaelement-and-player.js',
                         'less!mediaelement/mediaelementplayer.css'], function () {
 
                     var pw,
