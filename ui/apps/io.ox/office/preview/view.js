@@ -13,10 +13,10 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/view/view',
+     'io.ox/office/tk/view/officeview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, View, gt) {
+    ], function (Utils, OfficeView, gt) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ define('io.ox/office/preview/view',
      *
      * @constructor
      *
-     * @extends View
+     * @extends OfficeView
      *
      * @param {PreviewApplication} app
      *  The OX Preview application that has created this view instance.
@@ -58,7 +58,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        View.call(this, app, { scrollable: true, margin: '52px 30px' });
+        OfficeView.call(this, app, { scrollable: true, margin: '52px 30px' });
 
         // private methods ----------------------------------------------------
 
@@ -347,7 +347,7 @@ define('io.ox/office/preview/view',
 
     // exports ================================================================
 
-    // derive this class from class View
-    return View.extend({ constructor: PreviewView });
+    // derive this class from class OfficeView
+    return OfficeView.extend({ constructor: PreviewView });
 
 });

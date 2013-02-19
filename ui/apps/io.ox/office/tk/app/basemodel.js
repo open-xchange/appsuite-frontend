@@ -11,14 +11,14 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/model',
+define('io.ox/office/tk/app/basemodel',
      ['io.ox/core/event',
       'io.ox/office/tk/utils'
      ], function (Events, Utils) {
 
     'use strict';
 
-    // class Model ============================================================
+    // class BaseModel ========================================================
 
     /**
      * The base class for model classes used in OX Documents applications. Adds
@@ -31,7 +31,7 @@ define('io.ox/office/tk/app/model',
      * @param {OfficeApplication} app
      *  The application that has created this model instance.
      */
-    function Model(app) {
+    function BaseModel(app) {
 
         // base constructor ---------------------------------------------------
 
@@ -44,10 +44,10 @@ define('io.ox/office/tk/app/model',
             this.events.destroy();
         };
 
-    } // class Model
+    } // class BaseModel
 
     // exports ================================================================
 
-    return _.makeExtendable(Model);
+    return _.makeExtendable(BaseModel);
 
 });

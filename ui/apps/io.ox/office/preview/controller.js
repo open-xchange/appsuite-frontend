@@ -12,9 +12,9 @@
  */
 
 define('io.ox/office/preview/controller',
-    ['io.ox/office/tk/app/controller',
+    ['io.ox/office/tk/app/basecontroller',
      'gettext!io.ox/office/main'
-    ], function (Controller, gt) {
+    ], function (BaseController, gt) {
 
     'use strict';
 
@@ -25,7 +25,7 @@ define('io.ox/office/preview/controller',
      *
      * @constructor
      *
-     * @extends Controller
+     * @extends BaseController
      *
      * @param {PreviewApplication} app
      *  The OX Preview application that has created this controller instance.
@@ -108,7 +108,7 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        Controller.call(this, app);
+        BaseController.call(this, app);
 
         // initialization -----------------------------------------------------
 
@@ -127,7 +127,7 @@ define('io.ox/office/preview/controller',
 
     // exports ================================================================
 
-    // derive this class from class Controller
-    return Controller.extend({ constructor: PreviewController });
+    // derive this class from class BaseController
+    return BaseController.extend({ constructor: PreviewController });
 
 });

@@ -13,8 +13,8 @@
 
 define('io.ox/office/preview/model',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/app/model'
-    ], function (Utils, Model) {
+     'io.ox/office/tk/app/basemodel'
+    ], function (Utils, BaseModel) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/office/preview/model',
      *
      * @constructor
      *
-     * @extends Model
+     * @extends BaseModel
      */
     function PreviewModel(app) {
 
@@ -44,7 +44,7 @@ define('io.ox/office/preview/model',
 
         // base constructor ---------------------------------------------------
 
-        Model.call(this, app);
+        BaseModel.call(this, app);
 
         // methods ------------------------------------------------------------
 
@@ -116,7 +116,7 @@ define('io.ox/office/preview/model',
 
     // exports ================================================================
 
-    // derive this class from class Model
-    return Model.extend({ constructor: PreviewModel });
+    // derive this class from class BaseModel
+    return BaseModel.extend({ constructor: PreviewModel });
 
 });

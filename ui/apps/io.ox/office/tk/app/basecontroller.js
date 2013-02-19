@@ -11,14 +11,14 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/controller',
+define('io.ox/office/tk/app/basecontroller',
     ['io.ox/core/event',
      'io.ox/office/tk/utils'
     ], function (Events, Utils) {
 
     'use strict';
 
-    // class Controller =======================================================
+    // class BaseController =======================================================
 
     /**
      * A controller contains a collection of items, consisting of unique key
@@ -30,7 +30,7 @@ define('io.ox/office/tk/app/controller',
      * @param {OfficeApplication} app
      *  The application that has created this controller instance.
      */
-    function Controller(app) {
+    function BaseController(app) {
 
         var // self reference
             self = this,
@@ -324,7 +324,7 @@ define('io.ox/office/tk/app/controller',
          *      returned. If specified, overrides the default done handler
          *      passed to the constructor of this controller.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerDefinition = function (key, definition) {
@@ -339,10 +339,10 @@ define('io.ox/office/tk/app/controller',
          *
          * @param {Object} definitions
          *  A map of key/definition pairs for all new items. Each item will be
-         *  defined by calling the method Controller.registerDefinition(). See
-         *  this method for more details.
+         *  defined by calling the method BaseController.registerDefinition().
+         *  See this method for more details.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerDefinitions = function (definitions) {
@@ -361,7 +361,7 @@ define('io.ox/office/tk/app/controller',
          *
          * @param {Function} doneHandler
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerDoneHandler = function (doneHandler) {
@@ -380,7 +380,7 @@ define('io.ox/office/tk/app/controller',
          *  enable() taking an item key and state parameter. Must support the
          *  method update() taking the key and value of an item.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerViewComponent = function (component) {
@@ -393,13 +393,13 @@ define('io.ox/office/tk/app/controller',
 
         /**
          * Unregisters a view component that has been registered with the
-         * method Controller.registerViewComponent().
+         * method BaseController.registerViewComponent().
          *
          * @param {Component} component
          *  A view component that has been registered with the method
-         *  Controller.registerViewComponent() before.
+         *  BaseController.registerViewComponent() before.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.unregisterViewComponent = function (component) {
@@ -420,7 +420,7 @@ define('io.ox/office/tk/app/controller',
          *  exactly. If omitted, all items will be updated. If set to null,
          *  no item will be updated.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller.
          */
         this.update = (function () {
@@ -428,7 +428,7 @@ define('io.ox/office/tk/app/controller',
             var // pending controller keys to be updated
                 pendingKeys = [];
 
-            // direct callback: called every time when Controller.update() has been called
+            // direct callback: called every time when BaseController.update() has been called
             function registerKeys(keys) {
                 // update the array of pending keys
                 if (_.isUndefined(keys)) {
@@ -447,10 +447,10 @@ define('io.ox/office/tk/app/controller',
                 self.trigger('update', resultCache);
             }
 
-            // create and return the debounced Controller.update() method
+            // create and return the debounced BaseController.update() method
             return app.createDebouncedMethod(registerKeys, triggerUpdate);
 
-        }()); // Controller.update()
+        }()); // BaseController.update()
 
         /**
          * Returns the current value of the specified item.
@@ -477,7 +477,7 @@ define('io.ox/office/tk/app/controller',
          * @param value
          *  The new value of the item.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller.
          */
         this.change = function (key, value) {
@@ -489,7 +489,7 @@ define('io.ox/office/tk/app/controller',
          * Triggers a cancel event manually. Executes the default done handler
          * of this controller.
          *
-         * @returns {Controller}
+         * @returns {BaseController}
          *  A reference to this controller.
          */
         this.cancel = this.done = function () {
@@ -511,10 +511,10 @@ define('io.ox/office/tk/app/controller',
         // register item definitions
         this.registerDefinitions(items);
 
-    } // class Controller
+    } // class BaseController
 
     // exports ================================================================
 
-    return _.makeExtendable(Controller);
+    return _.makeExtendable(BaseController);
 
 });
