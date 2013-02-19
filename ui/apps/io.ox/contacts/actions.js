@@ -231,7 +231,8 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/vcard', {
 
         requires: function (e) {
-            if (!capabilities.has('webmail')) {
+            var ctx = e.context;
+            if (!capabilities.has('webmail') || (ctx.id === 0 && ctx.folder_id === 0)) {
                 return false;
             } else {
                 var list = [].concat(e.context);
