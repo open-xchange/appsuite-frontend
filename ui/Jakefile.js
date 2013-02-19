@@ -252,7 +252,6 @@ utils.concat("boot.js", [
         "lib/require.js",
         "lib/require-fix.js",
         "lib/modernizr.js",
-        "lib/jquery.lazyload.js",
         "lib/bigscreen.js",
         "lib/placeholder.min.js",
         //add backbone and dot.js may be a AMD-variant would be better
