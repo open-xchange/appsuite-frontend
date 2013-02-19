@@ -315,7 +315,10 @@ define("io.ox/calendar/view-detail",
     ext.point("io.ox/calendar/detail").extend({
         index: 700,
         id: "details",
-        draw: function (data) {
+        draw: function (data, options) {
+            if (options && options.brief) {
+                return $();
+            }
             var node = $("<div>").addClass('details')
                 .append($("<div>").addClass("io-ox-label").text(gt("Details")))
                 .appendTo(this);
@@ -435,7 +438,7 @@ define("io.ox/calendar/view-detail",
 
     return {
 
-        draw: function (data) {
+        draw: function (data, options) {
 
             var node;
 
@@ -444,13 +447,13 @@ define("io.ox/calendar/view-detail",
             } else {
                 node = $("<div>").addClass("calendar-detail");
                 node.attr('data-cid', String(_.cid(data)));
-                ext.point("io.ox/calendar/detail").invoke("draw", node, data);
+                ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
             }
 
             var refresh = function (e, ap) {
                 if (ap.id === data.id && ap.folder === data.folder) {
                     node.empty();
-                    ext.point("io.ox/calendar/detail").invoke("draw", node, ap);
+                    ext.point("io.ox/calendar/detail").invoke("draw", node, ap, options);
                 }
             };
             // bind api events

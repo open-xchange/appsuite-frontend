@@ -660,7 +660,7 @@
 
       isActive = $parent.hasClass('open')
 
-      clearMenus()
+      clearMenus(e)
 
       if (!isActive) {
         $parent.toggleClass('open')

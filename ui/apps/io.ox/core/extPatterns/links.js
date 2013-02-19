@@ -232,6 +232,9 @@ define("io.ox/core/extPatterns/links",
 
         // create & add node first, since the rest is async
         var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
+        if (options.open === 'left') {
+            node.addClass("pull-right").css({textAligh: 'left'});
+        }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
         $toggle.dropdown();
