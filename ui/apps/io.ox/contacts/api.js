@@ -214,6 +214,9 @@ define('io.ox/contacts/api',
                 );
             })
             .done(function () {
+                _(list).map(function (data) {
+                    api.trigger('delete:' + encodeURIComponent(_.cid(data)), data);
+                });
                 api.trigger('refresh.all');
             });
     };
