@@ -24,8 +24,7 @@ define('io.ox/mail/view-detail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
      'io.ox/mail/actions',
-     'less!io.ox/mail/style.css',
-     'io.ox/calendar/invitations/register'
+     'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
 
     'use strict';
