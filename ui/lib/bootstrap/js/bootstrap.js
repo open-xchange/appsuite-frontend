@@ -713,7 +713,8 @@
 
   function clearMenus(e) {
     // Ignore second click event fired on Firefox for right click
-    if (e.button === 2) { return; }
+    console.log(e);
+    if (e && e.button === 2) { return; }
     $(toggle).each(function () {
       getParent($(this)).removeClass('open')
     })
