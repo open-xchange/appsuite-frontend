@@ -24,8 +24,9 @@ define('io.ox/mail/actions',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
+     'io.ox/core/api/conversion',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilities, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilities, conversionAPI, settings) {
 
     'use strict';
 
@@ -400,6 +401,47 @@ define('io.ox/mail/actions',
                     notifications.yell('success', gt('Attachments have been saved'));
                 })
                 .fail(notifications.yell);
+        }
+    });
+
+
+    new Action('io.ox/mail/actions/vcard', {
+        id: 'vcard',
+        requires: function (e) {
+            var context = e.context,
+                hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
+                isRightType = context.content_type && context.content_type.match(/^text\/directory/i) !== null,
+                isVcard = hasRightSuffix && isRightType;
+            return e.collection.has('some') && isVcard;
+        },
+        action: function (baton) {
+            var attachment = baton.data;
+            conversionAPI.convert(
+                {
+                    identifier: 'com.openexchange.mail.vcard',
+                    args: [
+                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                    ]
+                }, {
+                    identifier: 'com.openexchange.contact.json',
+                    args: []
+                }
+            ).done(function (data) {
+                    //TODO: Figure out why this indentation needs to be so sucky
+                    //TODO: Handle data not being an array or containing more than one contact
+                    var contact = data[0];
+                    contact.folder_id = config.get('folder.contacts');
+                    require(['io.ox/contacts/edit/main'], function (m) {
+                        if (m.reuse('edit', contact)) {
+                            return;
+                        }
+                        m.getApp(contact).launch();
+                    });
+                }).fail(function (data) {
+                    console.err('FAILED!', data);
+                });
         }
     });
 
@@ -816,6 +858,13 @@ define('io.ox/mail/actions',
         index: 500,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'vcard',
+        index: 600,
+        label: gt('Store VCard as contact'),
+        ref: 'io.ox/mail/actions/vcard'
     }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
