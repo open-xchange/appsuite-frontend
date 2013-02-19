@@ -24,7 +24,8 @@ define('io.ox/mail/view-detail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
      'io.ox/mail/actions',
-     'less!io.ox/mail/style.css'
+     'less!io.ox/mail/style.css',
+     'io.ox/calendar/invitations/register'
     ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
 
     'use strict';
@@ -442,7 +443,8 @@ define('io.ox/mail/view-detail',
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
                         container.replaceWith(self.draw(tmp));
-                    });
+                    }),
+                drawnAlternatively = false;
 
             try {
 
@@ -463,7 +465,15 @@ define('io.ox/mail/view-detail',
                 }
 
                 // invoke extensions
-                ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                ext.point("io.ox/mail/detail/alternatives").each(function (extension) {
+                    if (extension.accept(baton) && !drawnAlternatively) {
+                        drawnAlternatively = true;
+                        extension.invoke('draw', node, baton, ext.point("io.ox/mail/detail"));
+                    }
+                });
+                if (!drawnAlternatively) {
+                    ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                }
 
             } catch (e) {
                 console.error('mail.draw', e.message, e, baton);

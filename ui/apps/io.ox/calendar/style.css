@@ -150,6 +150,7 @@
 .calendar-detail .note {
     max-width: 550px;
     white-space: pre-wrap;
+    word-wrap: break-word;
     margin: 2em 0 1em 0;
     cursor: text;
     .box-sizing(border-box);
@@ -268,5 +269,46 @@
     float: right;
 }
 
+/* Invitations */
 
+.io-ox-calendar-itip-analysis .date {
+    margin-right: 14px;
+}
+
+.itip-actions {
+    text-align: right;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.io-ox-calendar-itip-analysis .changes {
+  margin: 1em 0;
+  font-size: 11pt;
+}
+ 
+.io-ox-calendar-itip-analysis .changes .original {
+  font-weight: bold;
+}
+ 
+.io-ox-calendar-itip-analysis .changes .recurrencePosition {
+  font-weight: bold;
+}
+ 
+.io-ox-calendar-itip-analysis .changes .updated {
+  color: green;
+  font-weight: bold;
+}
+
+.io-ox-calendar-itip-analysis .changes .original {
+   font-weight: bold;
+}
+
+.io-ox-calendar-itip-analysis .changes .recurrencePosition {
+   font-weight: bold;
+}
+
+.io-ox-calendar-itip-analysis .changes .updated {
+   color: green;
+   font-weight: bold;
+}
 
