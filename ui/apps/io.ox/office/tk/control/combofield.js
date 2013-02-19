@@ -218,6 +218,9 @@ define('io.ox/office/tk/control/combofield',
 
         // initialization -----------------------------------------------------
 
+        // add special marker class used to adjust formatting
+        this.getNode().addClass('combo-field');
+
         // prepare group and register event handlers
         this.on('menuopen', menuOpenHandler)
             .on('validated', textFieldValidationHandler)

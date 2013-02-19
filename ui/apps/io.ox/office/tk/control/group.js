@@ -25,7 +25,10 @@ define('io.ox/office/tk/control/group',
         HIDDEN_CLASS = 'hidden',
 
         // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled';
+        DISABLED_CLASS = 'disabled',
+
+        // CSS class for the group node while any embedded control is focused
+        FOCUSED_CLASS = 'focused';
 
     // class Group ============================================================
 
@@ -404,6 +407,13 @@ define('io.ox/office/tk/control/group',
                         event.preventDefault();
                         self.trigger('cancel');
                     }
+                })
+                .on('focusin focusout', function () {
+                    _.defer(function () {
+                        // cannot rely on the order of focusin/focusout events, simply check
+                        // if focus is inside the group (after browser has processed the event!)
+                        groupNode.toggleClass(FOCUSED_CLASS, Utils.containsFocusedControl(groupNode));
+                    });
                 });
         } else {
             this.hide();

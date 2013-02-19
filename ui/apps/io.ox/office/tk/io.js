@@ -125,7 +125,9 @@ define('io.ox/office/tk/io',
      * @returns {jQuery.Promise}
      *  The Promise of a Deferred object that will be resolved with the result
      *  object containing the data URL, or rejected if the read operation
-     *  failed.
+     *  failed. If the file size is known, the Promise will be notified about
+     *  the progress of the operation (a floating-point number between 0.0 and
+     *  1.0).
      */
     IO.readClientFileAsDataUrl = function (fileDesc) {
 
@@ -150,10 +152,10 @@ define('io.ox/office/tk/io',
                 def.reject();
             };
 
-            // register progress handler, Deferred object will be notified with percentage
+            // register progress handler, Deferred object will be notified
             reader.onprogress = function (event) {
                 if (event.lengthComputable) {
-                    def.notify(Math.round((event.loaded / event.total) * 100));
+                    def.notify(event.loaded / event.total);
                 }
             };
 

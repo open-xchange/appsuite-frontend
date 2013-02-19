@@ -187,10 +187,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     /* border width of buttons in framed design mode */
     @framed-border-width: 3px;
 
-    /* glow effect for focused controls, use as argument for .box-shadow() */
+    /* glow effect for focused controls, use as argument for shadow mix-in classes */
     @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
-    /* glow effect for focused and hovered controls, use as argument for .box-shadow() */
-    @focus-glow-hover-effect: 0 0 8px 2px fade(@selectedBackground, 75%);
 
     position: relative;
     padding: 0;
@@ -611,11 +609,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                         }
                     }
                     
-                    /* effects for all elements in groups with text boxes (ComboField) */
-                    &.text-focus {
+                    /* effects for all elements in combo fields */
+                    &.combo-field.focused {
                         .box-shadow(@focus-glow-effect);
         
-                        input, a.button {
+                        > input, > a.button.dropdown-button {
                             &, &:hover, &:focus, &:active {
                                 background: white;
                                 color: @textColor;
@@ -623,9 +621,18 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                             }
                         }
 
-                        > input:not(:last-child) { border-right-color: transparent; }
-                        > input + a.button { border-left-color: transparent; }
-}
+                        > input {
+                            &, &:hover, &:focus, &:active {
+                                border-right-color: transparent;
+                            }
+                        }
+
+                        > a.button.dropdown-button {
+                            &, &:hover, &:focus, &:active {
+                                border-left-color: transparent;
+                            }
+                        }
+                    }
                 }
             }
 

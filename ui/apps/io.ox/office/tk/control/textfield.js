@@ -21,9 +21,6 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // CSS marker class for the group node while focus is in text field
-        TEXT_FOCUS_CLASS = 'text-focus',
-
         // default validator without any restrictions on the field text
         defaultValidator = null;
 
@@ -280,6 +277,7 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
             .registerChangeHandler('commit', { node: textField, valueResolver: commitHandler });
+
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
@@ -287,11 +285,6 @@ define('io.ox/office/tk/control/textfield',
             // characters, use key events as a workaround. This is still not perfect,
             // as it misses cut/delete from context menu, drag&drop, etc.
             .on('input keydown keyup', fieldInputHandler);
-        this.getNode().on('focusin focusout', function () {
-            // cannot rely on the order of focusin/focusout events, simply check
-            // if focus is inside the group (after browser has processed the event!)
-            _.defer(function () { self.getNode().toggleClass(TEXT_FOCUS_CLASS, Utils.containsFocusedControl(self.getNode())); });
-        });
 
         // initialize read-only mode
         this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));

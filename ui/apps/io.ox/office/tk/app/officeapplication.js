@@ -266,14 +266,8 @@ define('io.ox/office/tk/app/officeapplication',
          */
         function importDocument(point) {
 
-            var // the application window
-                win = self.getWindow();
-
             // do nothing if file descriptor is missing (e.g. while restoring after browser refresh)
             if (!file) { return $.when(); }
-
-            // set window to busy state while the import handler is running
-            win.busy();
 
             // notify listeners
             self.trigger('docs:import:before');
@@ -282,7 +276,6 @@ define('io.ox/office/tk/app/officeapplication',
             return importHandler.call(self, point)
                 .always(function () {
                     self.trigger('docs:import:after');
-                    controller.update();
                 })
                 .done(function () {
                     self.trigger('docs:import:success');
@@ -291,11 +284,8 @@ define('io.ox/office/tk/app/officeapplication',
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.'));
                     view.showError(title, message);
-                    Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
+                    Utils.warn('OfficeApplication.launch(): importing document "' + file.filename + '" failed.');
                     self.trigger('docs:import:error');
-                })
-                .always(function () {
-                    win.idle();
                 });
         }
 
@@ -979,12 +969,18 @@ define('io.ox/office/tk/app/officeapplication',
         this.failRestore = function (point) {
 
             var // the result Deferred object
-                def = $.Deferred();
+                def = $.Deferred(),
+                // the application window
+                win = this.getWindow();
 
-                // set file descriptor and import the document
+            // set file descriptor and import the document
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
             // always resolve the deferred (expected by the core launcher)
-            importDocument(point).always(function () { def.resolve(); });
+            win.busy();
+            importDocument(point).always(function () {
+                win.idle();
+                def.resolve();
+            });
 
             return def.promise();
         };
@@ -1054,7 +1050,6 @@ define('io.ox/office/tk/app/officeapplication',
                     controller.update();
                     // this resumes pending window 'open' event handler
                     initDef.resolve();
-                    win.idle();
                 })
                 .done(function () {
                     self.trigger('docs:init:success');
@@ -1068,6 +1063,7 @@ define('io.ox/office/tk/app/officeapplication',
                     def.resolve();
                 });
 
+                def.always(function () { win.idle(); });
             });
 
             return def.promise();
