@@ -321,7 +321,7 @@ define('io.ox/core/commons-folderview',
                     dialog.getBody().css('height', '250px');
                     var tree = new views.FolderTree(dialog.getBody(), {
                         type: baton.options.type,
-                        rootFolderId: '9',
+                        rootFolderId: '1',
                         skipRoot: true,
                         cut: folder.id,
                         customize: function (data) {

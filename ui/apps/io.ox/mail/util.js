@@ -292,7 +292,7 @@ define('io.ox/mail/util',
         },
 
         getInitialDefaultSender: function () {
-            var mailArray = _(config.get('mail.addresses', []));
+            var mailArray = _(config.get('modules.mail.sendaddress', []));
             return mailArray._wrapped[0];
         },
 
