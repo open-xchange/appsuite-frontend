@@ -290,7 +290,7 @@ define('io.ox/office/tk/app/officeapplication',
                 .fail(function (result) {
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.'));
-                    self.showError(title, message);
+                    view.showError(title, message);
                     Utils.warn('OfficeApplication.launch(): importing document ' + file.filename + ' failed.');
                     self.trigger('docs:import:error');
                 })
