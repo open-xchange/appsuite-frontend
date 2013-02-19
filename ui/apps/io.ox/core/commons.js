@@ -401,13 +401,15 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-
             cid,
-
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function () {
                 if ((getter = getter || (api ? api.get : null))) {
+                    // fallback for create trigger
+                    if (!data.id) {
+                        data.id = arguments[1].id;
+                    }
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;
@@ -442,6 +444,7 @@ define('io.ox/core/commons',
             cid = encodeURIComponent(cid);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
+            api.on('create', update);
         }
 
         return node.one('dispose', function () {
@@ -456,6 +459,7 @@ define('io.ox/core/commons',
                     cid = encodeURIComponent(cid);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
+                    api.off('create', update);
                 }
                 api = update = data = node = getter = null;
             });
