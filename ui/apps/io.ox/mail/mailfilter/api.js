@@ -27,15 +27,34 @@ define("io.ox/mail/mailfilter/api",
 
         },
 
-        getRules: function (flag, username) {
+        getRules: function (flag) {
 
             return http.GET({
                 module: "mailfilter",
                 params: {
                     action: "list",
-                    flag: flag,
-                    username: username
+                    flag: flag
                 }
+            });
+        },
+
+        update: function (data) {
+
+            delete data.folder;
+
+            var preparedData = {
+                    "actioncmds": [data],
+                    "id": 0
+                };
+            if (data.active !== undefined) {
+                preparedData.active = data.active;
+                delete data.active;
+            }
+
+            return http.PUT({
+                module: "mailfilter",
+                params: {action: "update"},
+                data: preparedData
             });
         }
     };

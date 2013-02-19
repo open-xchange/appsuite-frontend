@@ -12,5 +12,27 @@
  */
 
 
+.edit-vacation {
+	
+	max-width: 800px;
+	
+	select[name="day"], select[name="month"], select[name="year"] {
+        height: 30px;
+    }
 
+    select[name="day"] {
+        width: 60px;
+        margin-right: 15px;
+    }
 
+    select[name="month"] {
+        width: 125px;
+        margin-right: 15px;
+    }
+
+    select[name="year"] {
+        width: 69px;
+    }
+}
+
+ 

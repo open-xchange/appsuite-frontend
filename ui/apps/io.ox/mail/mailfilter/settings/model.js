@@ -23,18 +23,15 @@ define('io.ox/mail/mailfilter/settings/model',
     function buildFactory(ref, api) {
         var factory = new ModelFactory({
             api: api,
-            ref: ref,
+            ref: ref
 
-            updateEvents: ['edit']
-//            destroy: function (model) {
-//                return api.remove({id: model.id, folder_id: model.get('folder_id')});
-//            }
         });
 
         Validators.validationFor(ref, {
             subject: { format: 'string'},
             text: { format: 'string' },
-            days: { format: 'string' }
+            days: { format: 'string' },
+            active: { format: 'boolean'}
         });
         return factory;
 
@@ -44,15 +41,11 @@ define('io.ox/mail/mailfilter/settings/model',
         subject: 'Subject',
         text: 'Text',
         days: 'Days',
-        active: 'aktive'
+        active: 'Active'
     };
 
-//    var factory = buildFactory('io.ox/mail/mailfilter/settings/model', api);
 
     return {
-//        mailfilter: factory.model,
-//        mailfilters: factory.collection,
-//        factory: factory,
         api: api,
         fields: fields,
         protectedMethods: {

@@ -27,6 +27,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             VacationEditView = point.createView({
                 tagName: 'div',
                 className: 'edit-vacation'
+
             });
 
         point.extend(new forms.Header({
@@ -48,45 +49,9 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             }
         }));
 
-        // Actions
-        point.basicExtend(new links.InlineLinks({
-            index: 150,
-            id: 'inline-actions',
-            ref: ref + '/edit/view/inline',
-            customizeNode: function ($node) {
-                $node.addClass("span9");
-                $node.css({marginBottom: '20px'});
-            }
-        }));
-
-        // Save
-
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
-            id: "save",
-            index: 100,
-            label: gt("Save"),
-            ref: ref + "/actions/edit/save",
-            cssClasses: "btn btn-primary",
-            tabIndex: 10,
-            tagtype: "button"
-        }));
-
-        // Edit Actions
-
-        new actions.Action(ref + '/actions/edit/save', {
-            id: 'save',
-            action: function (options, baton) {
-                options.parentView.trigger('save:start');
-                options.model.save().done(function () {
-                    options.parentView.trigger('save:success');
-                }).fail(function () {
-                    options.parentView.trigger('save:fail');
-                });
-            }
-        });
 
         point.extend(new forms.CheckBoxField({
-            id: ref + '/edit/view/aktiv',
+            id: ref + '/edit/view/active',
             index: 250,
             label: model.fields.active,
             attribute: 'active',
@@ -102,7 +67,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             id: ref + '/edit/view/subject',
             index: 250,
             label: model.fields.subject,
-            control: '<input type="text" class="input-xlarge" name="' + 'subject' + '">',
+            control: '<input type="text" class="input-xlarge" name="subject">',
             attribute: 'subject'
         }));
 
@@ -110,7 +75,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             id: ref + '/edit/view/mailtext',
             index: 250,
             label: model.fields.text,
-            control: '<textarea rows="12" class="span6" name="' + 'test' + '">',
+            control: '<textarea rows="12" class="span6" name="text">',
             attribute: 'text'
         }));
 
@@ -121,6 +86,20 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             attribute: 'days',
             selectOptions: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8'}
         }));
+
+//        point.extend(new forms.DateControlGroup({
+//            id: ref + '/edit/view/dateFrom',
+//            index: 250,
+//            label: 'Date from',
+//            attribute: 'dateFrom'
+//        }));
+//
+//        point.extend(new forms.DateControlGroup({
+//            id: ref + '/edit/view/dateUntil',
+//            index: 250,
+//            label: 'Date until',
+//            attribute: 'dateUntil'
+//        }));
 
 
         var index = 400;

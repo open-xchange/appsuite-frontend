@@ -22,39 +22,29 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'use strict';
 
 
-    // Model Factory for use with the edit dialog
-    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
-
-    // The edit dialog
-    var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter');
+    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
+        VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter');
 
     return {
         editVacationtNotice: function ($node) {
-            // Load the vacationnotice
+            var deferred = $.Deferred();
+
             api.getRules('vacation').done(function (data) {
-//                console.log(data[0]);
+
                 var vacationData = data[0].actioncmds[0];
                 vacationData.active = data[0].active;
+                var vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
-                $node.append(new VacationEdit({model: factory.create(vacationData)}).render().$el);
+                $node.append(vacationNotice.render().$el);
 
-
-
+                deferred.resolve(vacationNotice.model);
 
             });
-//            return factory.create().done(function (vacation) {
 
-//            $node.append($('<div>').text('Man sieht was'));
+            return deferred.done(function (model) {
+            });
+            // Load the vacationnotice
 
-//            user.on('sync:start', function () {
-//                dialogs.busy($node);
-//            });
-//
-//            user.on('sync:always', function () {
-//                dialogs.idle($node);
-//                });
-//            });
-//            });
         }
     };
 
