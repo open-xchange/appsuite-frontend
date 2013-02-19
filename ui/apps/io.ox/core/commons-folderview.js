@@ -542,10 +542,8 @@ define('io.ox/core/commons-folderview',
 
                     sidepanel.on('contextmenu', '.folder', function (e) {
                         e.preventDefault();
-                        $(this).closest('.foldertree-sidepanel')
-                            .children('.foldertree-toolbar')
-                            .children('[data-action="options"]')
-                            .children('a.dropdown-toggle').click();
+                        $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
+                        return false;
                     });
 
                     initTree = loadTree = null;
