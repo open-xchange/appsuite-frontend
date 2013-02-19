@@ -18,8 +18,9 @@ define('io.ox/core/export',
     'io.ox/core/api/folder',
     'io.ox/core/notifications',
     'io.ox/core/config',
+    'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/backbone/forms.less'], function (ext, dialogs, api, folderApi, notifications, config, gt) {
+    'less!io.ox/backbone/forms.less'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
 
     'use strict';
 
@@ -153,10 +154,60 @@ define('io.ox/core/export',
         }
     });
 
+    //format: vcard
+    ext.point('io.ox/core/export/format').extend({
+        id: 'hcard',
+        index: 300,
+        draw: function (baton) {
+            if (baton.module === 'contacts') {
+                baton.format.hcard = {
+                    getDeferred: function () {
+                        var def = new $.Deferred();
+                        api.getVCARD(baton.id, false)
+                            .fail(function (e) {
+                                if (e)
+                                    def.reject(e);
+                                else
+                                    def.reject({error: gt('folder does not contain any data')});
+                            })
+                            .pipe(
+                                function (data) {
+                                    var hcard = vcard.getHCard(data),
+                                        enabledDataUri = false;
+                                    //data uri vs. popup
+                                    if (enabledDataUri && !_.browser.IE) {
+                                        window.location.href = "data:data:text/html;charset=utf-8," + encodeURIComponent(hcard);
+                                    } else {
+                                        var win = window.open('about:blank', '_blank');
+                                        //popupblocker
+                                        if (!win) {
+                                            var popupblocker = 'The window could not be opened. Most likely it has been blocked by a pop-up or advertisement blocker. Please check your browser settings and make sure pop-ups are allowed for this domain.';
+                                            notifications.yell('error', gt(popupblocker));
+                                        }
+                                        //onready
+                                        $(win).ready(function () {
+                                            win.document.write(hcard);
+                                            win.document.title = gt('hCard Export');
+                                            win.focus();
+                                            // IE9 has problems focusing the window for the first time
+                                            setTimeout(function () {
+                                                win.focus();
+                                            }, 0);
+                                        });
+                                    }
+                                });
+                        return def;
+                    }
+                };
+                return $('<option value="hcard">hCard</option>');
+            }
+        }
+    });
+
     //format: ical
     ext.point('io.ox/core/export/format').extend({
         id: 'ical',
-        index: 300,
+        index: 400,
         draw: function (baton) {
             if (baton.module === 'calendar' || baton.module === 'tasks') {
                 baton.format.ical = { getDeferred: function () { return api.getICAL(baton.id, baton.simulate); } };
