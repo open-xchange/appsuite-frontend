@@ -549,6 +549,15 @@ define("io.ox/mail/api",
                 action: "expunge"
             },
             data: [folder_id]
+        }).pipe(function (data) {
+            return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
+                api.trigger('refresh.all');
+                folderAPI.reload(folder_id);
+                return data;
+            });
+        }).done(function () {
+            notifications.yell('success', 'The folder has been cleaned up.');
+            folderAPI.reload(folder_id);
         });
     };
 
