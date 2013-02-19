@@ -207,7 +207,7 @@ define("io.ox/mail/api",
     var api = apiFactory({
         module: "mail",
         keyGenerator: function (obj) {
-            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
+            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
         },
         requests: {
             all: {
@@ -220,7 +220,7 @@ define("io.ox/mail/api",
             },
             list: {
                 action: "list",
-                columns: "102,600,601,602,603,604,605,607,610,611,614"
+                columns: "102,600,601,602,603,604,605,607,610,611,614,652"
             },
             get: {
                 action: "get",

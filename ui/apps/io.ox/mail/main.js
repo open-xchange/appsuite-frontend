@@ -117,6 +117,15 @@ define('io.ox/mail/main',
 
         // add template
         grid.addTemplate(tmpl.main);
+        
+        // template changes for unified mail
+        grid.on('change:prop:folder', function (e, folder) {
+            var unified = folderAPI.is('unifiedmail', folder);
+            if (unified !== tmpl.unified) {
+                tmpl.unified = unified;
+                grid.updateTemplates();
+            }
+        });
 
         //get sorting settings
         var sortSettings = {};

@@ -13,14 +13,9 @@
 
 /* VGrid elements */
 
-.vgrid-cell.mail * {
-    height: 1.5em; /* good for what? */
-}
-
 .vgrid-cell.mail {
     padding: 6px 13px 6px 13px;
     line-height: 1.5em;
-    height: 3em;
 }
 
 .io-ox-portal-widget .vgrid-cell.mail { /* portal */

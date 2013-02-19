@@ -24,9 +24,10 @@ define('io.ox/mail/view-grid-template',
 
         // main grid template
         main: {
+            unified: false,
             build: function () {
                 var from, date, priority, subject, attachment, threadSize, flag,
-                    answered, forwarded, unread;
+                    answered, forwarded, unread, account = null;
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span class="date">'),
@@ -45,7 +46,24 @@ define('io.ox/mail/view-grid-template',
                         )
                     )
                 );
-                return { from: from, date: date, priority: priority, unread: unread, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag, answered: answered, forwarded: forwarded };
+                if (that.unified) {
+                    this.append($('<div>').append(
+                        account = $('<div class="label label-info">')
+                    ));
+                }
+                return {
+                    from: from,
+                    date: date,
+                    priority: priority,
+                    unread: unread,
+                    subject: subject,
+                    attachment: attachment,
+                    threadSize: threadSize,
+                    flag: flag,
+                    answered: answered,
+                    forwarded: forwarded,
+                    account: account
+                };
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
@@ -61,6 +79,7 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
+                if (fields.account) fields.account.text(data.account_name);
                 if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }
