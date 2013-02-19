@@ -272,10 +272,15 @@ define("io.ox/calendar/api",
                 },
                 data: o.data
             })
-            .done(function (resp) {
+            .pipe(function (resp) {
                 get_cache = {};
-                api.trigger("confirmation-changed", o);//redraw detailview to be responsive and remove invites
+                api.trigger("confirmation-changed", o); //redraw detailview to be responsive and remove invites
                 api.trigger('refresh.all');
+                return api.get(o)
+                        .pipe(function (data) {
+                            api.trigger('updateDetails', data); // do not use this event / only for view-details
+                            return data;
+                        });
             });
         },
 
