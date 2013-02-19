@@ -713,8 +713,9 @@
 
   function clearMenus(e) {
     // Ignore second click event fired on Firefox for right click
-    console.log(e);
     if (e && e.button === 2) { return; }
+    // Ignore ctrl click to make firefox mac users happy
+    if (e && e.ctrlKey) { return; }
     $(toggle).each(function () {
       getParent($(this)).removeClass('open')
     })
