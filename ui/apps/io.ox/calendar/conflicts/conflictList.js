@@ -13,7 +13,8 @@
 
 define('io.ox/calendar/conflicts/conflictList',
     ['io.ox/core/extensions',
-    'gettext!io.ox/calendar/conflicts/conflicts'], function (ext, gt) {
+     'io.ox/calendar/api',
+     'gettext!io.ox/calendar/conflicts/conflicts'], function (ext, calAPI, gt) {
 	'use strict';
 
 	return {
@@ -27,10 +28,11 @@ define('io.ox/calendar/conflicts/conflictList',
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts));
                     new dialogs.SidePopup()
                         .delegate(conflictList, ".vgrid-cell", function (popup, e, target) {
-                            var data = target.data("appointment");
-                            require(["io.ox/calendar/view-detail"], function (view) {
-                                popup.append(view.draw(data));
-                                data = null;
+                            calAPI.get(target.data("appointment")).done(function (data) {
+                                require(["io.ox/calendar/view-detail"], function (view) {
+                                    popup.append(view.draw(data));
+                                    data = null;
+                                });
                             });
                         });
                 }
