@@ -127,7 +127,7 @@ define("io.ox/preview/main",
                     preload: 'metadata',
                     controls: 'control',
                     autoplay: false
-                }).hide().appendTo(this);
+                }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
                 require(['apps/mediaelement/mediaelement-and-player.js',
                         'less!mediaelement/mediaelementplayer.css'], function () {
