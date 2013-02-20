@@ -18,8 +18,9 @@ define("io.ox/contacts/view-detail",
      "io.ox/contacts/api",
      "io.ox/contacts/actions",
      "io.ox/core/api/folder",
+     'io.ox/core/extPatterns/links',
      "less!io.ox/contacts/style.css"
-    ], function (ext, gt, util, api, actions, folderAPI) {
+    ], function (ext, gt, util, api, actions, folderAPI, links) {
 
     "use strict";
 
@@ -147,7 +148,7 @@ define("io.ox/contacts/view-detail",
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
     });
-
+    
     function getDescription(data) {
         if (api.looksLikeDistributionList(data)) return gt('Distribution list');
         if (api.looksLikeResource(data)) return gt('Resource');
@@ -209,6 +210,62 @@ define("io.ox/contacts/view-detail",
     function looksLikeHTML(str) {
         return (/<\w/).test(str);
     }
+    
+    //attachments
+    ext.point("io.ox/contacts/detail").extend({
+        index: 220,
+        id: "attachments",
+        draw: function (baton) {
+            if (baton.data.number_of_attachments > 0) {
+                ext.point('io.ox/contacts/detail-attach').invoke('draw', this, baton.data);
+            }
+        }
+    });
+    
+    ext.point('io.ox/contacts/detail-attach').extend({
+        index: 100,
+        id: 'attachments',
+        draw: function (contact) {
+            var attachmentNode;
+            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is allready there
+                attachmentNode = this;
+            } else {
+                attachmentNode = $('<div>').addClass('attachments-container row-fluid').appendTo(this);//else build new
+            }
+            $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentNode);
+            var linkContainer = $('<div>').addClass('span8 field-value').appendTo(attachmentNode);
+            require(['io.ox/core/api/attachment'], function (api) {
+                api.getAll({folder_id: contact.folder_id, id: contact.id, module: 7}).done(function (data) {
+                    _(data).each(function (a, index) {
+                        // draw
+                        buildDropdown(linkContainer, _.noI18n(a.filename), a);
+                    });
+                    if (data.length > 1) {
+                        buildDropdown(linkContainer, gt('all'), data);
+                    }
+                    attachmentNode.delegate('a', 'click', function (e) {e.preventDefault(); });
+                }).fail(function () {
+                    attachmentFail(attachmentNode, contact);
+                });
+            });
+        }
+    });
+
+    var attachmentFail = function (container, contact) {
+        container.empty().append(
+                $.fail(gt('Could not load attachments for this contact.'), function () {
+                    ext.point('io.ox/contacts/detail-attach').invoke('draw', container, contact);
+                })
+            );
+    };
+
+    var buildDropdown = function (container, label, data) {
+        new links.DropdownLinks({
+                label: label,
+                classes: 'attachment-item',
+                ref: 'io.ox/contacts/attachment/links'
+            }).draw.call(container, data);
+    };
 
     ext.point("io.ox/contacts/detail").extend({
         index: 250,

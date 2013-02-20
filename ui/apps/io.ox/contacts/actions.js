@@ -351,6 +351,95 @@ define('io.ox/contacts/actions',
             });
         }
     });
+    
+    //attachment actions
+    new Action('io.ox/contacts/actions/preview-attachment', {
+        id: 'preview',
+        requires: function (e) {
+            return require(['io.ox/preview/main'])
+                .pipe(function (p) {
+                    var list = _.getArray(e.context);
+                    // is at least one attachment supported?
+                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                        return memo || new p.Preview({
+                            filename: obj.filename,
+                            mimetype: obj.content_type
+                        })
+                        .supportsPreview();
+                    }, false);
+                });
+        },
+        multiple: function (list) {
+            var e = $.Event();
+            e.target = this;
+
+            require(['io.ox/core/tk/dialogs',
+                     'io.ox/preview/main',
+                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
+                //build Sidepopup
+                new dialogs.SidePopup({ arrow: false, side: 'right' })
+                    .show(e, function (popup) {
+                    _(list).each(function (data, index) {
+                        data.dataURL = attachmentApi.getUrl(data, 'view');
+                        var pre = new p.Preview(data, {
+                            width: popup.parent().width(),
+                            height: 'auto'
+                        });
+                        if (pre.supportsPreview()) {
+                            popup.append(
+                                $('<h4>').text(data.filename)
+                            );
+                            pre.appendTo(popup);
+                            popup.append($('<div>').text('\u00A0'));
+                        }
+                    });
+                    if (popup.find('h4').length === 0) {
+                        popup.append($('<h4>').text(gt('No preview available')));
+                    }
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/open-attachment', {
+        id: 'open',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                _(list).each(function (data) {
+                    var url = attachmentApi.getUrl(data, 'open');
+                    window.open(url);
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/download-attachment', {
+        id: 'download',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                _(list).each(function (data) {
+                    var url = attachmentApi.getUrl(data, 'download');
+                    window.open(url);
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/save-attachment', {
+        id: 'save',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                //cannot be converted to multiple request because of backend bug (module overides params.module)
+                _(list).each(function (data) {
+                    attachmentApi.save(data);
+                });
+                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+            });
+        }
+    });
 
     //  points
 
@@ -454,5 +543,34 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         label: gt('Add to contact list'),
         ref: 'io.ox/contacts/actions/add-to-contactlist'
+    }));
+    
+    // Attachments
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 100,
+        label: gt('Preview'),
+        ref: 'io.ox/contacts/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'open',
+        index: 200,
+        label: gt('Open in new tab'),
+        ref: 'io.ox/contacts/actions/open-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'download',
+        index: 300,
+        label: gt('Download'),
+        ref: 'io.ox/contacts/actions/download-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'save',
+        index: 400,
+        label: gt('Save in file store'),
+        ref: 'io.ox/contacts/actions/save-attachment'
     }));
 });

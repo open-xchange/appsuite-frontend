@@ -19,9 +19,10 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/extPatterns/links',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/widgets/cityControlGroup',
+    'io.ox/core/tk/attachments',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/edit/style.css'
-], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
+], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, attachments, gt) {
 
     "use strict";
 
@@ -56,7 +57,8 @@ define('io.ox/contacts/edit/view-form', [
                         'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                         'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
             comment: ['note'],
-            misc: ['private_flag']
+            misc: ['private_flag'],
+            attachments: ['attachments_list', 'attachments_buttons']
         },
 
         rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
@@ -88,7 +90,8 @@ define('io.ox/contacts/edit/view-form', [
             comment: gt('Comment'),
             userfields: gt('User fields'),
             misc: //#. section name for contact inputfields that does not fit somewhere else
-                  gt('Miscellaneous')
+                  gt('Miscellaneous'),
+            attachments: gt('Attachments')
         },
 
         special: {
@@ -120,6 +123,58 @@ define('io.ox/contacts/edit/view-form', [
                 }), {
                     hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
                         return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
+                    }
+                });
+            },
+            attachments_list: function (options) {
+                options.point.extend(new attachments.EditableAttachmentList({
+                    id: options.field,
+                    registerAs: 'attachmentList',
+                    className: 'div',
+                    index: options.index,
+                    module: 7
+                }), {
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return true;// model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0;
+                    }
+                });
+            },
+            attachments_buttons: function (options) {
+                options.point.extend({
+                    id: options.field,
+                    index: options.index,
+                    render: function (baton) {
+                        var baton = this.baton,
+                            $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm').addClass('span12'),
+                            $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
+                            $input = $inputWrap.find('input[type="file"]'),
+                            $button = $inputWrap.find('button[data-action="add"]')
+                                .on('click', function (e) {
+                            e.preventDefault();
+                            if (_.browser.IE !== 9) {
+                                _($input[0].files).each(function (fileData) {
+                                    baton.attachmentList.addFile(fileData);
+                                });
+                                $input.trigger('reset.fileupload');
+                            } else {
+                                if ($input.val()) {
+                                    var fileData = {
+                                        name: $input.val().match(/[^\/\\]+$/),
+                                        size: 0,
+                                        hiddenField: $input
+                                    };
+                                    baton.attachmentList.addFile(fileData);
+                                    $input.addClass('add-attachment').hide();
+                                    $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                                }
+                            }
+                        });
+
+                        $node.append($('<div>').addClass('span12 contact_attachments_buttons').append($inputWrap));
+                    }
+                }, {
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return true;
                     }
                 });
             },
@@ -273,9 +328,40 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
             action: function (options, baton) {
+                var attachmentHandlingOver = true;
+                function attachmentHandling() {
+                    options.model.off('finishedAttachmentHandling');
+                    require(['io.ox/contacts/api'], function (api) {
+                        var attr = options.model.attributes;
+                        api.get({ id: attr.id, folder: attr.folder_id }, false)
+                            .pipe(function (data) {
+                                return $.when(
+                                    api.caches.get.add(data),
+                                    api.caches.all.grepRemove(attr.folder_id + api.DELIM),
+                                    api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
+                                    api.clearFetchCache()
+                                )
+                                .done(function () {
+                                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                    api.trigger('refresh.list');
+                                    attachmentHandlingOver = true;
+                                    options.parentView.trigger('save:success');
+                                });
+                            });
+                    });
+                }
+                
+                //check if attachments are changed
+                if (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0) {
+                    attachmentHandlingOver = false;
+                    options.model.on('finishedAttachmentHandling', attachmentHandling);
+                    options.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                }
                 options.parentView.trigger('save:start');
                 options.model.save().done(function () {
-                    options.parentView.trigger('save:success');
+                    if (attachmentHandlingOver) {
+                        options.parentView.trigger('save:success');
+                    }
                 }).fail(function () {
                     options.parentView.trigger('save:fail');
                 });

@@ -26,6 +26,27 @@
     .btn {
         margin-left: 13px;
     }
+    
+    .contact_attachments_buttons .btn {
+    	margin-left: -1px;
+    }
+    
+    .attachment-edit-row {
+ 		margin-bottom: 9px;
+ 	}
+    
+ 	.io-ox-core-tk-attachment {
+	 	.delete {
+	 		width: 25px;
+	 		font-size: 19px;
+			padding-left: 12px;
+			cursor: pointer;
+	 	}
+	 	.attachment-icon {
+	 		padding-left: 15px;
+			width: 45px;
+	 	}
+ 	}
 
     .form-horizontal .control-group {
         margin-bottom: 10px;

@@ -128,9 +128,16 @@ define('io.ox/contacts/api',
     };
 
     api.update =  function (o) {
-
+        var attachmentHandlingNeeded = o.data.tempAttachmentIndicator;
+        delete o.data.tempAttachmentIndicator;
         if (_.isEmpty(o.data)) {
-            return $.when();
+            if (attachmentHandlingNeeded) {
+                return $.when().pipe(function () {
+                    return {folder_id: o.folder, id: o.id};
+                });
+            } else {
+                return $.when();
+            }
         } else {
             fixDistributionList(o.data);
             // go!
@@ -303,7 +310,11 @@ define('io.ox/contacts/api',
 
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching', true);
-
+    
+    api.clearFetchCache = function () {
+        return fetchCache.clear();
+    };
+    
    /**
     * get contact redced/filtered contact data; manages caching
     *
