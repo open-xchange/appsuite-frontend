@@ -103,7 +103,7 @@
         chrome = ua.indexOf('Chrome/') > -1;
 
     // add namespaces
-    _.browser = {
+    _.browser = _.device = {
         /** is IE? */
         IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
             : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
@@ -124,6 +124,30 @@
         /** Android **/
         Android: (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined
     };
+
+    var queries = {
+        size: {
+            small: '(max-device-width: 480px)',
+            medium: '(min-device-width: 480px) and (max-device-width: 1024px)',
+            large: '(min-device-width: 1025px)'
+        },
+        landscape: '(orientation: landscape)',
+        portrait: '(orientation: portrait)',
+        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
+    }
+    _.display = function () {
+        var ob = {};
+        $.each(queries.size, function (key, query) {
+            if (matchMedia(query).matches) {
+                ob.size = key;
+                return;
+            }
+        });
+        ob.landscape = matchMedia(queries.landscape).matches;
+        ob.portrait = matchMedia(queries.portrait).matches;
+        ob.retina = matchMedia(queries.retina).matches;
+        return ob;
+    }();
 
     // extend underscore utilities
     _.mixin({
