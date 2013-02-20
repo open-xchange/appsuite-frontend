@@ -602,29 +602,49 @@ define("io.ox/mail/api",
     api.markRead = function (list) {
         list = [].concat(list);
 
-        _(list).each(function (obj) {
-            obj.flags = obj.flags | 32;
-            api.caches.get.merge(obj);
-            api.caches.list.merge(obj);
-        });
-
-        return $.when(
-            tracker.update(list, function (obj) {
+        function updateCache(list) {
+            return tracker.update(list, function (obj) {
                 tracker.setSeen(obj);
                 obj.flags = obj.flags | 32;
-            })
-            .done(function () { api.trigger('refresh.list'); }),
-            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                _(list).chain()
-                    .map(function (elem) {
-                        return elem.folder || elem.folder_id;
-                    })
-                    .uniq()
-                    .each(function (elem) {
-                        folderAPI.reload(elem);
+                api.caches.get.merge(obj);
+                api.caches.list.merge(obj);
+            });
+        }
+
+        function reloadFolders(list) {
+            _(list).chain()
+            .map(function (elem) {
+                return elem.folder || elem.folder_id;
+            }).uniq().each(function (elem) {
+                folderAPI.reload(elem);
+            });
+        }
+
+        if (list[0].folder && !list[0].id) {
+            // request is to mark folder as read, so update alle items in the
+            // folder (cache only, backend will handle the rest)
+            return api.caches.list.values().done(function (res) {
+                //FIXME: is there a better way to get all elements within a folder?
+                var folderItems = _(res).select(function (obj) {
+                        var f = list[0].folder;
+                        return (obj.folder === f) || (obj.folder_id === f);
                     });
-            })
-        );
+
+                return updateCache(folderItems).done(function () {
+                    api.trigger('refresh.list');
+                    update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                        reloadFolders(list);
+                    });
+                });
+            });
+        }
+
+        return updateCache(list).done(function () {
+            api.trigger('refresh.list');
+            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                reloadFolders(list);
+            });
+        });
     };
 
     api.markSpam = function (list) {
