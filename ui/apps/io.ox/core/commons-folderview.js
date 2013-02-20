@@ -229,7 +229,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'import',
-            index: 800,
+            index: 245,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="import">').text(gt('Import'));
                 this.append(
