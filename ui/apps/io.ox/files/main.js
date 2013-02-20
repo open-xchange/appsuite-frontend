@@ -47,9 +47,7 @@ define('io.ox/files/main',
         commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 
         win.nodes.outer.on('drop', function (e, baton) {
-            if (baton.dragType === 'mail') {
-                actions.invoke('io.ox/files/actions/move', null, baton);
-            }
+            actions.invoke('io.ox/files/actions/move', null, baton);
         });
 
         // go!

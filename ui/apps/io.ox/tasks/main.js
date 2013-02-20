@@ -218,9 +218,7 @@ define('io.ox/tasks/main',
 
         // drag & drop
         win.nodes.outer.on('drop', function (e, baton) {
-            if (baton.dragType === 'mail') {
-                actions.invoke('io.ox/tasks/actions/move', null, baton);
-            }
+            actions.invoke('io.ox/tasks/actions/move', null, baton);
         });
 
         //ready for show

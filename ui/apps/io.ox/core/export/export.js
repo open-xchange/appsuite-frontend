@@ -185,10 +185,9 @@ define('io.ox/core/export/export',
     return {
         show: function (module, id) {
             var id = String(id),
-                dialog = new dialogs.ModalDialog({width: 500}),
+                dialog = new dialogs.ModalDialog({ width: 500, easyOut: true }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
-
-            //get folder and build dialog
+            // get folder and build dialog
             folderApi.get({ folder: id}).done(function (folder) {
                 dialog
                     .build(function () {
@@ -211,22 +210,22 @@ define('io.ox/core/export/export',
                             e.stopPropagation();
                         });
                     })
-                    .done(
-                        function (action) {
-                            if (action === 'export') {
-                                var id = baton.nodes.select.val() || '',
-                                    def = baton.format[id].getDeferred() || new $.Deferred();
-                                def
-                                    .done(function (data) {
-                                            if (data)
-                                                window.location.href = data;
-                                        })
-                                    .fail(function (obj) {
-                                            notifications.yell('error', obj && obj.error || gt('An unknown error occurred'));
-                                        });
-                            } else
-                                dialog = null;
-                        });
+                    .done(function (action) {
+                        if (action === 'export') {
+                            var id = baton.nodes.select.val() || '',
+                                def = baton.format[id].getDeferred() || new $.Deferred();
+                            def.done(function (data) {
+                                if (data) {
+                                    window.location.href = data;
+                                }
+                            })
+                            .fail(function (obj) {
+                                notifications.yell('error', obj && obj.error || gt('An unknown error occurred'));
+                            });
+                        } else {
+                            dialog = null;
+                        }
+                    });
             });
         }
     };

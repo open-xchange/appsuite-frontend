@@ -212,9 +212,7 @@ define("io.ox/contacts/main",
 
          // drag & drop
         win.nodes.outer.on('drop', function (e, baton) {
-            if (baton.dragType === 'mail') {
-                actions.invoke('io.ox/contacts/actions/move', null, baton);
-            }
+            actions.invoke('io.ox/contacts/actions/move', null, baton);
         });
 
         // go!

@@ -351,7 +351,7 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
-            if (config.get('ui.mail.replyTo.configurable', false) === true) {
+            if (config.get('ui.mail.replyTo.configurable', true) === true) {
                 this.addSection('replyTo', gt('Reply to'), false, true)
                     .append($('<div>').addClass('fieldset').append(
                         $('<label>', {'for': 'writer_field_replyTo'}).addClass('wrapping-label'),

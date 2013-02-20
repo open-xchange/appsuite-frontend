@@ -16,12 +16,12 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
     'use strict';
 
     // scaffolds
-    var underlay = $("<div>").hide().addClass("abs io-ox-dialog-underlay"),
-        popup = $("<div>").hide().addClass("io-ox-dialog-popup")
+    var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
+        popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $("<div>").addClass("modal-header"),
-                $("<div>").addClass("modal-body"),
-                $("<div>").addClass("modal-footer")
+                $('<div class="modal-header">'),
+                $('<div class="modal-body">'),
+                $('<div class="modal-footer">')
             );
 
     var Dialog = function (options) {
@@ -31,12 +31,10 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 popup: popup.clone().appendTo('body')
             },
 
+            lastFocus = $(),
             deferred = $.Deferred(),
-
             closeViaEscapeKey,
-
             self = this,
-
             data = {},
 
             o = _.extend({
@@ -50,10 +48,25 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 // maxWidth (px), maxHeight (px)
             }, options),
 
+            keepFocus = function (e) {
+                if (!nodes.popup.get(0).contains(e.target)) {
+                    e.stopPropagation();
+                    nodes.popup.focus();
+                }
+            },
+
             close = function () {
-                $(document).off("keydown", closeViaEscapeKey);
+                nodes.popup.off('keydown', closeViaEscapeKey);
+                document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
+                // restore focus
+                lastFocus = lastFocus.closest(':visible');
+                if (lastFocus.hasClass('dropdown')) {
+                    lastFocus.children().first().focus();
+                } else {
+                    lastFocus.focus();
+                }
                 // self destruction
                 for (var prop in self) {
                     delete self[prop];
@@ -132,7 +145,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         this.text = function (str) {
             var p = nodes.body;
             p.find(".plain-text").remove();
-            p.append($("<h4>").addClass("plain-text").text(str || ""));
+            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ""));
             return this;
         };
 
@@ -231,6 +244,10 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
 
         this.show = function (callback) {
 
+            // remember focussed element
+            lastFocus = $(document.activeElement);
+            document.addEventListener('focus', keepFocus, true); // not via jQuery!
+
             // empty header?
             if (nodes.header.children().length === 0) {
                 nodes.header.remove();
@@ -281,7 +298,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             }
 
             if (o.easyOut) {
-                $(document).on("keydown", closeViaEscapeKey);
+                nodes.popup.on('keydown', closeViaEscapeKey);
             }
 
             if (callback) {
@@ -410,7 +427,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             // use this to check if it's open
             if (self.nodes.closest) {
                 // remove handlers & avoid leaks
-                $(document).off("keydown", closeByEscapeKey);
+                $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
                 self.nodes.click.off("click", closeByClick);
                 self.lastTrigger = previousProp = null;

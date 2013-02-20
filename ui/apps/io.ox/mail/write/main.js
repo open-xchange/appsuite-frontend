@@ -389,7 +389,6 @@ define('io.ox/mail/write/main',
 
         app.setReplyTo = function (value) {
             if (config.get('ui.mail.replyTo.configurable', false) === false) return;
-
             view.form.find('input#writer_field_replyTo').val(value);
         };
 

@@ -239,7 +239,13 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
-        options = _.extend({ simple: true, editable: true, multiple: true }, options || {});
+        options = _.extend({
+            simple: true,
+            editable: true,
+            multiple: true,
+            draggable: true,
+            dragType: ''
+        }, options || {});
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -368,7 +374,7 @@ define('io.ox/core/tk/vgrid',
         Events.extend(this);
 
         // selection
-        Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail' });
+        Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
 
         // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {

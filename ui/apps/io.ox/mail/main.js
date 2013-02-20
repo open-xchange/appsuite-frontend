@@ -117,7 +117,7 @@ define('io.ox/mail/main',
 
         // add template
         grid.addTemplate(tmpl.main);
-        
+
         // template changes for unified mail
         grid.on('change:prop:folder', function (e, folder) {
             var unified = folderAPI.is('unifiedmail', folder);
@@ -506,9 +506,7 @@ define('io.ox/mail/main',
 
         // drag & drop
         win.nodes.outer.on('drop', function (e, baton) {
-            if (baton.dragType === 'mail') {
-                actions.invoke('io.ox/mail/actions/move', null, baton);
-            }
+            actions.invoke('io.ox/mail/actions/move', null, baton);
         });
 
         // go!
