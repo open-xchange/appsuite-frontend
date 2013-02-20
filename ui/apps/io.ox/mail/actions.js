@@ -429,7 +429,6 @@ define('io.ox/mail/actions',
                     args: []
                 }
             ).done(function (data) {
-                    //TODO: Figure out why this indentation needs to be so sucky
                     //TODO: Handle data not being an array or containing more than one contact
                     var contact = data[0];
                     contact.folder_id = config.get('folder.contacts');
@@ -439,6 +438,40 @@ define('io.ox/mail/actions',
                         }
                         m.getApp(contact).launch();
                     });
+                }).fail(function (data) {
+                    console.err('FAILED!', data);
+                });
+        }
+    });
+
+    new Action('io.ox/mail/actions/ical', {
+        id: 'ical',
+        requires: function (e) {
+            var context = e.context,
+                hasRightSuffix = context.filename && context.filename.match(/\.ics$/i) !== null,
+                isRightType = context.content_type  && context.content_type.match(/^text\/calendar/i) !== null,
+                isICAL = hasRightSuffix && isRightType;
+            return e.collection.has('some') && isICAL;
+        },
+        action: function (baton) {
+            var attachment = baton.data;
+            conversionAPI.convert(
+                {
+                    identifier: 'com.openexchange.mail.ical',
+                    args: [
+                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                    ]
+                }, {
+                    identifier: 'com.openexchange.ical',
+                    args: [
+                        {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
+                        {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
+                    ]
+                }
+            ).done(function (data) {
+                    notifications.yell('success', gt('These %s appointments have been stored in your main calendar folder.', data.size));
                 }).fail(function (data) {
                     console.err('FAILED!', data);
                 });
@@ -863,8 +896,15 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
         index: 600,
-        label: gt('Store VCard as contact'),
+        label: gt('Create contact from VCard'),
         ref: 'io.ox/mail/actions/vcard'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'ical',
+        index: 601,
+        label: gt('Store ICal as appointment'),
+        ref: 'io.ox/mail/actions/ical'
     }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
