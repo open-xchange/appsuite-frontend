@@ -39,7 +39,6 @@ define("io.ox/mail/mailfilter/api",
         },
 
         update: function (data) {
-
             delete data.folder;
 
             var preparedData = {
@@ -50,7 +49,6 @@ define("io.ox/mail/mailfilter/api",
                 preparedData.active = data.active;
                 delete data.active;
             }
-
             return http.PUT({
                 module: "mailfilter",
                 params: {action: "update"},

@@ -31,7 +31,8 @@ define('io.ox/mail/mailfilter/settings/model',
             subject: { format: 'string'},
             text: { format: 'string' },
             days: { format: 'string' },
-            active: { format: 'boolean'}
+            active: { format: 'boolean'},
+            addresses: { format: 'array'}
         });
         return factory;
 
@@ -41,7 +42,8 @@ define('io.ox/mail/mailfilter/settings/model',
         subject: 'Subject',
         text: 'Text',
         days: 'Days',
-        active: 'Active'
+        active: 'Active',
+        addresses: 'E-mail addresses'
     };
 
 

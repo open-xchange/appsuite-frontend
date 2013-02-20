@@ -22,17 +22,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'use strict';
 
 
-    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
-        VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter');
+    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
 
     return {
-        editVacationtNotice: function ($node) {
+        editVacationtNotice: function ($node, multiValues) {
             var deferred = $.Deferred();
 
             api.getRules('vacation').done(function (data) {
-
                 var vacationData = data[0].actioncmds[0];
                 vacationData.active = data[0].active;
+                var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
+
                 var vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
                 $node.append(vacationNotice.render().$el);
@@ -43,7 +43,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             return deferred.done(function (model) {
             });
-            // Load the vacationnotice
 
         }
     };

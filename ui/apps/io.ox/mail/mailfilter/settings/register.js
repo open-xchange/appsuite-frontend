@@ -11,7 +11,9 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/register', ['io.ox/core/extensions', 'io.ox/core/notifications', 'gettext!io.ox/mail'], function (ext, notifications, gt) {
+define('io.ox/mail/mailfilter/settings/register',
+        ['io.ox/core/extensions', 'io.ox/core/notifications',
+         'io.ox/core/api/user', 'gettext!io.ox/mail'], function (ext, notifications, userAPI, gt) {
 
     'use strict';
 
@@ -22,6 +24,13 @@ define('io.ox/mail/mailfilter/settings/register', ['io.ox/core/extensions', 'io.
         for (; x < fields.length; x++) {
             model.touch(fields[x]);
         }
+    },
+        createDaysObject = function (from, to) {
+        var objectOfValues = [];
+        for (var i = from; i <= to; i += 1) {
+            objectOfValues[i] = i;
+        }
+        return objectOfValues;
     };
 
     ext.point("io.ox/settings/pane").extend({
@@ -36,20 +45,29 @@ define('io.ox/mail/mailfilter/settings/register', ['io.ox/core/extensions', 'io.
         draw: function () {
             var $node = this;
             require(["io.ox/mail/mailfilter/settings/filter"], function (filters) {
-                filters.editVacationtNotice($node).done(function (filter) {
-                    filterModel = filter;
-                    touchAttributes(filterModel);
-                    filter.on('update', function () {
-                        require("io.ox/core/notifications").yell("success", gt("Your vacation notice has been saved"));
+
+                userAPI.get().done(function (user) {
+
+                    var multiValues = {
+                        aliases: _.object(user.aliases, user.aliases),
+                        days: createDaysObject(1, 31)
+                    };
+
+                    filters.editVacationtNotice($node, multiValues).done(function (filter) {
+                        filterModel = filter;
+                        touchAttributes(filterModel);
+                        filter.on('update', function () {
+                            require("io.ox/core/notifications").yell("success", gt("Your vacation notice has been saved"));
+                        });
+                    }).fail(function () {
+                        $node.append(
+                            $.fail(gt("Couldn't load your vacation notice."), function () {
+                                filters.editVacationtNotice($node).done(function () {
+                                    $node.find('[data-action="discard"]').hide();
+                                });
+                            })
+                        );
                     });
-                }).fail(function () {
-                    $node.append(
-                        $.fail(gt("Couldn't load your vacation notice."), function () {
-                            filters.editVacationtNotice($node).done(function () {
-                                $node.find('[data-action="discard"]').hide();
-                            });
-                        })
-                    );
                 });
             });
         },

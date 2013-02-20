@@ -33,6 +33,10 @@
     select[name="year"] {
         width: 69px;
     }
+    
+    [data-extension-id="io.ox/core/mailfilter/edit/view/addresses"] select{
+        width: 570px;
+    }
 }
 
  

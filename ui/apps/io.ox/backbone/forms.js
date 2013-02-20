@@ -475,6 +475,9 @@ define('io.ox/backbone/forms',
                 var self = this;
                 this.nodes = {};
                 this.nodes.select = $('<select>');
+                if (options.multiple) {
+                    this.nodes.select.attr('multiple', 'multiple');
+                }
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.select.append(
                         $("<option>", {value: value}).text(label)

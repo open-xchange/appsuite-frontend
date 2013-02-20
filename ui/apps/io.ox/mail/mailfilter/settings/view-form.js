@@ -22,19 +22,17 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
     "use strict";
 
-    function createVacationEdit(ref) {
+    function createVacationEdit(ref, multiValues) {
         var point = views.point(ref + '/edit/view'),
             VacationEditView = point.createView({
                 tagName: 'div',
                 className: 'edit-vacation'
-
             });
 
         point.extend(new forms.Header({
             index: 50,
             id: 'headline',
             label: gt('Vacation Notice')
-
         }));
 
         // Show backend errors
@@ -49,7 +47,6 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             }
         }));
 
-
         point.extend(new forms.CheckBoxField({
             id: ref + '/edit/view/active',
             index: 250,
@@ -57,10 +54,10 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             attribute: 'active',
             customizeNode: function () {
                 this.$el.css({
-                    clear: 'both'
+                    clear: 'both',
+                    width: '100px'
                 });
             }
-
         }));
 
         point.extend(new forms.ControlGroup({
@@ -84,7 +81,16 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             index: 250,
             label: model.fields.days,
             attribute: 'days',
-            selectOptions: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8'}
+            selectOptions: multiValues.days
+        }));
+
+        point.extend(new forms.SelectBoxField({
+            id: ref + '/edit/view/addresses',
+            index: 250,
+            label: model.fields.addresses,
+            attribute: 'addresses',
+            multiple: true,
+            selectOptions: multiValues.aliases
         }));
 
 //        point.extend(new forms.DateControlGroup({
