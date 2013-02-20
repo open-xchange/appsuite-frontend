@@ -197,6 +197,8 @@ define('io.ox/core/tk/selection',
 
         // click handler
         click = function (e) {
+            // Fix weird contextmenu glitch
+            if (e.button === 2 || e.ctrlKey) { e.preventDefault(); }
             var key, id;
             if (!e.isDefaultPrevented()) {
                 key = $(this).attr('data-obj-id');
