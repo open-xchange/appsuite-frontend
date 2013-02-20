@@ -356,7 +356,7 @@ define("io.ox/mail/write/view-main",
                     .append($('<div>').addClass('fieldset').append(
                         $('<label>', {'for': 'writer_field_replyTo'}).addClass('wrapping-label'),
                         $('<input>', {
-                            'type' : 'email',
+                            'type' : 'text',
                             'id' : 'writer_field_replyTo',
                             'name' : 'replyTo'
                         })
