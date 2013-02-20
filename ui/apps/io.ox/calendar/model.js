@@ -234,21 +234,29 @@ define('io.ox/calendar/model',
         applyAutoLengthMagic: function (model) {
             // End date automatically shifts with start date
             var length = model.get('end_date') - model.get('start_date'),
-                updating = false;
+                updatingStart = false,
+                updatingEnd = false;
             model.on('change:start_date', function () {
-                if (length < 0) {
+                if (length < 0 || updatingStart) {
                     return;
                 }
-                updating = true;
+                updatingEnd = true;
                 model.set('end_date', model.get('start_date') + length);
-                updating = false;
+                updatingEnd = false;
             });
 
             model.on('change:end_date', function () {
-                if (updating) {
+                if (updatingEnd) {
                     return;
                 }
-                length = model.get('end_date') - model.get('start_date');
+                var tmpLength = model.get('end_date') - model.get('start_date');
+                if (tmpLength < 0) {
+                    updatingStart = true;
+                    model.set('start_date', model.get('end_date') - length);
+                    updatingStart = false;
+                } else {
+                    length = tmpLength;
+                }
             });
         },
         fullTimeChangeBindings: function (model) {
