@@ -141,13 +141,13 @@ define('io.ox/formats/vcard', [], function () {
         var output = '<div class="vcard" style="clear:both">',
             type, i, value, key, ordered;
 
-        //name (required)
-        output += '<h1 class="fn">' + contact.fn.typeless + '</h1>';
-
         //photo
         for (type in contact.photo) {
             output += contact.photo[type] ? '<img class="photo" style="float:right" src="data:image/' + type + ';base64,' + contact.photo[type] + '" />' : '';
         }
+
+        //name (required)
+        output += '<h1 class="fn" style="line-height: 1.1em">' + contact.fn.typeless + '</h1>';
 
         //structured name
         ordered = ['honorific-prefix', 'given-name', 'additional-name', 'family-name', 'honorific-suffix'];
@@ -234,7 +234,7 @@ define('io.ox/formats/vcard', [], function () {
         _.each(contacts, function (contact) {
             return content += hCardContact(contact);
         });
-        return '<body style="font: 14px/20px Arial; padding: 10px 30px;">' + content + '</body>';
+        return '<body style="font: 14px/20px Arial; padding: 30px;">' + content + '</body>';
     };
 
     /**
