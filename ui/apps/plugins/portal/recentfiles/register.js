@@ -48,19 +48,22 @@ define('plugins/portal/recentfiles/register',
         },
 
         load: function (baton) {
-            return filesApi.search('*', {sort: 5, order: 'desc', columns: '1,3,4,5,20,700,701,702,703,704'})
-            .done(function (files) {
-                var userIds = _(files).chain().map(function (fileEntry) {
-                    return fileEntry.modified_by;
-                }).uniq().value();
-
-                userApi.getList(userIds).done(function (users) {
-                    _(files).map(function (file) {
-                        file.modified_by = _(users).find(function (user) { return user.user_id === file.modified_by; });
-                    });
-                });
-
+            return filesApi.search('', { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' })
+            .pipe(function (files) {
+                // update baton
                 baton.data = files;
+                // get user ids
+                var userIds = _(files).chain().pluck('modified_by').uniq().value();
+                // map userids back to each file
+                return userApi.getList(userIds)
+                    .done(function (users) {
+                        _(files).each(function (file) {
+                            file.modified_by = _(users).find(function (user) { return user.id === file.modified_by; });
+                        });
+                    })
+                    .pipe(function () {
+                        return files;
+                    });
             });
         },
 
@@ -73,16 +76,10 @@ define('plugins/portal/recentfiles/register',
             }
             _(data).each(function (file) {
                 var myDate = new date.Local(file.last_modified).format(date.DATE_TIME),
-                    text;
-                if (file.last_modified === file.creation_date) {
-                    text = gt("%1$s was created by %2$s");
-                } else {
-                    text = gt("%1$s was modified by %2$s");
-                }
-                text = text
-                    .replace("%1$s", '<b>' + (file.filename || file.title) + '</b>')
-                    .replace("%2$s", file.modified_by.display_name);
-
+                    text = file.last_modified === file.creation_date ?
+                        gt("%1$s was created by %2$s") :
+                        gt("%1$s was modified by %2$s");
+                text = gt.format(text, '<b>' + (file.filename || file.title) + '</b>', file.modified_by.display_name);
                 $('<div class="entry">').html(text).appendTo(content);
             });
         },
