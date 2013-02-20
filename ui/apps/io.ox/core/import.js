@@ -63,7 +63,7 @@ define('io.ox/core/import',
         id: 'ical',
         index: 100,
         draw: function (baton) {
-            if (baton.module === 'calendar') {
+            if (baton.module === 'calendar' || baton.module === 'tasks') {
                 return $('<option value="ICAL">').text(gt('iCal'));
             }
         }
