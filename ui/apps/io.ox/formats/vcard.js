@@ -138,12 +138,16 @@ define('io.ox/formats/vcard', [], function () {
      */
     var hCardContact = function (contact) {
         //http://microformats.org/wiki/hcard
-        var output = '<div class="vcard">',
+        var output = '<div class="vcard" style="clear:both">',
             type, i, value, key, ordered;
 
         //name (required)
-        output += '<div class="fn">' + contact.fn.typeless + '</div>';
+        output += '<h1 class="fn">' + contact.fn.typeless + '</h1>';
 
+        //photo
+        for (type in contact.photo) {
+            output += contact.photo[type] ? '<img class="photo" style="float:right" src="data:image/' + type + ';base64,' + contact.photo[type] + '" />' : '';
+        }
 
         //structured name
         ordered = ['honorific-prefix', 'given-name', 'additional-name', 'family-name', 'honorific-suffix'];
@@ -162,10 +166,6 @@ define('io.ox/formats/vcard', [], function () {
         output += contact.title ?  '<div class="title">' + contact.title.typeless + '</div>' : '';
         output += contact.role ?  '<div class="role">' + contact.role.typeless + '</div>' : '';
 
-        //photo
-        for (type in contact.photo) {
-            output += contact.photo[type] ? '<img class="photo" src="data:image/' + type + ';base64,' + contact.photo[type] + '" />' : '';
-        }
 
         //url (multitype)
         for (type in contact.url) {
@@ -234,7 +234,7 @@ define('io.ox/formats/vcard', [], function () {
         _.each(contacts, function (contact) {
             return content += hCardContact(contact);
         });
-        return content;
+        return '<body style="font: 14px/20px Arial; padding: 10px 30px;">' + content + '</body>';
     };
 
     /**

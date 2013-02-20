@@ -127,7 +127,20 @@ define('io.ox/core/export/export',
                                     if (enabledDataUri && !_.browser.IE) {
                                         window.location.href = "data:data:text/html;charset=utf-8," + encodeURIComponent(hcard);
                                     } else {
-                                        var win = window.open('about:blank', '_blank');
+                                        //TODO: put generalized version into a util class
+                                        var win,
+                                            w = 650,
+                                            h = 800,
+                                            l = 50,
+                                            t = 50;
+                                        //center
+                                        w = Math.min($(document).width() * 80 / 100, w) || w;
+                                        h = Math.min($(document).height() * 90 / 100, h) || h;
+                                        l = ($(document).width() / 2) - (w / 2) || l;
+                                        t = ($(document).height() / 2) - (h / 2) || t;
+
+                                        //open popup
+                                        var win = window.open('about:blank', '_blank', "scrollbars=1, resizable=1, copyhistory=no, width=" + w + ",height=" + h);
                                         //popupblocker
                                         if (!win) {
                                             var popupblocker = 'The window could not be opened. Most likely it has been blocked by a pop-up or advertisement blocker. Please check your browser settings and make sure pop-ups are allowed for this domain.';
@@ -135,6 +148,7 @@ define('io.ox/core/export/export',
                                         }
                                         //onready
                                         $(win).ready(function () {
+                                            win.moveTo(l, t);
                                             win.document.write(hcard);
                                             win.document.title = gt('hCard Export');
                                             win.focus();
