@@ -22,7 +22,7 @@
     @widget-padding: 13px;
 
     padding: 13px (13px - @spacing) 13px 13px;
-    .overflow(auto);
+    overflow: auto;
 
     .header {
         margin: 0 13px @vert-spacing 13px;

@@ -357,6 +357,13 @@ define('io.ox/portal/main',
             // add side popup
             sidepopup.delegate(appBaton.$.widgets, '.item, .content.pointer, .action.pointer', openSidePopup);
 
+            // add -webkit-overflow-scroll only for iOS to enable momentum scroll
+            // (will cause errors on android chrome)
+            // TODO: avoid device specific inline css fixes
+            if (_.browser.iOS) {
+                $('.io-ox-portal').css('-webkit-overflow-scrolling', 'touch');
+            }
+
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
                 appBaton.$.widgets.sortable({
