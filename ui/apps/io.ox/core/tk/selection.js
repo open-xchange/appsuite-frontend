@@ -473,6 +473,15 @@ define('io.ox/core/tk/selection',
         };
 
         /**
+         * Deselect item
+         */
+        this.deselect = function (id) {
+            deselect(id);
+            changed();
+            return this;
+        };
+
+        /**
          * Set selection
          */
         this.set = function (list, quiet) {

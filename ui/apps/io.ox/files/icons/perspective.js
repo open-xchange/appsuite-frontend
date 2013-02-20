@@ -224,11 +224,32 @@ define('io.ox/files/icons/perspective',
                 });
             }
 
-            dialog.delegate(iconview, '.file-icon', iconClick);
+            function toggleSelection(o) {
+                if (self.selection.isSelected(o)) {
+                    self.selection.deselect(o);
+                } else {
+                    self.selection.select(o);
+                }
+            }
 
-            iconview.on('hover', '.selectable', function () {
-                var o = _.cid($(this).attr('data-obj-id'));
-                self.selection.set([o]);
+            iconview.on('click', '.selectable', function (e) {
+                var cid = _.cid($(this).attr('data-obj-id'));
+                if (!e.shiftKey) {
+                    self.selection.clear();
+
+                    api.get(cid).done(function (file) {
+                        app.currentFile = file;
+                        if (dropZone) {
+                            dropZone.update();
+                        }
+                        dialog.show(e, function (popup) {
+                            popup.append(viewDetail.draw(file));
+                        });
+                    });
+                } else {
+                    dialog.close();
+                }
+                toggleSelection(cid);
             });
 
             drawIcon = function (file) {
