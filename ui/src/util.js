@@ -91,7 +91,9 @@
         'Chrome': '20',
         'Safari': '5',
         'Firefox': '10',
-        'IE': '9'
+        'IE': '9',
+        'Android': '4',
+        'iOS': '6'
     };
 
     // browser detection - adopted from prototype.js
@@ -118,9 +120,9 @@
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1,
         /** iOS **/
-        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i),
+        iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.'): undefined,
         /** Android **/
-        android: !!navigator.userAgent.match(/Android/i)
+        Android: (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined
     };
 
     // extend underscore utilities
