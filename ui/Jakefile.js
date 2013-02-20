@@ -23,7 +23,6 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require("./lib/build/less");
 
 console.info("Build path: " + utils.builddir);
 
