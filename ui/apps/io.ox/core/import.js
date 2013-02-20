@@ -25,16 +25,6 @@ define('io.ox/core/import',
 
     'use strict';
 
-    //header: title
-    ext.point('io.ox/core/import/title').extend({
-        id: 'default',
-        draw: function (title) {
-            this.append(
-                $('<h3>').text(gt(title))
-            );
-        }
-    });
-
     //body: breadcrumb
     ext.point('io.ox/core/import/breadcrumb').extend({
         id: 'default',
@@ -102,12 +92,9 @@ define('io.ox/core/import',
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);
 
-                    //header
-                    ext.point('io.ox/core/import/title')
-                        .invoke('draw', this.getHeader(), gt('Import'));
                     //body
                     ext.point('io.ox/core/import/breadcrumb')
-                        .invoke('draw', form, id, gt('Path'));
+                        .invoke('draw', form, id, gt('Import into'));
                     ext.point('io.ox/core/import/select')
                         .invoke('draw', form, baton);
                     ext.point('io.ox/core/import/file_upload')
