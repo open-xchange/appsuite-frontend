@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/export',
+define('io.ox/core/export/export',
     ['io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/export',
@@ -20,85 +20,26 @@ define('io.ox/core/export',
     'io.ox/core/config',
     'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/backbone/forms.less'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
+    'less!io.ox/core/export/style.css'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
 
     'use strict';
 
-    //header: title
-    ext.point('io.ox/core/export/title').extend({
+    /**
+     * @description header: title
+     */
+    ext.point('io.ox/core/export/export/title').extend({
         id: 'default',
-        draw: function (title) {
+        draw: function (id, title) {
             this.append(
-                $('<h3>').text(gt(title))
+                folderApi.getBreadcrumb(id, { subfolders: false, prefix: gt(title) })
             );
         }
     });
 
-    //body: breadcrumb
-    ext.point('io.ox/core/export/breadcrumb').extend({
-        id: 'default',
-        draw: function (id, prefix) {
-            this.append(
-                folderApi.getBreadcrumb(id, { prefix: prefix || '' })
-                .css({'padding-top': '5px', 'padding-left': '5px'})
-            );
-        }
-    });
-
-    //body: foldertype
-    ext.point('io.ox/core/export/foldertype').extend({
-        id: 'default',
-        draw: function (folder) {
-            function ucfirst(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-            //default
-            this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>')
-                        .css({'padding-top': '5px', 'padding-left': '5px'})
-                        .addClass('span3')
-                        .text(gt('Folder type')),
-                    $('<input>', { type: 'text' })
-                        .addClass('span9')
-                        .attr('readonly', 'readonly')
-                        .val(ucfirst(folder.module))
-                )
-            );
-        }
-    });
-
-    //body: caldav
-    ext.point('io.ox/core/export/caldav').extend({
-        id: 'default',
-        draw: function (folder) {
-            function ucfirst(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-            if (config.get('modules.caldav.active') && folder.module === 'calendar') {
-                this.append(
-                    $('<div class="row-fluid">').append(
-                        $('<label>')
-                            .css({'padding-top': '5px', 'padding-left': '5px'})
-                            .addClass('span3')
-                            .text(gt('CalDAV URL')),
-                        $('<input>', { type: 'text' })
-                            .addClass('span9')
-                            .attr('readonly', 'readonly')
-                            .val(
-                                _.noI18n(config.get('modules.caldav.url')
-                                    .replace('[hostname]', location.host)
-                                    .replace('[folderId]', String(folder.id))
-                            )
-                        )
-                    )
-                );
-            }
-        }
-    });
-
-    //select
-    ext.point('io.ox/core/export/select').extend({
+    /**
+     * @description body: select
+     */
+    ext.point('io.ox/core/export/export/select').extend({
         id: 'default',
         draw: function (baton) {
             var nodes = {}, formats;
@@ -109,7 +50,7 @@ define('io.ox/core/export',
             nodes.select = $('<select class="span9">').appendTo(nodes.row);
 
             //add option
-            formats = ext.point('io.ox/core/export/format').invoke('draw', null, baton)._wrapped;
+            formats = ext.point('io.ox/core/export/export/format').invoke('draw', null, baton)._wrapped;
             formats.forEach(function (node) {
                 if (node)
                     node.appendTo(nodes.select);
@@ -120,8 +61,10 @@ define('io.ox/core/export',
         }
     });
 
-    //buttons
-    ext.point('io.ox/core/export/buttons').extend({
+    /**
+     * @description footer: buttons
+     */
+    ext.point('io.ox/core/export/export/buttons').extend({
         id: 'default',
         draw: function () {
             this
@@ -130,8 +73,10 @@ define('io.ox/core/export',
         }
     });
 
-    //format: csv
-    ext.point('io.ox/core/export/format').extend({
+    /**
+     * @description format: csv
+     */
+    ext.point('io.ox/core/export/export/format').extend({
         id: 'csv',
         index: 100,
         draw: function (baton) {
@@ -142,8 +87,10 @@ define('io.ox/core/export',
         }
     });
 
-    //format: vcard
-    ext.point('io.ox/core/export/format').extend({
+    /**
+     * @description format: vcard
+     */
+    ext.point('io.ox/core/export/export/format').extend({
         id: 'vcard',
         index: 200,
         draw: function (baton) {
@@ -154,8 +101,10 @@ define('io.ox/core/export',
         }
     });
 
-    //format: vcard
-    ext.point('io.ox/core/export/format').extend({
+    /**
+     * @description format: hcard
+     */
+    ext.point('io.ox/core/export/export/format').extend({
         id: 'hcard',
         index: 300,
         draw: function (baton) {
@@ -195,6 +144,7 @@ define('io.ox/core/export',
                                             }, 0);
                                         });
                                     }
+                                    def.resolve();
                                 });
                         return def;
                     }
@@ -204,8 +154,10 @@ define('io.ox/core/export',
         }
     });
 
-    //format: ical
-    ext.point('io.ox/core/export/format').extend({
+    /**
+     * @description format: ical
+     */
+    ext.point('io.ox/core/export/export/format').extend({
         id: 'ical',
         index: 400,
         draw: function (baton) {
@@ -222,43 +174,42 @@ define('io.ox/core/export',
                 dialog = new dialogs.ModalDialog({width: 500}),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
 
-            //get folder and process
+            //get folder and build dialog
             folderApi.get({ folder: id}).done(function (folder) {
                 dialog
                     .build(function () {
                         //header
-                        ext.point('io.ox/core/export/title')
-                            .invoke('draw', this.getHeader(), 'Export');
+                        ext.point('io.ox/core/export/export/title')
+                            .invoke('draw', this.getHeader(), id, 'Export');
                         //body
-                        ext.point('io.ox/core/export/breadcrumb')
-                            .invoke('draw', this.getContentNode(), id, gt('Path'));
-                        ext.point('io.ox/core/export/foldertype')
-                            .invoke('draw', this.getContentNode(), folder);
-                        ext.point('io.ox/core/export/caldav')
-                            .invoke('draw', this.getContentNode(), folder);
-                        //select
-                        ext.point('io.ox/core/export/select')
+                        ext.point('io.ox/core/export/export/select')
                             .invoke('draw', this.getContentNode(), baton);
                         //buttons
-                        ext.point('io.ox/core/export/buttons')
+                        ext.point('io.ox/core/export/export/buttons')
                             .invoke('draw', this);
+                        //apply style
+                        this.getPopup().addClass('export-dialog');
                     })
-                    .show()
+                    .show(function () {
+                        //focus
+                        this.find('select').focus();
+                        this.on('keydown', function (e) {
+                            e.stopPropagation();
+                        });
+                    })
                     .done(
                         function (action) {
-                            var id = baton.nodes.select.val() || '',
-                                def = baton.format[id].getDeferred() || new $.Deferred();
-
                             if (action === 'export') {
+                                var id = baton.nodes.select.val() || '',
+                                    def = baton.format[id].getDeferred() || new $.Deferred();
                                 def
-                                .done(function (data) {
-                                        if (data)
-                                            window.location.href = data;
-                                        return false;
-                                    })
-                                .fail(function (obj) {
-                                        notifications.yell('error', obj && obj.error || gt('An unknown error occurred'));
-                                    });
+                                    .done(function (data) {
+                                            if (data)
+                                                window.location.href = data;
+                                        })
+                                    .fail(function (obj) {
+                                            notifications.yell('error', obj && obj.error || gt('An unknown error occurred'));
+                                        });
                             } else
                                 dialog = null;
                         });

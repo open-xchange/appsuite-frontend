@@ -1,0 +1,35 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2013
+ * Mail: info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ *
+ */
+
+ .export-dialog {
+
+    min-width: 200px;
+
+    .modal-header {
+        .breadcrumb {
+            margin-bottom: 0;
+            padding-left: 0;
+            background-color: transparent;
+            .prefix { font-weight: bold; font-size: 16px; }
+        }
+    }
+
+    .modal-body {
+        height: 50px;
+        max-height: 50px;
+        padding-bottom: 10px;
+    }
+
+}

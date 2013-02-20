@@ -198,7 +198,7 @@ define('io.ox/core/commons-folderview',
 
         function exportData(e) {
             e.preventDefault();
-            require(['io.ox/core/export'], function (exporter) {
+            require(['io.ox/core/export/export'], function (exporter) {
                 //module,folderid
                 exporter.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
             });
@@ -206,11 +206,10 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'export',
-            index: 700,
+            index: 250,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="export">').text(gt('Export'));
                 this.append(
-                    $('<li class="divider">'),
                     $('<li>').append(link)
                 );
                 if (api.can('export', baton.data)) {
