@@ -30,7 +30,7 @@ define('io.ox/office/tk/view/dialogs',
     function createModalDialog(options) {
 
         var // create the dialog instance
-            dialog = new CoreDialogs.ModalDialog({ width: 400, easyOut: true }),
+            dialog = new CoreDialogs.ModalDialog({ width: 400, easyOut: true, async: Utils.getBooleanOption(options, 'async', false) }),
             // the title text
             title = Utils.getStringOption(options, 'title');
 
