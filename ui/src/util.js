@@ -100,10 +100,16 @@
     var ua = navigator.userAgent,
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1;
+        chrome = ua.indexOf('Chrome/') > -1,
+        iOS = ua.indexOf('iPhone|iPad|iPod'),
+        Android = ua.indexOf('Android');
 
-    // add namespaces
+    // add namespaces, just sugar
     _.browser = _.device = {
+        /** iOS **/
+        iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.'): undefined,
+        /** Android **/
+        Android: (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
         /** is IE? */
         IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
             : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
@@ -112,19 +118,17 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
+        Safari: !iOS && !Android && webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
         /** Chrome */
         Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
         Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1,
-        /** iOS **/
-        iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.'): undefined,
-        /** Android **/
-        Android: (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined
+        MacOS: ua.indexOf('Macintosh') > -1
     };
 
+    // do media queries here
+    // TODO define sizes to match pads and phones
     var queries = {
         size: {
             small: '(max-device-width: 480px)',
