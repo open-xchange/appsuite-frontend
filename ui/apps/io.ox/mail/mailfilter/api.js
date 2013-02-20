@@ -45,9 +45,11 @@ define("io.ox/mail/mailfilter/api",
                     "actioncmds": [data],
                     "id": 0
                 };
-            if (data.active !== undefined) {
+            if (data.active) {
                 preparedData.active = data.active;
                 delete data.active;
+            } else {
+                preparedData.active = false;
             }
             return http.PUT({
                 module: "mailfilter",
