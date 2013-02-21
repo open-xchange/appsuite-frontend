@@ -46,7 +46,7 @@ define('io.ox/files/main',
         // folder tree
         commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 
-        win.nodes.outer.on('drop', function (e, baton) {
+        win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/files/actions/move', null, baton);
         });
 

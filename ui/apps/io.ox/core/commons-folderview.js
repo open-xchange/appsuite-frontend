@@ -597,17 +597,16 @@ define('io.ox/core/commons-folderview',
         }
 
         // auto-open on drag
-        app.getWindow().nodes.body.on({
-            dragstart: function () {
+        app.getWindow().nodes.body
+            .on('selection:dragstart', function () {
                 tmpVisible = !visible;
                 app.showFolderView();
-            },
-            dragstop: function () {
+            })
+            .on('selection:dragstop', function () {
                 if (tmpVisible) {
                     app.hideFolderView();
                 }
-            }
-        });
+            });
     }
 
     return {

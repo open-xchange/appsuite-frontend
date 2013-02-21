@@ -664,7 +664,7 @@ define('io.ox/core/tk/selection',
 
             function firstMove() {
                 // trigger DOM event
-                container.trigger('dragstart');
+                container.trigger('selection:dragstart');
             }
 
             function over() {
@@ -713,7 +713,7 @@ define('io.ox/core/tk/selection',
                 });
                 $('.dnd-over').removeClass('dnd-over');
                 // trigger DOM event
-                container.trigger('dragstop');
+                container.trigger('selection:dragstop');
                 // revert?
                 if (helper !== null) {
                     remove();
@@ -723,7 +723,7 @@ define('io.ox/core/tk/selection',
             function drop(e) {
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
-                $(this).trigger('drop', [baton]);
+                $(this).trigger('selection:drop', [baton]);
             }
 
             function start(e) {
@@ -751,7 +751,7 @@ define('io.ox/core/tk/selection',
                         .attr('data-dropzones', options.dropzoneSelector)
                         .on('drop', function (e, baton) {
                             baton.dropType = options.dropType;
-                            self.trigger('drop', baton);
+                            self.trigger('selection:drop', baton);
                         });
                 }
             }

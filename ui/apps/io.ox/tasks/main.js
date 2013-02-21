@@ -217,7 +217,7 @@ define('io.ox/tasks/main',
         commons.addGridToolbarFolder(app, grid);
 
         // drag & drop
-        win.nodes.outer.on('drop', function (e, baton) {
+        win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/tasks/actions/move', null, baton);
         });
 
