@@ -449,9 +449,9 @@ define('io.ox/mail/actions',
         requires: function (e) {
             var context = e.context,
                 hasRightSuffix = context.filename && context.filename.match(/\.ics$/i) !== null,
-                isRightType = context.content_type  && context.content_type.match(/^text\/calendar/i) !== null,
-                isICAL = hasRightSuffix && isRightType;
-            return e.collection.has('some') && isICAL;
+                isCalendarType = context.content_type  && context.content_type.match(/^text\/calendar/i) !== null,
+                isAppType = context.content_type  && context.content_type.match(/^application\/ics/i) !== null;
+            return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
             var attachment = baton.data;
@@ -859,6 +859,20 @@ define('io.ox/mail/actions',
     // Attachments
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'vcard',
+        index: 50,
+        label: gt('Create contact from VCard'),
+        ref: 'io.ox/mail/actions/vcard'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'ical',
+        index: 50,
+        label: gt('Store ICal as appointment'),
+        ref: 'io.ox/mail/actions/ical'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
@@ -891,20 +905,6 @@ define('io.ox/mail/actions',
         index: 500,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
-    }));
-
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'vcard',
-        index: 600,
-        label: gt('Create contact from VCard'),
-        ref: 'io.ox/mail/actions/vcard'
-    }));
-
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'ical',
-        index: 601,
-        label: gt('Store ICal as appointment'),
-        ref: 'io.ox/mail/actions/ical'
     }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
