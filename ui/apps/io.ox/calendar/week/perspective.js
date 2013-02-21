@@ -190,7 +190,7 @@ define('io.ox/calendar/week/perspective',
         refresh: function () {
             var self = this;
             this.app.folder.getData().done(function (data) {
-                // set folder data to view and update
+                // save folder data to view and update
                 self.getAppointments(self.view.folder(data));
             });
         },
@@ -216,7 +216,7 @@ define('io.ox/calendar/week/perspective',
         },
 
         /**
-         * [render description]
+         * initial rendering of the view
          * @param  {Object} app current application
          * @param  {Object} opt perspective options
          */
@@ -234,7 +234,7 @@ define('io.ox/calendar/week/perspective',
             });
 
             var self = this,
-                refresh = $.proxy(function (e) {
+                refresh = $.proxy(function () {
                     self.refresh();
                 }, this);
 
@@ -256,7 +256,7 @@ define('io.ox/calendar/week/perspective',
                     });
 
                 // watch for api refresh
-                api.on('refresh.all', refresh, this)
+                api.on('create update delete', refresh, this)
                     .on('delete', function () {
                         // Close dialog after delete
                         self.dialog.close();

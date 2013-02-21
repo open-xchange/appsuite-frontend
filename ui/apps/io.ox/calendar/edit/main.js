@@ -245,15 +245,16 @@ define('io.ox/calendar/edit/main',
                         self = this,
                         attList = this.view.baton.attachmentList;
                     if (attList.attachmentsToAdd.length > 0) {
+                        var data = self.model.attributes;
                         if (attList.oldMode) {
                             tmpFrame.on('attachmentsSaved', function () {
                                 tmpFrame.off('attachmentsSaved');
-                                ox.trigger('refresh^');
+                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 self.quit();
                             });
                         } else {
                             this.model.on('finishedAttachmentHandling', function () {
-                                ox.trigger('refresh^');
+                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 self.quit();
                             });
                         }

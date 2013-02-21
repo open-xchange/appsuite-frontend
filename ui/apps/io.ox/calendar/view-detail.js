@@ -436,32 +436,25 @@ define("io.ox/calendar/view-detail",
         module: 1
     }));
 
+    function redraw(e, data) {
+        $(this).replaceWith(e.data.view.draw(data));
+    }
+
     return {
 
         draw: function (data, options) {
 
-            var node;
-
-            if (!data) {
-                node = $();
-            } else {
-                node = $("<div>").addClass("calendar-detail");
-                node.attr('data-cid', String(_.cid(data)));
+            try {
+                var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
+                node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
+
+                return node;
+
+            } catch (e) {
+                console.error('io.ox/calendar/view-detail:draw()', e);
             }
 
-            var refresh = function (e, ap) {
-                if (ap.id === data.id && ap.folder === data.folder) {
-                    node.empty();
-                    ext.point("io.ox/calendar/detail").invoke("draw", node, ap, options);
-                }
-            };
-            // bind api events
-            calAPI
-                .off('updateDetails')
-                .on('updateDetails', refresh);
-
-            return node;
         }
     };
 });

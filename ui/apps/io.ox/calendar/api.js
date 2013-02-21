@@ -140,8 +140,8 @@ define("io.ox/calendar/api",
         },
 
         update: function (o) {
-            var folder_id = o.folder_id || o.folder;
-            var key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+            var folder_id = o.folder_id || o.folder,
+                key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o)) {
                 return $.when();
             } else {
@@ -178,9 +178,8 @@ define("io.ox/calendar/api",
                     delete get_cache[key];
                     return api.get(getObj)
                         .pipe(function (data) {
-                            api.trigger('refresh.all');
                             api.trigger('update', data);
-                            api.trigger('updateDetails', data); // do not use this event / only for view-details
+                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                             return data;
                         });
                 });
@@ -233,7 +232,6 @@ define("io.ox/calendar/api",
                 all_cache = {};
                 return api.get(getObj)
                         .pipe(function (data) {
-                            api.trigger('refresh.all');
                             api.trigger('create', data);
                             return data;
                         });
@@ -243,7 +241,9 @@ define("io.ox/calendar/api",
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+
             var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -255,14 +255,19 @@ define("io.ox/calendar/api",
             .done(function (resp) {
                 all_cache = {};
                 delete get_cache[key];
-                api.trigger('refresh.all');
+                api.trigger("refresh.all");
                 api.trigger('delete', resp);
+                api.trigger('delete:' + encodeURIComponent(_.cid(o)), o);
                 //remove Reminders in Notification Area
                 api.checkForNotification(o, true);
             });
         },
 
         confirm: function (o) {
+
+            var folder_id = o.folder_id || o.folder,
+                key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -275,10 +280,12 @@ define("io.ox/calendar/api",
             .pipe(function (resp) {
                 get_cache = {};
                 api.trigger("confirmation-changed", o); //redraw detailview to be responsive and remove invites
-                api.trigger('refresh.all');
+                all_cache = {};
+                delete get_cache[key];
                 return api.get(o)
                         .pipe(function (data) {
-                            api.trigger('updateDetails', data); // do not use this event / only for view-details
+                            api.trigger('update', data);
+                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                             return data;
                         });
             });
@@ -368,8 +375,9 @@ define("io.ox/calendar/api",
                 })
                 .sortBy('start_date')
                 .value();
-
-            api.trigger('new-invites', invites);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
+            // even if empty array is given it needs to be triggered to remove
+            // notifications that does not exist anymore (already handled in ox6 etc)
+            api.trigger('new-invites', invites);
             return invites;
         });
     };
@@ -433,6 +441,7 @@ define("io.ox/calendar/api",
             // clear caches
             all_cache = {};
             get_cache = {};
+            participant_cache = {};
             // trigger local refresh
             api.trigger("refresh.all");
         });

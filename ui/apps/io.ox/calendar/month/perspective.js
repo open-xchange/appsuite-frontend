@@ -403,10 +403,11 @@ define('io.ox/calendar/month/perspective',
             };
 
             // watch for api refresh
-            api.on('refresh.all', refresh)
+            api.on('create update', refresh)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
+                    refresh();
                 });
             app.on('folder:change', refresh)
                 .getWindow()
