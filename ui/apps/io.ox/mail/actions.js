@@ -447,13 +447,15 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/ical', {
         id: 'ical',
         requires: function (e) {
+            console.log("DEBUG1:", e.context.filename, e.context.content_type);
             var context = e.context,
                 hasRightSuffix = context.filename && context.filename.match(/\.ics$/i) !== null,
-                isCalendarType = context.content_type  && context.content_type.match(/^text\/calendar/i) !== null,
-                isAppType = context.content_type  && context.content_type.match(/^application\/ics/i) !== null;
+                isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
+                isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
+            console.log("DEBUG2:", baton.data);
             var attachment = baton.data;
             conversionAPI.convert(
                 {
