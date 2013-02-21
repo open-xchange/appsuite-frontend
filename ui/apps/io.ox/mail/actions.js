@@ -410,9 +410,9 @@ define('io.ox/mail/actions',
         requires: function (e) {
             var context = e.context,
                 hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
-                isRightType = context.content_type && context.content_type.match(/^text\/directory/i) !== null,
-                isVcard = hasRightSuffix && isRightType;
-            return e.collection.has('some') && isVcard;
+                isVCardType = context.content_type && !!context.content_type.match(/^text\/vcard/i),
+                isDirctoryType = context.content_type && !!context.content_type.match(/^text\/directory/i);
+            return  (hasRightSuffix && isDirctoryType) || isVCardType;
         },
         action: function (baton) {
             var attachment = baton.data;
