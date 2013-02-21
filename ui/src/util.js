@@ -105,7 +105,7 @@
         Android = ua.indexOf('Android');
 
     // add namespaces, just sugar
-    _.browser = _.device = {
+    _.browser = {
         /** iOS **/
         iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.'): undefined,
         /** Android **/
@@ -127,34 +127,38 @@
         MacOS: ua.indexOf('Macintosh') > -1
     };
 
+    _(_.browser).each(function (value, key) {
+        _.browser[key.toLowerCase()] = value;
+    });
+
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
-        size: {
-            small: '(max-device-width: 480px)',
-            medium: '(min-device-width: 480px) and (max-device-width: 1024px)',
-            large: '(min-device-width: 1025px)'
-        },
+        small: '(max-device-width: 480px)',
+        medium: '(min-device-width: 480px) and (max-device-width: 1024px)',
+        large: '(min-device-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
-    }
-    _.display = function () {
-        var ob = {};
-        $.each(queries.size, function (key, query) {
-            if (matchMedia(query).matches) {
-                ob.size = key;
-                return;
-            }
-        });
-        ob.landscape = matchMedia(queries.landscape).matches;
-        ob.portrait = matchMedia(queries.portrait).matches;
-        ob.retina = matchMedia(queries.retina).matches;
-        return ob;
-    }();
+    };
+
+    _.display = {};
+
+    _(queries).each(function (query, key) {
+        _.display[key] = !!matchMedia(query).matches;
+    });
 
     // extend underscore utilities
     _.mixin({
+
+        // combination of browser & display
+        device: function (condition) {
+            condition = String(condition || 'true').replace(/[a-z]+/ig, function (match) {
+                match = match.toLowerCase();
+                return _.browser[match] || _.display[match] || Modernizr[match] || 'false';
+            });
+            return new Function('return !!(' + condition + ')')();
+        },
 
         /**
          * Serialize object (key/value pairs) to fit into URLs (e.g. a=1&b=2&c=HelloWorld)
