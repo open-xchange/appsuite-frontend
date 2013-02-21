@@ -33,6 +33,8 @@ define("io.ox/calendar/view-detail",
             _.call(ext.action, e.data, e);
         });
     };
+    
+    var attachmentsBusy = false; //check if attachments are uploding atm
 
     // draw via extension points
 
@@ -420,7 +422,12 @@ define("io.ox/calendar/view-detail",
         index: 600,
         draw: function (data) {
             var $node;
-            if (data.number_of_attachments) {
+            if (attachmentsBusy) {
+                this.append(
+                        $('<div class="io-ox-label">').text(gt('Attachments')),
+                        $node = $('<div>').css({width: '30%', height: '10px'}).busy()
+                    );
+            } else if (data.number_of_attachments && data.number_of_attachment !== 0) {
                 this.append(
                     $('<div class="io-ox-label">').text(gt('Attachments')),
                     $node = $('<div>')
@@ -439,6 +446,10 @@ define("io.ox/calendar/view-detail",
     function redraw(e, data) {
         $(this).replaceWith(e.data.view.draw(data));
     }
+    
+    function setAttachmentsbusy(e, state) {
+        attachmentsBusy = state;
+    }
 
     return {
 
@@ -446,6 +457,8 @@ define("io.ox/calendar/view-detail",
 
             try {
                 var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
+                calAPI.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
+                calAPI.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
                 node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
 

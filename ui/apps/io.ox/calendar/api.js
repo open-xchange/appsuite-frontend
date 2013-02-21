@@ -141,7 +141,9 @@ define("io.ox/calendar/api",
 
         update: function (o) {
             var folder_id = o.folder_id || o.folder,
-                key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+                key = folder_id + "." + o.id + "." + (o.recurrence_position || 0),
+                attachmentHandlingNeeded = o.tempAttachmentIndicator;
+            delete o.tempAttachmentIndicator;
             if (_.isEmpty(o)) {
                 return $.when();
             } else {
@@ -178,12 +180,29 @@ define("io.ox/calendar/api",
                     delete get_cache[key];
                     return api.get(getObj)
                         .pipe(function (data) {
+                            if (attachmentHandlingNeeded) {
+                                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), true);
+                            }
                             api.trigger('update', data);
                             api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                             return data;
                         });
                 });
             }
+        },
+        
+        //used to cleanup Cache and trigger refresh after attachmentHandling
+        attachmentCallback: function (obj) {
+            console.log(obj);
+            all_cache = {};
+            var key = obj.folder_id + "." + obj.id + "." + (obj.recurrence_position || 0);
+            delete get_cache[key];
+            return api.get(obj)
+                .pipe(function (data) {
+                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), false);
+                    api.trigger('update', data);
+                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                });
         },
 
         checkForNotification: function (obj, removeAction) {
@@ -205,6 +224,8 @@ define("io.ox/calendar/api",
         },
 
         create: function (o) {
+            var attachmentHandlingNeeded = o.tempAttachmentIndicator;
+            delete o.tempAttachmentIndicator;
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -232,7 +253,11 @@ define("io.ox/calendar/api",
                 all_cache = {};
                 return api.get(getObj)
                         .pipe(function (data) {
+                            if (attachmentHandlingNeeded) {
+                                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), true);
+                            }
                             api.trigger('create', data);
+                            api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                             return data;
                         });
             });

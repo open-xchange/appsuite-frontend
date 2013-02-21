@@ -473,6 +473,7 @@ define("io.ox/contacts/view-detail",
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
+                api.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(baton.data)), {node: node}, setAttachmentsbusy);
                 api.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(baton.data)), {node: node}, setAttachmentsbusy);
                 node.addClass('contact-detail view');
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);

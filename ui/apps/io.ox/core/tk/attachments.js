@@ -45,8 +45,8 @@ define('io.ox/core/tk/attachments',
 
                     this.model.on('create update', uploadOnSave);
                 },
-                finishedCallback: function () {
-                    this.model.trigger("finishedAttachmentHandling");
+                finishedCallback: function (model, id) {
+                    model.trigger("finishedAttachmentHandling");
                 },
                 render: function () {
                     var self = this,
@@ -168,7 +168,7 @@ define('io.ox/core/tk/attachments',
                             self.model.trigger('backendError', resp);
                         }).done(function () {
                             allDone--;
-                            if (allDone <= 0) { self.finishedCallback(); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
                         });
                     }
 
@@ -178,18 +178,18 @@ define('io.ox/core/tk/attachments',
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.finishedCallback(); }
+                                if (allDone <= 0) { self.finishedCallback(self.model, id); }
                             });
                         } else {
                             attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.finishedCallback(); }
+                                if (allDone <= 0) { self.finishedCallback(self.model, id); }
                             });
                         }
                     }
-                    if (allDone <= 0) { self.finishedCallback(); }
+                    if (allDone <= 0) { self.finishedCallback(self.model, id); }
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
                     this.attachmentsOnServer = [];

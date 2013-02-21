@@ -241,26 +241,7 @@ define('io.ox/calendar/edit/main',
                 onSave: function () {
                     this.considerSaved = true;
                     this.getWindow().idle();
-                    var tmpFrame = $('#tmp'),
-                        self = this,
-                        attList = this.view.baton.attachmentList;
-                    if (attList.attachmentsToAdd.length > 0) {
-                        var data = self.model.attributes;
-                        if (attList.oldMode) {
-                            tmpFrame.on('attachmentsSaved', function () {
-                                tmpFrame.off('attachmentsSaved');
-                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
-                                self.quit();
-                            });
-                        } else {
-                            this.model.on('finishedAttachmentHandling', function () {
-                                api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
-                                self.quit();
-                            });
-                        }
-                    } else {
-                        this.quit();
-                    }
+                    this.quit();
                 },
                 failSave: function () {
                     if (this.model) {

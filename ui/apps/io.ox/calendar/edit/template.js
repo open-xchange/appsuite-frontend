@@ -20,7 +20,8 @@ define('io.ox/calendar/edit/template',
          'io.ox/backbone/forms',
          'io.ox/core/tk/attachments',
          'io.ox/calendar/edit/recurrence-view',
-         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, pViews) {
+         'io.ox/calendar/api',
+         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, api, pViews) {
 
     'use strict';
 
@@ -61,6 +62,10 @@ define('io.ox/calendar/edit/template',
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
+                    //check if attachments are changed
+                    if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
+                        baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                    }
                     baton.model.save();
                 })
             );
@@ -449,7 +454,16 @@ define('io.ox/calendar/edit/template',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1700,
-        module: 1
+        module: 1,
+        finishedCallback: function (model, id) {
+            var obj = {};
+            obj.id = model.attributes.id || id;//new objects have no id in model yet
+            obj.folder_id = model.attributes.folder_id || model.attributes.folder;
+            if (model.attributes.recurrence_position !== null) {
+                obj.recurrence_position = model.attributes.recurrence_position;
+            }
+            api.attachmentCallback(obj);
+        }
     }));
 
     point.basicExtend({
@@ -459,7 +473,7 @@ define('io.ox/calendar/edit/template',
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
                 $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
                 $input = $inputWrap.find('input[type="file"]')
-                .on('change', function (e) {
+                    .on('change', function (e) {
                 e.preventDefault();
                 if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
