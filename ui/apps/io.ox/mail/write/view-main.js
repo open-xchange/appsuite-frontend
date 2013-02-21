@@ -255,8 +255,12 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var node = $('<div>').addClass('fromselect-wrapper'),
-                select = $('<select>').css('width', '100%');
+            var node = $('<div>').addClass('fromselect-wrapper')
+                       .append(
+                           $('<label>', {'for': 'from'}).addClass('wrapping-label')
+                           .text(gt('From'))
+                    ),
+                select = $('<select>', {'name': 'from'}).css('width', '100%');
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 _(addresses).each(function (address) {
                     var option = $('<option>').text(_.noI18n(mailUtil.formatSender(address)));
@@ -272,6 +276,48 @@ define("io.ox/mail/write/view-main",
                 });
             });
             return node.append(select);
+        },
+
+        createReplyToField: function () {
+            if (config.get('ui.mail.replyTo.configurable', true) !== true) {
+                return;
+            }
+            return $('<div>').addClass('fieldset').append(
+                $('<label>', {'for': 'writer_field_replyTo'})
+                .addClass('wrapping-label').text(gt('Reply to')),
+                $('<input>',
+                    {'type' : 'text',
+                     'id' : 'writer_field_replyTo',
+                     'name' : 'replyTo'
+                    })
+                .addClass('discreet')
+                .autocomplete({
+                    source: function (val) {
+                        return accountAPI.getAllSenderAddresses().then(function (result) {
+                            result = result.filter(function (elem) {
+                                return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
+                            });
+                            return {list: result, hits: result.length};
+                        });
+                    },
+                    draw: function (data, query) {
+                        var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
+                        this.append(
+                            name,
+                            $('<div class="ellipsis">').text(_.noI18n(data.email))
+                        );
+                    },
+                    reduce: function (data) {
+                        data.list = _(data.list).map(function (elem) {
+                            return {data: {}, display_name: elem[0], email: elem[1]};
+                        });
+                        return data;
+                    },
+                    stringify: function (data) {
+                        return mailUtil.formatSender(data.display_name, data.email);
+                    }
+                })
+            );
         },
 
         createRecipientList: function (id) {
@@ -351,46 +397,6 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
-            if (config.get('ui.mail.replyTo.configurable', true) === true) {
-                this.addSection('replyTo', gt('Reply to'), false, true)
-                    .append($('<div>').addClass('fieldset').append(
-                        $('<label>', {'for': 'writer_field_replyTo'}).addClass('wrapping-label'),
-                        $('<input>', {
-                            'type' : 'email',
-                            'id' : 'writer_field_replyTo',
-                            'name' : 'replyTo'
-                        })
-                        .addClass('discreet')
-                        .autocomplete({
-                            source: function (val) {
-                                return accountAPI.getAllSenderAddresses().then(function (result) {
-                                    result = result.filter(function (elem) {
-                                        return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
-                                    });
-                                    return {list: result, hits: result.length};
-                                });
-                            },
-                            draw: function (data, query) {
-                                var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
-                                this.append(
-                                    name,
-                                    $('<div class="ellipsis">').text(_.noI18n(data.email))
-                                );
-                            },
-                            reduce: function (data) {
-                                data.list = _(data.list).map(function (elem) {
-                                    return {data: {}, display_name: elem[0], email: elem[1]};
-                                });
-                                return data;
-                            },
-                            stringify: function (data) {
-                                return mailUtil.formatSender(data.display_name, data.email);
-                            }
-                        })
-                    ));
-                this.addLink('replyTo', gt('Reply to'));
-            }
-
             // Attachments (unless we're on iOS)
             if (ox.uploadsEnabled) {
                 this.fileCount = 0;
@@ -464,13 +470,17 @@ define("io.ox/mail/write/view-main",
             }());
 
             // FROM
-            this.addLink('from', gt('Sender'));
-            this.addSection('from', gt('Sender'), false, true)
-                .append(this.createSenderField());
+            this.addLink('sender', gt('Sender'));
+            this.addSection('sender', gt('Sender'), false, true)
+                .append(this.createSenderField())
+                .append(this.createReplyToField());
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
-                    self.scrollpane.find('a[data-section-link="from"]').parent().remove();
+                    self.scrollpane.find('div.fromselect-wrapper').remove();
+                }
+                if (self.sections.sender.children().length === 0) {
+                    $('a[data-section-link="sender"]').remove();
                 }
             });
 
