@@ -45,7 +45,9 @@ define('io.ox/core/tk/attachments',
 
                     this.model.on('create update', uploadOnSave);
                 },
-
+                finishedCallback: function () {
+                    this.model.trigger("finishedAttachmentHandling");
+                },
                 render: function () {
                     var self = this,
                         odd = true,
@@ -166,7 +168,7 @@ define('io.ox/core/tk/attachments',
                             self.model.trigger('backendError', resp);
                         }).done(function () {
                             allDone--;
-                            if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                            if (allDone <= 0) { self.finishedCallback(); }
                         });
                     }
 
@@ -176,18 +178,18 @@ define('io.ox/core/tk/attachments',
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                                if (allDone <= 0) { self.finishedCallback(); }
                             });
                         } else {
                             attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                                if (allDone <= 0) { self.finishedCallback(); }
                             });
                         }
                     }
-                    if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                    if (allDone <= 0) { self.finishedCallback(); }
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
                     this.attachmentsOnServer = [];

@@ -20,9 +20,10 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/widgets/cityControlGroup',
     'io.ox/core/tk/attachments',
+    'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/edit/style.css'
-], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, attachments, gt) {
+], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, attachments, api, gt) {
 
     "use strict";
 
@@ -132,10 +133,27 @@ define('io.ox/contacts/edit/view-form', [
                     registerAs: 'attachmentList',
                     className: 'div',
                     index: options.index,
-                    module: 7
+                    module: 7,
+                    finishedCallback: function () {
+                        var attr = this.model.attributes;
+                        api.get({ id: attr.id, folder: attr.folder_id }, false)
+                            .pipe(function (data) {
+                                return $.when(
+                                    api.caches.get.add(data),
+                                    api.caches.all.grepRemove(attr.folder_id + api.DELIM),
+                                    api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
+                                    api.clearFetchCache()
+                                )
+                                .done(function () {
+                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: false, redraw: false});
+                                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                    api.trigger('refresh.list');
+                                });
+                            });
+                    }
                 }), {
                     hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return true;// model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0;
+                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
                     }
                 });
             },
@@ -174,7 +192,7 @@ define('io.ox/contacts/edit/view-form', [
                     }
                 }, {
                     hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                        return true;
+                        return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
                     }
                 });
             },
@@ -322,46 +340,31 @@ define('io.ox/contacts/edit/view-form', [
             tabIndex: 10,
             tagtype: "button"
         }));
+        
+        // attachment Drag & Drop
+        views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
+            id: 'attachment',
+            index: 100,
+            label: gt('Drop here to upload a <b>new attachment</b>'),
+            multiple: function (files, view) {
+                _(files).each(function (fileData) {
+                    view.baton.attachmentList.addFile(fileData);
+                });
+            }
+        });
 
         // Edit Actions
 
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
             action: function (options, baton) {
-                var attachmentHandlingOver = true;
-                function attachmentHandling() {
-                    options.model.off('finishedAttachmentHandling');
-                    require(['io.ox/contacts/api'], function (api) {
-                        var attr = options.model.attributes;
-                        api.get({ id: attr.id, folder: attr.folder_id }, false)
-                            .pipe(function (data) {
-                                return $.when(
-                                    api.caches.get.add(data),
-                                    api.caches.all.grepRemove(attr.folder_id + api.DELIM),
-                                    api.caches.list.remove({ id: attr.id, folder: attr.folder_id }),
-                                    api.clearFetchCache()
-                                )
-                                .done(function () {
-                                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
-                                    api.trigger('refresh.list');
-                                    attachmentHandlingOver = true;
-                                    options.parentView.trigger('save:success');
-                                });
-                            });
-                    });
-                }
-                
                 //check if attachments are changed
                 if (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0) {
-                    attachmentHandlingOver = false;
-                    options.model.on('finishedAttachmentHandling', attachmentHandling);
                     options.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                 }
                 options.parentView.trigger('save:start');
                 options.model.save().done(function () {
-                    if (attachmentHandlingOver) {
-                        options.parentView.trigger('save:success');
-                    }
+                    options.parentView.trigger('save:success');
                 }).fail(function () {
                     options.parentView.trigger('save:fail');
                 });

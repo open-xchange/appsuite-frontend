@@ -124,6 +124,7 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
+                    api.trigger('AttachmentHandlingInProgress:' + o.folder + '.' + o.id, {state: true, redraw: true});
                     return {folder_id: o.folder, id: o.id};
                 });
             } else {
@@ -153,6 +154,9 @@ define('io.ox/contacts/api',
                                 fetchCache.clear()
                             )
                             .done(function () {
+                                if (attachmentHandlingNeeded) {
+                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: true, redraw: false});
+                                }
                                 api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
