@@ -455,28 +455,25 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var attachment = baton.data;
-            conversionAPI.convert(
-                {
-                    identifier: 'com.openexchange.mail.ical',
-                    args: [
-                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
-                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
-                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
-                    ]
-                },
-                {
-                    identifier: 'com.openexchange.ical',
-                    args: [
-                        {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
-                        {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
-                    ]
-                }
-            ).done(function (data) {
-                    notifications.yell('success', gt('Appointments have been stored in your main calendar folder.'));
-                }).fail(function (data) {
-                    console.err('FAILED!', data);
-                });
-
+            conversionAPI.convert({
+                identifier: 'com.openexchange.mail.ical',
+                args: [
+                    {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                    {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                    {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                ]
+            },
+            {
+                identifier: 'com.openexchange.ical',
+                args: [
+                    {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
+                    {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
+                ]
+            })
+            .done(function (data) {
+                notifications.yell('success', gt('The appointment has been added to your calendar'));
+            })
+            .fail(notifications.yell);
         }
     });
 
