@@ -1,6 +1,18 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ */
+
 define("io.ox/participants/views",
-        ['gettext!io.ox/calendar/edit/main',
-         'less!io.ox/participants/participants.less'], function (gt) {
+    ['gettext!io.ox/calendar/edit/main',
+     'less!io.ox/participants/participants.less'], function (gt) {
+
     "use strict";
 
     var getImageStyle = function (url) {
@@ -86,7 +98,7 @@ define("io.ox/participants/views",
 
         },
         setTypeStyle: function  () {
-            var type = this.model.get('type');
+            var type = this.model.get('type'), data;
             this.nodes.$img.removeAttr('class');
 
             switch (type) {
@@ -99,7 +111,7 @@ define("io.ox/participants/views",
                 if (m === '')
                     this.nodes.$mail.html('&nbsp;');
                 if (this.options.halo) {
-                    this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                    this.nodes.$wrapper.data({ email1: m }).addClass('halo-link');
                 }
                 break;
             case 2:
@@ -109,6 +121,11 @@ define("io.ox/participants/views",
             case 3:
                 this.nodes.$img.addClass('resource-image');
                 this.nodes.$mail.text(gt('Resource'));
+                if (this.options.halo) {
+                    data = this.model.toJSON();
+                    data.callbacks = this.options.callbacks || {};
+                    this.nodes.$wrapper.data(data).addClass('halo-resource-link');
+                }
                 break;
             case 4:
                 this.nodes.$img.addClass('resource-image');
@@ -146,13 +163,12 @@ define("io.ox/participants/views",
             options.collection.on('add', _.bind(this.onAdd, this));
             options.collection.on('remove', _.bind(this.onRemove, this));
             options.collection.on('reset', _.bind(this.updateContainer, this));
-
         },
         render: function () {
             var self = this,
                 counter = 1;
             this.nodes = {};
-            
+
             // bring organizer up
             this.collection.each(function (participant) {
                 if (participant.get('id') === self.options.baton.model.get('organizerId')) {
@@ -175,12 +191,12 @@ define("io.ox/participants/views",
             return this;
         },
         createParticipantNode: function (participant) {
-            var self = this;
             return new ParticipantEntryView({
                 model: participant,
-                baton: self.options.baton,
+                baton: this.options.baton,
                 className: 'span6',
-                halo: true
+                halo: true,
+                callbacks: this.options.baton.callbacks || {}
             }).render().$el;
         },
         updateContainer: function () {

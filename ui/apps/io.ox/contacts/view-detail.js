@@ -32,7 +32,7 @@ define("io.ox/contacts/view-detail",
             })
             .join(arguments[0] || "");
     };
-    
+
     var attachmentsBusy = false; //check if attachments are uploding atm
 
     function addField(label, value, node, fn) {
@@ -150,7 +150,7 @@ define("io.ox/contacts/view-detail",
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
     });
-    
+
     function getDescription(data) {
         if (api.looksLikeDistributionList(data)) return gt('Distribution list');
         if (api.looksLikeResource(data)) return gt('Resource');
@@ -212,7 +212,7 @@ define("io.ox/contacts/view-detail",
     function looksLikeHTML(str) {
         return (/<\w/).test(str);
     }
-    
+
     //attachments
     ext.point("io.ox/contacts/detail").extend({
         index: 110,
@@ -226,7 +226,7 @@ define("io.ox/contacts/view-detail",
             }
         }
     });
-    
+
     function  drawBusyAttachments(node, simple) {
         if (simple) {
             node.find('.attachments-value').empty().removeClass('span8').addClass('span2').busy();
@@ -243,7 +243,7 @@ define("io.ox/contacts/view-detail",
             linkContainer.busy();
         }
     }
-    
+
     ext.point('io.ox/contacts/detail-attach').extend({
         index: 100,
         id: 'attachments',
@@ -293,15 +293,19 @@ define("io.ox/contacts/view-detail",
         index: 250,
         id: "description", // only for resources
         draw: function (baton) {
-            if ('description' in baton.data) {
+            var text = $.trim(baton.data.description || '');
+            if (text !== '') {
                 addField(gt('Description'), true, this, function (node) {
-                    var text = $.trim(baton.data.description);
-                    if (looksLikeHTML(text)) {
-                        node.html(text);
-                    } else {
-                        node.html(text.replace(/\n/g, '<br>'));
-                    }
+                    node.html(looksLikeHTML(text) ? text : text.replace(/\n/g, '<br>'));
                 });
+                if (baton.data.callbacks && 'extendDescription' in baton.data.callbacks) {
+                    addField('', '\u00A0', this, function (node) {
+                        node.append(
+                            $('<a href="#">').text(gt('Copy to description'))
+                            .on('click', { description: text.replace(/[ \t]+/g, ' ') }, baton.data.callbacks.extendDescription)
+                        );
+                    });
+                }
                 addField('', '\u00A0', this);
             }
         }
@@ -453,7 +457,7 @@ define("io.ox/contacts/view-detail",
     function redraw(e, data) {
         $(this).replaceWith(e.data.view.draw(data));
     }
-    
+
     function setAttachmentsbusy(e, data) {
         attachmentsBusy = data.state;
         if (data.redraw) {

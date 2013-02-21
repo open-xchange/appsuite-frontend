@@ -16,9 +16,10 @@ define('io.ox/calendar/edit/main',
        'io.ox/calendar/api',
        'io.ox/core/extPatterns/dnd',
        'io.ox/calendar/edit/view-main',
+       'io.ox/core/notifications',
        'gettext!io.ox/calendar/edit/main',
        'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, gt, calendarSettings) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, calendarSettings) {
 
     'use strict';
 
@@ -73,6 +74,21 @@ define('io.ox/calendar/edit/main',
                     this.model.off('change:title');
                 },
 
+                // published via calllbacks objects in baton (see below)
+                // baton makes its journey through all extensions
+                // description field (resource only) uses this function to
+                // offer "Copy to description"; the click event lands here
+                extendDescription: function (e) {
+                    // we simply have to look for the textarea
+                    // this whole thing could be solved differently (more local)
+                    // but I had no clue how to hook into the
+                    // 'new forms.InputField({...})' stuff in template.js
+                    e.preventDefault();
+                    var textarea = app.view.$el.find('textarea.note');
+                    textarea.val(textarea.val() + e.data.description);
+                    notifications.yell('success', gt('Description has been copied'));
+                },
+
                 edit: function (data, options) {
 
                     app.cid = 'io.ox/calendar:edit.' + _.cid(data);
@@ -85,7 +101,11 @@ define('io.ox/calendar/edit/main',
                         appointmentModel.applyAutoLengthMagic(self.model);
                         appointmentModel.fullTimeChangeBindings(self.model);
                         appointmentModel.setDefaultParticipants(self.model, {create: false}).done(function () {
-                            app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
+
+                            var baton = { model: self.model, mode: data.id ? 'edit' : 'create', app: self, callbacks: {} };
+                            baton.callbacks.extendDescription = app.extendDescription;
+                            app.view = self.view = new MainView(baton);
+
                             //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
                             if (_.browser.IE === undefined || _.browser.IE > 9) {
                                 self.model.on('create:start update:start', function () {
@@ -168,14 +188,19 @@ define('io.ox/calendar/edit/main',
                             });
                     }
                 },
+
                 considerSaved: false,
+
                 create: function (data) {
                     var self = this;
                     app.model = self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
                     appointmentModel.fullTimeChangeBindings(self.model);
                     appointmentModel.setDefaultParticipants(self.model, {create: true}).done(function () {
-                        app.view = self.view = new MainView({model: self.model, app: self});
+
+                        var baton = { model: self.model, app: self, callbacks: {} };
+                        baton.callbacks.extendDescription = app.extendDescription;
+                        app.view = self.view = new MainView(baton);
 
                         self.model.on('create update', _.bind(self.onSave, self));
                         self.view.on('save:success', function () {
