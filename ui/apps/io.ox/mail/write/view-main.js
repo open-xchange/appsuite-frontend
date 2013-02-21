@@ -479,6 +479,9 @@ define("io.ox/mail/write/view-main",
                 if (addresses.length <= 1) {
                     self.scrollpane.find('div.fromselect-wrapper').remove();
                 }
+                if (self.sections.sender.children().length === 0) {
+                    $('a[data-section-link="sender"]').remove();
+                }
             });
 
             // Options
