@@ -15,7 +15,7 @@ define('io.ox/calendar/invitations/register',
     ['io.ox/core/extensions', 'io.ox/core/http', 'settings!io.ox/calendar', 'gettext!io.ox/calendar/main', "less!io.ox/calendar/style.css"],
     function (ext, http, settings, gt) {
     'use strict';
-    var regex = /text\/calendar.*?method=.+/i;
+    var regex = /text\/calendar.*?method=(.+)/i;
 
     var i18n = {
         'accept': gt("Accept"),
@@ -70,7 +70,15 @@ define('io.ox/calendar/invitations/register',
 
     function discoverIMipAttachment(baton) {
         return _(baton.data.attachments).find(function (attachment) {
-            return regex.test(attachment.content_type);
+            var match = attachment.content_type.match(regex);
+            if (match && match[1].toLowerCase() !== "publish") {
+                var index = match[1].indexOf(";");
+                var method = index !== -1 ? match[1].substr(0, index) : match[1];
+                method = method.toLowerCase();
+
+                return method !== 'publish';
+            }
+            return false;
         });
     }
 
@@ -255,7 +263,6 @@ define('io.ox/calendar/invitations/register',
         id: 'imip',
         accept: function (baton) {
             var imipAttachment = discoverIMipAttachment(baton);
-
             if (imipAttachment) {
                 baton.imip = {
                     attachment: imipAttachment
