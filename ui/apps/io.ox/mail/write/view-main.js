@@ -477,7 +477,7 @@ define("io.ox/mail/write/view-main",
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
-                    self.scrollpane.find('a[data-section-link="from"]').parent().remove();
+                    self.scrollpane.find('div.fromselect-wrapper').remove();
                 }
             });
 
