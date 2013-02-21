@@ -215,7 +215,7 @@ define("io.ox/contacts/view-detail",
     
     //attachments
     ext.point("io.ox/contacts/detail").extend({
-        index: 220,
+        index: 110,
         id: "attachments",
         draw: function (baton) {
             if (attachmentsBusy) {
@@ -231,15 +231,15 @@ define("io.ox/contacts/view-detail",
         if (simple) {
             node.find('.attachments-value').empty().removeClass('span8').addClass('span2').busy();
             if (node.find('.attachments-value').length === 0) {
-                var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').after(node.find('.contact-header').next());
+                var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').after(node.find('.contact-header'));
                 $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
-                var linkContainer = $('<div>').addClass('span2 field-value attachments-value').appendTo(attachmentsBusyNode);
+                var linkContainer = $('<div>').addClass('attachments-value').appendTo(attachmentsBusyNode);
                 linkContainer.busy();
             }
         } else {
             var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').appendTo(node);
             $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
-            var linkContainer = $('<div>').addClass('span2 field-value attachments-value').appendTo(attachmentsBusyNode);
+            var linkContainer = $('<div>').addClass('attachments-value').appendTo(attachmentsBusyNode);
             linkContainer.busy();
         }
     }
@@ -255,7 +255,7 @@ define("io.ox/contacts/view-detail",
                 attachmentNode = $('<div>').addClass('attachments-container row-fluid').appendTo(this);//else build new
             }
             $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentNode);
-            var linkContainer = $('<div>').addClass('span8 field-value attachments-value').appendTo(attachmentNode);
+            var linkContainer = $('<div>').addClass('attachments-value').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: contact.folder_id, id: contact.id, module: 7}).done(function (data) {
                     _(data).each(function (a, index) {

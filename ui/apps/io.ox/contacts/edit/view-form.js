@@ -164,10 +164,9 @@ define('io.ox/contacts/edit/view-form', [
                     render: function (baton) {
                         var baton = this.baton,
                             $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm').addClass('span12'),
-                            $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
-                            $input = $inputWrap.find('input[type="file"]'),
-                            $button = $inputWrap.find('button[data-action="add"]')
-                                .on('click', function (e) {
+                            $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                            $input = $inputWrap.find('input[type="file"]')
+                                .on('change', function (e) {
                             e.preventDefault();
                             if (_.browser.IE !== 9) {
                                 _($input[0].files).each(function (fileData) {

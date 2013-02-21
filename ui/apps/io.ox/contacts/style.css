@@ -153,6 +153,10 @@
         background-repeat: no-repeat;
         background-size: contain;
     }
+    
+    .attachment-item{
+		color: #333;
+	}
 
     .io-ox-inline-links {
         margin: 2em 0;

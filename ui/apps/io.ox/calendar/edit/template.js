@@ -457,10 +457,9 @@ define('io.ox/calendar/edit/template',
         index: 1800,
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
-                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
-                $input = $inputWrap.find('input[type="file"]'),
-                $button = $inputWrap.find('button[data-action="add"]')
-                    .on('click', function (e) {
+                $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                $input = $inputWrap.find('input[type="file"]')
+                .on('change', function (e) {
                 e.preventDefault();
                 if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
