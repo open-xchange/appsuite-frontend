@@ -23,12 +23,11 @@ define('io.ox/files/settings/model',
         },
 
         save: function () {
-//            console.log(this.attributes);
             settings.save(this.attributes);
         },
 
         destroy: function () {
-            console.log("destroy in model.js");
+            console.log('destroy in model.js');
         }
 
     });

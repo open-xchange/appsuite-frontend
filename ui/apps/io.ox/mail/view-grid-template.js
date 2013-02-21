@@ -29,19 +29,19 @@ define('io.ox/mail/view-grid-template',
                     answered, forwarded, unread;
                 this.addClass('mail').append(
                     $('<div>').append(
-                        date = $('<span>').addClass('date'),
-                        from = $('<div>').addClass('from')
+                        date = $('<span class="date">'),
+                        from = $('<div class="from">')
                     ),
                     $('<div>').append(
-                        threadSize = $('<div>').addClass('thread-size'),
-                        flag = $('<div>').addClass('flag').text(_.noI18n('\u00A0')),
-                        attachment = $('<i>').addClass('icon-paper-clip'),
-                        priority = $('<span>').addClass('priority'),
-                        $('<div>').addClass('subject').append(
-                            answered = $('<i>').addClass('icon-circle-arrow-left'),
-                            forwarded = $('<i>').addClass('icon-circle-arrow-right'),
-                            unread = $('<i>').addClass('icon-bookmark'),
-                            subject = $('<span>')
+                        threadSize = $('<div class="thread-size">'),
+                        flag = $('<div class="flag">').text(_.noI18n('\u00A0')),
+                        attachment = $('<i class="icon-paper-clip">'),
+                        priority = $('<span class="priority">'),
+                        $('<div class="subject">').append(
+                            answered = $('<i class="icon-circle-arrow-left">'),
+                            forwarded = $('<i class="icon-circle-arrow-right">'),
+                            unread = $('<i class="icon-bookmark">'),
+                            subject = $('<span class="drag-title">')
                         )
                     )
                 );
@@ -56,7 +56,7 @@ define('io.ox/mail/view-grid-template',
                     fields.threadSize.text(_.noI18n(data.threadSize)).css('display', '');
                 }
                 fields.from.empty().append(
-                    util.getFrom(data, account.is('sent', data.folder_id) ? 'to' : 'from')
+                    util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent', data.folder_id) ? 'to' : 'from')
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
@@ -93,7 +93,7 @@ define('io.ox/mail/view-grid-template',
                     _(list.slice(1)).each(function (data, index) {
                         self.append(
                             $('<div class="thread-summary-item selectable">')
-                            .addClass(util.isUnread(data) ? 'unread' : undefined)
+                            .addClass(util.isUnseen(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
                                 $('<div class="thread-summary-right">')

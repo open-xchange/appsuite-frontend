@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "неделя",
+        "понеделник",
+        "вторник",
+        "сряда",
+        "четвъртък",
+        "петък",
+        "събота"
+    ],
+    "daysShort": [
+        "нд",
+        "пн",
+        "вт",
+        "ср",
+        "чт",
+        "пт",
+        "сб"
+    ],
+    "daysStandalone": [
+        "нд",
+        "пн",
+        "вт",
+        "ср",
+        "чт",
+        "пт",
+        "сб"
+    ],
+    "months": [
+        "януари",
+        "февруари",
+        "март",
+        "април",
+        "май",
+        "юни",
+        "юли",
+        "август",
+        "септември",
+        "октомври",
+        "ноември",
+        "декември"
+    ],
+    "monthsShort": [
+        "ян.",
+        "февр.",
+        "март",
+        "апр.",
+        "май",
+        "юни",
+        "юли",
+        "авг.",
+        "септ.",
+        "окт.",
+        "ноем.",
+        "дек."
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "dd.MM.yy",
+        "yMEd": "E, d.MM.y 'г'.",
+        "yMMMd": "dd MMM y",
+        "yMMMEd": "E, d MMM y 'г'.",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "dd.MM.yy, HH:mm",
+        "yMdHmv": "dd.MM.yy, HH:mm v",
+        "yMdhm": "dd.MM.yy, h:mm a",
+        "yMdhmv": "dd.MM.yy, h:mm a v",
+        "yMEdHm": "E, d.MM.y 'г'., HH:mm",
+        "yMEdHmv": "E, d.MM.y 'г'., HH:mm v",
+        "yMEdhm": "E, d.MM.y 'г'., h:mm a",
+        "yMEdhmv": "E, d.MM.y 'г'., h:mm a v"
+    },
+    "date": "dd.MM.yyyy",
+    "time": "HH:mm",
+    "dateTimeFormat": "%2$s, %1$s",
+    "intervals": {
+        "fallback": "%1$s - %2$s",
+        "hm": {
+            "a": "H:mm – H:mm",
+            "h": "h:mm-h:mm a",
+            "m": "h:mm-h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm-HH:mm",
+            "m": "HH:mm-HH:mm"
+        },
+        "hmv": {
+            "a": "H:mm – H:mm v",
+            "h": "h:mm-h:mm a v",
+            "m": "h:mm-h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm-HH:mm v",
+            "m": "HH:mm-HH:mm v"
+        },
+        "yMMMd": {
+            "d": "dd-dd MMM y",
+            "m": "dd MMM - dd MMM y",
+            "y": "dd MMM y - dd MMM y"
+        },
+        "yMMMEd": {
+            "d": "d MMM y, E - d MMM y, E",
+            "m": "d MMM y, E - d MMM y, E",
+            "y": "d MMM y, E - d MMM y, E"
+        }
+    },
+    "dayPeriods": {
+        "am": "пр. об.",
+        "pm": "сл. об."
+    },
+    "eras": [
+        "пр. н. е.",
+        "от н. е."
+    ],
+    "dateTime": "dd.MM.yyyy, HH:mm",
+    "h12": false
+}

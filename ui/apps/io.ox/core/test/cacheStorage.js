@@ -43,20 +43,21 @@ define("io.ox/core/test/cacheStorage",
         index: 100,
         test: function (j) {
 
-            _([simple, localstorage/*, indexeddb*/]).each(function (testStorage) {
+            _([simple, localstorage, indexeddb]).each(function (testStorage) {
 
                 j.describe("Caching Storagelayer: " + testStorage.getStorageLayerName(), function () {
 
                     j.it('check storagelayer', function () {
-                        testStorage.setId('TEST');
                         j.expect(testStorage.isUsable()).toBeTruthy();
                     });
+
+                    var testStorageInst = testStorage.getInstance('TEST');
 
                     j.it('clear the cache', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);
 
-                        testStorage.setId('TEST').clear().done(function (check) {
+                        testStorageInst.clear().done(function (check) {
                             loaded.yep();
                             j.expect(check).not.toBeDefined();
                         }).fail(function (e) {
@@ -69,7 +70,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);
 
-                        testStorage.setId('TEST').keys().done(function (keys) {
+                        testStorageInst.keys().done(function (keys) {
                             loaded.yep();
                             j.expect(keys).toEqual([]);
                         }).fail(function (e) {
@@ -82,7 +83,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get key', TIMEOUT);
 
-                        testStorage.setId('TEST').get('notexistingkey').done(function (data) {
+                        testStorageInst.get('notexistingkey').done(function (data) {
                             loaded.yep();
                             j.expect(data).toBeNull();
                         }).fail(function (e) {
@@ -95,7 +96,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not set key', TIMEOUT);
 
-                        testStorage.setId('TEST').set(testKey, testValue).done(function (key) {
+                        testStorageInst.set(testKey, testValue).done(function (key) {
                             // set is deferred internally, so we defer too
                             _.defer(function () {
                                 loaded.yep();
@@ -111,7 +112,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not set key', TIMEOUT);
 
-                        testStorage.setId('TEST').get(testKey).done(function (data) {
+                        testStorageInst.get(testKey).done(function (data) {
                             loaded.yep();
                             j.expect(data).toEqual(testValue);
                         }).fail(function (e) {
@@ -124,7 +125,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);
 
-                        testStorage.setId('TEST').keys().done(function (keys) {
+                        testStorageInst.keys().done(function (keys) {
                             loaded.yep();
                             j.expect(keys).toEqual([testKey]);
                         }).fail(function (e) {
@@ -137,7 +138,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.setId('TEST').get(testKey).done(function (check) {
+                        testStorageInst.get(testKey).done(function (check) {
                             loaded.yep();
                             j.expect(check).not.toBeNull();
                         }).fail(function (e) {
@@ -150,7 +151,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.setId('TEST').remove(testKey).done(function () {
+                        testStorageInst.remove(testKey).done(function () {
                             loaded.yep();
                             j.expect(true).toBeTruthy();
                         }).fail(function (e) {
@@ -163,7 +164,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.setId('TEST').get(testKey).done(function (check) {
+                        testStorageInst.get(testKey).done(function (check) {
                             loaded.yep();
                             j.expect(check).toBeNull();
                         }).fail(function (e) {
@@ -176,7 +177,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.setId('TEST').clear().done(function () {
+                        testStorageInst.clear().done(function () {
                             loaded.yep();
                             j.expect(true).toBeTruthy();
                         }).fail(function (e) {
@@ -189,7 +190,7 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.setId('TEST').keys().done(function (allKeys) {
+                        testStorageInst.keys().done(function (allKeys) {
                             loaded.yep();
                             j.expect(allKeys).toEqual([]);
                         }).fail(function (e) {

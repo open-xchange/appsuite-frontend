@@ -113,60 +113,47 @@ define('io.ox/calendar/actions',
                 o.recurrence_position = params.recurrence_position;
             }
 
-            api.get(o).done(function (data) {
-                require(['io.ox/calendar/edit/main'], function (m) {
-                    if (data.recurrence_type > 0) {
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
-                                .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                                .addPrimaryButton('series',
-                                    //#. Use singular in this context
-                                    gt('Series'))
-                                .addButton('appointment', gt('Appointment'))
-                                .addButton('cancel', gt('Cancel'))
-                                .show()
-                                .done(function (action) {
+            require(['io.ox/calendar/edit/main'], function (m) {
+                if (params.recurrence_type > 0 || params.recurrence_position) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                            .addPrimaryButton('series',
+                                //#. Use singular in this context
+                                gt('Series'))
+                            .addButton('appointment', gt('Appointment'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show()
+                            .done(function (action) {
 
-                                    if (action === 'cancel') {
-                                        return;
-                                    }
-                                    if (action === 'series') {
-                                        // edit the series, discard recurrence position
-                                        delete data.recurrence_position;
-                                    }
-                                    if (action === 'appointment') {
-                                        // edit one appointment, create change exception
-                                        var fields = ['recurrence_date_position',
-                                            'change_exceptions',
-                                            'delete_exceptions',
-                                            'recurrence_type',
-                                            'days',
-                                            'day_in_month',
-                                            'month',
-                                            'interval',
-                                            'until',
-                                            'occurrences'];
-                                        var x = 0;
-                                        // ensure theses fields will not be send to backend
-                                        for (; x < fields.length; x++) {
-                                            delete data[fields[x]];
-                                        }
-                                    }
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                if (action === 'series') {
+                                    // edit the series, discard recurrence position
+                                    delete o.recurrence_position;
+                                }
 
+                                // disable cache with second param
+                                api.get(o, false).done(function (data) {
                                     if (m.reuse('edit', data, {action: action})) return;
                                     m.getApp().launch().done(function () {
+                                        if (action === 'appointment') {
+                                            data = api.removeRecurrenceInformation(data);
+                                        }
                                         this.edit(data, {action: action});
-
                                     });
                                 });
-                        });
-                    } else {
+                            });
+                    });
+                } else {
+                    api.get(o, false).done(function (data) {
                         if (m.reuse('edit', data)) return;
                         m.getApp().launch().done(function () {
                             this.edit(data);
                         });
-                    }
-                });
+                    });
+                }
             });
         }
     });
@@ -203,7 +190,7 @@ define('io.ox/calendar/actions',
                                         return;
                                     }
                                     if (action === 'series') {
-                                        delete data.recurrence_position;
+                                        delete myModel.attributes.recurrence_position;
                                     }
                                     myModel.destroy();
                                 });
@@ -312,7 +299,7 @@ define('io.ox/calendar/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus accent-color">');
         }
     });
 

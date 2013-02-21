@@ -11,18 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
+define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                                 'io.ox/core/strings'], function (gt, strings) {
-    "use strict";
+    'use strict';
 
     var util = {
         buildLabel: function (text, id) {
-            return $('<label>').text(text).addClass("task-edit-label").attr('for', id);
+            return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
         },
         //build progressField and buttongroup
         buildProgress: function () {
             var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
-                .addClass("span6 progress-field");
+                .addClass('span6 progress-field');
 
             $('<div>').addClass('input-append').append(progress,
                     $('<button>').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
@@ -54,18 +54,18 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             return progress;
         },
         buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div>').addClass("row-fluid task-edit-row").appendTo(parent);
+            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
             for (var i = 0; i < extensions.length; i++) {
                 if (!(_.isArray(extensions[i]))) { //check for true extensionpoint
-                    extensions[i].invoke("draw", row, baton);
+                    extensions[i].invoke('draw', row, baton);
                 } else { //its a normal node
-                    $('<div>').addClass("span" + extensions[i][1]).append(extensions[i][0]).appendTo(row);
+                    $('<div>').addClass('span' + extensions[i][1]).append(extensions[i][0]).appendTo(row);
                 }
             }
             //find labels and make them focus the inputfield
-            row.find("label").each(function (label) {
+            row.find('label').each(function (label) {
                 if (this) {
-                    $(this).attr("for", $(this).next().attr('id'));
+                    $(this).attr('for', $(this).next().attr('id'));
                 }
             });
             return row;
@@ -87,32 +87,32 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                 }
             }
 
-            var row = $('<div>').addClass("row-fluid task-edit-row").appendTo(parent);
+            var row = $('<div>').addClass('row-fluid task-edit-row').appendTo(parent);
             for (var i = 0; i < nodes.length; i++) {
                 if (_.isArray(widths[i])) {
-                    $('<div>').addClass("span" + widths[i][0] + " offset" + widths[i][1]).append(nodes[i]).appendTo(row);
+                    $('<div>').addClass('span' + widths[i][0] + ' offset' + widths[i][1]).append(nodes[i]).appendTo(row);
                 } else {
-                    $('<div>').addClass("span" + widths[i]).append(nodes[i]).appendTo(row);
+                    $('<div>').addClass('span' + widths[i]).append(nodes[i]).appendTo(row);
                 }
             }
 
             //fillout gridCells
             if (fillGrid || fillGrid === undefined) {
-                row.children().children().not('label').addClass("span12");
+                row.children().children().not('label').addClass('span12');
             }
         },
 
         //Tabs
         buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
-            var table = $('<ul>').addClass("nav nav-tabs"),
-                content = $('<div>').addClass("tab-content");
+            var table = $('<ul>').addClass('nav nav-tabs'),
+                content = $('<div>').addClass('tab-content');
             for (var i = 0; i < tabs.length; i++) {
                 $('<li>').css('width', '33%')
-                    .append($('<a>').addClass("tab-link").css('text-align', 'center')
-                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': "tab"}).text(tabs[i])).appendTo(table);
+                    .append($('<a>').addClass('tab-link').css('text-align', 'center')
+                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': 'tab'}).text(tabs[i])).appendTo(table);
             }
             for (var i = 0; i < tabs.length; i++) {
-                $('<div>').attr('id', "edit-task-tab" + [i] + uid).addClass("tab-pane").appendTo(content);
+                $('<div>').attr('id', 'edit-task-tab' + [i] + uid).addClass('tab-pane').appendTo(content);
             }
             table.find('li :first').addClass('active');
             content.find('div :first').addClass('active');
@@ -123,10 +123,10 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             var tempNodes = [];
             node.empty();
             for (var i = 0; i < attachments.length; i++) {
-                tempNodes.push([$('<i>').addClass("icon-remove task-remove-attachment").attr('lnr', i),
+                tempNodes.push([$('<i>').addClass('icon-remove task-remove-attachment').attr('lnr', i),
                                 $('<i>').addClass('icon-paper-clip'),
-                                $('<div>').text(_.noI18n(attachments[i].name)).addClass("task-attachment-name"),
-                                $('<div>').text(_.noI18n(strings.fileSize(attachments[i].size))).addClass("task-attachment-filesize")]);
+                                $('<div>').text(_.noI18n(attachments[i].name)).addClass('task-attachment-name'),
+                                $('<div>').text(_.noI18n(strings.fileSize(attachments[i].size))).addClass('task-attachment-filesize')]);
             }
             //check if we have an odd number of attachments
             if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
@@ -136,6 +136,37 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             for (var i = 0; i < tempNodes.length; i += 2) {
                 this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
+        },
+        
+        buildConfirmationPopup: function (model, dialogs, isArray) {
+            //build popup
+            var popup = new dialogs.ModalDialog()
+                .addPrimaryButton('ChangeConfState', gt('Change state'))
+                .addButton('cancel', gt('Cancel')),
+                body = popup.getBody(),
+                title,
+                note,
+                message,
+                state;
+                
+            if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
+                title = model.title || '\u2014';
+                note  = model.note || '\u2014';
+            } else {
+                title = model.get("title") || '\u2014';
+                note  = model.get("note") || '\u2014';
+            }
+                
+            body.append($("<h4>").text(_.noI18n(title)),
+                        $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
+            util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),
+                        state = $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+                        $('<option>').text(gt('Confirm')),
+                        $('<option>').text(gt('Decline')),
+                        $('<option>').text(gt('Tentative')))],
+                        [util.buildLabel(gt("Confirmation message", "confMessageInput")), message = $('<input>')
+                             .attr({type: 'text', id: "confMessageInput"})]]);
+            return {popup: popup, state: state, message: message};
         }
     };
 

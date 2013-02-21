@@ -39,11 +39,11 @@ define('io.ox/core/commons',
 
             var points = {};
 
-            function draw(id, selection) {
+            function draw(id, selection, grid) {
                 // inline links
                 var node = $('<div>');
                 (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                    .draw.call(node, selection);
+                    .draw.call(node, {data: selection, grid: grid});//needs grid to add busy animations without using global selectors
                 return $().add(
                     $('<div>').addClass('summary').html(
                         gt('<b>%1$d</b> elements selected', selection.length)
@@ -52,16 +52,16 @@ define('io.ox/core/commons',
                 .add(node.children().first());
             }
 
-            return function (id, node, selection, api) {
+            return function (id, node, selection, api, grid) {
                 if (selection.length > 1) {
                     // draw
                     node.idle().empty().append(
                         (api ? $.createViewContainer(selection, api) : $('<div>'))
                         .on('redraw', function () {
-                            $(this).empty().append(draw(id, selection));
+                            $(this).empty().append(draw(id, selection, grid));
                         })
                         .addClass('io-ox-multi-selection')
-                        .append(draw(id, selection))
+                        .append(draw(id, selection, grid))
                         .center()
                     );
                 }
@@ -83,7 +83,7 @@ define('io.ox/core/commons',
                         draw(selection[0]);
                     } else if (len > 1) {
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unique(this.unfold()), api);
+                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
                     } else {
                         node.css('height', '').idle().empty();
                     }
@@ -104,10 +104,6 @@ define('io.ox/core/commons',
             // list request
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
-            });
-            // handle 'not-found'
-            api.on('not-found', function () {
-                grid.selection.selectFirst();
             });
         },
 
@@ -165,15 +161,35 @@ define('io.ox/core/commons',
                 app.getWindow().search.stop();
             }
 
+            // disable for 7.0.1
+            var isMail = false && app.get('name') === 'io.ox/mail';
+
+            function updateUnreadCount(id, data) {
+                var unread = data.unread,
+                    node = grid.getToolbar().find('.folder-unread-count[data-folder-id="' + id + '"]');
+                node[unread > 0 ? 'show' : 'hide']().text(unread);
+            }
+
+            function drawFolderName(folder_id) {
+                var link = $('<a href="#" data-action="open-folderview">')
+                    .append(folderAPI.getTextNode(folder_id))
+                    .on('click', fnOpen);
+                if (isMail) {
+                    folderAPI.get({ folder: folder_id }).done(function (data) {
+                        link.after(
+                            $.txt(' '),
+                            $('<b class="label folder-unread-count">').attr('data-folder-id', folder_id).hide()
+                        );
+                    });
+                }
+                return link;
+            }
+
             grid.on('change:prop:folder change:mode', function (e, value) {
                 var folder_id = grid.prop('folder'), mode = grid.getMode(),
                     node = grid.getToolbar().find('.grid-info').empty();
                 if (mode === 'all') {
-                    node.append(
-                        $('<a href="#" data-action="open-folderview">')
-                        .append(folderAPI.getTextNode(folder_id))
-                        .on('click', fnOpen)
-                    );
+                    node.append(drawFolderName(folder_id));
                 } else if (mode === 'search') {
                     node.append(
                         $('<a href="#" data-action="cancel-search">')
@@ -183,6 +199,13 @@ define('io.ox/core/commons',
                     );
                 }
             });
+
+            // unread counter for mail
+            if (isMail) {
+                folderAPI.on('update:unread', function (e, id, data) {
+                    updateUnreadCount(id, data);
+                });
+            }
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
         },
@@ -289,7 +312,6 @@ define('io.ox/core/commons',
 
             app.folder
                 .updateTitle(app.getWindow())
-                .updateGrid(grid)
                 .setType(type);
             if (grid) {
                 app.folder.updateGrid(grid);
@@ -307,7 +329,9 @@ define('io.ox/core/commons',
 
             // explicit vs. default
             if (defaultFolderId !== undefined) {
-                return app.folder.set(defaultFolderId);
+                return app.folder.set(defaultFolderId).pipe(null, function () {
+                    return app.folder.setDefault();
+                });
             } else {
                 return app.folder.setDefault();
             }

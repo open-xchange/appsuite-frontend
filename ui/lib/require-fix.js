@@ -1,3 +1,29 @@
+// Override nextTick to enable collection of dependencies for concatenation.
+(function () {
+    var waiting = 0, finalCallback = null;
+    require.nextTick = function (fn, finalCb) {
+        if (finalCb) finalCallback = finalCb;
+        if (!fn && waiting) return;
+        waiting++;
+        setTimeout(function () {
+            if (fn) fn();
+            if (--waiting || !finalCallback) return;
+            var cb = finalCallback;
+            finalCallback = null;
+            cb();
+        }, 4);
+    };
+    _.each(require.s.contexts, function(context) {
+        context.nextTick = require.nextTick;
+    });
+}());
+
+// init require.js
+require({
+    // inject version
+    baseUrl: ox.base + "/apps",
+    waitSeconds: 30 //_.browser.IE ? 20 : 10
+});
 
 // jQuery AMD fix
 define('jquery', function () { return $; });
@@ -46,7 +72,6 @@ define.async = (function () {
 **/
 (function () {
 
-    var defined = {};
     var originalDefine = define;
 
     window.define = function () {
@@ -56,6 +81,10 @@ define.async = (function () {
         // Is this a define statement we understand?
         if (_.isString(arguments[0])) {
             var name = arguments[0];
+            // FIXME
+            if (name === "io.ox/core/notifications") {
+                return originalDefine.apply(this, arguments);
+            }
             var dependencies = arguments[1];
             var definitionFunction = $.noop;
             if (_.isFunction(dependencies)) {
@@ -65,9 +94,8 @@ define.async = (function () {
                 definitionFunction = arguments[2];
             }
             // already defined?
-            if (!(name in defined)) {
+            if (!requirejs.defined(name)) {
                 var wrapper = ox.manifests.wrapperFor(name, dependencies, definitionFunction);
-                defined[name] = true;
                 return originalDefine(name, wrapper.dependencies, wrapper.definitionFunction);
             } else {
                 return;

@@ -30,7 +30,7 @@ define("plugins/portal/tasks/register",
         },
 
         load: function (baton) {
-            return taskApi.getAll({}, false).done(function (data) {
+            return taskApi.getAllFromAllFolders().done(function (data) { //super special getAll method
                 baton.data = data;
             });
         },
@@ -39,14 +39,14 @@ define("plugins/portal/tasks/register",
 
             var content = $('<div class="content">');
 
-            if (baton.data.length === 0) {
-                this.append(content.text(gt("You don't have any tasks")));
-                return;
-            }
-
             var tasks = _(baton.data).filter(function (task) {
                 return task.end_date !== null && task.status !== 3;
             });
+
+            if (tasks.length === 0) {
+                this.append(content.text(gt("You don't have any tasks that are either due soon or overdue.")));
+                return;
+            }
 
             _(tasks).each(function (task) {
                 task = util.interpretTask(task);
@@ -63,16 +63,25 @@ define("plugins/portal/tasks/register",
                     )
                 );
             });
-
             this.append(content);
         },
 
         draw: function (baton) {
-            var popup = this.busy();
+            var popup = this.busy(),
+                content;
+
             require(['io.ox/tasks/view-detail', 'io.ox/tasks/api'], function (view, api) {
+
+                function contentCheck(e) {
+                    popup.parent().parent().find('button').trigger('click');
+                    popup = null;
+                    api.off('removePopup', contentCheck);
+
+                }
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
+                    popup.idle().append(content = view.draw(data));
+                    api.on('removePopup', contentCheck);
                 });
             });
         }
@@ -81,6 +90,7 @@ define("plugins/portal/tasks/register",
     ext.point('io.ox/portal/widget/tasks/settings').extend({
         title: gt('Tasks'),
         type: 'tasks',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

@@ -341,24 +341,48 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         }
     }
 
+    function lookupTinyMCELanguage() {
+        var tinymce_lang,
+        lookup_lang = ox.language,
+        tinymce_langpacks = ['ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'ch', 'cn', 'cs', 'cy', 'da', 'de', 'dv', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'kl', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'nn', 'no', 'pl', 'ps', 'pt', 'ro', 'ru', 'sc', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sy', 'ta', 'te', 'th', 'tn', 'tr', 'tt', 'tw', 'uk', 'ur', 'vi', 'zh', 'zu'],
+
+        tinymce_special = {
+            zh_CN: "zh-cn",
+            zh_TW: "zh-tw"
+        };
+
+        if (_.has(tinymce_special, lookup_lang)) {
+            return tinymce_special[lookup_lang];
+        }
+
+        tinymce_lang = _.indexOf(tinymce_langpacks, lookup_lang.substr(0, 2), true);
+        if (tinymce_lang > -1) {
+            return tinymce_langpacks[tinymce_lang];
+        } else {
+            return 'en';
+        }
+    }
+
     function Editor(textarea) {
-
         var def = $.Deferred(), ed;
-
         (textarea = $(textarea)).tinymce({
-
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
             plugins: 'paste',
             theme: 'advanced',
             skin: 'ox',
+            language: lookupTinyMCELanguage(),
 
             init_instance_callback: function () {
                 // get internal editor reference
                 ed = textarea.tinymce();
+                if ($('#' + ed.id + '_ifr')) {
+                    $('#' + ed.id + '_ifr').attr('tabindex', '5');
+                }
                 // add handler for focus/blur
                 $(ed.getWin())
                     .on('focus', function (e) {
                         $('#' + ed.id + '_tbl').addClass('focused');
+                        ed.getBody().focus();
                     })
                     .on('blur', function (e) {
                         $('#' + ed.id + '_tbl').removeClass('focused');
@@ -555,6 +579,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
         };
 
+        this.setCaretPosition = function (pos) {
+            $(ed.getDoc()).scrollTop(0);
+        };
+
         this.appendContent = function (str) {
             var content = this.getContent();
             str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
@@ -590,6 +618,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             $(selector, ed.getDoc()).remove();
         };
 
+        this.removeClassBySelector = function (selector, name) {
+            $(selector, ed.getDoc()).removeClass(name);
+        };
+
         this.replaceContent = function (str, rep) {
 
             // adopted from tinyMCE's searchreplace plugin
@@ -618,8 +650,6 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                     found = true;
                 }
             }
-
-            window.lala = win;
 
             return found;
         };

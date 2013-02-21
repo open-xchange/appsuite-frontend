@@ -12,10 +12,10 @@
  */
 
 define("plugins/halo/appointments/register",
-    ["io.ox/core/extensions"], function (ext) {
+    ["io.ox/core/extensions", "gettext!plugins/halo"], function (ext, gt) {
 
     "use strict";
-    
+
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
 
@@ -37,7 +37,7 @@ define("plugins/halo/appointments/register",
             require(
                 ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                 function (dialogs, viewGrid) {
-                    $node.append($("<div/>").addClass("widget-title clear-title").text("Shared Appointments"));
+                    $node.append($("<div/>").addClass("widget-title clear-title").text(gt("Shared Appointments")));
                     viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
                     new dialogs.SidePopup()

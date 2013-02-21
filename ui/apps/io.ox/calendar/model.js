@@ -37,7 +37,7 @@ define('io.ox/calendar/model',
                 id: model.id,
                 folder: model.get('folder_id') || model.get('folder')
             };
-            if (model.recurrence_position) {
+            if (model.attributes.recurrence_position) {
                 _.extend(options, {recurrence_position: model.get('recurrence_position')});
             }
             return api.remove(options);
@@ -59,14 +59,17 @@ define('io.ox/calendar/model',
                     }
                 });
             },
-            getParticipants: function () {
+            getParticipants: function (options) {
+
                 if (this._participants) {
                     return this._participants;
                 }
-                var self = this;
-                var resetListUpdate = false;
-                var changeParticipantsUpdate = false;
-                var participants = this._participants = new pModel.Participants(this.get('participants'));
+                var self = this,
+                    defaults = _.extend({sortBy: 'display_name'}, options),
+                    resetListUpdate = false,
+                    changeParticipantsUpdate = false,
+                    participants = this._participants = new pModel.Participants(this.get('participants'));
+
                 participants.invoke('fetch');
 
                 function resetList(participant) {
@@ -93,7 +96,6 @@ define('io.ox/calendar/model',
                 return participants;
             }
         },
-
         getUpdatedAttributes: function (model) {
             var attributesToSave = model.changedSinceLoading();
             attributesToSave.id = model.id;
@@ -251,28 +253,26 @@ define('io.ox/calendar/model',
             });
         },
         fullTimeChangeBindings: function (model) {
-            var _start = model.get('start_date');
-            var _end = model.get('end_date');
+            // save initial values;
+            var _start = model.get('full_time') ? date.Local.utc(model.get('start_date')) : model.get('start_date'),
+                _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date');
+
             model.on('change:full_time', function () {
-                var startDate = new date.Local(model.get('start_date')),
-                    endDate = new date.Local(model.get('end_date'));
                 if (model.get('full_time') === true) {
-
+                    var startDate = new date.Local(model.get('start_date')),
+                        endDate = new date.Local(model.get('end_date') - 1);
+                    // parse to fulltime dates
                     startDate.setHours(0, 0, 0, 0);
-                    endDate.setDate(endDate.getDate() + 1).setHours(0, 0, 0, 0);
-
-                    model.set('start_date',  date.Local.localTime(startDate.getTime()));
+                    endDate.setHours(0, 0, 0, 0);
+                    endDate.setDate(endDate.getDate() + 1);
+                    // convert to UTC
+                    model.set('start_date', date.Local.localTime(startDate.getTime()));
                     model.set('end_date', date.Local.localTime(endDate.getTime()));
                 } else {
                     model.set('start_date', _start);
                     model.set('end_date', _end);
                 }
             });
-        },
-        toLocalTime: function (model) {
-            model.set('start_date', date.Local.localTime(model.get('start_date')));
-            model.set('end_date', date.Local.localTime(model.get('end_date')));
-
         },
         factory: factory,
         Appointment: factory.model,

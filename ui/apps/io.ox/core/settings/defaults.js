@@ -12,14 +12,26 @@
  */
 
 define('io.ox/core/settings/defaults', function (ext) {
+
 	'use strict';
-	var defaultLanguage = _(ox.serverConfig.languages).contains("en_US") ? 'en_US' : ox.serverConfig.languages[0];
+
+	var defaultLanguage;
+
+	if (!ox.serverConfig || !ox.serverConfig.languages) {
+		defaultLanguage = 'en_US';
+	} else {
+		defaultLanguage = _(ox.serverConfig.languages).contains("en_US") ? 'en_US' : ox.serverConfig.languages[0];
+	}
+	var cookieLanguage = _.getCookie('language');
+	if (cookieLanguage) {
+		defaultLanguage = cookieLanguage;
+	}
 
 	return {
 		language: defaultLanguage,
 		refreshInterval: 5 * 60000,
 		autoStart: 'io.ox/mail/main',
-		autoOpenNotification: true
+		autoOpenNotification: false
 	};
-	
+
 });

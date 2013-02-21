@@ -6,11 +6,11 @@
 <div id="io-ox-core" class="abs unselectable wallpaper" style="display: none">
     <!-- top bar -->
     <div id="io-ox-topbar">
+        <div class="launchers"></div>
         <div class="launcher-dropdown dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-reorder"></i></a>
             <ul class="dropdown-menu"></ul>
         </div>
-        <div class="launchers"></div>
     </div>
     <!-- screens -->
     <div id="io-ox-screens" class="abs">
@@ -42,7 +42,7 @@
             <div class="css-table-cell" id="io-ox-login-header">
                 <h1 class="clear-title">
                     <span id='io-ox-login-header-prefix'></span>
-                    <span id='io-ox-login-header-label'></span>
+                    <span id='io-ox-login-header-label'>...</span>
                 </h1>
             </div>
             </div>
@@ -55,16 +55,16 @@
 
                     <div class="row-fluid control-group">
                         <div class="span6">
-                            <input type="email" id="io-ox-login-username" name="username" tabindex="1"
+                            <label class="no-margin"><input type="email" id="io-ox-login-username" name="username" tabindex="1"
                                 class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                placeholder="User name" data-i18n="User name" data-i18n-attr='placeholder'>
+                                placeholder="User name" data-i18n="User name" data-i18n-attr='placeholder'></label>
                         </div>
-                        <div class="span4">
-                            <input type="password" id="io-ox-login-password" name="password" tabindex="2"
+                        <div class="span3">
+                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="2"
                                 class="span12" maxlength="100" autocorrect="off" autocapitalize="off"
-                                placeholder="Password" data-i18n="Password" data-i18n-attr='placeholder'>
+                                placeholder="Password" data-i18n="Password" data-i18n-attr='placeholder'></label>
                         </div>
-                        <div class="span2">
+                        <div class="span3">
                             <input type="submit" tabindex="3" name="signin"
                                 id="login-button" class="span12 btn btn-primary"
                                 value="Sign in" data-i18n="Sign in" data-i18n-attr='value'>
@@ -80,7 +80,7 @@
                             </label>
                         </div>
                         <div class="span6" id="io-ox-forgot-password">
-                            <label><a href="#" target="_blank" tabindex="5" data-i18n="Forgot your password?">Forgot your password?</a></label>
+                            <a href="#" target="_blank" tabindex="5" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
 
@@ -89,6 +89,14 @@
 
                     <div id="io-ox-login-feedback-strings" style="display: none">
                         <span data-i18n-id="no-connection" data-i18n="No connection to server. Please check your internet connection and retry."></span>
+                        <span data-i18n-id="enter-credentials" data-i18n="Please enter your credentials."></span>
+                        <span data-i18n-id="enter-password" data-i18n="Please enter your password."></span>
+                        <span data-i18n-id="browser-version" data-i18n="Your browser version is not supported!"></span>
+                        <span data-i18n-id="browser" data-i18n="Your browser is not supported!"></span>
+                        <span data-i18n-id="please-update" data-i18n="Please update your browser."></span>
+                        <span data-i18n-id="please-use" data-i18n="For best results, please use "></span>
+                        <span data-i18n-id="slow" data-i18n="Your browser is slow and outdated!"></span>
+
                     </div>
 
                 </form>

@@ -23,7 +23,7 @@ define('io.ox/mail/settings/model',
         },
 
         save: function () {
-            settings.save(this.attributes);
+            return settings.save(this.attributes);
         },
 
         destroy: function () {

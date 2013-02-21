@@ -47,9 +47,25 @@ define('io.ox/core/tk/attachments',
                 },
 
                 render: function () {
-                    var self = this;
+                    var self = this,
+                        odd = true,
+                        row;
                     _(this.allAttachments).each(function (attachment) {
-                        self.$el.append(self.renderAttachment(attachment));
+                        if (odd) {
+                            row = $('<div>').addClass("row-fluid attachment-edit-row").appendTo(self.$el);
+                            odd = false;
+                        } else {
+                            odd = true;
+                        }
+                        row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
+                    });
+
+                    //trigger refresh of attachmentcounter
+                    this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
+
+                    //replace x with icon
+                    self.$el.find('.delete').each(function (index, deleteNode) {
+                        $(deleteNode).text('').append('<i class="icon-remove">');
                     });
                     return this;
                 },
@@ -78,7 +94,7 @@ define('io.ox/core/tk/attachments',
                         )
                     );
                     if (size.text() === "0 B") {size.text(" "); }
-                    
+
                     return $el;
                 },
                 loadAttachments: function () {
@@ -247,8 +263,8 @@ define('io.ox/core/tk/attachments',
         new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
             id: 'open',
             requires: 'one',
-            action: function (data) {
-                var url = attachmentAPI.getUrl(data, 'view');
+            action: function (baton) {
+                var url = attachmentAPI.getUrl(baton.data, 'view');
                 window.open(url);
             }
         });
@@ -256,15 +272,39 @@ define('io.ox/core/tk/attachments',
         new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
             id: 'download',
             requires: 'one',
-            action: function (data) {
-                var url = attachmentAPI.getUrl(data, 'download');
+            action: function (baton) {
+                var url = attachmentAPI.getUrl(baton.data, 'download');
                 window.open(url);
             }
         });
 
+        var fileUploadWidget = function (options) {
+            var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid'));
+            if (options.displayLabel) node.append($('<label>').text(gt('File')));
+            node.append(
+                $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
+                    .append($('<div>').addClass('input-append').append(
+                        $('<div>').addClass('uneditable-input').append(
+                            $('<i>').addClass('icon-file fileupload-exists'),
+                            $('<span>').addClass('fileupload-preview')
+                        ),
+                        $('<span>').addClass('btn btn-file').append(
+                            $('<span>').addClass('fileupload-new').text(gt('Select file')),
+                            $('<span>').addClass('fileupload-exists').text(gt('Change')),
+                            (options.multi ? $('<input type="file" name="file" multiple="multiple">') : $('<input name="file" type="file">'))
+                        ),
+                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Remove')),
+                        (options.displayButton ? $('<button>', { 'data-action': 'add' }).addClass('btn').text(gt('Upload file')) : '')
+                    )
+                )
+            );
+            return node;
+        };
+
         return {
             EditableAttachmentList: EditableAttachmentList,
-            AttachmentList: AttachmentList
+            AttachmentList: AttachmentList,
+            fileUploadWidget: fileUploadWidget
         };
     }
 );

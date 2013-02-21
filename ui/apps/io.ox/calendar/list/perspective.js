@@ -18,8 +18,10 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/commons',
      'io.ox/core/extensions',
      'io.ox/core/date',
+     'io.ox/calendar/util',
+     'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-     ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, gt) {
+    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
 
     'use strict';
 
@@ -43,7 +45,6 @@ define('io.ox/calendar/list/perspective',
 
         // add grid options
         grid.prop('order', 'asc')
-            .prop('all', true)
             .prop('folder', app.folder.get());
 
         // add template
@@ -100,7 +101,7 @@ define('io.ox/calendar/list/perspective',
             // sort
             list.find(
                     '[data-option="' + props.order + '"], ' +
-                    '[data-option="' + (props.all ? 'all' : '~all') + '"]'
+                    '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]'
                 )
                 .find('i').attr('class', 'icon-ok');
             // order
@@ -138,7 +139,8 @@ define('io.ox/calendar/list/perspective',
                                         grid.prop('order', option).refresh(true);
                                         break;
                                     case 'all':
-                                        grid.prop('all', !grid.prop('all')).refresh(true);
+                                        settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
+                                        app.trigger('folder:change');
                                         break;
                                     default:
                                         break;
@@ -159,12 +161,27 @@ define('io.ox/calendar/list/perspective',
                 return api.getAll({
                     start: start.getTime(),
                     end: end.getTime(),
-                    folder: prop.all && folder.type === 1 ? undefined : prop.folder,
+                    folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
+                }).pipe(function (data) {
+                    var now = _.now();
+                    if (!settings.get('showDeclinedAppointments', false)) {
+                        data = _.filter(data, function (obj) {
+                            var hash = util.getConfirmations(obj),
+                                conf = hash[ox.user_id] || { status: 1, comment: "" };
+                            return conf.status !== 2;
+                        });
+                    }
+                    _.map(data, function (obj) {
+                        // show pending appointments under today label
+                        if (obj.start_date < now) {
+                            obj.start_date = now;
+                        }
+                        return obj;
+                    });
+                    return data;
                 });
             });
-
-
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
@@ -181,6 +198,10 @@ define('io.ox/calendar/list/perspective',
         });
 
         grid.prop('folder', app.folder.get());
+        app.on('folder:change', function () {
+            updateGridOptions();
+            grid.refresh(true);
+        });
         grid.paint();
     };
 

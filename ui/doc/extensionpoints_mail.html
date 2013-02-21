@@ -1,0 +1,86 @@
+<b>io.ox/mail/all/actions</b><br>
+The point for the "all" actions dropdown in the detail view of a selected mail.<br>
+This place should be used for actions in context with all involved contacts.<br>
+The baton is forwarded to the the single action functions.<br><br>
+
+baton contains:<br>
+
+<pre class="text">
+<b>data</b> - <i>holds the mail object of the current selected contact</i>
+
+data.threadKey - <i></i>
+data.threadPosition - <i></i>
+data.threadSize - <i></i>
+</pre>
+
+<pre class="text">
+<b>tracker</b>
+
+</pre>
+
+<b>io.ox/mail/attachment/links</b><br>
+The point for actions related to the attachments of a mail.<br><br>
+
+<b>io.ox/mail/detail</b><br>
+The point for the detail view of a selected mail. <br>
+The baton is forwarded.<br>
+It is followed by points for each mail detail:<br>
+
+<p style="white-space: pre-wrap">
+    - io.ox/mail/detail/contact-picture
+    - io.ox/mail/detail/receiveddate
+    - io.ox/mail/detail/fromlist
+    - io.ox/mail/detail/thread-position
+    - io.ox/mail/detail/flag
+    - io.ox/mail/detail/subject
+    - io.ox/mail/detail/tocopy
+    - io.ox/mail/detail/attachments
+    - io.ox/mail/detail/inline-links
+    - io.ox/mail/detail/phishing-warning
+    - io.ox/mail/detail/externalresources-warning
+    - io.ox/mail/detail/content
+</p>
+
+<b>io.ox/mail/detail/notification</b><br>
+The point for the notification handling.<br>
+A extended mail object is forwarded.<br><br>
+
+<b>io.ox/mail/detail/notification/update-notification</b><br>
+The point to remove read mails in notification Area.<br><br>
+
+<b>io.ox/mail/dnd/actions</b><br>
+The point for mail import via drag & drop.<br><br>
+
+<b>io.ox/mail/links/inline</b><br>
+The Point for inserting actions like reply & delete.<br><br>
+
+<b>io.ox/mail/settings/detail</b><br>
+The point for the mail settings detailpage.<br><br>
+
+<b>io.ox/mail/settings/detail/section</b><br>
+This point is not longer supported.<br><br>
+
+<b>io.ox/mail/thread</b><br>
+The Point for inserting actions related to the whole thread like move & delete.<br>
+The baton is forwarded.<br><br>
+
+<b>io.ox/mail/vgrid/options</b><br>
+The point for applying options to the vgrid related to the mail app.<br><br>
+
+<b>io.ox/mail/vgrid/toolbar</b><br>
+The point for extending the vgrid toolbar in the mail app.<br><br>
+
+<b>io.ox/mail/write/toolbar</b><br>
+The point for inserting inline buttons on top of the mail write view.<br><br> 
+
+<b>io.ox/mail/write/actions/send</b><br>
+The point for the action related to the send button.<br>
+The baton is available.<br><br>
+
+<b>io.ox/mail/write/actions/draft</b><br>
+The point for the action related to the save button.<br>
+The baton is available.<br><br>
+
+<b>io.ox/mail/write/actions/discard</b><br>
+The point for the action related to the discard button.<br>
+The baton is available.<br><br>

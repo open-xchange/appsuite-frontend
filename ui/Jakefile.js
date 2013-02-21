@@ -24,15 +24,31 @@ var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var less = require("./lib/build/less");
-var showdown = require('./lib/showdown/src/showdown');
 
 console.info("Build path: " + utils.builddir);
 
+var pkgName = process.env['package'];
+var ver = process.env.version;
+var rev = process.env.revision;
+
+if ((!pkgName || !ver || !rev) && path.existsSync('debian/changelog')) {
+    var changelogEntry = /(\S+) \((\S+)-(\d+)\)/.exec(
+        fs.readFileSync('debian/changelog', 'utf8'));
+    pkgName = pkgName || changelogEntry[1];
+    ver = ver || changelogEntry[2];
+    rev = rev || changelogEntry[3];
+}
+
+if (!pkgName) {
+    console.error('Please specify the package name using package=<NAME>');
+    process.exit(1);
+}
+ver = ver || "0.0.1";
+rev = rev || "1";
+
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
-var ver = (process.env.version || "7.0.0");
-var rev = ver + "-" + (process.env.revision || "1");
-version = rev + "." + t.getUTCFullYear() +
+version = ver + "-" + rev + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
@@ -44,15 +60,6 @@ function envBoolean(name) {
 
 var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
-
-var pkgName = process.env['package'];
-if (!pkgName && path.existsSync('debian/changelog')) {
-    pkgName = /\S+/.exec(fs.readFileSync('debian/changelog', 'utf8'))[0];
-}
-if (!pkgName) {
-    console.error('Please specify the package name using package=<NAME>');
-    process.exit(1);
-}
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -126,9 +133,7 @@ function jsFilter (data) {
     // UglifyJS
     if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
-    tree = pro.ast_mangle(tree, { defines: {
-        STATIC_APPS: parse(process.env.STATIC_APPS || 'true')[1][0][1]
-    } });
+    tree = pro.ast_mangle(tree);
     tree = pro.ast_squeeze(tree, { make_seqs: false });
     // use split_lines
     return catchParseErrors(function (data) {
@@ -197,6 +202,7 @@ utils.copy(utils.list("src/"));
 function htmlFilter (data) {
     return data
         .replace(/@\s?version\s?@/g, version)
+        .replace(/@\s?revision\s?@/g, rev)
         .replace(/@base@/g, 'v=' + version)
         .replace(/@debug@/g, debug);
 }
@@ -234,10 +240,8 @@ _.each(_.map(['core', 'signin', 'core.appcache', 'signin.appcache'], utils.dest)
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     debug ? utils.string(';STATIC_APPS=(' +
-                          (process.env.STATIC_APPS || 'true') + ');')
-           : utils.string(';'),
-     "src/plugins.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
+     utils.string(';\n'), "src/plugins.js", "src/jquery.plugins.js",
+     "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 
@@ -258,121 +262,15 @@ utils.concat("boot.js", [
         "lib/backbone.validation.js",
         "lib/backbone.custom.js",
         "lib/doT.js",
-        "apps/io.ox/core/event.js",
-        "apps/io.ox/core/http.js",
-        "apps/io.ox/core/session.js",
-        "apps/io.ox/core/gettext.js",
-        "apps/io.ox/core/async.js",
-        "apps/io.ox/core/extensions.js",
-        "apps/io.ox/core/cache.js",
-        "apps/io.ox/core/cache/simple.js",
-        "apps/io.ox/core/cache/localstorage.js",
-        "apps/io.ox/core/cache/indexeddb.js",
-        "apps/io.ox/core/capabilities.js",
-        "apps/io.ox/core/manifests.js",
         "tmp/boot.js"]);
 
-utils.concat("pre-core.js",
-    utils.list("apps", [
-        "io.ox/core/settings.js", // settings plugin
-        "io.ox/core/config.js",
-        "io.ox/core/tk/selection.js",
-        "io.ox/core/tk/vgrid.js",
-        "io.ox/core/tk/model.js",
-        "io.ox/core/tk/upload.js",
-        "io.ox/core/api/factory.js",
-        "io.ox/core/api/user.js",
-        "io.ox/core/api/resource.js",
-        "io.ox/core/api/group.js",
-        "io.ox/core/api/account.js",
-        "io.ox/core/api/folder.js",
-        "io.ox/core/api/apps.js",
-        "io.ox/core/api/reminder",
-        "io.ox/core/desktop.js",
-        "io.ox/core/commons.js",
-        "io.ox/core/commons-folderview.js",
-        "io.ox/core/collection.js",
-        "io.ox/core/notifications.js",
-        "io.ox/core/extPatterns/actions.js",
-        "io.ox/core/extPatterns/links.js",
-        "io.ox/core/extPatterns/stage.js",
-        "io.ox/core/extPatterns/dnd.js",
-        "io.ox/core/tk/folderviews",
-        "io.ox/mail/api.js",
-        "io.ox/mail/util.js",
-        "io.ox/contacts/api.js",
-        "io.ox/tasks/api.js",
-        "io.ox/tasks/util.js",
-        "io.ox/calendar/api.js",
-        "io.ox/calendar/util.js",
-        "io.ox/core/date.js",
-        "plugins/notifications/mail/register.js",
-        "plugins/notifications/calendar/register.js",
-        "plugins/notifications/taks/register.js"
-    ]), { type: "source" }
-);
-
-// statically concatenated apps
-
-(function () {
-    var root = utils.dest('apps/io.ox');
-    function rel(list) {
-        list.dir = root;
-        return list;
-    }
-
-    utils.concat('apps/io.ox/static/core.js', rel([
-            'core/bootstrap/basics.js',
-            'mail/actions.js',
-            'core/settings/defaults.js',
-            'core/main.js'
-        ]), { type: 'none' }
-    );
-
-    utils.concat('apps/io.ox/static/mail.js',
-        rel(['contacts/api.js',
-             'mail/util.js',
-             'mail/api.js',
-             'mail/actions.js',
-             'mail/view-grid-template.js',
-             'mail/view-detail.js',
-             'mail/settings/defaults.js',
-             'mail/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/contacts.js',
-        rel(['contacts/api.js', 'contacts/actions.js', 'contacts/util.js',
-             'contacts/view-detail.js', 'help/hints.js', 'contacts/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/tasks.js',
-        rel(['tasks/util.js', 'tasks/actions.js', 'tasks/api.js',
-             'tasks/view-detail.js', 'tasks/view-grid-template.js',
-             'tasks/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/files.js',
-        rel(['files/api.js', 'files/actions.js', 'files/main.js']),
-        { type: 'none' });
-
-    utils.concat('apps/io.ox/static/calendar.js',
-        rel(['contacts/api.js', 'calendar/util.js', 'calendar/actions.js',
-             'calendar/main.js']),
-        { type: 'none' });
-}());
-
 // Twitter Bootstrap
-utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
+utils.copy(utils.list("lib/bootstrap", ["img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
-
-// Concat styles of core and plugins
-utils.concat( "bootstrap.min.css", ["lib/bootstrap/css/bootstrap.min.css", "lib/bootstrap-datepicker.css"],
-        { to: utils.dest("apps/io.ox/core/bootstrap/css") });
-
 
 // jQuery UI
 
-utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
+utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 // Mediaelement.js
@@ -383,14 +281,15 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
-//time zone database
+//online help
 
-if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
-    utils.file(zoneinfo, [], function() {
-        if (!path.existsSync(zoneinfo)) {
-            fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
-        }
+if (path.existsSync('help')) {
+    var helpDir = process.env.helpDir || utils.builddir;
+    _.each(fs.readdirSync('help'), function (Lang) {
+        var lang = Lang.toLowerCase().replace(/_/g, '-');
+        utils.copy(utils.list(path.join('help', Lang + '/')), {
+            to: helpDir.replace(/@lang@/g, lang)
+        });
     });
 }
 
@@ -510,28 +409,30 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
-// doc task
+// docs task
 
-desc("Developer documentation");
+desc("Generates developer documentation");
 utils.topLevelTask("docs", [], utils.summary("docs"));
 
 var titles = [];
 function docFile(file, title) {
     filename = "doc/" + file + ".html";
-    utils.concat(filename, ["doc/lib/header.html", filename,
-                            "doc/lib/footer.html"], { filter: function(src) {
-                                return new showdown.converter().makeHtml(src);
-                            } });
+    utils.concat(filename,
+        ["doc/lib/header.html", filename, "doc/lib/footer.html"]);
     titles.push('<a href="' + file +'.html">' + title + '</a><br/>');
 }
 
+docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
-docFile("demo", "Demo Steps");
-docFile("extensions", "Extension Points");
+docFile("extensionpoints_contact", "Extension Points / Contact App");
+docFile("extensionpoints_mail", "Extension Points / Mail App");
 docFile("libs", "External Libs");
-docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
+docFile("buildsystem", "Build System");
+docFile("manifests", "Module System");
 docFile("vgrid", "VGrid");
+docFile("portalplugin", "Portal Plugins ");
+docFile("actions_files", "Actions / Files App");
 docFile("i18n", "Internationalization");
 docFile("date", "Date and Time");
 
@@ -540,7 +441,7 @@ var indexFiles = ["lib/header.html", "index.html",
 indexFiles.dir = "doc";
 utils.concat("doc/index.html", indexFiles);
 
-utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
+utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
@@ -594,7 +495,7 @@ task("deps", [depsPath], function() {
         });
     });
     var down = "children", up = "parents";
-    if (process.env.reverse) { t = down; down = up; up = t; }
+    if (process.env.reverse) { var t = down; down = up; up = t; }
     var root = process.env.root;
     if (root) {
         console.log("");
@@ -618,6 +519,7 @@ utils.topLevelTask('init-packaging', [], function() {
 (function () {
     var packagingVariables = {
         '': '',
+        '@': '@',
         'package': pkgName,
         timestamp: formatDate(new Date())
     };
@@ -641,7 +543,7 @@ utils.topLevelTask('init-packaging', [], function() {
             {
                 key: 'copyright',
                 prompt: 'Copyright line',
-                def: '2012 Open-Xchange, Inc'
+                def: '2013 Open-Xchange, Inc'
             },
             {
                 key: 'licenseName',
@@ -717,7 +619,7 @@ directory(distDest, ["clean"]);
 desc("Creates source packages");
 task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
-        return /^(tmp|ox.pot|build)$/.test(f);
+        return /^(tmp|ox\.pot|build|local\.conf)$/.test(f);
     });
     var tarName = pkgName + '-' + ver;
     var debName = pkgName + '_' + ver;
@@ -729,7 +631,7 @@ task("dist", [distDest], function () {
             function (m, block) {
                 block = block.replace(/^#/gm, '');
                 return _.map(i18n.languages(), function (Lang) {
-                    var lang = Lang.toLowerCase().replace('_', '-');
+                    var lang = Lang.toLowerCase().replace(/_/g, '-');
                     return block.replace(/## ([Ll])ang ##/g, function (m, L) {
                         return L === 'L' ? Lang : lang;
                     });
@@ -738,12 +640,30 @@ task("dist", [distDest], function () {
     }
     function tar(code) {
         if (code) return fail();
-        
-        _.each([pkgName + '.spec', 'debian/control'], function (name) {
-            var file = path.join(dest, name);
-            fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
-        });
-        
+
+        var file = path.join(dest, pkgName + '.spec');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
+            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
+        file = path.join(dest, 'debian/control');
+        fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
+
+        if (path.existsSync('i18n/languagenames.json')) {
+            var languageNames = _.extend(
+                JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
+                JSON.parse(fs.readFileSync('i18n/overrides.json', 'utf8')));
+            _.each(i18n.languages(), function (Lang) {
+                var lang = Lang.toLowerCase().replace(/_/g, '-');
+                fs.writeFileSync(path.join(dest, 'i18n',
+                        'open-xchange-appsuite-l10n-' + lang + '.properties'),
+                    'io.ox/appsuite/languages/' + Lang + '=' +
+                    languageNames[Lang].replace(/[^\x21-\x7e]/g, function(c) {
+                        if (c === ' ') return '\\ ';
+                        var hex = c.charCodeAt(0).toString(16);
+                        return '\\u0000'.slice(0, -hex.length) + hex;
+                    }));
+            });
+        }
+
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
                    { cwd: distDest }, dpkgSource);
     }
@@ -757,12 +677,20 @@ task("dist", [distDest], function () {
 
 // clean task
 
-desc("Removes all generated files");
-task("clean", [], function() {
-    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
-    rimraf(distDest, rmTmp);
-    function rmTmp() { rimraf("tmp", rmBuild); }
-    function rmBuild() { rimraf(utils.builddir, complete); };
+desc('Removes all generated files');
+task('clean', [], function() {
+    if (path.existsSync('ox.pot')) fs.unlinkSync('ox.pot');
+    var dirs = ['tmp', utils.builddir, distDest];
+    if (process.env.l10nDir) dirs.push(process.env.l10nDir);
+    if (process.env.manifestDir) dirs.push(process.env.manifestDir);
+    rmdirs(dirs.length);
+    function rmdirs(i) {
+        if (i--) {
+            rimraf(dirs[i], function () { rmdirs(i); });
+        } else {
+            complete();
+        }
+    }
 }, { async: true });
 
 // task dependencies

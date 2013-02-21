@@ -2,6 +2,7 @@
 //@include ../../../../lib/bootstrap/js/bootstrap.js
 //@include ../../../../lib/bootstrap-datepicker.js
 //@include ../../../../lib/bootstrap-combobox.js
+//@include ../../../../lib/bootstrap-fileupload.js
 
 define('io.ox/core/bootstrap/basics', function () {
 

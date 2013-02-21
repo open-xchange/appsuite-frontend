@@ -50,6 +50,8 @@ define('io.ox/core/api/autocomplete',
                 // cache miss
                 http.pause();
                 _(self.apis).each(function (apiModule) {
+                    /*  boolean parameter seems to be a hack to set
+                        option 'emailAutoComplete: false' only in contacts api */
                     apiModule.api.search(query, true);
                 });
                 return http.resume().pipe(function (data) {
@@ -60,7 +62,7 @@ define('io.ox/core/api/autocomplete',
                         switch (type) {
                         case 'user':
                         case 'contact':
-                            retData = self.processContactResults(type, retData.concat(self.processContacts(type, data[index])), query);
+                            retData = self.processContactResults(type, retData.concat(self.processItem(type, data[index])), query);
                             break;
                         case 'resource':
                         case 'group':
@@ -72,21 +74,6 @@ define('io.ox/core/api/autocomplete',
                     return (self.cache[query] = retData);
                 });
             }
-        },
-        processContacts: function (type, data) {
-            var result = _(data.data).map(function (dataItem) {
-                // TODO: the api should return already mapped objects
-                var contactColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592';
-                var obj = http.makeObject(dataItem, 'contacts', contactColumns.split(','));
-
-                var myobj = {
-                    data: obj,
-                    type: type
-                };
-                return myobj;
-            });
-
-            return result;
         },
         processItem: function (type, data) {
             var result = _(data.data).map(function (dataItem) {

@@ -33,7 +33,11 @@ define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
             'isColorQuoted': false,
             'selectFirstMessage': true,
             'defaultSignature': false,
-            'threadView': 'inbox'
+            'threadView': 'inbox',
+            //for persistent sort
+            'sort': 'thread',
+            'order': 'desc',
+            'unread': false
         };
 
     return settingsDefaults;

@@ -45,9 +45,89 @@ define('plugins/portal/facebook/register',
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
 
+    var getHelpFromUser = function (post) {
+        console.log('Little was known about this type of post (#' + post.type + ') when we wrote this program. Maybe you can send us the following information so we can improve it?',
+            JSON.stringify(post));
+    };
+
+    var loadFromFacebook = function (baton) {
+        return proxy.request({
+                api: 'facebook',
+                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
+                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
+                })
+            })
+            .pipe(JSON.parse);
+    };
+
+    var drawPreview = function (baton) {
+        var resultsets = baton.data,
+            content = baton.contentNode;
+
+        if (resultsets.error) {
+            handleError(content, baton);
+            return content;
+        }
+
+        content.addClass('pointer');
+        var wall = resultsets.data[0].fql_result_set,
+            profiles = resultsets.data[1].fql_result_set;
+
+        if (!wall || wall.length === 0) {
+            content.append(
+                $('<div class="paragraph">').text(gt('No wall posts yet.')));
+        } else {
+            _(wall).each(function (post) {
+                var message = strings.shorten(post.message || post.description || '', 150);
+                content.append(
+                    $('<div class="paragraph">').append(
+                        $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
+                        $('<span class="normal">').text(message)
+                    )
+                );
+            });
+        }
+        return content;
+    };
+
+    var handleError = function (node, baton) {
+        var resultsets = baton.data,
+            account = keychain.getStandardAccount('facebook'),
+            $reauthorizeLink = $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                keychain.submodules.facebook.reauthorize(account).done(function () {
+                    keychain.submodules.facebook.trigger('update');
+                }).fail(function () {
+                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
+                });
+            });
+        console.error('Facebook reported an error', resultsets.error);
+        node.append(
+            $('<div class="error bold">').text(gt('Facebook reported an error:')),
+            $('<div class="errormessage">').text(resultsets.error.message),
+            '<br />'
+        ).addClass('error-occurred error');
+
+        if (resultsets.error.message.indexOf('authorize') !== -1 || resultsets.error.message.indexOf('changed the password') !== -1 || resultsets.error.type === 'OAuthException' || resultsets.error.message.indexOf('606') !== -1) {
+            node.append($reauthorizeLink);
+        }
+    };
+
     ext.point('io.ox/portal/widget/facebook').extend({
 
         title: 'Facebook',
+
+        initialize: function (baton) {
+            keychain.submodules.facebook.on('update create delete', function () {
+                loadFromFacebook().done(function (data) {
+                    baton.data = data;
+                    if (baton.contentNode) {
+                        baton.contentNode.empty();
+                        drawPreview(baton);
+                    }
+                });
+            });
+        },
 
         action: function (baton) {
             window.open('https://www.facebook.com/me', 'facebook');
@@ -67,25 +147,10 @@ define('plugins/portal/facebook/register',
         },
 
         preview: function (baton) {
-            var resultsets = baton.data,
-                wall = resultsets.data[0].fql_result_set,
-                profiles = resultsets.data[1].fql_result_set,
-                $content = $('<div class="content pointer">');
-            if (!wall || wall.length === 0) {
-                $content.append(
-                    $('<div class="paragraph">').text(gt('No wall posts yet.')));
-            } else {
-                _(wall).each(function (post) {
-                    var message = strings.shorten(post.message || post.description || '', 150);
-                    $content.append(
-                        $('<div class="paragraph">').append(
-                            $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
-                            $('<span class="normal">').text(message)
-                        )
-                    );
-                });
-            }
-            this.append($content);
+            var content = $('<div class="content">');
+            baton.contentNode = content;
+            drawPreview(baton);
+            this.append(content);
         },
 
         load: function (baton) {
@@ -103,7 +168,6 @@ define('plugins/portal/facebook/register',
         },
 
         draw: function (baton) {
-
             var resultsets = baton.data,
                 wall = resultsets.data[0].fql_result_set,
                 profiles = resultsets.data[1].fql_result_set;
@@ -137,6 +201,9 @@ define('plugins/portal/facebook/register',
                     ));
 
                 //use extension mechanism to enable rendering of different contents
+                var extPoints = ext.point('plugins/portal/facebook/renderer'),
+                    sortedExtPoints = _(extPoints).sortBy(function (elem) {return elem.index; });
+
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
@@ -182,6 +249,8 @@ define('plugins/portal/facebook/register',
         }
     });
 
+
+    /* index >= 128 for all plugins with a clearly defined purpose (meaning: I exactly know what I'm doing) */
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
         index: 128,
@@ -190,9 +259,13 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            this.text(post.story || post.message || post.attachment.name).append(
-                $('<a>', {'class': "posted-image", 'href': media.href})
-                    .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
+            this.append(
+                $('<a>', {'class': "posted-image", 'href': media.href}).append(
+                    $('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt}),
+                    $('<div>').text(post.description || ''),
+                    $('<div>').text(post.message || '')
+                )
+            );
         }
     });
 
@@ -206,6 +279,105 @@ define('plugins/portal/facebook/register',
             this.text(post.message);
         }
     });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'friends',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 8);
+        },
+        draw: function (post) {
+            this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'tagged-in-photo',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 65);
+        },
+        draw: function (post) {
+            this.text(post.description);
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'reply-on-wallpost',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 56);
+        },
+        draw: function (post) {
+            this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'like',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 161);
+        },
+        draw: function (post) {
+            this.append(
+                $('<div>').text(post.description));
+            if (post.attachment && post.attachment.name && post.attachment.href) {
+                var attachment = post.attachment;
+                $('<a>', {href: attachment.href}).text(attachment.name);
+            }
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo-comment',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 257);
+        },
+        draw: function (post) {
+            this.text(post.description);
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'link-like',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 347);
+        },
+        draw: function (post) {
+            if (post.attachment.href && post.attachment.name) {
+                var $link = $('<a>', {href: post.attachment.href}).text(post.attachment.name);
+                this.text(gt('Liked a link: %s', $link));
+            }
+            getHelpFromUser(post);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo-share',
+        index: 128,
+        accepts: function (post) {
+            return post.type === 80 && post.attachment.fb_object_type === 'photo';
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+
+            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            if (media !== undefined) {
+                $('<a>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo($(this));
+            }
+        }
+    });
+
+    /* index >= 196 for plugins handling generic stuff (like the common comment) */
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'link',
@@ -245,8 +417,9 @@ define('plugins/portal/facebook/register',
         }
     });
 
+
     ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'app_story',
+        id: 'app-story',
         index: 196,
         accepts: function (post) {
             return (post.type === 237);
@@ -266,7 +439,7 @@ define('plugins/portal/facebook/register',
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'new-cover-photo',
-        index: 197,
+        index: 196,
         accepts: function (post) {
             return post.type === 373 && post.attachment.media[0];
         },
@@ -281,6 +454,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
+    /* index >224 for fallback solutions */
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
@@ -288,15 +462,15 @@ define('plugins/portal/facebook/register',
             return true;
         },
         draw: function (post) {
-            console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', post);
+            console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', JSON.stringify(post));
             this.text(post.message);
-//            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
 
     ext.point('io.ox/portal/widget/facebook/settings').extend({
         title: gt('Facebook'),
         type: 'facebook',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

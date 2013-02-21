@@ -1,415 +1,327 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
- *
- * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/cache/indexeddb', function () {
+define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (ext) {
 
-    'use strict';
+	'use strict';
 
-    var id, storeName,
-        dbName = 'oxcache',
-        IDB_VERSION = (String(ox.base).split('='))[1].split('.').join(''),//ox.base;
+    var SCHEMA = 1;
+    var QUEUE_DELAY = 5000;
 
-        // Initialising the IndexedDB Objects
-        indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB,
-        IDBDatabase = window.IDBDatabase || window.mozIDBDatabase || window.webkitIDBDatabase,
-        IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange,
-        IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction,
+	var instances = {},
+        moduleDefined = $.Deferred(),
+        db, defunct = false, opened, that;
 
-        connection = [],
-
-        lastGCRun = {},
-        gcTimeout = 30 * 60 * 1000, // 30 Minutes
-        ts_cachetimeout = (2 * 24 * 60 * 60 * 1000); // 2 days
-
-    function upgradeCallback(transaction, oldVersion) {
-
-        var db = transaction.db;
-
-        if (db.objectStoreNames.contains(storeName)) {
-            db.deleteObjectStore(storeName);
-        }
-
-        var objectStore = db.createObjectStore(storeName, {
-            "keyPath": "key"
-        }, true);
-
-        objectStore.createIndex('accesstime', 'data.accesstime', { unique: false });
-
-        db.transaction([], IDBTransaction.VERSION_CHANGE);
+    defunct = !(Modernizr.indexeddb && window.indexedDB);
+    if (defunct) {
+        return $.when();
     }
 
-    function openDb(dbName) {
+    function IndexeddbStorage(id) {
+        var fluent = {},
+            queue = { timer: null, list: [] },
+            myDB;
 
-        var def = $.Deferred();
+        var dbOpened = $.Deferred();// OP(opened);
 
-        try {
-
-            var req;
-
-            if (_.isFunction(IDBDatabase.prototype.setVersion)) {
-                req = indexedDB.open(dbName);
-            } else {
-                req = indexedDB.open(dbName, IDB_VERSION, upgradeCallback);
-            }
-
-            req.onsuccess = function (e) {
-                var db = e.target.result;
-
-                connection[dbName] = db;
-
-                db.onversionchange = function () {
-                    db.close();
-                    connection[dbName] = db = null;
-                };
-
-                def.resolve(db);
+        OP(db.transaction("databases", "readwrite").objectStore("databases").put({ name: id })).done(function (db) {
+            var opened =  window.indexedDB.open(id, SCHEMA);
+            opened.onupgradeneeded = function (e) {
+                // Set up object stores
+                myDB = e.target.result;
+                myDB.createObjectStore("cache", {keyPath: "key"});
             };
-
-            req.onerror = function (e) {
-                console.log('indexedDB.open error', e);
-                def.reject(e);
-            };
-
-        } catch (e) {
-            console.log('opendb EXCEPTION', e);
-            def.reject(e);
-        }
-
-        return def;
-    }
-
-    function getConnection(dbName) {
-        var def = new $.Deferred();
-
-        if (!!connection[dbName] && connection[dbName].constuctor === window.IDBDatabase) {
-            def.resolve(connection[dbName]);
-        } else {
-            openDb(dbName).done(function (con) {
-                def.resolve(con);
-            }).fail(function (e) {
-                console.log('getConnection reject', e);
-                def.reject(e);
-            });
-        }
-
-        return def;
-    }
-
-    function checkStore(dbName, storeName) {
-        var def = new $.Deferred();
-
-        getConnection(dbName).done(function (db) {
-
-            if (!db.version || "" + db.version !== "" + IDB_VERSION || !db.objectStoreNames.contains(storeName)) {
-
-                if (_.isFunction(db.setVersion)) {
-
-                    var requestV = db.setVersion(IDB_VERSION);
-
-                    requestV.onsuccess = function (e) {
-
-                        if (db.objectStoreNames.contains(storeName)) {
-                            db.deleteObjectStore(storeName);
-                        }
-
-                        var objectStore = db.createObjectStore(storeName, {
-                            "keyPath": "key"
-                        }, true);
-
-                        objectStore.createIndex('accesstime', 'accesstime', { unique: false });
-
-                        def.resolve(db);
-                    };
-
-                    requestV.onerror = function (e) {
-                        console.log('checkStore requestV error', e);
-                        def.reject(e);
-                    };
-
-                    requestV.onblocked = function (e) {
-                        console.log('checkStore requestV block', e);
-                        def.reject(e);
-                    };
-                } else {
-                    def.resolve(db);
-                }
-
-            } else {
-                def.resolve(db);
-            }
-
-        }).fail(function (e) {
-            console.log('checkStore reject', e);
-            def.reject(e);
+            OP(opened).done(dbOpened.resolve).fail(dbOpened.reject);
         });
 
-        return def;
-    }
+        function operation(fn, readwrite) {
+            var def = $.Deferred();
+            dbOpened.done(function (db) {
+                var tx = readwrite ? db.transaction(["cache"], "readwrite") : db.transaction(["cache"]);
+                fn(tx.objectStore("cache")).done(def.resolve).fail(def.reject);
+            });
+            return def;
+        }
 
-    function getStore(dbName, storeName) {
+        function read(fn) {
+            return operation(fn, false);
+        }
 
-        var def = new $.Deferred();
+        function readwrite(fn) {
+            return operation(fn, true);
+        }
 
-        checkStore(dbName, storeName).done(function (db) {
-
-            try {
-                var transactionStartTime = (new Date()).getTime();
-                var transaction = db.transaction(storeName, IDBTransaction.READ_WRITE);
-
-                transaction.oncomplete = function (e) {
-                    var transactionStopTime = (new Date()).getTime();
-                };
-
-                transaction.onabort = function (e) {
-                    var transactionStopTime = (new Date()).getTime();
-                };
-
-                transaction.onerror = function (e) {
-                    var transactionStopTime = (new Date()).getTime();
-                };
-
-                var objectStore = transaction.objectStore(storeName);
-
-                def.resolve(objectStore);
-
-            } catch (e) {
-                console.log('getStore inner reject', e);
-                def.reject(e);
-            }
-        }).fail(function (e) {
-            console.log('getStore reject', e);
-            def.reject(e);
-        });
-
-        return def;
-    }
-
-
-    function getObjectstore() {
-        return getStore('oxcache', storeName);
-    }
-
-    var that = {
-        setId : function (theId) {
-            id = theId;
-            storeName = "cache_" + id;
-        },
-        getId : function () {
-            return id;
-        },
-        getStorageLayerName : function () {
-            return 'cache/indexeddb';
-        },
-        isUsable : function () {
-            return Modernizr.indexeddb;
-        },
-        gc : function () {
-            // keypath for accesstime data.accesstime
-            return getObjectstore().pipe(function (store) {
-
-                var lastRun = lastGCRun[store.name],
-                    now = _.now();
-
-                //console.log('#', store.name, lastRun, _(lastRun).isUndefined(), now , lastRun + gcTimeout, (now > lastRun + gcTimeout), lastGCRun);
-
-                if (_(lastRun).isUndefined() || now > (lastRun + gcTimeout)) {
-                    lastGCRun[store.name] = now;
-                    console.log('GC RUN', store.name);
-
-                    var deleteRange = IDBKeyRange.upperBound(now - ts_cachetimeout);
-                    var index = store.index('accesstime');
-                    var deleteCursor = index.openKeyCursor(deleteRange);
-
-                    deleteCursor.onsuccess = function (event) {
-                        var cursor = event.target.result;
-                        //console.log('success event', event, cursor);
-                        if (cursor) {
-                            console.log('DELETE', cursor.primaryKey);
-                            store['delete'](cursor.primaryKey);
-                            cursor['continue']();
-                        }
-                    };
-
-                    deleteCursor.onerror = function (e) {
-                        console.log('cursor error', e);
-                    };
-
-                    return deleteCursor;
-                } else {
-                    //console.log('no gc run for ', store.name, now, lastRun);
-                    return null;
+        _.extend(this, {
+            clear: function () {
+                fluent = {};
+                return readwrite(function (cache) {
+                    return OP(cache.clear());
+                });
+            },
+            get: function (key) {
+                key = "" + key;
+                if (_.isUndefined(key) || _.isNull(key)) {
+                    return $.Deferred().resolve(null);
                 }
-            });
-        },
-        clear : function () {
-
-            return getObjectstore().pipe(function (store) {
-                var def = new $.Deferred();
-                var request = store.clear();
-                request.onsuccess = function (event) {
-                    def.resolve();
-                };
-                request.onerror = function () {
-                    def.reject();
-                };
-                return def;
-            });
-
-        },
-        get : function (key) {
-            that.gc();
-            return getObjectstore().pipe(function (store) {
-
-                var def = new $.Deferred();
-
-                try {
-                    var getRequest = store.get(key);
-
-                    getRequest.onsuccess = function (event) {
-
-                        if (_.isUndefined(event.target.result) || _.isUndefined(event.target.result.data)) {
+                if (fluent[key]) {
+                    try {
+                        return $.Deferred().resolve(JSON.parse(fluent[key]));
+                    } catch (e) {
+                        console.error("Could not deserialize", id, key, fluent[key], e);
+                        return $.Deferred().resolve(null);
+                    }
+                }
+                return read(function (cache) {
+                    var def = $.Deferred();
+                    function found(obj) {
+                        if (!_.isUndefined(obj) && !_.isNull(obj)) {
+                            try {
+                                var data = JSON.parse(obj.data);
+                                fluent[key] = obj.data;
+                                def.resolve(data);
+                            } catch (e) {
+                                // ignore broken values
+                                console.error("Could not deserialize", id, key, fluent[key], e);
+                            }
+                        } else {
                             def.resolve(null);
-                        } else {
-                            that.set(key, null, true);
-                            def.resolve(event.target.result.data);
                         }
-                    };
+                    }
+                    OP(cache.get(key)).done(found);
 
-                    getRequest.onerror = function (event) {
-                        def.reject(event);
-                    };
-
-                } catch ( e) {
-                    console.error('get exception > ', e);
+                    return def;
+                });
+            },
+            set: function (key, data, options) {
+                key = "" + key;
+                fluent[key] = JSON.stringify(data);
+                return readwrite(function (cache) {
+                    try {
+                        return OP(cache.put({
+                            key: key,
+                            data: JSON.stringify(data)
+                        }));
+                    } catch (e) {
+                        // SKIP
+                        console.error("Could not serialize", id, key, data);
+                        return $.Deferred().reject();
+                    }
+                });
+            },
+            remove: function (key) {
+                key = "" + key;
+                if (fluent[key]) {
+                    delete fluent[key];
                 }
+                return readwrite(function (cache) {
+                    return OP(cache['delete'](key));
+                });
+            },
+            keys: function () {
+                return read(function (cache) {
+                    var def = $.Deferred(),
+                        keys = [];
 
-                return def;
-            });
-        },
-
-        set : function (key, data, accessTimeUpdate) {
-            that.gc();
-            return getObjectstore().pipe(function (store) {
-
-                var def = $.Deferred();
-
-                var testRequest = store.get(key);
-                testRequest.onsuccess = function (e) {
-
-                    var result = e.target.result;
-
-                    if (_.isUndefined(result)) {
-                        if (accessTimeUpdate === true) {
-                            def.reject();
-                        } else {
-                            var addRequest = store.add({ key: key, data: data, accesstime: _.now() });
-
-                            addRequest.onsuccess = function (e) {
-                                def.resolve(e.target.result);
-                            };
-
-                            addRequest.onerror = function (e) {
-                                def.reject(e);
-                            };
-                        }
-                    } else {
-                        if (accessTimeUpdate === true) {
-                            data = result.data;
-                        }
-
-                        var putRequest = store.put({ key: key, data: data, accesstime: _.now() });
-
-                        putRequest.onsuccess = function (e) {
-                            def.resolve(e.target.result);
-                        };
-
-                        putRequest.onerror = function (e) {
-                            def.reject(e);
-                        };
-
+                    function iter(cursor) {
+                        keys.push(cursor.key);
                     }
 
-                };
-                testRequest.onerror = function (e) {
-                    def.reject(e);
-                };
-
-                return def;
-            });
-        },
-
-        remove : function (key) {
-
-            return getObjectstore().pipe(function (store) {
-                var def = new $.Deferred();
-                var delRequest = store["delete"](key);
-
-                delRequest.onsuccess = function (event) {
-                    def.resolve();
-                };
-                delRequest.onerror = function () {
-                    def.reject();
-                };
-                return def;
-            });
-        },
-
-        keys : function () {
-            that.gc();
-            return getObjectstore().pipe(function (store) {
-                var def = new $.Deferred();
-
-                if (_.isFunction(store.getAll)) {
-
-                    var getAllRequest = store.getAll();
-                    getAllRequest.onsuccess = function (e) {
-
-                        var keys = _.chain(e.target.result)
-                                    .pluck('key')
-                                    .value();
-
+                    ITER(cache.openCursor()).step(iter).end(function () {
                         def.resolve(keys);
-                    };
+                    }).fail(def.reject);
 
-                    getAllRequest.onerror = function (e) {
-                        def.reject();
-                    };
-
-                } else {
-
-                    var keys = [];
-                    var theCursor = store.openCursor();
-
-                    theCursor.onsuccess = function (event) {
-                        var cursor = event.target.result;
-
-                        if (cursor) {
-                            keys.push(cursor.key);
-                            cursor['continue']();
-                        } else {
-                            def.resolve(keys);
-                        }
-                    };
-
-                    theCursor.onerror = function (e) {
-                        def.reject(e);
-                    };
+                    return def;
+                });
+            },
+            close: function () {
+                if (myDB) {
+                    myDB.close();
                 }
+            }
+        });
+    }
 
-                return def;
-            });
+    that =  {
+        id: 'indexeddb',
+        index: 100,
+        getInstance: function (theId) {
+            if (!instances[theId]) {
+                return instances[theId] = new IndexeddbStorage(theId);
+            }
+            return instances[theId];
+        },
+        getStorageLayerName: function () {
+            return 'cache/indexeddb';
+        },
+        isUsable: function () {
+            return !defunct;
+        },
+        gc: function () {
+        },
+        clear: function () {
+            if (!defunct) {
+                return destroyDB();
+            }
         }
     };
 
-    return that;
+    // Adapter for IndexedDB operations to the familiar deferreds
+    function OP(request) {
+        var def = $.Deferred();
+        request.onerror = function (event) {
+            def.reject(event);
+        };
+        request.onblocked = function (event) {
+            def.reject(event);
+        };
+        request.onsuccess = function (event) {
+            def.resolve(event.target.result);
+        };
+        return def;
+    }
+
+    function ITER(request) {
+        var callbacks = {
+            step: [],
+            end: [],
+            fail: []
+        }, failed = false, ended = false;
+
+        request.onerror = function (event) {
+            if (!failed && !ended) {
+                _(callbacks.fail).each(function (fn) {
+                    fn(event);
+                });
+            }
+            failed = true;
+
+        };
+
+        request.onsuccess = function (event) {
+            if (failed || ended) {
+                return;
+            }
+            if (event.target.result) {
+                _(callbacks.step).each(function (fn) {
+                    fn(event.target.result);
+                });
+                event.target.result['continue']();
+            } else {
+                _(callbacks.end).each(function (fn) {
+                    fn();
+                });
+                ended = true;
+            }
+        };
+
+        var that = {
+            step: function (fn) {
+                callbacks.step.push(fn);
+                return that;
+            },
+            end: function (fn) {
+                callbacks.end.push(fn);
+                return that;
+            },
+            fail: function (fn) {
+                callbacks.fail.push(fn);
+                return that;
+            }
+        };
+
+        return that;
+    }
+
+    // Open the Meta-Database
+    var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
+
+    opened.onupgradeneeded = function (e) {
+        // Set up object stores
+        var db = e.target.result;
+        db.createObjectStore("databases", {keyPath: "name"});
+        db.createObjectStore("meta", {keyPath: "id"});
+    };
+
+    function initializeDB() {
+        var tx = db.transaction("meta", "readwrite");
+        return OP(tx.objectStore("meta").put({
+            id: 'default',
+            version: ox.base
+        }));
+    }
+
+    function destroyDB() {
+        // Drop all databases
+        var def = $.Deferred();
+        var deletes = [];
+        ITER(db.transaction("databases").objectStore("databases").openCursor()).step(function (cursor) {
+            if (instances[cursor.key]) {
+                instances[cursor.key].close();
+            }
+            deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key)));
+        }).end(function () {
+            $.when.apply($, deletes).done(function () {
+                instances = {};
+                OP(db.transaction("databases", "readwrite").objectStore("databases").clear()).always(function () {
+                    initializeDB().done(def.resolve).fail(def.reject);
+                }).fail(def.reject);
+            }).fail(def.reject);
+        }).fail(def.reject);
+
+        return def;
+    }
+
+    OP(opened).done(function (theDB) {
+        db = theDB;
+        if (!db) {
+            defunct = true;
+            moduleDefined.resolve(that);
+            return;
+        }
+
+        // Setup
+        db.onerror = function (event) {
+            console.error("IndexedDB error: ", event.target.errorCode, event);
+        };
+
+        var tx = db.transaction("meta");
+
+        OP(tx.objectStore("meta").get("default")).done(function (meta) {
+            var setupCompleted = null;
+            if (!meta) {
+                setupCompleted = initializeDB();
+            } else if (ox.online && (meta.version !== ox.base || meta.cleanUp)) {
+                meta.cleanUp = true;
+                OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                setupCompleted = destroyDB().done(function () {
+                    meta.cleanUp = false;
+                    meta.version = ox.base;
+                    OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                });
+            } else {
+                setupCompleted = $.when();
+            }
+            setupCompleted.done(function () {
+                moduleDefined.resolve(that);
+            });
+        });
+
+
+    }).fail(function (event) {
+        defunct = true;
+        moduleDefined.resolve(that);
+    });
+
+    return moduleDefined.done(function (storage) {
+        ext.point("io.ox/core/cache/storage").extend(storage);
+    });
 });

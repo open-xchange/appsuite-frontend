@@ -16,10 +16,11 @@ define('io.ox/core/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'g
 
 	ext.point('io.ox/core/about').extend({
 		draw: function (data) {
-			this.append(
+			var revision = 'revision' in data ? data.revision : ('Rev' + ox.revision);
+			this.addClass('user-select-text').append(
 				$('<h4>').text(gt.noI18n(data.productName)),
 				$('<p>').append(
-					$('<span>').text('UI version:'), $.txt(' '), $('<b>').text(data.version), $('<br>'),
+					$('<span>').text('UI version:'), $.txt(' '), $('<b>').text(data.version + ' ' + revision), $('<br>'),
 					$('<span>').text('Server version:'), $.txt(' '), $('<b>').text(data.serverVersion)
 				),
 				$('<p>').text(gt('Contact: %1$s', data.contact)),

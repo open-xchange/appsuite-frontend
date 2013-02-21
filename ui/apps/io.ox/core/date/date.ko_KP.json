@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 1,
+    "weekStart": 1,
+    "days": [
+        "일요일",
+        "월요일",
+        "화요일",
+        "수요일",
+        "목요일",
+        "금요일",
+        "토요일"
+    ],
+    "daysShort": [
+        "일",
+        "월",
+        "화",
+        "수",
+        "목",
+        "금",
+        "토"
+    ],
+    "daysStandalone": [
+        "일",
+        "월",
+        "화",
+        "수",
+        "목",
+        "금",
+        "토"
+    ],
+    "months": [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월"
+    ],
+    "monthsShort": [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "yyyy. M. d.",
+        "yMEd": "yyyy. M. d. (E)",
+        "yMMMd": "y년 MMM d일",
+        "yMMMEd": "y년 MMM d일 (E)",
+        "hm": "a h:mm",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "a h:mm v",
+        "yMdHm": "yyyy. M. d. HH:mm",
+        "yMdHmv": "yyyy. M. d. HH:mm v",
+        "yMdhm": "yyyy. M. d. a h:mm",
+        "yMdhmv": "yyyy. M. d. a h:mm v",
+        "yMEdHm": "yyyy. M. d. (E) HH:mm",
+        "yMEdHmv": "yyyy. M. d. (E) HH:mm v",
+        "yMEdhm": "yyyy. M. d. (E) a h:mm",
+        "yMEdhmv": "yyyy. M. d. (E) a h:mm v"
+    },
+    "date": "yyyy. M. d.",
+    "time": "a h:mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s ~ %2$s",
+        "hm": {
+            "a": "a h:mm ~ a h:mm",
+            "h": "a h:mm~h:mm",
+            "m": "a h:mm~h:mm"
+        },
+        "Hm": {
+            "h": "HH:mm ~ HH:mm",
+            "m": "HH:mm ~ HH:mm"
+        },
+        "hmv": {
+            "a": "a h:mm ~ a h:mm v",
+            "h": "a h:mm~h:mm v",
+            "m": "a h:mm~h:mm v"
+        },
+        "Hmv": {
+            "h": "HH:mm ~ HH:mm v",
+            "m": "HH:mm ~ HH:mm v"
+        },
+        "yMMMd": {
+            "d": "y년 M월 d일~d일",
+            "m": "y년 M월 d일 ~ M월 d일",
+            "y": "y년 M월 d일 ~ y년 M월 d일"
+        },
+        "yMMMEd": {
+            "d": "y년 M월 d일 (E) ~ d일 (E)",
+            "m": "y년 M월 d일 (E) ~ M월 d일 (E)",
+            "y": "y년 M월 d일 (E) ~ y년 M월 d일 (E)"
+        }
+    },
+    "dayPeriods": {
+        "am": "오전",
+        "pm": "오후"
+    },
+    "eras": [
+        "기원전",
+        "서기"
+    ],
+    "dateTime": "yyyy. M. d. a h:mm",
+    "h12": true
+}

@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": null,
+    "weekStart": 6,
+    "days": [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت"
+    ],
+    "daysShort": [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت"
+    ],
+    "daysStandalone": [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت"
+    ],
+    "months": [
+        "كانون الثاني",
+        "شباط",
+        "آذار",
+        "نيسان",
+        "أيار",
+        "حزيران",
+        "تموز",
+        "آب",
+        "أيلول",
+        "تشرين الأول",
+        "تشرين الثاني",
+        "كانون الأول"
+    ],
+    "monthsShort": [
+        "يناير",
+        "فبراير",
+        "مارس",
+        "أبريل",
+        "مايو",
+        "يونيو",
+        "يوليو",
+        "أغسطس",
+        "سبتمبر",
+        "أكتوبر",
+        "نوفمبر",
+        "ديسمبر"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d‏/M‏/yyyy",
+        "yMEd": "E، d/‏M/‏yyyy",
+        "yMMMd": "d MMM، y",
+        "yMMMEd": "E، d MMM، y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d‏/M‏/yyyy HH:mm",
+        "yMdHmv": "d‏/M‏/yyyy HH:mm v",
+        "yMdhm": "d‏/M‏/yyyy h:mm a",
+        "yMdhmv": "d‏/M‏/yyyy h:mm a v",
+        "yMEdHm": "E، d/‏M/‏yyyy HH:mm",
+        "yMEdHmv": "E، d/‏M/‏yyyy HH:mm v",
+        "yMEdhm": "E، d/‏M/‏yyyy h:mm a",
+        "yMEdhmv": "E، d/‏M/‏yyyy h:mm a v"
+    },
+    "date": "dd‏/MM‏/yyyy",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "d–d MMM، y",
+            "m": "d MMM – d MMM، yyyy",
+            "y": "d MMM، y – d MMM، y"
+        },
+        "yMMMEd": {
+            "d": "E، d – E، d MMM، yyyy",
+            "m": "E، d MMM – E، d MMM، y",
+            "y": "E، d MMM، y – E، d MMM، y"
+        }
+    },
+    "dayPeriods": {
+        "am": "ص",
+        "pm": "م"
+    },
+    "eras": [
+        "ق.م",
+        "م"
+    ],
+    "dateTime": "dd‏/MM‏/yyyy h:mm a",
+    "h12": true
+}

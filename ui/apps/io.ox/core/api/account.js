@@ -23,8 +23,6 @@ define('io.ox/core/api/account',
     // quick hash for sync checks
     var idHash = {},
         typeHash = {},
-        // chache
-        cache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); }),
         // default separator
         separator = config.get('modules.mail.defaultseparator', '/');
 
@@ -146,8 +144,63 @@ define('io.ox/core/api/account',
         }
     };
 
-    api.getPrimaryAddress = function () {
-        return api.get(0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+    /**
+     * Get the primary address for a given account.
+     *
+     * If no account id is given, the default account will be used.
+     *
+     * @param accountId - the account id for the account, might be null
+     * @return an array containing the personal name (might be empty!) and the primary address
+     */
+    api.getPrimaryAddress = function (accountId) {
+        return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+    };
+
+    function getAddressArray(name, address) {
+        name = $.trim(name || '');
+        address = $.trim(address).toLowerCase();
+        return [name !== address ? name : '', address];
+    }
+
+    function getSenderAddress(account) {
+        // just for robustness
+        if (!account) return [];
+        // no addresses?
+        if (account.addresses === null && account.id === 0) {
+            //FIXME: once the backend returns something in account.addresses,
+            // it should be safe to remove this code
+            return _(config.get('modules.mail.addresses')).map(function (address) {
+                return getAddressArray(account.personal, address);
+            });
+        } else if (account.addresses === null) {
+            return [getAddressArray(account.personal, account.primary_address)];
+        }
+        // looks like addresses continas primary address plus aliases
+        var addresses = String(account.addresses || '').split(',');
+        // build common array of [display_name, email]
+        return _(addresses).map(function (address) {
+            return getAddressArray(account.personal, address);
+        });
+    }
+
+    /**
+     * Get a list of addresses that can be used when sending mails.
+     *
+     * If no account id is given, the default account will be used.
+     *
+     * @param accountId - the account id of the account wanted
+     * @return - the personal name and a list of (alias) addresses usable for sending
+     */
+    api.getSenderAddresses = function (accountId) {
+        return this.get(accountId || 0).pipe(getSenderAddress);
+    };
+
+    api.getAllSenderAddresses = function () {
+        return api.all().pipe(function (list) {
+            return $.when.apply($, _(list).map(getSenderAddress)).pipe(function () {
+                return _(arguments).flatten(true);
+            });
+        });
     };
 
     /**
@@ -249,8 +302,9 @@ define('io.ox/core/api/account',
             data: data
         })
         .done(function (d) {
-            accountsAllCache.add(d, _.now());
-            api.trigger('account_created', {id: d.id, email: d.primary_address});
+            accountsAllCache.add(d, _.now()).done(function () {
+                api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+            });
         });
     };
 
@@ -294,9 +348,10 @@ define('io.ox/core/api/account',
             params: {action: 'delete'},
             data: data
         }).done(function () {
-            accountsAllCache.remove(data);
-            api.trigger('refresh.all');
-            api.trigger('delete');
+            accountsAllCache.remove(data).done(function () {
+                api.trigger('refresh.all');
+                api.trigger('delete');
+            });
         });
     };
 

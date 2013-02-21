@@ -24,81 +24,56 @@ define("plugins/portal/quota/register",
     var loadTile = function () {
         return api.get();
     },
+    availableQuota = function (quota) {
+        var fields = [];
 
-    drawTile = function (quota) {
-        this.append(
-            $('<div class="content no-pointer">').append(
-                $('<div class="paragraph">').append(
-                    $("<span>").text(gt("File quota")),
-                    $('<span class="pull-right gray quota-memory-file">'),
-                    $("<div>").addClass("plugins-portal-quota-filebar")
-                ),
-                $('<div class="paragraph">').append(
-                    $('<span>').text(gt("Mail quota")),
-                    $('<span class="pull-right gray quota-memory-mail">'),
-                    $("<div>").addClass("plugins-portal-quota-mailbar")
-                ),
-                $('<div class="paragraph">').append(
-                    $('<span>').text(gt("Mail count quota")),
-                    $('<span class="pull-right gray quota-mailcount">'),
-                    $("<div>").addClass("plugins-portal-quota-mailcountbar")
-                ).addClass("plugins-portal-quota-mailcount")
-            )
-        );
+        fields.push({
+            quota: quota.file.quota,
+            usage: quota.file.use,
+            name: 'memory-file',
+            i18nName: gt('File quota')
+        });
 
-        //filestorage
-        if (quota.file.quota < 0) {
-            this.find(".quota-memory-file").text(gt("unlimited"));
-            this.find(".plugins-portal-quota-filebar").remove();
-        } else {
-            this.find(".quota-memory-file")
-            .text(//#. %1$s is the storagespace in use
-                  //#. %2$s is the max storagespace
-                  //#, c-format
-                  gt("%1$s of %2$s", strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
+        fields.push({
+            quota: quota.mail.quota,
+            usage: quota.mail.use,
+            name: 'memory-mail',
+            i18nName: gt('Mail quota')
+        });
 
-            var width = (quota.file.use / quota.file.quota) * 100;
-            this.find(".plugins-portal-quota-filebar")
-                .addClass("progress progress-striped")
-                .append(buildbar(width));
-        }
+        fields.push({
+            quota: quota.mail.countquota,
+            usage: quota.mail.countuse,
+            name: 'mailcount',
+            i18nName: gt('Mail count quota')
+        });
 
-        //mailstorage
-        if (quota.mail.quota < 0) {
-            this.find(".quota-memory-mail").text(gt("unlimited"));
-            this.find(".plugins-portal-quota-mailbar").remove();
-        } else {
-            this.find(".quota-memory-mail")
-            .text(//#. %1$s is the storagespace in use
-                  //#. %2$s is the max storagespace
-                  //#, c-format
-                  gt("%1$s of %2$s", strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
-
-            var width = (quota.mail.use / quota.mail.quota) * 100;
-            this.find(".plugins-portal-quota-mailbar")
-                .addClass("progress progress-striped")
-                .append(buildbar(width));
-        }
-
-        //mailcount
-        if (quota.mail.countquota < 0) {
-            this.find(".quota-mailcount").remove();
-        } else {
-            this.find(".quota-mailcount")
-            .text(//#. %1$s is the number of mails
-                  //#. %2$s is the maximum number of mails
-                  //#, c-format
-                  gt("%1$s of %2$s", gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
-
-            var width = (quota.mail.countuse / quota.mail.countquota) * 100;
-            this.find(".plugins-portal-quota-mailcountbar")
-                .addClass("progress progress-striped")
-                .append(buildbar(width));
-        }
+        return _(fields).select(function (q) {
+            return (q.quota && q.usage);
+        });
     },
 
-    buildbar = function (width) {
-        var progressbar = $('<div>').addClass('bar').css('width', width + "%");
+    drawTile = function (quota) {
+        var contentFields = $('<div>').addClass('content no-pointer');
+
+        this.append(contentFields);
+
+        _.each(availableQuota(quota), function (q) {
+            addQuotaArea(contentFields, q);
+        });
+    },
+
+    /**
+     * Create a progress bar showing the relation of two values represonted by
+     * @param usage and @param size. It’s assumed, that usage is always the smaller
+     * value and size the larger one.
+     *
+     * @return a progressbar element
+     */
+    buildbar = function (usage, size) {
+        var width       = (Math.min(usage, size) / Math.max(usage, size)) * 100,
+            progressbar = $('<div>').addClass('bar').css('width', width + '%');
+
         if (width < 70) {
             progressbar.addClass('default'); // blue instead of green
         } else if (width < 90) {
@@ -109,6 +84,48 @@ define("plugins/portal/quota/register",
 
         return progressbar;
     },
+    /**
+     * Add a quota section with a given (internal) @param quota.name and a
+     * user visible @param quota.i18nName to the element @param el
+     *
+     * @param el - the element, that is the parent
+     * @param quota - object of the form:
+     * {
+     *  name: name of the quota element (same as for addQuotaArea)
+     *  i18nName: translated name to show to the user
+     *  quota: value of the quota
+     *  usage: actual usage of the quota
+     *  widget: the widget to add the quota fields to
+     * }
+     * @return - a div element containing some fields for data
+     */
+    addQuotaArea = function (el, quota) {
+        var label = $('<span>').addClass('pull-right gray quota-' + quota.name),
+            bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
+
+        el.append(
+            $('<div>').addClass('paragraph')
+            .append($('<span>').text(quota.i18nName),
+                label,
+                bar
+            )
+        );
+
+        if (quota.quota < 0) {
+            label.text(gt('unlimited'));
+            bar.remove();
+        } else {
+            label.text(
+                //#. %1$s is the storagespace in use
+                //#. %2$s is the max storagespace
+                //#, c-format
+                gt('%1$s of %2$s', strings.fileSize(quota.usage), strings.fileSize(quota.quota))
+            );
+
+            bar.addClass('progress progress-striped')
+            .append(buildbar(quota.usage, quota.quota));
+        }
+    },
 
     load = function () {
         return $.Deferred().resolve();
@@ -118,7 +135,7 @@ define("plugins/portal/quota/register",
         return $.Deferred().resolve();
     };
 
-    ext.point("io.ox/portal/widget/quota").extend({
+    ext.point('io.ox/portal/widget/quota').extend({
         title: gt('Quota'),
         load: load,
         draw: draw,
@@ -134,6 +151,7 @@ define("plugins/portal/quota/register",
     ext.point('io.ox/portal/widget/quota/settings').extend({
         title: gt('Quota'),
         type: 'quota',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

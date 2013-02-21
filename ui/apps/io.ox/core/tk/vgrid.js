@@ -136,9 +136,109 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
+    var ChunkedLoader = function (options) {
+        var CHUNK_SIZE = 100,
+            THRESHHOLD_EAGER = 0,
+            activeLoaders = {};
+
+        this.MAX_CHUNK = 200;
+        this.MIN_CHUNK = 50;
+
+        this.fetch = _.identity();
+        this.all = function () {
+            return [];
+        };
+
+        this.loadChunk = function loadChunk(index, options) {
+            if (activeLoaders[index]) {
+                return activeLoaders[index];
+            }
+            var all = this.all(options);
+            var offset = CHUNK_SIZE * index;
+            var numRows = CHUNK_SIZE;
+            var subset = all.slice(offset, offset + numRows);
+
+            if (_.isEmpty(subset)) {
+                return $.Deferred().resolve([]);
+            }
+            var fetcher = this.fetch(subset, options);
+            activeLoaders[index] = fetcher;
+
+            fetcher.always(function () {
+                activeLoaders[index] = null;
+                delete activeLoaders[index];
+            });
+
+            return fetcher;
+        };
+
+        this.getChunkLoaders = function getChunkLoaders(start, length, options) {
+            CHUNK_SIZE = Math.max(Math.min(Math.ceil(this.all().length / 3), this.MAX_CHUNK), this.MIN_CHUNK);
+            THRESHHOLD_EAGER = CHUNK_SIZE;
+
+            var end = start + length,
+                startChunk = Math.floor(start / CHUNK_SIZE),
+                endChunk = Math.floor(end / CHUNK_SIZE),
+                chunkLoaders = [];
+
+            for (var i = startChunk; i <= endChunk; i++) {
+                var lowerBound = i * CHUNK_SIZE,
+                    upperBound = lowerBound + CHUNK_SIZE;
+                if (start > lowerBound) {
+                    lowerBound = start;
+                }
+                if (end < upperBound) {
+                    upperBound = end;
+                }
+                chunkLoaders.push({
+                    loader: this.loadChunk(i, options),
+                    start: lowerBound - (i * CHUNK_SIZE),
+                    end: upperBound - (i * CHUNK_SIZE)
+                });
+            }
+
+            // Fetch eagerly the next chunk, when we come close to the edge
+            if (activeLoaders.length < 5) {
+                if ((CHUNK_SIZE - (end % CHUNK_SIZE)) < THRESHHOLD_EAGER) {
+                    this.loadChunk(endChunk + 1, options);
+                }
+
+                // Fetch eagerly the previous chunk, when we come close to the edge
+                if (startChunk > 0 && ((start % CHUNK_SIZE) < THRESHHOLD_EAGER)) {
+                    this.loadChunk(startChunk - 1, options);
+                }
+            }
+
+            return chunkLoaders;
+        };
+
+        this.load = function (start, length, options) {
+            var chunkLoaders = this.getChunkLoaders(start, length, options);
+            var deferreds = [];
+            _(chunkLoaders).each(function (obj) {
+                deferreds.push(obj.loader);
+            });
+            var def = $.Deferred();
+            var list = [];
+
+            $.when.apply($, deferreds).done(function () {
+                var i;
+                for (i = 0; i < arguments.length; i++) {
+                    list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+                }
+                def.resolve(list);
+            }).fail(def.reject);
+
+            return def;
+        };
+
+        _.extend(this, options);
+    };
+
+
     var VGrid = function (target, options) {
 
-        options = options || {};
+        options = _.extend({ simple: true, editable: true, multiple: true }, options || {});
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -149,7 +249,7 @@ define('io.ox/core/tk/vgrid',
             loaded = false,
             responsiveChange = true,
             firstRun = true,
-            firstAutoSelect = true,
+            selectFirstAllowed = true,
             paused = false,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
@@ -222,11 +322,9 @@ define('io.ox/core/tk/vgrid',
             // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
             mult = Modernizr.touch ? 6 : 3,
             // properties
-            props = {},
+            props = { editable: options.editable || false },
             // shortcut
             isArray = _.isArray,
-            // edit mode
-            editable = false,
             // private methods
             scrollToLabel,
             hScrollToLabel,
@@ -243,7 +341,18 @@ define('io.ox/core/tk/vgrid',
             getIndex,
             fnScroll,
             deserialize,
-            emptyMessage;
+            emptyMessage,
+            chunkLoader = new ChunkedLoader({
+                all: function () {
+                    return all;
+                },
+                fetch: function (subset, options) {
+                    var load = loadData[options.mode] || loadData.all;
+                    return load.call(self, subset);
+                },
+                MAX_CHUNK: options.maxChunkSize || 200,
+                MIN_CHUNK: options.minChunkSize || 50
+            });
 
         // add label class
         template.node.addClass('selectable');
@@ -285,8 +394,12 @@ define('io.ox/core/tk/vgrid',
                 // draw
                 clone = label.getClone();
                 clone.node.addClass('vgrid-label').data('label-index', i);
-                defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
+                defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
                 text = clone.node.text();
+                // convert Umlauts
+                text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
+                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
@@ -299,8 +412,8 @@ define('io.ox/core/tk/vgrid',
                 var i, obj, node;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
-                    node = labels.nodes.eq(i);
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
+                    node = labels.nodes.eq(i);
                     node.css({ top: obj.top + 'px' });
                     cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
                 }
@@ -315,12 +428,9 @@ define('io.ox/core/tk/vgrid',
                 createCheckbox = function () {
                     var id = 'grid_cb_' + (guid++), fields = {};
                     this.prepend(
-                        fields.div = $('<div>')
-                        .addClass('vgrid-cell-checkbox')
-                        .append(
-                            fields.label = $('<label>', { 'for': id })
-                            .append(
-                                fields.input = $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                        fields.div = $('<div class="vgrid-cell-checkbox">').append(
+                            fields.label = $('<label>').append(
+                                fields.input = $('<input type="checkbox" class="reflect-selection">')
                             )
                         )
                     );
@@ -348,7 +458,7 @@ define('io.ox/core/tk/vgrid',
             };
             numLabels = 0;
             // loop
-            var i = 0, $i = all.length, current, tmp = '';
+            var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current);
                 if (tmp !== false) {
@@ -363,7 +473,6 @@ define('io.ox/core/tk/vgrid',
 
             // calling this via LFO, so that we always get the latest data
             function cont(offset, data) {
-
                 // vars
                 var i, $i, shift = 0, j = '', row,
                     defaultClassName = template.getDefaultClassName(),
@@ -378,6 +487,16 @@ define('io.ox/core/tk/vgrid',
                     }
                 }
 
+                // remove undefined data
+                for (i = 0, $i = data.length; i < $i;) {
+                    if (!data[i]) {
+                        data.splice(i, 1);
+                        $i--;
+                    } else {
+                        i++;
+                    }
+                }
+
                 // loop
                 for (i = 0, $i = data.length; i < $i; i++) {
                     // shift?
@@ -385,19 +504,13 @@ define('io.ox/core/tk/vgrid',
                     if (index !== undefined) {
                         shift += labels.list[index].height || labelHeight;
                     }
-                    // no data? (happens if list request fails)
-                    if (!data[i]) {
-                        pool[i] = cloneRow(template);
-                    }
                     row = pool[i];
                     row.appendTo(container);
                     // reset class name
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
-                    if (data[i]) {
-                        // update fields
-                        row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
-                    }
+                    // update fields
+                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
                     node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }
@@ -427,7 +540,6 @@ define('io.ox/core/tk/vgrid',
 
                 // keep positive
                 offset = Math.max(offset, 0);
-
                 if (offset === currentOffset) {
                     return DONE;
                 } else {
@@ -435,15 +547,13 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // get all items
-                var load = loadData[currentMode] || loadData.all,
-                    subset = all.slice(offset, offset + numRows),
-                    lfo = _.lfo(cont, offset);
+                var lfo = _.lfo(cont, offset);
 
-                return load.call(self, subset)
+                return chunkLoader.load(offset, numRows, {mode: currentMode})
                     .done(lfo)
                     .fail(function () {
                         // continue with dummy array
-                        lfo(new Array(subset.length));
+                        lfo(new Array(numRows));
                     });
             };
 
@@ -511,67 +621,82 @@ define('io.ox/core/tk/vgrid',
             return paint(offset);
         }
 
+        // might be overwritten
         deserialize = function (cid) {
             return _.cid(cid);
         };
 
-        function autoSelect() {
-            return options.selectFirstItem !== false && $(document).width() > 700;
-        }
+        var updateSelection = (function () {
 
-        function updateSelection(changed) {
-            // vars
-            var id = _.url.hash('id'), ids, cid, index, selectionChanged;
-            // use url?
-            ids = id !== undefined ? id.split(/,/) : [];
-            if (all.length) {
-                if (ids.length && self.selection.contains(ids)) {
-                    // convert ids to objects first - avoids problems with
-                    // non-existing items that cannot be resolved in selections
-                    //console.debug('case #1:', ids);
-                    ids = _(ids).map(deserialize);
-                    selectionChanged = !self.selection.equals(ids);
-                    if (selectionChanged) {
-                        // set
-                        self.selection.set(ids);
-                        firstAutoSelect = false;
+            function getIds() {
+                var id = _.url.hash('id');
+                return id !== undefined ? id.split(/,/) : [];
+            }
+
+            function restoreSelection(ids, changed) {
+                // convert ids to objects first - avoids problems with
+                // non-existing items that cannot be resolved in selections
+                // console.debug('case #1:', ids);
+                ids = _(ids).map(deserialize);
+                var selectionChanged = !self.selection.equals(ids), cid, index;
+                if (selectionChanged) {
+                    // set
+                    self.selection.set(ids);
+                    selectFirstAllowed = false;
+                }
+                if (selectionChanged || changed) {
+                    // scroll to first selected item
+                    cid = _(ids).first();
+                    index = self.selection.getIndex(cid) || 0;
+                    if (!isVisible(index)) {
+                        setIndex(index - 2); // not at the very top
                     }
-                    //changed = true;
-                    if (selectionChanged || changed) {
-                        // scroll to first selected item
-                        cid = _(ids).first();
-                        index = self.selection.getIndex(cid) || 0;
-                        if (!isVisible(index)) {
-                            setIndex(index - 2); // not at the very top
+                }
+            }
+
+            function autoSelectAllowed() {
+                return options.selectFirstItem !== false && $(document).width() > 700;
+            }
+
+            return function updateSelection(changed) {
+                if (all.length) {
+                    var ids = getIds();
+                    if (self.selection.contains(ids)) {
+                        // if ids are given and still part of the selection
+                        // we can restore that state
+                        restoreSelection(ids, changed);
+                    }
+                    else if (autoSelectAllowed()) {
+                        // select first?
+                        if (selectFirstAllowed) {
+                            // console.debug('case #2: first');
+                            self.selection.selectFirst();
+                            selectFirstAllowed = false;
                         }
-                    }
-                } else {
-                    if (autoSelect()) {
-                        if (firstAutoSelect) {
-                            // select first or previous selection
-                            //console.debug('case #2: smart');
-                            self.selection.selectSmart();
-                            firstAutoSelect = false;
-                        } else {
+                        else {
                             // set selection based on last index
-                            //console.debug('case #3: last index');
+                            // console.debug('case #3: last index');
                             self.selection.selectLastIndex();
                         }
                     }
                 }
-            }
-        }
+            };
+
+        }());
 
         loadAll = (function () {
 
-            function fail() {
+            function fail(list) {
+                // is detailed error message enabled
+                list = list.categories === 'PERMISSION_DENIED' ? list : {};
+                list = isArray(list) ? _.first(list) : list;
                 // clear grid
                 apply([]);
                 // inform user
                 container.hide().parent().idle()
                     .find('.io-ox-fail').parent().remove().end().end()
                     .append(
-                        $.fail(gt('Could not load this list'), function () {
+                        $.fail(gt(list.error || 'Could not load this list'), function () {
                             container.show();
                             loadAll();
                         })
@@ -599,15 +724,15 @@ define('io.ox/core/tk/vgrid',
                             tmp.push(obj);
                         }
                     });
-                    list = tmp.concat(all);
+                    list = tmp.concat(list);
                 }
+
                 if (isArray(list)) {
                     return apply(list)
                         .always(function () {
                             self.idle();
                         })
                         .done(function () {
-                            firstAutoSelect = firstAutoSelect || list.length === 0;
                             updateSelection(list.length !== all.length || !_.isEqual(all, list));
                         });
                 } else {
@@ -688,7 +813,9 @@ define('io.ox/core/tk/vgrid',
         // selection events
         this.selection
             .on('change', function (e, list) {
-                var id = _(list).map(function (obj) {
+                // prevent to long URLs
+                var MAXSELECTIONSAVE = 50,
+                    id = _(list.slice(0, MAXSELECTIONSAVE)).map(function (obj) {
                         return self.selection.serialize(obj);
                     }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
@@ -745,7 +872,7 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.idle = function () {
-            container.show().css({ visibility: '' }).parent().idle();
+            _.defer(function () { container.show().css({ visibility: '' }).parent().idle(); });
             return this;
         };
 
@@ -789,11 +916,12 @@ define('io.ox/core/tk/vgrid',
             // we don't check for currentModule but always refresh
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
+            var previous = currentMode;
             currentMode = mode;
-            this.trigger('change:mode', currentMode);
             _.url.hash('id', null);
-            firstAutoSelect = true;
+            selectFirstAllowed = false;
             responsiveChange = true;
+            this.trigger('change:mode', currentMode, previous);
             return this.refresh();
         };
 
@@ -842,33 +970,37 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getEditable = function () {
-            return editable;
+            return this.prop('editable');
         };
 
         this.setEditable = function (flag, selector) {
-            if (flag) {
-                node.addClass('editable');
-                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
-                editable = true;
-            } else {
-                node.removeClass('editable');
-                this.selection.setEditable(false);
-                editable = false;
+            if (options.multiple === true) {
+                if (flag) {
+                    node.addClass('editable');
+                    this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
+                    this.prop('editable', true);
+                } else {
+                    node.removeClass('editable');
+                    this.selection.setEditable(false);
+                    this.prop('editable', false);
+                }
             }
         };
 
         this.setMultiple = function (flag) {
-            this.selection.setMultiple(flag);
-            toolbar[flag ? 'show' : 'detach']();
+            console.warn('deprecated', flag);
         };
 
         this.prop = function (key, value) {
             if (key !== undefined) {
                 if (value !== undefined) {
-                    props[key] = value;
-                    this.trigger('change:prop', key, value);
-                    this.trigger('change:prop:' + key, value);
-                    responsiveChange = true;
+                    var previous = props[key];
+                    if (value !== previous) {
+                        props[key] = value;
+                        this.trigger('change:prop', key, value, previous);
+                        this.trigger('change:prop:' + key, value, previous);
+                        responsiveChange = true;
+                    }
                     return this;
                 } else {
                     return props[key];
@@ -920,11 +1052,31 @@ define('io.ox/core/tk/vgrid',
         };
 
         // apply options
-        if (options.editable) {
-            this.setEditable(true);
+        if (options.multiple) {
+            if (options.editable) {
+                this.setEditable(true);
+            }
+            this.selection.setMultiple(true);
+            toolbar.show();
+        } else {
+            this.selection.setMultiple(false);
+            toolbar.detach();
         }
 
         node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+
+        this.on('change:prop:folder', function (e, value, previous) {
+            if (previous !== undefined) {
+                selectFirstAllowed = false;
+                self.selection.resetLastIndex();
+            }
+        });
+
+        this.on('change:mode', function (e, value, previous) {
+            self.selection.clear();
+            self.selection.resetLastIndex();
+            selectFirstAllowed = (value === 'search');
+        });
     };
 
     // make Template accessible

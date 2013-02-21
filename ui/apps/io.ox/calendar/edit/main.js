@@ -173,7 +173,7 @@ define('io.ox/calendar/edit/main',
                     var self = this;
                     app.model = self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
-
+                    appointmentModel.fullTimeChangeBindings(self.model);
                     appointmentModel.setDefaultParticipants(self.model, {create: true}).done(function () {
                         app.view = self.view = new MainView({model: self.model, app: self});
 
@@ -244,11 +244,19 @@ define('io.ox/calendar/edit/main',
                     var tmpFrame = $('#tmp'),
                         self = this,
                         attList = this.view.baton.attachmentList;
-                    if (attList.oldMode && attList.attachmentsToAdd.length > 0) {
-                        tmpFrame.on('attachmentsSaved', function () {
-                            tmpFrame.off('attachmentsSaved');
-                            self.quit();
-                        });
+                    if (attList.attachmentsToAdd.length > 0) {
+                        if (attList.oldMode) {
+                            tmpFrame.on('attachmentsSaved', function () {
+                                tmpFrame.off('attachmentsSaved');
+                                ox.trigger('refresh^');
+                                self.quit();
+                            });
+                        } else {
+                            this.model.on('finishedAttachmentHandling', function () {
+                                ox.trigger('refresh^');
+                                self.quit();
+                            });
+                        }
                     } else {
                         this.quit();
                     }

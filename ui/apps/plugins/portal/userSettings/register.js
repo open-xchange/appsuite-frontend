@@ -24,8 +24,15 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
 
             userEdit.editCurrentUser($node).done(function (user) {
                 user.on('update', function () {
+                    require("io.ox/core/notifications").yell("success", gt("Your data has been saved"));
                     popup.close();
                 });
+            }).fail(function () {
+                $node.append(
+                    $.fail(gt("Couldn't load your contact data."), function () {
+                        userEdit.editCurrentUser($node);
+                    })
+                );
             });
 
             popup.show(e, function (pane) {
@@ -88,22 +95,31 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
         title: gt('User data'),
 
         preview: function (baton) {
+            var content;
             this.append(
-                $('<div class="content">').append(
+                content = $('<div class="content">').append(
                     // user data
                     $('<div class="action">').text(gt('My contact data'))
-                    .on('click', changeUserData),
-                    // password
-                    $('<div class="action">').text(gt('My password'))
-                    .on('click', changePassword)
+                    .on('click', changeUserData)
                 )
             );
+            // password
+            //check for capability
+            require(['io.ox/core/capabilities'], function (capabilities) {
+                if (capabilities.has('edit_password')) {
+                    content.append(
+                        $('<div class="action">').text(gt('My password'))
+                        .on('click', changePassword)
+                    );
+                }
+            });
         }
     });
 
     ext.point('io.ox/portal/widget/userSettings/settings').extend({
         title: gt('User data'),
         type: 'userSettings',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

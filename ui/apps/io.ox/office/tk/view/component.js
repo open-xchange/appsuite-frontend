@@ -14,25 +14,24 @@
 define('io.ox/office/tk/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/scrollable',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button'
-    ], function (Events, Utils, Scrollable, Group, Label, Button) {
+    ], function (Events, Utils, Group, Label, Button) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // CSS class for hidden components
+        HIDDEN_CLASS = 'hidden';
 
     // class Component ========================================================
 
     /**
      * Base class for view components that can be registered at a controller.
-     * Contains instances of Group objects (controls or groups of controls),
-     * receives UI update events from the controller to update the state of the
-     * control groups, and forwards change actions from the control groups to
-     * the controller.
+     * Contains instances of Group objects (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
      * - 'change': If a control has been activated. The event handler receives
@@ -44,53 +43,51 @@ define('io.ox/office/tk/view/component',
      *
      * @constructor
      *
-     * @param {Application} app
-     *  The application instance.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, the contents of the view component will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view component.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
-     *      this instance.
-     *  @param {String} [options.visible]
-     *      The key of the controller item that controls the visibility of the
-     *      view component. The visibility will be bound to the 'enabled' state
-     *      of the respective controller item. If omitted, the view component
-     *      will be visible initially, and will not control its visibility.
+     *      this view component.
+     *  @param {Object} [options.css]
+     *      Additional CSS formatting that will be set at the root DOM node of
+     *      this view component.
      */
-    function Component(app, options) {
+    function Component(options) {
 
         var // self reference
             self = this,
 
             // create the DOM root element representing the view component
-            node = $('<div>').addClass('view-component'),
+            node = Utils.createContainerNode('view-component', options),
+
+            // the current target node for new groups
+            targetNode = node,
 
             // all control groups, as plain array
             groups = [],
 
             // all control groups, mapped by key
-            groupsByKey = {},
+            groupsByKey = {};
 
-            // group initializer waiting for the first window 'show' event
-            deferredInit = $.Deferred(),
+        // base constructor ---------------------------------------------------
 
-            // whether the application window has been shown at least once
-            windowShown = false,
-
-            // the controller item controlling the visibility of this view component
-            visibleKey = Utils.getStringOption(options, 'visible');
+        // add event hub
+        Events.extend(this);
 
         // private methods ----------------------------------------------------
 
         /**
-         * Resolves the deferred initializer, if this view component and the
-         * application window are both visible.
+         * Changes the visibility of this view component and triggers a 'show'
+         * event.
          */
-        function initialize() {
-            if (windowShown && (node.css('display') !== 'none')) {
-                deferredInit.resolve();
+        function showComponent(state) {
+            if (self.isVisible() !== state) {
+                node.toggleClass(HIDDEN_CLASS, !state);
             }
         }
 
@@ -108,16 +105,8 @@ define('io.ox/office/tk/view/component',
             // remember the group object
             groups.push(group);
 
-            // Trigger an 'init' event at the group when the container window
-            // becomes visible the first time. The 'deferredInit' object will
-            // be resolved on the first window 'show' event and will execute
-            // all done handlers attached here. If the window is already
-            // visible when calling this method, the deferred is resolved and
-            // will execute the new done handler immediately.
-            deferredInit.done(function () { group.trigger('init'); });
-
             // insert the group into this view component
-            node.append(group.getNode());
+            targetNode.append(group.getNode());
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -204,73 +193,19 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Displays this view component, if it is currently hidden.
+         * Adds the passed control group as a 'private group' to this view
+         * component. Change events of the group will not be forwarded to the
+         * listeners of this view component. Instead, the caller has to
+         * register a change listener at the group by itself.
+         *
+         * @param {Group} group
+         *  The control group object to be inserted.
          *
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.show = function () {
-            node.show();
-            initialize();
-            return this;
-        };
-
-        /**
-         * Hides this view component, if it is currently visible.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.hide = function () {
-            node.hide();
-            return this;
-        };
-
-        /**
-         * Returns whether this view component contains the control that is
-         * currently focused. Searches in all registered group objects.
-         */
-        this.hasFocus = function () {
-            return _(groups).any(function (group) { return group.hasFocus(); });
-        };
-
-        /**
-         * Sets the focus to the first enabled group object in this view
-         * component, unless it already contains a focused group.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.grabFocus = function () {
-
-            var // all visible and enabled group objects
-                enabledGroups = null;
-
-            // set focus to first enabled group, if no group is focused
-            if (!this.hasFocus()) {
-                enabledGroups = getEnabledGroups();
-                if (enabledGroups.length) {
-                    enabledGroups[0].grabFocus();
-                }
-            }
-
-            return this;
-        };
-
-        /**
-         * Adds separation space following the last inserted group.
-         *
-         * @param {String} [type]
-         *  The type of the separator to be inserted. The resulting design of
-         *  the separator is dependent on the type of this view component. The
-         *  type will be added as CSS class name to the group node representing
-         *  the separator.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.addSeparator = function (type) {
-            insertGroup(new Group({ classes: 'separator' + (_.isString(type) ? (' ' + type) : '') }));
+        this.addPrivateGroup = function (group) {
+            insertGroup(group);
             return this;
         };
 
@@ -303,8 +238,8 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
-         * Creates a new dynamic label control, and inserts it into this view component. The label text will be updated according to calls
-         * of the method ToolBar.update().
+         * Creates a new label control, and inserts it into this view
+         * component.
          *
          * @param {String} key
          *  The unique key of the label.
@@ -340,6 +275,87 @@ define('io.ox/office/tk/view/component',
         };
 
         /**
+         * Adds a container node that will take all groups that will be
+         * inserted in the passed callback function. The groups are still
+         * independent from each other, but may be rendered in a different way.
+         *
+         * @param {Function} callback
+         *  The callback function that will be called from this method. All
+         *  groups created from this function will be inserted into the
+         *  container node created initially. Will be called in the context of
+         *  this view component ('this' can be used to create new groups in
+         *  this view component).
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new container
+         *  node. The following options are supported:
+         *  @param {String} [options.classes]
+         *      Additional CSS classes that will be set at the container node.
+         *  @param {Object} [options.css]
+         *      Additional CSS formatting that will be set at the container
+         *      node.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.addGroupContainer = function (callback, options) {
+
+            // create the container node for the groups,
+            // always insert into root node (do not nest group containers)
+            targetNode = Utils.createContainerNode('group-container', options).appendTo(node);
+
+            // execute the passed callback function, restore current target node
+            callback.call(this);
+            targetNode = node;
+            return this;
+        };
+
+        /**
+         * Returns whether this view component is visible.
+         */
+        this.isVisible = function () {
+            return !node.hasClass(HIDDEN_CLASS);
+        };
+
+        /**
+         * Displays this view component, if it is currently hidden.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.show = function () {
+            showComponent(true);
+            return this;
+        };
+
+        /**
+         * Hides this view component, if it is currently visible.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.hide = function () {
+            showComponent(false);
+            return this;
+        };
+
+        /**
+         * Toggles the visibility of this view component.
+         *
+         * @param {Boolean} [state]
+         *  If specified, shows or hides the view component depending on the
+         *  boolean value. If omitted, toggles the current visibility of the
+         *  view component.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.toggle = function (state) {
+            showComponent((state === true) || ((state !== false) && this.isVisible()));
+            return this;
+        };
+
+        /**
          * Enables or disables the specified group of this view component.
          *
          * @param {String} key
@@ -353,13 +369,7 @@ define('io.ox/office/tk/view/component',
          *  A reference to this view component.
          */
         this.enable = function (key, state) {
-            if (key === visibleKey) {
-                if (_.isUndefined(state) || (state === true)) {
-                    this.show();
-                } else {
-                    this.hide();
-                }
-            }
+            // invoke the enable() method of all groups with the specified key
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
             }
@@ -378,6 +388,37 @@ define('io.ox/office/tk/view/component',
          */
         this.disable = function (key) {
             return this.enable(key, false);
+        };
+
+        /**
+         * Returns whether this view component contains the control that is
+         * currently focused. Searches in all registered group objects.
+         */
+        this.hasFocus = function () {
+            return _(groups).any(function (group) { return group.hasFocus(); });
+        };
+
+        /**
+         * Sets the focus to the first enabled group object in this view
+         * component, unless it already contains a focused group.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
+        this.grabFocus = function () {
+
+            var // all visible and enabled group objects
+                enabledGroups = null;
+
+            // set focus to first enabled group, if no group is focused
+            if (!this.hasFocus()) {
+                enabledGroups = getEnabledGroups();
+                if (enabledGroups.length) {
+                    enabledGroups[0].grabFocus();
+                }
+            }
+
+            return this;
         };
 
         /**
@@ -405,24 +446,15 @@ define('io.ox/office/tk/view/component',
          */
         this.destroy = function () {
             node.off().remove();
-            app.getController().unregisterViewComponent(this);
             this.events.destroy();
-            self = node = groups = groupsByKey = deferredInit = null;
+            _(groups).invoke('destroy');
+            self = node = groups = groupsByKey = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // add event hub
-        Events.extend(this);
-
         // additional CSS classes
-        node.addClass(Utils.getStringOption(options, 'classes', ''));
-
-        // register this view component at the application controller
-        app.getController().registerViewComponent(this);
-
-        // wait for the first window 'show' event and trigger an 'init' event at all groups
-        app.getWindow().one('show', function () { windowShown = true; initialize(); });
+        node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

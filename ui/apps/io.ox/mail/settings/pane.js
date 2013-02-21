@@ -12,13 +12,15 @@
  */
 
 define('io.ox/mail/settings/pane',
-       ['settings!io.ox/mail', 'io.ox/mail/settings/model',
-        'dot!io.ox/mail/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, gt, api) {
+   ['settings!io.ox/mail',
+    'io.ox/mail/settings/model',
+    'dot!io.ox/mail/settings/form.html',
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'gettext!io.ox/mail',
+    'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
-
-
 
     var mailSettings =  settings.createModel(mailSettingsModel),
 
@@ -63,61 +65,50 @@ define('io.ox/mail/settings/pane',
                            {label: gt('10 minutes'), value: '10_minutes'}],
         mailViewSettings;
 
-
-    api.all().done(function (array) {
-        var itemList = [];
-        _.each(array, function (key, value) {
-            itemList.push(key.primary_address);
-        });
-
-
-        var MailSettingsView = Backbone.View.extend({
-            tagName: "div",
-            _modelBinder: undefined,
-            initialize: function (options) {
-                // create template
-                this._modelBinder = new Backbone.ModelBinder();
-
-            },
-            render: function () {
-                var self = this;
-                self.$el.empty().append(tmpl.render('io.ox/mail/settings', {
-                    strings: staticStrings,
-                    optionsAutoSaveMinutes: optionsAutoSave,
-                    optionsAllAccountes: itemList
-                }));
-
+    var MailSettingsView = Backbone.View.extend({
+        tagName: "div",
+        _modelBinder: undefined,
+        initialize: function (options) {
+            // create template
+            this._modelBinder = new Backbone.ModelBinder();
+        },
+        render: function () {
+            var self = this;
+            api.getAllSenderAddresses().done(function (addresses) {
+                self.$el.empty().append(
+                    tmpl.render('io.ox/mail/settings', {
+                        strings: staticStrings,
+                        optionsAutoSaveMinutes: optionsAutoSave,
+                        optionsAllAccounts: addresses.map(function (address) { return address[1]; })
+                    })
+                );
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-                return self;
-            }
-        });
-
-        ext.point('io.ox/mail/settings/detail').extend({
-            index: 200,
-            id: 'mailsettings',
-            draw: function (data) {
-
-                mailViewSettings = new MailSettingsView({model: mailSettings});
-                var holder = $('<div>').css('max-width', '800px');
-                this.append(holder.append(
-                    mailViewSettings.render().el)
-                );
-            },
-
-            save: function () {
-                mailViewSettings.model.save();
-            }
-        });
-
-
+            });
+            return self;
+        }
     });
 
+    ext.point('io.ox/mail/settings/detail').extend({
+        index: 200,
+        id: 'mailsettings',
+        draw: function (data) {
 
+            mailViewSettings = new MailSettingsView({model: mailSettings});
+            var holder = $('<div>').css('max-width', '800px');
+            this.append(holder.append(
+                mailViewSettings.render().el)
+            );
+            if (Modernizr.touch) { // See Bug 24802
+                holder.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
+            }
+        },
 
-
-
-
+        save: function () {
+            mailViewSettings.model.save().fail(function () {
+                notifications.yell('error', gt('Could not save settings'));
+            });
+        }
+    });
 
 });

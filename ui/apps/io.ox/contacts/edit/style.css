@@ -13,7 +13,7 @@
 
 
 
-.icon-plus-sign {
+.icon-plus-sign, .icon-minus-sign {
     margin-right: 5px;
 }
 
@@ -36,7 +36,7 @@
    	}
 
     .sectionheader {
-        margin-top: 40px;
+        margin-top: 20px;
     }
 
     .sectionheader.collapsed {

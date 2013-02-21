@@ -2,9 +2,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="msapplication-tap-highlight" content="no" />
+<meta name="msapplication-tap-highlight" content="no">
 
-<link rel="stylesheet" href="v=@ version @/apps/io.ox/core/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="v=@ version @/apps/themes/login/login.css">
 
 <style type="text/css">
@@ -24,6 +23,7 @@ window.ox = {
     debug: @debug@,
     language: 'en_US',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
+    revision: '@ revision @',
     root: root,
     serverConfig: {},
     session: '',
@@ -40,7 +40,7 @@ window.ox = {
 
 <script src="v=@ version @/boot.js"></script>
 
-<link rel="shortcut icon" href="v=@ version @/favicon.ico">
+<link id="favicon" rel="shortcut icon" href="v=@ version @/apps/themes/default/favicon.ico" type="image/x-icon">
 
 <!-- iOS home button support -->
 <link rel="apple-touch-icon" href="v=@ version @/apps/themes/default/icon57.png" />

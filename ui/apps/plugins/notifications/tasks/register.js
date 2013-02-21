@@ -70,6 +70,7 @@ define('plugins/notifications/tasks/register',
         },
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
         },
 
@@ -91,8 +92,12 @@ define('plugins/notifications/tasks/register',
             var item = $(e.currentTarget).closest('.item'),
                 cid = item.attr('data-cid'),
                 obj = _.cid(cid), model;
-            // this is a very strange API signature; just to have that said
-            api.update(_.now(), obj.id, { status: 3, percent_completed: 100 }, obj.folder_id)
+            // now with much cooler api signature. YEAH!
+            api.update({id: obj.id,
+                        folder_id: obj.folder_id,
+                        status: 3,
+                        percent_completed: 100,
+                        date_completed: _.now() })
                 .done(function (result) {
                     api.trigger('update:' + encodeURIComponent(cid), result);
                 });
@@ -131,12 +136,12 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
 
             var notifications = controller.get('io.ox/tasks', NotificationsView);
-
-            api.on('new-tasks', function (e, tasks) {
+            
+            function add(e, tasks, reset) {
+                var items = [];
                 _(tasks).each(function (taskObj) {
-                    var task = util.interpretTask(taskObj);
-                    notifications.collection.push(
-                        new Backbone.Model({
+                    var task = util.interpretTask(taskObj),
+                        tmp = new Backbone.Model({
                             id: task.id,
                             folder_id: task.folder_id,
                             badge: task.badge,
@@ -144,11 +149,36 @@ define('plugins/notifications/tasks/register',
                             end_date: task.end_date,
                             status: task.status,
                             cid: _.cid(task)
-                        }),
-                        { silent: true }
-                    );
+                        });
+                    if (reset) {
+                        items.push(tmp);
+                    } else {
+                        notifications.collection.push(tmp, {silent: true});
+                    }
                 });
+                if (reset) {
+                    notifications.collection.reset(items);
+                }
+            }
+            
+            function remove(e, tasks) {
+                _(tasks).each(function (taskObj) {
+                    notifications.collection.remove(notifications.collection._byId[taskObj.id]);
+                });
+            }
+            //be responsive
+            api.on('delete', remove);
+            api.on('new-tasks', function (e, tasks) {
+                add(e, tasks, true);
                 notifications.collection.trigger('reset');
+            });
+            api.on('add-overdue-tasks', function (e, tasks) {
+                add(e, tasks);
+                notifications.collection.trigger('add');
+            });
+            api.on('remove-overdue-tasks', function (e, tasks) {
+                remove(e, tasks);
+                notifications.collection.trigger('remove');
             });
 
             api.getTasks();
@@ -180,11 +210,11 @@ define('plugins/notifications/tasks/register',
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
-                $('<div class="actions">').append(
+                $('<div class="task-actions">').append(
+                    $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
-                    $('<button class="btn btn-inverse taskokbtn" data-action="ok">').text(gt('OK')),
-                    $('<select class="dateselect" data-action="selector">')
-                    .append(util.buildDropdownMenu(new Date()))
+                    $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
+                    
                 )
             );
         }
@@ -210,7 +240,7 @@ define('plugins/notifications/tasks/register',
         deleteReminder: function (e) {
             e.stopPropagation();
             reminderApi.deleteReminder(this.model.attributes.reminderId);
-            this.close();
+            this.model.collection.remove(this.model);
         },
 
         selectClicked: function (e) {
@@ -219,12 +249,19 @@ define('plugins/notifications/tasks/register',
 
         remindAgain: function (e) {
             var endDate = new Date(),
-                dates;
-            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+                dates,
+                model = this.model,
+                key = [model.get('folder_id') + '.' + model.get('id')];
+            
+            dates = util.computePopupTime(endDate, this.$el.find(".dateselect :selected").attr("finderid"));
             endDate = dates.alarmDate;
-            reminderApi.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
+            reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
+                return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+            }).done(function () {
+                api.trigger("update:" + key[0]);//update detailview
+            });
             e.stopPropagation();
-            this.close();
+            model.collection.remove(model);
         },
 
         onClickItem: function (e) {
@@ -253,11 +290,6 @@ define('plugins/notifications/tasks/register',
                     });
                 });
             }
-        },
-
-        close: function () {
-            this.remove();
-            this.model.destroy();
         }
     });
 
@@ -267,7 +299,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-reminder-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -292,13 +331,13 @@ define('plugins/notifications/tasks/register',
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
             reminderApi.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
-
                 api.getAll({}, false).done(function (tasks) {
+                    var items = [];
                     _(tasks).each(function (taskObj) {
                         var index = $.inArray(taskObj.id, reminderTaskIds);
                         if (index !== -1) {
                             var task = util.interpretTask(taskObj);
-                            notifications.collection.push(
+                            items.push(
                                 new Backbone.Model({
                                     id: task.id,
                                     folder_id: task.folder_id,
@@ -307,12 +346,11 @@ define('plugins/notifications/tasks/register',
                                     title: task.title,
                                     end_date: task.end_date,
                                     status: task.status
-                                }),
-                                { silent: true }
+                                })
                             );
                         }
                     });
-                    notifications.collection.trigger('reset');
+                    notifications.collection.reset(items).trigger('reset');
                 });
             });
         }
@@ -343,11 +381,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<select class="stateselect" data-action="selector">').append(
-                            $('<option>').text(gt('Confirm')),
-                            $('<option>').text(gt('Decline')),
-                            $('<option>').text(gt('Tentative'))),
-                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Change state'))
+                    $('<button class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
                 )
             );
             task = null;
@@ -363,7 +397,7 @@ define('plugins/notifications/tasks/register',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
-
+        
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-confirmation/item').invoke('draw', this.$el, baton);
@@ -400,13 +434,26 @@ define('plugins/notifications/tasks/register',
 
         onChangeState: function (e) {
             e.stopPropagation();
-            var model = this.model,
-                state = this.$el.find(".stateselect").prop('selectedIndex') + 1;
-            api.confirm({id: model.get('id'),
-                         folder_id: model.get("folder_id"),
-                         data: {confirmation: state }
-            }).done(function () {
-                model.collection.remove(model);
+            var model = this.model;
+            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
+                //build popup
+                var popup = editUtil.buildConfirmationPopup(model, dialogs);
+                //go
+                popup.popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = popup.state.prop('selectedIndex') + 1,
+                            message = popup.message.val();
+                        api.confirm({id: model.get('id'),
+                                     folder_id: model.get("folder_id"),
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));
+                            model.collection.remove(model);
+                        });
+                    }
+                });
             });
         }
     });
@@ -417,7 +464,14 @@ define('plugins/notifications/tasks/register',
         id: 'io-ox-notifications-confirmation-tasks',
 
         initialize: function () {
+            var self = this;
             this.collection.on('reset add remove', this.render, this);
+            //be responsive
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    self.collection.remove(self.collection._byId[id.id]);
+                });
+            });
         },
 
         render: function () {
@@ -441,13 +495,18 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksconfirmation', NotificationsConfirmationView);
             api.on('confirm-tasks', function (e, confirmationTasks) {
+                var items = [];
                 _(confirmationTasks).each(function (task) {
-                    notifications.collection.push(
-                        new Backbone.Model(task),
-                        { silent: true }
+                    items.push(
+                        new Backbone.Model(task)
                     );
                 });
-                notifications.collection.trigger('reset');
+                notifications.collection.reset(items).trigger('reset');
+            }).on('remove-task-confirmation-notification', function (e, ids) {
+                _(ids).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id.id]);
+                });
+                notifications.collection.trigger("remove");
             });
         }
     });

@@ -19,9 +19,26 @@ How to get the UI running in Debian/Ubuntu
 4.  Build the UI and the documentation:
 
         ./build.sh
-        ./build.sh doc
+        ./build.sh docs
 
-5.  If everything works fine, the documentation should be at
+    Note: Instead of exporting the builddir every time your want to build the ui or
+    run the appserver, you can also create a file <em>local.conf</em> and set the
+    directory in there. This way, every time the buildsystem or appserver runs, it
+    automatically picks up the correct directory.
+
+    local.conf:
+    --- snip ---
+    export buildir="/Library/WebServer/Documents/appsuite"
+    --- snap ---
+
+
+5.  Run the app loading server
+        
+        ./appserver.sh
+
+    Don't worry: If it doesn't tell you anything it's happily running.
+
+6.  If everything works fine, the documentation should be at
     http://localhost/appsuite/doc/apache.html. Continue reading there!
 
 
@@ -43,11 +60,24 @@ How to get the UI running on MacOS X
     - Set environment variable:
         export builddir="/Library/WebServer/Documents/appsuite"
 
+    Note: Instead of exporting the builddir every time your want to build the ui or
+    run the appserver, you can also create a file <em>local.conf</em> and set the
+    directory in there. This way, every time the buildsystem or appserver runs, it
+    automatically picks up the correct directory.
+
+    local.conf:
+    --- snip ---
+    export buildir="/Library/WebServer/Documents/appsuite"
+    --- snap ---
+
     - Build UI:
       ./build.sh
 
+    - Run the app loading server
+      ./appserver.sh
+
     - Build documentation:
-      ./build.sh doc
+      ./build.sh docs
 
 4.  If everything works fine, the documentation should be at
     http://localhost/appsuite/doc/apache.html. Continue reading there!

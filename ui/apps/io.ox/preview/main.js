@@ -121,10 +121,56 @@ define("io.ox/preview/main",
                 return tmp;
             }()),
             draw: function (file) {
-                $("<audio>").attr({
-                    controls: "controls",
-                    src: file.dataURL
-                }).appendTo(this);
+                var audiofile = $("<audio>").attr({
+                    src: file.dataURL,
+                    type: file.mimetype,
+                    preload: 'metadata',
+                    controls: 'control',
+                    autoplay: false
+                }).hide().appendTo(this);
+                var self = this;
+                require(['apps/mediaelement/mediaelement-and-player.js',
+                        'less!mediaelement/mediaelementplayer.css'], function () {
+
+                    var pw,
+                    wW = $(window).width();
+                    if (wW < 700 && wW > 510) { pw = 480; }
+                    if (wW < 1085 && wW > 900) { pw = 300; }
+
+                    self.find('video, audio').mediaelementplayer({
+                        audioWidth: pw,
+                        videoWidth: pw,
+                        plugins: ['flash', 'silverlight'],
+                        enableAutosize: true,
+                        timerRate: 250,
+                        features: ['playpause', 'progress', 'current', 'volume'],
+                        enablePluginDebug: true,
+                        keyActions: [{
+                            keys: [32, 179], // SPACE
+                            action: function (player, media) {
+                                if (media.paused || media.ended) {
+                                    media.play();
+                                } else {
+                                    media.pause();
+                                }
+                            }
+                        },
+                        {
+                            keys: [39, 228], // RIGHT
+                            action: function (player, media) {
+                                var newVolume = Math.min(media.volume + 0.1, 1);
+                                media.setVolume(newVolume);
+                            }
+                        },
+                        {
+                            keys: [37, 227], // LEFT
+                            action: function (player, media) {
+                                var newVolume = Math.max(media.volume - 0.1, 0);
+                                media.setVolume(newVolume);
+                            }
+                        }]
+                    });
+                });
             }
         }));
     }
@@ -134,9 +180,7 @@ define("io.ox/preview/main",
     }
 
     function previewFailed() {
-        $(this).closest('div').empty().append(
-            $('<div class="alert alert-info">').text(gt("Preview could not be loaded"))
-        );
+        $(this).closest('div').empty();
     }
 
     // if available register office typed renderer
@@ -146,7 +190,7 @@ define("io.ox/preview/main",
             index: 10,
             supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
              'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
-             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm' ],
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots' ],
             draw: function (file, options) {
 
                 var $a = clickableLink(file, function (e) {
@@ -179,6 +223,7 @@ define("io.ox/preview/main",
             var self = this;
             require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
+                data.parent = file.parent;
                 self.append(view.draw(data).css('padding', 0));
             });
         },

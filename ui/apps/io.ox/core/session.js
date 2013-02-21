@@ -30,17 +30,20 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         return language in languages ? language : false;
     };
 
-    var set = function (data) {
+    var set = function (data, language, store) {
         ox.session = data.session || '';
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
-        ox.language = ox.forcedLanguage || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        return store ? that.store().then(finished, finished) : finished();
+        function finished() { return $.when(data); }
     };
 
     var that = {
 
         autoLogin: function () {
+            var store = false;
             // GET request
             return http.GET({
                 module: 'login',
@@ -53,14 +56,43 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     client: that.client()
                 }
             })
-            .done(set);
+            // If autologin fails, try the token login
+            .then(null, function () {
+                if (!_.url.hash('serverToken')) return;
+                return http.POST({
+                    module: 'login',
+                    jsessionid: _.url.hash('jsessionid'),
+                    appendColumns: false,
+                    appendSession: false,
+                    processResponse: false,
+                    timeout: TIMEOUTS.AUTOLOGIN,
+                    params: {
+                        action: 'tokens',
+                        client: that.client(),
+                        serverToken: _.url.hash('serverToken'),
+                        clientToken: _.url.hash('clientToken')
+                    }
+                }).then(function (response) { return response.data; });
+            })
+            .done(function () {
+                store = _.url.hash('store');
+                _.url.hash({
+                    jsessionid: null,
+                    serverToken: null,
+                    clientToken: null,
+                    store: null
+                });
+            })
+            .then(function (data) {
+                return set(data, undefined, store);
+            });
         },
 
         login: (function () {
 
             var pending = null;
 
-            return function (username, password, store) {
+            return function (username, password, store, language) {
 
                 var def = $.Deferred(), multiple = [];
 
@@ -75,13 +107,13 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
-                        if (ox.forcedLanguage) {
+                        if (language) {
                             multiple.push({
                                 module: 'jslob',
                                 action: 'update',
                                 id: 'io.ox/core',
                                 data: {
-                                    language: ox.forcedLanguage
+                                    language: language
                                 }
                             });
                         }
@@ -94,6 +126,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 action: 'login',
                                 name: username,
                                 password: password,
+                                language: language,
                                 client: that.client(),
                                 timeout: TIMEOUTS.LOGIN,
                                 multiple: JSON.stringify(multiple)
@@ -101,22 +134,13 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            set(data);
-                            // set permanent cookie
-                            if (store) {
-                                that.store().always(function (e) {
-                                    // we don't care if this fails
-                                    def.resolve(data);
-                                });
-                            } else {
-                                def.resolve(data);
-                            }
+                            set(data, language, store).done(def.resolve(data));
                         })
                         .fail(def.reject);
                     }
                 } else {
                     // offline
-                    set({ session: 'offline', user: username });
+                    set({ session: 'offline', user: username }, language);
                     def.resolve({ session: ox.session, user: ox.user });
                 }
 

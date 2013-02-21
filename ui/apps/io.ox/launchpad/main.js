@@ -23,6 +23,17 @@ define('io.ox/launchpad/main',
 
     'use strict';
 
+    // same stupid solution like in core/main until we get translated apps from backend
+    gt('Portal');
+    gt('Mail');
+    gt('Address Book');
+    gt('Calendar');
+    gt('Tasks');
+    gt('Files');
+    gt('Conversations');
+    gt('Settings');
+    gt('Documents');
+
     var FADE_DURATION = 1000,
 
         firstRun = true,
@@ -102,7 +113,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folder_id = config.get("folder.infostore");
+                        e.data.createArguments.folderId = String(config.get("folder.infostore"));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();
@@ -129,6 +140,7 @@ define('io.ox/launchpad/main',
         },
 
         drawApp = function (data) {
+            data.title = gt(data.title);
             return $(appTmpl(data));
         },
 
@@ -178,7 +190,7 @@ define('io.ox/launchpad/main',
                     }
                 });
             });
-            
+
             api.getInstalled().done(function (installed) {
                 secInstalled.empty();
                 /*secInstalled.append(

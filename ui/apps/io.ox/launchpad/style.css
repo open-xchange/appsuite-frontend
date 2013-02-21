@@ -2,6 +2,7 @@
 #io-ox-launchpad .pad {
     margin: 26px auto 26px auto;
     width: 700px;
+    min-height: 0;
 }
 
 #io-ox-launchpad .section {
@@ -11,7 +12,7 @@
 }
 
 #io-ox-launchpad h1 {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-size: 1.5em;
     font-weight: normal;
     line-height: 2em;
@@ -77,6 +78,7 @@
 
 /* touch device */
 
-.touch #io-ox-launchpad .pad { width: 1000px; }
-.touch #io-ox-launchpad .app { width: 180px; font-size: @touch-font-size; }
+.touch #io-ox-launchpad .pad {
+    width: 1000px; }
+.touch #io-ox-launchpad .app { width: 180px; font-size: @touchFontSize; }
 .touch #io-ox-launchpad .app .icon { width: 64px; height: 64px; }

@@ -1,3 +1,40 @@
+* 2013-02-14 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24955: Missing translation/fallback for online help
+ - Fixed bug 23752: New session everytime you select an email or an appointment
+
+* 2013-02-12 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24814: Significant performance decrease compared to 7.0.0
+
+* 2003-02-08 - viktor.pracht@open-xchange.com
+
+ - Implemented story 42053091: online help for OX App Suite is built and available
+
+* 2013-02-04 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24732: Version of UI is defined in RPM spec file but it should be used either from build system or from debian/changelog file
+
+* 2013-01-31 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24669: Login doesn't work with cs_CZ locale
+
+* 2013-01-28 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24612: Non-Existing file references in app cache manifests break UI update
+
+* 2013-01-25 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24528: Direct link to an item is invalid after using token login
+
+* 2013-01-23 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24518: If a timezone can not be loaded, system doesn't allow access
+
+* 2013-01-08 - alexander.quast@open-xchange.com
+
+ - Fix for bug 24411: Unresolvable (resource) conflicts
+
 * 2012-12-17 - marcus.klein@open-xchange.com
 
  - Fix for bug 24222: Renamed package to open-xchange-appsuite.

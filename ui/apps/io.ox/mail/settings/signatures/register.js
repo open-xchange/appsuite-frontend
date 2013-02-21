@@ -315,7 +315,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     $("<br>").appendTo($node);
 
 
-                    if (config.get('gui.mail.signatures').length > 0) {
+                    if (config.get('gui.mail.signatures') && !_.isNull && config.get('gui.mail.signatures').length > 0) {
                         $('<a href="#">').text(gt("Import signatures")).on('click', function (e) {
                             fnImportSignatures(e, config.get('gui.mail.signatures'));
                             return false;

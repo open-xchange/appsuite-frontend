@@ -17,7 +17,11 @@ div.io-ox-calendar-edit {
     label.desc {
         font-size: 13px;
         color: #888;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
+    }
+
+    label.desc span {
+        white-space: nowrap;
     }
 
     div.section {
@@ -27,7 +31,7 @@ div.io-ox-calendar-edit {
     }
 
     h1.title {
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         font-weight: 300;
         font-size: 20px;
         line-height: 30px;
@@ -87,7 +91,7 @@ div.io-ox-calendar-edit {
     }
 
     textarea.note {
-        font-family: @font-normal;
+        font-family: @normalFontFamily;
         font-size: 13px;
         line-height: 18px;
         color: black;
@@ -165,7 +169,7 @@ div.io-ox-calendar-edit {
 
     .sectiontitle {
         font-size: 13px;
-        font-family: @font-light;
+        font-family: @lightFontFamily;
         margin: 20px 0 15px 0;
         color: #888;
     }
@@ -343,4 +347,29 @@ div.edit-appointment-participant div {
 .io-ox-recurrence-day-picker li {
     list-style-type: none;
     cursor: pointer;
+}
+
+.io-ox-calendar-edit {
+
+    .filename {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    .attachment-edit-row {
+        margin-bottom: 9px;
+    }
+
+    .io-ox-core-tk-attachment {
+        .delete {
+            width: 25px;
+            font-size: 19px;
+            padding-left: 12px;
+            cursor: pointer;
+        }
+        .attachment-icon {
+            padding-left: 15px;
+            width: 45px;
+        }
+    }
 }

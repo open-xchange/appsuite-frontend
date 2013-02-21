@@ -101,8 +101,11 @@ define('io.ox/mail/util',
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
                 recipient = this.parseRecipient(match[0]);
+                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly
+                //look Bug 23983
+                var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (recipient[1].indexOf('@') > -1) {
+                if (msExchange || recipient[1].indexOf('@') > -1) {
                     list.push(recipient);
                 }
             }
@@ -122,7 +125,7 @@ define('io.ox/mail/util',
                     email1: String(list[i][1] || '').toLowerCase()
                 };
                 $('<a>', { href: '#', title: obj.email1 })
-                    .addClass('person-link')
+                    .addClass('person-link person-' + field)
                     .css('whiteSpace', 'nowrap')
                     .text(_.noI18n(obj.display_name))
                     .data('person', obj)
@@ -191,6 +194,22 @@ define('io.ox/mail/util',
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
             return $('<span>').addClass('person').text(_.noI18n(dn));
+        },
+
+        /**
+         * Format the Sender field using display name and email
+         *
+         * @return the email address or a string like "Display Name" <email@address.example>
+         */
+        formatSender: function (name, address) {
+            var args = _(arguments).toArray();
+            if (_.isArray(args[0])) {
+                name = args[0][0];
+                address = args[0][1];
+            }
+            name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+            address = $.trim(address || '').toLowerCase();
+            return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 
         getFlag: function (data) {
@@ -273,7 +292,7 @@ define('io.ox/mail/util',
         },
 
         getInitialDefaultSender: function () {
-            var mailArray = _(config.get('mail.addresses', []));
+            var mailArray = _(config.get('modules.mail.sendaddress', []));
             return mailArray._wrapped[0];
         },
 
@@ -306,6 +325,7 @@ define('io.ox/mail/util',
                                 _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
                             title: obj.filename || obj.subject || '',
                             mail: mail,
+                            parent: data.parent || mail,
                             nested_message: _.extend({}, obj, { parent: mail })
                         });
                     }
@@ -316,7 +336,7 @@ define('io.ox/mail/util',
                     obj = data.attachments[i];
                     if (obj.disp === 'attachment') {
                         attachments.push(
-                            _.extend(obj, { mail: mail, title: obj.filename || '' })
+                            _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     }
                 }

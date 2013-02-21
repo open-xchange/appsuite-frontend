@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 4,
+    "weekStart": 1,
+    "days": [
+        "nedeľa",
+        "pondelok",
+        "utorok",
+        "streda",
+        "štvrtok",
+        "piatok",
+        "sobota"
+    ],
+    "daysShort": [
+        "ne",
+        "po",
+        "ut",
+        "st",
+        "št",
+        "pi",
+        "so"
+    ],
+    "daysStandalone": [
+        "Ne",
+        "Po",
+        "Ut",
+        "St",
+        "Št",
+        "Pi",
+        "So"
+    ],
+    "months": [
+        "januára",
+        "februára",
+        "marca",
+        "apríla",
+        "mája",
+        "júna",
+        "júla",
+        "augusta",
+        "septembra",
+        "októbra",
+        "novembra",
+        "decembra"
+    ],
+    "monthsShort": [
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "máj",
+        "jún",
+        "júl",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d.M.yyyy",
+        "yMEd": "E d. M. y",
+        "yMMMd": "d.M.yyyy",
+        "yMMMEd": "E, d. MMM y",
+        "hm": "h:mm a",
+        "Hm": "H:mm",
+        "v": "v",
+        "Hmv": "H:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d.M.yyyy H:mm",
+        "yMdHmv": "d.M.yyyy H:mm v",
+        "yMdhm": "d.M.yyyy h:mm a",
+        "yMdhmv": "d.M.yyyy h:mm a v",
+        "yMEdHm": "E d. M. y H:mm",
+        "yMEdHmv": "E d. M. y H:mm v",
+        "yMEdhm": "E d. M. y h:mm a",
+        "yMEdhmv": "E d. M. y h:mm a v"
+    },
+    "date": "d.M.yyyy",
+    "time": "H:mm",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a - h:mm a",
+            "h": "h:mm - h:mm a",
+            "m": "h:mm - h:mm a"
+        },
+        "Hm": {
+            "h": "H:mm – H:mm",
+            "m": "H:mm – H:mm"
+        },
+        "hmv": {
+            "a": "h:mm a - h:mm a v",
+            "h": "h:mm - h:mm a v",
+            "m": "h:mm - h:mm a v"
+        },
+        "Hmv": {
+            "h": "H:mm – H:mm v",
+            "m": "H:mm – H:mm v"
+        },
+        "yMMMd": {
+            "d": "d. - d. MMM y",
+            "m": "d. MMM - d. MMM y",
+            "y": "d. MMM y - d. MMM y"
+        },
+        "yMMMEd": {
+            "d": "E, d. - E, d. MMM y",
+            "m": "E, d. MMM - E, d. MMM y",
+            "y": "E, d. MMM y - E, d. MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "dopoludnia",
+        "pm": "popoludní"
+    },
+    "eras": [
+        "pred n.l.",
+        "n.l."
+    ],
+    "dateTime": "d.M.yyyy H:mm",
+    "h12": false
+}

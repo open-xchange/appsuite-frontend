@@ -13,46 +13,62 @@
  */
 
 define('io.ox/core/cache',
-    ["io.ox/core/cache/indexeddb",
+    ["io.ox/core/extensions",
+     "io.ox/core/cache/indexeddb",
      "io.ox/core/cache/localstorage",
-     "io.ox/core/cache/simple"], function () {
+     "io.ox/core/cache/simple"], function (ext) {
 
     'use strict';
 
     // default key generator
-    var defaultKeyGenerator = function (data) {
-        if (typeof data === 'object' && data) {
-            data = 'data' in data ? data.data : data;
-            return (data.folder_id || data.folder || 0) + '.' + data.id;
-        } else {
-            return '';
+    var preferredPersistentCache = null,
+        storages = {},
+        defaultKeyGenerator = function (data) {
+            if (typeof data === 'object' && data) {
+                data = 'data' in data ? data.data : data;
+                return (data.folder_id || data.folder || 0) + '.' + data.id;
+            } else {
+                return '';
+            }
+        };
+
+    ox.cache = {
+        clear: function () {
+            ext.point("io.ox/core/cache/storage").each(function (storage) {
+                if (storage.clear && storage.isUsable()) {
+                    storage.clear();
+                }
+            });
         }
     };
+
+    ext.point("io.ox/core/cache/storage").each(function (storage) {
+        if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
+            preferredPersistentCache = storage.id;
+        }
+        storages[storage.id] = storage;
+    });
+    // #!&cacheStorage=localstorage
+    preferredPersistentCache = _.url.hash('cacheStorage') ? _.url.hash('cacheStorage') : preferredPersistentCache;
 
     /**
      *  @class CacheStorage
      */
-
     var CacheStorage = (function () {
 
         return function (name, persistent, options) {
 
             var opt = _.extend({
                     fluent: 'simple',
-                    persistent: false && Modernizr.indexeddb ? 'indexeddb' : 'localstorage'
+                    persistent: preferredPersistentCache
                 }, options || {}),
 
-                persitentCache = require('io.ox/core/cache/' + opt.persistent),
-                fluentCache = require('io.ox/core/cache/' + opt.fluent),
-                id,
+                persitentCache = storages[opt.persistent],
+                fluentCache = storages[opt.fluent],
                 // use persistent storage?
                 persist = (persitentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
                             if (ox.user !== '') {
-                                id = 'cache.' + (ox.user || '_') + '.' + (name || '');
-                                persist = function () {
-                                    return true;
-                                };
                                 return true;
                             } else {
                                 return false;
@@ -63,15 +79,16 @@ define('io.ox/core/cache',
                         }),
 
                 getStorageLayer = function () {
-                    var layer = null;
+                    var layer = null, instance, id;
                     if (persist()) {
                         layer = persitentCache;
                     } else {
                         layer = fluentCache;
                     }
-                    layer.setId(id);
+                    id = 'appsuite.cache.' + (ox.user || 'anonymous') + '.' + (ox.language || 'en_US') + '.' + (name || '');
 
-                    return layer;
+                    instance = layer.getInstance(id);
+                    return instance;
                 };
 
             this.clear = function () {
@@ -122,7 +139,6 @@ define('io.ox/core/cache',
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
             return index.get(key).pipe(function (getdata) {
-                var type = getdata === null ? 'add modify *' : 'update modify *';
                 if (getdata !== null) {
                     if (timestamp >= getdata.timestamp) {
                         return index.set(key, {

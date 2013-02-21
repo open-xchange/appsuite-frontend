@@ -9,7 +9,7 @@
 .oldschool { margin: 0; }
 
 .io-ox-mail-write h1.title {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 20px;
     line-height: 30px;
@@ -37,7 +37,7 @@
 }
 
 .io-ox-mail-write .priority-overlay.high {
-    color: @mail-priority;
+    color: @mailPriority;
 }
 
 .io-ox-mail-write .sendbutton-wrapper {
@@ -83,12 +83,12 @@
 }
 
 .touch .io-ox-mail-write textarea {
-    font-size: @touch-font-size;
+    font-size: @touchFontSize;
 }
 
 .io-ox-mail-write input[type=text],
 .io-ox-mail-write input[type=text].discreet:focus {
-    font-size: @font-size;
+    font-size: @baseFontSize;
     line-height: 18px;
     height: 29px;
     border: 1px solid #ccc;
@@ -105,9 +105,9 @@
 
 .touch .io-ox-mail-write input[type=text],
 .touch .io-ox-mail-write input[type=text].discreet:focus {
-    font-size: @touch-font-size;
-    line-height: @touch-font-size + 6;
-    height: @touch-font-size + 6 + 9;
+    font-size: @touchFontSize;
+    line-height: @touchFontSize + 6;
+    height: @touchFontSize + 6 + 9;
 }
 
 .io-ox-mail-write input[type=text]:focus,
@@ -128,7 +128,7 @@
 }
 
 .touch .io-ox-mail-write input[type=text].subject {
-    font-size: @touch-font-size + 2;
+    font-size: @touchFontSize + 2;
 }
 
 .io-ox-mail-write input[type=file] {
@@ -137,7 +137,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    .box-shadow(0px 0px 4px 0px @outline-color);
+    .box-shadow(0px 0px 4px 0px @outlineColor);
 }
 
 .io-ox-mail-write .wrapping-label {
@@ -148,7 +148,7 @@
     color: #000;
     line-height: 1.25em;
     padding: 0px 0px 5px 0px;
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     cursor: pointer;
 }
 
@@ -164,14 +164,14 @@
 }
 
 .io-ox-mail-write .section-link {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     white-space: nowrap;
     line-height: 1em;
     margin-bottom: 1em;
 }
 
 .io-ox-mail-write .section[data-section='All']{
-	font-family: @font-light;
+	font-family: @lightFontFamily;
 }
 
 .io-ox-mail-write-contact {
@@ -306,7 +306,7 @@
 }
 
 .io-ox-mail-write .text-editor {
-    font-family: @font-normal;
+    font-family: @normalFontFamily;
     font-size: 14px;
     line-height: 20px;
     color: black;
@@ -323,7 +323,7 @@
 
 .io-ox-mail-write .text-editor:focus {
     border-color: #fff;
-    .box-shadow(0px 0px 4px 0px @outline-color);
+    .box-shadow(0px 0px 4px 0px @outlineColor);
 }
 
 .io-ox-mail-write .change-format {
@@ -331,8 +331,13 @@
 }
 
 .io-ox-mail-write .change-format a {
-    color: @link-color;
+    color: @linkColor;
     font-weight: 300;
+}
+
+.io-ox-mail-write .change-format a.active {
+    color: darken(@linkColor, 50%);
+    font-weight: 500;
 }
 
 /* Proofread */

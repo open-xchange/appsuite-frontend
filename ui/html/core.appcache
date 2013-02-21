@@ -5,13 +5,8 @@ CACHE:
 # core
 @base@/favicon.ico
 @base@/boot.js
-@base@/pre-core.js
 @base@/blank.html
-@base@/src/serverconfig.js
 @base@/src/offline.js
-# bootstrap
-@base@/apps/io.ox/core/bootstrap/basics.js
-@base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/font-awesome.css
@@ -19,31 +14,16 @@ CACHE:
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.woff
 @base@/apps/themes/login/fonts/OpenSans-Light-webfont.ttf
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
+@base@/apps/themes/style.less
+@base@/apps/themes/definitions.less
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
 @base@/apps/themes/default/logo-small.png
-# core
-@base@/apps/io.ox/core/main.js
-# mail
-@base@/apps/io.ox/mail/actions.js
-@base@/apps/io.ox/mail/api.js
-@base@/apps/io.ox/mail/main.js
-@base@/apps/io.ox/mail/style.css
-@base@/apps/io.ox/mail/util.js
-@base@/apps/io.ox/mail/view-detail.js
-@base@/apps/io.ox/mail/view-grid-template.js
-@base@/apps/io.ox/mail/images/ping.mp3
-@base@/apps/io.ox/core.en_US.js
-@base@/apps/io.ox/core.de_DE.js
-@base@/apps/io.ox/core/date/date.en_US.json
-@base@/apps/io.ox/core/date/date.de_DE.json
-@base@/apps/io.ox/core/date/tz/zoneinfo/Europe/Berlin
-@base@/apps/io.ox/contacts/api.js
-@base@/apps/io.ox/mail/settings/defaults.js
-@base@/apps/io.ox/core/tk/upload.less
-# plugins
-@base@/apps/plugins/halo/register.js
+
+# modules
+api/apps/load/@base@,io.ox/core/http.js,io.ox/core/session.js,io.ox/core/cache.js,io.ox/core/extensions.js,io.ox/core/manifests.js,io.ox/core/capabilities.js,io.ox/core/config.js,io.ox/core/settings.js,io.ox/core/event.js,io.ox/core/cache/indexeddb.js,io.ox/core/cache/localstorage.js,io.ox/core/cache/simple.js,io.ox/core/async.js,/text;io.ox/core/bootstrap/css/bootstrap.less
+api/apps/load/@base@,plugins/halo/register.js
 
 NETWORK:
 *

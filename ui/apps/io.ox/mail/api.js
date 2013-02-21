@@ -92,11 +92,13 @@ define("io.ox/mail/api",
 
                 var hash = {};
 
+                // hash affected cids
+                // return top thread obj (threadview) or mail obj (singleview)
                 list = _(list).chain()
                     .map(function (obj) {
                         var cid = _.cid(obj), top = threadHash[cid];
                         hash[cid] = true;
-                        return top in threads ? _(threads[top]).first() : null;
+                        return top in threads ? _(threads[top]).first() : obj;
                     })
                     .compact().value();
 
@@ -108,8 +110,11 @@ define("io.ox/mail/api",
                 }
 
                 return api.updateAllCache(list, function (obj) {
-                    process(obj);
-                    _(obj.thread).each(process);
+                    // handles threadView: on || off
+                    if (obj.thread)
+                        _(obj.thread).each(process);
+                    else
+                        process(obj);
                 });
             },
 
@@ -141,6 +146,21 @@ define("io.ox/mail/api",
                 unseen[cid] = false;
             },
 
+            /**
+             * @param {object|string} obj (id, folder_id) or string (cid)
+             * @returns {void}
+             */
+            remove: function (obj) {
+                var cid = getCID(obj),
+                    root = this.getThreadCID(cid),
+                    thread;
+                if (root) {
+                    threads[root] = _(threads[root]).filter(function (item) {
+                        return cid !== getCID(item);
+                    });
+                }
+            },
+
             // use this to check if mails in a thread are unseen
             isPartiallyUnseen: function (obj) {
                 var cid = getCID(obj), top = threads[threadHash[cid]];
@@ -169,7 +189,13 @@ define("io.ox/mail/api",
 
             canAutoRead: function (obj) {
                 var cid = getCID(obj);
-                return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
+                if (!(cid in unseen)) { //unseen list is not initialized if mailapp was not opened before
+                                        //this makes sure mails get removed correctly in notification area if this happens
+                    unseen[cid] = true;
+                    return true;
+                } else {
+                    return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
+                }
             }
         };
 
@@ -181,7 +207,7 @@ define("io.ox/mail/api",
     var api = apiFactory({
         module: "mail",
         keyGenerator: function (obj) {
-            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || 'noimg') : '';
+            return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
         },
         requests: {
             all: {
@@ -198,7 +224,7 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
-                view: settings.get('allowHtmlMessages', true) ? 'noimg' : 'text',
+                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'noimg' : 'html') : 'text',
                 embedded: "true"
             },
             getUnmodified: {
@@ -233,9 +259,7 @@ define("io.ox/mail/api",
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true).done(function () {
-                        api.trigger('not-found');
-                    });
+                    api.remove([params], true);
                 }
             }
         },
@@ -245,13 +269,9 @@ define("io.ox/mail/api",
         },
         pipe: {
             all: function (response, opt) {
-                // debug flags
-//                _(response.data.slice(0, 7)).each(function (obj, i) {
-//                    console.warn('server > all', i, _.cid(obj), 'seen?', (obj.flags & 32) === 32);
-//                });
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
-                tracker.reset(response.data);
+                tracker.reset(response.data || response); // threadedAll || all
                 return response;
             },
             get: function (data, options) {
@@ -395,19 +415,17 @@ define("io.ox/mail/api",
 
     // ~ list
     api.getThreads = function (ids) {
-
-        return this.getList(ids)
-            .pipe(function (data) {
-                // clone not to mess up with searches
-                data = _.deepClone(data);
-                // inject thread size
-                var i = 0, obj;
-                for (; (obj = data[i]); i++) {
-                    obj.threadSize = tracker.getThreadSize(obj);
-                    obj.unreadCount = tracker.getUnreadCount(obj);
-                }
-                return data;
-            });
+        return this.getList(ids).pipe(function (data) {
+            // clone not to mess up with searches
+            data = _.deepClone(data);
+            // inject thread size
+            var i = 0, obj;
+            for (; (obj = data[i]); i++) {
+                obj.threadSize = tracker.getThreadSize(obj);
+                obj.unreadCount = tracker.getUnreadCount(obj);
+            }
+            return data;
+        });
     };
 
     var update = function (list, data, apiAction) {
@@ -473,15 +491,19 @@ define("io.ox/mail/api",
             return api.caches.all.grepKeys(folder_id + DELIM).pipe(function (keys) {
                 return $.when.apply($, _(keys).map(function (folder_id) {
                     return api.caches.all.get(folder_id).pipe(function (co) {
-                        if (co && co.data) {
+                        // handles threadView: on || off
+                        if (co) {
+                            co.data = co.data || co;
                             // update affected items
                             return $.when.apply($,
                                 _(co.data).map(function (obj) {
                                     if (_.cid(obj) in hash) {
                                         callback(obj);
+                                        // handles threadView: on || off
+                                        var elem = obj.thread || obj;
                                         return $.when(
-                                            api.caches.list.merge(obj),
-                                            api.caches.get.merge(obj)
+                                            api.caches.list.merge(elem),
+                                            api.caches.get.merge(elem)
                                         );
                                     } else {
                                         return DONE;
@@ -516,6 +538,8 @@ define("io.ox/mail/api",
 
         list = [].concat(list);
 
+        label = String(label); // Bugfix: #24730
+
         return $.when(
             tracker.update(list, function (obj) {
                 obj.color_label = label;
@@ -527,7 +551,6 @@ define("io.ox/mail/api",
     };
 
     api.markUnread = function (list) {
-
         list = [].concat(list);
 
         _(list).each(function (obj) {
@@ -549,7 +572,6 @@ define("io.ox/mail/api",
     };
 
     api.markRead = function (list) {
-
         list = [].concat(list);
 
         _(list).each(function (obj) {
@@ -906,7 +928,7 @@ define("io.ox/mail/api",
             params: {
                 action: 'all',
                 folder: 'default0/INBOX',
-                columns: '610,600,601', //received_date, id, folder_id
+                columns: '610,600,601,611', //received_date, id, folder_id, flags
                 unseen: 'true',
                 deleted: 'true',
                 sort: '610',
@@ -921,7 +943,7 @@ define("io.ox/mail/api",
                 recent = _(unseen).filter(function (obj) {
                     return obj.received_date > lastUnseenMail;
                 });
-                if (recent.length > 0) {
+                if (recent.length > 0 && (recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'
                     api.trigger('new-mail', recent);
                     lastUnseenMail = recent[0].received_date;
                 }
@@ -959,7 +981,7 @@ define("io.ox/mail/api",
         });
         // loop over list and check occurence via hash
         return _(list).filter(function (obj) {
-            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s, entire;
+            var cid = _.cid(obj), found = cid in hash, length = obj.thread ? obj.thread.length : 1, s, entire;
             // case #1: found in hash; no thread
             if (found && length <= 1) {
                 return false;

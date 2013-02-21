@@ -45,6 +45,10 @@ define('io.ox/office/tk/control/label',
             // the update handler
             updateHandler = Utils.getFunctionOption(options, 'updateHandler');
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, options);
+
         // private methods ----------------------------------------------------
 
         /**
@@ -60,9 +64,37 @@ define('io.ox/office/tk/control/label',
             Utils.setControlCaption(label, labelOptions);
         }
 
-        // base constructor ---------------------------------------------------
+        // methods ------------------------------------------------------------
 
-        Group.call(this, options);
+        /**
+         * Changes the icon of this label control.
+         *
+         * @param {String} [icon]
+         *  The CSS class name of the new icon. If omitted, the current icon
+         *  will be removed from the label.
+         *
+         * @returns {Label}
+         *  A reference to this instance.
+         */
+        this.setIcon = function (icon) {
+            Utils.setControlCaption(label, Utils.extendOptions(options, { icon: icon }));
+            return this;
+        };
+
+        /**
+         * Changes the label text of this label control.
+         *
+         * @param {String} [labelText]
+         *  The new label text. If omitted, the current label text will be
+         *  removed from the label control.
+         *
+         * @returns {Label}
+         *  A reference to this instance.
+         */
+        this.setLabelText = function (labelText) {
+            Utils.setControlCaption(label, Utils.extendOptions(options, { label: labelText }));
+            return this;
+        };
 
         // initialization -----------------------------------------------------
 

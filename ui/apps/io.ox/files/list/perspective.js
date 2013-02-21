@@ -39,8 +39,8 @@ define('io.ox/files/list/perspective',
             build: function () {
                 var name;
                 this
-                    .addClass("file")
-                    .append(name = $("<div>").addClass("name"));
+                    .addClass('file')
+                    .append(name = $('<div>').addClass('name'));
                 return { name: name };
             },
             set: function (data, fields, index) {
@@ -97,14 +97,14 @@ define('io.ox/files/list/perspective',
                 dropZone.update();
             }
         })
-        .on("change", function (evt, selected) {
+        .on('change', function (evt, selected) {
             if (selected.length > 1) {
                 app.currentFile = null;
             }
         });
 
         // delete item
-        api.on("beforedelete", function () {
+        api.on('beforedelete', function () {
             grid.selection.selectNext();
         });
 
@@ -116,12 +116,20 @@ define('io.ox/files/list/perspective',
                 win.busy();
             },
             progress: function (file) {
-                return api.uploadFile({ file: file, folder: app.folder.get() }).done(function (data) {
-                    // select new item
-                    grid.selection.set([data]);
-                    grid.refresh();
-                    // TODO: Error Handling
-                });
+                return api.uploadFile({ file: file, folder: app.folder.get() })
+                    .done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    }).fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('This file has not been added'));
+                        });
+                    });
             },
             stop: function () {
                 win.idle();
@@ -144,6 +152,13 @@ define('io.ox/files/list/perspective',
                         grid.selection.set([data]);
                         grid.refresh();
                         // TODO: Error Handling
+                    }).fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            if (e && e.code && e.code === 'UPL-0005')
+                                notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                            else
+                                notifications.yell('error', gt('This file has not been added'));
+                        });
                     });
             },
             stop: function () {
@@ -153,23 +168,23 @@ define('io.ox/files/list/perspective',
 
         if (_.browser.IE === undefined || _.browser.IE > 9) {
             dropZone = new dnd.UploadZone({
-                ref: "io.ox/files/dnd/actions"
+                ref: 'io.ox/files/dnd/actions'
             }, app);
 
 
         // var shortcutPoint = new shortcuts.Shortcuts({
-        //     ref: "io.ox/files/shortcuts"
+        //     ref: 'io.ox/files/shortcuts'
         // });
-            if (dropZone) {dropZone.include(); }
+            if (dropZone) dropZone.include();
 
 
-            app.on("perspective:list:hide", function () {
-                if (dropZone) {dropZone.remove(); }
+            app.on('perspective:list:hide', function () {
+                if (dropZone) dropZone.remove();
                 // shortcutPoint.deactivate();
             });
 
-            app.on("perspective:list:show", function () {
-                if (dropZone) {dropZone.include(); }
+            app.on('perspective:list:show', function () {
+                if (dropZone) dropZone.include();
                 // shortcutPoint.deactivate();
             });
 
@@ -193,7 +208,7 @@ define('io.ox/files/list/perspective',
         app.on('folder:change', function (e, id, folder) {
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();
-                if (dropZone) { dropZone.include(); }
+                if (dropZone) dropZone.include();
             }
             // reset first
             win.nodes.title.find('.has-publications').remove();

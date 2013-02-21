@@ -26,7 +26,18 @@ define("io.ox/calendar/main",
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win,
-        lastPerspective = 'week:' + settings.get('viewView', 'workweek');
+        lastPerspective = settings.get('viewView', 'week:workweek');
+
+    // corrupt data fix
+    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+
+    // First mobile handling, just for the moment a workaround until we have
+    // the backend calls for this
+
+    if (_.browser.iOS || _.browser.android) {
+        // force listview for iOS device
+        lastPerspective = 'list';
+    }
 
     // launcher
     app.setLauncher(function (options) {
@@ -45,7 +56,7 @@ define("io.ox/calendar/main",
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar')
+        commons.addFolderSupport(app, null, 'calendar', config.get('folder.calendar'))
             .pipe(commons.showWindow(win))
             .done(function () {
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);

@@ -13,28 +13,15 @@
 
 define('io.ox/office/tk/view/view',
         ['io.ox/office/tk/utils',
-         'io.ox/office/tk/view/pane'
-        ], function (Utils, Pane) {
+         'io.ox/office/tk/view/pane',
+         'gettext!io.ox/office/main',
+         'less!io.ox/office/tk/view/style.css'
+        ], function (Utils, Pane, gt) {
 
     'use strict';
 
-    // private global functions ===============================================
-
-    /**
-     * Translates the two passed boolean flags describing a pane position to
-     * the correct name of a window border side.
-     *
-     * @param {Boolean} horizontal
-     *  If true, selects horizontal panes (top or bottom); otherwise, selects
-     *  vertical panes (left or right).
-     *
-     * @param {Boolean} leading
-     *  If true, selects the leading pane (top or left); otherwise, selects the
-     *  trailing pane (bottom or right).
-     */
-    function getPaneSide(horizontal, leading) {
-        return horizontal ? (leading ? 'top' : 'bottom') : (leading ? 'left' : 'right');
-    }
+    var // CSS marker class for panes in overlay mode
+        OVERLAY_CLASS = 'overlay';
 
     // class View =============================================================
 
@@ -42,6 +29,11 @@ define('io.ox/office/tk/view/view',
      * Base class for the view instance of an office application. Creates the
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
+     *
+     * @constructor
+     *
+     * @param {OfficeApplication} app
+     *  The application containing this view instance.
      *
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
@@ -52,69 +44,72 @@ define('io.ox/office/tk/view/view',
      */
     function View(app, options) {
 
-        var // the application controller
-            controller = app.getController(),
-
-            // the application window
-            win = ox.ui.createWindow({ name: app.getName() }),
-
-            // centered application pane
+        var // centered application pane
             appPane = null,
 
             // application model container node
             modelContainerNode = $('<div>').addClass('app-pane-model-container'),
 
-            // all pane instances, mapped by identifier, and by border side
-            panes = { all: {}, top: [], bottom: [], left: [], right: [] },
+            // all pane instances, in insertion order
+            panes = [],
+
+            // all pane instances, mapped by identifier
+            panesById = {},
 
             // inner shadows for application pane
-            shadowNodes = {};
+            shadowNodes = {},
+
+            // identifier of the view pane following an alert banner
+            alertsBeforePaneId = null,
+
+            // alert banner currently shown
+            currentAlert = null,
+
+            // timeout for current alert auto-close
+            currentAlertTimeout = null;
 
         // private methods ----------------------------------------------------
 
         /**
-         * Handles resize events of the browser window, and adjusts the view
-         * pane nodes.
+         * Adjusts the positions of all view pane nodes.
          */
-        function windowResizeHandler(event) {
+        function refreshPaneLayout() {
 
-            var // current offsets representing available space in the application window
+            var // all pane nodes and the alert banner
+                paneNodes = [],
+                // current offsets representing available space in the application window
                 offsets = { top: 0, bottom: 0, left: 0, right: 0 };
 
-            // updates the position of a single pane, and updates the 'offsets' object
-            function updatePane(pane, horizontal, leading) {
-
-                var paneNode = pane.getNode(),
-                    paneOffsets = null;
-
-                if (paneNode.css('display') !== 'none') {
-                    paneOffsets = _.clone(offsets);
-                    paneOffsets[getPaneSide(horizontal, !leading)] = 'auto';
-                    paneNode.css(paneOffsets);
-                    offsets[getPaneSide(horizontal, leading)] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+            // callback function for _.any(), tries to insert currentAlert into the paneNodes array
+            function insertCurrentAlert(pane, index) {
+                if (pane.getIdentifier() === alertsBeforePaneId) {
+                    paneNodes.splice(index, 0, currentAlert);
+                    return true;
                 }
             }
 
-            // updates the top and bottom panes
-            function updateHorizontalPanes() {
-                _(panes.top).each(function (pane) { updatePane(pane, true, true); });
-                _(panes.bottom).each(function (pane) { updatePane(pane, true, false); });
+            // extract the nodes of all view panes
+            paneNodes = _(panes).map(function (pane) { return pane.getNode(); });
+
+            // insert the current alert banner at the configured position, otherwise append it
+            if (currentAlert && !_(panes).any(insertCurrentAlert)) {
+                paneNodes.push(currentAlert);
             }
 
-            // updates the left and right panes
-            function updateVerticalPanes() {
-                _(panes.left).each(function (pane) { updatePane(pane, false, true); });
-                _(panes.right).each(function (pane) { updatePane(pane, false, false); });
-            }
+            // update the position of all panes (updates the 'offsets' object accordingly)
+            _(paneNodes).each(function (paneNode) {
 
-            // start with panes located at the smaller sides of the window
-            if (win.nodes.main.width() < win.nodes.main.height()) {
-                updateHorizontalPanes();
-                updateVerticalPanes();
-            } else {
-                updateVerticalPanes();
-                updateHorizontalPanes();
-            }
+                var position = paneNode.data('pane-pos'),
+                    horizontal = (position === 'top') || (position === 'bottom'),
+                    leading = (position === 'top') || (position === 'left'),
+                    paneOffsets = _.clone(offsets);
+
+                paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
+                paneNode.css(paneOffsets);
+                if ((paneNode.css('display') !== 'none') && !paneNode.hasClass(OVERLAY_CLASS)) {
+                    offsets[position] += (horizontal ? paneNode.outerHeight() : paneNode.outerWidth());
+                }
+            });
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
             appPane.getNode().css(offsets);
@@ -128,14 +123,70 @@ define('io.ox/office/tk/view/view',
 
         /**
          * Returns the central DOM node of the application (the complete inner
-         * area between all existing view panes). This is always the parent
-         * node of the application model root node.
+         * area between all existing view panes).
          *
          * @returns {jQuery}
          *  The central DOM node of the application.
          */
         this.getApplicationNode = function () {
             return appPane.getNode();
+        };
+
+        /**
+         * Adds the passed view pane instance into this view.
+         *
+         * @param {Pane} pane
+         *  The view pane instance to be inserted into this view.
+         *
+         * @param {String} position
+         *  The border of the application window to attach the view pane to.
+         *  Supported values are 'top', 'bottom', 'left', and 'right'.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the appearance of the view pane. The
+         *  following options are supported:
+         *  @param {Boolean} [options.overlay=false]
+         *      If set to true, the pane will float over the other panes and
+         *      application contents instead of reserving and consuming the
+         *      space needed for its size.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.addPane = function (pane, position, options) {
+
+            // insert the pane
+            panesById[pane.getIdentifier()] = pane;
+            panes.push(pane);
+            app.getWindowNode().append(pane.getNode());
+
+            // overlay mode and position
+            pane.getNode().toggleClass(OVERLAY_CLASS, Utils.getBooleanOption(options, 'overlay', false));
+            return this.setPanePosition(pane.getIdentifier(), position);
+        };
+
+        /**
+         * Creates a new view pane instance in this view.
+         *
+         * @param {String} id
+         *  The unique identifier of the new view pane.
+         *
+         * @param {String} position
+         *  The border of the application window to attach the view pane to.
+         *  Supported values are 'top', 'bottom', 'left', and 'right'.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new view pane.
+         *  Supports all options supported by the Pane class constructor, and
+         *  the method View.addPane().
+         *
+         * @returns {Pane}
+         *  The new view pane.
+         */
+        this.createPane = function (id, position, options) {
+            var pane = new Pane(app, id, options);
+            this.addPane(pane, position, options);
+            return pane;
         };
 
         /**
@@ -150,94 +201,332 @@ define('io.ox/office/tk/view/view',
          *  pane has been found.
          */
         this.getPane = function (id) {
-            return (id in panes.all) ? panes.all[id] : null;
+            return (id in panesById) ? panesById[id] : null;
         };
 
         /**
-         * Adds the passed view pane instance into this view.
+         * Changes the position of the pane.
          *
          * @param {String} id
          *  The unique identifier of the view pane.
          *
-         * @param {Pane} pane
-         *  The new view pane instance.
-         *
-         * @param {String} side
+         * @param {String} position
          *  The border of the application window to attach the view pane to.
          *  Supported values are 'top', 'bottom', 'left', and 'right'.
          *
          * @returns {View}
          *  A reference to this instance.
          */
-        this.addPane = function (id, pane, side) {
-            if (_.isArray(panes[side])) {
-                panes.all[id] = pane;
-                panes[side].push(pane);
-                win.nodes.main.append(pane.getNode().addClass(side));
-                windowResizeHandler();
+        this.setPanePosition = function (id, position) {
+            if (id in panesById) {
+                panesById[id].getNode().data('pane-pos', position);
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Returns whether the specified view pane is currently visible.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {Boolean}
+         *  Whether the specified view pane is currently visible.
+         */
+        this.isPaneVisible = function (id) {
+            return  (id in panesById) && panesById[id].isVisible();
+        };
+
+        /**
+         * Makes the view pane with the specified identifier visible.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.showPane = function (id) {
-            if (id in panes.all) {
-                panes.all[id].getNode().show();
-                windowResizeHandler();
+            if (id in panesById) {
+                panesById[id].getNode().show();
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Hides the view pane with the specified identifier.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.hidePane = function (id) {
-            if (id in panes.all) {
-                panes.all[id].getNode().hide();
-                windowResizeHandler();
+            if (id in panesById) {
+                panesById[id].getNode().hide();
+                refreshPaneLayout();
             }
             return this;
         };
 
+        /**
+         * Changes the visibility of the view pane with the specified
+         * identifier.
+         *
+         * @param {String} id
+         *  The unique identifier of the view pane.
+         *
+         * @param {Boolean} [state]
+         *  If specified, shows or hides the view pane independently from its
+         *  current visibility state. If omitted, toggles the visibility of the
+         *  view pane.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
         this.togglePane = function (id, state) {
-            if (id in panes.all) {
-                panes.all[id].getNode().toggle(state);
-                windowResizeHandler();
+            if (id in panesById) {
+                panesById[id].getNode().toggle(state);
+                refreshPaneLayout();
             }
             return this;
+        };
+
+        /**
+         * Returns whether an alert banner is currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether an alert banner is visible.
+         */
+        this.hasAlert = function () {
+            return _.isObject(currentAlert);
+        };
+
+        /**
+         * Registers the identifier of the first view pane that will be
+         * rendered after an alert banner. By default, an alert banner will be
+         * drawn after all view panes.
+         *
+         * @param {String} id
+         *  The unique identifier of the first view pane drawn after an alert
+         *  banner.
+         */
+        this.showAlertsBeforePane = function (id) {
+            alertsBeforePaneId = _.isString(id) ? id : null;
+            refreshPaneLayout();
+        };
+
+        /**
+         * Shows an alert banner at the top of the application window. An alert
+         * currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {String} type
+         *  The type of the alert banner. Supported values are 'error',
+         *  'warning', and 'success'.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. The following options are supported:
+         *  @param {Boolean} [options.closeable]
+         *      If set to true, the alert banner can be closed with a close
+         *      button shown in the top-right corner of the banner.
+         *  @param {Number} [options.timeout=5000]
+         *      Can be specified together with 'options.closeable'. Specifies
+         *      the number of milliseconds until the alert banner will vanish
+         *      automatically. If not specified, the default of five seconds is
+         *      used. The value 0 will show a closeable alert banner that will
+         *      not vanish automatically.
+         *  @param {String} [options.buttonLabel]
+         *      If specified, a push button will be shown with the passed
+         *      caption label.
+         *  @param {String} [options.buttonKey]
+         *      Must be specified together with the 'options.buttonLabel'
+         *      option. When the button has been pressed, the controller item
+         *      with the passed key will be executed.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showAlert = function (title, message, type, options) {
+
+            var // the label of the push button to be shown in the alert banner
+                buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
+                // the controller key of the push button
+                buttonKey = Utils.getStringOption(options, 'buttonKey'),
+                // create a new alert node
+                alert = $.alert(title, message)
+                    .removeClass('alert-error')
+                    .addClass('alert-' + type + ' in hide')
+                    .data('pane-pos', 'top'),
+                // auto-close timeout delay
+                timeout = Utils.getIntegerOption(options, 'timeout', 5000);
+
+            function toggleOverlay(state) {
+                alert.toggleClass(OVERLAY_CLASS, state);
+                refreshPaneLayout();
+            }
+
+            // Hides the alert with a specific animation.
+            function closeAlert() {
+                toggleOverlay(true);
+                alert.slideUp('fast', function () {
+                    alert.remove();
+                    currentAlert = null;
+                });
+            }
+
+            function buttonClickHandler() {
+                closeAlert();
+                app.getController().change(buttonKey);
+            }
+
+            // remove alert banner currently shown, update reference to current alert
+            app.cancelDelayed(currentAlertTimeout);
+            currentAlertTimeout = null;
+            if (currentAlert) { currentAlert.remove(); }
+            currentAlert = alert;
+
+            // make the alert banner closeable
+            if (Utils.getBooleanOption(options, 'closeable', false)) {
+                // alert can be closed by clicking anywhere in the banner
+                alert.click(closeAlert);
+                // initialize auto-close
+                if (timeout > 0) {
+                    currentAlertTimeout = app.executeDelayed(closeAlert, timeout);
+                }
+            } else {
+                // remove closer button
+                alert.find('a.close').remove();
+            }
+
+            // always execute controller default action when alert has been clicked (also if not closeable)
+            alert.click(function () { app.getController().done(); });
+
+            // insert the push button into the alert banner
+            if (_.isString(buttonLabel) && _.isString(buttonKey)) {
+                alert.append(
+                    $.button({ label: buttonLabel }).addClass('btn-' + type + ' btn-mini').click(buttonClickHandler)
+                );
+            }
+
+            // insert and show the new alert banner
+            app.getWindowNode().append(alert);
+            toggleOverlay(true);
+            // after alert is visible, remove overlay mode, and refresh pane layout again
+            alert.slideDown('fast', function () { toggleOverlay(false); });
+
+            return this;
+        };
+
+        /**
+         * Shows an error alert banner at the top of the application window. An
+         * alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showError = function (title, message, options) {
+            return this.showAlert(title, message, 'error', options);
+        };
+
+        /**
+         * Shows a warning alert banner at the top of the application window.
+         * An alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showWarning = function (title, message, options) {
+            return this.showAlert(title, message, 'warning', options);
+        };
+
+        /**
+         * Shows a success alert banner at the top of the application window.
+         * An alert currently shown will be removed before.
+         *
+         * @param {String} title
+         *  The alert title.
+         *
+         * @param {String} message
+         *  The alert message text.
+         *
+         * @param {Object} [options]
+         *  A map with additional options controlling the appearance and
+         *  behavior of the alert banner. See method Alert.showAlert() for
+         *  details.
+         *
+         * @returns {View}
+         *  A reference to this instance.
+         */
+        this.showSuccess = function (title, message, options) {
+            return this.showAlert(title, message, 'success', options);
         };
 
         this.destroy = function () {
-            _(panes.all).invoke('destroy');
+            _(panes).invoke('destroy');
             appPane.destroy();
-            win = appPane = panes = null;
+            appPane = panes = panesById = null;
         };
 
         // initialization -----------------------------------------------------
-
-        // set the window at the application instance
-        app.setWindow(win);
 
         // insert the document model root node into the container node
         modelContainerNode.append(app.getModel().getNode());
         modelContainerNode.css('margin', Utils.getIntegerOption(options, 'modelPadding', 0, 0) + 'px');
 
         // create the application pane, and insert the model container
-        appPane = new Pane(app, { classes: 'app-pane' });
+        appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
         appPane.getNode().append(modelContainerNode);
 
-        // move window tool bar to the right
-        win.nodes.outer.addClass('toolbar-right');
-
         // add the main application pane
-        win.nodes.main.addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
-            win.nodes.main.append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
+            app.getWindowNode().append(shadowNodes[border] = $('<div>').addClass('app-pane-shadow'));
         });
 
         // listen to browser window resize events when the OX window is visible
-        app.registerWindowResizeHandler(windowResizeHandler);
+        app.registerWindowResizeHandler(refreshPaneLayout);
 
         // update all view components every time the window will be shown
-        win.on('show', function () { controller.update(); });
+        app.getWindow().on('show', function () { app.getController().update(); });
+
+        // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+        app.on('docs:init:after', function () {
+            app.getWindowNode().find('.toolbox .group:not(.design-white) a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
+        });
 
     } // class View
 

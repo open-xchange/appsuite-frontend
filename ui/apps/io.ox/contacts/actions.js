@@ -114,33 +114,37 @@ define('io.ox/contacts/actions',
     var copyMove = function (type, apiAction, title, success) {
         return function (list) {
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
+
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text(title))
                     .addPrimaryButton('ok', title)
-                    .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var item = _(list).first(),
-                    tree = new views.FolderList(dialog.getBody(), { type: type });
-                tree.paint();
-                dialog.show(function () {
-                    tree.selection.set(item.folder_id || item.folder);
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api[apiAction](list, selectedFolder[0]).then(
-                                function () {
-                                    notifications.yell('success', success);
-                                },
-                                notifications.yell
-                            );
+                    .addButton('cancel', gt('Cancel')),
+                    item = _(list).first(),
+                    id = String(item.folder_id || item.folder),
+                    tree = new views.FolderList(dialog.getBody().css('height', '250px'), { type: type });
+
+                dialog
+                    .show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var selectedFolder = tree.selection.get();
+                            if (selectedFolder.length === 1) {
+                                // move action
+                                api[apiAction](list, selectedFolder[0]).then(
+                                    function () {
+                                        notifications.yell('success', success);
+                                    },
+                                    notifications.yell
+                                );
+                            }
                         }
-                    }
-                    tree.destroy();
-                    tree = dialog = null;
-                });
+                        tree.destroy();
+                        tree = dialog = null;
+                    });
             });
         };
     };
@@ -259,6 +263,22 @@ define('io.ox/contacts/actions',
         }
     });
 
+    new Action('io.ox/contacts/actions/add-to-portal', {
+        requires: function (e) {
+            return e.collection.has('one') && !!e.context.mark_as_distributionlist;
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickycontact', 'contacts', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.display_name
+                });
+                notifications.yell('success', gt('This distribution list has been added to the portal'));
+            });
+        }
+    });
+
     //  points
 
     ext.point('io.ox/contacts/detail/actions').extend(new links.InlineLinks({
@@ -273,7 +293,7 @@ define('io.ox/contacts/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus accent-color">');
         }
     });
 
@@ -324,8 +344,14 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         prio: 'hi',
         label: gt('Delete'),
-        ref: 'io.ox/contacts/actions/delete',
-        special: 'danger'
+        ref: 'io.ox/contacts/actions/delete'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-portal',
+        index: INDEX += 100,
+        label: gt('Add to portal'),
+        ref: 'io.ox/contacts/actions/add-to-portal'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({

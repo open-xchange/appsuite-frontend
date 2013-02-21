@@ -45,6 +45,7 @@ define('io.ox/settings/main',
             }
         },
         requiresLabel: function (i, data, current) {
+            if (!data) { return false; }
             return data.group !== current ? data.group : false;
         }
     };
@@ -85,8 +86,6 @@ define('io.ox/settings/main',
             }
         };
 
-        win.on('hide', saveSettings);
-
         win.nodes.controls.append(
             forms.createCheckbox({
                 dataid: 'settings-expertcb',
@@ -109,7 +108,7 @@ define('io.ox/settings/main',
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
 
-        grid = new VGrid(left);
+        grid = new VGrid(left, { multiple: false });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -135,7 +134,7 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/core',
                     settings: true,
-                    title: 'Basic Settings'
+                    title: gt('Basic settings')
                 });
 
                 // TODO: Move this to a plugin
@@ -146,7 +145,7 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/settings/accounts',
                     settings: true,
-                    title: 'Keyring'
+                    title: gt('Mail and Social Accounts')
                 });
 
                 // Extend the above list by custom plugins
@@ -166,8 +165,6 @@ define('io.ox/settings/main',
 
             return def;
         });
-
-        grid.setMultiple(false);
 
         var showSettings = function (obj) {
             var settingsPath = obj.id + '/settings/pane',
@@ -189,10 +186,12 @@ define('io.ox/settings/main',
         // trigger auto save
         grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
-                saveSettings();
                 currentSelection = selection[0];
             }
         });
+
+        // trigger auto save on any change
+        win.nodes.main.on('change', saveSettings);
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
         commons.wireGridAndWindow(grid, win);

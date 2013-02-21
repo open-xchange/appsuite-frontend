@@ -1,123 +1,280 @@
+
+//
+// Variables
+// --------------------------------------------------
+
+
+// Global values
+// --------------------------------------------------
+
+
+// Grays
+// -------------------------
+@black:                 #000;
+@grayDarker:            #222;
+@grayDark:              #333;
+@gray:                  #555;
+@grayLight:             #aaa;
+@grayLighter:           #eee;
+@white:                 #fff;
+
+
+// Accent colors
+// -------------------------
+@blue:                  darken(#049cdb, 5%);
+@blueDark:              #0064cd;
+@blueLight:             lighten(#049cdb, 25%);
+@green:                 #1A8D1A;
+@greenLight:            #92D050;
+@red:                   #cc0000;
+@yellow:                #F8E400; // bit darker than #FFFF00, slightly more red
+@orange:                #f89406;
+@pink:                  #E01CD9;
+@purple:                #7E16CF;
+
+
+
+
+// Scaffolding
+// -------------------------
+@bodyBackground:        @white;
+@textColor:             @grayDark;
+
+
+// Links
+// -------------------------
+@linkColor:             #08c;
+@linkColorHover:        darken(@linkColor, 15%);
+@linkAccentColor:       #FFAD00;
+
+
+// Typography
+// -------------------------
+@sansFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
+@serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+@monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
+
+@baseFontSize:          14px;
+@baseFontFamily:        @sansFontFamily;
+@baseLineHeight:        20px;
+@altFontFamily:         @serifFontFamily;
+
+@touchFontSize:         15px;
+
+
+@headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
+@headingsFontWeight:    bold;    // instead of browser default, bold
+@headingsColor:         inherit; // empty to use BS default, @textColor
+
+
+// Component sizing
+// -------------------------
+// Based on 14px font-size and 20px line-height
+
+@fontSizeLarge:         @baseFontSize * 1.25; // ~18px
+@fontSizeSmall:         @baseFontSize * 0.85; // ~12px
+@fontSizeMini:          @baseFontSize * 0.75; // ~11px
+
+@paddingLarge:          11px 19px; // 44px
+@paddingSmall:          2px 10px;  // 26px
+@paddingMini:           0 6px;   // 22px
+
+@baseBorderRadius:      4px;
+@borderRadiusLarge:     6px;
+@borderRadiusSmall:     3px;
+
+
+// Tables
+// -------------------------
+@tableBackground:                   transparent; // overall background-color
+@tableBackgroundAccent:             #f9f9f9; // for striping
+@tableBackgroundHover:              #f5f5f5; // for hover
+@tableBorder:                       #ddd; // table and cell border
+
+// Buttons
+// -------------------------
+@btnBackground:                     @white;
+@btnBackgroundHighlight:            darken(@white, 10%);
+@btnBorder:                         #bbb;
+
+@btnPrimaryBackground:              @linkColor;
+@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 20%);
+
+@btnInfoBackground:                 #5bc0de;
+@btnInfoBackgroundHighlight:        #2f96b4;
+
+@btnSuccessBackground:              #62c462;
+@btnSuccessBackgroundHighlight:     #51a351;
+
+@btnWarningBackground:              lighten(@orange, 15%);
+@btnWarningBackgroundHighlight:     @orange;
+
+@btnDangerBackground:               #ee5f5b;
+@btnDangerBackgroundHighlight:      #bd362f;
+
+@btnInverseBackground:              #444;
+@btnInverseBackgroundHighlight:     @grayDarker;
+
+
+// Forms
+// -------------------------
+@inputBackground:               @white;
+@inputBorder:                   #ccc;
+@inputBorderRadius:             @baseBorderRadius;
+@inputDisabledBackground:       @grayLighter;
+@formActionsBackground:         #f5f5f5;
+@inputHeight:                   @baseLineHeight + 10px; // base line-height + 8px vertical padding + 2px top/bottom border
+
+
+// Dropdowns
+// -------------------------
+@dropdownBackground:            @white;
+@dropdownBorder:                rgba(0,0,0,.2);
+@dropdownDividerTop:            #e5e5e5;
+@dropdownDividerBottom:         @white;
+
+@dropdownLinkColor:             @grayDark;
+@dropdownLinkColorHover:        @white;
+@dropdownLinkColorActive:       @white;
+
+@dropdownLinkBackgroundActive:  @linkColor;
+@dropdownLinkBackgroundHover:   @dropdownLinkBackgroundActive;
+
+
+// Input placeholder text color
+// -------------------------
+@placeholderText:         @grayLight;
+
+
+// Hr border color
+// -------------------------
+@hrBorder:                @grayLighter;
+
+
+// Horizontal forms & lists
+// -------------------------
+@horizontalComponentOffset:       180px;
+
+
+// Wells
+// -------------------------
+@wellBackground:                  #f5f5f5;
+
+// Pagination
+// -------------------------
+@paginationBackground:                #fff;
+@paginationBorder:                    #ddd;
+@paginationActiveBackground:          #f5f5f5;
+
+// Form states and alerts
+// -------------------------
+@warningText:             #c09853;
+@warningBackground:       #fcf8e3;
+@warningBorder:           darken(spin(@warningBackground, -10), 3%);
+
+@errorText:               #b94a48;
+@errorBackground:         #f2dede;
+@errorBorder:             darken(spin(@errorBackground, -10), 3%);
+
+@successText:             #468847;
+@successBackground:       #dff0d8;
+@successBorder:           darken(spin(@successBackground, -10), 5%);
+
+@infoText:                #3a87ad;
+@infoBackground:          #d9edf7;
+@infoBorder:              darken(spin(@infoBackground, -10), 7%);
+
+
+// Tooltips and popovers
+// -------------------------
+@tooltipColor:            #fff;
+@tooltipBackground:       #000;
+@tooltipArrowWidth:       5px;
+@tooltipArrowColor:       @tooltipBackground;
+
+@popoverBackground:       #fff;
+@popoverArrowWidth:       10px;
+@popoverArrowColor:       #fff;
+@popoverTitleBackground:  darken(@popoverBackground, 3%);
+
+// Special enhancement for popovers
+@popoverArrowOuterWidth:  @popoverArrowWidth + 1;
+@popoverArrowOuterColor:  rgba(0,0,0,.25);
+
+
+// OX
+//----------------------
 /* basic definitions */
 
-@accent1-bright: #0090CD;
+@accent1Bright: #0090CD;
 @accent1: #006897;
-@accent1-dark: #007DB3;
+@accent1Dark: #007DB3;
 @accent2: #c84673;
-@accent2-dark: #993658;
-
-@font-size: 12px;
-@touch-font-size: 15px;
-
-@color: #333; /* not #000 ! */
+@accent2Dark: #993658;
 
 /* assignments */
 
-@link-color: #08c;
-@link-on-dark: #3BF;
-@link-color-dark: @accent1-dark;
-@inline-link-color: @accent1-bright;
-@action-link-color: @accent1;
-@person-link-color: @accent1-bright;
+@linkOnDark: #3BF;
+@inlineLinkColor: @linkColor;
+@personLinkColor: @linkColor;
 
 @toolbar: #08c;
-@app-favorites: @accent2;
-@outline-color: @accent1;
+@outlineColor: @accent1;
 
-@topbar-font-size: 13px;
-@window-head-font-size: 13px;
-@vgrid-font-size: 13px;
-@inline-link-font-size: 14px;
-@inline-links-margin: 18px 0;
+@enabledBackground: #ddd;
+@enabledColor: #000;
+
+@disabledBackground: #ccc;
+@disabledColor: #999;
+
+@topbarFontSize: 13px;
+@windowHeadFontSize: 13px;
+@vgridFontSize: 13px;
+@inlineLinkFontSize: 14px;
+@inlineLinksMargin: 18px 0;
 
 /* individual definitions */
 
-@font-light: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-@font-normal: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@lightFontFamily: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@normalFontFamily: @sansFontFamily;
 
-@wallpaper-fallback-color: #ffffff;
-@wallpaper-color1: rgba(255, 255, 255, 1);
-@wallpaper-color2: rgba(246, 246, 246, 1);
-@wallpaper-color3: rgba(168, 168, 168, 1);
-
-@menu-background: #000;
-@menu-color: #fff;
+@wallpaperColor1: rgba(255, 255, 255, 1);
+@wallpaperColor2: rgba(246, 246, 246, 1);
+@wallpaperColor3: rgba(168, 168, 168, 1);
 
 @background: #fff;
 
-@selected-background: #39A9E1;
-@selected-color: #F0FAFF;
+@selectedBackground: #39A9E1;
+@selectedColor: #F0FAFF;
 
-@enabled-background: #ddd;
-@enabled-color: #000;
+@windowHeadTop: #222;
+@windowHeadBottom: #111;
+@foldertreeSidepanelBackground: #333;
 
-@disabled-background: #ccc;
-@disabled-color: #999;
+@windowTitleColor: #fff;
+@toolbarLinkColor: lighten(@toolbar, 20%);
 
-@status-background: #F0F0F0;
-@status-color: #000;
+@topbarBackground: #222;
+@topbarBackgroundAlt: lighten(@topbarBackground, 8%);
 
-@head-background: @menu-background;
-@head-color: @menu-color;
+@topbarLauncherColor: #aaa;
+@topbarLauncherColor-hover: #fff;
+@topbarLauncherColorActive: #fff;
+@topbarLauncherBackgroundHover: #333;
+@topbarLauncherBackgroundActive: #000;
 
-@window-head-top: #222;
-@window-head-bottom: #111;
-@foldertree-sidepanel-background: #333;
+@inlineLinkBorderColor: #eee;
 
-@window-title-color: #fff;
-@toolbar-link-color: lighten(@toolbar, 20%);
-
-@topbar-background: #222;
-@topbar-background-alt: lighten(@topbar-background, 8%);
-
-@topbar-launcher-color: #aaa;
-@topbar-launcher-color-hover: #fff;
-@topbar-launcher-color-active: #fff;
-@topbar-launcher-background-hover: #333;
-@topbar-launcher-background-active: #000;
-@topbar-progress-color: #444;
-
-@window-control-color: #aaa;
-@window-control-border-color: #ccc;
-@window-control-color-hover: #333;
-@window-control-border-color-hover: #aaa;
-@window-control-background-hover: #fff;
-
-@welcome-background: #eee;
-@welcome-background-rgba: rgba(255, 255, 255, 0.25);
-@welcome-border-color: #aaa;
-@welcome-color: #333;
-@welcome-color-accent: #888;
-@welcome-color-bright: #777;
-
-@settings-background: @menu-background;
-@settings-color: @menu-color;
-
-@inline-link-border-color: #eee;
-
-@mail-priority: #fc0;
-@mail-attachment-link-color: #333;
-@mail-attachment-link-color-hover: #000;
+@mailPriority: #fc0;
+@mailAttachmentLinkColor: #333;
+@mailAttachmentLinkColorHover: #000;
 
 @list-highlight: #ffc;
 
-// Default colors
-
-@color_red: #cc0000;
-@color_orange: #f89406;
-@color_yellow: #ffff00;
-@color_lightgreen: #92D050;
-@color_green: #1A8D1A;
-@color_lightblue: lighten(#049cdb, 25%);
-@color_blue: darken(#049cdb, 5%);
-@color_purple: #7E16CF;
-@color_pink: #E01CD9;
-@color_gray: #aaa;
-
 // Dimensions
 
-@window-head-width: 50px;
-@window-content-shift: 250px;
+@windowHeadWidth: 50px;
+@windowContentShift: 250px;
 
 // Mixins
 
@@ -218,3 +375,4 @@
         -moz-backface-visibility: @type;
     }
 }
+

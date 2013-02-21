@@ -19,14 +19,14 @@ define('io.ox/core/settings/pane',
          'io.ox/core/http',
          'io.ox/core/api/apps',
          'settings!io.ox/core',
-         'gettext!io.ox/core/settings'],
+         'gettext!io.ox/core'],
          function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
 
     'use strict';
 
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval'];
+        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
 
 
@@ -40,7 +40,10 @@ define('io.ox/core/settings/pane',
                 var showNotice = _(reloadMe).any(function (attr) {
                     return e.changes[attr];
                 });
-                if (showNotice) {
+
+                if (e.changes.autoOpenNotification) {//AutonOpenNotification updates directly
+                    require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
+                } else if (showNotice) {
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
                 }
             });
@@ -57,7 +60,12 @@ define('io.ox/core/settings/pane',
         index: 100,
         attribute: 'language',
         label: gt("Language"),
-        selectOptions: ox.serverConfig.languages || {}
+        selectOptions: ox.serverConfig.languages || {},
+        updateModel: function () {
+            var value = this.nodes.element.val();
+            this.model.set(this.attribute, value);
+            _.setCookie('language', value);
+        }
     }));
 
     http.GET({
@@ -96,6 +104,12 @@ define('io.ox/core/settings/pane',
 
         // Themes
         var availableThemes = settingOptions.tree.themes;
+
+        //  until we get translated themes from backend
+        if (settingOptions.tree.themes['default']) {
+            settingOptions.tree.themes['default'] = gt('Default Theme');
+        }
+
 
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
             point.extend(new forms.SelectControlGroup({
@@ -138,6 +152,8 @@ define('io.ox/core/settings/pane',
             _(appAPI.getFavorites()).each(function (app) {
                 options[app.path] = gt(app.title);
             });
+
+            options.none = gt('None');
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,
@@ -147,7 +163,7 @@ define('io.ox/core/settings/pane',
             }));
         }
     }());
-    
+
     // Auto open notification area
     (function () {
         if (settings.isConfigurable('autoOpenNotificationarea')) {
@@ -167,7 +183,6 @@ define('io.ox/core/settings/pane',
                     this.nodes.element.attr('checked', value);
                 },
                 updateModel: function () {
-                    this.setValueInModel();
                     var value = this.nodes.element.attr('checked');
                     if (value) {
                         value = true;
@@ -179,5 +194,20 @@ define('io.ox/core/settings/pane',
             }));
         }
     }());
+
+    point.basicExtend({
+        id: 'clearCache',
+        index: 200000,
+        draw: function () {
+            this.append(
+                $('<button class="btn">').text(gt("Clear cache")).on("click", function (e) {
+                    e.preventDefault();
+                    require(["io.ox/core/cache"], function () {
+                        ox.cache.clear();
+                    });
+                })
+            );
+        }
+    });
 
 });

@@ -1,0 +1,128 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "kɔsiɖa",
+        "dzoɖa",
+        "blaɖa",
+        "kuɖa",
+        "yawoɖa",
+        "fiɖa",
+        "memleɖa"
+    ],
+    "daysShort": [
+        "kɔs",
+        "dzo",
+        "bla",
+        "kuɖ",
+        "yaw",
+        "fiɖ",
+        "mem"
+    ],
+    "daysStandalone": [
+        "kɔs",
+        "dzo",
+        "bla",
+        "kuɖ",
+        "yaw",
+        "fiɖ",
+        "mem"
+    ],
+    "months": [
+        "dzove",
+        "dzodze",
+        "tedoxe",
+        "afɔfĩe",
+        "dama",
+        "masa",
+        "siamlɔm",
+        "deasiamime",
+        "anyɔnyɔ",
+        "kele",
+        "adeɛmekpɔxe",
+        "dzome"
+    ],
+    "monthsShort": [
+        "dzv",
+        "dzd",
+        "ted",
+        "afɔ",
+        "dam",
+        "mas",
+        "sia",
+        "dea",
+        "any",
+        "kel",
+        "ade",
+        "dzm"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "M/d/y",
+        "yMEd": "E, M/d/y",
+        "yMMMd": "MMM d 'lia', y",
+        "yMMMEd": "E, MMM d, y",
+        "hm": "a 'ga' h:mm",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "a 'ga' h:mm v",
+        "yMdHm": "HH:mm M/d/y",
+        "yMdHmv": "HH:mm v M/d/y",
+        "yMdhm": "a 'ga' h:mm M/d/y",
+        "yMdhmv": "a 'ga' h:mm v M/d/y",
+        "yMEdHm": "HH:mm E, M/d/y",
+        "yMEdHmv": "HH:mm v E, M/d/y",
+        "yMEdhm": "a 'ga' h:mm E, M/d/y",
+        "yMEdhmv": "a 'ga' h:mm v E, M/d/y"
+    },
+    "date": "MMM d 'lia', y",
+    "time": "a 'ga' h:mm",
+    "dateTimeFormat": "%1$s %2$s",
+    "intervals": {
+        "fallback": "%1$s - %2$s",
+        "hm": {
+            "a": "a 'ga' h:mm - a 'ga' h:mm",
+            "h": "a 'ga' h:mm - 'ga' h:mm",
+            "m": "a 'ga' h:mm – 'ga' h:mm"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "a 'ga' h:mm – a 'ga' h:mm v",
+            "h": "a 'ga' h:mm–h:mm v",
+            "m": "a h:mm–h:mm v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "MMM d 'lia' – d 'lia' , y",
+            "m": "MMM d 'lia' – MMM d 'lia', y",
+            "y": "MMM d 'lia' , y – MMM d 'lia', y"
+        },
+        "yMMMEd": {
+            "d": "E, MMM d 'lia' – E, MMM d 'lia', y",
+            "m": "E, MMM d 'lia' – E, MMM d 'lia', y",
+            "y": "E, MMM d 'lia', y – E, MMM d 'lia', y"
+        }
+    },
+    "dayPeriods": {
+        "afternoon": "ɣetrɔ",
+        "am": "ŋdi",
+        "earlyAfternoon": "ŋdɔ",
+        "earlyMorning": "fɔŋli",
+        "evening": "fiẽ",
+        "morning": "ŋdi",
+        "night": "zã",
+        "pm": "ɣetrɔ"
+    },
+    "eras": [
+        "hY",
+        "Yŋ"
+    ],
+    "dateTime": "a 'ga' h:mm MMM d 'lia', y",
+    "h12": true
+}

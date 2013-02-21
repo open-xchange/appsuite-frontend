@@ -10,22 +10,36 @@ Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
 Package: open-xchange-appsuite
 Architecture: all
-Depends: ${misc:Depends}, apache2, open-xchange-appsuite-l10n-en-us
+Depends: ${misc:Depends}, apache2
 Description: OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-manifest
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-core
-Description: Manifest for apps included in the OX App Suite HTML5 client
+Depends: ${misc:Depends}, open-xchange-core, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Description: Manifest and apps included in the OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-dev
 Architecture: all
-Depends: nodejs (>= 0.4.0)
+Depends: ${misc:Depends}, nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-help-de-de
+Architecture: all
+Depends: ${misc:Depends}
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (de_DE)
+
+Package: open-xchange-appsuite-help-en-us
+Architecture: all
+Depends: ${misc:Depends}
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (en_US)
 
 ## l10n ##
 #Package: open-xchange-appsuite-l10n-## lang ##
 #Architecture: all
+#Depends: ${misc:Depends}, open-xchange-l10n-## lang ##
 #Provides: open-xchange-appsuite-l10n
-#Description: ## Lang ## translation of the OX App Suite HTML5 client
+#Breaks: open-xchange-l10n-## lang ## (<< 7.0.1)
+#Description: Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end l10n ##

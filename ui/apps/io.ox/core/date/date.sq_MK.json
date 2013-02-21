@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": null,
+    "weekStart": 1,
+    "days": [
+        "e diel",
+        "e hënë",
+        "e martë",
+        "e mërkurë",
+        "e enjte",
+        "e premte",
+        "e shtunë"
+    ],
+    "daysShort": [
+        "Die",
+        "Hën",
+        "Mar",
+        "Mër",
+        "Enj",
+        "Pre",
+        "Sht"
+    ],
+    "daysStandalone": [
+        "Die",
+        "Hën",
+        "Mar",
+        "Mër",
+        "Enj",
+        "Pre",
+        "Sht"
+    ],
+    "months": [
+        "janar",
+        "shkurt",
+        "mars",
+        "prill",
+        "maj",
+        "qershor",
+        "korrik",
+        "gusht",
+        "shtator",
+        "tetor",
+        "nëntor",
+        "dhjetor"
+    ],
+    "monthsShort": [
+        "Jan",
+        "Shk",
+        "Mar",
+        "Pri",
+        "Maj",
+        "Qer",
+        "Kor",
+        "Gsh",
+        "Sht",
+        "Tet",
+        "Nën",
+        "Dhj"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "y-M-d",
+        "yMEd": "E, d.M.yyyy",
+        "yMMMd": "y MMM d",
+        "yMMMEd": "E, d MMM y",
+        "hm": "h.mm.a",
+        "Hm": "H.mm",
+        "v": "v",
+        "Hmv": "H.mm v",
+        "hmv": "h.mm.a v",
+        "yMdHm": "y-M-d H.mm",
+        "yMdHmv": "y-M-d H.mm v",
+        "yMdhm": "y-M-d h.mm.a",
+        "yMdhmv": "y-M-d h.mm.a v",
+        "yMEdHm": "E, d.M.yyyy H.mm",
+        "yMEdHmv": "E, d.M.yyyy H.mm v",
+        "yMEdhm": "E, d.M.yyyy h.mm.a",
+        "yMEdhmv": "E, d.M.yyyy h.mm.a v"
+    },
+    "date": "yyyy-MM-dd",
+    "time": "h.mm.a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s - %2$s",
+        "hm": {
+            "a": "h.mm.a - h.mm.a",
+            "h": "h.mm.-h.mm.a",
+            "m": "h.mm.-h.mm.a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h.mm.a - h.mm.a v",
+            "h": "h.mm.-h.mm.a v",
+            "m": "h.mm.-h.mm.a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "dd-dd MMM y",
+            "m": "dd MMM - dd MMM y",
+            "y": "dd MMM y - dd MMM y"
+        },
+        "yMMMEd": {
+            "d": "E, dd - E, dd MMM y",
+            "m": "E, dd MMM - E, dd MMM y",
+            "y": "E, dd MMM y - E, dd MMM y"
+        }
+    },
+    "dayPeriods": {
+        "am": "PD",
+        "pm": "MD"
+    },
+    "eras": [
+        "p.e.r.",
+        "n.e.r."
+    ],
+    "dateTime": "yyyy-MM-dd h.mm.a",
+    "h12": true
+}

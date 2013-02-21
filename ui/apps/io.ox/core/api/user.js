@@ -30,7 +30,7 @@ define("io.ox/core/api/user",
             },
             list: {
                 action: "list",
-                columns: "1,20,500,524,555"
+                columns: "1,20,500,524,555,614"
             },
             get: {
                 action: "get"
@@ -87,7 +87,7 @@ define("io.ox/core/api/user",
 
 
     api.editNewImage = function (o, changes, file) {
-        console.log("EDIT NEW IMAGE ENTERED");
+        // console.log("EDIT NEW IMAGE ENTERED");
         var form = new FormData();
         form.append('file', file);
         form.append('json', JSON.stringify(changes));
@@ -145,10 +145,19 @@ define("io.ox/core/api/user",
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
+   /**
+    * gets deferred.promise for fetching picture url
+    *
+    * @param {string} id of a user
+    * @param {object} options height, width, scaleType
+    * @return {promise}
+    */
     api.getPictureURL = function (id, options) {
+        //get contact object first (userId != contactId)
         return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
             .pipe(
                 function (data, contactsAPI) {
+                    //call contactsAPI to share a picture cache
                     return contactsAPI.getPictureURL(data[0] || data, options);
                 },
                 function () {
@@ -157,6 +166,13 @@ define("io.ox/core/api/user",
             );
     };
 
+    /**
+    * get div node with callbacks managing fetching/updating
+    *
+    * @param {string} id of a user
+    * @param {object} options height, with, scaleType
+    * @return {object} div node with callbacks
+    */
     api.getPicture = function (id, options) {
         var node = $("<div>"),
             clear = function () {

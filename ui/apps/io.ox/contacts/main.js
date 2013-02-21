@@ -110,6 +110,11 @@ define("io.ox/contacts/main",
                         fields.private_flag.hide();
                     }
                     fields.description.text(_.noI18n(util.getDescription(data)));
+                    if ((_.noI18n(util.getFullName(data)) + _.noI18n(util.getDescription(data))).trim().length === 0) {
+                        // nothing is written down, add some text, so user isn’t confused
+                        fields.name.addClass('bright-text').append(gt("Empty name and description found."));
+                        fields.description.append(gt("Edit to set a name."));
+                    }
                 }
             }
         });
@@ -126,6 +131,7 @@ define("io.ox/contacts/main",
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
+            if (!data) { return false; }
             var name = data.last_name || data.display_name || "#",
                 prefix = _.noI18n(name.substr(0, 1).toUpperCase());
             return (i === 0 || prefix !== current) ? prefix : false;
@@ -140,13 +146,13 @@ define("io.ox/contacts/main",
         showContact = function (obj) {
             // get contact
             right.busy(true);
-            app.currentContact = obj;
             if (obj && obj.id !== undefined) {
-                api.get(api.reduce(obj))
+                app.currentContact = api.reduce(obj);
+                api.get(app.currentContact)
                     .done(_.lfo(drawContact))
                     .fail(_.lfo(drawFail, obj));
             } else {
-                console.error('showContact', obj);
+                right.idle().empty();
             }
         };
 
@@ -195,7 +201,6 @@ define("io.ox/contacts/main",
 
         api.on("edit", function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
-                // Reload
                 showContact(app.currentContact);
             }
         });

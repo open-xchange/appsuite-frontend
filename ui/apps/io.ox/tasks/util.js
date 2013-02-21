@@ -10,11 +10,11 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/tasks/util",
+define('io.ox/tasks/util',
     ['gettext!io.ox/tasks',
      'io.ox/core/date'], function (gt, date) {
 
-    "use strict";
+    'use strict';
 
     var lookupArray = [60000 * 5,           //five minutes
                        60000 * 15,          //fifteen minutes
@@ -42,64 +42,64 @@ define("io.ox/tasks/util",
                     alarmDate = new Date(time.getTime());
 
                 switch (finderId) {
-                case "0":
-                case "1":
-                case "2":
-                case "3":
+                case '0':
+                case '1':
+                case '2':
+                case '3':
                     alarmDate.setTime(alarmDate.getTime() + lookupArray[finderId]);
                     break;
                 default:
                     alarmDate.setTime(prepareTime(alarmDate));
                     switch (finderId) {
-                    case "d0":
+                    case 'd0':
                         alarmDate.setHours(6);
                         break;
-                    case "d1":
+                    case 'd1':
                         alarmDate.setHours(12);
                         break;
-                    case "d2":
+                    case 'd2':
                         alarmDate.setHours(15);
                         break;
-                    case "d3":
+                    case 'd3':
                         alarmDate.setHours(18);
                         break;
-                    case "d4":
+                    case 'd4':
                         alarmDate.setHours(22);
                         break;
                     default:
                         alarmDate.setHours(6);
                         switch (finderId) {
-                        case "t":
+                        case 't':
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24);
                             break;
-                        case "ww":
+                        case 'ww':
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * 7);
                             break;
-                        case "w0":
+                        case 'w0':
                             var day = alarmDate.getDay() % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w1":
+                        case 'w1':
                             var day = (((alarmDate.getDay() - 1) % 7) + 7) % 7;//workaround: javascript modulo operator to stupid to handle negative numbers
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w2":
+                        case 'w2':
                             var day = (((alarmDate.getDay() - 2) % 7) + 7) % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w3":
+                        case 'w3':
                             var day = (((alarmDate.getDay() - 3) % 7) + 7) % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w4":
+                        case 'w4':
                             var day = (((alarmDate.getDay() - 4) % 7) + 7) % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w5":
+                        case 'w5':
                             var day = (((alarmDate.getDay() - 5) % 7) + 7) % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
-                        case "w6":
+                        case 'w6':
                             var day = (((alarmDate.getDay() - 6) % 7) + 7) % 7;
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
@@ -141,10 +141,10 @@ define("io.ox/tasks/util",
                 }
 
                 //normal times
-                var appendString = "<option finderId='0'>" + gt('in 5 minutes') + "</option>" +
-                "<option finderId='1'>" + gt('in 15 minutes') + "</option>" +
-                "<option finderId='2'>" + gt('in 30 minutes') + "</option>" +
-                "<option finderId='3'>" + gt('in one hour') + "</option>";
+                var appendString = "<option finderId='0'>" + gt('in 5 minutes') + '</option>' +
+                "<option finderId='1'>" + gt('in 15 minutes') + '</option>' +
+                "<option finderId='2'>" + gt('in 30 minutes') + '</option>' +
+                "<option finderId='3'>" + gt('in one hour') + '</option>';
 
                 // variable daytimes
                 var i = time.getHours(),
@@ -164,7 +164,7 @@ define("io.ox/tasks/util",
 
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
-                    appendString = appendString + "<option finderId='d" + i + "'>" + temp + "</option>";
+                    appendString = appendString + "<option finderId='d" + i + "'>" + temp + '</option>';
                     i++;
                 }
 
@@ -174,11 +174,11 @@ define("io.ox/tasks/util",
 
                 i = (time.getDay() + 2) % 7;
 
-                appendString = appendString + "<option finderId='t'>" + gt("tomorrow") + "</option>";
+                appendString = appendString + "<option finderId='t'>" + gt('tomorrow') + '</option>';
 
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
-                    appendString = appendString + "<option finderId='w" + i + "'>" + temp + "</option>";
+                    appendString = appendString + "<option finderId='w" + i + "'>" + temp + '</option>';
                     if (i < 6) {
                         i++;
                     } else {
@@ -186,14 +186,14 @@ define("io.ox/tasks/util",
                     }
 
                     if (i === startday) {
-                        appendString = appendString + "<option finderId='ww'>" + gt("in one week") + "</option>";
+                        appendString = appendString + "<option finderId='ww'>" + gt('in one week') + '</option>';
                         circleIncomplete = false;
                     }
                 }
 
                 if (bootstrapDropdown) {
                     appendString = appendString.replace(/<option/g, "<li><a href='#'");
-                    appendString = appendString.replace(/option>/g, "a></li>");
+                    appendString = appendString.replace(/option>/g, 'a></li>');
                 }
 
                 return appendString;
@@ -205,32 +205,32 @@ define("io.ox/tasks/util",
             {
                 task = _.copy(task, true);
                 if (task.status === 3) {
-                    task.status = gt("Done");
-                    task.badge = "badge badge-success";
+                    task.status = gt('Done');
+                    task.badge = 'badge badge-success';
 
                 } else {
 
                     var now = new Date();
                     if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
-                        task.status = gt("Over due");
-                        task.badge = "badge badge-important";
+                        task.status = gt('Over due');
+                        task.badge = 'badge badge-important';
                     } else if (detail && task.status) {
                         switch (task.status) {
                         case 1:
-                            task.status = gt("Not started");
-                            task.badge = "badge";
+                            task.status = gt('Not started');
+                            task.badge = 'badge';
                             break;
                         case 2:
-                            task.status = gt("In progress");
-                            task.badge = "badge";
+                            task.status = gt('In progress');
+                            task.badge = 'badge';
                             break;
                         case 4:
-                            task.status = gt("Waiting");
-                            task.badge = "badge";
+                            task.status = gt('Waiting');
+                            task.badge = 'badge';
                             break;
                         case 5:
-                            task.status = gt("Deferred");
-                            task.badge = "badge";
+                            task.status = gt('Deferred');
+                            task.badge = 'badge';
                             break;
                         }
                     } else {

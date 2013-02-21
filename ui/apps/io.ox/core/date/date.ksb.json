@@ -1,0 +1,122 @@
+{
+    "daysInFirstWeek": null,
+    "days": [
+        "Jumaapii",
+        "Jumaatatu",
+        "Jumaane",
+        "Jumaatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumaamosi"
+    ],
+    "daysShort": [
+        "Jpi",
+        "Jtt",
+        "Jmn",
+        "Jtn",
+        "Alh",
+        "Iju",
+        "Jmo"
+    ],
+    "daysStandalone": [
+        "Jpi",
+        "Jtt",
+        "Jmn",
+        "Jtn",
+        "Alh",
+        "Iju",
+        "Jmo"
+    ],
+    "months": [
+        "Januali",
+        "Febluali",
+        "Machi",
+        "Aplili",
+        "Mei",
+        "Juni",
+        "Julai",
+        "Agosti",
+        "Septemba",
+        "Oktoba",
+        "Novemba",
+        "Desemba"
+    ],
+    "monthsShort": [
+        "Jan",
+        "Feb",
+        "Mac",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "y-M-d",
+        "yMEd": "E, M/d/y",
+        "yMMMd": "y MMM d",
+        "yMMMEd": "E, MMM d, y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "y-M-d HH:mm",
+        "yMdHmv": "y-M-d HH:mm v",
+        "yMdhm": "y-M-d h:mm a",
+        "yMdhmv": "y-M-d h:mm a v",
+        "yMEdHm": "E, M/d/y HH:mm",
+        "yMEdHmv": "E, M/d/y HH:mm v",
+        "yMEdhm": "E, M/d/y h:mm a",
+        "yMEdhmv": "E, M/d/y h:mm a v"
+    },
+    "date": "d MMM y",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm–h:mm a",
+            "m": "h:mm–h:mm a"
+        },
+        "Hm": {
+            "h": "HH:mm–HH:mm",
+            "m": "HH:mm–HH:mm"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm–h:mm a v",
+            "m": "h:mm–h:mm a v"
+        },
+        "Hmv": {
+            "h": "HH:mm–HH:mm v",
+            "m": "HH:mm–HH:mm v"
+        },
+        "yMMMd": {
+            "d": "yyyy-MM-d – d",
+            "m": "yyyy-MM-dd – MM-d",
+            "y": "yyyy-MM-dd – yyyy-MM-dd"
+        },
+        "yMMMEd": {
+            "d": "E, yyyy-MM-dd – E, yyyy-MM-dd",
+            "m": "E, yyyy-MM-dd – E, yyyy-MM-dd",
+            "y": "E, yyyy-MM-dd – E, yyyy-MM-dd"
+        }
+    },
+    "dayPeriods": {
+        "am": "makeo",
+        "pm": "nyiaghuo"
+    },
+    "eras": [
+        "KK",
+        "BK"
+    ],
+    "dateTime": "d MMM y h:mm a",
+    "h12": true
+}

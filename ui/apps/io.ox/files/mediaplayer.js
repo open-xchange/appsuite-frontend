@@ -17,14 +17,14 @@ define('io.ox/files/mediaplayer',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
-     'mediaelement/mediaelement-and-player',
+     'apps/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
      'less!mediaelement/mediaelementplayer.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (commons, gt, api, folderAPI) {
 
-    "use strict";
+    'use strict';
 
     var mediaplayer = {
 
@@ -43,18 +43,18 @@ define('io.ox/files/mediaplayer',
 
         config: {
             list: [],
-            app: null,
             videoSupport: false
         },
 
         init: function (config) {
             _.extend(this.config, config);
-            this.app = config.app;
+            this.app = config.baton.app;
             this.win = this.app.getWindow();
+
             this.restore();
-            this.list = this.filterMediaList(config.list, config.videoSupport);
-            if (this.list.length > 0)
-            {
+            this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
+
+            if (this.list.length > 0) {
                 this.show();
                 this.eventHandler();
             }
@@ -118,9 +118,7 @@ define('io.ox/files/mediaplayer',
             return $.grep(list, function (o) {
                 if (videoSupport) {
                     return (new RegExp(pattern, 'i')).test(o.filename);
-                }
-                else
-                {
+                } else {
                     return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
                 }
             });
@@ -309,11 +307,7 @@ define('io.ox/files/mediaplayer',
         },
 
         restore: function () {
-            if (this.config.videoSupport) {
-                this.close();
-            }
-            else
-            {
+            if (!this.config.videoSupport) {
                 $('#io-ox-topbar > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();
@@ -322,8 +316,7 @@ define('io.ox/files/mediaplayer',
         },
 
         close: function () {
-            if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0)
-            {
+            if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
                 this.mediaelement.pause();
                 this.player.empty().remove();
                 this.trackdisplay.remove(); // no empty; kills inner stuff

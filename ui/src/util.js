@@ -118,7 +118,9 @@
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1,
         /** iOS **/
-        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
+        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i),
+        /** Android **/
+        android: !!navigator.userAgent.match(/Android/i)
     };
 
     // extend underscore utilities
@@ -562,6 +564,10 @@
         console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
-    if (assert(true) === 0) delete window.assert; // Available only in debug builds
+    try {
+        if (assert(true) === 0) delete window.assert; // Available only in debug builds
+    } catch (e) {
+        // do nothing if delete fails (this happens on IE8 -_-)
+    }
 
 }());

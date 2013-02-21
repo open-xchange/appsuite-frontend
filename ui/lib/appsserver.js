@@ -16,8 +16,12 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 
-var prefix = process.argv[2] || '/var/www/ox7/apps/';
+var prefix = process.argv[2] || '/var/www/appsuite/';
 if (prefix.slice(-1) !== '/') prefix += '/';
+
+var tzModule = 'io.ox/core/date/tz/zoneinfo/';
+var tzPath = process.argv[3] || '/usr/share/zoneinfo/';
+if (tzPath.slice(-1) !== '/') tzPath += '/';
 
 var escapes = {
     '\x00': '\\x00', '\x01': '\\x01', '\x02': '\\x02', '\x03': '\\x03',
@@ -37,8 +41,25 @@ function escape(s) {
     });
 }
 
+function httpDate(d) {
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    return [
+        ['Sun,', 'Mon,', 'Tue,', 'Wed,', 'Thu,', 'Fri,', 'Sat,'][d.getUTCDay()],
+        pad(d.getUTCDate()),
+        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()],
+        d.getUTCFullYear(),
+        [pad(d.getUTCHours()),
+         pad(d.getUTCMinutes()),
+         pad(d.getUTCSeconds())].join(':'),
+        'GMT'
+    ].join(' ');
+}
+
 http.createServer(function (request, response) {
     response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
+    var d = new Date(new Date().getTime() + 3e10);
+    response.setHeader('Expires', httpDate(d));
     var list = url.parse(request.url).pathname.split(',');
     list.shift();
     for (var i in list) {
@@ -49,12 +70,18 @@ http.createServer(function (request, response) {
                            escape(list[i]) + "\"');\n");
             continue;
         }
-        var filename = path.join(prefix, m[2]);
+        if (m[2].slice(0, tzModule.length) == tzModule) {
+            var filename = path.join(tzPath, m[2].slice(tzModule.length));
+        } else {
+            var filename = path.join(prefix, 'apps', m[2]);
+        }
         var valid = path.existsSync(filename);
         console.log(filename);
         if (!valid) {
             console.log('Could not read', filename);
-            response.write("console.log('Could not read " + filename + "');\n");
+            response.write("define('" + escape(list[i]) +
+                "', function () { throw new Error(\"Could not read '" +
+                escape(m[2]) + "'\"); });\n");
             continue;
         }
         if (m[1]) {
@@ -65,7 +92,8 @@ http.createServer(function (request, response) {
             } else {
                 var s = fs.readFileSync(filename, 'utf8');
             }
-            response.write("define('" + list[i] + "','" + escape(s) + "');\n");
+            response.write("define('" + escape(list[i]) + "','" + escape(s) +
+                           "');\n");
         } else {
             response.write(fs.readFileSync(filename));
         }

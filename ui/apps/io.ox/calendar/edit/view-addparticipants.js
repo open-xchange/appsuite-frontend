@@ -50,20 +50,57 @@ define('io.ox/calendar/edit/view-addparticipants',
             }
 
             self.autoparticipants = self.$el.find('.add-participant')
-                .attr('autocapitalize', 'off')
-                .attr('autocorrect',    'off')
-                .attr('autocomplete',   'off')
                 .autocomplete({
+                    autoselect: options.autoselect,
                     parentSelector: options.parentSelector,
-                    source: function (query) {
-                        return autocompleteAPI.search(query);
-                    },
-                    stringify: function (obj) {
-                        return (obj && obj.data && obj.data.display_name) ? obj.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
+                    api: autocompleteAPI,
+                    // reduce suggestion list
+                    reduce: function (data) {
+
+                        // updating baton-data-node
+                        self.trigger('update');
+                        var baton = $.data(self.$el, 'baton') || {list: []},
+                            hash = {},
+                            list;
+                        _(baton.list).each(function (obj) {
+                            // handle contacts/external contacts
+                            if (obj.type === 1 || obj.type === 5) {
+                                hash[obj.email] = true;
+                                hash[obj.type + '|' + obj.id] = true;
+                            } else {
+                                hash[obj.type + '|' + obj.id] = true;
+                            }
+                        });
+
+                        // filter doublets
+                        list = _(data).filter(function (recipient) {
+                            var type, uniqueId, uniqueMail;
+                            switch (recipient.type) {
+                            case 'user':
+                                type = 1;
+                                break;
+                            case 'contact':
+                                type = 5;
+                                break;
+                            case 'group':
+                                type = 2;
+                                break;
+                            case 'resource':
+                                type = 3;
+                                break;
+                            }
+                            uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id];
+                            uniqueMail = !hash[recipient.email];
+                            return uniqueId && uniqueMail;
+                        });
+
+                        //return number of query hits and the filtered list
+                        return { list: list, hits: data.length };
                     },
                     draw: function (obj) {
                         if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
                             switch (obj.type) {
+                            case 'user':
                             case 'contact':
                                 if (obj.data.internal_userid && obj.data.email1 === obj.email) {
                                     obj.data.type = 1; //user
@@ -74,6 +111,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                                     obj.data.type = 5;
                                     // h4ck
                                     obj.data.email1 = obj.email;
+                                    //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                                    obj.data.emailparam = obj.email;
                                 }
                                 break;
                             case 'resource':
@@ -85,7 +124,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                             }
                             obj.data.image1_url = obj.data.image1_url || '';
                             var pmodel = new pModel.Participant(obj.data);
-                            var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false, wurst: 'hans'});
+                            var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false, halo: false});
                             var markup = pview.render().el;
 
                             this.append(markup);
@@ -107,21 +146,25 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
-            var selectedItem = this.autoparticipants.getSelectedItem();
+            var selectedItem = this.autoparticipants.getSelectedItem(),
+                self = this;
 
             if (selectedItem) {
                 return this.autoparticipants.trigger('selected', selectedItem);
             } else {
-                var node = this.$('input.add-participant');
-                var val = node.val();
-                var list = mailUtil.parseRecipients(val);
+                var node = this.$('input.add-participant'),
+                    val = node.val(),
+                    list = mailUtil.parseRecipients(val);
                 if (list.length) {
-                    this.select({
-                        id: Math.random(),
-                        display_name: list[0][0],
-                        mail: list[0][1],
-                        image1_url: '',
-                        type: 5 // TYPE_EXTERNAL_USER
+                    // add n extenal users
+                    _.each(list, function (elem) {
+                        self.select({
+                            id: Math.random(),
+                            display_name: elem[0],
+                            mail: elem[1],
+                            image1_url: '',
+                            type: 5 // TYPE_EXTERNAL_USER
+                        });
                     });
                 } else {
                     node.attr('disabled', 'disabled')

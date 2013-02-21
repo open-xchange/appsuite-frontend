@@ -11,10 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils',
-    ['io.ox/core/gettext',
-     'less!io.ox/office/tk/style.css'
-    ], function (gettext) {
+define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     'use strict';
 
@@ -25,10 +22,7 @@ define('io.ox/office/tk/utils',
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
-        LABEL_SELECTOR = 'span[data-role="label"]',
-
-        // selector for <span> elements in a control caption
-        CAPTION_SELECTOR = ICON_SELECTOR + ', ' + LABEL_SELECTOR;
+        LABEL_SELECTOR = 'span[data-role="label"]';
 
     // static class Utils =====================================================
 
@@ -472,12 +466,17 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not a string. May be any value (not only strings).
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty strings will be returned from the
+     *  options object. Empty strings will be replaced with the specified
+     *  default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getStringOption = function (options, name, def) {
+    Utils.getStringOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isString(value) ? value : def;
+        return (_.isString(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**
@@ -642,12 +641,16 @@ define('io.ox/office/tk/utils',
      *  or if it does not contain the specified attribute, or if the attribute
      *  is not an array. May be any value.
      *
+     * @param {Boolean} [nonEmpty=false]
+     *  If set to true, only non-empty arrays will be returned from the options
+     *  object. Empty arrays will be replaced with the specified default value.
+     *
      * @returns
      *  The value of the specified attribute, or the default value.
      */
-    Utils.getArrayOption = function (options, name, def) {
+    Utils.getArrayOption = function (options, name, def, nonEmpty) {
         var value = Utils.getOption(options, name);
-        return _.isArray(value) ? value : def;
+        return (_.isArray(value) && (!nonEmpty || (value.length > 0))) ? value : def;
     };
 
     /**
@@ -755,6 +758,14 @@ define('io.ox/office/tk/utils',
         // convert nodes to DOM node object
         outerNode = Utils.getDomNode(outerNode);
         innerNode = Utils.getDomNode(innerNode);
+
+        // IE does not support contains() method at document
+        if (outerNode === document) {
+            outerNode = document.body;
+            if (innerNode === outerNode) {
+                return true;
+            }
+        }
 
         // outer node must be an element; be sure that a node does not contain itself
         if ((outerNode.nodeType !== 1) || (outerNode === innerNode)) {
@@ -1034,12 +1045,13 @@ define('io.ox/office/tk/utils',
      */
     Utils.findClosestParent = function (rootNode, node, selector) {
 
+        rootNode = Utils.getDomNode(rootNode);
         node = Utils.getDomNode(node).parentNode;
         while (node && !$(node).is(selector)) {
             node = node.parentNode;
         }
 
-        return (node && Utils.containsNode(rootNode, node)) ? node : null;
+        return (node && ((rootNode === node) || Utils.containsNode(rootNode, node))) ? node : null;
     };
 
     /**
@@ -1241,8 +1253,262 @@ define('io.ox/office/tk/utils',
         return node;
     };
 
+    // positioning and scrolling ----------------------------------------------
+
+    // calculate size of system scroll bars
+    (function () {
+
+        var // dummy container used to calculate the scroll bar sizes
+            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
+
+        $('body').append(outerDiv);
+        Utils.SCROLLBAR_WIDTH = 100 - outerDiv[0].clientWidth;
+        Utils.SCROLLBAR_HEIGHT = 100 - outerDiv[0].clientHeight;
+        outerDiv.remove();
+    }());
+
     /**
-     * Scrolls a specific child node of a container node into its visible area.
+     * Returns the position and size of the specified node inside visible area
+     * of the browser window. This includes the distances of all four borders
+     * of the node to the borders of the browser window.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose position relative to the browser window will be
+     *  calculated. If this object is a jQuery collection, uses the first node
+     *  it contains.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the node relative to the browser window in pixels:
+     *  - 'left': the distance of the left border of the node to the left
+     *      border of the browser window,
+     *  - 'top': the distance of the top border of the node to the top border
+     *      of the browser window,
+     *  - 'right': the distance of the right border of the node to the right
+     *      border of the browser window,
+     *  - 'bottom': the distance of the bottom border of the node to the bottom
+     *      border of the browser window,
+     *  - 'width': the outer width of the node (including its borders),
+     *  - 'height': the outer height of the node (including its borders).
+     */
+    Utils.getNodePositionInWindow = function (node) {
+
+        var // the passed node, as jQuery object
+            $node = $(node),
+            // the offset of the node, relative to the browser window
+            position = $node.offset();
+
+        // add size and right/bottom distances
+        position.width = $node.outerWidth();
+        position.height = $node.outerHeight();
+        position.right = window.innerWidth - position.left - position.width;
+        position.bottom = window.innerHeight - position.top - position.height;
+
+        return position;
+    };
+
+    /**
+     * Returns the position of the visible area of the passed scrollable node.
+     * This includes the size of the visible area without scroll bars (if
+     * shown), and the distances of all four borders of the visible area to the
+     * borders of the entire scroll area.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the visible area relative to the entire scroll area of the node in
+     *  pixels:
+     *  - 'left': the distance of the left border of the visible area to the
+     *      left border of the entire scroll area,
+     *  - 'top': the distance of the top border of the visible area to the top
+     *      border of the entire scroll area,
+     *  - 'right': the distance of the right border of the visible area
+     *      (without scroll bar) to the right border of the entire scroll area,
+     *  - 'bottom': the distance of the bottom border of the visible area
+     *      (without scroll bar) to the bottom border of the entire scroll
+     *      area,
+     *  - 'width': the width of the visible area (without scroll bar),
+     *  - 'height': the height of the visible area (without scroll bar).
+     */
+    Utils.getVisibleAreaPosition = function (node) {
+        node = Utils.getDomNode(node);
+        return {
+            left: node.scrollLeft,
+            top: node.scrollTop,
+            right: node.scrollWidth - node.clientWidth - node.scrollLeft,
+            bottom: node.scrollHeight - node.clientHeight - node.scrollTop,
+            width: node.clientWidth,
+            height: node.clientHeight
+        };
+    };
+
+    /**
+     * Returns the position and size of the specified window rectangle inside
+     * the passed scrollable node. This includes the size of the rectangle as
+     * specified, and the distances of all four borders of the rectangle to the
+     * borders of the visible area or entire scroll area of the scrollable
+     * node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {Object} windowRect
+     *  The rectangle whose position and size relative to the scrollable node
+     *  will be calculated. Must provide the attributes 'left', 'top', 'width',
+     *  and 'height' in pixels. The attributes 'left' and 'top' are interpreted
+     *  relatively to the browser window.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the calculation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.visibleArea=false]
+     *      If set to true, calculates the distances of the window rectangle to
+     *      the visible area of the scrollable node. Otherwise, returns the
+     *      top and left position and the size of the window rectangle
+     *      unmodified, and adds the distance of its right and bottom borders
+     *      to the right and bottom borders of the entire scroll area of the
+     *      scrollable node.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the window rectangle relative to the entire scroll area or visible area
+     *  of the scrollable node in pixels:
+     *  - 'left': the distance of the left border of the window rectangle to
+     *      the left border of the scrollable node,
+     *  - 'top': the distance of the top border of the window rectangle to the
+     *      top border of the scrollable node,
+     *  - 'right': the distance of the right border of the window rectangle to
+     *      the right border of the scrollable node,
+     *  - 'bottom': the distance of the bottom border of the window rectangle
+     *      to the bottom border of the scrollable node,
+     *  - 'width': the width of the window rectangle, as passed,
+     *  - 'height': the height of the window rectangle, as passed.
+     */
+    Utils.getRectanglePositionInNode = function (scrollableNode, windowRect, options) {
+
+        var // the passed scrollable node, as jQuery object
+            $scrollableNode = $(scrollableNode),
+            // the offset of the scrollable node, relative to the browser window
+            scrollableOffset = $scrollableNode.offset(),
+            // the width of the left and top border of the scrollable node, in pixels
+            leftBorderWidth = Utils.convertCssLength($scrollableNode.css('borderLeftWidth'), 'px'),
+            topBorderWidth = Utils.convertCssLength($scrollableNode.css('borderTopWidth'), 'px'),
+            // dimensions of the visible area of the scrollable node
+            visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
+
+            // the dimensions of the window rectangle, relative to the visible area of the scrollable node
+            dimensions = {
+                left: windowRect.left + leftBorderWidth - scrollableOffset.left,
+                top: windowRect.top + topBorderWidth - scrollableOffset.top,
+                width: windowRect.width,
+                height: windowRect.height
+            };
+
+        // add right and bottom distance of child node to visible area
+        dimensions.right = visiblePosition.width - dimensions.left - dimensions.width;
+        dimensions.bottom = visiblePosition.height - dimensions.top - dimensions.height;
+
+        // add distances to entire scroll area, if option 'visibleArea' is not set
+        if (!Utils.getBooleanOption(options, 'visibleArea', false)) {
+            _(['left', 'top', 'right', 'bottom']).each(function (border) {
+                dimensions[border] += visiblePosition[border];
+            });
+        }
+
+        return dimensions;
+    };
+
+    /**
+     * Returns the dimensions of the specified child node inside its scrollable
+     * ancestor node. This includes the size of the child node, and the
+     * distances of all four borders of the child node to the borders of the
+     * visible area or entire scroll area of the scrollable node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {HTMLElement|jQuery} childNode
+     *  The DOM element whose dimensions will be calculated. Must be contained
+     *  in the specified scrollable element. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the calculation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.visibleArea=false]
+     *      If set to true, calculates the distances of the child node to the
+     *      visible area of the scrollable node. Otherwise, calculates the
+     *      distances of the child node to the entire scroll area of the
+     *      scrollable node.
+     *
+     * @returns {Object}
+     *  An object with numeric attributes representing the position and size of
+     *  the child node relative to the entire scroll area or visible area of
+     *  the scrollable node in pixels:
+     *  - 'left': the distance of the left border of the child node to the
+     *      left border of the scrollable node,
+     *  - 'top': the distance of the top border of the child node to the top
+     *      border of the scrollable node,
+     *  - 'right': the distance of the right border of the child node to the
+     *      right border of the scrollable node,
+     *  - 'bottom': the distance of the bottom border of the child node to the
+     *      bottom border of the scrollable node,
+     *  - 'width': the outer width of the child node (including its borders),
+     *  - 'height': the outer height of the child node (including its borders).
+     */
+    Utils.getChildNodePositionInNode = function (scrollableNode, childNode, options) {
+        var windowPosition = Utils.getNodePositionInWindow(childNode);
+        return Utils.getRectanglePositionInNode(scrollableNode, windowPosition, options);
+    };
+
+    /**
+     * Scrolls the passed window rectangle into the visible area of the
+     * specified scrollable node.
+     *
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @param {Object} windowRect
+     *  The rectangle of the browser window that will be made visible by
+     *  scrolling the scrollable node. Must provide the attributes 'left',
+     *  'top', 'width', and 'height' in pixels. The attributes 'left' and 'top'
+     *  are interpreted relatively to the browser window.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the scroll action. Supports the following
+     *  options:
+     *  @param {Number} [options.padding=0]
+     *      Minimum distance between the borders of the visible area and the
+     *      rectangle.
+     */
+    Utils.scrollToWindowRectangle = function (scrollableNode, windowRect, options) {
+
+        var // dimensions of the rectangle in the visible area of the scrollable node
+            position = Utils.getRectanglePositionInNode(scrollableNode, windowRect, { visibleArea: true }),
+            // padding between scrolled element and border of visible area
+            padding = Utils.getIntegerOption(options, 'padding', 0, 0);
+
+        function updateScrollPosition(leadingChildOffset, trailingChildOffset, scrollAttributeName) {
+
+            var maxPadding = Utils.minMax((leadingChildOffset + trailingChildOffset) / 2, 0, padding),
+                offset = Math.max(leadingChildOffset - Math.max(maxPadding - trailingChildOffset, 0), maxPadding);
+
+            Utils.getDomNode(scrollableNode)[scrollAttributeName] -= (offset - leadingChildOffset);
+        }
+
+        updateScrollPosition(position.left, position.right, 'scrollLeft');
+        updateScrollPosition(position.top, position.bottom, 'scrollTop');
+    };
+
+    /**
+     * Scrolls the passed child node into the visible area of the specified
+     * scrollable container node.
      *
      * @param {HTMLElement|jQuery} scrollableNode
      *  The scrollable DOM element that contains the specified child node. If
@@ -1256,99 +1522,40 @@ define('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
      *  options:
-     *  @param {Boolean} [options.horizontal=false]
-     *      If set to true, scrolls the element in horizontal direction.
-     *      Otherwise, scrolls the element in vertical direction.
      *  @param {Number} [options.padding=0]
-     *      Minimum padding between the inner border of the container node and
-     *      the outer border of the child node.
-     *  @param {String} [options.overflow='begin']
-     *      Specifies how to position the child node if it is larger than the
-     *      visible area of the container node. If omitted or set to 'begin',
-     *      the top border (left border in horizontal mode) of the child node
-     *      will be visible. If set to 'center', the child node will be
-     *      centered in the visible area. If set to 'end', the bottom border
-     *      (right border in horizontal mode) of the child node will be
-     *      visible.
+     *      Minimum distance between the borders of the visible area and the
+     *      child node.
      */
-    Utils.scrollToChildNode = (function () {
-
-        var horizontalNames = {
-                offset: 'left',
-                offsetBorder: 'border-left-width',
-                innerSize: 'innerWidth',
-                outerSize: 'outerWidth',
-                scroll: 'scrollLeft'
-            },
-
-            verticalNames = {
-                offset: 'top',
-                offsetBorder: 'border-top-width',
-                innerSize: 'innerHeight',
-                outerSize: 'outerHeight',
-                scroll: 'scrollTop'
-            };
-
-        // return the actual scrollToChildNode() method
-        return function (scrollableNode, childNode, options) {
-
-            var // scroll direction
-                horizontal = Utils.getBooleanOption(options, 'horizontal', false),
-                // attribute and function names depending on scroll direction
-                names = horizontal ? horizontalNames : verticalNames,
-
-                // padding between scrolled element and container border
-                padding = Utils.getIntegerOption(options, 'padding', 0, 0, 9999),
-                // how to position an oversized child node
-                overflow = Utils.getStringOption(options, 'overflow'),
-
-                // the scrollable element, as jQuery collection
-                $scrollableNode = $(scrollableNode).first(),
-                // inner size of the scrollable container node
-                scrollableSize = $scrollableNode[names.innerSize](),
-                // border size on left/top end of the container node
-                scrollableBorderSize = Utils.convertCssLength($scrollableNode.css(names.offsetBorder), 'px', 0),
-                // current position of the scrollable container node (inner area, relative to browser window)
-                scrollableOffset = $scrollableNode.offset()[names.offset] + scrollableBorderSize,
-
-                // the child node, as jQuery collection
-                $childNode = $(childNode).first(),
-                // current position of the child node (relative to browser window)
-                childOffset = $childNode.offset()[names.offset],
-                // outer size of the child node
-                childSize = $childNode[names.outerSize](),
-                // maximum possible padding to fit child node into container node
-                maxPadding = Math.min(padding, Math.max(Math.floor((scrollableSize - childSize) / 2), 0)),
-                // minimum offset valid for the child node (with margin from left/top)
-                minChildOffset = scrollableOffset + maxPadding,
-                // maximum offset valid for the child node (with margin from right/bottom)
-                maxChildOffset = scrollableOffset + scrollableSize - maxPadding - childSize,
-                // new absolute offset of the child node to make it visible
-                newChildOffset = 0;
-
-            if (minChildOffset <= maxChildOffset) {
-                // if there is a valid range for the child element, calculate its new position
-                newChildOffset = Utils.minMax(childOffset, minChildOffset, maxChildOffset);
-            } else {
-                // otherwise: find position according to overflow mode
-                switch (overflow) {
-                case 'center':
-                    newChildOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
-                    break;
-                case 'end':
-                    newChildOffset = maxChildOffset;
-                    break;
-                default:
-                    newChildOffset = minChildOffset;
-                }
-            }
-
-            // change the current scroll position of the container node by the difference of old and new child offset
-            $scrollableNode[names.scroll]($scrollableNode[names.scroll]() + childOffset - newChildOffset);
-        };
-    }());
+    Utils.scrollToChildNode = function (scrollableNode, childNode, options) {
+        var windowPosition = Utils.getNodePositionInWindow(childNode);
+        Utils.scrollToWindowRectangle(scrollableNode, windowPosition, options);
+    };
 
     // form control elements --------------------------------------------------
+
+    /**
+     * Creates and returns a new <div> container element.
+     *
+     * @param {String} className
+     *  CSS class name set at the container element.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new element. The
+     *  following options are supported:
+     *  @param {String} [options.classes]
+     *      A space-separated list of CSS classes to be added to the element.
+     *  @param {Object} [options.css]
+     *      A map with CSS formatting attributes to be added to the element.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new container element.
+     */
+    Utils.createContainerNode = function (className, options) {
+        return $('<div>')
+            .addClass(className)
+            .addClass(Utils.getStringOption(options, 'classes', ''))
+            .css(Utils.getObjectOption(options, 'css', {}));
+    };
 
     /**
      * Creates and returns a new form control element.
@@ -1363,16 +1570,16 @@ define('io.ox/office/tk/utils',
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
      *  @param [options.value]
-     *      A value or object that will be copied to the 'data-value' attribute
-     *      of the control. Will be converted to a JSON string. Must not be
-     *      null. The undefined value will be ignored.
+     *      A value, object, or function that will be copied to the
+     *      'data-value' attribute of the control. Must not be null or
+     *      undefined.
      *  @param [options.userData]
      *      A value or object that will be copied to the 'data-userdata'
      *      attribute of the control. May contain any user-defined data.
-     *  @param {Number} [options.width]
-     *      The fixed total width of the control element (including padding),
-     *      in pixels. If omitted, the size will be set automatically according
-     *      to the contents of the control.
+     *  @param {Number|String} [options.width]
+     *      The total width of the control element (including padding). If
+     *      omitted, the size will be set automatically according to the
+     *      contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -1396,13 +1603,15 @@ define('io.ox/office/tk/utils',
 
     /**
      * Returns the value stored in the 'value' data attribute of the first
-     * control in the passed jQuery collection.
+     * control in the passed jQuery collection. If the stored value is a
+     * function, calls that function and returns its result.
      *
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
-        return control.first().data('value');
+        var value = control.first().data('value');
+        return _.isFunction(value) ? value() : value;
     };
 
     /**
@@ -1413,8 +1622,8 @@ define('io.ox/office/tk/utils',
      *  A jQuery collection containing a control element.
      *
      * @param value
-     *  A value or object that will be copied to the 'value' data attribute of
-     *  the control. Must not be null. The undefined value will be ignored.
+     *  A value, object, or function that will be copied to the 'value' data
+     *  attribute of the control. Must not be null or undefined.
      */
     Utils.setControlValue = function (control, value) {
         if (!_.isUndefined(value) && !_.isNull(value)) {
@@ -1555,7 +1764,6 @@ define('io.ox/office/tk/utils',
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        // icon class name must be first to be able to select icon subsets in CSS
         return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-office-icon') + ((white === true) ? ' icon-white' : ''));
     };
 
@@ -1582,9 +1790,6 @@ define('io.ox/office/tk/utils',
      *  @param {String} [options.icon]
      *      The full name of the Bootstrap or OX icon class. If omitted, no
      *      icon will be shown.
-     *  @param {Boolean} [options.whiteIcon=false]
-     *      If set to true, the icon will be shown in light colors by adding
-     *      the CSS class 'icon-white'.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -1596,7 +1801,6 @@ define('io.ox/office/tk/utils',
 
         var // option values
             icon = Utils.getStringOption(options, 'icon'),
-            whiteIcon = Utils.getBooleanOption(options, 'whiteIcon'),
             label = Utils.getStringOption(options, 'label'),
             labelCss = Utils.getObjectOption(options, 'labelCss'),
 
@@ -1620,7 +1824,8 @@ define('io.ox/office/tk/utils',
             caption.append($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
+                // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')).addClass(language))
             );
         }
 
@@ -1636,22 +1841,6 @@ define('io.ox/office/tk/utils',
         if (caption.children().length === 0) {
             caption.remove();
         }
-    };
-
-    /**
-     * Returns the class of the caption icon of the first control in the passed
-     * jQuery collection.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @return {String|Undefined}
-     *  The class of the caption icon of the control, if existing, otherwise
-     *  undefined.
-     */
-    Utils.getControlIcon = function (control) {
-        var icon = control.first().children('div.caption').children(ICON_SELECTOR);
-        return icon.length ? icon.attr('data-icon') : undefined;
     };
 
     /**
@@ -1726,8 +1915,8 @@ define('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // create the DOM anchor element representing the button
-            button = Utils.createControl('a', undefined, options).addClass('button');
+        var // create the DOM anchor element representing the button (href="#" is essential for tab traveling)
+            button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;
@@ -1984,91 +2173,6 @@ define('io.ox/office/tk/utils',
         APOSTROPH:      222,
         OPEN_ANGLE:     226     // German keyboard
 */
-    };
-
-    // deferred methods container =============================================
-
-    /**
-     * @constructor
-     */
-    Utils.DeferredMethods = function (context) {
-
-        var // browser timeouts, mapped by indexes of deferred methods
-            timeouts = {},
-            // counter for unique indexes of all deferred methods
-            count = 0;
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Creates a deferred method that can be called multiple times.
-         * Execution is separated into a part that runs directly every time the
-         * method is called (direct callback), and a part that runce once after
-         * the current script execution ends (deferred callback).
-         *
-         * @param {Function} directCallback
-         *  A function that will be called every time the deferred method
-         *  has been called. Receives the following parameters:
-         *  @param {Object} storage
-         *      The storage object passed to the DeferredObjects.createObject()
-         *      method. Can be used to store additional data needed across
-         *      multiple calls of the direct and/or deferred callbacks.
-         *
-         * @param {Function} deferredCallback
-         *  A function that will be called once after calling the deferred
-         *  method once or multiple times during the execution of the current
-         *  script. Receives the following parameters:
-         *  @param {Object} storage
-         *      The storage object passed to the DeferredObjects.createObject()
-         *      method. Can be used to store additional data needed across
-         *      multiple calls of the direct and/or deferred callbacks.
-         *
-         * @param {Object} [storage]
-         *  An object that will be passed to all callback functions and can be
-         *  used to store additional data. The storage object remains valid
-         *  across all calls of the direct callback and the deferred callback.
-         *
-         * @returns {Function}
-         *  The deferred method that can be called multiple times, and that
-         *  executes the deferred callback once after execution of the current
-         *  script ends. Passes all arguments to the direct callback (following
-         *  the leading storage parameter if specified), and returns the result
-         *  of the direct callback function.
-         */
-        this.createMethod = function (directCallback, deferredCallback, storage) {
-
-            var // unique index of this deferred method
-                index = count++,
-                // arguments for direct callback
-                args = _.isUndefined(storage) ? [] : [storage];
-
-            // create and return the deferred method
-            return function () {
-
-                // create a timeout calling the deferred callback
-                if (!(index in timeouts)) {
-                    timeouts[index] = window.setTimeout(function () {
-                        delete timeouts[index];
-                        deferredCallback.call(context, storage);
-                    }, 0);
-                }
-
-                // call the direct callback with the passed arguments
-                return directCallback.apply(context, args.concat(_.toArray(arguments)));
-            };
-        };
-
-        /**
-         * Clears the running timeouts, without calling the pending deferred
-         * callback functions.
-         */
-        this.destroy = function () {
-            _(timeouts).each(function (timeout) {
-                window.clearTimeout(timeout);
-            });
-            timeouts = null;
-        };
-
     };
 
     // console output =========================================================

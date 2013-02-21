@@ -1,0 +1,123 @@
+{
+    "daysInFirstWeek": 1,
+    "weekStart": 0,
+    "days": [
+        "እሑድ",
+        "ሰኞ",
+        "ማክሰኞ",
+        "ረቡዕ",
+        "ሐሙስ",
+        "ዓርብ",
+        "ቅዳሜ"
+    ],
+    "daysShort": [
+        "እሑድ",
+        "ሰኞ",
+        "ማክሰ",
+        "ረቡዕ",
+        "ሐሙስ",
+        "ዓርብ",
+        "ቅዳሜ"
+    ],
+    "daysStandalone": [
+        "እ",
+        "ሰ",
+        "ማ",
+        "ረ",
+        "ሐ",
+        "ዓ",
+        "ቅ"
+    ],
+    "months": [
+        "ጃንዩወሪ",
+        "ፌብሩወሪ",
+        "ማርች",
+        "ኤፕሪል",
+        "ሜይ",
+        "ጁን",
+        "ጁላይ",
+        "ኦገስት",
+        "ሴፕቴምበር",
+        "ኦክተውበር",
+        "ኖቬምበር",
+        "ዲሴምበር"
+    ],
+    "monthsShort": [
+        "ጃንዩ",
+        "ፌብሩ",
+        "ማርች",
+        "ኤፕሪ",
+        "ሜይ",
+        "ጁን",
+        "ጁላይ",
+        "ኦገስ",
+        "ሴፕቴ",
+        "ኦክተ",
+        "ኖቬም",
+        "ዲሴም"
+    ],
+    "formats": {
+        "E": "E",
+        "yMd": "d/M/y",
+        "yMEd": "E፣ d/M/y",
+        "yMMMd": "d MMM y",
+        "yMMMEd": "E፣ MMM d y",
+        "hm": "h:mm a",
+        "Hm": "HH:mm",
+        "v": "v",
+        "Hmv": "HH:mm v",
+        "hmv": "h:mm a v",
+        "yMdHm": "d/M/y HH:mm",
+        "yMdHmv": "d/M/y HH:mm v",
+        "yMdhm": "d/M/y h:mm a",
+        "yMdhmv": "d/M/y h:mm a v",
+        "yMEdHm": "E፣ d/M/y HH:mm",
+        "yMEdHmv": "E፣ d/M/y HH:mm v",
+        "yMEdhm": "E፣ d/M/y h:mm a",
+        "yMEdhmv": "E፣ d/M/y h:mm a v"
+    },
+    "date": "d MMM y",
+    "time": "h:mm a",
+    "dateTimeFormat": "%2$s %1$s",
+    "intervals": {
+        "fallback": "%1$s – %2$s",
+        "hm": {
+            "a": "h:mm a – h:mm a",
+            "h": "h:mm – h:mm a",
+            "m": "h:mm – h:mm a"
+        },
+        "Hm": {
+            "h": "hh:mm–hh:mm a",
+            "m": "hh:mm–hh:mm a"
+        },
+        "hmv": {
+            "a": "h:mm a – h:mm a v",
+            "h": "h:mm – h:mm a v",
+            "m": "h:mm – h:mm a v"
+        },
+        "Hmv": {
+            "h": "hh:mm–hh:mm a v",
+            "m": "hh:mm–hh:mm a v"
+        },
+        "yMMMd": {
+            "d": "MMM d–d፣ y",
+            "m": "MMM d – MMM d፣ y",
+            "y": "MMM d፣ y – MMM d፣ y"
+        },
+        "yMMMEd": {
+            "d": "E MMM d – E MMM d፣ y",
+            "m": "E MMM d – E MMM d፣ y",
+            "y": "E፣ MMM d፣ y – E፣ MMM d፣ y"
+        }
+    },
+    "dayPeriods": {
+        "am": "ጥዋት",
+        "pm": "ከሰዓት"
+    },
+    "eras": [
+        "ዓ/ዓ",
+        "ዓ/ም"
+    ],
+    "dateTime": "d MMM y h:mm a",
+    "h12": true
+}

@@ -12,15 +12,15 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/files/main",
-    ["io.ox/core/commons",
-     "gettext!io.ox/files",
+define('io.ox/files/main',
+    ['io.ox/core/commons',
+     'gettext!io.ox/files',
      'settings!io.ox/files',
-     "io.ox/files/actions",
-     "less!io.ox/files/style.less"
+     'io.ox/files/actions',
+     'less!io.ox/files/style.less'
     ], function (commons, gt, settings) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' }),
@@ -32,12 +32,12 @@ define("io.ox/files/main",
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
-            title: gt("Files"),
+            title: gt('Files'),
             toolbar: true,
             search: true
         }));
 
-        win.addClass("io-ox-files-main");
+        win.addClass('io-ox-files-main');
         app.settings = settings;
 
         commons.wirePerspectiveEvents(app);

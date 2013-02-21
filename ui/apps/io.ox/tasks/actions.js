@@ -11,14 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/actions",
+define('io.ox/tasks/actions',
     ['io.ox/core/extensions',
      'io.ox/tasks/util',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
-     'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
+     'io.ox/core/notifications',
+     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
 
-    "use strict";
+    'use strict';
 
     //  actions
     var Action = links.Action, Button = links.Button,
@@ -27,7 +28,7 @@ define("io.ox/tasks/actions",
     new Action('io.ox/tasks/actions/create', {
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch();
+                edit.getApp().launch({ folderid: baton.app.folder.get()});
             });
         }
     });
@@ -42,33 +43,43 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/delete', {
+        requires: 'some',
         action: function (baton) {
-            var data = baton.data;
+            var data = baton.data,
+                numberOfTasks = data.length || 1;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('delete', gt('Delete'))
+                var popup = new dialogs.ModalDialog({async: true})
+                    .addPrimaryButton('deleteTask', gt('Delete'))
                     .addButton('cancel', gt('Cancel'));
-
                 //Header
                 popup.getBody()
-                    .append($("<h4>")
-                            .text(gt('Do you really want to delete this task?')));
-
+                    .append($('<h4>')
+                            .text(gt.ngettext('Do you really want to delete this task?',
+                                              'Do you really want to delete this tasks?', numberOfTasks)));
                 //go
-                popup.show().done(function (action) {
-                    if (action === 'delete') {
-                        require(['io.ox/tasks/api'], function (api) {
-                            api.remove({id: data.id, folder: data.folder_id}, false)
-                                .done(function (data) {
-                                    if (data === undefined || data.length === 0) {
-                                        notifications.yell('success', gt('Task has been deleted!'));
-                                    } else {//task was modified
-                                        notifications.yell('error', gt('Failure! Please refresh.'));
-                                    }
-                                });
-                        });
-                    }
+                popup.show();
+                popup.on('deleteTask', function () {
+                    require(['io.ox/tasks/api'], function (api) {
+                        api.remove(data, false)
+                            .done(function (data) {
+                                notifications.yell('success', gt.ngettext('Task has been deleted!',
+                                                                          'Tasks have been deleted!', numberOfTasks));
+                                popup.close();
+                            }).fail(function (result) {
+                                if (result.code === "TSK-0019") { //task was already deleted somewhere else. everythings fine, just show info
+                                    notifications.yell('info', gt('Task was already deleted!'));
+                                    popup.close();
+                                } else {
+                                    //show retrymessage and enable buttons again
+                                    popup.idle();
+                                    popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
+                                                                              'The tasks could not be deleted.', numberOfTasks), function () {
+                                        popup.trigger('deleteTask', data);
+                                    })).find('h4').remove();
+                                }
+                            });
+                    });
                 });
             });
         }
@@ -76,61 +87,85 @@ define("io.ox/tasks/actions",
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return e.baton.data.status !== 3;
+            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
         },
         action: function (baton) {
-            changeState(baton);
+            changeState(baton, 1);
         }
     });
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
-            return e.baton.data.status === 3;
+            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
-            changeState(baton);
+            changeState(baton, 3);
         }
     });
 
-    function changeState(baton) {
+    function changeState(baton, state) {
         var mods,
             data = baton.data;
-        if (data.status === 3) {
+        if (state === 3) {
             mods = {label: gt('Undone'),
                     data: {status: 1,
-                           percent_completed: 0
+                           percent_completed: 0,
+                           date_completed: null
                           }
                    };
         } else {
             mods = {label: gt('Done'),
                     data: {status: 3,
-                           percent_completed: 100
+                           percent_completed: 100,
+                           date_completed: _.now()
                           }
                    };
         }
-        require(['io.ox/tasks/api'], function (api) {
-            api.update(data.last_modified || _.now(), data.id, mods.data, data.folder_id || data.folder)
-                .done(function (result) {
-                    api.trigger("update:" + encodeURIComponent(data.folder_id + '.' + data.id));
-                    notifications.yell('success', mods.label);
-                })
-                .fail(function (result) {
-                    notifications.yell('error', gt.noI18n(result));
-                });
+        require(['io.ox/core/http', 'io.ox/tasks/api'], function (http, api) {
+            if (data.length > 1) {
+                api.updateMultiple(data, mods.data)
+                    .done(function (result) {
+                        _(data).each(function (item) {
+                            //update detailview
+                            api.trigger('update:' + encodeURIComponent(item.folder_id + '.' + item.id));
+                        });
+
+                        notifications.yell('success', mods.label);
+                    })
+                    .fail(function (result) {
+                        notifications.yell('error', gt.noI18n(result));
+                    });
+            } else {
+                mods.data.id = data.id;
+                mods.data.folder_id = data.folder_id || data.folder;
+                api.update(mods.data)
+                    .done(function (result) {
+                        api.trigger('update:' + encodeURIComponent(data.folder_id + '.' + data.id));
+                        notifications.yell('success', mods.label);
+                    })
+                    .fail(function (result) {
+                        var errorMsg = gt("A severe error occured!");
+                        if (result.code === "TSK-0007") {//task was modified before
+                            errorMsg = gt("Task was modified before, please reload");
+                        }
+                        notifications.yell('error', errorMsg);
+                    });
+            }
         });
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'one',
+        requires: 'some',
         action: function (baton) {
-            var task = baton.data;
-            require(['io.ox/core/tk/dialogs', "io.ox/core/tk/folderviews", 'io.ox/tasks/api'],
+            var task = baton.data,
+                numberOfTasks = task.length || 1;
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api'],
                     function (dialogs, views, api) {
                 //build popup
                 var popup = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text('Move'))
-                    .addPrimaryButton("ok", gt("Move"))
-                    .addButton("cancel", gt("Cancel"));
+                    .header($('<h3>').text(gt('Move')))
+                    .addPrimaryButton('ok', gt('Move'))
+                    .addButton('cancel', gt('Cancel'));
                 popup.getBody().css({ height: '250px' });
                 var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
                     id = String(task.folder || task.folder_id);
@@ -142,19 +177,68 @@ define("io.ox/tasks/actions",
                 })
                 .done(function (action) {
                     if (action === 'ok') {
+                        var node = $('.io-ox-multi-selection');
+                        node.hide();
+                        node.parent().busy();
                         var target = _(tree.selection.get()).first();
                         // move only if folder differs from old folder
                         if (target && target !== id) {
                             // move action
                             api.move(task, target)
                             .done(function () {
-                                notifications.yell('success', gt('Task moved.'));
+                                node.show();
+                                node.parent().idle();
+                                notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
                             })
-                            .fail(notifications.yell);
+                            .fail(function (response) {
+                                node.show();
+                                node.parent().idle();
+                                notifications.yell('error', gt('A severe error occured!'));
+                            });
                         }
                     }
                     tree.destroy();
                     tree = popup = null;
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/tasks/actions/confirm', {
+        id: 'confirm',
+        requires: function (args) {
+            var result = false;
+            if (args.baton.data.participants) {
+                var userId = configApi.get('identifier');
+                _(args.baton.data.participants).each(function (participant) {
+                    if (participant.id === userId) {
+                        result = true;
+                    }
+                });
+                return result;
+            }
+            return result;
+        },
+        action: function (baton) {
+            var data = baton.data;
+            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api'], function (editUtil, dialogs, api) {
+                //build popup
+                var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
+                //go
+                popup.popup.show().done(function (action) {
+                    if (action === "ChangeConfState") {
+                        var state = popup.state.prop('selectedIndex') + 1,
+                            message = popup.message.val();
+                        api.confirm({id: data.id,
+                                     folder_id: data.folder_id,
+                                     data: {confirmation: state,
+                                            confirmMessage: message}
+                        }).done(function () {
+                            //update detailview
+                            api.trigger("update:" + data.folder_id + '.' + data.id);
+                            api.trigger("remove-task-confirmation-notification", [{id: data.id}]);
+                        });
+                    }
                 });
             });
         }
@@ -202,7 +286,7 @@ define("io.ox/tasks/actions",
                         }
                     });
                     if (popup.find('h4').length === 0) {
-                        popup.append($('<h4>').text(gt("No preview available")));
+                        popup.append($('<h4>').text(gt('No preview available')));
                     }
                 });
             });
@@ -255,7 +339,7 @@ define("io.ox/tasks/actions",
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus accent-color">');
         }
     });
 
@@ -271,7 +355,7 @@ define("io.ox/tasks/actions",
         id: 'edit',
         index: 100,
         prio: 'hi',
-        label: gt("Edit"),
+        label: gt('Edit'),
         ref: 'io.ox/tasks/actions/edit'
     }));
 
@@ -279,7 +363,7 @@ define("io.ox/tasks/actions",
         id: 'delete',
         index: 200,
         prio: 'hi',
-        label: gt("Delete"),
+        label: gt('Delete'),
         ref: 'io.ox/tasks/actions/delete'
     }));
 
@@ -287,7 +371,7 @@ define("io.ox/tasks/actions",
         id: 'done',
         index: 300,
         prio: 'hi',
-        label: gt("Done"),
+        label: gt('Done'),
         ref: 'io.ox/tasks/actions/done'
     }));
 
@@ -295,7 +379,7 @@ define("io.ox/tasks/actions",
         id: 'unDone',
         index: 310,
         prio: 'hi',
-        label: gt("Undone"),
+        label: gt('Undone'),
         ref: 'io.ox/tasks/actions/undone'
     }));
 
@@ -325,13 +409,10 @@ define("io.ox/tasks/actions",
                         var finderId = $(this).attr('finderId');
                         require(['io.ox/tasks/api'], function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
-                                modifications = {end_date: endDate.getTime()},
-                                folder;
-                            if (e.data.task.folder) {
-                                folder = e.data.task.folder;
-                            } else {
-                                folder = e.data.task.folder_id;
-                            }
+                                modifications = {end_date: endDate.getTime(),
+                                                 id: e.data.task.id,
+                                                 folder_id: e.data.task.folder_id || e.data.task.folder};
+
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -340,8 +421,8 @@ define("io.ox/tasks/actions",
                                         .addPrimaryButton('change', gt('Adjust start date'));
                                     //text
                                     popup.getBody().append(
-                                        $("<h4>").text(gt('Inconsistent dates')),
-                                        $("<div>").text(
+                                        $('<h4>').text(gt('Inconsistent dates')),
+                                        $('<div>').text(
                                             //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
                                             //#. If this happens the user gets the option to change the start date so it matches the due date
                                             gt('The due date cannot be before start date. Adjust start date?')
@@ -352,16 +433,16 @@ define("io.ox/tasks/actions",
                                             notifications.yell('info', gt('Canceled'));
                                         } else {
                                             modifications.start_date = modifications.end_date;
-                                            api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                                api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
+                                            api.update(modifications).done(function () {
+                                                api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
                                     });
                                 });
                             } else {
-                                api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
-                                    api.trigger("update:" + encodeURIComponent(folder + '.' + e.data.task.id));
+                                api.update(modifications).done(function () {
+                                    api.trigger('update:' + encodeURIComponent(modifications.folder_id + '.' + modifications.id));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }
@@ -376,8 +457,16 @@ define("io.ox/tasks/actions",
         id: 'move',
         index: 500,
         prio: 'lo',
-        label: gt("Move"),
+        label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'confirm',
+        index: 600,
+        prio: 'lo',
+        label: gt('Change confirmation status'),
+        ref: 'io.ox/tasks/actions/confirm'
     }));
 
     // Attachments

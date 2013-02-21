@@ -16,7 +16,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/config',
      'io.ox/core/api/account',
      'io.ox/core/event',
-     'gettext!io.ox/core'], function (http, cache, config, account, Events, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'], function (http, cache, config, account, Events, notifications, gt) {
 
     'use strict';
 
@@ -51,7 +52,11 @@ define('io.ox/core/api/folder',
                     cache.add(data.id, data);
                 })
                 .fail(function (error) {
-                    console.error('folder.get', id, error);
+                    if (error.categories === "PERMISSION_DENIED") {
+                        notifications.yell(error);
+                    } else {
+                        console.error('folder.get', id, error);
+                    }
                 });
             };
 
@@ -171,13 +176,18 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .pipe(function (data, timestamp) {
+                        // rearrange on multiple ???
+                        if (data.timestamp) {
+                            timestamp = _.now(); // force update
+                            data = data.data;
+                        }
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data, timestamp),
                             // also add to folder cache
                             $.when.apply($,
                                 _(data).map(function (folder) {
-                                    return folderCache.add(folder.id, folder);
+                                    return folderCache.add(folder.id, folder, timestamp);
                                 })
                             )
                         )
@@ -219,7 +229,7 @@ define('io.ox/core/api/folder',
                         appendColumns: true
                     })
                     .done(function (data) {
-                        // loop over folders to remove root & update cache
+                        // loop over folders to remove root & 1 cache
                         data = _(data).filter(function (folder) {
                             cache.add(folder.id, folder);
                             return folder.id !== '1';
@@ -282,7 +292,7 @@ define('io.ox/core/api/folder',
                                 },
                                 addToCache = function (obj) {
                                     // add to folder cache
-                                    folderCache.add(obj, timestamp);
+                                    folderCache.add(obj.id, obj, timestamp);
                                     return obj;
                                 },
                                 sorter = function (a, b) {
@@ -391,6 +401,7 @@ define('io.ox/core/api/folder',
                 return http.PUT({
                     module: 'folders',
                     params: {
+                        module: module,
                         action: 'new',
                         folder_id: opt.folder,
                         tree: '1'
@@ -418,6 +429,27 @@ define('io.ox/core/api/folder',
             })
             .fail(function (error) {
                 api.trigger('create:fail', error, opt.folder);
+            });
+        },
+
+        sync: function () {
+            // action=update doesn't inform us about new unread mails, so we need another approach
+
+            // renew subfoldercache
+            // get all folders from subfolder cache
+            return subFolderCache.keys().pipe(function (keys) {
+                // clear subfolder cache
+                subFolderCache.clear();
+
+                // renew all subfolder entries
+                http.pause();
+                _(keys).map(function (id) {
+                    return api.getSubFolders({ folder: id, cache: false });
+                });
+
+                api.trigger('update');
+
+                return http.resume();
             });
         },
 
@@ -608,8 +640,6 @@ define('io.ox/core/api/folder',
          * Can?
          */
         can: function (action, data, obj) {
-            // is my folder?
-            var compareValue = (obj && ox.user_id === _.firstOf(obj.created_by, 0)) ? 0 : 1;
             // check multiple folder?
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
@@ -622,14 +652,18 @@ define('io.ox/core/api/folder',
                 rights = data.own_rights,
                 isSystem = data.standard_folder || this.is('system', data),
                 isAdmin = perm(rights, 28) === 1,
-                isMail = data.module === 'mail';
+                isMail = data.module === 'mail',
+                compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0; // is my folder ?
             // switch
             switch (action) {
             case 'read':
                 // can read?
                 // 256 = read own, 512 = read all, 8192 = admin
+                // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > compareValue || (!this.is('system', data) && this.is('public', data) && data.folder_id !== '10');
+                return perm(rights, 7) > 0 ||
+                        (!isSystem && this.is('public', data) && data.folder_id !== '10') &&
+                        rights !== 1;
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;
@@ -722,6 +756,7 @@ define('io.ox/core/api/folder',
                         var equalUnread = a.unread === b.unread,
                             equalData = a.title === b.title && a.subfolders === b.subfolders && a.subscr_subflds === b.subscr_subflds;
                         api.trigger('update:unread', id, b);
+                        api.trigger('update:unread:' + id, b);
                         if (!equalData) {
                             api.trigger('update', id, id, b);
                         }
@@ -778,15 +813,15 @@ define('io.ox/core/api/folder',
 
     api.setUnread = function (folder, unread) {
         return folderCache.get(folder).pipe(function (data) {
-                if (data) {
-                    data.unread = Math.max(0, unread);
-                    return folderCache.add(folder, data).done(function () {
-                        api.trigger('change:' + folder);
-                    });
-                } else {
-                    return $.when();
-                }
-            });
+            if (data) {
+                data.unread = Math.max(0, unread);
+                return folderCache.add(folder, data).done(function () {
+                    api.trigger('change:' + folder);
+                });
+            } else {
+                return $.when();
+            }
+        });
     };
 
     api.decUnread = function (folder) {
@@ -882,6 +917,17 @@ define('io.ox/core/api/folder',
     }());
 
     Events.extend(api);
+
+    ox.on('refresh^', function () {
+        api.sync();
+    });
+
+    // publish caches
+    api.caches = {
+        folderCache: folderCache,
+        subFolderCache: subFolderCache,
+        visibleCache: visibleCache
+    };
 
     return api;
 });

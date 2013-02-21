@@ -731,7 +731,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var $el = new View({model: recipe}).render().$el;
 
-                    j.expect($el.find(".sectionheader a").text()).toEqual("Section");
+                    j.expect($el.find(".sectionheader.collapsed a").text()).toEqual("Section");
                     j.expect($el.find(".find-me-description").parent().css("display")).toEqual("none");
 
                     // Unhide the section

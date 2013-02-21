@@ -17,7 +17,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
-     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -31,6 +32,11 @@ define('io.ox/calendar/week/perspective',
         view:           null,   // the current view obj
         modes:          { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 }, // all available modes
 
+        /**
+         * open sidepopup to show appointment
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         */
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
@@ -39,18 +45,25 @@ define('io.ox/calendar/week/perspective',
                     .show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
+            }).fail(function () {
+                notifications.yell('error', gt('An error occured. Please try again.'));
+                $('.appointment', self.main).removeClass('opac current');
             });
         },
 
+        /**
+         * update appointment data
+         * @param  {Object} obj new appointment data
+         */
         updateAppointment: function (obj) {
             var self = this;
-            _.each(obj, function (el, i) {
-                if (el === null) {
-                    delete obj[i];
-                }
-            });
 
+            /**
+             * call api update function
+             * @param  {Object} obj new appointment data
+             */
             var apiUpdate = function (obj) {
+                obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog()
@@ -72,10 +85,23 @@ define('io.ox/calendar/week/perspective',
                 });
             };
 
+            /**
+             * cleanup appointment data
+             * @param  {Object} obj new appointment data
+             * @return {Object}     clean appointment data
+             */
+            var clean = function (app) {
+                _.each(app, function (el, i) {
+                    if (el === null || _.indexOf(['old_start_date', 'old_end_date', 'drag_move'], i) >= 0) {
+                        delete app[i];
+                    }
+                });
+                return app;
+            };
+
             if (obj.recurrence_type > 0) {
-                var noSeriesEdit = obj.drag_move && obj.drag_move !== 0,
-                    dialog = new dialogs.ModalDialog();
-                if (noSeriesEdit) {
+                var dialog = new dialogs.ModalDialog();
+                if (obj.drag_move && obj.drag_move !== 0) {
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
                         .addButton('appointment', gt('Yes'))
@@ -116,16 +142,30 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * open create dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openCreateAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, obj);
         },
 
+        /**
+         * open edit dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, {data: obj});
         },
 
+        /**
+         * get appointments and update collection
+         * @param  {Object} obj object containing start and end timestamp
+         */
         getAppointments: function (obj) {
             // fetch appointments
             var collection = this.collection;
@@ -138,10 +178,15 @@ define('io.ox/calendar/week/perspective',
                             return m;
                         }));
                     collection = null;
+                }).fail(function () {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
                 });
             }
         },
 
+        /**
+         * refresh appointment data
+         */
         refresh: function () {
             var self = this;
             this.app.folder.getData().done(function (data) {
@@ -150,6 +195,9 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
+        /**
+         * trigger view save function
+         */
         save: function () {
             // save scrollposition
             if (this.view) {
@@ -157,6 +205,9 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * trigger view restore function
+         */
         restore: function () {
             // restore scrollposition
             if (this.view) {
@@ -164,6 +215,11 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        /**
+         * [render description]
+         * @param  {Object} app current application
+         * @param  {Object} opt perspective options
+         */
         render: function (app, opt) {
             // init perspective
             this.app = app;
@@ -204,6 +260,9 @@ define('io.ox/calendar/week/perspective',
                     .on('delete', function () {
                         // Close dialog after delete
                         self.dialog.close();
+                    })
+                    .on('create update', function (e, obj) {
+                        self.view.setStartDate(obj.start_date);
                     });
 
                 // watch for folder change
@@ -212,7 +271,10 @@ define('io.ox/calendar/week/perspective',
                     .on('show', refresh, this)
                     .on('show', $.proxy(this.restore, this))
                     .on('beforehide', $.proxy(this.save, this))
-                    .on('change:perspective', this.view.unbindKeys);
+                    .on('change:perspective', function () {
+                        self.view.unbindKeys();
+                        self.dialog.close();
+                    });
             }
 
             this.view.setScrollPos();

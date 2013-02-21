@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/dropdown/list',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/scrollable'
-    ], function (Utils, Scrollable) {
+     'io.ox/office/tk/control/group',
+     'io.ox/office/tk/dropdown/dropdown'
+    ], function (Utils, Group, DropDown) {
 
     'use strict';
 
@@ -25,7 +26,7 @@ define('io.ox/office/tk/dropdown/list',
 
     /**
      * Extends a Group object with a drop-down button and a drop-down menu
-     * containing a list of items. Extends the Scrollable mix-in class with
+     * containing a list of items. Extends the DropDown mix-in class with
      * functionality specific to the list drop-down element.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
@@ -34,12 +35,12 @@ define('io.ox/office/tk/dropdown/list',
      *
      * @constructor
      *
-     * @extends Scrollable
+     * @extends DropDown
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the list. Supports all
-     *  options of the Scrollable base class. Additionally, the following
-     *  options are supported:
+     *  options of the DropDown base class. Additionally, the following options
+     *  are supported:
      *  @param {Boolean} [options.sorted=false]
      *      If set to true, the list items will be inserted ordered according
      *      to the registered sort functor (see 'option.sortFunctor').
@@ -53,22 +54,48 @@ define('io.ox/office/tk/dropdown/list',
      *      ordered by their label texts, ignoring case; items without text
      *      label will be prepended in no special order. This option has no
      *      effect, if sorting is not enabled.
+     *  @param {Function} [options.itemValueResolver]
+     *      The function that returns the current value of a clicked list item.
+     *      Will be passed to the method Group.registerChangeHandler() called
+     *      at the internal button group that contains the list items in the
+     *      drop-down menu.
+     *  @param {String} [options.itemDesign='default']
+     *      The design mode of the list items. See the option 'options.design'
+     *      supported by the Group class constructor for details.
+     *  @param {Function} [options.itemCreateHandler]
+     *      A function that will be called after a new list item has been added
+     *      to this list. The function receives the button control representing
+     *      the new list item (jQuery object) as first parameter.
      */
     function List(options) {
 
         var // self reference (the Group instance)
             self = this,
 
-            // the container element for all list items
-            listNode = $('<ul>'),
-
             // sorted list items
             sorted = Utils.getBooleanOption(options, 'sorted', false),
 
             // functor used to sort the items
-            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor');
+            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
+
+            // the group in the drop-down menu representing the list items
+            listItemGroup = new Group({ classes: 'button-list', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+
+            // handler called after a new item has been created
+            itemCreateHandler = Utils.getFunctionOption(options, 'itemCreateHandler', $.noop);
+
+        // base constructor ---------------------------------------------------
+
+        DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Handles 'menuopen' events.
+         */
+        function menuOpenHandler() {
+            this.getMenuNode().css('min-width', this.getNode().outerWidth() + 'px');
+        }
 
         /**
          * Handles key events in the open list menu element.
@@ -91,10 +118,10 @@ define('io.ox/office/tk/dropdown/list',
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + this.getItemCountPerPage())).focus(); }
+                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.HOME:
                 if (keydown) { buttons.first().focus(); }
@@ -105,44 +132,27 @@ define('io.ox/office/tk/dropdown/list',
             }
         }
 
-        // base constructor ---------------------------------------------------
-
-        Scrollable.call(this, listNode, options);
-
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the group instance containing all list items.
+         */
+        this.getListItemGroup = function () {
+            return listItemGroup;
+        };
 
         /**
          * Returns all button elements representing the list items.
          */
         this.getListItems = function () {
-            return listNode.find(Utils.BUTTON_SELECTOR);
-        };
-
-        /**
-         * Sets the focus to the first list item in the drop-down list.
-         */
-        this.grabMenuFocus = function () {
-            if (!Utils.containsFocusedControl(listNode)) {
-                this.getListItems().first().focus();
-            }
-            return this;
-        };
-
-        /**
-         * Returns the number of list items that can be shown at the same time
-         * in the drop-down list, depending on the current screen size.
-         */
-        this.getItemCountPerPage = function () {
-            var menuNode = self.getMenuNode(),
-                buttons = self.getListItems();
-            return buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+            return listItemGroup.getNode().children(Utils.BUTTON_SELECTOR);
         };
 
         /**
          * Removes all list items from the drop-down menu.
          */
         this.clearListItems = function () {
-            listNode.empty();
+            listItemGroup.getNode().empty();
             return this;
         };
 
@@ -154,6 +164,9 @@ define('io.ox/office/tk/dropdown/list',
          * @param {Object} [options]
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
+         *  Additionally, the following options are supported:
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the button.
          *
          * @returns {jQuery}
          *  The button element representing the new list item, as jQuery
@@ -161,16 +174,19 @@ define('io.ox/office/tk/dropdown/list',
          */
         this.createListItem = function (options) {
 
-            var // create the button element representing the list item
-                button = Utils.createButton(options),
-                // embed it into a list item element
-                listItem = $('<li>').append(button),
+            var // all existing list items
+                buttons = self.getListItems(),
+                // create the button element representing the list item
+                button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted lists
                 index = -1;
 
+            // add tool tip
+            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
+
             // find insertion index for sorted lists
             if (sorted) {
-                index = _.chain(this.getListItems().get())
+                index = _.chain(buttons.get())
                     // convert array of button elements to strings returned by sort functor
                     .map(function (button) { return sortFunctor.call(self, $(button)); })
                     // calculate the insertion index of the new list item
@@ -180,16 +196,21 @@ define('io.ox/office/tk/dropdown/list',
             }
 
             // insert the new list item element
-            if ((0 <= index) && (index < listNode.children().length)) {
-                listNode.children().eq(index).before(listItem);
+            if ((0 <= index) && (index < buttons.length)) {
+                buttons.eq(index).before(button);
             } else {
-                listNode.append(listItem);
+                listItemGroup.getNode().append(button);
             }
 
+            // call external handler
+            itemCreateHandler.call(this, button);
             return button;
         };
 
         // initialization -----------------------------------------------------
+
+        // add the button group control to the drop-down view component
+        this.addPrivateMenuGroup(listItemGroup);
 
         // default sort functor: sort by button label text, case insensitive
         sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
@@ -197,17 +218,25 @@ define('io.ox/office/tk/dropdown/list',
             return _.isString(label) ? label.toLowerCase() : '';
         };
 
-        // initialize the drop-down element
-        this.getMenuNode().addClass('list');
-
         // register event handlers
-        listNode.on('keydown keypress keyup', listKeyHandler);
+        this.on('menuopen', menuOpenHandler);
+        listItemGroup
+            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR, valueResolver: Utils.getFunctionOption(options, 'itemValueResolver') })
+            .getNode().on('keydown keypress keyup', listKeyHandler);
 
     } // class List
 
+    // static fields ----------------------------------------------------------
+
+    /**
+     * Number of list items that will be skipped when using the PAGE_UP or
+     * PAGE_DOWN key.
+     */
+    List.PAGE_SIZE = 5;
+
     // exports ================================================================
 
-    // derive this class from class Scrollable
-    return Scrollable.extend({ constructor: List });
+    // derive this class from class DropDown
+    return DropDown.extend({ constructor: List });
 
 });

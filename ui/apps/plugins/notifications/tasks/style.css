@@ -15,9 +15,9 @@
  float: right;
  }
  
- .tasknote .dateselect{
+ .task-actions .dateselect{
  margin-top: 0.5em;
- width: 100%; 
+ width: 170px; 
  }
  
 #io-ox-notifications-confirmation-tasks .stateselect{
@@ -32,6 +32,10 @@
 }
 
 .taskremindbtn{
-white-space: nowrap;
-width: 77%;
+	white-space: nowrap;
+	width: 170px;
+}
+
+.taskRemindOkBtn{
+	float: right;
 }

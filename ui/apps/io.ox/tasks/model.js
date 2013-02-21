@@ -11,20 +11,23 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/model", ['io.ox/tasks/api',
+define('io.ox/tasks/model', ['io.ox/tasks/api',
                              'io.ox/backbone/modelFactory',
                              'io.ox/backbone/validation',
                              'io.ox/core/extensions',
                              'io.ox/participants/model',
                              'gettext!io.ox/tasks'], function (api, ModelFactory, Validations, ext, pModel, gt) {
-        
-    "use strict";
-        
+
+    'use strict';
+
     var defaults = {
             status: 1,
             priority: 2,
             percent_completed: 0,
-            folder_id: api.getDefaultFolder()
+            folder_id: api.getDefaultFolder(),
+            recurrence_type: 0,
+            private_flag: false,
+            notification: true//set allways (OX6 does this too)
         },
         factory = new ModelFactory({
             ref: 'io.ox/tasks/model',
@@ -87,26 +90,26 @@ define("io.ox/tasks/model", ['io.ox/tasks/api',
         target_duration: {format: 'number'},
         private_flag: { format: 'boolean'}
     });
-        
-    ext.point("io.ox/tasks/model/validation").extend({
+
+    ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt("The start date must be before the end date."));
-                this.add('end_date', gt("The start date must be before the end date."));
+                this.add('start_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The start date must be before the end date.'));
             }
         }
     });
-    
-    ext.point("io.ox/tasks/model/validation").extend({
+
+    ext.point('io.ox/tasks/model/validation').extend({
         id: 'progress-not-between-0-and-100',
         validate: function (attributes) {
             if (attributes.percent_completed && (attributes.percent_completed < 0 || attributes.percent_completed > 100)) {
-                this.add('percent_completed', gt("Progress must be a valid number between 0 and 100"));
+                this.add('percent_completed', gt('Progress must be a valid number between 0 and 100'));
             }
         }
     });
-        
+
     return {
         defaults: defaults,
         factory: factory,

@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -16,8 +16,9 @@ define('io.ox/files/actions',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
+     'io.ox/core/notifications',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, capabilities, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, capabilities, notifications, gt, settings) {
 
     'use strict';
 
@@ -161,7 +162,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/send', {
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
+            return e.collection.has('some') && capabilities.has('webmail') && ox.uploadsEnabled;
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -174,6 +175,50 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/showlink', {
+        requires: function (e) {
+            return e.collection.has('some') && capabilities.has('webmail');
+        },
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                var calcWidth,
+                    container = $('<div>').css('display', 'inline-block'),
+                    content  = _(list).map(function (file) {
+                    var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
+                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url), 'cleanlink': url};
+                });
+
+                if (window.clipboardData) {
+
+                    _(content).each(function (item) {
+                        var copyButton = $('<a>').attr('href', '#').addClass('btn').text(gt('copy to clipboard'));
+                        copyButton.on('click', function () {
+                            window.clipboardData.setData('Text', item.cleanlink);
+                        });
+
+                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link + ' ').append(copyButton)));
+                    });
+                } else {
+                    _(content).each(function (item) {
+                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
+                    });
+                }
+
+                // to get the width of the container
+                $('body').append(container);
+                calcWidth = container.width();
+                calcWidth = calcWidth + 30;
+
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
+                        .append(container)
+                        .addButton('cancel', gt('Cancel'))
+                        .show();
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/delete', {
         requires: 'some',
         multiple: function (list) {
@@ -181,17 +226,31 @@ define('io.ox/files/actions',
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',
                     list.length
+            ),
+            responseSuccces = gt.ngettext(
+                    'This file has been deleted',
+                    'These files have been deleted',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been deleted',
+                    'These files have not been deleted',
+                    list.length
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton("delete", gt('Delete'))
-                    .addButton("cancel", gt('Cancel'))
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list);
+                            api.remove(list).done(function () {
+                                notifications.yell('success', responseSuccces);
+                            }).fail(function () {
+                                notifications.yell('error', responseFail);
+                            });
                         }
                     });
             });
@@ -216,13 +275,13 @@ define('io.ox/files/actions',
                         update.filename = name;
                     }
 
-                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                    return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
 
                 $input.val(baton.data.title || baton.data.filename);
-                var $form = $("<form>").append(
-                    $('<label for="name">').append($('<b>').text(gt("Name"))),
+                var $form = $('<form>').append(
+                    $('<label for="name">').append($('<b>').text(gt('Name'))),
                     $input
                 );
 
@@ -257,10 +316,10 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var $input = $('<textarea rows="10">').css({width: "507px"});
+                var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
                 $input.val(baton.data.description);
-                var $form = $("<form>").append(
-                    $('<label for="name">').append($('<b>').text(gt("Description"))),
+                var $form = $('<form>').append(
+                    $('<label for="name">').append($('<b>').text(gt('Description'))),
                     $input
                 );
                 var dialog = null;
@@ -276,7 +335,7 @@ define('io.ox/files/actions',
                         description: description
                     };
 
-                    return api.update(update).fail(require("io.ox/core/notifications").yell);
+                    return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
                 keys.on('shift+enter', function () {
@@ -316,7 +375,7 @@ define('io.ox/files/actions',
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');
                 var item = _(list).first(),
-                    tree = new views.FolderList(dialog.getBody(), { type: type });
+                    tree = new views.FolderTree(dialog.getBody(), { type: type, rootFolderId: '9', skipRoot: true });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set({ id: item.folder_id || item.folder });
@@ -324,10 +383,9 @@ define('io.ox/files/actions',
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
-                        console.log("SELECTED FOLDER", selectedFolder);
                         if (selectedFolder.length === 1) {
                             // move action
-                            api[apiAction](list, selectedFolder[0]).fail(require("io.ox/core/notifications").yell);
+                            api[apiAction](list, selectedFolder[0]).fail(require('io.ox/core/notifications').yell);
                         }
                     }
                     tree.destroy();
@@ -349,6 +407,21 @@ define('io.ox/files/actions',
         multiple: copyMove('infostore', 'copy', gt('Copy'))
     });
 
+    new Action('io.ox/files/actions/add-to-portal', {
+        require: function (e) {
+            return e.collection.has('one') && capabilities.has('!disablePortal');
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickyfile', 'files', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.filename || baton.data.title
+                });
+                notifications.yell('success', gt('This file has been added to the portal'));
+            });
+        }
+    });
 
     // version specific actions
 
@@ -362,7 +435,7 @@ define('io.ox/files/actions',
                 id: data.id,
                 last_modified: data.last_modified,
                 version: data.version
-            });
+            }, true);
         }
     });
 
@@ -379,8 +452,8 @@ define('io.ox/files/actions',
                 // ask
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton("delete", gt("Delete"))
-                    .addButton("cancel", gt("Cancel"))
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -397,14 +470,14 @@ define('io.ox/files/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-plus accent-color">');
         }
     });
 
     new ActionLink(POINT + '/links/toolbar/default', {
         index: 100,
-        id: "upload",
-        label: gt("Upload new file"),
+        id: 'upload',
+        label: gt('Upload new file'),
         ref: POINT + '/actions/upload'
     });
 
@@ -446,85 +519,100 @@ define('io.ox/files/actions',
     // });
 
     // new ActionLink(POINT + '/links/toolbar/publish', {
-    //     id: "publish",
-    //     label: gt("Publish current folder"),
-    //     ref: "io.ox/files/actions/publish"
+    //     id: 'publish',
+    //     label: gt('Publish current folder'),
+    //     ref: 'io.ox/files/actions/publish'
     // });
 
     // INLINE
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "editor",
+        id: 'editor',
         index: 40,
         prio: 'hi',
-        label: gt("Edit"),
-        ref: "io.ox/files/actions/editor"
+        label: gt('Edit'),
+        ref: 'io.ox/files/actions/editor'
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new links.Link({
-        id: "open",
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'open',
         index: 100,
         prio: 'hi',
-        label: gt("Open"),
-        ref: "io.ox/files/actions/open"
+        label: gt('Open'),
+        ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
         prio: 'hi',
-        label: gt("Download"),
-        ref: "io.ox/files/actions/download"
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'sendlink',
         index: 300,
-        label: gt("Send as link"),
-        ref: "io.ox/files/actions/sendlink"
+        label: gt('Send as link'),
+        ref: 'io.ox/files/actions/sendlink'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',
         index: 400,
-        label: gt("Send by mail"),
-        ref: "io.ox/files/actions/send"
+        label: gt('Send by mail'),
+        ref: 'io.ox/files/actions/send'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'showlink',
+        index: 400,
+        label: gt('Show link'),
+        ref: 'io.ox/files/actions/showlink'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
         index: 500,
-        label: gt("Rename"),
-        ref: "io.ox/files/actions/rename"
+        label: gt('Rename'),
+        ref: 'io.ox/files/actions/rename'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'edit-description',
         index: 550,
-        label: gt("Edit description"),
-        ref: "io.ox/files/actions/edit-description"
+        label: gt('Edit description'),
+        ref: 'io.ox/files/actions/edit-description'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
         index: 600,
-        label: gt("Move"),
-        ref: "io.ox/files/actions/move"
+        label: gt('Move'),
+        ref: 'io.ox/files/actions/move'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'copy',
         index: 700,
-        label: gt("Copy"),
-        ref: "io.ox/files/actions/copy"
+        label: gt('Copy'),
+        ref: 'io.ox/files/actions/copy'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
         index: 800,
         prio: 'hi',
-        label: gt("Delete"),
-        ref: "io.ox/files/actions/delete"
+        label: gt('Delete'),
+        ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'add-to-portal',
+        index: 900,
+        prio: 'lo',
+        label: gt('Add to portal'),
+        ref: 'io.ox/files/actions/add-to-portal'
     }));
 
     // version links
@@ -533,30 +621,30 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
         index: 100,
-        label: gt("Open"),
-        ref: "io.ox/files/actions/open"
+        label: gt('Open'),
+        ref: 'io.ox/files/actions/open'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
-        label: gt("Download"),
-        ref: "io.ox/files/actions/download"
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
-        label: gt("Make this the current version"),
-        ref: "io.ox/files/versions/actions/makeCurrent"
+        label: gt('Make this the current version'),
+        ref: 'io.ox/files/versions/actions/makeCurrent'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
-        label: gt("Delete version"),
-        ref: "io.ox/files/versions/actions/delete",
-        special: "danger"
+        label: gt('Delete version'),
+        ref: 'io.ox/files/versions/actions/delete',
+        special: 'danger'
     }));
 
     // Drag and Drop
@@ -564,7 +652,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/dnd/actions').extend({
         id: 'create',
         index: 10,
-        label: gt("Drop here to upload a <b>new file</b>"),
+        label: gt('Drop here to upload a <b>new file</b>'),
         multiple: function (files, app) {
             app.queues.create.offer(files);
         }
@@ -596,17 +684,15 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/slideshow', {
         requires: function (e) {
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: false,
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     attachmentMode: false
                 });
             });
@@ -615,18 +701,16 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/slideshow-fullscreen', {
         requires: function (e) {
-            return BigScreen.enabled && _(e.context.allIds).reduce(function (memo, obj) {
+            return BigScreen.enabled && _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             BigScreen.request($('.io-ox-files-main .carousel')[0]);
             require(['io.ox/files/carousel'], function (carousel) {
                 carousel.init({
                     fullScreen: true,
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     attachmentMode: false
                 });
             });
@@ -635,16 +719,14 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename) && settings.get('audioEnabled');
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     videoSupport: false
                 });
             });
@@ -655,16 +737,14 @@ define('io.ox/files/actions',
         requires: function (e) {
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
             if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-            return _(e.context.allIds).reduce(function (memo, obj) {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
             }, false);
         },
-        action: function (e) {
-            var baton = e.data.baton;
+        action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
-                    list: e.data.allIds,
-                    app: baton.app,
+                    baton: baton,
                     videoSupport: true
                 });
             });

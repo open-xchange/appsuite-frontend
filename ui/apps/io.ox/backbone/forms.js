@@ -440,7 +440,6 @@ define('io.ox/backbone/forms',
                 this.$el.append(
                         $('<label class="checkbox">')
                         .addClass(this.labelClassName || '')
-                        .css('display', 'inline-block')
                         .append(
                             this.nodes.checkbox = $('<input type="checkbox">'),
                             this.label
@@ -576,6 +575,9 @@ define('io.ox/backbone/forms',
                             self.nodes.extensionNodes[extension.id].show();
                         }
                     });
+                    // Show regular header
+                    this.nodes.collapsedHeader.hide();
+                    this.nodes.header.show();
                 } else if (this.initialState === 'collapsed') {
                     // Show regular header
                     this.nodes.collapsedHeader.hide();
@@ -600,6 +602,9 @@ define('io.ox/backbone/forms',
                             self.nodes.extensionNodes[extension.id].hide();
                         }
                     });
+                    // show collapsedHeader
+                    this.nodes.collapsedHeader.show();
+                    this.nodes.header.hide();
                 } else if (this.initialState === 'collapsed') {
                     // hide all
                     this.nodes.extensions.hide();
@@ -613,19 +618,43 @@ define('io.ox/backbone/forms',
                 this.nodes.toggleLink.text(gt('Show more'));
             },
 
+            /**
+             * Draw the header of a section.
+             *
+             * There can be four states a section might be in.
+             * 1. allVisible
+             *   * if this is the initial state, section can never be collapsed
+             *   * neither + or - sign are shown
+             * 2. mixed open
+             *   * section contains some visible fields that can be hidden by the user
+             *   * - sign is shown
+             * 3. mixed close
+             *   * section contains some hidden fields that can be made visible by the user
+             *   * + sign is shown
+             * 3. collapsed
+             *   * some or all fields of this section are hidden
+             *   * + sign is shown
+             *
+             * TODO: this code might need some cleanup (drawHeader, less and more)
+             */
             drawHeader: function () {
                 var self = this;
 
-                this.nodes.header = $('<div class="row sectionheader">').appendTo(this.$el);
+                this.nodes.header = $('<div class="row sectionheader">').append(
+                    $('<span class="offset2 span4">').append(
+                        $('<i class="icon-minus-sign">'),
+                        $('<a href="#">').text(this.title).on('click', function () {
+                            if (self.state === 'mixed') {
+                                self.more();
+                            } else if (self.state === 'allVisible') {
+                                self.less();
+                            }
+                        })
+                    )
+                ).appendTo(this.$el);
 
-                $('<a href="#" class="offset2 span4">').text(this.title).on('click', function () {
-                    if (self.state === 'mixed') {
-                        self.more();
-                    } else if (self.state === 'allVisible') {
-                        self.less();
-                    }
-                }).appendTo(this.nodes.header);
                 if (this.state === 'allVisible') {
+                    this.nodes.header.find('.icon-minus-sign').hide();
                     return;
                 }
 
@@ -637,7 +666,7 @@ define('io.ox/backbone/forms',
                     }
                 });
 
-                if (this.state === 'collapsed') {
+                if (this.state === 'collapsed' || this.initialState === 'mixed') {
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
                     $('<span class="offset2 span4">').append(
                         $('<i class="icon-plus-sign">'),
@@ -670,25 +699,29 @@ define('io.ox/backbone/forms',
     function DatePicker(options) {
         var BinderUtils = {
             convertDate: function (direction, value, attribute, model) {
+                var ret;
                 if (direction === 'ModelToView') {
-                    return BinderUtils._toDate(value, attribute, model);
+                    if (model.get('full_time')) {
+                        value = date.Local.utc(value);
+                        if (attribute === 'end_date') {
+                            value -= date.DAY;
+                        }
+                    }
+                    ret = BinderUtils._toDate(value, attribute, model);
                 } else {
-                    return BinderUtils._dateStrToDate(value, attribute, model);
+                    ret = BinderUtils._dateStrToDate(value, attribute, model);
+                    if (model.get('full_time') && attribute === 'end_date') {
+                        ret += date.DAY;
+                    }
                 }
+                return ret;
             },
 
             convertTime: function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
-                    if (model.get('full_time')) {
-                        value = date.Local.utc(value);
-                    }
-                    return BinderUtils._toTime(value, attribute, model, direction);
+                    return BinderUtils._toTime(value, attribute, model);
                 } else {
-                    value = BinderUtils._timeStrToDate(value, attribute, model);
-                    if (model.get('full_time')) {
-                        value = date.Local.localTime(value);
-                    }
-                    return value;
+                    return BinderUtils._timeStrToDate(value, attribute, model);
                 }
             },
 

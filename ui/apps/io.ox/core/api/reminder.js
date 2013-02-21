@@ -29,7 +29,8 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
             return http.PUT({
                 module: "reminder",
                 params: {action: "remindAgain",
-                         id: reminderId
+                         id: reminderId,
+                         timezone: 'UTC'
                          },
                 data: {alarm: remindDate}
             });
@@ -45,7 +46,7 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
                     end: range || _.now()
                 }
             }).pipe(function (list) {
-
+                
                 if (module === undefined || module === 4) {
                     //seperate task reminders from overall reminders
                     var reminderTaskId = [],
@@ -60,12 +61,8 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
                             reminderCalId.push(list[i]);
                         }
                     }
-                    if (reminderTaskId.length > 0) {
-                        api.trigger('reminder-tasks', reminderTaskId, reminderId);
-                    }
-                    if (reminderCalId.length > 0) {
-                        api.trigger('reminder-calender', reminderCalId);
-                    }
+                    api.trigger('reminder-tasks', reminderTaskId, reminderId);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
+                    api.trigger('reminder-calendar', reminderCalId);//same as above
                 }
 
                 return list;

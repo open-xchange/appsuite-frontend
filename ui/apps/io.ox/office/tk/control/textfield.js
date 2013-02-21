@@ -21,6 +21,9 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
+        // CSS marker class for the group node while focus is in text field
+        FOCUS_CLASS = 'text-focus',
+
         // default validator without any restrictions on the field text
         defaultValidator = null;
 
@@ -69,6 +72,10 @@ define('io.ox/office/tk/control/textfield',
             // initial value of text field when focused, needed for ESCAPE key handling
             initialText = null;
 
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
+
         // private methods ----------------------------------------------------
 
         /**
@@ -97,7 +104,7 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
-         * The action handler for this text field.
+         * Returns the current value associated to the text field.
          */
         function commitHandler() {
             var value = readOnly ? null : self.getFieldValue();
@@ -114,8 +121,11 @@ define('io.ox/office/tk/control/textfield',
             switch (event.type) {
             case 'focus':
                 // save current value
-                initialText = textField.val();
+                if (!_.isString(initialText)) {
+                    initialText = textField.val();
+                }
                 validationFieldState = getFieldState();
+                self.getNode().addClass(FOCUS_CLASS);
                 break;
             case 'focus:key':
                 // select entire text when reaching the field with keyboard
@@ -123,8 +133,10 @@ define('io.ox/office/tk/control/textfield',
                 validationFieldState = getFieldState();
                 break;
             case 'blur:key':
-                // commit value when losing focus via keyboard
-                textField.trigger('commit');
+                // commit changed value when losing focus via keyboard
+                if (initialText !== textField.val()) {
+                    textField.trigger('commit');
+                }
                 break;
             case 'blur':
                 // restore saved value
@@ -132,6 +144,7 @@ define('io.ox/office/tk/control/textfield',
                     textField.val(initialText);
                     initialText = null;
                 }
+                self.getNode().removeClass(FOCUS_CLASS);
                 break;
             }
         }
@@ -182,23 +195,19 @@ define('io.ox/office/tk/control/textfield',
                 }
 
                 // trigger 'validated' event to all listeners, pass old field state
-                textField.trigger('validated', validationFieldState);
+                self.trigger('validated', validationFieldState);
 
                 // save current state of the text field
                 validationFieldState = getFieldState();
             }
         }
 
-        // base constructor ---------------------------------------------------
-
-        Group.call(this, Utils.extendOptions(options, { white: true }));
-
         // methods ------------------------------------------------------------
 
         /**
          * Returns the text control element, as jQuery object.
          */
-        this.getTextField = function () {
+        this.getTextFieldNode = function () {
             return textField;
         };
 
@@ -248,7 +257,7 @@ define('io.ox/office/tk/control/textfield',
                         .off('mousedown dragover drop contextmenu');
                 }
                 // trigger listeners
-                textField.trigger('readonly', readOnly);
+                this.trigger('readonly', readOnly);
             }
             return this;
         };
@@ -272,7 +281,7 @@ define('io.ox/office/tk/control/textfield',
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
-            .registerActionHandler(textField, 'commit', commitHandler);
+            .registerChangeHandler('commit', { node: textField, valueResolver: commitHandler });
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)

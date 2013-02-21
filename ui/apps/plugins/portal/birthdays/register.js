@@ -21,7 +21,7 @@ define('plugins/portal/birthdays/register',
     'use strict';
 
     var WEEKS = 8,
-        RANGE = WEEKS * 7 * 24 * 60 * 60 * 1000,
+        RANGE = WEEKS * date.WEEK,
         sidepopup;
 
     function unifySpelling(name) {
@@ -44,8 +44,9 @@ define('plugins/portal/birthdays/register',
         title: gt('Next birthdays'),
 
         load: function (baton) {
-            var start = _.now(),
-                end = start + RANGE;
+            var aDay = 24 * 60 * 60 * 1000,
+                start = _.now() - aDay, //yes, one could try to calculate 00:00Z this day, but hey...
+                end = start + WEEKS * aDay;
             return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;
             });
@@ -119,42 +120,38 @@ define('plugins/portal/birthdays/register',
             this.append($list);
         },
 
-        preview: function () {
+        preview: function (baton) {
 
             var $list = $('<div class="content pointer">'),
-                start = _.now(),
-                end = start + RANGE;
+                hash = {},
+                contacts = baton.data;
 
-            api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (contacts) {
-
-                var hash = {};
-
-                if (contacts.length === 0) {
-                    $list.append($('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
-                } else {
-                    _(contacts).each(function (contact) {
-                        var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
-                            name = util.getFullName(contact);
-                        if (!isDuplicate(name, hash)) {
-                            $list.append(
-                                $('<div class="line">').append(
-                                    $('<span class="bold">').text(name), $.txt(' '),
-                                    $('<span class="accent">').text(birthday)
-                                )
-                            );
-                            markDuplicate(name, hash);
-                        }
-                    });
-                }
-            });
+            if (contacts.length === 0) {
+                $list.append($('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
+            } else {
+                _(contacts).each(function (contact) {
+                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                        name = util.getFullName(contact);
+                    if (!isDuplicate(name, hash)) {
+                        $list.append(
+                            $('<div class="line">').append(
+                                $('<span class="bold">').text(name), $.txt(' '),
+                                $('<span class="accent">').text(birthday)
+                            )
+                        );
+                        markDuplicate(name, hash);
+                    }
+                });
+            }
 
             this.append($list);
         }
     });
 
     ext.point('io.ox/portal/widget/birthdays/settings').extend({
-        title: gt('Birthdays'),
+        title: gt('Next birthdays'),
         type: 'birthdays',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

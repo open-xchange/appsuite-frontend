@@ -92,10 +92,15 @@ define("io.ox/participants/views",
             switch (type) {
             case 1:
                 this.nodes.$img.addClass('contact-image');
-                var m = this.model.getEmail();
+                //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                var m = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
                 this.nodes.$mail.text(m);
-
-                this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                //workaround bug 24485: suppress visually nested autocomplete items
+                if (m === '')
+                    this.nodes.$mail.html('&nbsp;');
+                if (this.options.halo) {
+                    this.nodes.$wrapper.data({email1: m}).addClass('halo-link');
+                }
                 break;
             case 2:
                 this.nodes.$img.addClass('group-image');
@@ -112,7 +117,7 @@ define("io.ox/participants/views",
             case 5:
                 this.nodes.$img.addClass('external-user-image');
                 this.nodes.$mail.text(this.model.getEmail() || gt('External user'));
-                if (this.model.getEmail()) {
+                if (this.model.getEmail() && this.options.halo) {
                     this.nodes.$wrapper.data({email1: this.model.getEmail()}).addClass('halo-link');
                 }
                 this.nodes.$extra.text(gt('External user'));
@@ -137,16 +142,25 @@ define("io.ox/participants/views",
         tagName: 'div',
         className: 'participantsrow',
         initialize: function (options) {
-
+            var self = this;
             options.collection.on('add', _.bind(this.onAdd, this));
             options.collection.on('remove', _.bind(this.onRemove, this));
             options.collection.on('reset', _.bind(this.updateContainer, this));
+
         },
         render: function () {
-            var self = this;
+            var self = this,
+                counter = 1;
             this.nodes = {};
+            
+            // bring organizer up
             this.collection.each(function (participant) {
-                self.nodes[participant.id] = self.createParticipantNode(participant);
+                if (participant.get('id') === self.options.baton.model.get('organizerId')) {
+                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                } else {
+                    self.nodes[counter] = self.createParticipantNode(participant);
+                    counter++;
+                }
             });
             var row = null;
             var c = 0;
@@ -165,7 +179,8 @@ define("io.ox/participants/views",
             return new ParticipantEntryView({
                 model: participant,
                 baton: self.options.baton,
-                className: 'span6'
+                className: 'span6',
+                halo: true
             }).render().$el;
         },
         updateContainer: function () {

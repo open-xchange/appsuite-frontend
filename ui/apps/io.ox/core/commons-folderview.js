@@ -15,7 +15,8 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, gt) {
+     'io.ox/core/config',
+     'gettext!io.ox/core'], function (ext, links, notifications, api, config, gt) {
 
     'use strict';
 
@@ -57,7 +58,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var ul;
                 this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup">').append(
+                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></a>'),
                         ul = $('<ul class="dropdown-menu">')
                     )
@@ -72,14 +73,13 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var ul;
                 this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></a>'),
+                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog accent-color"></a>'),
                         ul = $('<ul class="dropdown-menu">').append(
                             $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
                         )
                     )
                 );
-
                 ext.point(POINT + '/sidepanel/toolbar/options').invoke('draw', ul, baton);
             }
         });
@@ -94,7 +94,7 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a href="#" class="toolbar-action pull-right"><i class="icon-remove"></a>')
+                    $('<a href="#" class="toolbar-action pull-right" data-action="close"><i class="icon-remove"></a>')
                     .on('click', { app: baton.app }, fnClose)
                 );
             }
@@ -160,7 +160,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
             id: 'subscribe-folder',
-            index: 200,
+            index: 300,
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     this.append($('<li>').append(
@@ -168,6 +168,26 @@ define('io.ox/core/commons-folderview',
                         .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
                     ));
                 }
+            }
+        });
+
+        function createPublicFolder(e) {
+            e.preventDefault();
+            //public folder has the magic id 2
+            e.data.app.folderView.add("2", {module: e.data.module});
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-public-folder',
+            index: 50,
+            draw: function (baton) {
+                var type = baton.options.type;
+                if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
+
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'))
+                    .on('click', {app: baton.app, module: type}, createPublicFolder)
+                ));
             }
         });
 
@@ -198,11 +218,13 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'delete',
-            index: 1000,
+            index: 500,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="delete">').text(gt('Delete'));
-                this.append($('<li>').append(link));
-
+                this.append(
+                    $('<li class="divider">'),
+                    $('<li>').append(link)
+                );
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { app: baton.app }, deleteFolder);
                 } else {
@@ -220,10 +242,78 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'permissions',
-            index: 200,
+            index: 300,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
-                this.append($('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions)));
+                this.append(
+                    $('<li class="divider">'),
+                    $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
+                );
+            }
+        });
+
+        function showFolderProperties(e) {
+            e.preventDefault();
+            var baton = e.data.baton,
+                id = _(baton.app.folderView.selection.get()).first();
+            api.get({ folder: id }).done(function (folder) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                    var title = gt('Properties'),
+                    dialog = new dialogs.ModalDialog({
+                        easyOut: true
+                    })
+                    .header(
+                        api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
+                    )
+                    .build(function () {
+                        function ucfirst(str) {
+                            return str.charAt(0).toUpperCase() + str.slice(1);
+                        }
+                        var node = this.getContentNode().append(
+                            $('<div class="row-fluid">').append(
+                                $('<label>')
+                                    .css({'padding-top': '5px', 'padding-left': '5px'})
+                                    .addClass('span3')
+                                    .text(gt('Folder type')),
+                                $('<input>', { type: 'text' })
+                                    .addClass('span9')
+                                    .attr('readonly', 'readonly')
+                                    .val(ucfirst(folder.module))
+                            )
+                        );
+                        if (config.get('modules.caldav.active') && folder.module === 'calendar') {
+                            node.append(
+                                $('<div class="row-fluid">').append(
+                                    $('<label>')
+                                        .css({'padding-top': '5px', 'padding-left': '5px'})
+                                        .addClass('span3')
+                                        .text(gt('CalDAV URL')),
+                                    $('<input>', { type: 'text' })
+                                        .addClass('span9')
+                                        .attr('readonly', 'readonly')
+                                        .val(
+                                            _.noI18n(config.get('modules.caldav.url')
+                                                .replace("[hostname]", location.host)
+                                                .replace("[folderId]", id)
+                                        )
+                                    )
+                                )
+                            );
+                        }
+                    })
+                    .addPrimaryButton('ok', gt('Close'))
+                    .show().done(function () { dialog = null; });
+                });
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'properties',
+            index: 400,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="properties">').text(gt('Properties'));
+                this.append($('<li>').append(link));
+                link.on('click', { baton: baton }, showFolderProperties);
             }
         });
 
@@ -243,7 +333,7 @@ define('io.ox/core/commons-folderview',
                     dialog.getBody().css('height', '250px');
                     var tree = new views.FolderTree(dialog.getBody(), {
                         type: baton.options.type,
-                        rootFolderId: '9',
+                        rootFolderId: '1',
                         skipRoot: true,
                         cut: folder.id,
                         customize: function (data) {
@@ -275,10 +365,10 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
             id: 'move',
+            index: 200,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="delete">').text(gt('Move'));
                 this.append($('<li>').append(link));
-
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { baton: baton }, moveFolder);
                 } else {
@@ -426,14 +516,15 @@ define('io.ox/core/commons-folderview',
 
                     api.on('update', function (e, id, newId, data) {
                         // this is used by folder rename, since the id might change (mail folders)
-                        if (_.isEqual(tree.selection.get(), [id])) {
+                        var sel = tree.selection.get();
+                        if (_.isEqual(sel, [id])) {
                             tree.repaint().done(function () {
                                 tree.idle();
                                 if (newId !== id) tree.select(newId);
                             });
                         } else {
-                            if (!id && !newId) {
-                                tree.select('default0/INBOX');
+                            if (!id && !newId && sel.length === 0) {
+                                tree.select(config.get('folder.' + options.type) + '');
                             }
                             tree.repaint();
                             tree.idle();
@@ -447,6 +538,12 @@ define('io.ox/core/commons-folderview',
 
                     api.on('update:unread', function (e, id, data) {
                         tree.reloadNode(id);
+                    });
+
+                    sidepanel.on('contextmenu', '.folder', function (e) {
+                        e.preventDefault();
+                        $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
+                        return false;
                     });
 
                     initTree = loadTree = null;

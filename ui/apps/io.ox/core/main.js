@@ -41,15 +41,71 @@ define("io.ox/core/main",
     };
 
     var topbar = $('#io-ox-topbar'),
-        launchers = topbar.find('.launchers'),
-        launcherDropdown = topbar.find('.launcher-dropdown ul');
+        launchers = $('.launchers', topbar),
+        launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     // whatever ...
+    gt('Portal');
+    gt('Mail');
     gt('Address Book');
     gt('Calendar');
     gt('Tasks');
     gt('Files');
     gt('Conversations');
+
+    function tabManager() {
+        // Reset first
+        launchers.children('.launcher:hidden').each(function (i, node) {
+            $(node).show();
+        });
+
+        var items = launchers.children('.launcher'),
+        itemsVisible = launchers.children('.launcher:visible'),
+        itemsRight = topbar.children('.launcher.right'),
+        itemsLeftWidth = 0,
+        itemsRightWidth = $('#io-ox-top-logo-small', topbar).outerWidth(true),
+        viewPortWidth = $(document).width(),
+        launcherDropDownIcon = $('.launcher-dropdown', topbar),
+        launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
+
+        launcherDropDownIcon.hide();
+
+        itemsRight.each(function () {
+            itemsRightWidth += $(this).outerWidth(true);
+        });
+        itemsVisible.each(function () {
+            itemsLeftWidth += $(this).outerWidth(true);
+        });
+
+        var visibleTabs,
+            i = 0,
+            hidden = 0;
+
+        for (i = items.length; i > 1; i--) {
+            visibleTabs = itemsVisible.length - hidden;
+            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth || visibleTabs <= 3) {
+                break;
+            } else {
+                var lastVisibleItem = launchers.children('.launcher:visible').last();
+                itemsLeftWidth = itemsLeftWidth - lastVisibleItem.outerWidth(true);
+                lastVisibleItem.hide();
+                hidden++;
+                if (hidden === 1) {
+                    itemsLeftWidth += launcherDropDownIconWidth;
+                }
+                if (visibleTabs <= 4) {
+                    $('.launcher.left-corner', topbar).hide();
+                }
+            }
+        }
+        $('li', launcherDropdown).hide();
+        if (hidden > 0) {
+            launcherDropDownIcon.show();
+            for (i = hidden; i > 0; i--) {
+                $('li', launcherDropdown).eq(-i).show();
+            }
+        }
+    }
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
@@ -121,7 +177,8 @@ define("io.ox/core/main",
 
     (function () {
 
-        var interval = settings.get('refreshInterval', 300000), next = _.now() + interval;
+        var interval = parseInt(settings.get('refreshInterval', 300000), 10),
+            next = _.now() + interval;
 
         ext.point('io.ox/core/refresh').extend({
             action: function () {
@@ -171,15 +228,21 @@ define("io.ox/core/main",
             }
         }
 
+        function addUserContent(model, launcher) {
+            if (model.get('userContent')) {
+                var icon = model.get('userContentIcon') || 'icon-pencil';
+                launcher.addClass('user-content').prepend($('<i class="' + icon + '">'));
+            }
+        }
+
         ox.ui.apps.on('add', function (model, collection, e) {
+            if (model.get('title') === undefined) { return; }
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title');
             add(node, launchers, model);
             // is user-content?
-            if (model.get('userContent')) {
-                node.addClass('user-content').prepend($('<i class="icon-pencil">'));
-            }
+            addUserContent(model, node);
             // add list item
             node = $('<li>').append(
                 $('<a>', {
@@ -191,11 +254,13 @@ define("io.ox/core/main",
             );
             node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
             add(node, launcherDropdown, model);
+            tabManager();
         });
 
         ox.ui.apps.on('remove', function (model, collection, e) {
             launchers.children('[data-app-guid="' + model.guid + '"]').remove();
             launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
+            tabManager();
         });
 
         ox.ui.apps.on('launch resume', function (model, collection, e) {
@@ -208,10 +273,9 @@ define("io.ox/core/main",
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
-            if (model.get('userContent')) {
-                node.prepend($('<i class="icon-pencil">'));
-            }
+            addUserContent(model, node);
             launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
+            tabManager();
         });
 
         /**
@@ -238,6 +302,7 @@ define("io.ox/core/main",
                 setTimeout(function () {
                     if (ox.online) {
                         notifications.attach(addLauncher);
+                        tabManager();
                     }
                 }, 5000);
             }
@@ -262,7 +327,8 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var helpLink = "help/" + ox.language + "/index.html";
+                var lang = ox.language.slice(0, 2) === 'de' ? 'de_DE' : 'en_US';
+                var helpLink = "help/" + lang + "/index.html";
                 this.append(
                     $('<li>').append(
                         $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
@@ -276,11 +342,19 @@ define("io.ox/core/main",
             index: 200,
             draw: function () {
                 if (BigScreen.enabled) {
+                    var fullscreenButton,
+                        toggleText = function () {
+                            if (fullscreenButton.text() === gt('Fullscreen')) {
+                                fullscreenButton.text(gt('Exit Fullscreen'));
+                            } else {
+                                fullscreenButton.text(gt('Fullscreen'));
+                            }
+                        };
                     this.append(
                         $('<li>').append(
-                            $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
+                            fullscreenButton = $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
                         )
-                        .on('click', function () { BigScreen.toggle(); })
+                        .on('click', function () { BigScreen.toggle(); toggleText(); })
                     );
                 }
             }
@@ -379,6 +453,8 @@ define("io.ox/core/main",
 
                 ext.point('io.ox/core/topbar/launchpad').invoke('draw');
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
+
+                $(window).resize(tabManager);
             }
         });
 
@@ -412,9 +488,23 @@ define("io.ox/core/main",
             location.hash = '#!';
         }
 
+        var autoLaunchArray = function () {
+            var autoStart = [];
+            if (settings.get('autoStart') === 'none') {
+                autoStart = [];
+            } else {
+                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) { return !_.isUndefined(o) && !_.isNull(o); });
+            }
+            if (_.isEmpty(autoStart)) {
+                autoStart.push("io.ox/mail");
+            }
+
+            return autoStart;
+        };
+
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : [].concat(settings.get('autoStart'))
+            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : autoLaunchArray()
         });
 
         var getAutoLaunchDetails = function (str) {

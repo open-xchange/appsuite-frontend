@@ -140,7 +140,7 @@
 }
 
 .file-details .basicInfo em {
-    font-family: @font-light;
+    font-family: @lightFontFamily;
     color: #333;
     font-style: normal;
     white-space: nowrap;
@@ -194,6 +194,10 @@
 
 .file-details .version {
     padding: 5px 5px 10px 5px;
+    .span6 div a {
+        word-break: break-all;
+        word-wrap: break-word;
+    }
 }
 
 .file-details .version-comment {
@@ -202,7 +206,7 @@
 }
 
 .file-details .dragout {
-    color: @color;
+    color: @textColor;
     cursor: pointer;
 }
 
@@ -214,3 +218,23 @@
 .file-details .io-ox-inline-links {
     margin-top: 1em;
 }
+
+.modal-header {
+    h1 { font-size: 20px;}
+}
+.create-file {
+    .fileForm {
+        label {
+            display:block;
+            margin-bottom:5px;
+        }
+    }
+}
+
+.dialogreselect {
+    -moz-user-select: -moz-text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+

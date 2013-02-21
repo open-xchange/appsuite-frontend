@@ -29,7 +29,12 @@ define('io.ox/mail/actions',
 
     'use strict';
 
-    var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
+    var isDraftFolder = function (folder_id) {
+            return _.contains(account.getFoldersByType('drafts'), folder_id);
+        },
+        isDraftMail = function (mail) {
+            return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
+        },
         Action = links.Action;
 
     // actions
@@ -81,7 +86,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             // other recipients that me?
             return e.collection.has('toplevel', 'one') &&
-                util.hasOtherRecipients(e.context) && e.context.folder_id !== defaultDraftFolder;
+                util.hasOtherRecipients(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -96,7 +101,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -126,7 +131,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && e.context.folder_id === defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -174,6 +179,7 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
+                var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                     var dialog = new dialogs.ModalDialog({ easyOut: true })
                         .header($('<h3>').text(label))
@@ -201,10 +207,16 @@ define('io.ox/mail/actions',
                         if (action === 'ok') {
                             var target = _(tree.selection.get()).first();
                             if (target && target !== folderId) {
+                                if (type === "move" && vGrid) {//add busy animation
+                                    vGrid.busy();
+                                }
                                 api[type](list, target).then(
                                     function () {
                                         notifications.yell('success', success);
                                         folderAPI.reload(target, list);
+                                        if (type === "move" && vGrid) {//remove busy animation
+                                            vGrid.idle();
+                                        }
                                     },
                                     notifications.yell
                                 );
@@ -233,7 +245,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list);
+            api.markUnread(list).done(function () {
+                api.trigger("add-unseen-mails", list); //create notifications in notification area
+            });
         }
     });
 
@@ -249,10 +263,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list);
-            for (var i = 0; i < list.length; i++) {
-                ext.point('io.ox/mail/detail/notification').invoke('action', this, list[i]);
-            }
+            api.markRead(list).done(function () {
+                api.trigger("remove-unseen-mails", list); //remove notifications in notification area
+            });
         }
     });
 
@@ -298,6 +311,7 @@ define('io.ox/mail/actions',
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
+                            parent: data.parent,
                             mimetype: data.content_type,
                             dataURL: api.getUrl(data, 'view')
                         }, {
@@ -331,18 +345,21 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/slideshow-attachment', {
         id: 'slideshow',
         requires: function (e) {
-            return _(e.context).reduce(function (memo, obj) {
+            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
                 return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, true);
         },
         multiple: function (list) {
-            _(list).each(function (data) {
-                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
-            });
             require(['io.ox/files/carousel'], function (slideshow) {
+                var files = _(list).map(function (file) {
+                    return {
+                        url: api.getUrl(file, 'view'),
+                        filename: file.filename
+                    };
+                });
                 slideshow.init({
                     fullScreen: false,
-                    list: list,
+                    baton: {allIds: files},
                     attachmentMode: true
                 });
             });
@@ -374,7 +391,7 @@ define('io.ox/mail/actions',
             notifications.yell('info', 'Attachments will be saved!');
             api.saveAttachments(list)
                 .done(function (data) {
-                    notifications.yell('success', 'Attachments have been saved!');
+                    notifications.yell('success', gt('Attachments have been saved'));
                 })
                 .fail(notifications.yell);
         }
@@ -385,6 +402,22 @@ define('io.ox/mail/actions',
         requires: 'some',
         multiple: function (data) {
             window.open(api.getUrl(data, 'eml'));
+        }
+    });
+
+    new Action('io.ox/mail/actions/add-to-portal', {
+        require: function (e) {
+            return e.collection.has('one') && capabilities.has('!disablePortal');
+        },
+        action: function (baton) {
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.add('stickymail', 'mail', {
+                    id: baton.data.id,
+                    folder_id: baton.data.folder_id,
+                    title: baton.data.subject
+                });
+                notifications.yell('success', gt('This mail has been added to the portal'));
+            });
         }
     });
 
@@ -530,73 +563,67 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var data = baton.data;
-            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
-                    function (dialogs, taskApi, tasksUtil) {
-                        //create popup dialog
-                        var popup = new dialogs.ModalDialog()
-                            .addPrimaryButton('create', gt('Create reminder'))
-                            .addButton('cancel', gt('Cancel'));
+            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskApi, tasksUtil) {
+                //create popup dialog
+                var popup = new dialogs.ModalDialog()
+                    .addPrimaryButton('create', gt('Create reminder'))
+                    .addButton('cancel', gt('Cancel'));
 
-                        //Header
-                        popup.getHeader()
-                            .append($("<h4>")
-                                    .text(gt('Remind me')));
+                //Header
+                popup.getHeader()
+                    .append($("<h4>")
+                            .text(gt('Remind me')));
 
-                        //fill popup body
-                        var popupBody = popup.getBody();
+                //fill popup body
+                var popupBody = popup.getBody();
 
-                        popupBody.append($('<div>').text(gt('Subject')));
-                        var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
-                            .focus(function () {
-                                    this.select();
-                                })
-                            .appendTo(popupBody);
+                popupBody.append($('<div>').text(gt('Subject')));
+                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
+                    .focus(function () {
+                            this.select();
+                        })
+                    .appendTo(popupBody);
 
-                        popupBody.append("<div>" + gt('Note') + "</div>");
-                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
-                            .focus(function ()
-                                    {
-                                    this.select();
-                                })
-                            .appendTo(popupBody);
+                popupBody.append("<div>" + gt('Note') + "</div>");
+                var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
+                    gt('From') + ": " + util.formatSender(data.from[0][0], data.from[0][1]) })
+                    .focus(function ()
+                            {
+                            this.select();
+                        })
+                    .appendTo(popupBody);
 
+                popupBody.append("<div>" + gt('Remind me') + "</div>");
+                var dateSelector = $('<select>', {name: "dateselect"})
+                .appendTo(popupBody);
+                var endDate = new Date();
+                dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
 
-                        popupBody.append("<div>" + gt('Remind me') + "</div>");
-                        var dateSelector = $('<select>', {name: "dateselect"})
-                        .appendTo(popupBody);
-                        var endDate = new Date();
-                        dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
+                //ready for work
+                var def = popup.show();
+                titleInput.focus();
+                def.done(function (action) {
+                    if (action === "create") {
 
+                        //Calculate the right time
+                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
 
-                        //ready for work
-                        var def = popup.show();
-                        titleInput.focus();
-                        def.done(function (action) {
-
-                                if (action === "create")
-                                    {
-
-                                    //Calculate the right time
-                                    var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
-
-                                    taskApi.create({title: titleInput.val(),
-                                        folder_id: config.get('folder.tasks'),
-                                        end_date: dates.endDate.getTime(),
-                                        start_date: dates.endDate.getTime(),
-                                        alarm: dates.alarmDate.getTime(),
-                                        note: noteInput.val(),
-                                        status: 1,
-                                        recurrence_type: 0,
-                                        percent_completed: 0
-                                        })
-                                        .done(function () {
-                                            notifications.yell('success', 'Reminder has been created!');
-                                        });
-                                }
-                            });
-                    });
-
+                        taskApi.create({title: titleInput.val(),
+                            folder_id: config.get('folder.tasks'),
+                            end_date: dates.endDate.getTime(),
+                            start_date: dates.endDate.getTime(),
+                            alarm: dates.alarmDate.getTime(),
+                            note: noteInput.val(),
+                            status: 1,
+                            recurrence_type: 0,
+                            percent_completed: 0
+                        })
+                        .done(function () {
+                            notifications.yell('success', gt('Reminder has been created'));
+                        });
+                    }
+                });
+            });
         }
     });
 
@@ -606,7 +633,7 @@ define('io.ox/mail/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil">');
+            return $('<i class="icon-pencil accent-color">');
         }
     });
 
@@ -733,6 +760,15 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1200,
+        prio: 'lo',
+        id: 'add-to-portal',
+        label: gt('Add to portal'),
+        ref: 'io.ox/mail/actions/add-to-portal'
+    }));
+
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1300,
         prio: 'lo',
         id: 'saveEML',
         label: gt('Save as file'),

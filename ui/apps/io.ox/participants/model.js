@@ -1,3 +1,16 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
+ */
+
 define("io.ox/participants/model",
         ['io.ox/core/api/user',
          'io.ox/core/api/group',
@@ -84,18 +97,14 @@ define("io.ox/participants/model",
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                contactAPI.search(self.get('mail')).done(function (results) {
-                    if (results && results.length > 0) {
-                        var itemWithImage = _(results).find(function (item) {
-                            return item.image1_url && item.image1_url !== '';
-                        });
-                        itemWithImage = itemWithImage || results[0]; // take with image or just the first one
+                contactAPI.getByEmailadress(self.get('mail') || self.get('email1')).done(function (data) {
+                    if (data && data.display_name) {
                         self.set({
-                            display_name: itemWithImage.display_name,
+                            display_name: data.display_name,
                             email1: self.get('mail') || self.get('email1'),
-                            image1_url: itemWithImage.image1_url,
-                            type: itemWithImage.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
-                            id: itemWithImage.internal_userid ? itemWithImage.internal_userid : self.get('id')
+                            image1_url: data.image1_url,
+                            type: data.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
+                            id: data.internal_userid ? data.internal_userid : self.get('id')
                         });
                         self.id = self.get('id');
                         self.trigger("change");
@@ -108,7 +117,7 @@ define("io.ox/participants/model",
                 break;
             case self.TYPE_DISTLIST_USER_GROUP:
                 //fetch user group
-                groupAPI.get({id: self.get('id')}).done(function (group) {
+                contactAPI.get({id: self.get('id'), folder_id: self.get('folder_id')}).done(function (group) {
                     self.set(group);
                     self.trigger('change', self);
                     df.resolve();
@@ -155,6 +164,7 @@ define("io.ox/participants/model",
                 });
                 self.remove(duplicates);
             });
+
         },
         model: ParticipantModel,
         addUniquely: function (models, options) {

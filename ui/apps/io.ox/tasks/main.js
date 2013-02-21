@@ -11,19 +11,19 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/main",
-    ["io.ox/tasks/api",
+define('io.ox/tasks/main',
+    ['io.ox/tasks/api',
      'io.ox/core/extensions',
      'gettext!io.ox/tasks',
      'io.ox/core/tk/vgrid',
      'io.ox/tasks/view-grid-template',
-     "io.ox/core/commons",
+     'io.ox/core/commons',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks'
     ], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
@@ -54,7 +54,7 @@ define("io.ox/tasks/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
-            title: "Tasks",
+            title: 'Tasks',
             toolbar: true,
             search: true
         });
@@ -174,7 +174,7 @@ define("io.ox/tasks/main",
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/tasks', showTask, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
@@ -232,17 +232,17 @@ define("io.ox/tasks/main",
                     .attr('data-toggle', 'dropdown')
                     .append($('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">'))
                     .dropdown(),
-                    $('<ul>').addClass("dropdown-menu")
+                    $('<ul>').addClass('dropdown-menu')
                     .append(
-                        $('<li>').append($("<a data-option='state'>").text(gt('Status')).prepend($("<i>"))), // state becomes Bundesland :)
-                        $('<li>').append($("<a data-option='202'>").text(gt('Due date')).prepend($("<i>"))),
-                        $('<li>').append($("<a data-option='200'>").text(gt('Subject')).prepend($("<i>"))),
-                        $('<li>').append($("<a data-option='309'>").text(gt('Priority')).prepend($("<i>"))),
+                        $('<li>').append($("<a data-option='state'>").text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
+                        $('<li>').append($("<a data-option='202'>").text(gt('Due date')).prepend($('<i>'))),
+                        $('<li>').append($("<a data-option='200'>").text(gt('Subject')).prepend($('<i>'))),
+                        $('<li>').append($("<a data-option='309'>").text(gt('Priority')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='asc'>").text(gt('Ascending')).prepend($("<i>"))),
-                        $('<li>').append($("<a data-option='desc'>").text(gt('Descending')).prepend($("<i>"))),
+                        $('<li>').append($("<a data-option='asc'>").text(gt('Ascending')).prepend($('<i>'))),
+                        $('<li>').append($("<a data-option='desc'>").text(gt('Descending')).prepend($('<i>'))),
                         $('<li class="divider">'),
-                        $('<li>').append($("<a data-option='done'>").text(gt('Show done tasks')).prepend($("<i>")))
+                        $('<li>').append($("<a data-option='done'>").text(gt('Show done tasks')).prepend($('<i>')))
                     ).on('click', 'a', { grid: grid }, taskToolbarOptions)
                 )
             );

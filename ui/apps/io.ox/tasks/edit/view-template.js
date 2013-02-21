@@ -11,17 +11,17 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
+define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/backbone/views',
                                           'io.ox/core/date',
                                           'io.ox/core/notifications',
                                           'io.ox/backbone/forms',
-                                          'io.ox/contacts/util',
+                                          'io.ox/calendar/util',
                                           'io.ox/participants/views',
                                           'io.ox/core/tk/attachments',
                                           'io.ox/core/extensions'],
                                           function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
-    "use strict";
+    'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
 
@@ -56,10 +56,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("status-selector span12").attr("id", "task-edit-status-select");
+            this.nodes.select = $('<select>').addClass('status-selector span12').attr('id', 'task-edit-status-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -95,10 +95,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("priority-selector span12").attr("id", "task-edit-priority-select");
+            this.nodes.select = $('<select>').addClass('priority-selector span12').attr('id', 'task-edit-priority-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -143,7 +143,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -166,7 +166,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -189,7 +189,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -212,7 +212,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                 }
                 this.model.set(this.attribute, value);
             } else {
-                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
                 this.nodes.inputField.val(this.model.get(this.attribute));
             }
         }
@@ -227,10 +227,10 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass("currency span12").attr("id", "task-edit-currency");
+            this.nodes.select = $('<select>').addClass('currency span12').attr('id', 'task-edit-currency');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $("<option>", {value: value}).text(label)
+                    $('<option>', {value: value}).text(label)
                 );
             });
             this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -294,8 +294,9 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
-        draw: function (options) {
-            this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
+        draw: function (baton) {
+            this.append(new pViews.UserContainer({collection: baton.model.getParticipants(),
+                                                  baton: baton}).render().$el);
         }
     });
 
@@ -323,12 +324,26 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                     parentSelector: '.io-ox-tasks-edit'
                 });
 
+                //add recipents to baton-data-node; used to filter sugestions list in view
+                autocomplete.on('update', function () {
+                    var baton = {list: []};
+                    collection.any(function (item) {
+                        //participant vs. organizer
+                        var email = item.get('email1') || item.get('email2');
+                        if (email !== null)
+                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                    });
+                    $.data(node, 'baton', baton);
+                });
+
                 autocomplete.on('select', function (data) {
                     var alreadyParticipant = false, obj,
                     userId;
                     alreadyParticipant = collection.any(function (item) {
                         if (data.type === 5) {
                             return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
+                        } else if (data.type === 1) {
+                            return item.get('id') ===  data.internal_userid;
                         } else {
                             return (item.id === data.id && item.get('type') === data.type);
                         }
@@ -385,7 +400,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
@@ -420,7 +435,7 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell("error", gt("Please enter a valid date.")); }, 300);
+                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
 
@@ -489,72 +504,46 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1900,
-        module: 4,
-        render: function () {
-            var self = this,
-                odd = true,
-                row;
-            _(this.allAttachments).each(function (attachment) {
-                if (odd) {
-                    row = $('<div>').addClass("row-fluid task-edit-row").appendTo(self.$el);
-                    odd = false;
-                } else {
-                    odd = true;
-                }
-                row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
-            });
-
-            //trigger refresh of attachmentcounter
-            this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
-
-            //replace x with icon
-            self.$el.find('.delete').each(function (index, deleteNode) {
-                $(deleteNode).text('').append('<i class="icon-remove">');
-            });
-            return this;
-        }
+        module: 4
     }));
 
     point.basicExtend({
         id: 'attachment_upload',
         index: 2000,
         draw: function (baton) {
-            var $node = $("<form>").appendTo(this).attr('id', 'attachmentsForm'),
-                $input = $("<input>", { type: "file" }),
-                $button = $("<button/>").attr('data-action', 'add').text(gt("Upload file")).addClass("btn span12");
-           
-            if (_.browser.IE !== 9) {
-                $button.on("click", function (e) {
-                    e.preventDefault();
+            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm').addClass('span12'),
+                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
+                $input = $inputWrap.find('input[type="file"]'),
+                $button = $inputWrap.find('button[data-action="add"]')
+                    .on('click', function (e) {
+                e.preventDefault();
+                if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
                         baton.attachmentList.addFile(fileData);
                     });
-                });
-            } else {
-                $button.on("click", function (e) {
+                    $input.trigger('reset.fileupload');
+                } else {
                     if ($input.val()) {
                         var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                        e.preventDefault();
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
                         baton.attachmentList.addFile(fileData);
-                        $input.addClass("add-attachment").hide();
-                        $input = $("<input>", { type: "file" }).appendTo($input.parent());
+                        $input.addClass('add-attachment').hide();
+                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                     }
-                });
-            }
+                }
+            });
 
-            $node.append($("<div>").addClass("span3").append($button));
-            $node.append($("<div>").addClass("span6").append($input));
+            $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
 
-    ext.point("io.ox/tasks/edit/dnd/actions").extend({
+    ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,
-        label: gt("Drop here to upload a <b>new attachment</b>"),
+        label: gt('Drop here to upload a <b>new attachment</b>'),
         multiple: function (files, view) {
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);

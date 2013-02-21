@@ -18,8 +18,7 @@ define('io.ox/calendar/month/view',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, folder, gt, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -60,7 +59,7 @@ define('io.ox/calendar/month/view',
             if (cT.hasClass('appointment') && !cT.hasClass('private')) {
                 var self = this,
                     obj = _.cid(cid + '');
-                
+
                 if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
@@ -81,7 +80,7 @@ define('io.ox/calendar/month/view',
                 }
                 self.clicks++;
 
-                if (self.clickTimer !== null && self.clicks === 2) {
+                if (self.clickTimer !== null && self.clicks === 2 && cT.hasClass('modify')) {
                     clearTimeout(self.clickTimer);
                     self.clicks = 0;
                     self.clickTimer = null;
@@ -91,7 +90,7 @@ define('io.ox/calendar/month/view',
         },
 
         onCreateAppointment: function (e) {
-            if (!folder.can('create', this.folder)) {
+            if (!folderAPI.can('create', this.folder)) {
                 return;
             }
             if ($(e.target).hasClass('list')) {
@@ -185,7 +184,7 @@ define('io.ox/calendar/month/view',
                     conf = hash[myself] || { status: 1, comment: "" };
 
                 // is declined?
-                if (conf.status !== 2 || settings.get('showDeclinedAppointments', 'false') === 'true') {
+                if (conf.status !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
                         endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
@@ -308,7 +307,7 @@ define('io.ox/calendar/month/view',
             } else {
                 classes = util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf.status) +
-                    (folder.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
             this.addClass(classes)

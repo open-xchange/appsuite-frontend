@@ -42,6 +42,7 @@ define('plugins/portal/updater/register',
     ext.point('io.ox/portal/widget/updater/settings').extend({
         title: gt('Updater'),
         type: 'updater',
-        editable: false
+        editable: false,
+        unique: true
     });
 });

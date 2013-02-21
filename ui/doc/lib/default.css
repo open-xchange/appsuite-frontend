@@ -32,6 +32,10 @@ a:hover {
     text-decoration: underline;
 }
 
+a[target=_blank]:after {
+	content: url(newwin.png)
+}
+
 i {
     font-style: italic;
     color: #888;
@@ -88,6 +92,11 @@ dt {
 
 dd {
 	margin: 0.5em 1em 1em;
+}
+
+dd > p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 dl i {

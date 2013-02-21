@@ -12,6 +12,7 @@
 
 define('io.ox/core/permissions/permissions',
     ['io.ox/core/extensions',
+     'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
@@ -19,7 +20,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/contacts/util',
      'io.ox/calendar/edit/view-addparticipants',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.css'], function (ext, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
+     'less!io.ox/core/permissions/style.css'], function (ext, notifications, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
 
     'use strict';
 
@@ -56,7 +57,7 @@ define('io.ox/core/permissions/permissions',
             },
 
             render: function () {
-                var baton = ext.Baton({ model: this.model, view: this });
+                var baton = ext.Baton({ model: this.model, view: this, admin: this.options.admin });
                 ext.point(POINT + '/detail').invoke('draw', this.$el.empty(), baton);
                 return this;
             },
@@ -202,14 +203,19 @@ define('io.ox/core/permissions/permissions',
         index: 200,
         id: 'entitysentence',
         draw: function (baton) {
+            var node;
             this.append(
                 $('<div class="entity">').append(
-                    $('<div>').append(
+                    node = $('<div>').append(
                         $('<span class="name">').text(_.noI18n(baton.name)),
                         baton.model.get('entity') === baton.view.options.owner ? $('<span class="owner">').text(gt('Owner')) : $(),
                         // quick change
                         addRoles(baton)
-                    ),
+                    )
+                )
+            );
+            if (baton.admin) {
+                node.append(
                     $('<div>').append(
                         // folder rights
                         gt('Folder permissions'), $.txt(_.noI18n(': ')),
@@ -224,8 +230,24 @@ define('io.ox/core/permissions/permissions',
                             addDropdown('admin', baton), $.txt(_.noI18n('. '))
                     ),
                     addRemoveButton(baton.model.get('entity'))
-                )
-            );
+                );
+            } else {
+                node.append(
+                    $('<div class="readonly">').append(
+                        // folder rights
+                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
+                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
+                        // object rights
+                        gt('Object permissions'), $.txt(_.noI18n(': ')),
+                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
+                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
+                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
+                        // admin
+                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
+                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
+                    )
+                );
+            }
             baton.view.updateRole();
         }
     });
@@ -242,7 +264,7 @@ define('io.ox/core/permissions/permissions',
         // folder fix
         if (permission === 'folder' && selected === 0) selected = 1;
         if (!isFolderAdmin) {
-            return $.txt(menus[permission][selected]);
+            return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
             $('<a href="#" data-toggle="dropdown">').attr('data-type', permission).text(menus[permission][selected]),
@@ -276,9 +298,16 @@ define('io.ox/core/permissions/permissions',
     return {
         show: function (folder) {
             folder_id = String(folder);
-            api.get({ folder: folder_id }).done(function (data) {
+            api.get({ folder: folder_id, cache: false }).done(function (data) {
                 try {
+
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
+
+                    // Check if ACLs enabled and only do that for mail component,
+                    // every other component will have ACL capabilities (stored in DB)
+                    if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
+                        isFolderAdmin = false;
+                    }
 
                     var dialog = new dialogs.ModalDialog({
                         width: 800
@@ -286,6 +315,27 @@ define('io.ox/core/permissions/permissions',
                     .header(
                         api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
+
+                    // mail folders show up with "null"
+                    var owner = data.created_by || ox.user_id;
+
+                    collection.on('reset', function () {
+                        var node = dialog.getContentNode().empty();
+                        this.each(function (model) {
+                            new PermissionsView({ model: model, collection: this, owner: owner, admin: isFolderAdmin })
+                            .render().$el.appendTo(node);
+                        }, this);
+                    });
+
+                    collection.on('add', function (model, collection) {
+                        var node = dialog.getContentNode();
+                        new PermissionsView({ model: model, collection: collection, owner: owner, admin: isFolderAdmin })
+                        .render().$el.appendTo(node);
+                    });
+
+                    collection.reset(_(data.permissions).map(function (obj) {
+                        return new Permission(obj);
+                    }));
 
                     if (isFolderAdmin) {
 
@@ -296,37 +346,24 @@ define('io.ox/core/permissions/permissions',
                                 $('<button class="btn" type="button" data-action="add">')
                                     .append($('<i class="icon-plus">'))
                             ),
-
-                            autocomplete = new AddParticipantsView({el: node}),
-
-                            // mail folders show up with "null"
-                            owner = data.created_by || ox.user_id;
-
-                        collection.on('reset', function () {
-                            var node = dialog.getContentNode().empty();
-                            this.each(function (model) {
-                                new PermissionsView({ model: model, collection: this, owner: owner })
-                                .render().$el.appendTo(node);
-                            }, this);
-                        });
-
-                        collection.on('add', function (model, collection) {
-                            var node = dialog.getContentNode();
-                            new PermissionsView({ model: model, collection: collection, owner: owner })
-                            .render().$el.appendTo(node);
-                        });
-
-                        collection.reset(_(data.permissions).map(function (obj) {
-                            return new Permission(obj);
-                        }));
+                            autocomplete = new AddParticipantsView({el: node});
 
                         autocomplete.render({
                             parentSelector: '.permissions-dialog > .modal-footer',
+                            autoselect: true,
                             users: true,
                             contacts: false,
                             groups: true,
                             resources: false,
                             distributionlists: false
+                        });
+                        //add recipents to baton-data-node; used to filter sugestions list in view
+                        autocomplete.on('update', function () {
+                            var baton = {list: []};
+                            collection.any(function (item) {
+                                baton.list.push({id: item.get('entity'), type: item.get('isGroup') ? 2 : 1});
+                            });
+                            $.data(node, 'baton', baton);
                         });
                         autocomplete.on('select', function (data) {
                             var isGroup = data.type === 2,
@@ -335,9 +372,14 @@ define('io.ox/core/permissions/permissions',
                                     bits: 257, // default is 'view folder' plus 'read all'
                                     group: isGroup
                                 };
-                            // duplicate check
-                            if (!collection.any(function (item) { return item.entity === obj.entity; })) {
-                                collection.add(new Permission(obj));
+                            if (!obj.entity)
+                                notifications.yell('error', data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.'));
+                            else
+                            {
+                                // duplicate check
+                                if (!collection.any(function (item) { return item.entity === obj.entity; })) {
+                                    collection.add(new Permission(obj));
+                                }
                             }
                         });
                         dialog.getFooter().prepend(node);
@@ -353,7 +395,7 @@ define('io.ox/core/permissions/permissions',
                             api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
                                 collection.off();
                             });
-                        } else if (action === 'cancel') {
+                        } else if (action === 'cancel' || action === 'ok') {
                             collection.off();
                         }
                     });

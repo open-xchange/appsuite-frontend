@@ -24,24 +24,61 @@ define('io.ox/files/api',
     'use strict';
 
     var mime_types = {
+        // images
         'jpg' : 'image/jpeg',
         'jpeg': 'image/jpeg',
         'png' : 'image/png',
         'gif' : 'image/gif',
         'tif' : 'image/tiff',
         'tiff': 'image/tiff',
+        // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
         'ogv' : 'video/ogg',
         'ogm' : 'video/ogg',
-        'webm': 'video/webm'
+        'webm': 'video/webm',
+        // open office
+        'odc':  'application/vnd.oasis.opendocument.chart',
+        'odb': 'application/vnd.oasis.opendocument.database',
+        'odf': 'application/vnd.oasis.opendocument.formula',
+        'odg': 'application/vnd.oasis.opendocument.graphics',
+        'otg': 'application/vnd.oasis.opendocument.graphics-template',
+        'odi': 'application/vnd.oasis.opendocument.image',
+        'odp': 'application/vnd.oasis.opendocument.presentation',
+        'otp': 'application/vnd.oasis.opendocument.presentation-template',
+        'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+        'ots': 'application/vnd.oasis.opendocument.spreadsheet-template',
+        'odt': 'application/vnd.oasis.opendocument.text',
+        'odm': 'application/vnd.oasis.opendocument.text-master',
+        'ott': 'application/vnd.oasis.opendocument.text-template',
+        'oth': 'application/vnd.oasis.opendocument.text-web',
+        // pdf
+        'pdf': 'application/pdf',
+        // microsoft office
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'doc': 'application/msword',
+        'dot': 'application/msword',
+        'xls': 'application/vnd.ms-excel',
+        'xlb': 'application/vnd.ms-excel',
+        'xlt': 'application/vnd.ms-excel',
+        'ppt': 'application/vnd.ms-powerpoint',
+        'pps': 'application/vnd.ms-powerpoint'
     };
+
+    var regFixContentType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
 
     var fixContentType = function (data) {
         if (data) {
-            if (data.file_mimetype === 'application/octet-stream') {
+            if (regFixContentType.test(data.file_mimetype)) {
                 var ext = _((data.filename || '').split('.')).last().toLowerCase();
                 if (ext in mime_types) {
                     data.file_mimetype = mime_types[ext];
@@ -179,6 +216,9 @@ define('io.ox/files/api',
 
             // good old form post
             fixOptions();
+            if (options.form) {
+                options.form.off('submit');
+            }
             return http.FORM({ form: options.form, data: options.json }).pipe(success);
         }
     };
@@ -280,12 +320,17 @@ define('io.ox/files/api',
         return deferred;
     };
 
-    api.update = function (file) {
-        var obj = { id: file.id, folder: file.folder_id };
+    api.update = function (file, makeCurrent) { //special handling for mark as current version
+        var obj = { id: file.id, folder: file.folder_id },
+            updateData = file;
+
+        if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
+            updateData = {version: file.version};
+        }
         return http.PUT({
                 module: 'files',
                 params: { action: 'update', id: file.id, timestamp: _.now() },
-                data: file,
+                data: updateData,
                 appendColumns: false
             })
             .pipe(function () {
@@ -328,7 +373,7 @@ define('io.ox/files/api',
             id = String(obj.id);
             obj = { folder_id: fid, id: id };
 
-            if (/^(new|delete)$/.test(type) && fid) {
+            if (/^(new|change|delete)$/.test(type) && fid) {
                 // if we have a new file or an existing file was deleted, we have to clear the proper folder cache.
                 all = caches.all.grepRemove(fid + api.DELIM);
             } else {
@@ -350,7 +395,7 @@ define('io.ox/files/api',
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
                             api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
-                            api.trigger('refresh.list');
+                            api.trigger('refresh.all');
                         });
                     } else {
                         api.trigger('refresh.all');
@@ -392,6 +437,7 @@ define('io.ox/files/api',
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
         switch (mode) {
         case 'open':
+        case 'view':
             return url + name + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';

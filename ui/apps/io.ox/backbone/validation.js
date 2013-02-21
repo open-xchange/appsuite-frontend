@@ -40,7 +40,9 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
         },
         date: function (val) {
             // val: timestamp
-            if (!_.isNumber(val) || val > 253402214400008) {
+            // tasks allows null values to remove a date. Calendar must have start and end date
+            // calendar fields use val = undefined if they are empty so this should work correctly for both systems
+            if (val !== null && !_.isNumber(val) || val > 253402214400008) {
                 return gt('Please enter a valid date');
             }
             return true;
@@ -54,8 +56,8 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            var result = (regEmail.test(val) || val === '') ? true : gt('Please enter a valid email address');
-            return result;
+            var result = (regEmail.test(val) || val === '');
+            return result || gt('Please enter a valid email address');
 
         },
         url: function (val) {
@@ -111,7 +113,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
                             var value = attributes[attribute];
 
                             if (_.isUndefined(value) || value === null || value === '') {
-                                errors.add(attribute, 'Please enter a value');
+                                errors.add(attribute, gt('Please enter a value'));
                             }
                         }
                     });

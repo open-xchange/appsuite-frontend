@@ -95,7 +95,32 @@ define("plugins/portal/linkedIn/register",
         }
     });
 
-    ext.point("io.ox/portal/widget/linkedin").extend({
+    var handleError = function (node, baton) {
+        var data = baton.data;
+        console.error("LinkedIn error occurred", '(' + data.errorCode + ') ' + data.message);
+        node.append(
+            $('<div class="error bold">').text(gt('LinkedIn reported an error:')),
+            $('<div class="errormessage">').text('(' + data.errorCode + ') ' + data.message)
+        ).addClass('error-occurred');
+        if (data.message.indexOf('authorize') !== -1) {
+            var account = keychain.getStandardAccount('linkedin');
+            node.append(
+                $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                    keychain.submodules.linkedin.reauthorize(account).done(function () {
+                        console.log(gt("You have reauthorized this %s account.", 'LinkedIn'));
+                    }).fail(function () {
+                        console.error(gt("Something went wrong reauthorizing the %s account.", 'LinkedIn'));
+                    });
+                })
+            );
+        }
+        if (data.message.indexOf('Access to messages denied') !== -1) {
+            node.append('<br />');
+            $('<div class="solution italic">').text(gt('Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages.')).appendTo(node);
+        }
+    };
+
+    ext.point("io.ox/portal/widget/linkedIn").extend({
 
         title: 'LinkedIn',
 
@@ -118,7 +143,11 @@ define("plugins/portal/linkedIn/register",
                 url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
             })
             .pipe(function (msgs) {
-                return (baton.data = JSON.parse(msgs).values);
+                var data = JSON.parse(msgs);
+                if ((data.errorCode >= 0) && data.message) {
+                    return (baton.data = data);
+                }
+                return (baton.data = data.values);
             })
             .fail(function (err) {
                 console.log('Nope', err);
@@ -126,12 +155,11 @@ define("plugins/portal/linkedIn/register",
         },
 
         preview: function (baton) {
-
             var message = baton.data ? baton.data[0] : null;
-
-            var content = $('<div class="content pointer">');
+            var content = $('<div class="content">');
 
             if (baton.data && baton.data.length) {
+                content.addClass('pointer');
                 _(baton.data).each(function (message) {
                     content.append(
                         $('<div class="paragraph">').append(
@@ -141,6 +169,9 @@ define("plugins/portal/linkedIn/register",
                         )
                     );
                 });
+            } else if (baton.data && baton.data.errorCode !== undefined) {
+                content.removeClass('pointer');
+                handleError(content, baton);
             } else {
                 this.append(
                     $('<div class="content">').text(gt('You have no new messages'))
@@ -203,9 +234,10 @@ define("plugins/portal/linkedIn/register",
         }
     });
 
-    ext.point('io.ox/portal/widget/linkedin/settings').extend({
+    ext.point('io.ox/portal/widget/linkedIn/settings').extend({
         title: gt('LinkedIn'),
-        type: 'linkedin',
-        editable: false
+        type: 'linkedIn',
+        editable: false,
+        unique: true
     });
 });

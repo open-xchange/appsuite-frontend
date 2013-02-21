@@ -14,11 +14,14 @@
 
 .io-ox-office-preview-main {
 
-    .view-pane.app-pane {
-        text-align: center;
+.page {
+    /* fix for IE10, which does not render SVG text elements when line height is 0 */
+    line-height: normal;
+    overflow: hidden;
 
-        div.page {
-            display: inline-block;
-        }
+    &, &:focus, &:active {
+        outline: none;
     }
+}
+
 }

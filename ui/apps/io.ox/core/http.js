@@ -308,7 +308,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1034": "pop3_delete_write_through",
             "1035": "pop3_storage ",
             "1036": "pop3_path",
-            "1037": "personal"
+            "1037": "personal",
+            "1038": "reply_to",
+            "1039": "addresses"
         },
         "attachment": {
             "1": "id",
@@ -367,6 +369,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             // get id
             column = columns[i];
             id = ids[column] || column;
+            if (id === undefined) {
+                console.error('Undefined column', data, module, columns, 'index', i);
+            }
             // extend object
             obj[id] = data[i];
         }
@@ -392,9 +397,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         o.type = type;
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
+        if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
         // add session
-        if (o.appendSession === true && ox.session) {
-            o.params.session = ox.session;
+        if (o.appendSession === true) {
+            o.params.session = ox.session || 'unset';
         }
         // add columns
         if (o.appendColumns === true && o.params.columns === undefined) {
@@ -417,7 +423,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
-            o.contentType = "text/javascript; charset=UTF-8";
+            o.contentType = 'text/javascript; charset=UTF-8';
         }
         else if (type === "UPLOAD") {
             // POST with FormData object
@@ -452,18 +458,21 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         if (response && response.error !== undefined && !response.data) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isAutoLogin = o.module === "login" && o.data && /^(autologin|store)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+                isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
+                isAutoLogin = o.module === "login" && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
+            if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
-                ox.session = "";
+                ox.session = '';
                 ox.relogin(o, deferred);
             } else {
                 deferred.reject(response);
             }
         } else {
             // handle warnings
+            var passThrough = false;
             if (response && response.error !== undefined) {
-                console.warn("TODO: warning");
+                console.warn("Request to server resulted in error", response);
+                passThrough = true;
             }
             // success
             if (o.dataType === "json" && o.processResponse === true) {
@@ -481,7 +490,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                                 // data/error
                                 if (response[i].data !== undefined) {
                                     // data
-                                    tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
+                                    var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
+                                    // handling for GET requests
+                                    if (typeof o.data === "string") {
+                                        o.data = JSON.parse(o.data);
+                                        module = o.data[i].module;
+                                    }
+                                    tmp = sanitize(response[i].data, module, o.data[i].columns);
                                     data.push({ data: tmp, timestamp: timestamp });
                                     // handle warnings within multiple
                                     if (response[i].error !== undefined) {
@@ -498,6 +513,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
                         data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
+                        if (passThrough) {
+                            passThrough = false;
+                        }
                         deferred.resolve(data, timestamp);
                     }
                 } else {
@@ -516,7 +534,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // slow mode
         slow = _.url.hash("slow"),
         // fail mode
-        fail = _.url.hash('fail') !== undefined;
+        fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
 
     var ajax = (function () {
 
@@ -612,8 +630,25 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         return function (o, type) {
             // process options
             o = processOptions(o, type);
+
             // vars
             var r, def = $.Deferred();
+
+            // whitelisting sessionless actions (config, login, autologin)
+            if (!o.params.session) {
+                // check whitelist
+                var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
+                    req = o.module + '#' + o.params.action,
+                    found = _.find(whiteList, function (moduleAction) {
+                        var e = moduleAction.split('#');
+                        return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
+                    });
+                if (!found) {
+                    ox.relogin(o, def);
+                    return def;
+                }
+            }
+
             // paused?
             if (paused === true) {
                 queue.push({ deferred: def, options: o });
@@ -641,7 +676,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             }
             // continuation
             function cont() {
-                if (fail && o.module !== "login" && Math.random() < Number(_.url.hash('fail'))) {
+                if ((ox.fail || fail) && o.module !== "login" && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
                     // simulate broken connection
                     console.error("HTTP fail", r.o.url, r.xhr);
                     r.def.reject({ error: "0 simulated fail" });
@@ -887,12 +922,22 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     .done(function (data) {
                         // orchestrate callbacks and their data
                         for (i = 0, $l = q.length; i < $l; i++) {
-                            q[i].deferred.resolve(data[i]);
+                            if (data[i].data && data[i].timestamp) {
+                                q[i].deferred.resolve(data[i].data, data[i].timestamp);
+                            } else {
+                                q[i].deferred.resolve(data[i]);
+                            }
                         }
                         // continuation
                         def.resolve(data);
                     })
-                    .fail(def.reject);
+                    .fail(function (error) {
+                        _(q).each(function (item) {
+                            item.deferred.reject(error);
+                        });
+                        // continuation
+                        def.reject(error);
+                    });
                 } else {
                     // continuation
                     def.resolve([]);

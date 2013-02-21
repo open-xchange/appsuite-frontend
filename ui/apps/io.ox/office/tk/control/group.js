@@ -35,6 +35,18 @@ define('io.ox/office/tk/control/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
+     * Instances of this class trigger the following events:
+     * - 'change': If the control has been activated in a special way depending
+     *      on the type of the control group. The event handler receives the
+     *      new value of the activated control.
+     * - 'cancel': When the focus needs to be returned to the application (e.g.
+     *      when the Escape key is pressed, or when a click on a drop-down
+     *      button closes the opened drop-down menu).
+     * - 'show': After the control has been shown or hidden. The event handler
+     *      receives the new visibility state.
+     * - 'enable': After the control has been enabled or disabled. The event
+     *      handler receives the new state.
+     *
      * @constructor
      *
      * @param {Object} [options]
@@ -43,9 +55,18 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
-     *  @param {Boolean} [options.white]
-     *      If set to true, control embedded in the group will get a white
-     *      background instead of being transparent.
+     *  @param {String} [options.design='default']
+     *      Changes the appearance of the control elements and the group.
+     *      Supported values are:
+     *      'default': transparent background; active state and mouse hover
+     *      effect with fill colors; keyboard focus effect with border lines
+     *      (the default design). Exception: *focused* text fields behave as
+     *      described in the 'white' design (white background, glow effect).
+     *      'white': White background with shadow; mouse hover effect with
+     *      darker shadow; keyboard focus effect and drop-down effect with
+     *      glowing shadow.
+     *      'framed': transparent background; active state, mouse hover effect,
+     *      and keyboard focus effect with colored border lines.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
@@ -61,14 +82,27 @@ define('io.ox/office/tk/control/group',
             // update handler functions
             updateHandlers = [];
 
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
+
         // private methods ----------------------------------------------------
+
+        /**
+         * Shows or hides this group.
+         */
+        function showGroup(visible) {
+            groupNode.toggleClass(HIDDEN_CLASS, !visible);
+            self.trigger('show', visible);
+        }
 
         /**
          * Keyboard handler for the entire group.
          */
         function keyHandler(event) {
 
-            var // distinguish between event types (ignore keypress events)
+            var // distinguish between event types
                 keyup = event.type === 'keyup';
 
             if (event.keyCode === KeyCodes.ESCAPE) {
@@ -84,6 +118,21 @@ define('io.ox/office/tk/control/group',
          */
         this.getNode = function () {
             return groupNode;
+        };
+
+        /**
+         * Returns the position and size of the group node in the browser
+         * window.
+         *
+         * @returns {Object}
+         *  An object with numeric 'left', 'top', 'right', 'bottom', 'width',
+         *  and 'height' attributes representing the position and size of the
+         *  group node in pixels. The attributes 'right' and 'bottom' represent
+         *  the distance of the right/bottom corner of the group node to the
+         *  right/bottom border of the browser window.
+         */
+        this.getNodePosition = function () {
+            return Utils.getNodePositionInWindow(groupNode);
         };
 
         /**
@@ -104,66 +153,68 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Registers the passed action handler for a specific control. Action
-         * handlers will be executed, when the control has been activated in
-         * the user interface. Will trigger a 'change' event, passing its
-         * current value as returned by the passed action handler.
-         *
-         * @param {jQuery} [node]
-         *  The DOM node that catches the jQuery action events. May be a single
-         *  control, or a parent element of several controls. If omitted, uses
-         *  the root node of this group. In case a container element is used,
-         *  the parameter 'selector' must be specified.
+         * Registers an event handler for specific DOM control nodes, that will
+         * trigger a 'change' event for this group instance. The value of the
+         * 'change' event will be determined by the passed value resolver
+         * function.
          *
          * @param {String} type
-         *  The type of the action event, e.g. 'click' or 'change'.
+         *  The type of the event handler that will be bound to the selected
+         *  DOM node(s), e.g. 'click' or 'change'.
          *
-         * @param {String} [selector]
-         *  If specified, selects the ancestor elements of the specified node,
-         *  which are actually triggering the events.
-         *
-         * @param {Function} actionHandler
-         *  The action handler function. Will be called in the context of this
-         *  group. Receives the control that triggered the action event. Must
-         *  return the current value of the control (e.g. the boolean state of
-         *  a toggle button, the value of a list item, or the current text in a
-         *  text input field). May return null to indicate that a 'cancel'
-         *  event should be triggered instead of a 'change' event.
+         * @param {Object} [options]
+         *  A map of options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {jQuery} [options.node]
+         *      The DOM node that catches the jQuery action events. May be a
+         *      single DOM control node, or a parent element of several
+         *      controls selected by a jQuery selector string, if specified in
+         *      the options parameter. If omitted, defaults to the root node of
+         *      this group.
+         *  @param {String} [options.selector]
+         *      If specified, selects the ancestor elements of the specified
+         *      node, which are actually triggering the events. If omitted, the
+         *      event handler will be bound directly to the node passed to this
+         *      method.
+         *  @param {Function} [options.valueResolver]
+         *      The function that returns the current value of this group
+         *      instance. Will be called in the context of this group. Receives
+         *      the control node that has triggered the event, as jQuery
+         *      object. Must return the current value of the control (e.g. the
+         *      boolean state of a toggle button, the value of a list item, or
+         *      the current text in a text input field). May return null to
+         *      indicate that a 'cancel' event should be triggered instead of a
+         *      'change' event. If omitted, defaults to the static method
+         *      Utils.getControlValue().
          *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.registerActionHandler = function (node, type, selector, actionHandler) {
+        this.registerChangeHandler = function (type, options) {
 
-            function actionEventHandler(event) {
-                var value =  self.isEnabled() ? actionHandler.call(self, $(this)) : null;
+            var // the node to attach the event handler to
+                node = Utils.getOption(options, 'node', groupNode),
+                // the jQuery selector for ancestor nodes
+                selector = Utils.getStringOption(options, 'selector', ''),
+                // the resolver function for the control value
+                valueResolver = Utils.getFunctionOption(options, 'valueResolver', Utils.getControlValue);
+
+            function eventHandler(event) {
+                var value =  self.isEnabled() ? valueResolver.call(self, $(this)) : null;
                 if (_.isNull(value)) {
                     self.trigger('cancel');
                 } else {
+                    self.update(value);
                     self.trigger('change', value);
                 }
-            }
-
-            // normalize passed parameters, if node parameter is missing
-            if (_.isString(node)) {
-                // push all parameters to the right, and update node parameter
-                actionHandler = selector;
-                selector = type;
-                type = node;
-                node = groupNode;
-            }
-
-            // normalize passed parameters, if selector parameter is missing
-            if (_.isFunction(selector)) {
-                actionHandler = selector;
-                selector = undefined;
+                return false;
             }
 
             // attach event handler to the node
             if (selector) {
-                node.on(type, selector, actionEventHandler);
+                node.on(type, selector, eventHandler);
             } else {
-                node.on(type, actionEventHandler);
+                node.on(type, eventHandler);
             }
 
             return this;
@@ -180,6 +231,10 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
+            // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+            if (groupNode.hasClass('white-icons')) {
+                groupNode.find('i').addClass('icon-white');
+            }
             return this;
         };
 
@@ -194,8 +249,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            groupNode.append(control.addClass(Group.FOCUSABLE_CLASS));
-            return this;
+            return this.addChildNodes(control.addClass(Group.FOCUSABLE_CLASS));
         };
 
         /**
@@ -249,7 +303,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.show = function () {
-            groupNode.removeClass(HIDDEN_CLASS);
+            showGroup(true);
             return this;
         };
 
@@ -260,7 +314,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.hide = function () {
-            groupNode.addClass(HIDDEN_CLASS);
+            showGroup(false);
             return this;
         };
 
@@ -269,15 +323,13 @@ define('io.ox/office/tk/control/group',
          *
          * @param {Boolean} [state]
          *  If specified, shows or hides the groups depending on the boolean
-         *  value. If omitted, switches the group from visible to hidden and
-         *  vice versa.
+         *  value. If omitted, toggles the current visibility of the group.
          *
          * @returns {Group}
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            var hidden = (state === false) || ((state !== true) && !this.isVisible());
-            groupNode.toggleClass(HIDDEN_CLASS, hidden);
+            showGroup((state === true) || ((state !== false) && this.isVisible()));
             return this;
         };
 
@@ -326,14 +378,15 @@ define('io.ox/office/tk/control/group',
             return this;
         };
 
-        // initialization -----------------------------------------------------
+        this.destroy = function () {
+            this.events.destroy();
+        };
 
-        // add event hub
-        Events.extend(this);
+        // initialization -----------------------------------------------------
 
         // formatting and tool tip
         groupNode
-            .addClass(Utils.getBooleanOption(options, 'white') ? 'white' : '')
+            .addClass('design-' + Utils.getStringOption(options, 'design', 'default'))
             .addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 

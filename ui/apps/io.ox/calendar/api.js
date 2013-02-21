@@ -17,25 +17,23 @@ define("io.ox/calendar/api",
     ["io.ox/core/http",
      "io.ox/core/event",
      "io.ox/core/config",
-     "io.ox/core/api/user",
      "io.ox/core/notifications",
-     "io.ox/core/api/factory"], function (http, Events, config, userAPI, notifications, factory) {
+     "io.ox/core/api/factory"], function (http, Events, config, notifications, factory) {
 
     "use strict";
 
     // really stupid caching for speed
     var all_cache = {},
         get_cache = {},
-        participant_cache = {};
-
-    var DAY = 60000 * 60 * 24;
+        participant_cache = {},
+        DAY = 60000 * 60 * 24;
 
     var api = {
 
-        get: function (o) {
+        get: function (o, useCache) {
 
             o = o || {};
-
+            useCache = useCache === undefined ? true : !!useCache;
             var params = {
                 action: "get",
                 id: o.id,
@@ -47,19 +45,24 @@ define("io.ox/calendar/api",
                 params.recurrence_position = o.recurrence_position;
             }
 
-            var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
+            if (params.id && params.folder) {
+                var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
 
-            if (get_cache[key] === undefined) {
-                return http.GET({
-                        module: "calendar",
-                        params: params
-                    })
-                    .done(function (data) {
-                        get_cache[key] = JSON.stringify(data);
-                    });
+                if (get_cache[key] === undefined || !useCache) {
+                    return http.GET({
+                            module: "calendar",
+                            params: params
+                        })
+                        .done(function (data) {
+                            get_cache[key] = JSON.stringify(data);
+                        });
+                } else {
+                    return $.Deferred().resolve(JSON.parse(get_cache[key]));
+                }
             } else {
-                return $.Deferred().resolve(JSON.parse(get_cache[key]));
+                return $.Deferred().reject();
             }
+
         },
 
         getAll: function (o) {
@@ -76,8 +79,7 @@ define("io.ox/calendar/api",
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
                     // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
-
-                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,220,209,212,213,214,215,216,222",
+                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -139,7 +141,6 @@ define("io.ox/calendar/api",
 
         update: function (o) {
             var folder_id = o.folder_id || o.folder;
-
             var key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o)) {
                 return $.when();
@@ -156,6 +157,7 @@ define("io.ox/calendar/api",
                     data: o
                 })
                 .pipe(function (obj) {
+                    api.checkForNotification(o);
                     var getObj = {};
                     if (!_.isUndefined(obj.conflicts)) {
                         var df = new $.Deferred();
@@ -178,8 +180,27 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
+                            api.trigger('updateDetails', data); // do not use this event / only for view-details
                             return data;
                         });
+                });
+            }
+        },
+
+        checkForNotification: function (obj, removeAction) {
+
+            if (removeAction) {
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.trigger("remove-calendar-notifications", obj);
+                    api.trigger("remove-calendar-notifications", obj);
+                });
+            } else if (obj.alarm !== "-1" && obj.end_date > _.now()) {//new appointments
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.getReminders();
+                });
+            } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
+                require(["io.ox/core/api/reminder"], function (reminderApi) {
+                    reminderApi.getReminders();
                 });
             }
         },
@@ -194,6 +215,7 @@ define("io.ox/calendar/api",
                 data: o
             })
             .pipe(function (obj) {
+                api.checkForNotification(o);
                 var getObj = {};
                 if (!_.isUndefined(obj.conflicts)) {
                     var df = new $.Deferred();
@@ -212,7 +234,7 @@ define("io.ox/calendar/api",
                 return api.get(getObj)
                         .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('create', getObj);
+                            api.trigger('create', data);
                             return data;
                         });
             });
@@ -235,6 +257,8 @@ define("io.ox/calendar/api",
                 delete get_cache[key];
                 api.trigger('refresh.all');
                 api.trigger('delete', resp);
+                //remove Reminders in Notification Area
+                api.checkForNotification(o, true);
             });
         },
 
@@ -250,6 +274,7 @@ define("io.ox/calendar/api",
             })
             .done(function (resp) {
                 get_cache = {};
+                api.trigger("confirmation-changed", o);//redraw detailview to be responsive and remove invites
                 api.trigger('refresh.all');
             });
         },
@@ -269,7 +294,7 @@ define("io.ox/calendar/api",
                     action: "updates",
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
-                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222",
+                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -338,9 +363,8 @@ define("io.ox/calendar/api",
                 })
                 .sortBy('start_date')
                 .value();
-            if (invites.length > 0) {
-                api.trigger('new-invites', invites);
-            }
+
+            api.trigger('new-invites', invites);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
             return invites;
         });
     };

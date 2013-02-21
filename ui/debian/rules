@@ -11,15 +11,28 @@ endif
 override_dh_auto_install:
 	sh build.sh \
 	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
-	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/var/www/appsuite \
+	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
+	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
+	for i in i18n/*.properties; do \
+	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
+	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
+	    cp $$i debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
+	done
+	cp -r debian/open-xchange-appsuite/var/www/appsuite/apps \
+	    debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite/
 	sed -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
 	    bin/build-appsuite > tmp/build-appsuite
 	chmod +x tmp/build-appsuite
 
 override_dh_auto_clean:
-	sh build.sh clean $(FLAGS)
+	sh build.sh clean \
+	    builddir=debian/open-xchange-appsuite/var/www/appsuite \
+	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
+	    manifestDir=debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite \
+        helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
+	    $(FLAGS) --trace
 
 %:
 	dh $@
