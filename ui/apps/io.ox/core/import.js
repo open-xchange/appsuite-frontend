@@ -64,6 +64,9 @@ define('io.ox/core/import',
         index: 100,
         draw: function (baton) {
             if (baton.module === 'calendar' || baton.module === 'tasks') {
+                require(['io.ox/' + baton.module + '/api'], function (api) {
+                    baton.api = api;
+                });
                 return $('<option value="ICAL">').text(gt('iCal'));
             }
         }
