@@ -447,7 +447,6 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/ical', {
         id: 'ical',
         requires: function (e) {
-            console.log("DEBUG1:", e.context.filename, e.context.content_type);
             var context = e.context,
                 hasRightSuffix = context.filename && context.filename.match(/\.ics$/i) !== null,
                 isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
@@ -455,7 +454,6 @@ define('io.ox/mail/actions',
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
-            console.log("DEBUG2:", baton.data);
             var attachment = baton.data;
             conversionAPI.convert(
                 {
@@ -465,7 +463,8 @@ define('io.ox/mail/actions',
                         {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
                         {'com.openexchange.mail.conversion.sequenceid': attachment.id}
                     ]
-                }, {
+                },
+                {
                     identifier: 'com.openexchange.ical',
                     args: [
                         {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
@@ -477,6 +476,7 @@ define('io.ox/mail/actions',
                 }).fail(function (data) {
                     console.err('FAILED!', data);
                 });
+
         }
     });
 
