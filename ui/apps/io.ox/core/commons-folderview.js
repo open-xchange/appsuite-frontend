@@ -29,7 +29,8 @@ define('io.ox/core/commons-folderview',
             rootFolderId: '1',
             type: undefined,
             view: 'ApplicationFolderTree',
-            visible: app.settings.get('folderview/visible', false),
+            // disable folder popup as it takes to much space for startup on small screens
+            visible: _.device('!small') ? app.settings.get('folderview/visible', false): false,
             permanent: app.settings.get('folderview/permanent', true)
         });
 
@@ -454,6 +455,7 @@ define('io.ox/core/commons-folderview',
                 sidepanel.fadeOut();
             }
             if (visible) {
+
                 app.settings.set('folderview/visible', visible = false).save();
             }
         };

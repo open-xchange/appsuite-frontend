@@ -18,6 +18,8 @@
     @weekview-footer-height: 25px;
     @weekview-toolbar-height: 41px;
 
+    @SMALL-weekview-time-with: 45px;
+
     * {
         .box-sizing(border-box);
         -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -38,6 +40,7 @@
         font-family: @lightFontFamily;
         font-size: 20px;
     }
+
 
     .toolbar .showall {
         position: absolute;
@@ -410,4 +413,50 @@
         top: 0;
         height: 100%;
     }
+
+    @media all and (max-width: 480px) {
+
+        .toolbar .info {
+           display: none;
+        }
+
+        .toolbar .showall {
+            right: 30px;
+            top: 47px;
+        }
+
+        .pagination {
+            position: absolute;
+            top: 9px;
+            left: 0;
+            right: 0;
+        }
+        .footer-container {
+            top: @weekview-toolbar-height + 7;
+        }
+        .footer {
+            line-height: inherit;
+            right: auto;
+            background-color: none;
+            left: 10px;
+        }
+        .weekday {
+            font-size:  18px;
+        }
+        .fulltime {
+            left: @SMALL-weekview-time-with;
+        }
+        .week-container-label {
+            width: @SMALL-weekview-time-with;
+        }
+        .week-container {
+            left:  @SMALL-weekview-time-with;
+        }
+
+        .week-view-container {
+
+            top: @weekview-toolbar-height + @weekview-footer-height + 7;
+        }
+   }
 }
+

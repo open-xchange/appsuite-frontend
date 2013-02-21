@@ -31,13 +31,9 @@ define("io.ox/calendar/main",
     // corrupt data fix
     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
 
-    // First mobile handling, just for the moment a workaround until we have
-    // the backend calls for this
 
-    if (_.browser.iOS || _.browser.Android) {
-        // force listview for iOS device
-        lastPerspective = 'list';
-    }
+    // force listview on small devices
+    lastPerspective = _.device('small') ? 'list': lastPerspective;
 
     // launcher
     app.setLauncher(function (options) {

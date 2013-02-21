@@ -38,21 +38,27 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/actions/switch-to-month-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'month');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:week');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:workweek');
         }

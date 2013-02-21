@@ -166,6 +166,7 @@ define('io.ox/calendar/week/view',
             e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
+
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
                 this.setStartDate('next');
             }
