@@ -224,19 +224,9 @@ define('io.ox/files/icons/perspective',
                 });
             }
 
-            function toggleSelection(o) {
-                if (self.selection.isSelected(o)) {
-                    self.selection.deselect(o);
-                } else {
-                    self.selection.select(o);
-                }
-            }
-
             iconview.on('click', '.selectable', function (e) {
                 var cid = _.cid($(this).attr('data-obj-id'));
-                if (!e.shiftKey) {
-                    self.selection.clear();
-
+                if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
                     api.get(cid).done(function (file) {
                         app.currentFile = file;
                         if (dropZone) {
@@ -249,7 +239,6 @@ define('io.ox/files/icons/perspective',
                 } else {
                     dialog.close();
                 }
-                toggleSelection(cid);
             });
 
             drawIcon = function (file) {
@@ -281,6 +270,7 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
+                self.selection.update();
             };
 
             drawFirst = function () {
@@ -314,6 +304,7 @@ define('io.ox/files/icons/perspective',
                         baton.allIds = filterFiles(ids, options);
 
                         allIds = baton.allIds;
+                        self.selection.init(allIds);
 
                         redraw(allIds.slice(start, end));
                     })
