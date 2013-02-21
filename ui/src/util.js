@@ -101,8 +101,8 @@
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
         chrome = ua.indexOf('Chrome/') > -1,
-        iOS = ua.indexOf('iPhone|iPad|iPod'),
-        Android = ua.indexOf('Android');
+        iOS = ua.indexOf('iPhone|iPad|iPod') > -1,
+        Android = ua.indexOf('Android') > -1;
 
     // add namespaces, just sugar
     _.browser = {
