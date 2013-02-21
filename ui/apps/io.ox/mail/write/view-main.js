@@ -274,6 +274,49 @@ define("io.ox/mail/write/view-main",
             return node.append(select);
         },
 
+        createReplyToField: function () {
+            if (config.get('ui.mail.replyTo.configurable', true) !== true) {
+                return;
+            }
+            this.addSection('replyTo', gt('Reply to'), false, true)
+            .append($('<div>').addClass('fieldset').append(
+                $('<label>', {'for': 'writer_field_replyTo'})
+                .addClass('wrapping-label'), $('<input>',
+                    {'type' : 'text',
+                     'id' : 'writer_field_replyTo',
+                     'name' : 'replyTo'
+                    })
+                .addClass('discreet')
+                .autocomplete({
+                    source: function (val) {
+                        return accountAPI.getAllSenderAddresses().then(function (result) {
+                            result = result.filter(function (elem) {
+                                return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
+                            });
+                            return {list: result, hits: result.length};
+                        });
+                    },
+                    draw: function (data, query) {
+                        var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
+                        this.append(
+                            name,
+                            $('<div class="ellipsis">').text(_.noI18n(data.email))
+                        );
+                    },
+                    reduce: function (data) {
+                        data.list = _(data.list).map(function (elem) {
+                            return {data: {}, display_name: elem[0], email: elem[1]};
+                        });
+                        return data;
+                    },
+                    stringify: function (data) {
+                        return mailUtil.formatSender(data.display_name, data.email);
+                    }
+                })
+            ));
+            this.addLink('replyTo', gt('Reply to'));
+        },
+
         createRecipientList: function (id) {
             return (this.sections[id + 'List'] = $('<div>'))
                 .addClass('recipient-list').hide();
@@ -351,45 +394,7 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
-            if (config.get('ui.mail.replyTo.configurable', true) === true) {
-                this.addSection('replyTo', gt('Reply to'), false, true)
-                    .append($('<div>').addClass('fieldset').append(
-                        $('<label>', {'for': 'writer_field_replyTo'}).addClass('wrapping-label'),
-                        $('<input>', {
-                            'type' : 'text',
-                            'id' : 'writer_field_replyTo',
-                            'name' : 'replyTo'
-                        })
-                        .addClass('discreet')
-                        .autocomplete({
-                            source: function (val) {
-                                return accountAPI.getAllSenderAddresses().then(function (result) {
-                                    result = result.filter(function (elem) {
-                                        return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
-                                    });
-                                    return {list: result, hits: result.length};
-                                });
-                            },
-                            draw: function (data, query) {
-                                var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
-                                this.append(
-                                    name,
-                                    $('<div class="ellipsis">').text(_.noI18n(data.email))
-                                );
-                            },
-                            reduce: function (data) {
-                                data.list = _(data.list).map(function (elem) {
-                                    return {data: {}, display_name: elem[0], email: elem[1]};
-                                });
-                                return data;
-                            },
-                            stringify: function (data) {
-                                return mailUtil.formatSender(data.display_name, data.email);
-                            }
-                        })
-                    ));
-                this.addLink('replyTo', gt('Reply to'));
-            }
+            this.createReplyToField();
 
             // Attachments (unless we're on iOS)
             if (ox.uploadsEnabled) {
