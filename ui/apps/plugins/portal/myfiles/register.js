@@ -11,13 +11,14 @@
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/recentfiles/register',
+define('plugins/portal/myfiles/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/core/api/user',
      'io.ox/core/date',
+     'io.ox/core/config',
      'gettext!plugins/portal',
-     'less!plugins/portal/recentfiles/style.css'], function (ext, filesApi, userApi, date, gt) {
+     'less!plugins/portal/myfiles/style.css'], function (ext, filesApi, userApi, date, config, gt) {
 
     'use strict';
     var humanReadable = function (bytes) {
@@ -31,9 +32,9 @@ define('plugins/portal/recentfiles/register',
         return Math.round(temp) + " " + suffixes[pos];
     };
 
-    ext.point('io.ox/portal/widget/recentfiles').extend({
+    ext.point('io.ox/portal/widget/myfiles').extend({
 
-        title: 'Recently changed files',
+        title: 'My latest files',
 
         isEnabled: function () {
             return true;
@@ -48,7 +49,7 @@ define('plugins/portal/recentfiles/register',
         },
 
         load: function (baton) {
-            return filesApi.search('', { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' })
+            return filesApi.search('', { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704', folder: config.get('folder.infostore') })
             .pipe(function (files) {
                 // update baton
                 baton.data = files;
@@ -68,7 +69,7 @@ define('plugins/portal/recentfiles/register',
         },
 
         preview: function (baton) {
-            var content = $('<div class="content recentfiles pointer">').appendTo(this),
+            var content = $('<div class="content myfiles pointer">').appendTo(this),
                 data = baton.data;
             if (!data || data.length === 0) {
                 content.text(gt("No files were uploaded recently"));
@@ -77,9 +78,9 @@ define('plugins/portal/recentfiles/register',
             _(data).each(function (file) {
                 var myDate = new date.Local(file.last_modified).format(date.DATE_TIME),
                     text = file.last_modified === file.creation_date ?
-                        gt("%1$s was created by %2$s") :
-                        gt("%1$s was modified by %2$s");
-                text = gt.format(text, '<b>' + (file.filename || file.title) + '</b>', file.modified_by.display_name);
+                        gt("%1$s was created on %2$s") :
+                        gt("%1$s was modified on %2$s");
+                text = gt.format(text, '<b>' + (file.filename || file.title) + '</b>', myDate);
                 $('<div class="item">').html(text).appendTo(content).on('click', function (clickEvent) {
                     window.location = "#!&app=io.ox/files&folder=" + file.folder_id + "&id=" + file.folder_id + "." + file.id + "&perspective=list";
                     location.reload(); //TODO: remove once OX starts to listen to fragment changes
@@ -88,10 +89,10 @@ define('plugins/portal/recentfiles/register',
         },
 
         draw: function (baton) {
-            var content = $('<div class="content recentfiles">').appendTo(this),
+            var content = $('<div class="content myfiles">').appendTo(this),
                 data = baton.data;
 
-            content.append($('<h1>').text(gt('Recently changed files')));
+            content.append($('<h1>').text(gt('My own recently changed files')));
 
             if (!data || data.length === 0) {
                 content.text(gt("No files were created or changed recently."));
@@ -112,9 +113,6 @@ define('plugins/portal/recentfiles/register',
                         location.reload(); //TODO: remove once OX starts to listen to fragment changes
                     }),
                     '<br/>',
-                    $('<span class="uploader">').text(text),
-                    $('<b class="uploader">').text(file.modified_by.display_name), //TODO halo here?
-                    '<br/>',
                     $('<span class="date">').text(myDate),
                     $('<span class="type">').text(file.mime_type),
                     $('<span class="size">').text(humanReadable(file.file_size)),
@@ -126,9 +124,9 @@ define('plugins/portal/recentfiles/register',
         }
     });
 
-    ext.point('io.ox/portal/widget/recentfiles/settings').extend({
-        title: gt('Recent files'),
-        type: 'recentfiles',
+    ext.point('io.ox/portal/widget/myfiles/settings').extend({
+        title: gt('My files'),
+        type: 'myfiles',
         editable: false
     });
 });

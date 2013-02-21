@@ -21,7 +21,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = ['plugins/portal/recentfiles/register'];
+	var DEV_PLUGINS = ['plugins/portal/recentfiles/register', 'plugins/portal/myfiles/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),

@@ -472,7 +472,7 @@ define('io.ox/mail/actions',
                     ]
                 }
             ).done(function (data) {
-                    notifications.yell('success', gt('These %s appointments have been stored in your main calendar folder.', data.size));
+                    notifications.yell('success', gt('Appointments have been stored in your main calendar folder.'));
                 }).fail(function (data) {
                     console.err('FAILED!', data);
                 });
@@ -863,14 +863,14 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
         index: 50,
-        label: gt('Create contact from VCard'),
+        label: gt('Create a contact from this'),
         ref: 'io.ox/mail/actions/vcard'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'ical',
         index: 50,
-        label: gt('Store ICal as appointment'),
+        label: gt('Add to calendar'),
         ref: 'io.ox/mail/actions/ical'
     }));
 
