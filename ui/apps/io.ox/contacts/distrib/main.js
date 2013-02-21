@@ -41,14 +41,13 @@ define('io.ox/contacts/distrib/main',
         });
 
         app.create = function (folderId, initdata) {
+
             initialDistlist = {
                 folder_id: folderId,
                 mark_as_distributionlist: true,
                 last_name: ''
             };
 
-            // set state
-            app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
 

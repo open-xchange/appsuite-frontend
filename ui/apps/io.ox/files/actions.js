@@ -73,12 +73,10 @@ define('io.ox/files/actions',
     // editor
     new Action('io.ox/files/actions/editor', {
         requires: function (e) {
-            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.filename);
+            return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
         },
         action: function (baton) {
-            ox.launch('io.ox/editor/main').done(function () {
-                this.load(baton.data);
-            });
+            ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
         }
     });
 
@@ -553,7 +551,7 @@ define('io.ox/files/actions',
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'editor',
-        index: 40,
+        index: 150,
         prio: 'hi',
         label: gt('Edit'),
         ref: 'io.ox/files/actions/editor'

@@ -72,13 +72,6 @@ define('io.ox/contacts/api',
         }
     }
 
-    function fixDistributionList(data) {
-        // fix last_name for distribution lists (otherwise sorting sucks)
-        if (data.distribution_list && data.distribution_list.length) {
-            data.last_name = data.display_name || '';
-        }
-    }
-
     api.create = function (data, file) {
 
         // TODO: Ask backend for a fix, until that:
@@ -87,8 +80,6 @@ define('io.ox/contacts/api',
         wat(data, 'email3');
 
         var method, body;
-
-        fixDistributionList(data);
 
         if (file) {
             var body = new FormData();
@@ -139,7 +130,6 @@ define('io.ox/contacts/api',
                 return $.when();
             }
         } else {
-            fixDistributionList(o.data);
             // go!
             return http.PUT({
                     module: 'contacts',
@@ -310,11 +300,11 @@ define('io.ox/contacts/api',
 
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching', true);
-    
+
     api.clearFetchCache = function () {
         return fetchCache.clear();
     };
-    
+
    /**
     * get contact redced/filtered contact data; manages caching
     *
