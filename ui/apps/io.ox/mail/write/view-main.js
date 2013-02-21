@@ -394,8 +394,6 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to'));
 
-            this.createReplyToField();
-
             // Attachments (unless we're on iOS)
             if (ox.uploadsEnabled) {
                 this.fileCount = 0;
@@ -471,7 +469,8 @@ define("io.ox/mail/write/view-main",
             // FROM
             this.addLink('from', gt('Sender'));
             this.addSection('from', gt('Sender'), false, true)
-                .append(this.createSenderField());
+                .append(this.createSenderField())
+                .append(this.createReplyToField());
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
