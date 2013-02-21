@@ -121,6 +121,14 @@ define('io.ox/core/import',
                         folder: id
                     })
                     .done(function (res) {
+                        try {
+                            baton.api.caches.all.grepRemove(id + baton.api.DELIM);
+                            baton.api.trigger('refresh.all');
+                        } catch (e) {
+                            // if api is unknown, refresh everything
+                            console.warn('import triggering global refresh because of unknown API', e);
+                            ox.trigger('refresh^');
+                        }
                         notifications.yell('success', gt('Data imported successfully'));
                     })
                     .fail(function (res) {
