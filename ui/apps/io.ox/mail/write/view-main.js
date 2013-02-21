@@ -255,8 +255,12 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var node = $('<div>').addClass('fromselect-wrapper'),
-                select = $('<select>').css('width', '100%');
+            var node = $('<div>').addClass('fromselect-wrapper')
+                       .append(
+                           $('<label>', {'for': 'from'}).addClass('wrapping-label')
+                           .text(gt('From'))
+                    ),
+                select = $('<select>', {'name': 'from'}).css('width', '100%');
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 _(addresses).each(function (address) {
                     var option = $('<option>').text(_.noI18n(mailUtil.formatSender(address)));
@@ -280,7 +284,8 @@ define("io.ox/mail/write/view-main",
             }
             return $('<div>').addClass('fieldset').append(
                 $('<label>', {'for': 'writer_field_replyTo'})
-                .addClass('wrapping-label'), $('<input>',
+                .addClass('wrapping-label').text(gt('Reply to')),
+                $('<input>',
                     {'type' : 'text',
                      'id' : 'writer_field_replyTo',
                      'name' : 'replyTo'
