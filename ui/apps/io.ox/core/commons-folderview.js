@@ -166,7 +166,6 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var link = $('<a href="#" data-action="rename">').text(gt('Rename'));
                 this.append($('<li>').append(link));
-
                 if (api.can('rename', baton.data)) {
                     link.on('click', { app: baton.app }, renameFolder);
                 } else {
