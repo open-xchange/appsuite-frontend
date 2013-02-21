@@ -470,8 +470,8 @@ define("io.ox/mail/write/view-main",
             }());
 
             // FROM
-            this.addLink('from', gt('Sender'));
-            this.addSection('from', gt('Sender'), false, true)
+            this.addLink('sender', gt('Sender'));
+            this.addSection('sender', gt('Sender'), false, true)
                 .append(this.createSenderField())
                 .append(this.createReplyToField());
 
