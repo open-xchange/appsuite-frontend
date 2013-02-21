@@ -541,7 +541,7 @@ define("io.ox/mail/api",
 
 
     api.expunge = function (folder_id) {
-        notifications.yell('info', 'Cleaning up... This may take a few moments.');
+        notifications.yell('info', 'Cleaning up... This may take a few seconds.');
         // new clear
         return http.PUT({
             module: "mail",
