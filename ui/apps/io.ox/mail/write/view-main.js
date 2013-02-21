@@ -278,8 +278,7 @@ define("io.ox/mail/write/view-main",
             if (config.get('ui.mail.replyTo.configurable', true) !== true) {
                 return;
             }
-            this.addSection('replyTo', gt('Reply to'), false, true)
-            .append($('<div>').addClass('fieldset').append(
+            return $('<div>').addClass('fieldset').append(
                 $('<label>', {'for': 'writer_field_replyTo'})
                 .addClass('wrapping-label'), $('<input>',
                     {'type' : 'text',
@@ -313,8 +312,7 @@ define("io.ox/mail/write/view-main",
                         return mailUtil.formatSender(data.display_name, data.email);
                     }
                 })
-            ));
-            this.addLink('replyTo', gt('Reply to'));
+            );
         },
 
         createRecipientList: function (id) {
