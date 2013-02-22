@@ -843,60 +843,19 @@ define('io.ox/office/tk/app/officeapplication',
         /**
          * Unlocks a lock for the deferred execution of debounced methods. If
          * the last lock has been unlocked, all pending debounced methods will
-         * be executed. To prevent dead locks, this method MUST NOT be used in
-         * the implementation of a debounced method itself.
+         * be executed immediately. To prevent dead locks, this method MUST NOT
+         * be used in the implementation of a debounced method itself.
          *
-         * @param {Object} [options]
-         *  A map with options that control the behavior of this method. The
-         *  following options are supported:
-         *  @param {Boolean} [options.async=false]
-         *      If set to true, the pending debounced methods will be executed
-         *      asynchronously in a browser timeout loop. The Promise returned
-         *      by this method will be resolved after executing all debounced
-         *      methods, and will be notified about the progress of the
-         *      operation.
-         *
-         * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved immediately
-         *  if deferred execution of debounced methods is still locked, or
-         *  after the pending debounced methods have been executed
-         *  synchronously. In case of asynchronous execution, the Promise will
-         *  be resolved after the timeout loop that executes all pending
-         *  debounced methods.
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
          */
         this.unlockDebouncedMethods = function (options) {
-
-            var // the result Deferred object
-                def = $.Deferred(),
-                // local copy of the pending callbacks
-                pendingCallbacks = null,
-                // index of next pending callbacks
-                index = 0;
-
             debouncedLocks = Math.max(debouncedLocks - 1, 0);
             if ((debouncedLocks === 0) && (lockedDebouncedCallbacks.length > 0)) {
-                if (Utils.getBooleanOption(options, 'async', false)) {
-                    pendingCallbacks = _.clone(lockedDebouncedCallbacks);
-                    lockedDebouncedCallbacks = [];
-                    self.executeDelayed(function () {
-                        def.notify(index / pendingCallbacks.length);
-                        pendingCallbacks[index]();
-                        index += 1;
-                        if (index < pendingCallbacks.length) { return true; }
-                        def.notify(1).resolve();
-                    }, 0, 2);
-                } else {
-                    _(lockedDebouncedCallbacks).each(function (executeDeferredCallBack) {
-                        executeDeferredCallBack();
-                    });
-                    lockedDebouncedCallbacks = [];
-                    def.resolve();
-                }
-            } else {
-                def.resolve();
+                _(lockedDebouncedCallbacks).each(function (executeCallBack) { executeCallBack(); });
+                lockedDebouncedCallbacks = [];
             }
-
-            return def.promise();
+            return this;
         };
 
         /**
