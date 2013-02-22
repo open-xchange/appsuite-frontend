@@ -329,6 +329,11 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             return this;
         };
 
+        this.setUnderlayStyle =  function (css) {
+            nodes.underlay.css(css || {});
+            return this;
+        };
+
         this.setDefaultAction = function (action) {
             o.defaultAction = action;
             return this;
