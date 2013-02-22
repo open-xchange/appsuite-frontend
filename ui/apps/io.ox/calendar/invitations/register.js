@@ -12,8 +12,8 @@
  */
 
 define('io.ox/calendar/invitations/register',
-    ['io.ox/core/extensions', 'io.ox/core/http', 'settings!io.ox/calendar', 'gettext!io.ox/calendar/main', "less!io.ox/calendar/style.css"],
-    function (ext, http, settings, gt) {
+    ['io.ox/core/extensions', 'io.ox/core/http', 'settings!io.ox/calendar', 'gettext!io.ox/calendar/main', "io.ox/calendar/util", "less!io.ox/calendar/style.css"],
+    function (ext, http, settings, gt, util) {
     'use strict';
     var regex = /text\/calendar.*?method=(.+)/i;
 
@@ -64,7 +64,7 @@ define('io.ox/calendar/invitations/register',
         3: gt("You have tentatively accepted the appointment")
     };
 
-    var priority = ['accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'update', 'delete', 'declinecounter', 'accept', 'tentative', 'decline', 'ignore'];
+    var priority = ['ignore', 'decline', 'tentative', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'update', 'delete', 'accept'];
 
 
 
@@ -112,7 +112,26 @@ define('io.ox/calendar/invitations/register',
                 _(analysis.changes).each(function (change) {
                     renderChange($analysisNode, change, analysis, detailPoint, baton);
                 });
-            },
+            }
+        };
+
+        var appointments = [];
+
+        _(analysis.annotations).each(function (annotation) {
+            if (annotation.appointment) {
+                appointments.push(annotation.appointment);
+            }
+        });
+
+        _(analysis.changes).each(function (change) {
+            var appointment = change.newAppointment || change.currentAppointment || change.deletedAppointment;
+            if (appointment) {
+                appointments.push(appointment);
+            }
+        });
+
+
+        var after = {
             'inline-links': function () {
                 var $actions = $('<div class="itip-actions">');
                 _(priority).each(function (action) {
@@ -142,17 +161,19 @@ define('io.ox/calendar/invitations/register',
                         $actions.append("&nbsp;");
                     }
                 });
-                require(["io.ox/core/extPatterns/links"], function (links) {
-                    new links.DropdownLinks({
-                            id: 'dropdown-links',
-                            ref: 'io.ox/mail/links/inline',
-                            classes: 'btn dropdown-right',
-                            label: gt("More"),
-                            open: 'left'
-                        }
-                    ).draw.call($actions, baton);
+                var $box = $('<div class="well">').appendTo($node);
+                $box.append($('<span class="muted">').text(gt("This email contains an appointment")));
+                _(appointments).each(function (appointment) {
+                    var recurrenceString = util.getRecurrenceString(appointment);
+                    $("<div>").append(
+                        $("<b>").text(appointment.title), $.txt(", "),
+                        $("<span>").addClass("day").append(
+                            $.txt(gt.noI18n(util.getDateInterval(appointment))),
+                            $.txt(gt.noI18n((recurrenceString !== "" ? " \u2013 " + recurrenceString : "")))
+                        )
+                    ).appendTo($box);
                 });
-                $node.append($actions);
+                $box.append($actions);
             }
         };
 
@@ -173,6 +194,9 @@ define('io.ox/calendar/invitations/register',
                 } else {
                     extension.invoke('draw', $node, baton);
                 }
+            }
+            if (after[extension.id]) {
+                after[extension.id]();
             }
         });
 
@@ -284,23 +308,42 @@ define('io.ox/calendar/invitations/register',
     });
 
     ext.point('io.ox/mail/detail').extend({
-        index: 165,
+        index: 175,
         id: 'accept-decline',
         draw: function (baton) {
-            var $actions = $('<div class="itip-actions">').appendTo(this);
+            var $actions, $appointmentInfo;
+
 
             if (baton.data.headers["X-OX-Reminder"] && baton.data.headers["X-Open-Xchange-Module"] === "Appointments") {
+                $('<div class="well">').append(
+                    $('<span class="muted">').text(gt("This email contains an appointment")),
+                    $("<br>"),
+                    $appointmentInfo = $('<div class="appointmentInfo">'),
+                    $actions = $('<div class="itip-actions">')
+                ).appendTo(this);
                 require(["io.ox/calendar/api"], function (calendarAPI) {
                     var address = baton.data.headers["X-OX-Reminder"].split(/,\s*/);
                     var id = address[0], folder = address[1];
 
                     $actions.append(
-                        $('<button class="btn btn-success" data-action="1">').text("Accept"),
+                        $('<button class="btn btn-danger" data-action="2">').text("Decline"),
                         "&nbsp;",
                         $('<button class="btn btn-warning" data-action="3">').text("Tentative"),
                         "&nbsp;",
-                        $('<button class="btn btn-danger" data-action="2">').text("Decline")
+                        $('<button class="btn btn-success" data-action="1">').text("Accept")
                     );
+
+                    calendarAPI.get({folder: folder, id: id}).done(function (appointment) {
+                        var recurrenceString = util.getRecurrenceString(appointment);
+                        $appointmentInfo.append(
+                            $("<b>").text(appointment.title), $.txt(", "),
+                            $("<span>").addClass("day").append(
+                                $.txt(gt.noI18n(util.getDateInterval(appointment))),
+                                $.txt(gt.noI18n((recurrenceString !== "" ? " \u2013 " + recurrenceString : "")))
+                            )
+                        );
+                        
+                    });
 
                     $actions.on("click", "button", function (e) {
                         calendarAPI.confirm({
