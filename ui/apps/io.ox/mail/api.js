@@ -299,7 +299,7 @@ define("io.ox/mail/api",
     // publish tracker
     api.tracker = tracker;
 
-    api.separator = config.get('modules.mail.defaultseparator', '/');
+    api.separator = settings.get('defaultseparator', '/');
 
     api.SENDTYPE = {
         NORMAL:  '0',
