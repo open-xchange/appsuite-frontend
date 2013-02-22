@@ -425,7 +425,7 @@ define("io.ox/calendar/view-detail",
             if (attachmentsBusy) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
-                        $node = $('<div>').css({width: '30%', height: '10px'}).busy()
+                        $node = $('<div>').css({width: '30%', height: '12px'}).busy()
                     );
             } else if (data.number_of_attachments && data.number_of_attachment !== 0) {
                 this.append(

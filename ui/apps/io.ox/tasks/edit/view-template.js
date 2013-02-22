@@ -19,8 +19,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/calendar/util',
                                           'io.ox/participants/views',
                                           'io.ox/core/tk/attachments',
+                                          'io.ox/tasks/api',
                                           'io.ox/core/extensions'],
-                                          function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
+                                          function (gt, views, date, notifications, forms, util, pViews, attachments, api, ext) {
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -504,7 +505,15 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1900,
-        module: 4
+        module: 4,
+        finishedCallback: function (model, id) {
+            var obj = {};
+            obj.id = model.attributes.id || id;
+            obj.folder_id = model.attributes.folder_id || model.attributes.folder;
+            api.removeFromCache(encodeURIComponent(_.cid(obj)));
+            api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(obj)), false);
+            api.trigger('update:' + encodeURIComponent(_.cid(obj)));
+        }
     }));
 
     point.basicExtend({

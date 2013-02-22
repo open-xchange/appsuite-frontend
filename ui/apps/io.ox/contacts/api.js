@@ -80,6 +80,8 @@ define('io.ox/contacts/api',
         wat(data, 'email3');
 
         var method, body;
+        var attachmentHandlingNeeded = data.tempAttachmentIndicator;
+        delete data.tempAttachmentIndicator;
 
         if (file) {
             var body = new FormData();
@@ -111,6 +113,9 @@ define('io.ox/contacts/api',
                     fetchCache.clear()
                 )
                 .pipe(function () {
+                    if (attachmentHandlingNeeded) {
+                        api.trigger('AttachmentHandlingInProgress:' + d.folder_id + '.' + d.id, {state: true, redraw: true});
+                    }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
                     return d;

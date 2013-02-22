@@ -99,6 +99,8 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     
     api.create = function (task) {
         task.participants = repairParticipants(task.participants);
+        var attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        delete task.tempAttachmentIndicator;
         return http.PUT({
             module: 'tasks',
             params: {action: 'new',
@@ -106,6 +108,9 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             data: task,
             appendColumns: false
         }).done(function (response) {
+            if (attachmentHandlingNeeded) {
+                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(task)), true);
+            }
             api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
             return response;
         });
@@ -185,58 +190,68 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
 
     api.update = function (task, newFolder) {
-                //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
-                if (arguments.length > 2) {
-                    console.log("Using old api signature.");
-                    task = arguments[2];
-                    task.folder_id = arguments[3];
-                    task.id = arguments[1];
-                }
+        var attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        delete task.tempAttachmentIndicator;
+        
+        //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
+        if (arguments.length > 2) {
+            console.log("Using old api signature.");
+            task = arguments[2];
+            task.folder_id = arguments[3];
+            task.id = arguments[1];
+        }
                 
-                var useFolder = task.folder_id || task.folder,
-                    timestamp = task.last_modified || _.now();
+        var useFolder = task.folder_id || task.folder,
+            timestamp = task.last_modified || _.now();
                 
-                if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
-                    task.folder_id = newFolder;
-                }
-                task.notification = true;//set allways (OX6 does this too)
+        if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
+            task.folder_id = newFolder;
+        }
+        task.notification = true;//set allways (OX6 does this too)
                 
-                if (useFolder === undefined) {//if no folder is given use default
-                    useFolder = api.getDefaultFolder();
-                }
+        if (useFolder === undefined) {//if no folder is given use default
+            useFolder = api.getDefaultFolder();
+        }
                 
-                if (task.status === 3 || task.status === '3') {
-                    task.date_completed = _.now();
-                } else if (task.status !== 3 && task.status !== '3') {
-                    task.date_completed = null;
-                }
+        if (task.status === 3 || task.status === '3') {
+            task.date_completed = _.now();
+        } else if (task.status !== 3 && task.status !== '3') {
+            task.date_completed = null;
+        }
                 
-                var key = useFolder + '.' + task.id;
-                return http.PUT({
-                    module: 'tasks',
-                    params: {action: 'update',
-                        folder: useFolder,
-                        id: task.id,
-                        timestamp: timestamp,
-                        timezone: 'UTC'
-                    },
-                    data: task,
-                    appendColumns: false
-                }).pipe(function () {
-                    // update cache
-                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
-                }).pipe(function () {
-                    //return object with id and folder id needed to save the attachments correctly
-                    var obj = {folder_id: useFolder, id: task.id};
-                    //notification check
-                    api.checkForNotifications([obj], task);
-                    return obj;
-                }).done(function () {
-                    //trigger refresh, for vGrid etc
-                    api.trigger('refresh.all');
-                });
+        var key = useFolder + '.' + task.id;
+        return http.PUT({
+            module: 'tasks',
+            params: {action: 'update',
+                folder: useFolder,
+                id: task.id,
+                timestamp: timestamp,
+                timezone: 'UTC'
+            },
+            data: task,
+            appendColumns: false
+        }).pipe(function () {
+            // update cache
+            return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+        }).pipe(function () {
+            //return object with id and folder id needed to save the attachments correctly
+            var obj = {folder_id: useFolder, id: task.id};
+            //notification check
+            api.checkForNotifications([obj], task);
+            return obj;
+        }).done(function () {
+            if (attachmentHandlingNeeded) {
+                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(task)), true);
+            }
+            //trigger refresh, for vGrid etc
+            api.trigger('refresh.all');
+        });
 
-            };
+    };
+    
+    api.removeFromCache = function (key) {
+        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+    };
             
     //used by done/undone actions when used with multiple selection
     api.updateMultiple = function (list, modifications) {

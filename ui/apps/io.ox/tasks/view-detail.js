@@ -19,7 +19,8 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                    'io.ox/tasks/actions',
                                    'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
     'use strict';
-
+    
+    var attachmentsBusy = false; //check if attachments are uploding atm
     var taskDetailView = {
 
         draw: function (data) {
@@ -27,7 +28,10 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             if (!data) {
                 return $('<div>');
             }
-
+            
+            api.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
+            api.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
+            
             var task = util.interpretTask(data, true),
                 // outer node
                 self = this;
@@ -39,7 +43,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
 
                 infoPanel = $('<div>').addClass('info-panel');
-
+            
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
@@ -111,7 +115,13 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
             $('<div>').text(gt.noI18n(task.title)).addClass('title clear-title').appendTo(node);
 
-            if (task.number_of_attachments > 0) {
+            if (attachmentsBusy) {
+                $('<div>').addClass('attachments-container')
+                    .append(
+                        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
+                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
+                    .appendTo(node);
+            } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', node, task);
             }
 
@@ -202,7 +212,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             return node;
         }
     };
-
+    
     // inline links for each task
     ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,
@@ -238,6 +248,10 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             });
         }
     });
+    
+    function setAttachmentsbusy(e, state) {
+        attachmentsBusy = state;
+    }
 
     var attachmentFail = function (container, task) {
         container.empty().append(

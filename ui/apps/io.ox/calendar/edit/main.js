@@ -113,8 +113,13 @@ define('io.ox/calendar/edit/main',
                                 });
                             }
                             self.model.on('create update', _.bind(self.onSave, self));
-                            self.model.on('backendError', function () {
-                                self.getWindow().idle();
+                            self.model.on('backendError', function (response) {
+                                try {
+                                    self.getWindow().idle();
+                                } catch (e) {
+                                    notifications.yell('error', response.error);
+                                }
+                                
                             });
 
                             self.setTitle(gt('Edit appointment'));

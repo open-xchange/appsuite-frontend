@@ -193,7 +193,6 @@ define("io.ox/calendar/api",
         
         //used to cleanup Cache and trigger refresh after attachmentHandling
         attachmentCallback: function (obj) {
-            console.log(obj);
             all_cache = {};
             var key = obj.folder_id + "." + obj.id + "." + (obj.recurrence_position || 0);
             delete get_cache[key];
