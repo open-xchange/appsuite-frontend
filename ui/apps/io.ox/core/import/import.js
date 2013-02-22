@@ -84,6 +84,19 @@ define('io.ox/core/import/import',
         }
     });
 
+    ext.point('io.ox/core/import/format').extend({
+        id: 'vcard',
+        index: 100,
+        draw: function (baton) {
+            if (baton.module === 'contacts') {
+                require(['io.ox/' + baton.module + '/api'], function (api) {
+                    baton.api = api;
+                });
+                return $('<option value="VCARD">').text(gt('vCard'));
+            }
+        }
+    });
+
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
