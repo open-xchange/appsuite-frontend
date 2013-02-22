@@ -31,9 +31,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
             api.getRules('vacation').done(function (data) {
                 var vacationData = data[0].actioncmds[0];
                 vacationData.active = data[0].active;
+
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
 
                 var vacationNotice = new VacationEdit({model: factory.create(vacationData)});
+
+                _(vacationData.addresses).each(function (mail) {
+                    vacationNotice.model.set(mail, true);
+                });
 
                 $node.append(vacationNotice.render().$el);
 

@@ -84,14 +84,20 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             selectOptions: multiValues.days
         }));
 
-        point.extend(new forms.SelectBoxField({
+        point.extend(new forms.SectionLegend({
             id: ref + '/edit/view/addresses',
             index: 250,
-            label: model.fields.addresses,
-            attribute: 'addresses',
-            multiple: true,
-            selectOptions: multiValues.aliases
+            label: gt('E-mail addresses')
         }));
+
+        _(multiValues.aliases).each(function (alias) {
+            point.extend(new forms.CheckBoxField({
+                id: ref + '/edit/view/' + alias,
+                index: 250,
+                label: alias,
+                attribute: alias
+            }));
+        });
 
 //        point.extend(new forms.DateControlGroup({
 //            id: ref + '/edit/view/dateFrom',

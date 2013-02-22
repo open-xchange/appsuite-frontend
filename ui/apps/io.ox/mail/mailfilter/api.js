@@ -39,22 +39,11 @@ define("io.ox/mail/mailfilter/api",
         },
 
         update: function (data) {
-            delete data.folder;
 
-            var preparedData = {
-                    "actioncmds": [data],
-                    "id": 0
-                };
-            if (data.active) {
-                preparedData.active = data.active;
-                delete data.active;
-            } else {
-                preparedData.active = false;
-            }
             return http.PUT({
                 module: "mailfilter",
                 params: {action: "update"},
-                data: preparedData
+                data: data
             });
         }
     };

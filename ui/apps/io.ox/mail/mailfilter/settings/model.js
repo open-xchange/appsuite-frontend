@@ -23,7 +23,41 @@ define('io.ox/mail/mailfilter/settings/model',
     function buildFactory(ref, api) {
         var factory = new ModelFactory({
             api: api,
-            ref: ref
+            ref: ref,
+
+            update: function (model) {
+
+                var addresses = [];
+                _(model.attributes).each(function (value, attribute) {
+                    if (attribute !== 'active' && value === true) {
+                        addresses.push(attribute);
+                    }
+                });
+
+                var newAttributes = {
+                    days: model.attributes.days,
+                    id: model.attributes.id,
+                    subject: model.attributes.subject,
+                    text: model.attributes.text
+                };
+
+                if (!_.isEmpty(addresses)) {
+                    newAttributes.addresses = addresses;
+                }
+
+                var preparedData = {
+                        "actioncmds": [newAttributes],
+                        "id": 0
+                    };
+                if (model.attributes.active) {
+                    preparedData.active = model.attributes.active;
+                    delete model.attributes.active;
+                } else {
+                    preparedData.active = false;
+                }
+
+                return api.update(preparedData);
+            }
 
         });
 
