@@ -342,7 +342,7 @@ define('plugins/portal/twitter/register',
                     'data-count': 'none',
                     'data-size': 'large',
                     'data-lang': ox.language.split('_')[0],
-                    'data-url': '',
+                    'data-url': ' ', //need to provide %20 here, so twitter detects, we set some data
                     'data-text': ' ' //there must be text in the text attribute, may be we could add an input field to the sidebar
                                       //to pre-fill the popup, leaving the default message empty for now
                 }),
