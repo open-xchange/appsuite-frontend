@@ -23,7 +23,7 @@ define('io.ox/calendar/invitations/register',
         'accept_and_ignore_conflicts': gt("Accept"),
         'accept_party_crasher': gt("Add new participant"),
         'create': gt("Accept"),
-        'update': gt("Update"),
+        'update': gt("Accept changes"),
         'delete': gt("Delete"),
         'declinecounter': gt("Reject changes"),
         'tentative': gt("Tentative"),
@@ -36,10 +36,10 @@ define('io.ox/calendar/invitations/register',
         'accept_and_replace': 'btn-primary',
         'accept_and_ignore_conflicts': 'btn-success',
         'accept_party_crasher': 'btn-primary',
-        'create': 'btn-success',
-        'update': 'btn-primary',
-        'delete': 'btn-primary',
-        'declinecounter': 'btn-danger',
+        'create': 'pull-left btn-primary',
+        'update': 'pull-left btn-primary',
+        'delete': 'pull-left btn-primary',
+        'declinecounter': 'pull-left btn-danger',
         'tentative': 'btn-warning',
         'decline': 'btn-danger',
         'ignore': ''
@@ -64,7 +64,7 @@ define('io.ox/calendar/invitations/register',
         3: gt("You have tentatively accepted the appointment")
     };
 
-    var priority = ['ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'update', 'delete'];
+    var priority = ['update', 'ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
 
 
 
@@ -133,6 +133,10 @@ define('io.ox/calendar/invitations/register',
 
         var after = {
             'inline-links': function () {
+                if (analysis.actions.length === 1 && analysis.actions[0] === 'ignore') {
+                    return;
+                }
+
                 var $actions = $('<div class="itip-actions">');
                 _(priority).each(function (action) {
                     if (_(analysis.actions).contains(action)) {
@@ -162,7 +166,7 @@ define('io.ox/calendar/invitations/register',
                     }
                 });
                 var $box = $('<div class="well">').appendTo($node);
-                $box.append($('<span class="muted">').text(gt("This email contains an appointment")));
+                $box.append($('<span class="muted introduction">').text(gt("This email contains an appointment")));
                 _(appointments).each(function (appointment) {
                     var recurrenceString = util.getRecurrenceString(appointment);
                     $("<div>").append(
@@ -173,7 +177,18 @@ define('io.ox/calendar/invitations/register',
                         )
                     ).appendTo($box);
                 });
+
+                _(analysis.changes).each(function (change) {
+                    $box.append(renderDiffDescription(change));
+                });
+
+                if (appointments.length === 0) {
+                    $box.find(".introduction").remove();
+                }
+
                 $box.append($actions);
+            
+            
             }
         };
 
@@ -206,7 +221,7 @@ define('io.ox/calendar/invitations/register',
     function renderAnnotation($node, annotation, analysis, detailPoint, baton) {
         $node.append(
             $('<div class="annotation">').append(
-                $('<div class="message">').append(annotation.message),
+                $('<div class="message alert">').append(annotation.message),
                 renderAppointment(annotation.appointment, baton, detailPoint)
             )
         );
@@ -215,8 +230,6 @@ define('io.ox/calendar/invitations/register',
     function renderChange($node, change, analysis, detailPoint, baton) {
         $node.append(
             $('<div class="change">').append(
-                $('<div class="introduction">').append(change.introduction),
-                renderDiffDescription(change),
                 renderConflicts(change),
                 renderAppointment(change.newAppointment || change.currentAppointment || change.deletedAppointment, detailPoint, baton)
             )
@@ -257,7 +270,7 @@ define('io.ox/calendar/invitations/register',
         var text = gt.format(gt.ngettext('You already have %1$d appointment in this timeframe.',
             'You already have %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
-        $node.append($('<div class="alert">').append(text).append($('<a href="#">').text(gt(" Show"))).on("click", function (e) {
+        $node.append($('<div class="alert alert-error">').append(text).append($('<a href="#">').text(gt(" Show"))).on("click", function (e) {
             e.preventDefault();
             
             require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
