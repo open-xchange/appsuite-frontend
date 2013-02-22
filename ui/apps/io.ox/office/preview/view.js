@@ -48,7 +48,7 @@ define('io.ox/office/preview/view',
             model = null,
 
             // the root node containing the current page contents
-            pageNode = $('<div>', { tabindex: 0 }).addClass('page'),
+            pageNode = $('<div>', { tabindex: -1 }).addClass('page'),
 
             // current page index (one-based!)
             page = 0,

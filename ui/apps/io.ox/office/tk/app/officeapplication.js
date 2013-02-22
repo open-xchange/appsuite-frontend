@@ -240,6 +240,9 @@ define('io.ox/office/tk/app/officeapplication',
             // the controller instance as single connection point between model and view
             controller = null,
 
+            // whether the document is completely imported
+            imported = false,
+
             // browser timeouts for delayed callbacks, mapped by initial setTimeout() call
             delayTimeouts = {},
 
@@ -247,7 +250,13 @@ define('io.ox/office/tk/app/officeapplication',
             debounceTimeouts = {},
 
             // counter for unique indexes of all debounced methods
-            debounceCount = 0;
+            debounceCount = 0,
+
+            // whether deferred execution of debounced methods is currently locked
+            debouncedLocks = 0,
+
+            // debounced methods waiting for execution while deferrred execution is locked
+            lockedDebouncedCallbacks = [];
 
         // private methods ----------------------------------------------------
 
@@ -278,6 +287,7 @@ define('io.ox/office/tk/app/officeapplication',
                     self.trigger('docs:import:after');
                 })
                 .done(function () {
+                    imported = true;
                     self.trigger('docs:import:success');
                 })
                 .fail(function (result) {
@@ -455,6 +465,18 @@ define('io.ox/office/tk/app/officeapplication',
         this.updateTitle = function () {
             this.setTitle(this.getShortFileName() || gt('Unnamed'));
             return this;
+        };
+
+        /**
+         * Return whether importing the document has been completed. Will be
+         * false before this application triggers the 'docs:import:success'
+         * event, and true afterwards.
+         *
+         * @returns {Boolean}
+         *  Whether importing the document has been completed.
+         */
+        this.isImportFinished = function () {
+            return imported;
         };
 
         // server requests ----------------------------------------------------
@@ -768,12 +790,22 @@ define('io.ox/office/tk/app/officeapplication',
 
                 // create a new timeout that calls the deferred callback
                 debounceTimeouts[index] = window.setTimeout(function () {
-                    // first delete the timeout from the map
-                    // (allow to call ourselves from deferred callback)
-                    delete debounceTimeouts[index];
-                    // call deferred callback, recall it if it returns true
-                    if (deferredCallback.call(self) === true) {
-                        createTimeout(repeatedDelay);
+
+                    // unregisters and executes the deferred callback
+                    function executeDeferredCallBack() {
+                        // first delete the timeout from the map
+                        // (allow to call ourselves from deferred callback)
+                        delete debounceTimeouts[index];
+                        // call deferred callback, recall it if it returns true
+                        if (deferredCallback.call(self) === true) {
+                            createTimeout(repeatedDelay);
+                        }
+                    }
+
+                    if (debouncedLocks === 0) {
+                        executeDeferredCallBack();
+                    } else {
+                        lockedDebouncedCallbacks.push(executeDeferredCallBack);
                     }
                 }, delay);
             }
@@ -791,6 +823,80 @@ define('io.ox/office/tk/app/officeapplication',
                     return directCallback.apply(self, _.toArray(arguments));
                 }
             };
+        };
+
+        /**
+         * Prevents deferred execution of debounced methods. Each call of this
+         * method must be reverted by a corresponding call to the method
+         * OfficeApplication.unlockDebouncedMethods(). To prevent dead locks,
+         * this method MUST NOT be used in the implementation of a debounced
+         * method itself.
+         *
+         * @returns {OfficeApplication}
+         *  A reference to this application instance.
+         */
+        this.lockDebouncedMethods = function () {
+            debouncedLocks += 1;
+            return this;
+        };
+
+        /**
+         * Unlocks a lock for the deferred execution of debounced methods. If
+         * the last lock has been unlocked, all pending debounced methods will
+         * be executed. To prevent dead locks, this method MUST NOT be used in
+         * the implementation of a debounced method itself.
+         *
+         * @param {Object} [options]
+         *  A map with options that control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.async=false]
+         *      If set to true, the pending debounced methods will be executed
+         *      asynchronously in a browser timeout loop. The Promise returned
+         *      by this method will be resolved after executing all debounced
+         *      methods, and will be notified about the progress of the
+         *      operation.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved immediately
+         *  if deferred execution of debounced methods is still locked, or
+         *  after the pending debounced methods have been executed
+         *  synchronously. In case of asynchronous execution, the Promise will
+         *  be resolved after the timeout loop that executes all pending
+         *  debounced methods.
+         */
+        this.unlockDebouncedMethods = function (options) {
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // local copy of the pending callbacks
+                pendingCallbacks = null,
+                // index of next pending callbacks
+                index = 0;
+
+            debouncedLocks = Math.max(debouncedLocks - 1, 0);
+            if ((debouncedLocks === 0) && (lockedDebouncedCallbacks.length > 0)) {
+                if (Utils.getBooleanOption(options, 'async', false)) {
+                    pendingCallbacks = _.clone(lockedDebouncedCallbacks);
+                    lockedDebouncedCallbacks = [];
+                    self.executeDelayed(function () {
+                        def.notify(index / pendingCallbacks.length);
+                        pendingCallbacks[index]();
+                        index += 1;
+                        if (index < pendingCallbacks.length) { return true; }
+                        def.notify(1).resolve();
+                    }, 0, 2);
+                } else {
+                    _(lockedDebouncedCallbacks).each(function (executeDeferredCallBack) {
+                        executeDeferredCallBack();
+                    });
+                    lockedDebouncedCallbacks = [];
+                    def.resolve();
+                }
+            } else {
+                def.resolve();
+            }
+
+            return def.promise();
         };
 
         /**
@@ -1047,7 +1153,6 @@ define('io.ox/office/tk/app/officeapplication',
                 callHandlers(initHandlers)
                 .always(function () {
                     self.trigger('docs:init:after');
-                    controller.update();
                     // this resumes pending window 'open' event handler
                     initDef.resolve();
                 })
