@@ -745,12 +745,12 @@ a.button {
 }
 
 .vgrid-cell-checkbox {
-    width: 30px;
+    position: absolute;
+	left: 0;
+	width: 30px;
     height: 100% !important;
-    float: left;
     display: none;
     cursor: pointer;
-    margin: -5px 0 -5px -13px;
     padding: 5px 0 6px 13px;
 }
 
@@ -765,6 +765,10 @@ a.button {
 
 .vgrid.editable .vgrid-cell-checkbox {
     display: block;
+}
+
+.vgrid.editable .vgrid-cell {
+	padding-left: 43px; /* width + padding of .vgrid-cell-checkbox */
 }
 
 .vgrid-cell.odd {
