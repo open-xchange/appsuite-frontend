@@ -28,8 +28,6 @@ define('io.ox/core/settings/pane',
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
-
-
     ext.point("io.ox/core/settings/detail").extend({
         index: 100,
         id: 'extensions',
@@ -212,8 +210,14 @@ define('io.ox/core/settings/pane',
             index: 600,
             attribute: 'autoLogout',
             label: gt("Auto Logout"),
-            selectOptions: options
+            selectOptions: options,
+            updateModel: function () {
+                this.setValueInModel(this.nodes.element.val());
+                ox.autoLogoutRestart();
+            }
         }));
+
+
     }());
 
     point.basicExtend({

@@ -695,6 +695,12 @@ $(window).load(function () {
                     setDefaultLanguage()
                 )
                 .always(function () {
+
+                    // autologout message
+                    if (_.url.hash("autologout")) {
+                        $('#io-ox-login-header').append($('<small>').text(gt('autologout')));
+                    }
+
                     // supported browser?
                     if (!browserCheck()) {
                         // warn user

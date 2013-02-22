@@ -30,7 +30,10 @@ define("io.ox/core/main",
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
 
-    var logout = function () {
+    var logout = function (opt) {
+        opt = _.extend({
+            autologout: false
+        }, opt || {});
         $("#background_loader").fadeIn(DURATION, function () {
             $("#io-ox-core").hide();
 
@@ -46,7 +49,7 @@ define("io.ox/core/main",
 
             $.when.apply($, deferreds).always(function () {
                 session.logout().always(function () {
-                    _.url.redirect("signin");
+                    _.url.redirect("signin" + (opt.autologout ? "#autologout=true" : ""));
                 });
             });
         });
@@ -241,7 +244,9 @@ define("io.ox/core/main",
         // clear current timeout and reset activity status
         var resetTimeout = function () {
             clearTimeout(timeout);
-            timeout = setTimeout(logout, interval);
+            timeout = setTimeout(function () {
+                logout({autologout: true});
+            }, interval);
             timeoutStart = _.now();
             changed = false;
         };
@@ -258,28 +263,48 @@ define("io.ox/core/main",
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
 
                         var countdown = timeLeft,
-                            node = $('<span>').text(gt.format(gt.ngettext('Logout in %1$d Second', 'Logout in %1$d Seconds', countdown), gt.noI18n(countdown))),
+                            getString = function (sec) {
+                                return gt.format(
+                                    gt.ngettext(
+                                        'You will be automatically logged out in %1$d Second',
+                                        'You will be automatically logged out in %1$d Seconds', sec
+                                    ), gt.noI18n(sec)
+                                );
+                            },
+                            node = $('<span>').text(getString(countdown)),
                             countdownTimer = setInterval(function () {
                                 countdown--;
-                                node.text(gt.format(gt.ngettext('Logout in %1$d Second', 'Logout in %1$d Seconds', countdown), gt.noI18n(countdown)));
+                                node.text(getString(countdown));
                             }, 1000);
 
                         dialog = new dialogs.ModalDialog()
-                            .header($('<h3>').text(gt('Logout warning')))
+                            .header($('<h3>').text(gt('Logout')))
                             .append(node)
-                            .addDangerButton('abort', gt('Abort'))
+                            .addPrimaryButton('cancel', gt('Cancel'))
+                            .addDangerButton('force', gt('Logout now'))
+                            .setUnderlayStyle({
+                                backgroundColor: 'white',
+                                opacity: 0.90
+                            })
                             .show()
                             .done(function (action) {
-                                if (action === 'abort') {
+                                if (action === 'cancel') {
                                     resetTimeout();
                                     clearInterval(countdownTimer);
                                     dialog = null;
+                                }
+                                if (action === 'force') {
+                                    logout();
                                 }
                             });
 
                     });
                 }
             }
+        };
+
+        var change = function () {
+            changed = true;
         };
 
         var start = function () {
@@ -290,9 +315,7 @@ define("io.ox/core/main",
             if (interval > 0 && timeout === null) {
 
                 // bind mouse, keyboard and touch events to monitor user activity
-                $(document).on('mousedown mousemove scroll touchstart touchmove keydown', function () {
-                    changed = true;
-                });
+                $(document).on('mousedown mousemove scroll touchstart touchmove keydown', change);
                 // start timeout
                 resetTimeout();
                 // check every x seconds to reduce setTimeout operations
@@ -306,6 +329,7 @@ define("io.ox/core/main",
                 clearTimeout(timeout);
                 clearInterval(checker);
                 timeout = checker = null;
+                $(document).off('mousedown mousemove scroll touchstart touchmove keydown', change);
             }
         };
 
@@ -317,6 +341,13 @@ define("io.ox/core/main",
         ox.autoLogoutRestart = restart;
 
         start();
+
+        ox.autoLogoutRestartDebug = function () {
+            CHECKINTERVAL = 1;
+            WARNINGSTART = 10;
+            getInterval = function () { return 12000; };
+            restart();
+        };
 
     }());
 
