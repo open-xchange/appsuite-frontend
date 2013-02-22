@@ -108,7 +108,7 @@ define('io.ox/core/import',
     return {
         show: function (module, id) {
             var id = String(id),
-                dialog = new dialogs.ModalDialog({width: 500}),
+                dialog = new dialogs.ModalDialog({}),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}},
                 form;
 
