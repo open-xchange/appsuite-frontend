@@ -721,6 +721,7 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: false })
                 .done(function () {
+                    app.setFrom(data || {});
                     app.getEditor().focus();
                     win.idle();
                     def.resolve();
