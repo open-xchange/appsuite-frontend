@@ -149,9 +149,6 @@ define('io.ox/core/api/folder',
         },
 
         getSubFolders: function (options) {
-            if (options.all) {
-                options.cache = false;
-            }
             // options
             var opt = _.extend({
                     folder: '1',
@@ -159,9 +156,11 @@ define('io.ox/core/api/folder',
                     event: false,
                     cache: true,
                     storage: null
-                }, options || {}),
+                }, options || {});
+            if (opt.all) opt.cache = false;
+            
                 // get cache
-                cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
+            var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
                 // cache miss?
                 getter = function () {
                     return http.GET({

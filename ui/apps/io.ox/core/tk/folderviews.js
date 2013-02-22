@@ -291,7 +291,7 @@ define('io.ox/core/tk/folderviews',
 
         this.destroy = function () {
             // remove from parent node
-            var node = tree.getNode(data.folder_id);
+            var node = data && tree.getNode(data.folder_id);
             if (node) {
                 node.removeChild(this);
             }

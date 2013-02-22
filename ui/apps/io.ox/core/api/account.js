@@ -77,18 +77,6 @@ define('io.ox/core/api/account',
         ox.api.cache.folder1.remove(id);
     };
 
-    var invalidateUnifiedMail = function () {
-        var children = []
-            .concat(ox.api.cache.folder0.children(1))
-            .concat(ox.api.cache.folder1.children(1));
-        $.each(children, function (i, obj) {
-            if (ox.api.folder.is('unifiedmail', obj.id)) {
-                invalidateFolder(obj.id);
-                return false;
-            }
-        });
-    };
-
     var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator);
 
     var api = {};
@@ -106,9 +94,23 @@ define('io.ox/core/api/account',
     };
 
     // is drafts, trash, spam etc.
-    api.is = function (type, id) {
-        return typeHash[id] === type;
-    };
+    api.is = (function () {
+        var unifiedFolders = {
+            inbox:  /^default\d+\/INBOX(?:\/|$)/,
+            sent:   /^default\d+\/Sent(?:\/|$)/,
+            trash:  /^default\d+\/Trash(?:\/|$)/,
+            drafts: /^default\d+\/Drafts(?:\/|$)/,
+            spam:   /^default\d+\/Spam(?:\/|$)/
+        };
+        return function (type, id) {
+            if (api.isUnified(id)) {
+                var re = unifiedFolders[type];
+                return Boolean(re && re.test(id));
+            } else {
+                return typeHash[id] === type;
+            }
+        };
+    }());
 
     api.getFoldersByType = function (type) {
         return _(typeHash).chain().map(function (value, key) {

@@ -590,9 +590,11 @@
             return memo.add($.txt(_.noI18n(str)));
         }, $());
     };
-
-
-
+	
+    _.escapeRegExp = function (s) {
+        return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+    };
+    
     window.assert = function (value, message) {
         if (value) return;
         console.error(message || 'Assertion failed!');

@@ -1135,5 +1135,21 @@ define("io.ox/mail/api",
         api.options.requests.get.view = value ? 'noimg' : 'text';
     });
 
+    // RegExp suffix for recursive grepRemove:
+    // id + '/' for subfolders or id + DELIM for the top folder
+    var reSuffix = ')(?:/|' + _.escapeRegExp(DELIM) + ')';
+    
+    accountAPI.on('refresh.all account_created', function () {
+        folderAPI.getSubFolders().done(function (folders) {
+            var ids = [];
+            _.chain(folders).pluck('id')
+                .filter(accountAPI.isUnified)
+                .each(function (id) { ids.push(_.escapeRegExp(id)); });
+            var re = new RegExp('^(?:' + ids.join('|') + reSuffix);
+            api.caches.all.grepRemove(re);
+            _.each(folderAPI.caches, function (cache) { cache.grepRemove(re); });
+        });
+    });
+    
     return api;
 });

@@ -197,10 +197,13 @@ define('io.ox/core/cache',
 
         // grep remove
         this.grepRemove = function (pattern) {
-            var i = 0, $i = 0, reg = new RegExp(pattern);
+            var i = 0, $i = 0;
+            if (typeof pattern === 'string') {
+                pattern = new RegExp(_.escapeRegExp(pattern));
+            }
 
             var remover = function (key) {
-                if (reg.test(key)) {
+                if (pattern.test(key)) {
                     return index.remove(key);
                 }
             };
@@ -226,12 +229,14 @@ define('io.ox/core/cache',
         this.grepKeys = function (pattern) {
             return index.keys().done(function (keys) {
                 var $i = keys.length, i = 0,
-                    tmp = [], key,
-                    reg = new RegExp(pattern);
+                    tmp = [], key;
+                if (typeof pattern === 'string') {
+                    pattern = new RegExp(_.escapeRegExp(pattern));
+                }
 
                 for (; i < $i; i++) {
                     key = keys[i];
-                    if (reg.test(key)) {
+                    if (pattern.test(key)) {
                         tmp.push(key);
                     }
                 }
