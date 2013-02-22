@@ -601,6 +601,10 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
+                    // set data again, to use correct sender field
+                    // fixes a timing problem because select field is not fully
+                    // drawn, when setMail is called
+                    app.setFrom(data || {});
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {

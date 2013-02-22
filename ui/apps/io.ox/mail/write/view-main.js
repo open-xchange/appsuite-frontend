@@ -268,10 +268,6 @@ define("io.ox/mail/write/view-main",
                         displayname: address[0],
                         primaryaddress: address[1]
                     });
-                    // this code runs after setFrom in main.js, so we need to pre-select here
-                    if (address[1] === settings.get('defaultSendAddress')) {
-                        option.attr('selected', 'selected');
-                    }
                     select.append(option);
                 });
             });
