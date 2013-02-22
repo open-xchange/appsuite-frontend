@@ -351,7 +351,7 @@ define('io.ox/contacts/actions',
             });
         }
     });
-    
+
     //attachment actions
     new Action('io.ox/contacts/actions/preview-attachment', {
         id: 'preview',
@@ -541,10 +541,10 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'add-to-contactlist',
         index: INDEX += 100,
-        label: gt('Add to contact list'),
+        label: gt('Add to address book'),
         ref: 'io.ox/contacts/actions/add-to-contactlist'
     }));
-    
+
     // Attachments
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'preview',
