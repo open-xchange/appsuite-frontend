@@ -79,7 +79,7 @@ define('plugins/portal/facebook/register',
                 $('<div class="paragraph">').text(gt('No wall posts yet.')));
         } else {
             _(wall).each(function (post) {
-                var message = strings.shorten(post.message || post.description || '', 150);
+                var message = strings.shorten(post.message || post.description || post.attachment.caption || '', 150);
                 content.append(
                     $('<div class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
@@ -311,6 +311,17 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'location',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 285 && post.attachment && post.attachment.caption);
+        },
+        draw: function (post) {
+            this.text(post.attachment.caption);
         }
     });
 
