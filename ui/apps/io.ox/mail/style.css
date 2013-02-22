@@ -84,6 +84,10 @@
         color: #888 !important;
         -webkit-font-smoothing: antialiased;
     }
+    
+    &.deleted .label {
+        color: @white !important;
+    }
 
     &.selected.deleted * { color: @selectedColor !important; }
 }
