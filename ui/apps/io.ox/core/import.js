@@ -30,7 +30,7 @@ define('io.ox/core/import',
         id: 'default',
         draw: function (id, prefix) {
             this.append(
-                folderApi.getBreadcrumb(id, { prefix: prefix || '' })
+                folderApi.getBreadcrumb(id, { prefix: prefix || '' })
                 .css({'padding-top': '5px', 'padding-left': '5px'}),
                 $('<input type="hidden" name="folder">').val(id)
             );
@@ -68,6 +68,19 @@ define('io.ox/core/import',
                     baton.api = api;
                 });
                 return $('<option value="ICAL">').text(gt('iCal'));
+            }
+        }
+    });
+
+    ext.point('io.ox/core/import/format').extend({
+        id: 'csv',
+        index: 100,
+        draw: function (baton) {
+            if (baton.module === 'contacts') {
+                require(['io.ox/' + baton.module + '/api'], function (api) {
+                    baton.api = api;
+                });
+                return $('<option value="CSV">').text(gt('CSV'));
             }
         }
     });
@@ -135,8 +148,9 @@ define('io.ox/core/import',
                     })
                     .done(function (res) {
                         try {
-                            baton.api.caches.all.grepRemove(id + baton.api.DELIM);
-                            baton.api.trigger('refresh.all');
+                            baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
+                                baton.api.trigger('refresh.all');
+                            });
                         } catch (e) {
                             // if api is unknown, refresh everything
                             console.warn('import triggering global refresh because of unknown API', e);
