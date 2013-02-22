@@ -278,11 +278,11 @@ define("io.ox/core/main",
                             }, 1000);
 
                         dialog = new dialogs.ModalDialog()
-                            .header($('<h3>').text(gt('Logout')))
+                            .header($('<h3>').text(gt('Automatic logout')))
                             .append(node)
                             .topmost()
                             .addPrimaryButton('cancel', gt('Cancel'))
-                            .addDangerButton('force', gt('Logout now'))
+                            .addAlternativeButton('force', gt('Logout now'))
                             .setUnderlayStyle({
                                 backgroundColor: 'white',
                                 opacity: 0.90
@@ -311,7 +311,6 @@ define("io.ox/core/main",
         var start = function () {
 
             interval = getInterval();
-            timeoutStart = _.now();
 
             if (interval > 0 && timeout === null) {
 
