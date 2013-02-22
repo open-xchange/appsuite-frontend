@@ -147,5 +147,19 @@
                 </div>
             </div>
         </div>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATION_MAIL_HANDLING}}</legend>
+        <div class="form-horizontal">        
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.NOTIFICATION_MAILS_ARE_DELETED}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="deleteInvitationMailAfterAction" data-property="deleteInvitationMailAfterAction" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="deleteInvitationMailAfterAction" data-property="deleteInvitationMailAfterAction" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
+            </div>
+        </div>
     </extension>
 </part>

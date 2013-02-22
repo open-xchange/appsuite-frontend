@@ -28,7 +28,8 @@ function () {
         notifyNewModifiedDeleted: true,
         notifyAcceptedDeclinedAsCreator: false,
         notifyAcceptedDeclinedAsParticipant: false,
-        showAllPrivateAppointments: false
+        showAllPrivateAppointments: false,
+        deleteInvitationMailAfterAction: true
     };
 
     return settingsDefaults;

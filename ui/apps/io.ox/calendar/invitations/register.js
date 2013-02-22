@@ -64,7 +64,7 @@ define('io.ox/calendar/invitations/register',
         3: gt("You have tentatively accepted the appointment")
     };
 
-    var priority = ['ignore', 'decline', 'tentative', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'update', 'delete', 'accept'];
+    var priority = ['ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'update', 'delete'];
 
 
 
@@ -275,7 +275,7 @@ define('io.ox/calendar/invitations/register',
     }
 
     function deleteMailIfNeeded(baton) {
-        require(["io.ox/mail/api", "settings!io.ox/core/calendar"], function (api, settings) {
+        require(["io.ox/mail/api", "settings!io.ox/calendar"], function (api, settings) {
             if (settings.get("deleteInvitationMailAfterAction")) {
                 api.remove([baton.data]);
             }
