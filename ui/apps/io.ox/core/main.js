@@ -280,6 +280,7 @@ define("io.ox/core/main",
                         dialog = new dialogs.ModalDialog()
                             .header($('<h3>').text(gt('Logout')))
                             .append(node)
+                            .topmost()
                             .addPrimaryButton('cancel', gt('Cancel'))
                             .addDangerButton('force', gt('Logout now'))
                             .setUnderlayStyle({

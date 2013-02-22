@@ -329,6 +329,12 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             return this;
         };
 
+        this.topmost = function () {
+            nodes.underlay.addClass('topmost');
+            nodes.popup.addClass('topmost');
+            return this;
+        };
+
         this.setUnderlayStyle =  function (css) {
             nodes.underlay.css(css || {});
             return this;
