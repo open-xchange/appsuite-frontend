@@ -222,7 +222,7 @@ define('io.ox/core/commons-folderview',
 
         function importData(e) {
             e.preventDefault();
-            require(['io.ox/core/import'], function (importer) {
+            require(['io.ox/core/import/import'], function (importer) {
                 importer.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
             });
         }

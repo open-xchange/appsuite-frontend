@@ -12,7 +12,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/import',
+define('io.ox/core/import/import',
     ['io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/attachments',
@@ -21,7 +21,7 @@ define('io.ox/core/import',
     'io.ox/core/notifications',
     'io.ox/core/config',
     'gettext!io.ox/core',
-    'less!io.ox/backbone/forms.less'], function (ext, dialogs, attachments, folderApi, api, notifications, config, gt) {
+    'less!io.ox/core/import/style.less'], function (ext, dialogs, attachments, folderApi, api, notifications, config, gt) {
 
     'use strict';
 
