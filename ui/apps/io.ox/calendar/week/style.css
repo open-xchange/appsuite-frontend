@@ -419,12 +419,10 @@
         .toolbar .info {
            display: none;
         }
-
         .toolbar .showall {
             right: 30px;
             top: 47px;
         }
-
         .pagination {
             position: absolute;
             top: 9px;
@@ -452,9 +450,7 @@
         .week-container {
             left:  @SMALL-weekview-time-with;
         }
-
         .week-view-container {
-
             top: @weekview-toolbar-height + @weekview-footer-height + 7;
         }
    }

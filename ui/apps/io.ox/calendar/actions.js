@@ -108,7 +108,9 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
-        requires: 'one modify',
+        requires: function (e) {
+            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+        },
         action: function (baton) {
             var params = baton.data,
                 o = {
@@ -225,7 +227,9 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
-        requires: 'one create',
+        requires: function (e) {
+            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+        },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)
