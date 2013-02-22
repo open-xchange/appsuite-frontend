@@ -448,7 +448,7 @@ define('io.ox/mail/actions',
         id: 'ical',
         requires: function (e) {
             var context = e.context,
-                hasRightSuffix = context.filename && context.filename.match(/\.ics$/i) !== null,
+                hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
                 isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
@@ -860,7 +860,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
         index: 50,
-        label: gt('Create a contact from this'),
+        label: gt('Add to address book'),
         ref: 'io.ox/mail/actions/vcard'
     }));
 
