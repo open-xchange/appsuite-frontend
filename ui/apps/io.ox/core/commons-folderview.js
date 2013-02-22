@@ -400,7 +400,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
             fnChangeFolder, fnHide, fnShow, togglePermanent,
-            disablePermanent, enablePermanent,
+            disablePermanent, enablePermanent, enableResize,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -426,14 +426,15 @@ define('io.ox/core/commons-folderview',
         };
 
         disablePermanent = function () {
-            app.getWindow().nodes.body.removeClass('side-shift');
-            sidepanel.removeClass('side-shift');//css({ width: '', left: '0px' });
+            app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
+            sidepanel.removeClass('side-shift').attr('style', '');//css({ width: '', left: '0px' });
+
         };
 
         enablePermanent = function () {
             //var width = 250; //sidepanel.outerWidth();
             app.getWindow().nodes.body.addClass('side-shift');
-            sidepanel.addClass('side-shift');//css({ width: width + 'px', left: -width + 'px' });
+            sidepanel.addClass('side-shift').attr('style', '');//css({ width: width + 'px', left: -width + 'px' });
         };
 
         togglePermanent = function () {
@@ -441,6 +442,36 @@ define('io.ox/core/commons-folderview',
             options.permanent = !options.permanent;
             app.settings.set('folderview/permanent', options.permanent).save();
             return options.permanent;
+        };
+
+        enableResize = function () {
+            var resizeBar = $('<div>').addClass('resizebar');
+            sidepanel.append(resizeBar);
+            var maxSidePanelWidth = sidepanel.find('.folder-root').width() - resizeBar.width(),
+            minSidePanelWidth = sidepanel.width() - resizeBar.width(),
+            windowContainer = sidepanel.closest('.window-container-center'),
+            windowHeadWidth = windowContainer.find('.window-head').width();
+            if (maxSidePanelWidth <= minSidePanelWidth) {
+                return;
+            }
+            resizeBar.mousedown(function (e) {
+                e.preventDefault();
+                windowContainer.mousemove(function (e) {
+                    var newpos = e.pageX - windowHeadWidth - resizeBar.width(),
+                    sideShift = $(sidepanel).hasClass('side-shift');
+                    if (sideShift && newpos < maxSidePanelWidth && newpos > minSidePanelWidth) {
+                        sidepanel.css({width: newpos + resizeBar.width(), left: -newpos - resizeBar.width()})
+                            .closest('.window-body.side-shift').css('left', e.pageX);
+                    } else if (!sideShift && newpos < maxSidePanelWidth && newpos > minSidePanelWidth) {
+                        sidepanel.css({width: newpos})
+                            .closest('.window-body.side-shift').css('left', e.pageX);
+
+                    }
+                });
+            });
+            windowContainer.mouseup(function (e) {
+                windowContainer.unbind('mousemove');
+            });
         };
 
         fnHide = function () {
@@ -558,6 +589,10 @@ define('io.ox/core/commons-folderview',
                         $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
                         return false;
                     });
+
+                    if (!Modernizr.touch) {
+                        enableResize();
+                    }
 
                     initTree = loadTree = null;
                 });

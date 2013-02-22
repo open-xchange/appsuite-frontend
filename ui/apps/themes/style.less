@@ -1364,8 +1364,21 @@ input.nice-input {
 
     background-color: @foldertreeSidepanelBackground;
     width: 330px;
+    right: auto;
+    z-index: 3;
+    min-width: 330px;
 
     &.border-right { border: 0px none; }
+
+    .resizebar {
+        background: transparent;
+        width: 10px;
+        height: 100%;
+        position: relative;
+        z-index: 10000;
+        float: right;
+        cursor: e-resize;
+    }
 
     .foldertree-container {
 
@@ -1415,6 +1428,7 @@ input.nice-input {
     &.side-shift {
         width: @windowContentShift;
         left: 0 - @windowContentShift;
+        min-width: 250px;
     }
 }
 
