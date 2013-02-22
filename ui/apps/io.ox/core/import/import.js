@@ -30,8 +30,7 @@ define('io.ox/core/import/import',
         id: 'default',
         draw: function (id, prefix) {
             this.append(
-                folderApi.getBreadcrumb(id, { prefix: prefix || '' })
-                .css({'padding-top': '5px', 'padding-left': '5px'}),
+                folderApi.getBreadcrumb(id, { prefix: prefix || '' }),
                 $('<input type="hidden" name="folder">').val(id)
             );
         }
@@ -128,6 +127,7 @@ define('io.ox/core/import/import',
                     //buttons
                     ext.point('io.ox/core/import/buttons')
                         .invoke('draw', this);
+                    this.getPopup().addClass('import-dialog');
                 })
                 .show()
                 .done(function (action) {
