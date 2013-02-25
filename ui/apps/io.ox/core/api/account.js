@@ -217,6 +217,7 @@ define('io.ox/core/api/account',
             return http.GET({
                 module: 'account',
                 params: { action: 'all' },
+                appendColumns: true,
                 processResponse: true
             });
         };
