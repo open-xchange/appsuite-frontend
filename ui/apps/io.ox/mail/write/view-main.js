@@ -289,23 +289,21 @@ define("io.ox/mail/write/view-main",
                 .addClass('discreet')
                 .autocomplete({
                     source: function (val) {
-                        return accountAPI.getAllSenderAddresses().then(function (result) {
-                            result = result.filter(function (elem) {
-                                return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
+                        return autocompleteAPI.search(val).then(function (autocomplete_result) {
+                            return accountAPI.getAllSenderAddresses().then(function (result) {
+                                result = result.filter(function (elem) {
+                                    return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
+                                });
+                                return {list: result.concat(autocomplete_result), hits: result.length};
                             });
-                            return {list: result, hits: result.length};
                         });
                     },
                     draw: function (data, query) {
-                        var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
-                        this.append(
-                            name,
-                            $('<div class="ellipsis">').text(_.noI18n(data.email))
-                        );
+                        drawAutoCompleteItem(this, data, query);
                     },
                     reduce: function (data) {
                         data.list = _(data.list).map(function (elem) {
-                            return {data: {}, display_name: elem[0], email: elem[1]};
+                            return elem.type === 'contact' ? elem : {data: {}, display_name: elem[0], email: elem[1]};
                         });
                         return data;
                     },
