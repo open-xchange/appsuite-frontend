@@ -258,6 +258,8 @@ define('io.ox/office/tk/app/officeapplication',
             // debounced methods waiting for execution while deferrred execution is locked
             lockedDebouncedCallbacks = [];
 
+        self.fromNewFile = launchOptions.action === 'new';
+
         // private methods ----------------------------------------------------
 
         /**
@@ -1135,7 +1137,7 @@ define('io.ox/office/tk/app/officeapplication',
 
         // call all registered quit handlers
         this.setQuit(function () {
-
+            var ids = [{}];
             // return existing Deferred if a quit request is already running
             if (currentQuitDef && (currentQuitDef.state() === 'pending')) {
                 return currentQuitDef.promise();
@@ -1162,6 +1164,13 @@ define('io.ox/office/tk/app/officeapplication',
 
                     // base application does not trigger 'quit' events
                     self.trigger('docs:quit');
+
+                    if (self.fromNewFile && !model.hasCreatedOperations()) {
+                        //delete empty files
+                        _.extend(ids[0], self.getFileDescriptor());
+
+                        FilesAPI.remove(ids);
+                    }
 
                     // destroy class members
                     controller.destroy();
