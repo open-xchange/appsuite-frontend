@@ -445,18 +445,22 @@ define('io.ox/core/commons-folderview',
         };
 
         enableResize = function () {
-            var resizeBar = $('<div>').addClass('resizebar');
-            sidepanel.append(resizeBar);
-            var maxSidePanelWidth = sidepanel.find('.folder-root').width() - resizeBar.width(),
-            minSidePanelWidth = sidepanel.width() - resizeBar.width(),
-            windowContainer = sidepanel.closest('.window-container-center'),
-            windowHeadWidth = windowContainer.find('.window-head').width();
-            if (maxSidePanelWidth <= minSidePanelWidth) {
-                return;
+            var resizeBar, minSidePanelWidth, windowContainer, maxSidePanelWidth, windowHeadWidth;
+
+            sidepanel.append(resizeBar = $('<div>').addClass('resizebar'));
+            minSidePanelWidth = sidepanel.width() - resizeBar.width();
+
+            function getWidths() {
+                windowContainer   = sidepanel.closest('.window-container-center');
+                maxSidePanelWidth = windowContainer.width() / 2;
+                windowHeadWidth   = windowContainer.find('.window-head').width();
             }
-            resizeBar.mousedown(function (e) {
+
+            getWidths();
+
+            resizeBar.off('mousedown').on('mousedown', function (e) {
                 e.preventDefault();
-                windowContainer.mousemove(function (e) {
+                windowContainer.on('mousemove', function (e) {
                     var newpos = e.pageX - windowHeadWidth - resizeBar.width(),
                     sideShift = $(sidepanel).hasClass('side-shift');
                     if (sideShift && newpos < maxSidePanelWidth && newpos > minSidePanelWidth) {
@@ -469,9 +473,12 @@ define('io.ox/core/commons-folderview',
                     }
                 });
             });
-            windowContainer.mouseup(function (e) {
-                windowContainer.unbind('mousemove');
+
+            windowContainer.on('mouseup', function (e) {
+                windowContainer.off('mousemove');
             });
+
+            $(window).on('resize', _.debounce(getWidths, 200));
         };
 
         fnHide = function () {
