@@ -580,7 +580,7 @@ define("io.ox/mail/api",
                 return data;
             });
         }).done(function () {
-            notifications.yell('success', 'The folder has been emptyied.');
+            notifications.yell('success', 'The folder has been emptied.');
             folderAPI.reload(folder_id);
         });
     };
