@@ -1145,9 +1145,11 @@ define("io.ox/mail/api",
             _.chain(folders).pluck('id')
                 .filter(accountAPI.isUnified)
                 .each(function (id) { ids.push(_.escapeRegExp(id)); });
-            var re = new RegExp('^(?:' + ids.join('|') + reSuffix);
-            api.caches.all.grepRemove(re);
-            _.each(folderAPI.caches, function (cache) { cache.grepRemove(re); });
+            var re = new RegExp('(?:' + ids.join('|') + reSuffix);
+            $.when.apply($, _.map(
+                [api.caches.all].concat(_.toArray(folderAPI.caches)),
+                function (cache) { return cache.grepRemove(re); }
+            )).done(function () { api.trigger('refresh.all'); });
         });
     });
     
