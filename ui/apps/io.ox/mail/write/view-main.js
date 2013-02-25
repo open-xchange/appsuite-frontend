@@ -275,6 +275,7 @@ define("io.ox/mail/write/view-main",
         },
 
         createReplyToField: function () {
+            //TODO: once this is mapped to jslob, use settings here (key should be showReplyTo)
             if (config.get('ui.mail.replyTo.configurable', true) !== true) {
                 return;
             }
