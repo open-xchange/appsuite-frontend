@@ -1191,8 +1191,10 @@ define("io.ox/core/desktop",
                 $('<form class="form-search form-inline">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query" name="query">')
+                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query">')
                             .attr({
+                                name: 'query',
+                                autocomplete: 'off',
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
                                 id: searchId
