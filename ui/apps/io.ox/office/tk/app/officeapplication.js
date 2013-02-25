@@ -1129,7 +1129,7 @@ define('io.ox/office/tk/app/officeapplication',
                     def.resolve();
                 });
 
-                def.always(function () { win.idle(); });
+                // def.always(function () { win.idle(); }); // this can be done after documentLoaded in the model -> only one progress bar
             });
 
             return def.promise();
