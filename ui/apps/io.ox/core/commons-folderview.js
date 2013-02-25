@@ -185,7 +185,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var link = $('<a href="#" data-action="delete">').text(gt('Delete'));
                 this.append(
-                    $('<li class="divider">'),
+                    (baton.options.type === 'mail' ? '' : $('<li class="divider">')),
                     $('<li>').append(link)
                 );
                 if (api.can('deleteFolder', baton.data)) {

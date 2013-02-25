@@ -32,11 +32,9 @@ define('io.ox/mail/folderview-extensions',
         id: 'add-account',
         index: 200,
         draw: function (baton) {
-            if (baton.options.type === 'mail') {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
-                ));
-            }
+            this.append($('<li>').append(
+                $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
+            ));
         }
     });
     function subscribeIMAPFolder(e) {
@@ -48,12 +46,10 @@ define('io.ox/mail/folderview-extensions',
         id: 'subscribe-folder',
         index: 300,
         draw: function (baton) {
-            if (baton.options.type === 'mail') {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
-                    .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
-                ));
-            }
+            this.append($('<li>').append(
+                $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
+                .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
+            ));
         }
     });
 
@@ -72,8 +68,6 @@ define('io.ox/mail/folderview-extensions',
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
-            if (baton.options.type !== 'mail') return;
-
             this.append($('<li>').append(
                 $('<a href="#" data-action="markfolderread">').text(gt('Mark all mails as read'))
                 .on('click', { app: baton.app }, markMailFolderRead)
@@ -92,16 +86,36 @@ define('io.ox/mail/folderview-extensions',
         id: 'expunge',
         index: 75,
         draw: function (baton) {
-            if (baton.options.type === 'mail') {
-                var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
-                this.append($('<li>').append(link));
-                if (folderAPI.can('delete', baton.data)) {
-                    link.on('click', { baton: baton }, expungeFolder);
-                } else {link.addClass('disabled').on('click', $.preventDefault);
-                }
-                this.append($('<li class="divider">'));
+            var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
+            this.append($('<li>').append(link));
+            if (folderAPI.can('delete', baton.data)) {
+                link.on('click', { baton: baton }, expungeFolder);
+            } else {link.addClass('disabled').on('click', $.preventDefault);
+            }
+            this.append($('<li class="divider">'));
+        }
+    });
+
+    function clearFolder(e) {
+        e.preventDefault();
+        var baton = e.data.baton,
+        id = _(baton.app.folderView.selection.get()).first();
+        mailAPI.clear(id);
+    }
+
+    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        id: 'clear',
+        index: 450,
+        draw: function (baton) {
+            var link = $('<a href="#" data-action="clearfolder">').text(gt('Empty folder'));
+            this.append($('<li class="divider">'), $('<li>').append(link));
+            if (folderAPI.can('delete', baton.data)) {
+                link.on('click', { baton: baton }, clearFolder);
+            } else {
+                link.addClass('disabled').on('click', $.preventDefault);
             }
         }
     });
+
 
 });

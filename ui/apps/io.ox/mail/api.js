@@ -562,6 +562,29 @@ define("io.ox/mail/api",
         });
     };
 
+    api.clear = function (folder_id) {
+        notifications.yell('info', 'Emptying folder... This may take a few seconds.');
+        // new clear
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: '1'
+            },
+            data: [folder_id]
+        }).pipe(function (data) {
+            return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
+                api.trigger('refresh.all');
+                folderAPI.reload(folder_id);
+                return data;
+            });
+        }).done(function () {
+            notifications.yell('success', 'The folder has been emptyied.');
+            folderAPI.reload(folder_id);
+        });
+    };
+
     api.changeColor = function (list, label, local) {
 
         list = [].concat(list);
@@ -1138,7 +1161,7 @@ define("io.ox/mail/api",
     // RegExp suffix for recursive grepRemove:
     // id + '/' for subfolders or id + DELIM for the top folder
     var reSuffix = ')(?:/|' + _.escapeRegExp(DELIM) + ')';
-    
+
     accountAPI.on('refresh.all account_created', function () {
         folderAPI.getSubFolders().done(function (folders) {
             var ids = [];
@@ -1152,6 +1175,6 @@ define("io.ox/mail/api",
             )).done(function () { api.trigger('refresh.all'); });
         });
     });
-    
+
     return api;
 });
