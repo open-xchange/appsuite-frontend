@@ -301,11 +301,7 @@ define("io.ox/mail/write/view-main",
                         });
                     },
                     draw: function (data, query) {
-                        var name = data.display_name ? $('<div class="person-link ellipsis">').text(_.noI18n((data.display_name) + '\u00A0')) : '';
-                        this.append(
-                            name,
-                            $('<div class="ellipsis">').text(_.noI18n(data.email))
-                        );
+                        drawAutoCompleteItem(this, data, query);
                     },
                     reduce: function (data) {
                         data.list = _(data.list).map(function (elem) {
