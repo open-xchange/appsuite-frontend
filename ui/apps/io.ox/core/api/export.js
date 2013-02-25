@@ -45,6 +45,7 @@ define('io.ox/core/api/export',
             dataType: 'text'
         })
         .done(function (data) {
+            // only error messages will be returned as json
             try {
                 //qualified server error
                 data = $.parseJSON(data);
