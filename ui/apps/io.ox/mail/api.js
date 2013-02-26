@@ -845,7 +845,8 @@ define("io.ox/mail/api",
 
         var deferred,
             flatten = function (recipient) {
-                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''), address = recipient[1];
+                return name === '' ? address : '"' + name + '" <' + address + '>';
             };
 
         // clone data (to avoid side-effects)
