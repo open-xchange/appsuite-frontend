@@ -168,13 +168,13 @@ define('io.ox/core/api/account',
         // just for robustness
         if (!account) return [];
         // no addresses?
-        if (account.addresses === null && account.id === 0) {
+        if (!account.addresses && account.id === 0) {
             //FIXME: once the backend returns something in account.addresses,
             // it should be safe to remove this code
             return _(config.get('modules.mail.addresses')).map(function (address) {
                 return getAddressArray(account.personal, address);
             });
-        } else if (account.addresses === null) {
+        } else if (!account.addresses) { // null, undefined, empty
             return [getAddressArray(account.personal, account.primary_address)];
         }
         // looks like addresses continas primary address plus aliases
