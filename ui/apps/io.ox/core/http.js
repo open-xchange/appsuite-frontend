@@ -310,7 +310,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1036": "pop3_path",
             "1037": "personal",
             "1038": "reply_to",
-            "1039": "addresses"
+            "1039": "addresses",
+            "1040": "meta"
         },
         "attachment": {
             "1": "id",
