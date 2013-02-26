@@ -20,6 +20,7 @@ define('plugins/portal/recentfiles/register',
      'less!plugins/portal/recentfiles/style.css'], function (ext, filesApi, userApi, date, gt) {
 
     'use strict';
+
     var humanReadable = function (bytes) {
         var pos = 0,
             temp = bytes,
@@ -33,19 +34,7 @@ define('plugins/portal/recentfiles/register',
 
     ext.point('io.ox/portal/widget/recentfiles').extend({
 
-        title: 'Recently changed files',
-
-        isEnabled: function () {
-            return true;
-        },
-
-        requiresSetUp: function () {
-            return false;
-        },
-
-        performSetUp: function () {
-            return;
-        },
+        title: gt('Recently changed files'),
 
         load: function (baton) {
             return filesApi.search('', { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' })
@@ -68,61 +57,41 @@ define('plugins/portal/recentfiles/register',
         },
 
         preview: function (baton) {
-            var content = $('<div class="content recentfiles pointer">').appendTo(this),
+
+            var content = $('<div class="content recentfiles">').appendTo(this),
                 data = baton.data;
+
             if (!data || data.length === 0) {
-                content.text(gt("No files were uploaded recently"));
+                content.text(gt('No files were uploaded recently'));
                 return;
             }
+
             _(data).each(function (file) {
-                var myDate = new date.Local(file.last_modified).format(date.DATE_TIME),
-                    text = file.last_modified === file.creation_date ?
-                        gt("%1$s was created by %2$s") :
-                        gt("%1$s was modified by %2$s");
-                text = gt.format(text, '<b>' + (file.filename || file.title) + '</b>', file.modified_by.display_name);
-                $('<div class="item">').html(text).appendTo(content).on('click', function (clickEvent) {
-                    window.location = "#!&app=io.ox/files&folder=" + file.folder_id + "&id=" + file.folder_id + "." + file.id + "&perspective=list";
-                    location.reload(); //TODO: remove once OX starts to listen to fragment changes
-                });
+                var filename = String(file.filename || file.title || '');
+                // create nice filename for long names
+                if (filename.length > 20) {
+                    // remove leading & tailing date stufff
+                    filename = filename
+                        .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
+                        .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
+                }
+                content.append(
+                    $('<div class="item">').data('item', file).append(
+                        $('<b>').text(filename), $.txt(' '),
+                        $('<span class="gray">').text(file.modified_by.display_name)
+                    )
+                );
             });
         },
 
         draw: function (baton) {
-            var content = $('<div class="content recentfiles">').appendTo(this),
-                data = baton.data;
-
-            content.append($('<h1>').text(gt('Recently changed files')));
-
-            if (!data || data.length === 0) {
-                content.text(gt("No files were created or changed recently."));
-                return;
-            }
-
-            _(data).each(function (file) {
-                var myDate = new date.Local(file.last_modified).format(date.DATE_TIME),
-                    text;
-                if (file.last_modified === file.creation_date) {
-                    text = gt("Created by:");
-                } else {
-                    text = gt("Modified by:");
-                }
-                $('<div class="entry">').append(
-                    $('<a>').text(file.filename || file.title).on('click', function () {
-                        window.location = "#!&app=io.ox/files&folder=" + file.folder_id + "&id=" + file.folder_id + "." + file.id + "&perspective=list";
-                        location.reload(); //TODO: remove once OX starts to listen to fragment changes
-                    }),
-                    '<br/>',
-                    $('<span class="uploader">').text(text),
-                    $('<b class="uploader">').text(file.modified_by.display_name), //TODO halo here?
-                    '<br/>',
-                    $('<span class="date">').text(myDate),
-                    $('<span class="type">').text(file.mime_type),
-                    $('<span class="size">').text(humanReadable(file.file_size)),
-                    '<br />'
-                ).appendTo(content);
-
+            var popup = this.busy();
+            require(['io.ox/files/list/view-detail'], function (view) {
+                var obj = filesApi.reduce(baton.item);
+                filesApi.get(obj).done(function (data) {
+                    popup.idle().append(view.draw(data));
+                });
             });
-
         }
     });
 
