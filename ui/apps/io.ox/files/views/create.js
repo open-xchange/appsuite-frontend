@@ -77,7 +77,7 @@ define('io.ox/files/views/create', [
             index: 100,
             draw: function () {
                 this.append(
-                    $('<label>').text(gt('Title')),
+                    $('<label>').text(gt.pgettext('description', 'Title')),
                     $('<input type="text" name="title">').addClass('span12')
                 );
             }

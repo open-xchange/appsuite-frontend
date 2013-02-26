@@ -213,7 +213,7 @@ define('io.ox/contacts/model',
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        title: gt('Title'), // Anrede
+        title: gt.pgettext('salutation', 'Title'),
         street_home: gt('Street'),
         postal_code_home: gt('Postcode'),
         city_home: gt('Town'),
