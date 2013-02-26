@@ -11,17 +11,20 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
-                                 'io.ox/tasks/edit/view-template',
-                                 'io.ox/tasks/util',
-                                 'io.ox/tasks/model',
-                                 'io.ox/core/date',
-                                 'io.ox/tasks/edit/util',
-                                 'io.ox/core/extensions',
-                                 'io.ox/core/notifications',
-                                 'io.ox/backbone/views',
-                                 'io.ox/backbone/forms'],
-                                 function (gt, template, reminderUtil, model, date, util, ext, notifications, views, forms) {
+define('io.ox/tasks/edit/view',
+    ['gettext!io.ox/tasks/edit',
+     'io.ox/tasks/edit/view-template',
+     'io.ox/tasks/util',
+     'io.ox/tasks/model',
+     'io.ox/core/date',
+     'io.ox/tasks/edit/util',
+     'io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'io.ox/core/capabilities'
+    ], function (gt, template, reminderUtil, model, date, util, ext, notifications, views, forms, capabilities) {
+
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view'),
@@ -79,27 +82,33 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
                 detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
             this.$el.append(tabs.addClass('collapsed'), temp.content);
-            temp = null;
 
             //partitipants tab
             util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass('collapsed');
             util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass('collapsed');
 
             //attachmentTab
-            var attachmentTabheader = tabs.find('a:eq(1)');
-            this.on('attachmentCounterRefresh', function (e, number) {
-                e.stopPropagation();
-                attachmentTabheader.text(
-                    //#. %1$s is the number of currently attached attachments
-                    //#, c-format
-                    gt('Attachments (%1$s)', gt.noI18n(number)));
-            });
+            if (capabilities.has('infostore')) {
+                var attachmentTabheader = tabs.find('a:eq(1)');
+                this.on('attachmentCounterRefresh', function (e, number) {
+                    e.stopPropagation();
+                    attachmentTabheader.text(
+                        //#. %1$s is the number of currently attached attachments
+                        //#, c-format
+                        gt('Attachments (%1$s)', gt.noI18n(number)));
+                });
 
-            this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
-            util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
+                this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
+                util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
 
-            // Hide attachments on specific devices (boot.js)
-            if (!ox.uploadsEnabled) attachmentTabheader.hide();
+                // Hide attachments on specific devices (boot.js)
+                if (!ox.uploadsEnabled) attachmentTabheader.hide();
+            } else {
+                // remove tab header
+                temp.table.children().eq(1).remove();
+            }
+
+            temp = tabs = null;
 
             //detailstab
             util.buildExtensionRow(detailsTab, this.getRow(0, app, 'details'), self.baton);
