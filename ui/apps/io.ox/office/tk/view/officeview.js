@@ -199,21 +199,6 @@ define('io.ox/office/tk/view/officeview',
         };
 
         /**
-         * Inserts new DOM nodes temporarely into the body of the page.
-         *
-         * @param {HTMLElement|jQuery}
-         *  The DOM node(s) to be inserted into the application pane. If this
-         *  object is a jQuery collection, inserts all contained DOM nodes into
-         *  the application pane.
-         *
-         * @returns {OfficeView}
-         *  A reference to this instance.
-         */
-        this.insertContentNodeToBody = function (contentNode) {
-            $('body').append(contentNode);
-        };
-
-        /**
          * Adds the passed view pane instance into this view.
          *
          * @param {Pane} pane
