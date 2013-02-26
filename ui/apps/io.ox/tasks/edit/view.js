@@ -88,24 +88,24 @@ define('io.ox/tasks/edit/view',
             util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass('collapsed');
 
             //attachmentTab
-            if (capabilities.has('infostore')) {
-                var attachmentTabheader = tabs.find('a:eq(1)');
-                this.on('attachmentCounterRefresh', function (e, number) {
-                    e.stopPropagation();
-                    attachmentTabheader.text(
-                        //#. %1$s is the number of currently attached attachments
-                        //#, c-format
-                        gt('Attachments (%1$s)', gt.noI18n(number)));
-                });
+            var attachmentTabheader = tabs.find('a:eq(1)');
+            this.on('attachmentCounterRefresh', function (e, number) {
+                e.stopPropagation();
+                attachmentTabheader.text(
+                    //#. %1$s is the number of currently attached attachments
+                    //#, c-format
+                    gt('Attachments (%1$s)', gt.noI18n(number)));
+            });
 
-                this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
-                util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
+            this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);
+            util.buildExtensionRow(attachmentsTab, [this.getRow(1, app, 'attachments')], self.baton);
 
-                // Hide attachments on specific devices (boot.js)
-                if (!ox.uploadsEnabled) attachmentTabheader.hide();
-            } else {
-                // remove tab header
-                temp.table.children().eq(1).remove();
+            // Hide attachments on specific devices (boot.js)
+            if (!ox.uploadsEnabled) attachmentTabheader.hide();
+
+            if (!capabilities.has('infostore')) {
+                attachmentTabheader.hide();
+                attachmentsTab.hide();
             }
 
             temp = tabs = null;
