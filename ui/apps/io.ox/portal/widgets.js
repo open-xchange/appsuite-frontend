@@ -21,7 +21,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = ['plugins/portal/recentfiles/register', 'plugins/portal/myfiles/register'];
+	var DEV_PLUGINS = ['plugins/portal/recentfiles/register', 'plugins/portal/upsell/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -110,7 +110,7 @@ define('io.ox/portal/widgets',
             return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
         },
 
-        add: function (type, plugin, props) {
+        add: function (type, plugin, props, options) {
 
             // find free id
             var widgets = settings.get('widgets/user', {}),
@@ -118,15 +118,22 @@ define('io.ox/portal/widgets',
                 i = 0, id = type + '_0',
                 colors = api.getColors();
 
+            options = _.extend({
+                color: colors[_.random(colors.length - 1)],
+                enabled: true,
+                inverse: false
+            }, options || {});
+
             while (id in widgets) {
                 id = type + '_' + (++i);
             }
 
             widget = {
-                color: colors[_.random(colors.length - 1)],
-                enabled: true,
+                color: options.color,
+                enabled: options.enabled,
+                inverse: options.inverse,
                 id: id,
-                index: collection.length,
+                index: 0, // otherwise not visible
                 plugin: 'plugins/portal/' + (plugin || type) + '/register',
                 props: props || {},
                 type: type

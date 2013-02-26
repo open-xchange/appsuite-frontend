@@ -105,7 +105,7 @@ define('io.ox/portal/main',
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
-            .addClass('widget pending')
+            .addClass('widget pending' + (baton.model.get('inverse') ? ' inverse' : ''))
             .append(
                 $('<h2 class="title">').text('\u00A0')
             );

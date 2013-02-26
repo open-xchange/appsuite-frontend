@@ -16,48 +16,59 @@ define('io.ox/core/upsell',
 
     'use strict';
 
-    var useDefaults = function () {
+    function showUpgradeDialog() {
+        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+            new dialogs.ModalDialog({ easyOut: true })
+                .build(function () {
+                    this.getHeader().append(
+                        $('<h4>').text(gt('Upgrade'))
+                    );
+                    this.getContentNode().append(
+                        $.txt(gt('This feature is not available. In order to use it, you need to upgrade your account now.')),
+                        $.txt(' '),
+                        $.txt(gt('The first 90 days are free.'))
+                    );
+                    this.addPrimaryButton('upgrade', gt('Get free upgrade'));
+                })
+                .setUnderlayStyle({
+                    opacity: 0.80
+                })
+                .on('upgrade', function () {
+                    ox.trigger('upsell:upgrade');
+                })
+                .on('show', function () {
+                    ox.off('upsell:requires-upgrade', showUpgradeDialog);
+                })
+                .on('close', function () {
+                    ox.on('upsell:requires-upgrade', showUpgradeDialog);
+                })
+                .show();
+        });
+    }
 
-        function showUpgradeDialog() {
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({ easyOut: true })
-                    .build(function () {
-                        this.getHeader().append(
-                            $('<h4>').text(gt('Upgrade'))
-                        );
-                        this.getContentNode().append(
-                            $.txt(gt('This feature is not available. In order to use it, you need to upgrade your account now.')),
-                            $.txt(' '),
-                            $.txt(gt('The first 90 days are free.'))
-                        );
-                        this.addPrimaryButton('upgrade', gt('Get free upgrade'));
-                    })
-                    .setUnderlayStyle({
-                        opacity: 0.80
-                    })
-                    .on('upgrade', function () {
-                        ox.trigger('upsell:upgrade');
-                    })
-                    .on('show', function () {
-                        ox.off('upsell:requires-upgrade', showUpgradeDialog);
-                    })
-                    .on('close', function () {
-                        ox.on('upsell:requires-upgrade', showUpgradeDialog);
-                    })
-                    .show();
-            });
-        }
+    function upgrade() {
+        // needs no translation; just for demo purposes
+        alert('User decided to upgrade! (global event: upsell:upgrade)');
+    }
 
-        ox.on('upsell:requires-upgrade', showUpgradeDialog);
+    var that = {
 
-        // avoid calling this twice
-        useDefaults = $.noop;
-    };
+        captureRequiresUpgrade: function () {
+            ox.on('upsell:requires-upgrade', showUpgradeDialog);
+            that.captureRequiresUpgrade = $.noop;
+        },
 
-    return {
+        captureUpgrade: function () {
+            ox.on('upsell:upgrade', upgrade);
+            that.captureUpgrade = $.noop;
+        },
+
         useDefaults: function () {
-            useDefaults();
+            that.captureRequiresUpgrade();
+            that.captureUpgrade();
         }
     };
+
+    return that;
 
 });
