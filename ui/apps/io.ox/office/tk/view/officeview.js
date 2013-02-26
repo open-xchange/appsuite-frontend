@@ -589,8 +589,8 @@ define('io.ox/office/tk/view/officeview',
         });
 
         // detach application pane from DOM while loading the document
-        app.on('docs:import:before', function () { appContainerNode.detach(); })
-            .on('docs:import:after', function () { appPane.getNode().append(appContainerNode); });
+//        app.on('docs:import:before', function () { appContainerNode.detach(); })
+//            .on('docs:import:after', function () { appPane.getNode().append(appContainerNode); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {
