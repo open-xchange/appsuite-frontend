@@ -90,6 +90,7 @@ define('io.ox/core/tk/folderviews',
                             $.fail(gt('Couldn\'t load subfolders.'), function () {
                                 drawChildren(reload, method);
                             })
+                            .attr('data-folder-id', id)
                         );
                     })
                     .pipe(function (children) {
@@ -102,7 +103,7 @@ define('io.ox/core/tk/folderviews',
                             hideArrow();
                             return $.when();
                         }
-                        return $.when.apply(null, _(children).invoke(method, nodes.sub));
+                        return $.when.apply(null, _(children).invoke(method, nodes.sub.empty()));
                     });
             },
 

@@ -21,9 +21,10 @@ define("io.ox/core/main",
      "io.ox/core/date",
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
+     'io.ox/core/upsell',
      "settings!io.ox/core",
      "gettext!io.ox/core",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, settings, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
 
     "use strict";
 

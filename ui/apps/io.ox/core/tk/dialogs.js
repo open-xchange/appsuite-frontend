@@ -56,6 +56,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             },
 
             close = function () {
+                self.trigger('close');
                 nodes.popup.off('keydown', closeViaEscapeKey);
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();

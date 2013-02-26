@@ -1,4 +1,0 @@
-{
-    namespace: "portal",
-    requires: "infostore"
-}

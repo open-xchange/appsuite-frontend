@@ -16,8 +16,9 @@ define('plugins/portal/recentfiles/register',
      'io.ox/files/api',
      'io.ox/core/api/user',
      'io.ox/core/date',
+     'io.ox/core/config',
      'gettext!plugins/portal',
-     'less!plugins/portal/recentfiles/style.css'], function (ext, filesApi, userApi, date, gt) {
+     'less!plugins/portal/recentfiles/style.css'], function (ext, filesApi, userApi, date, config, gt) {
 
     'use strict';
 
@@ -32,72 +33,86 @@ define('plugins/portal/recentfiles/register',
         return Math.round(temp) + " " + suffixes[pos];
     };
 
-    ext.point('io.ox/portal/widget/recentfiles').extend({
+    _(['recentfiles', 'myfiles']).each(function (type) {
 
-        title: gt('Recently changed files'),
-
-        load: function (baton) {
-            return filesApi.search('', { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' })
-            .pipe(function (files) {
-                // update baton
-                baton.data = files;
-                // get user ids
-                var userIds = _(files).chain().pluck('modified_by').uniq().value();
-                // map userids back to each file
-                return userApi.getList(userIds)
-                    .done(function (users) {
-                        _(files).each(function (file) {
-                            file.modified_by = _(users).find(function (user) { return user.id === file.modified_by; });
-                        });
-                    })
-                    .pipe(function () {
-                        return files;
-                    });
-            });
-        },
-
-        preview: function (baton) {
-
-            var content = $('<div class="content recentfiles">').appendTo(this),
-                data = baton.data;
-
-            if (!data || data.length === 0) {
-                content.text(gt('No files were uploaded recently'));
-                return;
-            }
-
-            _(data).each(function (file) {
-                var filename = String(file.filename || file.title || '');
-                // create nice filename for long names
-                if (filename.length > 20) {
-                    // remove leading & tailing date stufff
-                    filename = filename
-                        .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
-                        .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
-                }
-                content.append(
-                    $('<div class="item">').data('item', file).append(
-                        $('<b>').text(filename), $.txt(' '),
-                        $('<span class="gray">').text(file.modified_by.display_name)
-                    )
-                );
-            });
-        },
-
-        draw: function (baton) {
-            var popup = this.busy();
-            require(['io.ox/files/list/view-detail'], function (view) {
-                var obj = filesApi.reduce(baton.item);
-                filesApi.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
-                });
-            });
+        var searchOptions = { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' };
+        if (type === 'myfiles') {
+            searchOptions.folder = config.get('folder.infostore');
         }
-    });
 
-    ext.point('io.ox/portal/widget/recentfiles/settings').extend({
-        title: gt('Recent files'),
-        type: 'recentfiles',
-        editable: false
+        var title = type === 'recentfiles' ? gt('Recently changed files') : gt('My latest files');
+
+        ext.point('io.ox/portal/widget/' + type).extend({
+
+            title: title,
+
+            load: function (baton) {
+                return filesApi.search('', searchOptions)
+                .pipe(function (files) {
+                    // update baton
+                    baton.data = files;
+                    // get user ids
+                    var userIds = _(files).chain().pluck('modified_by').uniq().value();
+                    // map userids back to each file
+                    return userApi.getList(userIds)
+                        .done(function (users) {
+                            _(files).each(function (file) {
+                                file.modified_by = _(users).find(function (user) { return user.id === file.modified_by; });
+                            });
+                        })
+                        .pipe(function () {
+                            return files;
+                        });
+                });
+            },
+
+            preview: function (baton) {
+
+                var content = $('<div class="content recentfiles">').appendTo(this),
+                    data = baton.data;
+
+                if (!data || data.length === 0) {
+                    content.text(gt('No files have been changed recently'));
+                    return;
+                }
+
+                _(data).each(function (file) {
+                    var filename = String(file.filename || file.title || '');
+                    // create nice filename for long names
+                    if (filename.length > 20) {
+                        // remove leading & tailing date stufff
+                        filename = filename
+                            .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
+                            .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
+                    }
+                    content.append(
+                        $('<div class="item">').data('item', file).append(
+                            $('<b>').text(filename), $.txt(' '),
+                            $('<span class="gray">').text(
+                                type === 'recentfiles' ?
+                                    file.modified_by.display_name : // show WHO changed it
+                                    new date.Local(file.last_modified).format(date.DATE_TIME) // show WHEN it was changed
+                            )
+                        )
+                    );
+                });
+            },
+
+            draw: function (baton) {
+                var popup = this.busy();
+                require(['io.ox/files/list/view-detail'], function (view) {
+                    var obj = filesApi.reduce(baton.item);
+                    filesApi.get(obj).done(function (data) {
+                        popup.idle().append(view.draw(data));
+                    });
+                });
+            }
+        });
+
+        ext.point('io.ox/portal/widget/' + type + '/settings').extend({
+            title: title,
+            type: type,
+            editable: false
+        });
     });
 });
