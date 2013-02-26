@@ -61,7 +61,10 @@ define('io.ox/office/tk/app/officeapplication',
 
             // find running editor application
             runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
-                var appFile = _.isFunction(app.getFileDescriptor) ? app.getFileDescriptor() : null;
+
+                var // file descriptor of current running application
+                    appFile = app.getFileDescriptor();
+
                 // TODO: check file version too?
                 return _.isObject(appFile) &&
                     (file.id === appFile.id) &&
@@ -71,7 +74,7 @@ define('io.ox/office/tk/app/officeapplication',
         if (runningApps.length > 1) {
             Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
         }
-        return runningApps.length ? runningApps[0] : null;
+        return (runningApps.length > 0) ? runningApps[0] : null;
     }
 
     /**
@@ -255,7 +258,7 @@ define('io.ox/office/tk/app/officeapplication',
             // whether deferred execution of debounced methods is currently locked
             debouncedLocks = 0,
 
-            // debounced methods waiting for execution while deferrred execution is locked
+            // debounced methods waiting for execution while deferred execution is locked
             lockedDebouncedCallbacks = [];
 
         // private methods ----------------------------------------------------
@@ -1127,7 +1130,8 @@ define('io.ox/office/tk/app/officeapplication',
                     def.resolve();
                 });
 
-                // def.always(function () { win.idle(); }); // this can be done after documentLoaded in the model -> only one progress bar
+                // finally remove the busy indicator
+                def.always(function () { win.idle(); });
             });
 
             return def.promise();

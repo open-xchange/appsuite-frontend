@@ -20,11 +20,11 @@ define('io.ox/office/preview/view',
 
     'use strict';
 
-    var // minimum zoom level (25%)
-        MIN_ZOOM = -4,
+    var // predefined zoom-out factors
+        ZOOMOUT_FACTORS = [25, 35, 50, 75],
 
-        // maximum zoom level (1600%)
-        MAX_ZOOM = 8;
+        // predefined zoom-in factors
+        ZOOMIN_FACTORS = [150, 200, 300, 400, 600, 800, 1200, 1600];
 
     // class PreviewView ======================================================
 
@@ -53,7 +53,7 @@ define('io.ox/office/preview/view',
             // current page index (one-based!)
             page = 0,
 
-            // current zoom level (0 means 100%, in steps of sqrt(2) up and down)
+            // current zoom level (index into the predefined arrays)
             zoom = 0;
 
         // base constructor ---------------------------------------------------
@@ -246,9 +246,8 @@ define('io.ox/office/preview/view',
         };
 
         /**
-         * Returns the current zoom level. A value of 0 represents a zoom
-         * factor of 100%. Positive values will zoom in the page in steps of
-         * sqrt(2), negative values will zoom out.
+         * Returns the current zoom level. The zoom level is a zero-based array
+         * index into the table of predefined zoom factors.
          *
          * @returns {Number}
          *  The current zoom level.
@@ -264,7 +263,7 @@ define('io.ox/office/preview/view',
          *  The minimum zoom level.
          */
         this.getMinZoomLevel = function () {
-            return MIN_ZOOM;
+            return -ZOOMOUT_FACTORS.length;
         };
 
         /**
@@ -274,7 +273,7 @@ define('io.ox/office/preview/view',
          *  The maximum zoom level.
          */
         this.getMaxZoomLevel = function () {
-            return MAX_ZOOM;
+            return ZOOMIN_FACTORS.length;
         };
 
         /**
@@ -284,7 +283,7 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.decreaseZoomLevel = function () {
-            if (zoom > MIN_ZOOM) {
+            if (zoom > this.getMinZoomLevel()) {
                 zoom -= 1;
                 updateZoom();
             }
@@ -298,7 +297,7 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.increaseZoomLevel = function () {
-            if (zoom < MAX_ZOOM) {
+            if (zoom < this.getMaxZoomLevel()) {
                 zoom += 1;
                 updateZoom();
             }
@@ -308,11 +307,10 @@ define('io.ox/office/preview/view',
          * Returns the current zoom factor in percent.
          *
          * @returns {Number}
-         *  The current zoom factor in percent, rounded to two significant
-         *  digits.
+         *  The current zoom factor in percent.
          */
         this.getZoomFactor = function () {
-            return Utils.roundSignificantDigits(100 * Math.pow(Math.SQRT2, zoom), 2);
+            return (zoom === 0) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
         };
 
         /**
@@ -334,7 +332,7 @@ define('io.ox/office/preview/view',
          *  PreviewView.getSavePoint().
          */
         this.restoreFromSavePoint = function (point) {
-            zoom = Utils.getIntegerOption(point, 'zoom', 0, MIN_ZOOM, MAX_ZOOM);
+            zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));
         };
 
