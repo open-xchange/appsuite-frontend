@@ -22,25 +22,32 @@ define('io.ox/core/print', [], function () {
             tasks: 'super-tasks-template.tmpl'
         };
 
-    function getWindow(url) {
-        var width = 600, height = screen.availHeight - 100,
-            left = (screen.availWidth - width) / 2 >> 0, top = 40,
-            options = 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',menubar=0,toolbar=0,location=1,status=0',
-            name = 'print_' + _.now(), // avoid bugs about non-opening windows
-            win = window.open(url, name, options);
-        win.moveTo(left, top);
-        return win;
-    }
-
     return {
 
-        open: function (module, data, _url_) {
+        getWindowOptions: function (url) {
+            var o = { width: 600, height: screen.availHeight - 100, top: 40 };
+            o.left = (screen.availWidth - o.width) / 2 >> 0;
+            o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=0,toolbar=0,location=1,status=0';
+            return o;
+        },
+
+        getWindow: function (url) {
+            var name = 'print_' + _.now(), // avoid bugs about non-opening windows
+                options = this.getWindowOptions(url),
+                win = window.open(url, name, options.string);
+            win.moveTo(options.left, options.top);
+            return win;
+        },
+
+        // module and data are mandatory;
+        // use options to overwrite default request params
+        open: function (module, data, options, _url_) {
 
             var params = { action: 'get' }, url;
 
             if (_.isArray(data)) {
                 params.data = JSON.stringify(data);
-            } else {
+            } else if (_.isObject(data)) {
                 params.folder = data.folder_id || data.folder;
                 params.id = data.id;
             }
@@ -49,14 +56,14 @@ define('io.ox/core/print', [], function () {
             params.template = defaultTemplates[module] || fallbackTemplate;
             params.session = ox.session;
 
-            url = _url_ || ox.apiRoot + '/' + module + '?' + $.param(params);
+            url = _url_ || ox.apiRoot + '/' + module + '?' + $.param(_.extend(params, options));
 
-            return getWindow(url);
+            return this.getWindow(url);
         },
 
         interim: function (url) {
             console.warn('Temporary solution; replace by open()', url);
-            return this.open('mail', {}, url || (ox.base + '/blank.html'));
+            return this.open('mail', 0, 0, url || (ox.base + '/blank.html'));
         }
     };
 });
