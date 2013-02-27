@@ -11,8 +11,9 @@
  */
 
 define('io.ox/core/upsell',
-    ['settings!io.ox/core',
-     'gettext!io.ox/core'], function (settings, gt) {
+    ['io.ox/core/capabilities',
+     'settings!io.ox/core',
+     'gettext!io.ox/core'], function (capabilities, settings, gt) {
 
     'use strict';
 
@@ -52,6 +53,16 @@ define('io.ox/core/upsell',
     }
 
     var that = {
+
+        // checks if upsell is enabled for a single capability or
+        // multiple space-separated capabilities; example: upsell.enabled('infostore');
+        enabled: function (caps) {
+            var enabled = settings.get('upsell/enabled') || {},
+                check = String(caps || '').split(' ');
+            return _(check).reduce(function (memo, feature) {
+                return memo && !capabilities.has(feature) && feature in enabled;
+            }, true);
+        },
 
         captureRequiresUpgrade: function () {
             ox.on('upsell:requires-upgrade', showUpgradeDialog);
