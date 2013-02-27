@@ -142,7 +142,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             left: 0; right: 0;
         } 
         
-        /* scrollable app pane, center container node horizontally into application pane */
+        /* scrollable application pane, center container node horizontally into application pane */
         &.scrollable {
             .overflow(auto);
             text-align: center;
@@ -538,6 +538,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                     border-color: @selectedBackground;
                     .box-shadow(@focus-glow-effect);
                 }
+
+                input:not(.disabled):focus {
+                    border-color: @selectedBackground;
+                    .box-shadow(@focus-glow-effect);
+                }
             }
 
             /* add specific design properties for white on dark design */
@@ -616,8 +621,9 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                         > input, > a.button.dropdown-button {
                             &, &:hover, &:focus, &:active {
                                 background: white;
-                                color: @textColor;
                                 border-color: @selectedBackground;
+                                .box-shadow(none);
+                                color: @textColor;
                             }
                         }
 
