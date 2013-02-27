@@ -246,20 +246,11 @@ define('io.ox/office/tk/app/officeapplication',
             // whether the document is completely imported
             imported = false,
 
-            // browser timeouts for delayed callbacks, mapped by initial setTimeout() call
-            delayTimeouts = {},
+            // browser timeouts for delayed callbacks
+            delayTimeouts = [],
 
-            // browser timeouts for debounced methods, mapped by their indexes
-            debounceTimeouts = {},
-
-            // counter for unique indexes of all debounced methods
-            debounceCount = 0,
-
-            // whether deferred execution of debounced methods is currently locked
-            debouncedLocks = 0,
-
-            // debounced methods waiting for execution while deferred execution is locked
-            lockedDebouncedCallbacks = [];
+            // Deferred object used to lock execution of debounced methods
+            debouncedLock = null;
 
         // private methods ----------------------------------------------------
 
@@ -769,7 +760,7 @@ define('io.ox/office/tk/app/officeapplication',
          *
          * @param {Function} callback
          *  The callback function that will be executed in a browser timeout
-         *  after the delay time.
+         *  after the delay time. Does not receive any parameters.
          *
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
@@ -795,15 +786,16 @@ define('io.ox/office/tk/app/officeapplication',
          *  returns a simple value or object, the Deferred object will be
          *  resolved with that value. If the callback function returns a
          *  Deferred object by itself, its state and result value will be
-         *  forwarded to the Deferred object returned by this method. If the
-         *  callback function will be executed repeatedly, the Deferred object
-         *  will not be resolved before the last execution cycle. The returned
+         *  forwarded to the Promise returned by this method. If the callback
+         *  function will be executed repeatedly, the Promise will not be
+         *  resolved before the last execution cycle. If the Deferred object
+         *  returned by the callback function is rejected, repeated execution
+         *  will be stopped, and the returned Promise will be rejected too. The
          *  Promise contains an additional method 'abort()' that can be called
          *  before the timeout has been fired to cancel the pending or repeated
-         *  execution of the callback function. In that case, the returned
-         *  Promise will neither be resolved nor rejected. When the application
-         *  will be closed, it aborts all pending callback functions
-         *  automatically.
+         *  execution of the callback function. In that case, the Promise will
+         *  neither be resolved nor rejected. When the application will be
+         *  closed, it aborts all pending callback functions automatically.
          */
         this.executeDelayed = function (callback, options) {
 
@@ -818,6 +810,11 @@ define('io.ox/office/tk/app/officeapplication',
                 // the Promise of the Deferred object
                 promise = def.promise();
 
+            function unregisterTimeout() {
+                delayTimeouts = _(delayTimeouts).without(timeout);
+                timeout = null;
+            }
+
             // creates and registers a browser timeout that executes the callback
             function createTimeout() {
 
@@ -825,7 +822,7 @@ define('io.ox/office/tk/app/officeapplication',
                 timeout = window.setTimeout(function () {
 
                     // first, unregister the timeout
-                    delete delayTimeouts[timeout];
+                    unregisterTimeout();
 
                     // execute the callback function, react on its result
                     $.when(callback())
@@ -842,11 +839,11 @@ define('io.ox/office/tk/app/officeapplication',
 
                 }, delay);
 
-                // register the browser timeout in the global map
-                delayTimeouts[timeout] = timeout;
+                // register the browser timeout
+                delayTimeouts.push(timeout);
             }
 
-            // do not call from other unregistered pending timeouts after application quit
+            // do not call from other unregistered pending timeouts when application closes
             if (delayTimeouts) { createTimeout(); }
 
             // switch to repetition delay time
@@ -854,9 +851,9 @@ define('io.ox/office/tk/app/officeapplication',
 
             // add an abort() method to the Promise
             promise.abort = function () {
-                if (timeout in delayTimeouts) {
-                    window.clearTimeout(delayTimeouts[timeout]);
-                    delete delayTimeouts[timeout];
+                if (timeout) {
+                    window.clearTimeout(timeout);
+                    unregisterTimeout();
                     // leave the Deferred object unresolved
                 }
             };
@@ -864,6 +861,51 @@ define('io.ox/office/tk/app/officeapplication',
             return promise;
         };
 
+        /**
+         * Executes the passed callback function repeatedly for small chunks of
+         * the passed data array in a browser timeout loop.
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed in a browser timeout
+         *  after the delay time. Receives a chunk of the passed data array as
+         *  first parameter, and the absolute index of the first element of the
+         *  chunk in the complete array as second parameter. If the callback
+         *  function returns a Deferred object (or a Promise), repeated
+         *  execution will be delayed until the Deferred object will be
+         *  resolved or rejected. In case the Deferred object will be rejected,
+         *  repeated execution will be cancelled, and the Deferred object
+         *  returned by this method will be rejected immediately.
+         *
+         * @param {Object[]|jQuery} dataArray
+         *  A JavaScript array, or another array-like object that provides an
+         *  attribute 'length' and a method 'slice(begin, end)', e.g. a jQuery
+         *  collection.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Number} [options.chunkLength=10]
+         *      The number of elements that will be extracted from the passed
+         *      data array and will be passed to the callback function.
+         *  @param {Number} [options.delay=0]
+         *      The time (in milliseconds) the execution of the passed callback
+         *      function will be delayed.
+         *  @param {Number} [options.repeatDelay=options.delay]
+         *      The time (in milliseconds) the repeated execution of the passed
+         *      callback function will be delayed. If omitted, the specified
+         *      initial delay time (option 'options.delay') will be used.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved after all
+         *  array elements have been processed; or rejected, if the callback
+         *  function returns and rejects a Deferred object. The Promise will be
+         *  notified about the progress (floating-point value between 0.0 and
+         *  1.0). The Promise contains an additional method 'abort()' that can
+         *  be called before processing all array elements has been finished to
+         *  cancel the entire loop immediately. In that case, the Promise will
+         *  neither be resolved nor rejected. When the application will be
+         *  closed, it aborts all running loops automatically.
+         */
         this.processArrayDelayed = function (callback, dataArray, options) {
 
             var // the result Deferred object
@@ -903,115 +945,95 @@ define('io.ox/office/tk/app/officeapplication',
 
         /**
          * Creates a debounced method that can be called multiple times during
-         * the current script execution. Execution is separated into a part
-         * that runs directly every time the method is called (the 'direct
-         * callback'), and a part that runs once after the current script
-         * execution ends (the 'deferred callback').
+         * the current script execution. The passed callback will be executed
+         * once in a browser timeout.
          *
          * @param {Function} directCallback
-         *  A function that will be called every time the debounced method
-         *  has been called. Receives all parameters that have been passed to
-         *  the debounced method.
+         *  A function that will be called every time the debounced method has
+         *  been called. Receives all parameters that have been passed to the
+         *  debounced method.
          *
          * @param {Function} deferredCallback
-         *  A function that will be called once after calling the debounced
-         *  method at least once during the execution of the current script.
-         *  Does not receive any parameters. As long as this function returns
-         *  true, it will be called again after the passed repeatition delay
-         *  time.
+         *  A function that will be called in a browser timeout after the
+         *  debounced method has been called at least once during the execution
+         *  of the current script.
          *
-         * @param {Number} [initialDelay=0]
-         *  The time (in milliseconds) the first execution of the deferred
-         *  callback function will be delayed.
-         *
-         * @param {Number} [repeatedDelay=initialDelay]
-         *  The time (in milliseconds) after the execution of the deferred
-         *  callback function will be repeated. If omitted, the passed initial
-         *  delay time will be used.
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of the created
+         *  debounced method. Supports all options of the method
+         *  OfficeApplication.executeDelayed(). Especially, repeated execution
+         *  of the deferred callback function is supported.
          *
          * @returns {Function}
          *  The debounced method that can be called multiple times, and that
-         *  executes the deferred callback once after execution of the current
-         *  script ends. Passes all arguments to the direct callback, and
-         *  returns the result of the direct callback function.
+         *  executes the deferred callback function once after execution of the
+         *  current script endsPasses all arguments to the direct callback
+         *  function, and returns its result.
          */
-        this.createDebouncedMethod = function (directCallback, deferredCallback, initialDelay, repeatedDelay) {
+        this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // unique index of this deferred method
-                index = debounceCount++;
+            var // the current timer used to execute the callback
+                timer = null,
+                // whether execution of the deferred callback function has been postponed already
+                postponed = false;
 
-            // creates a timeout calling the deferred callback, if not already done
-            function createTimeout(delay) {
+            // creates a timeout that executes the callback, if not already done
+            function createTimeout() {
 
-                // do not create multiple timeouts
-                if (index in debounceTimeouts) { return; }
+                // create a new timeout executing the callback function
+                timer = self.executeDelayed(function () {
 
-                // create a new timeout that calls the deferred callback
-                debounceTimeouts[index] = window.setTimeout(function () {
-
-                    // unregisters and executes the deferred callback
-                    function executeDeferredCallBack() {
-                        // first delete the timeout from the map
-                        // (allow to call ourselves from deferred callback)
-                        delete debounceTimeouts[index];
-                        // call deferred callback, recall it if it returns true
-                        if (deferredCallback.call(self) === true) {
-                            createTimeout(repeatedDelay);
-                        }
+                    // postpone execution if debounced methods are currently locked
+                    if (debouncedLock) {
+                        postponed = true;
+                        debouncedLock.done(createTimeout);
+                        return;
                     }
 
-                    if (debouncedLocks === 0) {
-                        executeDeferredCallBack();
-                    } else {
-                        lockedDebouncedCallbacks.push(executeDeferredCallBack);
-                    }
-                }, delay);
+                    // execute the callback and return its result (for repeated execution)
+                    postponed = false;
+                    return deferredCallback();
+
+                }, options);
+
+                // reset timer reference after execution
+                timer.always(function () { timer = null; });
             }
 
-            initialDelay = _.isNumber(initialDelay) ? initialDelay : 0;
-            repeatedDelay = _.isNumber(repeatedDelay) ? repeatedDelay : initialDelay;
-
-            // create and return the deferred method
+            // create and return the debounced method
             return function () {
-                // do not call from other unregistered pending timeouts after quit
-                if (debounceTimeouts) {
-                    // create a timeout calling the deferred callback
-                    createTimeout(initialDelay);
-                    // call the direct callback with the passed arguments
-                    return directCallback.apply(self, _.toArray(arguments));
-                }
+
+                // create a timeout executing the callback function
+                if (!timer && !postponed) { createTimeout(); }
+
+                // call the direct callback with the passed arguments
+                return directCallback.apply(undefined, _.toArray(arguments));
             };
         };
 
         /**
-         * Prevents deferred execution of debounced methods. Each call of this
-         * method must be reverted by a corresponding call to the method
-         * OfficeApplication.unlockDebouncedMethods(). To prevent dead locks,
-         * this method MUST NOT be used in the implementation of a debounced
-         * method itself.
+         * Prevents deferred execution of debounced methods, until the method
+         * OfficeApplication.unlockDebouncedMethods() has been called.
          *
          * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.lockDebouncedMethods = function () {
-            debouncedLocks += 1;
+            debouncedLock = debouncedLock || $.Deferred();
             return this;
         };
 
         /**
-         * Unlocks a lock for the deferred execution of debounced methods. If
-         * the last lock has been unlocked, all pending debounced methods will
-         * be executed immediately. To prevent dead locks, this method MUST NOT
-         * be used in the implementation of a debounced method itself.
+         * Unlocks deferred execution of debounced methods. All pending
+         * debounced methods will be executed.
          *
          * @returns {OfficeApplication}
          *  A reference to this application instance.
          */
         this.unlockDebouncedMethods = function (options) {
-            debouncedLocks = Math.max(debouncedLocks - 1, 0);
-            if ((debouncedLocks === 0) && (lockedDebouncedCallbacks.length > 0)) {
-                _(lockedDebouncedCallbacks).each(function (executeCallBack) { executeCallBack(); });
-                lockedDebouncedCallbacks = [];
+            if (debouncedLock) {
+                debouncedLock.resolve();
+                debouncedLock = null;
             }
             return this;
         };
@@ -1216,22 +1238,19 @@ define('io.ox/office/tk/app/officeapplication',
                 _(delayTimeouts).each(function (timeout) {
                     window.clearTimeout(timeout);
                 });
-                _(debounceTimeouts).each(function (timeout) {
-                    window.clearTimeout(timeout);
-                });
 
                 // execute quit handlers, simply defer without caring about the result
                 callHandlers(quitHandlers)
                 .always(function () {
 
-                    // base application does not trigger 'quit' events
+                    // OX application does not trigger 'quit' events
                     self.trigger('docs:quit');
 
                     // destroy class members
                     controller.destroy();
                     view.destroy();
                     model.destroy();
-                    model = view = controller = delayTimeouts = debounceTimeouts = null;
+                    model = view = controller = delayTimeouts = null;
 
                     // always resolve (really close the application), regardless
                     // of the result of the quit handlers
@@ -1311,7 +1330,7 @@ define('io.ox/office/tk/app/officeapplication',
 
         // listen to user logout and notify all running applications
         ext.point('io.ox/core/logout').extend({
-            id: 'office-' + getDocumentType(moduleName) + '-logout',
+            id: moduleName + '/logout',
             logout: function () {
                 var deferreds = _(ox.ui.App.get(moduleName)).map(function (app) {
                     return app.executeQuitHandlers();
