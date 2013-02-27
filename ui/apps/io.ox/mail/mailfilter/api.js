@@ -45,6 +45,13 @@ define("io.ox/mail/mailfilter/api",
                 params: {action: "update"},
                 data: data
             });
+        },
+
+        getConfig: function () {
+            return http.PUT({
+                module: "mailfilter",
+                params: {action: "config"}
+            });
         }
     };
 

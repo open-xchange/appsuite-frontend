@@ -908,7 +908,20 @@ define('io.ox/backbone/forms',
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
                 this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
 
+                if (options.overwritePositioning) {
+                    this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
+                }
+
                 return this;
+            },
+
+            repositioning: function () {
+                var element = this.nodes.controlGroup;
+
+                this.nodes.controlGroup.find('.datepicker.dropdown-menu').css({
+                    top: $(element)[0].offsetTop + $(element)[0].offsetHeight,
+                    left: $(element)[0].offsetLeft
+                });
             },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);

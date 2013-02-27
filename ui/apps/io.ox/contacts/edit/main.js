@@ -80,7 +80,7 @@ define('io.ox/contacts/edit/main',
                                 if (app.dropZone) {app.dropZone.remove(); }
                                 app.quit();
                             });
-                            
+
                             if (_.browser.IE === undefined || _.browser.IE > 9) {
                                 app.dropZone = new dnd.UploadZone({
                                     ref: 'io.ox/contacts/edit/dnd/actions'
@@ -96,7 +96,7 @@ define('io.ox/contacts/edit/main',
                                     app.dropZone.remove();
                                 }
                             });
-                            
+
                             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
                             contact.on('change:display_name', function () {

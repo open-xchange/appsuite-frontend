@@ -66,18 +66,22 @@ define('io.ox/mail/mailfilter/settings/model',
             text: { format: 'string' },
             days: { format: 'string' },
             active: { format: 'boolean'},
-            addresses: { format: 'array'}
+            addresses: { format: 'array'},
+            dateFrom: { format: 'date'},
+            dateUntil: { format: 'date'}
         });
         return factory;
 
     }
 
     var fields = {
-        subject: 'Subject',
-        text: 'Text',
-        days: 'Days',
-        active: 'Active',
-        addresses: 'E-mail addresses'
+        subject: gt('Subject'),
+        text: gt('Text'),
+        days: gt('Days'),
+        active: gt('Active'),
+        addresses: gt('E-mail addresses'),
+        dateFrom: gt('Start Date'),
+        dateUntil: gt('End date')
     };
 
 

@@ -31,6 +31,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
             api.getRules('vacation').done(function (data) {
                 var vacationData = data[0].actioncmds[0];
                 vacationData.active = data[0].active;
+                vacationData.dateFrom = data[0].test.tests[0].datevalue[0];
+                vacationData.dateUntil = data[0].test.tests[1].datevalue[0];
 
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
 
