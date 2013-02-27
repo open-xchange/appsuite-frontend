@@ -689,7 +689,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 } /* end of .view-component */
 
 /* modified shadow effect for groups in transparent panes */
-.view-pane.transparent > .view-component.toolbox {
+.view-pane.overlay > .view-component.toolbox {
     overflow: visible;
 
     > .group, > .group-container {
