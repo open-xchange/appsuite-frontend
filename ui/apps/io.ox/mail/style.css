@@ -257,6 +257,11 @@
         height: 0px;
     }
 
+    .subscription-actions {
+        text-align: right;
+        margin-top: 1em;
+    }
+
     .thread-inline-actions {
         border: 0px none;
         padding: 18px 20px 0 20px;

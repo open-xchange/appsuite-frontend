@@ -23,9 +23,10 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
+     'io.ox/pubsub/util',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubUtil) {
 
     'use strict';
 
@@ -953,6 +954,74 @@ define('io.ox/mail/view-detail',
                     drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
                 }
                 this.append(outer);
+            }
+        }
+    });
+
+    /**
+     * @description actions for publication invitation mails
+     */
+    ext.point('io.ox/mail/detail').extend({
+        index: 199,
+        id: 'subscribe',
+        draw: function (baton) {
+
+            var data = baton.data, picture,
+                label = 'Subscribe',
+                pub = {},
+                pubtype = '';
+
+            //exists publication header
+            pub.url  = data.headers['X-OX-PubURL'] || '';
+
+            if (pub.url === '')
+                return false;
+            else {
+               //qualify data
+                pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
+                pub.module  = pubtype[1];
+                pub.type  = pubtype[2];
+                pub.name = _.first(_.last(pub.url.split('/')).split('?')) + '_' + _.now();
+                pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
+                pub.folder = '';
+                //dom
+                var $actions, $appointmentInfo, $box;
+                $('<div class="well">').append(
+                    $('<span class="muted">').text(gt('This email contains an subscription invitation for a shared folder')),
+                    $("<br>"),
+                    $appointmentInfo = $('<div class="appointmentInfo">'),
+                    $actions = $('<div class="subscription-actions">')
+                ).appendTo(this);
+                $actions.append(
+                    $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe')),
+                    "&nbsp;",
+                    $('<button class="btn" data-action="show">').text(gt('Originally Published'))
+                );
+
+                //actions
+                $actions.on('click', 'button', function (e) {
+                    var button = $(e.target),
+                        notifications = require('io.ox/core/notifications');
+                    //disble button
+                    $(e.target).attr('disabled', 'disabled');
+                    if (button.data('action') === 'show') {
+                        window.open(pub.url, '_blank');
+                    } else {
+                        var self = this,
+                            opt = opt || {};
+                        //create folder; create and refresh subscription
+                        pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url)
+                        .done(function (data) {
+                                    notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
+                                    //refresh folder views
+                                    folder.trigger('update');
+                                })
+                        .fail(function (data) {
+                            notifications.yell('error', data.error || gt('An unknown error occurred'));
+                        });
+                    }
+                });
+                this.append($box);
             }
         }
     });
