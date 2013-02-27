@@ -36,13 +36,13 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         // no argument?
         if (path === undefined) { return clone(source); }
         // get parts
-        var key, parts = getParts(path), tmp = clone(source) || {};
+        var key, parts = getParts(path), tmp = source || {};
         while (parts.length) {
             key = parts.shift();
             tmp = tmp[key];
             if (tmp === undefined) { return defaultValue; }
         }
-        return tmp;
+        return clone(tmp);
     };
 
     var Settings = function (path) {

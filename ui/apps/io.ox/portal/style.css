@@ -66,6 +66,7 @@
         float: left;
         background-clip: padding-box;
         background-color: #f5f5f5;
+        overflow: hidden;
         .transition(background-color 0.3s linear);
         .box-sizing(border-box);
         .user-select(none);
@@ -205,6 +206,7 @@
         top: @line-height * 4;
         line-height: @line-height;
         overflow: hidden;
+        z-index: 10;
         .transition(opacity 0.3s linear);
         &.pointer { cursor: pointer; }
     }

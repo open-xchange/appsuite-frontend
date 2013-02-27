@@ -22,7 +22,7 @@ define('io.ox/core/upsell',
             new dialogs.ModalDialog({ easyOut: true })
                 .build(function () {
                     this.getHeader().append(
-                        $('<h4>').text(gt('Upgrade'))
+                        $('<h4>').text(gt('Upgrade required'))
                     );
                     this.getContentNode().append(
                         $.txt(gt('This feature is not available. In order to use it, you need to upgrade your account now.')),
@@ -60,16 +60,6 @@ define('io.ox/core/upsell',
         enabledCache = {};
 
     var that = {
-
-        // helpful if something goes wrong
-        debug: function () {
-            console.debug('enabled', enabled, 'capabilityCache', capabilityCache, 'enabledCache', enabledCache);
-        },
-
-        // just for development & debugging
-        disable: function (string) {
-            enabledCache[string] = false;
-        },
 
         // convenience functions
         trigger: function () {
@@ -151,6 +141,26 @@ define('io.ox/core/upsell',
         useDefaults: function () {
             that.captureRequiresUpgrade();
             that.captureUpgrade();
+        },
+
+        // helpful if something goes wrong
+        debug: function () {
+            console.debug('enabled', enabled, 'capabilityCache', capabilityCache, 'enabledCache', enabledCache);
+        },
+
+        // just for demo purposes
+        demo: function () {
+            enabled.infostore = true;
+            capabilityCache.infostore = false;
+            enabled.tasks = true;
+            capabilityCache.tasks = false;
+            console.debug('Disabled infostore & task actions; enabled upsell');
+            that.useDefaults();
+            require(['io.ox/portal/widgets'], function (widgets) {
+                widgets.addPlugin('plugins/portal/upsell/register');
+                widgets.add('upsell', { color: 'gray', inverse: true });
+                console.debug('Added upsell widget to portal');
+            });
         }
     };
 

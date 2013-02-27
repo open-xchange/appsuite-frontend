@@ -21,7 +21,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = ['plugins/portal/recentfiles/register', 'plugins/portal/upsell/register'];
+	var DEV_PLUGINS = [];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -38,8 +38,13 @@ define('io.ox/portal/widgets',
 
     var api = {
 
+        // for demo/debugging
+        addPlugin: function (plugin) {
+            availablePlugins = availablePlugins.concat(plugin);
+        },
+
         getAvailablePlugins: function () {
-            return availablePlugins;
+            return _(availablePlugins).uniq();
         },
 
         getCollection: function () {
@@ -63,25 +68,25 @@ define('io.ox/portal/widgets',
                     return obj;
                 })
                 .filter(function (obj) {
-                    return _(availablePlugins).contains(obj.plugin) || _(allTypes).contains(obj.type);
+                    return _(api.getAvailablePlugins()).contains(obj.plugin) || _(allTypes).contains(obj.type);
                 })
                 .value();
         },
 
         loadAllPlugins: function () {
-            return require(availablePlugins);
+            return require(api.getAvailablePlugins());
         },
 
         loadUsedPlugins: function () {
             var usedPlugins = collection.pluck('plugin'),
-                dependencies = _(availablePlugins).intersection(usedPlugins);
+                dependencies = _(api.getAvailablePlugins()).intersection(usedPlugins);
             return require(dependencies).done(function () {
                 api.removeDisabled();
             });
         },
 
         getAllTypes: function () {
-            return _.chain(availablePlugins.concat(allTypes))
+            return _.chain(api.getAvailablePlugins().concat(allTypes))
                 .map(function (id) {
                     var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
                     return ext.point('io.ox/portal/widget/' + type + '/settings').options();
@@ -110,18 +115,19 @@ define('io.ox/portal/widgets',
             return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
         },
 
-        add: function (type, plugin, props, options) {
+        add: function (type, options) {
 
             // find free id
             var widgets = settings.get('widgets/user', {}),
-                widget,
-                i = 0, id = type + '_0',
+                widget, i = 0, id = type + '_0',
                 colors = api.getColors();
 
             options = _.extend({
                 color: colors[_.random(colors.length - 1)],
                 enabled: true,
-                inverse: false
+                inverse: false,
+                plugin: type,
+                props: {}
             }, options || {});
 
             while (id in widgets) {
@@ -134,8 +140,8 @@ define('io.ox/portal/widgets',
                 inverse: options.inverse,
                 id: id,
                 index: 0, // otherwise not visible
-                plugin: 'plugins/portal/' + (plugin || type) + '/register',
-                props: props || {},
+                plugin: 'plugins/portal/' + options.plugin + '/register',
+                props: options.props,
                 type: type
             };
 
