@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection',
-    ['io.ox/core/api/folder'], function (api) {
+define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
 
     'use strict';
 

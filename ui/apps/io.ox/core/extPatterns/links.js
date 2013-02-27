@@ -15,8 +15,9 @@
 define("io.ox/core/extPatterns/links",
     ["io.ox/core/extensions",
      "io.ox/core/collection",
+     "io.ox/core/upsell",
      "io.ox/core/extPatterns/actions",
-     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
+     "gettext!io.ox/core"], function (ext, Collection, upsell, actions, gt) {
 
     "use strict";
 
@@ -113,15 +114,15 @@ define("io.ox/core/extPatterns/links",
     };
 
     var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
-        var linkNode = $("<div>").appendTo(node);
         baton = ext.Baton.ensure(baton);
-        return getLinks(self, collection, linkNode, baton, args).always(function (links) {
+        var linkNode = $('<div>');
+        var def = getLinks(self, collection, linkNode, baton, args).always(function (links) {
             // count resolved links
             var count = 0;
             // draw links
             _(links).each(function (link) {
                 if (_.isFunction(link.draw)) {
-                    link.draw.call(bootstrapMode ? $("<li>").appendTo(linkNode) : linkNode, baton);
+                    link.draw.call(bootstrapMode ? $('<li>').appendTo(linkNode) : linkNode, baton);
                     if (_.isFunction(link.customize)) {
                         link.customize.call(linkNode.find('a'), baton);
                     }
@@ -130,9 +131,11 @@ define("io.ox/core/extPatterns/links",
             });
             // empty?
             if (count === 0) {
-                linkNode.addClass("empty");
+                linkNode.addClass('empty');
             }
         });
+        node.append(linkNode);
+        return def;
     };
 
     var ToolbarLinks = function (options) {

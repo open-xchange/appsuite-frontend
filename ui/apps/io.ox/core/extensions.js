@@ -287,6 +287,10 @@ define("io.ox/core/extensions",
             return list().inject(cb, memo).value();
         };
 
+        this.pluck = function (id) {
+            return list().pluck(id).value();
+        };
+
         this.invoke = function (/* name, context */) {
             var o = list(),
                 args = ['invoke'].concat($.makeArray(arguments));

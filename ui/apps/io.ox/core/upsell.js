@@ -30,9 +30,11 @@ define('io.ox/core/upsell',
                         $.txt(gt('The first 90 days are free.'))
                     );
                     this.addPrimaryButton('upgrade', gt('Get free upgrade'));
+                    this.addButton('cancel', gt('Cancel'));
                 })
                 .setUnderlayStyle({
-                    opacity: 0.80
+                    opacity: 0.70,
+                    backgroundColor: '#08C'
                 })
                 .on('upgrade', function () {
                     ox.trigger('upsell:upgrade');
@@ -52,17 +54,89 @@ define('io.ox/core/upsell',
         alert('User decided to upgrade! (global event: upsell:upgrade)');
     }
 
+    // local copy for speed
+    var enabled = settings.get('upsell/enabled') || {},
+        capabilityCache = {},
+        enabledCache = {};
+
     var that = {
 
-        // checks if upsell is enabled for a single capability or
-        // multiple space-separated capabilities; example: upsell.enabled('infostore');
-        enabled: function (caps) {
-            var enabled = settings.get('upsell/enabled') || {},
-                check = String(caps || '').split(' ');
-            return _(check).reduce(function (memo, feature) {
-                return memo && !capabilities.has(feature) && feature in enabled;
-            }, true);
+        // helpful if something goes wrong
+        debug: function () {
+            console.debug('enabled', enabled, 'capabilityCache', capabilityCache, 'enabledCache', enabledCache);
         },
+
+        // just for development & debugging
+        disable: function (string) {
+            enabledCache[string] = false;
+        },
+
+        // convenience functions
+        trigger: function () {
+            ox.trigger('upsell:requires-upgrade');
+        },
+
+        // simple click handler
+        click: function (e) {
+            e.preventDefault();
+            that.trigger();
+        },
+
+        // find one set of capabilities that matches
+        any: function (array) {
+            return _(array).reduce(function (memo, c) {
+                return memo || c === undefined || that.has(c);
+            }, false);
+        },
+
+        // bypass for convenience
+        has: function (string) {
+            if (!string) return true;
+            // check cache
+            if (string in capabilityCache) return capabilityCache[string];
+            // lookup
+            return (capabilityCache[string] = capabilities.has(string));
+        },
+
+        // checks if something should be visible depending on required capabilites
+        // true if any item matches requires capabilites
+        // true if any item does not match its requirements but is enabled for upsell
+        // this function is used for any inline link, for example, to decide whether or not showing it
+        visible: function (array) {
+            if (!_.isArray(array)) return true;
+            return array.length === 0 || _(array).reduce(function (memo, capability) {
+                return memo || capability === undefined || that.enabled(capability) || that.has(capability);
+            }, false);
+        },
+
+        // checks if upsell is enabled for a set of capabilities
+        // true if at least one set matches
+        enabled: (function () {
+
+            function lookup(memo, capability) {
+                return memo && capability in enabled;
+            }
+
+            // checks if upsell is enabled for a single capability or
+            // multiple space-separated capabilities; example: isEnabled('infostore');
+            function isEnabled(string) {
+                if (!_.isString(string)) return false;
+                // check cache
+                if (string in enabledCache) return enabledCache[string];
+                // lookup
+                return (enabledCache[string] = _(string.split(' ')).reduce(lookup, true));
+            }
+
+            function reduce(memo, capability) {
+                return memo || isEnabled(capability);
+            }
+
+            return function (array) {
+                if (!array) return true;
+                return _([].concat(array)).reduce(reduce, false);
+            };
+
+        }()),
 
         captureRequiresUpgrade: function () {
             ox.on('upsell:requires-upgrade', showUpgradeDialog);

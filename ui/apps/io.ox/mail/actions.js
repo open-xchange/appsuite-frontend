@@ -486,9 +486,8 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/add-to-portal', {
-        require: function (e) {
-            return e.collection.has('one') && capabilities.has('!disablePortal');
-        },
+        requires: 'one',
+        capabilities: 'portal', // was: !disablePortal
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.add('stickymail', 'mail', {
@@ -638,9 +637,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
-        requires: function (e) {
-            return e.collection.has('one') && capabilities.has('tasks');
-        },
+        requires: 'one',
+        capabilities: 'tasks',
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskApi, tasksUtil) {

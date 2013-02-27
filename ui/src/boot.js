@@ -292,6 +292,7 @@ $(window).load(function () {
             // restore form
             var restore = function () {
                     // stop being busy
+                    $('#io-ox-login-form').css('opacity', '');
                     $('#io-ox-login-blocker').hide();
                     $('#io-ox-login-feedback').idle();
                 },
