@@ -747,6 +747,161 @@ define('io.ox/office/tk/app/officeapplication',
         };
 
         /**
+         * Executes all registered quit handlers and returns a Deferred object
+         * that will be resolved or rejected according to the rasults of the
+         * handlers.
+         *
+         * @internal
+         *  Not for external use. Only used from the implementation of the
+         *  'io.ox/core/logout' extension point.
+         */
+        this.executeQuitHandlers = function () {
+            return callHandlers(quitHandlers);
+        };
+
+        // timeouts -----------------------------------------------------------
+
+        /**
+         * Executes the passed callback function once or repeatedly in a
+         * browser timeout. If the application will be closed before the
+         * callback function has been started, or while the callback function
+         * will be repeated, it will not be executed anymore.
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed in a browser timeout
+         *  after the delay time.
+         *
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Number} [options.delay=0]
+         *      The time (in milliseconds) the execution of the passed callback
+         *      function will be delayed.
+         *  @param {Boolean} [options.repeat=false]
+         *      If set to true, the return value of the callback function will
+         *      be evaluated to decide whether to repeat its execution. If the
+         *      callback function returns the Boolean value true, or a Deferred
+         *      object that will be resolved with the Boolean value true, a new
+         *      timeout will be started and the callback function will be
+         *      executed again, as long as it returns true.
+         *  @param {Number} [options.repeatDelay=options.delay]
+         *      The time (in milliseconds) the repeated execution of the passed
+         *      callback function will be delayed. If omitted, the specified
+         *      initial delay time (option 'options.delay') will be used.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved after the
+         *  callback function has been executed. If the callback function
+         *  returns a simple value or object, the Deferred object will be
+         *  resolved with that value. If the callback function returns a
+         *  Deferred object by itself, its state and result value will be
+         *  forwarded to the Deferred object returned by this method. If the
+         *  callback function will be executed repeatedly, the Deferred object
+         *  will not be resolved before the last execution cycle. The returned
+         *  Promise contains an additional method 'abort()' that can be called
+         *  before the timeout has been fired to cancel the pending or repeated
+         *  execution of the callback function. In that case, the returned
+         *  Promise will neither be resolved nor rejected. When the application
+         *  will be closed, it aborts all pending callback functions
+         *  automatically.
+         */
+        this.executeDelayed = function (callback, options) {
+
+            var // the current browser timeout identifier
+                timeout = null,
+                // the delay time for the next execution of the callback
+                delay = Utils.getIntegerOption(options, 'delay', 0, 0),
+                // whether to repeat execution of the callback function
+                repeat = Utils.getBooleanOption(options, 'repeat', false),
+                // the result Deferred object
+                def = $.Deferred(),
+                // the Promise of the Deferred object
+                promise = def.promise();
+
+            // creates and registers a browser timeout that executes the callback
+            function createTimeout() {
+
+                // create a new browser timeout
+                timeout = window.setTimeout(function () {
+
+                    // first, unregister the timeout
+                    delete delayTimeouts[timeout];
+
+                    // execute the callback function, react on its result
+                    $.when(callback())
+                    .done(function (result) {
+                        if (repeat && (result === true)) {
+                            createTimeout();
+                        } else {
+                            def.resolve(result);
+                        }
+                    })
+                    .fail(function (result) {
+                        def.reject(result);
+                    });
+
+                }, delay);
+
+                // register the browser timeout in the global map
+                delayTimeouts[timeout] = timeout;
+            }
+
+            // do not call from other unregistered pending timeouts after application quit
+            if (delayTimeouts) { createTimeout(); }
+
+            // switch to repetition delay time
+            delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
+
+            // add an abort() method to the Promise
+            promise.abort = function () {
+                if (timeout in delayTimeouts) {
+                    window.clearTimeout(delayTimeouts[timeout]);
+                    delete delayTimeouts[timeout];
+                    // leave the Deferred object unresolved
+                }
+            };
+
+            return promise;
+        };
+
+        this.processArrayDelayed = function (callback, dataArray, options) {
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the timer executing the callback function for the array chunks
+                timer = null,
+                // the length of a single chunk in the array
+                chunkLength = Utils.getIntegerOption(options, 'chunkLength', 10, 1),
+                // current array index
+                index = 0;
+
+            // check passed data array
+            if (dataArray.length === 0) { return $.when(); }
+
+            // start a repeated timer, pass the delay times passed to this method
+            timer = self.executeDelayed(function () {
+
+                // notify listeners about the progress
+                def.notify(index / dataArray.length);
+
+                // execute the callback, return whether to repeat execution
+                return $.when(callback(dataArray.slice(index, index + chunkLength), index))
+                    .then(function () {
+                        index += chunkLength;
+                        // repeat execution, if index has not reached end of array yet
+                        return index < dataArray.length;
+                    });
+
+            }, Utils.extendOptions(options, { repeat: true }));
+
+            // listen to the timer result, and resolve/reject the own Deferred object
+            timer.done(function () { def.notify(1).resolve(); }).fail(function () { def.reject(); });
+
+            // extend the promise with an 'abort()' method that aborts the timer
+            return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+        };
+
+        /**
          * Creates a debounced method that can be called multiple times during
          * the current script execution. Execution is separated into a part
          * that runs directly every time the method is called (the 'direct
@@ -861,101 +1016,7 @@ define('io.ox/office/tk/app/officeapplication',
             return this;
         };
 
-        /**
-         * Executes all registered quit handlers and returns a Deferred object
-         * that will be resolved or rejected according to the rasults of the
-         * handlers.
-         *
-         * @internal
-         *  Not for external use. Only used from the implementation of the
-         *  'io.ox/core/logout' extension point.
-         */
-        this.executeQuitHandlers = function () {
-            return callHandlers(quitHandlers);
-        };
-
         // application runtime ------------------------------------------------
-
-        /**
-         * Executes the passed callback function once or repeatedly in a
-         * browser timeout. If the application will be closed before the
-         * callback function has been started, or while the callback function
-         * will be repeated, it will not be executed anymore.
-         *
-         * @param {Function} callback
-         *  The callback function that will be executed in a browser timeout
-         *  after the specified initial delay time. As long as this function
-         *  returns true, it will be called again after the specified
-         *  repetition delay time.
-         *
-         * @param {Number} [initialDelay=0]
-         *  The time (in milliseconds) the first execution of the passed
-         *  callback function will be delayed.
-         *
-         * @param {Number} [repeatedDelay=initialDelay]
-         *  The time (in milliseconds) after the execution of the passed
-         *  callback function will be repeated. If omitted, the passed initial
-         *  delay time will be used.
-         *
-         * @returns {Number}
-         *  A unique identifier that can be used to identify the pending
-         *  callback function.
-         */
-        this.executeDelayed = function (callback, initialDelay, repeatedDelay) {
-
-            var // the unique timeout identifier (initial browser timeout handle)
-                id = null,
-                // the delay time for the next execution of the callback
-                delay = _.isNumber(initialDelay) ? initialDelay : 0;
-
-            // executes the callback, repeats execution if required
-            function executeCallback() {
-                delete delayTimeouts[id];
-                // call deferred callback, recall it if it returns true
-                if (callback() === true) {
-                    delayTimeouts[id] = window.setTimeout(executeCallback, delay);
-                }
-            }
-
-            // do not call from other unregistered pending timeouts after quit
-            if (delayTimeouts) {
-                // create initial timeout
-                id = window.setTimeout(executeCallback, delay);
-                delayTimeouts[id] = id;
-
-                // switch to repetition delay time
-                if (_.isNumber(repeatedDelay)) {
-                    delay = repeatedDelay;
-                }
-            }
-
-            return id;
-        };
-
-        /**
-         * Cancels the execution of the specified deferred method. If the
-         * deferred callback function has been executed already and is not
-         * executed repeatedly, this method has no effect.
-         *
-         * @param {Number} id
-         *  The unique identifier of the deferred callback, as returned from
-         *  the method OfficeApplication.executeDelayed().
-         *
-         * @returns {Boolean}
-         *  Whether the specified callback was still waiting for its execution
-         *  and has been cancelled.
-         */
-        this.cancelDelayed = function (id) {
-
-            var // whether the timeout is still waiting for execution
-                pending = id in delayTimeouts;
-
-            if (pending) {
-                window.clearTimeout(delayTimeouts[id]);
-                delete delayTimeouts[id];
-            }
-            return pending;
-        };
 
         /**
          * Renames the current file and updates the GUI accordingly.

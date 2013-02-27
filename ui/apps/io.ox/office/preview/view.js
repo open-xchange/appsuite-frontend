@@ -106,7 +106,7 @@ define('io.ox/office/preview/view',
         function showPage(newPage) {
 
             var // a timeout for the window busy call
-                busyTimeout = null;
+                busyPromise = null;
 
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
@@ -115,10 +115,7 @@ define('io.ox/office/preview/view',
             page = newPage;
 
             // switch window to busy state after a short delay
-            busyTimeout = app.executeDelayed(function () {
-                app.getWindow().busy();
-                busyTimeout = null;
-            }, 500);
+            busyPromise = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
             model.loadPage(page)
@@ -131,11 +128,8 @@ define('io.ox/office/preview/view',
             })
             .always(function () {
                 app.getController().update();
-                if (busyTimeout) {
-                    app.cancelDelayed(busyTimeout);
-                } else {
-                    app.getWindow().idle();
-                }
+                busyPromise.abort();
+                app.getWindow().idle();
             });
         }
 

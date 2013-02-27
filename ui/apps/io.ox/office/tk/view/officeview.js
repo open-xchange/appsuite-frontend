@@ -182,6 +182,28 @@ define('io.ox/office/tk/view/officeview',
         };
 
         /**
+         * Detaches the application pane from the DOM.
+         *
+         * @returns {OfficeView}
+         *  A reference to this instance.
+         */
+        this.detachAppPane = function () {
+            this.getAppPaneNode().detach();
+            return this;
+        };
+
+        /**
+         * Attaches the application pane to the DOM.
+         *
+         * @returns {OfficeView}
+         *  A reference to this instance.
+         */
+        this.attachAppPane = function () {
+            app.getWindowNode().prepend(this.getAppPaneNode());
+            return this;
+        };
+
+        /**
          * Inserts new DOM nodes into the container node of the application
          * pane.
          *
@@ -453,7 +475,7 @@ define('io.ox/office/tk/view/officeview',
             }
 
             // remove alert banner currently shown, update reference to current alert
-            app.cancelDelayed(currentAlertTimeout);
+            if (currentAlertTimeout) { currentAlertTimeout.abort(); }
             currentAlertTimeout = null;
             if (currentAlert) { currentAlert.remove(); }
             currentAlert = alert;
@@ -464,7 +486,7 @@ define('io.ox/office/tk/view/officeview',
                 alert.click(closeAlert);
                 // initialize auto-close
                 if (timeout > 0) {
-                    currentAlertTimeout = app.executeDelayed(closeAlert, timeout);
+                    currentAlertTimeout = app.executeDelayed(closeAlert, { delay: timeout });
                 }
             } else {
                 // remove closer button
@@ -587,10 +609,6 @@ define('io.ox/office/tk/view/officeview',
         app.getWindow().on('show', function () {
             app.getController().update().done();
         });
-
-        // detach application pane from DOM while loading the document
-//        app.on('docs:import:before', function () { appContainerNode.detach(); })
-//            .on('docs:import:after', function () { appPane.getNode().append(appContainerNode); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {
