@@ -200,7 +200,7 @@ define('io.ox/tasks/util',
             },
 
             //change status number to status text. format enddate to presentable string
-            //if detail alarm and startdate get converted too and status text is set for more states than overdue and success
+            //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, detail)
             {
                 task = _.copy(task, true);

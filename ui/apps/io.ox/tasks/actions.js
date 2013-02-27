@@ -261,6 +261,61 @@ define('io.ox/tasks/actions',
             });
         }
     });
+    
+    new Action('io.ox/tasks/actions/print', {
+        id: 'print',
+        action: function (baton) {
+            var data = util.interpretTask(baton.data, true),
+                fields = {
+                    start_date: gt('Start date'),
+                    end_date: gt('End date'),
+                    priority: gt('Priority'),
+                    percent_completed: gt('Progress in percent'),
+                    note: gt('Description'),
+                    target_duration: gt('Estimated duration in minutes'),
+                    actual_duration: gt('Actual duration in minutes'),
+                    target_costs: gt('Estimated costs'),
+                    actual_costs: gt('Actual costs'),
+                    currency: gt('Currency'),
+                    trip_meter: gt('Distance'),
+                    billing_information: gt('Billing information'),
+                    company: gt('Company')
+                },
+                states = [gt('Not yet confirmed'),
+                          gt('Confirmed'),
+                          gt('Declined'),
+                          gt('Tentative')],
+                participants = [];
+            
+            require(['io.ox/core/print'], function (print) {
+                //Do something with the data and give it to print when its ready
+                //included needed code allready
+                //makes additional requests but is needed later anyway
+                if (data.participants.length > 0) {
+                    require(['io.ox/core/api/user'], function (userApi) {
+                        _(data.participants).each(function (participant) {
+                            if (participant.id) {//external participants dont have an id but the display name is already given
+                                userApi.getName(participant.id).done(function (name) {
+                                    participants.push({display_name: name, confirmation: states[participant.confirmation]});
+                                });
+                            } else {
+                                participants.push({display_name: participant.display_name, confirmation: states[participant.confirmation]});
+                            }
+                        });
+                        console.log(data);
+                        console.log(participants);
+                        //meanwhile show dummy
+                        print.interim(ox.base + '/apps/io.ox/tasks/print-template.html');
+                    });
+                } else {
+                    console.log(data);
+                    console.log(participants);
+                    //meanwhile show dummy
+                    print.interim(ox.base + '/apps/io.ox/tasks/print-template.html');
+                }
+            });
+        }
+    });
 
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
@@ -485,6 +540,14 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'print',
+        index: 700,
+        prio: 'lo',
+        label: gt('Print'),
+        ref: 'io.ox/tasks/actions/print'
     }));
 
     // Attachments
