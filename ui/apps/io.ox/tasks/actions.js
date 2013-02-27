@@ -261,7 +261,7 @@ define('io.ox/tasks/actions',
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/print', {
         id: 'print',
         action: function (baton) {
@@ -286,7 +286,7 @@ define('io.ox/tasks/actions',
                           gt('Declined'),
                           gt('Tentative')],
                 participants = [];
-            
+
             require(['io.ox/core/print'], function (print) {
                 //Do something with the data and give it to print when its ready
                 //included needed code allready
@@ -334,16 +334,12 @@ define('io.ox/tasks/actions',
                     }, false);
                 });
         },
-        multiple: function (list) {
-            var e = $.Event();
-            e.target = this;
-
+        multiple: function (list, baton) {
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
                 //build Sidepopup
-                new dialogs.SidePopup({ arrow: false, side: 'right' })
-                    .show(e, function (popup) {
+                new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
                         data.dataURL = attachmentApi.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
@@ -394,6 +390,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/save-attachment', {
         id: 'save',
+        capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
             require(['io.ox/core/api/attachment'], function (attachmentApi) {
@@ -541,7 +538,7 @@ define('io.ox/tasks/actions',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'print',
         index: 700,

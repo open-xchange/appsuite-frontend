@@ -17,9 +17,8 @@ define('io.ox/contacts/actions',
      'io.ox/contacts/api',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/capabilities',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt, settings) {
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, gt, settings) {
 
     'use strict';
 
@@ -182,9 +181,11 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/send', {
 
+        capabilities: 'webmail',
+
         requires: function (e) {
             var ctx = e.context;
-            if (!capabilities.has('webmail') || (ctx.id === 0 && ctx.folder_id === 0)) {
+            if (ctx.id === 0 && ctx.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -230,9 +231,11 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/vcard', {
 
+        capabilities: 'webmail',
+
         requires: function (e) {
             var ctx = e.context;
-            if (!capabilities.has('webmail') || (ctx.id === 0 && ctx.folder_id === 0)) {
+            if (ctx.id === 0 && ctx.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(e.context);
@@ -259,9 +262,11 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/invite', {
 
+        capabilities: 'calendar',
+
         requires: function (e) {
             var ctx = e.context;
-            if (!capabilities.has('calendar') || (ctx.id === 0 && ctx.folder_id === 0)) {
+            if (ctx.id === 0 && ctx.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -315,6 +320,7 @@ define('io.ox/contacts/actions',
     });
 
     new Action('io.ox/contacts/actions/add-to-portal', {
+        capabilities: 'portal',
         requires: function (e) {
             return e.collection.has('one') && !!e.context.mark_as_distributionlist;
         },
@@ -369,16 +375,12 @@ define('io.ox/contacts/actions',
                     }, false);
                 });
         },
-        multiple: function (list) {
-            var e = $.Event();
-            e.target = this;
-
+        multiple: function (list, baton) {
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
                 //build Sidepopup
-                new dialogs.SidePopup({ arrow: false, side: 'right' })
-                    .show(e, function (popup) {
+                new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
                         data.dataURL = attachmentApi.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
@@ -429,6 +431,7 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/save-attachment', {
         id: 'save',
+        capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
             require(['io.ox/core/api/attachment'], function (attachmentApi) {

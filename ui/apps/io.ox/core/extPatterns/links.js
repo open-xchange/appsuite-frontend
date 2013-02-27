@@ -35,6 +35,7 @@ define("io.ox/core/extPatterns/links",
                 var node = $(this),
                     baton = node.data("baton"),
                     ref = node.data("ref");
+                baton.e = e;
                 actions.invoke(ref, this, baton, e);
             };
 
@@ -92,6 +93,7 @@ define("io.ox/core/extPatterns/links",
             click = function (e) {
                 e.preventDefault();
                 var extension = e.data.extension;
+                e.data.baton.e = e;
                 actions.invoke(extension.ref, extension, e.data.baton);
             };
 

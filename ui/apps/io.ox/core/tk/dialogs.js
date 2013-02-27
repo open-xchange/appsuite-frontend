@@ -359,7 +359,8 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
     var SidePopup = function (options) {
 
         options = _.extend({
-            modal: false
+            modal: false,
+            arrow: true
         }, options || {});
 
         var processEvent,

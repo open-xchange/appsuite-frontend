@@ -17,9 +17,8 @@ define('io.ox/calendar/actions',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/actions',
      'io.ox/core/config',
-     'io.ox/core/notifications',
-     'io.ox/core/capabilities'
-    ], function (ext, links, api, util, gt, config, notifications, capabilities) {
+     'io.ox/core/notifications'
+    ], function (ext, links, api, util, gt, config, notifications) {
 
     'use strict';
 
@@ -72,9 +71,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
-        requires: function () {
-            return capabilities.has('webmail');
-        },
+        capabilities: 'webmail',
         action: function (baton) {
             var def = $.Deferred();
             util.createArrayOfRecipients(baton.data.participants, def);
@@ -89,9 +86,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
-        requires: function () {
-            return capabilities.has('contacts');
-        },
+        capabilities: 'contacts',
         action: function (baton) {
             var contactsFolder = config.get('folder.contacts'),
                 def = $.Deferred();

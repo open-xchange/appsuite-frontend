@@ -150,11 +150,10 @@ define('io.ox/core/upsell',
 
         // just for demo purposes
         demo: function () {
-            enabled.infostore = true;
-            capabilityCache.infostore = false;
-            enabled.tasks = true;
-            capabilityCache.tasks = false;
-            console.debug('Disabled infostore & task actions; enabled upsell');
+            var e = enabled, c = capabilityCache;
+            e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = true;
+            c.portal = c.webmail = c.contacts = c.calendar = c.infostore = c.tasks = false;
+            console.debug('Disabled inline actions regarding portal, mail, contacts, calendar, tasks, and files; enabled upsell instead');
             that.useDefaults();
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.addPlugin('plugins/portal/upsell/register');
@@ -163,6 +162,11 @@ define('io.ox/core/upsell',
             });
         }
     };
+
+    var hash = _.url.hash('demo') || '';
+    if (hash.indexOf('upsell') > -1) {
+        that.demo();
+    }
 
     return that;
 

@@ -23,10 +23,9 @@ define('io.ox/mail/actions',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
-     'io.ox/core/capabilities',
      'io.ox/core/api/conversion',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilities, conversionAPI, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, conversionAPI, settings) {
 
     'use strict';
 
@@ -308,12 +307,10 @@ define('io.ox/mail/actions',
                     }, false);
                 });
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             // open side popup
-            var e = $.Event();
-            e.target = this;
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
-                new dialogs.SidePopup().show(e, function (popup) {
+                new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, i) {
                         var pre = new p.Preview({
                             data: data,
@@ -391,9 +388,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('infostore');
-        },
+        capabilities: 'infostore',
+        requires: 'some',
         multiple: function (list) {
             notifications.yell('info', 'Attachments will be saved!');
             api.saveAttachments(list)
@@ -407,6 +403,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/vcard', {
         id: 'vcard',
+        capabilities: 'contacts',
         requires: function (e) {
             var context = e.context,
                 hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
@@ -446,6 +443,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/ical', {
         id: 'ical',
+        capabilities: 'calendar',
         requires: function (e) {
             var context = e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
@@ -486,8 +484,8 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/add-to-portal', {
-        requires: 'one',
         capabilities: 'portal', // was: !disablePortal
+        requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.add('stickymail', 'mail', {
@@ -505,10 +503,8 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/sendmail', {
         requires: 'some',
         action: function (baton) {
-
             var data = baton.data,
                 recipients = data.to.concat(data.cc).concat(data.from);
-
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose({ folder_id: data.folder_id, to: recipients });
@@ -519,9 +515,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/createdistlist', {
         id: 'create-distlist',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('contacts');
-        },
+        capabilities: 'contacts',
+        requires: 'some',
         action: function (baton) {
 
             var data = baton.data,
@@ -576,9 +571,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('calendar');
-        },
+        capabilities: 'calendar',
+        requires: 'some',
         action: function (baton) {
             var data = baton.data,
                 collectedRecipients = [],
@@ -637,8 +631,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
-        requires: 'one',
         capabilities: 'tasks',
+        requires: 'one',
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskApi, tasksUtil) {
