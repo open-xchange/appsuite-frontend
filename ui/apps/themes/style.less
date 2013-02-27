@@ -119,6 +119,16 @@
         background-color: @topbarLauncherBackgroundHover;
     }
 
+    .launcher.upsell {
+        color: darken(@topbarLauncherColor, 20%);
+        i.icon-lock {
+            color: inherit;
+            font-size: 14px;
+            position: static;
+            margin-right: 0.5em;
+        }
+    }
+
     .launcher.active-app {
         color: @topbarLauncherColorActive;
         background-color: @topbarLauncherBackgroundActive;

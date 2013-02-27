@@ -93,8 +93,8 @@ define('io.ox/core/upsell',
         // true if any item does not match its requirements but is enabled for upsell
         // this function is used for any inline link, for example, to decide whether or not showing it
         visible: function (array) {
-            if (!_.isArray(array)) return true;
-            return array.length === 0 || _(array).reduce(function (memo, capability) {
+            if (!array) return true;
+            return _([].concat(array)).reduce(function (memo, capability) {
                 return memo || capability === undefined || that.enabled(capability) || that.has(capability);
             }, false);
         },
@@ -152,8 +152,9 @@ define('io.ox/core/upsell',
         demo: function () {
             var e = enabled, c = capabilityCache;
             e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = true;
-            c.portal = c.webmail = c.contacts = c.calendar = c.infostore = c.tasks = false;
-            console.debug('Disabled inline actions regarding portal, mail, contacts, calendar, tasks, and files; enabled upsell instead');
+            c.portal = c.webmail = c.contacts = true;
+            c.calendar = c.infostore = c.tasks = false;
+            console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
             that.useDefaults();
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.addPlugin('plugins/portal/upsell/register');
@@ -163,10 +164,14 @@ define('io.ox/core/upsell',
         }
     };
 
-    var hash = _.url.hash('demo') || '';
-    if (hash.indexOf('upsell') > -1) {
-        that.demo();
-    }
+    (function () {
+
+        var hash = _.url.hash('demo') || '';
+        if (hash.indexOf('upsell') > -1) {
+            that.demo();
+        }
+
+    }());
 
     return that;
 

@@ -19,7 +19,8 @@ define("io.ox/core/desktop",
      "io.ox/core/extPatterns/links",
      "io.ox/core/cache",
      "io.ox/core/notifications",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, gt) {
+     "io.ox/core/upsell",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, gt) {
 
     "use strict";
 
@@ -77,7 +78,11 @@ define("io.ox/core/desktop",
 
         launch: function () {
             var self = this, id = (this.get('name') || this.id) + '/main';
-            return ox.launch(id).done(function () { self.quit(); });
+            if (upsell.has(this.get('requires'))) {
+                return ox.launch(id).done(function () { self.quit(); });
+            } else {
+                upsell.trigger();
+            }
         },
 
         quit: function (force) {

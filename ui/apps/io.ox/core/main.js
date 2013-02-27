@@ -365,6 +365,11 @@ define("io.ox/core/main",
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
+                if (!upsell.has(model.get('requires'))) {
+                    node.addClass('upsell').prepend(
+                        $('<i class="icon-lock">')
+                    );
+                }
             } else {
                 placeholder = container.children('.placeholder[data-app-name="' + $.escape(model.get('name')) + '"]');
                 if (placeholder.length) {
@@ -576,7 +581,13 @@ define("io.ox/core/main",
             id: 'default',
             draw: function () {
                 _(appAPI.getFavorites()).each(function (obj) {
-                    ox.ui.apps.add(new ox.ui.AppPlaceholder({ id: obj.id, title: obj.title }));
+                    if (upsell.visible(obj.requires)) {
+                        ox.ui.apps.add(new ox.ui.AppPlaceholder({
+                            id: obj.id,
+                            title: obj.title,
+                            requires: obj.requires
+                        }));
+                    }
                 });
             }
         });
