@@ -117,6 +117,7 @@
 .vgrid-cell.mail .icon-paper-clip {
     font-size: 20px;
     width: 18px;
+    height: 18px;
     margin-left: 0.5em;
     float: right;
 }
@@ -143,6 +144,7 @@
     background-color: darken(@selectedBackground, 15%);
 }
 
+.vgrid.editable .vgrid-cell.thread-summary,
 .vgrid-cell.thread-summary {
     padding: 0;
 }
