@@ -324,6 +324,24 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "804": "file_size",
             "805": "file_mimetype",
             "806": "rtf_flag"
+        },
+        "subscriptions": {
+            "id": "id",
+            "displayName": "displayName",
+            "enabled": "enabled",
+            "source": "source"
+        },
+        "publications": {
+            "id": "id",
+            "displayName": "displayName",
+            "enabled": "enabled"
+        },
+        "subscriptionSources": {
+            "id": "id",
+            "displayName": "displayName",
+            "icon": "icon",
+            "module": "module",
+            "formDescription": "formDescription"
         }
     };
 
