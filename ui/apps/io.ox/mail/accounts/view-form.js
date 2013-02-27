@@ -13,9 +13,10 @@
 
 define('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
+     'io.ox/core/notifications',
      'text!io.ox/mail/accounts/account_detail.html',
      'gettext!io.ox/settings/settings'
-    ], function (View, tmpl, gt) {
+    ], function (View, notifications, tmpl, gt) {
 
     'use strict';
 
@@ -60,7 +61,7 @@ define('io.ox/mail/accounts/view-form',
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
-                Backbone.Validation.bind(this, {selector: 'data-property'});
+                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is allways valid even if inputfields contain wrong values
             },
             render: function () {
                 var self = this;
@@ -78,7 +79,7 @@ define('io.ox/mail/accounts/view-form',
                 if (self.model.get('mail_protocol') === 'imap') {
                     pop3node.hide();
                 }
-                
+
                 function syncLogin(model, value) {
                         model.set('login', value);
                     }
@@ -128,15 +129,30 @@ define('io.ox/mail/accounts/view-form',
             },
             onSave: function () {
                 var self = this,
-                    deferedSave = $.Deferred();
+                    deferedSave = $.Deferred(),
+                    valdef = $.Deferred();
+                
                 this.model.save(false, deferedSave);
-                deferedSave.done(function (data) {
-                    self.dialog.close();
-                    if (self.collection) {
-                        self.collection.add([data]);
-                    }
-                    if (self.model.isNew()) {
-                        self.succes();
+                deferedSave.done(function (data) {//carefull here! there is no fail possible for this defered. Even errors result in done (backbone specific)
+                    if (data.error) {//manual check for error
+                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                            notifications.yell('error', gt('Login must not be empty.'));
+                        } else if (data.code === "SVL-0002") {
+                            notifications.yell('error',
+                                    //#. %1$s the missing request parameter
+                                    //#, c-format
+                                    gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                        } else {
+                            notifications.yell('error', _.noI18n(data.error));
+                        }
+                    } else {
+                        self.dialog.close();
+                        if (self.collection) {
+                            self.collection.add([data]);
+                        }
+                        if (self.model.isNew()) {
+                            self.succes();
+                        }
                     }
                 });
             }
