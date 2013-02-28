@@ -113,8 +113,7 @@ define('io.ox/office/preview/controller',
         // initialization -----------------------------------------------------
 
         // register item definitions
-        this.registerDefinitions(items)
-            .registerDoneHandler(function () { view.grabFocus(); });
+        this.registerDefinitions(items);
 
         // initialization after construction
         app.on('docs:init', function () {

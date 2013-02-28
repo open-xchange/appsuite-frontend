@@ -38,9 +38,6 @@ define('io.ox/office/framework/app/basecontroller',
             // definitions for all items, mapped by item key
             items = {},
 
-            // all registered default done handlers
-            doneHandlers = [],
-
             // registered view components
             components = [],
 
@@ -72,8 +69,8 @@ define('io.ox/office/framework/app/basecontroller',
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set', $.noop),
-                // done handler
-                doneHandler = Utils.getFunctionOption(definition, 'done', callDoneHandlers),
+                // whether to return browser focus to application pane (default: true)
+                done = Utils.getBooleanOption(definition, 'done', true),
                 // whether the item executes asynchronously
                 async = Utils.getBooleanOption(definition, 'async', false);
 
@@ -164,7 +161,8 @@ define('io.ox/office/framework/app/basecontroller',
                         setHandler.call(item, value);
                     }
                 }
-                doneHandler.call(item);
+                // return focus to application pane
+                if (done) { grabApplicationFocus(); }
                 return this;
             };
 
@@ -229,12 +227,10 @@ define('io.ox/office/framework/app/basecontroller',
         }
 
         /**
-         * Calls all registered default done handlers.
+         * Moves the browser focus to the application pane.
          */
-        function callDoneHandlers() {
-            _(doneHandlers).each(function (doneHandler) {
-                doneHandler.call(self);
-            });
+        function grabApplicationFocus() {
+            app.getView().grabFocus();
         }
 
         /**
@@ -247,7 +243,7 @@ define('io.ox/office/framework/app/basecontroller',
                 items[key].change(value);
                 self.update();
             } else {
-                callDoneHandlers();
+                grabApplicationFocus();
             }
         }
 
@@ -261,7 +257,7 @@ define('io.ox/office/framework/app/basecontroller',
                 callSetHandler(key, value);
                 break;
             case 'cancel':
-                callDoneHandlers();
+                grabApplicationFocus();
                 break;
             }
         }
@@ -350,22 +346,6 @@ define('io.ox/office/framework/app/basecontroller',
                 this.registerDefinition(key, definition);
             }, this);
             return this;
-        };
-
-        /**
-         * Registers a callback function that will be called when an item
-         * setter function has been executed after a 'change' event and the
-         * item does not define its own done handler, or if a view component
-         * triggers a 'cancel' event. Will be executed in the context of this
-         * controller.
-         *
-         * @param {Function} doneHandler
-         *
-         * @returns {BaseController}
-         *  A reference to this controller instance.
-         */
-        this.registerDoneHandler = function (doneHandler) {
-            doneHandlers.push(doneHandler);
         };
 
         /**
@@ -468,7 +448,7 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         /**
-         * Triggers a change event manually. Executes the setter function of
+         * Triggers a controller item manually. Executes the setter function of
          * the item associated to the specified key, passing in the new value.
          *
          * @param {String} key
@@ -482,18 +462,6 @@ define('io.ox/office/framework/app/basecontroller',
          */
         this.change = function (key, value) {
             callSetHandler(key, value);
-            return this;
-        };
-
-        /**
-         * Triggers a cancel event manually. Executes the default done handler
-         * of this controller.
-         *
-         * @returns {BaseController}
-         *  A reference to this controller.
-         */
-        this.cancel = this.done = function () {
-            callDoneHandlers();
             return this;
         };
 

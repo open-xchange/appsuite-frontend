@@ -38,6 +38,10 @@ define('io.ox/office/framework/view/baseview',
      * @param {BaseApplication} app
      *  The application containing this view instance.
      *
+     * @param {Function} grabFocusHandler
+     *  A function that has to implement moving the browser focus into the
+     *  application pane.
+     *
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
@@ -51,7 +55,7 @@ define('io.ox/office/framework/view/baseview',
      *      The margin between the fixed application pane and the embedded
      *      application container node, as CSS 'margin' attribute.
      */
-    function BaseView(app, options) {
+    function BaseView(app, grabFocusHandler, options) {
 
         var // self reference
             self = this,
@@ -166,6 +170,18 @@ define('io.ox/office/framework/view/baseview',
         }
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Moves the browser focus into the application pane. Calls the
+         * handler function passed to the constructor of this instance.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.grabFocus = function () {
+            grabFocusHandler.call(this);
+            return this;
+        };
 
         /**
          * Returns the DOM node of the application pane (the complete inner
@@ -494,8 +510,8 @@ define('io.ox/office/framework/view/baseview',
                 alert.find('a.close').remove();
             }
 
-            // always execute controller default action when alert has been clicked (also if not closeable)
-            alert.click(function () { app.getController().done(); });
+            // return focus to application pane when alert has been clicked (also if not closeable)
+            alert.click(function () { self.grabFocus(); });
 
             // insert the push button into the alert banner
             if (_.isString(buttonLabel) && _.isString(buttonKey)) {
@@ -608,7 +624,8 @@ define('io.ox/office/framework/view/baseview',
 
         // update all view components every time the window will be shown
         app.getWindow().on('show', function () {
-            app.getController().update().done();
+            app.getController().update();
+            self.grabFocus();
         });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps

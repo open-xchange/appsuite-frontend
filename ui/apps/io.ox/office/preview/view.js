@@ -58,9 +58,16 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, { scrollable: true, margin: '52px 30px' });
+        BaseView.call(this, app, grabFocusHandler, { scrollable: true, margin: '52px 30px' });
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Sets the browser focus to the page node.
+         */
+        function grabFocusHandler() {
+            pageNode.focus();
+        }
 
         /**
          * Initialization after construction. Will be called once after
@@ -173,17 +180,6 @@ define('io.ox/office/preview/view',
         }
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Sets the browser focus to the page node.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.grabFocus = function () {
-            pageNode.focus();
-            return this;
-        };
 
         /**
          * Returns the one-based index of the page currently shown.
