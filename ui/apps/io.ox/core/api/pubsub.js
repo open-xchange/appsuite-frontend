@@ -25,14 +25,20 @@ define('io.ox/core/api/pubsub',
      * @return {deferred}
      */
     function api(opt) {
-        var opt = $.extend(true, {
-            module: null,
-            columns: null
-        }, opt || {});
 
-        return apiFactory({
-            module: opt.module,
+        /**
+         * clears cache
+         * @return {deferred}
+         */
+        var clearCache = function (api) {
+            return $.when(
+                    api.caches.all.clear(),
+                    api.caches.get.clear(),
+                    api.caches.list.clear()
+                );
+        };
 
+        return $.extend(true, apiFactory(opt), {
             /**
              * update publication/subscription
              * @private
@@ -40,14 +46,17 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             update: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    params: {
-                        action: 'update'
-                    },
-                    data: data
+                return clearCache(this).pipe(function () {
+                    http.PUT({
+                        module: opt.module,
+                        params: {
+                            action: 'update'
+                        },
+                        data: data
+                    });
                 });
             },
+
             /**
              * refresh publication/subscription
              * @private
@@ -55,15 +64,17 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             refresh: function (id, folder) {
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return http.GET({
-                    module: opt.module,
-                    appendColumns: false,
-                    params: {
-                        action: 'refresh',
-                        id : id,
-                        folder: folder
-                    }
+                folder = _.isObject(folder) ? folder.id : folder || '';
+                return clearCache(this).pipe(function () {
+                    return http.GET({
+                        module: opt.module,
+                        appendColumns: false,
+                        params: {
+                            action: 'refresh',
+                            id : id,
+                            folder: folder
+                        }
+                    });
                 });
             },
 
@@ -74,13 +85,15 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             create: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    appendColumns: false,
-                    params: {
-                        action: 'new'
-                    },
-                    data: data
+                return clearCache(this).pipe(function () {
+                    return http.PUT({
+                        module: opt.module,
+                        appendColumns: false,
+                        params: {
+                            action: 'new'
+                        },
+                        data: data
+                    });
                 });
             }
         });
