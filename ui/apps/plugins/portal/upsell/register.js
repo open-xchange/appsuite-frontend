@@ -34,7 +34,11 @@ define('plugins/portal/upsell/register',
                     $('<div>').text(gt('Click here for free trial.'))
                 )
                 .on('click', function () {
-                    ox.trigger('upsell:upgrade');
+                    ox.trigger('upsell:upgrade', {
+                        type: 'widget',
+                        id: 'io.ox/portal/widget/upsell',
+                        missing: ''
+                    });
                 })
             );
         }

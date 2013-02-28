@@ -62,7 +62,11 @@ define("io.ox/core/extPatterns/actions",
         // capabilities, we try to offer upsell
         if (!upsell.any(capabilities)) {
             if (upsell.enabled(capabilities)) {
-                upsell.trigger();
+                upsell.trigger({
+                    type: 'inline-action',
+                    id: ref,
+                    missing: upsell.missing(capabilities)
+                });
             }
             return;
         }

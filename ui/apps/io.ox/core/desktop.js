@@ -77,11 +77,11 @@ define("io.ox/core/desktop",
         },
 
         launch: function () {
-            var self = this, id = (this.get('name') || this.id) + '/main';
-            if (upsell.has(this.get('requires'))) {
+            var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
+            if (upsell.has(requires)) {
                 return ox.launch(id).done(function () { self.quit(); });
             } else {
-                upsell.trigger();
+                upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
             }
         },
 

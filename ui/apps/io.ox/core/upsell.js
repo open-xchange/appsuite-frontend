@@ -17,7 +17,7 @@ define('io.ox/core/upsell',
 
     'use strict';
 
-    function showUpgradeDialog() {
+    function showUpgradeDialog(e, options) {
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog({ easyOut: true })
                 .build(function () {
@@ -37,7 +37,7 @@ define('io.ox/core/upsell',
                     backgroundColor: '#08C'
                 })
                 .on('upgrade', function () {
-                    ox.trigger('upsell:upgrade');
+                    ox.trigger('upsell:upgrade', options);
                 })
                 .on('show', function () {
                     ox.off('upsell:requires-upgrade', showUpgradeDialog);
@@ -49,7 +49,8 @@ define('io.ox/core/upsell',
         });
     }
 
-    function upgrade() {
+    function upgrade(e, options) {
+        console.debug('upgrade', options);
         // needs no translation; just for demo purposes
         alert('User decided to upgrade! (global event: upsell:upgrade)');
     }
@@ -62,8 +63,8 @@ define('io.ox/core/upsell',
     var that = {
 
         // convenience functions
-        trigger: function () {
-            ox.trigger('upsell:requires-upgrade');
+        trigger: function (options) {
+            ox.trigger('upsell:requires-upgrade', options);
         },
 
         // simple click handler
@@ -77,6 +78,12 @@ define('io.ox/core/upsell',
             return _(array).reduce(function (memo, c) {
                 return memo || c === undefined || that.has(c);
             }, false);
+        },
+
+        // returns missing capabilities (<string>)
+        missing: function (array) {
+            if (!array) return '';
+            return _([].concat(array)).chain().filter(function (c) { return !that.has(c); }).flatten().value().join(' ');
         },
 
         // bypass for convenience
