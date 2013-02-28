@@ -23,7 +23,7 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
-     'io.ox/pubsub/util',
+     'io.ox/core/pubsub/api',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubUtil) {
