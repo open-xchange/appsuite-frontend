@@ -39,6 +39,40 @@ define('io.ox/core/pubsub/settings/pane',
         }
     });
 
+    ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
+        id: 'itemview',
+        draw: function (baton) {
+            var data = baton.model.toJSON();
+
+            this.append(
+                $('<span>').text(data.displayName),
+                $('<a href="#" class="close" data-action="remove">').html('&times;')
+            );
+        }
+    });
+
+    var PubSubItem = Backbone.View.extend({
+        tagName: 'li',
+        className: '',
+        events: {
+            'click [data-action="remove"]': 'onRemove'
+        },
+        render: function () {
+            var baton = ext.Baton({ model: this.model, view: this });
+            ext.point('io.ox/core/pubsub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
+            return this;
+        },
+        onRemove: function (ev) {
+            ev.preventDefault();
+            this.model.collection.remove(this.model);
+            this.remove();
+        }
+    });
+
+    function createPubSubItem(model) {
+        return new PubSubItem({model: model});
+    }
+
     point.extend({
         id: 'content',
         render: function () {
@@ -46,9 +80,9 @@ define('io.ox/core/pubsub/settings/pane',
 
             this.model.done(function (res) {
                 res.each(function (obj) {
-                    $('<li>').append(
-                        obj.get('displayName')
-                    ).appendTo(listNode);
+                    listNode.append(
+                        createPubSubItem(obj).render().el
+                    );
                 });
             });
             listNode.appendTo(this.$el);
