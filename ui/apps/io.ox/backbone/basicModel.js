@@ -117,7 +117,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                     isSave: true
                 });
                 if (!this.isValid()) {
-                    return $.Deferred().reject({error: gt('Invalid data')});
+                    return $.Deferred().reject({error: gt('Invalid data'), model: this});
                 }
             }
             if (this.syncer) {
