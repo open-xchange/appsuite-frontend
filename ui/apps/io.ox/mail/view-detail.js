@@ -241,6 +241,15 @@ define('io.ox/mail/view-detail',
                 source = $.trim(source);
                 isLarge = source.length > 1024 * 512; // > 512 KB
 
+                // hide content
+                if (data.hidecontent) {
+                    return {
+                        content: $('<div class="content">'),
+                        isLarge: false,
+                        type: 'text/html'
+                    };
+                }
+
                 // empty?
                 if (source === '') {
                     return {
@@ -959,6 +968,28 @@ define('io.ox/mail/view-detail',
     });
 
     /**
+     * custom content within invitation mail?
+     * @param  {object} data of invitation mail
+     * @param  {string} url of publication
+     * @return {boolean}
+     */
+    function containsCustomContent(data, url) {
+        var $content = that.getContent(data).content,
+            invalid = new RegExp(/[^a-zA-Z 0-9\/\:\-\.\?\=\_]+/g),
+            whitespace = new RegExp(/[\s]+/g),
+            text;
+        //remove potential style tag/content
+        $content.find('style').remove();
+        //remove non printable chars, whitespace and the url
+        text = $content.text().trim()
+            .replace(invalid, '')
+            .replace(whitespace, '')
+            .replace(url, '');
+        //fuzzy: remaining text relevant?
+        return text.length > 4;
+    }
+
+    /**
      * @description actions for publication invitation mails
      */
     ext.point('io.ox/mail/detail').extend({
@@ -977,7 +1008,9 @@ define('io.ox/mail/view-detail',
             if (pub.url === '')
                 return false;
             else {
-               //qualify data
+                //hide mail content if invitaion
+                data.hidecontent = !containsCustomContent(data, pub.url);
+                //qualify data
                 pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
                 pub.module  = pubtype[1];
                 pub.type  = pubtype[2];
@@ -987,7 +1020,7 @@ define('io.ox/mail/view-detail',
                 //dom
                 var $actions, $appointmentInfo, $box;
                 $('<div class="well">').append(
-                    $('<span class="muted">').text(gt('This email contains an subscription invitation for a shared folder')),
+                    $('<span class="muted">').text(gt('This email contains a subscription invitation for a shared %1$s folder', gt(pub.module))),
                     $("<br>"),
                     $appointmentInfo = $('<div class="appointmentInfo">'),
                     $actions = $('<div class="subscription-actions">')
