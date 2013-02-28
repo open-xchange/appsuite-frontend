@@ -44,10 +44,26 @@ define('io.ox/core/pubsub/settings/pane',
         draw: function (baton) {
             var data = baton.model.toJSON();
 
+            this[data.enabled ? 'removeClass' : 'addClass']('disabled');
+
             this.append(
-                $('<span>').text(data.displayName),
+                $('<span>').addClass('content pull-left')
+                .addClass(data.enabled ? '' : 'disabled').append(
+                    $('<div>').text(data.displayName),
+                    $('<div>').text(data.folder)
+                ),
                 $('<a href="#" class="close" data-action="remove">').html('&times;')
             );
+
+            if (data.enabled) {
+                this.append(
+                    $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
+                );
+            } else {
+                this.append(
+                    $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
+                );
+            }
         }
     });
 
@@ -55,12 +71,20 @@ define('io.ox/core/pubsub/settings/pane',
         tagName: 'li',
         className: '',
         events: {
+            'click [data-action="toggle"]': 'onToggle',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/pubsub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
             return this;
+        },
+        onToggle: function (ev) {
+            ev.preventDefault();
+            this.model.set('enabled', !this.model.get('enabled')).save().fail(function (res) {
+                res.model.set('enabled', !res.model.get('enabled'));
+            });
+            this.render();
         },
         onRemove: function (ev) {
             ev.preventDefault();

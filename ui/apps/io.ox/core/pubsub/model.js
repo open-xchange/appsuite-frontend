@@ -28,6 +28,9 @@ define('io.ox/core/pubsub/model',
                     console.log(model, arguments);
                     return $.when().resolve(true);
                 },
+                update: function (model) {
+                    return api.publications.update(model);
+                },
                 destroy: function (model) {
                     return api.publications.remove(model.id);
                 }
@@ -36,6 +39,9 @@ define('io.ox/core/pubsub/model',
         Subscription = BasicModel.extend({
             ref: 'io.ox/core/pubsub/subscription/',
             syncer: {
+                update: function (model) {
+                    return api.subscriptions.update(model);
+                },
                 destroy: function (model) {
                     return api.subscriptions.remove(model.id);
                 }
