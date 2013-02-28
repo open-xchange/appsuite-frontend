@@ -31,9 +31,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             api.getRules('vacation').done(function (data) {
                 var vacationData = data[0].actioncmds[0];
+                vacationData.mainID = data[0].id;
                 vacationData.active = data[0].active;
-                vacationData.dateFrom = data[0].test.tests[0].datevalue[0];
-                vacationData.dateUntil = data[0].test.tests[1].datevalue[0];
+
+                if (_(data[0].test).size() === 2) {
+                    _(data[0].test.tests).each(function (value) {
+                        if (value.comparison === 'ge') {
+                            vacationData.dateFrom = value.datevalue[0];
+                        } else {
+                            vacationData.dateUntil = value.datevalue[0];
+                        }
+                    });
+                }
 
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
 

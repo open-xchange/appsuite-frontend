@@ -46,15 +46,48 @@ define('io.ox/mail/mailfilter/settings/model',
                 }
 
                 var preparedData = {
-                        "actioncmds": [newAttributes],
-                        "id": 0
+                    "actioncmds": [newAttributes],
+                    "id": model.attributes.mainID
+                };
+
+                var testForTimeframe = {
+                        "id": "allof",
+                        "tests": []
                     };
+
+                if (model.attributes.dateFrom) {
+                    testForTimeframe.tests.push(
+                        {
+                            "id": "currentdate",
+                            "comparison": "ge",
+                            "datepart": "date",
+                            "datevalue": [model.attributes.dateFrom]
+                        }
+                    );
+                }
+
+                if (model.attributes.dateUntil) {
+                    testForTimeframe.tests.push(
+                        {
+                            "id": "currentdate",
+                            "comparison": "le",
+                            "datepart": "date",
+                            "datevalue": [model.attributes.dateUntil]
+                        }
+                    );
+                }
+
+                if (testForTimeframe.tests.length === 0) {
+                    testForTimeframe = { id: "true" };
+                }
+
                 if (model.attributes.active) {
                     preparedData.active = model.attributes.active;
-                    delete model.attributes.active;
                 } else {
                     preparedData.active = false;
                 }
+
+                preparedData.test = testForTimeframe;
 
                 return api.update(preparedData);
             }
