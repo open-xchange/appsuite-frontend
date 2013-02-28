@@ -140,8 +140,8 @@ define('io.ox/office/framework/app/basecontroller',
 
             /**
              * Executes the setter function of this item (passing in the new
-             * value), and the done handler, and updates all registered view
-             * components.
+             * value), updates all registered view components, and moves the
+             * browser focus back to the application pane,
              *
              * @param value
              *  The new value of the item.
@@ -234,8 +234,8 @@ define('io.ox/office/framework/app/basecontroller',
         }
 
         /**
-         * Calls the set handler of the item with the registered key. If the
-         * item does not exist, calls the registered default done handlers.
+         * Calls the set handler of the item with the registered key, and moves
+         * the browser focus back to the application pane.
          */
         function callSetHandler(key, value) {
             if (key in items) {
@@ -315,10 +315,9 @@ define('io.ox/office/framework/app/basecontroller',
          *      runs, the item will be disabled. When the Deferred object has
          *      been resolved or rejected, the item will be enabled and
          *      updated again.
-         *  @param {Function} [definition.done]
-         *      A function that will be executed after the setter function has
-         *      returned. If specified, overrides the default done handler
-         *      passed to the constructor of this controller.
+         *  @param {Boolean} [definition.done=true]
+         *      If set to false, the browser focus will not be moved to the
+         *      application pane after an item setter has been executed.
          *
          * @returns {BaseController}
          *  A reference to this controller instance.
