@@ -94,10 +94,7 @@ define('io.ox/core/api/pubsub',
     var sources = function () {
         var opt = {
                 module: 'subscriptionSources',
-                columns: 'id,displayName,icon,module,formDescription',
-                request: {
-                    all: {}
-                }
+                columns: 'id,displayName,icon,module,formDescription'
             };
 
         return apiFactory(opt);
