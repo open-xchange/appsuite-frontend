@@ -9,18 +9,19 @@
  * Mail: info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 define('io.ox/core/api/pubsub',
-    ['io.ox/core/http'], function (http) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'
+    ], function (http, apiFactory) {
 
     'use strict';
 
-    //TODO: caching
-
     /**
      * gerneralized API for pubsub
-     * @param  {string} opt
+     * @param  {object} opt
      * @return {deferred}
      */
     function api(opt) {
@@ -29,56 +30,8 @@ define('io.ox/core/api/pubsub',
             columns: null
         }, opt || {});
 
-        return {
-            /**
-             * returns folder publications/subscriptions
-             * @private
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                var def = $.Deferred();
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return http.GET({
-                    module: opt.module,
-                    params: {
-                        action: 'all',
-                        columns: opt.columns,
-                        folder: folder,
-                        entityModule: type
-                    }
-                })
-                .done(function (data) {
-                    def.resolve(data);
-                })
-                .fail(function (data) {
-                    def.reject(data);
-                });
-            },
-            /**
-             * returns publication/subscription data
-             * @private
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
-             */
-            get: function (item) {
-                var def = $.Deferred(),
-                    id = _.isObject(item) ? item.id : item || '';
-                return http.GET({
-                    module: opt.module,
-                    params: {
-                        action: 'get',
-                        id: id
-                    }
-                })
-                .done(function (data) {
-                    def.resolve(data || []);
-                })
-                .fail(function (data) {
-                    def.reject(data);
-                });
-            },
+        return apiFactory({
+            module: opt.module,
 
             /**
              * update publication/subscription
@@ -95,9 +48,8 @@ define('io.ox/core/api/pubsub',
                     data: data
                 });
             },
-
             /**
-             * create publication/subscription
+             * refresh publication/subscription
              * @private
              * @param  {string|object} subscription id or object
              * @return {deferred}
@@ -130,111 +82,9 @@ define('io.ox/core/api/pubsub',
                     },
                     data: data
                 });
-            },
-
-            /**
-             * remove publication/subscription
-             * @private
-             * @param  {array} array of ids
-             * @return {deferred}
-             */
-            remove: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    params: {
-                        action: 'delete'
-                    },
-                    data: data
-                });
             }
-        };
+        });
     }
-
-
-    /**
-     * public publication api
-     * @public
-     * @return {object}
-     */
-    var publication = function () {
-        var opt = {
-                module: 'publications',
-                columns: 'id,displayName,enabled'
-            },
-            apimod = api(opt);
-
-        return {
-            /**
-             * returns folder publications
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                return apimod.all(type, folder);
-            },
-            /**
-             * returns publication data
-             * @private
-             * @param  {string|object} publication id or object
-             * @return {deferred}
-             */
-            get: function (publication) {
-                return apimod.get(publication);
-            }
-        };
-    };
-
-
-    /**
-     * public subscription api
-     * @public
-     * @return {object}
-     */
-    var subscription = function () {
-        var opt = {
-                module: 'subscriptions',
-                columns: 'id,displayName,enabled,source'
-            },
-            apimod = api(opt);
-
-        return {
-            /**
-             * returns folder subscriptions
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                return apimod.all(type, folder);
-            },
-            /**
-             * returns subscription data
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
-             */
-            get: function (publication) {
-                return apimod.get(publication);
-            },
-            /**
-             * returns subscription data
-             * @param  {object} data
-             * @return {deferred}
-             */
-            create: function (data) {
-                return apimod.create(data);
-            },
-            /**
-             * returns subscription data
-             * @param  {object} data
-             * @return {deferred}
-             */
-            refresh: function (id, folder) {
-                return apimod.refresh(id, folder);
-            }
-        };
-    };
-
 
     /**
      * public subscription sources api
@@ -262,8 +112,14 @@ define('io.ox/core/api/pubsub',
     };
 
     return {
-        publication: publication(),
-        subscription: subscription(),
+        publication: api({
+            module: 'publications',
+            columns: 'id,entity,entityModule,enabled,target'
+        }),
+        subscription: api({
+            module: 'subscriptions',
+            columns: 'id,displayName,enabled,source'
+        }),
         sources: sources()
     };
 
