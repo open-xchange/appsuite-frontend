@@ -16,8 +16,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/api',
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/mail/mailfilter/settings/view-form',
-    'io.ox/core/tk/dialogs'
-], function (ext, api, mailfilterModel, ViewForm, dialogs) {
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/mail'
+], function (ext, api, mailfilterModel, ViewForm, dialogs, gt) {
 
     'use strict';
 
@@ -43,6 +44,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 });
 
                 $node.append(vacationNotice.render().$el);
+
+                ext.point("io.ox/core/mailfilter/model/validation").extend({
+                    id: 'start-date-before-end-date',
+                    validate: function (attributes) {
+
+                        if (attributes.dateFrom && attributes.dateUntil && attributes.dateUntil < attributes.dateFrom) {
+                            this.add('dateFrom', gt("The start date must be before the end date."));
+                            this.add('dateUntil', gt("The start date must be before the end date."));
+                        }
+                    }
+                });
 
                 deferred.resolve(vacationNotice.model);
 

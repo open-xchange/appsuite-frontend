@@ -903,10 +903,13 @@ define('io.ox/backbone/forms',
                     todayHighlight: true,
                     todayBtn: true
                 });
-                this.nodes.timeField.combobox(comboboxHours);
+
+                if (options.display === "DATETIME") {
+                    this.nodes.timeField.combobox(comboboxHours);
+                    this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+                }
 
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
 
                 if (options.overwritePositioning) {
                     this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
@@ -931,7 +934,10 @@ define('io.ox/backbone/forms',
                     this.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
                 }
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+
+                if (options.display === "DATETIME") {
+                    this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+                }
             },
             updateModelDate: function () {
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
