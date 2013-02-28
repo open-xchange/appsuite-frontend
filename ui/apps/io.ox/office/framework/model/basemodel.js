@@ -11,7 +11,7 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/basemodel',
+define('io.ox/office/framework/model/basemodel',
      ['io.ox/core/event',
       'io.ox/office/tk/utils'
      ], function (Events, Utils) {
@@ -28,7 +28,7 @@ define('io.ox/office/tk/app/basemodel',
      *
      * @extends Events
      *
-     * @param {OfficeApplication} app
+     * @param {BaseApplication} app
      *  The application that has created this model instance.
      */
     function BaseModel(app) {

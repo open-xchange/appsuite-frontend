@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/basecontroller',
+define('io.ox/office/framework/app/basecontroller',
     ['io.ox/core/event',
      'io.ox/office/tk/utils'
     ], function (Events, Utils) {
@@ -27,7 +27,7 @@ define('io.ox/office/tk/app/basecontroller',
      *
      * @constructor
      *
-     * @param {OfficeApplication} app
+     * @param {BaseApplication} app
      *  The application that has created this controller instance.
      */
     function BaseController(app) {

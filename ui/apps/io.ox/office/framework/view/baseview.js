@@ -11,20 +11,20 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/view/officeview',
-        ['io.ox/core/event',
-         'io.ox/office/tk/utils',
-         'io.ox/office/tk/view/pane',
-         'gettext!io.ox/office/main',
-         'less!io.ox/office/tk/view/style.css'
-        ], function (Events, Utils, Pane, gt) {
+define('io.ox/office/framework/view/baseview',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils',
+     'io.ox/office/framework/view/pane',
+     'gettext!io.ox/office/main',
+     'less!io.ox/office/framework/view/basestyle.css'
+    ], function (Events, Utils, Pane, gt) {
 
     'use strict';
 
     var // CSS marker class for panes in overlay mode
         OVERLAY_CLASS = 'overlay';
 
-    // class OfficeView =======================================================
+    // class BaseView =========================================================
 
     /**
      * Base class for the view instance of an office application. Creates the
@@ -35,7 +35,7 @@ define('io.ox/office/tk/view/officeview',
      *
      * @extends Events
      *
-     * @param {OfficeApplication} app
+     * @param {BaseApplication} app
      *  The application containing this view instance.
      *
      * @param {Object} [options]
@@ -51,7 +51,7 @@ define('io.ox/office/tk/view/officeview',
      *      The margin between the fixed application pane and the embedded
      *      application container node, as CSS 'margin' attribute.
      */
-    function OfficeView(app, options) {
+    function BaseView(app, options) {
 
         var // self reference
             self = this,
@@ -171,8 +171,8 @@ define('io.ox/office/tk/view/officeview',
          * Returns the DOM node of the application pane (the complete inner
          * area between all existing view panes). Note that this is NOT the
          * container node where applications insert their own contents. The
-         * method OfficeView.insertContentNode() is intended to be used to
-         * insert own contents into the application pane.
+         * method BaseView.insertContentNode() is intended to be used to insert
+         * own contents into the application pane.
          *
          * @returns {jQuery}
          *  The DOM node of the application pane.
@@ -184,7 +184,7 @@ define('io.ox/office/tk/view/officeview',
         /**
          * Detaches the application pane from the DOM.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.detachAppPane = function () {
@@ -195,7 +195,7 @@ define('io.ox/office/tk/view/officeview',
         /**
          * Attaches the application pane to the DOM.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
@@ -212,7 +212,7 @@ define('io.ox/office/tk/view/officeview',
          *  object is a jQuery collection, inserts all contained DOM nodes into
          *  the application pane.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.insertContentNode = function (contentNode) {
@@ -241,7 +241,7 @@ define('io.ox/office/tk/view/officeview',
          *      If set to true, the background of an overlay pane will be
          *      transparent. Has no effect if the pane is not in overlay mode.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.addPane = function (pane, position, options) {
@@ -277,7 +277,7 @@ define('io.ox/office/tk/view/officeview',
          * @param {Object} [options]
          *  A map of options to control the properties of the new view pane.
          *  Supports all options supported by the Pane class constructor, and
-         *  the method OfficeView.addPane().
+         *  the method BaseView.addPane().
          *
          * @returns {Pane}
          *  The new view pane.
@@ -290,7 +290,7 @@ define('io.ox/office/tk/view/officeview',
 
         /**
          * Returns the specified view pane which has been added with the method
-         * OfficeView.createPane() before.
+         * BaseView.createPane() before.
          *
          * @param {String} id
          *  The unique identifier of the view pane.
@@ -313,7 +313,7 @@ define('io.ox/office/tk/view/officeview',
          *  The border of the application window to attach the view pane to.
          *  Supported values are 'top', 'bottom', 'left', and 'right'.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.setPanePosition = function (id, position) {
@@ -343,7 +343,7 @@ define('io.ox/office/tk/view/officeview',
          * @param {String} id
          *  The unique identifier of the view pane.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.showPane = function (id) {
@@ -356,7 +356,7 @@ define('io.ox/office/tk/view/officeview',
          * @param {String} id
          *  The unique identifier of the view pane.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.hidePane = function (id) {
@@ -375,7 +375,7 @@ define('io.ox/office/tk/view/officeview',
          *  current visibility state. If omitted, toggles the visibility of the
          *  view pane.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.togglePane = function (id, state) {
@@ -438,7 +438,7 @@ define('io.ox/office/tk/view/officeview',
          *      option. When the button has been pressed, the controller item
          *      with the passed key will be executed.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.showAlert = function (title, message, type, options) {
@@ -527,7 +527,7 @@ define('io.ox/office/tk/view/officeview',
          *  behavior of the alert banner. See method Alert.showAlert() for
          *  details.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.showError = function (title, message, options) {
@@ -549,7 +549,7 @@ define('io.ox/office/tk/view/officeview',
          *  behavior of the alert banner. See method Alert.showAlert() for
          *  details.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.showWarning = function (title, message, options) {
@@ -571,7 +571,7 @@ define('io.ox/office/tk/view/officeview',
          *  behavior of the alert banner. See method Alert.showAlert() for
          *  details.
          *
-         * @returns {OfficeView}
+         * @returns {BaseView}
          *  A reference to this instance.
          */
         this.showSuccess = function (title, message, options) {
@@ -615,10 +615,10 @@ define('io.ox/office/tk/view/officeview',
             app.getWindowNode().find('.toolbox .group a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
         });
 
-    } // class OfficeView
+    } // class BaseView
 
     // exports ================================================================
 
-    return _.makeExtendable(OfficeView);
+    return _.makeExtendable(BaseView);
 
 });

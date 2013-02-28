@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/view/component',
+define('io.ox/office/tk/component/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',

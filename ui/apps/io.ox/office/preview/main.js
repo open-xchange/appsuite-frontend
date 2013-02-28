@@ -13,13 +13,13 @@
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/app/officeapplication',
+     'io.ox/office/framework/app/baseapplication',
      'io.ox/office/preview/model',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, OfficeApplication, PreviewModel, PreviewView, PreviewController, gt) {
+    ], function (Utils, BaseApplication, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
 
@@ -30,9 +30,9 @@ define('io.ox/office/preview/main',
      *
      * @constructor
      *
-     * @extends OfficeApplication
+     * @extends BaseApplication
      */
-    var PreviewApplication = OfficeApplication.extend({ constructor: function (launchOptions) {
+    var PreviewApplication = BaseApplication.extend({ constructor: function (launchOptions) {
 
         var // self reference
             self = this,
@@ -42,7 +42,7 @@ define('io.ox/office/preview/main',
 
         // base constructor ---------------------------------------------------
 
-        OfficeApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions);
+        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions);
 
         // private methods ----------------------------------------------------
 
@@ -111,6 +111,6 @@ define('io.ox/office/preview/main',
 
     // exports ================================================================
 
-    return OfficeApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
+    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
 
 });

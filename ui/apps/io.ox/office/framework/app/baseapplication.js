@@ -11,13 +11,14 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/app/officeapplication',
+define('io.ox/office/framework/app/baseapplication',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',
+     'settings!io.ox/office',
      'gettext!io.ox/office/main'
-    ], function (ext, FilesAPI, Utils, IO, gt) {
+    ], function (ext, FilesAPI, Utils, IO, Settings, gt) {
 
     'use strict';
 
@@ -114,7 +115,7 @@ define('io.ox/office/tk/app/officeapplication',
         return app;
     }
 
-    // class OfficeApplication ================================================
+    // class BaseApplication ==================================================
 
     /**
      * A mix-in class that defines common public methods for an application
@@ -126,7 +127,7 @@ define('io.ox/office/tk/app/officeapplication',
      *      been constructed completely, before the registered initialization
      *      handlers will be called. Note that the calling order of the event
      *      listeners is not defined. See method
-     *      OfficeApplication.registerInitHandler() for an alternative.
+     *      BaseApplication.registerInitHandler() for an alternative.
      * - 'docs:init:after': Once during launch, after the registered
      *      initialization handlers have been called.
      * - 'docs:init:success': Directly after the event 'docs:init:after', if
@@ -159,33 +160,33 @@ define('io.ox/office/tk/app/officeapplication',
      * @param {Function} ModelClass
      *  The constructor function of the document model class. MUST derive from
      *  the class Model. Receives a reference to this application instance.
-     *  MUST NOT use the methods OfficeApplication.getModel(),
-     *  OfficeApplication.getView(), or OfficeApplication.getController()
-     *  during construction. For further initialization depending on valid
+     *  MUST NOT use the methods BaseApplication.getModel(),
+     *  BaseApplication.getView(), or BaseApplication.getController() during
+     *  construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
      *  handler for the 'docs:init' event of this application, or register an
-     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  initialization handler with the BaseApplication.registerInitHandler()
      *  method.
      *
      * @param {Function} ViewClass
      *  The constructor function of the view class. MUST derive from the class
      *  View. Receives a reference to this application instance. MUST NOT use
-     *  the methods OfficeApplication.getModel(), OfficeApplication.getView(),
-     *  or OfficeApplication.getController() during construction. For further
+     *  the methods BaseApplication.getModel(), BaseApplication.getView(), or
+     *  BaseApplication.getController() during construction. For further
      *  initialization depending on valid model/view/controller instances, the
      *  constructor can register an event handler for the 'docs:init' event of
      *  this application, or register an initialization handler with the
-     *  OfficeApplication.registerInitHandler() method.
+     *  BaseApplication.registerInitHandler() method.
      *
      * @param {Function} ControllerClass
      *  The constructor function of the controller class. MUST derive from the
      *  class Controller. Receives a reference to this application instance.
-     *  MUST NOT use the methods OfficeApplication.getModel(),
-     *  OfficeApplication.getView(), or OfficeApplication.getController()
-     *  during construction. For further initialization depending on valid
+     *  MUST NOT use the methods BaseApplication.getModel(),
+     *  BaseApplication.getView(), or BaseApplication.getController() during
+     *  construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
      *  handler for the 'docs:init' event of this application, or register an
-     *  initialization handler with the OfficeApplication.registerInitHandler()
+     *  initialization handler with the BaseApplication.registerInitHandler()
      *  method.
      *
      * @param {Function} importHandler
@@ -211,7 +212,7 @@ define('io.ox/office/tk/app/officeapplication',
      *      If set to false, the application window will not be detached from
      *      the DOM while it is hidden.
      */
-    function OfficeApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions) {
+    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions) {
 
         var // self reference
             self = this,
@@ -288,7 +289,7 @@ define('io.ox/office/tk/app/officeapplication',
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),
                         message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.'));
                     view.showError(title, message);
-                    Utils.warn('OfficeApplication.launch(): importing document "' + file.filename + '" failed.');
+                    Utils.warn('BaseApplication.launch(): importing document "' + file.filename + '" failed.');
                     self.trigger('docs:import:error');
                 });
         }
@@ -350,6 +351,40 @@ define('io.ox/office/tk/app/officeapplication',
             return controller;
         };
 
+        /**
+         * Returns the global user settings for all applications of the same
+         * type.
+         *
+         * @param {String} key
+         *  The unique key of the user setting.
+         *
+         * @param defValue
+         *  The default value in case the user setting does not exist yet.
+         *
+         * @returns
+         *  The value of the global user setting.
+         */
+        this.getUserSettingsValue = function (key, defValue) {
+            return Settings.get(this.getDocumentType() + '/' + key, defValue);
+        };
+
+        /**
+         * Changes a global user setting for all applications of the same type.
+         *
+         * @param {String} key
+         *  The unique key of the user setting.
+         *
+         * @param value
+         *  The new value of the user setting.
+         *
+         * @returns {BaseApplication}
+         *  A reference to this application instance.
+         */
+        this.setUserSettingsValue = function (key, value) {
+            Settings.set(this.getDocumentType() + '/' + key, value).save();
+            return this;
+        };
+
         // file descriptor ----------------------------------------------------
 
         /**
@@ -372,7 +407,7 @@ define('io.ox/office/tk/app/officeapplication',
          * Must not be called if the application already contains a valid file
          * descriptor.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.setFileDescriptor = function (newFile) {
@@ -453,7 +488,7 @@ define('io.ox/office/tk/app/officeapplication',
          * the application does not contain a file descriptor, shows the
          * localized word 'Unnamed' as title.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.updateTitle = function () {
@@ -524,7 +559,7 @@ define('io.ox/office/tk/app/officeapplication',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: OfficeApplication.FILTER_MODULE_NAME,
+                module: BaseApplication.FILTER_MODULE_NAME,
                 params: this.getFileParameters()
             }, options);
 
@@ -556,7 +591,7 @@ define('io.ox/office/tk/app/officeapplication',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: OfficeApplication.CONVERTER_MODULE_NAME,
+                module: BaseApplication.CONVERTER_MODULE_NAME,
                 params: this.getFileParameters()
             }, options);
 
@@ -588,7 +623,7 @@ define('io.ox/office/tk/app/officeapplication',
             options = Utils.extendOptions(this.getFileParameters(), options);
 
             // build and return the resulting URL
-            return ox.apiRoot + '/' + OfficeApplication.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+            return ox.apiRoot + '/' + BaseApplication.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
 
         // application setup --------------------------------------------------
@@ -609,7 +644,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  instance. May return a Deferred object, which must be resolved or
          *  rejected by the initialization handler function.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerInitHandler = function (initHandler) {
@@ -628,7 +663,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  the quit handler function. If the Deferred object will be rejected,
          *  the application remains alive.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerBeforeQuitHandler = function (beforeQuitHandler) {
@@ -651,7 +686,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  May return a Deferred object, which must be resolved or rejected by
          *  the quit handler function.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerQuitHandler = function (quitHandler) {
@@ -669,7 +704,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  instance. Must return an object the new restore point will be
          *  extended with.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerFailSaveHandler = function (failSaveHandler) {
@@ -694,7 +729,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  The event handler function that will be bound to the specified
          *  events.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerEventHandler = function (target, events, handler) {
@@ -721,7 +756,7 @@ define('io.ox/office/tk/app/officeapplication',
          *  window. Will be triggered once when the application window becomes
          *  visible.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.registerWindowResizeHandler = function (resizeHandler) {
@@ -961,7 +996,7 @@ define('io.ox/office/tk/app/officeapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of the created
          *  debounced method. Supports all options of the method
-         *  OfficeApplication.executeDelayed(). Especially, repeated execution
+         *  BaseApplication.executeDelayed(). Especially, repeated execution
          *  of the deferred callback function is supported.
          *
          * @returns {Function}
@@ -1013,9 +1048,9 @@ define('io.ox/office/tk/app/officeapplication',
 
         /**
          * Prevents deferred execution of debounced methods, until the method
-         * OfficeApplication.unlockDebouncedMethods() has been called.
+         * BaseApplication.unlockDebouncedMethods() has been called.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.lockDebouncedMethods = function () {
@@ -1027,7 +1062,7 @@ define('io.ox/office/tk/app/officeapplication',
          * Unlocks deferred execution of debounced methods. All pending
          * debounced methods will be executed.
          *
-         * @returns {OfficeApplication}
+         * @returns {BaseApplication}
          *  A reference to this application instance.
          */
         this.unlockDebouncedMethods = function (options) {
@@ -1111,7 +1146,7 @@ define('io.ox/office/tk/app/officeapplication',
          *
          * @param {Object} point
          *  The save point containing the application state, as returned by the
-         *  last call of the OfficeApplication.failSave() method.
+         *  last call of the BaseApplication.failSave() method.
          *
          * @returns {jQuery.Promise}
          *  The promise of a Deferred object that will be resolved when the
@@ -1209,7 +1244,7 @@ define('io.ox/office/tk/app/officeapplication',
                 .fail(function () {
                     self.trigger('docs:init:error');
                     // failing initialization handler should have shown an error alert
-                    Utils.warn('OfficeApplication.launch(): initialization failed.');
+                    Utils.warn('BaseApplication.launch(): initialization failed.');
                     def.resolve();
                 });
 
@@ -1272,19 +1307,19 @@ define('io.ox/office/tk/app/officeapplication',
         // set application title to current file name
         this.updateTitle();
 
-    } // class OfficeApplication
+    } // class BaseApplication
 
     // constants --------------------------------------------------------------
 
     /**
      * The name of the document filter server module.
      */
-    OfficeApplication.FILTER_MODULE_NAME = 'oxodocumentfilter';
+    BaseApplication.FILTER_MODULE_NAME = 'oxodocumentfilter';
 
     /**
      * The name of the document converter server module.
      */
-    OfficeApplication.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
+    BaseApplication.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
 
     // static methods ---------------------------------------------------------
 
@@ -1311,7 +1346,7 @@ define('io.ox/office/tk/app/officeapplication',
      * @returns {Object}
      *  The launcher object expected by the ox.launch() method.
      */
-    OfficeApplication.createLauncher = function (moduleName, ApplicationClass, defaultLaunchOptions) {
+    BaseApplication.createLauncher = function (moduleName, ApplicationClass, defaultLaunchOptions) {
 
         // executed when a new application will be launched via ox.launch()
         function launchApp(launchOptions) {
@@ -1345,6 +1380,6 @@ define('io.ox/office/tk/app/officeapplication',
 
     // exports ================================================================
 
-    return _.makeExtendable(OfficeApplication);
+    return _.makeExtendable(BaseApplication);
 
 });

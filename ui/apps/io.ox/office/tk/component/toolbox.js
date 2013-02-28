@@ -11,10 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/view/toolbox',
+define('io.ox/office/tk/component/toolbox',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/view/component'
+     'io.ox/office/tk/component/component'
     ], function (Utils, Button, Component) {
 
     'use strict';
@@ -34,9 +34,6 @@ define('io.ox/office/tk/view/toolbox',
      * @constructor
      *
      * @extends Component
-     *
-     * @param {OfficeApplication} app
-     *  The application containing this tool box.
      *
      * @param {Object} [options]
      *  A map of options controlling the appearance and behavior of the tool

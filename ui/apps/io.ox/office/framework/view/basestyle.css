@@ -70,13 +70,13 @@ i.io-ox-office-icon {
     width: @icon-size;
     height: @icon-size;
     margin: 0;
-    background-image: url(img/ox-office-icons-black.png);
+    background-image: url(base-icons-black.png);
     background-origin: content-box;
     line-height: @icon-size;
     vertical-align: text-top;
 
     &.icon-white {
-        background-image: url(img/ox-office-icons-white.png);
+        background-image: url(base-icons-white.png);
     }
 
     .icon-position(@x, @y) {

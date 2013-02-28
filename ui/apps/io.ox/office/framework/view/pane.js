@@ -11,10 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/view/pane',
+define('io.ox/office/framework/view/pane',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/view/component',
-     'io.ox/office/tk/view/toolbox'
+     'io.ox/office/tk/component/component',
+     'io.ox/office/tk/component/toolbox'
     ], function (Utils, Component, ToolBox) {
 
     'use strict';
@@ -27,7 +27,7 @@ define('io.ox/office/tk/view/pane',
      *
      * @constructor
      *
-     * @param {OfficeApplication} app
+     * @param {BaseApplication} app
      *  The application containing this pane element.
      *
      * @param {String} id

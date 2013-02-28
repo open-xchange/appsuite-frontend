@@ -13,7 +13,7 @@
 
 define('io.ox/office/tk/dropdown/dropdown',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/view/component',
+     'io.ox/office/tk/component/component',
      'io.ox/office/tk/control/group'
     ], function (Utils, Component, Group) {
 

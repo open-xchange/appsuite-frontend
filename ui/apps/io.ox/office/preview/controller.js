@@ -12,7 +12,7 @@
  */
 
 define('io.ox/office/preview/controller',
-    ['io.ox/office/tk/app/basecontroller',
+    ['io.ox/office/framework/app/basecontroller',
      'gettext!io.ox/office/main'
     ], function (BaseController, gt) {
 
