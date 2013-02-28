@@ -86,30 +86,16 @@ define('io.ox/core/api/pubsub',
         });
     }
 
-    /**
-     * public subscription sources api
-     * @public
-     * @return {object}
-     */
-    var sources = function () {
-        var opt = {
-                module: 'subscriptionSources',
-                columns: 'id,displayName,icon,module,formDescription'
-            };
-
-        return apiFactory(opt);
-    };
-
     return {
         publications: api({
-            module: 'publications',
-            columns: 'id,entity,entityModule,enabled,target'
+            module: 'publications'
         }),
         subscriptions: api({
-            module: 'subscriptions',
-            columns: 'id,displayName,enabled,source'
+            module: 'subscriptions'
         }),
-        sources: sources()
+        sources: apiFactory({
+            module: 'subscriptionSources'
+        })
     };
 
 });
