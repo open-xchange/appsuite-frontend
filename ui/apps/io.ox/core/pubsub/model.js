@@ -44,6 +44,15 @@ define('io.ox/core/pubsub/model',
                         collection.add(new Publication(obj));
                     });
                     return collection;
+                }).then(function (collection) {
+                    return api.subscriptions.getAll().then(function (res) {
+                        return api.subscriptions.getList(res);
+                    }).then(function (res) {
+                        _(res).each(function (obj) {
+                            collection.add(new Subscription(obj));
+                        });
+                        return collection;
+                    });
                 });
             }
         });
