@@ -93,22 +93,14 @@ define('io.ox/core/api/pubsub',
      */
     var sources = function () {
         var opt = {
-                module: 'soures',
-                columns: 'id,displayName,icon,module,formDescription'
-            },
-            apimod = api(opt);
+                module: 'subscriptionSources',
+                columns: 'id,displayName,icon,module,formDescription',
+                request: {
+                    all: {}
+                }
+            };
 
-        return {
-            /**
-             * returns folder subscriptions
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type) {
-                return apimod.all(type);
-            }
-        };
+        return apiFactory(opt);
     };
 
     return {
