@@ -40,7 +40,15 @@ define('io.ox/core/tk/attachments',
 
                     function uploadOnSave(response) {
                         self.model.off('create update', uploadOnSave);
-                        self.save(response.id, response.folder || response.folder_id);
+                        var id = self.model.attributes.id,
+                            folder = self.model.attributes.folder || self.model.attributes.folder_id;
+
+                        if (id === undefined && response !== undefined) {
+                            id = response.id;
+                        }
+                        if (folder && id) {
+                            self.save(id, folder);
+                        }
                     }
 
                     this.model.on('create update', uploadOnSave);
