@@ -466,6 +466,7 @@ define('io.ox/office/framework/view/baseview',
                 alert.slideUp('fast', function () {
                     alert.remove();
                     currentAlert = null;
+                    refreshPaneLayout();
                 });
             }
 
