@@ -118,16 +118,25 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !iOS && !Android && webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
+        Safari: !iOS && !Android && webkit && !chrome ? ua.split('Version/')[1].split(' Safari')[0]: undefined,
         /** Chrome */
         Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
         Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1
+        // todo win
     };
 
     _(_.browser).each(function (value, key) {
+        // ensure version is a number, not a string
+        // Only major versions will be kept
+        // '7.2.3' will be 7.2
+        // '6.0.1' will be 6
+        if (_.isString(value)) {
+            value = parseFloat(value, 10);
+            _.browser[key] = value;
+        }
         _.browser[key.toLowerCase()] = value;
     });
 
@@ -157,7 +166,12 @@
                 match = match.toLowerCase();
                 return _.browser[match] || _.display[match] || Modernizr[match] || 'false';
             });
-            return new Function('return !!(' + condition + ')')();
+            try {
+                return new Function('return !!(' + condition + ')')();
+            } catch (e) {
+                console.error('_.device()', condition, e);
+                return false;
+            }
         },
 
         /**
@@ -590,11 +604,11 @@
             return memo.add($.txt(_.noI18n(str)));
         }, $());
     };
-	
+
     _.escapeRegExp = function (s) {
         return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
-    
+
     window.assert = function (value, message) {
         if (value) return;
         console.error(message || 'Assertion failed!');

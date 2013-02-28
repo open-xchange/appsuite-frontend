@@ -26,6 +26,9 @@ define('io.ox/tasks/actions',
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch({ folderid: baton.app.folder.get()});
@@ -34,6 +37,9 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (m) {
                 if (m.reuse('edit', baton.data)) return;
@@ -178,6 +184,7 @@ define('io.ox/tasks/actions',
                 if (baton.target) {
                     commit(baton.target);
                 } else {
+
                     //build popup
                     var popup = new dialogs.ModalDialog({ easyOut: true })
                         .header($('<h3>').text(gt('Move')))

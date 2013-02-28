@@ -1605,6 +1605,15 @@ ul.dropdown-menu li a.disabled { color:#999; }
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 
+/** clean bootstrap body padding **/
+
+@media (max-width: 767px) {
+    body {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+}
+
 @media (max-width: 900px) {
 
     .io-ox-sidepopup.right, .io-ox-sidepopup.left {
@@ -1709,4 +1718,22 @@ ul.dropdown-menu li a.disabled { color:#999; }
 // landscape
 @media (max-width: 700px) and (orientation:landscape) {
     .window-head { padding-left: 40px; } // iOS landscape back button fix
+}
+
+@media all and (max-width: 480px) {
+
+    #io-ox-notifications-popups {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin: 0;
+    }
+
+    .touch #io-ox-topbar .launcher {
+        font-size: @topbarFontSize; line-height: 35px; padding: 2px 12px 5px 12px;
+    }
+    .clear-title {
+        font-size: 15pt;
+    }
 }

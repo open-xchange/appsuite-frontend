@@ -44,7 +44,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/upload', {
-        requires: 'create',
+        requires: function (e) {
+            return _.device('!small') && e.collection.has('create');
+        },
         action: function (baton) {
             require(['io.ox/files/views/create'], function (create) {
                 create.show(baton.app, {

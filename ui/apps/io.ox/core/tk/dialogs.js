@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
+define("io.ox/core/tk/dialogs",
+    ['io.ox/core/event',
+    'gettext!io.ox/core',
+    'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
 
     'use strict';
 
@@ -24,9 +27,11 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 $('<div class="modal-footer">')
             );
 
+
     var Dialog = function (options) {
 
         var nodes = {
+                buttons: [],
                 underlay: underlay.clone().appendTo('body'),
                 popup: popup.clone().appendTo('body')
             },
@@ -61,6 +66,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
+
                 // restore focus
                 lastFocus = lastFocus.closest(':visible');
                 if (lastFocus.hasClass('dropdown')) {
@@ -108,6 +114,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
+
 
         if (o.addclass) {
             nodes.popup.addClass(o.addclass);
@@ -180,6 +187,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             }
 
             var button = $.button(opt);
+            nodes.buttons.push(button);
             return button.addClass(options.classes);
         };
 
@@ -210,7 +218,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');
-            nodes.footer.append(button);
+            nodes.footer.prepend(button);
             return this;
         };
 
@@ -273,20 +281,36 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 }
             });
 
-            // apply dimensions
-            if (o.center) {
-                // center vertically
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    top: "50%",
-                    marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+            // apply dimensions, only on desktop and pad
+            if (_.device('!small')) {
+                if (o.center) {
+                    // center vertically
+                    nodes.popup.css({
+                        width: dim.width + "px",
+                        top: "50%",
+                        marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+                    });
+                } else {
+                    // use fixed top position
+                    nodes.popup.css({
+                        width: dim.width + "px",
+                        top: o.top || "0px"
+                    });
+                }
+            }
+
+            if (_.device('small')) {
+
+                // rebuild button section for mobile devices
+                nodes.footer.rowfluid = $('<div class="row-fluid">');
+                nodes.footer.append(nodes.footer.rowfluid);
+
+                _.each(nodes.buttons, function (buttonNode) {
+                    nodes.footer.rowfluid.prepend(buttonNode/*.addClass('btn-large')*/);
+                    buttonNode.wrap('<div class="span3">');
                 });
-            } else {
-                // use fixed top position
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    top: o.top || "0px"
-                });
+
+
             }
 
             nodes.underlay.show();

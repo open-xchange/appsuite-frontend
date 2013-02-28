@@ -247,6 +247,13 @@ define('io.ox/core/tk/vgrid',
             dragType: ''
         }, options || {});
 
+        // mobile
+        if (_.device('small')) {
+            // override options, no toggles and no multiple selection for the moment
+            options.showToggle = false;
+            options.multiple = false;
+        }
+
         // target node
         var node = $(target).empty().addClass('vgrid'),
             // reference for private functions
@@ -366,7 +373,7 @@ define('io.ox/core/tk/vgrid',
         label.node.addClass('vgrid-label');
 
         // fix mobile safari bug (all content other than position=static is cut off)
-        if (Modernizr.touch) {
+        if (_.device('iOS && Safari')) {
             container.css('webkitTransform', 'translate3d(0, 0, 0)');
         }
 
@@ -1066,7 +1073,7 @@ define('io.ox/core/tk/vgrid',
             toolbar.show();
         } else {
             this.selection.setMultiple(false);
-            toolbar.detach();
+            //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
         node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');

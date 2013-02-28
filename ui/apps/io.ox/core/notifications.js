@@ -269,7 +269,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 fader = function () {
                     clear();
-                    $('body').off('click', fader);
+                    $('body').off('click tap', fader);
                     active = false;
                     var node = container.children().first();
                     node.fadeOut(function () {
@@ -304,7 +304,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                             .append($('<b>').text(message || ''))
                         );
                         if (!active) {
-                            $('body').on('click', fader);
+                            $('body').on('click tap', fader);
                         }
                         active = true;
                         clear();
@@ -314,6 +314,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             };
         }())
     };
-
+    window.not = new NotificationController();
     return new NotificationController();
 });

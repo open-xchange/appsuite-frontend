@@ -742,8 +742,9 @@ $(window).load(function () {
         serverDown();
     });
 
+
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.Chrome && ox.debug) {
+    if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {
 
         (function () {
 

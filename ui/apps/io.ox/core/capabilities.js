@@ -21,7 +21,7 @@ define('io.ox/core/capabilities', function () {
 	'use strict';
 
 	var capabilities = {},
-		disabled = {};
+		disabled = {text: true};
 
 	_(ox.serverConfig.capabilities).each(function (cap) {
 		capabilities[cap.id] = cap;

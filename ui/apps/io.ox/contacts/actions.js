@@ -61,7 +61,9 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/update', {
         index: 100,
         id: 'edit',
-        requires: 'one modify',
+        requires:  function (e) {
+            return e.collection.has('one') && e.collection.has('modify') && _.device('!small');
+        },
         action: function (baton) {
             var data = baton.data;
             if (data.mark_as_distributionlist === true) {
@@ -83,7 +85,9 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/create', {
         index: 100,
         id: 'create',
-		requires: 'create',
+		requires:  function (e) {
+            return e.collection.has('create') && _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred();
@@ -100,7 +104,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create-dist',
 		requires: function (e) {
-            return e.collection.has('create');
+            return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
