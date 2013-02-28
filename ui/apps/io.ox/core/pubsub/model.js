@@ -27,13 +27,26 @@ define('io.ox/core/pubsub/model',
                 create: function (model) {
                     console.log(model, arguments);
                     return $.when().resolve(true);
+                },
+                destroy: function (model) {
+                    return api.publications.remove(model.id);
                 }
             }
         }),
         Subscription = BasicModel.extend({
-            ref: 'io.ox/core/pubsub/subscription/'
+            ref: 'io.ox/core/pubsub/subscription/',
+            syncer: {
+                destroy: function (model) {
+                    return api.subscriptions.remove(model.id);
+                }
+            }
         }),
         PubSubItems = Backbone.Collection.extend({
+            initialize: function () {
+                this.on('remove', function (model, collection, opt) {
+                    model.destroy();
+                });
+            },
             sync: function (method, collection, options) {
                 if (method !== 'read') return;
 
