@@ -40,7 +40,7 @@ define('io.ox/pubsub/util',
                     folder: folder
                 }
             }, dynkey, options || {});
-            return api.subscription.create(o);
+            return api.subscriptions.create(o);
         },
 
         /**
@@ -50,7 +50,7 @@ define('io.ox/pubsub/util',
          * @return {deferred} number of items
          */
         refreshSubscription: function (subscription, folder) {
-            return api.subscription.refresh(subscription, folder);
+            return api.subscriptions.refresh(subscription, folder);
         },
 
         /**
