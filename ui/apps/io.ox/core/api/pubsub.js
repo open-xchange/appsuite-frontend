@@ -112,11 +112,11 @@ define('io.ox/core/api/pubsub',
     };
 
     return {
-        publication: api({
+        publications: api({
             module: 'publications',
             columns: 'id,entity,entityModule,enabled,target'
         }),
-        subscription: api({
+        subscriptions: api({
             module: 'subscriptions',
             columns: 'id,displayName,enabled,source'
         }),
