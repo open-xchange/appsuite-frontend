@@ -327,13 +327,16 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         },
         "subscriptions": {
             "id": "id",
+            "folder": "folder",
+            "source": "source",
             "displayName": "displayName",
-            "enabled": "enabled",
-            "source": "source"
+            "enabled": "enabled"
         },
         "publications": {
             "id": "id",
-            "displayName": "displayName",
+            "entity": "entity",
+            "entityModule": "entityModule",
+            "target": "target",
             "enabled": "enabled"
         },
         "subscriptionSources": {
