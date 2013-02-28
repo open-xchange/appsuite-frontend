@@ -72,10 +72,13 @@ define('io.ox/core/pubsub/model',
 
     ext.point('io.ox/core/pubsub/publication/validation').extend({
         validate: function (obj, errors) {
-            if (!obj.site) {
+            if (!obj.target) {
+                errors.add(gt('Publication must have a target.'));
+                return;
+            }
+            if (!(obj[obj.target] || {}).siteName) {
                 errors.add(gt('Publication must have a site.'));
             }
-
         }
     });
 
