@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.0.1-5) unstable; urgency=low
+
+  * Build for patch 2013-03-01
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Thu, 28 Feb 2013 17:42:15 +0100
+
 open-xchange-appsuite (7.0.1-4) unstable; urgency=low
 
   * Fourth release candidate for 7.0.1
