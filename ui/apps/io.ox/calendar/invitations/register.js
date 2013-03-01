@@ -187,8 +187,8 @@ define('io.ox/calendar/invitations/register',
                 }
 
                 $box.append($actions);
-            
-            
+
+
             }
         };
 
@@ -244,7 +244,7 @@ define('io.ox/calendar/invitations/register',
         require(["io.ox/calendar/view-detail"], function (viewDetail) {
             node.append(viewDetail.draw(appointment, {brief: true}));
         });
-        
+
         return node;
     }
 
@@ -252,7 +252,7 @@ define('io.ox/calendar/invitations/register',
         if (!change.diffDescription) {
             return $();
         }
-        
+
         var $list = $('<div class="changes">');
 
         _(change.diffDescription || []).each(function (diffEntry) {
@@ -272,7 +272,7 @@ define('io.ox/calendar/invitations/register',
 
         $node.append($('<div class="alert alert-error">').append(text).append($('<a href="#">').text(gt(" Show"))).on("click", function (e) {
             e.preventDefault();
-            
+
             require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
                 $node.find(".alert").remove();
                 $node.append(
@@ -339,11 +339,11 @@ define('io.ox/calendar/invitations/register',
                     var id = address[0], folder = address[1];
 
                     $actions.append(
-                        $('<button class="btn btn-danger" data-action="2">').text("Decline"),
+                        $('<button class="btn btn-danger" data-action="2">').text(gt("Decline")),
                         "&nbsp;",
-                        $('<button class="btn btn-warning" data-action="3">').text("Tentative"),
+                        $('<button class="btn btn-warning" data-action="3">').text(gt("Tentative")),
                         "&nbsp;",
-                        $('<button class="btn btn-success" data-action="1">').text("Accept")
+                        $('<button class="btn btn-success" data-action="1">').text(gt("Accept"))
                     );
 
                     calendarAPI.get({folder: folder, id: id}).done(function (appointment) {
@@ -355,7 +355,7 @@ define('io.ox/calendar/invitations/register',
                                 $.txt(gt.noI18n((recurrenceString !== "" ? " \u2013 " + recurrenceString : "")))
                             )
                         );
-                        
+
                     });
 
                     $actions.on("click", "button", function (e) {
@@ -378,5 +378,5 @@ define('io.ox/calendar/invitations/register',
             }
         }
     });
-    
+
 });
