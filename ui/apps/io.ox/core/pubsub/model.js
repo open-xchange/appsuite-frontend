@@ -75,7 +75,10 @@ define('io.ox/core/pubsub/model',
 
                 return api.publications.getAll().then(function (res) {
                     _(res).each(function (obj) {
-                        collection.add(new Publication(obj));
+                        var pub = new Publication(obj);
+                        pub.fetch().then(function (pub) {
+                            return collection.add(pub);
+                        });
                     });
                     return collection;
                 });
@@ -93,7 +96,10 @@ define('io.ox/core/pubsub/model',
 
                 return api.subscriptions.getAll().then(function (res) {
                     _(res).each(function (obj) {
-                        collection.add(new Subscription(obj));
+                        var sub = new Subscription(obj);
+                        sub.fetch().then(function (sub) {
+                            return collection.add(sub);
+                        });
                     });
                     return collection;
                 });

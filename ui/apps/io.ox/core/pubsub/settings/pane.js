@@ -96,24 +96,29 @@ define('io.ox/core/pubsub/settings/pane',
         return new PubSubItem({model: model});
     }
 
-    function createList(model) {
-        var listNode = $('<ul>');
-
-        model.done(function (res) {
-            res.each(function (obj) {
-                listNode.append(
-                    createPubSubItem(obj).render().el
-                );
-            });
-        });
-        return listNode;
-    }
-
     point.extend({
         id: 'content',
         render: function () {
-            this.$el.append(createList(this.baton.publications));
-            this.$el.append(createList(this.baton.subscriptions));
+            var baton = this.baton;
+            baton.pubListNode = $('<ul>').addClass('publications');
+            baton.subListNode = $('<ul>').addClass('subscriptions');
+            this.$el.append(baton.pubListNode);
+            this.$el.append(baton.subListNode);
+
+            this.baton.publications.done(function (model) {
+                model.on('add', function (model) {
+                    baton.pubListNode.append(
+                        createPubSubItem(model).render().el
+                    );
+                });
+            });
+            this.baton.subscriptions.done(function (model) {
+                model.on('add', function (model) {
+                    baton.subListNode.append(
+                        createPubSubItem(model).render().el
+                    );
+                });
+            });
         }
     });
 });
