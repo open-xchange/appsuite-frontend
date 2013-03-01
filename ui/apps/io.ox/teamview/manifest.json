@@ -1,0 +1,7 @@
+{
+    title: "Teamview",
+    company: "Open-Xchange",
+    icon: "calendar.png",
+    category: "Productivity",
+    requires: "calendar"
+}

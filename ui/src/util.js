@@ -101,32 +101,38 @@
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
         chrome = ua.indexOf('Chrome/') > -1,
-        iOS = ua.indexOf('iPhone|iPad|iPod') > -1,
-        Android = ua.indexOf('Android') > -1;
+        MacOS = ua.indexOf('Macintosh') > -1,
+        Windows = ua.indexOf('Windows') > -1,
+        Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
+        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
 
     // add namespaces, just sugar
     _.browser = {
-        /** iOS **/
-        iOS: (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.'): undefined,
-        /** Android **/
-        Android: (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
         /** is IE? */
-        IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
-            : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
+        IE: navigator.appName === "Microsoft Internet Explorer" ?
+            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : undefined,
         /** is Opera? */
-        Opera: isOpera ? ua.split('Opera/')[1].split(' ')[0].split('.')[0]: undefined,
+        Opera: isOpera ?
+            ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !iOS && !Android && webkit && !chrome ? ua.split('Version/')[1].split(' Safari')[0]: undefined,
+        Safari: !iOS && !Android && webkit && !chrome ?
+            ua.split('Version/')[1].split(' Safari')[0] : undefined,
         /** Chrome */
-        Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
+        Chrome: webkit && chrome ?
+            ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
-        /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1
-        // todo win
+        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ?
+            ua.split('Firefox/')[1].split('.')[0] : undefined,
+        /** OS **/
+        iOS: iOS,
+        MacOS: MacOS,
+        Android : Android,
+        Windows: Windows
     };
+
+    var browserLC = {};
 
     _(_.browser).each(function (value, key) {
         // ensure version is a number, not a string
@@ -137,7 +143,8 @@
             value = parseFloat(value, 10);
             _.browser[key] = value;
         }
-        _.browser[key.toLowerCase()] = value;
+        key = key.toLowerCase();
+        _.browser[key] = browserLC[key] = value;
     });
 
     // do media queries here
@@ -157,6 +164,11 @@
         _.display[key] = !!matchMedia(query).matches;
     });
 
+        // aliases
+    _.display.smartphone = _.display.small;
+    _.display.tablet = _.display.medium;
+    _.display.desktop = _.display.large;
+
     // extend underscore utilities
     _.mixin({
 
@@ -166,10 +178,17 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
+            misc.touch = Modernizr.touch;
+            // no arguments?
+            if (arguments.length === 0) {
+                return _.extend({}, browserLC, _.display, misc);
+            }
+            // true for undefined, null, empty string
+            if (!condition) return true;
             // check condition
             condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return _.browser[match] || _.display[match] || misc[match] || Modernizr[match] || 'false';
+                return browserLC[match] || _.display[match] || misc[match] || 'false';
             });
             try {
                 return new Function('return !!(' + condition + ')')();
