@@ -472,11 +472,13 @@ define("io.ox/mail/write/view-main",
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
-                    self.scrollpane.find('div.fromselect-wrapper').remove();
+                    self.scrollpane.find('div.fromselect-wrapper').hide();
                 }
-                if (self.sections.sender.children().length === 0) {
-                    $('a[data-section-link="sender"]').remove();
+                self.sections.sender.show();
+                if (self.sections.sender.children(':visible').length === 0) {
+                    $('a[data-section-link="sender"]').hide();
                 }
+                self.sections.sender.hide();
             });
 
             // Options
