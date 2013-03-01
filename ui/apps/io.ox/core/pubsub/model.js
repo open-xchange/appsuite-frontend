@@ -53,12 +53,8 @@ define('io.ox/core/pubsub/model',
                 }
             }
         }),
-        PubSubItems = Backbone.Collection.extend({
-            initialize: function () {
-                this.on('remove', function (model, collection, opt) {
-                    model.destroy();
-                });
-            },
+        Publications = Backbone.Collection.extend({
+            model: Publication,
             sync: function (method, collection, options) {
                 if (method !== 'read') return;
 
@@ -69,15 +65,21 @@ define('io.ox/core/pubsub/model',
                         collection.add(new Publication(obj));
                     });
                     return collection;
-                }).then(function (collection) {
-                    return api.subscriptions.getAll().then(function (res) {
-                        return api.subscriptions.getList(res);
-                    }).then(function (res) {
-                        _(res).each(function (obj) {
-                            collection.add(new Subscription(obj));
-                        });
-                        return collection;
+                });
+            }
+        }),
+        Subscriptions = Backbone.Collection.extend({
+            model: Subscription,
+            sync: function (method, collection, options) {
+                if (method !== 'read') return;
+
+                return api.subscriptions.getAll().then(function (res) {
+                    return api.subscriptions.getList(res);
+                }).then(function (res) {
+                    _(res).each(function (obj) {
+                        collection.add(new Subscription(obj));
                     });
+                    return collection;
                 });
             }
         });
@@ -96,6 +98,8 @@ define('io.ox/core/pubsub/model',
 
     return {
         Publication: Publication,
-        PubSubItems: PubSubItems
+        Publications: Publications,
+        Subscription: Subscription,
+        Subscriptions: Subscriptions
     };
 });

@@ -25,7 +25,8 @@ define('io.ox/core/pubsub/settings/pane',
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
         SettingView = point.createView({className: 'pubsub settings'}),
-        items = new model.PubSubItems();
+        publications = new model.Publications(),
+        subscriptions = new model.Subscriptions();
 
     ext.point('io.ox/core/pubsub/settings/detail').extend({
         index: 100,
@@ -35,7 +36,7 @@ define('io.ox/core/pubsub/settings/pane',
                 $('<div class="clear-title">').text(point.title),
                 $('<div class="settings sectiondelimiter">')
             );
-            new SettingView({model: items.fetch()}).render().$el.appendTo(this);
+            new SettingView({publications: publications.fetch(), subscriptions: subscriptions.fetch()}).render().$el.appendTo(this);
         }
     });
 
@@ -113,7 +114,8 @@ define('io.ox/core/pubsub/settings/pane',
     point.extend({
         id: 'content',
         render: function () {
-            this.$el.append(createList(this.model));
+            this.$el.append(createList(this.baton.publications));
+            this.$el.append(createList(this.baton.subscriptions));
         }
     });
 });
