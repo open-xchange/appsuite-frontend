@@ -86,7 +86,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             
             
             templApi.getNames().done(function (data) {//get the templates
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: data, target: self.model.attributes[self.model.attributes.target]});
+                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: data, popup: popup, target: self.model.attributes[self.model.attributes.target]});
                  //Body
                 popup.getBody().addClass('form-horizontal');
                 ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
@@ -217,6 +217,31 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         }
     });
     
+    function sendInvitation(baton) {
+        require(['io.ox/mail/write/main'], function (m) {
+            //predefined data for mail
+            var data = {
+                    folder_id: 'default0/INBOX',
+                    subject: gt('Publication'),
+                    attachments: [{ content: baton.model.url() }],
+                    module: baton.model.attributes.entityModule,
+                    target: baton.model.attributes.target,
+                    headers: {
+                        'X-OX-PubURL': baton.model.url(),
+                        'X-OX-PubType': [baton.model.attributes.entityModule,
+                                         baton.model.attributes.target].toString()
+                    }
+                } || {};
+            //use default email dialog
+            m.getApp().launch().done(function () {
+                this.compose(data)
+                    .done(function () {
+                        baton.popup.close();
+                    });
+            });
+        });
+    }
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'emailbutton',
         index: 500,
@@ -225,7 +250,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 this.append($('<div>').addClass('control-group').append(
                             $('<div>').addClass('controls').append(
                             $('<button>').addClass('email-btn btn').text(gt('Send E-mail about this publication')).on('click', function () {
-                                console.log('Hier koennte ihre Werbung stehen.');
+                                sendInvitation(baton);
                             }))),
                             $('<br>'));
             }

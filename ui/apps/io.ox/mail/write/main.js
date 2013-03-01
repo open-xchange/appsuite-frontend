@@ -609,15 +609,6 @@ define('io.ox/mail/write/main',
                 // clear hash
                 _.url.hash('mailto', null);
             }
-            // triggered by invitation mail?
-            if (data && _.isObject(data.invitation)) {
-                data.subject = data.invitation.subject || '';
-                data.attachments = [{ content: data.invitation.link || '' }];
-                data.headers = {
-                    'X-OX-PubURL': data.invitation.link || '',
-                    'X-OX-PubType': data.invitation.module + ',com.openexchange.publish.microformats.' + data.invitation.module + '.online' || ''
-                };
-            }
 
             _.url.hash('app', 'io.ox/mail/write:compose');
 
