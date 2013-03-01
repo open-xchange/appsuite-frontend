@@ -17,14 +17,15 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                           'io.ox/backbone/forms',
                                           'io.ox/core/api/pubsub',
                                           'io.ox/core/api/templating',
-                                          'io.ox/core/tk/dialogs'], function (gt, pubsub, ext, forms, api, templApi, dialogs)  {
+                                          'io.ox/core/notifications',
+                                          'io.ox/core/tk/dialogs'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
     
     'use strict';
     
     var buildPublishDialog = function (baton) {
         //prepare data
         
-        //check which baton we have standard or bton from folderview
+        //check which baton we have standard or baton from folderview
         //folderview means new publication otherwise its a new one
         if (baton.model) {
             //buildView
@@ -72,7 +73,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         render: function () {
             var self = this;
             //build popup
-            var popup = new dialogs.ModalDialog()
+            var popup = new dialogs.ModalDialog({async: true})
                 .addPrimaryButton('publish', gt('Publish'))
                 .addButton('cancel', gt('Cancel'));
             
@@ -90,13 +91,25 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 popup.getBody().addClass('form-horizontal');
                 ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
                 //go
-                popup.show().done(function (action) {
-                    console.log(action);
-                    console.log(self);
-                    if (action === 'publish') {
-                        self.model.save().done(function () {
-                        });
-                    }
+                popup.show();
+                popup.on('publish', function (action) {
+                    self.model.save().done(function () {
+                        popup.close();
+                    }).fail(function (error) {
+                        popup.idle();
+                        if (!self.model.valid) {
+                            if (!error.model) {//backend Error
+                                if (error.error_params[0].indexOf('PUB-0006') === 0) {
+                                    popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
+                                } else {
+                                    notifications.yell('error', _.noI18n(error.error));
+                                }
+                            } else {//validation gone wrong
+                                //must be namefield empty because other fields are correctly filled by default
+                                popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Publications must have a name'));
+                            }
+                        }
+                    });
                 });
             });
 
@@ -107,13 +120,23 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         id: 'siteName',
         index: 100,
         draw: function (baton) {
-            var node;
-            this.append($('<div>').addClass('control-group').append(
+            var node,
+                control;
+            
+            this.append(control = $('<div>').addClass('control-group siteName-control').append(
                             $('<label>').addClass('siteName-label control-label').text(gt('Name')).attr('for', 'siteName-value'),
                             $('<div>').addClass('controls').append(
                                 node = $('<input>').attr({type: 'text', id: 'siteName-value'}).addClass('siteName-value').on('change', function () {
+                                    if (node.val() === '' || node.val() === undefined) {
+                                        control.addClass('error');
+                                        control.find('.help-inline').text(gt('Publications must have a name'));
+                                    } else {
+                                        control.removeClass('error');
+                                        control.find('.help-inline').text('');
+                                    }
                                     baton.target.siteName = node.val();
-                                }))));
+                                }),
+                             $('<span>').addClass('help-inline'))));
             //prefill
             node.val(baton.target.siteName);
         }
