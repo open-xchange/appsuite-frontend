@@ -12,15 +12,18 @@
  */
 
 define('io.ox/calendar/edit/template',
-        ['io.ox/core/extensions',
-         'gettext!io.ox/calendar/edit/main',
-         'io.ox/calendar/util',
-         'io.ox/core/date',
-         'io.ox/backbone/views',
-         'io.ox/backbone/forms',
-         'io.ox/core/tk/attachments',
-         'io.ox/calendar/edit/recurrence-view',
-         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, pViews) {
+    ['io.ox/core/extensions',
+     'gettext!io.ox/calendar/edit/main',
+     'io.ox/calendar/util',
+     'io.ox/core/date',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'io.ox/core/tk/attachments',
+     'io.ox/calendar/edit/recurrence-view',
+     'io.ox/calendar/api',
+     'io.ox/participants/views',
+     'io.ox/core/capabilities'
+    ], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
 
     'use strict';
 
@@ -444,6 +447,7 @@ define('io.ox/calendar/edit/template',
         index: 1600
     }));
 
+
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',
@@ -506,7 +510,7 @@ define('io.ox/calendar/edit/template',
     });
 
     // Disable attachments for specific devices (see boot.js)
-    if (!ox.uploadsEnabled) {
+    if (!ox.uploadsEnabled || !capabilities.has('infostore')) {
         ext.point("io.ox/calendar/edit/section").disable("attachments_legend");
         ext.point("io.ox/calendar/edit/section").disable("attachments_upload");
     }
