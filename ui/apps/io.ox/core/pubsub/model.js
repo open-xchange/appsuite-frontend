@@ -115,6 +115,16 @@ define('io.ox/core/pubsub/model',
     return {
         Publication: Publication,
         Publications: Publications,
+        publications: function () {
+            var publications = new Publications();
+
+            return publications.fetch();
+        },
+        subscriptions: function () {
+            var subscriptions = new Subscriptions();
+
+            return subscriptions.fetch();
+        },
         Subscription: Subscription,
         Subscriptions: Subscriptions
     };

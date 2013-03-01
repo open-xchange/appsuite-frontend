@@ -24,9 +24,7 @@ define('io.ox/core/pubsub/settings/pane',
     'use strict';
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
-        SettingView = point.createView({className: 'pubsub settings'}),
-        publications = new model.Publications(),
-        subscriptions = new model.Subscriptions();
+        SettingView = point.createView({className: 'pubsub settings'});
 
     ext.point('io.ox/core/pubsub/settings/detail').extend({
         index: 100,
@@ -36,7 +34,7 @@ define('io.ox/core/pubsub/settings/pane',
                 $('<div class="clear-title">').text(point.title),
                 $('<div class="settings sectiondelimiter">')
             );
-            new SettingView({publications: publications.fetch(), subscriptions: subscriptions.fetch()}).render().$el.appendTo(this);
+            new SettingView({publications: model.publications(), subscriptions: model.subscriptions()}).render().$el.appendTo(this);
         }
     });
 
