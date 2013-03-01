@@ -381,7 +381,7 @@ define('io.ox/core/commons-folderview',
             visible = false,
             tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
-            fnChangeFolder, fnHide, fnShow, fnResize,
+            fnChangeFolder, fnHide, fnShow, fnResize, fnAnimationEnd,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -392,6 +392,11 @@ define('io.ox/core/commons-folderview',
         fnChangeFolder = function (e, selection) {
             var id = _(selection).first();
             api.get({ folder: id }).done(function (data) {
+
+                if (_.device('small')) {
+                    // close tree
+                    toggle();
+                }
                 if (data.module === options.type) {
                     app.folder.set(id);
                 }
@@ -430,18 +435,40 @@ define('io.ox/core/commons-folderview',
             $(window).on('resize', _.debounce(getWidths, 200));
         };
 
+        fnAnimationEnd = function (e) {
+            if (sidepanel.hasClass('slidein')) {
+                sidepanel.removeClass('slidein');
+            }
+            if (sidepanel.hasClass('slideout')) {
+                app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
+                sidepanel.removeClass('side-shift slideout').attr('style', '').hide();
+            }
+
+        };
+
         fnHide = function () {
             app.settings.set('folderview/visible', visible = false).save();
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
-            app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
-            sidepanel.removeClass('side-shift').attr('style', '').hide();
+
+            if (_.device('small')) {
+                sidepanel.addClass('slideout');
+
+            } else {
+                app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
+                sidepanel.removeClass('side-shift').attr('style', '').hide();
+            }
+
         };
 
         fnShow = function () {
             app.settings.set('folderview/visible', visible = true).save();
             app.getWindow().nodes.body.addClass('side-shift');
+
             sidepanel.addClass('side-shift').attr('style', '').show();
+            if (_.device('small')) {
+                sidepanel.addClass('slidein');
+            }
             container.scrollTop(top);
             app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
             return $.when();
@@ -477,9 +504,15 @@ define('io.ox/core/commons-folderview',
                 }
             });
 
+            sidepanel.on('webkitAnimationEnd', function (e) {
+                console.log('animationend');
+                fnAnimationEnd(e);
+            });
+
             // paint now
             return tree.paint().pipe(function () {
                 return tree.select(app.folder.get()).done(function () {
+
 
                     tree.selection.on('change', fnChangeFolder);
                     toggleTree = toggle;
