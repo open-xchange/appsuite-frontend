@@ -87,8 +87,12 @@ define('io.ox/core/pubsub/settings/pane',
         },
         onRemove: function (ev) {
             ev.preventDefault();
-            this.model.collection.remove(this.model);
-            this.remove();
+            this.model.collection.remove(this.model).done(function () {
+                this.remove();
+            }).fail(function (res) {
+                //FIXME: notify the user
+                console.log(res);
+            });
         }
     });
 
