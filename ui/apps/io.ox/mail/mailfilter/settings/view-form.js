@@ -160,7 +160,12 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                 id: ref + '/edit/view/' + alias,
                 index: 350,
                 label: alias,
-                attribute: alias
+                attribute: alias,
+                customizeNode: function () {
+                    this.$el.css({
+                        width: '300px'
+                    });
+                }
             }));
         });
 
