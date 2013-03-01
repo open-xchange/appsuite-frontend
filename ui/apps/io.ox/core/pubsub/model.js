@@ -36,7 +36,7 @@ define('io.ox/core/pubsub/model',
                     return api.publications.create(model.attributes);
                 },
                 read: function (model) {
-                    return api.publications.get(model);
+                    return api.publications.get({id: model.id});
                 },
                 update: function (model) {
                     return api.publications.update(model);
@@ -53,7 +53,7 @@ define('io.ox/core/pubsub/model',
                     return api.subscriptions.create(model.attributes);
                 },
                 read: function (model) {
-                    return api.subscriptions.get(model);
+                    return api.subscriptions.get({id: model.id});
                 },
                 update: function (model) {
                     return api.subscriptions.update(model);
