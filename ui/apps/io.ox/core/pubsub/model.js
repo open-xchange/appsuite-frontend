@@ -59,8 +59,6 @@ define('io.ox/core/pubsub/model',
                 if (method !== 'read') return;
 
                 return api.publications.getAll().then(function (res) {
-                    return api.publications.getList(res);
-                }).then(function (res) {
                     _(res).each(function (obj) {
                         collection.add(new Publication(obj));
                     });
@@ -74,8 +72,6 @@ define('io.ox/core/pubsub/model',
                 if (method !== 'read') return;
 
                 return api.subscriptions.getAll().then(function (res) {
-                    return api.subscriptions.getList(res);
-                }).then(function (res) {
                     _(res).each(function (obj) {
                         collection.add(new Subscription(obj));
                     });
