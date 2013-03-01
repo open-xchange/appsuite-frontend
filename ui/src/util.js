@@ -162,9 +162,14 @@
 
         // combination of browser & display
         device: function (condition) {
-            condition = String(condition || 'true').replace(/[a-z]+/ig, function (match) {
+            // add support for language checks
+            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
+            misc[lang] = true;
+            misc[lang.split('_')[0] + '_*'] = true;
+            // check condition
+            condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return _.browser[match] || _.display[match] || Modernizr[match] || 'false';
+                return _.browser[match] || _.display[match] || misc[match] || Modernizr[match] || 'false';
             });
             try {
                 return new Function('return !!(' + condition + ')')();

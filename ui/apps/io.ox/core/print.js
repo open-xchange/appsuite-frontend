@@ -41,7 +41,7 @@ define('io.ox/core/print', [], function () {
 
         // module and data are mandatory;
         // use options to overwrite default request params
-        open: function (module, data, options, _url_) {
+        open: function (module, data, options) {
 
             var params = { action: 'get' }, url;
 
@@ -56,14 +56,18 @@ define('io.ox/core/print', [], function () {
             params.template = defaultTemplates[module] || fallbackTemplate;
             params.session = ox.session;
 
-            url = _url_ || ox.apiRoot + '/' + module + '?' + $.param(_.extend(params, options));
+            url = ox.apiRoot + '/' + module + '?' + $.param(_.extend(params, options));
 
             return this.getWindow(url);
         },
 
+        openURL: function (url) {
+            return this.getWindow(url || (ox.base + '/blank.html'));
+        },
+
         interim: function (url) {
             console.warn('Temporary solution; replace by open()', url);
-            return this.open('mail', 0, 0, url || (ox.base + '/blank.html'));
+            return this.openURL(url);
         }
     };
 });
