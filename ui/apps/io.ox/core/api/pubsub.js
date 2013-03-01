@@ -103,6 +103,14 @@ define('io.ox/core/api/pubsub',
         publications: api({
             module: 'publications'
         }),
+        publicationTargets: api({
+            module: 'publicationTargets',
+            requests: {
+                all: {
+                    columns: 'id,displayName,icon,module,formDescription'
+                }
+            }
+        }),
         subscriptions: api({
             module: 'subscriptions'
         }),

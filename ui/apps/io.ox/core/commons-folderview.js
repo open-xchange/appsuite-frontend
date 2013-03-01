@@ -225,6 +225,30 @@ define('io.ox/core/commons-folderview',
                 }
             }
         });
+        
+        function publish(e) {
+            e.preventDefault();
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                publications.buildSubscribeDialog(e.data.baton);
+            });
+        }
+        
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'pubilcations',
+            index: 260,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
+                this.append(
+                    $('<li>').append(link)
+                );
+
+                if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
+                    link.on('click', { baton: baton }, publish);
+                } else {
+                    link.addClass('disabled').on('click', $.preventDefault);
+                }
+            }
+        });
 
         function setFolderPermissions(e) {
             e.preventDefault();

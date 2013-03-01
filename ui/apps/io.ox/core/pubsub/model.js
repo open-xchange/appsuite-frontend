@@ -23,10 +23,14 @@ define('io.ox/core/pubsub/model',
 
     var Publication = BasicModel.extend({
             ref: 'io.ox/core/pubsub/publication/',
+            defaults: {
+                entity: {},
+                entityModule: '',
+                target: ''
+            },
             syncer: {
                 create: function (model) {
-                    console.log(model, arguments);
-                    return $.when().resolve(true);
+                    return api.publications.create(model.attributes);
                 },
                 read: function (model) {
                     return api.publications.get(model);
