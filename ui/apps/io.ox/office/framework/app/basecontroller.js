@@ -35,12 +35,6 @@ define('io.ox/office/framework/app/basecontroller',
         var // self reference
             self = this,
 
-            // definitions for all items, mapped by item key
-            items = {},
-
-            // registered view components
-            components = [],
-
             // cached item values during a complex update
             resultCache = {},
 
@@ -96,23 +90,6 @@ define('io.ox/office/framework/app/basecontroller',
             };
 
             /**
-             * Enables or disables this item, and updates all registered view
-             * components.
-             *
-             * @param {Boolean} [state=true]
-             *  If omitted or set to true, the item will be enabled. Otherwise,
-             *  the item will be disabled.
-             *
-             * @returns {Item}
-             *  A reference to this item.
-             */
-            this.enable = function (state) {
-                enabled = _.isUndefined(state) || (state === true);
-                _(components).invoke('enable', key, this.isEnabled());
-                return this;
-            };
-
-            /**
              * Returns the current value of this item.
              */
             this.get = function () {
@@ -121,22 +98,9 @@ define('io.ox/office/framework/app/basecontroller',
             };
 
             /**
-             * Updates the controls associated to this item in all view
-             * components.
-             *
-             * @returns {Item}
-             *  A reference to this item.
-             */
-            this.update = function () {
-                _(components).invoke('enable', key, this.isEnabled());
-                _(components).invoke('update', key, this.get());
-                return this;
-            };
-
-            /**
              * Executes the setter function of this item (passing in the new
-             * value), updates all registered view components, and moves the
-             * browser focus back to the application pane.
+             * value), and moves the browser focus back to the application
+             * pane.
              *
              * @param value
              *  The new value of the item.
@@ -145,19 +109,26 @@ define('io.ox/office/framework/app/basecontroller',
              *  A reference to this item.
              */
             this.change = function (value) {
+
+                var // the result Deferred object
+                    def = null;
+
+                // execute the set handler
                 if (this.isEnabled()) {
                     if (async) {
-                        this.enable(false);
-                        setHandler.call(item, value).always(function () {
-                            enabled = true;
-                            self.update(); // updates enable+value
-                        });
-                    } else {
-                        setHandler.call(item, value);
+                        enabled = false;
+                        self.update(key);
                     }
+                    def = setHandler.call(this, value);
                 }
-                // return focus to application pane
-                if (done) { grabApplicationFocus(); }
+
+                $.when(def).always(function () {
+                    enabled = true;
+                    self.update();
+                    // return focus to application pane
+                    if (done) { grabApplicationFocus(); }
+                });
+
                 return this;
             };
 
@@ -178,50 +149,6 @@ define('io.ox/office/framework/app/basecontroller',
         }
 
         /**
-         * Returns all items matching the passed key selector in a map.
-         *
-         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
-         *  The keys of the items to be included into the result, as
-         *  space-separated string, or as regular expression, or as array of
-         *  strings or regular expressions (also mixed). Strings have to match
-         *  the keys exactly. If omitted, all registered items will be
-         *  returned. If set to null, an empty map will be returned.
-         *
-         * @returns {Object}
-         *  A map of all items with matching keys, mapped by their keys.
-         */
-        function selectItems(keys) {
-
-            var // result collection
-                matchingItems = {};
-
-            // return all items, if parameter is missing
-            if (_.isUndefined(keys)) {
-                return items;
-            }
-
-            // convert passed parameter to array
-            keys =
-                _.isString(keys) ? keys.split(/\s+/) :  // string: space-separated list to array
-                _.isRegExp(keys) ? [keys] :             // regular expression: one-element array
-                _.isArray(keys) ? keys :                // array: nothing to do
-                [];                                     // default: select nothing
-
-            // pick items by string key or by regular expression
-            _(keys).each(function (key) {
-                if (_.isString(key) && (key in items)) {
-                    matchingItems[key] = items[key];
-                } else if (_.isRegExp(key)) {
-                    _(items).each(function (item, itemKey) {
-                        if (key.test(itemKey)) { matchingItems[itemKey] = item; }
-                    });
-                }
-            });
-
-            return matchingItems;
-        }
-
-        /**
          * Moves the browser focus to the application pane.
          */
         function grabApplicationFocus() {
@@ -236,7 +163,6 @@ define('io.ox/office/framework/app/basecontroller',
             if (key in items) {
                 clearResultCache();
                 items[key].change(value);
-                self.update();
             } else {
                 grabApplicationFocus();
             }
@@ -343,86 +269,66 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         /**
-         * Registers a view component (e.g. a tool bar) that contains form
-         * controls used to display item values and trigger item actions.
+         * Registers an event listener at the passed view component containing
+         * form controls used to display item values and trigger item actions.
          *
          * @param {Component} component
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
-         *  activated in the user interface, or 'cancel' events to return to
-         *  the application without doing anything. Must support the method
-         *  enable() taking an item key and state parameter. Must support the
-         *  method update() taking the key and value of an item.
+         *  activated in the user interface; or 'cancel' events to return to
+         *  the application without doing anything.
          *
          * @returns {BaseController}
          *  A reference to this controller instance.
          */
         this.registerViewComponent = function (component) {
-            if (!_(components).contains(component)) {
-                components.push(component);
-                component.on('change cancel', componentEventHandler);
-            }
+            component.on('change cancel', componentEventHandler);
             return this;
         };
 
         /**
-         * Unregisters a view component that has been registered with the
-         * method BaseController.registerViewComponent().
+         * Receives the current values of the specified items, and triggers an
+         * 'update' event.
          *
-         * @param {Component} component
-         *  A view component that has been registered with the method
-         *  BaseController.registerViewComponent() before.
-         *
-         * @returns {BaseController}
-         *  A reference to this controller instance.
-         */
-        this.unregisterViewComponent = function (component) {
-            if (_(components).contains(component)) {
-                component.off('change cancel', componentEventHandler);
-                components = _(components).without(component);
-            }
-            return this;
-        };
-
-        /**
-         * Receives the current values of the specified items, and updates all
-         * registered view components.
-         *
-         * @param {String|RegExp|Null} [keys]
-         *  The keys of the items to be updated, as space-separated string,
-         *  or as regular expression. Strings have to match the keys
-         *  exactly. If omitted, all items will be updated. If set to null,
-         *  no item will be updated.
+         * @param {String} [key]
+         *  The key of the item to be updated. If omitted, all items will be
+         *  updated.
          *
          * @returns {BaseController}
          *  A reference to this controller.
          */
         this.update = (function () {
 
-            var // pending controller keys to be updated
-                pendingKeys = [];
+            var // pending controller items to be updated
+                pendingItems = {};
 
             // direct callback: called every time when BaseController.update() has been called
-            function registerKeys(keys) {
-                // update the array of pending keys
-                if (_.isUndefined(keys)) {
-                    pendingKeys = undefined;
-                } else if (_.isArray(pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
-                    pendingKeys.push(keys);
+            function registerKey(key) {
+                if (_.isUndefined(key)) {
+                    pendingItems = undefined;
+                } else if (pendingItems && _.isString(key) && (key in items)) {
+                    pendingItems[key] = items[key];
                 }
                 return self;
             }
 
             // deferred callback: called once, after current script ends
             function triggerUpdate() {
+
+                // collect states of all matching items in resultCache
                 clearResultCache();
-                _(selectItems(pendingKeys)).invoke('update');
-                pendingKeys = [];
+                _(pendingItems || items).each(function (item) {
+                    item.isEnabled();
+                    item.get();
+                });
+                pendingItems = {};
+
+                // notify all listeners
                 self.trigger('update', resultCache);
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKeys, triggerUpdate);
+            return app.createDebouncedMethod(registerKey, triggerUpdate);
 
         }()); // BaseController.update()
 
@@ -459,13 +365,9 @@ define('io.ox/office/framework/app/basecontroller',
             return this;
         };
 
-        /**
-         * Removes this controller from all event sources.
-         */
         this.destroy = function () {
-            // unregister from view components
-            _(components).invoke('off', 'change cancel', componentEventHandler);
-            items = components = null;
+            this.events.destroy();
+            items = null;
         };
 
         // initialization -----------------------------------------------------

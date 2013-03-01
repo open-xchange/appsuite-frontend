@@ -106,7 +106,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 }
 
 /* ========================================================================= */
-/* panes and view components                                                 */
+/* view panes                                                                */
 /* ========================================================================= */
 
 /* background color for panes */
@@ -114,13 +114,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 /* background color for panes */
 @app-pane-fill-color: #e5e5e5;
-
-/* shadow for hovering elements */
-.drop-shadow(@size: 5px) {
-    .box-shadow(0 @size 2 * @size fade(black, 20%));
-}
-
-/* panes =================================================================== */
 
 > .view-pane {
     position: absolute;
@@ -163,7 +156,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             }
         }
     }
-}
+
+} /* end of > .view-pane */
 
 /* the inner shadows of the application pane */
 > .app-pane-shadow {
@@ -171,25 +165,142 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     .box-shadow(0 0 10px fade(black, 20%));
 }
 
-/* view components ========================================================= */
+/* ========================================================================= */
+/* control groups                                                            */
+/* ========================================================================= */
 
-.view-component {
+/* glow effect for focused controls, use as argument for shadow mix-in classes */
+@focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
-    /* standard height of controls */
-    @control-height: 36px;
+/* shadow for hovering elements */
+.drop-shadow(@size: 5px) {
+    .box-shadow(0 @size 2 * @size fade(black, 20%));
+}
+
+.group {
+
     /* horizontal padding in control elements */
     @control-padding: 10px;
     /* space between control caption elements */
     @caption-spacing: 5px;
-    /* standard height of controls in drop-down lists */
-    @list-item-height: 30px;
 
-    /* border width of buttons in framed design mode */
-    @framed-border-width: 3px;
+    position: relative;
+    .box-sizing(border-box);
+    
+    /* hidden groups ('important' to overrule display modes from other rules) */
+    &.hidden {
+        display: none !important;
+    }
 
-    /* glow effect for focused controls, use as argument for shadow mix-in classes */
-    @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
+    /* disabled groups ('important' to overrule display modes from other rules) */
+    &.disabled {
+        /* override mouse pointer for any embedded elements */
+        &, * { cursor: default !important; }
+    }
 
+    /* common control settings --------------------------------------------- */
+
+    label, a.button, input {
+        display: inline-block;
+        position: relative;
+        .box-sizing(border-box);
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: none;
+        border: none;
+        .border-radius(0);
+        .box-shadow(none);
+        .transition(none);
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: normal;
+        color: @textColor;
+        text-shadow: none;
+        vertical-align: top;
+
+        /* prevent dotted focus rectangle around the control */
+        &:focus, &:active {
+            outline: none;
+        }
+    }
+
+    /* control caption elements (always span elements as children) */
+    label, a.button {
+        padding-left: @control-padding;
+        padding-right: @control-padding;
+
+        span {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        > .caption {
+            .box-sizing(border-box);
+            width: 100%;
+            overflow: hidden;
+
+            > span + span {
+                margin-left: @caption-spacing;
+            }
+        }
+    }
+
+    /* fade out caption for buttons and labels in disabled groups */
+    &.disabled label, &.disabled a.button, label.disabled, a.button.disabled {
+        > .caption, > span {
+            .opacity(50);
+        }
+    }
+
+    /* labels -------------------------------------------------------------- */
+
+    label {
+        text-align: center;
+        cursor: default;
+    }
+
+    /* buttons ------------------------------------------------------------- */
+
+    a.button {
+        text-align: left;
+
+        &.dropdown-button {
+            padding-right: @caret-width + @control-padding;
+
+            > .caption > span:last-child {
+                margin-right: @caption-spacing;
+            }
+
+            > span.dropdown-caret {
+                position: absolute;
+                top: 0;
+                right: @control-padding;
+            }
+        }
+    }
+
+    /* text fields --------------------------------------------------------- */
+
+    input {
+        width: 150px;
+        padding-left: 4px;
+        padding-right: 4px;
+        line-height: normal;
+        cursor: text;
+
+        &.readonly {
+            cursor: default;
+        }
+    }
+
+} /* end of .group */
+
+/* ========================================================================= */
+/* view components                                                           */
+/* ========================================================================= */
+
+.view-component {
     position: relative;
     padding: 0;
 
@@ -204,221 +315,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         &:not(:hover) { .opacity(70); }
     }
 
-    /* groups (container elements for controls) ---------------------------- */
-
-    .group {
-        /* relative position is essential for drop-down menu positioning */
-        position: relative;
-        .box-sizing(border-box);
-
-        /* hidden groups ('important' to overrule display modes from other rules) */
-        &.hidden {
-            display: none !important;
-        }
-
-        /* disabled groups ('important' to overrule display modes from other rules) */
-        &.disabled {
-            /* override mouse pointer for any embedded elements */
-            &, * { cursor: default !important; }
-        }
-
-        /* common control settings ----------------------------------------- */
-
-        label, a.button, input {
-            display: inline-block;
-            position: relative;
-            .box-sizing(border-box);
-            height: @control-height;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: none;
-            border: none;
-            .border-radius(0);
-            .box-shadow(none);
-            .transition(none);
-            white-space: nowrap;
-            font-size: 13px;
-            font-weight: normal;
-            color: @textColor;
-            text-shadow: none;
-            vertical-align: top;
-
-            /* prevent dotted focus rectangle around the control */
-            &:focus, &:active {
-                outline: none;
-            }
-        }
-
-        /* control caption elements (always spans as children) */
-        label, a.button {
-            padding-left: @control-padding;
-            padding-right: @control-padding;
-            line-height: @control-height;
-
-            span {
-                display: inline-block;
-                vertical-align: top;
-            }
-
-            > .caption {
-                .box-sizing(border-box);
-                width: 100%;
-                overflow: hidden;
-
-                > span + span {
-                    margin-left: @caption-spacing;
-                }
-            }
-        }
-
-        /* fade out caption for buttons and labels in disabled groups */
-        &.disabled label, &.disabled a.button, label.disabled, a.button.disabled {
-            > .caption, > span {
-                .opacity(50);
-            }
-        }
-
-        /* labels ---------------------------------------------------------- */
-
-        label {
-            text-align: center;
-            cursor: default;
-        }
-
-        /* buttons --------------------------------------------------------- */
-
-        a.button {
-            text-align: left;
-
-            &.dropdown-button {
-                padding-right: @caret-width + @control-padding;
-
-                > .caption > span:last-child {
-                    margin-right: @caption-spacing;
-                }
-
-                > span.dropdown-caret {
-                    position: absolute;
-                    top: 0;
-                    right: @control-padding;
-                }
-            }
-        }
-
-        /* text fields ----------------------------------------------------- */
-
-        input {
-            width: 150px;
-            padding-left: 4px;
-            padding-right: 4px;
-            line-height: normal;
-            cursor: text;
-
-            &.readonly {
-                cursor: default;
-            }
-        }
-
-        /* item buttons in drop-down menus --------------------------------- */
-
-        &.item-buttons {
-    
-            a.button {
-                display: block;
-                width: 100%;
-                height: @list-item-height;
-                line-height: @list-item-height;
-                text-align: left;
-            }
-
-            /* list drop-downs */
-            &.list {
-            }
-
-            /* grid drop-downs */
-            &.grid {
-                > table > tbody > tr > td {
-                    padding: 0;
-                }
-            }
-        }
-
-        /* group designs --------------------------------------------------- */
-
-        &.design-default.item-buttons {
-            padding: 5px 0;
-
-            a.button {
-                border: 1px solid transparent;
-                line-height: @list-item-height - 2px;
-
-                &.selected {
-                    background: fade(@selectedBackground, 60%);
-                }
-            }
-
-            &:not(.disabled) a.button:not(.disabled) {
-
-                &:hover { background: fade(black, 5%); }
-                &:active { background: fade(black, 10%); }
-
-                &:focus:not(:active) {
-                    border-color: @selectedBackground;
-                    .box-shadow(@focus-glow-effect);
-                }
-
-                &.selected {
-                    &:hover { background: fade(@selectedBackground, 70%); }
-                    &:active { background: fade(@selectedBackground, 80%); }
-                }
-            }
-        }
-
-        /* framed design: selected, hover, focus with borders (preserve contents) */
-        &.design-framed {
-
-            a.button {
-                border: @framed-border-width solid transparent;
-                .border-radius(5px);
-                line-height: @control-height - 2 * @framed-border-width;
-
-                &.selected {
-                    border-color: @selectedBackground;
-                    .drop-shadow(4px);
-                }
-            }
-
-            &:not(.disabled) a.button:not(.disabled) {
-                &:hover:not(:focus) { border-color: fade(black, 10%); }
-                &:active:not(:focus) { border-color: fade(black, 10%); }
-                &:focus { border-color: fade(@selectedBackground, 60%); }
-
-                &.selected {
-                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
-                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
-                    &:focus { border-color: darken(@selectedBackground, 20%); }
-                }
-            }
-
-            &.item-buttons {
-                padding: 5px;
-
-                a.button {
-                    height: @control-height + 2 * @framed-border-width;
-                    padding-left: 12px;
-                    padding-right: 12px;
-                    line-height: @control-height;
-
-                    &:not(:first-child) {
-                        margin-top: 4px;
-                    }
-                }
-            }
-        }
-
-    } /* end of .group */
-
     /* tool boxes ---------------------------------------------------------- */
 
     &.toolbox {
@@ -427,6 +323,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         @toolbox-padding: 13px;
         /* default spacing between controls */
         @control-spacing: 8px;
+        /* standard height of controls */
+        @control-height: 36px;
         /* border radius for controls */
         @border-radius: 5px;
         /* height of the heading label */
@@ -512,9 +410,13 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         }
 
         .group {
+            /* repeat background, needed for overlay panes with transparent background */
+            background: @pane-fill-color;
 
             label, a.button, input {
+                height: @control-height;
                 border: 1px solid #181818;
+                color: white;
 
                 + label, + a.button, + input {
                     margin-left: -1px;
@@ -525,8 +427,24 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 line-height: @control-height - 2px;
             }
 
-            /* raise hovered/focused control to make all borders visible */
+            /* selected toggle/radio buttons */
+            a.button.selected {
+                background: fade(@selectedBackground, 50%);
+            }
+
+            /* color of place holder in text fields */
+            input {
+                .placeholder-color() { color: lighten(@pane-fill-color, 15%); }
+                &::-webkit-input-placeholder { .placeholder-color(); }
+                &:-moz-placeholder { .placeholder-color(); }
+                &::-moz-placeholder { .placeholder-color(); }
+                &:-ms-input-placeholder { .placeholder-color(); }
+            }
+
+            /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
             &:not(.disabled) {
+
+                /* raise hovered/focused control to make all borders visible */
                 a.button, input {
                     &:not(.disabled) {
                         &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
@@ -534,109 +452,75 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                     }
                 }
 
-                a.button:not(.disabled):focus:not(:active) {
-                    border-color: @selectedBackground;
-                    .box-shadow(@focus-glow-effect);
-                }
+                a.button:not(.disabled) {
+                    .box-shadow(@button-shadow-effect);
 
-                input:not(.disabled):focus {
-                    border-color: @selectedBackground;
-                    .box-shadow(@focus-glow-effect);
-                }
-            }
+                    &:hover { background: fade(white, 5%); }
+                    &:active { background: fade(black, 5%); }
 
-            /* add specific design properties for white on dark design */
-            &.design-default {
-                background: @pane-fill-color;
+                    &:focus:not(:active) {
+                        .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
+                        border-color: @selectedBackground;
+                    }
 
-                label, a.button, input {
-                    color: white;
-                }
+                    /* selected toggle/radio buttons */
+                    &.selected {
+                        .box-shadow(@selected-button-shadow-effect);
 
-                /* color of place holder in text fields */
-                input {
-                    .placeholder-color() { color: lighten(@pane-fill-color, 15%); }
-                    &::-webkit-input-placeholder { .placeholder-color(); }
-                    &:-moz-placeholder { .placeholder-color(); }
-                    &::-moz-placeholder { .placeholder-color(); }
-                    &:-ms-input-placeholder { .placeholder-color(); }
-                }
-
-                /* selected toggle/radio buttons */
-                a.button.selected {
-                    background: fade(@selectedBackground, 50%);
-                }
-
-                /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
-                &:not(.disabled) {
-
-                    a.button:not(.disabled) {
-                        .box-shadow(@button-shadow-effect);
-
-                        &:hover { background: fade(white, 5%); }
-                        &:active { background: fade(black, 5%); }
+                        &:hover { background: fade(@selectedBackground, 60%); }
+                        &:active { background: fade(@selectedBackground, 40%); }
 
                         &:focus:not(:active) {
-                            .box-shadow-2(@button-shadow-effect, @focus-glow-effect);
-                        }
-
-                        /* selected toggle/radio buttons */
-                        &.selected {
-                            .box-shadow(@selected-button-shadow-effect);
-
-                            &:hover { background: fade(@selectedBackground, 60%); }
-                            &:active { background: fade(@selectedBackground, 40%); }
-
-                            &:focus:not(:active) {
-                                .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
-                            }
+                            .box-shadow-2(@selected-button-shadow-effect, @focus-glow-effect);
                         }
                     }
+                }
 
-                    /* text fields without white background as long as not focused */
-                    input:not(.disabled) {
+                /* text fields without white background as long as not focused */
+                input:not(.disabled) {
 
-                        &:not(:focus) {
-                            .box-shadow(@textfield-shadow-effect);
-                            &:hover { background: fade(white, 5%); }
-                        }
-
-                        &:focus, &:active {
-                            background: white;
-                            color: @textColor;
-
-                            /* color of place holder in text fields */
-                            .placeholder-color() { color: #ccc; }
-                            &::-webkit-input-placeholder { .placeholder-color(); }
-                            &:-moz-placeholder { .placeholder-color(); }
-                            &::-moz-placeholder { .placeholder-color(); }
-                            &:-ms-input-placeholder { .placeholder-color(); }
-                        }
+                    &:not(:focus) {
+                        .box-shadow(@textfield-shadow-effect);
+                        &:hover { background: fade(white, 5%); }
                     }
-                    
-                    /* effects for all elements in combo fields */
-                    &.combo-field.focused {
+
+                    &:focus, &:active {
+                        background: white;
                         .box-shadow(@focus-glow-effect);
-        
-                        > input, > a.button.dropdown-button {
-                            &, &:hover, &:focus, &:active {
-                                background: white;
-                                border-color: @selectedBackground;
-                                .box-shadow(none);
-                                color: @textColor;
-                            }
-                        }
+                        border-color: @selectedBackground;
+                        color: @textColor;
 
-                        > input {
-                            &, &:hover, &:focus, &:active {
-                                border-right-color: transparent;
-                            }
+                        /* color of place holder in text fields */
+                        .placeholder-color() { color: #ccc; }
+                        &::-webkit-input-placeholder { .placeholder-color(); }
+                        &:-moz-placeholder { .placeholder-color(); }
+                        &::-moz-placeholder { .placeholder-color(); }
+                        &:-ms-input-placeholder { .placeholder-color(); }
+                    }
+                }
+                
+                /* effects for all elements in combo fields */
+                &.combo-field.focused {
+                    .box-shadow(@focus-glow-effect);
+    
+                    > input, > a.button.dropdown-button {
+                        &, &:hover, &:focus, &:active {
+                            background: white;
+                            border-color: @selectedBackground;
+                            .box-shadow(none);
+                            color: @textColor;
                         }
+                    }
 
-                        > a.button.dropdown-button {
-                            &, &:hover, &:focus, &:active {
-                                border-left-color: transparent;
-                            }
+                    > input {
+                        &, &:hover, &:focus, &:active {
+                            border-right-color: transparent;
+                        }
+                    }
+
+                    > a.button.dropdown-button {
+                        &, &:hover, &:focus, &:active {
+                            border-left-color: transparent;
                         }
                     }
                 }
@@ -649,7 +533,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             margin-top: -@control-spacing;
             padding-top: @heading-height + 2 * @control-spacing;
 
-            > .group.design-heading {
+            > .group.heading {
                 position: absolute;
                 top: @control-spacing;
                 left: -1px;
@@ -679,7 +563,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             }
 
             /* collapsed: hide all groups following the heading button */
-            &.collapsed > .group.design-heading ~ * {
+            &.collapsed > .group.heading ~ * {
                 display: none;
             }
         }
@@ -724,7 +608,101 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             width: 100%;
         }
     }
-}
+
+    > .group.item-buttons {
+
+        a.button {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* list drop-downs */
+        &.list {
+        }
+
+        /* grid drop-downs */
+        &.grid {
+            > table > tbody > tr > td {
+                padding: 0;
+            }
+        }
+    
+        /* default design: selected, hover, focus with background color */
+        &.design-default {
+
+            /* standard height of controls */
+            @list-item-height: 30px;
+
+            padding: 5px 0;
+
+            a.button {
+                height: @list-item-height;
+                border: 1px solid transparent;
+                line-height: @list-item-height - 2px;
+
+                &.selected {
+                    background: fade(@selectedBackground, 60%);
+                }
+            }
+
+            &:not(.disabled) a.button:not(.disabled) {
+
+                &:hover { background: fade(black, 5%); }
+                &:active { background: fade(black, 10%); }
+
+                &:focus:not(:active) {
+                    border-color: @selectedBackground;
+                    .box-shadow(@focus-glow-effect);
+                }
+
+                &.selected {
+                    &:hover { background: fade(@selectedBackground, 70%); }
+                    &:active { background: fade(@selectedBackground, 80%); }
+                }
+            }
+        }
+
+        /* framed design: selected, hover, focus with borders (preserve contents) */
+        &.design-framed {
+
+            /* standard height of controls in drop-down lists, framed design */
+            @list-item-height: 42px;
+            /* border width of buttons in framed design mode */
+            @item-border-width: 3px;
+
+            padding: 5px;
+
+            a.button {
+                height: @list-item-height;
+                padding-left: 12px;
+                padding-right: 12px;
+                border: @item-border-width solid transparent;
+                .border-radius(5px);
+                line-height: @list-item-height - 2 * @item-border-width;
+
+                &.selected {
+                    border-color: @selectedBackground;
+                    .drop-shadow(4px);
+                }
+            }
+
+            &:not(.disabled) a.button:not(.disabled) {
+
+                &:hover:not(:focus) { border-color: fade(black, 10%); }
+                &:active:not(:focus) { border-color: fade(black, 10%); }
+                &:focus { border-color: fade(@selectedBackground, 60%); }
+
+                &.selected {
+                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
+                    &:focus { border-color: darken(@selectedBackground, 20%); }
+                }
+            }
+        }
+    }
+
+} /* end of &.dropdown-container */
 
 /* ========================================================================= */
 

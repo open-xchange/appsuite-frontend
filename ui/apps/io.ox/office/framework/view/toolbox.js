@@ -11,10 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/component/toolbox',
+define('io.ox/office/framework/view/toolbox',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/component/component'
+     'io.ox/office/framework/view/component'
     ], function (Utils, Button, Component) {
 
     'use strict';
@@ -29,11 +29,15 @@ define('io.ox/office/tk/component/toolbox',
 
     /**
      * Represents a view component with a fixed width and a vertically oriented
-     * layout.
+     * layout. Optionally, a heading label will be shown that allows to
+     * collapse and expand the tool box.
      *
      * @constructor
      *
      * @extends Component
+     *
+     * @param {BaseApplication} app
+     *  The application containing this view component instance.
      *
      * @param {Object} [options]
      *  A map of options controlling the appearance and behavior of the tool
@@ -49,7 +53,7 @@ define('io.ox/office/tk/component/toolbox',
      *      If set to true, the heading label can be clicked to expand the tool
      *      box (show all its contents) after it has been collapsed.
      */
-    function ToolBox(options) {
+    function ToolBox(app, options) {
 
         var // self reference
             self = this,
@@ -58,7 +62,7 @@ define('io.ox/office/tk/component/toolbox',
             headingLabel = Utils.getStringOption(options, 'label'),
 
             // the heading button that collapses/expands the tool box
-            headingButton = _.isString(headingLabel) ? new Button({ design: 'heading', label: headingLabel }) : null,
+            headingButton = _.isString(headingLabel) ? new Button({ classes: 'heading', label: headingLabel }) : null,
 
             // whether the heading button can collapse the tool box
             canCollapse = Utils.getBooleanOption(options, 'collapse', false),
@@ -68,7 +72,7 @@ define('io.ox/office/tk/component/toolbox',
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, options);
+        Component.call(this, app, options);
 
         // private methods ----------------------------------------------------
 

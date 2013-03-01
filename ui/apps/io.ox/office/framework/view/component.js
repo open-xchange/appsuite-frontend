@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/component/component',
+define('io.ox/office/framework/view/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
@@ -43,6 +43,11 @@ define('io.ox/office/tk/component/component',
      *
      * @constructor
      *
+     * @extends Events
+     *
+     * @param {BaseApplication} app
+     *  The application containing this view component instance.
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
@@ -57,7 +62,7 @@ define('io.ox/office/tk/component/component',
      *      Additional CSS formatting that will be set at the root DOM node of
      *      this view component.
      */
-    function Component(options) {
+    function Component(app, options) {
 
         var // self reference
             self = this,
@@ -180,6 +185,19 @@ define('io.ox/office/tk/component/component',
                 if (keydown) { moveFocus(true); }
                 return false;
             }
+        }
+
+        /**
+         * Handler for application controller 'update' events.
+         */
+        function controllerUpdateHandler(event, itemStates) {
+            _(itemStates).each(function (itemState, key) {
+                if (key in groupsByKey) {
+                    _.chain(groupsByKey[key])
+                        .invoke('enable', itemState.enable)
+                        .invoke('update', itemState.value);
+                }
+            });
         }
 
         // methods ------------------------------------------------------------
@@ -356,41 +374,6 @@ define('io.ox/office/tk/component/component',
         };
 
         /**
-         * Enables or disables the specified group of this view component.
-         *
-         * @param {String} key
-         *  The key of the control group to be enabled or disabled.
-         *
-         * @param {Boolean} [state=true]
-         *  If omitted or set to true, the control group will be enabled.
-         *  Otherwise, it will be disabled.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.enable = function (key, state) {
-            // invoke the enable() method of all groups with the specified key
-            if (key in groupsByKey) {
-                _(groupsByKey[key]).invoke('enable', state);
-            }
-            return this;
-        };
-
-        /**
-         * Disables the specified group of this view component. Has the same
-         * effect as calling Component.enable(key, false).
-         *
-         * @param {String} key
-         *  The key of the control group to be disabled.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.disable = function (key) {
-            return this.enable(key, false);
-        };
-
-        /**
          * Returns whether this view component contains the control that is
          * currently focused. Searches in all registered group objects.
          */
@@ -422,25 +405,6 @@ define('io.ox/office/tk/component/component',
         };
 
         /**
-         * Updates the specified control group with the specified value.
-         *
-         * @param {String} key
-         *  The key of the control group to be updated.
-         *
-         * @param value
-         *  The new value to be displayed in the control.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.update = function (key, value) {
-            if (key in groupsByKey) {
-                _(groupsByKey[key]).invoke('update', value);
-            }
-            return this;
-        };
-
-        /**
          * Calls the destroy methods of all child objects, and removes this
          * view component from the page.
          */
@@ -458,6 +422,11 @@ define('io.ox/office/tk/component/component',
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);
+
+        // register this view component at the application controller, and listen to its update events
+        app.getController()
+            .registerViewComponent(this)
+            .on('update', controllerUpdateHandler);
 
     } // class Component
 

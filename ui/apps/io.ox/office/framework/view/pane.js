@@ -13,8 +13,8 @@
 
 define('io.ox/office/framework/view/pane',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/component/component',
-     'io.ox/office/tk/component/toolbox'
+     'io.ox/office/framework/view/component',
+     'io.ox/office/framework/view/toolbox'
     ], function (Utils, Component, ToolBox) {
 
     'use strict';
@@ -78,8 +78,7 @@ define('io.ox/office/framework/view/pane',
         };
 
         /**
-         * Adds the passed view component into this pane, and registers it at
-         * the application controller.
+         * Adds the passed view component into this pane.
          *
          * @param {Component} component
          *  The view component to be added to this pane.
@@ -90,7 +89,6 @@ define('io.ox/office/framework/view/pane',
         this.addViewComponent = function (component) {
             components.push(component);
             node.append(component.getNode());
-            app.getController().registerViewComponent(component);
             return this;
         };
 
@@ -106,16 +104,13 @@ define('io.ox/office/framework/view/pane',
          *  The new tool box component.
          */
         this.createToolBox = function (options) {
-            var toolBox = new ToolBox(options);
+            var toolBox = new ToolBox(app, options);
             this.addViewComponent(toolBox);
             return toolBox;
         };
 
         this.destroy = function () {
-            _(components).each(function (component) {
-                app.getController().unregisterViewComponent(component);
-                component.destroy();
-            });
+            _(components).invoke('destroy');
             node = components = null;
         };
 

@@ -38,8 +38,11 @@ define('io.ox/office/tk/dropdown/items',
      *  A map of options to control the properties of the drop-down menu. The
      *  following options are supported:
      *  @param {String} [options.itemDesign='default']
-     *      The design mode of the menu items. See the option 'options.design'
-     *      supported by the Group class constructor for details.
+     *      The design mode of the menu items. The value 'default' shows items
+     *      in a simple drop-down list style, highlighted items will be drawn
+     *      with a changed background color. The value 'framed' shows the
+     *      highlighted items with a thick border and leaves the background
+     *      untouched.
      *  @param {Function} [options.itemInserter]
      *      A function that will implement inserting an item element at a
      *      specific position. The function receives the button control
@@ -74,7 +77,7 @@ define('io.ox/office/tk/dropdown/items',
             self = this,
 
             // the group in the drop-down menu containing the menu items
-            itemGroup = new Group({ classes: 'item-buttons', design: Utils.getStringOption(options, 'itemDesign', 'default') }),
+            itemGroup = new Group({ classes: 'item-buttons design-' + Utils.getStringOption(options, 'itemDesign', 'default') }),
 
             // handler called to insert a new item element into the item group
             itemInserter = Utils.getFunctionOption(options, 'itemInserter'),

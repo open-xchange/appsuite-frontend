@@ -13,9 +13,8 @@
 
 define('io.ox/office/tk/dropdown/dropdown',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/component/component',
      'io.ox/office/tk/control/group'
-    ], function (Utils, Component, Group) {
+    ], function (Utils, Group) {
 
     'use strict';
 
@@ -82,14 +81,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the drop-down button
             menuButton = Utils.createButton(plainCaret ? {} : options).addClass('dropdown-button').append(caretSpan),
 
-            // the view component embedded in the drop-down menu
-            menuComponent = new Component(),
-
-            // the root node of the menu view component
-            contentNode = menuComponent.getNode(),
-
             // the drop-down menu element containing the menu view component
-            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container').append(contentNode),
+            menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $(),
@@ -224,10 +217,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
                 if (keyup) {
-                    toggleMenu(null);
-                    if (self.isMenuVisible()) {
-                        self.grabMenuFocus();
-                    }
+                    toggleMenu(true);
+                    self.grabMenuFocus();
                 }
                 return false;
             }
@@ -324,13 +315,11 @@ define('io.ox/office/tk/dropdown/dropdown',
                 menuMinSize = { minWidth: menuNode.css('min-width'), minHeight: menuNode.css('min-height') };
 
             // set size of menu node to 'auto' to be able to obtain the effective size
-            contentNode.css('width', 'auto');
             menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
             menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
 
             // restore min-width and min-height of the menu node, and other CSS properties
             menuNode.css(menuMinSize);
-            contentNode.css('width', '100%');
 
             // enable window resize handler which recalculates position and size of the menu node
             $(window).on('resize', windowResizeHandler);
@@ -391,13 +380,6 @@ define('io.ox/office/tk/dropdown/dropdown',
         };
 
         /**
-         * Returns the view component embedded in the drop-down menu.
-         */
-        this.getMenuComponent = function () {
-            return menuComponent;
-        };
-
-        /**
          * Returns whether the drop-down menu is currently visible.
          */
         this.isMenuVisible = function () {
@@ -434,7 +416,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A reference to this instance.
          */
         this.grabMenuFocus = function () {
-            menuComponent.grabFocus();
+            // TODO
             return this;
         };
 
@@ -452,10 +434,10 @@ define('io.ox/office/tk/dropdown/dropdown',
          */
         this.addPrivateMenuGroup = function (group) {
 
-            // insert the passed group into the view component of the drop-down menu
-            menuComponent.addPrivateGroup(group);
+            // insert the node of the passed group into the drop-down menu
+            menuNode.append(group.getNode());
 
-            // forward events of the embedded group to listeners of this drop-down group
+            // forward events of the group to listeners of this drop-down group
             group.on('change cancel', function (event, value) {
                 self.trigger(event.type, value);
             });
