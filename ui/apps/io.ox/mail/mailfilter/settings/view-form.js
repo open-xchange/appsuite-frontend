@@ -174,6 +174,20 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                         label: gt('Timeframe')
                     }));
 
+                    point.extend(new forms.CheckBoxField({
+                        id: ref + '/edit/view/activeTimeframe',
+                        index: 1500,
+                        label: model.fields.activeTimeframe,
+                        attribute: 'activeTimeframe',
+                        customizeNode: function () {
+                            this.$el.css({
+                                clear: 'both',
+                                width: '300px',
+                                margin: '15px 0'
+                            });
+                        }
+                    }));
+
                     point.extend(new forms.DatePicker({
                         id: ref + '/edit/view/start_date',
                         index: 1600,

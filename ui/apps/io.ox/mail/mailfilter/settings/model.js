@@ -77,7 +77,7 @@ define('io.ox/mail/mailfilter/settings/model',
                     );
                 }
 
-                if (testForTimeframe.tests.length === 0) {
+                if (model.attributes.activeTimeframe === false || testForTimeframe.tests.length === 0) {
                     testForTimeframe = { id: "true" };
                 }
 
@@ -114,7 +114,8 @@ define('io.ox/mail/mailfilter/settings/model',
         active: gt('Active'),
         addresses: gt('E-mail addresses'),
         dateFrom: gt('Start Date'),
-        dateUntil: gt('End date')
+        dateUntil: gt('End date'),
+        activeTimeframe: gt('Use timeframe')
     };
 
 

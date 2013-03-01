@@ -17,8 +17,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/mail/mailfilter/settings/view-form',
     'io.ox/core/tk/dialogs',
+    'io.ox/core/date',
     'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, gt) {
+], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
 
     'use strict';
 
@@ -42,6 +43,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             vacationData.dateUntil = value.datevalue[0];
                         }
                     });
+                    vacationData.activeTimeframe = true;
+                } else {
+                    var myDateStart = new date.Local(date.Local.utc(_.now()));
+                    var myDateEnd = new date.Local(date.Local.utc(_.now()));
+
+                    myDateStart = myDateStart.addUTC(date.DAY);
+                    myDateEnd = myDateEnd.addUTC(date.DAY + date.WEEK);
+
+                    vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
+                    vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
                 }
 
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
