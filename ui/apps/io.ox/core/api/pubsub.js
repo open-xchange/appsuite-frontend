@@ -101,7 +101,12 @@ define('io.ox/core/api/pubsub',
 
     return {
         publications: api({
-            module: 'publications'
+            module: 'publications',
+            requests: {
+                all: {
+                    columns: 'id,displayName,enabled'
+                }
+            }
         }),
         publicationTargets: api({
             module: 'publicationTargets',
@@ -112,7 +117,12 @@ define('io.ox/core/api/pubsub',
             }
         }),
         subscriptions: api({
-            module: 'subscriptions'
+            module: 'subscriptions',
+            requests: {
+                all: {
+                    columns: 'id,displayName,enabled'
+                }
+            }
         }),
         sources: apiFactory({
             module: 'subscriptionSources'
