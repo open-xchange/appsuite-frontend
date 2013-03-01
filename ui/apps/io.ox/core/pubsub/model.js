@@ -114,7 +114,6 @@ define('io.ox/core/pubsub/model',
 
     return {
         Publication: Publication,
-        Publications: Publications,
         publications: function () {
             var publications = new Publications();
 
@@ -125,7 +124,6 @@ define('io.ox/core/pubsub/model',
 
             return subscriptions.fetch();
         },
-        Subscription: Subscription,
-        Subscriptions: Subscriptions
+        Subscription: Subscription
     };
 });
