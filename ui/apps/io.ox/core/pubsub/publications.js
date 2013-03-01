@@ -21,37 +21,52 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     
     'use strict';
     
-    var buildSubscribeDialog = function (baton) {
+    var buildPublishDialog = function (baton) {
         //prepare data
         
-        api.publicationTargets.getAll().done(function (data) {
-            var target = '';
-            _(data).each(function (obj) {
-                if (obj.module === baton.data.module)   {
-                    target = obj.id;
-                }
-            });
-            var attr = {entity: {folder: baton.data.id},
-                        entityModule: baton.data.module,
-                        target: target};
-            attr[target] = {'protected': true,
-                            siteName: '',
-                            template: '',
-                            url: ''};
-            
-            //buildModel
-            var model = new pubsub.Publication(attr);
+        //check which baton we have standard or bton from folderview
+        //folderview means new publication otherwise its a new one
+        if (baton.model) {
             //buildView
-            var view = new PublicationView({ model: model});
+            var view = new PublicationView({model: baton.model});
             
             view.render();
-        });
+        } else {
+            api.publicationTargets.getAll().done(function (data) {
+                var target = '';
+                _(data).each(function (obj) {
+                    if (obj.module === baton.data.module)   {
+                        target = obj.id;
+                    }
+                });
+                var attr = {entity: {folder: baton.data.id},
+                            entityModule: baton.data.module,
+                            target: target};
+                attr[target] = {'protected': true,
+                                siteName: '',
+                                template: '',
+                                url: ''};
+                
+                //buildModel
+                var model = new pubsub.Publication(attr);
+                //buildView
+                var view = new PublicationView({model: model});
+                
+                view.render();
+            });
+        }
     },
     PublicationView = Backbone.View.extend({
         tagName: "div",
         _modelBinder: undefined,
+        editMode: undefined,
         initialize: function (options) {
-            // create template
+            if (this.model.id) {
+                this.editMode = true;
+            } else {
+                this.editMode = false;
+            }
+            
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
@@ -165,23 +180,38 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
         }
     });
+    ext.point('io.ox/core/pubsub/publications/dialog').extend({
+        id: 'url',
+        index: 400,
+        draw: function (baton) {
+            if (baton.view.editMode) {
+                this.append($('<div>').addClass('control-group').append(
+                        $('<label>').addClass('url-label control-label').text(_.noI18n('URL')).attr('for', 'url-value'),
+                        $('<div>').addClass('controls').append(
+                            $('<a>').attr({id: 'url-value', href: baton.target.url}).addClass('url-value').text(_.noI18n(baton.target.url))
+                            )));
+            }
+        }
+    });
     
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'emailbutton',
-        index: 400,
+        index: 500,
         draw: function (baton) {
-            this.append($('<div>').addClass('control-group').append(
-                        $('<div>').addClass('controls').append(
-                        $('<button>').addClass('email-btn btn').text(gt('Send E-mail about this publication')).on('click', function () {
-                            console.log('Hier koennte ihre Werbung stehen.');
-                        }))),
-                        $('<br>'));
+            if (baton.view.editMode) {
+                this.append($('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(
+                            $('<button>').addClass('email-btn btn').text(gt('Send E-mail about this publication')).on('click', function () {
+                                console.log('Hier koennte ihre Werbung stehen.');
+                            }))),
+                            $('<br>'));
+            }
         }
     });
     
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'legalinformation',
-        index: 500,
+        index: 600,
         draw: function (baton) {
             var fullNode = $('<div>').append($('<b>').addClass('warning-label').text(gt('Attention')),
                         $('<div>').addClass('warning-text').text(
@@ -203,6 +233,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     });
     
     return {
-        buildSubscribeDialog: buildSubscribeDialog
+        buildPublishDialog: buildPublishDialog
     };
 });

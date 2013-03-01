@@ -229,7 +229,7 @@ define('io.ox/core/commons-folderview',
         function publish(e) {
             e.preventDefault();
             require(['io.ox/core/pubsub/publications'], function (publications) {
-                publications.buildSubscribeDialog(e.data.baton);
+                publications.buildPublishDialog(e.data.baton);
             });
         }
         

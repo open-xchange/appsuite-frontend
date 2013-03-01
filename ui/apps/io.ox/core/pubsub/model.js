@@ -28,6 +28,9 @@ define('io.ox/core/pubsub/model',
                 entityModule: '',
                 target: ''
             },
+            url: function () {
+                return this.attributes[this.attributes.target].url;
+            },
             syncer: {
                 create: function (model) {
                     return api.publications.create(model.attributes);
