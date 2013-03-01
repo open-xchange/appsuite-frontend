@@ -62,6 +62,11 @@ define('io.ox/core/pubsub/model',
         }),
         Publications = Backbone.Collection.extend({
             model: Publication,
+            initialize: function () {
+                this.on('remove', function (model, collection, opt) {
+                    model.destroy();
+                });
+            },
             sync: function (method, collection, options) {
                 if (method !== 'read') return;
 
@@ -75,6 +80,11 @@ define('io.ox/core/pubsub/model',
         }),
         Subscriptions = Backbone.Collection.extend({
             model: Subscription,
+            initialize: function () {
+                this.on('remove', function (model, collection, opt) {
+                    model.destroy();
+                });
+            },
             sync: function (method, collection, options) {
                 if (method !== 'read') return;
 
