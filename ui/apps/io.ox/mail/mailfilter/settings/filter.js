@@ -53,6 +53,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
                     vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
+
+                    vacationData.activeTimeframe = false;
                 }
 
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
