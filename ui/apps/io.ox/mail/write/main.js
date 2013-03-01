@@ -194,6 +194,7 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
                     $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
+                    $('<input>', { type: 'hidden', name: 'headers', value: '' }),
                     view.leftside,
                     view.rightside
                 )
@@ -465,6 +466,16 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
+
+        /**
+         * store headers data in form
+         * @param {object} header key/value pairs
+         * @returns {undefined}
+         */
+        app.setHeaders = function (headers) {
+            view.form.find('input[name=headers]').val(JSON.stringify(headers) || '{}');
+        };
+
         var windowTitles = {
             compose: gt('Compose new mail'),
             replyall: gt('Reply all'),
@@ -510,6 +521,7 @@ define('io.ox/mail/write/main',
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
+            this.setHeaders(data.headers);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
             // add files (from contacts)
@@ -596,6 +608,15 @@ define('io.ox/mail/write/main',
                 };
                 // clear hash
                 _.url.hash('mailto', null);
+            }
+            // triggered by invitation mail?
+            if (data && _.isObject(data.invitation)) {
+                data.subject = data.invitation.subject || '';
+                data.attachments = [{ content: data.invitation.link || '' }];
+                data.headers = {
+                    'X-OX-PubURL': data.invitation.link || '',
+                    'X-OX-PubType': data.invitation.module + ',com.openexchange.publish.microformats.' + data.invitation.module + '.online' || ''
+                };
             }
 
             _.url.hash('app', 'io.ox/mail/write:compose');
@@ -789,6 +810,7 @@ define('io.ox/mail/write/main',
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
+                headers: JSON.parse(data.headers) || {},
                 reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
