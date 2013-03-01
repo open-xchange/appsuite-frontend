@@ -33,7 +33,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
             api.getRules('vacation').done(function (data) {
                 var vacationData = data[0].actioncmds[0];
                 vacationData.mainID = data[0].id;
-                vacationData.active = data[0].active;
 
                 if (_(data[0].test).size() === 2) {
                     _(data[0].test.tests).each(function (value) {
@@ -43,7 +42,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             vacationData.dateUntil = value.datevalue[0];
                         }
                     });
-                    vacationData.activeTimeframe = true;
+
+                    vacationData.activeSelect = data[0].active ? 'activeTime' : 'disabled';
+
                 } else {
                     var myDateStart = new date.Local(date.Local.utc(_.now()));
                     var myDateEnd = new date.Local(date.Local.utc(_.now()));
@@ -54,7 +55,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
                     vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
 
-                    vacationData.activeTimeframe = false;
+                    vacationData.activeSelect = data[0].active ? 'active' : 'disabled';
                 }
 
                 var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);

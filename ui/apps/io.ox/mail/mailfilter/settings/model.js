@@ -29,7 +29,7 @@ define('io.ox/mail/mailfilter/settings/model',
 
                 var addresses = [];
                 _(model.attributes).each(function (value, attribute) {
-                    if (attribute !== 'active' && value === true) {
+                    if (value === true) {
                         addresses.push(attribute);
                     }
                 });
@@ -77,12 +77,12 @@ define('io.ox/mail/mailfilter/settings/model',
                     );
                 }
 
-                if (model.attributes.activeTimeframe === false || testForTimeframe.tests.length === 0) {
+                if (model.attributes.activeSelect === 'disabled' || model.attributes.activeSelect === 'active' || testForTimeframe.tests.length === 0) {
                     testForTimeframe = { id: "true" };
                 }
 
-                if (model.attributes.active) {
-                    preparedData.active = model.attributes.active;
+                if (model.attributes.activeSelect === 'active' || model.attributes.activeSelect === 'activeTime') {
+                    preparedData.active = true;
                 } else {
                     preparedData.active = false;
                 }
@@ -115,7 +115,8 @@ define('io.ox/mail/mailfilter/settings/model',
         addresses: gt('E-mail addresses'),
         dateFrom: gt('Start Date'),
         dateUntil: gt('End date'),
-        activeTimeframe: gt('Use timeframe')
+        activeTimeframe: gt('Use timeframe'),
+        activeSelect: gt('Status')
     };
 
 

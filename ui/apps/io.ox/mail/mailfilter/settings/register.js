@@ -26,7 +26,7 @@ define('io.ox/mail/mailfilter/settings/register',
         }
     },
         createDaysObject = function (from, to) {
-        var objectOfValues = [];
+        var objectOfValues = {};
         for (var i = from; i <= to; i += 1) {
             objectOfValues[i] = i;
         }
@@ -50,7 +50,12 @@ define('io.ox/mail/mailfilter/settings/register',
 
                     var multiValues = {
                         aliases: _.object(user.aliases, user.aliases),
-                        days: createDaysObject(1, 31)
+                        days: createDaysObject(1, 31),
+                        activeSelect: {
+                            'active': gt('active'),
+                            'activeTime': gt('active with timeframe'),
+                            'disabled': gt('disabled')
+                        }
                     };
 
                     filters.editVacationtNotice($node, multiValues).done(function (filter) {

@@ -112,19 +112,6 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             }
         }));
 
-        point.extend(new forms.CheckBoxField({
-            id: ref + '/edit/view/active',
-            index: 250,
-            label: model.fields.active,
-            attribute: 'active',
-            customizeNode: function () {
-                this.$el.css({
-                    clear: 'both',
-                    width: '100px'
-                });
-            }
-        }));
-
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/subject',
             index: 250,
@@ -135,7 +122,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/mailtext',
-            index: 250,
+            index: 300,
             label: model.fields.text,
             control: '<textarea rows="12" class="span6" name="text">',
             attribute: 'text'
@@ -143,7 +130,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.SelectBoxField({
             id: ref + '/edit/view/days',
-            index: 250,
+            index: 350,
             label: model.fields.days,
             attribute: 'days',
             selectOptions: multiValues.days
@@ -151,14 +138,14 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.SectionLegend({
             id: ref + '/edit/view/addresses',
-            index: 250,
+            index: 400,
             label: gt('E-mail addresses')
         }));
 
         _(multiValues.aliases).each(function (alias) {
             point.extend(new forms.CheckBoxField({
                 id: ref + '/edit/view/' + alias,
-                index: 350,
+                index: 450,
                 label: alias,
                 attribute: alias,
                 customizeNode: function () {
@@ -170,80 +157,88 @@ define('io.ox/mail/mailfilter/settings/view-form', [
         });
 
         model.api.getConfig().done(function (data) {
+            var isAvailable = false;
             _(data.tests).each(function (test) {
                 if (test.test === 'currentdate') {
-
-                    point.extend(new forms.SectionLegend({
-                        id: ref + '/edit/view/timeframe',
-                        index: 400,
-                        label: gt('Timeframe')
-                    }));
-
-                    point.extend(new forms.CheckBoxField({
-                        id: ref + '/edit/view/activeTimeframe',
-                        index: 1500,
-                        label: model.fields.activeTimeframe,
-                        attribute: 'activeTimeframe',
-                        customizeNode: function () {
-                            this.$el.css({
-                                clear: 'both',
-                                width: '300px',
-                                margin: '15px 0'
-                            });
-                        }
-                    }));
-
-                    point.extend(new forms.DatePicker({
-                        id: ref + '/edit/view/start_date',
-                        index: 1600,
-                        className: 'span6',
-                        labelClassName: 'timeframe-edit-label',
-                        display: 'DATE',
-                        attribute: 'dateFrom',
-                        label: gt('Starts on'),
-                        overwritePositioning: true,
-                        updateModelDate: function () {
-                            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
-                        },
-                        updateModelTime: function () {
-                            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
-                        }
-                    }));
-
-                    point.extend(new forms.DatePicker({
-                        id: ref + '/edit/view/end_date',
-                        index: 1600,
-                        className: 'span6',
-                        labelClassName: 'timeframe-edit-label',
-                        display: 'DATE',
-                        attribute: 'dateUntil',
-                        label: gt('Ends on'),
-                        overwritePositioning: true,
-                        updateModelDate: function () {
-                            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
-                        },
-                        updateModelTime: function () {
-                            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
-                        }
-                    }));
+                    isAvailable = true;
                 }
             });
+
+            if (isAvailable) {
+
+                point.extend(new forms.SectionLegend({
+                    id: ref + '/edit/view/timeframe',
+                    index: 500,
+                    label: gt('Timeframe')
+                }));
+
+                point.extend(new forms.SelectBoxField({
+                    id: ref + '/edit/view/activeSelect',
+                    index: 200,
+                    label: model.fields.activeSelect,
+                    attribute: 'activeSelect',
+                    selectOptions: multiValues.activeSelect,
+                    customizeNode: function () {
+                        this.$el.css({
+                            clear: 'both',
+                            width: '100px'
+                        });
+                    }
+                }));
+
+                point.extend(new forms.DatePicker({
+                    id: ref + '/edit/view/start_date',
+                    index: 550,
+                    className: 'span6',
+                    labelClassName: 'timeframe-edit-label',
+                    display: 'DATE',
+                    attribute: 'dateFrom',
+                    label: gt('Starts on'),
+                    overwritePositioning: true,
+                    updateModelDate: function () {
+                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+                    },
+                    updateModelTime: function () {
+                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+                    }
+                }));
+
+                point.extend(new forms.DatePicker({
+                    id: ref + '/edit/view/end_date',
+                    index: 600,
+                    className: 'span6',
+                    labelClassName: 'timeframe-edit-label',
+                    display: 'DATE',
+                    attribute: 'dateUntil',
+                    label: gt('Ends on'),
+                    overwritePositioning: true,
+                    updateModelDate: function () {
+                        this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
+                    },
+                    updateModelTime: function () {
+                        this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model));
+                    }
+                }));
+
+            } else {
+
+                delete multiValues.activeSelect.activeTime;
+
+                point.extend(new forms.SelectBoxField({
+                    id: ref + '/edit/view/activeSelect',
+                    index: 200,
+                    label: model.fields.activeSelect,
+                    attribute: 'activeSelect',
+                    selectOptions: multiValues.activeSelect,
+                    customizeNode: function () {
+                        this.$el.css({
+                            clear: 'both',
+                            width: '100px'
+                        });
+                    }
+                }));
+            }
         });
-
-//        point.extend(new forms.DateControlGroup({
-//            id: ref + '/edit/view/dateFrom',
-//            index: 250,
-//            label: 'Date from',
-//            attribute: 'dateFrom'
-//        }));
-//
-//        point.extend(new forms.DateControlGroup({
-//            id: ref + '/edit/view/dateUntil',
-//            index: 250,
-//            label: 'Date until',
-//            attribute: 'dateUntil'
-//        }));
-
 
         return VacationEditView;
     }
