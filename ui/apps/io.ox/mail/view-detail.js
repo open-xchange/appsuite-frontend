@@ -1000,18 +1000,22 @@ define('io.ox/mail/view-detail',
      */
     function containsCustomContent(data, url) {
         var $content = that.getContent(data).content,
-            invalid = new RegExp(/[^a-zA-Z 0-9\/\:\-\.\?\=\_]+/g),
             whitespace = new RegExp(/[\s]+/g),
-            text;
-        //remove potential style tag/content
+            zws = new RegExp(/[\u200b]+/g), //zero-width space
+            words, part;
+        //get words
         $content.find('style').remove();
-        //remove non printable chars, whitespace and the url
-        text = $content.text().trim()
-            .replace(invalid, '')
-            .replace(whitespace, '')
-            .replace(url, '');
-        //fuzzy: remaining text relevant?
-        return text.length > 4;
+        words = $content
+                .text()
+                .trim()
+                .replace(whitespace, '|')
+                .split('|');
+        //remove link
+        var words = _.filter(words, function (part) {
+            return part.replace(zws, '') !== url;
+        });
+        //fuzzy: relevant number of words?
+        return words.length > 2;
     }
 
     /**
