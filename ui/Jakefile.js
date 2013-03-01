@@ -90,7 +90,18 @@ function jsFilter (data) {
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-
+    
+    // Check for NBSPs, Eclipse doesn't like them
+    if (data.indexOf('\xa0') >= 0) {
+        _.each(data.split(/\r\n?|\n/), function (line, lineno) {
+            var col = line.indexOf('\xa0');
+            if (col < 0) return;
+            var pos = self.getSrc(lineno + 1);
+            console.warn('Warning: NBSP in ' + pos.name + ' at ' + pos.line +
+                         ':' + (col + 1));
+        });
+    }
+    
     var tree = parse(data, self.task.name);
 
     // Custom processing of the parsed AST
