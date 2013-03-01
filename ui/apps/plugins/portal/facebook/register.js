@@ -74,7 +74,7 @@ define('plugins/portal/facebook/register',
         var wall = resultsets.data[0].fql_result_set,
             profiles = resultsets.data[1].fql_result_set;
 
-        if (!wall || wall.length === 0) {
+        if (!wall || wall.length === 0) {
             content.append(
                 $('<div class="paragraph">').text(gt('No wall posts yet.')));
         } else {

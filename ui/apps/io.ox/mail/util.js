@@ -208,7 +208,7 @@ define('io.ox/mail/util',
                 address = args[0][1];
             }
             name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
-            address = $.trim(address || '').toLowerCase();
+            address = $.trim(address || '').toLowerCase();
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 

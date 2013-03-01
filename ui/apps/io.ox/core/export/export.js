@@ -134,7 +134,7 @@ define('io.ox/core/export/export',
                                             l = 50,
                                             t = 50;
                                         //center
-                                        w = Math.min($(document).width() * 80 / 100, w) || w;
+                                        w = Math.min($(document).width() * 80 / 100, w) || w;
                                         h = Math.min($(document).height() * 90 / 100, h) || h;
                                         l = ($(document).width() / 2) - (w / 2) || l;
                                         t = ($(document).height() / 2) - (h / 2) || t;

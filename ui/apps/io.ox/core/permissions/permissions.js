@@ -102,42 +102,42 @@ define('io.ox/core/permissions/permissions',
         menus = {
             'folder': {
                 1:  //#. folder permissions
-                    gt('view the folder'),
-                2:  //#. folder permissions
+                    gt('view the folder'),
+                2:  //#. folder permissions
                     gt('create objects'),
-                4:  //#. folder permissions
+                4:  //#. folder permissions
                     gt('create objects and subfolders'),
-                64: //#. folder permissions
+                64: //#. folder permissions
                     gt('create objects and subfolders')
             },
             'read': {
                 0:  //#. object permissions - read
                     gt('no read permissions'),
-                1:  //#. object permissions - read
+                1:  //#. object permissions - read
                     gt('read own objects'),
-                2:  //#. object permissions - read
+                2:  //#. object permissions - read
                     gt('read all objects'),
-                64: //#. object permissions - read
+                64: //#. object permissions - read
                     gt('read all objects')
             },
             'write': {
                 0:  //#. object permissions - edit/modify
                     gt('no edit permissions'),
-                1:  //#. object permissions - edit/modify
+                1:  //#. object permissions - edit/modify
                     gt('edit own objects'),
-                2:  //#. object permissions - edit/modify
+                2:  //#. object permissions - edit/modify
                     gt('edit all objects'),
-                64: //#. object permissions - edit/modify
+                64: //#. object permissions - edit/modify
                     gt('edit all objects')
             },
             'delete': {
                 0:  //#. object permissions - delete
                     gt('no delete permissions'),
-                1:  //#. object permissions - delete
+                1:  //#. object permissions - delete
                     gt('delete only own objects'),
-                2:  //#. object permissions - delete
+                2:  //#. object permissions - delete
                     gt('delete all objects'),
-                64: //#. object permissions - delete
+                64: //#. object permissions - delete
                     gt('delete all objects')
             },
             'admin': {

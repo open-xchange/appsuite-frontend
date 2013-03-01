@@ -115,7 +115,7 @@ define('io.ox/files/list/view-detail',
         id: 'description',
         index: 400,
         draw: function (baton) {
-            var text = $.trim(baton.data.description || '');
+            var text = $.trim(baton.data.description || '');
             if (text !== '') {
                 this.append(
                     $('<div class="description">')
@@ -176,7 +176,7 @@ define('io.ox/files/list/view-detail',
                 $commentArea.addClass('disabled');
 
                 if (_.browser.IE !== 9) {
-                    var files = $input.find('input[type="file"]')[0].files || [];
+                    var files = $input.find('input[type="file"]')[0].files || [];
 
                     filesAPI.uploadNewVersion({
                         file: _(files).first(),

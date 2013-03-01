@@ -39,7 +39,7 @@ define('io.ox/core/api/pubsub',
              */
             all: function (type, folder) {
                 var def = $.Deferred();
-                folder = _.isObject(folder) ? folder.id : folder || '';
+                folder = _.isObject(folder) ? folder.id : folder || '';
                 return http.GET({
                     module: opt.module,
                     params: {
@@ -52,7 +52,7 @@ define('io.ox/core/api/pubsub',
                 .done(function (data) {
                     def.resolve(data);
                 })
-                .fail(function (data) {
+                .fail(function (data) {
                     def.reject(data);
                 });
             },
@@ -64,7 +64,7 @@ define('io.ox/core/api/pubsub',
              */
             get: function (item) {
                 var def = $.Deferred(),
-                    id = _.isObject(item) ? item.id : item || '';
+                    id = _.isObject(item) ? item.id : item || '';
                 return http.GET({
                     module: opt.module,
                     params: {
@@ -75,7 +75,7 @@ define('io.ox/core/api/pubsub',
                 .done(function (data) {
                     def.resolve(data || []);
                 })
-                .fail(function (data) {
+                .fail(function (data) {
                     def.reject(data);
                 });
             },
@@ -103,7 +103,7 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             refresh: function (id, folder) {
-                folder = _.isObject(folder) ? folder.id : folder || '';
+                folder = _.isObject(folder) ? folder.id : folder || '';
                 return http.GET({
                     module: opt.module,
                     appendColumns: false,

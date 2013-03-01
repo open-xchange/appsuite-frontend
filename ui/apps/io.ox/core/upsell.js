@@ -56,7 +56,7 @@ define('io.ox/core/upsell',
     }
 
     // local copy for speed
-    var enabled = settings.get('upsell/enabled') || {},
+    var enabled = settings.get('upsell/enabled') || {},
         capabilityCache = {},
         enabledCache = {};
 
@@ -101,7 +101,7 @@ define('io.ox/core/upsell',
         // this function is used for any inline link, for example, to decide whether or not showing it
         visible: function (array) {
             if (!array) return true;
-            return _([].concat(array)).reduce(function (memo, capability) {
+            return _([].concat(array)).reduce(function (memo, capability) {
                 return memo || capability === undefined || that.enabled(capability) || that.has(capability);
             }, false);
         },

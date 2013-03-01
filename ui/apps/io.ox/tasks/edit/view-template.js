@@ -332,7 +332,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
                     });
                     $.data(node, 'baton', baton);
                 });

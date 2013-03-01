@@ -50,7 +50,7 @@ define('io.ox/core/tk/autocomplete',
                 //object related unique string
                 stringify: function (data) {
                     var value;
-                    if (data.type === 'resource' || data.type === 'group')
+                    if (data.type === 'resource' || data.type === 'group')
                         value = data.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '');
                     else
                         value = data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
@@ -271,7 +271,7 @@ define('io.ox/core/tk/autocomplete',
             fnKeyUp = _.debounce(function (e, isRetry) {
                 e.stopPropagation();
                 var val = $.trim($(this).val());
-                isRetry = isRetry || false;
+                isRetry = isRetry || false;
                 if (val.length >= o.minLength) {
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastValue = val;

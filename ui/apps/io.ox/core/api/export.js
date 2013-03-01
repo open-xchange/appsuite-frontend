@@ -34,7 +34,7 @@ define('io.ox/core/api/export',
      */
     var get = function (type, folder, simulate) {
         var def = $.Deferred();
-        folder = _.isString(folder) ? folder : folder.id || '';
+        folder = _.isString(folder) ? folder : folder.id || '';
         http.GET({
             simulate: !!simulate,
             module: 'export',
@@ -55,7 +55,7 @@ define('io.ox/core/api/export',
                 def.resolve(data);
             }
         })
-        .fail(function (data) {
+        .fail(function (data) {
             //http error
             def.reject(data);
         });

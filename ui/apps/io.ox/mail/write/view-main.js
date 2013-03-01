@@ -801,7 +801,7 @@ define("io.ox/mail/write/view-main",
         var elem;
         return list.map(function (elem) {
             var obj = {
-                display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
+                display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
                 email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
                 image1_url: elem.image1_url || '',
                 folder_id: elem.folder_id || '',

@@ -91,7 +91,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                             }
                             uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id];
                             uniqueMail = !hash[recipient.email];
-                            return uniqueId && uniqueMail;
+                            return uniqueId && uniqueMail;
                         });
 
                         //return number of query hits and the filtered list

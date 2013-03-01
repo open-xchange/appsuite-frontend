@@ -1050,7 +1050,7 @@ define('io.ox/mail/view-detail',
                                     folder.trigger('update');
                                 })
                         .fail(function (data) {
-                            notifications.yell('error', data.error || gt('An unknown error occurred'));
+                            notifications.yell('error', data.error || gt('An unknown error occurred'));
                         });
                     }
                 });

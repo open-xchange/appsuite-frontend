@@ -48,7 +48,7 @@ define('io.ox/core/print', [], function () {
             if (_.isArray(data)) {
                 params.data = JSON.stringify(data);
             } else if (_.isObject(data)) {
-                params.folder = data.folder_id || data.folder;
+                params.folder = data.folder_id || data.folder;
                 params.id = data.id;
             }
 

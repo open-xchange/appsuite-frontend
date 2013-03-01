@@ -34,7 +34,7 @@ define('io.ox/formats/vcard', [], function () {
 
         //key values
         tmp.key = tmp.keytype[0].toLowerCase();
-        tmp.type = (tmp.keytype[2] || tmp.keytype[1] || 'typeless').replace(/TYPE=/g, '').replace(/type=/g, '').toLowerCase();
+        tmp.type = (tmp.keytype[2] || tmp.keytype[1] || 'typeless').replace(/TYPE=/g, '').replace(/type=/g, '').toLowerCase();
 
         //initalize
         data[tmp.key] = {};
@@ -50,19 +50,19 @@ define('io.ox/formats/vcard', [], function () {
 
         //mappings
         if (tmp.key === 'n') {
-            data[tmp.key][tmp.type]['family-name'] = tmp.values[0] || '';
-            data[tmp.key][tmp.type]['given-name'] = tmp.values[1] || '';
-            data[tmp.key][tmp.type]['additional-name'] = tmp.values[2] || '';
-            data[tmp.key][tmp.type]['honorific-prefix'] = tmp.values[3] || '';
-            data[tmp.key][tmp.type]['honorific-suffix'] = tmp.values[4] || '';
+            data[tmp.key][tmp.type]['family-name'] = tmp.values[0] || '';
+            data[tmp.key][tmp.type]['given-name'] = tmp.values[1] || '';
+            data[tmp.key][tmp.type]['additional-name'] = tmp.values[2] || '';
+            data[tmp.key][tmp.type]['honorific-prefix'] = tmp.values[3] || '';
+            data[tmp.key][tmp.type]['honorific-suffix'] = tmp.values[4] || '';
         } else if (tmp.key === 'adr') {
-            data[tmp.key][tmp.type]['post-office-box'] = tmp.values[0] || '';
-            data[tmp.key][tmp.type]['extended-address'] = tmp.values[1] || '';
-            data[tmp.key][tmp.type]['street-address'] = tmp.values[2] || '';
-            data[tmp.key][tmp.type].locality = tmp.values[3] || '';
-            data[tmp.key][tmp.type].region = tmp.values[4] || '';
-            data[tmp.key][tmp.type]['postal-code'] = tmp.values[5] || '';
-            data[tmp.key][tmp.type]['country-name'] = tmp.values[6] || '';
+            data[tmp.key][tmp.type]['post-office-box'] = tmp.values[0] || '';
+            data[tmp.key][tmp.type]['extended-address'] = tmp.values[1] || '';
+            data[tmp.key][tmp.type]['street-address'] = tmp.values[2] || '';
+            data[tmp.key][tmp.type].locality = tmp.values[3] || '';
+            data[tmp.key][tmp.type].region = tmp.values[4] || '';
+            data[tmp.key][tmp.type]['postal-code'] = tmp.values[5] || '';
+            data[tmp.key][tmp.type]['country-name'] = tmp.values[6] || '';
         } else {
             //array
             data[tmp.key][tmp.type] = tmp.values;

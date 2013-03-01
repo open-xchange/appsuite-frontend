@@ -196,7 +196,7 @@ define("io.ox/participants/views",
                 baton: this.options.baton,
                 className: 'span6',
                 halo: true,
-                callbacks: this.options.baton.callbacks || {}
+                callbacks: this.options.baton.callbacks || {}
             }).render().$el;
         },
         updateContainer: function () {

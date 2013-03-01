@@ -828,7 +828,7 @@ define('io.ox/core/tk/selection',
 
     Selection.extend = function (obj, node, options) {
         // extend object
-        return (obj.selection = new Selection(node, options || {}));
+        return (obj.selection = new Selection(node, options || {}));
     };
 
     return Selection;

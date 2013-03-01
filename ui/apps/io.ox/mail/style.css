@@ -84,7 +84,7 @@
         color: #888 !important;
         -webkit-font-smoothing: antialiased;
     }
-    
+
     &.deleted .label {
         color: @white !important;
     }
@@ -253,7 +253,7 @@
         clear: left;
         height: 0px;
     }
-    
+
     .mail-detail-clear-both {
         clear: both;
         height: 0px;
@@ -330,7 +330,7 @@
         margin: 18px 0 18px 1em;
         float: right;
     }
-    
+
     .flag-dropdown {
         width: 30px;
         height: 24px;
@@ -535,7 +535,7 @@ h4.mail-attachment-preview {
     color: #333;
 }
 
-.io-ox-mail-window .border-right { border-color: #eee; }
+.io-ox-mail-window .border-right { border-color: #eee; }
 
 .touch .mail-detail .content.plain-text {
     font-size: @touchFontSize;

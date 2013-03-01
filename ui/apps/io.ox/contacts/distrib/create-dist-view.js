@@ -98,7 +98,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                         newMember = self.copyContact(self.$el, data.data, data.email);
                     } else {
                         //normalise
-                        if (nameValue !== '' || mailValue !== '') {
+                        if (nameValue !== '' || mailValue !== '') {
                             nameValue = nameValue === '' ? mailValue : nameValue;
                             mailValue = mailValue === '' ? nameValue : mailValue;
                             newMember = self.copyContact(self.$el, nameValue, mailValue);
