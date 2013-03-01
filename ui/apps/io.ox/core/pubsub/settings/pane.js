@@ -97,19 +97,23 @@ define('io.ox/core/pubsub/settings/pane',
         return new PubSubItem({model: model});
     }
 
+    function createList(model) {
+        var listNode = $('<ul>');
+
+        model.done(function (res) {
+            res.each(function (obj) {
+                listNode.append(
+                    createPubSubItem(obj).render().el
+                );
+            });
+        });
+        return listNode;
+    }
+
     point.extend({
         id: 'content',
         render: function () {
-            var listNode = $('<ul>');
-
-            this.model.done(function (res) {
-                res.each(function (obj) {
-                    listNode.append(
-                        createPubSubItem(obj).render().el
-                    );
-                });
-            });
-            listNode.appendTo(this.$el);
+            this.$el.append(createList(this.model));
         }
     });
 });
