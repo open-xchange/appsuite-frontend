@@ -30,8 +30,8 @@ define('io.ox/office/tk/component/component',
     // class Component ========================================================
 
     /**
-     * Base class for view components that can be registered at a controller.
-     * Contains instances of Group objects (controls or groups of controls).
+     * Base class for view components containing instances of Group objects
+     * (controls or groups of controls).
      *
      * Instances of this class trigger the following events:
      * - 'change': If a control has been activated. The event handler receives

@@ -18,7 +18,7 @@ define('io.ox/office/framework/app/basecontroller',
 
     'use strict';
 
-    // class BaseController =======================================================
+    // class BaseController ===================================================
 
     /**
      * A controller contains a collection of items, consisting of unique key
@@ -124,24 +124,19 @@ define('io.ox/office/framework/app/basecontroller',
              * Updates the controls associated to this item in all view
              * components.
              *
-             * @param [defaultValue]
-             *  The default value if the value getter returns undefined.
-             *
              * @returns {Item}
              *  A reference to this item.
              */
-            this.update = function (defaultValue) {
-                var value = this.get();
-                value = _.isUndefined(value) ? defaultValue : value;
+            this.update = function () {
                 _(components).invoke('enable', key, this.isEnabled());
-                _(components).invoke('update', key, value);
+                _(components).invoke('update', key, this.get());
                 return this;
             };
 
             /**
              * Executes the setter function of this item (passing in the new
              * value), updates all registered view components, and moves the
-             * browser focus back to the application pane,
+             * browser focus back to the application pane.
              *
              * @param value
              *  The new value of the item.
