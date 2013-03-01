@@ -26,7 +26,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         //prepare data
         
         //check which baton we have standard or baton from folderview
-        //folderview means new publication otherwise its a new one
+        //folderview means new publication otherwise its an existing one
         if (baton.model) {
             //buildView
             var view = new PublicationView({model: baton.model});
