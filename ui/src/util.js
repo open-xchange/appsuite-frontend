@@ -163,7 +163,7 @@
         // combination of browser & display
         device: function (condition) {
             // add support for language checks
-            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
+            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             // check condition
