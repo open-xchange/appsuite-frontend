@@ -93,11 +93,17 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 //go
                 popup.show();
                 popup.on('publish', function (action) {
-                    self.model.save().done(function () {
-                        if (self.model.get('invite'))
-                            sendInvitation(baton);
-                        else
-                        popup.close();
+                    self.model.save().done(function (id) {
+                        api.publications.get({id: id}).done(function (data) {
+                            if (self.model.get('invite')) {
+                                //TODO: handle url domain missmatch
+                                //TODO: user collection
+                                var model = new pubsub.Publication(data);
+                                baton.model = model;
+                                sendInvitation(baton);
+                            } else
+                                popup.close();
+                        });
                     }).fail(function (error) {
                         popup.idle();
                         if (!self.model.valid) {
@@ -223,7 +229,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     function sendInvitation(baton) {
         require(['io.ox/mail/write/main'], function (m) {
             //predefined data for mail
-            var url = baton.model.url(),
+            var url = baton.model.url().replace('http://ox/', 'http://appsuite-dev.open-xchange.com/'),
                 data = {
                     folder_id: 'default0/INBOX',
                     subject: gt('Publication'),
