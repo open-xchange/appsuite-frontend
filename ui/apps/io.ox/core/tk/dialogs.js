@@ -275,7 +275,7 @@ define("io.ox/core/tk/dialogs",
                     dim[d] = o[id];
                 }
                 // apply document limits
-                var max = $(document)[d]() - 100;
+                var max = $(document)[d]() - 50;
                 if (dim[d] && dim[d] > max) {
                     dim[d] = max;
                 }
@@ -288,7 +288,7 @@ define("io.ox/core/tk/dialogs",
                     nodes.popup.css({
                         width: dim.width + "px",
                         top: "50%",
-                        marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+                        marginTop: 0 - (dim.height / 2 >> 0) + "px"
                     });
                 } else {
                     // use fixed top position
@@ -309,8 +309,6 @@ define("io.ox/core/tk/dialogs",
                     nodes.footer.rowfluid.prepend(buttonNode/*.addClass('btn-large')*/);
                     buttonNode.wrap('<div class="span3">');
                 });
-
-
             }
 
             nodes.underlay.show();
