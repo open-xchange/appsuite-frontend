@@ -94,6 +94,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 popup.show();
                 popup.on('publish', function (action) {
                     self.model.save().done(function () {
+                        if (self.model.get('invite'))
+                            sendInvitation(baton);
+                        else
                         popup.close();
                     }).fail(function (error) {
                         popup.idle();
@@ -186,7 +189,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         draw: function (baton) {
             var node;
             this.append($('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls').append(
+                    $('<div>').addClass('controls checkboxes').append(
                             $('<label>').addClass('checkbox').text(gt('Add cipher code')).append(
                             node = $('<input>').attr('type', 'checkbox').addClass('cypher-checkbox').on('change', function () {
                                 if (node.attr('checked') === 'checked') {
@@ -246,6 +249,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         id: 'emailbutton',
         index: 500,
         draw: function (baton) {
+            var node;
             if (baton.view.editMode) {
                 this.append($('<div>').addClass('control-group').append(
                             $('<div>').addClass('controls').append(
@@ -253,6 +257,17 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                 sendInvitation(baton);
                             }))),
                             $('<br>'));
+            } else {
+                this.find('div.checkboxes').append(
+                            $('<label>').addClass('checkbox').text(gt('Share Link by E-mail')).append(
+                            node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
+                                if (node.attr('checked') === 'checked') {
+                                    baton.model.attributes.invite = true;
+                                } else {
+                                    baton.model.attributes.invite = false;
+                                }
+                            }))
+                        );
             }
         }
     });
