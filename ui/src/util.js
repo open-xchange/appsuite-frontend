@@ -173,7 +173,7 @@
     _.mixin({
 
         // combination of browser & display
-        device: function (condition) {
+        device: function (condition, debug) {
             // add support for language checks
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
@@ -190,6 +190,9 @@
                 match = match.toLowerCase();
                 return browserLC[match] || _.display[match] || misc[match] || 'false';
             });
+            if (debug) {
+                console.debug(condition);
+            }
             try {
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
