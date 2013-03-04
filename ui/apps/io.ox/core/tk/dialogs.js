@@ -27,7 +27,6 @@ define("io.ox/core/tk/dialogs",
                 $('<div class="modal-footer">')
             );
 
-
     var Dialog = function (options) {
 
         var nodes = {
@@ -86,14 +85,16 @@ define("io.ox/core/tk/dialogs",
             busy = function () {
                 nodes.footer.find('button').attr('disabled', 'disabled');
                 nodes.body.find('input').attr('disabled', 'disabled');
+                nodes.body.css('opacity', 0.5);
             },
 
             idle = function () {
                 nodes.footer.find('button').removeAttr('disabled');
                 nodes.body.find('input').removeAttr('disabled');
+                nodes.body.css('opacity', '');
             },
 
-            process = function (e) {
+            invoke = function (e) {
                 var action = e.data ? e.data.action : e,
                     async = o.async && action !== 'cancel';
                 // be busy?
@@ -121,8 +122,6 @@ define("io.ox/core/tk/dialogs",
         }
         // add event hub
         Events.extend(this);
-
-        this.process = process;
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -176,7 +175,7 @@ define("io.ox/core/tk/dialogs",
             var opt = {
                 label: label,
                 data: { action: action },
-                click: process,
+                click: invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse
@@ -231,7 +230,7 @@ define("io.ox/core/tk/dialogs",
 
         closeViaEscapeKey = function (e) {
             if (e.which === 27) {
-                process("cancel");
+                invoke('cancel');
             }
         };
 
@@ -239,16 +238,23 @@ define("io.ox/core/tk/dialogs",
             if (!o || o.async)  {
                 close();
             } else {
-                process('cancel');
+                invoke('cancel');
             }
+        };
+
+        this.invoke = function (action) {
+            invoke(action);
+            return this;
         };
 
         this.idle = function () {
             idle();
+            return this;
         };
 
         this.busy = function () {
             busy();
+            return this;
         };
 
         this.show = function (callback) {
@@ -325,7 +331,7 @@ define("io.ox/core/tk/dialogs",
             }
 
             if (callback) {
-                callback.call(nodes.popup);
+                callback.call(nodes.popup, this);
             }
 
             this.trigger('show');
@@ -335,15 +341,15 @@ define("io.ox/core/tk/dialogs",
 
         nodes.underlay.click(function () {
             if (o && o.underlayAction) {
-                process(o.underlayAction);
+                invoke(o.underlayAction);
             } else if (o && o.easyOut) {
-                process("cancel");
+                invoke("cancel");
             }
         });
 
         nodes.popup.click(function () {
             if (o && o.defaultAction) {
-                process(o.defaultAction);
+                invoke(o.defaultAction);
             }
         });
 
@@ -561,6 +567,7 @@ define("io.ox/core/tk/dialogs",
                 self.nodes.target.append((options.modal ? overlay : popup).css('visibility', 'hidden'));
 
                 // call custom handler
+                console.log('call handler', self);
                 (handler || $.noop).call(self, pane.empty(), e, my);
 
                 // set arrow top
@@ -633,7 +640,7 @@ define("io.ox/core/tk/dialogs",
             nodes.pane.fadeOut();
         },
 
-        process = function (e) {
+        invoke = function (e) {
             deferred.resolve(e.data);
             close();
         };
@@ -653,7 +660,7 @@ define("io.ox/core/tk/dialogs",
                 $.button({
                     label: label,
                     data: action,
-                    click: process
+                    click: invoke
                 })
             );
             return this;
@@ -666,7 +673,7 @@ define("io.ox/core/tk/dialogs",
 
         this.toggle = function () {
             if (this.visible) {
-                process("toggeled");
+                invoke("toggeled");
             } else {
                 this.show();
             }

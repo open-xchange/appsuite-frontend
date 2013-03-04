@@ -224,7 +224,7 @@ define('io.ox/calendar/week/perspective',
             // init perspective
             this.app = app;
             this.collection = new Backbone.Collection([]);
-            this.main.addClass('week-view').empty();
+            this.main.addClass('calendar-week-view').empty();
 
             delete this.view;
 

@@ -1296,6 +1296,7 @@ define('io.ox/calendar/week/view',
         showAll: function (opt) {
             if (typeof opt === 'boolean') {
                 this.showAllCon[opt ? 'show': 'hide']();
+                return this;
             } else {
                 var set = settings.get('showAllPrivateAppointments', false);
                 this.showAllCheck.prop('checked', set);

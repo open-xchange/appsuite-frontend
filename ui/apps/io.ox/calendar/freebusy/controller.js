@@ -13,23 +13,36 @@
 define('io.ox/calendar/freebusy/controller',
     ['io.ox/core/tk/dialogs',
      'io.ox/calendar/week/view',
-     'gettext!io.ox/core/calendar',
-     'less!io.ox/core/calendar/freebusy/style.css'], function (dialogs, WeekView, gt) {
+     'io.ox/core/api/folder',
+     'gettext!io.ox/calendar',
+     'settings!io.ox/core',
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, gt, settings) {
 
     'use strict';
 
     var that = {
 
-        FreeBusy: function (options) {
+        FreeBusy: function (options, controller) {
 
             var self = this;
 
             // create container node
             this.$el = $('<div class="abs free-busy-view">').on('dispose', function () {
                 // clean up
-                console.log('YEEEHAA > dispose', this);
                 self.weekview.remove();
             });
+
+            this.postprocess = function () {
+                this.weekview.setScrollPos();
+            };
+
+            this.refresh = function () {
+                this.collection.reset();
+            };
+
+            this.create = function () {
+                controller.invoke('create');
+            };
 
             // all appointments are stored in this collection
             this.collection = new Backbone.Collection([]);
@@ -37,22 +50,31 @@ define('io.ox/calendar/freebusy/controller',
             // get new instance of weekview
             this.weekview = new WeekView({
                 collection: this.collection,
-                mode: 'workweek',
+                mode: 2, // 2 = week:workweek
                 appExtPoint: 'io.ox/calendar/week/view/appointment'
             });
 
+            this.weekview
+                // hide show all checkbox
+                .showAll(false)
+                // listen to refresh event
+                .on('onRefresh', this.refresh, this)
+                // listen to create event
+                .on('openCreateAppointment', this.create, this);
+
             this.$el.append(
-                $('<div class="abs free-busy-participants">'),
-                this.weekview.render().$el.addClass('free-busy-calendar')
+                $('<div class="abs participants-view">'),
+                this.weekview.render().$el.addClass('abs calendar-week-view')
             );
         },
 
         open: function (options) {
 
             var width = $(document).width() - 50,
-                height = $(document).height() - 200;
+                height = $(document).height() - 200,
+                freebusy;
 
-            new dialogs.ModalDialog({ width: width, easyOut: true })
+            new dialogs.ModalDialog({ width: width, easyOut: false })
                 .build(function () {
                     this.getHeader()
                         .append(
@@ -61,11 +83,24 @@ define('io.ox/calendar/freebusy/controller',
                     this.getContentNode()
                         .css({ height: height + 'px', maxHeight: height + 'px' })
                         .append(
-                            new that.FreeBusy(options).$el
+                            (freebusy = new that.FreeBusy(options, this)).$el
                         );
                 })
                 .addPrimaryButton('close', gt('Close'))
-                .show();
+                .busy()
+                .show(function (popup) {
+                    var id = settings.get('folder/calendar');
+                    folderAPI.get({ folder: id }).always(function (data) {
+                        // pass folder data over to view (needs this for permission checks)
+                        // use fallback data on error
+                        data = data.error ? { folder_id: 1, id: id, own_rights: 403710016 } : data;
+                        freebusy.weekview.folder(data);
+                        // clean up
+                        popup.idle();
+                        freebusy.postprocess();
+                        freebusy = popup = null;
+                    });
+                });
         }
     };
 

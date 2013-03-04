@@ -503,7 +503,7 @@ define('io.ox/core/tk/folderviews',
 
         function fnKeyPress(e) {
             if (e.which === 13) {
-                e.data.popup.process('add');
+                e.data.popup.invoke('add');
             }
         }
 

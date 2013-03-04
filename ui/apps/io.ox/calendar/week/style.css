@@ -10,7 +10,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-.window-content.week-view {
+.calendar-week-view {
 
     @appointment-lasso: rgba(0, 0, 0, 0.4);
 
