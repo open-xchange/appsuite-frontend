@@ -287,21 +287,32 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     );
                 }
 
+                var o = {};
+
                 // catch server error?
-                if (_.isObject(type) && 'error' in type) {
-                    message = type.error;
-                    type = 'error';
+                if (_.isObject(type)) {
+                    if ('error' in type) {
+                        o.type = 'error';
+                        o.message = type.error;
+                        o.headline = gt('Error');
+                    } else {
+                        o = type;
+                    }
+                } else {
+                    o.type = o.type || 'info';
+                    o.message = message;
                 }
 
-                type = type || 'info';
-
                 // add message
-                if (validType.test(type)) {
+                if (validType.test(o.type)) {
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         container.empty().append(
-                            $('<div class="alert alert-' + type + '">')
-                            .append($('<b>').text(message || ''))
+                            $('<div class="alert alert-' + o.type + '">')
+                            .append(
+                                o.headline ? $('<b>').text(o.headline) : $(),
+                                $('<div>').html(_.escape(o.message).replace(/\n/g, '<br>'))
+                            )
                         );
                         if (!active) {
                             $('body').on('click tap', fader);
