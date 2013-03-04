@@ -41,29 +41,32 @@ define('io.ox/core/pubsub/settings/pane',
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                controls = $('<div>').addClass('actions');
 
             this[data.enabled ? 'removeClass' : 'addClass']('disabled');
 
+            $('<a href="#" class="action" data-action="edit">').text(gt('Edit')).appendTo(controls);
+            $('<a href="#" class="close" data-action="remove">').html('&times;').appendTo(controls);
+
             this.append(
-                $('<span>').addClass('content pull-left')
+                $('<div>').addClass('content')
                 .addClass(data.enabled ? '' : 'disabled').append(
-                    $('<div>').text(data.displayName),
-                    $('<div>').text(data.folder)
-                ),
-                $('<a href="#" class="action" data-action="edit">').text(gt('Edit')),
-                $('<a href="#" class="close" data-action="remove">').html('&times;')
+                    $('<div>').addClass('name').text(data.displayName),
+                    $('<div>').addClass('path').text(data.folder || data.entity.folder)
+                )
             );
 
             if (data.enabled) {
-                this.append(
+                controls.append(
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
                 );
             } else {
-                this.append(
+                controls.append(
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
                 );
             }
+            controls.appendTo(this);
         }
     });
 
