@@ -355,7 +355,8 @@ define('io.ox/office/tk/control/textfield',
          *  destroy the selection when changing the text). When returning the
          *  boolean value false, the previous state of the text field (as it
          *  was after the last validation) will be restored. Otherwise, the
-         *  valueof the text field is considered valid will not be modified.
+         *  value of the text field is considered to be valid and will not be
+         *  modified.
          */
         this.validate = function (text) {
         };

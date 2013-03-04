@@ -22,27 +22,6 @@ define('io.ox/office/tk/dialogs',
     // private helper functions ===============================================
 
     /**
-     * Creates and returns an empty modal dialog object.
-     *
-     * @returns {CoreDialogs.ModalDialog}
-     *  The new dialog object.
-     */
-    function createModalDialog(options) {
-
-        var // create the dialog instance
-            dialog = new CoreDialogs.ModalDialog({ width: 400, easyOut: true, async: Utils.getBooleanOption(options, 'async', false) }),
-            // the title text
-            title = Utils.getStringOption(options, 'title');
-
-        // add title
-        if (_.isString(title)) {
-            dialog.header($('<h4>').text(title));
-        }
-
-        return dialog;
-    }
-
-    /**
      * Adds OK and Cancel buttons to the passed dialog.
      */
     function addDialogButtons(dialog, options) {
@@ -57,14 +36,42 @@ define('io.ox/office/tk/dialogs',
     // methods ----------------------------------------------------------------
 
     /**
+     * Creates and returns an empty modal dialog.
+     *
+     * @param {Object} [options]
+     *  Additional options that control the appearance and behavior of the
+     *  dialog. The following options are supported:
+     *  @param {String} [options.title]
+     *      The title of the dialog window that will be shown in a larger font.
+     *  @param {Boolean} [options.async]
+     *      Whether the dialog will be opened in asynchronous mode.
+     *
+     * @returns {CoreDialogs.ModalDialog}
+     *  A modal dialog object initialized with options.
+     */
+    Dialogs.createDialog = function (options) {
+
+        var // create the dialog instance
+            dialog = new CoreDialogs.ModalDialog({ width: 400, easyOut: true, async: Utils.getBooleanOption(options, 'async', false) }),
+            // the title text
+            title = Utils.getStringOption(options, 'title');
+
+        // add title
+        if (_.isString(title)) {
+            dialog.header($('<h4>').text(title));
+        }
+
+        return dialog;
+    };
+
+    /**
      * Shows a simple OK/Cancel dialog with customizable button texts.
      *
      * @param {Object} [options]
      *  Additional options that control the appearance and behavior of the
      *  dialog. The following options are supported:
      *  @param {String} [options.title]
-     *      If specified, the title of the dialog window that will be shown in
-     *      a larger font.
+     *      The title of the dialog window that will be shown in a larger font.
      *  @param {String} [options.message]
      *      If specified, the message shown in the dialog body.
      *  @param {String} [options.okLabel=gt('OK')]
@@ -81,7 +88,7 @@ define('io.ox/office/tk/dialogs',
     Dialogs.showOkCancelDialog = function (options) {
 
         var // the dialog object
-            dialog = createModalDialog(options),
+            dialog = Dialogs.createDialog(options),
 
             // the message text
             message = Utils.getStringOption(options, 'message'),
@@ -168,7 +175,7 @@ define('io.ox/office/tk/dialogs',
                 }),
 
             // the dialog object
-            dialog = createModalDialog(options).append(input.addClass('nice-input')),
+            dialog = Dialogs.createDialog(options).append(input.addClass('nice-input')),
 
             // the result deferred
             def = $.Deferred();
@@ -228,7 +235,7 @@ define('io.ox/office/tk/dialogs',
                 }),
 
             // the dialog object
-            dialog = createModalDialog(options).append(input.addClass('nice-input')),
+            dialog = Dialogs.createDialog(options).append(input.addClass('nice-input')),
 
             // the file descriptor of the file currently selected
             file = null,
@@ -258,20 +265,6 @@ define('io.ox/office/tk/dialogs',
         });
 
         return def.promise();
-    };
-
-    /**
-     * Creates and returns an empty modal dialog
-     *
-     *  @param {String} [options.title]
-     *      If specified, the title of the dialog window that will be shown in
-     *      a larger font.
-     *
-     * @returns {Dialog}
-     *  A modal dialog object initialized with options.
-     */
-    Dialogs.createDialog = function (options) {
-        return createModalDialog(options);
     };
 
     // exports ================================================================

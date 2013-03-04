@@ -51,9 +51,16 @@ define('io.ox/office/tk/io',
      *  function.
      */
     IO.createDeferredFilter = function (filter, context) {
+
+        // create and return a function that call the filter and returns a resolved/rejected Deferred object
         return function (response) {
-            var def = $.Deferred(),
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // call passed filter callback
                 value = _.isObject(response) ? filter.call(context, response) : undefined;
+
+            // resolve the Deferred object, if the value returned by the filter function is not undefined
             return _.isUndefined(value) ? def.reject() : def.resolve(value);
         };
     };

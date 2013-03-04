@@ -98,7 +98,7 @@ define('io.ox/office/tk/control/radiogroup',
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button.
-         *  Supports all generic formatting options for buttons (See method
+         *  Supports all generic formatting options for buttons (see method
          *  Utils.createButton() for details), except 'options.value' which
          *  will be set to the 'value' parameter passed to this function.
          *  Additionally, the following options are supported:

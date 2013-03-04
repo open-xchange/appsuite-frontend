@@ -679,15 +679,14 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  An object containing some attribute values. If undefined, creates and
      *  extends a new empty object.
      *
-     * @param {Object} [extensions]
-     *  Another object whose attributes will be inserted into the former
-     *  object. Will overwrite existing attributes in the clone of the passed
-     *  object.
+     * @param {Object} [...]
+     *  Other objects whose attributes will be inserted into the former object.
+     *  Will overwrite existing attributes in the clone of the passed object.
      *
      * @returns {Object}
      *  A new clone of the passed object, extended by the new attributes.
      */
-    Utils.extendOptions = function (options, extensions) {
+    Utils.extendOptions = function (options) {
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
@@ -708,8 +707,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         options = _.isObject(options) ? _.copy(options, true) : {};
 
         // add all extensions to the clone
-        if (_.isObject(extensions)) {
-            extend(options, extensions);
+        for (var index = 1; index < arguments.length; index += 1) {
+            if (_.isObject(arguments[index])) {
+                extend(options, arguments[index]);
+            }
         }
 
         return options;
