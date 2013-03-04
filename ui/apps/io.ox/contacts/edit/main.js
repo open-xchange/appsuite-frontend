@@ -168,10 +168,18 @@ define('io.ox/contacts/edit/main',
 
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
-            customizeModel: function (contact) {
-                contact.on('change:first_name change:last_name change:title', function () {
-                    contact.set('display_name', util.getFullName(contact.toJSON()));
-                });
+            customizeModel: function (contact, value, options) {
+                contact.on('change:first_name change:last_name change:title',
+                    function (model) {
+                        if (options.changes.display_name) return;
+                        var dn = model.get('display_name');
+                        // only change display name if empty or previous default
+                        if (!dn || dn === util.getFullName(model.previousAttributes()))
+                        {
+                            model.set('display_name',
+                                      util.getFullName(model.toJSON()));
+                        }
+                    });
             }
         });
 

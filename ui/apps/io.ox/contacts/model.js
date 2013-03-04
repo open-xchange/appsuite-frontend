@@ -91,7 +91,7 @@ define('io.ox/contacts/model',
         });
 
         Validators.validationFor(ref, {
-            display_name: { format: 'string', mandatory: true},
+            display_name: { format: 'string' },
             first_name: { format: 'string'},
             last_name: { format: 'string'},
             second_name: { format: 'string'},

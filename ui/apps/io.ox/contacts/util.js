@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util', [], function () {
+define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
     'use strict';
 
@@ -37,7 +37,17 @@ define('io.ox/contacts/util', [], function () {
             }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                return $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name);
+                return obj.title ?
+                    //#. Name with title
+                    //#. %1$s is the first name
+                    //#. %2$s is the last name
+                    //#. %3$s is the title
+                    gt('%3$s %2$s, %1$s', obj.first_name, obj.last_name,
+                                          obj.title) :
+                    //#. Name without title
+                    //#. %1$s is the first name
+                    //#. %2$s is the last name
+                    gt('%2$s, %1$s', obj.first_name, obj.last_name);
             }
             // use existing display name?
             if (obj.display_name) {
