@@ -249,7 +249,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             if (baton.view.editMode) {
                 this.append($('<div>').addClass('control-group').append(
                             $('<div>').addClass('controls').append(
-                            $('<button>').addClass('email-btn btn').text(gt('Send E-mail about this publication')).on('click', function () {
+                            $('<button>').addClass('email-btn btn').text(gt('Share Link by E-mail')).on('click', function () {
                                 sendInvitation(baton);
                             }))),
                             $('<br>'));
