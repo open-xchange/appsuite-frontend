@@ -254,6 +254,20 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/print', {
+        id: 'print',
+        requires: 'one',
+        action: function (baton) {
+            require(['io.ox/core/print']).done(function (p) {
+                if (baton.recurrence_position) {
+                    p.open('calendar', baton.data, {template: 'print.appointment.tmpl', pos: baton.data.recurrence_position});
+                } else {
+                    p.open('calendar', baton.data, {template: 'print.appointment.tmpl'});
+                }
+            });
+        }
+    });
+
     var copyMove = function (type, apiAction, title) {
         return function (list) {
             require(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
@@ -397,6 +411,14 @@ define('io.ox/calendar/actions',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 500,
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
