@@ -223,14 +223,18 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     function sendInvitation(baton) {
         require(['io.ox/mail/write/main'], function (m) {
             //predefined data for mail
-            var data = {
+            var url = baton.model.url(),
+                data = {
                     folder_id: 'default0/INBOX',
                     subject: gt('Publication'),
-                    attachments: [{ content: baton.model.url() }],
+                    attachments: {
+                        html: [{ content: '<a href="' + url + '">' + url + '</a>' }],
+                        text: [{ content: url }]
+                    },
                     module: baton.model.attributes.entityModule,
                     target: baton.model.attributes.target,
                     headers: {
-                        'X-OX-PubURL': baton.model.url(),
+                        'X-OX-PubURL': url,
                         'X-OX-PubType': [baton.model.attributes.entityModule,
                                          baton.model.attributes.target].toString()
                     }
