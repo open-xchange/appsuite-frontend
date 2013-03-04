@@ -326,7 +326,6 @@ define('io.ox/calendar/invitations/register',
         draw: function (baton) {
             var $actions, $appointmentInfo;
 
-
             if (baton.data.headers["X-OX-Reminder"] && baton.data.headers["X-Open-Xchange-Module"] === "Appointments") {
                 $('<div class="well">').append(
                     $('<span class="muted">').text(gt("This email contains an appointment")),
@@ -334,9 +333,14 @@ define('io.ox/calendar/invitations/register',
                     $appointmentInfo = $('<div class="appointmentInfo">'),
                     $actions = $('<div class="itip-actions">')
                 ).appendTo(this);
-                require(["io.ox/calendar/api"], function (calendarAPI) {
-                    var address = baton.data.headers["X-OX-Reminder"].split(/,\s*/);
-                    var id = address[0], folder = address[1];
+
+                require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (calendarAPI, calSettings) {
+                    var address = baton.data.headers["X-OX-Reminder"].split(/,\s*/),
+                        id = address[0],
+                        showReminderSelect = false,
+                        folder = address[1],
+                        defaultReminder = calSettings.get('defaultReminder', 15),
+                        reminderSelect = $();
 
                     $actions.append(
                         $('<button class="btn btn-danger" data-action="2">').text(gt("Decline")),
@@ -345,6 +349,7 @@ define('io.ox/calendar/invitations/register',
                         "&nbsp;",
                         $('<button class="btn btn-success" data-action="1">').text(gt("Accept"))
                     );
+
 
                     calendarAPI.get({folder: folder, id: id}).done(function (appointment) {
                         var recurrenceString = util.getRecurrenceString(appointment);
@@ -356,24 +361,55 @@ define('io.ox/calendar/invitations/register',
                             )
                         );
 
+                        showReminderSelect = util.getConfirmationStatus(appointment) !== 1;
+
+                        if (showReminderSelect) {
+                            reminderSelect = $('<div>')
+                                .addClass('controls')
+                                .css({display: 'inline-block'})
+                                .append(
+                                    $('<select>')
+                                        .attr('data-property', 'reminder')
+                                        .css({'margin': '0px 10px'})
+                                        .attr('id', 'reminderSelect')
+                                        .append(function (i, html) {
+                                            var self = $(this),
+                                                options = util.getReminderOptions();
+                                            _(options).each(function (label, value) {
+                                                self.append($("<option>", {value: value}).text(label));
+                                            });
+                                        }).val(defaultReminder)
+                                ).before(
+                                    $('<label>').addClass('control-label').css({display: 'inline-block'}).attr('for', 'reminderSelect').text(gt('Reminder'))
+                                );
+                            $actions.prepend(reminderSelect);
+                        }
+
+                        $actions.on("click", "button", function (e) {
+                            calendarAPI.confirm({
+                                folder: folder,
+                                id: id,
+                                data: {
+                                    confirmation: Number($(e.target).data("action"))
+                                }
+                            }).done(function () {
+                                if (showReminderSelect) {
+                                    var reminder = parseInt(reminderSelect.find('select').val(), 10);
+                                    if (reminder !== defaultReminder) {
+                                        appointment.alarm = reminder;
+                                        calendarAPI.update(appointment);
+                                    }
+                                }
+                                require("io.ox/core/notifications").yell('success', successInternal[Number($(e.target).data("action"))]);
+                                require(["io.ox/mail/api", "settings!io.ox/core/calendar"], function (api, settings) {
+                                    if (settings.get("deleteInvitationMailAfterAction")) {
+                                        api.remove([baton.data]);
+                                    }
+                                });
+                            }).fail(require("io.ox/core/notifications").yell);
+                        });
                     });
 
-                    $actions.on("click", "button", function (e) {
-                        calendarAPI.confirm({
-                            folder: folder,
-                            id: id,
-                            data: {
-                                confirmation: Number($(e.target).data("action"))
-                            }
-                        }).done(function () {
-                            require("io.ox/core/notifications").yell('success', successInternal[Number($(e.target).data("action"))]);
-                            require(["io.ox/mail/api", "settings!io.ox/core/calendar"], function (api, settings) {
-                                if (settings.get("deleteInvitationMailAfterAction")) {
-                                    api.remove([baton.data]);
-                                }
-                            });
-                        }).fail(require("io.ox/core/notifications").yell);
-                    });
                 });
             }
         }

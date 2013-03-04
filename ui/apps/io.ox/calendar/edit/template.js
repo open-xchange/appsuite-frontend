@@ -237,57 +237,6 @@ define('io.ox/calendar/edit/template',
 
     // alarms
     (function () {
-        var reminderListValues = [
-            {value: -1, format: 'string'},
-            {value: 0, format: 'minutes'},
-            {value: 15, format: 'minutes'},
-            {value: 30, format: 'minutes'},
-            {value: 45, format: 'minutes'},
-
-            {value: 60, format: 'hours'},
-            {value: 120, format: 'hours'},
-            {value: 240, format: 'hours'},
-            {value: 360, format: 'hours'},
-            {value: 420, format: 'hours'},
-            {value: 720, format: 'hours'},
-
-            {value: 1440, format: 'days'},
-            {value: 2880, format: 'days'},
-            {value: 4320, format: 'days'},
-            {value: 5760, format: 'days'},
-            {value: 7200, format: 'days'},
-            {value: 8640, format: 'days'},
-
-            {value: 10080, format: 'weeks'},
-            {value: 20160, format: 'weeks'},
-            {value: 30240, format: 'weeks'},
-            {value: 40320, format: 'weeks'}
-        ];
-
-        var options = {};
-        _(reminderListValues).each(function (item, index) {
-            var i;
-            switch (item.format) {
-            case 'string':
-                options[item.value] = gt('No reminder');
-                break;
-            case 'minutes':
-                options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-                break;
-            case 'hours':
-                i = Math.floor(item.value / 60);
-                options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-                break;
-            case 'days':
-                i  = Math.floor(item.value / 60 / 24);
-                options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-                break;
-            case 'weeks':
-                i = Math.floor(item.value / 60 / 24 / 7);
-                options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-                break;
-            }
-        });
         point.extend(new forms.SelectBoxField({
             id: 'alarm',
             index: 800,
@@ -295,9 +244,8 @@ define('io.ox/calendar/edit/template',
             className: "span4",
             attribute: 'alarm',
             label: gt("Reminder"),
-            selectOptions: options
+            selectOptions: util.getReminderOptions()
         }));
-
     }());
 
     // shown as

@@ -167,9 +167,7 @@ define('io.ox/calendar/list/perspective',
                     var now = _.now();
                     if (!settings.get('showDeclinedAppointments', false)) {
                         data = _.filter(data, function (obj) {
-                            var hash = util.getConfirmations(obj),
-                                conf = hash[ox.user_id] || { status: 1, comment: "" };
-                            return conf.status !== 2;
+                            return util.getConfirmationStatus(obj) !== 2;
                         });
                     }
                     _.map(data, function (obj) {

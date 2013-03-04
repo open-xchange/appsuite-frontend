@@ -776,7 +776,7 @@ define('io.ox/calendar/week/view',
                     })
                     .addClass(border ? 'border' : '');
                 }
-                self.$('.week-container ' + day).append(apps);
+                self.$('.week-container ' + day, self.$el).append(apps);
             });
 
             // init drag and resize widget on appointments
@@ -861,7 +861,7 @@ define('io.ox/calendar/week/view',
                                 // move right
                                 if (day > d.my.lastPos) {
                                     // set new helper
-                                    $('.week-container .day[date="' + day + '"]')
+                                    $('.week-container .day[date="' + day + '"]', self.$el)
                                         .append(d.my.curHelper = el.clone());
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 } else {
@@ -910,7 +910,7 @@ define('io.ox/calendar/week/view',
                                 // move left
                                 if (day < d.my.firstPos) {
                                     // add new helper
-                                    $('.week-container .day[date="' + day + '"]')
+                                    $('.week-container .day[date="' + day + '"]', self.$el)
                                         .append(d.my.curHelper = el.clone().addClass('opac'));
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
 
@@ -1036,7 +1036,7 @@ define('io.ox/calendar/week/view',
 
                                 // calc first position
                                 if (((d.my.firstTop >= 0 && firstTop < 0) || (d.my.firstTop >= paneHeight && firstTop < paneHeight)) && diff < 0) {
-                                    $('.week-container .day[date="' + (--d.my.firstPos) + '"]')
+                                    $('.week-container .day[date="' + (--d.my.firstPos) + '"]', self.$el)
                                         .append($(this).clone());
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
@@ -1058,7 +1058,7 @@ define('io.ox/calendar/week/view',
 
                                 // calc last position
                                 if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
-                                    $('.week-container .day[date="' + (++d.my.lastPos) + '"]')
+                                    $('.week-container .day[date="' + (++d.my.lastPos) + '"]', self.$el)
                                         .append($(this).clone());
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el);
                                 }
@@ -1109,7 +1109,7 @@ define('io.ox/calendar/week/view',
                     }
                 });
 
-            $('.week-container .day').droppable();
+            $('.week-container .day', this.$el).droppable();
 
             // remove unused resizable panes
             $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s', this.$el)

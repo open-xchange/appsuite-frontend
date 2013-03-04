@@ -58,10 +58,7 @@ define("io.ox/calendar/view-grid-template",
                 };
             },
             set: function (data, fields, index) {
-                var hash = util.getConfirmations(data),
-                    conf = hash[ox.user_id] || { status: 1, comment: "" };
-
-                this.addClass(util.getConfirmationClass(conf.status) + (data.hard_conflict ? ' hardconflict' : ''));
+                this.addClass(util.getConfirmationClass(util.getConfirmationStatus(data)) + (data.hard_conflict ? ' hardconflict' : ''));
                 fields.title
                     .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {

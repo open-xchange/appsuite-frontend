@@ -13,15 +13,41 @@
 define('io.ox/calendar/acceptdeny',
     ['io.ox/calendar/api',
      'io.ox/core/tk/dialogs',
-     'gettext!io.ox/calendar'], function (api, dialogs, gt) {
+     'io.ox/calendar/util',
+     'settings!io.ox/calendar',
+     'gettext!io.ox/calendar'], function (api, dialogs, util, calSettings, gt) {
 
     'use strict';
 
     return function (o) {
 
+        var showReminderSelect = util.getConfirmationStatus(o) !== 1,
+            message = util.getConfirmationMessage(o),
+            reminderSelect = $(),
+            inputid = _.uniqueId('dialog'),
+            defaultReminder = calSettings.get('defaultReminder', 15);
+
         o = { folder: o.folder_id, id: o.id };
 
-        var inputid = _.uniqueId('dialog');
+        if (showReminderSelect) {
+            reminderSelect = $('<div>')
+                .addClass('controls')
+                .css({'margin-right': '10px'})
+                .append(
+                    $('<select>')
+                        .attr('data-property', 'reminder')
+                        .attr('id', 'reminderSelect')
+                        .append(function (i, html) {
+                            var self = $(this),
+                                options = util.getReminderOptions();
+                            _(options).each(function (label, value) {
+                                self.append($("<option>", {value: value}).text(label));
+                            });
+                        }).val(defaultReminder)
+                ).before(
+                    $('<label>').addClass('control-label').attr('for', 'reminderSelect').text(gt('Reminder'))
+                );
+        }
 
         return new dialogs.ModalDialog({easyOut: true})
             .header($('<h3>').text(gt('Change confirmation status')))
@@ -32,12 +58,15 @@ define('io.ox/calendar/acceptdeny',
                         $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment:')),
                         $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
                             $('<input>')
-                            .css({'width': '100%'})
-                            .attr('data-property', 'comment')
-                            .attr('id', inputid))
+                                .css({'width': '100%'})
+                                .attr('data-property', 'comment')
+                                .attr('id', inputid)
+                                .val(message)
                         )
-                    )
+                    ),
+                    reminderSelect
                 )
+            )
             .addAlternativeButton('cancel', gt('Cancel'))
             .addDangerButton('declined', gt('Decline'))
             .addWarningButton('tentative', gt('Tentative'))
@@ -68,7 +97,16 @@ define('io.ox/calendar/acceptdeny',
                 }
 
                 api.confirm(o)
-                    .fail(function (err) {
+                    .done(function () {
+                        if (showReminderSelect) {
+                            var reminder = parseInt(reminderSelect.find('select').val(), 10);
+                            if (reminder !== defaultReminder) {
+                                delete o.data;
+                                o.alarm = reminder;
+                                api.update(o);
+                            }
+                        }
+                    }).fail(function (err) {
                         console.log('ERROR', err);
                     });
             });

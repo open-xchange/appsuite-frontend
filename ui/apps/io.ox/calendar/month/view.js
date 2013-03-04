@@ -180,11 +180,8 @@ define('io.ox/calendar/month/view',
             // loop over all appointments
             this.collection.each(function (model) {
 
-                var hash = util.getConfirmations(model.attributes),
-                    conf = hash[myself] || { status: 1, comment: "" };
-
                 // is declined?
-                if (conf.status !== 2 || settings.get('showDeclinedAppointments', false)) {
+                if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
                         endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
@@ -298,15 +295,13 @@ define('io.ox/calendar/month/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
-                hash = util.getConfirmations(a.attributes),
-                conf = hash[myself] || { status: 1, comment: "" },
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
                 classes = 'private';
             } else {
                 classes = util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf.status) +
+                    ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
