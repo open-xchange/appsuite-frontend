@@ -51,6 +51,7 @@ define('io.ox/core/pubsub/settings/pane',
                     $('<div>').text(data.displayName),
                     $('<div>').text(data.folder)
                 ),
+                $('<a href="#" class="action" data-action="edit">').text(gt('Edit')),
                 $('<a href="#" class="close" data-action="remove">').html('&times;')
             );
 
@@ -71,6 +72,7 @@ define('io.ox/core/pubsub/settings/pane',
         className: '',
         events: {
             'click [data-action="toggle"]': 'onToggle',
+            'click [data-action="edit"]': 'onEdit',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
@@ -84,6 +86,13 @@ define('io.ox/core/pubsub/settings/pane',
                 res.model.set('enabled', !res.model.get('enabled'));
             });
             this.render();
+        },
+        onEdit: function (ev) {
+            var baton = ext.Baton({model: this.model, view: this});
+            ev.preventDefault();
+            require(['io.ox/core/pubsub/publications'], function (pubsubViews) {
+                pubsubViews.buildPublishDialog(baton);
+            });
         },
         onRemove: function (ev) {
             ev.preventDefault();
