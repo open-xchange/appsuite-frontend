@@ -199,6 +199,63 @@ define("io.ox/calendar/util",
             }
         },
 
+        getReminderOptions: function () {
+            var inputid = _.uniqueId('dialog'),
+                reminderListValues = [
+                {value: -1, format: 'string'},
+                {value: 0, format: 'minutes'},
+                {value: 15, format: 'minutes'},
+                {value: 30, format: 'minutes'},
+                {value: 45, format: 'minutes'},
+
+                {value: 60, format: 'hours'},
+                {value: 120, format: 'hours'},
+                {value: 240, format: 'hours'},
+                {value: 360, format: 'hours'},
+                {value: 420, format: 'hours'},
+                {value: 720, format: 'hours'},
+
+                {value: 1440, format: 'days'},
+                {value: 2880, format: 'days'},
+                {value: 4320, format: 'days'},
+                {value: 5760, format: 'days'},
+                {value: 7200, format: 'days'},
+                {value: 8640, format: 'days'},
+
+                {value: 10080, format: 'weeks'},
+                {value: 20160, format: 'weeks'},
+                {value: 30240, format: 'weeks'},
+                {value: 40320, format: 'weeks'}
+            ],
+            options = {};
+
+            _(reminderListValues).each(function (item, index) {
+                var i;
+                switch (item.format) {
+                case 'string':
+                    options[item.value] = gt('No reminder');
+                    break;
+                case 'minutes':
+                    options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
+                    break;
+                case 'hours':
+                    i = Math.floor(item.value / 60);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
+                    break;
+                case 'days':
+                    i  = Math.floor(item.value / 60 / 24);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
+                    break;
+                case 'weeks':
+                    i = Math.floor(item.value / 60 / 24 / 7);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
+                    break;
+                }
+            });
+
+            return options;
+        },
+
         onSameDay: function (t1, t2) {
             // don't change this to date.Local; this is just a simple comparison
             return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
@@ -395,6 +452,16 @@ define("io.ox/calendar/util",
                 };
             });
             return hash;
+        },
+
+        getConfirmationStatus: function (obj, id) {
+            var hash = this.getConfirmations(obj);
+            return (hash[id || ox.user_id] || { status: 1, comment: "" }).status;
+        },
+
+        getConfirmationMessage: function (obj, id) {
+            var hash = this.getConfirmations(obj);
+            return (hash[id || ox.user_id] || { status: 1, comment: "" }).comment;
         },
 
         // returns a set of rows, each containing 7 days
