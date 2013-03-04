@@ -35,9 +35,6 @@ define('io.ox/office/framework/app/basecontroller',
         var // self reference
             self = this,
 
-            // cached item values during a complex update
-            resultCache = {},
-
             // all the little controller items
             items = {
 
@@ -45,7 +42,13 @@ define('io.ox/office/framework/app/basecontroller',
                     // quit in a timeout (otherwise this controller becomes invalid while still running)
                     set: function () { _.defer(function () { app.quit(); }); }
                 }
-            };
+            },
+
+            // cached item values during a complex update
+            resultCache = {},
+
+            // number of item setters currently running (recursion counter)
+            runningSetters = 0;
 
         // class Item ---------------------------------------------------------
 
@@ -66,7 +69,9 @@ define('io.ox/office/framework/app/basecontroller',
                 // whether to return browser focus to application pane (default: true)
                 done = Utils.getBooleanOption(definition, 'done', true),
                 // whether the item executes asynchronously
-                async = Utils.getBooleanOption(definition, 'async', false);
+                async = Utils.getBooleanOption(definition, 'async', false),
+                // additional user data
+                userData = Utils.getOption(definition, 'userData');
 
             function getAndCacheResult(type, handler, parentValue) {
 
@@ -119,7 +124,9 @@ define('io.ox/office/framework/app/basecontroller',
                         enabled = false;
                         self.update(key);
                     }
+                    runningSetters += 1;
                     def = setHandler.call(this, value);
+                    runningSetters -= 1;
                 }
 
                 $.when(def).always(function () {
@@ -130,6 +137,27 @@ define('io.ox/office/framework/app/basecontroller',
                 });
 
                 return this;
+            };
+
+            /**
+             * Returns the unique key of this item.
+             *
+             * @returns {String}
+             *  The unique key this item has been registered with.
+             */
+            this.getKey = function () {
+                return key;
+            };
+
+            /**
+             * Returns the user data that has been registered with the
+             * definition of this item.
+             *
+             * @returns {Any}
+             *  The registered user data if existing, otherwise undefined.
+             */
+            this.getUserData = function () {
+                return userData;
             };
 
         } // class Item
@@ -161,7 +189,8 @@ define('io.ox/office/framework/app/basecontroller',
          */
         function callSetHandler(key, value) {
             if (key in items) {
-                clearResultCache();
+                // do not clear cache if called recursively from another setter
+                if (runningSetters === 0) { clearResultCache(); }
                 items[key].change(value);
             } else {
                 grabApplicationFocus();
@@ -239,6 +268,10 @@ define('io.ox/office/framework/app/basecontroller',
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.
+         *  @param {Any} [definition.userData]
+         *      Additional user data that will be provided by the method
+         *      'Item.getUserData()'. Can be used in all item getter and setter
+         *      methods.
          *
          * @returns {BaseController}
          *  A reference to this controller instance.
@@ -343,7 +376,8 @@ define('io.ox/office/framework/app/basecontroller',
          *  exist.
          */
         this.get = function (key) {
-            clearResultCache();
+            // do not clear the cache if currently running in a set handler
+            if (runningSetters === 0) { clearResultCache(); }
             return (key in items) ? items[key].get() : undefined;
         };
 
