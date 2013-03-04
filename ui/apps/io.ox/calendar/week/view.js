@@ -49,6 +49,7 @@ define('io.ox/calendar/week/view',
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
         restoreCache:   {},     // object, which contains data for save and restore functions
+        extPoint:       null,
 
         pane:           $('<div>').addClass('scrollpane'),          // main scroll pane
         fulltimePane:   $('<div>').addClass('fulltime'),            // full-time appointments pane
@@ -64,6 +65,7 @@ define('io.ox/calendar/week/view',
         initialize: function (opt) {
             myself = myself || ox.user_id;
             this.mode = opt.mode;
+            this.extPoint = opt.appExtPoint;
             this.setStartDate();
             this.collection
                 .on('reset', this.renderAppointments, this)
@@ -617,11 +619,8 @@ define('io.ox/calendar/week/view',
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                var hash = util.getConfirmations(model.attributes),
-                    conf = hash[myself] || { status: 1, comment: "" };
-
                 // is declined?
-                if (conf.status !== 2 || this.showDeclined) {
+                if (util.getConfirmationStatus(model.attributes, myself) !== 2 || this.showDeclined) {
 
                     if (model.get('full_time')) {
                         fulltimeCount++;
@@ -1191,7 +1190,7 @@ define('io.ox/calendar/week/view',
                     'data-composite-id': a.id
                 });
 
-            ext.point('io.ox/calendar/week/view/appointment')
+            ext.point(this.extPoint)
                 .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: this.folder()})));
             return el;
         },
@@ -1354,15 +1353,13 @@ define('io.ox/calendar/week/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
-                hash = util.getConfirmations(a.attributes),
-                conf = hash[myself] || { status: 1, comment: "" },
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
                 classes = 'private';
             } else {
                 classes = util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf.status) +
+                    ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
