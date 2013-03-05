@@ -81,7 +81,9 @@ define('io.ox/calendar/week/view',
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
-            this.bindKeys();
+            if (!opt.keyboard || opt.keyboard === true) {
+                this.bindKeys();
+            }
             this.initSettings();
         },
 
@@ -201,17 +203,19 @@ define('io.ox/calendar/week/view',
          */
         onKey: function (e) {
             e.preventDefault();
-            switch (e.which) {
-            case 37:
-                this.setStartDate('prev');
-                this.trigger('onRefresh');
-                break;
-            case 39:
-                this.setStartDate('next');
-                this.trigger('onRefresh');
-                break;
-            default:
-                break;
+            if (document.activeElement.tagName === 'BODY') {
+                switch (e.which) {
+                case 37:
+                    this.setStartDate('prev');
+                    this.trigger('onRefresh');
+                    break;
+                case 39:
+                    this.setStartDate('next');
+                    this.trigger('onRefresh');
+                    break;
+                default:
+                    break;
+                }
             }
         },
 
