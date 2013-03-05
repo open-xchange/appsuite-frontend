@@ -19,24 +19,25 @@ define('io.ox/core/api/pubsub',
 
     'use strict';
 
+
+    /**
+     * clears cache
+     * @return {deferred}
+     */
+    var clearCache = function (api) {
+        return $.when(
+            api.caches.all.clear(),
+            api.caches.get.clear(),
+            api.caches.list.clear()
+        );
+    };
+
     /**
      * gerneralized API for pubsub
      * @param  {object} opt
      * @return {deferred}
      */
     function api(opt) {
-
-        /**
-         * clears cache
-         * @return {deferred}
-         */
-        var clearCache = function (api) {
-            return $.when(
-                    api.caches.all.clear(),
-                    api.caches.get.clear(),
-                    api.caches.list.clear()
-                );
-        };
 
         return $.extend(true, apiFactory(opt), {
             /**
@@ -53,27 +54,6 @@ define('io.ox/core/api/pubsub',
                             action: 'update'
                         },
                         data: data
-                    });
-                });
-            },
-
-            /**
-             * refresh publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
-             */
-            refresh: function (id, folder) {
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return clearCache(this).pipe(function () {
-                    return http.GET({
-                        module: opt.module,
-                        appendColumns: false,
-                        params: {
-                            action: 'refresh',
-                            id : id,
-                            folder: folder
-                        }
                     });
                 });
             },
@@ -116,12 +96,34 @@ define('io.ox/core/api/pubsub',
                 }
             }
         }),
-        subscriptions: api({
+        subscriptions: $.extend(true, api({
             module: 'subscriptions',
             requests: {
                 all: {
                     columns: 'id,displayName,enabled'
                 }
+            }
+        }),
+        {
+            /**
+             * refresh publication/subscription
+             * @private
+             * @param  {string|object} subscription id or object
+             * @return {deferred}
+             */
+            refresh: function (id, folder) {
+                folder = _.isObject(folder) ? folder.id : folder || '';
+                return clearCache(this).pipe(function () {
+                    return http.GET({
+                        module: 'subscriptions',
+                        appendColumns: false,
+                        params: {
+                            action: 'refresh',
+                            id : id,
+                            folder: folder
+                        }
+                    });
+                });
             }
         }),
         sources: apiFactory({
