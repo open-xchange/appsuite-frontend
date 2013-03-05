@@ -102,10 +102,13 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             popup.on('publish', function (action) {
                 self.model.save().done(function (id) {
                     api.publications.get({id: id}).done(function (data) {
+                        var model = new pubsub.Publication(data);
+                        //code for use if pubsub.publications is singleton
+                        //could use api trigger add with model as data while settings pane listens to this in the meantime if desired
+                        //pubsub.publications.push(model).trigger('add');
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection
-                            var model = new pubsub.Publication(data);
                             baton.model = model;
                             sendInvitation(baton);
                         } else
@@ -294,16 +297,22 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             }))),
                             $('<br>'));
             } else {
-                this.find('div.checkboxes').append(
-                            $('<label>').addClass('checkbox').text(gt('Share Link by E-mail')).append(
-                            node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
-                                if (node.attr('checked') === 'checked') {
-                                    baton.model.attributes.invite = true;
-                                } else {
-                                    baton.model.attributes.invite = false;
-                                }
-                            }))
-                        );
+                var temp = $('<label>').addClass('checkbox').text(gt('Share Link by E-mail')).append(
+                               node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
+                                    if (node.attr('checked') === 'checked') {
+                                        baton.model.attributes.invite = true;
+                                    } else {
+                                        baton.model.attributes.invite = false;
+                                    }
+                                }));
+                
+                var wrapper = this.find('div.checkboxes');
+                if (wrapper.length === 0)  {//build wrapper
+                    wrapper = this.append($('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(temp)));
+                } else {
+                    wrapper.append(temp);
+                }
             }
         }
     });
