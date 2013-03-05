@@ -278,21 +278,23 @@
 .itip-actions {
     text-align: right;
     margin-top: 1em;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .io-ox-calendar-itip-analysis .changes {
   margin: 1em 0;
   font-size: 11pt;
 }
- 
+
 .io-ox-calendar-itip-analysis .changes .original {
   font-weight: bold;
 }
- 
+
 .io-ox-calendar-itip-analysis .changes .recurrencePosition {
   font-weight: bold;
 }
- 
+
 .io-ox-calendar-itip-analysis .changes .updated {
   color: green;
   font-weight: bold;

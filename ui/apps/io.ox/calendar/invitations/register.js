@@ -331,7 +331,9 @@ define('io.ox/calendar/invitations/register',
                     $('<span class="muted">').text(gt("This email contains an appointment")),
                     $("<br>"),
                     $appointmentInfo = $('<div class="appointmentInfo">'),
-                    $actions = $('<div class="itip-actions">')
+                    $('<div>').css('text-align', 'right').append(
+                        $actions = $('<div class="itip-actions">')
+                    )
                 ).appendTo(this);
 
                 require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (calendarAPI, calSettings) {
@@ -364,25 +366,25 @@ define('io.ox/calendar/invitations/register',
                         showReminderSelect = util.getConfirmationStatus(appointment) !== 1;
 
                         if (showReminderSelect) {
-                            reminderSelect = $('<div>')
-                                .addClass('controls')
-                                .css({display: 'inline-block'})
-                                .append(
-                                    $('<select>')
-                                        .attr('data-property', 'reminder')
-                                        .css({'margin': '0px 10px'})
-                                        .attr('id', 'reminderSelect')
-                                        .append(function (i, html) {
-                                            var self = $(this),
-                                                options = util.getReminderOptions();
-                                            _(options).each(function (label, value) {
-                                                self.append($("<option>", {value: value}).text(label));
-                                            });
-                                        }).val(defaultReminder)
-                                ).before(
-                                    $('<label>').addClass('control-label').css({display: 'inline-block'}).attr('for', 'reminderSelect').text(gt('Reminder'))
-                                );
-                            $actions.prepend(reminderSelect);
+                            reminderSelect = $('<div>').css({'text-align': 'left', 'display': 'inline-block'}).append(
+                                $('<label>').addClass('control-label').attr('for', 'reminderSelect').text(gt('Reminder')),
+                                $('<div>')
+                                    .addClass('controls')
+                                    .append(
+                                        $('<select>')
+                                            .attr('data-property', 'reminder')
+                                            .css({'margin': '0px 10px'})
+                                            .attr('id', 'reminderSelect')
+                                            .append(function (i, html) {
+                                                var self = $(this),
+                                                    options = util.getReminderOptions();
+                                                _(options).each(function (label, value) {
+                                                    self.append($("<option>", {value: value}).text(label));
+                                                });
+                                            }).val(defaultReminder)
+                                    )
+                            );
+                            $actions.before(reminderSelect);
                         }
 
                         $actions.on("click", "button", function (e) {

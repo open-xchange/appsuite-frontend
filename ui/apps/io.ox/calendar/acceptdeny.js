@@ -55,12 +55,12 @@ define('io.ox/calendar/acceptdeny',
             .append(
                 $('<div>').addClass('row-fluid').css({'margin-top': '20px'}).append(
                     $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(
-                        $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment:')),
+                        $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment')),
                         $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
                             $('<input>')
-                                .css({'width': '100%'})
+                                .css({width: '100%', color: '#fff'})
                                 .attr('data-property', 'comment')
-                                .attr('id', inputid)
+                                .attr({id: inputid, type: 'text'})
                                 .val(message)
                         )
                     ),
