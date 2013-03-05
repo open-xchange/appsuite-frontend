@@ -214,9 +214,13 @@ define('io.ox/office/tk/control/radiolist',
 
         /**
          * Removes all option buttons from this control.
+         *
+         * @returns {RadioList}
+         *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            this.clearItems();
+            this.clearItemGroup();
+            return this;
         };
 
         /**
@@ -235,7 +239,7 @@ define('io.ox/office/tk/control/radiolist',
          * @returns {RadioList}
          *  A reference to this instance.
          */
-        this.addOptionButton = function (value, options) {
+        this.createOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value });

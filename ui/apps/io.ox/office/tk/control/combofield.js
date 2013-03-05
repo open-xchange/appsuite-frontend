@@ -208,7 +208,7 @@ define('io.ox/office/tk/control/combofield',
          *  specified, the label of the list entry will be set to the string
          *  value provided by the current validator of the text field.
          */
-        this.addListEntry = function (value, options) {
+        this.createListEntry = function (value, options) {
             options = Utils.extendOptions({ label: this.valueToText(value) }, options);
             this.createItem(Utils.extendOptions(options, { value: value }));
             // the inserted list item may match the value in the text field

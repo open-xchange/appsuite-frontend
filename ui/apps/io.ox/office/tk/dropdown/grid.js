@@ -61,11 +61,9 @@ define('io.ox/office/tk/dropdown/grid',
         /**
          * Inserts the passed item button into the grid.
          */
-        function itemGridInserter(button, index) {
+        function itemGridInserter(sectionNode, button, index) {
 
-            var // the root node of the item group
-                itemGroupNode = self.getItemGroup().getNode(),
-                // the table element containing the grid items
+            var // the table element containing the grid items
                 tableNode = null,
                 // the last table row
                 rowNode = null,
@@ -73,9 +71,9 @@ define('io.ox/office/tk/dropdown/grid',
                 buttons = null;
 
             // create a new table element for the button if required
-            tableNode = itemGroupNode.children().last();
-            if (!tableNode.is('table')) {
-                tableNode = $('<table>').appendTo(itemGroupNode);
+            tableNode = sectionNode.children('table');
+            if (tableNode.length === 0) {
+                tableNode = $('<table>').appendTo(sectionNode);
             }
 
             // create a new table row element for the button if required
@@ -124,11 +122,8 @@ define('io.ox/office/tk/dropdown/grid',
 
         // initialization -----------------------------------------------------
 
-        // additional formatting for grid layout
-        this.getItemGroup().getNode().addClass('grid');
-
-        // register event handlers
-        this.getItemGroup().getNode().on('keydown keypress keyup', gridKeyHandler);
+        // additional formatting for grid layout, register event handlers
+        this.getItemGroup().getNode().addClass('grid').on('keydown keypress keyup', gridKeyHandler);
 
     } // class Grid
 

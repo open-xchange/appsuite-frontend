@@ -270,7 +270,7 @@ define('io.ox/office/framework/view/component',
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.addLabel = function (key, options) {
+        this.createLabel = function (key, options) {
             return this.addGroup(key, new Label(options));
         };
 
@@ -288,7 +288,7 @@ define('io.ox/office/framework/view/component',
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.addButton = function (key, options) {
+        this.createButton = function (key, options) {
             return this.addGroup(key, new Button(options));
         };
 
@@ -316,7 +316,7 @@ define('io.ox/office/framework/view/component',
          * @returns {Component}
          *  A reference to this view component.
          */
-        this.addGroupContainer = function (callback, options) {
+        this.createGroupContainer = function (callback, options) {
 
             // create the container node for the groups,
             // always insert into root node (do not nest group containers)

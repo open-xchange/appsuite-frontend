@@ -84,9 +84,13 @@ define('io.ox/office/tk/control/radiogroup',
 
         /**
          * Removes all option buttons from this radio group.
+         *
+         * @returns {RadioGroup}
+         *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
             getOptionButtons().remove();
+            return this;
         };
 
         /**
@@ -108,7 +112,7 @@ define('io.ox/office/tk/control/radiogroup',
          * @returns {RadioGroup}
          *  A reference to this instance.
          */
-        this.addOptionButton = function (value, options) {
+        this.createOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),

@@ -45,11 +45,16 @@ define('io.ox/office/tk/dropdown/items',
      *      untouched.
      *  @param {Function} [options.itemInserter]
      *      A function that will implement inserting an item element at a
-     *      specific position. The function receives the button control
-     *      representing the new item (jQuery object) as first parameter, and
-     *      the insertion index as second parameter. Will be called in the
-     *      context of this group instance. If omitted, item elements will be
-     *      inserted as direct children of the group in the drop-down menu.
+     *      specific position. The function receives the following parameters:
+     *      (1) {jQuery} sectionNode
+     *          The section root node the new item will be inserted into,
+     *      (2) {jQuery} button
+     *          The button control representing the new item,
+     *      (3) {Number} index
+     *          The insertion index according to the sort options.
+     *      Will be called in the context of this group instance. If omitted,
+     *      item elements will be appended as direct children of the last
+     *      section node.
      *  @param {Function} [options.itemCreateHandler]
      *      A function that will be called after a new menu item has been added
      *      to the drop-down menu. The function receives the button control
@@ -79,6 +84,9 @@ define('io.ox/office/tk/dropdown/items',
             // the group in the drop-down menu containing the menu items
             itemGroup = new Group({ classes: 'item-buttons design-' + Utils.getStringOption(options, 'itemDesign', 'default') }),
 
+            // the root node of the item group
+            itemGroupNode = itemGroup.getNode(),
+
             // handler called to insert a new item element into the item group
             itemInserter = Utils.getFunctionOption(options, 'itemInserter'),
 
@@ -95,6 +103,36 @@ define('io.ox/office/tk/dropdown/items',
 
         DropDown.call(this, Utils.extendOptions(options, { autoLayout: true }));
 
+        // private methods ----------------------------------------------------
+
+        /**
+         * Returns the section node with the passed identifier.
+         *
+         * @returns {jQuery}
+         *  The section node with the passed identifier if existing, otherwise
+         *  an empty jQuery collection.
+         */
+        function getSectionNode(sectionId) {
+            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
+        }
+
+        /**
+         * Gets or creates the section node with the passed identifier.
+         *
+         * @returns {jQuery}
+         *  The section node with the passed identifier.
+         */
+        function getOrCreateSectionNode(sectionId, label) {
+            var sectionNode = getSectionNode(sectionId);
+            if (sectionNode.length === 0) {
+                if (_.isString(label)) {
+                    itemGroupNode.append(Utils.createLabel({ label: label }));
+                }
+                sectionNode = Utils.createContainerNode('item-section').attr('data-section', sectionId).appendTo(itemGroupNode);
+            }
+            return sectionNode;
+        }
+
         // methods ------------------------------------------------------------
 
         /**
@@ -109,14 +147,35 @@ define('io.ox/office/tk/dropdown/items',
          * Returns all button elements representing the menu items.
          */
         this.getItems = function () {
-            return itemGroup.getNode().find(Utils.BUTTON_SELECTOR);
+            return itemGroupNode.find(Utils.BUTTON_SELECTOR);
         };
 
         /**
-         * Removes all list items from the drop-down menu.
+         * Removes all list items and their section nodes from the drop-down
+         * menu.
+         *
+         * @returns {Items}
+         *  A reference to this instance.
          */
-        this.clearItems = function () {
-            itemGroup.getNode().empty();
+        this.clearItemGroup = function () {
+            itemGroupNode.empty();
+            return this;
+        };
+
+        /**
+         * Adds a new section node to the drop-down menu.
+         *
+         * @param {String} sectionId
+         *  The unique identifier of the section.
+         *
+         * @param {String} [label]
+         *  If specified, a heading label will be created for the section.
+         *
+         * @returns {Items}
+         *  A reference to this instance.
+         */
+        this.createSection = function (sectionId, label) {
+            getOrCreateSectionNode(sectionId, label);
             return this;
         };
 
@@ -129,6 +188,12 @@ define('io.ox/office/tk/dropdown/items',
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
          *  Additionally, the following options are supported:
+         *  @param {String} [options.sectionId]
+         *      The unique identifier of the section the new item will be
+         *      inserted into. If a section with the specified identifier does
+         *      not exist yet, it will be created without header label. If
+         *      omitted, a default section without header label will be created
+         *      and used.
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the button.
          *
@@ -137,8 +202,10 @@ define('io.ox/office/tk/dropdown/items',
          */
         this.createItem = function (options) {
 
-            var // all existing list items
-                buttons = self.getItems(),
+            var // the section node
+                sectionNode = getOrCreateSectionNode(Utils.getStringOption(options, 'sectionId', '')),
+                // all existing items in the current section
+                sectionButtons = sectionNode.find(Utils.BUTTON_SELECTOR),
                 // create the button element representing the item
                 button = Utils.createButton(options).addClass(Group.FOCUSABLE_CLASS),
                 // insertion index for sorted items
@@ -149,7 +216,7 @@ define('io.ox/office/tk/dropdown/items',
 
             // find insertion index for sorted items
             if (sorted) {
-                index = _.chain(buttons.get())
+                index = _.chain(sectionButtons.get())
                     // convert array of button elements to strings returned by sort functor
                     .map(function (button) { return sortFunctor.call(self, $(button)); })
                     // calculate the insertion index of the new list item
@@ -158,16 +225,16 @@ define('io.ox/office/tk/dropdown/items',
                     .value();
             } else {
                 // else: append to existing items
-                index = buttons.length;
+                index = sectionButtons.length;
             }
 
             // insert the new item element
             if (_.isFunction(itemInserter)) {
-                itemInserter.call(this, button, index);
-            } else if ((0 <= index) && (index < buttons.length)) {
-                button.insertBefore(buttons[index]);
+                itemInserter.call(this, sectionNode, button, index);
+            } else if ((0 <= index) && (index < sectionButtons.length)) {
+                button.insertBefore(sectionButtons[index]);
             } else {
-                itemGroup.getNode().append(button);
+                sectionNode.append(button);
             }
 
             // call external handler

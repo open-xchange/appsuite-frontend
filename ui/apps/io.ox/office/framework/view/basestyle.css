@@ -599,17 +599,27 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     font-size: 0;
     line-height: 0;
 
-    > .view-component {
-        display: inline-block;
-        width: auto;
-
-        > .group {
-            display: inline-block;
-            width: 100%;
-        }
-    }
-
     > .group.item-buttons {
+
+        > label {
+            display: block;
+            width: 100%;
+            height: auto;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            font-size: 10px;
+            line-height: normal;
+            font-weight: bold;
+        }
+
+        > .item-section {
+            display: block;
+            width: 100%;
+            .box-sizing(border-box);
+
+            &:first-child { margin-top: 5px; }
+            &:last-child { margin-bottom: 5px; }
+        }
 
         a.button {
             display: block;
@@ -623,8 +633,16 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
         /* grid drop-downs */
         &.grid {
-            > table > tbody > tr > td {
-                padding: 0;
+            > .item-section {
+                padding: 0 5px;
+
+                > table {
+                    width: 100%;
+
+                    > tbody > tr > td {
+                        padding: 0;
+                    }
+                }
             }
         }
     
@@ -632,14 +650,12 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         &.design-default {
 
             /* standard height of controls */
-            @list-item-height: 30px;
-
-            padding: 5px 0;
+            @item-height: 30px;
 
             a.button {
-                height: @list-item-height;
+                height: @item-height;
                 border: 1px solid transparent;
-                line-height: @list-item-height - 2px;
+                line-height: @item-height - 2px;
 
                 &.selected {
                     background: fade(@selectedBackground, 60%);
@@ -667,23 +683,21 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         &.design-framed {
 
             /* standard height of controls in drop-down lists, framed design */
-            @list-item-height: 42px;
+            @item-height: 42px;
             /* border width of buttons in framed design mode */
             @item-border-width: 3px;
 
-            padding: 5px;
-
             a.button {
-                height: @list-item-height;
+                height: @item-height;
                 padding-left: 12px;
                 padding-right: 12px;
                 border: @item-border-width solid transparent;
                 .border-radius(5px);
-                line-height: @list-item-height - 2 * @item-border-width;
+                line-height: @item-height - 2 * @item-border-width;
 
                 &.selected {
                     border-color: @selectedBackground;
-                    .drop-shadow(4px);
+                    .drop-shadow();
                 }
             }
 

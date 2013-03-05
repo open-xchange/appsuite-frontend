@@ -83,20 +83,20 @@ define('io.ox/office/preview/view',
             model = app.getModel();
 
             topPane.createToolBox({ hoverEffect: true, classes: 'right' })
-                .addButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+                .createButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
             bottomPane.createToolBox({ hoverEffect: true, classes: 'right' })
-                .addGroupContainer(function () {
-                    this.addButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
-                        .addButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
-                        .addLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
-                        .addButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
-                        .addButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') });
+                .createGroupContainer(function () {
+                    this.createButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
+                        .createButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
+                        .createLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
+                        .createButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
+                        .createButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') });
                 })
-                .addGroupContainer(function () {
-                    this.addButton('zoom/dec',    { icon: 'icon-zoom-out', tooltip: gt('Zoom out') })
-                        .addLabel('zoom/current', {                        tooltip: gt('Current zoom factor') })
-                        .addButton('zoom/inc',    { icon: 'icon-zoom-in',  tooltip: gt('Zoom in') });
+                .createGroupContainer(function () {
+                    this.createButton('zoom/dec',    { icon: 'icon-zoom-out', tooltip: gt('Zoom out') })
+                        .createLabel('zoom/current', {                        tooltip: gt('Current zoom factor') })
+                        .createButton('zoom/inc',    { icon: 'icon-zoom-in',  tooltip: gt('Zoom in') });
                 });
 
             // insert the page node into the application pane
