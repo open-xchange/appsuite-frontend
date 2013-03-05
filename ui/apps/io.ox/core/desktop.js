@@ -166,7 +166,6 @@ define("io.ox/core/desktop",
                                     // update hash
                                     _.url.hash('folder', folder);
                                     self.trigger('folder:change', folder, data);
-                                    console.log('hier?');
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
