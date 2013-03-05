@@ -79,7 +79,8 @@
  }
 
  .io-ox-tasks-edit .tab-content {
-  	overflow: visible;
+    min-height:364px;
+    overflow: visible;
  }
 
  .io-ox-tasks-edit .alarm-date-field,
