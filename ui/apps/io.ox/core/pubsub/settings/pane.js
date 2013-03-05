@@ -15,11 +15,12 @@ define('io.ox/core/pubsub/settings/pane',
         ['io.ox/core/extensions',
          'io.ox/core/pubsub/model',
          'io.ox/backbone/views',
+         'io.ox/core/api/folder',
          'settings!io.ox/core/pubsub',
          'gettext!io.ox/core/pubsub',
          'less!io.ox/core/pubsub/style.less'
         ],
-         function (ext, model, views, settings, gt) {
+         function (ext, model, views, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -38,6 +39,18 @@ define('io.ox/core/pubsub/settings/pane',
         }
     });
 
+    function createPathInformation(model) {
+        var opts = {
+                handler: function (id) {
+                    folderAPI.get({folder: id}).done(function (folder) {
+                        //TODO: do something with the folder here
+                    });
+                },
+                last: true // add 'active' class to last item
+            };
+        return folderAPI.getBreadcrumb(model.get('folder') || model.get('entity').folder, opts);
+    }
+
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
@@ -53,7 +66,7 @@ define('io.ox/core/pubsub/settings/pane',
                 $('<div>').addClass('content')
                 .addClass(data.enabled ? '' : 'disabled').append(
                     $('<div>').addClass('name').text(data.displayName),
-                    $('<div>').addClass('path').text(data.folder || data.entity.folder)
+                    createPathInformation(baton.model)
                 )
             );
 
