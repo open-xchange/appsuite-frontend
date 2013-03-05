@@ -580,7 +580,11 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-                _(appAPI.getFavorites()).each(function (obj) {
+                var favorites = appAPI.getFavorites();
+                favorites.sort(function (a, b) {
+                    return ext.indexSorter(a, b);
+                });
+                _(favorites).each(function (obj) {
                     if (upsell.visible(obj.requires)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
                             id: obj.id,
