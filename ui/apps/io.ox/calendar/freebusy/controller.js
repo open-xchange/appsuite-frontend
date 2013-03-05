@@ -39,6 +39,8 @@ define('io.ox/calendar/freebusy/controller',
                     .showAll(false)
                     // scroll to proper time
                     .setScrollPos();
+                // auto focus
+                this.autoCompleteControls.find('.add-participant').focus();
             };
 
             this.refresh = function () {
@@ -68,8 +70,8 @@ define('io.ox/calendar/freebusy/controller',
 
             // construct auto-complete
             this.autoCompleteControls = $('<div class="autocomplete-controls input-append pull-left">').append(
-                $('<input type="text" class="add-participant">'),
-                $('<button class="btn" type="button" data-action="add">').append($('<i class="icon-plus">'))
+                $('<input type="text" class="add-participant">').attr('placeholder', gt('Add participants') + ' ...'),
+                $('<button class="btn add-button" type="button" data-action="add">').append($('<i class="icon-plus">'))
             );
 
             // get instance of AddParticipantsView
@@ -79,7 +81,8 @@ define('io.ox/calendar/freebusy/controller',
                     autoselect: true,
                     contacts: true,
                     resources: true,
-                    distributionlists: true
+                    distributionlists: true,
+                    placement: 'top'
                 });
 
             this.$el.append(

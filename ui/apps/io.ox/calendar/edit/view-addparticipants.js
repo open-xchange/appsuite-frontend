@@ -39,7 +39,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                     groups: true,
                     resources: true,
                     distributionlists: true,
-                    parentSelector: '.io-ox-calendar-edit'
+                    parentSelector: '.io-ox-calendar-edit',
+                    placement: 'bottom'
                 },
                 options = $.extend(defaults, opt),
                 autocompleteAPI = new AutocompleteAPI(options);
@@ -53,6 +54,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                 .autocomplete({
                     autoselect: options.autoselect,
                     parentSelector: options.parentSelector,
+                    placement: options.placement,
                     api: autocompleteAPI,
                     // reduce suggestion list
                     reduce: function (data) {

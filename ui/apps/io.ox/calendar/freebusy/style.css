@@ -20,7 +20,11 @@
     }
 
     .add-participant {
-        width: @participantsWidth - 30;
+        width: @participantsWidth - 45;
+    }
+
+    .modal-footer .btn.add-button {
+        min-width: 3em;
     }
 
     .calendar-week-view {
