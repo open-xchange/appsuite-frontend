@@ -34,19 +34,27 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             view.render();
         } else {
             api.publicationTargets.getAll().done(function (data) {
-                var target = '';
+                var target = '',
+                    targetObj = {},
+                    module = baton.data.module || 'infostore/object';//infostore baton has no module etc...maybe it will be added later
+                    
                 _(data).each(function (obj) {
-                    if (obj.module === baton.data.module)   {
+                    if (obj.module === module)   {
                         target = obj.id;
+                        _(obj.formDescription).each(function (description) {//fill targetObj
+                            targetObj[description.name] = description.defaultValue || '';
+                        });
                     }
                 });
-                var attr = {entity: {folder: baton.data.id},
-                            entityModule: baton.data.module,
+                var attr = {entityModule: module,
                             target: target};
-                attr[target] = {'protected': true,
-                                siteName: '',
-                                template: '',
-                                url: ''};
+                if (module === 'infostore/object') {
+                    attr.entity = {id: baton.data.id};
+                } else {
+                    attr.entity = {folder: baton.data.id};
+                }
+                
+                attr[target] = targetObj;
                 
                 //buildModel
                 var model = new pubsub.Publication(attr);
@@ -61,11 +69,16 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         tagName: "div",
         _modelBinder: undefined,
         editMode: undefined,
+        infostoreItem: false,
         initialize: function (options) {
             if (this.model.id) {
                 this.editMode = true;
             } else {
                 this.editMode = false;
+            }
+            
+            if (this.model.attributes.entityModule === 'infostore/object') {
+                this.infostoreItem = true;
             }
             
             this._modelBinder = new Backbone.ModelBinder();
@@ -84,43 +97,56 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 popup.getHeader().append($('<h4>').text(gt('Publish item')));
             }
             
+            var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
             
-            templApi.getNames().done(function (data) {//get the templates
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: data, popup: popup, target: self.model.attributes[self.model.attributes.target]});
-                 //Body
-                popup.getBody().addClass('form-horizontal');
-                ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
-                //go
-                popup.show();
-                popup.on('publish', function (action) {
-                    self.model.save().done(function (id) {
-                        api.publications.get({id: id}).done(function (data) {
-                            if (self.model.get('invite')) {
-                                //TODO: handle url domain missmatch
-                                //TODO: user collection
-                                var model = new pubsub.Publication(data);
-                                baton.model = model;
-                                sendInvitation(baton);
-                            } else
-                                popup.close();
-                        });
-                    }).fail(function (error) {
-                        popup.idle();
-                        if (!self.model.valid) {
-                            if (!error.model) {//backend Error
-                                if (error.error_params[0].indexOf('PUB-0006') === 0) {
-                                    popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
-                                } else {
-                                    notifications.yell('error', _.noI18n(error.error));
-                                }
-                            } else {//validation gone wrong
-                                //must be namefield empty because other fields are correctly filled by default
-                                popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Publications must have a name'));
-                            }
-                        }
+            popup.on('publish', function (action) {
+                self.model.save().done(function (id) {
+                    api.publications.get({id: id}).done(function (data) {
+                        if (self.model.get('invite')) {
+                            //TODO: handle url domain missmatch
+                            //TODO: user collection
+                            var model = new pubsub.Publication(data);
+                            baton.model = model;
+                            sendInvitation(baton);
+                        } else
+                            popup.close();
                     });
+                }).fail(function (error) {
+                    popup.idle();
+                    if (!self.model.valid) {
+                        if (!error.model) {//backend Error
+                            if (error.error_params[0].indexOf('PUB-0006') === 0) {
+                                popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
+                            } else {
+                                notifications.yell('error', _.noI18n(error.error));
+                            }
+                        } else {//validation gone wrong
+                            //must be namefield empty because other fields are correctly filled by default
+                            popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Publications must have a name'));
+                        }
+                    }
                 });
             });
+            if (!this.infostoreItem) {
+                templApi.getNames().done(function (data) {//get the templates if needed
+                    baton.templates = data;
+                    //Body
+                    popup.getBody().addClass('form-horizontal');
+                    ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
+                    //go
+                    popup.show();
+                });
+            } else {
+                //Body
+                popup.getBody().addClass('form-horizontal');
+                ext.point('io.ox/core/pubsub/publications/dialog').each(function (extension) {
+                    if (extension.id === 'url' || extension.id === 'emailbutton' || extension.id === 'legalinformation') {
+                        extension.invoke('draw', popup.getBody(), baton);
+                    }
+                });
+                //go
+                popup.show();
+            }
 
         }
     });
@@ -297,11 +323,15 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
             
-            var link = $('<div>').addClass('control-group').append($('<a>').addClass('controls').text(gt('Legal information')).on('click', function (e) {
+            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Legal information')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
                 }));
-            this.append(link);
+            if (baton.view.infostoreItem && !baton.view.editMode) {
+                this.append(fullNode);
+            } else {
+                this.append(link);
+            }
         }
     });
     

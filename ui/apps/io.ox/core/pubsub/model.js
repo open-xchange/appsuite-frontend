@@ -140,7 +140,7 @@ define('io.ox/core/pubsub/model',
                 errors.add(gt('Publication must have a target.'));
                 return;
             }
-            if (!(obj[obj.target] || {}).siteName) {
+            if ((obj[obj.target] || {}).siteName === '') {
                 errors.add(gt('Publication must have a site.'));
             }
         }

@@ -62,12 +62,11 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/publish', {
         requires: function () {
-            // DISABLED, since for no given full PUB/SUB support
-            return false;
+            return true;
         },
         action: function (baton) {
-            require(['io.ox/publications/wizard'], function (wizard) {
-                wizard.oneClickAdd(baton.app.folder.get());
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                publications.buildPublishDialog(baton);
             });
         }
     });
@@ -643,7 +642,13 @@ define('io.ox/files/actions',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal'
     }));
-
+    
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'publish',
+        index: 1000,
+        label: gt('Publish'),
+        ref: 'io.ox/files/actions/publish'
+    }));
     // version links
 
 
