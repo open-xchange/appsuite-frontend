@@ -30,7 +30,12 @@ define('io.ox/core/api/apps',
 
     // Construct App Data
     _(manifests.manager.apps).each(function (appManifest) {
-        if (!appManifest.path && !appManifest.category) return;
+        if (!appManifest.path || !appManifest.category) {
+            if (window.console && console.warn) {
+                console.warn('Ignored app', appManifest);
+            }
+            return;
+        }
 
         var id = appManifest.path.substr(0, appManifest.path.length - 5);
 
