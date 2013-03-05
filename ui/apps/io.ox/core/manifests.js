@@ -126,7 +126,7 @@ define.async('io.ox/core/manifests',
             manifestManager.pluginPoints = {};
             manifestManager.plugins = {};
             manifestManager.apps = {};
-            
+
             _(ox.serverConfig.manifests).each(process);
             if (_.url.hash('customManifests')) {
                 console.info("Loading custom manifests");

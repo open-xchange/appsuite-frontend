@@ -114,15 +114,15 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/subject',
-            index: 250,
+            index: 400,
             label: model.fields.subject,
-            control: '<input type="text" class="input-xlarge" name="subject">',
+            control: '<input type="text" class="span6" name="subject">',
             attribute: 'subject'
         }));
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/mailtext',
-            index: 300,
+            index: 450,
             label: model.fields.text,
             control: '<textarea rows="12" class="span6" name="text">',
             attribute: 'text'
@@ -130,7 +130,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.SelectBoxField({
             id: ref + '/edit/view/days',
-            index: 350,
+            index: 450,
             label: model.fields.days,
             attribute: 'days',
             selectOptions: multiValues.days
@@ -138,14 +138,14 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
         point.extend(new forms.SectionLegend({
             id: ref + '/edit/view/addresses',
-            index: 400,
-            label: gt('E-mail addresses')
+            index: 500,
+            label: gt('Send vacation notice for the following addresses')
         }));
 
         _(multiValues.aliases).each(function (alias) {
             point.extend(new forms.CheckBoxField({
                 id: ref + '/edit/view/' + alias,
-                index: 450,
+                index: 550,
                 label: alias,
                 attribute: alias,
                 customizeNode: function () {
@@ -168,7 +168,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
                 point.extend(new forms.SectionLegend({
                     id: ref + '/edit/view/timeframe',
-                    index: 500,
+                    index: 250,
                     label: gt('Timeframe')
                 }));
 
@@ -188,7 +188,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/start_date',
-                    index: 550,
+                    index: 300,
                     className: 'span6',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',
@@ -205,7 +205,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/end_date',
-                    index: 600,
+                    index: 350,
                     className: 'span6',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',

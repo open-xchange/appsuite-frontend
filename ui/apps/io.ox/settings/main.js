@@ -134,7 +134,8 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/core',
                     settings: true,
-                    title: gt('Basic settings')
+                    title: gt('Basic settings'),
+                    index: 100
                 });
 
                 // TODO: Move this to a plugin
@@ -145,7 +146,8 @@ define('io.ox/settings/main',
                     icon: '',
                     id: 'io.ox/settings/accounts',
                     settings: true,
-                    title: gt('Mail and Social Accounts')
+                    title: gt('Mail and Social Accounts'),
+                    index: 600
                 });
 
                 // Extend the above list by custom plugins
@@ -155,8 +157,13 @@ define('io.ox/settings/main',
                         id: ext.ref,
                         settings: true,
                         title: ext.title,
-                        loadSettingPane: ext.loadSettingPane
+                        loadSettingPane: ext.loadSettingPane,
+                        index: ext.index
                     });
+                });
+
+                apps.sort(function (a, b) {
+                    return ext.indexSorter(a, b);
                 });
 
                 def.resolve(apps);

@@ -110,7 +110,7 @@ define('io.ox/mail/mailfilter/settings/model',
     var fields = {
         subject: gt('Subject'),
         text: gt('Text'),
-        days: gt('Days'),
+        days: gt('Number of days between vacation notices to the same sender'),
         active: gt('Active'),
         addresses: gt('E-mail addresses'),
         dateFrom: gt('Start Date'),

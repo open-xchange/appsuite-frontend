@@ -37,7 +37,8 @@ define('io.ox/mail/mailfilter/settings/register',
         id: 'vacation',
         title: gt("Vacation Notice"),
         ref: 'io.ox/vacation',
-        loadSettingPane: false
+        loadSettingPane: false,
+        index: 400
     });
 
     ext.point("io.ox/vacation/settings/detail").extend({
