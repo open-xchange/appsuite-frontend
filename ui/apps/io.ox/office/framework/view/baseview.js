@@ -482,7 +482,9 @@ define('io.ox/office/framework/view/baseview',
                 alert.slideUp('fast', function () {
                     alert.remove();
                     currentAlert = null;
-                    refreshPaneLayout();
+                    // slideUp() may run into application quit and cause JS errors, guard
+                    // by using a delayed callback which will not be executed after quit
+                    app.executeDelayed(function () { refreshPaneLayout(); });
                 });
             }
 
@@ -524,7 +526,11 @@ define('io.ox/office/framework/view/baseview',
             app.getWindowNode().append(alert);
             toggleOverlay(true);
             // after alert is visible, remove overlay mode, and refresh pane layout again
-            alert.slideDown('fast', function () { toggleOverlay(false); });
+            alert.slideDown('fast', function () {
+                // slideDown() may run into application quit and cause JS errors, guard
+                // by using a delayed callback which will not be executed after quit
+                app.executeDelayed(function () { toggleOverlay(false); });
+            });
 
             return this;
         };
