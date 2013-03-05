@@ -12,11 +12,15 @@
 
  .free-busy-view {
 
-    @participantsWidth: 300px;
+    @participantsWidth: 320px;
 
     .participants-view {
-        width: @participantsWidth - 1px;
+        width: @participantsWidth - 1;
         border-right: 1px solid #ccc;
+    }
+
+    .add-participant {
+        width: @participantsWidth - 30;
     }
 
     .calendar-week-view {
