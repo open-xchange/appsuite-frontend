@@ -19,10 +19,7 @@ define('io.ox/office/framework/view/toolbox',
 
     'use strict';
 
-    var // CSS class for collapseable tool boxes
-        COLLAPSING_CLASS = 'collapsing',
-
-        // CSS class for tool boxes currently collapsed
+    var // CSS class for tool boxes currently collapsed
         COLLAPSED_CLASS = 'collapsed';
 
     // class ToolBox ==========================================================
@@ -37,7 +34,11 @@ define('io.ox/office/framework/view/toolbox',
      * @extends Component
      *
      * @param {BaseApplication} app
-     *  The application containing this view component instance.
+     *  The application containing this tool box instance.
+     *
+     * @param {String} id
+     *  The unique identifier of the tool box. Will be used to register a
+     *  controller item that handles the collapsed state of the tool box.
      *
      * @param {Object} [options]
      *  A map of options controlling the appearance and behavior of the tool
@@ -45,116 +46,42 @@ define('io.ox/office/framework/view/toolbox',
      *  the following options are supported:
      *  @param {String} [options.label]
      *      If specified, a heading label will be shown at the top border of
-     *      the tool box.
-     *  @param {Boolean} [options.collapse=false]
-     *      If set to true, the heading label can be clicked to collapse the
-     *      tool box (hide all its contents but the heading label).
-     *  @param {Boolean} [options.expand=false]
-     *      If set to true, the heading label can be clicked to expand the tool
-     *      box (show all its contents) after it has been collapsed.
+     *      the tool box. The heading label can be clicked to collapse (hide
+     *      all its contents but the heading label) and expand (show all its
+     *      contents) the tool box.
      */
-    function ToolBox(app, options) {
+    function ToolBox(app, id, options) {
 
         var // self reference
             self = this,
 
+            // the unique base controller key of the tool box
+            baseKey = 'view/toolbox/' + id,
+
             // the label for the heading button
-            headingLabel = Utils.getStringOption(options, 'label'),
-
-            // the heading button that collapses/expands the tool box
-            headingButton = _.isString(headingLabel) ? new Button({ classes: 'heading', label: headingLabel }) : null,
-
-            // whether the heading button can collapse the tool box
-            canCollapse = Utils.getBooleanOption(options, 'collapse', false),
-
-            // whether the heading button can expand the tool box
-            canExpand = Utils.getBooleanOption(options, 'expand', false);
+            headingLabel = Utils.getStringOption(options, 'label');
 
         // base constructor ---------------------------------------------------
 
         Component.call(this, app, options);
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Collapses or expands this tool box.
-         *
-         * @param {Boolean} expand
-         *  If set to true, the tool box will be expanded, otherwise collapsed.
-         */
-        function expandToolBox(expand) {
-            if (headingButton) {
-                self.getNode().toggleClass(COLLAPSED_CLASS, !expand);
-                headingButton.enable(expand ? canCollapse : canExpand);
-            }
-        }
-
-        /**
-         * Click handler for the heading button that collapses or expands this
-         * tool box.
-         */
-        function headingActionHandler() {
-            var expand = self.isCollapsed();
-            expandToolBox(expand);
-            self.trigger('expand', expand).trigger('cancel');
-        }
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Returns whether this tool box can be collapsed and expanded (i.e.
-         * whether it contains a heading button).
-         */
-        this.isCollapseable = function () {
-            return this.getNode().hasClass(COLLAPSING_CLASS);
-        };
-
-        /**
-         * Returns whether this tool box is currently collapsed.
-         */
-        this.isCollapsed = function () {
-            return this.getNode().hasClass(COLLAPSED_CLASS);
-        };
-
-        /**
-         * Collapses this tool box so that only the heading button remains
-         * visible. Has no effect if the tool box is not collapseable (i.e.
-         * if it does not contain a heading button).
-         *
-         * @returns {ToolBox}
-         *  A reference to this instance.
-         */
-        this.collapse = function () {
-            expandToolBox(false);
-            return this;
-        };
-
-        /**
-         * Expands this tool box so that all its contents become visible. Has
-         * no effect if the tool box is not collapseable (i.e. if it does not
-         * contain a heading button).
-         *
-         * @returns {ToolBox}
-         *  A reference to this instance.
-         */
-        this.expand = function () {
-            expandToolBox(true);
-            return this;
-        };
 
         // initialization -----------------------------------------------------
 
         this.getNode().addClass('toolbox');
 
         // tool box with heading (button that collapses/expands the tool box)
-        if (headingButton) {
-            // tool boxes with heading button are collapseable
-            this.getNode().addClass(COLLAPSING_CLASS);
-            // add the heading button to the tool box, and register the action handler
-            this.addPrivateGroup(headingButton);
-            headingButton.on('change', headingActionHandler);
-            // update state and label of heading button
-            expandToolBox(true);
+        if (_.isString(headingLabel)) {
+
+            // add a special marker CSS class
+            this.getNode().addClass('collapsing');
+
+            // create a controller item that collapses/expands the tool box
+            app.getController().registerDefinition(baseKey + '/expand', {
+                set: function (expand) { self.getNode().toggleClass(COLLAPSED_CLASS); }
+            });
+
+            // create the heading button
+            this.createButton(baseKey + '/expand', { classes: 'heading', label: headingLabel });
         }
 
     } // class ToolBox

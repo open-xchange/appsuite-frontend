@@ -96,6 +96,10 @@ define('io.ox/office/framework/view/pane',
          * Creates a new tool box component in this pane, and registers it at
          * the application controller.
          *
+         * @param {String} id
+         *  The unique identifier of the tool box. Will be used to register a
+         *  controller item that handles the collapsed state of the tool box.
+         *
          * @param {Object} [options]
          *  A map of options for the tool box in the pane. Supports all options
          *  supported by the ToolBox class constructor.
@@ -103,8 +107,8 @@ define('io.ox/office/framework/view/pane',
          * @returns {ToolBox}
          *  The new tool box component.
          */
-        this.createToolBox = function (options) {
-            var toolBox = new ToolBox(app, options);
+        this.createToolBox = function (id, options) {
+            var toolBox = new ToolBox(app, id, options);
             this.addViewComponent(toolBox);
             return toolBox;
         };

@@ -82,10 +82,10 @@ define('io.ox/office/preview/view',
 
             model = app.getModel();
 
-            topPane.createToolBox({ hoverEffect: true, classes: 'right' })
+            topPane.createToolBox('top', { hoverEffect: true, classes: 'right' })
                 .createButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
-            bottomPane.createToolBox({ hoverEffect: true, classes: 'right' })
+            bottomPane.createToolBox('bottom', { hoverEffect: true, classes: 'right' })
                 .createGroupContainer(function () {
                     this.createButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
                         .createButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })

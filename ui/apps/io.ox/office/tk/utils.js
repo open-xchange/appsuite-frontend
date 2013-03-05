@@ -1284,10 +1284,32 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         node.remove();
     }());
 
+    /**
+     * Returns whether the passed DOM element contains a visible vertical
+     * scroll bar.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element. If this object is a jQuery collection, uses the first
+     *  node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM element contains a visible vertical scroll bar.
+     */
     Utils.hasVerticalScrollBar = function (node) {
         return $(node).width() > Utils.getDomNode(node).clientWidth;
     };
 
+    /**
+     * Returns whether the passed DOM element contains a visible horizontal
+     * scroll bar.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element. If this object is a jQuery collection, uses the first
+     *  node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM element contains a visible horizontal scroll bar.
+     */
     Utils.hasHorizontalScrollBar = function (node) {
         return $(node).height() > Utils.getDomNode(node).clientHeight;
     };
