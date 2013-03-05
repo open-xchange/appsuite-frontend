@@ -331,7 +331,7 @@ define('io.ox/calendar/invitations/register',
                     $('<span class="muted">').text(gt("This email contains an appointment")),
                     $("<br>"),
                     $appointmentInfo = $('<div class="appointmentInfo">'),
-                    $('<div>').css('text-align', 'right').append(
+                    $('<div>').css({ textAlign: 'right', marginTop: '1em' }).append(
                         $actions = $('<div class="itip-actions">')
                     )
                 ).appendTo(this);
@@ -367,14 +367,11 @@ define('io.ox/calendar/invitations/register',
 
                         if (showReminderSelect) {
                             reminderSelect = $('<div>').css({'text-align': 'left', 'display': 'inline-block'}).append(
-                                $('<label>').addClass('control-label').attr('for', 'reminderSelect').text(gt('Reminder')),
-                                $('<div>')
-                                    .addClass('controls')
+                                $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
+                                $('<div class="controls">')
                                     .append(
-                                        $('<select>')
-                                            .attr('data-property', 'reminder')
-                                            .css({'margin': '0px 10px'})
-                                            .attr('id', 'reminderSelect')
+                                        $('<select id="reminderSelect" data-property="reminder">')
+                                            .css({ margin: '0' })
                                             .append(function (i, html) {
                                                 var self = $(this),
                                                     options = util.getReminderOptions();
