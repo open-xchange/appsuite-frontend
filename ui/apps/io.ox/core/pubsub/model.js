@@ -82,7 +82,19 @@ define('io.ox/core/pubsub/model',
                     });
                     return collection;
                 });
-            }
+            },
+            /**
+             * get a list of items for a folder
+             *
+             * Use it like:
+             * <code>
+             *   model.collection.forFolder({folder_id: 2342});
+             * </code>
+             *
+             * @param {object} - an object containing a folder_id attribute
+             * @return [model] - an array containing matching model objects
+             */
+            forFolder: filterFolder
         }),
         Subscriptions = Backbone.Collection.extend({
             model: Subscription,
@@ -103,8 +115,24 @@ define('io.ox/core/pubsub/model',
                     });
                     return collection;
                 });
-            }
+            },
+            /**
+             * get a list of items for a folder
+             *
+             * Use it like:
+             * <code>
+             *   model.collection.forFolder({folder_id: 2342});
+             * </code>
+             *
+             * @param {object} - an object containing a folder_id attribute
+             * @return [model] - an array containing matching model objects
+             */
+            forFolder: filterFolder
         });
+
+    function filterFolder(folder) {
+        return this.where({folder: folder.folder_id});
+    }
 
     ext.point('io.ox/core/pubsub/publication/validation').extend({
         validate: function (obj, errors) {
