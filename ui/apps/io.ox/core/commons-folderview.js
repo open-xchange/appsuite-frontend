@@ -381,7 +381,8 @@ define('io.ox/core/commons-folderview',
             visible = false,
             tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
-            fnChangeFolder, fnHide, fnShow, fnResize, fnAnimationEnd,
+            onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
+            fnHide, fnShow, fnResize, fnAnimationEnd,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -389,16 +390,29 @@ define('io.ox/core/commons-folderview',
             ACTION = name + '/actions/toggle-folderview',
             baton = new ext.Baton({ app: app });
 
-        fnChangeFolder = function (e, selection) {
+        changeFolder = function (e, folder) {
+            app.folderView.selection.set(folder);
+        };
+
+        changeFolderOn = function () {
+            app.on('folder:change', changeFolder);
+        };
+
+        changeFolderOff = function () {
+            app.off('folder:change', changeFolder);
+        };
+
+        onChangeFolder = function (e, selection) {
             var id = _(selection).first();
             api.get({ folder: id }).done(function (data) {
-
                 if (_.device('small')) {
                     // close tree
                     toggle();
                 }
                 if (data.module === options.type) {
+                    changeFolderOff();
                     app.folder.set(id);
+                    changeFolderOn();
                 }
             });
         };
@@ -513,10 +527,11 @@ define('io.ox/core/commons-folderview',
             return tree.paint().pipe(function () {
                 return tree.select(app.folder.get()).done(function () {
 
-
-                    tree.selection.on('change', fnChangeFolder);
+                    tree.selection.on('change', onChangeFolder);
                     toggleTree = toggle;
                     sidepanel.idle();
+
+                    changeFolderOn();
 
                     api.on('delete:prepare', function (e, id, folder_id) {
                         tree.select(folder_id);

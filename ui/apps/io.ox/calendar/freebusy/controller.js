@@ -33,7 +33,11 @@ define('io.ox/calendar/freebusy/controller',
             });
 
             this.postprocess = function () {
-                this.weekview.setScrollPos();
+                this.weekview
+                    // hide show all checkbox
+                    .showAll(false)
+                    // scroll to proper time
+                    .setScrollPos();
             };
 
             this.refresh = function () {
@@ -55,8 +59,6 @@ define('io.ox/calendar/freebusy/controller',
             });
 
             this.weekview
-                // hide show all checkbox
-                .showAll(false)
                 // listen to refresh event
                 .on('onRefresh', this.refresh, this)
                 // listen to create event

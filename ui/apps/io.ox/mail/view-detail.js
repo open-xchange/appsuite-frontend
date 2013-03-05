@@ -75,8 +75,8 @@ define('io.ox/mail/view-detail',
 
     var regHTML = /^text\/html$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
-        regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
-        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
+        regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
+        regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
@@ -112,32 +112,46 @@ define('io.ox/mail/view-detail',
 
     var openDocumentLink = function (e) {
         e.preventDefault();
-        location.hash = e.data.hash;
-        ox.launch('io.ox/files/main');
+        ox.launch('io.ox/files/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
+            var app = this, folder = e.data.folder, id = e.data.id;
+            // switch to proper perspective
+            ox.ui.Perspective.show(app, 'list').done(function () {
+                // set proper folder
+                app.folder.set(folder).done(function () {
+                    app.getGrid().selection.set(folder + '.' + id);
+                });
+            });
+        });
     };
 
+    // fix hosts (still need a configurable list on the backend)
+    // ox.serverConfig.hosts = ox.serverConfig.hosts.concat('appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
+
     var isValidHost = function (url) {
-        var match = url.match(/^https?:\/\/([^\/]+)/i);
+        var match = url.match(/^https?:\/\/([^\/#]+)/i);
         return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
-    var drawDocumentLink = function (href, title) {
-        var link, m, folder, id;
+    var drawDocumentLink = function (matches, title) {
+        var link, href, folder, id;
         // create link
         link = $('<a>', { href: '#' })
             .css({ textDecoration: 'none', fontFamily: 'Arial' })
             .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[3];
+        id = matches[4];
         // internal document?
         /* TODO: activate internal Links when files app is ready */
-        if (isValidHost(href) && ((m = href.match(regDocumentAlt)) && m.length) && false) {
+        if (isValidHost(href)) {
             // yep, internal
-            folder = m[3];
-            id = m[4];
             href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
-            link.on('click', { hash: href }, openDocumentLink);
+            link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
         } else {
             // nope, external
-            link.attr('href', $.trim(href));
+            href = '#app=io.ox/files&perspective=list&folder=' + folder + (id ? '&id=' + id : '');
+            link.attr('href', href);
         }
         return link;
     };
@@ -335,28 +349,39 @@ define('io.ox/mail/view-detail',
                                 this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
                             }
                             // some replacements
-                            if (((m = text.match(regDocument)) && m.length) || ((m = text.match(regDocumentAlt)) && m.length)) {
+                            if ((m = text.match(regDocument)) && m.length) {
                                 // link to document
                                 node.replaceWith(
-                                     $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[5]))
+                                );
+                            } else if ((m = text.match(regDocumentAlt)) && m.length) {
+                                // link to document (new syntax)
+                                node.replaceWith(
+                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[6]))
                                 );
                             } else if ((m = text.match(regFolder)) && m.length) {
                                 // link to folder
                                 node.replaceWith(
-                                    $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
+                                    $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
-                            } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
-                                if (((n = m[2].match(regDocument)) && n.length) || ((n = m[2].match(regDocumentAlt)) && n.length)) {
+                            } else if ((n = text.match(regLink)) && n.length && node.closest('a').length === 0) {
+                                if ((m = n[2].match(regDocument)) && m.length) {
                                     // link to document
                                     node.replaceWith(
-                                         $($.txt(m[1])).add(drawDocumentLink(n[2], gt('Document'))).add($.txt(m[3]))
+                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[3]))
                                     );
-                                } else if ((n = m[2].match(regFolder)) && n.length) {
+                                } else if ((m = n[2].match(regDocumentAlt)) && m.length) {
+                                    // link to document
+                                    node.replaceWith(
+                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Document'))).add($.txt(m[4]))
+                                    );
+                                } else if ((m = n[2].match(regFolder)) && m.length) {
                                     // link to folder
                                     node.replaceWith(
-                                        $($.txt(m[1])).add(drawDocumentLink(n[2], gt('Folder'))).add($.txt(n[3]))
+                                        $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
                                     );
                                 } else {
+                                    m = n;
                                     node.replaceWith(
                                         $($.txt(m[1] || '')).add(drawLink(m[2])).add($.txt(m[3]))
                                     );

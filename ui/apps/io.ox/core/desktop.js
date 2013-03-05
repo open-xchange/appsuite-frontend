@@ -166,6 +166,7 @@ define("io.ox/core/desktop",
                                     // update hash
                                     _.url.hash('folder', folder);
                                     self.trigger('folder:change', folder, data);
+                                    console.log('hier?');
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
@@ -568,7 +569,7 @@ define("io.ox/core/desktop",
             if (_.isString(p) && (/:/).test(p)) {
                 per = p.split(":")[0];
             }
-            require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
+            return require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
                 if (cur && (per === 'month' || per === 'week')) {
                     cur.save();
                 }

@@ -51,7 +51,7 @@ define('io.ox/files/main',
         });
 
         // go!
-        commons.addFolderSupport(app, null, 'infostore')
+        return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default

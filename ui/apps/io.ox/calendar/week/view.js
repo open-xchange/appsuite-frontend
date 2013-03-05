@@ -554,6 +554,7 @@ define('io.ox/calendar/week/view',
                 newPos = (this.pane.height() - workHeight) / 2;
             // adjust scoll position
             this.pane.scrollTop((slotHeight * this.workStart) - newPos);
+            return this;
         },
 
         /**
