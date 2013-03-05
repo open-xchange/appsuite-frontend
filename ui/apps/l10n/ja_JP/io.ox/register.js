@@ -19,8 +19,6 @@ define('l10n/ja_JP/io.ox/register', [
 ], function (ext, views, forms, gt) {
     'use strict';
     
-    if (ox.language !== 'ja_JP') return;
-    
     ext.point('io.ox/contacts/edit/main/model').extend({
         id: 'stealContact',
         customizeModel: function (c) {
