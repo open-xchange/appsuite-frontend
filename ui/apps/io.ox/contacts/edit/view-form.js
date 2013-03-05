@@ -209,9 +209,7 @@ define('io.ox/contacts/edit/view-form', [
             label: model.fields[options.field],
             control: '<input type="text" class="input-xlarge" name="' + options.field + '">',
             attribute: options.field,
-            rare: options.isRare,
-            setValueInElement: forms.utils.controlGroup.date.setValueInElement,
-            setValueInModel: forms.utils.controlGroup.date.setValueInModel
+            rare: options.isRare
         }), {
             hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
                 return !model.isSet(options.field);

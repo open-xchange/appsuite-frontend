@@ -140,14 +140,14 @@ define('io.ox/backbone/forms',
         };
 
         this.onValidationError = function (messages) {
-            this.nodes.controls.find('.help-block.error').remove();
+            this.removeError();
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
             });
             this.nodes.controlGroup.addClass('error');
             this.nodes.controls.append(helpBlock);
-            this.nodes.element.select();
+            if (this.nodes.element) this.nodes.element.select();
         };
 
         this.modelEvents = {};
@@ -190,180 +190,78 @@ define('io.ox/backbone/forms',
     }
 
     function DateControlGroup(options) {
-
-        this.tagName = 'div';
-
-        this.init = function () {
-            this.nodes = {};
-        };
-
-        this.buildControlGroup = function () {
-            if (this.nodes.controlGroup) {
-                return this.nodes.controlGroup;
-            }
-            this.buildControls();
-
-            this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-
-            this.nodes.controlGroup.append(
-                this.buildLabel(),
-                this.buildControls()
-            );
-        };
-
-        this.buildControls = function () {
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                    this.buildElement(),
-                    this.buildDropElements())
-                    );
-        };
-
-        this.buildLabel = function () {
-            return this.nodes.label || (this.nodes.label = $('<label class="control-label">').text(this.label));
-        };
-
-        this.buildElement = function () {
+        
+        ControlGroup.call(this, _.extend({
+            buildElement: buildElement,
+            setValueInElement: setValueInElement,
+            updateModel: updateModel
+        }, options || {}));
+        
+        function buildElement() {
             var self = this;
-            if (this.nodes.element) {
-                return this.nodes.element;
+            var parent = $('<span>');
+            this.nodes.dropelements = {};
+            
+            function createSelect(name, from, to, setter, format) {
+                var node = self.nodes.dropelements[name] = $('<select>').attr({
+                        'name': name,
+                        'size': 1
+                    }),
+                    step = from < to ? 1 : -1,
+                    d = new date.Local(0);
+                $('<option>').appendTo(node);
+                for (var i = from; i !== to; i += step) {
+                    setter.call(d, i);
+                    $('<option>').val(i).text(d.format(format)).appendTo(node);
+                }
+                node.appendTo(parent);
             }
-            this.nodes.element = $(this.control).addClass('control');
-            this.nodes.element.on('change', function () {
-                self.updateModel();
-            });
-
-            return this.nodes.element;
-        };
-
-        this.buildDropElements = function () {
-            var self = this,
-                collectedDate = function (submittedValue) {
-                var dayValue = self.nodes.dropelements.find('[name="day"]').val(),
-                    monthValue = self.nodes.dropelements.find('[name="month"]').val(),
-                    yearValue = self.nodes.dropelements.find('[name="year"]').val(),
-                    collectedString = new date.Local();
-
-                if (submittedValue === '') {
-                    return {formated: '', stamp: ''};
-                } else {
-                    collectedString.setDate(dayValue);
-                    collectedString.setMonth(monthValue);
-
-                    yearValue = (yearValue !== '') ? yearValue : new Date().getFullYear();
-
-                    collectedString.setYear(yearValue);
-                    return {formated: collectedString.format(date.DATE), stamp: collectedString};
-                }
-
-            },
-                createSelect = function (name, from, to) {
-                var node = $('<select>').attr({
-                    'name': name,
-                    'size': 1
-                }),
-                    arrayOfValues = [];
-                if (name === 'month') {
-                    arrayOfValues.push($('<option>').text(''));
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').val(i).text(gt.noI18n(date.locale.months[i])));
+            
+            date.getFormat(date.DATE).replace(
+                /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
+                function (match, y, m, d) {
+                    var proto = date.Local.prototype;
+                    if (y) {
+                        var year = (new date.Local()).getYear();
+                        createSelect('year', year, year - 150, proto.setYear, y);
+                    } else if (m) {
+                        createSelect('month', 0, 11, proto.setMonth, 'MMMMM');
+                    } else if (d) {
+                        createSelect('day', 1, 31, proto.setDate, match);
                     }
-
-                } else if (name === 'day') {
-                    arrayOfValues.push($('<option>').text(''));
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').text(i));
-                    }
-                } else {
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').text(i));
-                    }
-                    arrayOfValues.push($('<option>').text(''));
-                    arrayOfValues.reverse();
-                }
-
-                _(arrayOfValues).each(function (val) {
-                    node.append(val);
                 });
-
-                return node;
-            };
-
-            this.nodes.element.css('display', 'none');
-
-            this.nodes.dropelements = $('<span>').append(
-                createSelect('day', 1, 31),
-                createSelect('month', 0, 11),
-                createSelect('year', 1900,  new Date().getFullYear())
-            );
-            this.nodes.dropelements.on('change', 'select', function () {
-
-                var dateObj = collectedDate($(this).val());
-                self.nodes.element.val(dateObj.formated);
-                self.nodes.element.data('dateobject', dateObj.stamp);
-                self.nodes.element.trigger('change');
+            parent.on('change', 'select', function () {
+                self.updateModel($(this).val() === '');
             });
 
-            return this.nodes.dropelements;
-        };
-
-        this.setValueInElement = function (valueFromModel) {
-            this.nodes.element.val(valueFromModel);
-        };
-
-        this.setValueInModel = function (valueFromElement) {
-            this.model.set(this.attribute, valueFromElement);
-        };
-
-        this.updateElement = function () {
-            this.setValueInElement(this.model.get(this.attribute));
-        };
-
-        this.updateModel = function () {
-            this.setValueInModel(this.nodes.element.val());
-        };
-
-        this.removeError = function () {
-            this.nodes.controlGroup.removeClass('error');
-            this.nodes.controls.find('.help-block.error').remove();
-        };
-
-        this.handleRareModelChange = function () {
-            if (this.model.isSet(this.attribute)) {
-                this.nodes.controlGroup.show();
-            }
-        };
-
-        this.render = function () {
-            this.buildControlGroup();
-            this.updateElement();
-            if (this.rare && !this.model.isSet(this.attribute)) {
-                this.nodes.controlGroup.hide();
-            }
-        };
-
-        this.onValidationError = function (messages) {
-            var helpBlock =  $('<div class="help-block error">');
-            _(messages).each(function (msg) {
-                helpBlock.append($.txt(msg));
-            });
-            this.nodes.controlGroup.addClass('error');
-            this.nodes.controls.append(helpBlock);
-            this.nodes.element.select();
-        };
-
-        this.modelEvents = {};
-
-
-        if (options.rare) {
-            this.modelEvents['change:' + options.attribute] = 'handleRareModelChange updateElement';
-        } else {
-            this.modelEvents['change:' + options.attribute] = 'updateElement';
+            return parent;
         }
-
-        this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
-        this.modelEvents['valid:' + options.attribute] = 'removeError';
-
-        _.extend(this, options); // May override any of the above aspects
+        
+        function setValueInElement(valueFromModel) {
+            if (!this.nodes.dropelements) return;
+            
+            var de = this.nodes.dropelements;
+            if (valueFromModel) {
+                var d = new date.Local(date.Local.utc(valueFromModel));
+                de.year.val(d.getYear());
+                de.month.val(d.getMonth());
+                de.day.val(d.getDate());
+            } else {
+                de.year.val('');
+                de.month.val('');
+                de.day.val('');
+            }
+        }
+        
+        function updateModel(clear) {
+            var de = this.nodes.dropelements;
+            this.setValueInModel(clear ? null :
+                date.Local.localTime(new date.Local(
+                    de.year.val()  || new date.Local().getYear(),
+                    de.month.val() || 0,
+                    de.day.val()   || 1)));
+        }
+        
     }
 
     function addErrorHandling(options, object) {
@@ -986,56 +884,7 @@ define('io.ox/backbone/forms',
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
-        DatePicker: DatePicker,
-        utils: {
-            date2string: function (value) {
-                if (_.isNumber(value)) {
-                    return (new date.Local(date.Local.utc(value)));
-                }
-                return value;
-            },
-
-            controlGroup: {
-                date: {
-                    setValueInElement: function (valueFromModel) {
-                        var transformedValue = forms.utils.date2string(valueFromModel),
-                            transformedValueFormated;
-
-                        if (this.nodes.dropelements) {
-                            var allSelects = this.nodes.dropelements.find('select'),
-                            singleValues = [];
-                            if (_.isObject(transformedValue)) {
-                                transformedValueFormated = transformedValue.format(date.DATE);
-                            } else {
-                                transformedValueFormated = transformedValue;
-                            }
-
-                            if (transformedValue !== undefined && transformedValue !== null) {
-                                singleValues.push(transformedValue.getDate(), transformedValue.getMonth(), transformedValue.getYear());
-                            }
-
-                            _(allSelects).each(function (element, key) {
-                                $(element).val(singleValues[key]);
-                            });
-                        }
-
-                        this.nodes.element.val(transformedValueFormated);
-
-                    },
-
-                    setValueInModel: function (valueFromElement) {
-                        var timestamp = this.nodes.element.data().dateobject.t;
-                        if (valueFromElement === '') {
-                            valueFromElement = timestamp = null;
-                        }
-                        if (this.model.set(this.attribute, timestamp)) {
-                            this.$el.removeClass('error');
-                            this.nodes.controls.find('.help-block.error').remove();
-                        }
-                    }
-                }
-            }
-        }
+        DatePicker: DatePicker
     };
 
     return forms;
