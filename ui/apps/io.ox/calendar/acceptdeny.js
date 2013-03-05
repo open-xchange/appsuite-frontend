@@ -57,10 +57,9 @@ define('io.ox/calendar/acceptdeny',
                     $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(
                         $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment')),
                         $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
-                            $('<input>')
-                                .css({width: '100%', color: '#fff'})
-                                .attr('data-property', 'comment')
-                                .attr({id: inputid, type: 'text'})
+                            $('<input type="text" data-property="comment">')
+                                .attr({ id: inputid })
+                                .css({ width: '100%' })
                                 .val(message)
                         )
                     ),
