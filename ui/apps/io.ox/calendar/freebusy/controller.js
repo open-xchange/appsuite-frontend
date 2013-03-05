@@ -85,6 +85,8 @@ define('io.ox/calendar/freebusy/controller',
                 $('<div class="abs participants-view">'),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
+
+            this.refresh();
         },
 
         open: function (options) {

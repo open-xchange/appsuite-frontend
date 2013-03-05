@@ -51,19 +51,30 @@ define('io.ox/calendar/week/view',
         restoreCache:   {},     // object, which contains data for save and restore functions
         extPoint:       null,
 
-        pane:           $('<div>').addClass('scrollpane'),          // main scroll pane
-        fulltimePane:   $('<div>').addClass('fulltime'),            // full-time appointments pane
-        fulltimeCon:    $('<div>').addClass('fulltime-container'),  // full-time container
-        fulltimeNote:   $('<div>').addClass('note'),                // note in full-time appointment area
-        timeline:       $('<div>').addClass('timeline'),            // timeline
-        footer:         $('<div>').addClass('footer'),              // footer
-        kwInfo:         $('<span>').addClass('info'),               // current KW
-        showAllCheck:   $('<input/>').attr('type', 'checkbox'),     // show all folders check-box
-        showAllCon:     $('<div>').addClass('showall'),             // container
+        pane:           null,   // main scroll pane
+        fulltimePane:   null,   // full-time appointments pane
+        fulltimeCon:    null,   // full-time container
+        fulltimeNote:   null,   // note in full-time appointment area
+        timeline:       null,   // timeline
+        footer:         null,   // footer
+        kwInfo:         null,   // current KW
+        showAllCheck:   null,   // show all folders check-box
+        showAllCon:     null,   // container
 
         // init values from prespective
         initialize: function (opt) {
             myself = myself || ox.user_id;
+
+            this.pane = $('<div>').addClass('scrollpane');
+            this.fulltimePane = $('<div>').addClass('fulltime');
+            this.fulltimeCon = $('<div>').addClass('fulltime-container');
+            this.fulltimeNote = $('<div>').addClass('note');
+            this.timeline = $('<div>').addClass('timeline');
+            this.footer = $('<div>').addClass('footer');
+            this.kwInfo = $('<span>').addClass('info');
+            this.showAllCheck = $('<input/>').attr('type', 'checkbox');
+            this.showAllCon = $('<div>').addClass('showall');
+
             this.mode = opt.mode;
             this.extPoint = opt.appExtPoint;
             this.setStartDate();
@@ -449,7 +460,6 @@ define('io.ox/calendar/week/view',
          * @return {Backbone.View} this view
          */
         render: function () {
-
             // create timelabels
             var timeLabel = [];
             for (var i = 1; i < this.slots; i++) {
