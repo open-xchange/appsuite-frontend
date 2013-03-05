@@ -50,7 +50,7 @@ define("io.ox/core/api/factory",
             module: "",
             // for all, list, and get
             requests: {
-                all: { action: "all", appendColumns: true },
+                all: { action: "all" },
                 list: { action: "list" },
                 get: { action: "get" },
                 search: { action: "search" },
