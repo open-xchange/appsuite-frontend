@@ -59,6 +59,10 @@ define("io.ox/participants/views",
                 this.nodes.$img, this.nodes.$text, this.nodes.$mail, this.nodes.$extra, this.nodes.$removeButton
             );
 
+            if (this.options.customize) {
+                this.options.customize.call(this);
+            }
+
             return this;
         },
 

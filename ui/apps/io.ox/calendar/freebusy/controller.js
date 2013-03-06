@@ -28,6 +28,8 @@ define('io.ox/calendar/freebusy/controller',
 
     'use strict';
 
+    var INDEX = 10;
+
     var that = {
 
         FreeBusy: function (options, controller) {
@@ -74,7 +76,16 @@ define('io.ox/calendar/freebusy/controller',
                 controller.busy();
                 var list = self.getParticipants(), options = self.getInterval();
                 api.freebusy(list, options).done(function (data) {
-                    data = _(data).chain().pluck('data').flatten().map(toModel).value();
+                    data = _(data).chain()
+                        .map(function (request, index) {
+                            return _(request.data).map(function (obj) {
+                                obj.index = index;
+                                return obj;
+                            });
+                        })
+                        .flatten()
+                        .map(toModel)
+                        .value();
                     self.appointments.reset(data);
                     controller.idle();
                 });
@@ -114,9 +125,17 @@ define('io.ox/calendar/freebusy/controller',
             this.participants = new participantsModel.Participants([]);
             this.participantsView = $('<div class="participants-view">');
 
+            function customize() {
+                var index = this.model.collection.indexOf(this.model) || 0;
+                this.$el.addClass('with-participant-color').append(
+                    $('<div class="participant-color">').addClass('color-index-' + (index % INDEX))
+                );
+            }
+
             function drawParticipant(model) {
                 self.participantsView.append(
-                    new participantsView.ParticipantEntryView({ model: model, halo: true }).render().$el
+                    new participantsView.ParticipantEntryView({ model: model, halo: true, customize: customize })
+                        .render(customize).$el
                 );
             }
 
@@ -158,6 +177,14 @@ define('io.ox/calendar/freebusy/controller',
                 .on('showAppointment', this.showAppointment, this);
 
             this.appointments.reset([]);
+
+            var renderAppointment = this.weekView.renderAppointment;
+            this.weekView.renderAppointment = function (model) {
+                var $el = renderAppointment.call(self.weekView, model);
+                $el.removeClass('modify reserved temporary absent free')
+                    .addClass('color-index-' + (model.get('index') % INDEX));
+                return $el;
+            };
 
             // construct auto-complete
             this.autoCompleteControls = $('<div class="autocomplete-controls input-append pull-left">').append(

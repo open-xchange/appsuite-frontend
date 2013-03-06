@@ -25,6 +25,23 @@
         content: ' ';
     }
 
+    .participant-wrapper .remove {
+        right: 11px;
+    }
+
+    .with-participant-color.removable {
+        padding-right: 50px;
+    }
+
+    .participant-color {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 10px;
+        background-color: #eee;
+    }
+
     .add-participant {
         width: @participantsWidth - 82;
     }
@@ -37,4 +54,19 @@
         top: 10px;
         left: @participantsWidth;
     }
+
+    .appointment {
+        opacity: 0.75;
+    }
+
+    .color-index-0 { background-color: @blue; }
+    .color-index-1 { background-color: @blueLight; }
+    .color-index-2 { background-color: @green; }
+    .color-index-3 { background-color: @greenLight; }
+    .color-index-4 { background-color: @yellow; }
+    .color-index-5 { background-color: @orange; }
+    .color-index-6 { background-color: @red; }
+    .color-index-7 { background-color: @pink; }
+    .color-index-8 { background-color: @purple; }
+    .color-index-9 { background-color: #888; }
  }

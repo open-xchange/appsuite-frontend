@@ -239,7 +239,7 @@
 
     .appointment {
         position: absolute;
-        background-color: #08c;
+        background-color: #ccc;
         opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
