@@ -228,9 +228,9 @@ define('io.ox/office/framework/view/component',
         };
 
         /**
-         * Adds the passed control group to this view component. Calls to the
-         * method Component.update() will be forwarded to all registered
-         * groups.
+         * Adds the passed control group to this view component. The component
+         * listens to 'update' events of the application controller and
+         * forwards changed values to all registered control groups.
          *
          * @param {String} key
          *  The unique key of this group.

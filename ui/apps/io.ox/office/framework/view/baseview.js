@@ -628,10 +628,12 @@ define('io.ox/office/framework/view/baseview',
         // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
 
-        // update all view components every time the window will be shown
-        app.getWindow().on('show', function () {
-            app.getController().update();
-            self.grabFocus();
+        // after import, update all view components every time the window will be shown
+        app.on('docs:import:after', function () {
+            app.getWindow().on('show', function () {
+                app.getController().update();
+                self.grabFocus();
+            });
         });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
