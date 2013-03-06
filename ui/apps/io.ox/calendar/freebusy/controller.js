@@ -19,9 +19,10 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/participants/views',
      'io.ox/core/api/user',
      'io.ox/contacts/util',
+     'io.ox/calendar/api',
      'gettext!io.ox/calendar',
      'settings!io.ox/core',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, gt, settings) {
 
     'use strict';
 
@@ -43,15 +44,39 @@ define('io.ox/calendar/freebusy/controller',
                     .showAll(false)
                     // scroll to proper time
                     .setScrollPos();
+                // initial reset with empty array; fixes layout
+                self.appointments.reset([]);
                 // pre-fill participants list
                 this.participants.reset([].concat(options.participants));
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
             };
 
-            this.refresh = function () {
-                this.appointments.reset();
+            this.getParticipants = function () {
+                return this.participants.map(function (model) {
+                    return { id: model.get('id'), type: model.get('type') };
+                });
             };
+
+            this.getInterval = function () {
+                var start = this.weekView.startDate;
+                return { start: start + 0, end: start + api.DAY * 5 };
+            };
+
+            this.loadAppointments = function () {
+                controller.busy();
+                var list = self.getParticipants(), options = self.getInterval();
+                api.freebusy(list, options).done(function (data) {
+                    data = _(data).chain().pluck('data').flatten().value();
+                    self.appointments.reset(data);
+                    controller.idle();
+                });
+            };
+
+            this.refresh = _.debounce(function () {
+                self.appointments.reset([]);
+                self.loadAppointments();
+            }, 250);
 
             this.create = function () {
                 controller.invoke('create');
@@ -77,7 +102,8 @@ define('io.ox/calendar/freebusy/controller',
                 .on('remove', removeParticipant)
                 .on('reset', function () {
                     self.participants.each(drawParticipant);
-                });
+                })
+                .on('change', this.refresh);
 
             // all appointments are stored in this collection
             this.appointments = new Backbone.Collection([]);
@@ -152,8 +178,6 @@ define('io.ox/calendar/freebusy/controller',
                 $('<div class="abs participants-view-scrollpane">').append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
-
-            this.refresh();
         },
 
         open: function (options) {

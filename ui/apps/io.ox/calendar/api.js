@@ -190,7 +190,7 @@ define("io.ox/calendar/api",
                 });
             }
         },
-        
+
         //used to cleanup Cache and trigger refresh after attachmentHandling
         attachmentCallback: function (obj) {
             all_cache = {};
@@ -455,6 +455,45 @@ define("io.ox/calendar/api",
 
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
+    };
+
+    api.MINUTE = 60000;
+    api.HOUR = api.MINUTE * 60;
+    api.DAY = api.HOUR * 24;
+    api.WEEK = api.DAY * 7;
+
+    api.freebusy = function (list, options) {
+
+        list = [].concat(list);
+
+        options = _.extend({
+            start: _.now(),
+            end: _.now() + DAY
+        }, options);
+
+        var i = 0, $i = list.length;
+
+        var requests = _(list).map(function (obj) {
+            return {
+                module: 'calendar',
+                action: 'freebusy',
+                id: obj.id,
+                type: obj.type,
+                start: options.start,
+                end: options.end
+            };
+        });
+
+        if (list.length) {
+            return http.PUT({
+                module: "multiple",
+                data: requests,
+                appendColumns: false,
+                'continue': true
+            });
+        } else {
+            return $.Deferred().resolve([]);
+        }
     };
 
     api.reduce = factory.reduce;
