@@ -34,11 +34,11 @@
 
     .toolbar .info {
         position: absolute;
-        left: 10px;
         float: left;
-        line-height: 32px;
+        line-height: 38px;
         font-family: @lightFontFamily;
         font-size: 20px;
+        left: @weekview-time-with;
     }
 
 
@@ -81,7 +81,6 @@
 
     .fulltime-container {
         position: relative;
-        border-bottom: 1px solid #ccc;
         width: 100%;
         overflow-y: scroll;
         overflow-x: hidden;
@@ -89,6 +88,7 @@
 
     .fulltime {
         position: absolute;
+        border-bottom: 1px solid #ccc;
         left: @weekview-time-with;
         right: 0;
     }
@@ -97,11 +97,16 @@
         position: absolute;
         background: none;
         width: 100%;
-        font-family: @lightFontFamily;
-        text-align: center;
+        font-size: 12px;
         color: #888;
+        text-align: right;
         .ellipsis();
         .user-select(none);
+        padding: 0px 10px;
+    }
+
+    .fulltime .day {
+        border: none;
     }
 
     .scrollpane {
@@ -117,7 +122,6 @@
     .footer-container {
         position: absolute;
         height: @weekview-footer-height;
-        border-bottom: 1px solid #ccc;
         left: 0;
         right: 0;
         top: @weekview-toolbar-height;
@@ -138,8 +142,6 @@
         left: @weekview-time-with;
         white-space: nowrap;
         background-color: white;
-        font-family: @lightFontFamily;
-        font-size: 15px;
     }
 
     .week-container {
@@ -180,7 +182,6 @@
     }
 
     .time .number {
-        font-family: @lightFontFamily;
         font-size: 12px;
         position: absolute;
         right: 5px;
@@ -214,10 +215,13 @@
 
     .weekday {
         display: inline-block;
-        font-family: @lightFontFamily;
         font-size: 13px;
-        text-align: center;
+        text-align: left;
         .ellipsis();
+    }
+
+    .weekday.today {
+        font-weight: bold;
     }
 
     .week-container .appointment {

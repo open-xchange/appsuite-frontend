@@ -511,7 +511,7 @@ define('io.ox/calendar/week/view',
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
             if (!Modernizr.touch) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick here for whole day appointment')).attr('unselectable', 'on'));
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
             }
 
             // create days
@@ -631,17 +631,16 @@ define('io.ox/calendar/week/view',
 
             // refresh footer, timeline and today-label
             for (var d = 0; d < this.columns; d++) {
-                days.push(
-                    $('<div>')
-                        .addClass('weekday')
-                        .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
-                        .width(100 / this.columns + '%')
-                );
+                var day = $('<div>')
+                    .addClass('weekday')
+                    .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
+                    .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().setHours(0, 0, 0, 0).getTime() === tmpDate.getTime()) {
-                    $('.day[date="' + d + '"]', this.pane).addClass('today');
+                    $('.day[date="' + d + '"]', this.pane).add(day).addClass('today');
                     hasToday = true;
                 }
+                days.push(day);
                 tmpDate.add(date.DAY);
             }
             this.footer.empty().append(days);
@@ -688,7 +687,7 @@ define('io.ox/calendar/week/view',
                             height: this.fulltimeHeight,
                             width: (100 / this.columns) * fulltimeWidth + '%',
                             left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
-                            top: row * (this.fulltimeHeight + 1) + 1
+                            top: row * (this.fulltimeHeight + 1)
                         });
                         this.fulltimePane.append(app);
                     } else {
@@ -746,7 +745,7 @@ define('io.ox/calendar/week/view',
             }, this);
 
             // calculate full-time appointment container height
-            var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1) + 1;
+            var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
