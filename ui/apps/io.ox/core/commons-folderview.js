@@ -508,9 +508,7 @@ define('io.ox/core/commons-folderview',
             // draw toolbar
             tree.selection.on('change', function (e, selection) {
                 if (selection.length) {
-                    var obj = selection[0],
-                        id = _.isObject(obj) ? obj.folder_id : obj;
-                    console.log('strange', id, '<>', obj);
+                    var id = selection[0];
                     api.get({ folder: id }).done(function (data) {
                         baton.data = data;
                         // update toolbar

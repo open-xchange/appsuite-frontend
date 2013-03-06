@@ -19,8 +19,6 @@ define("io.ox/participants/views",
 
         tagName: 'div',
 
-        className: 'participant-wrapper',
-
         events: {
             'click .remove': 'onRemove'
         },
@@ -29,7 +27,9 @@ define("io.ox/participants/views",
 
             var self = this;
 
-            this.$el.attr('data-cid', this.model.cid);
+            // we set the class this way because some controller pass an existing node
+            this.$el.addClass('participant-wrapper')
+                .attr('data-cid', this.model.cid);
 
             this.nodes = {
                 $img: $('<div>'),
