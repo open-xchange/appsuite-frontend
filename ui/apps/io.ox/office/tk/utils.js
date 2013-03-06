@@ -139,27 +139,26 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {String[]} attributeNames
      *  The names of all attributes of the objects that will be compared.
      *
+     * @param {Function} [comparator=_.isEqual]
+     *  A binary predicate function that returns true if the passed attribute
+     *  values are considered being equal. Will be called, if both objects
+     *  passed to this method contain a specific attribute, and receives the
+     *  attribute values from both objects.
+     *
      * @returns {Boolean}
      *  Whether all specified attributes are equal in both objects.
      */
-    Utils.hasEqualAttributes = function (object1, object2, attributeNames) {
+    Utils.hasEqualAttributes = function (object1, object2, attributeNames, comparator) {
 
-        var // loop indexes
-            index = 0, length = attributeNames.length,
-            // current attribute name
-            attrName = '',
-            // whether the objects contain the attribute
-            hasAttr1 = false, hasAttr2 = false;
+        // default to the _isEqual() method to compare attribute values
+        comparator = _.isFunction(comparator) ? comparator : _.isEqual;
 
-        for (; index < length; index += 1) {
-            attrName = attributeNames[index];
-            hasAttr1 = attrName in object1;
-            hasAttr2 = attrName in object2;
-            if ((hasAttr1 !== hasAttr2) || (hasAttr1 && hasAttr2 && !_.isEqual(object1[attrName], object2[attrName]))) {
-                return false;
-            }
-        }
-        return true;
+        // process all specified attributes
+        return _(attributeNames).all(function (attrName) {
+            var hasAttr1 = attrName in object1,
+                hasAttr2 = attrName in object2;
+            return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
+        });
     };
 
     // calculation and conversion ---------------------------------------------

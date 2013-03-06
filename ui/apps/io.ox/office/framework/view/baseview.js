@@ -484,7 +484,7 @@ define('io.ox/office/framework/view/baseview',
                     currentAlert = null;
                     // slideUp() may run into application quit and cause JS errors, guard
                     // by using a delayed callback which will not be executed after quit
-                    app.executeDelayed(function () { refreshPaneLayout(); });
+                    app.executeDelayed(refreshPaneLayout);
                 });
             }
 
