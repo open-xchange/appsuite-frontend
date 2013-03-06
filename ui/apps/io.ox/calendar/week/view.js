@@ -333,8 +333,8 @@ define('io.ox/calendar/week/view',
                         dayChange = curDay !== lData.lastDay,
                         dayDiff = Math.abs(curDay - lData.startDay),
                         lassoStart = this.roundToGrid(lData.start, (down && dayDiff === 0) || right ? 'n' : 's');
-                    if (dayDiff > 0) {
 
+                    if (dayDiff > 0) {
                         if (dayChange) {
                             // move mouse to another day area
 
@@ -384,7 +384,12 @@ define('io.ox/calendar/week/view',
 
                         }
                     } else {
-                        var newHeight = Math.abs(lassoStart - this.roundToGrid(mouseY, down ? 's' : 'n'));
+                        var newHeight = 0;
+                        if (Math.abs(lData.start - mouseY) > 5) {
+                            newHeight = Math.abs(lassoStart - this.roundToGrid(mouseY, down ? 's' : 'n'));
+                        } else {
+                            mouseY = lData.start;
+                        }
                         if (dayChange) {
                             lData.last.remove();
                             delete lData.last;
@@ -405,7 +410,7 @@ define('io.ox/calendar/week/view',
                         .addClass('appointment lasso')
                         .css({
                             height: this.cellHeight,
-                            minHeight: this.cellHeight,
+                            minHeight: 1,
                             top: this.roundToGrid(mouseY, 'n')
                         })
                         .data({
@@ -424,7 +429,23 @@ define('io.ox/calendar/week/view',
             case 'mouseup':
                 if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
-                        start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)),
+                        self = this,
+                        cleanUp = function () {
+                            // delete div and reset object
+                            $.each(lData.helper, function (i, el) {
+                                el.remove();
+                            });
+                            lData = null;
+                            self.lasso.remove();
+                        };
+
+                    // no action on 0px move
+                    if (lData.start === lData.stop && lData.lastDay === lData.startDay) {
+                        cleanUp();
+                        break;
+                    }
+
+                    var start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)),
                         end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay));
 
                     if (lData.startDay === lData.lastDay) {
@@ -435,12 +456,7 @@ define('io.ox/calendar/week/view',
                         end += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.start : lData.stop);
                     }
 
-                    // delete div and reset object
-                    $.each(lData.helper, function (i, el) {
-                        el.remove();
-                    });
-                    lData = null;
-                    this.lasso.remove();
+                    cleanUp();
 
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,

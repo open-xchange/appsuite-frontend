@@ -56,7 +56,8 @@ define('io.ox/calendar/freebusy/controller',
             this.weekView = new WeekView({
                 collection: this.collection,
                 mode: 2, // 2 = week:workweek
-                appExtPoint: 'io.ox/calendar/week/view/appointment'
+                appExtPoint: 'io.ox/calendar/week/view/appointment',
+                keyboard: false
             });
 
             this.weekView
