@@ -169,6 +169,14 @@ define('io.ox/office/framework/view/baseview',
             _(overlayPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
         }
 
+        /**
+         * Updates the view after the application becomes active/visible.
+         */
+        function windowShowHandler() {
+            app.getController().update();
+            self.grabFocus();
+        }
+
         // methods ------------------------------------------------------------
 
         /**
@@ -630,10 +638,8 @@ define('io.ox/office/framework/view/baseview',
 
         // after import, update all view components every time the window will be shown
         app.on('docs:import:after', function () {
-            app.getWindow().on('show', function () {
-                app.getController().update();
-                self.grabFocus();
-            });
+            app.getWindow().on('show', windowShowHandler);
+            windowShowHandler();
         });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
