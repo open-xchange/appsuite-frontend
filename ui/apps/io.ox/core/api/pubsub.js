@@ -22,33 +22,52 @@ define('io.ox/core/api/pubsub',
 
     /**
      * clears cache
+     * @private
      * @return {deferred}
      */
-    var clearCache = function (api) {
+    var clearCache = function (api, data) {
+        var keys = {
+                general: api.cid(''),
+                folder: api.cid({folder: data.folder}),
+                pub: '.' + data.id,
+                sub: data.folder + '.'
+            };
         return $.when(
-            api.caches.all.clear(),
-            api.caches.get.clear(),
-            api.caches.list.clear()
+            //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
+            api.caches.all.remove(keys.general),
+            api.caches.get.grepRemove(keys.pub),
+            api.caches.get.grepRemove(keys.sub)
+        );
+    };
+
+    /**
+     * for test purposes only
+     * @private
+     * @return {deferred}
+     */
+    var dumpKeys = function (api) {
+        return $.when(
+            api.caches.all.keys().pipe(function (data) { console.log('all', data); }),
+            api.caches.get.keys().pipe(function (data) { console.log('get', data); })
         );
     };
 
     /**
      * gerneralized API for pubsub
      * @param  {object} opt
-     * @return {deferred}
+     * @return {object} api
      */
     function api(opt) {
 
         return $.extend(true, apiFactory(opt), {
             /**
              * update publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
+             * @param  {object} data
              * @return {deferred}
              */
             update: function (data) {
-                return clearCache(this).pipe(function () {
-                    http.PUT({
+                return clearCache(this, {id: data.id || '', folder: data.folder || data.entity.folder || ''}).pipe(function () {
+                    return http.PUT({
                         module: opt.module,
                         params: {
                             action: 'update'
@@ -77,16 +96,18 @@ define('io.ox/core/api/pubsub',
              * @return {deferred} subscription id
              */
             create: function (data) {
-                return clearCache(this).pipe(function () {
-                    return http.PUT({
-                        module: opt.module,
-                        appendColumns: false,
-                        params: {
-                            action: 'new'
-                        },
-                        data: data
+                var that = this;
+                return clearCache(that, data.entity)
+                    .pipe(function () {
+                        return http.PUT({
+                            module: opt.module,
+                            appendColumns: false,
+                            params: {
+                                action: 'new'
+                            },
+                            data: data
+                        });
                     });
-                });
             }
         });
     }
@@ -118,9 +139,8 @@ define('io.ox/core/api/pubsub',
         }),
         {
             /**
-             * refresh publication/subscription
-             * @private
-             * @param  {object} data id and folder
+             * refresh subscription
+             * @param  {object} data (id,folder)
              * @return {deferred} item count
              */
             refresh: function (data) { //checked
