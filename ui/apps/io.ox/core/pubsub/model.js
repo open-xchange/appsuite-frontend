@@ -42,7 +42,7 @@ define('io.ox/core/pubsub/model',
                     return api.publications.update(model.attributes);
                 },
                 destroy: function (model) {
-                    return api.publications.remove(model.id);
+                    return api.publications.destroy(model.id);
                 }
             }
         }),
@@ -59,7 +59,7 @@ define('io.ox/core/pubsub/model',
                     return api.subscriptions.update(model.attributes);
                 },
                 destroy: function (model) {
-                    return api.subscriptions.remove(model.id);
+                    return api.subscriptions.destroy(model.id);
                 }
             }
         }),

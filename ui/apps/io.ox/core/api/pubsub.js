@@ -59,10 +59,22 @@ define('io.ox/core/api/pubsub',
             },
 
             /**
-             * create publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
+             * removes publication/subscription
+             * @param  {string} id
              * @return {deferred}
+             */
+            destroy: function (id) {
+                var that = this;
+                return clearCache(this, {id: id})
+                    .pipe(function () {
+                        return that.remove(id);
+                    });
+            },
+
+            /**
+             * create publication/subscription
+             * @param  {object} data (pubsub model attributes)
+             * @return {deferred} subscription id
              */
             create: function (data) {
                 return clearCache(this).pipe(function () {
