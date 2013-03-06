@@ -108,18 +108,18 @@ define('io.ox/core/api/pubsub',
             /**
              * refresh publication/subscription
              * @private
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
+             * @param  {object} data id and folder
+             * @return {deferred} item count
              */
-            refresh: function (id, folder) {
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return clearCache(this).pipe(function () {
+            refresh: function (data) { //checked
+                var folder = data.folder || '';
+                return clearCache(this, data).pipe(function () {
                     return http.GET({
                         module: 'subscriptions',
                         appendColumns: false,
                         params: {
                             action: 'refresh',
-                            id : id,
+                            id : data.id,
                             folder: folder
                         }
                     });

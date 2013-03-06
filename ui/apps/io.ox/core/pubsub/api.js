@@ -45,12 +45,11 @@ define('io.ox/core/pubsub/api',
 
         /**
          * refresh
-         * @param  {string|number} subscription id
-         * @param  {string|number} folder id
+         * @param  {object} data id and folder
          * @return {deferred} number of items
          */
-        refreshSubscription: function (subscription, folder) {
-            return api.subscriptions.refresh(subscription, folder);
+        refreshSubscription: function (data) {
+            return api.subscriptions.refresh(data);
         },
 
         /**
@@ -63,13 +62,13 @@ define('io.ox/core/pubsub/api',
          */
         initSubscription: function (module, folder, url, options) {
             return util.createSubscription(module, folder, url, options)
-                .pipe(function (subscription) {
-                    //refresh
-                    return util.refreshSubscription(subscription, folder)
-                    .pipe(function (items) {
-                        return {subscription: subscription, items: items};
+                    .pipe(function (subscription) {
+                        //refresh
+                        return util.refreshSubscription({id: subscription, folder: folder})
+                        .pipe(function (items) {
+                            return {subscription: subscription, items: items};
+                        });
                     });
-                });
         },
 
         /**
