@@ -15,8 +15,8 @@ define('l10n/ja_JP/io.ox/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/views',
     'io.ox/backbone/forms',
-    'gettext!l10n/ja_JP'
-], function (ext, views, forms, gt) {
+    'css!l10n/ja_JP/io.ox/style.css'
+], function (ext, views, forms) {
     'use strict';
     
     ext.point('io.ox/contacts/edit/main/model').extend({
@@ -32,31 +32,35 @@ define('l10n/ja_JP/io.ox/register', [
         .replace({ id: 'last_name', index: 200 })
         .replace({ id: 'first_name', index: 300 });
     
-    views.point('io.ox/contacts/edit/personal')
-        .extend(yomiField('yomiLastName', gt('Furigana for last name')),
-                { before: 'last_name' })
-        .extend(yomiField('yomiFirstName', gt('Furigana for first name')),
-                { before: 'first_name' });
+    yomiField('personal', 'last_name', 'yomiLastName');
+    yomiField('personal', 'first_name', 'yomiFirstName');
+    yomiField('job', 'company', 'yomiCompany');
     
-    views.point('io.ox/contacts/edit/job')
-        .extend(yomiField('yomiCompany', gt('Furigana for company')),
-                { before: 'company' });
-
+    function yomiField(point, id, yomiID) {
+        var control = $('<input type="text" class="input-xlarge furigana">')
+            .attr('name', yomiID);
+        views.point('io.ox/contacts/edit/' + point).extend(
+            new forms.ControlGroup({
+                id: yomiID,
+                attribute: yomiID,
+                control: control
+            }), {
+                before: id,
+                hidden: true,
+                show: function () {
+                    control.removeClass('readonly').prop('disabled', '');
+                },
+                hide: function () {
+                    control.addClass('readonly').prop('disabled', 'disabled');
+                }
+            });
+    }
+    
     _.each(['home', 'business', 'other'], function (type) {
         ext.point('io.ox/contacts/edit/' + type + '_address')
             .replace({ id: 'state_' + type, index: 100 })
             .replace({ id: 'street_' + type, index: 300 });
     });
-    
-    function yomiField(id, label) {
-        return new forms.ControlGroup({
-            id: id,
-            label: label,
-            attribute: id,
-            control: $('<input type="text" class="input-xlarge">')
-                .attr('name', id)
-        });
-    }
     
     ext.point('io.ox/contacts/edit/view').extend({
         index: 'last',

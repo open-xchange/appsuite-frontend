@@ -207,7 +207,6 @@ define('io.ox/contacts/edit/view-form', [
             id: options.field,
             index: options.index,
             label: model.fields[options.field],
-            control: '<input type="text" class="input-xlarge" name="' + options.field + '">',
             attribute: options.field,
             rare: options.isRare
         }), {
