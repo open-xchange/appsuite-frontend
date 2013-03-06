@@ -110,16 +110,19 @@ define('io.ox/calendar/week/view',
                 var jumptTo = (opt && typeof opt === 'number') ? new date.Local(opt) : new date.Local();
                 switch (this.mode) {
                 case 1: // day
+                    this.$el.addClass('dayview');
                     this.columns = 1;
                     this.startDate = jumptTo.setHours(0, 0, 0, 0);
                     break;
                 case 2: // workweek
+                    this.$el.addClass('workweekview');
                     this.columns = 5;
                     var weekStart = date.Local.utc((jumptTo.getDays() - jumptTo.getDay() + this.workWeekStart) * date.DAY);
                     this.startDate = new date.Local(weekStart);
                     break;
                 default:
                 case 3: // week
+                    this.$el.addClass('weekview');
                     this.columns = 7;
                     this.startDate = jumptTo.setStartOfWeek();
                     break;
@@ -645,9 +648,10 @@ define('io.ox/calendar/week/view',
             }
             this.footer.empty().append(days);
             this.kwInfo.text(
-                gt.noI18n(
+                gt.noI18n(this.columns > 1 ?
                     self.startDate
-                        .formatInterval(new date.Local(self.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE)
+                        .formatInterval(new date.Local(self.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
+                    self.startDate.format(date.DAYOFWEEK_DATE)
                 )
             );
 
