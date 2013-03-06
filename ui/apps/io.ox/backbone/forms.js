@@ -225,7 +225,7 @@ define('io.ox/backbone/forms',
                         var year = (new date.Local()).getYear();
                         createSelect('year', year, year - 150, proto.setYear, y);
                     } else if (m) {
-                        createSelect('month', 0, 11, proto.setMonth, 'MMMMM');
+                        createSelect('month', 0, 11, proto.setMonth, 'MMMM');
                     } else if (d) {
                         createSelect('day', 1, 31, proto.setDate, match);
                     }
