@@ -22,6 +22,7 @@ define("io.ox/participants/model",
     // TODO: Bulk Loading
 
     var ParticipantModel = Backbone.Model.extend({
+
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
         TYPE_RESOURCE: 3,
@@ -34,14 +35,23 @@ define("io.ox/participants/model",
             email1: '',
             image1_url: ''
         },
+
         initialize: function () {
             var self = this;
             if (self.get('internal_userid')) {
-                self.id = self.get('internal_userid');
+                self.cid = 'internal_' + self.get('internal_userid');
                 self.set({
                     id: self.get('internal_userid'),
                     type: this.TYPE_USER
                 });
+            }
+            if (this.get('type') === this.TYPE_USER) {
+                this.cid = 'internal_' + this.get('id');
+                //this.set('id', this.get('id'));
+            }
+            if (this.get('type') === this.TYPE_EXTERNAL_USER) {
+                this.cid = 'external_' + this.get('mail');
+                this.set('id', this.get('mail'));
             }
             if (self.get('entity')) {
                 self.id = parseInt(self.get('entity'), 10);
@@ -54,11 +64,8 @@ define("io.ox/participants/model",
                 self.trigger("fetch");
                 self.trigger("change");
             });
-            if (this.get('type') === this.TYPE_EXTERNAL_USER) {
-                this.id = this.get('mail');
-                this.set('id', this.get('mail'));
-            }
         },
+
         fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
@@ -134,7 +141,7 @@ define("io.ox/participants/model",
         },
 
         getDisplayName: function () {
-            return util.getDisplayName(this.toJSON());
+            return util.getFullName(this.toJSON());
         },
         getEmail: function () {
             return util.getMail(this.toJSON());
@@ -149,6 +156,7 @@ define("io.ox/participants/model",
     });
 
     var ParticipantsCollection = Backbone.Collection.extend({
+
         initialize: function () {
             var self = this;
             self.on("change", function () {
@@ -164,9 +172,10 @@ define("io.ox/participants/model",
                 });
                 self.remove(duplicates);
             });
-
         },
+
         model: ParticipantModel,
+
         addUniquely: function (models, options) {
             var self = this;
             if (!_.isArray(models)) {

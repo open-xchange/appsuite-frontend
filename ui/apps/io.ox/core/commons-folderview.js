@@ -391,7 +391,7 @@ define('io.ox/core/commons-folderview',
             baton = new ext.Baton({ app: app });
 
         changeFolder = function (e, folder) {
-            app.folderView.selection.set(folder);
+            app.folderView.selection.set(folder.id);
         };
 
         changeFolderOn = function () {
@@ -404,6 +404,7 @@ define('io.ox/core/commons-folderview',
 
         onChangeFolder = function (e, selection) {
             var id = _(selection).first();
+
             api.get({ folder: id }).done(function (data) {
                 if (_.device('small')) {
                     // close tree
@@ -507,7 +508,9 @@ define('io.ox/core/commons-folderview',
             // draw toolbar
             tree.selection.on('change', function (e, selection) {
                 if (selection.length) {
-                    var id = selection[0];
+                    var obj = selection[0],
+                        id = _.isObject(obj) ? obj.folder_id : obj;
+                    console.log('strange', id, '<>', obj);
                     api.get({ folder: id }).done(function (data) {
                         baton.data = data;
                         // update toolbar

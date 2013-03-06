@@ -158,7 +158,7 @@ define('io.ox/core/api/folder',
                     storage: null
                 }, options || {});
             if (opt.all) opt.cache = false;
-            
+
                 // get cache
             var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
                 // cache miss?
@@ -223,7 +223,8 @@ define('io.ox/core/api/folder',
                         params: {
                             action: 'path',
                             id: opt.folder,
-                            tree: '1'
+                            tree: '1',
+                            altNames: true
                         },
                         appendColumns: true
                     })
@@ -254,7 +255,11 @@ define('io.ox/core/api/folder',
                     });
                 };
 
-            useCache(opt.folder);
+            if (opt.cache === false) {
+                getter();
+            } else {
+                useCache(opt.folder);
+            }
             return def;
         },
 

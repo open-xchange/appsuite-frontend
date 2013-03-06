@@ -617,6 +617,14 @@
             return _.isSet(o) ? o : defaultValue;
         },
 
+        toHash: function (array, prop) {
+            var tmp = {};
+            _(array).each(function (obj) {
+                tmp[obj[prop]] = obj;
+            });
+            return tmp;
+        },
+
         noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
             return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
         }

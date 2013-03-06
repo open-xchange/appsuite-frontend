@@ -14,9 +14,16 @@
 
     @participantsWidth: 320px;
 
-    .participants-view {
-        width: @participantsWidth - 1;
+    .participants-view-scrollpane {
+        padding: 13px;
+        width: @participantsWidth;
         border-right: 1px solid #ccc;
+        .box-sizing(border-box);
+        .overflow-y();
+    }
+
+    .participants-view:after {
+        content: ' ';
     }
 
     .add-participant {

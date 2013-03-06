@@ -15,143 +15,146 @@ define("io.ox/participants/views",
 
     "use strict";
 
-    var getImageStyle = function (url) {
-        return ((/api\/image/).test(url) === true) ? 'background-image: url("' + url + '");' : '';
-    };
-
     var ParticipantEntryView = Backbone.View.extend({
+
         tagName: 'div',
+
+        className: 'participant-wrapper',
+
         events: {
             'click .remove': 'onRemove'
         },
-        initialize: function () {
-            var self = this;
-            this.model.on("change", function () {
-                self.$el.empty();
-                self.render();
-            });
-        },
+
         render: function () {
+
+            var self = this;
+
             this.$el.attr('data-cid', this.model.cid);
-            var self = this,
-                $wrapper = $('<div class="participant-wrapper">'),
-                $img = $('<div>'),
-                $text = $('<div class="participant-name">'),
-                $mail = $('<div class="participant-email">'),
-                $extra = $('<div>').addClass('extra-decorator').html('&nbsp;'),
-                $removeButton = $('<div class="remove">')
-                    .append($('<div class="icon">')
-                        .append($('<i class="icon-remove">'))
-                    );
-            self.nodes = {};
-            self.nodes.$wrapper = $wrapper;
-            self.nodes.$mail = $mail;
-            self.nodes.$img = $img;
-            self.nodes.$extra = $extra;
-            // some paint magic
-            $removeButton.on('mouseover', function () {
-                $(this).find('i').addClass('icon-white');
-            });
-            $removeButton.on('mouseleave', function () {
-                $(this).find('i').removeClass('icon-white');
-            });
 
-            // choose right contact image and subtext
+            this.nodes = {
+                $img: $('<div>'),
+                $text: $('<div class="participant-name">'),
+                $mail: $('<div class="participant-email">'),
+                $extra: $('<div class="extra-decorator">'),
+                $removeButton: $('<div class="remove"><div class="icon"><i class="icon-remove"></i></div></div>')
+            };
+
+            this.setDisplayName();
             this.setTypeStyle();
-
             this.setOrganizer();
+            this.setCustomImage();
 
-            $img.attr('style', getImageStyle(this.model.getImage()));
-
-            $wrapper.append(
-                $img,
-                $text.text(this.model.getDisplayName()),
-                $mail,
-                $extra
-            );
-
-            if (this.options.closeButton || _.isUndefined(this.options.closeButton)) {
-                if (this.model.get('ui_removable') !== false) {
-                    $wrapper.append($removeButton);
-                }
+            if (this.options.closeButton !== false && this.model.get('ui_removable') !== false) {
+                this.$el.addClass('removable');
             }
 
-            this.$el.append($wrapper);
-
-            this.model.on('change', function () {
-                $text.text(self.model.getDisplayName());
-                self.setTypeStyle();
+            this.model.on('change', function (model, e) {
+                if (e && e.changes) {
+                    self.$el.empty();
+                    self.render();
+                }
             });
+
+            this.$el.append(
+                this.nodes.$img, this.nodes.$text, this.nodes.$mail, this.nodes.$extra, this.nodes.$removeButton
+            );
 
             return this;
         },
-        setOrganizer: function () {
-            if (!this.options.baton) {
-                this.nodes.$extra.hide();
-                return;
+
+        setDisplayName: function () {
+            var text = this.model.getDisplayName();
+            this.nodes.$text.text(text);
+        },
+
+        setCustomImage: function () {
+            var url = this.model.getImage();
+            if ((/api\/image/).test(url)) {
+                this.nodes.$img.css('backgroundImage', 'url(' + url + ')');
             }
+        },
+
+        setOrganizer: function () {
+
+            if (!this.options.baton) return;
+
             var organizer = this.options.baton.model.get('organizer'),
                 organizerId = this.options.baton.model.get('organizerId');
+
             if (this.model.get('id') === organizerId) {
+                this.$el.addClass('three-rows');
                 this.nodes.$extra.text(gt('Organizer'));
             }
-
         },
+
+        setRows: function (mail, extra) {
+            this.nodes.$mail.text(mail || '');
+            this.nodes.$extra.text(extra || '');
+            if (mail && extra) {
+                this.$el.addClass('three-rows');
+            }
+        },
+
+        setImageClass: (function () {
+
+            var types = 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' ');
+
+            return function (type) {
+                type = parseInt(type, 10);
+                this.nodes.$img.attr('class', 'participant-image ' + (types[type] || ''));
+            };
+
+        }()),
+
         setTypeStyle: function  () {
-            var type = this.model.get('type'), data;
-            this.nodes.$img.removeAttr('class');
+
+            var type = this.model.get('type'), mail, data;
+
+            this.setImageClass(type);
 
             switch (type) {
             case 1:
-                this.nodes.$img.addClass('contact-image');
-                //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                var m = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
-                this.nodes.$mail.text(m);
-                //workaround bug 24485: suppress visually nested autocomplete items
-                if (m === '')
-                    this.nodes.$mail.html('&nbsp;');
+                // uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
+                this.setRows(mail);
                 if (this.options.halo) {
-                    this.nodes.$wrapper.data({ email1: m }).addClass('halo-link');
+                    this.$el.data({ email1: mail }).addClass('pointer halo-link');
                 }
                 break;
             case 2:
-                this.nodes.$img.addClass('group-image');
-                this.nodes.$mail.text(gt('Group'));
+                this.setRows('', gt('Group'));
                 break;
             case 3:
-                this.nodes.$img.addClass('resource-image');
-                this.nodes.$mail.text(gt('Resource'));
+                this.setRows('', gt('Resource'));
                 if (this.options.halo) {
                     data = this.model.toJSON();
                     data.callbacks = this.options.callbacks || {};
-                    this.nodes.$wrapper.data(data).addClass('halo-resource-link');
+                    this.$el.data(data).addClass('pointer halo-resource-link');
                 }
                 break;
             case 4:
-                this.nodes.$img.addClass('resource-image');
-                this.nodes.$mail.text(gt('Resource group'));
+                this.setRows('', gt('Resource group'));
                 break;
             case 5:
-                this.nodes.$img.addClass('external-user-image');
-                this.nodes.$mail.text(this.model.getEmail() || gt('External user'));
-                if (this.model.getEmail() && this.options.halo) {
-                    this.nodes.$wrapper.data({email1: this.model.getEmail()}).addClass('halo-link');
+                mail = this.model.getEmail();
+                this.setRows(mail, gt('External contact'));
+                if (mail && this.options.halo) {
+                    this.$el.data({ email1: mail }).addClass('pointer halo-link');
                 }
-                this.nodes.$extra.text(gt('External user'));
                 break;
             case 6:
-                this.nodes.$img.addClass('group-image');
-                this.nodes.$mail.text(this.model.getEmail() || gt('Distribution list'));
+                this.setRows('', gt('Distribution list'));
                 break;
             }
         },
+
         onRemove: function (e) {
             // remove participant from model
             e.preventDefault();
             // get cid from parent node
-            var itemid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
+            var cid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
             // remove from collection by cid
-            this.model.collection.remove(this.model.collection.getByCid(itemid));
+            this.model.collection.remove(this.model.collection.getByCid(cid));
         }
     });
 

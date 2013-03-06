@@ -164,18 +164,23 @@ define("io.ox/core/api/factory",
                     .done(o.done.all || $.noop);
             },
 
-            getList: function (ids, useCache) {
+            getList: function (ids, useCache, options) {
                 // be robust
                 ids = ids ? [].concat(ids) : [];
                 // custom filter
                 if (o.filter) { ids = _(ids).filter(o.filter); }
                 // use cache?
+                options = options || {};
                 useCache = useCache === undefined ? true : !!useCache;
                 // async getter
                 var getter = function () {
+                    var params = _.extend({}, o.requests.list);
+                    if (options.allColumns) {
+                        params.columns = http.getAllColumns(o.module, true);
+                    }
                     return http.fixList(ids, http.PUT({
                         module: o.module,
-                        params: o.requests.list,
+                        params: params,
                         data: http.simplify(ids)
                     }))
                     .pipe(function (data) {
@@ -183,8 +188,9 @@ define("io.ox/core/api/factory",
                     })
                     .pipe(function (data) {
                         // add to cache
-                        // merge with "get" cache
-                        return $.when(caches.list.add(data), caches.get.merge(data)).pipe(function () {
+                        var method = options.allColumns ? 'add' : 'merge';
+                        // merge with or add to "get" cache
+                        return $.when(caches.list.add(data), caches.get[method](data)).pipe(function () {
                             return data;
                         });
                     });

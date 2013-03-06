@@ -15,9 +15,13 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/week/view',
      'io.ox/core/api/folder',
      'io.ox/calendar/edit/view-addparticipants',
+     'io.ox/participants/model',
+     'io.ox/participants/views',
+     'io.ox/core/api/user',
+     'io.ox/contacts/util',
      'gettext!io.ox/calendar',
      'settings!io.ox/core',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, AddParticipantsView, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, gt, settings) {
 
     'use strict';
 
@@ -39,24 +43,48 @@ define('io.ox/calendar/freebusy/controller',
                     .showAll(false)
                     // scroll to proper time
                     .setScrollPos();
+                // pre-fill participants list
+                this.participants.reset([].concat(options.participants));
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
             };
 
             this.refresh = function () {
-                this.collection.reset();
+                this.appointments.reset();
             };
 
             this.create = function () {
                 controller.invoke('create');
             };
 
+            // participants collection
+            this.participants = new participantsModel.Participants([]);
+            this.participantsView = $('<div class="participants-view">');
+
+            function drawParticipant(model) {
+                self.participantsView.append(
+                    new participantsView.ParticipantEntryView({ model: model }).render().$el
+                );
+            }
+
+            function removeParticipant(model) {
+                var cid = model.cid;
+                self.participantsView.find('[data-cid="' + cid + '"]').remove();
+            }
+
+            this.participants
+                .on('add', drawParticipant)
+                .on('remove', removeParticipant)
+                .on('reset', function () {
+                    self.participants.each(drawParticipant);
+                });
+
             // all appointments are stored in this collection
-            this.collection = new Backbone.Collection([]);
+            this.appointments = new Backbone.Collection([]);
 
             // get new instance of weekview
             this.weekView = new WeekView({
-                collection: this.collection,
+                collection: this.appointments,
                 mode: 2, // 2 = week:workweek
                 appExtPoint: 'io.ox/calendar/week/view/appointment',
                 keyboard: false
@@ -77,16 +105,51 @@ define('io.ox/calendar/freebusy/controller',
             // get instance of AddParticipantsView
             this.autocomplete = new AddParticipantsView({ el: this.autoCompleteControls })
                 .render({
-                    parentSelector: '.free-busy-view > .modal-footer',
                     autoselect: true,
                     contacts: true,
-                    resources: true,
                     distributionlists: true,
-                    placement: 'top'
+                    groups: true,
+                    parentSelector: '.free-busy-view > .modal-footer',
+                    placement: 'top',
+                    resources: true
                 });
 
+            this.autocomplete.on('select', function (data) {
+
+                if (_.isArray(data.distribution_list)) {
+                    // resolve distribution lits
+                    _(data.distribution_list).each(function (data) {
+                        data.type = 5;
+                        self.participants.add(data);
+                    });
+                } else if (data.type === 2) {
+                    // fetch users en block first
+                    controller.busy();
+                    self.participantsView.css('visibility', 'hidden').parent().busy();
+                    userAPI.getList(data.members, true, { allColumns: true })
+                        .done(function (list) {
+                            // resolve group
+                            // add type and polish display_name
+                            _(list).each(function (obj) {
+                                obj.type = 1;
+                                obj.sort_name = contactsUtil.getSortName(obj);
+                            });
+                            _(list).chain().sortBy('sort_name').each(function (obj) {
+                                self.participants.add(obj);
+                            });
+                        })
+                        .always(function () {
+                            self.participantsView.css('visibility', '').parent().idle();
+                            controller.idle();
+                        });
+                } else {
+                    // single participant
+                    self.participants.add(data);
+                }
+            });
+
             this.$el.append(
-                $('<div class="abs participants-view">'),
+                $('<div class="abs participants-view-scrollpane">').append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
 
@@ -134,6 +197,15 @@ define('io.ox/calendar/freebusy/controller',
                 });
         }
     };
+
+    /* DEV
+
+    var participants = [{ folder_id: 6, id: 225, type: 1 }, { folder_id: 6, id: 80, type: 1 }];
+    require(['io.ox/calendar/freebusy/controller'], function (controller) {
+        controller.open({ participants: participants });
+    });
+
+    */
 
     return that;
 });

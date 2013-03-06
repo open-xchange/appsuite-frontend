@@ -66,7 +66,7 @@ define("io.ox/mail/write/view-main",
 
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'mailwrite', contacts: true });
+    var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true });
 
     var view = View.extend({
 

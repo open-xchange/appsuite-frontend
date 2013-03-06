@@ -1501,49 +1501,29 @@ a.toolbar-action, .toolbar-action > a {
 
 .cursor-pointer { cursor: pointer; }
 
-div.contact-image {
-    background-image: url(dummypicture.xpng);
-    height: 3em;
-    width: 3em;
+.participant-image {
+    height: 54px; /* allows 3 lines with 18px line-height */
+    width: 54px;
     margin-right: 1em;
     display: inline-block;
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center center;
     float: left;
 }
 
-div.group-image {
+.participant-image.contact-image,
+.participant-image.external-user-image {
+    background-image: url(dummypicture.xpng);
+}
+
+.participant-image.group-image {
     background-image: url(dummypicture_group.xpng);
     background-position: 0px -4px;
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
 }
 
-div.resource-image {
+.participant-image.resource-image {
     background-image: url(dummypicture_resource.xpng);
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
-}
-
-div.external-user-image {
-    background-image: url(dummypicture.xpng);
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
 }
 
 /** DRAG & DROP **/

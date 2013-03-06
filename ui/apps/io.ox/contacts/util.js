@@ -30,6 +30,13 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
         },
 
+        // variant of getFullName without title, all lowercase
+        getSortName: function (obj) {
+            obj = _.extend({}, obj);
+            obj.title = '';
+            return this.getFullName(obj).toLowerCase();
+        },
+
         getFullName: function (obj) {
             // vanity fix
             function fix(field) {
@@ -37,13 +44,13 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                return obj.title ?
+                var title = fix(obj.title);
+                return title ?
                     //#. Name with title
                     //#. %1$s is the first name
                     //#. %2$s is the last name
                     //#. %3$s is the title
-                    gt('%3$s %2$s, %1$s', obj.first_name, obj.last_name,
-                                          obj.title) :
+                    gt('%3$s %2$s, %1$s', obj.first_name, obj.last_name, title) :
                     //#. Name without title
                     //#. %1$s is the first name
                     //#. %2$s is the last name

@@ -487,6 +487,8 @@ define('io.ox/core/tk/selection',
          * Set selection
          */
         this.set = function (list, quiet) {
+            // previous
+            var previous = this.get(), current;
             // clear
             clear();
             // loop
@@ -500,8 +502,8 @@ define('io.ox/core/tk/selection',
             });
             // reset last index
             lastIndex = -1;
-            // event
-            if (quiet !== true) {
+            // event?
+            if (!_.isEqual(previous, this.get()) && quiet !== true) {
                 changed();
             }
             return this;
