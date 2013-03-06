@@ -1,0 +1,196 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/capabilities", "io.ox/realtime/atmosphere"], function (ext, Event, caps) {
+    'use strict';
+    // TODO: Check capability
+    if (!caps.has("rt")) {
+        var dummy = {
+            send: $.noop
+        };
+        Event.extend(dummy);
+        return $.Deferred().resolve(dummy);
+    }
+    var socket = $.atmosphere;
+    var splits = document.location.toString().split('/');
+    var proto = splits[0];
+    var host = splits[2];
+    var url = proto + "//" + host + "/realtime/atmosphere/rt";
+    var api = {};
+    var def = $.Deferred();
+
+    function matches(json, namespace, element) {
+        return json.namespace === namespace && json.element === element;
+    }
+
+    function get(json, namespace, element) {
+        var i;
+        if (matches(json, namespace, element)) {
+            return new RealtimePayload(json);
+        } else {
+            if (json.payloads) {
+                for (i = 0; i < json.payloads.length; i++) {
+                    var payload = get(json.payloads[i], namespace, element);
+                    if (payload !== null) {
+                        return payload;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    function getAll(collector, json, namespace, element) {
+        if (matches(json, namespace, element)) {
+            collector.push(new RealtimePayload(json));
+        }
+        _(json.payloads || []).each(function (p) {
+            getAll(collector, p, namespace, element);
+        });
+    }
+
+    function RealtimePayload(json) {
+        this.element = json.element;
+        this.namespace = json.namespace;
+        this.data = json.data;
+        this.payloads = json.payloads || [];
+
+        this.get = function (namespace, element) {
+            return get(json, namespace, element);
+        };
+
+        this.getAll = function (namespace, element) {
+            var collector = [];
+            getAll(collector, json, namespace, element);
+            return collector;
+        };
+
+    }
+
+    function RealtimeStanza(json) {
+        this.selector = json.selector;
+        this.to = json.to;
+        this.from = json.from;
+        this.type = json.type;
+        this.element = json.element;
+        this.payloads = json.payloads || [];
+
+        this.get = function (namespace, element) {
+            return get(json, namespace, element);
+        };
+
+        this.getAll = function (namespace, element) {
+            var collector = [];
+            getAll(collector, json, namespace, element);
+            return collector;
+        };
+
+    }
+
+    /*
+    TODO: Transport Negotiation
+    var transports = [];
+    transports[0] = "websocket";
+    transports[1] = "sse";
+    transports[2] = "jsonp";
+    transports[3] = "long-polling";
+    transports[4] = "streaming";
+    transports[5] = "ajax";
+
+    $.each(transports, function (index, transport) {
+        var req = new $.atmosphere.AtmosphereRequest();
+
+        req.url = url;
+        req.contentType = "application/json";
+        req.transport = transport;
+        req.headers = { "negotiating" : "true", session: session };
+
+        req.onOpen = function(response) {
+            // SO?
+        };
+
+        req.onReconnect = function(request) {
+          request.close();
+        };
+
+        socket.subscribe(req);
+    });
+    */
+
+    var request = {
+        url: url,
+        contentType : "application/json",
+        logLevel : 'debug',
+        transport : 'long-polling',
+        fallbackTransport: 'long-polling',
+        timeout: 60000,
+        maxRequests : 3,
+        headers : {session: ox.session}
+    };
+
+
+    //------------------------------------------------------------------------------
+    //request callbacks
+
+    request.onOpen = function (response) {
+        def.resolve(api);
+    };
+
+    request.onReconnect = function (request, response) {
+        //socket.info("Reconnecting");
+    };
+
+    request.onMessage = function (response) {
+        var message = response.responseBody;
+        var json = {};
+        try {
+            json = $.parseJSON(message);
+            if (api.debug) {
+                console.log("<-", json);
+            }
+        } catch (e) {
+            console.log('This doesn\'t look like valid JSON: ', message);
+            console.error(e, e.stack);
+            throw e;
+        }
+        var stanza = new RealtimeStanza(json);
+        api.trigger("receive", stanza);
+        api.trigger("receive:" + stanza.selector, stanza);
+    };
+
+    request.onClose = function (response) {
+        if (api.debug) {
+            console.log("Closed");
+        }
+    };
+
+    request.onError = function (response) {
+        console.error(response);
+    };
+
+    var subSocket = socket.subscribe(request);
+
+    api.send = function (options) {
+        options.session = options.session || ox.session;
+        subSocket.push(JSON.stringify(options));
+        if (api.debug) {
+            console.log("->", options);
+        }
+    };
+
+
+
+    Event.extend(api);
+
+    return def;
+});
