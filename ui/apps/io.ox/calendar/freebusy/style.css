@@ -17,7 +17,6 @@
     .participants-view-scrollpane {
         padding: 13px;
         width: @participantsWidth;
-        border-right: 1px solid #ccc;
         .box-sizing(border-box);
         .overflow-y();
     }
@@ -35,6 +34,7 @@
     }
 
     .calendar-week-view {
+        top: 10px;
         left: @participantsWidth;
     }
  }

@@ -127,7 +127,6 @@ define('io.ox/calendar/freebusy/controller',
                     controller.busy();
                     self.participantsView.css('visibility', 'hidden').parent().busy();
                     // resolve group
-                    console.log('resolve group', data.members);
                     userAPI.getList(data.members, true, { allColumns: true })
                         .done(function (list) {
                             // add type and polish display_name
@@ -160,11 +159,11 @@ define('io.ox/calendar/freebusy/controller',
         open: function (options) {
 
             var width = $(document).width() - 50,
-                height = $(document).height() - 200,
+                height = $(document).height() - 180,
                 freebusy;
 
             new dialogs.ModalDialog({ width: width, easyOut: false })
-                .addPrimaryButton('close', gt('Close'))
+                .addButton('close', gt('Close'))
                 .build(function () {
 
                     this.getPopup().addClass('free-busy-view');

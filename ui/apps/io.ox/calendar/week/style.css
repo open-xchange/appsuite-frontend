@@ -98,7 +98,8 @@
         background: none;
         width: 100%;
         font-size: 12px;
-        color: #888;
+        font-weight: 200;
+        color: #aaa;
         text-align: right;
         .ellipsis();
         .user-select(none);
@@ -124,7 +125,7 @@
         height: @weekview-footer-height;
         left: 0;
         right: 0;
-        top: @weekview-toolbar-height;
+        top: @weekview-toolbar-height + 4px;
         width: 100%;
         .overflow(hidden);
     }
@@ -188,7 +189,7 @@
     .time .number {
         font-size: 12px;
         position: absolute;
-        right: 5px;
+        right: 8px;
         bottom: -9px;
     }
 
@@ -458,7 +459,7 @@
             left:  @SMALL-weekview-time-with;
         }
         .week-view-container {
-            top: @weekview-toolbar-height + @weekview-footer-height + 7;
+            top: @weekview-toolbar-height + @weekview-footer-height + 7 + 4;
         }
    }
 }
