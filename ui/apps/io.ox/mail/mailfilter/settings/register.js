@@ -38,7 +38,8 @@ define('io.ox/mail/mailfilter/settings/register',
         title: gt("Vacation Notice"),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
-        index: 400
+        index: 400,
+        lazySaveSettings: true
     });
 
     ext.point("io.ox/vacation/settings/detail").extend({

@@ -136,7 +136,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             selectOptions: multiValues.days
         }));
 
-        point.extend(new forms.SectionLegend({
+        point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/addresses',
             index: 500,
             label: gt('Send vacation notice for the following addresses')

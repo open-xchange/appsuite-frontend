@@ -60,7 +60,9 @@ define('io.ox/settings/main',
         left,
         right,
         expertmode = true, // for testing - better: false,
-        currentSelection = null;
+        currentSelection = null,
+        previousSelection = null;
+
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -78,9 +80,34 @@ define('io.ox/settings/main',
             title: 'Settings',
             chromeless: true
         }));
+        var changeStatus = false,
 
-        var saveSettings = function () {
-            if (currentSelection !== null) {
+            saveSettings = function (triggeredBy) {
+
+            switch (triggeredBy) {
+            case "changeMain":
+                if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
+                    var settingsID = currentSelection.id + '/settings';
+                    ext.point(settingsID + '/detail').invoke('save');
+                } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
+                    changeStatus = true;
+                }
+                break;
+            case 'changeGrid':
+                if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
+                    var settingsID = previousSelection.id + '/settings';
+                    ext.point(settingsID + '/detail').invoke('save');
+                    changeStatus = false;
+                }
+                break;
+            case 'hide':
+                if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
+                    var settingsID = currentSelection.id + '/settings';
+                    ext.point(settingsID + '/detail').invoke('save');
+                    changeStatus = false;
+                }
+                break;
+            default:
                 var settingsID = currentSelection.id + '/settings';
                 ext.point(settingsID + '/detail').invoke('save');
             }
@@ -158,7 +185,8 @@ define('io.ox/settings/main',
                         settings: true,
                         title: ext.title,
                         loadSettingPane: ext.loadSettingPane,
-                        index: ext.index
+                        index: ext.index,
+                        lazySaveSettings: ext.lazySaveSettings || false
                     });
                 });
 
@@ -193,12 +221,24 @@ define('io.ox/settings/main',
         // trigger auto save
         grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
+                previousSelection = currentSelection;
                 currentSelection = selection[0];
             }
         });
 
+        grid.selection.on('change', function () {
+            saveSettings('changeGrid');
+        });
+
         // trigger auto save on any change
-        win.nodes.main.on('change', saveSettings);
+
+        win.nodes.main.on('change', function () {
+            saveSettings('changeMain');
+        });
+        win.on('hide', function () {
+            saveSettings('hide');
+        });
+
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
         commons.wireGridAndWindow(grid, win);
