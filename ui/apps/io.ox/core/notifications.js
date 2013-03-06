@@ -299,7 +299,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         o = type;
                     }
                 } else {
-                    o.type = o.type || 'info';
+                    o.type = type || 'info';
                     o.message = message;
                 }
 

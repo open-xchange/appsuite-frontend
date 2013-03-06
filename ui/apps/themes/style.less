@@ -957,17 +957,46 @@ input[type=search] {
 }
 
 .io-ox-dialog-popup {
+
     position: relative;
     width: 500px;
     margin: 0 auto 0 auto;
     overflow: visible;
     background-color: white;
-    border: 1px solid #111;
     z-index: 65001;
+    border: 0px none;
+    .box-shadow(0px 5px 25px -5px #000);
     .border-radius(5px 5px 5px 5px);
 
     .modal-header {
         h3, h4 { margin: 0; }
+    }
+
+    .content {
+        overflow: auto;
+    }
+
+    .content .plain-text {
+        font-size: 12pt;
+        text-align: center;
+        color: @textColor;
+        padding: 10px;
+    }
+
+    .form-actions {
+        text-align: right;
+    }
+
+    .modal-footer .btn {
+        min-width: 5em;
+    }
+
+    .io-ox-sidepopup.right {
+        .border-radius(0 5px 5px 0);
+    }
+
+    .io-ox-sidepopup.left {
+        .border-radius(5px 0 0 5px);
     }
 }
 
@@ -979,29 +1008,7 @@ input[type=search] {
     z-index: 65003;
 }
 
-.io-ox-dialog-popup .form-actions {
-    text-align: right;
-}
 
-.boxshadow .io-ox-dialog-popup {
-    border: 0px none;
-    .box-shadow(0px 5px 25px -5px #000);
-}
-
-.io-ox-dialog-popup .content {
-    overflow: auto;
-}
-
-.io-ox-dialog-popup .content .plain-text {
-    font-size: 12pt;
-    text-align: center;
-    color: @textColor;
-    padding: 10px;
-}
-
-.io-ox-dialog-popup .modal-footer .btn {
-    min-width: 5em;
-}
 
 .io-ox-dialog-pane {
     width: 500px;  /* Shrink to fit would be nicer */

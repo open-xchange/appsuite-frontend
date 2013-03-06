@@ -508,15 +508,15 @@ define("io.ox/core/tk/dialogs",
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
-                target: target || my.parents(".window-body, .notifications-overlay")
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .io-ox-dialog-popup, .notifications-overlay"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .io-ox-dialog-popup, .notifications-overlay"),
+                target: target || my.parents(".window-body, .io-ox-dialog-popup, .notifications-overlay")
             };
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .notifications-overlay").css("zIndex") || 1) + 2;
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .notifications-overlay").css("zIndex") || 1) + 2;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);

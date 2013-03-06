@@ -45,24 +45,19 @@ define("io.ox/calendar/api",
                 params.recurrence_position = o.recurrence_position;
             }
 
-            if (params.id && params.folder) {
-                var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
+            var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
 
-                if (get_cache[key] === undefined || !useCache) {
-                    return http.GET({
-                            module: "calendar",
-                            params: params
-                        })
-                        .done(function (data) {
-                            get_cache[key] = JSON.stringify(data);
-                        });
-                } else {
-                    return $.Deferred().resolve(JSON.parse(get_cache[key]));
-                }
+            if (get_cache[key] === undefined || !useCache) {
+                return http.GET({
+                        module: "calendar",
+                        params: params
+                    })
+                    .done(function (data) {
+                        get_cache[key] = JSON.stringify(data);
+                    });
             } else {
-                return $.Deferred().reject();
+                return $.Deferred().resolve(JSON.parse(get_cache[key]));
             }
-
         },
 
         getAll: function (o) {
