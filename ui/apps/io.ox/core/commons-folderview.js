@@ -520,7 +520,6 @@ define('io.ox/core/commons-folderview',
             });
 
             sidepanel.on('webkitAnimationEnd', function (e) {
-                console.log('animationend');
                 fnAnimationEnd(e);
             });
 

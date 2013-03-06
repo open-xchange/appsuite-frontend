@@ -150,8 +150,8 @@
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
-        small: '(max-device-width: 480px)',
-        medium: '(min-device-width: 480px) and (max-device-width: 1024px)',
+        small: '(max-device-width: 720px)',
+        medium: '(min-device-width: 721px) and (max-device-width: 1024px)',
         large: '(min-device-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
