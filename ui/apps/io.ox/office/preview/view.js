@@ -87,16 +87,16 @@ define('io.ox/office/preview/view',
 
             bottomPane.createToolBox('bottom', { hoverEffect: true, classes: 'right' })
                 .createGroupContainer(function () {
-                    this.createButton('pages/first',    { icon: 'arrow-first',    tooltip: gt('Show first page') })
-                        .createButton('pages/previous', { icon: 'arrow-previous', tooltip: gt('Show previous page') })
-                        .createLabel('pages/current',   {                         tooltip: gt('Current page and total page count') })
-                        .createButton('pages/next',     { icon: 'arrow-next',     tooltip: gt('Show next page') })
-                        .createButton('pages/last',     { icon: 'arrow-last',     tooltip: gt('Show last page') });
+                    this.createButton('pages/first',    { icon: 'docs-first-page',    tooltip: gt('Show first page') })
+                        .createButton('pages/previous', { icon: 'docs-previous-page', tooltip: gt('Show previous page') })
+                        .createLabel('pages/current',   {                             tooltip: gt('Current page and total page count') })
+                        .createButton('pages/next',     { icon: 'docs-next-page',     tooltip: gt('Show next page') })
+                        .createButton('pages/last',     { icon: 'docs-last-page',     tooltip: gt('Show last page') });
                 })
                 .createGroupContainer(function () {
-                    this.createButton('zoom/dec',    { icon: 'icon-zoom-out', tooltip: gt('Zoom out') })
+                    this.createButton('zoom/dec',    { icon: 'docs-zoom-out', tooltip: gt('Zoom out') })
                         .createLabel('zoom/current', {                        tooltip: gt('Current zoom factor') })
-                        .createButton('zoom/inc',    { icon: 'icon-zoom-in',  tooltip: gt('Zoom in') });
+                        .createButton('zoom/inc',    { icon: 'docs-zoom-in',  tooltip: gt('Zoom in') });
                 });
 
             // insert the page node into the application pane

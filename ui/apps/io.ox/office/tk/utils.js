@@ -1826,7 +1826,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-office-icon') + ((white === true) ? ' icon-white' : ''));
+        return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-documents-icon') + ((white === true) ? ' icon-white' : '') + ' ' + language);
     };
 
     /**
@@ -1887,7 +1887,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
                 // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')).addClass(language))
+                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')))
             );
         }
 
