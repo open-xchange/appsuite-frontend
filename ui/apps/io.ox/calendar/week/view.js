@@ -205,11 +205,11 @@ define('io.ox/calendar/week/view',
             e.preventDefault();
             if (document.activeElement.tagName === 'BODY') {
                 switch (e.which) {
-                case 37:
+                case 37: // left
                     this.setStartDate('prev');
                     this.trigger('onRefresh');
                     break;
-                case 39:
+                case 39: // right
                     this.setStartDate('next');
                     this.trigger('onRefresh');
                     break;
@@ -302,6 +302,13 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        onLassoESC: function (e) {
+            if (e.which === 27) {
+                this.cleanUpLasso();
+                $(document).off('keyup', $.proxy(this.onLassoESC, this));
+            }
+        },
+
         /**
          * handler for lasso function in grid
          * @param  {MouseEvent} e mouseevents on day container
@@ -316,6 +323,7 @@ define('io.ox/calendar/week/view',
             case 'mousedown':
                 if (this.lasso === false && $(e.target).hasClass('timeslot')) {
                     this.lasso = true;
+                    $(document).on('keyup', $.proxy(this.onLassoESC, this));
                 }
                 break;
 
@@ -410,7 +418,7 @@ define('io.ox/calendar/week/view',
                         .addClass('appointment lasso')
                         .css({
                             height: this.cellHeight,
-                            minHeight: 1,
+                            minHeight: 0,
                             top: this.roundToGrid(mouseY, 'n')
                         })
                         .data({
@@ -428,20 +436,11 @@ define('io.ox/calendar/week/view',
 
             case 'mouseup':
                 if (_.isObject(this.lasso) && e.which === 1) {
-                    var lData = this.lasso.data(),
-                        self = this,
-                        cleanUp = function () {
-                            // delete div and reset object
-                            $.each(lData.helper, function (i, el) {
-                                el.remove();
-                            });
-                            lData = null;
-                            self.lasso.remove();
-                        };
+                    var lData = this.lasso.data();
 
                     // no action on 0px move
                     if (lData.start === lData.stop && lData.lastDay === lData.startDay) {
-                        cleanUp();
+                        this.cleanUpLasso();
                         break;
                     }
 
@@ -456,7 +455,7 @@ define('io.ox/calendar/week/view',
                         end += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.start : lData.stop);
                     }
 
-                    cleanUp();
+                    this.cleanUpLasso();
 
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,
@@ -473,6 +472,22 @@ define('io.ox/calendar/week/view',
                 break;
             }
             return;
+        },
+
+        /**
+         * cleanUp all lasso data
+         */
+        cleanUpLasso: function () {
+            if (_.isObject(this.lasso)) {
+                var lData = this.lasso.data();
+                // delete div and reset object
+                $.each(lData.helper, function (i, el) {
+                    el.remove();
+                });
+                lData = null;
+                this.lasso.remove();
+                this.lasso = false;
+            }
         },
 
         /**
