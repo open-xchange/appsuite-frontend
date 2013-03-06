@@ -39,7 +39,7 @@ define('io.ox/core/pubsub/model',
                     return api.publications.get({id: model.id});
                 },
                 update: function (model) {
-                    return api.publications.update(model);
+                    return api.publications.update(model.attributes);
                 },
                 destroy: function (model) {
                     return api.publications.remove(model.id);
@@ -56,7 +56,7 @@ define('io.ox/core/pubsub/model',
                     return api.subscriptions.get({id: model.id});
                 },
                 update: function (model) {
-                    return api.subscriptions.update(model);
+                    return api.subscriptions.update(model.attributes);
                 },
                 destroy: function (model) {
                     return api.subscriptions.remove(model.id);
