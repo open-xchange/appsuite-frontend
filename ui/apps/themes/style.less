@@ -1015,6 +1015,12 @@ input[type=search] {
     padding: 10px;
 }
 
+.io-ox-dialog-popup {
+    .modal-header, .modal-footer {
+        padding: 13px;
+    }
+}
+
 /* hints */
 
 span.hint {
@@ -1225,27 +1231,52 @@ input.nice-input {
 /* auto complete */
 
 .autocomplete-popup {
+
+    @width: 3px;
+
     position: absolute;
     background-color: white;
-    border: 1px solid #ccc;
     z-index: 100000;
     height: 200px;
     overflow-x: hidden;
     overfloy-y: auto;
-    padding-top: 3px;
-    .box-shadow(0px 5px 20px -10px black);
     .box-sizing(border-box);
     text-align:left;
-}
+    min-width: 360px;
 
-.autocomplete-popup .autocomplete-item {
-    padding: 0 5px 5px 5px;
-    line-height: 1.5em;
-    cursor: pointer;
-}
+    .autocomplete-item {
+        padding: 2px @width 2px @width;
+        line-height: 1.5em;
+        cursor: pointer;
+    }
 
-.autocomplete-popup .autocomplete-item.selected {
-    background-color: #eee;
+    .autocomplete-item.selected {
+        background-color: #eee;
+    }
+
+    .scrollable-pane:after {
+        content: '';
+    }
+
+    &.top-placement {
+        .box-shadow(0 -5px 20px -5px black);
+        margin: -1px 0 0 -@width;
+        border-top: (2 * @width) solid white;
+        border-bottom: 1px solid white;
+        .autocomplete-item {
+            margin-top: @width - 1px;
+        }
+    }
+
+    &.bottom-placement {
+        .box-shadow(0 5px 20px -5px black);
+        margin: 1px 0 0 -@width;
+        border-top: 1px solid white;
+        border-bottom: (2 * @width) solid white;
+        .autocomplete-item {
+            margin-bottom: @width - 1px;
+        }
+    }
 }
 
 /* folder tree */

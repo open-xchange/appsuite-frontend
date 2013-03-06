@@ -126,9 +126,10 @@ define('io.ox/calendar/freebusy/controller',
                     // fetch users en block first
                     controller.busy();
                     self.participantsView.css('visibility', 'hidden').parent().busy();
+                    // resolve group
+                    console.log('resolve group', data.members);
                     userAPI.getList(data.members, true, { allColumns: true })
                         .done(function (list) {
-                            // resolve group
                             // add type and polish display_name
                             _(list).each(function (obj) {
                                 obj.type = 1;

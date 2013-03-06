@@ -12,7 +12,7 @@
 
  .free-busy-view {
 
-    @participantsWidth: 320px;
+    @participantsWidth: 340px;
 
     .participants-view-scrollpane {
         padding: 13px;
@@ -27,7 +27,7 @@
     }
 
     .add-participant {
-        width: @participantsWidth - 45;
+        width: @participantsWidth - 82;
     }
 
     .modal-footer .btn.add-button {

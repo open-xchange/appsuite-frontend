@@ -38,28 +38,43 @@ define("io.ox/participants/model",
 
         initialize: function () {
             var self = this;
-            if (self.get('internal_userid')) {
-                self.cid = 'internal_' + self.get('internal_userid');
-                self.set({
-                    id: self.get('internal_userid'),
+            if (this.get('internal_userid')) {
+                this.cid = 'internal_' + this.get('internal_userid');
+                this.set({
+                    id: this.get('internal_userid'),
                     type: this.TYPE_USER
                 });
             }
-            if (this.get('type') === this.TYPE_USER) {
-                this.cid = 'internal_' + this.get('id');
-                //this.set('id', this.get('id'));
-            }
-            if (this.get('type') === this.TYPE_EXTERNAL_USER) {
-                this.cid = 'external_' + this.get('mail');
-                this.set('id', this.get('mail'));
-            }
-            if (self.get('entity')) {
-                self.id = parseInt(self.get('entity'), 10);
-                self.set({
-                    id: parseInt(self.get('entity'), 10),
+            else if (this.get('entity')) {
+                this.cid = 'entity_' + parseInt(this.get('entity'), 10);
+                this.set({
+                    id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
                 });
             }
+            else {
+                switch (this.get('type')) {
+                case this.TYPE_USER:
+                    this.cid = 'internal_' + this.get('id');
+                    break;
+                case this.TYPE_USER_GROUP:
+                    this.cid = 'usergroup_' + this.get('id');
+                    break;
+                case this.TYPE_RESOURCE:
+                    this.cid = 'resource_' + this.get('id');
+                    break;
+                case this.TYPE_RESOURCE_GROUP:
+                    this.cid = 'resourcegroup_' + this.get('id');
+                    break;
+                case this.TYPE_EXTERNAL_USER:
+                    this.cid = 'external_' + this.get('id');
+                    break;
+                case this.TYPE_DISTLIST_USER_GROUP:
+                    this.cid = 'distlist_' + this.get('id');
+                    break;
+                }
+            }
+
             this.fetch().done(function () {
                 self.trigger("fetch");
                 self.trigger("change");

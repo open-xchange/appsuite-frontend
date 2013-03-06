@@ -36,6 +36,7 @@ define("io.ox/core/tk/dialogs",
             },
 
             lastFocus = $(),
+            innerFocus = $(),
             deferred = $.Deferred(),
             closeViaEscapeKey,
             self = this,
@@ -83,15 +84,18 @@ define("io.ox/core/tk/dialogs",
             },
 
             busy = function () {
-                nodes.footer.find('button').attr('disabled', 'disabled');
-                nodes.body.find('input').attr('disabled', 'disabled');
+                nodes.footer.find('input, select, button').attr('disabled', 'disabled');
+                nodes.body.find('input, select, button, textarea').attr('disabled', 'disabled');
                 nodes.body.css('opacity', 0.5);
+                innerFocus = $(document.activeElement);
+                nodes.popup.focus();
             },
 
             idle = function () {
-                nodes.footer.find('button').removeAttr('disabled');
-                nodes.body.find('input').removeAttr('disabled');
+                nodes.footer.find('input, select, button').removeAttr('disabled');
+                nodes.body.find('input, select, button, textarea').removeAttr('disabled');
                 nodes.body.css('opacity', '');
+                innerFocus.focus();
             },
 
             invoke = function (e) {
