@@ -227,7 +227,6 @@
         display: inline;
     }
 
-    @appointment-private: #555; /* dark grey */
     @appointment-out: #aaa; /* light grey */
 
     /* out */
@@ -244,7 +243,7 @@
     @appointment-temporary: #FFBB00; /* yellow */
     @appointment-absent: #913F3F; /* red */
     @appointment-free: #8EB360; /* green */
-    @appointment-private: #ccc; /* grey */
+    @appointment-private: #555; /* dark grey */
 
     @appointment-unconfirmed-alpha: 0.4;
     @appointment-declined-alpha: 0.3;
@@ -256,11 +255,6 @@
         float: left;
         font-size: 15px;
         margin-right: 3px;
-    }
-
-    .appointment.private {
-        cursor: normal;
-        background-color: @appointment-private;
     }
 
     .appointment.reserved {
@@ -284,6 +278,15 @@
         color: @appointment-declined-font;
     }
 
+    .appointment.private {
+        background-color: @appointment-private;
+    }
+
+    .appointment.private.disabled {
+        cursor: normal;
+    }
+
+
     /* hover */
     .appointment.reserved.hover {
         background-color: darken(@appointment-reserved, @appointment-hover-pct);
@@ -299,6 +302,10 @@
 
     .appointment.free.hover {
         background-color: darken(@appointment-free, @appointment-hover-pct);
+    }
+
+   .appointment.private.hover {
+        background-color: darken(@appointment-private, @appointment-hover-pct);
     }
 
     /* unconfirmed */

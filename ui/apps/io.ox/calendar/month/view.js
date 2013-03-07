@@ -56,7 +56,7 @@ define('io.ox/calendar/month/view',
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
                 cT = $('[data-cid="' + cid + '"]', this.pane);
-            if (cT.hasClass('appointment') && !cT.hasClass('private')) {
+            if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = _.cid(cid + '');
 
@@ -298,9 +298,9 @@ define('io.ox/calendar/month/view',
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
-                classes = 'private';
+                classes = 'private disabled';
             } else {
-                classes = util.getShownAsClass(a.attributes) +
+                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }

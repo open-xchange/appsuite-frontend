@@ -247,7 +247,7 @@ define('io.ox/calendar/week/perspective',
                 .on('updateAppointment', this.updateAppointment, this)
                 .on('onRefresh', this.refresh, this);
 
-            this.main.append(this.view.render().el);
+            this.main.append(this.view.render().$el);
 
             if (!opt.rendered) {
                 // create sidepopup object with eventlistener

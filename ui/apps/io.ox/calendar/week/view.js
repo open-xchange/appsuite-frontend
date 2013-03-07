@@ -32,6 +32,7 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
+        minCellHeight:  24,     // min height of one single fragment in px
         fulltimeHeight: 20,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
@@ -42,9 +43,11 @@ define('io.ox/calendar/week/view',
         mode:           0,      // view mode {1: day, 2: workweek, 3: week}
         workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
         showDeclined:   false,  // show declined appointments
+        showFulltime:   true,   // show area for fulltime appointments
 
         startDate:      null,   // start of day/week as local date (use as reference point)
         clickTimer:     null,   // timer to separate single and double click
+        todayClass:     null,   // CSS classname for today column
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
@@ -60,10 +63,13 @@ define('io.ox/calendar/week/view',
         kwInfo:         null,   // current KW
         showAllCheck:   null,   // show all folders check-box
         showAllCon:     null,   // container
+        firstScroll:    false,
 
         // init values from prespective
         initialize: function (opt) {
             myself = myself || ox.user_id;
+
+            // ox.testprint = this.print;
 
             this.pane = $('<div>').addClass('scrollpane');
             this.fulltimePane = $('<div>').addClass('fulltime');
@@ -75,6 +81,8 @@ define('io.ox/calendar/week/view',
             this.showAllCheck = $('<input/>').attr('type', 'checkbox');
             this.showAllCon = $('<div>').addClass('showall');
 
+            this.showFulltime = opt.showFulltime === false ? false : true;
+            this.todayClass = opt.todayClass || 'today';
             this.mode = opt.mode;
             this.extPoint = opt.appExtPoint;
             this.setStartDate();
@@ -242,7 +250,7 @@ define('io.ox/calendar/week/view',
          */
         onClickAppointment: function (e) {
             var cT = $(e.currentTarget);
-            if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('private')) {
+            if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = _.cid($(e.currentTarget).data('cid') + '');
                 if (!cT.hasClass('current')) {
@@ -361,7 +369,7 @@ define('io.ox/calendar/week/view',
                                 .addClass('appointment lasso')
                                 .css({
                                     height: right ? this.roundToGrid(mouseY, 's') : 'auto',
-                                    minHeight: this.cellHeight,
+                                    minHeight: this.minCellHeight,
                                     top: right ? 0 : this.roundToGrid(mouseY, 'n'),
                                     bottom: right ? 'auto' : 0
                                 });
@@ -388,7 +396,7 @@ define('io.ox/calendar/week/view',
                             // change only last helper height
                             lData.last.css({
                                 height: right ? this.roundToGrid(mouseY, 's') : 'auto',
-                                minHeight: this.cellHeight,
+                                minHeight: this.minCellHeight,
                                 top: right ? 0 : this.roundToGrid(mouseY, 'n'),
                                 bottom: right ? 'auto' : 0
                             });
@@ -501,11 +509,11 @@ define('io.ox/calendar/week/view',
             // create timelabels
             var timeLabel = [];
             for (var i = 1; i < this.slots; i++) {
+                var number = new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME);
                 timeLabel.push(
                     $('<div>')
                         .addClass('time')
-                        .append($('<div>').addClass('number').text(new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME)))
-                        .height(this.cellHeight * this.fragmentation)
+                        .append($('<div>').addClass('number').text(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2')))
                 );
             }
             timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
@@ -535,7 +543,6 @@ define('io.ox/calendar/week/view',
                     day.append(
                         $('<div>')
                             .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
-                            .height(this.cellHeight)
                     );
                 }
                 weekCon.append(day);
@@ -590,6 +597,7 @@ define('io.ox/calendar/week/view',
                         this.pane.empty().append(timeLabel, weekCon)
                     )
             );
+
             return this;
         },
 
@@ -597,11 +605,26 @@ define('io.ox/calendar/week/view',
          * move the calendar window scrolling position, so that the working hours are centered
          */
         setScrollPos: function () {
+            this.adjustCellHeight();
             var slotHeight = this.cellHeight * this.fragmentation,
-                workHeight = slotHeight * (this.workEnd - this.workStart),
-                newPos = (this.pane.height() - workHeight) / 2;
+                workHeight = slotHeight * (this.workEnd - this.workStart);
+
             // adjust scoll position
-            this.pane.scrollTop((slotHeight * this.workStart) - newPos);
+            this.pane.scrollTop((slotHeight * this.workStart) - (this.pane.height() - workHeight) / 2);
+            return this;
+        },
+
+        /**
+         * adjust cell height to fit into scrollpane
+         * @return {View} thie view
+         */
+        adjustCellHeight: function () {
+            this.cellHeight = Math.floor(
+                Math.max(this.pane.height() / ((this.workEnd - this.workStart + 1) * this.fragmentation),
+                this.minCellHeight)
+            );
+            $('.timeslot', this.pane).height(this.cellHeight - 1);
+            $('.time', this.pane).height(this.cellHeight * this.fragmentation);
             return this;
         },
 
@@ -622,7 +645,7 @@ define('io.ox/calendar/week/view',
 
             // clear all first
             $('.appointment', this.$el).remove();
-            $('.day.today', this.$el).removeClass('today');
+            $('.day.' + this.todayClass, this.$el).removeClass(this.todayClass);
 
             var self = this,
                 draw = {},
@@ -640,7 +663,8 @@ define('io.ox/calendar/week/view',
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().setHours(0, 0, 0, 0).getTime() === tmpDate.getTime()) {
-                    $('.day[date="' + d + '"]', this.pane).add(day).addClass('today');
+                    $('.day[date="' + d + '"]', this.pane).addClass(this.todayClass);
+                    day.addClass('today');
                     hasToday = true;
                 }
                 days.push(day);
@@ -670,8 +694,7 @@ define('io.ox/calendar/week/view',
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || this.showDeclined) {
-
-                    if (model.get('full_time')) {
+                    if (model.get('full_time') && this.showFulltime) {
                         fulltimeCount++;
                         var app = this.renderAppointment(model),
                             fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
@@ -695,6 +718,12 @@ define('io.ox/calendar/week/view',
                         });
                         this.fulltimePane.append(app);
                     } else {
+                        // fix fulltime appointments to local time
+                        if (model.get('full_time')) {
+                            model.set({start_date: date.Local.utc(model.get('start_date'))}, {silent: true});
+                            model.set({end_date: date.Local.utc(model.get('end_date'))}, {silent: true});
+                        }
+
                         var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate)),
                             endLocal = new date.Local(model.get('end_date')),
                             start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
@@ -749,10 +778,18 @@ define('io.ox/calendar/week/view',
             }, this);
 
             // calculate full-time appointment container height
-            var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
+            var ftHeight = 0;
+            if (this.showFulltime) {
+                ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
+            }
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
+
+            if (!this.firstScroll) {
+                this.setScrollPos();
+                this.firstScroll = true;
+            }
 
             // control note in full-time appointment area
             this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
@@ -807,19 +844,18 @@ define('io.ox/calendar/week/view',
                 // loop over all appointments to draw them
                 for (var j = 0; j < apps.length; j++) {
                     var app = apps[j],
-                        pos = self.calcPos(app),
+                        pos = self.calcPos(app.pos),
                         idx = Math.min(app.pos.max, positions.length),
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth));
-
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: Math.max(pos.height, self.cellHeight) - (border ? 0 : 1),
+                        height: Math.max(pos.height, self.minCellHeight) - (border ? 0 : 1),
                         lineHeight: self.cellHeight + 'px',
                         width: width + '%',
-                        minHeight: self.cellHeight + 'px',
+                        minHeight: self.minCellHeight + 'px',
                         maxWidth: self.appWidth + '%',
                         zIndex: j
                     })
@@ -1284,12 +1320,12 @@ define('io.ox/calendar/week/view',
 
         /**
          * calculate css position paramter (top and left) of an appointment
-         * @param  {Object} ap jQuery object of the appointment
+         * @param  {Object} ap meta object of the appointment
          * @return {Object}    object containin top and height values
          */
         calcPos: function (ap) {
-            var start = new date.Local(ap.pos.start),
-                end = new date.Local(ap.pos.end),
+            var start = new date.Local(ap.start),
+                end = new date.Local(ap.end),
                 self = this,
                 calc = function (d) {
                     return Math.floor((d.getHours() / 24 + d.getMinutes() / 1440) * self.height());
@@ -1395,6 +1431,10 @@ define('io.ox/calendar/week/view',
             if (this.restoreCache.scrollPosition) {
                 this.pane.scrollTop(this.restoreCache.scrollPosition);
             }
+        },
+
+        print: function () {
+            console.log('print');
         }
     });
 
@@ -1406,9 +1446,9 @@ define('io.ox/calendar/week/view',
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
-                classes = 'private';
+                classes = 'private disabled';
             } else {
-                classes = util.getShownAsClass(a.attributes) +
+                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
