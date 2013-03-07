@@ -156,6 +156,7 @@ define("io.ox/calendar/view-detail",
         } else {
             name = display_name = obj.display_name || mail_lc;
         }
+        
         node = $('<div class="participant">')
             .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
             .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)))
@@ -164,6 +165,10 @@ define("io.ox/calendar/view-detail",
         // has confirmation comment?
         if (conf.comment !== '') {
             node.append($("<span>").addClass("comment").text(gt.noI18n(conf.comment)));
+        }
+        if (obj.type === 5) {
+            //add external badge
+            node.append($('<div>').append($('<span>').addClass('badge').text(gt('External'))));//div wrapping needed or badge would use the whole line
         }
         return node;
     }

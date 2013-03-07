@@ -24,7 +24,6 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
     var taskDetailView = {
 
         draw: function (data) {
-
             if (!data) {
                 return $('<div>');
             }
@@ -178,7 +177,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                         failedToLoad(node, table, participant);
                                     });
                             } else {
-                                drawParticipant(table, participant, participant.display_name);
+                                drawParticipant(table, participant, participant.display_name + ' <' + participant.mail + '>');
                             }
                         },
                         drawParticipant = function (table, participant, name) {
@@ -186,11 +185,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                             table.append(row = $('<tr>').append(
                                 $('<td class="participants-table-name">').text(name))
                             );
-                            if (participant.confirmation !== undefined) {
+                            row.append(
+                                $('<td>').text(states[participant.confirmation || 0][0]),
+                                $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]))
+                                );
+                            if (participant.type === 5) { //external participant
                                 row.append(
-                                    $('<td>').text(states[participant.confirmation][0]),
-                                    $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation][1]))
-                                    );
+                                        $('<td>').append($('<div>').addClass('badge participants-external').text(gt('External')))
+                                        );
                             }
                         },
                         failedToLoad = function (node, table, participant) {
