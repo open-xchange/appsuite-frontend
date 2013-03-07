@@ -92,7 +92,7 @@
         'Safari': '5',
         'Firefox': '10',
         'IE': '9',
-        'Android': '4',
+        'Android': '4.2',
         'iOS': '6'
     };
 

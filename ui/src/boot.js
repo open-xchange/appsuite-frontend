@@ -87,7 +87,7 @@ $(window).load(function () {
     }
 
     // check for supported browser
-    function browserCheck() {
+    function isBrowserSupported() {
         var supp = false;
         _.each(_.browserSupport, function(value, key) {
             if (_.browser[key] >= value) {
@@ -96,6 +96,7 @@ $(window).load(function () {
         });
         return supp;
     }
+    window.isBrowserSupported = isBrowserSupported;
 
     // feedback
     function feedback(type, node) {
@@ -703,19 +704,33 @@ $(window).load(function () {
                     }
 
                     // supported browser?
-                    if (!browserCheck()) {
-                        // warn user
-                        feedback('info', $(
-                            _.browser.Chrome ?
-                            '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
-                            '<b>' + gt('browser') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
-                        ));
+                    if (!isBrowserSupported()) {
+
+                        if (_.device('android')) {
+                            // special info for not supported android
+                            feedback('info', _.printf(gt('os-android'), _.browserSupport.Android));
+                        } else if (_.device('ios')) {
+                            // special info for not supported iOS
+                            feedback('info', _.printf(gt('os-ios'), _.browserSupport.iOS));
+                        } else {
+                            // general warning about browser
+                            feedback('info', $(
+                                _.browser.Chrome ?
+                                '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
+                                '<b>' + gt('browser') + '</b>&nbsp;' + gt('please-use') + '<div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
+                            ));
+                        }
+
                     } else if (_.browser.IE <= 8) {
                         // recommend chrome frame?
                         var link = 'http://www.google.com/chromeframe/?user=true';
                         feedback('info', $(
                             '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
                         ));
+                    } else if (_.device('android || ios')) {
+                        // TODO remove after 7.4
+                        // inform about preview mode for 7.2
+                        feedback('info', gt('mobile-preview'));
                     }
                     // show login dialog
                     $('#io-ox-login-blocker').on('mousedown', false);
