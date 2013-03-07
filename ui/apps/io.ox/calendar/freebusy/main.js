@@ -21,7 +21,7 @@ define('io.ox/calendar/freebusy/main',
 
         var app, win;
 
-        app = ox.ui.createApp({ name: NAME, title: 'Find free time' });
+        app = ox.ui.createApp({ name: NAME, title: 'Find a free time' });
 
         // launcher
         app.setLauncher(function (options) {

@@ -787,7 +787,7 @@ define('io.ox/calendar/week/view',
             }
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.css({ height: ftHeight + 'px' });
-            this.pane.css({ top: ftHeight + 'px' });
+            this.pane.css({ top: (ftHeight || 7) + 'px' });
 
             if (!this.firstScroll) {
                 this.setScrollPos();

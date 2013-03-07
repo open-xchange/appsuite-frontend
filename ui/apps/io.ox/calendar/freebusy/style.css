@@ -24,6 +24,16 @@
     .add-participant {
         width: @participantsWidth - 82;
     }
+
+    .hint {
+        line-height: 30px;
+        position: relative;
+        left: 77px;
+    }
+
+    .popover {
+        max-width: 380px;
+    }
 }
 
 .window-content .free-busy-view {

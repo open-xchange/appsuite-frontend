@@ -262,7 +262,7 @@ define('io.ox/calendar/freebusy/controller',
             });
 
             this.$el.append(
-                $('<h1>').text(gt('Find free time')),
+                $('<h1>').text(gt('Find a free time')),
                 $('<div class="abs participants-view-scrollpane">').append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
@@ -272,10 +272,23 @@ define('io.ox/calendar/freebusy/controller',
 
             var freebusy = new that.FreeBusy(options, win);
 
+            var how = gt('How does this work?');
+
             this.append(
                 freebusy.$el,
                 $('<div class="abs free-busy-controls">').append(
-                    freebusy.autoCompleteControls
+                    $('<button class="btn pull-right">').text(gt('Back to appointment')),
+                    freebusy.autoCompleteControls,
+                    $('<a href="#" class="hint pull-left">')
+                        .text(how)
+                        .click($.preventDefault)
+                        .popover({
+                            title: how,
+                            content: gt('If you spot a free time, just select this area. ' +
+                                'To do this, move the cursor to the start time, hold the mouse button, and drag the mouse to the end time. ' +
+                                'You will automatically return to your appointment and the new start and end time will be used.'),
+                            placement: 'top'
+                        })
                 )
             );
 
@@ -291,47 +304,6 @@ define('io.ox/calendar/freebusy/controller',
                 freebusy.postprocess();
                 freebusy = win = null;
             });
-        },
-
-        open: function (options) {
-
-            var width = $(document).width() - 50,
-                height = $(document).height() - 180,
-                freebusy;
-
-            new dialogs.ModalDialog({ width: width, easyOut: false })
-                .addButton('close', gt('Close'))
-                .build(function () {
-
-                    this.getPopup().addClass('free-busy-view');
-
-                    // get free/busy instance
-                    freebusy = new that.FreeBusy(options, this);
-
-                    this.getHeader().append(
-                            $('<h4 id="dialog-title">').text(gt('Find free time'))
-                        );
-                    this.getFooter().prepend(
-                            freebusy.autoCompleteControls
-                        );
-                    this.getContentNode()
-                        .css({ height: height + 'px', maxHeight: height + 'px' })
-                        .append(freebusy.$el);
-                })
-                .busy()
-                .show(function (popup) {
-                    var id = settings.get('folder/calendar');
-                    folderAPI.get({ folder: id }).always(function (data) {
-                        // pass folder data over to view (needs this for permission checks)
-                        // use fallback data on error
-                        data = data.error ? { folder_id: 1, id: id, own_rights: 403710016 } : data;
-                        freebusy.weekView.folder(data);
-                        // clean up
-                        popup.idle();
-                        freebusy.postprocess();
-                        freebusy = popup = null;
-                    });
-                });
         }
     };
 
