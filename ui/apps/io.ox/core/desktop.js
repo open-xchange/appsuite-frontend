@@ -727,7 +727,7 @@ define("io.ox/core/desktop",
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
                         baton = ext.Baton({ window: this, $: this.nodes, app: this.app, folder: folder });
-                    ext.point(name + '/toolbar').invoke('draw', this.nodes.toolbar.empty(), baton);
+                    ext.point(name + '/window-toolbar').invoke('draw', this.nodes.toolbar.empty(), baton);
                 };
 
                 ext.point(name + '/window-title').extend({

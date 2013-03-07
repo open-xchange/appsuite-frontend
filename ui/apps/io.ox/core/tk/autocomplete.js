@@ -150,6 +150,8 @@ define('io.ox/core/tk/autocomplete',
 
                         popup.show();
 
+                        window.popup = popup;
+
                         isOpen = true;
                     }
                 },

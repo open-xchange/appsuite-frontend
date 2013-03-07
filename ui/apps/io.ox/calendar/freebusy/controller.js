@@ -38,7 +38,7 @@ define('io.ox/calendar/freebusy/controller',
                 postprocessed = $.Deferred();
 
             // create container node
-            this.$el = $('<div class="abs">').on('dispose', function () {
+            this.$el = $('<div class="abs free-busy-view">').on('dispose', function () {
                 // clean up
                 self.weekView.remove();
             });
@@ -155,7 +155,7 @@ define('io.ox/calendar/freebusy/controller',
                 });
 
             // pre-fill participants list
-            this.participants.reset([].concat(options.participants));
+            this.participants.reset(options.participants || []);
 
             // all appointments are stored in this collection
             this.appointments = new Backbone.Collection([]);
@@ -199,7 +199,7 @@ define('io.ox/calendar/freebusy/controller',
                     contacts: true,
                     distributionlists: true,
                     groups: true,
-                    parentSelector: '.free-busy-view > .modal-footer',
+                    parentSelector: 'body',
                     placement: 'top',
                     resources: true
                 });
@@ -239,9 +239,35 @@ define('io.ox/calendar/freebusy/controller',
             });
 
             this.$el.append(
+                $('<h1>').text(gt('Find free time')),
                 $('<div class="abs participants-view-scrollpane">').append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
+        },
+
+        draw: function (options, win) {
+
+            var freebusy = new that.FreeBusy(options, win);
+
+            this.append(
+                freebusy.$el,
+                $('<div class="abs free-busy-controls">').append(
+                    freebusy.autoCompleteControls
+                )
+            );
+
+            win.busy();
+            var id = settings.get('folder/calendar');
+            folderAPI.get({ folder: id }).always(function (data) {
+                // pass folder data over to view (needs this for permission checks)
+                // use fallback data on error
+                data = data.error ? { folder_id: 1, id: id, own_rights: 403710016 } : data;
+                freebusy.weekView.folder(data);
+                // clean up
+                win.idle();
+                freebusy.postprocess();
+                freebusy = win = null;
+            });
         },
 
         open: function (options) {

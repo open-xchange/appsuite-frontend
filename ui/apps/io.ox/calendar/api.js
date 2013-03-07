@@ -475,13 +475,14 @@ define("io.ox/calendar/api",
                 id: obj.id,
                 type: obj.type,
                 start: options.start,
-                end: options.end
+                end: options.end,
+                timezone: 'UTC'
             };
         });
 
         if (list.length) {
             return http.PUT({
-                module: "multiple",
+                module: 'multiple',
                 data: requests,
                 appendColumns: false,
                 'continue': true

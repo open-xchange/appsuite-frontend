@@ -10,12 +10,39 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- .free-busy-view {
+@controlsHeight: 34px;
+@participantsWidth: 340px;
 
-    @participantsWidth: 340px;
+.free-busy-controls {
+
+    top: auto;
+    background-color: whiteSmoke;
+    border-top: 1px solid #ddd;
+    padding: 13px;
+    height: @controlsHeight;
+
+    .add-participant {
+        width: @participantsWidth - 82;
+    }
+}
+
+.window-content .free-busy-view {
+
+    bottom: @controlsHeight + 13 * 2 + 1;
+
+    h1 {
+        position: absolute;
+        top: 13px;
+        left: 13px;
+        margin: 0;
+        line-height: 38px;
+        font-family: @lightFontFamily;
+        font-size: 20px;
+    }
 
     .participants-view-scrollpane {
-        padding: 13px;
+        top: 50px;
+        padding: 0 13px 13px 13px;
         width: @participantsWidth;
         .box-sizing(border-box);
         .overflow-y();
@@ -42,10 +69,6 @@
         background-color: #eee;
     }
 
-    .add-participant {
-        width: @participantsWidth - 82;
-    }
-
     .modal-footer .btn.add-button {
         min-width: 3em;
     }
@@ -56,11 +79,11 @@
     }
 
     .appointment {
-        opacity: 0.75;
+        opacity: 0.70;
     }
 
-    .color-index-0 { background-color: @blue; }
-    .color-index-1 { background-color: @blueLight; }
+    .color-index-0 { background-color: darken(@blue, 10%); }
+    .color-index-1 { background-color: darken(@blueLight, 20%); }
     .color-index-2 { background-color: @green; }
     .color-index-3 { background-color: @greenLight; }
     .color-index-4 { background-color: @yellow; }
@@ -69,4 +92,6 @@
     .color-index-7 { background-color: @pink; }
     .color-index-8 { background-color: @purple; }
     .color-index-9 { background-color: #888; }
+
+    .color-index-4 .appointment-content { color: #333; }
  }
