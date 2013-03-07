@@ -1415,7 +1415,7 @@ msgstr "Envoyer le courriel"
 
 #: apps/io.ox/contacts/actions.js:330 apps/io.ox/mail/actions.js:832
 msgid "Invite to appointment"
-msgstr "Inviter au rendez-vous"
+msgstr "Inviter à un rendez-vous"
 
 #: apps/io.ox/contacts/actions.js:353 apps/io.ox/files/actions.js:614
 #: apps/io.ox/mail/actions.js:765
@@ -2932,7 +2932,7 @@ msgstr "Le rappel a été créé"
 
 #: apps/io.ox/mail/actions.js:643 apps/io.ox/mail/write/main.js:462
 msgid "Compose new mail"
-msgstr "Composer un nouveau courriel"
+msgstr "Rédiger un nouveau courriel"
 
 #: apps/io.ox/mail/actions.js:653
 msgid "Reply All"
@@ -3062,7 +3062,7 @@ msgstr "Utiliser une police à chasse fixe pour les courriels de texte"
 
 #: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:35
 msgid "Compose"
-msgstr "Composition"
+msgstr "Rédiger"
 
 #: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:36
 msgid "Append vcard"
@@ -7167,7 +7167,7 @@ msgstr "Mon mot de passe"
 #~ msgid "Note: Attachments are not viewable when composing a new message"
 #~ msgstr ""
 #~ "Remarque : les pièces jointes ne peuvent pas être vues pendant que l'on "
-#~ "compose un nouveau message"
+#~ "rédige un nouveau message"
 
 #~ msgid "Notifier"
 #~ msgstr "Programme de notification"
