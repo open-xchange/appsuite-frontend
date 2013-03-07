@@ -162,7 +162,7 @@ define("io.ox/participants/model",
             return util.getMail(this.toJSON());
         },
         getImage: function () {
-            return util.getImage(this.toJSON());
+            return util.getImage(this.toJSON(), { scaleType: 'cover', width: 54, height: 54 });
         },
         markAsUnremovable: function () {
             this.set('ui_removable', false);

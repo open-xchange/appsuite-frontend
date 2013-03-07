@@ -18,7 +18,7 @@
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
-    padding: 8px 13px;
+    padding: 13px;
     height: @controlsHeight;
 
     .add-participant {
@@ -28,7 +28,7 @@
 
 .window-content .free-busy-view {
 
-    bottom: @controlsHeight + 8 * 2 + 1;
+    bottom: @controlsHeight + 13 * 2 + 1;
 
     .user-select(none);
 
@@ -113,7 +113,7 @@
     .color-index-1 { background-color: darken(@blueLight, 20%); }
     .color-index-2 { background-color: @green; }
     .color-index-3 { background-color: @greenLight; }
-    .color-index-4 { background-color: @yellow; }
+    .color-index-4 { background-color: #DAD172; } /* better than pure yellow */
     .color-index-5 { background-color: @orange; }
     .color-index-6 { background-color: @red; }
     .color-index-7 { background-color: @pink; }

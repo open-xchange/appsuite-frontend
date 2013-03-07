@@ -138,6 +138,14 @@ define('io.ox/calendar/freebusy/controller',
                 );
             }
 
+            function updateParticipantColors() {
+                self.participants.each(function (model, index) {
+                    var node = self.participantsView.find('[data-cid="' + model.cid + '"] .participant-color');
+                    node.attr('class', 'participant-color ' + getColorClass(index));
+                    model.set('index', index);
+                });
+            }
+
             function drawParticipant(model) {
                 self.participantsView.append(
                     new participantsView.ParticipantEntryView({ model: model, halo: true, customize: customize })
@@ -148,12 +156,14 @@ define('io.ox/calendar/freebusy/controller',
             function removeParticipant(model) {
                 var cid = model.cid;
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
+                updateParticipantColors();
             }
 
             this.participants
                 .on('add', drawParticipant)
                 .on('remove', removeParticipant)
                 .on('reset', function () {
+                    self.participantsView.empty();
                     self.participants.each(drawParticipant);
                 })
                 .on('add remove reset', function () {
@@ -201,7 +211,7 @@ define('io.ox/calendar/freebusy/controller',
 
             // construct auto-complete
             this.autoCompleteControls = $('<div class="autocomplete-controls input-append pull-left">').append(
-                $('<input type="text" class="add-participant">').attr('placeholder', gt('Add participants') + ' ...'),
+                $('<input type="text" class="add-participant">').attr('placeholder', gt('Add participant') + ' ...'),
                 $('<button class="btn add-button" type="button" data-action="add">').append($('<i class="icon-plus">'))
             );
 
