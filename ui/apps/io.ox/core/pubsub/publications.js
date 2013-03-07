@@ -18,7 +18,8 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                           'io.ox/core/api/pubsub',
                                           'io.ox/core/api/templating',
                                           'io.ox/core/notifications',
-                                          'io.ox/core/tk/dialogs'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
+                                          'io.ox/core/tk/dialogs',
+                                          'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
     
     'use strict';
     
@@ -89,18 +90,20 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             var popup = new dialogs.ModalDialog({async: true})
                 .addPrimaryButton('publish', gt('Publish'))
                 .addButton('cancel', gt('Cancel'));
-            
             //Header
             if (self.model.attributes.entity.folder) {
                 popup.getHeader().append($('<h4>').text(gt('Publish folder')));
             } else {
                 popup.getHeader().append($('<h4>').text(gt('Publish item')));
             }
+            //Body
+            popup.getBody().addClass('form-horizontal publication-dialog');
             
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
             
             popup.on('publish', function (action) {
                 self.model.save().done(function (id) {
+                    notifications.yell('success', gt("Publication has been added"));
                     api.publications.get({id: id}).done(function (data) {
                         var model = new pubsub.Publication(data);
                         //code for use if pubsub.publications is singleton
@@ -133,15 +136,13 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             if (!this.infostoreItem) {
                 templApi.getNames().done(function (data) {//get the templates if needed
                     baton.templates = data;
-                    //Body
-                    popup.getBody().addClass('form-horizontal');
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
                     //go
-                    popup.show();
+                    popup.show(function () {
+                        popup.getBody().find('input[type="text"]').focus();
+                    });
                 });
             } else {
-                //Body
-                popup.getBody().addClass('form-horizontal');
                 ext.point('io.ox/core/pubsub/publications/dialog').each(function (extension) {
                     if (extension.id === 'url' || extension.id === 'emailbutton' || extension.id === 'legalinformation') {
                         extension.invoke('draw', popup.getBody(), baton);
@@ -172,6 +173,8 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                         control.removeClass('error');
                                         control.find('.help-inline').text('');
                                     }
+                                    //make input lowercase and save to model
+                                    node.val(node.val().toLowerCase());
                                     baton.target.siteName = node.val();
                                 }),
                              $('<span>').addClass('help-inline'))));
@@ -199,14 +202,17 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
             if (templates.length === 1) {
                 node = $('<div>').val(templates[0]);
-            } else {
+            } else if (templates.length > 0) {
                 this.append($('<div>').addClass('control-group').append(
                     $('<label>').addClass('template-label control-label').attr('for', 'template-value').text(gt('Template')),
                     $('<div>').addClass('controls').append(
-                        node = $('<select>').attr('id', 'template-value').addClass('template-value').on('change', function () {
+                        node = $('<select>').attr('id', 'template-value').addClass('template-value input-xlarge').on('change', function () {
                             baton.target.template = node.val();
                         }))));
                 buildTemplates(node, templates);
+            } else {//no matching templates found on server
+                baton.popup.close();
+                notifications.yell('error', gt("No matching templates on this Server"));
             }
             
             //prefill
@@ -321,7 +327,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         id: 'legalinformation',
         index: 600,
         draw: function (baton) {
-            var fullNode = $('<div>').append($('<b>').addClass('warning-label').text(gt('Attention')),
+            var fullNode = $('<div>').addClass('alert alert-info').append($('<b>').addClass('warning-label').text(gt('Attention')),
                         $('<div>').addClass('warning-text').text(
                             gt('The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish.')),
                         $('<br>'),
@@ -332,7 +338,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
             
-            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Legal information')).on('click', function (e) {
+            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
                 }));
