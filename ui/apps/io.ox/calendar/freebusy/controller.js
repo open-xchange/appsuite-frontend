@@ -28,14 +28,17 @@ define('io.ox/calendar/freebusy/controller',
 
     'use strict';
 
-    var INDEX = 10;
+    var INDEX = 9;
+
+    var getColorClass = function (index) {
+        return 'color-index-' + ((index * 2) % INDEX);
+    };
 
     var that = {
 
         FreeBusy: function (options, controller) {
 
-            var self = this,
-                postprocessed = $.Deferred();
+            var self = this;
 
             // create container node
             this.$el = $('<div class="abs free-busy-view">').on('dispose', function () {
@@ -51,8 +54,6 @@ define('io.ox/calendar/freebusy/controller',
                     .setScrollPos();
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
-                // done!
-                postprocessed.resolve();
             };
 
             this.getParticipants = function () {
@@ -78,10 +79,16 @@ define('io.ox/calendar/freebusy/controller',
                 api.freebusy(list, options).done(function (data) {
                     data = _(data).chain()
                         .map(function (request, index) {
-                            return _(request.data).map(function (obj) {
-                                obj.index = index;
-                                return obj;
-                            });
+                            return _(request.data).chain()
+                                .filter(function (obj) {
+                                    // ignore shown_as "free"
+                                    return obj.shown_as !== 4;
+                                })
+                                .map(function (obj) {
+                                    obj.index = index;
+                                    return obj;
+                                })
+                                .value();
                         })
                         .flatten()
                         .map(toModel)
@@ -112,7 +119,6 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.refresh = _.debounce(function () {
-                console.log('refresh!');
                 self.appointments.reset([]);
                 self.loadAppointments();
             }, 250);
@@ -128,7 +134,7 @@ define('io.ox/calendar/freebusy/controller',
             function customize() {
                 var index = this.model.collection.indexOf(this.model) || 0;
                 this.$el.addClass('with-participant-color').append(
-                    $('<div class="participant-color">').addClass('color-index-' + (index % INDEX))
+                    $('<div class="participant-color">').addClass(getColorClass(index))
                 );
             }
 
@@ -150,7 +156,7 @@ define('io.ox/calendar/freebusy/controller',
                 .on('reset', function () {
                     self.participants.each(drawParticipant);
                 })
-                .on('change', function () {
+                .on('add remove reset', function () {
                     self.refresh();
                 });
 
@@ -162,10 +168,12 @@ define('io.ox/calendar/freebusy/controller',
 
             // get new instance of weekview
             this.weekView = new WeekView({
-                collection: this.appointments,
-                mode: 2, // 2 = week:workweek
                 appExtPoint: 'io.ox/calendar/week/view/appointment',
-                keyboard: false
+                collection: this.appointments,
+                keyboard: false,
+                mode: 2, // 2 = week:workweek
+                showFulltime: false,
+                todayClass: ''
             });
 
             this.weekView
@@ -182,7 +190,12 @@ define('io.ox/calendar/freebusy/controller',
             this.weekView.renderAppointment = function (model) {
                 var $el = renderAppointment.call(self.weekView, model);
                 $el.removeClass('modify reserved temporary absent free')
-                    .addClass('color-index-' + (model.get('index') % INDEX));
+                    // set color by index
+                    .addClass(getColorClass(model.get('index')))
+                    // whole-day / all-day / full-time
+                    .addClass(model.get('full_time') ? 'fulltime' : '')
+                    // temporary
+                    .addClass(model.get('shown_as') === 2 ? 'striped' : '');
                 return $el;
             };
 

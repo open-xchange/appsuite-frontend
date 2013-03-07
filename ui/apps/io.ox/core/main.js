@@ -468,7 +468,8 @@ define("io.ox/core/main",
                     $('<li>').append(
                         $('<a href="#" data-app-name="io.ox/settings">').text(gt('Settings'))
                     )
-                    .on('click', function () {
+                    .on('click', function (e) {
+                        e.preventDefault();
                         ox.launch('io.ox/settings/main');
                     })
                 );
@@ -505,7 +506,10 @@ define("io.ox/core/main",
                         $('<li>').append(
                             fullscreenButton = $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
                         )
-                        .on('click', function () { BigScreen.toggle(); })
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            BigScreen.toggle();
+                        })
                     );
                 }
             }
@@ -519,7 +523,8 @@ define("io.ox/core/main",
                     $('<li>').append(
                         $('<a href="#" data-action="about">').text(gt('About'))
                     )
-                    .on('click', function () {
+                    .on('click', function (e) {
+                        e.preventDefault();
                         require(['io.ox/core/about'], function (about) {
                             about.show();
                         });
@@ -537,7 +542,10 @@ define("io.ox/core/main",
                     $('<li>').append(
                         $('<a href="#" data-action="logout">').text(gt('Sign out'))
                     )
-                    .on('click', logout)
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        logout();
+                    })
                 );
             }
         });

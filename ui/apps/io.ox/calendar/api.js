@@ -457,39 +457,66 @@ define("io.ox/calendar/api",
     api.DAY = api.HOUR * 24;
     api.WEEK = api.DAY * 7;
 
+    // fluent caches
+    api.caches = {
+        freebusy: {}
+    };
+
     api.freebusy = function (list, options) {
 
         list = [].concat(list);
+
+        if (list.length === 0) {
+            return $.Deferred().resolve([]);
+        }
 
         options = _.extend({
             start: _.now(),
             end: _.now() + DAY
         }, options);
 
-        var i = 0, $i = list.length;
+        var result = [], requests = [];
 
-        var requests = _(list).map(function (obj) {
-            return {
-                module: 'calendar',
-                action: 'freebusy',
-                id: obj.id,
-                type: obj.type,
-                start: options.start,
-                end: options.end,
-                timezone: 'UTC'
-            };
+        _(list).each(function (obj) {
+            var key = [obj.type, obj.id, options.start, options.end].join('-');
+            // in cache?
+            if (key in api.caches.freebusy) {
+                result.push(api.caches.freebusy[key]);
+            } else {
+                result.push(key);
+                requests.push({
+                    module: 'calendar',
+                    action: 'freebusy',
+                    id: obj.id,
+                    type: obj.type,
+                    start: options.start,
+                    end: options.end,
+                    timezone: 'UTC'
+                });
+            }
         });
 
-        if (list.length) {
-            return http.PUT({
-                module: 'multiple',
-                data: requests,
-                appendColumns: false,
-                'continue': true
-            });
-        } else {
-            return $.Deferred().resolve([]);
+        if (requests.length === 0) {
+            return $.Deferred().resolve(result);
         }
+
+        return http.PUT({
+            module: 'multiple',
+            data: requests,
+            appendColumns: false,
+            'continue': true
+        })
+        .pipe(function (response) {
+            return _(result).map(function (obj) {
+                if (_.isString(obj)) {
+                    // use fresh server data
+                    return (api.caches.freebusy[obj] = response.shift());
+                } else {
+                    // use cached data
+                    return obj;
+                }
+            });
+        });
     };
 
     api.reduce = factory.reduce;

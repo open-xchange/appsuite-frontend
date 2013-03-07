@@ -18,7 +18,7 @@
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
-    padding: 13px;
+    padding: 8px 13px;
     height: @controlsHeight;
 
     .add-participant {
@@ -28,7 +28,9 @@
 
 .window-content .free-busy-view {
 
-    bottom: @controlsHeight + 13 * 2 + 1;
+    bottom: @controlsHeight + 8 * 2 + 1;
+
+    .user-select(none);
 
     h1 {
         position: absolute;
@@ -60,13 +62,16 @@
         padding-right: 50px;
     }
 
+    @opacity: 0.70;
+
     .participant-color {
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         width: 10px;
-        background-color: #eee;
+        background-color: #ccc;
+        opacity: @opacity;
     }
 
     .modal-footer .btn.add-button {
@@ -79,7 +84,29 @@
     }
 
     .appointment {
-        opacity: 0.70;
+        opacity: @opacity;
+        cursor: pointer;
+    }
+
+    .appointment-content { cursor: inherit; }
+
+    .appointment.fulltime {
+        opacity: @opacity / 2;
+        z-index: 0 !important;
+    }
+
+    /* copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste */
+    .striped(@angle: 45deg) {
+        background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+        background-image: -webkit-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -moz-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -o-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+    }
+
+    .appointment.striped {
+        .striped();
+        opacity: @opacity - 0.1;
     }
 
     .color-index-0 { background-color: darken(@blue, 10%); }
@@ -91,7 +118,6 @@
     .color-index-6 { background-color: @red; }
     .color-index-7 { background-color: @pink; }
     .color-index-8 { background-color: @purple; }
-    .color-index-9 { background-color: #888; }
 
     .color-index-4 .appointment-content { color: #333; }
  }
