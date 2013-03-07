@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-02-14 16:32+0100\n"
+"PO-Revision-Date: 2013-03-01 10:10+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@bureau-cornavin.com>\n"
 "Language-Team: Italian <it@bureau-cornavin.com>\n"
 "MIME-Version: 1.0\n"
@@ -2531,7 +2531,7 @@ msgstr "Rinomina cartella"
 
 #: apps/io.ox/core/tk/folderviews.js:853
 msgid "Public"
-msgstr "Pubblica"
+msgstr "Pubblico"
 
 #: apps/io.ox/core/tk/folderviews.js:853
 msgid "Shared"
