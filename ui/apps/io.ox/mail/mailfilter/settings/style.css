@@ -15,27 +15,27 @@
 .edit-vacation {
 	
 	max-width: 800px;
-	
-	select[name="day"], select[name="month"], select[name="year"] {
-        height: 30px;
-    }
-
-    select[name="day"] {
-        width: 60px;
-        margin-right: 15px;
-    }
-
-    select[name="month"] {
-        width: 125px;
-        margin-right: 15px;
-    }
-
-    select[name="year"] {
-        width: 69px;
+    
+    [data-extension-id="io.ox/core/mailfilter/edit/view/subject"] {
+        clear: both;
     }
     
-    [data-extension-id="io.ox/core/mailfilter/edit/view/addresses"] select{
-        width: 570px;
+    [data-extension-id="io.ox/core/mailfilter/edit/view/days"] {
+        margin-bottom: 20px;
+    }
+    
+    [data-extension-id="io.ox/core/mailfilter/edit/view/timeframecheckbox"] {
+         margin-top: 20px;
+         width: 300px;
+    }
+    
+    [data-extension-id="io.ox/core/mailfilter/edit/view/start_date"] {
+        float: left;
+        margin-left: 0;
+    }
+    
+     [data-extension-id="io.ox/core/mailfilter/edit/view/end_date"] {
+        float: left;
     }
 }
 

@@ -87,7 +87,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             }
         };
 
-    function createVacationEdit(ref, multiValues) {
+    function createVacationEdit(ref, multiValues, timeFrameState) {
         var point = views.point(ref + '/edit/view'),
             VacationEditView = point.createView({
                 tagName: 'div',
@@ -97,7 +97,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
         point.extend(new forms.Header({
             index: 50,
             id: 'headline',
-            label: gt('Vacation Notice')
+            label: model.fields.headline
         }));
 
         // Show backend errors
@@ -139,7 +139,8 @@ define('io.ox/mail/mailfilter/settings/view-form', [
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/addresses',
             index: 300,
-            label: gt('Send vacation notice for the following addresses')
+            label: model.fields.headlineAdresses
+
         }));
 
         _(multiValues.aliases).each(function (alias) {
@@ -166,22 +167,22 @@ define('io.ox/mail/mailfilter/settings/view-form', [
 
             if (isAvailable) {
 
-                point.extend(new forms.SectionLegend({
-                    id: ref + '/edit/view/timeframe',
-                    index: 400,
-                    label: gt('Timeframe')
-                }));
-
-                point.extend(new forms.SelectBoxField({
-                    id: ref + '/edit/view/activeSelect',
-                    index: 125,
-                    label: model.fields.activeSelect,
-                    attribute: 'activeSelect',
-                    selectOptions: multiValues.activeSelect,
+                point.extend(new forms.CheckBoxField({
+                    id: ref + '/edit/view/timeframecheckbox',
+                    index: 425,
+                    label: model.fields.activateTimeFrame,
+                    attribute: 'activateTimeFrame',
                     customizeNode: function () {
-                        this.$el.css({
-                            clear: 'both',
-                            width: '100px'
+                        var self = this;
+
+                        this.$el.on('change', function () {
+                            var fields = $('.edit-vacation').find('.input-small');
+
+                            if (self.$el.find('input').prop('checked') !== true) {
+                                fields.attr('disabled', true);
+                            } else {
+                                fields.attr('disabled', false);
+                            }
                         });
                     }
                 }));
@@ -189,12 +190,13 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/start_date',
                     index: 450,
-                    className: 'span6',
+                    className: 'span2',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',
                     attribute: 'dateFrom',
-                    label: gt('Starts on'),
+                    label: model.fields.dateFrom,
                     overwritePositioning: true,
+                    initialStateDisabled: timeFrameState ? false : true,
                     updateModelDate: function () {
                         this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
                     },
@@ -206,12 +208,13 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                 point.extend(new forms.DatePicker({
                     id: ref + '/edit/view/end_date',
                     index: 500,
-                    className: 'span6',
+                    className: 'span2',
                     labelClassName: 'timeframe-edit-label',
                     display: 'DATE',
                     attribute: 'dateUntil',
-                    label: gt('Ends on'),
+                    label: model.fields.dateUntil,
                     overwritePositioning: true,
+                    initialStateDisabled: timeFrameState ? false : true,
                     updateModelDate: function () {
                         this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model));
                     },
@@ -220,23 +223,6 @@ define('io.ox/mail/mailfilter/settings/view-form', [
                     }
                 }));
 
-            } else {
-
-                delete multiValues.activeSelect.activeTime;
-
-                point.extend(new forms.SelectBoxField({
-                    id: ref + '/edit/view/activeSelect',
-                    index: 125,
-                    label: model.fields.activeSelect,
-                    attribute: 'activeSelect',
-                    selectOptions: multiValues.activeSelect,
-                    customizeNode: function () {
-                        this.$el.css({
-                            clear: 'both',
-                            width: '100px'
-                        });
-                    }
-                }));
             }
         });
 

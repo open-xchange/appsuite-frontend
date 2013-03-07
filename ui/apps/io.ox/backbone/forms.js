@@ -190,18 +190,18 @@ define('io.ox/backbone/forms',
     }
 
     function DateControlGroup(options) {
-        
+
         ControlGroup.call(this, _.extend({
             buildElement: buildElement,
             setValueInElement: setValueInElement,
             updateModel: updateModel
         }, options || {}));
-        
+
         function buildElement() {
             var self = this;
             var parent = $('<span>');
             this.nodes.dropelements = {};
-            
+
             function createSelect(name, from, to, setter, format) {
                 var node = self.nodes.dropelements[name] = $('<select>').attr({
                         'name': name,
@@ -216,7 +216,7 @@ define('io.ox/backbone/forms',
                 }
                 node.appendTo(parent);
             }
-            
+
             date.getFormat(date.DATE).replace(
                 /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
                 function (match, y, m, d) {
@@ -236,10 +236,10 @@ define('io.ox/backbone/forms',
 
             return parent;
         }
-        
+
         function setValueInElement(valueFromModel) {
             if (!this.nodes.dropelements) return;
-            
+
             var de = this.nodes.dropelements;
             if (valueFromModel) {
                 var d = new date.Local(date.Local.utc(valueFromModel));
@@ -252,7 +252,7 @@ define('io.ox/backbone/forms',
                 de.day.val('');
             }
         }
-        
+
         function updateModel(clear) {
             var de = this.nodes.dropelements;
             this.setValueInModel(clear ? null :
@@ -261,7 +261,7 @@ define('io.ox/backbone/forms',
                     de.month.val() || 0,
                     de.day.val()   || 1)));
         }
-        
+
     }
 
     function addErrorHandling(options, object) {
@@ -772,6 +772,9 @@ define('io.ox/backbone/forms',
                             $('<div class="control">').append(
                                 function () {
                                     self.nodes.dayField = $('<input type="text" class="input-small">');
+                                    if (options.initialStateDisabled) {
+                                        self.nodes.dayField.attr('disabled', true);
+                                    }
                                     self.nodes.timezoneField = $('<span class="label">');
                                     if (self.model.get(self.attribute)) {
                                         self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);

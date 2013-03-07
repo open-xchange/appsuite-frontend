@@ -27,28 +27,34 @@ define('io.ox/mail/mailfilter/settings/model',
 
             update: function (model) {
 
+                var newAttributes = {
+                        days: model.attributes.days,
+                        id: model.attributes.id,
+                        subject: model.attributes.subject,
+                        text: model.attributes.text
+                    };
+
+                var preparedData = {
+                        "actioncmds": [newAttributes],
+                        "id": model.attributes.mainID
+                    };
+
                 var addresses = [];
                 _(model.attributes).each(function (value, attribute) {
-                    if (value === true) {
+                    if (value === true && attribute !== 'activateTimeFrame') {
                         addresses.push(attribute);
+                        preparedData.active = true;
                     }
                 });
 
-                var newAttributes = {
-                    days: model.attributes.days,
-                    id: model.attributes.id,
-                    subject: model.attributes.subject,
-                    text: model.attributes.text
-                };
-
                 if (!_.isEmpty(addresses)) {
                     newAttributes.addresses = addresses;
+
+                } else {
+                    newAttributes.addresses = [model.attributes.primaryMail];
+                    preparedData.active = false;
                 }
 
-                var preparedData = {
-                    "actioncmds": [newAttributes],
-                    "id": model.attributes.mainID
-                };
 
                 var testForTimeframe = {
                         "id": "allof",
@@ -77,14 +83,8 @@ define('io.ox/mail/mailfilter/settings/model',
                     );
                 }
 
-                if (model.attributes.activeSelect === 'disabled' || model.attributes.activeSelect === 'active' || testForTimeframe.tests.length === 0) {
+                if (testForTimeframe.tests.length === 0 || model.attributes.activateTimeFrame === false) {
                     testForTimeframe = { id: "true" };
-                }
-
-                if (model.attributes.activeSelect === 'active' || model.attributes.activeSelect === 'activeTime') {
-                    preparedData.active = true;
-                } else {
-                    preparedData.active = false;
                 }
 
                 preparedData.test = testForTimeframe;
@@ -95,28 +95,29 @@ define('io.ox/mail/mailfilter/settings/model',
         });
 
         Validators.validationFor(ref, {
-            subject: { format: 'string'},
+            subject: { format: 'string' },
             text: { format: 'string' },
             days: { format: 'string' },
-            active: { format: 'boolean'},
-            addresses: { format: 'array'},
-            dateFrom: { format: 'date'},
-            dateUntil: { format: 'date'}
+            active: { format: 'boolean' },
+            addresses: { format: 'array' },
+            dateFrom: { format: 'date' },
+            dateUntil: { format: 'date' },
+            activateTimeFrame: { format: 'boolean' }
         });
         return factory;
 
     }
 
     var fields = {
+        headline: gt('Vacation Notice'),
         subject: gt('Subject'),
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
-        active: gt('Active'),
+        headlineAdresses: gt('Enabled for the following addresses'),
         addresses: gt('E-mail addresses'),
-        dateFrom: gt('Start Date'),
-        dateUntil: gt('End date'),
-        activeTimeframe: gt('Use timeframe'),
-        activeSelect: gt('Status')
+        dateFrom: gt('From'),
+        dateUntil: gt('End'),
+        activateTimeFrame: gt('Use timeframe')
     };
 
 

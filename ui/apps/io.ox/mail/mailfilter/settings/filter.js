@@ -27,12 +27,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
 
     return {
-        editVacationtNotice: function ($node, multiValues) {
+        editVacationtNotice: function ($node, multiValues, primaryMail) {
             var deferred = $.Deferred();
 
             api.getRules('vacation').done(function (data) {
-                var vacationData = data[0].actioncmds[0];
+                var vacationData = data[0].actioncmds[0],
+                    VacationEdit,
+                    vacationNotice;
                 vacationData.mainID = data[0].id;
+                vacationData.primaryMail = primaryMail;
 
                 if (_(data[0].test).size() === 2) {
                     _(data[0].test.tests).each(function (value) {
@@ -43,11 +46,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         }
                     });
 
-                    vacationData.activeSelect = data[0].active ? 'activeTime' : 'disabled';
+                    vacationData.activateTimeFrame = true;
 
                 } else {
-                    var myDateStart = new date.Local(date.Local.utc(_.now()));
-                    var myDateEnd = new date.Local(date.Local.utc(_.now()));
+                    var myDateStart = new date.Local(date.Local.utc(_.now())),
+                        myDateEnd = new date.Local(date.Local.utc(_.now()));
 
                     myDateStart = myDateStart.addUTC(date.DAY);
                     myDateEnd = myDateEnd.addUTC(date.DAY + date.WEEK);
@@ -55,16 +58,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
                     vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
 
-                    vacationData.activeSelect = data[0].active ? 'active' : 'disabled';
+                    vacationData.activateTimeFrame = false;
                 }
 
-                var VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues);
+                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues, vacationData.activateTimeFrame);
 
-                var vacationNotice = new VacationEdit({model: factory.create(vacationData)});
+                vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
-                _(vacationData.addresses).each(function (mail) {
-                    vacationNotice.model.set(mail, true);
-                });
+                if (data[0].active === true) {
+                    _(vacationData.addresses).each(function (mail) {
+                        vacationNotice.model.set(mail, true);
+                    });
+                }
 
                 $node.append(vacationNotice.render().$el);
 
@@ -83,8 +88,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             });
 
-            return deferred.done(function (model) {
-            });
+            return deferred;
 
         }
     };

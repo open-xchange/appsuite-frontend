@@ -52,15 +52,10 @@ define('io.ox/mail/mailfilter/settings/register',
 
                     var multiValues = {
                         aliases: _.object(user.aliases, user.aliases),
-                        days: createDaysObject(1, 31),
-                        activeSelect: {
-                            'active': gt('active'),
-                            'activeTime': gt('active with timeframe'),
-                            'disabled': gt('disabled')
-                        }
+                        days: createDaysObject(1, 31)
                     };
 
-                    filters.editVacationtNotice($node, multiValues).done(function (filter) {
+                    filters.editVacationtNotice($node, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         touchAttributes(filterModel);
                         filter.on('update', function () {
