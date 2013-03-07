@@ -83,15 +83,16 @@ define('io.ox/calendar/week/view',
 
             this.showFulltime = opt.showFulltime === false ? false : true;
             this.todayClass = 'todayClass' in opt ? opt.todayClass : 'today';
-            this.mode = opt.mode;
+            this.mode = opt.mode || 1;
             this.extPoint = opt.appExtPoint;
-            this.setStartDate();
+
             this.collection
                 .on('reset', this.renderAppointments, this)
                 .on('change', this.redrawAppointment, this);
             if (!opt.keyboard || opt.keyboard === true) {
                 this.bindKeys();
             }
+            this.setStartDate();
             this.initSettings();
         },
 
@@ -645,7 +646,9 @@ define('io.ox/calendar/week/view',
 
             // clear all first
             $('.appointment', this.$el).remove();
-            $('.day.' + this.todayClass, this.$el).removeClass(this.todayClass);
+            if (this.todayClass) {
+                $('.day.' + this.todayClass, this.$el).removeClass(this.todayClass);
+            }
 
             var self = this,
                 draw = {},
