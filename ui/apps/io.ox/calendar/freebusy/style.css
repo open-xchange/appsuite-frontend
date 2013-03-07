@@ -41,7 +41,7 @@
     }
 
     .participants-view-scrollpane {
-        top: 50px;
+        top: 64px;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
         .box-sizing(border-box);
