@@ -1826,7 +1826,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-documents-icon') + ((white === true) ? ' icon-white' : '') + ' ' + language);
+        return $('<i>').addClass(icon + ((white === true) ? ' icon-white' : '') + ' ' + language);
     };
 
     /**

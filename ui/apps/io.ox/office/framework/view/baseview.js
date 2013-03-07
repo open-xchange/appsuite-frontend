@@ -16,7 +16,8 @@ define('io.ox/office/framework/view/baseview',
      'io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/framework/view/basestyle.css'
+     'less!io.ox/office/framework/view/basestyle.css',
+     'less!io.ox/office/framework/view/docs-icons.less'
     ], function (Events, Utils, Pane, gt) {
 
     'use strict';

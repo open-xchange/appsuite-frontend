@@ -58,82 +58,21 @@
 /* icons                                                                     */
 /* ========================================================================= */
 
-/* target pixel size of the icons */
-@icon-size: 18px;
-
-/*
- * Use image map for OX Document icons with CSS class "io-ox-documents-icon". 
- */
-i.io-ox-documents-icon {
+i[class^="docs-"] {
     display: inline-block;
-    width: @icon-size;
-    height: @icon-size;
     margin: 0;
     background-image: url(docs-icons-black.png);
     background-origin: content-box;
-    background-size: 360px 180px;
-    line-height: @icon-size;
     vertical-align: text-bottom;
 
     &.icon-white {
         background-image: url(docs-icons-white.png);
     }
-
-    .icon-position(@x, @y) {
-        background-position: -(@icon-size * @x) -(@icon-size * @y);
-    }
-
-    &.docs-show-sidepane            { .icon-position(0, 0); }
-    &.docs-hide-sidepane            { .icon-position(1, 0); }
-
-    &.docs-first-page               { .icon-position(2, 0); }
-    &.docs-previous-page            { .icon-position(3, 0); }
-    &.docs-next-page                { .icon-position(4, 0); }
-    &.docs-last-page                { .icon-position(5, 0); }
-
-    &.docs-zoom-in                  { .icon-position(6, 0); }
-    &.docs-zoom-out                 { .icon-position(7, 0); }
-
-    &.docs-undo                     { .icon-position(8, 0); }
-    &.docs-redo                     { .icon-position(9, 0); }
-
-    &.docs-font-bold                { .icon-position(0, 1); }
-    &.docs-font-bold.de_DE          { .icon-position(1, 1); }
-    &.docs-font-bold.fr_FR          { .icon-position(2, 1); }
-    &.docs-font-italic              { .icon-position(3, 1); }
-    &.docs-font-italic.de_DE        { .icon-position(4, 1); }
-    &.docs-font-underline           { .icon-position(5, 1); }
-    &.docs-font-underline.fr_FR     { .icon-position(6, 1); }
-    &.docs-font-strikeout           { .icon-position(7, 1); }
-    &.docs-font-superscript         { .icon-position(8, 1); }
-    &.docs-font-subscript           { .icon-position(9, 1); }
-    &.docs-font-color               { .icon-position(10, 1); }
-    &.docs-font-fill-color          { .icon-position(11, 1); }
-
-    &.docs-reset-formatting         { .icon-position(12, 1); }
-    
-    &.docs-para-align-left          { .icon-position(0, 2); }
-    &.docs-para-align-center        { .icon-position(1, 2); }
-    &.docs-para-align-right         { .icon-position(2, 2); }
-    &.docs-para-align-justify       { .icon-position(3, 2); }
-
-    &.docs-para-line-spacing-1      { .icon-position(4, 2); }
-    &.docs-para-line-spacing-1-5    { .icon-position(5, 2); }
-    &.docs-para-line-spacing-2      { .icon-position(6, 2); }
-
-    &.docs-para-fill-color          { .icon-position(7, 2); }
-
-    &.docs-list-bullet              { .icon-position(8, 2); }
-    &.docs-list-numbered            { .icon-position(9, 2); }
-    &.docs-list-dec-level           { .icon-position(10, 2); }
-    &.docs-list-inc-level           { .icon-position(11, 2); }
-
-    &.docs-pilcrow                  { .icon-position(12, 2); }
 }
 
 /* give standard Bootstrap icons a minimum width */
 i[class^="icon-"], i[class^=" icon-"] {
-    min-width: @icon-size;
+    min-width: 16px;
     font-size: 16px;
     text-align: center;
 }
