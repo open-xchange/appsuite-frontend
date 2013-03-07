@@ -295,7 +295,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1021": "transport_protocol",
             "1022": "transport_secure",
             "1023": "transport_login",
-            "1024": "transport_passord",
+            "1024": "transport_password",
             "1025": "unified_inbox_enabled",
             "1026": "trash_fullname",
             "1027": "sent_fullname",
