@@ -82,7 +82,7 @@ define('io.ox/calendar/week/view',
             this.showAllCon = $('<div>').addClass('showall');
 
             this.showFulltime = opt.showFulltime === false ? false : true;
-            this.todayClass = opt.todayClass || 'today';
+            this.todayClass = 'todayClass' in opt ? opt.todayClass : 'today';
             this.mode = opt.mode;
             this.extPoint = opt.appExtPoint;
             this.setStartDate();
