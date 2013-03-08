@@ -63,7 +63,7 @@ i[class^="docs-"] {
     margin: 0;
     background-image: url(docs-icons-black.png);
     background-origin: content-box;
-    vertical-align: text-bottom;
+    vertical-align: middle;
 
     &.icon-white {
         background-image: url(docs-icons-white.png);
