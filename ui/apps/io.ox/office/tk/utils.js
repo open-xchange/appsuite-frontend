@@ -161,7 +161,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         });
     };
 
-    // calculation and conversion ---------------------------------------------
+    // calculation, conversion, string manipulation ---------------------------
 
     /**
      * Restricts the passed value to the specified numeric range.
@@ -457,6 +457,22 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.toggleToken = function (list, token, state, nothing) {
         return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
+    };
+
+    /**
+     * Repeats the passed string.
+     *
+     * @param {String} text
+     *  The text to be repeated.
+     *
+     * @param {Number} count
+     *  The number of repetitions.
+     *
+     * @returns {String}
+     *  The generated string.
+     */
+    Utils.repeatString = function (text, count) {
+        return new Array(count + 1).join(text);
     };
 
     // options object ---------------------------------------------------------
