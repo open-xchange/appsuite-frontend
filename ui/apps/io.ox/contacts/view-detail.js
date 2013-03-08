@@ -19,8 +19,9 @@ define("io.ox/contacts/view-detail",
      "io.ox/contacts/actions",
      "io.ox/core/api/folder",
      'io.ox/core/extPatterns/links',
+     'io.ox/core/date',
      "less!io.ox/contacts/style.css"
-    ], function (ext, gt, util, api, actions, folderAPI, links) {
+    ], function (ext, gt, util, api, actions, folderAPI, links, date) {
 
     "use strict";
 
@@ -36,7 +37,6 @@ define("io.ox/contacts/view-detail",
     var attachmentsBusy = false; //check if attachments are uploding atm
 
     function addField(label, value, node, fn) {
-        var node;
         if (value) {
             node.append(
                 $('<div class="row-fluid">').append(
@@ -152,10 +152,36 @@ define("io.ox/contacts/view-detail",
     });
 
     function getDescription(data) {
-        if (api.looksLikeDistributionList(data)) return gt('Distribution list');
-        if (api.looksLikeResource(data)) return gt('Resource');
-        return _.noI18n((data.company || data.position || data.profession) ?
-            join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
+        function single(index, value, translated) {
+            var params = new Array(index);
+            params[index - 1] = translated ? value : _.noI18n(value);
+            return { format: _.noI18n('%' + index + '$s'), params: params };
+        }
+        if (api.looksLikeDistributionList(data)) {
+            return single(7, gt('Distribution list'), true);
+        }
+        if (api.looksLikeResource(data)) {
+            return single(7, gt('Resource'), true);
+        }
+        if (data.company || data.position || data.profession) {
+            return {
+                format: join(', ', data.company ? '%4$s' : '',
+                                   data.position ? '%5$s' : '',
+                                   data.profession ? '%6$s' : ''),
+                params: ['', '', '', _.noI18n(data.company),
+                         _.noI18n(data.position), _.noI18n(data.profession)]
+            };
+        }
+        return util.getMailFormat(data);
+    }
+    
+    function createText(format, classes) {
+        return _.aprintf(format.format, function (index) {
+            return $('<div>').addClass(classes[index])
+                             .text(_.noI18n(format.params[index]));
+        }, function (text) {
+            return $.txt(text);
+        });
     }
 
     ext.point("io.ox/contacts/detail/head").extend({
@@ -176,15 +202,17 @@ define("io.ox/contacts/view-detail",
         id: 'contact-title',
         draw: function (baton) {
             var private_flag,
-                nameText = baton.data.display_name ? baton.data.display_name : util.getFullName(baton.data);
+                name = createText(util.getFullNameFormat(baton.data),
+                    ['first_name', 'last_name', 'title', 'display_name']),
+                job = createText(getDescription(baton.data),
+                    ['email1', 'email2', 'email3', 'company', 'position',
+                     'profession', 'type']);
             this.append(
                 // right side
                 $('<div class="span8 field-value">').append(
-                    $('<div class="name clear-title">')
-                        .text(_.noI18n(nameText)),
+                    $('<div class="name clear-title">').append(name),
                     private_flag = $('<i class="icon-lock private-flag">').hide(),
-                    $('<div class="job clear-title">')
-                        .text(getDescription(baton.data))
+                    $('<div class="job clear-title">').append(job)
                 )
             );
             if (baton.data.private_flag) {
@@ -396,10 +424,10 @@ define("io.ox/contacts/view-detail",
         index: 700,
         id: 'birthday',
         draw: function (baton) {
-            var r = 0, data = baton.data,
-                date = new Date(data.birthday);
-            if (data.birthday !== null && !isNaN(date.getDate())) {
-                r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(), this);
+            var r = 0, bday = baton.data.birthday;
+            if (bday || bday === 0) {
+                r += addField(gt("Birthday"),
+                              new date.Local(bday).format(date.DATE), this);
             }
             if (r > 0) {
                 addField("", "\u00A0", this);

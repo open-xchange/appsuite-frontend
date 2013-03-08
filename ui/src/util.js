@@ -489,7 +489,37 @@
                         return params[index++];
                     }
                 )
-                .replace(/%%/, "%");
+                .replace(/%%/g, '%');
+        },
+        
+        /**
+         * Array-based printf uses a callback function to collect parts of the
+         * format string in an array. Useful to construct DOM nodes based on
+         * translated text.
+         * @param {String} str the format string using printf syntax.
+         * @param {Function(index)} formatCb A callback function which converts
+         * a format specifier to an array element. Its parameter is a 0-based
+         * index of the format specifier.
+         * @param {Function(text)} textCb An optional callback function which
+         * converts text between format specifiers to an array element. Its
+         * parameter is the text to convert. If not specified, formatCb is
+         * called for both, format specifiers and the text between them.
+         */
+        aprintf: function (str, formatCb, textCb) {
+            var result = [], index = 0;
+            if (!textCb) textCb = formatCb;
+            String(str).replace(
+                /%(([0-9]+)\$)?[A-Za-z]|((?:%%|[^%])+)/g,
+                function (match, pos, n, text) {
+                    if (text) {
+                        result.push(textCb(text.replace(/%%/g, '%')));
+                    } else {
+                        if (pos) index = n - 1;
+                        result.push(formatCb(index++));
+                    }
+                    return '';
+                });
+            return result;
         },
 
         /**
@@ -643,7 +673,7 @@
     _.escapeRegExp = function (s) {
         return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
-
+    
     window.assert = function (value, message) {
         if (value) return;
         console.error(message || 'Assertion failed!');

@@ -1,4 +1,7 @@
 {
-    "namespace": "io.ox/contacts/edit/view-form",
+    "namespace": [
+        "io.ox/contacts/view-detail",
+        "io.ox/contacts/edit/view-form"
+    ],
     "device": "ja_JP"
 }

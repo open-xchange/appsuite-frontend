@@ -19,6 +19,27 @@ define('l10n/ja_JP/io.ox/register', [
 ], function (ext, views, forms) {
     'use strict';
     
+    // Detail view
+    
+    ext.point('io.ox/contacts/detail/head').extend({
+        index: 'last',
+        id: 'furigana',
+        draw: function (baton) {
+            var self = this;
+            addFurigana('.last_name', 'yomiLastName');
+            addFurigana('.first_name', 'yomiFirstName');
+            addFurigana('.company', 'yomiCompany');
+            function addFurigana(selector, yomiField) {
+                var value = baton.data[yomiField];
+                if (!value) return;
+                self.find(selector).prepend(
+                    $('<div class="furigana">').text(value));
+            }
+        }
+    });
+    
+    // Edit view
+    
     ext.point('io.ox/contacts/edit/main/model').extend({
         id: 'stealContact',
         customizeModel: function (c) {
