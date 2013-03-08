@@ -257,7 +257,7 @@ define('io.ox/tasks/actions',
                         api.confirm({id: data.id,
                                      folder_id: data.folder_id,
                                      data: {confirmation: state,
-                                            confirmMessage: message}
+                                            confirmmessage: message}
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + data.folder_id + '.' + data.id);
@@ -272,51 +272,52 @@ define('io.ox/tasks/actions',
     new Action('io.ox/tasks/actions/print', {
         id: 'print',
         action: function (baton) {
-            var data = util.interpretTask(baton.data, true),
-                fields = {
-                    start_date: gt('Start date'),
-                    end_date: gt('End date'),
-                    priority: gt('Priority'),
-                    percent_completed: gt('Progress in percent'),
-                    note: gt('Description'),
-                    target_duration: gt('Estimated duration in minutes'),
-                    actual_duration: gt('Actual duration in minutes'),
-                    target_costs: gt('Estimated costs'),
-                    actual_costs: gt('Actual costs'),
-                    currency: gt('Currency'),
-                    trip_meter: gt('Distance'),
-                    billing_information: gt('Billing information'),
-                    company: gt('Company')
+            var data = {
+                    values: util.interpretTask(baton.data, true),
+                    labels: {
+                        start_date: gt('Start date'),
+                        end_date: gt('End date'),
+                        priority: gt('Priority'),
+                        percent_completed: gt('Progress in percent'),
+                        note: gt('Description'),
+                        target_duration: gt('Estimated duration in minutes'),
+                        actual_duration: gt('Actual duration in minutes'),
+                        target_costs: gt('Estimated costs'),
+                        actual_costs: gt('Actual costs'),
+                        currency: gt('Currency'),
+                        trip_meter: gt('Distance'),
+                        billing_information: gt('Billing information'),
+                        company: gt('Company'),
+                        participants: gt('Participants'),
+                        details: gt('Details')
+                    },
+                    participants: []
                 },
                 states = [gt('Not yet confirmed'),
                           gt('Confirmed'),
                           gt('Declined'),
-                          gt('Tentative')],
-                participants = [];
+                          gt('Tentative')];
 
             require(['io.ox/core/print'], function (print) {
                 //Do something with the data and give it to print when its ready
-                //included needed code allready
+                //included needed code already
                 //makes additional requests but is needed later anyway
-                if (data.participants.length > 0) {
+                if (data.values.participants.length > 0) {
                     require(['io.ox/core/api/user'], function (userApi) {
-                        _(data.participants).each(function (participant) {
-                            if (participant.id) {//external participants dont have an id but the display name is already given
+                        _(data.values.participants).each(function (participant) {
+                            if (participant.id) {//external participants don't have an id but the display name is already given
                                 userApi.getName(participant.id).done(function (name) {
-                                    participants.push({display_name: name, confirmation: states[participant.confirmation]});
+                                    data.participants.push({display_name: name, confirmation: states[participant.confirmation]});
                                 });
                             } else {
-                                participants.push({display_name: participant.display_name, confirmation: states[participant.confirmation]});
+                                data.participants.push({display_name: participant.display_name, confirmation: states[participant.confirmation]});
                             }
                         });
-                        console.log(data);
-                        console.log(participants);
+                        //print.open('tasks', data, {template: 'infostore://70045', id: data.values.id, folder: data.values.folder_id || data.values.folder});
                         //meanwhile show dummy
                         print.interim(ox.base + '/apps/io.ox/tasks/print-template.html');
                     });
                 } else {
-                    console.log(data);
-                    console.log(participants);
                     //meanwhile show dummy
                     print.interim(ox.base + '/apps/io.ox/tasks/print-template.html');
                 }

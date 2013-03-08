@@ -446,7 +446,7 @@ define('plugins/notifications/tasks/register',
                         api.confirm({id: model.get('id'),
                                      folder_id: model.get("folder_id"),
                                      data: {confirmation: state,
-                                            confirmMessage: message}
+                                            confirmmessage: message}
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));

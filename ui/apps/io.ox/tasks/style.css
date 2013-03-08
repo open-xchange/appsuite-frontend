@@ -134,14 +134,10 @@
 		padding-right: 10px;
 	}
 	
-	.participants-external {
-		margin-left: 3px;
-	}
-	
-	.participants-table-colorsquare {
-		width: 13px;
-		height: 13px;
-		margin-bottom: 1px;
-		margin-left: 3px;
+	.task-participants-table {
+		border-spacing: 3px;
+		border-collapse: separate;
+		left: -3px;
+		position: relative;
 	}
 }

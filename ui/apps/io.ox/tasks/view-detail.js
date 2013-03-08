@@ -189,6 +189,9 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                 $('<td>').text(states[participant.confirmation || 0][0]),
                                 $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]))
                                 );
+                            if (participant.confirmmessage) {
+                                row.append($('<td>').text(_.noI18n(participant.confirmmessage)));
+                            }
                             if (participant.type === 5) { //external participant
                                 row.append(
                                         $('<td>').append($('<div>').addClass('badge participants-external').text(gt('External')))
