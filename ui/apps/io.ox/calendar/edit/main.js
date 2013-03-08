@@ -28,13 +28,24 @@ define('io.ox/calendar/edit/main',
         var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true }),
 
             controller = _.extend(app, {
+
                 start: function () {
+
                     if (_.browser.IE === undefined || _.browser.IE > 9) {
                         app.dropZone = new dnd.UploadZone({
                             ref: "io.ox/calendar/edit/dnd/actions"
                         }, app);
                     }
+
+                    var state = app.getState();
+
+                    if ('folder' in state && 'id' in state) {
+                        api.get({ folder: state.folder, id: state.id }).done(function (data) {
+                            app.edit(data);
+                        });
+                    }
                 },
+
                 stop: function () {
                     var self = this,
                         df = new $.Deferred();
@@ -119,7 +130,7 @@ define('io.ox/calendar/edit/main',
                                 } catch (e) {
                                     notifications.yell('error', response.error);
                                 }
-                                
+
                             });
 
                             self.setTitle(gt('Edit appointment'));
@@ -181,16 +192,9 @@ define('io.ox/calendar/edit/main',
                     }
 
                     if (data) {
-                        //hash support
-                        self.setState({ folder: data.folder_id, id: data.id});
+                        // hash support
+                        self.setState({ folder: data.folder_id, id: data.id });
                         cont(data);
-                    } else {
-                        api.get(self.getState())
-                            .done(cont)
-                            .fail(function (err) {
-                                // FIXME: use general error class, teardown gently for the user
-                                throw new Error(err.error);
-                            });
                     }
                 },
 

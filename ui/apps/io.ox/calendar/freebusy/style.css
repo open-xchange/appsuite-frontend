@@ -50,6 +50,7 @@
         line-height: 38px;
         font-family: @lightFontFamily;
         font-size: 20px;
+        font-weight: 200;
     }
 
     .participants-view-scrollpane {
@@ -67,6 +68,10 @@
 
     .participant-wrapper .remove {
         right: 11px;
+    }
+
+    .with-participant-color {
+        padding-right: 20px;
     }
 
     .with-participant-color.removable {

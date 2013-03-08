@@ -30,10 +30,9 @@ define('io.ox/calendar/freebusy/main',
             win = ox.ui.createWindow({ name: NAME, chromeless: true });
             app.setWindow(win);
 
-            if (!options.folder) {
-                options.folder = settings.get('folder/calendar');
-                options.standalone = true;
-            }
+            // if folder is missing or we don't have a model to update
+            options.standalone = !options.folder || !options.model;
+            options.folder = options.folder || settings.get('folder/calendar');
 
             win.show(function () {
 
@@ -45,16 +44,20 @@ define('io.ox/calendar/freebusy/main',
                 });
 
                 freebusy.promise.done(function (action, data) {
-                    console.log('promise.done', action, data);
                     switch (action) {
                     case 'quit':
                         app.quit();
                         break;
-                    case 'cancel':
-                        console.log('cancel');
-                        break;
                     case 'update':
-                        console.log('update', data);
+                        options.model.set({
+                            start_date: data.start_date,
+                            end_date: data.end_date,
+                            participants: data.participants
+                        });
+                        /* falls through */
+                    case 'cancel':
+                        options.app.getWindow().show();
+                        app.quit();
                         break;
                     }
                 });

@@ -640,8 +640,11 @@ define('io.ox/calendar/week/view',
                 Math.max(this.pane.height() / ((this.workEnd - this.workStart + 1) * this.fragmentation),
                 this.minCellHeight)
             );
-            $('.timeslot', this.pane).height(this.cellHeight - 1);
-            $('.time', this.pane).height(this.cellHeight * this.fragmentation);
+            // only update if height differs from CSS default
+            if (this.cellHeight !== this.minCellHeight) {
+                $('.timeslot', this.pane).height(this.cellHeight - 1);
+                $('.time', this.pane).height(this.cellHeight * this.fragmentation);
+            }
             return this;
         },
 

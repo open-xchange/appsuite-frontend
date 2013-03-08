@@ -174,7 +174,6 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
-
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
@@ -190,7 +189,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.DatePicker({
         id: 'end-date',
         className: 'span6',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label desc where-I-want-to-add-a-link',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
@@ -284,7 +283,7 @@ define('io.ox/calendar/edit/template',
     // participants label
     point.extend(new forms.SectionLegend({
         id: 'participants_legend',
-        className: 'span12',
+        className: 'span12 where-I-want-to-add-a-link',
         label: gt('Participants'),
         index: 1300
     }));
@@ -466,6 +465,33 @@ define('io.ox/calendar/edit/template',
         index: 10000,
         draw: function () {
             this.append('<div>').css('height', '100px');
+        }
+    });
+
+    function openFreeBusyView(e) {
+        var app = e.data.app, model = e.data.model;
+        e.preventDefault();
+        ox.launch('io.ox/calendar/freebusy/main', {
+            app: app,
+            start_date: model.get('start_date'),
+            end_date: model.get('end_date'),
+            folder: model.get('folder_id'),
+            participants: model.get('participants'),
+            model: model
+        });
+    }
+
+    // link free/busy view
+    point.basicExtend({
+        id: 'link-free-busy',
+        index: 100000,
+        draw: function (baton) {
+            // because that works
+            var selector = 'label.where-I-want-to-add-a-link, .where-I-want-to-add-a-link legend';
+            this.parent().find(selector).append(
+                $('<a href="#" class="pull-right">').text(gt('Find a free time'))
+                    .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
+            );
         }
     });
 

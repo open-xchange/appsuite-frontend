@@ -42,6 +42,11 @@ define('io.ox/calendar/freebusy/controller',
             this.$el = templates.getMainContainer().on('dispose', function () {
                 // clean up
                 self.weekView.remove();
+                self.participants.off();
+                self.participants.reset([]);
+                self.appointments.reset([]);
+                self.autocomplete.remove();
+                self.autocomplete = self.weekView = null;
             });
 
             this.update = function (e, data) {
@@ -55,13 +60,16 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.postprocess = function () {
-                this.weekView
-                    // hide show all checkbox
-                    .showAll(false)
-                    // scroll to proper time
-                    .setScrollPos();
+                // hide show all checkbox
+                this.weekView.showAll(false);
+                // pre-fill participants list
+                self.participants.reset(options.participants || []);
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
+                // scroll to proper time (resets cell height, too; deferred not to block UI)
+                _.defer(function () {
+                    self.weekView.setScrollPos();
+                });
             };
 
             this.getParticipants = function () {
@@ -130,6 +138,46 @@ define('io.ox/calendar/freebusy/controller',
                 }
             }, 200, true);
 
+            // all appointments are stored in this collection
+            this.appointments = new Backbone.Collection([]);
+
+            // get new instance of weekview
+            this.weekView = new WeekView({
+                allowLasso: !standalone,
+                appExtPoint: 'io.ox/calendar/week/view/appointment',
+                collection: this.appointments,
+                keyboard: false,
+                mode: 2, // 2 = week:workweek
+                showFulltime: false,
+                todayClass: ''
+            });
+
+            this.weekView
+                // listen to refresh event
+                .on('onRefresh', function () {
+                    self.appointments.reset([]);
+                    self.refresh();
+                })
+                // listen to create event
+                .on('openCreateAppointment', this.update, this)
+                // listen to show appointment event
+                .on('showAppointment', this.showAppointment, this);
+
+            this.appointments.reset([]);
+
+            var renderAppointment = this.weekView.renderAppointment;
+            this.weekView.renderAppointment = function (model) {
+                var $el = renderAppointment.call(self.weekView, model);
+                $el.removeClass('modify reserved temporary absent free')
+                    // set color by index
+                    .addClass(templates.getColorClass(model.get('index')))
+                    // whole-day / all-day / full-time
+                    .addClass(model.get('full_time') ? 'fulltime' : '')
+                    // temporary
+                    .addClass(model.get('shown_as') === 2 ? 'striped' : '');
+                return $el;
+            };
+
             // participants collection
             this.participants = new participantsModel.Participants([]);
             this.participantsView = templates.getParticipantsView();
@@ -171,49 +219,6 @@ define('io.ox/calendar/freebusy/controller',
                 .on('add remove reset', function () {
                     self.refresh();
                 });
-
-            // pre-fill participants list
-            this.participants.reset(options.participants || []);
-
-            // all appointments are stored in this collection
-            this.appointments = new Backbone.Collection([]);
-
-            // get new instance of weekview
-            this.weekView = new WeekView({
-                allowLasso: !standalone,
-                appExtPoint: 'io.ox/calendar/week/view/appointment',
-                collection: this.appointments,
-                keyboard: false,
-                mode: 2, // 2 = week:workweek
-                showFulltime: false,
-                todayClass: ''
-            });
-
-            this.weekView
-                // listen to refresh event
-                .on('onRefresh', function () {
-                    self.appointments.reset([]);
-                    self.refresh();
-                })
-                // listen to create event
-                .on('openCreateAppointment', this.update, this)
-                // listen to show appointment event
-                .on('showAppointment', this.showAppointment, this);
-
-            this.appointments.reset([]);
-
-            var renderAppointment = this.weekView.renderAppointment;
-            this.weekView.renderAppointment = function (model) {
-                var $el = renderAppointment.call(self.weekView, model);
-                $el.removeClass('modify reserved temporary absent free')
-                    // set color by index
-                    .addClass(templates.getColorClass(model.get('index')))
-                    // whole-day / all-day / full-time
-                    .addClass(model.get('full_time') ? 'fulltime' : '')
-                    // temporary
-                    .addClass(model.get('shown_as') === 2 ? 'striped' : '');
-                return $el;
-            };
 
             // construct auto-complete
             this.autoCompleteControls = templates.getAutoCompleteControls();
@@ -297,15 +302,6 @@ define('io.ox/calendar/freebusy/controller',
             return freebusy;
         }
     };
-
-    /* DEV
-
-    var participants = [{ folder_id: 6, id: 225, type: 1 }, { folder_id: 6, id: 80, type: 1 }];
-    require(['io.ox/calendar/freebusy/controller'], function (controller) {
-        controller.open({ participants: participants });
-    });
-
-    */
 
     return that;
 });

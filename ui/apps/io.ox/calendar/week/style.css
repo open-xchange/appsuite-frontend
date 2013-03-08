@@ -180,10 +180,12 @@
 
     .timeslot {
         border-bottom: 1px solid #ccc;
+        height: 24px;
     }
 
     .time {
         position: relative;
+        height: 48px;
     }
 
     .time .number {
@@ -262,7 +264,7 @@
     }
 
     .appointment.border {
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
     .appointment.current {
