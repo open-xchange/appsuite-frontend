@@ -33,7 +33,7 @@ define("io.ox/calendar/view-detail",
             _.call(ext.action, e.data, e);
         });
     };
-    
+
     var attachmentsBusy = false; //check if attachments are uploding atm
 
     // draw via extension points
@@ -156,7 +156,7 @@ define("io.ox/calendar/view-detail",
         } else {
             name = display_name = obj.display_name || mail_lc;
         }
-        
+
         node = $('<div class="participant">')
             .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
             .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)))
@@ -383,18 +383,18 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             if (data.creation_date || data.created_by) {
                 this.append(
-                    $("<span>")
-                        .addClass("detail-label")
-                        .append($.txt(gt("Created")), $.txt(gt.noI18n(":\u00A0")))
-                )
-                .append(
-                    $("<span>")
-                        .addClass("detail created")
-                        .append($("<span>").text(gt.noI18n(data.creation_date ? util.getDate(data.creation_date) : '')))
-                        .append($("<span>").text(gt.noI18n(" \u2013 ")))
-                        .append($("<span>").append(data.created_by ? userAPI.getTextNode(data.created_by) : ''))
-                 )
-                 .append($("<br>"));
+                    $('<span class="detail-label">').append(
+                        $.txt(gt('Created')), $.txt(gt.noI18n(':\u00A0'))
+                    ),
+                    $('<span class="detail created">').append(
+                        $('<span>').text(gt.noI18n(data.creation_date ? util.getDate(data.creation_date) : '')),
+                        $('<span>').text(gt.noI18n(data.creation_date ? ' \u2013 ' : '')),
+                        $('<a href="#" class="halo-link">').data({ user_id: data.created_by }).append(
+                            data.created_by ? userAPI.getTextNode(data.created_by) : ''
+                        )
+                    ),
+                    $('<br>')
+                 );
             }
         }
     });
@@ -406,18 +406,18 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             if (data.last_modified || data.modified_by) {
                 this.append(
-                    $("<span>")
-                        .addClass("detail-label")
-                        .append($.txt(gt("Modified")), $.txt(gt.noI18n(":\u00A0")))
-                )
-                .append(
-                    $("<span>")
-                        .addClass("detail modified")
-                        .append($("<span>").text(gt.noI18n(data.last_modified ? util.getDate(data.last_modified) : '')))
-                        .append($("<span>").text(gt.noI18n(" \u2013 ")))
-                        .append($("<span>").append(data.modified_by ? userAPI.getTextNode(data.modified_by) : ''))
-                 )
-                 .append($("<br>"));
+                    $('<span class="detail-label">').append(
+                        $.txt(gt('Modified')), $.txt(gt.noI18n(':\u00A0'))
+                    ),
+                    $('<span class="detail modified">').append(
+                        $('<span>').text(gt.noI18n(data.last_modified ? util.getDate(data.last_modified) : '')),
+                        $('<span>').text(gt.noI18n(data.last_modified ? ' \u2013 ' : '')),
+                        $('<a href="#" class="halo-link">').data({ user_id: data.modified_by }).append(
+                            data.modified_by ? userAPI.getTextNode(data.modified_by) : ''
+                        )
+                    ),
+                    $('<br>')
+                 );
             }
         }
     });
@@ -451,7 +451,7 @@ define("io.ox/calendar/view-detail",
     function redraw(e, data) {
         $(this).replaceWith(e.data.view.draw(data));
     }
-    
+
     function setAttachmentsbusy(e, state) {
         attachmentsBusy = state;
     }

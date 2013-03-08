@@ -72,6 +72,7 @@ define('io.ox/calendar/freebusy/main',
                         /* falls through */
                     case 'cancel':
                         options.app.getWindow().show();
+                        if (options.callback) options.callback();
                         quit();
                         break;
                     }

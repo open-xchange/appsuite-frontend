@@ -67,7 +67,8 @@ define("io.ox/participants/model",
                     this.cid = 'resourcegroup_' + this.get('id');
                     break;
                 case this.TYPE_EXTERNAL_USER:
-                    this.cid = 'external_' + this.get('id');
+                    this.cid = 'external_' + (this.get('id') || this.get('mail'));
+                    this.set('id', this.get('id') || this.get('mail'));
                     break;
                 case this.TYPE_DISTLIST_USER_GROUP:
                     this.cid = 'distlist_' + this.get('id');
@@ -180,6 +181,7 @@ define("io.ox/participants/model",
                 var duplicates = [];
                 self.each(function (p, index) {
                     if (idMap[p.id]) {
+                        console.log('DUPLICATE', p.id);
                         duplicates.push(p);
                     } else {
                         idMap[p.id] = true;

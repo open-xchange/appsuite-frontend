@@ -34,7 +34,9 @@ define('io.ox/calendar/freebusy/controller',
 
             var self = this,
                 standalone = options.standalone,
-                state = $.Deferred();
+                state = $.Deferred(),
+                // short-term fluent appointment cache
+                cache = {};
 
             this.promise = state.promise();
 
@@ -47,6 +49,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.appointments.reset([]);
                 self.autocomplete.remove();
                 self.autocomplete = self.weekView = null;
+                cache = {};
             });
 
             this.update = function (e, data) {
@@ -94,6 +97,7 @@ define('io.ox/calendar/freebusy/controller',
                 api.freebusy(list, options).done(function (data) {
                     // check for weekView cause it might get null if user quits
                     if (self.weekView) {
+                        cache = {};
                         data = _(data).chain()
                             .map(function (request, index) {
                                 return _(request.data).chain()
@@ -102,7 +106,10 @@ define('io.ox/calendar/freebusy/controller',
                                         return obj.shown_as !== 4;
                                     })
                                     .map(function (obj) {
+                                        // store index
                                         obj.index = index;
+                                        // add appointments without access to cache
+                                        cache[_.cid(obj)] = obj;
                                         return obj;
                                     })
                                     .value();
@@ -121,25 +128,47 @@ define('io.ox/calendar/freebusy/controller',
 
             this.sidePopup = new dialogs.SidePopup().on('close', unmarkAppointments);
 
+            function openSidePopup(e, data) {
+                self.sidePopup.show(e, function (popup) {
+                    popup.append(detailView.draw(data));
+                });
+            }
+
             this.showAppointment = function (e, obj) {
-                api.get(obj).then(
-                    function (data) {
-                        self.sidePopup.show(e, function (popup) {
-                            popup.append(detailView.draw(data));
-                        });
-                    },
-                    function (error) {
-                        notifications.yell(error);
-                        unmarkAppointments();
-                    }
-                );
+                var cid = _.cid(obj),
+                    folder = parseInt(obj.folder_id, 10); // otherwise '0' is true
+                if (!folder && cid in cache) {
+                    openSidePopup(e, cache[cid]);
+                } else {
+                    api.get(obj).then(
+                        function (data) {
+                            openSidePopup(e, data);
+                        },
+                        function (error) {
+                            if (cid in cache) {
+                                openSidePopup(e, cache[cid]);
+                            } else {
+                                notifications.yell(error);
+                                unmarkAppointments();
+                            }
+                        }
+                    );
+                }
             };
 
-            this.refresh = _.debounce(function () {
+            this.refresh = function () {
                 if (self.weekView) {
                     self.loadAppointments();
                 }
-            }, 200, true);
+            };
+
+            this.refreshChangedParticipants = _.debounce(function () {
+                self.refresh();
+            }, 200);
+
+            this.refreshChangedInterval = function () {
+                self.refresh();
+            };
 
             // all appointments are stored in this collection
             this.appointments = new Backbone.Collection([]);
@@ -160,7 +189,7 @@ define('io.ox/calendar/freebusy/controller',
                 // listen to refresh event
                 .on('onRefresh', function () {
                     self.appointments.reset([]);
-                    self.refresh();
+                    self.refreshChangedInterval();
                 })
                 // listen to create event
                 .on('openCreateAppointment', this.update, this)
@@ -221,7 +250,7 @@ define('io.ox/calendar/freebusy/controller',
                     self.participants.each(drawParticipant);
                 })
                 .on('add remove reset', function () {
-                    self.refresh();
+                    self.refreshChangedParticipants();
                 });
 
             // construct auto-complete

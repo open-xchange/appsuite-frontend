@@ -491,7 +491,7 @@
                 )
                 .replace(/%%/g, '%');
         },
-        
+
         /**
          * Array-based printf uses a callback function to collect parts of the
          * format string in an array. Useful to construct DOM nodes based on
@@ -631,8 +631,12 @@
                     // join
                     tmp = encode(o.id);
                     f = o.folder_id !== undefined ? o.folder_id : o.folder;
-                    if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
-                    if (o[r] !== undefined && o[r] !== null) { tmp += '.' + encode(o[r]); }
+                    if (o[r] !== undefined && o[r] !== null) {
+                        // if we have a recurrence position we need a folder
+                        tmp = encode(f || 0) + '.' + tmp + '.' + encode(o[r]);
+                    } else {
+                        if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    }
                     return tmp;
                 }
             };
@@ -673,7 +677,7 @@
     _.escapeRegExp = function (s) {
         return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
-    
+
     window.assert = function (value, message) {
         if (value) return;
         console.error(message || 'Assertion failed!');
