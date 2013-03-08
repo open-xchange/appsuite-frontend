@@ -36,6 +36,9 @@ define('io.ox/calendar/freebusy/main',
 
             // clean up & quit
             function quit() {
+                if (options.app) {
+                    options.app.off('quit', quit);
+                }
                 app.quit();
                 options.$el = options.app = options.model = null;
                 app = win = options = null;

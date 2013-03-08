@@ -93,7 +93,7 @@ define('io.ox/calendar/week/view',
             if (!opt.keyboard || opt.keyboard === true) {
                 this.bindKeys();
             }
-            this.setStartDate();
+            this.setStartDate(opt.startDate);
             this.initSettings();
         },
 

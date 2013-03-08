@@ -92,23 +92,26 @@ define('io.ox/calendar/freebusy/controller',
             this.loadAppointments = function () {
                 var list = self.getParticipants(), options = self.getInterval();
                 api.freebusy(list, options).done(function (data) {
-                    data = _(data).chain()
-                        .map(function (request, index) {
-                            return _(request.data).chain()
-                                .filter(function (obj) {
-                                    // ignore shown_as "free"
-                                    return obj.shown_as !== 4;
-                                })
-                                .map(function (obj) {
-                                    obj.index = index;
-                                    return obj;
-                                })
-                                .value();
-                        })
-                        .flatten()
-                        .value();
-                    // reset now
-                    self.weekView.reset(options.start, data);
+                    // check for weekView cause it might get null if user quits
+                    if (self.weekView) {
+                        data = _(data).chain()
+                            .map(function (request, index) {
+                                return _(request.data).chain()
+                                    .filter(function (obj) {
+                                        // ignore shown_as "free"
+                                        return obj.shown_as !== 4;
+                                    })
+                                    .map(function (obj) {
+                                        obj.index = index;
+                                        return obj;
+                                    })
+                                    .value();
+                            })
+                            .flatten()
+                            .value();
+                        // reset now
+                        self.weekView.reset(options.start, data);
+                    }
                 });
             };
 
@@ -149,6 +152,7 @@ define('io.ox/calendar/freebusy/controller',
                 keyboard: false,
                 mode: 2, // 2 = week:workweek
                 showFulltime: false,
+                startDate: options.start_date,
                 todayClass: ''
             });
 

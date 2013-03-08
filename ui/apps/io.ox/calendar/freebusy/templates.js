@@ -64,7 +64,7 @@ define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'],
                     content: gt(
                         'If you spot a free time, just select this area. ' +
                         'To do this, move the cursor to the start time, hold the mouse button, and <b>drag the mouse</b> to the end time. ' +
-                        'You will automatically return to the appointment. ' +
+                        'You will automatically return to the appointment dialog. ' +
                         'The selected start and end time as well as the current participant list will be applied. '
                     ),
                     html: true,
