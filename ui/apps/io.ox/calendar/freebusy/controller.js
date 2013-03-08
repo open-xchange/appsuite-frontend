@@ -13,6 +13,7 @@
 define('io.ox/calendar/freebusy/controller',
     ['io.ox/core/tk/dialogs',
      'io.ox/calendar/week/view',
+     'io.ox/calendar/freebusy/templates',
      'io.ox/core/api/folder',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/participants/model',
@@ -22,17 +23,11 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/api',
      'io.ox/core/notifications',
      'io.ox/calendar/view-detail',
-     'gettext!io.ox/calendar',
+     'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
-
-    var INDEX = 9;
-
-    var getColorClass = function (index) {
-        return 'color-index-' + ((index * 2) % INDEX);
-    };
 
     var that = {
 
@@ -41,7 +36,7 @@ define('io.ox/calendar/freebusy/controller',
             var self = this;
 
             // create container node
-            this.$el = $('<div class="abs free-busy-view">').on('dispose', function () {
+            this.$el = templates.getMainContainer().on('dispose', function () {
                 // clean up
                 self.weekView.remove();
             });
@@ -129,19 +124,18 @@ define('io.ox/calendar/freebusy/controller',
 
             // participants collection
             this.participants = new participantsModel.Participants([]);
-            this.participantsView = $('<div class="participants-view">');
+            this.participantsView = templates.getParticipantsView();
 
             function customize() {
                 var index = this.model.collection.indexOf(this.model) || 0;
                 this.$el.addClass('with-participant-color').append(
-                    $('<div class="participant-color">').addClass(getColorClass(index))
+                    templates.getParticipantColor(index)
                 );
             }
 
             function updateParticipantColors() {
                 self.participants.each(function (model, index) {
-                    var node = self.participantsView.find('[data-cid="' + model.cid + '"] .participant-color');
-                    node.attr('class', 'participant-color ' + getColorClass(index));
+                    templates.updateParticipantColor(self.participantsView, model.cid, index);
                     model.set('index', index);
                 });
             }
@@ -201,7 +195,7 @@ define('io.ox/calendar/freebusy/controller',
                 var $el = renderAppointment.call(self.weekView, model);
                 $el.removeClass('modify reserved temporary absent free')
                     // set color by index
-                    .addClass(getColorClass(model.get('index')))
+                    .addClass(templates.getColorClass(model.get('index')))
                     // whole-day / all-day / full-time
                     .addClass(model.get('full_time') ? 'fulltime' : '')
                     // temporary
@@ -210,10 +204,7 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             // construct auto-complete
-            this.autoCompleteControls = $('<div class="autocomplete-controls input-append pull-left">').append(
-                $('<input type="text" class="add-participant">').attr('placeholder', gt('Add participant') + ' ...'),
-                $('<button class="btn add-button" type="button" data-action="add">').append($('<i class="icon-plus">'))
-            );
+            this.autoCompleteControls = templates.getAutoCompleteControls();
 
             // get instance of AddParticipantsView
             this.autocomplete = new AddParticipantsView({ el: this.autoCompleteControls })
@@ -262,8 +253,8 @@ define('io.ox/calendar/freebusy/controller',
             });
 
             this.$el.append(
-                $('<h1>').text(gt('Find a free time')),
-                $('<div class="abs participants-view-scrollpane">').append(this.participantsView),
+                templates.getHeadline(),
+                templates.getParticipantsScrollpane().append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view')
             );
         },
@@ -272,23 +263,12 @@ define('io.ox/calendar/freebusy/controller',
 
             var freebusy = new that.FreeBusy(options, win);
 
-            var how = gt('How does this work?');
-
             this.append(
                 freebusy.$el,
-                $('<div class="abs free-busy-controls">').append(
-                    $('<button class="btn pull-right">').text(gt('Back to appointment')),
+                templates.getControls().append(
+                    templates.getBackButton(),
                     freebusy.autoCompleteControls,
-                    $('<a href="#" class="hint pull-left">')
-                        .text(how)
-                        .click($.preventDefault)
-                        .popover({
-                            title: how,
-                            content: gt('If you spot a free time, just select this area. ' +
-                                'To do this, move the cursor to the start time, hold the mouse button, and drag the mouse to the end time. ' +
-                                'You will automatically return to your appointment and the new start and end time will be used.'),
-                            placement: 'top'
-                        })
+                    templates.getPopover()
                 )
             );
 
