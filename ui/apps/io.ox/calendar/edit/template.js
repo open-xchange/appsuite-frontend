@@ -456,7 +456,6 @@ define('io.ox/calendar/edit/template',
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);
             });
-
         }
     });
 

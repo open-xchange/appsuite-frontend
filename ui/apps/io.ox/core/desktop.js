@@ -325,6 +325,7 @@ define("io.ox/core/desktop",
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
+                self.trigger('quit');
                 self.set('state', 'stopped');
                 // remove app's properties
                 for (var id in self) {
@@ -780,7 +781,7 @@ define("io.ox/core/desktop",
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
-                    if (currentWindow !== this || parent.length === 0) {
+                    if (self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (firstShow) {
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
@@ -793,6 +794,7 @@ define("io.ox/core/desktop",
                         this.updateToolbar();
                         node.show();
                         scrollTo(node, function () {
+                            if (self === null) return;
                             if (currentWindow && currentWindow !== self) {
                                 currentWindow.hide();
                             }

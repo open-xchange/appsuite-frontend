@@ -34,6 +34,18 @@ define('io.ox/calendar/freebusy/main',
             options.standalone = !options.folder || !options.model;
             options.folder = options.folder || settings.get('folder/calendar');
 
+            // clean up & quit
+            function quit() {
+                app.quit();
+                options.$el = options.app = options.model = null;
+                app = win = options = null;
+            }
+
+            // quit if opener quits
+            if (options.app) {
+                options.app.on('quit', quit);
+            }
+
             win.show(function () {
 
                 win.busy();
@@ -46,7 +58,7 @@ define('io.ox/calendar/freebusy/main',
                 freebusy.promise.done(function (action, data) {
                     switch (action) {
                     case 'quit':
-                        app.quit();
+                        quit();
                         break;
                     case 'update':
                         options.model.set({
@@ -57,7 +69,7 @@ define('io.ox/calendar/freebusy/main',
                         /* falls through */
                     case 'cancel':
                         options.app.getWindow().show();
-                        app.quit();
+                        quit();
                         break;
                     }
                 });
