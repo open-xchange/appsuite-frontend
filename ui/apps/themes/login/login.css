@@ -297,3 +297,14 @@ body.down #io-ox-login-container .alert.alert-info {
     #io-ox-login-header { height: 15%; }
     #io-ox-login-header h1 { font-size: 14pt; margin: 2em 0 2em 0; }
 }
+
+@media (max-width: 480px) {
+    /* responsive re-login screen */
+    #io-ox-login-screen.relogin {
+        left: 5px;
+        right: 5px;
+        margin-left: 0;
+        width: auto;
+    }
+}
+
