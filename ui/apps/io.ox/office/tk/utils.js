@@ -475,6 +475,33 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return new Array(count + 1).join(text);
     };
 
+    /**
+     * Returns the passed text with the first character being upper-case.
+     *
+     * @param {String} text
+     *  The text to be converted.
+     *
+     * @returns {String}
+     *  The passed text with the first character being upper-case.
+     */
+    Utils.firstCharToUpperCase = function (text) {
+        return (text.length > 0) ? (text[0].toUpperCase() + text.slice(1)) : '';
+    };
+
+    /**
+     * Returns the passed text with the first character of each word being
+     * upper-case.
+     *
+     * @param {String} text
+     *  The text to be converted.
+     *
+     * @returns {String}
+     *  The passed text with the first character of each word being upper-case.
+     */
+    Utils.wordsToUpperCase = function (text) {
+        return _(text.split(' ')).map(Utils.firstCharToUpperCase).join(' ');
+    };
+
     // options object ---------------------------------------------------------
 
     /**
