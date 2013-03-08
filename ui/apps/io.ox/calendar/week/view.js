@@ -97,6 +97,21 @@ define('io.ox/calendar/week/view',
         },
 
         /**
+         * reset appointment collection; avoid incorrect concurrent requests
+         */
+        reset: function (startDate, data) {
+            console.log('reset. cmp', startDate, this.startDate.getTime(), 'eq?', startDate === this.startDate.getTime());
+            if (startDate === this.startDate.getTime()) {
+                // reset collection; transform raw dato to proper models
+                this.collection.reset(_(data).map(function (obj) {
+                    var model = new Backbone.Model(obj);
+                    model.id = _.cid(obj);
+                    return model;
+                }));
+            }
+        },
+
+        /**
          * set week reference start date
          * @param {string|number} opt
          *        number: Timestamp of a date in the reference week. Now if empty

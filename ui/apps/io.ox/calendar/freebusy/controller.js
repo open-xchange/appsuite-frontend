@@ -69,7 +69,6 @@ define('io.ox/calendar/freebusy/controller',
             }
 
             this.loadAppointments = function () {
-                controller.busy();
                 var list = self.getParticipants(), options = self.getInterval();
                 api.freebusy(list, options).done(function (data) {
                     data = _(data).chain()
@@ -86,10 +85,9 @@ define('io.ox/calendar/freebusy/controller',
                                 .value();
                         })
                         .flatten()
-                        .map(toModel)
                         .value();
-                    self.appointments.reset(data);
-                    controller.idle();
+                    // reset now
+                    self.weekView.reset(options.start, data);
                 });
             };
 
@@ -228,7 +226,6 @@ define('io.ox/calendar/freebusy/controller',
                     });
                 } else if (data.type === 2) {
                     // fetch users en block first
-                    controller.busy();
                     self.participantsView.css('visibility', 'hidden').parent().busy();
                     // resolve group
                     userAPI.getList(data.members, true, { allColumns: true })
@@ -244,7 +241,6 @@ define('io.ox/calendar/freebusy/controller',
                         })
                         .always(function () {
                             self.participantsView.css('visibility', '').parent().idle();
-                            controller.idle();
                         });
                 } else {
                     // single participant
