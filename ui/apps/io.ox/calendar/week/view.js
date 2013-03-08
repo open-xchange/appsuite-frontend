@@ -100,7 +100,6 @@ define('io.ox/calendar/week/view',
          * reset appointment collection; avoid incorrect concurrent requests
          */
         reset: function (startDate, data) {
-            console.log('reset. cmp', startDate, this.startDate.getTime(), 'eq?', startDate === this.startDate.getTime());
             if (startDate === this.startDate.getTime()) {
                 // reset collection; transform raw dato to proper models
                 this.collection.reset(_(data).map(function (obj) {
