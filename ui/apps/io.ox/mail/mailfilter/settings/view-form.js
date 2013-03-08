@@ -147,6 +147,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             point.extend(new forms.CheckBoxField({
                 id: ref + '/edit/view/' + alias,
                 index: 350,
+                className: 'blue',
                 label: alias,
                 attribute: alias,
                 customizeNode: function () {

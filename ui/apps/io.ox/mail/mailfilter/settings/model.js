@@ -117,7 +117,7 @@ define('io.ox/mail/mailfilter/settings/model',
         addresses: gt('E-mail addresses'),
         dateFrom: gt('From'),
         dateUntil: gt('End'),
-        activateTimeFrame: gt('Use timeframe')
+        activateTimeFrame: gt('Send vacation notice during this time only')
     };
 
 

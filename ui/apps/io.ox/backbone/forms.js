@@ -775,12 +775,16 @@ define('io.ox/backbone/forms',
                                     if (options.initialStateDisabled) {
                                         self.nodes.dayField.attr('disabled', true);
                                     }
-                                    self.nodes.timezoneField = $('<span class="label">');
-                                    if (self.model.get(self.attribute)) {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
-                                    } else {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+
+                                    if (options.display === "DATETIME") {
+                                        self.nodes.timezoneField = $('<span class="label">');
+                                        if (self.model.get(self.attribute)) {
+                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
+                                        } else {
+                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+                                        }
                                     }
+
                                     if (options.display === "DATE") {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === "DATETIME") {
@@ -829,9 +833,9 @@ define('io.ox/backbone/forms',
             },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                if (value) {
+                if (value && options.display === "DATETIME") {
                     this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
-                } else {
+                } else if (options.display === "DATETIME") {
                     this.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
                 }
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
