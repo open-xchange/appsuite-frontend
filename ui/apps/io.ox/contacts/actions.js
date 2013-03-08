@@ -270,7 +270,18 @@ define('io.ox/contacts/actions',
 
         multiple: function (list) {
             api.getList(list).done(function (list) {
-//                console.log(list);
+                var cleanedList = [];
+
+                _(list).each(function (contact) {
+                    if (contact.mark_as_distributionlist !== true) {
+                        cleanedList.push(contact);
+                    }
+                });
+
+                require(['io.ox/core/print'], function (print) {
+                    print.interim(ox.base + '/apps/io.ox/contacts/print-template-multi.html');
+                });
+
             });
         }
     });
