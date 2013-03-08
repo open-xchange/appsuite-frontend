@@ -12,6 +12,7 @@
 
 @controlsHeight: 34px;
 @participantsWidth: 340px;
+@bottom: @controlsHeight + 13 * 2 + 1;
 
 .free-busy-controls {
 
@@ -29,6 +30,7 @@
         line-height: 30px;
         position: relative;
         left: 77px;
+        cursor: help;
     }
 
     .popover {
@@ -37,8 +39,6 @@
 }
 
 .window-content .free-busy-view {
-
-    bottom: @controlsHeight + 13 * 2 + 1;
 
     .user-select(none);
 
@@ -54,6 +54,7 @@
 
     .participants-view-scrollpane {
         top: 64px;
+        bottom: @bottom;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
         .box-sizing(border-box);
@@ -91,6 +92,7 @@
     .calendar-week-view {
         top: 10px;
         left: @participantsWidth;
+        bottom: @bottom;
     }
 
     .appointment {

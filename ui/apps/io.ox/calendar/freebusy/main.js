@@ -11,7 +11,8 @@
  */
 
 define('io.ox/calendar/freebusy/main',
-    ['io.ox/calendar/freebusy/controller'], function (controller) {
+    ['io.ox/calendar/freebusy/controller',
+     'settings!io.ox/core'], function (controller, settings) {
 
     'use strict';
 
@@ -29,8 +30,34 @@ define('io.ox/calendar/freebusy/main',
             win = ox.ui.createWindow({ name: NAME, chromeless: true });
             app.setWindow(win);
 
+            if (!options.folder) {
+                options.folder = settings.get('folder/calendar');
+                options.standalone = true;
+            }
+
             win.show(function () {
-                controller.draw.call(win.nodes.main, options, win);
+
+                win.busy();
+
+                options.$el = win.nodes.main;
+                var freebusy = controller.getInstance(options, function () {
+                    win.idle();
+                });
+
+                freebusy.promise.done(function (action, data) {
+                    console.log('promise.done', action, data);
+                    switch (action) {
+                    case 'quit':
+                        app.quit();
+                        break;
+                    case 'cancel':
+                        console.log('cancel');
+                        break;
+                    case 'update':
+                        console.log('update', data);
+                        break;
+                    }
+                });
             });
         });
 

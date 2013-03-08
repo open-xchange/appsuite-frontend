@@ -83,6 +83,7 @@ define('io.ox/calendar/week/view',
 
             this.showFulltime = opt.showFulltime === false ? false : true;
             this.todayClass = 'todayClass' in opt ? opt.todayClass : 'today';
+            this.allowLasso = 'allowLasso' in opt ? opt.allowLasso : true;
             this.mode = opt.mode || 1;
             this.extPoint = opt.appExtPoint;
 
@@ -97,7 +98,8 @@ define('io.ox/calendar/week/view',
         },
 
         /**
-         * reset appointment collection; avoid incorrect concurrent requests
+         * reset appointment collection
+         * avoids processing concurrent requests in wrong order
          */
         reset: function (startDate, data) {
             if (startDate === this.startDate.getTime()) {
@@ -340,7 +342,7 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e mouseevents on day container
          */
         onLasso: function (e) {
-            if (!folderAPI.can('create', this.folder())) {
+            if (this.allowLasso === false || !folderAPI.can('create', this.folder())) {
                 return;
             }
 
