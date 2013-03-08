@@ -264,6 +264,17 @@ define('io.ox/contacts/actions',
         }
     });
 
+    new Action('io.ox/contacts/actions/print', {
+
+        requires: 'some read',
+
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+//                console.log(list);
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/invite', {
 
         capabilities: 'calendar',
@@ -498,6 +509,13 @@ define('io.ox/contacts/actions',
         prio: 'hi',
         label: gt('Send vCard'),
         ref: 'io.ox/contacts/actions/vcard'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'print',
+        index:  INDEX += 100,
+        label: gt('Print'),
+        ref: 'io.ox/contacts/actions/print'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
