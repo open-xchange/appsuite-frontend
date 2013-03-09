@@ -105,7 +105,7 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,700,701,702,703,704,705,706,707,709,711'
+                columns: '20,1,5,700,701,702,703,704,705,706,707,708,709,710,711'
             },
             get: {
                 action: 'get'
@@ -122,7 +122,13 @@ define('io.ox/files/api',
         },
         pipe: {
             all: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                    api.caches.get.merge(obj);
+                    api.caches.versions.remove(String(obj.id));
+                    // this can be solved smarter once backend send correct
+                    // number_of_version in "all" requests; always zero now
+                });
                 return data;
             },
             list: function (data) {
