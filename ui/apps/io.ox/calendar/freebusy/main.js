@@ -22,7 +22,7 @@ define('io.ox/calendar/freebusy/main',
 
         var app, win;
 
-        app = ox.ui.createApp({ name: NAME, title: 'Find a free time' });
+        app = ox.ui.createApp({ name: NAME, title: 'Scheduling' });
 
         // launcher
         app.setLauncher(function (options) {
@@ -32,7 +32,11 @@ define('io.ox/calendar/freebusy/main',
 
             // if folder is missing or we don't have a model to update
             options.standalone = !options.folder || !options.model;
-            options.folder = options.folder || settings.get('folder/calendar');
+            options.folder = options.folder || options.folder_id || settings.get('folder/calendar');
+
+            if (options.participants === undefined) {
+                options.participants = [{ id: ox.user_id, type: 1 }];
+            }
 
             // clean up & quit
             function quit() {

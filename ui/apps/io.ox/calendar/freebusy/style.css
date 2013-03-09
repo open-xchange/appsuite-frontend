@@ -126,14 +126,15 @@
         opacity: @opacity - 0.1;
     }
 
+    /* colors are in custom order: not rainbow */
     .color-index-0 { background-color: darken(@blue, 10%); }
     .color-index-1 { background-color: darken(@blueLight, 20%); }
-    .color-index-2 { background-color: @green; }
-    .color-index-3 { background-color: @greenLight; }
+    .color-index-2 { background-color: @greenLight; }
+    .color-index-3 { background-color: #DA728F; } /* custom red */
     .color-index-4 { background-color: #DAD172; } /* better than pure yellow */
     .color-index-5 { background-color: @orange; }
-    .color-index-6 { background-color: @red; }
-    .color-index-7 { background-color: @pink; }
+    .color-index-6 { background-color: @pink; }
+    .color-index-7 { background-color: @green; }
     .color-index-8 { background-color: @purple; }
 
     .color-index-4 .appointment-content { color: #333; }

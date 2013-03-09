@@ -24,7 +24,8 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/core/notifications',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt) {
+     'settings!io.ox/core',
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
 
@@ -52,13 +53,29 @@ define('io.ox/calendar/freebusy/controller',
                 cache = {};
             });
 
-            this.update = function (e, data) {
-                if (!standalone) {
-                    state.resolve('update', {
-                        start_date: data.start_date,
-                        end_date: data.end_date,
-                        participants: this.getParticipants()
+            this.updateAppointment = function (data) {
+                state.resolve('update', data);
+            };
+
+            this.newAppointment = function (data) {
+                require(['io.ox/calendar/edit/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.create(data);
                     });
+                });
+            };
+
+            this.onCreate = function (e, data) {
+                data = {
+                    start_date: data.start_date,
+                    end_date: data.end_date,
+                    participants: this.getParticipants(),
+                    folder_id: options.folder
+                };
+                if (standalone) {
+                    this.newAppointment(data);
+                } else {
+                    this.updateAppointment(data);
                 }
             };
 
@@ -175,7 +192,6 @@ define('io.ox/calendar/freebusy/controller',
 
             // get new instance of weekview
             this.weekView = new WeekView({
-                allowLasso: !standalone,
                 appExtPoint: 'io.ox/calendar/week/view/appointment',
                 collection: this.appointments,
                 keyboard: false,
@@ -192,7 +208,7 @@ define('io.ox/calendar/freebusy/controller',
                     self.refreshChangedInterval();
                 })
                 // listen to create event
-                .on('openCreateAppointment', this.update, this)
+                .on('openCreateAppointment', this.onCreate, this)
                 // listen to show appointment event
                 .on('showAppointment', this.showAppointment, this);
 
@@ -306,13 +322,13 @@ define('io.ox/calendar/freebusy/controller',
             }
 
             this.$el.append(
-                templates.getHeadline(),
+                templates.getHeadline(standalone),
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 this.weekView.render().$el.addClass('abs calendar-week-view'),
                 templates.getControls().append(
                     (!standalone ? templates.getBackButton() : templates.getQuitButton()).on('click', clickButton),
                     this.autoCompleteControls,
-                    !standalone ? templates.getPopover() : []
+                    templates.getPopover(standalone)
                 )
             );
         },
@@ -325,7 +341,17 @@ define('io.ox/calendar/freebusy/controller',
             folderAPI.get({ folder: options.folder }).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)
                 // use fallback data on error
-                data = data.error ? { folder_id: 1, id: options.folder, own_rights: 403710016 } : data;
+                var fallback = { folder_id: 1, id: settings.get('folder/calendar'), own_rights: 403710016 };
+                if (data.error) {
+                    data = fallback;
+                    options.folder = fallback.id;
+                }
+                // show warning in case of missing 'create' right
+                else if (!folderAPI.can('create', data)) {
+                    templates.informAboutfallback(data);
+                    data = fallback;
+                    options.folder = fallback.id;
+                }
                 freebusy.weekView.folder(data);
                 // clean up
                 freebusy.postprocess();

@@ -312,6 +312,18 @@ define('io.ox/calendar/actions',
         multiple: copyMove('calendar', 'move', gt('Move'))
     });
 
+    new Action('io.ox/calendar/actions/freebusy', {
+        requires: function (e) {
+            return _.device('!small');
+        },
+        action: function (baton, obj) {
+            ox.launch('io.ox/calendar/freebusy/main', {
+                folder: baton.app.folder.get(),
+                participants: [{ id: ox.user_id, type: 1 }]
+            });
+        }
+    });
+
     // Links - toolbar
 
     new ActionGroup(POINT + '/links/toolbar', {
@@ -372,6 +384,21 @@ define('io.ox/calendar/actions',
         index: 500,
         label: gt('List'),
         ref: 'io.ox/calendar/actions/switch-to-list-view'
+    });
+
+    // Links : toolbar : Free/busy
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'freebusy',
+        index: 200,
+        icon: function () {
+            return $('<i class="icon-group">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/freebusy', {
+        label: gt('Scheduling'),
+        ref: 'io.ox/calendar/actions/freebusy'
     });
 
     // FIXME: should only be visible if rights are ok

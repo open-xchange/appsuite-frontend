@@ -10,7 +10,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'], function (gt) {
+define('io.ox/calendar/freebusy/templates',
+    ['io.ox/core/notifications',
+     'gettext!io.ox/calendar/freebusy'], function (notifications, gt) {
 
     'use strict';
 
@@ -20,8 +22,10 @@ define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'],
             return $('<div class="abs free-busy-view">');
         },
 
-        getHeadline: function () {
-            return $('<h1>').text(gt('Find a free time'));
+        getHeadline: function (standalone) {
+            return $('<h1>').text(
+                standalone ? gt('Scheduling') : gt('Find a free time')
+            );
         },
 
         getParticipantsView: function () {
@@ -33,7 +37,7 @@ define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'],
         },
 
         getColorClass: function (index) {
-            return 'color-index-' + ((index * 2) % 9);
+            return 'color-index-' + (index % 9); // ((index * 2) % 9);
         },
 
         getParticipantColor: function (index) {
@@ -56,17 +60,18 @@ define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'],
             );
         },
 
-        getPopover: function () {
+        getPopover: function (standalone) {
+
+            var part1 = gt('If you spot a free time, just select this area. ' +
+                    'To do this, move the cursor to the start time, hold the mouse button, and <b>drag the mouse</b> to the end time.'),
+                part2 = gt('You will automatically return to the appointment dialog. ' +
+                    'The selected start and end time as well as the current participant list will be applied.');
+
             return $('<a href="#" class="hint pull-left" tabindex="2">')
                 .text(gt('How does this work?'))
                 .click($.preventDefault)
                 .popover({
-                    content: gt(
-                        'If you spot a free time, just select this area. ' +
-                        'To do this, move the cursor to the start time, hold the mouse button, and <b>drag the mouse</b> to the end time. ' +
-                        'You will automatically return to the appointment dialog. ' +
-                        'The selected start and end time as well as the current participant list will be applied. '
-                    ),
+                    content: part1 + (!standalone ? ' ' + part2 : ''),
                     html: true,
                     placement: 'top',
                     title: gt('Help'),
@@ -80,6 +85,24 @@ define('io.ox/calendar/freebusy/templates', ['gettext!io.ox/calendar/freebusy'],
 
         getQuitButton: function () {
             return $('<button class="btn pull-right" tabindex="3" data-action="quit">').text(gt('Quit'));
+        },
+
+        informAboutfallback: function (data) {
+            var owner = data['com.openexchange.folderstorage.displayName'] || '';
+            notifications.yell({
+                headline: gt('Note'),
+                type: 'info',
+                message: owner !== '' ?
+                    //#. Warning dialog
+                    //#. %1$s is a folder/calendar name
+                    //#. %2$s is the folder owner
+                    gt('You are not allowed to create appointments in "%1$s" owned by %2$s. ' +
+                        'Appointments will therefore be created in your private calendar.', data.title, owner) :
+                    //#. Warning dialog
+                    //#. %1$s is a folder/calendar name
+                    gt('You are not allowed to create appointments in "%1$s". ' +
+                        'Appointments will therefore be created in your private calendar.', data.title)
+            });
         }
     };
 });
