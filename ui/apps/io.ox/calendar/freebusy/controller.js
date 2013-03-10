@@ -37,19 +37,30 @@ define('io.ox/calendar/freebusy/controller',
                 standalone = options.standalone,
                 state = $.Deferred(),
                 // short-term fluent appointment cache
-                cache = {};
+                cache = {},
+                // dummy collection
+                emptyCollection = new Backbone.Collection([]),
+                // calendar views (day, workweek, week)
+                currentMode = '',
+                modes = { day: 1, workweek: 2, week: 3 },
+                calendarViews = {},
+                // folder data
+                folderData = {};
 
             this.promise = state.promise();
 
             // create container node
             this.$el = templates.getMainContainer().on('dispose', function () {
                 // clean up
-                self.weekView.remove();
+                for (var id in calendarViews) {
+                    calendarViews[id].remove();
+                    delete calendarViews[id];
+                }
                 self.participants.off();
                 self.participants.reset([]);
                 self.appointments.reset([]);
                 self.autocomplete.remove();
-                self.autocomplete = self.weekView = null;
+                self.autocomplete = calendarViews = null;
                 cache = {};
             });
 
@@ -81,15 +92,22 @@ define('io.ox/calendar/freebusy/controller',
 
             this.postprocess = function () {
                 // hide show all checkbox
-                this.weekView.showAll(false);
+                this.getCalendarView().showAll(false);
                 // pre-fill participants list
                 self.participants.reset(options.participants || []);
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
                 // scroll to proper time (resets cell height, too; deferred not to block UI)
                 _.defer(function () {
-                    self.weekView.setScrollPos();
+                    self.getCalendarView().setScrollPos();
                 });
+            };
+
+            this.setFolderData = function (data) {
+                folderData = data;
+                for (var id in calendarViews) {
+                    calendarViews[id].folder(data);
+                }
             };
 
             this.getParticipants = function () {
@@ -99,8 +117,8 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.getInterval = function () {
-                var start = this.weekView.startDate;
-                return { start: start + 0, end: start + api.DAY * 5 };
+                var start = this.getCalendarView().startDate;
+                return { start: start + 0, end: start + api.DAY * 7 };
             };
 
             function toModel(obj) {
@@ -113,7 +131,7 @@ define('io.ox/calendar/freebusy/controller',
                 var list = self.getParticipants(), options = self.getInterval();
                 api.freebusy(list, options).done(function (data) {
                     // check for weekView cause it might get null if user quits
-                    if (self.weekView) {
+                    if (self.getCalendarView()) {
                         cache = {};
                         data = _(data).chain()
                             .map(function (request, index) {
@@ -134,13 +152,13 @@ define('io.ox/calendar/freebusy/controller',
                             .flatten()
                             .value();
                         // reset now
-                        self.weekView.reset(options.start, data);
+                        self.getCalendarView().reset(options.start, data);
                     }
                 });
             };
 
             function unmarkAppointments() {
-                self.weekView.$el.find('.appointment').removeClass('opac current');
+                self.getCalendarView().$el.find('.appointment').removeClass('opac current');
             }
 
             this.sidePopup = new dialogs.SidePopup().on('close', unmarkAppointments);
@@ -174,7 +192,7 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.refresh = function () {
-                if (self.weekView) {
+                if (self.getCalendarView()) {
                     self.loadAppointments();
                 }
             };
@@ -190,42 +208,78 @@ define('io.ox/calendar/freebusy/controller',
             // all appointments are stored in this collection
             this.appointments = new Backbone.Collection([]);
 
-            // get new instance of weekview
-            this.weekView = new WeekView({
-                appExtPoint: 'io.ox/calendar/week/view/appointment',
-                collection: this.appointments,
-                keyboard: false,
-                mode: 2, // 2 = week:workweek
-                showFulltime: false,
-                startDate: options.start_date,
-                todayClass: ''
-            });
-
-            this.weekView
-                // listen to refresh event
-                .on('onRefresh', function () {
-                    self.appointments.reset([]);
-                    self.refreshChangedInterval();
-                })
-                // listen to create event
-                .on('openCreateAppointment', this.onCreate, this)
-                // listen to show appointment event
-                .on('showAppointment', this.showAppointment, this);
-
-            this.appointments.reset([]);
-
-            var renderAppointment = this.weekView.renderAppointment;
-            this.weekView.renderAppointment = function (model) {
-                var $el = renderAppointment.call(self.weekView, model);
-                $el.removeClass('modify reserved temporary absent free')
-                    // set color by index
-                    .addClass(templates.getColorClass(model.get('index')))
-                    // whole-day / all-day / full-time
-                    .addClass(model.get('full_time') ? 'fulltime' : '')
-                    // temporary
-                    .addClass(model.get('shown_as') === 2 ? 'striped' : '');
-                return $el;
+            this.getCalendarView = function () {
+                return calendarViews[currentMode];
             };
+
+            this.getCalendarViewInstance = function (mode) {
+
+                var view;
+
+                // same view?
+                if (mode === currentMode) return;
+
+                // disconnect current view?
+                if ((view = calendarViews[currentMode])) {
+                    view.collection = emptyCollection;
+                    view.$el.detach();
+                }
+
+                // reuse view?
+                if ((view = calendarViews[mode])) {
+                    view.collection = this.appointments;
+                    currentMode = mode;
+                    self.$el.append(view.$el);
+                    return view;
+                }
+
+                // create new view
+                view = calendarViews[mode] = new WeekView({
+                    allowLasso: true,
+                    appExtPoint: 'io.ox/calendar/week/view/appointment',
+                    collection: this.appointments,
+                    keyboard: false,
+                    mode: modes[mode],
+                    showFulltime: false,
+                    startDate: options.start_date,
+                    todayClass: ''
+                });
+
+                currentMode = mode;
+
+                view
+                    // listen to refresh event
+                    .on('onRefresh', function () {
+                        self.appointments.reset([]);
+                        self.refreshChangedInterval();
+                    })
+                    // listen to create event
+                    .on('openCreateAppointment', this.onCreate, this)
+                    // listen to show appointment event
+                    .on('showAppointment', this.showAppointment, this);
+
+                var renderAppointment = view.renderAppointment;
+                view.renderAppointment = function (model) {
+                    var $el = renderAppointment.call(view, model);
+                    $el.removeClass('modify reserved temporary absent free')
+                        // set color by index
+                        .addClass(templates.getColorClass(model.get('index')))
+                        // whole-day / all-day / full-time
+                        .addClass(model.get('full_time') ? 'fulltime' : '')
+                        // temporary
+                        .addClass(model.get('shown_as') === 2 ? 'striped' : '');
+                    return $el;
+                };
+
+                view.folder(folderData);
+
+                this.$el.append(view.$el.addClass('abs calendar-week-view'));
+                this.appointments.reset([]);
+                view.render();
+                view.showAll(false);
+            };
+
+            this.getCalendarViewInstance('workweek');
 
             // participants collection
             this.participants = new participantsModel.Participants([]);
@@ -316,6 +370,22 @@ define('io.ox/calendar/freebusy/controller',
                 }
             });
 
+            this.changeMode = function (mode) {
+                if (currentMode !== mode) {
+                    this.getCalendarViewInstance(mode);
+                    this.refresh();
+                    _.defer(function () {
+                        self.getCalendarView().setScrollPos();
+                    });
+                }
+            };
+
+            function changeView(e) {
+                e.preventDefault();
+                var action = $(this).attr('data-action');
+                self.changeMode(action);
+            }
+
             function clickButton(e) {
                 var action = $(this).attr('data-action');
                 state.resolve(action);
@@ -324,7 +394,7 @@ define('io.ox/calendar/freebusy/controller',
             this.$el.append(
                 templates.getHeadline(standalone),
                 templates.getParticipantsScrollpane().append(this.participantsView),
-                this.weekView.render().$el.addClass('abs calendar-week-view'),
+                templates.getIntervalDropdown().on('click', 'li a', changeView),
                 templates.getControls().append(
                     (!standalone ? templates.getBackButton() : templates.getQuitButton()).on('click', clickButton),
                     this.autoCompleteControls,
@@ -352,7 +422,7 @@ define('io.ox/calendar/freebusy/controller',
                     data = fallback;
                     options.folder = fallback.id;
                 }
-                freebusy.weekView.folder(data);
+                freebusy.setFolderData(data);
                 // clean up
                 freebusy.postprocess();
                 if (callback) { callback(); }

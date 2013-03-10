@@ -37,7 +37,7 @@ define('io.ox/calendar/freebusy/templates',
         },
 
         getColorClass: function (index) {
-            return 'color-index-' + (index % 9); // ((index * 2) % 9);
+            return 'color-index-' + (index % 10); // ((index * 2) % 9);
         },
 
         getParticipantColor: function (index) {
@@ -47,6 +47,18 @@ define('io.ox/calendar/freebusy/templates',
         updateParticipantColor: function (container, cid, index) {
             var node = container.find('[data-cid="' + cid + '"] .participant-color');
             node.attr('class', 'participant-color ' + this.getColorClass(index));
+        },
+
+        getIntervalDropdown: function () {
+            return $('<div class="view-dropdown dropdown">').append(
+                $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" tabindex="4">').text(gt('Change view')),
+                $.txt(' '), $('<b class="caret">'),
+                $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
+                    $('<li>').append($('<a role="menuitem" href="#" data-action="day">').text(gt('Day'))),
+                    $('<li>').append($('<a role="menuitem" href="#" data-action="workweek">').text(gt('Workweek'))),
+                    $('<li>').append($('<a role="menuitem" href="#" data-action="week">').text(gt('Week')))
+                )
+            );
         },
 
         getControls: function () {
