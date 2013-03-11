@@ -121,6 +121,26 @@ define('io.ox/core/pubsub/settings/pane',
         return new PubSubItem({model: model});
     }
 
+    /**
+     * Setup a new pubsub collection
+     *
+     * @private
+     * @param {$element} - jQuery list node element
+     * @param {object} - model behind the list
+     */
+    function setupList(node, model) {
+        model.each(function (model) {
+            node.append(
+                createPubSubItem(model).render().el
+            );
+        });
+        model.on('add', function (model) {
+            node.append(
+                createPubSubItem(model).render().el
+            );
+        });
+    }
+
     point.extend({
         id: 'content',
         render: function () {
@@ -130,20 +150,8 @@ define('io.ox/core/pubsub/settings/pane',
             this.$el.append(baton.pubListNode);
             this.$el.append(baton.subListNode);
 
-            this.baton.publications.done(function (model) {
-                model.on('add', function (model) {
-                    baton.pubListNode.append(
-                        createPubSubItem(model).render().el
-                    );
-                });
-            });
-            this.baton.subscriptions.done(function (model) {
-                model.on('add', function (model) {
-                    baton.subListNode.append(
-                        createPubSubItem(model).render().el
-                    );
-                });
-            });
+            setupList(baton.pubListNode.empty(), baton.publications);
+            setupList(baton.subListNode.empty(), baton.subscriptions);
         }
     });
 });
