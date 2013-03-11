@@ -144,6 +144,10 @@ define('io.ox/core/api/pubsub',
              * @return {deferred} item count
              */
             refresh: function (data) { //checked
+                if (!data) {
+                    //triggered by global refresh
+                    return;
+                }
                 var folder = data.folder || '';
                 return clearCache(this, data).pipe(function () {
                     return http.GET({
