@@ -148,7 +148,7 @@ define('io.ox/core/api/pubsub',
                     //triggered by global refresh
                     return;
                 }
-                var folder = data.folder || '';
+                var folder = data.folder || '';
                 return clearCache(this, data).pipe(function () {
                     return http.GET({
                         module: 'subscriptions',
