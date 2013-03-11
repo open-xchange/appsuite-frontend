@@ -721,7 +721,7 @@ define('io.ox/mail/view-detail',
         draw: function (baton) {
             // some mails just have a sent_date, e.g. nested EMLs
             var data = baton.data;
-            var date = util.getDateTime(data.received_date || data.sent_date || 0);
+            var date = util.getDateTime(data.received_date || data.sent_date || 0, { filtertoday: true });
             this.append(
                 $('<div>').addClass('date list').text(_.noI18n(date))
             );

@@ -36,21 +36,22 @@ define('io.ox/mail/util',
             });
         },
 
-        getDateFormated = function (timestamp, fulldate) {
-            var now = new date.Local(),
+        getDateFormated = function (timestamp, options) {
+            var opt = $.extend({fulldate: true, filtertoday: true}, options || {}),
+                now = new date.Local(),
                 d = new date.Local(date.Local.utc(timestamp)),
                 timestr = function () {
                     return d.format(date.TIME);
                 },
                 datestr = function () {
-                    return d.format(date.DATE) + (fulldate ? ' ' + timestr() : '');
+                    return d.format(date.DATE) + (opt.fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
                     return d.getDate() === now.getDate() &&
                         d.getMonth() === now.getMonth() &&
                         d.getYear() === now.getYear();
                 };
-            return isSameDay() ? timestr() : datestr();
+            return isSameDay() && opt.filtertoday ? timestr() : datestr();
         },
 
 
@@ -222,11 +223,11 @@ define('io.ox/mail/util',
         },
 
         getTime: function (timestamp) {
-            return getDateFormated(timestamp, false);
+            return getDateFormated(timestamp, { fulldate: false });
         },
 
-        getDateTime: function (timestamp) {
-            return getDateFormated(timestamp, true);
+        getDateTime: function (timestamp, options) {
+            return getDateFormated(timestamp, options);
         },
 
         getSmartTime: function (timestamp) {
