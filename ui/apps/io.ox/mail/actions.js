@@ -173,6 +173,59 @@ define('io.ox/mail/actions',
         }
     });
 
+    //print details
+    new Action('io.ox/mail/actions/print', {
+        id: 'print',
+        requires: 'some',
+        multiple: function (list, baton) {
+            require(['io.ox/mail/print/main'], function (print) {
+                notifications.yell('info', gt('Preparing data for printing.'));
+                print.open(list, baton.data, {serverside: false, mode: 'detail'})
+                .then(function (win) {
+                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
+                    }
+                );
+            });
+
+        }
+    });
+
+    //print as list
+    new Action('io.ox/mail/actions/printlist', {
+        id: 'printlist',
+        requires: 'some',
+        multiple: function (list, baton) {
+            require(['io.ox/mail/print/main'], function (print) {
+                notifications.yell('info', 'Preparing data for printing.');
+                print.open(list, baton.data, {serverside: false, mode: 'list', dimensions: { w: 900 }})
+                .then(function (win) {
+                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
+                    }
+                );
+
+            });
+
+        }
+    });
+
+    // print via server
+    new Action('io.ox/mail/actions/printserver', {
+        id: 'printserver',
+        requires: 'some',
+        multiple: function (list, baton) {
+            require(['io.ox/mail/print/main'], function (print) {
+                notifications.yell('info', 'Preparing data for printing.');
+                print.open(list, baton.data, {serverside: true, mode: 'list'})
+                .then(function (win) {
+                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
+                    }
+                );
+
+            });
+
+        }
+    });
+
     function moveAndCopy(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
@@ -821,6 +874,32 @@ define('io.ox/mail/actions',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete'
     }));
+
+    /*
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1050,
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/mail/actions/print'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1051,
+        prio: 'lo',
+        id: 'printlist',
+        label: gt('Print' + ': ' + gt('List')),
+        ref: 'io.ox/mail/actions/printlist'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1052,
+        prio: 'lo',
+        id: 'printserver',
+        label: gt('Print' + ': ' + 'Server'),
+        ref: 'io.ox/mail/actions/printserver'
+    }));
+    */
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
