@@ -90,7 +90,7 @@ define('io.ox/core/pubsub/settings/pane',
         initialize: function () {
             var baton = ext.Baton({ model: this.model, view: this });
 
-            this.model.on('change', function (model, info) {
+            this.model.on('change', function () {
                 baton.view.render();
             });
 
