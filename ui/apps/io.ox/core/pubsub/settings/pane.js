@@ -46,6 +46,7 @@ define('io.ox/core/pubsub/settings/pane',
                         //TODO: do something with the folder here
                     });
                 },
+                subfolder: false, //don’t show subfolders for last item
                 last: true // add 'active' class to last item
             };
         return folderAPI.getBreadcrumb(model.get('folder') || model.get('entity').folder, opts);
