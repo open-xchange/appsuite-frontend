@@ -62,12 +62,11 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/publish', {
         requires: function () {
-            // DISABLED, since for no given full PUB/SUB support
-            return false;
+            return true;
         },
         action: function (baton) {
-            require(['io.ox/publications/wizard'], function (wizard) {
-                wizard.oneClickAdd(baton.app.folder.get());
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                publications.buildPublishDialog(baton);
             });
         }
     });
@@ -149,11 +148,15 @@ define('io.ox/files/actions',
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
                     m.getApp().launch().done(function () {
-                        var content  = _(list).map(function (file) {
+                        //generate text and html content
+                        var html = [], text = [];
+                        _(list).each(function (file) {
                             var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            return gt('File: %1$s', file.title || file.filename) + '\n' + gt('Direct link: %1$s', url);
+                            var label = gt('File: %1$s', file.title || file.filename);
+                            html.push(label + '\n' + gt('Direct link: %1$s', '<a href="' + url + '">' + url + '</a>'));
+                            text.push(label + '\n' + gt('Direct link: %1$s', url));
                         });
-                        this.compose({ attachments: [{ content: content.join('\n\n') }] });
+                        this.compose({ attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
                     });
                 });
             });
@@ -639,7 +642,13 @@ define('io.ox/files/actions',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal'
     }));
-
+    
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'publish',
+        index: 1000,
+        label: gt('Publish'),
+        ref: 'io.ox/files/actions/publish'
+    }));
     // version links
 
 

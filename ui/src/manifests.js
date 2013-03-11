@@ -7,7 +7,6 @@ define(function () {
         {
             namespace: ['io.ox/settings/main'],
             path: 'io.ox/mail/mailfilter/settings/register'
-
         },
         {
             path: 'io.ox/mail/main',
@@ -68,6 +67,10 @@ define(function () {
             settings: true,
             requires: "!deniedPortal",
             index: 100
+        },
+        {
+            namespace: ['io.ox/settings/main'],
+            path: 'io.ox/core/pubsub/settings/register'
         }
 
     ];

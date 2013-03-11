@@ -194,6 +194,7 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
                     $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
+                    $('<input>', { type: 'hidden', name: 'headers', value: '' }),
                     view.leftside,
                     view.rightside
                 )
@@ -465,6 +466,16 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
+
+        /**
+         * store headers data in form
+         * @param {object} header key/value pairs
+         * @returns {undefined}
+         */
+        app.setHeaders = function (headers) {
+            view.form.find('input[name=headers]').val(JSON.stringify(headers) || '{}');
+        };
+
         var windowTitles = {
             compose: gt('Compose new mail'),
             replyall: gt('Reply all'),
@@ -510,6 +521,7 @@ define('io.ox/mail/write/main',
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
+            this.setHeaders(data.headers);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
             // add files (from contacts)
@@ -524,7 +536,9 @@ define('io.ox/mail/write/main',
             // set format
             return app.setFormat(mail.format).done(function () {
                 // set body
-                var content = data.attachments && data.attachments.length ? (data.attachments[0].content || '') : '';
+                // attachments: could contain separate html and text content
+                var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[mail.format] || []) :  (undefined),
+                    content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 if (mail.format === 'text') {
                     content = content.replace(/<br>\n?/g, '\n');
                     // backend sends html entities, these need to be transformed into plain text
@@ -789,6 +803,7 @@ define('io.ox/mail/write/main',
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
+                headers: JSON.parse(data.headers) || {},
                 reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,

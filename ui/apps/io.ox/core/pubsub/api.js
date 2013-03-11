@@ -11,15 +11,24 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/pubsub/util',
+define('io.ox/core/pubsub/api',
     ['io.ox/core/api/pubsub',
      'io.ox/core/config',
      'io.ox/core/api/folder',
-     'gettext!io.ox/mail'], function (api, config, folderApi, gt) {
+     'io.ox/core/pubsub/model',
+     'gettext!io.ox/mail'], function (api, config, folderApi, model, gt) {
 
     'use strict';
 
     var util = {
+        /**
+         * get publication collection (backbone)
+         * @returns  {deferred} collection
+         */
+        getCollection: function () {
+            return model.publications();
+        },
+
         /**
          * create
          * @param  {string} module id
@@ -40,17 +49,28 @@ define('io.ox/pubsub/util',
                     folder: folder
                 }
             }, dynkey, options || {});
-            return api.subscription.create(o);
+            //create subscription
+            return api.subscriptions.create(o)
+                .then(function (id) {
+                    var def = $.Deferred();
+                    //add to collection
+                    util.getCollection()
+                        .then(function (collection) {
+                            o.id = id;
+                            collection.add(new model.Subscription(o));
+                            def.resolve(id);
+                        });
+                    return def;
+                });
         },
 
         /**
          * refresh
-         * @param  {string|number} subscription id
-         * @param  {string|number} folder id
+         * @param  {object} data id and folder
          * @return {deferred} number of items
          */
-        refreshSubscription: function (subscription, folder) {
-            return api.subscription.refresh(subscription, folder);
+        refreshSubscription: function (data) {
+            return api.subscriptions.refresh(data);
         },
 
         /**
@@ -63,13 +83,13 @@ define('io.ox/pubsub/util',
          */
         initSubscription: function (module, folder, url, options) {
             return util.createSubscription(module, folder, url, options)
-                .pipe(function (subscription) {
-                    //refresh
-                    return util.refreshSubscription(subscription, folder)
-                    .pipe(function (items) {
-                        return {subscription: subscription, items: items};
+                    .pipe(function (subscription) {
+                        //refresh
+                        return util.refreshSubscription({id: subscription, folder: folder})
+                        .pipe(function (items) {
+                            return {subscription: subscription, items: items};
+                        });
                     });
-                });
         },
 
         /**

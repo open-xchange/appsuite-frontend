@@ -23,7 +23,7 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
-     'io.ox/pubsub/util',
+     'io.ox/core/pubsub/api',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubUtil) {
@@ -1000,18 +1000,22 @@ define('io.ox/mail/view-detail',
      */
     function containsCustomContent(data, url) {
         var $content = that.getContent(data).content,
-            invalid = new RegExp(/[^a-zA-Z 0-9\/\:\-\.\?\=\_]+/g),
             whitespace = new RegExp(/[\s]+/g),
-            text;
-        //remove potential style tag/content
+            zws = new RegExp(/[\u200b]+/g), //zero-width space
+            words, part;
+        //get words
         $content.find('style').remove();
-        //remove non printable chars, whitespace and the url
-        text = $content.text().trim()
-            .replace(invalid, '')
-            .replace(whitespace, '')
-            .replace(url, '');
-        //fuzzy: remaining text relevant?
-        return text.length > 4;
+        words = $content
+                .text()
+                .trim()
+                .replace(whitespace, '|')
+                .split('|');
+        //remove link
+        var words = _.filter(words, function (part) {
+            return part.replace(zws, '') !== url;
+        });
+        //fuzzy: relevant number of words?
+        return words.length > 2;
     }
 
     /**
@@ -1021,20 +1025,16 @@ define('io.ox/mail/view-detail',
         index: 199,
         id: 'subscribe',
         draw: function (baton) {
-
             var data = baton.data, picture,
-                label = 'Subscribe',
+                label = '',
                 pub = {},
                 pubtype = '';
 
             //exists publication header
             pub.url  = data.headers['X-OX-PubURL'] || '';
-
             if (pub.url === '')
                 return false;
             else {
-                //hide mail content if invitaion
-                data.hidecontent = !containsCustomContent(data, pub.url);
                 //qualify data
                 pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
                 pub.module  = pubtype[1];
@@ -1042,29 +1042,32 @@ define('io.ox/mail/view-detail',
                 pub.name = _.first(_.last(pub.url.split('/')).split('?')) + '_' + _.now();
                 pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
                 pub.folder = '';
+                label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
+                //hide mail content if invitaion
+                data.hidecontent = !containsCustomContent(data, pub.url);
                 //dom
                 var $actions, $appointmentInfo, $box;
                 $('<div class="well">').append(
-                    $('<span class="muted">').text(gt('This email contains a subscription invitation for a shared %1$s folder', gt(pub.module))),
+                    $('<span class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
                     $("<br>"),
                     $appointmentInfo = $('<div class="appointmentInfo">'),
                     $actions = $('<div class="subscription-actions">')
                 ).appendTo(this);
                 $actions.append(
-                    $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe')),
+                    $('<button class="btn" data-action="show">').text(gt('Show original publication')),
                     "&nbsp;",
-                    $('<button class="btn" data-action="show">').text(gt('Originally Published'))
+                    $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
                 );
-
                 //actions
                 $actions.on('click', 'button', function (e) {
                     var button = $(e.target),
                         notifications = require('io.ox/core/notifications');
                     //disble button
-                    $(e.target).attr('disabled', 'disabled');
                     if (button.data('action') === 'show') {
                         window.open(pub.url, '_blank');
                     } else {
+                        $(e.target).attr('disabled', 'disabled');
+                        notifications.yell('info', gt('Adding subscription. This may take some seconds...'));
                         var self = this,
                             opt = opt || {};
                         //create folder; create and refresh subscription

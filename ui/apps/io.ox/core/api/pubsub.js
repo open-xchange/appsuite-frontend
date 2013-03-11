@@ -9,262 +9,162 @@
  * Mail: info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 define('io.ox/core/api/pubsub',
-    ['io.ox/core/http'], function (http) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'
+    ], function (http, apiFactory) {
 
     'use strict';
 
-    //TODO: caching
+
+    /**
+     * clears cache
+     * @private
+     * @return {deferred}
+     */
+    var clearCache = function (api, data) {
+        var keys = {
+                general: api.cid(''),
+                folder: api.cid({folder: data.folder}),
+                pub: '.' + data.id,
+                sub: data.folder + '.'
+            };
+        return $.when(
+            //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
+            api.caches.all.remove(keys.general),
+            api.caches.get.grepRemove(keys.pub),
+            api.caches.get.grepRemove(keys.sub)
+        );
+    };
+
+    /**
+     * for test purposes only
+     * @private
+     * @return {deferred}
+     */
+    var dumpKeys = function (api) {
+        return $.when(
+            api.caches.all.keys().pipe(function (data) { console.log('all', data); }),
+            api.caches.get.keys().pipe(function (data) { console.log('get', data); })
+        );
+    };
 
     /**
      * gerneralized API for pubsub
-     * @param  {string} opt
-     * @return {deferred}
+     * @param  {object} opt
+     * @return {object} api
      */
     function api(opt) {
-        var opt = $.extend(true, {
-            module: null,
-            columns: null
-        }, opt || {});
 
-        return {
-            /**
-             * returns folder publications/subscriptions
-             * @private
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                var def = $.Deferred();
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return http.GET({
-                    module: opt.module,
-                    params: {
-                        action: 'all',
-                        columns: opt.columns,
-                        folder: folder,
-                        entityModule: type
-                    }
-                })
-                .done(function (data) {
-                    def.resolve(data);
-                })
-                .fail(function (data) {
-                    def.reject(data);
-                });
-            },
-            /**
-             * returns publication/subscription data
-             * @private
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
-             */
-            get: function (item) {
-                var def = $.Deferred(),
-                    id = _.isObject(item) ? item.id : item || '';
-                return http.GET({
-                    module: opt.module,
-                    params: {
-                        action: 'get',
-                        id: id
-                    }
-                })
-                .done(function (data) {
-                    def.resolve(data || []);
-                })
-                .fail(function (data) {
-                    def.reject(data);
-                });
-            },
-
+        return $.extend(true, apiFactory(opt), {
             /**
              * update publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
+             * @param  {object} data
              * @return {deferred}
              */
             update: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    params: {
-                        action: 'update'
-                    },
-                    data: data
+                return clearCache(this, {id: data.id || '', folder: data.folder || data.entity.folder || ''}).pipe(function () {
+                    return http.PUT({
+                        module: opt.module,
+                        params: {
+                            action: 'update'
+                        },
+                        data: data
+                    });
                 });
             },
 
             /**
-             * create publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
+             * removes publication/subscription
+             * @param  {string} id
              * @return {deferred}
              */
-            refresh: function (id, folder) {
-                folder = _.isObject(folder) ? folder.id : folder || '';
-                return http.GET({
-                    module: opt.module,
-                    appendColumns: false,
-                    params: {
-                        action: 'refresh',
-                        id : id,
-                        folder: folder
-                    }
-                });
+            destroy: function (id) {
+                var that = this;
+                return clearCache(this, {id: id})
+                    .pipe(function () {
+                        return that.remove(id);
+                    });
             },
 
             /**
              * create publication/subscription
-             * @private
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
+             * @param  {object} data (pubsub model attributes)
+             * @return {deferred} subscription id
              */
             create: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    appendColumns: false,
-                    params: {
-                        action: 'new'
-                    },
-                    data: data
-                });
-            },
-
-            /**
-             * remove publication/subscription
-             * @private
-             * @param  {array} array of ids
-             * @return {deferred}
-             */
-            remove: function (data) {
-                return http.PUT({
-                    module: opt.module,
-                    params: {
-                        action: 'delete'
-                    },
-                    data: data
-                });
+                var that = this;
+                return clearCache(that, data.entity)
+                    .pipe(function () {
+                        return http.PUT({
+                            module: opt.module,
+                            appendColumns: false,
+                            params: {
+                                action: 'new'
+                            },
+                            data: data
+                        });
+                    });
             }
-        };
+        });
     }
 
-
-    /**
-     * public publication api
-     * @public
-     * @return {object}
-     */
-    var publication = function () {
-        var opt = {
-                module: 'publications',
-                columns: 'id,displayName,enabled'
-            },
-            apimod = api(opt);
-
-        return {
-            /**
-             * returns folder publications
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                return apimod.all(type, folder);
-            },
-            /**
-             * returns publication data
-             * @private
-             * @param  {string|object} publication id or object
-             * @return {deferred}
-             */
-            get: function (publication) {
-                return apimod.get(publication);
-            }
-        };
-    };
-
-
-    /**
-     * public subscription api
-     * @public
-     * @return {object}
-     */
-    var subscription = function () {
-        var opt = {
-                module: 'subscriptions',
-                columns: 'id,displayName,enabled,source'
-            },
-            apimod = api(opt);
-
-        return {
-            /**
-             * returns folder subscriptions
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type, folder) {
-                return apimod.all(type, folder);
-            },
-            /**
-             * returns subscription data
-             * @param  {string|object} subscription id or object
-             * @return {deferred}
-             */
-            get: function (publication) {
-                return apimod.get(publication);
-            },
-            /**
-             * returns subscription data
-             * @param  {object} data
-             * @return {deferred}
-             */
-            create: function (data) {
-                return apimod.create(data);
-            },
-            /**
-             * returns subscription data
-             * @param  {object} data
-             * @return {deferred}
-             */
-            refresh: function (id, folder) {
-                return apimod.refresh(id, folder);
-            }
-        };
-    };
-
-
-    /**
-     * public subscription sources api
-     * @public
-     * @return {object}
-     */
-    var sources = function () {
-        var opt = {
-                module: 'soures',
-                columns: 'id,displayName,icon,module,formDescription'
-            },
-            apimod = api(opt);
-
-        return {
-            /**
-             * returns folder subscriptions
-             * @param  {string} type f.e. 'contacts'
-             * @param  {string|object} folder id or object
-             * @return {deferred}
-             */
-            all: function (type) {
-                return apimod.all(type);
-            }
-        };
-    };
-
     return {
-        publication: publication(),
-        subscription: subscription(),
-        sources: sources()
+        publications: api({
+            module: 'publications',
+            requests: {
+                all: {
+                    columns: 'id,displayName,enabled'
+                }
+            }
+        }),
+        publicationTargets: api({
+            module: 'publicationTargets',
+            requests: {
+                all: {
+                    columns: 'id,displayName,icon,module,formDescription'
+                }
+            }
+        }),
+        subscriptions: $.extend(true, api({
+            module: 'subscriptions',
+            requests: {
+                all: {
+                    columns: 'id,displayName,enabled'
+                }
+            }
+        }),
+        {
+            /**
+             * refresh subscription
+             * @param  {object} data (id,folder)
+             * @return {deferred} item count
+             */
+            refresh: function (data) { //checked
+                if (!data) {
+                    //triggered by global refresh
+                    return;
+                }
+                var folder = data.folder || '';
+                return clearCache(this, data).pipe(function () {
+                    return http.GET({
+                        module: 'subscriptions',
+                        appendColumns: false,
+                        params: {
+                            action: 'refresh',
+                            id : data.id,
+                            folder: folder
+                        }
+                    });
+                });
+            }
+        }),
+        sources: apiFactory({
+            module: 'subscriptionSources'
+        })
     };
 
 });
