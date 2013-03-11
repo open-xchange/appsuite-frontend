@@ -34,19 +34,30 @@
 
     .toolbar .info {
         position: absolute;
-        float: left;
-        line-height: 38px;
-        font-family: @lightFontFamily;
-        font-size: 20px;
         left: @weekview-time-with;
     }
 
+    .toolbar .kwinfo {
+        line-height: 38px;
+        font-family: @lightFontFamily;
+        font-size: 20px;
+    }
 
     .toolbar .showall {
         position: absolute;
-        width: 120px;
-        right: 30px;
+        display: inline;
+        right: 20px;
         top: 10px;
+    }
+
+    .toolbar .showall label {
+        display: inline;
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    .toolbar .showall input {
+        margin-left: 0;
     }
 
     .toolbar .pagination {
@@ -64,6 +75,10 @@
         right: 0px;
         bottom: 0px;
         top: @weekview-toolbar-height + @weekview-footer-height;
+    }
+
+    .dayview .week-view-container {
+        top: @weekview-toolbar-height;
     }
 
     .week {

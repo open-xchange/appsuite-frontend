@@ -38,7 +38,7 @@ define('io.ox/calendar/month/perspective',
         initLoad: 2,        // amount of initial called updates
         scrollOffset: 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
-        current: null,      // current month as UTC timestamp
+        current: null,      // current month as date object
         folder: null,
         app: null,          // the current application
         dialog: $(),        // sidepopup
@@ -273,6 +273,19 @@ define('io.ox/calendar/month/perspective',
             } else {
                 this.gotoMonth();
             }
+        },
+
+        print: function () {
+            var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
+                self = this;
+            require(['io.ox/core/print']).done(function (p) {
+                p.open('printCalendar', null, {
+                    template: 'cp_monthview_table.tmpl',
+                    usertemplate: 'infostore://69805',
+                    start: self.current.getTime(),
+                    end: end.getTime()
+                });
+            });
         },
 
         render: function (app) {

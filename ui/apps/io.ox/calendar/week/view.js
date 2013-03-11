@@ -69,7 +69,7 @@ define('io.ox/calendar/week/view',
         initialize: function (opt) {
             myself = myself || ox.user_id;
 
-            // ox.testprint = this.print;
+            ox.testprint = $.proxy(this.print, this);
 
             this.pane = $('<div>').addClass('scrollpane');
             this.fulltimePane = $('<div>').addClass('fulltime');
@@ -77,7 +77,7 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote = $('<div>').addClass('note');
             this.timeline = $('<div>').addClass('timeline');
             this.footer = $('<div>').addClass('footer');
-            this.kwInfo = $('<span>').addClass('info');
+            this.kwInfo = $('<span>').addClass('kwinfo');
             this.showAllCheck = $('<input/>').attr('type', 'checkbox');
             this.showAllCon = $('<div>').addClass('showall');
 
@@ -570,7 +570,9 @@ define('io.ox/calendar/week/view',
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        this.kwInfo,
+                        $('<div>').addClass('info').append(
+                            this.kwInfo
+                        ),
                         this.showAllCon
                             .empty()
                             .append(
@@ -1456,7 +1458,30 @@ define('io.ox/calendar/week/view',
         },
 
         print: function () {
-            console.log('print');
+            var start = this.startDate.local,
+                end = start + (date.DAY * this.columns),
+                self = this,
+                folder = this.folder(this.folder()),
+                templates = {
+                    1: {id: 69803, name: 'cp_dayview_table.tmpl'},
+                    2: {id: 69807, name: 'cp_workweekview_table.tmpl'},
+                    3: {id: 69806, name: 'cp_weekview_table.tmpl'}
+                };
+            require(['io.ox/core/print']).done(function (p) {
+                var tmpl = templates[self.mode],
+                    data = null;
+                if (folder.folder) {
+                    data = {folder_id: folder.folder};
+                }
+                p.open('printCalendar', data, {
+                    template: tmpl.name,
+                    usertemplate: 'infostore://' + tmpl.id,
+                    start: start,
+                    end: end,
+                    work_day_start_time: self.workStart * date.HOUR,
+                    work_day_end_time: self.workEnd * date.HOUR
+                });
+            });
         }
     });
 

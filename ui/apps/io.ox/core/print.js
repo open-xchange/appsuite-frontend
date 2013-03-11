@@ -43,7 +43,12 @@ define('io.ox/core/print', [], function () {
         // use options to overwrite default request params
         open: function (module, data, options) {
 
-            var params = { action: 'get' }, url;
+            var params = {action: 'get'}, url;
+
+            // workaround for old printcalendar
+            if (module === 'printCalendar') {
+                delete params.action;
+            }
 
             if (_.isArray(data)) {
                 params.data = JSON.stringify(data);

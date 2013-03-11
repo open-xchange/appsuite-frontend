@@ -521,6 +521,7 @@ define("io.ox/core/desktop",
                 initialized = false;
 
             this.main = $();
+            this.name = name;
 
             this.show = function (app, options) {
                 var win = app.getWindow();
@@ -530,7 +531,7 @@ define("io.ox/core/desktop",
                 }
                 // make sure it's initialized
                 if (!initialized) {
-                    this.main = win.addPerspective(name);
+                    this.main = win.addPerspective(this);
                     initialized = true;
                 }
 
@@ -541,7 +542,7 @@ define("io.ox/core/desktop",
                     win.trigger('change:initialPerspective', name);
                 }
                 // set perspective
-                win.setPerspective(name);
+                win.setPerspective(this);
 
                 _.url.hash('perspective', options.perspective);
 
@@ -1039,14 +1040,22 @@ define("io.ox/core/desktop",
                         .appendTo(this.nodes.toolbar);
                 };
 
-                this.addPerspective = function (id) {
+                this.addPerspective = function (pers) {
+                    var id = pers.name;
                     if (this.nodes[id] === undefined) {
                         var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
-                        return (this.nodes[id] = perspectives[id] = node);
+                        perspectives[id] = pers;
+                        return this.nodes[id] = node;
                     }
                 };
 
-                this.setPerspective = function (id) {
+                this.getPerspective = function () {
+                    var cur = this.currentPerspective.split(':')[0];
+                    return perspectives[cur];
+                };
+
+                this.setPerspective = function (pers) {
+                    var id = pers.name;
                     if (id !== this.currentPerspective.split(':')[0]) {
                         if (perspectives[id] !== undefined) {
                             this.nodes[this.currentPerspective.split(':')[0]].hide();
@@ -1280,7 +1289,6 @@ define("io.ox/core/desktop",
                     });
                 }
             }
-
             // inc
             guid++;
 

@@ -215,6 +215,12 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        print: function () {
+            if (this.view) {
+                this.view.print();
+            }
+        },
+
         /**
          * initial rendering of the view
          * @param  {Object} app current application

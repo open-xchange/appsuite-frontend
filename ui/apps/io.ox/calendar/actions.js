@@ -256,15 +256,18 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/print', {
         id: 'print',
-        requires: 'one',
+        requires: function (e) {
+            // var win = e.baton.window,
+            //     pers = win.getPerspective();
+            // console.log('requires', e, win, pers);
+            return true;
+        },
         action: function (baton) {
-            require(['io.ox/core/print']).done(function (p) {
-                if (baton.recurrence_position) {
-                    p.open('calendar', baton.data, {template: 'print.appointment.tmpl', pos: baton.data.recurrence_position});
-                } else {
-                    p.open('calendar', baton.data, {template: 'print.appointment.tmpl'});
-                }
-            });
+            var win = baton.app.getWindow(),
+                pers = win.getPerspective();
+            if (pers.print) {
+                pers.print();
+            }
         }
     });
 
@@ -386,19 +389,19 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
-    // Links : toolbar : Free/busy
-
     new ActionGroup(POINT + '/links/toolbar', {
-        id: 'freebusy',
-        index: 200,
+        id: 'print',
+        index: 700,
         icon: function () {
-            return $('<i class="icon-group">');
+            return $('<i class="icon-print">');
         }
     });
 
-    new ActionLink(POINT + '/links/toolbar/freebusy', {
-        label: gt('Scheduling'),
-        ref: 'io.ox/calendar/actions/freebusy'
+    new ActionLink(POINT + '/links/toolbar/print', {
+        index: 700,
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print'
     });
 
     // FIXME: should only be visible if rights are ok
