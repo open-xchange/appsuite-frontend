@@ -300,16 +300,6 @@ define('io.ox/calendar/edit/template',
                 }).render().$el);
         }
     });
-    point.extend(new forms.CheckBoxField({
-        id: 'notify',
-        labelClassName: 'control-label desc',
-        //headerClassName: 'control-label desc',
-        className: 'span12',
-        //header: gt('Notify all participants via e-mail.'),
-        label: gt('Notify all participants by E-mail.'),
-        attribute: 'notification',
-        index: 1410
-    }));
 
     // add participants
     point.basicExtend({
@@ -317,18 +307,17 @@ define('io.ox/calendar/edit/template',
         index: 1500,
         draw: function (options) {
             var node = this;
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = options.model.getParticipants();
-
-                node.append(
-                    $('<div class="input-append">').append(
+            node.append(
+                    $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant">'),
                         $('<button class="btn" type="button" data-action="add">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
 
+            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
+
+                var collection = options.model.getParticipants();
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render();
 
@@ -386,6 +375,19 @@ define('io.ox/calendar/edit/template',
                 });
             });
         }
+    });
+
+    point.extend(new forms.CheckBoxField({
+        id: 'notify',
+        labelClassName: 'control-label desc',
+        //headerClassName: 'control-label desc',
+        className: 'span6',
+        //header: gt('Notify all participants via e-mail.'),
+        label: gt('Notify all participants by E-mail.'),
+        attribute: 'notification',
+        index: 1510
+    }), {
+        nextTo: "add-participant"
     });
 
     // Attachments
