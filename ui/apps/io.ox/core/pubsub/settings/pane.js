@@ -148,8 +148,14 @@ define('io.ox/core/pubsub/settings/pane',
             var baton = this.baton;
             baton.pubListNode = $('<ul>').addClass('publications');
             baton.subListNode = $('<ul>').addClass('subscriptions');
-            this.$el.append(baton.pubListNode);
-            this.$el.append(baton.subListNode);
+            this.$el.append(
+                $('<legend>').text(gt('Publications')),
+                baton.pubListNode
+            );
+            this.$el.append(
+                $('<legend>').text(gt('Subscriptions')),
+                baton.subListNode
+            );
 
             setupList(baton.pubListNode.empty(), baton.publications);
             setupList(baton.subListNode.empty(), baton.subscriptions);
