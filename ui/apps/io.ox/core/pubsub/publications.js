@@ -104,11 +104,20 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             popup.on('publish', function (action) {
                 self.model.save().done(function (id) {
                     notifications.yell('success', gt("Publication has been added"));
-                    api.publications.get({id: id}).done(function (data) {
-                        var model = new pubsub.Publication(data);
-                        //code for use if pubsub.publications is singleton
-                        //could use api trigger add with model as data while settings pane listens to this in the meantime if desired
-                        pubsub.publications().push(model);
+
+                    //set id, if none is present (new model)
+                    if (!self.model.id) { self.model.id = id; }
+
+                    self.model.fetch().done(function (model, collection) {
+                        var publications = pubsub.publications();
+
+                        //update the model-(collection)
+                        //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "publications.update(model)" call
+                        if (self.model.collection) {
+                            self.model.set(model);
+                        } else {
+                            publications.add(model);
+                        }
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection

@@ -87,6 +87,13 @@ define('io.ox/core/pubsub/settings/pane',
     var PubSubItem = Backbone.View.extend({
         tagName: 'li',
         className: '',
+        initialize: function () {
+            var baton = ext.Baton({ model: this.model, view: this });
+
+            this.model.on('change', function (model, info) {
+                baton.view.render();
+            });
+        },
         events: {
             'click [data-action="toggle"]': 'onToggle',
             'click [data-action="edit"]': 'onEdit',
