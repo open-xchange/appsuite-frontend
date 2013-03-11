@@ -13,7 +13,7 @@
 
 define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/extensions',
-    'io.ox/mail/mailfilter/api',
+    'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/mail/mailfilter/settings/view-form',
     'io.ox/core/tk/dialogs',

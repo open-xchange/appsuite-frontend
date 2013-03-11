@@ -14,7 +14,7 @@
 define('io.ox/mail/mailfilter/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
-       'io.ox/mail/mailfilter/api',
+       'io.ox/core/api/mailfilter',
        'gettext!io.ox/mail'
        ], function (ModelFactory, Validators, api, gt) {
 

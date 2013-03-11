@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define("io.ox/mail/mailfilter/api",
+define("io.ox/core/api/mailfilter",
         ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
     "use strict";
 
@@ -25,6 +25,14 @@ define("io.ox/mail/mailfilter/api",
                 data: {id: ruleId}
             });
 
+        },
+
+        createRule: function (data) {
+            return http.PUT({
+                module: "mailfilter",
+                params: {action: "new"},
+                data: data
+            });
         },
 
         getRules: function (flag) {
