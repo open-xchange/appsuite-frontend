@@ -16,25 +16,25 @@
 	
 	max-width: 800px;
     
-    [data-extension-id="io.ox/core/mailfilter/edit/view/subject"] {
+    [data-extension-id="io.ox/core/vacationnotice/edit/view/subject"] {
         clear: both;
     }
     
-    [data-extension-id="io.ox/core/mailfilter/edit/view/days"] {
+    [data-extension-id="io.ox/core/vacationnotice/edit/view/days"] {
         margin-bottom: 20px;
     }
     
-    [data-extension-id="io.ox/core/mailfilter/edit/view/timeframecheckbox"] {
+    [data-extension-id="io.ox/core/vacationnotice/edit/view/timeframecheckbox"] {
          margin-top: 20px;
          width: 300px;
     }
     
-    [data-extension-id="io.ox/core/mailfilter/edit/view/start_date"] {
+    [data-extension-id="io.ox/core/vacationnotice/edit/view/start_date"] {
         float: left;
         margin-left: 0;
     }
     
-     [data-extension-id="io.ox/core/mailfilter/edit/view/end_date"] {
+     [data-extension-id="io.ox/core/vacationnotice/edit/view/end_date"] {
         float: left;
     }
 }

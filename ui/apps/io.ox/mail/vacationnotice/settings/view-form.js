@@ -10,8 +10,8 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/view-form', [
-    'io.ox/mail/mailfilter/settings/model',
+define('io.ox/mail/vacationnotice/settings/view-form', [
+    'io.ox/mail/vacationnotice/settings/model',
     'io.ox/backbone/views',
     'io.ox/backbone/forms',
     'io.ox/core/extPatterns/actions',
@@ -19,7 +19,7 @@ define('io.ox/mail/mailfilter/settings/view-form', [
     'io.ox/core/date',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/mailfilter/settings/style.css'
+    'less!io.ox/mail/vacationnotice/settings/style.css'
 ], function (model, views, forms, actions, links, date, notifications, gt) {
 
     "use strict";

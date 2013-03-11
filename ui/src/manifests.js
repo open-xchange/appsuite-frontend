@@ -6,7 +6,7 @@ define(function () {
         },
         {
             namespace: ['io.ox/settings/main'],
-            path: 'io.ox/mail/mailfilter/settings/register'
+            path: 'io.ox/mail/vacationnotice/settings/register'
         },
         {
             path: 'io.ox/mail/main',

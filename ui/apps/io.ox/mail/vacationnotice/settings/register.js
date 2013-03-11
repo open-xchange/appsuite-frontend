@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/register',
+define('io.ox/mail/vacationnotice/settings/register',
         ['io.ox/core/extensions', 'io.ox/core/notifications',
          'io.ox/core/api/user', 'gettext!io.ox/mail'], function (ext, notifications, userAPI, gt) {
 
@@ -46,7 +46,7 @@ define('io.ox/mail/mailfilter/settings/register',
         index: 100,
         draw: function () {
             var $node = this;
-            require(["io.ox/mail/mailfilter/settings/filter"], function (filters) {
+            require(["io.ox/mail/vacationnotice/settings/filter"], function (filters) {
 
                 userAPI.get().done(function (user) {
 

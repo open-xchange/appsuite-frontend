@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter', [
+define('io.ox/mail/vacationnotice/settings/filter', [
     'io.ox/core/extensions',
     'io.ox/core/api/mailfilter',
-    'io.ox/mail/mailfilter/settings/model',
-    'io.ox/mail/mailfilter/settings/view-form',
+    'io.ox/mail/vacationnotice/settings/model',
+    'io.ox/mail/vacationnotice/settings/view-form',
     'io.ox/core/tk/dialogs',
     'io.ox/core/date',
     'gettext!io.ox/mail'
@@ -24,7 +24,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'use strict';
 
 
-    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
+    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/vacationnotice/model', api);
 
     return {
         editVacationtNotice: function ($node, multiValues, primaryMail) {
@@ -61,7 +61,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     vacationData.activateTimeFrame = false;
                 }
 
-                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/mailfilter', multiValues, vacationData.activateTimeFrame);
+                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
 
                 vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
@@ -73,7 +73,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 $node.append(vacationNotice.render().$el);
 
-                ext.point("io.ox/core/mailfilter/model/validation").extend({
+                ext.point("io.ox/core/vacationnotice/model/validation").extend({
                     id: 'start-date-before-end-date',
                     validate: function (attributes) {
 

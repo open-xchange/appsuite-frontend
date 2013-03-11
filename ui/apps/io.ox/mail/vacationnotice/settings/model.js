@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/mail/mailfilter/settings/model',
+define('io.ox/mail/vacationnotice/settings/model',
       ['io.ox/backbone/modelFactory',
        'io.ox/backbone/validation',
        'io.ox/core/api/mailfilter',
