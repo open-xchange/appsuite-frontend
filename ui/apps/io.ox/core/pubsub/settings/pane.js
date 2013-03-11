@@ -93,6 +93,10 @@ define('io.ox/core/pubsub/settings/pane',
             this.model.on('change', function (model, info) {
                 baton.view.render();
             });
+
+            this.model.on('remove', function () {
+                baton.view.remove();
+            });
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
@@ -121,7 +125,6 @@ define('io.ox/core/pubsub/settings/pane',
         onRemove: function (ev) {
             ev.preventDefault();
             this.model.collection.remove(this.model);
-            this.remove();
         }
     });
 
