@@ -77,12 +77,6 @@ define('l10n/ja_JP/io.ox/register', [
             });
     }
     
-    _.each(['home', 'business', 'other'], function (type) {
-        ext.point('io.ox/contacts/edit/' + type + '_address')
-            .replace({ id: 'state_' + type, index: 100 })
-            .replace({ id: 'street_' + type, index: 300 });
-    });
-    
     ext.point('io.ox/contacts/edit/view').extend({
         index: 'last',
         draw: function (baton) {

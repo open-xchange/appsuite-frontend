@@ -18,12 +18,11 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/extPatterns/links',
     'io.ox/contacts/widgets/pictureUpload',
-    'io.ox/contacts/widgets/cityControlGroup',
     'io.ox/core/tk/attachments',
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/edit/style.css'
-], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, attachments, api, gt) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt) {
 
     "use strict";
 
@@ -45,10 +44,13 @@ define('io.ox/contacts/edit/view-form', [
                       'telephone_primary', 'telephone_radio',
                       'telephone_telex', 'telephone_ttytdd',
                       'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-            home_address: ['street_home', 'city_home', 'state_home', 'country_home'],
-            business_address: ['street_business', 'city_business',
-                               'state_business', 'country_business'],
-            other_address: ['street_other', 'city_other', 'state_other', 'country_other'],
+            home_address: ['street_home', 'postal_code_home', 'city_home',
+                           'state_home', 'country_home'],
+            business_address: ['street_business', 'postal_code_business',
+                               'city_business', 'state_business',
+                               'country_business'],
+            other_address: ['street_other', 'postal_code_other', 'city_other',
+                            'state_other', 'country_other'],
             job: ['profession', 'position', 'department', 'company', 'room_number',
                     'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
                     'commercial_register', 'branches', 'business_category', 'info',
@@ -194,14 +196,23 @@ define('io.ox/contacts/edit/view-form', [
                         return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
                     }
                 });
-            },
-            city_home: city('city_home', 'postal_code_home'),
-            city_business: city('city_business', 'postal_code_business'),
-            city_other: city('city_other', 'postal_code_other')
+            }
         }
     };
-
-
+    
+    _.each(['home', 'business', 'other'], function (type) {
+        var fields = meta.sections[type + '_address'];
+        meta.sections[type + '_address'] = _.compact(_.aprintf(
+            //#. Format of addresses
+            //#. %1$s is the street
+            //#. %2$s is the postal code
+            //#. %3$s is the city
+            //#. %4$s is the state
+            //#. %5$s is the country
+            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s'),
+            function (i) { return fields[i]; }, $.noop));
+    });
+    
     function dateField(options) {
         options.point.extend(new forms.DateControlGroup({
             id: options.field,
@@ -214,25 +225,6 @@ define('io.ox/contacts/edit/view-form', [
                 return !model.isSet(options.field);
             }
         });
-    }
-
-    function city(cityAttribute, postalCodeAttribute) {
-        return function (options) {
-            options.point.extend(new CityControlGroup({
-                id: cityAttribute,
-                index: options.index,
-                label: _.noI18n(model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute]),
-                zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
-                control: '<input type="text" class="span3" name="' + cityAttribute + '">',
-                zipAttribute: postalCodeAttribute,
-                attribute: cityAttribute,
-                rare: options.isRare
-            }), {
-                hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
-                    return !model.isAnySet(cityAttribute, postalCodeAttribute);
-                }
-            });
-        };
     }
 
     function createContactEdit(ref) {

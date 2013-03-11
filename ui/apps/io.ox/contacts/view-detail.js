@@ -111,32 +111,29 @@ define("io.ox/contacts/view-detail",
         });
     }
 
-    function addAddress(label, street, code, city, country, node) {
+    function addAddress(label, data, suffix, node) {
+        var f = _.map(['street', 'postal_code', 'city', 'state', 'country'],
+                      function (field) { return data[field + suffix] || ''; });
+        if (!_.some(f)) return 0;
         return addField(label, true, node, function (node) {
+            var text =
+                //#. Format of addresses
+                //#. %1$s is the street
+                //#. %2$s is the postal code
+                //#. %3$s is the city
+                //#. %4$s is the state
+                //#. %5$s is the country
+                gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', f);
             var a = $("<a>", {
-                    href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
+                    href: "http://www.google.de/maps?q=" +
+                          encodeURIComponent(text.replace('/\n/g', ', ')),
                     target: "_blank"
                 }).addClass("nolink");
-            if (street) {
-                a.append($("<span>").text(_.noI18n(street)));
-                if (city) {
-                    a.append($("<br>"));
-                }
-            }
-            if (code) {
-                a.append($("<span>").text(_.noI18n(code + ' ')));
-            }
-            if (city) {
-                a.append($("<span>").text(_.noI18n(city)));
-            }
-            if (country) {
-                a.append($("<br>"));
-                a.append($("<span>").text(_.noI18n(country)));
-            }
+            _.each(text.split('\n'), function (line) {
+                if (line) a.append($.txt(line), $('<br>'));
+            });
             a.append(
-                $('<br>').append(
-                    $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
-                )
+                $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
             );
             node.append(a);
         });
@@ -356,12 +353,8 @@ define("io.ox/contacts/view-detail",
         id: 'address',
         draw: function (baton) {
             var r = 0, data = baton.data;
-            if (data.street_business || data.city_business) {
-                r += addAddress(gt.pgettext("address", "Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
-            }
-            if (data.street_home || data.city_home) {
-                r += addAddress(gt.pgettext("address", "Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
-            }
+            addAddress(gt.pgettext("address", "Work"), data, '_business', this);
+            addAddress(gt.pgettext("address", "Home"), data, '_home', this);
             if (r > 0) { addField("", "\u00A0", this); }
         }
     });
