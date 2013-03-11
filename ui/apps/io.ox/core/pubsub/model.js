@@ -128,7 +128,9 @@ define('io.ox/core/pubsub/model',
              * @return [model] - an array containing matching model objects
              */
             forFolder: filterFolder
-        });
+        }),
+        //singleton instances
+        publications, subscriptions;
 
     function filterFolder(folder) {
         return this.where({folder: folder.folder_id});
@@ -149,14 +151,20 @@ define('io.ox/core/pubsub/model',
     return {
         Publication: Publication,
         publications: function () {
-            var publications = new Publications();
+            if (!publications) {
+                publications = new Publications();
+                publications.fetch();
+            }
 
-            return publications.fetch();
+            return publications;
         },
         subscriptions: function () {
-            var subscriptions = new Subscriptions();
+            if (!subscriptions) {
+                subscriptions = new Subscriptions();
+                subscriptions.fetch();
+            }
 
-            return subscriptions.fetch();
+            return subscriptions;
         },
         Subscription: Subscription
     };
