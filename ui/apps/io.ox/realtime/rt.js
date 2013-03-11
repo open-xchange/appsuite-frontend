@@ -13,7 +13,7 @@
 
 define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/capabilities", "io.ox/realtime/atmosphere"], function (ext, Event, caps) {
     'use strict';
-    // TODO: Check capability
+
     if (!caps.has("rt")) {
         var dummy = {
             send: $.noop
