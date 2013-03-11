@@ -16,6 +16,40 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Lokalize 1.0\n"
 
+#. Name with title
+#. %1$s is the first name
+#. %2$s is the last name
+#. %3$s is the title
+#: apps/io.ox/contacts/util.js:79
+msgid "%3$s %2$s, %1$s"
+msgstr "%3$s %2$s %1$s"
+
+#. Name without title
+#. %1$s is the first name
+#. %2$s is the last name
+#: apps/io.ox/contacts/util.js:87
+msgid "%2$s, %1$s"
+msgstr "%2$s %1$s"
+
+#. Format of addresses
+#. %1$s is the street
+#. %2$s is the postal code
+#. %3$s is the city
+#. %4$s is the state
+#. %5$s is the country
+#: apps/io.ox/contacts/edit/view-form.js:212
+#: apps/io.ox/contacts/view-detail.js:126
+msgid ""
+"%1$s\n"
+"%2$s %3$s\n"
+"%4$s\n"
+"%5$s"
+msgstr ""
+"%2$s %4$s\n"
+"%3$s\n"
+"%1$s\n"
+"%5$s"
+
 #: apps/io.ox/tasks/settings/pane.js:36
 msgid "5"
 msgstr "5"
