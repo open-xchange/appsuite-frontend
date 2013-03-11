@@ -51,10 +51,6 @@ define('io.ox/office/framework/view/component',
      * @param {Object} [options]
      *  A map of options to control the properties of the new view component.
      *  The following options are supported:
-     *  @param {Boolean} [options.hoverEffect=false]
-     *      If set to true, the contents of the view component will be
-     *      displayed half-transparent as long as the mouse does not hover the
-     *      view component.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this view component.
@@ -416,9 +412,6 @@ define('io.ox/office/framework/view/component',
         };
 
         // initialization -----------------------------------------------------
-
-        // additional CSS classes
-        node.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

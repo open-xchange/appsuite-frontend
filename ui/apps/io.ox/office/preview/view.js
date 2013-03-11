@@ -76,16 +76,16 @@ define('io.ox/office/preview/view',
         function initHandler() {
 
             var // the tool pane for upper tool boxes
-                topPane = self.createPane('toppane', 'top', { overlay: true, transparent: true }),
+                topPane = self.createPane('toppane', 'top', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }),
                 // the tool pane for lower tool boxes
-                bottomPane = self.createPane('bottompane', 'bottom', { overlay: true, transparent: true });
+                bottomPane = self.createPane('bottompane', 'bottom', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true });
 
             model = app.getModel();
 
-            topPane.createToolBox('top', { hoverEffect: true, classes: 'right' })
+            topPane.createToolBox('top')
                 .createButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
 
-            bottomPane.createToolBox('bottom', { hoverEffect: true, classes: 'right' })
+            bottomPane.createToolBox('bottom')
                 .createGroupContainer(function () {
                     this.createButton('pages/first',    { icon: 'docs-first-page',    tooltip: gt('Show first page') })
                         .createButton('pages/previous', { icon: 'docs-previous-page', tooltip: gt('Show previous page') })

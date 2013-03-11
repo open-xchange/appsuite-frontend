@@ -265,6 +265,11 @@ define('io.ox/office/framework/view/baseview',
          *  @param {Boolean} [options.transparent=false]
          *      If set to true, the background of an overlay pane will be
          *      transparent. Has no effect if the pane is not in overlay mode.
+         *  @param {Boolean} [options.hoverEffect=false]
+         *      If set to true, the view components in a transparent overlay
+         *      view pane will be displayed half-transparent as long as the
+         *      mouse does not hover the view component. Has no effect if the
+         *      pane is not in transparent overlay mode.
          *
          * @returns {BaseView}
          *  A reference to this instance.
@@ -283,8 +288,10 @@ define('io.ox/office/framework/view/baseview',
 
             // overlay mode and position
             paneNode.toggleClass(OVERLAY_CLASS, overlay);
-            if (Utils.getBooleanOption(options, 'transparent', false)) {
+            if (overlay && Utils.getBooleanOption(options, 'transparent', false)) {
                 paneNode[isHorizontalPosition(position) ? 'height' : 'width'](0);
+                // additional CSS classes
+                paneNode.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
             }
             return this.setPanePosition(pane.getIdentifier(), position);
         };
@@ -612,8 +619,7 @@ define('io.ox/office/framework/view/baseview',
 
         this.destroy = function () {
             this.events.destroy();
-            _(overlayPanes).invoke('destroy');
-            _(fixedPanes).invoke('destroy');
+            _(panesById).invoke('destroy');
             appPane.destroy();
             appPane = fixedPanes = overlayPanes = panesById = null;
         };

@@ -286,12 +286,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         display: none !important;
     }
 
-    /* half-transparent hover effect */
-    &.hover-effect {
-        .transition(opacity 0.2s linear);
-        &:not(:hover) { .opacity(70); }
-    }
-
     /* tool boxes ---------------------------------------------------------- */
 
     &.toolbox {
@@ -320,11 +314,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         /* size the tool box according to its floated children */
         overflow: hidden;
 
-        /* float at right border */
-        &.right {
-            float: right;
-        }
-
         .group, > .group-container {
             display: inline-block;
             float: left;
@@ -342,7 +331,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 margin-right: 0;
             }
 
-            &:last-child {
+            &.right + .right {
+                margin-right: @control-spacing;
+            }
+
+            &:last-child:not(.right) {
                 margin-right: 0;
             }
 
@@ -549,12 +542,37 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 } /* end of .view-component */
 
-/* modified shadow effect for groups in transparent panes */
-.view-pane.overlay > .view-component.toolbox {
-    overflow: visible;
+/* inline style view panes */
+.view-pane.inline {
+    text-align: left;
 
-    > .group, > .group-container {
-        .drop-shadow();
+    &.right {
+        text-align: right;
+    }
+
+    > .view-component.toolbox {
+        display: inline-block;
+        
+        &:not(:last-child) { padding-right: 4px; }
+        &:not(:first-child) { padding-left: 4px; }
+    }
+}
+
+/* modified shadow effect for groups in transparent panes */
+.view-pane.overlay {
+
+    > .view-component.toolbox {
+        overflow: visible;
+
+        > .group, > .group-container {
+            .drop-shadow();
+        }
+    }
+
+    /* half-transparent hover effect */
+    &.hover-effect {
+        .transition(opacity 0.2s linear);
+        &:not(:hover) { .opacity(70); }
     }
 }
 
