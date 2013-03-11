@@ -282,34 +282,36 @@
     display: inline-block;
 }
 
-.io-ox-calendar-itip-analysis .changes {
-  margin: 1em 0;
-  font-size: 11pt;
+.itip-actions.block {
+    text-align: right;
+    margin: 2em 0 0 0;
+    white-space: nowrap;
+    display: block;
 }
 
-.io-ox-calendar-itip-analysis .changes .original {
-  font-weight: bold;
-}
+.io-ox-calendar-itip-analysis {
 
-.io-ox-calendar-itip-analysis .changes .recurrencePosition {
-  font-weight: bold;
-}
+    min-height: 110px;
 
-.io-ox-calendar-itip-analysis .changes .updated {
-  color: green;
-  font-weight: bold;
-}
+    .confirmation-status {
+        font-weight: bold;
+        margin: 1em 0 1em 0;
+    }
 
-.io-ox-calendar-itip-analysis .changes .original {
-   font-weight: bold;
-}
+    .confirmation-status.accepted { color: @green; }
+    .confirmation-status.declined { color: @red; }
+    .confirmation-status.tentative { color: @orange; }
 
-.io-ox-calendar-itip-analysis .changes .recurrencePosition {
-   font-weight: bold;
-}
+    .changes {
+        margin: 1em 0;
+        font-size: 11pt;
 
-.io-ox-calendar-itip-analysis .changes .updated {
-   color: green;
-   font-weight: bold;
-}
+        .original, .recurrencePosition, .updated {
+            font-weight: bold;
+        }
 
+        .updated {
+            color: @green;
+        }
+    }
+}
