@@ -108,7 +108,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         var model = new pubsub.Publication(data);
                         //code for use if pubsub.publications is singleton
                         //could use api trigger add with model as data while settings pane listens to this in the meantime if desired
-                        //pubsub.publications.push(model).trigger('add');
+                        pubsub.publications().push(model);
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection
