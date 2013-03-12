@@ -61,15 +61,13 @@ define('io.ox/office/framework/app/basecontroller',
                 // parent item whose value/state is needed to resolve the own value/state
                 parentKey = Utils.getStringOption(definition, 'parent'),
                 // handler for enabled state
-                enableHandler = Utils.getFunctionOption(definition, 'enable', _.identity),
+                enableHandler = Utils.getFunctionOption(definition, 'enable', true),
                 // handler for value getter
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
-                setHandler = Utils.getFunctionOption(definition, 'set', $.noop),
+                setHandler = Utils.getFunctionOption(definition, 'set'),
                 // whether to return browser focus to application pane (default: true)
                 done = Utils.getBooleanOption(definition, 'done', true),
-                // whether the item executes asynchronously
-                async = Utils.getBooleanOption(definition, 'async', false),
                 // additional user data
                 userData = Utils.getOption(definition, 'userData');
 
@@ -80,7 +78,7 @@ define('io.ox/office/framework/app/basecontroller',
 
                 // if the required value does not exist yet, resolve it via the passed handler
                 if (!(type in result)) {
-                    result[type] = handler.call(item, parentValue);
+                    result[type] = _.isFunction(handler) ? handler.call(item, parentValue) : handler;
                 }
                 return result[type];
             }
@@ -91,7 +89,7 @@ define('io.ox/office/framework/app/basecontroller',
              */
             this.isEnabled = function () {
                 var parentEnabled = enabled && ((parentKey in items) ? items[parentKey].isEnabled() : true);
-                return enabled && getAndCacheResult('enable', enableHandler, parentEnabled);
+                return getAndCacheResult('enable', (enabled && parentEnabled) ? enableHandler : false);
             };
 
             /**
@@ -118,18 +116,32 @@ define('io.ox/office/framework/app/basecontroller',
                 var // the result Deferred object
                     def = null;
 
-                // execute the set handler
+                // do nothing if item is disabled
                 if (this.isEnabled()) {
-                    if (async) {
-                        enabled = false;
-                        self.update(key);
+
+                    // execute the set handler
+                    if (_.isFunction(setHandler)) {
+                        runningSetters += 1;
+                        def = setHandler.call(this, value);
+                        runningSetters -= 1;
                     }
-                    runningSetters += 1;
-                    def = setHandler.call(this, value);
-                    runningSetters -= 1;
+
+                    // convert result of the setter to a Deferred object
+                    def = $.when(def);
+
+                    // disable this item if setter is still running
+                    if (def.state() === 'pending') {
+                        enabled = false;
+                        self.update();
+                    }
+
+                } else {
+                    // item is disabled
+                    def = $.Deferred().reject();
                 }
 
-                $.when(def).always(function () {
+                // post processing after the setter is finished
+                def.always(function () {
                     enabled = true;
                     self.update();
                     // return focus to application pane
