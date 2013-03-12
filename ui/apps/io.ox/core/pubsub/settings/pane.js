@@ -149,10 +149,14 @@ define('io.ox/core/pubsub/settings/pane',
                 createPubSubItem(model).render().el
             );
         });
-        model.on('add', function (model) {
-            node.append(
-                createPubSubItem(model).render().el
-            );
+        model.on('add', function (model, collection, options) {
+            var item = createPubSubItem(model).render().el;
+
+            if (options.index === 0) {
+                node.prepend(item);
+            } else {
+                node.children('li:nth-child(' + options.index + ')').after(item);
+            }
         });
     }
 

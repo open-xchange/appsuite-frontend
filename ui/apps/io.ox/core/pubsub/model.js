@@ -97,7 +97,10 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: filterFolder
+            forFolder: filterFolder,
+            comparator: function (publication) {
+                return publication.get('displayName');
+            }
         }),
         Subscriptions = Backbone.Collection.extend({
             model: Subscription,
@@ -130,7 +133,10 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: filterFolder
+            forFolder: filterFolder,
+            comparator: function (subscription) {
+                return subscription.get('displayName');
+            }
         }),
         //singleton instances
         publications, subscriptions;
