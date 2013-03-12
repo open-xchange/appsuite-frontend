@@ -42,7 +42,9 @@ define('io.ox/office/preview/main',
 
         // base constructor ---------------------------------------------------
 
-        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions);
+        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions, {
+            chromeless: true
+        });
 
         // private methods ----------------------------------------------------
 
@@ -111,6 +113,6 @@ define('io.ox/office/preview/main',
 
     // exports ================================================================
 
-    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
+    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication);
 
 });

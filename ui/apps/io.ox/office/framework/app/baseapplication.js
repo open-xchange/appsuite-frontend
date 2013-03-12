@@ -91,16 +91,19 @@ define('io.ox/office/framework/app/baseapplication',
      *  as first parameter.
      *
      * @param {Object} [launchOptions]
-     *  A map of options containing initialization data for the new application
-     *  object.
+     *  A map of options passed to the core launcher (the ox.launch() method)
+     *  that determine the actions to perform during application launch. The
+     *
+     * @param {Object} [appOptions]
+     *  A map of options that control the creation of the ox.ui.App base class.
      *
      * @returns {ox.ui.App}
      *  The new application object.
      */
-    function createApplication(moduleName, ApplicationClass, launchOptions) {
+    function createApplication(moduleName, ApplicationClass, launchOptions, appOptions) {
 
         var // the icon shown in the top bar launcher
-            icon = Utils.getStringOption(launchOptions, 'icon', ''),
+            icon = Utils.getStringOption(appOptions, 'icon', ''),
             // the base application object
             app = ox.ui.createApp({
                 name: moduleName,
@@ -199,20 +202,35 @@ define('io.ox/office/framework/app/baseapplication',
      *  Must return a Deferred object that will be resolved or rejected after
      *  the document has been loaded.
      *
-     * @param {Object} launchOptions
-     *  A map of options containing initialization data for the new application
-     *  object. The following options are supported directly:
-     *  @param {Boolean} [launchOptions.search=false]
+     * @param {Object} [launchOptions]
+     *  A map of options passed to the core launcher (the ox.launch() method)
+     *  that determine the actions to perform during application launch. The
+     *  supported options are dependent on the actual application type. The
+     *  entire launch options may be missing, e.g. if the application is
+     *  restored after a browser refresh. The following standard launch options
+     *  are supported:
+     *  @param {String} launchOptions.action
+     *      Controls how to connect the application to a document file. If the
+     *      launch options map is passed at all, this is the only mandatory
+     *      launch option.
+     *  @param {Object} [launchOptions.file]
+     *      The descriptor of the file to be imported, as provided and used by
+     *      the Files application.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the application. The
+     *  following options are supported:
+     *  @param {Boolean} [options.search=false]
      *      If set to true, the application will show and use the global search
      *      tool bar.
-     *  @param {Boolean} [launchOptions.chromeless=true]
+     *  @param {Boolean} [options.chromeless=true]
      *      If set to true, the application window will not contain the main
      *      tool bar attached to the left or bottom border.
-     *  @param {Boolean} [launchOptions.detachable=true]
+     *  @param {Boolean} [options.detachable=true]
      *      If set to false, the application window will not be detached from
      *      the DOM while it is hidden.
      */
-    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions) {
+    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions, options) {
 
         var // self reference
             self = this,
@@ -1183,12 +1201,12 @@ define('io.ox/office/framework/app/baseapplication',
                 // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
-                    search: Utils.getBooleanOption(launchOptions, 'search', false),
-                    chromeless: Utils.getBooleanOption(launchOptions, 'chromeless', false)
+                    search: Utils.getBooleanOption(options, 'search', false),
+                    chromeless: Utils.getBooleanOption(options, 'chromeless', false)
                 });
 
             // do not detach window if specified
-            win.detachable = Utils.getBooleanOption(launchOptions, 'detachable', true);
+            win.detachable = Utils.getBooleanOption(options, 'detachable', true);
 
             // set the window at the application instance
             self.setWindow(win);
@@ -1214,7 +1232,7 @@ define('io.ox/office/framework/app/baseapplication',
                 // wait for pending initialization, kill the application if no
                 // file descriptor is present after fail-restore (using absence
                 // of the launch option 'action' as indicator for fail-restore)
-                if (!launchOptions || !('action' in launchOptions)) {
+                if (!_.isObject(launchOptions) || !_.isString(launchOptions.action)) {
 
                     // the 'open' event of the window is triggered once after launch and fail-restore
                     win.on('open', function () {
@@ -1338,15 +1356,17 @@ define('io.ox/office/framework/app/baseapplication',
      *  extend the core application object. Receives the launch options passed
      *  to the launcher as first parameter.
      *
-     * @param {Object} [defaultLaunchOptions]
-     *  A map of options containing initialization data for the new application
-     *  object. Will be extended with the actual launch options passed to the
-     *  launcher.
+     * @param {Object} [appOptions]
+     *  A map of options that control the creation of the ox.ui.App base class.
+     *  The following options are supported:
+     *  @param {String} [appOptions.icon]
+     *      If specified, the CSS class name of a Bootstrap icon that will be
+     *      shown in the top level launcher tab next to the application title.
      *
      * @returns {Object}
      *  The launcher object expected by the ox.launch() method.
      */
-    BaseApplication.createLauncher = function (moduleName, ApplicationClass, defaultLaunchOptions) {
+    BaseApplication.createLauncher = function (moduleName, ApplicationClass, appOptions) {
 
         // executed when a new application will be launched via ox.launch()
         function launchApp(launchOptions) {
@@ -1356,8 +1376,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // no running application: create and initialize a new application object
             if (!_.isObject(app)) {
-                launchOptions = Utils.extendOptions(defaultLaunchOptions, launchOptions);
-                app = createApplication(moduleName, ApplicationClass, launchOptions);
+                app = createApplication(moduleName, ApplicationClass, launchOptions, appOptions);
             }
 
             return app;
