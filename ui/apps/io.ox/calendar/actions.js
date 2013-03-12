@@ -389,6 +389,23 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
+    // scheduling
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'freebusy',
+        index: 700,
+        icon: function () {
+            return $('<i class="icon-group">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/freebusy', {
+        label: gt('Scheduling'),
+        ref: 'io.ox/calendar/actions/freebusy'
+    });
+
+    // print
+
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'print',
         index: 700,
