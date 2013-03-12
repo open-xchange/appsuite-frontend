@@ -26,7 +26,7 @@ define('io.ox/mail/view-detail',
      'io.ox/core/pubsub/api',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubUtil) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubApi) {
 
     'use strict';
 
@@ -1039,7 +1039,7 @@ define('io.ox/mail/view-detail',
                 pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
                 pub.module  = pubtype[1];
                 pub.type  = pubtype[2];
-                pub.name = _.first(_.last(pub.url.split('/')).split('?')) + '_' + _.now();
+                pub.name = _.first(_.last(pub.url.split('/')).split('?'));
                 pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
@@ -1071,7 +1071,7 @@ define('io.ox/mail/view-detail',
                         var self = this,
                             opt = opt || {};
                         //create folder; create and refresh subscription
-                        pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url)
+                        pubsubApi.autoSubscribe(pub.module, pub.name, pub.url)
                         .done(function (data) {
                                     notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
                                     //refresh folder views
