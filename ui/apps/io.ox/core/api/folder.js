@@ -842,6 +842,31 @@ define('io.ox/core/api/folder',
         return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
     };
 
+
+    /**
+     * Create a Breadcrum widget for a given folder.
+     *
+     * This widget can be customized in different ways. You can pass an options parameter
+     * containing an object with these attributes:
+     *
+     * @param {string} - folder id
+     * @param {object} - options:
+     * {
+     *     last: {boolean} - true: last item should have the active class set (default)
+     *                     - no relevance if subfolder option is set to true and element is "clickable" (*)
+     *                     - false: same as true if element is "clickable" (*)
+     *                     - false: a link that reacts to the function assigned to the handler option
+     *     handler: {function} - a handler function, called with the id of the folder as parameter
+     *     module: {string} - provide a module to limit "clickable" attribute (*) to a specific module
+     *     subfolder: {boolean} - show all subfolders of the folder as a dropdown if element is "clickable" (*)
+     *                          - default: true
+     * }
+     * (*) - element is defined to be clickable, if a few conditions are met:
+     *         - module option equals the folder module or module option is undefined
+     *         - handler function is defined
+     *
+     * @return {Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
+     */
     api.getBreadcrumb = (function () {
 
         var dropdown = function (li, id, title) {
