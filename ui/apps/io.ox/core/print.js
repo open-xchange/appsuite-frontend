@@ -25,7 +25,7 @@ define('io.ox/core/print', [], function () {
     return {
 
         getWindowOptions: function (url) {
-            var o = { width: 600, height: screen.availHeight - 100, top: 40 };
+            var o = { width: 750, height: screen.availHeight - 100, top: 40 };
             o.left = (screen.availWidth - o.width) / 2 >> 0;
             o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=0,toolbar=0,location=1,status=0';
             return o;

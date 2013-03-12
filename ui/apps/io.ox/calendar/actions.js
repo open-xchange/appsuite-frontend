@@ -17,8 +17,9 @@ define('io.ox/calendar/actions',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/actions',
      'io.ox/core/config',
-     'io.ox/core/notifications'
-    ], function (ext, links, api, util, gt, config, notifications) {
+     'io.ox/core/notifications',
+     'io.ox/core/print'
+    ], function (ext, links, api, util, gt, config, notifications, print) {
 
     'use strict';
 
@@ -254,6 +255,15 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/print-appointment', {
+        requires: 'one',
+        action: function (baton) {
+            var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';
+            if (baton.data[POS]) options[POS] = baton.data[POS];
+            print.open('calendar', baton.data, options);
+        }
+    });
+
     new Action('io.ox/calendar/detail/actions/print', {
         id: 'print',
         requires: function (e) {
@@ -449,7 +459,7 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
-        prio: 'hi',
+        prio: 'lo',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/calendar/detail/actions/move'
@@ -457,18 +467,18 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 400,
-        prio: 'hi',
-        id: 'delete',
-        label: gt('Delete'),
-        ref: 'io.ox/calendar/detail/actions/delete'
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print-appointment'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 500,
-        prio: 'lo',
-        id: 'print',
-        label: gt('Print'),
-        ref: 'io.ox/calendar/detail/actions/print'
+        prio: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
