@@ -52,7 +52,7 @@ define("io.ox/calendar/main",
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar', config.get('folder.calendar'))
+        commons.addFolderSupport(app, null, 'calendar', options.folder || config.get('folder.calendar'))
             .pipe(commons.showWindow(win))
             .done(function () {
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);

@@ -50,7 +50,7 @@ define('io.ox/tasks/main',
         };
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         win = ox.ui.createWindow({
@@ -222,7 +222,7 @@ define('io.ox/tasks/main',
         });
 
         //ready for show
-        commons.addFolderSupport(app, grid, 'tasks')
+        commons.addFolderSupport(app, grid, 'tasks', options.folder)
             .done(commons.showWindow(win, grid));
     });
 
