@@ -885,7 +885,6 @@ define("io.ox/core/desktop",
                     var blocker;
                     if (self) {
                         blocker = self.nodes.blocker;
-                        blocker.find('.header, .footer').empty();
                         $('body').focus(); // steal focus
                         self.nodes.main.find(BUSY_SELECTOR)
                             .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
@@ -911,7 +910,9 @@ define("io.ox/core/desktop",
                 this.idle = function (enable) {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
-                        self.nodes.blocker.find('.progress').hide().end().idle().hide();
+                        self.nodes.blocker.find('.progress').hide()
+                            .end().idle().hide()
+                            .find('.header, .footer').empty();
                         self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
                             .removeAttr('disabled').removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
