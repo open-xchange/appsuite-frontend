@@ -376,7 +376,8 @@ define('io.ox/core/api/folder',
 
             // options
             var opt = $.extend({
-                folder: null
+                folder: null,
+                autorename: true
             }, options || {});
 
             // default data
@@ -389,7 +390,6 @@ define('io.ox/core/api/folder',
             return this.get({ folder: opt.folder }).pipe(function (parent) {
                 // inherit module
                 var module = (opt.data.module = opt.data.module || parent.module);
-
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -407,6 +407,7 @@ define('io.ox/core/api/folder',
                     params: {
                         module: module,
                         action: 'new',
+                        autorename: opt.autorename,
                         folder_id: opt.folder,
                         tree: '1'
                     },

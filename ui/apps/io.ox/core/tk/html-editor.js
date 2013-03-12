@@ -366,11 +366,13 @@ define.async('io.ox/core/tk/html-editor', [], function () {
     function Editor(textarea) {
         var def = $.Deferred(), ed;
         (textarea = $(textarea)).tinymce({
+
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
             plugins: 'autolink,paste',
             theme: 'advanced',
             skin: 'ox',
             language: lookupTinyMCELanguage(),
+            gecko_spellcheck: true,
 
             init_instance_callback: function () {
                 // get internal editor reference
