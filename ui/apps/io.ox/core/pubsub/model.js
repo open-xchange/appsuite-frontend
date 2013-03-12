@@ -89,6 +89,8 @@ define('io.ox/core/pubsub/model',
             /**
              * get a list of items for a folder
              *
+             * If the result of the filter is empty, all subscriptions will be returned.
+             *
              * Use it like:
              * <code>
              *   model.collection.forFolder({folder_id: 2342});
@@ -125,6 +127,8 @@ define('io.ox/core/pubsub/model',
             /**
              * get a list of items for a folder
              *
+             * If the result of the filter is empty, all subscriptions will be returned.
+             *
              * Use it like:
              * <code>
              *   model.collection.forFolder({folder: 2342});
@@ -142,9 +146,13 @@ define('io.ox/core/pubsub/model',
         publications, subscriptions;
 
     function filterFolder(folder) {
-        return this.filter(function (e) {
+        var result = new Subscriptions(this.filter(function (e) {
             return e.get('entity').folder === String(folder.folder_id || folder.folder);
-        });
+        }));
+
+        if (result.length === 0) { result = this; }
+
+        return result;
     }
 
     ext.point('io.ox/core/pubsub/publication/validation').extend({
