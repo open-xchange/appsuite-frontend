@@ -68,7 +68,9 @@ define('io.ox/core/pubsub/settings/pane',
             this.append(
                 $('<div>').addClass('content')
                 .addClass(data.enabled ? '' : 'disabled').append(
-                    $('<div>').addClass('name').text(data.displayName),
+                    $('<div>').addClass('name').append(
+                        $('<a>', {href: baton.model.url()}).text(data.displayName)
+                    ),
                     createPathInformation(baton.model)
                 )
             );
