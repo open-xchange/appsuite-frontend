@@ -48,6 +48,9 @@ define('io.ox/core/pubsub/model',
         }),
         Subscription = BasicModel.extend({
             ref: 'io.ox/core/pubsub/subscription/',
+            url: function () {
+                return this.attributes[this.attributes.source].url;
+            },
             syncer: {
                 create: function (model) {
                     return api.subscriptions.create(model.attributes);
