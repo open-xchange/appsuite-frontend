@@ -18,8 +18,9 @@ define('io.ox/calendar/month/perspective',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
+     'io.ox/core/print',
      'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, settings, gt) {
+     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -278,13 +279,11 @@ define('io.ox/calendar/month/perspective',
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 self = this;
-            require(['io.ox/core/print']).done(function (p) {
-                p.open('printCalendar', null, {
-                    template: 'cp_monthview_table.tmpl',
-                    usertemplate: 'infostore://69805',
-                    start: self.current.getTime(),
-                    end: end.getTime()
-                });
+            print.open('printCalendar', null, {
+                template: 'cp_monthview_table.tmpl',
+                usertemplate: 'infostore://69805',
+                start: self.current.local,
+                end: end.local
             });
         },
 

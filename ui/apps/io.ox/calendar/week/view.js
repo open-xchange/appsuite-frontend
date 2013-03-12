@@ -16,9 +16,10 @@ define('io.ox/calendar/week/view',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
+     'io.ox/core/print',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, print, settings) {
 
     'use strict';
 
@@ -1467,20 +1468,18 @@ define('io.ox/calendar/week/view',
                     2: {id: 69806, name: 'cp_weekview_table.tmpl'},
                     3: {id: 69806, name: 'cp_weekview_table.tmpl'}
                 };
-            require(['io.ox/core/print']).done(function (p) {
-                var tmpl = templates[self.mode],
-                    data = null;
-                if (folder.folder) {
-                    data = {folder_id: folder.folder};
-                }
-                p.open('printCalendar', data, {
-                    template: tmpl.name,
-                    usertemplate: 'infostore://' + tmpl.id,
-                    start: start,
-                    end: end,
-                    work_day_start_time: self.workStart * date.HOUR,
-                    work_day_end_time: self.workEnd * date.HOUR
-                });
+            var tmpl = templates[self.mode],
+                data = null;
+            if (folder.folder) {
+                data = {folder_id: folder.folder};
+            }
+            print.open('printCalendar', data, {
+                template: tmpl.name,
+                usertemplate: 'infostore://' + tmpl.id,
+                start: start,
+                end: end,
+                work_day_start_time: self.workStart * date.HOUR,
+                work_day_end_time: self.workEnd * date.HOUR
             });
         }
     });

@@ -257,10 +257,9 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/print', {
         id: 'print',
         requires: function (e) {
-            // var win = e.baton.window,
-            //     pers = win.getPerspective();
-            // console.log('requires', e, win, pers);
-            return true;
+            var win = e.baton.window,
+                pers = win.getPerspective();
+            return pers.name !== 'list';
         },
         action: function (baton) {
             var win = baton.app.getWindow(),

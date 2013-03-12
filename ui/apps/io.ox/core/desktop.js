@@ -554,6 +554,7 @@ define("io.ox/core/desktop",
                     rendered = true;
                 }
                 win.currentPerspective = options.perspective;
+                win.updateToolbar();
             };
 
             this.render = $.noop;
