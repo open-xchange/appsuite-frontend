@@ -35,13 +35,11 @@ define('io.ox/mail/autoforward/settings/register',
             require(["io.ox/mail/autoforward/settings/filter"], function (filters) {
 
                 userAPI.get().done(function (user) {
-                    var multiValues = {
-                        email1: user.email1
-                    };
+                    var multiValues = {};
 
-                    filters.editAutoForward($node, multiValues).done(function (filter) {
+                    filters.editAutoForward($node, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
-                        filter.on('update', function () {
+                        filter.on('update create', function () {
                             require("io.ox/core/notifications").yell("success", gt("Your auto forward has been saved"));
                         });
                     }).fail(function () {

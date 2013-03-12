@@ -27,7 +27,7 @@ define('io.ox/mail/autoforward/settings/filter', [
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/autoforward/model', api);
 
     return {
-        editAutoForward: function ($node, multiValues) {
+        editAutoForward: function ($node, multiValues, userMainEmail) {
             var deferred = $.Deferred();
 
             api.getRules('autoforward').done(function (data) {
@@ -36,7 +36,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                     var autoForwardData = {},
                         ForwardEdit,
                         autoForward;
-
+                    autoForwardData.userMainEmail = userMainEmail;
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
 
                     autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
@@ -46,11 +46,18 @@ define('io.ox/mail/autoforward/settings/filter', [
                     deferred.resolve(autoForward.model);
 
                 } else {
-                    var autoForwardData = data[0].actioncmds[0],
+                    var autoForwardData = {},
                         ForwardEdit,
                         autoForward;
 
-                    autoForwardData.mainID = data[0].id;
+                    autoForwardData.id = data[0].id;
+                    autoForwardData.active = data[0].active;
+
+                    _(data[0].actioncmds).each(function (value) {
+                        if (value.id === 'redirect') {
+                            autoForwardData.forwardmail = value.to;
+                        }
+                    });
 
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
 
@@ -64,9 +71,6 @@ define('io.ox/mail/autoforward/settings/filter', [
                     deferred.resolve(autoForward.model);
 
                 }
-
-
-
 
             });
 

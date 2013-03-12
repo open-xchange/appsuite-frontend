@@ -20,24 +20,55 @@ define('io.ox/mail/autoforward/settings/model',
 
     'use strict';
 
+    function providePreparedData(attributes) {
+        var preparedData = {
+                "flags": ["autoforward"],
+                "test": {
+                    "headers": ["To"],
+                    "id": "header",
+                    "values": [attributes.userMainEmail],
+                    "comparison": "is"
+                },
+                "actioncmds": [
+                    {
+                        "to": attributes.forwardmail,
+                        "id": "redirect"
+                    },
+                    {
+                        "id": "stop"
+                    }
+                ],
+                "rulename": "autoforward",
+                "active": attributes.active ? true : false
+            };
+        if (attributes.id) {
+            preparedData.id = attributes.id;
+        }
+
+        return preparedData;
+    }
+
     function buildFactory(ref, api) {
         var factory = new ModelFactory({
             api: api,
             ref: ref,
 
             update: function (model) {
-                var preparedData = {};
-
-                // preparation logic goes here
-
-                console.log(model);
-//                return api.update(preparedData);
+                if (model.attributes.forwardmail === '') {
+                    return api.deleteRule(model.attributes.id);
+                } else {
+                    return api.update(providePreparedData(model.attributes));
+                }
+            },
+            create: function (model) {
+                return api.create(providePreparedData(model.attributes));
             }
 
         });
 
         Validators.validationFor(ref, {
-
+            forwardmail: {  format: 'email' },
+            active: { format: 'boolean' }
         });
         return factory;
 
@@ -48,7 +79,6 @@ define('io.ox/mail/autoforward/settings/model',
         forwardmail: gt('Target mail address'),
         active: gt('active')
     };
-
 
     return {
         api: api,

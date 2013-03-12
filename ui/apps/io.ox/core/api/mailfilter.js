@@ -15,19 +15,18 @@ define("io.ox/core/api/mailfilter",
     "use strict";
 
     var api = {
-        deleteRule: function (ruleId, username) {
+        deleteRule: function (ruleId) {
 
             return http.PUT({
                 module: "mailfilter",
-                params: {action: "delete",
-                         username: username
-                        },
+                params: {action: "delete"},
                 data: {id: ruleId}
             });
 
         },
 
-        createRule: function (data) {
+        create: function (data) {
+
             return http.PUT({
                 module: "mailfilter",
                 params: {action: "new"},
