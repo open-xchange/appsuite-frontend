@@ -411,26 +411,43 @@
     opacity: 1;
 }
 
-.window-blocker .progress {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    height: 20px;
-    margin-left: -200px;
-}
+.window-blocker {
 
-.window-blocker .progress:first-child {
-    margin-top: -20px;
-}
+    .progress {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 400px;
+        height: 20px;
+        margin-left: -200px;
+    }
 
-.window-blocker .progress:last-child {
-    margin-top: 5px;
-    height: 10px;
-}
+    .header {
+        top: auto;
+        bottom: 50%;
+        margin-bottom: 30px;
+        text-align: center;
+    }
 
-.window-blocker .progress .bar {
-    .border-radius(4px);
+    .footer {
+        top: 50%;
+        bottom: auto;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .first {
+        margin-top: -20px;
+    }
+
+    .second {
+        margin-top: 5px;
+        height: 10px;
+    }
+
+    .progress .bar {
+        .border-radius(4px);
+    }
 }
 
 .window-head {

@@ -880,11 +880,12 @@ define("io.ox/core/desktop",
                 var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
-                this.busy = function (pct, sub) {
+                this.busy = function (pct, sub, callback) {
                     // use self instead of this to make busy/idle robust for callback use
                     var blocker;
                     if (self) {
                         blocker = self.nodes.blocker;
+                        blocker.find('.header, .footer').empty();
                         $('body').focus(); // steal focus
                         self.nodes.main.find(BUSY_SELECTOR)
                             .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
@@ -895,10 +896,12 @@ define("io.ox/core/desktop",
                                 blocker.find('.bar').eq(1).css('width', (sub * 100) + '%').parent().show();
                             }
                             blocker.show();
-
                         } else {
                             blocker.find('.progress').hide();
                             blocker.busy().show();
+                        }
+                        if (_.isFunction(callback)) {
+                            callback.call(blocker);
                         }
                         self.trigger('busy');
                     }
@@ -1066,6 +1069,18 @@ define("io.ox/core/desktop",
                 };
 
                 this.currentPerspective = 'main';
+
+                this.setChromeless = function (mode) {
+                    if (mode) {
+                        this.nodes.outer.addClass('chromeless-window');
+                        this.nodes.head.hide();
+                        this.nodes.body.css('left', '0px');
+                    } else {
+                        this.nodes.outer.removeClass('chromeless-window');
+                        this.nodes.head.show();
+                        this.nodes.body.css('left', '');
+                    }
+                };
             };
 
         // window factory
@@ -1105,9 +1120,12 @@ define("io.ox/core/desktop",
                     .css({ width: width + unit })
                     .append(
                         // blocker
-                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
-                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide())
-                            .append($('<div class="progress progress-striped progress-warning active"><div class="bar" style="width: 0%;"></div></div>').hide()),
+                        win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
+                            $('<div class="abs header">'),
+                            $('<div class="progress progress-striped active first"><div class="bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped progress-warning active second"><div class="bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="abs footer">')
+                        ),
                         // window HEAD
                         win.nodes.head = $('<div class="window-head">'),
                         // window BODY
@@ -1230,9 +1248,7 @@ define("io.ox/core/desktop",
             // fix height/position/appearance
             if (opt.chromeless) {
 
-                win.nodes.outer.addClass('chromeless-window');
-                win.nodes.head.hide();
-                win.nodes.body.css('left', '0px');
+                win.setChromeless(true);
 
             } else if (opt.name) {
 
