@@ -1464,7 +1464,7 @@ define('io.ox/calendar/week/view',
                 folder = this.folder(this.folder()),
                 templates = {
                     1: {id: 69803, name: 'cp_dayview_table.tmpl'},
-                    2: {id: 69807, name: 'cp_workweekview_table.tmpl'},
+                    2: {id: 69806, name: 'cp_weekview_table.tmpl'},
                     3: {id: 69806, name: 'cp_weekview_table.tmpl'}
                 };
             require(['io.ox/core/print']).done(function (p) {
