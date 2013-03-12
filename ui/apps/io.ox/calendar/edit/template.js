@@ -385,7 +385,10 @@ define('io.ox/calendar/edit/template',
         //header: gt('Notify all participants via e-mail.'),
         label: gt('Notify all participants by E-mail.'),
         attribute: 'notification',
-        index: 1510
+        index: 1510,
+        customizeNode: function () {
+            this.$el.css("paddingTop", "5px");
+        }
     }), {
         nextTo: "add-participant"
     });
