@@ -21,24 +21,29 @@ define('io.ox/mail/autoforward/settings/model',
     'use strict';
 
     function providePreparedData(attributes) {
+        console.log(attributes);
         var preparedData = {
-                "flags": ["autoforward"],
+                "rulename": "autoforward",
+
                 "test": {
-                    "headers": ["To"],
                     "id": "header",
+                    "comparison": "contains",
                     "values": [attributes.userMainEmail],
-                    "comparison": "is"
+                    "headers": ["To"]
                 },
                 "actioncmds": [
                     {
-                        "to": attributes.forwardmail,
-                        "id": "redirect"
+                        "id": "redirect",
+                        "to": attributes.forwardmail
+                    },
+                    {
+                        "id": "keep"
                     },
                     {
                         "id": "stop"
                     }
                 ],
-                "rulename": "autoforward",
+                "flags": ["autoforward"],
                 "active": attributes.active ? true : false
             };
         if (attributes.id) {

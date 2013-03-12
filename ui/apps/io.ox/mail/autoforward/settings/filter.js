@@ -58,7 +58,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                             autoForwardData.forwardmail = value.to;
                         }
                     });
-
+                    autoForwardData.userMainEmail = userMainEmail;
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
 
                     autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
