@@ -12,12 +12,13 @@
  */
 
 define('io.ox/contacts/api',
-    ['io.ox/core/http',
+    ['io.ox/core/extensions',
+     'io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
      'io.ox/core/cache',
      'settings!io.ox/contacts'
-     ], function (http, apiFactory, notifications, cache, settings) {
+     ], function (ext, http, apiFactory, notifications, cache, settings) {
 
     'use strict';
 
@@ -50,7 +51,7 @@ define('io.ox/contacts/api',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     opt |= {};
-                    return {
+                    var data = {
                         display_name: query + '*',
                         first_name: query + '*',
                         last_name: query + '*',
@@ -60,6 +61,9 @@ define('io.ox/contacts/api',
                         orSearch: true,
                         emailAutoComplete: !!opt.emailAutoComplete
                     };
+                    ext.point('io.ox/contacts/api/search')
+                        .invoke('getData', data, query, opt);
+                    return data;
                 }
             }
         }

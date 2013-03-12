@@ -1,3 +1,7 @@
+* 2013-03-12 - viktor.pracht@open-xchange.com
+
+ - Implemented story 44469315: Ensure that all contact and user searches also search furigana fields.
+
 * 2013-03-12 - stefan.preuss@open-xchange.com
 
   - Fixed bug #25287 : Custom favicon.ico stored in a theme doesn't work in FF

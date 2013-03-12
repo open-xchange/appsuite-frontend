@@ -1,3 +1,22 @@
+<dl>
+    <dt>io.ox/contacts/api/search</dt>
+    <dd>
+        An opportunity to extend search requests. Extensions are called as
+        methods on the search request object and can modify it before it is sent
+        to the server.
+        <ul class="params">
+            <li><b>this</b> - The search request as described in the
+                <a href="http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative" target="_blank">HTTP API</a>.
+            </li>
+            
+            <li><code>query</code> <i>string</i> - The search query as entered
+            by the user.</li>
+            
+            <li><code>options</code> <i>Object</i> - The options object passed
+            to the contacts search API.</li>
+        </ul>
+    </dd>
+</dl>
 
 <b>io.ox/contacts/detail</b><br>
 The mainpoint for the detail view of a selected single contact.<br>

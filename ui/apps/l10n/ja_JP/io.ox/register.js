@@ -180,5 +180,16 @@ define('l10n/ja_JP/io.ox/register', [
             return String.fromCharCode.apply(String, kana);
         }
     }
+    
+    // Search
+    
+    ext.point('io.ox/contacts/api/search').extend({
+        id: 'furigana',
+        getData: function (query, options) {
+            if (this.last_name) this.yomiLastName = this.last_name;
+            if (this.first_name) this.yomiFirstName = this.first_name;
+            if (this.company) this.yomiCompany = this.company;
+        }
+    });
 
 });
