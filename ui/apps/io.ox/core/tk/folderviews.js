@@ -22,8 +22,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/notifications',
      'io.ox/core/http',
      'io.ox/core/cache',
+     'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, gt) {
+    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
 
     'use strict';
 
@@ -861,6 +862,26 @@ define('io.ox/core/tk/folderviews',
                 counter.find('span').text(gt.noI18n(data.unread || ''));
             } else {
                 this.removeClass('show-counter');
+            }
+        }
+    });
+
+    function openPubSubSettings(e) {
+        var options = { id: 'io.ox/core/pubsub', folder: e.data.folder };
+        ox.launch('io.ox/settings/main', options).done(function () {
+            this.setSettingsPane(options);
+        });
+    }
+
+    ext.point('io.ox/foldertree/folder').extend({
+        index: 200,
+        id: 'published',
+        customize: function (data) {
+            if (api.is('published', data) && capabilities.has('publication')) {
+                this.find('.folder-label').append(
+                    $('<i class="icon-rss folder-is-published">').attr('title', gt('Published'))
+                    .on('click', { folder: data.id }, openPubSubSettings)
+                );
             }
         }
     });

@@ -1374,6 +1374,18 @@ input.nice-input {
         margin: 0 1em 0 0;
     }
 
+    .folder-is-published {
+        margin-left: 1em;
+        color: #666;
+        font-size: 20px;
+        line-height: 18px;
+        position: relative;
+        top: 3px;
+        &:hover { color: @linkOnDark; }
+    }
+
+    .folder.selected .folder-is-published:hover { color: @linkOnDark !important; }
+
     .folder-counter {
         display: table-cell;
         text-align: right;

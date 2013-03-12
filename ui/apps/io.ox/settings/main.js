@@ -73,13 +73,14 @@ define('io.ox/settings/main',
         }
     }
 
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
             title: 'Settings',
             chromeless: true
         }));
+
         var changeStatus = false,
 
             saveSettings = function (triggeredBy) {
@@ -147,9 +148,11 @@ define('io.ox/settings/main',
 
         grid.requiresLabel = tmpl.requiresLabel;
 
-        grid.setAllRequest(function () {
-            var def = $.Deferred();
-            appsApi.getInstalled().done(function (installed) {
+
+        var getAllSettingsPanes = function () {
+
+            return appsApi.getInstalled().pipe(function (installed) {
+
                 var apps = _.filter(installed, function (item) {
                     return item.settings;
                 });
@@ -194,26 +197,34 @@ define('io.ox/settings/main',
                     return ext.indexSorter(a, b);
                 });
 
-                def.resolve(apps);
+                return apps;
             });
+        };
 
+        grid.setAllRequest(getAllSettingsPanes);
 
-            return def;
-        });
+        var showSettingsEnabled = true;
+        var showSettings = function (baton) {
 
-        var showSettings = function (obj) {
-            var settingsPath = obj.id + '/settings/pane',
-                extPointPart = obj.id + '/settings';
+            if (!showSettingsEnabled) return;
+
+            baton = ext.Baton.ensure(baton);
+
+            var data = baton.data,
+                settingsPath = data.id + '/settings/pane',
+                extPointPart = data.id + '/settings';
+
             right.empty().busy();
-            if (obj.loadSettingPane || _.isUndefined(obj.loadSettingPane)) {
-                require([settingsPath], function (m) {
+
+            if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
+                return require([settingsPath], function (m) {
                     right.empty().idle(); // again, since require makes this async
-                    ext.point(extPointPart + '/detail').invoke('draw', right, obj);
+                    ext.point(extPointPart + '/detail').invoke('draw', right, baton);
                     updateExpertMode();
                 });
             } else {
                 right.empty().idle(); // again, since require makes this async
-                ext.point(extPointPart + '/detail').invoke('draw', right, obj);
+                ext.point(extPointPart + '/detail').invoke('draw', right, baton);
                 updateExpertMode();
             }
         };
@@ -239,13 +250,31 @@ define('io.ox/settings/main',
             saveSettings('hide');
         });
 
-
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
         commons.wireGridAndWindow(grid, win);
 
+        app.setSettingsPane = function (options) {
+            if (options && options.id) {
+                return getAllSettingsPanes().done(function (apps) {
+                    var obj = _(apps).find(function (obj) { return obj.id === options.id; }),
+                        baton = new ext.Baton({ data: obj, options: options || {} });
+                    if (obj) {
+                        showSettingsEnabled = false;
+                        grid.selection.set([obj]);
+                        showSettingsEnabled = true;
+                        showSettings(baton);
+                    }
+                });
+            } else {
+                return $.when();
+            }
+        };
+
         // go!
         win.show(function () {
-            grid.paint();
+            grid.paint().done(function () {
+                app.setSettingsPane(options);
+            });
         });
     });
 

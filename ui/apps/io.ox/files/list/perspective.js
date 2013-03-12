@@ -210,19 +210,6 @@ define('io.ox/files/list/perspective',
                 dropZone.remove();
                 if (dropZone) dropZone.include();
             }
-            // reset first
-            win.nodes.title.find('.has-publications').remove();
-            // published?
-            if (folder && folder['com.openexchange.publish.publicationFlag']) {
-                win.nodes.title.prepend(
-                    $('<img>', {
-                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
-                        title: gt('This folder has publications'),
-                        alt: ''
-                    })
-                    .addClass('has-publications')
-                );
-            }
         });
 
         grid.prop('folder', app.folder.get());
