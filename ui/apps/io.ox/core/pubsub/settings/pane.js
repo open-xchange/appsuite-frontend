@@ -30,12 +30,16 @@ define('io.ox/core/pubsub/settings/pane',
     ext.point('io.ox/core/pubsub/settings/detail').extend({
         index: 100,
         id: 'extensions',
-        draw: function (point) {
+        draw: function (baton) {
             this.append(
-                $('<div class="clear-title">').text(point.title),
+                $('<div class="clear-title">').text(baton.title),
                 $('<div class="settings sectiondelimiter">')
             );
-            new SettingView({publications: model.publications(), subscriptions: model.subscriptions()}).render().$el.appendTo(this);
+
+            new SettingView({
+                publications: model.publications().forFolder({folder: baton.options.folder}),
+                subscriptions: model.subscriptions().forFolder({folder: baton.options.folder})
+            }).render().$el.appendTo(this);
         }
     });
 
