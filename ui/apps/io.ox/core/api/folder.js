@@ -407,7 +407,6 @@ define('io.ox/core/api/folder',
                     params: {
                         module: module,
                         action: 'new',
-                        autorename: opt.autorename,
                         folder_id: opt.folder,
                         tree: '1',
                         autorename: opt.autorename
