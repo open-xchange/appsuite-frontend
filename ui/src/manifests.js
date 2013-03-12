@@ -9,6 +9,11 @@ define(function () {
             path: 'io.ox/mail/vacationnotice/settings/register'
         },
         {
+            namespace: ['io.ox/settings/main'],
+            path: 'io.ox/mail/autoforward/settings/register'
+
+        },
+        {
             path: 'io.ox/mail/main',
             title: "Mail",
             company: "Open-Xchange",

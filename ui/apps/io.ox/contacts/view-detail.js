@@ -171,7 +171,7 @@ define("io.ox/contacts/view-detail",
         }
         return util.getMailFormat(data);
     }
-    
+
     function createText(format, classes) {
         return _.aprintf(format.format, function (index) {
             return $('<div>').addClass(classes[index])
