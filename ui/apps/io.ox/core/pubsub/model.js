@@ -127,7 +127,7 @@ define('io.ox/core/pubsub/model',
              *
              * Use it like:
              * <code>
-             *   model.collection.forFolder({folder_id: 2342});
+             *   model.collection.forFolder({folder: 2342});
              * </code>
              *
              * @param {object} - an object containing a folder_id attribute
@@ -142,7 +142,9 @@ define('io.ox/core/pubsub/model',
         publications, subscriptions;
 
     function filterFolder(folder) {
-        return this.where({folder: folder.folder_id});
+        return this.filter(function (e) {
+            return e.get('entity').folder === String(folder.folder_id || folder.folder);
+        });
     }
 
     ext.point('io.ox/core/pubsub/publication/validation').extend({
