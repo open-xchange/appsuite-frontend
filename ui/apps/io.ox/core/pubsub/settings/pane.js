@@ -39,6 +39,7 @@ define('io.ox/core/pubsub/settings/pane',
         }
     });
 
+
     function createPathInformation(model) {
         var opts = {
                 handler: function (id) {
@@ -47,8 +48,9 @@ define('io.ox/core/pubsub/settings/pane',
                     });
                 },
                 subfolder: false, //don’t show subfolders for last item
-                last: true // add 'active' class to last item
+                last: false // make last item a link (responding to handler function)
             };
+
         return folderAPI.getBreadcrumb(model.get('folder') || model.get('entity').folder, opts);
     }
 
