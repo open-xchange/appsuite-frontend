@@ -17,7 +17,22 @@ table, td {
 
 table {
     width: 100%;
+}
 
+@page  {
+    margin: 1.5cm 1.5cm 2.0cm 1.5cm; /* top right bottom left */
+}
+
+.space {
+    padding-top: 40px;
+}
+
+.busy {
+    margin: 10px auto 10px auto;
+    background-image: url(v=7.0.0-1.20120601.132924/apps/io.ox/settings/busy.gif);
+    width: 45px;
+    height: 11px;
+    background-repeat: no-repeat;
 }
 
 .outline, .outline th, .outline td {

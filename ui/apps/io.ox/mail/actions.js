@@ -21,11 +21,12 @@ define('io.ox/mail/actions',
      'io.ox/core/config',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
+     'io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
      'io.ox/core/api/conversion',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, conversionAPI, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, conversionAPI,  settings) {
 
     'use strict';
 
@@ -178,33 +179,15 @@ define('io.ox/mail/actions',
         id: 'print',
         requires: 'some',
         multiple: function (list, baton) {
-            require(['io.ox/mail/print/main'], function (print) {
-                notifications.yell('info', gt('Preparing data for printing.'));
-                print.open(list, baton.data, {serverside: false, mode: 'detail'})
-                .then(function (win) {
-                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
-                    }
-                );
+            var win = print.openURL();
+            require(['io.ox/mail/print/main'], function (printMail) {
+                var content = printMail
+                                .getContent(list, baton.data, {serverside: false})
+                                .done(function (content) {
+                                    win.document.write(content);
+                                    win.print();
+                                });
             });
-
-        }
-    });
-
-    //print as list
-    new Action('io.ox/mail/actions/printlist', {
-        id: 'printlist',
-        requires: 'some',
-        multiple: function (list, baton) {
-            require(['io.ox/mail/print/main'], function (print) {
-                notifications.yell('info', 'Preparing data for printing.');
-                print.open(list, baton.data, {serverside: false, mode: 'list', dimensions: { w: 900 }})
-                .then(function (win) {
-                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
-                    }
-                );
-
-            });
-
         }
     });
 
@@ -213,16 +196,12 @@ define('io.ox/mail/actions',
         id: 'printserver',
         requires: 'some',
         multiple: function (list, baton) {
-            require(['io.ox/mail/print/main'], function (print) {
-                notifications.yell('info', 'Preparing data for printing.');
-                print.open(list, baton.data, {serverside: true, mode: 'list'})
-                .then(function (win) {
-                        notifications.yell('success', gt('Data successfully prepared for printing. Please use opened dialog to start printing.'));
-                    }
-                );
-
-            });
-
+            var data = _.first(baton.data),
+                win = print.open('mail', data, {
+                    template: 'infostore://70070',
+                    id: data.id,
+                    folder: data.folder_id
+                });
         }
     });
 
@@ -875,7 +854,6 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/delete'
     }));
 
-    /*
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1050,
         prio: 'lo',
@@ -884,14 +862,8 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/print'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1051,
-        prio: 'lo',
-        id: 'printlist',
-        label: gt('Print' + ': ' + gt('List')),
-        ref: 'io.ox/mail/actions/printlist'
-    }));
-
+    /*
+    //development
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1052,
         prio: 'lo',
