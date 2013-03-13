@@ -172,29 +172,24 @@ define('io.ox/core/pubsub/subscriptions',
         id: 'service',
         index: 100,
         draw: function (baton) {
-            var services = [],
-                node,
-                userform;
-            for (var i = 0; i < baton.services.length; i++) {
-                if (baton.data.entityModule === baton.services[i].module) {
-                    services.push(baton.services[i]);
-                }
-            }
+            var node, userform;
 
             this.append($('<div>').addClass('control-group').append(
                 $('<label>').addClass('service-label control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
                     node = $('<select>').attr('id', 'service-value').addClass('service-value').on('change', function () {
-                        baton.model.setSource(_.where(services, { id: node.val() })[0]);
+                        baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
                         buildForm(userform, baton);
                     }))));
 
-            for (var i = 0; i < services.length; i++) {
-                $('<option>').text(services[i].displayName).val(services[i].id).appendTo(node);
-            }
+            _.each(baton.services, function (service) {
+                if (baton.data.entityModule === service.module) {
+                    node.append($('<option>').text(service.displayName).val(service.id));
+                }
+            });
 
             if (!baton.model.source()) {
-                baton.model.setSource(_.where(services, { id: node.val() })[0]);
+                baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
             } else {
                 node.val(baton.model.source().service.id);
             }
