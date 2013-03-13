@@ -852,6 +852,7 @@ define('io.ox/core/api/folder',
      * @param {string} - folder id
      * @param {object} - options:
      * {
+     *     exclude: {Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
      *     last: {boolean} - true: last item should have the active class set (default)
      *                     - no relevance if subfolder option is set to true and element is "clickable" (*)
      *                     - false: same as true if element is "clickable" (*)
@@ -913,19 +914,19 @@ define('io.ox/core/api/folder',
                 }
                 li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
             }
-            elem.attr('data-folder-id', folder.id);
+            elem.attr('data-folder-id', folder.id).data(folder);
             this.append(li);
         };
 
         return function (id, options) {
             var ul;
-            options = _.extend({ subfolder: true, last: true }, options);
+            options = _.extend({ subfolder: true, last: true, exclude: [] }, options);
             try {
                 ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
                     e.preventDefault();
                     var id = $(this).attr('data-folder-id');
                     if (id !== undefined) {
-                        _.call(options.handler, id);
+                        _.call(options.handler, id, $(this).data());
                     }
                 });
                 if (options.prefix) {
@@ -937,8 +938,11 @@ define('io.ox/core/api/folder',
             }
             finally {
                 api.getPath({ folder: id }).done(function (list) {
+                    var exclude = _(options.exclude);
                     _(list).each(function (o, i, list) {
-                        add.call(ul, o, i, list, options);
+                        if (!exclude.contains(o.id)) {
+                            add.call(ul, o, i, list, options);
+                        }
                     });
                     ul = null;
                 });

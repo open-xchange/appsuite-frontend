@@ -43,17 +43,20 @@ define('io.ox/core/pubsub/settings/pane',
         }
     });
 
+    // module mapping
+    var mapping = { contacts: 'io.ox/contacts', calendar: 'io.ox/calendar', infostore: 'io.ox/files' };
 
     function createPathInformation(model) {
         var opts = {
-                handler: function (id) {
-                    folderAPI.get({folder: id}).done(function (folder) {
-                        //TODO: do something with the folder here
-                    });
-                },
-                subfolder: false, //don’t show subfolders for last item
-                last: false // make last item a link (responding to handler function)
-            };
+            handler: function (id, data) {
+                ox.launch(mapping[data.module] + '/main', { folder: id }).done(function () {
+                    this.folder.set(id);
+                });
+            },
+            exclude: ['9'], // root folder is useless
+            subfolder: false, //don’t show subfolders for last item
+            last: false // make last item a link (responding to handler function)
+        };
 
         return folderAPI.getBreadcrumb(model.get('folder') || model.get('entity').folder, opts);
     }
@@ -61,34 +64,27 @@ define('io.ox/core/pubsub/settings/pane',
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
+
             var data = baton.model.toJSON(),
-                controls = $('<div>').addClass('actions');
+                enabled = data.enabled;
 
-            this[data.enabled ? 'removeClass' : 'addClass']('disabled');
+            this[enabled ? 'removeClass' : 'addClass']('disabled');
 
-            $('<a href="#" class="action" data-action="edit">').text(gt('Edit')).appendTo(controls);
-            $('<a href="#" class="close" data-action="remove">').html('&times;').appendTo(controls);
-
-            this.append(
-                $('<div>').addClass('content')
-                .addClass(data.enabled ? '' : 'disabled').append(
-                    $('<div>').addClass('name').append(
-                        $('<a>', {href: baton.model.url()}).text(data.displayName)
+            this.addClass('item').append(
+                $('<div class="actions">').append(
+                    $('<a href="#" class="close" data-action="remove">').html('&times;'),
+                    $('<a href="#" class="action" data-action="edit">').text(gt('Edit')),
+                    $('<a href="#" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable'))
+                ),
+                $('<div class="content">').append(
+                    $('<div class="name">').append(
+                        enabled ?
+                            $('<a>', { href: baton.model.url(), target: '_blank' }).text(data.displayName) :
+                            $('<span class="disabled">').text(data.displayName)
                     ),
                     createPathInformation(baton.model)
                 )
             );
-
-            if (data.enabled) {
-                controls.append(
-                    $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
-                );
-            } else {
-                controls.append(
-                    $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
-                );
-            }
-            controls.appendTo(this);
         }
     });
 
