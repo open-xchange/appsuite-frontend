@@ -140,12 +140,17 @@ define('io.ox/portal/settings/pane',
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                .text(widgets.getTitle(data, baton.view.options.title)),
-                // close (has float: right)
-                $('<a href="#" class="close" data-action="remove">').html('&times;')
+                .text(widgets.getTitle(data, baton.view.options.title))
             );
 
-            if (data.enabled) {
+            if (!data.protectedWidget) {
+                this.append(
+                    // close (has float: right)
+                    $('<a href="#" class="close" data-action="remove">').html('&times;')
+                );
+            }
+
+            if (data.enabled && !data.protectedWidget) {
                 // editable?
                 if (baton.view.options.editable) {
                     this.append(
@@ -156,10 +161,16 @@ define('io.ox/portal/settings/pane',
                     drawChangeColor(data.color),
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
                 );
-            } else {
+            } else if (!data.protectedWidget) {
                 this.append(
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
                 );
+            } else {
+                this.append("&nbsp;");
+            }
+
+            if (data.protectedWidget) {
+                // TODO
             }
         }
     });

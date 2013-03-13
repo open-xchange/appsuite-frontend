@@ -58,13 +58,24 @@ define('io.ox/portal/widgets',
         },
 
         getSettings: function () {
+            var prot = {};
+            _(settings.get('widgets/protected')).each(function (obj, id) {
+                obj.protectedWidget = true;
+                prot[id] = obj;
+            });
+
             return _(settings.get('widgets/user', {}))
                 .chain()
+                .extend(prot)
                 // map first since we need the object keys
                 .map(function (obj, id) {
+
                     obj.id = id;
                     obj.type = id.split('_')[0];
                     obj.props = obj.props || {};
+                    obj.inverse = _.isUndefined(obj.inverse) ? false : obj.inverse;
+                    obj.enabled = _.isUndefined(obj.enabled) ? true : obj.enabled;
+
                     return obj;
                 })
                 .filter(function (obj) {
@@ -118,7 +129,7 @@ define('io.ox/portal/widgets',
         add: function (type, options) {
 
             // find free id
-            var widgets = settings.get('widgets/user', {}),
+            var widgets = _(settings.get('widgets/user', {})).extend(settings.get('widgets/protected', {})),
                 widget, i = 0, id = type + '_0',
                 colors = api.getColors();
 
@@ -163,6 +174,9 @@ define('io.ox/portal/widgets',
             // get latest values
             var widgets = {};
             collection.each(function (model) {
+                if (model.get('protectedWidget')) {
+                    return;
+                }
                 var id = model.get('id');
                 widgets[id] = model.toJSON();
                 delete widgets[id].baton;
@@ -227,6 +241,10 @@ define('io.ox/portal/widgets',
     });
 
     collection.on('remove', function (model) {
+        if (model.get("protectedWidget")) {
+            // Don't you dare!
+            return;
+        }
         settings.remove('widgets/user/' + model.get('id')).save();
     });
 
