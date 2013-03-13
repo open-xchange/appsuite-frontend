@@ -13,12 +13,13 @@
 
 define("io.ox/calendar/main",
     ["io.ox/calendar/api",
+     "io.ox/core/date",
      "io.ox/calendar/util",
      "io.ox/core/config",
      "io.ox/core/commons",
      "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, util, config, commons, settings) {
+     "less!io.ox/calendar/style.css"], function (api, date, util, config, commons, settings) {
 
     "use strict";
 
@@ -46,6 +47,8 @@ define("io.ox/calendar/main",
         }));
 
         app.settings = settings;
+        app.refDate = new date.Local();
+
         win.addClass("io-ox-calendar-main");
 
         // folder tree

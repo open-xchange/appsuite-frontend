@@ -70,8 +70,6 @@ define('io.ox/calendar/week/view',
         initialize: function (opt) {
             myself = myself || ox.user_id;
 
-            ox.testprint = $.proxy(this.print, this);
-
             this.pane = $('<div>').addClass('scrollpane');
             this.fulltimePane = $('<div>').addClass('fulltime');
             this.fulltimeCon = $('<div>').addClass('fulltime-container');
@@ -87,6 +85,23 @@ define('io.ox/calendar/week/view',
             this.allowLasso = 'allowLasso' in opt ? opt.allowLasso : true;
             this.mode = opt.mode || 1;
             this.extPoint = opt.appExtPoint;
+            this.refDate = opt.refDate || new date.Local();
+
+            switch (this.mode) {
+            case 1: // day
+                this.$el.addClass('dayview');
+                this.columns = 1;
+                break;
+            case 2: // workweek
+                this.$el.addClass('workweekview');
+                this.columns = 5;
+                break;
+            default:
+            case 3: // week
+                this.$el.addClass('weekview');
+                this.columns = 7;
+                break;
+            }
 
             this.collection
                 .on('reset', this.renderAppointments, this)
@@ -94,7 +109,7 @@ define('io.ox/calendar/week/view',
             if (!opt.keyboard || opt.keyboard === true) {
                 this.bindKeys();
             }
-            this.setStartDate(opt.startDate);
+            this.setStartDate(this.refDate);
             this.initSettings();
         },
 
@@ -115,44 +130,45 @@ define('io.ox/calendar/week/view',
 
         /**
          * set week reference start date
-         * @param {string|number} opt
+         * @param {string|number|LocalDate} opt
          *        number: Timestamp of a date in the reference week. Now if empty
          *        string: {'next', 'prev'} set next or previous week
+         *        LoacalDate: date object in the reference week
          */
         setStartDate: function (opt) {
-            if (opt && typeof opt === 'string') {
-                switch (opt) {
-                case 'next':
-                    this.startDate.add(this.columns === 1 ? date.DAY : date.WEEK);
-                    break;
-                case 'prev':
-                    this.startDate.add((this.columns === 1 ? date.DAY : date.WEEK) * -1);
-                    break;
-                default:
-                    break;
+
+            if (opt) {
+                // number | LocalDate
+                if (typeof opt === 'number' || opt instanceof date.Local) {
+                    this.startDate = new date.Local(opt);
+                    this.refDate.setTime(this.startDate.getTime());
+                }
+                //string
+                if (typeof opt === 'string') {
+                    var diff = (this.columns === 1 ? date.DAY : date.WEEK) * (opt === 'prev' ? -1 : 1);
+                    this.startDate.add(diff);
+                    this.refDate.add(diff);
                 }
             } else {
                 // today button
-                var jumptTo = (opt && typeof opt === 'number') ? new date.Local(opt) : new date.Local();
-                switch (this.mode) {
-                case 1: // day
-                    this.$el.addClass('dayview');
-                    this.columns = 1;
-                    this.startDate = jumptTo.setHours(0, 0, 0, 0);
-                    break;
-                case 2: // workweek
-                    this.$el.addClass('workweekview');
-                    this.columns = 5;
-                    var weekStart = date.Local.utc((jumptTo.getDays() - jumptTo.getDay() + this.workWeekStart) * date.DAY);
-                    this.startDate = new date.Local(weekStart);
-                    break;
-                default:
-                case 3: // week
-                    this.$el.addClass('weekview');
-                    this.columns = 7;
-                    this.startDate = jumptTo.setStartOfWeek();
-                    break;
-                }
+                this.startDate = new date.Local();
+                this.refDate.setTime(this.startDate.getTime());
+            }
+
+            // normalize startDate to beginning of the week or day
+            switch (this.mode) {
+            case 1: // day
+                this.startDate.setHours(0, 0, 0, 0);
+                break;
+            case 2: // workweek
+                // settings independent, set startDate to Monday of the current week
+                var weekStart = date.Local.utc((this.startDate.getDays() - this.startDate.getDay() + this.workWeekStart) * date.DAY);
+                this.startDate = new date.Local(weekStart);
+                break;
+            default:
+            case 3: // week
+                this.startDate.setStartOfWeek();
+                break;
             }
         },
 
@@ -749,7 +765,7 @@ define('io.ox/calendar/week/view',
                             model.set({end_date: date.Local.utc(model.get('end_date'))}, {silent: true});
                         }
 
-                        var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate)),
+                        var startLocal = new date.Local(Math.max(model.get('start_date'), this.startDate.getTime())),
                             endLocal = new date.Local(model.get('end_date')),
                             start = new date.Local(startLocal.getYear(), startLocal.getMonth(), startLocal.getDate()).getTime(),
                             end = new date.Local(endLocal.getYear(), endLocal.getMonth(), endLocal.getDate()).getTime(),
