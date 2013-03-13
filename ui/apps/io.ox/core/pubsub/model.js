@@ -100,7 +100,7 @@ define('io.ox/core/pubsub/model',
             /**
              * get a list of items for a folder
              *
-             * If the result of the filter is empty, all subscriptions will be returned.
+             * If no folder is provided, all subscriptions will be returned.
              *
              * Use it like:
              * <code>
@@ -110,7 +110,13 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: filterFolder,
+            forFolder: function (folder) {
+                var filter = String(folder.folder_id || folder.folder || '');
+
+                if (!filter) { return this; }
+
+                return new Publications(filterFolder(filter, this));
+            },
             comparator: function (publication) {
                 return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
             }
@@ -141,7 +147,7 @@ define('io.ox/core/pubsub/model',
             /**
              * get a list of items for a folder
              *
-             * If the result of the filter is empty, all subscriptions will be returned.
+             * If no folder is provided, all subscriptions will be returned.
              *
              * Use it like:
              * <code>
@@ -151,7 +157,13 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: filterFolder,
+            forFolder: function (folder) {
+                var filter = String(folder.folder_id || folder.folder || '');
+
+                if (!filter) { return this; }
+
+                return new Subscriptions(filterFolder(filter, this));
+            },
             comparator: function (subscription) {
                 return subscription.get('enabled') + subscription.get('displayName');
             }
@@ -159,14 +171,11 @@ define('io.ox/core/pubsub/model',
         //singleton instances
         publications, subscriptions;
 
-    function filterFolder(folder) {
-        var result = new Subscriptions(this.filter(function (e) {
-            return e.get('entity').folder === String(folder.folder_id || folder.folder);
-        }));
-
-        if (result.length === 0) { result = this; }
-
-        return result;
+    function filterFolder(filter, collection) {
+        return collection.filter(function (e) {
+            console.log((e.get('entity') || {folder: e.get('folder')}).folder === filter);
+            return (e.get('entity') || {folder: e.get('folder')}).folder === filter;
+        });
     }
 
     ext.point('io.ox/core/pubsub/publication/validation').extend({
