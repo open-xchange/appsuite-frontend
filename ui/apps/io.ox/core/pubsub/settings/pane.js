@@ -26,7 +26,8 @@ define('io.ox/core/pubsub/settings/pane',
     'use strict';
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
-        SettingView = point.createView({ className: 'pubsub settings' });
+        SettingView = point.createView({ className: 'pubsub settings' }),
+        filter;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -75,13 +76,15 @@ define('io.ox/core/pubsub/settings/pane',
         index: 100,
         id: 'extensions',
         draw: function (baton) {
+            filter = {folder: baton.options.folder};
+
             this.append(
                 $('<div class="clear-title">').text(baton.data.title),
                 $('<div class="settings sectiondelimiter">'),
                 drawFilterInfo(baton.options.folder),
                 new SettingView({
-                    publications: model.publications().forFolder({folder: baton.options.folder}),
-                    subscriptions: model.subscriptions().forFolder({folder: baton.options.folder})
+                    publications: model.publications(),
+                    subscriptions: model.subscriptions()
                 })
                 .render().$el
             );
@@ -214,16 +217,22 @@ define('io.ox/core/pubsub/settings/pane',
      * @param {$element} - jQuery list node element
      * @param {object} - model behind the list
      */
-    function setupList(node, model) {
-        model.each(function (model) {
+    function setupList(node, collection) {
+        _.each(collection.forFolder(filter), function (model) {
             node.append(
                 createPubSubItem(model).render().el
             );
         });
-        model.on('add', function (model, collection, options) {
+        collection.on('add', function (model, collection, options) {
+            var filteredIndex = _.chain(collection.forFolder(filter))
+                .map(function (e) { return e.id; })
+                .indexOf(model.id)
+                .value();
+            if (filteredIndex < 0) { return; }
+
             var item = createPubSubItem(model).render().el;
 
-            if (options.index === 0) {
+            if (filteredIndex === 0) {
                 node.prepend(item);
             } else {
                 node.children('li:nth-child(' + options.index + ')').after(item);

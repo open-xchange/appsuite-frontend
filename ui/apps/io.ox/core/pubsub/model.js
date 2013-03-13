@@ -110,13 +110,7 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: function (folder) {
-                var filter = String(folder.folder_id || folder.folder || '');
-
-                if (!filter) { return this; }
-
-                return new Publications(filterFolder(filter, this));
-            },
+            forFolder: filterFolder,
             comparator: function (publication) {
                 return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
             }
@@ -157,13 +151,7 @@ define('io.ox/core/pubsub/model',
              * @param {object} - an object containing a folder_id attribute
              * @return [model] - an array containing matching model objects
              */
-            forFolder: function (folder) {
-                var filter = String(folder.folder_id || folder.folder || '');
-
-                if (!filter) { return this; }
-
-                return new Subscriptions(filterFolder(filter, this));
-            },
+            forFolder: filterFolder,
             comparator: function (subscription) {
                 return subscription.get('enabled') + subscription.get('displayName');
             }
@@ -171,8 +159,12 @@ define('io.ox/core/pubsub/model',
         //singleton instances
         publications, subscriptions;
 
-    function filterFolder(filter, collection) {
-        return collection.filter(function (e) {
+    function filterFolder(folder) {
+        var filter = String(folder.folder_id || folder.folder || '');
+
+        if (!filter) { return this.toArray(); }
+
+        return this.filter(function (e) {
             return (e.get('entity') || {folder: e.get('folder')}).folder === filter;
         });
     }
