@@ -867,7 +867,7 @@ define('io.ox/core/tk/folderviews',
     });
 
     function openPubSubSettings(e) {
-        var options = { id: 'io.ox/core/pubsub', folder: e.data.folder };
+        var options = { id: 'io.ox/core/pubsub', folder: e.data.folder, folderState: e.data.folderState };
         ox.launch('io.ox/settings/main', options).done(function () {
             this.setSettingsPane(options);
         });
@@ -880,7 +880,10 @@ define('io.ox/core/tk/folderviews',
             if (capabilities.has('publication') && api.is('published|subscribed', data)) {
                 this.find('.folder-label').append(
                     $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                    .on('click', { folder: data.id }, openPubSubSettings)
+                    .on('click', { folder: data.id, folderState: {
+                        isPublished: api.is('published', data),
+                        isSubscribed: api.is('subscribed', data)
+                    }}, openPubSubSettings)
                 );
             }
         }
