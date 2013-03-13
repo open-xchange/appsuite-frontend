@@ -43,7 +43,7 @@ define('io.ox/core/pubsub/settings/pane',
     function drawFilterInfo(folder) {
         if (!folder) { return ""; }
 
-        var node = $('<div>').addClass('alert alert-info');
+        var node = $('<div>').addClass('alert alert-info pubsub settings');
 
         folderAPI.getPath({folder: folder}).done(function (folder) {
             var folderNode = $('<span>').text(
@@ -60,12 +60,17 @@ define('io.ox/core/pubsub/settings/pane',
             node.append(
                 gt('Only showing items related to folder'), ' ',
                 folderNode,
-                $('<button>').addClass('close').text('Remove Filter').click(function (ev) {
-                    this.parentElement.remove();
-                    ox.launch('io.ox/settings/main').done(function () {
-                        this.setSettingsPane({id: 'io.ox/core/pubsub'});
-                    });
-                })
+                $('<div class="actions">').append(
+                    $('<a>', {href: '#'}).addClass('action').text(gt('Show all items')).click(function (ev) {
+                        this.parentElement.remove();
+                        ox.launch('io.ox/settings/main').done(function () {
+                            this.setSettingsPane({id: 'io.ox/core/pubsub'});
+                        });
+                    }),
+                    $('<button>').addClass('close').html('&times;').click(function (ev) {
+                        this.parentElement.remove();
+                    })
+                )
             );
         });
 
