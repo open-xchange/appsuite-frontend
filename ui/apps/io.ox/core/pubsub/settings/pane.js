@@ -158,10 +158,23 @@ define('io.ox/core/pubsub/settings/pane',
                 dynamicAction;
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
+            this.removeClass('alert alert-block alert-info'); // just in case we have these set
 
-            if (data.source) {
+            if (data.source && (baton.model.refreshState() === 'pending')) {
+                // this is a subscription and we are refreshing
+                this.empty().addClass('alert alert-block alert-info').append(
+                    $('<h4>').text(gt('Performing refresh')),
+                    $('<span>').text(gt('A refresh takes some time, so please be patient, while the action is performed.'))
+                );
+                this.removeClass('item');
+                //don’t render anything else! message is enough!
+                return;
+            } else if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
                 dynamicAction = $('<a href="#" class="action" data-action="refresh">').text(gt('Refresh'));
+            } else if (data.source && (baton.model.refreshState() !== 'pending')) {
+                // this is a subscription and refresh should be disabled
+                dynamicAction = $('<span>');
             } else if (data.target) {
                 // this is a publication
                 dynamicAction = $('<a href="#" class="action" data-action="edit">').text(gt('Edit'));
@@ -200,6 +213,7 @@ define('io.ox/core/pubsub/settings/pane',
         events: {
             'click [data-action="toggle"]': 'onToggle',
             'click [data-action="edit"]': 'onEdit',
+            'click [data-action="refresh"]': 'onRefresh',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
@@ -220,6 +234,14 @@ define('io.ox/core/pubsub/settings/pane',
             require(['io.ox/core/pubsub/publications'], function (pubsubViews) {
                 pubsubViews.buildPublishDialog(baton);
             });
+        },
+        onRefresh: function (ev) {
+            var baton = ext.Baton({model: this.model, view: this});
+            ev.preventDefault();
+            this.model.performRefresh().done(function () {
+                baton.view.render();
+            });
+            baton.view.render();
         },
         onRemove: function (ev) {
             ev.preventDefault();
