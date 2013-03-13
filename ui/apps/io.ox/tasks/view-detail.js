@@ -171,8 +171,8 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants dont have an id but the display name is already given
-                                userApi.getName(participant.id).done(function (name) {
-                                        drawParticipant(table, participant, name);
+                                userApi.get(participant.id).done(function (userInformation) {
+                                        drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {
                                         failedToLoad(node, table, participant);
                                     });
@@ -180,11 +180,17 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                 drawParticipant(table, participant, participant.display_name + ' <' + participant.mail + '>');
                             }
                         },
-                        drawParticipant = function (table, participant, name) {
+                        drawParticipant = function (table, participant, name, userInformation) {
                             var row;
-                            table.append(row = $('<tr>').append(
-                                $('<td class="participants-table-name">').text(name))
-                            );
+                            if (userInformation) {
+                                table.append(row = $('<tr>').append(
+                                    $('<td class="halo-link">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
+                                );
+                            } else {
+                                table.append(row = $('<tr>').append(
+                                    $('<td class="halo-link">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
+                                );
+                            }
                             row.append(
                                 $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1])),
                                 $('<td>').text(states[participant.confirmation || 0][0])
