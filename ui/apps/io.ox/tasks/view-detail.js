@@ -186,16 +186,11 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                 $('<td class="participants-table-name">').text(name))
                             );
                             row.append(
-                                $('<td>').text(states[participant.confirmation || 0][0]),
-                                $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]))
+                                $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1])),
+                                $('<td>').text(states[participant.confirmation || 0][0])
                                 );
                             if (participant.confirmmessage) {
-                                row.append($('<td>').text(_.noI18n(participant.confirmmessage)));
-                            }
-                            if (participant.type === 5) { //external participant
-                                row.append(
-                                        $('<td>').append($('<div>').addClass('badge participants-external').text(gt('External')))
-                                        );
+                                row.append($('<td>').addClass('participants-table-confirmmessage').text(_.noI18n('\u00A0\u00A0\u00A0' + participant.confirmmessage)));
                             }
                         },
                         failedToLoad = function (node, table, participant) {
@@ -204,13 +199,34 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                     lookupParticipant(node, table, participant);
                                 })
                             );
-                        };
-                    node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $("<table class='task-participants-table'>"));
-
+                        },
+                        intParticipants = [],
+                        extParticipants = [];
+                    
+                    
+                    //divide participants into internal and external users
+                    
                     _(task.participants).each(function (participant) {
-                        lookupParticipant(node, table, participant);
+                        if (participant.type === 5) {
+                            extParticipants.push(participant);
+                        } else {
+                            intParticipants.push(participant);
+                        }
                     });
+                    if (intParticipants.length > 0) {
+                        node.append($('<label class="detail-label">').text(gt('Participants')),
+                                table = $("<table class='task-participants-table'>"));
+                        _(intParticipants).each(function (participant) {
+                            lookupParticipant(node, table, participant);
+                        });
+                    }
+                    if (extParticipants.length > 0) {
+                        node.append($('<label class="detail-label">').text(gt('External participants')),
+                                table = $("<table class='task-participants-table'>"));
+                        _(extParticipants).each(function (participant) {
+                            lookupParticipant(node, table, participant);
+                        });
+                    }
                 });
             }
 

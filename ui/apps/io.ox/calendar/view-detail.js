@@ -166,10 +166,6 @@ define("io.ox/calendar/view-detail",
         if (conf.comment !== '') {
             node.append($("<span>").addClass("comment").text(gt.noI18n(conf.comment)));
         }
-        if (obj.type === 5) {
-            //add external badge
-            node.append($('<div>').append($('<span>').addClass('badge').text(gt('External'))));//div wrapping needed or badge would use the whole line
-        }
         return node;
     }
 
@@ -246,9 +242,16 @@ define("io.ox/calendar/view-detail",
                         .each(function (obj) {
                             plist.append(drawParticipant(obj, confirmations));
                         });
+                    //external Participants get their own section
+                    var extList;
+                    if (external.length > 0) {
+                        participants.append($("<div>")
+                                .addClass("io-ox-label participants-block").text(gt("External participants")),
+                                extList = $("<div>").addClass("participant-list"));
+                    }
                     // loop over external participants
                     _(external).each(function (obj) {
-                        plist.append(drawParticipant(obj, confirmations));
+                        extList.append(drawParticipant(obj, confirmations));
                     });
                     // loop over groups
                     _(groupList)
