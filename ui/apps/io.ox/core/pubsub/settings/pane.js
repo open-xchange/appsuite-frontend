@@ -69,6 +69,9 @@ define('io.ox/core/pubsub/settings/pane',
                     }),
                     $('<button>').addClass('close').html('&times;').click(function (ev) {
                         this.parentElement.remove();
+                        ox.launch('io.ox/settings/main').done(function () {
+                            this.setSettingsPane({id: 'io.ox/core/pubsub'});
+                        });
                     })
                 )
             );
