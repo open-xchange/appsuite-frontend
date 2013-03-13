@@ -150,14 +150,23 @@ define('io.ox/core/pubsub/settings/pane',
         draw: function (baton) {
 
             var data = baton.model.toJSON(),
-                enabled = data.enabled;
+                enabled = data.enabled,
+                dynamicAction;
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
+
+            if (data.source) {
+                // this is a subscription
+                dynamicAction = $('<a href="#" class="action" data-action="refresh">').text(gt('Refresh'));
+            } else if (data.target) {
+                // this is a publication
+                dynamicAction = $('<a href="#" class="action" data-action="edit">').text(gt('Edit'));
+            }
 
             this.addClass('item').append(
                 $('<div class="actions">').append(
                     $('<a href="#" class="close" data-action="remove">').html('&times;'),
-                    $('<a href="#" class="action" data-action="edit">').text(gt('Edit')),
+                    enabled ? dynamicAction : '',
                     $('<a href="#" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable'))
                 ),
                 $('<div class="content">').append(
