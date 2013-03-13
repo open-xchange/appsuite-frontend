@@ -4,5 +4,6 @@
     icon: "tasks.png",
     category: "Productivity",
     settings: true,
-    requires: "tasks"
+    requires: "tasks",
+    index: 1000
 }

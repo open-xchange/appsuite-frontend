@@ -4,5 +4,6 @@
     icon: "files.png",
     category: "Productivity",
     settings: true,
-    requires: "infostore"
+    requires: "infostore",
+    index: 900
 }

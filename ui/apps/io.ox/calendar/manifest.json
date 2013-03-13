@@ -4,5 +4,6 @@
     icon: "calendar.png",
     category: "Productivity",
     settings: true,
-    requires: "calendar"
+    requires: "calendar",
+    index: 800
 }

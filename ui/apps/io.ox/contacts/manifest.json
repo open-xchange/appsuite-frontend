@@ -5,7 +5,8 @@
 	    icon: "addressbook.png",
 	    category: "Basic",
 	    settings: true,
-	    requires: "contacts"
+	    requires: "contacts",
+	    index: 700
 	},
 	{
 		namespace: "io.ox/dev/testing/main",
