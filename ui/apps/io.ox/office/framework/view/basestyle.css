@@ -61,13 +61,13 @@
 i[class^="docs-"] {
     display: inline-block;
     margin: 0;
-    background-image: url(docs-icons-black.png);
     background-origin: content-box;
     vertical-align: middle;
 
-    &.icon-white {
-        background-image: url(docs-icons-white.png);
-    }
+    background-image: url(docs-icons-desktop-black.png);
+    &.icon-white { background-image: url(docs-icons-desktop-white.png); }
+    &.retina { background-image: url(docs-icons-retina-black.png); }
+    &.icon-white.retina { background-image: url(docs-icons-retina-white.png); }
 }
 
 /* give standard Bootstrap icons a minimum width */
