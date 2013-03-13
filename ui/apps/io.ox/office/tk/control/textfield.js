@@ -430,10 +430,10 @@ define('io.ox/office/tk/control/textfield',
     TextField.NumberValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // minimum and maximum
-            min = Utils.getIntegerOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
-            max = Utils.getIntegerOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
+            min = Utils.getNumberOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
+            max = Utils.getNumberOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
             digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
-            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '(\\.[0-9]*)?' : '') + '$');
+            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '([.,][0-9]*)?' : '') + '$');
 
         // base constructor ---------------------------------------------------
 
@@ -442,11 +442,12 @@ define('io.ox/office/tk/control/textfield',
         // methods ------------------------------------------------------------
 
         this.valueToText = function (value) {
+            // TODO L10N of decimal separator
             return _.isFinite(value) ? String(Utils.roundDigits(value, digits)) : '';
         };
 
         this.textToValue = function (text) {
-            var value = parseFloat(text);
+            var value = parseFloat(text.replace(/,/g, '.'));
             return (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
         };
 
