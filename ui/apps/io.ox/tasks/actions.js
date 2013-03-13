@@ -17,8 +17,8 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'text!io.ox/tasks/print.task.html',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, tmpl, configApi) {
+     'io.ox/core/print',
+     'io.ox/core/config'], function (ext, util, links, gt, notifications, print, configApi) {
 
     'use strict';
 
@@ -273,10 +273,7 @@ define('io.ox/tasks/actions',
     new Action('io.ox/tasks/actions/print', {
         id: 'print',
         action: function (baton) {
-            console.log(baton);
-            require(['io.ox/core/print'], function (print) {
-                print.open('tasks', baton.data, {template: 'infostore://70045', id: baton.data.id, folder: baton.data.folder_id || baton.data.folder});
-            });
+            print.open('tasks', baton.data, { template: 'infostore://70045', id: baton.data.id, folder: baton.data.folder_id || baton.data.folder });
         }
     });
 
