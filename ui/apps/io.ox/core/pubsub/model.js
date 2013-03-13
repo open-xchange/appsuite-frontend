@@ -80,6 +80,9 @@ define('io.ox/core/pubsub/model',
                 this.on('remove', function (model, collection, opt) {
                     model.destroy();
                 });
+                this.on('change:enabled', function (model, value, opt) {
+                    model.collection.sort();
+                });
             },
             sync: function (method, collection, options) {
                 if (method !== 'read') return;
@@ -109,7 +112,7 @@ define('io.ox/core/pubsub/model',
              */
             forFolder: filterFolder,
             comparator: function (publication) {
-                return publication.get('displayName');
+                return publication.get('enabled') + publication.get('displayName');
             }
         }),
         Subscriptions = Backbone.Collection.extend({
@@ -117,6 +120,9 @@ define('io.ox/core/pubsub/model',
             initialize: function () {
                 this.on('remove', function (model, collection, opt) {
                     model.destroy();
+                });
+                this.on('change:enabled', function (model, value, opt) {
+                    model.collection.sort();
                 });
             },
             sync: function (method, collection, options) {
@@ -147,7 +153,7 @@ define('io.ox/core/pubsub/model',
              */
             forFolder: filterFolder,
             comparator: function (subscription) {
-                return subscription.get('displayName');
+                return subscription.get('enabled') + subscription.get('displayName');
             }
         }),
         //singleton instances
