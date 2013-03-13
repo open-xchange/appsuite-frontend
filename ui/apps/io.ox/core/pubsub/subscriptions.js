@@ -29,7 +29,7 @@ define('io.ox/core/pubsub/subscriptions',
 
     buildSubscribeDialog = function (baton) {
         var model = new pubsub.Subscription({ folder: baton.data.id, entity: {folder: baton.data.id}, entityModule: baton.data.module }),
-            view = new SubscriptionView({model: model}).render();
+            view = new SubscriptionView({model: model}).render(baton.app);
     },
 
     SubscriptionView = Backbone.View.extend({
@@ -38,8 +38,7 @@ define('io.ox/core/pubsub/subscriptions',
         initialize: function (options) {
             this._modelBinder = new Backbone.ModelBinder();
         },
-        render: function () {
-
+        render: function (app) {
             var self = this,
 
             popup = new dialogs.ModalDialog({async: true})
@@ -58,7 +57,12 @@ define('io.ox/core/pubsub/subscriptions',
                     self.model.save().done(function (id) {
                         api.subscriptions.refresh({id: id, folder: folder}).done(function (data) {
                             notifications.yell('info', gt('Subscription successfully created.'));
-                            popup.close();
+                            app.folder.set(folder).done(function () {
+                                app.folderView.idle().repaint().done(function () {
+                                    self.select(folder);
+                                });
+                                popup.close();
+                            });
                         }).fail(function (error) {
                             popup.idle();
                             popup.getBody().find('.control-group:not(:first)').addClass('error');
