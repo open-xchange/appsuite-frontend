@@ -140,4 +140,9 @@
 		left: -3px;
 		position: relative;
 	}
+	
+	.participants-table-colorsquare {
+		width: 13px;
+		height: 13px;
+	}
 }
