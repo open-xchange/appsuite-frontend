@@ -124,6 +124,16 @@ define('io.ox/core/pubsub/settings/pane',
         return folderAPI.getBreadcrumb(folder, options);
     }
 
+    function drawDisplayName(name, url) {
+        var nameNode = $('<span>').text(name);
+
+        if (!url) {
+            return nameNode.addClass('disabled');
+        }
+
+        return nameNode.after(' (', $('<a>', { href: url, target: '_blank' }).text(gt('Link')), ')');
+    }
+
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
@@ -141,9 +151,7 @@ define('io.ox/core/pubsub/settings/pane',
                 ),
                 $('<div class="content">').append(
                     $('<div class="name">').append(
-                        enabled ?
-                            $('<a>', { href: baton.model.url(), target: '_blank' }).text(data.displayName) :
-                            $('<span class="disabled">').text(data.displayName)
+                        drawDisplayName(data.displayName, enabled ? baton.model.url() : "")
                     ),
                     createPathInformation(baton.model)
                 )
