@@ -32,7 +32,7 @@ define('io.ox/core/pubsub/settings/pane',
         id: 'extensions',
         draw: function (baton) {
             this.append(
-                $('<div class="clear-title">').text(baton.title),
+                $('<div class="clear-title">').text(baton.data.title),
                 $('<div class="settings sectiondelimiter">')
             );
 
