@@ -175,7 +175,7 @@ define('io.ox/mail/actions',
     });
 
     //print details
-    new Action('io.ox/mail/actions/print', {
+    new Action('io.ox/mail/actions/printclient', {
         id: 'print',
         requires: 'some',
         multiple: function (list, baton) {
@@ -192,17 +192,81 @@ define('io.ox/mail/actions',
     });
 
     // print via server
-    new Action('io.ox/mail/actions/printserver', {
-        id: 'printserver',
+    new Action('io.ox/mail/actions/print', {
+        id: 'print',
         requires: 'some',
         multiple: function (list, baton) {
-            var data = _.first(baton.data),
-                win = print.open('mail', data, {
-                    template: 'infostore://70070',
-                    id: data.id,
-                    folder: data.folder_id
-                });
-        }
+                //template syntax: http://freemarker.org/docs/
+                var data = baton.data;
+
+                //single vs. multi
+                if (list.length === 1) {
+                    var win = print.open('mail', data, {
+                            template: 'infostore://70149',
+                            id: data.id,
+                            folder: data.folder_id,
+                            view: 'text',
+                            format: 'template'
+                        });
+                } else {
+
+                    //TODO: switch to serverside printing
+                    ext.point('io.ox/mail/actions/printclient')
+                    .invoke('multiple', null, list, baton);
+
+                    //serverside
+                    /*
+                    require(['io.ox/core/http'], function (http) {
+                        var getList = function (list) {
+                            return api.getList(list)
+                            .pipe(function (data) {
+                                //sort and map for print request
+                                return _.chain(data)
+                                        .sortBy(function (mail) {
+                                            return 1 - mail.received_date;
+                                        })
+                                        .map(function (mail) {
+                                            return { id: mail.id, folder: mail.folder_id };
+                                        })
+                                        .value();
+                            });
+                        };
+
+                        var getPrint = function (min) {
+                            return http.PUT({
+                                module: 'mail',
+                                params: {
+                                    action: 'list',
+                                    template: 'infostore://70170',
+                                    view: 'text',
+                                    //format: 'template',
+                                    columns: '102,600,601,602,603,604,605,607,610,611,614,652'
+                                },
+                                data: min
+                            });
+                        };
+
+                        //get received_date for sorting
+                        getList(list)
+                        .pipe(function (min) {
+                            //get content for popup
+                            getPrint(min)
+                            .done(function (print) {
+                                console.warn(print);
+                                debugger;
+                            }).fail(function (resp) {
+                                console.error(resp);
+                                debugger;
+                            });
+                        })
+                        .fail(function (resp) {
+                            console.error(resp);
+                            debugger;
+                        });
+                    });
+                */
+                }
+            }
     });
 
     function moveAndCopy(type, label, success) {
@@ -861,17 +925,6 @@ define('io.ox/mail/actions',
         label: gt('Print'),
         ref: 'io.ox/mail/actions/print'
     }));
-
-    /*
-    //development
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1052,
-        prio: 'lo',
-        id: 'printserver',
-        label: gt('Print' + ': ' + 'Server'),
-        ref: 'io.ox/mail/actions/printserver'
-    }));
-    */
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,

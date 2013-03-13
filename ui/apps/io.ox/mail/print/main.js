@@ -134,26 +134,6 @@ define('io.ox/mail/print/main',
                 return '<link rel="stylesheet" href="' + getUrl('print.mail') + '" media="all" >';
             },
             /**
-             * use server side printing
-             * @param  {object} list
-             * @param  {object} data    baton.data
-             * @return {deferred} win
-             */
-            printServer = function (list, data) {
-                //TODO: support multi
-                var def = new $.Deferred(),
-                    data = _.first(data);
-                require(['io.ox/core/print']).done(function (print) {
-                    var win = print.open('mail', data, {
-                        template: 'infostore://70070',
-                        id: data.id,
-                        folder: data.folder_id
-                    });
-                    def.resolve(win);
-                });
-                return def;
-            },
-            /**
              * use client side printing
              * @param  {object} list
              * @param  {object} data    baton.data
@@ -168,8 +148,8 @@ define('io.ox/mail/print/main',
                 $('<div>').load(encodeURI(ox.abs + ox.root + '/apps/io.ox/mail/print/print.mail.tmpl'), function (filecontent) {
                         var sorter = {};
                         $container = $('<div>');
-                        $template = $($(filecontent.substr(27))[5]);
 
+                        $template = $($(filecontent.substr(27))[7]);
                         //append content for listelem
                         var defs = _(listelems)
                             .map(function (data, index) {
@@ -204,7 +184,7 @@ define('io.ox/mail/print/main',
              */
             getContent: function (list, data, options) {
                 init(options);
-                return opt.serverside ? printServer(list, data) : printClient(list, data);
+                return printClient(list, data);
             }
         };
     };
