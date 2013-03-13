@@ -59,6 +59,33 @@ define('io.ox/core/pubsub/model',
                 this.attributes.source = source.id;
                 this.attributes[this.attributes.source] = obj || {};
             },
+            /**
+             * Get the state concerning refresh.
+             *
+             * Knows three different states:
+             * - 'ready' - ready to perform a refresh
+             * - 'pending' - performing a refresh at the moment
+             * - 'done' - refresh is already done
+             *
+             * @return {string} - the state
+             */
+            refreshState: function () {
+                return this._refresh ? this._refresh.state() : 'ready';
+            },
+            performRefresh: function () {
+                var def = $.Deferred();
+
+                if (this.refreshState() === 'ready') {
+                    api.subscriptions.refresh(this.toJSON());
+                    this._refresh = def;
+                }
+
+                setTimeout(function () {
+                    def.resolve();
+                }, 5000);
+
+                return this._refresh;
+            },
             syncer: {
                 create: function (model) {
                     return api.subscriptions.create(model.attributes);
