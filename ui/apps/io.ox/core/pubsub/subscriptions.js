@@ -58,9 +58,7 @@ define('io.ox/core/pubsub/subscriptions',
                         api.subscriptions.refresh({id: id, folder: folder}).done(function (data) {
                             notifications.yell('info', gt('Subscription successfully created.'));
                             app.folder.set(folder).done(function () {
-                                app.folderView.idle().repaint().done(function () {
-                                    self.select(folder);
-                                });
+                                app.folderView.idle().repaint();
                                 popup.close();
                             });
                         }).fail(function (error) {
