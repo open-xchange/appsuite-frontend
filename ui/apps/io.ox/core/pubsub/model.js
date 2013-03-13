@@ -173,7 +173,6 @@ define('io.ox/core/pubsub/model',
 
     function filterFolder(filter, collection) {
         return collection.filter(function (e) {
-            console.log((e.get('entity') || {folder: e.get('folder')}).folder === filter);
             return (e.get('entity') || {folder: e.get('folder')}).folder === filter;
         });
     }
