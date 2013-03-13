@@ -42,6 +42,7 @@ define("plugins/portal/tasks/register",
             var tasks = _(baton.data).filter(function (task) {
                 return task.end_date !== null && task.status !== 3;
             });
+            tasks = tasks.slice(0, 10);
 
             if (tasks.length === 0) {
                 this.append(content.text(gt("You don't have any tasks that are either due soon or overdue.")));

@@ -54,12 +54,12 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             },
             search: {
                 action: 'search',
-                columns: '1,20,200,202,220,300,301',
+                columns: '1,20,101,200,202,203,220,300,301,309',
                 sort: '202',
                 order: 'asc',
                 timezone: 'UTC',
                 getData: function (query) {
-                    return { folder: query.folder, pattern: query.pattern };
+                    return { folder: query.folder, pattern: query.pattern, end: query.end, start: query.start };
                 }
             }
         }
@@ -340,22 +340,9 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     
     //gets every task in users private folders. Used in Portal tile
     api.getAllFromAllFolders = function () {
-        return http.PUT({
-            module: 'folders',
-            params: {
-                action: 'allVisible',
-                content_type: 'tasks',
-                columns: "1"
-            }
-        }).pipe(function (response) {
-            //get the data
-            return $.when.apply($,
-                _(response['private']).map(function (value) {
-                    return api.getAll({folder: value[0]}, false);//no caching here otherwise refresh uses old cache when moving a task
-                })
-            ).pipe(function () {
-                return _.flatten(_.toArray(arguments), true);
-            });
+        return api.search({pattern: '', end: _.now()})
+            .pipe(function (response) {
+            return response;
         });
     };
 
