@@ -27,7 +27,7 @@ define('io.ox/core/pubsub/settings/pane',
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
         SettingView = point.createView({ className: 'pubsub settings' }),
-        filter;
+        filter, folderState;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -85,6 +85,10 @@ define('io.ox/core/pubsub/settings/pane',
         id: 'extensions',
         draw: function (baton) {
             filter = {folder: baton.options.folder};
+            folderState = {
+                isPublished: folderAPI.is('published', baton.options.data || {}),
+                isSubscribed: folderAPI.is('subscribed', baton.options.data || {})
+            };
 
             this.append(
                 $('<div class="clear-title">').text(baton.data.title),
@@ -263,7 +267,7 @@ define('io.ox/core/pubsub/settings/pane',
         if (filteredList.length === 0) {
             hintNode = $('<div>').addClass('well');
 
-            if (filter.folder) {
+            if (filter.folder && (folderState.isPublished || folderState.isSubscribed)) {
                 hintNode.text(gt('You don’t have any accessible items for this folder.'));
             } else {
                 hintNode.text(gt('This list does not contain any items.'));
