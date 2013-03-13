@@ -82,7 +82,7 @@ define('io.ox/core/pubsub/model',
 
                 setTimeout(function () {
                     def.resolve();
-                }, 5000);
+                }, 50000);
 
                 return this._refresh;
             },
