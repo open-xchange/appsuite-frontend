@@ -238,16 +238,14 @@ define('io.ox/core/pubsub/subscriptions',
             var node;
             this.append(
                 $('<div>').addClass('control-group').append(
-                    $('<label>').addClass('control-label').attr('for', 'targetfolder').text(gt('Target')),
                     $('<div>').addClass('controls').append(
-                        $('<select>').append(
-                                $('<option>').val(baton.data.folder).text(gt('New folder')),
-                                $('<option>').val('').text(gt('Selected folder'))
-                            ).on('change', function () {
-                                if (!$(this).val()) {
+                        $('<label>').addClass('checkbox').text(gt('Add new folder for this subscription')).append(
+                            $('<input type="checkbox">').attr('checked', 'checked').on('change', function () {
+                                if (!$(this).attr('checked')) {
                                     baton.newFolder = false;
                                 }
                             })
+                        )
                     )
                 )
             );
