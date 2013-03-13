@@ -262,16 +262,24 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         index: 400,
         draw: function (baton) {
             if (baton.view.editMode) {
+                var link;
+                if (baton.data.enabled) {
+                    link = $('<a class="url-value">')
+                        .attr({ id: 'url-value', href: baton.target.url, target: '_blank' })
+                        .text(_.noI18n(baton.target.url));
+                } else {
+                    link = $('<div class="url-value">')
+                        .css('color', '#aaa')
+                        .text(_.noI18n(baton.target.url));
+                }
+                
                 this.append(
                     $('<div class="control-group">').append(
                         $('<label class="url-label control-label" for="url-value">').text(_.noI18n('URL')),
-                        $('<div class="controls">').append(
-                            $('<a class="url-value">')
-                            .attr({ id: 'url-value', href: baton.target.url, target: '_blank' })
-                            .text(_.noI18n(baton.target.url))
-                        )
+                        $('<div class="controls">').append(link)
                     )
                 );
+                
             }
         }
     });
