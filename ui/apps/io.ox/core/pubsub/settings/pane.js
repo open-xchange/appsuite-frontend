@@ -218,7 +218,10 @@ define('io.ox/core/pubsub/settings/pane',
      * @param {object} - model behind the list
      */
     function setupList(node, collection) {
-        _.each(collection.forFolder(filter), function (model) {
+        var filteredList = collection.forFolder(filter),
+            hintNode;
+
+        _.each(filteredList, function (model) {
             node.append(
                 createPubSubItem(model).render().el
             );
@@ -232,12 +235,24 @@ define('io.ox/core/pubsub/settings/pane',
 
             var item = createPubSubItem(model).render().el;
 
+            if (hintNode) { hintNode.remove(); }
+
             if (filteredIndex === 0) {
                 node.prepend(item);
             } else {
                 node.children('li:nth-child(' + options.index + ')').after(item);
             }
         });
+        if (filteredList.length === 0) {
+            hintNode = $('<div>').addClass('well');
+
+            if (filter.folder) {
+                hintNode.text(gt('You don’t have any accessible items for this folder.'));
+            } else {
+                hintNode.text(gt('This list does not contain any items.'));
+            }
+            node.after(hintNode);
+        }
     }
 
     point.extend({
