@@ -60,9 +60,9 @@ define('io.ox/office/framework/app/basecontroller',
                 enabled = true,
                 // parent item whose value/state is needed to resolve the own value/state
                 parentKey = Utils.getStringOption(definition, 'parent'),
-                // handler for enabled state
+                // handler for enabled state (default to constant true if missing)
                 enableHandler = Utils.getFunctionOption(definition, 'enable', true),
-                // handler for value getter
+                // handler for value getter (default to identity to forward parent value)
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
@@ -237,7 +237,7 @@ define('io.ox/office/framework/app/basecontroller',
          *  All callback functions will be executed in the context of the Item
          *  class instance. The following attributes are supported:
          *  @param {String} [definition.parent]
-         *      The name of an item that will be used to calculate intermediate
+         *      The key of an item that will be used to calculate intermediate
          *      results for the getter function and enabler function (see
          *      below). The key feature of parent items is that if a controller
          *      enables or updates multiple items at once, the getter or
@@ -248,13 +248,9 @@ define('io.ox/office/framework/app/basecontroller',
          *  @param {Function} [definition.enable]
          *      Predicate function returning true if the item is enabled, and
          *      false otherwise. If a parent item has been specified (see
-         *      above), the cached return value of its enabler function will be
-         *      passed to this function. This means that the enabler function
-         *      of parent items may return other values then booleans, if the
-         *      enablers of items using the parent item will calculate a
-         *      boolean value from that result. Defaults to a function that
-         *      returns always true; or, if a parent item has been registered,
-         *      that returns its cached value.
+         *      above) and it returned false, the item is disabled already, and
+         *      this function will not be called anymore. Defaults to a
+         *      function that always returns true.
          *  @param {Function} [definition.get]
          *      Getter function returning the current value of the item. Can be
          *      omitted for one-way action items (actions without a return
