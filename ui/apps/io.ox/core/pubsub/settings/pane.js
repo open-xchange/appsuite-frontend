@@ -39,6 +39,38 @@ define('io.ox/core/pubsub/settings/pane',
         });
     }
 
+    function drawFilterInfo(folder) {
+        if (!folder) { return ""; }
+
+        var node = $('<div>').addClass('alert alert-info');
+
+        folderAPI.getPath({folder: folder}).done(function (folder) {
+            var folderNode = $('<span>').text(
+                _(folder).chain()
+                .map(function (folder) {
+                    return folder.title;
+                })
+                .reduce(function (memo, name) {
+                    return memo + '/' + name;
+                }).value());
+
+            folderNode.addClass('folder');
+
+            node.append(
+                gt('Only showing items related to folder'), ' ',
+                folderNode,
+                $('<button>').addClass('close').text('Remove Filter').click(function (ev) {
+                    this.parentElement.remove();
+                    ox.launch('io.ox/settings/main').done(function () {
+                        this.setSettingsPane({id: 'io.ox/core/pubsub'});
+                    });
+                })
+            );
+        });
+
+        return node;
+    }
+
     ext.point('io.ox/core/pubsub/settings/detail').extend({
         index: 100,
         id: 'extensions',
@@ -46,6 +78,7 @@ define('io.ox/core/pubsub/settings/pane',
             this.append(
                 $('<div class="clear-title">').text(baton.data.title),
                 $('<div class="settings sectiondelimiter">'),
+                drawFilterInfo(baton.options.folder),
                 new SettingView({
                     publications: model.publications().forFolder({folder: baton.options.folder}),
                     subscriptions: model.subscriptions().forFolder({folder: baton.options.folder})
