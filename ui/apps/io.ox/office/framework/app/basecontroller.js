@@ -267,12 +267,6 @@ define('io.ox/office/framework/app/basecontroller',
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
          *      Defaults to an empty function.
-         *  @param {Function} [definition.async=false]
-         *      If set to true, the setter function executes asynchronously and
-         *      MUST return a Deferred object. As long as the setter function
-         *      runs, the item will be disabled. When the Deferred object has
-         *      been resolved or rejected, the item will be enabled and
-         *      updated again.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.
