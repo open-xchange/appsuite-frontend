@@ -289,7 +289,10 @@ define('io.ox/core/pubsub/settings/pane',
         if (filteredList.length === 0) {
             hintNode = $('<div>').addClass('well');
 
-            if (filter.folder && (folderState.isPublished || folderState.isSubscribed)) {
+            if (filter.folder && !collection.isEmpty() &&//we have a filter set and collection is not empty
+                ((folderState.isPublished && collection.first().has('target')) || //dealing with publications
+                (folderState.isSubscribed && collection.first().has('source'))) // dealing with subscriptions
+               ) {
                 hintNode.text(gt('You don’t have any accessible items for this folder.'));
             } else {
                 hintNode.text(gt('This list does not contain any items.'));
