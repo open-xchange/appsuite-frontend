@@ -877,9 +877,9 @@ define('io.ox/core/tk/folderviews',
         index: 200,
         id: 'published',
         customize: function (data) {
-            if (api.is('published', data) && capabilities.has('publication')) {
+            if (capabilities.has('publication') && api.is('published|subscribed', data)) {
                 this.find('.folder-label').append(
-                    $('<i class="icon-rss folder-is-published">').attr('title', gt('Published'))
+                    $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                     .on('click', { folder: data.id }, openPubSubSettings)
                 );
             }

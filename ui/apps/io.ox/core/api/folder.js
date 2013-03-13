@@ -628,6 +628,8 @@ define('io.ox/core/api/folder',
                         return false;
                     case 'published':
                         return !!data['com.openexchange.publish.publicationFlag'];
+                    case 'subscribed':
+                        return !!data['com.openexchange.subscribe.subscriptionFlag'];
                     case 'accessible':
                         // maybe need a better word. It's shared TO others
                         if (data.permissions.length <= 1) {
