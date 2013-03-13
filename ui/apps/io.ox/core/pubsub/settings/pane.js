@@ -16,16 +16,28 @@ define('io.ox/core/pubsub/settings/pane',
          'io.ox/core/pubsub/model',
          'io.ox/backbone/views',
          'io.ox/core/api/folder',
+         'io.ox/core/tk/dialogs',
          'settings!io.ox/core/pubsub',
          'gettext!io.ox/core/pubsub',
          'less!io.ox/core/pubsub/style.less'
         ],
-         function (ext, model, views, folderAPI, settings, gt) {
+         function (ext, model, views, folderAPI, dialogs, settings, gt) {
 
     'use strict';
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
-        SettingView = point.createView({className: 'pubsub settings'});
+        SettingView = point.createView({ className: 'pubsub settings' });
+
+    function openFileDetailView(popup, e, target) {
+        e.preventDefault();
+        var cid = target.attr('data-cid'), obj = _.cid(cid);
+        popup.busy();
+        require(['io.ox/files/api', 'io.ox/files/list/view-detail'], function (api, view) {
+            api.get(obj).done(function (data) {
+                popup.idle().append(view.draw(data));
+            });
+        });
+    }
 
     ext.point('io.ox/core/pubsub/settings/detail').extend({
         index: 100,
@@ -33,13 +45,15 @@ define('io.ox/core/pubsub/settings/pane',
         draw: function (baton) {
             this.append(
                 $('<div class="clear-title">').text(baton.data.title),
-                $('<div class="settings sectiondelimiter">')
+                $('<div class="settings sectiondelimiter">'),
+                new SettingView({
+                    publications: model.publications().forFolder({folder: baton.options.folder}),
+                    subscriptions: model.subscriptions().forFolder({folder: baton.options.folder})
+                })
+                .render().$el
             );
-
-            new SettingView({
-                publications: model.publications().forFolder({folder: baton.options.folder}),
-                subscriptions: model.subscriptions().forFolder({folder: baton.options.folder})
-            }).render().$el.appendTo(this);
+            // add side popup for single file publications
+            new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
         }
     });
 
@@ -47,7 +61,8 @@ define('io.ox/core/pubsub/settings/pane',
     var mapping = { contacts: 'io.ox/contacts', calendar: 'io.ox/calendar', infostore: 'io.ox/files' };
 
     function createPathInformation(model) {
-        var opts = {
+
+        var options = {
             handler: function (id, data) {
                 ox.launch(mapping[data.module] + '/main', { folder: id }).done(function () {
                     this.folder.set(id);
@@ -58,7 +73,22 @@ define('io.ox/core/pubsub/settings/pane',
             last: false // make last item a link (responding to handler function)
         };
 
-        return folderAPI.getBreadcrumb(model.get('folder') || model.get('entity').folder, opts);
+        var folder, entity;
+
+        if (model.has('folder')) {
+            // subscriptions have a folder on top-level
+            folder = model.get('folder');
+        } else {
+            // publications have a property 'entity'
+            entity = model.get('entity');
+            if (entity.id) {
+                // single file
+                options.leaf = $('<a href="#" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
+            }
+            folder = entity.folder;
+        }
+
+        return folderAPI.getBreadcrumb(folder, options);
     }
 
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({

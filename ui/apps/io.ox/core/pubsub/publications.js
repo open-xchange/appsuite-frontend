@@ -20,25 +20,25 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                           'io.ox/core/notifications',
                                           'io.ox/core/tk/dialogs',
                                           'less!io.ox/core/pubsub/style.less'], function (gt, pubsub, ext, forms, api, templApi, notifications, dialogs)  {
-    
+
     'use strict';
-    
+
     var buildPublishDialog = function (baton) {
         //prepare data
-        
+
         //check which baton we have standard or baton from folderview
         //folderview means new publication otherwise its an existing one
         if (baton.model) {
             //buildView
             var view = new PublicationView({model: baton.model});
-            
+
             view.render();
         } else {
             api.publicationTargets.getAll().done(function (data) {
                 var target = '',
                     targetObj = {},
                     module = baton.data.module || 'infostore/object';//infostore baton has no module etc...maybe it will be added later
-                    
+
                 _(data).each(function (obj) {
                     if (obj.module === module)   {
                         target = obj.id;
@@ -54,14 +54,14 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 } else {
                     attr.entity = {folder: baton.data.id};
                 }
-                
+
                 attr[target] = targetObj;
-                
+
                 //buildModel
                 var model = new pubsub.Publication(attr);
                 //buildView
                 var view = new PublicationView({model: model});
-                
+
                 view.render();
             });
         }
@@ -77,17 +77,17 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             } else {
                 this.editMode = false;
             }
-            
+
             if (this.model.attributes.entityModule === 'infostore/object') {
                 this.infostoreItem = true;
             }
-            
+
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
             var self = this;
             //build popup
-            var popup = new dialogs.ModalDialog({async: true})
+            var popup = new dialogs.ModalDialog({ async: true, easyOut: true })
                 .addPrimaryButton('publish', gt('Publish'))
                 .addButton('cancel', gt('Cancel'));
             //Header
@@ -98,9 +98,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
             //Body
             popup.getBody().addClass('form-horizontal publication-dialog');
-            
+
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
-            
+
             popup.on('publish', function (action) {
                 self.model.save().done(function (id) {
                     notifications.yell('success', gt("Publication has been added"));
@@ -163,14 +163,14 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
 
         }
     });
-    
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'siteName',
         index: 100,
         draw: function (baton) {
             var node,
                 control;
-            
+
             this.append(control = $('<div>').addClass('control-group siteName-control').append(
                             $('<label>').addClass('siteName-label control-label').text(gt('Name')).attr('for', 'siteName-value'),
                             $('<div>').addClass('controls').append(
@@ -191,13 +191,13 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             node.val(baton.target.siteName);
         }
     });
-    
+
     function buildTemplates(node, list) {
         for (var i = 0; i < list.length; i++) {
             $('<option>').text(list[i]).val(list[i]).appendTo(node);
         }
     }
-    
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'template',
         index: 200,
@@ -223,7 +223,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 baton.popup.close();
                 notifications.yell('error', gt("No matching templates on this Server"));
             }
-            
+
             //prefill
             if (baton.target.template === '') {//set to first item in selection
                 baton.target.template = node.val();
@@ -232,7 +232,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
         }
     });
-    
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'cypher',
         index: 300,
@@ -256,20 +256,26 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
         }
     });
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'url',
         index: 400,
         draw: function (baton) {
             if (baton.view.editMode) {
-                this.append($('<div>').addClass('control-group').append(
-                        $('<label>').addClass('url-label control-label').text(_.noI18n('URL')).attr('for', 'url-value'),
-                        $('<div>').addClass('controls').append(
-                            $('<a>').attr({id: 'url-value', href: baton.target.url}).addClass('url-value').text(_.noI18n(baton.target.url))
-                            )));
+                this.append(
+                    $('<div class="control-group">').append(
+                        $('<label class="url-label control-label" for="url-value">').text(_.noI18n('URL')),
+                        $('<div class="controls">').append(
+                            $('<a class="url-value">')
+                            .attr({ id: 'url-value', href: baton.target.url, target: '_blank' })
+                            .text(_.noI18n(baton.target.url))
+                        )
+                    )
+                );
             }
         }
     });
-    
+
     function sendInvitation(baton) {
         require(['io.ox/mail/write/main'], function (m) {
             //predefined data for mail
@@ -320,7 +326,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                         baton.model.attributes.invite = false;
                                     }
                                 }));
-                
+
                 var wrapper = this.find('div.checkboxes');
                 if (wrapper.length === 0)  {//build wrapper
                     wrapper = this.append($('<div>').addClass('control-group').append(
@@ -331,7 +337,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
         }
     });
-    
+
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
         id: 'legalinformation',
         index: 600,
@@ -346,7 +352,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                'Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
-            
+
             var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
@@ -358,7 +364,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             }
         }
     });
-    
+
     return {
         buildPublishDialog: buildPublishDialog
     };

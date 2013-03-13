@@ -853,6 +853,7 @@ define('io.ox/core/api/folder',
      * @param {object} - options:
      * {
      *     exclude: {Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
+     *     leaf: {DOMnode} - An extra node that is appended as last crumb
      *     last: {boolean} - true: last item should have the active class set (default)
      *                     - no relevance if subfolder option is set to true and element is "clickable" (*)
      *                     - false: same as true if element is "clickable" (*)
@@ -944,6 +945,11 @@ define('io.ox/core/api/folder',
                             add.call(ul, o, i, list, options);
                         }
                     });
+                    if (options.leaf) {
+                        ul.append(
+                            $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
+                        );
+                    }
                     ul = null;
                 });
             }
