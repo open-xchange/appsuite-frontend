@@ -51,6 +51,14 @@ define('io.ox/core/pubsub/model',
             url: function () {
                 return this.attributes[this.attributes.source].url;
             },
+            source: function () {
+                return this.attributes[this.attributes.source];
+            },
+            setSource: function (source, obj) {
+                delete this.attributes[this.attributes.source];
+                this.attributes.source = source.id;
+                this.attributes[this.attributes.source] = obj || {};
+            },
             syncer: {
                 create: function (model) {
                     return api.subscriptions.create(model.attributes);
@@ -163,6 +171,17 @@ define('io.ox/core/pubsub/model',
             }
             if ((obj[obj.target] || {}).siteName === '') {
                 errors.add(gt('Publication must have a site.'));
+            }
+        }
+    });
+
+    ext.point('io.ox/core/pubsub/subscription/validation').extend({
+        validate: function (obj, errors) {
+            var ref = obj[obj.source];
+            if (!ref) { errors.add(gt('Model is incomplete.')); return; }
+            if (ref === {} || (!ref.login || !ref.password) && !ref.account && !ref.url) {
+                errors.add(gt('You have to enter a username and password to subscribe.'));
+                return;
             }
         }
     });

@@ -225,16 +225,16 @@ define('io.ox/core/commons-folderview',
                 }
             }
         });
-        
+
         function publish(e) {
             e.preventDefault();
             require(['io.ox/core/pubsub/publications'], function (publications) {
                 publications.buildPublishDialog(e.data.baton);
             });
         }
-        
+
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'pubilcations',
+            id: 'publications',
             index: 260,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
@@ -244,6 +244,30 @@ define('io.ox/core/commons-folderview',
 
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
                     link.on('click', { baton: baton }, publish);
+                } else {
+                    link.addClass('disabled').on('click', $.preventDefault);
+                }
+            }
+        });
+
+        function subscribe(e) {
+            e.preventDefault();
+            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                subscriptions.buildSubscribeDialog(e.data.baton);
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'subscribe',
+            index: 270,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscribe'));
+                this.append(
+                    $('<li>').append(link)
+                );
+
+                if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
+                    link.on('click', { baton: baton }, subscribe);
                 } else {
                     link.addClass('disabled').on('click', $.preventDefault);
                 }
