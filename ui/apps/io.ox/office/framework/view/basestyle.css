@@ -509,7 +509,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 left: -1px;
                 right: -1px;
                 margin-right: 0;
-                background: #222;
+                background: fade(white, 10%);
                 .box-shadow(5px 20px 20px -20px fade(white, 10%) inset);
                 .border-radius(0);
 
