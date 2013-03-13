@@ -112,7 +112,7 @@ define('io.ox/core/pubsub/model',
              */
             forFolder: filterFolder,
             comparator: function (publication) {
-                return publication.get('enabled') + publication.get('displayName');
+                return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
             }
         }),
         Subscriptions = Backbone.Collection.extend({
