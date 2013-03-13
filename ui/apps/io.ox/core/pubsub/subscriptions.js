@@ -49,26 +49,14 @@ define('io.ox/core/pubsub/subscriptions',
             popup.getHeader().append($('<h4>').text(gt('Subscribe')));
 
             api.sources.getAll().done(function (data) {
-                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup });
-                popup.getBody().addClass('form-horizontal');
-                ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
-                popup.show();
-                popup.on('subscribe', function (action) {
-                    popup.busy();
-                    var invalid;
-                    _.each(popup.getBody().find('input:not([type=checkbox])'), function (input) {
-                        if ($(input).val() === '') {
-                            $(input).closest('.control-group').addClass('error');
-                            popup.idle();
-                            invalid = true;
-                        } else {
-                            $(input).closest('.control-group').removeClass('error');
-                        }
-                    });
-                    if (invalid) { return; }
+                var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
+
+                function saveModel() {
+
                     notifications.yell('info', gt('Checking credentials... This may take a few seconds.'));
+                    var folder = self.model.attributes.folder;
                     self.model.save().done(function (id) {
-                        api.subscriptions.refresh({id: id}).done(function (data) {
+                        api.subscriptions.refresh({id: id, folder: folder}).done(function (data) {
                             notifications.yell('info', gt('Subscription successfully created.'));
                             popup.close();
                         }).fail(function (error) {
@@ -88,6 +76,46 @@ define('io.ox/core/pubsub/subscriptions',
                         }
 
                     });
+                }
+
+                popup.getBody().addClass('form-horizontal');
+                ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
+                popup.show();
+                popup.on('subscribe', function (action) {
+                    popup.busy();
+                    var invalid;
+                    _.each(popup.getBody().find('input'), function (input) {
+                        if (!$(input).val()) {
+                            $(input).closest('.control-group').addClass('error');
+                            popup.idle();
+                            invalid = true;
+                        } else {
+                            $(input).closest('.control-group').removeClass('error');
+                        }
+                    });
+                    if (invalid) { return; }
+
+                    if (baton.newFolder) {
+                        var service = _.first(_(baton.services).select(function (t) {
+                            return t.id === baton.model.get('source');
+                        }));
+
+                        folderApi.create({
+                            folder: self.model.attributes.folder,
+                            data: {
+                                title: service.displayName || gt('New Folder'),
+                                module: self.model.attributes.entityModule
+                            }
+                        })
+                        .pipe(function (folder) {
+                            self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
+
+                            saveModel();
+                        });
+                    } else {
+                        saveModel();
+                    }
+
                 });
             });
 
@@ -106,20 +134,20 @@ define('io.ox/core/pubsub/subscriptions',
 
     function buildForm(node, baton) {
         node.empty();
-        var service = _(baton.services).select(function (t) {
+        var service = _.first(_(baton.services).select(function (t) {
             return t.id === baton.model.get('source');
-        });
+        }));
 
         function setSource(id) {
-            baton.model.setSource(service[0], { 'account': parseInt(id, 10) });
+            baton.model.setSource(service, { 'account': parseInt(id, 10) });
         }
 
         function oauth() {
             var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-            return keychainApi.createInteractively(service[0].displayName.toLowerCase(), win);
+            return keychainApi.createInteractively(service.displayName.toLowerCase(), win);
         }
 
-        _.each(service[0].formDescription, function (fd) {
+        _.each(service.formDescription, function (fd) {
             var controls;
             if (fd.widget === 'oauthAccount') {
                 var accounts = _.where(keychainApi.getAll(), { serviceId: fd.options.type });
@@ -135,6 +163,7 @@ define('io.ox/core/pubsub/subscriptions',
                             $('<option>').text(account.displayName).val(account.id)
                         );
                     });
+                    // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
                     controls = $('<button>').addClass('btn').text(gt('Add new account')).on('click', function () {
@@ -150,20 +179,20 @@ define('io.ox/core/pubsub/subscriptions',
             }
             node.append(
                 $('<div>').addClass('control-group').append(
-                    $('<label>').addClass('service-label control-label').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
+                    $('<label>').addClass('control-label').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
                     $('<div>').addClass('controls').append(controls)
                 )
             );
         });
         var source = {};
-        node.on('change blur', 'input', function (e) {
+        node.on('change blur', 'input[type="text"], input[type="password"]', function (e) {
             var cgroup = $(this).closest('.control-group');
-            if ($(this).val() === '' || $(this).val() === undefined) {
+            if (!$(this).val()) {
                 cgroup.addClass('error');
             } else {
                 cgroup.removeClass('error');
                 source[$(this).attr('name')] = $(this).val();
-                baton.model.setSource(service[0], source);
+                baton.model.setSource(service, source);
             }
         });
     }
@@ -175,9 +204,9 @@ define('io.ox/core/pubsub/subscriptions',
             var node, userform;
 
             this.append($('<div>').addClass('control-group').append(
-                $('<label>').addClass('service-label control-label').attr('for', 'service-value').text(gt('Source')),
+                $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
-                    node = $('<select>').attr('id', 'service-value').addClass('service-value').on('change', function () {
+                    node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
                         baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
                         buildForm(userform, baton);
                     }))));
@@ -201,8 +230,31 @@ define('io.ox/core/pubsub/subscriptions',
     });
 
     ext.point(POINT + '/dialog').extend({
-        id: 'durationinformation',
+        id: 'targetfolder',
         index: 200,
+        draw: function (baton) {
+            var node;
+            this.append(
+                $('<div>').addClass('control-group').append(
+                    $('<label>').addClass('control-label').attr('for', 'targetfolder').text(gt('Target')),
+                    $('<div>').addClass('controls').append(
+                        $('<select>').append(
+                                $('<option>').val(baton.data.folder).text(gt('New folder')),
+                                $('<option>').val('').text(gt('Selected folder'))
+                            ).on('change', function () {
+                                if (!$(this).val()) {
+                                    baton.newFolder = false;
+                                }
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/dialog').extend({
+        id: 'durationinformation',
+        index: 300,
         draw: function (baton) {
 
             var fullNode = $('<div>').addClass('alert alert-info').append(
