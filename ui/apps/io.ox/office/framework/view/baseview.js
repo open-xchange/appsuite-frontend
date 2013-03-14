@@ -195,7 +195,7 @@ define('io.ox/office/framework/view/baseview',
             if (_.isFunction(grabFocusHandler)) {
                 grabFocusHandler.call(this);
             } else {
-                thios.getAppPaneNode().focus();
+                this.getAppPaneNode().focus();
             }
             return this;
         };
