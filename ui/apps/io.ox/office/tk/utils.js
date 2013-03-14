@@ -882,6 +882,27 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Sets a CSS formatting attribute with all browser-specific prefixes at
+     * the passed element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose CSS attribute will be changed. If this object is
+     *  a jQuery collection, changes all contained nodes.
+     *
+     * @param {String} name
+     *  The base name of the CSS attribute.
+     *
+     * @param {Any} value
+     *  The new value of the CSS attribute.
+     */
+    Utils.setCssAttributeWithPrefixes = function (node, name, value) {
+        node = $(node);
+        _(['-webkit-', '-moz-', '-ms-', '-o-', '']).each(function (prefix) {
+            node.css(prefix + name, value);
+        });
+    };
+
+    /**
      * Returns an integer indicating how the two passed nodes are located to
      * each other.
      *

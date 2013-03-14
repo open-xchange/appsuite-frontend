@@ -148,8 +148,6 @@ define('io.ox/office/preview/view',
 
             var // the current zoom factor
                 factor = self.getZoomFactor() / 100,
-                // the scale transformation
-                scale = 'scale(' + factor + ')',
                 // the SVG root node
                 svgNode = pageNode.children().first(),
                 // the vertical margin to adjust scroll size
@@ -163,13 +161,8 @@ define('io.ox/office/preview/view',
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
             // if browser zoom is not 100%) regardless of existing SVG, must
             // set its size explicitly to see anything...
-            svgNode.css({
-                '-webkit-transform': scale,
-                '-moz-transform': scale,
-                '-ms-transform': scale,
-                transform: scale,
-                margin: vMargin + 'px ' + hMargin + 'px'
-            });
+            Utils.setCssAttributeWithPrefixes(svgNode, 'transform', 'scale(' + factor + ')');
+            svgNode.css('margin', vMargin + 'px ' + hMargin + 'px');
             pageNode.css({
                 width: svgNode.width() * factor,
                 height: svgNode.height() * factor

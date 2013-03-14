@@ -411,6 +411,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 &:-ms-input-placeholder { .placeholder-color(); }
             }
 
+            /* fade out text fields in disabled groups */
+            &.disabled input, input.disabled {
+                color: fade(white, 50%);
+            }
+
             /* keyboard/mouse effects (not for disabled buttons/text fields or groups) */
             &:not(.disabled) {
 
