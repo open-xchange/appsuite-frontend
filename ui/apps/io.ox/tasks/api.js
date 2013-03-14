@@ -18,7 +18,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     'use strict';
 
 
- // generate basic API
+    // generate basic API
     var api = apiFactory({
         module: 'tasks',
         keyGenerator: function (obj) {
@@ -245,6 +245,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             }
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
+            api.refreshPortal();
         });
 
     };
@@ -282,6 +283,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             api.checkForNotifications(list, modifications);
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
+            api.refreshPortal();
         });
     };
     
@@ -298,22 +300,33 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
-            function refreshPortal() {
-                api.trigger("removePopup");
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
-                    var app = portal.getApp(),
-                        model = app.getWidgetCollection()._byId.tasks_0;
-                    if (model) {
-                        app.refreshWidget(model, 0);
-                    }
-                });
-            }
+            
             if (!task.length) {
-                return api.update(task, newFolder).done(refreshPortal);
+                return api.update(task, newFolder);
             } else {
-                return api.updateMultiple(task, {folder_id: newFolder}).done(refreshPortal);
+                return api.updateMultiple(task, {folder_id: newFolder});
             }
         });
+    };
+    
+    //variables so portal is only required once
+    var portalModel,
+        portalApp;
+    
+    //refreshs the task portal tile
+    api.refreshPortal = function () {
+        api.trigger("removePopup");
+        if (portalModel && portalApp) {
+            portalApp.refreshWidget(portalModel, 0);
+        } else {
+            require(['io.ox/portal/main'], function (portal) {//refresh portal
+                portalApp = portal.getApp();
+                portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
+                if (portalModel) {
+                    portalApp.refreshWidget(portalModel, 0);
+                }
+            });
+        }
     };
     
     api.confirm =  function (options) { //options.id is the id of the task not userId
@@ -340,16 +353,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     
     //gets every task in users private folders. Used in Portal tile
     api.getAllFromAllFolders = function () {
-        return api.search({pattern: '', end: _.now()})
-            .pipe(function (response) {
-            return response;
-        });
+        return api.search({pattern: '', end: _.now()});
     };
 
     //for notification view
     api.getTasks = function () {
 
-        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed (lots of requests)
+        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),
