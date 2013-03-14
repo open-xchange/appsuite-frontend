@@ -174,7 +174,6 @@ define('io.ox/mail/actions',
         }
     });
 
-    // print via server
     new Action('io.ox/mail/actions/print', {
         id: 'print',
         requires: 'some',
@@ -221,7 +220,6 @@ define('io.ox/mail/actions',
                          * @return {deferred} print content
                          */
                         var getPrintable = function (listmin) {
-                            console.log(listmin);
                             return http.PUT({
                                 module: 'mail',
                                 dataType: 'text',
