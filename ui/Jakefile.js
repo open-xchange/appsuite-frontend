@@ -648,7 +648,7 @@ task("dist", [distDest], function () {
             });
     }
     function tar(code) {
-        if (code) return fail();
+        if (code) return fail('cp exited with code ' + code);
 
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
@@ -678,11 +678,17 @@ task("dist", [distDest], function () {
                    { cwd: distDest }, dpkgSource);
     }
     function dpkgSource(code) {
-        if (code) return fail();
+        if (code) return fail('tar exited with code ' + code);
         utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }
-    function done(code) { if (code) return fail(); else complete(); }
+    function done(code) {
+        if (code) {
+            console.warn('dpkg-source exited with code ' + code);
+            console.warn('Debian package is probably not available.');
+        }
+        complete();
+    }
 }, { async: true });
 
 // clean task
