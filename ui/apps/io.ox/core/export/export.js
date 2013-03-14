@@ -111,7 +111,68 @@ define('io.ox/core/export/export',
             if (baton.module === 'contacts') {
                 baton.format.hcard = {
                     getDeferred: function () {
-                        var def = new $.Deferred();
+                        var def = new $.Deferred(),
+                            /**
+                             * removes busy node
+                             * @param  {object} window
+                             * @return {undefined}
+                             */
+                            idle = function (win) {
+                                $(win.document.body)
+                                    .find('.busy')
+                                    .remove();
+                            },
+                            /**
+                             * appends busy node
+                             * @param  {object} window
+                             * @return {undefined}
+                             */
+                            busy = function (win) {
+                                $(win.document.body)
+                                    .append(
+                                        $('<div>')
+                                        .addClass('busy')
+                                        .css('background-image', 'url(v=' + ox.base + '/apps/io.ox/settings/busy.gif)')
+                                        .css('width', '100%')
+                                        .css('height', '100%')
+                                        .css('background-repeat', 'no-repeat')
+                                        .css('background-position', 'center center')
+                                    );
+                            },
+                            /**
+                             * create, focus, return new window
+                             * @return {object} window
+                             */
+                            getWindow = function () {
+                                var win,
+                                    w = 650,
+                                    h = 800,
+                                    l = 50,
+                                    t = 50;
+                                //center
+                                w = Math.min($(document).width() * 80 / 100, w) || w;
+                                h = Math.min($(document).height() * 90 / 100, h) || h;
+                                l = ($(document).width() / 2) - (w / 2) || l;
+                                t = ($(document).height() / 2) - (h / 2) || t;
+                                //open popup
+                                win = window.open('about:blank', '_blank', "scrollbars=1, resizable=1, copyhistory=no, width=" + w + ",height=" + h);
+                                //popupblocker
+                                if (!win) {
+                                    var popupblocker = 'The window could not be opened. Most likely it has been blocked by a pop-up or advertisement blocker. Please check your browser settings and make sure pop-ups are allowed for this domain.';
+                                    notifications.yell('error', gt(popupblocker));
+                                }
+                                //onready
+                                $(win).ready(function () {
+                                    busy(win);
+                                    win.moveTo(l, t);
+                                    win.focus();
+                                    win.document.title = gt('hCard Export');
+                                });
+                                return win;
+                            },
+                            win = getWindow();
+
+                        //get content
                         api.getVCARD(baton.id, false)
                             .fail(function (e) {
                                 if (e)
@@ -127,31 +188,11 @@ define('io.ox/core/export/export',
                                     if (enabledDataUri && !_.browser.IE) {
                                         window.location.href = "data:data:text/html;charset=utf-8," + encodeURIComponent(hcard);
                                     } else {
-                                        //TODO: put generalized version into a util class
-                                        var win,
-                                            w = 650,
-                                            h = 800,
-                                            l = 50,
-                                            t = 50;
-                                        //center
-                                        w = Math.min($(document).width() * 80 / 100, w) || w;
-                                        h = Math.min($(document).height() * 90 / 100, h) || h;
-                                        l = ($(document).width() / 2) - (w / 2) || l;
-                                        t = ($(document).height() / 2) - (h / 2) || t;
 
-                                        //open popup
-                                        var win = window.open('about:blank', '_blank', "scrollbars=1, resizable=1, copyhistory=no, width=" + w + ",height=" + h);
-                                        //popupblocker
-                                        if (!win) {
-                                            var popupblocker = 'The window could not be opened. Most likely it has been blocked by a pop-up or advertisement blocker. Please check your browser settings and make sure pop-ups are allowed for this domain.';
-                                            notifications.yell('error', gt(popupblocker));
-                                        }
                                         //onready
                                         $(win).ready(function () {
-                                            win.moveTo(l, t);
+                                            idle(win);
                                             win.document.write(hcard);
-                                            win.document.title = gt('hCard Export');
-                                            win.focus();
                                             // IE9 has problems focusing the window for the first time
                                             setTimeout(function () {
                                                 win.focus();
