@@ -418,7 +418,7 @@ define('io.ox/files/api',
     };
 
     api.versions = function (options) {
-        options = _.extend({ action: 'versions' }, options);
+        options = _.extend({ action: 'versions', timezone: 'utc' }, options);
         if (!options.id) {
             throw new Error('Please specify an id for which to fetch versions');
         }

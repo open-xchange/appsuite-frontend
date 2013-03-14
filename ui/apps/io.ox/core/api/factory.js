@@ -51,10 +51,10 @@ define('io.ox/core/api/factory',
             module: "",
             // for all, list, and get
             requests: {
-                all: { action: "all" },
-                list: { action: "list" },
-                get: { action: "get" },
-                search: { action: "search" },
+                all: { action: "all", timezone: 'utc' },
+                list: { action: "list", timezone: 'utc' },
+                get: { action: "get", timezone: 'utc' },
+                search: { action: "search", timezone: 'utc' },
                 remove: { action: "delete" }
             },
             cid: function (o) {

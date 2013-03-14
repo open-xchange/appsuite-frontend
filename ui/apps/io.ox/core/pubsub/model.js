@@ -73,18 +73,11 @@ define('io.ox/core/pubsub/model',
                 return this._refresh ? this._refresh.state() : 'ready';
             },
             performRefresh: function () {
-                var def = $.Deferred();
-
                 if (this.refreshState() === 'ready') {
-                    api.subscriptions.refresh(this.toJSON());
-                    this._refresh = def;
+                    return (this._refresh = _.wait(5000));
+                }  else {
+                    return this._refresh;
                 }
-
-                setTimeout(function () {
-                    def.resolve();
-                }, 50000);
-
-                return this._refresh;
             },
             syncer: {
                 create: function (model) {
@@ -180,7 +173,7 @@ define('io.ox/core/pubsub/model',
              */
             forFolder: filterFolder,
             comparator: function (subscription) {
-                return subscription.get('enabled') + subscription.get('displayName');
+                return !subscription.get('enabled') + subscription.get('displayName');
             }
         }),
         //singleton instances

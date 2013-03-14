@@ -53,128 +53,146 @@
     height: 1px;
 }
 
-.settings-detail-pane .section {
-    max-width: 800px;
-}
+.settings-detail-pane {
 
-.settings-detail-pane .form-horizontal .control-group > label {
-	float: left;
-	width: 150px;
-	padding-top: 5px;
-	text-align: right;
-}
+    .section {
+        max-width: 800px;
+    }
 
-.settings-detail-pane  .form-horizontal .controls,
-.settings-detail-pane .help-inline {
-	margin-left: 170px;
-}
+    h1.pane-headline {
+        font-family: @lightFontFamily;
+        font-weight: 200;
+        font-size: 26px;
+        line-height: 32px;
+        margin: 0 0 1em 0;
+    }
 
-.settings-detail-pane .form-inline .controls {
-	margin-left: 0px;
-	text-align: right;
-	width: 440px;
-}
+    h2.pane-headline {
+        font-size: 20px;
+        line-height: 24px;
+        margin: 2em 0 1.5em 0;
+    }
 
-.settings-detail-pane .listbox {
-	max-width: 540px;
-	overflow-x: hidden;
-  	overflow-y: auto;
-  	position: relative;
-  	border: 1px solid #D9D9D9;
-  	margin-bottom: 10px;
-    .border-radius(3px 3px 3px 3px);
-}
+    .form-horizontal .control-group > label {
+    	float: left;
+    	width: 150px;
+    	padding-top: 5px;
+    	text-align: right;
+    }
 
-.settings-detail-pane .listbox.ui-sortable {
-    border: 0px none;
-}
+    .form-horizontal .controls, .help-inline {
+    	margin-left: 170px;
+    }
 
-.settings-detail-pane .listbox .listbox-item {
-    background-color: #eee;
-    margin-bottom: 1px;
-    color: @enabledColor;
-}
+    .form-inline .controls {
+    	margin-left: 0px;
+    	text-align: right;
+    	width: 440px;
+    }
 
-.settings-detail-pane .listbox .listbox-item button {
-    float: right;
-    margin-left: 13px;
-}
+    .listbox {
 
-.settings-detail-pane .listbox.ui-sortable .enabled .listbox-item {
-}
+    	max-width: 540px;
+    	overflow-x: hidden;
+      	overflow-y: auto;
+      	position: relative;
+      	border: 1px solid #D9D9D9;
+      	margin-bottom: 10px;
+        .border-radius(3px 3px 3px 3px);
 
-.settings-detail-pane .listbox:focus {
-  border-color: hsl(214, 91%, 65%);
-  z-index: 2;
-}
 
-.settings-detail-pane .listbox .selectable[selected] {
-	background-color: @selectedBackground !important;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, lighten(@selectedBackground, 20%)),
-        color-stop(1, darken(@selectedBackground, 5%))
-    ) !important;
-    background-image: -o-linear-gradient(top, lighten(@selectedBackground, 20%) 0%, darken(@selectedBackground, 5%) 100%) !important;
-    background-image: -moz-linear-gradient(
-        center top,
-        lighten(@selectedBackground, 20%) 0%,
-        darken(@selectedBackground, 5%) 100%
-    ) !important;
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)", endColorstr="darken(@selectedBackground, 5%)~")";
-    border-bottom-color: black;
-    color: #fff;
-}
+        &.ui-sortable {
+            border: 0px none;
+        }
 
-.settings-detail-pane .listbox > .spacer {
-	border: 0;
-  	display: block;
-  	overflow: hidden;
-  	visibility: hidden;
-  	margin: 0;
-    .box-sizing(border-box);
-}
+        .listbox-item {
+            background-color: #eee;
+            margin-bottom: 1px;
+            color: @enabledColor;
+        }
 
-.settings-detail-pane .listbox .sortable-item {
-	padding: 13px;
-    color: #000;
-    background-color: #eee;
-    .box-sizing(border-box);
-}
+        .listbox-item button {
+            float: right;
+            margin-left: 13px;
+        }
 
-.settings-detail-pane .listbox .disabled .sortable-item {
-    color: #999;
-    background-color: #ddd;
-    font-weight: 300;
-}
+        &.ui-sortable .enabled .listbox-item {
+        }
 
-.settings-detail-pane .listbox .sortable-item:hover { background-color: #ccc; }
-.settings-detail-pane .listbox .disabled .sortable-item:hover { background-color: #ddd; }
+        &:focus {
+          border-color: hsl(214, 91%, 65%);
+          z-index: 2;
+        }
 
-.settings-detail-pane .listbox .requires-enabled { display: none; }
-.settings-detail-pane .listbox .enabled .editable-item .requires-enabled { display: inline-block; }
+        .selectable[selected] {
+        	background-color: @selectedBackground !important;
+            background-image: -webkit-gradient(
+                linear,
+                left top,
+                left bottom,
+                color-stop(0, lighten(@selectedBackground, 20%)),
+                color-stop(1, darken(@selectedBackground, 5%))
+            ) !important;
+            background-image: -o-linear-gradient(top, lighten(@selectedBackground, 20%) 0%, darken(@selectedBackground, 5%) 100%) !important;
+            background-image: -moz-linear-gradient(
+                center top,
+                lighten(@selectedBackground, 20%) 0%,
+                darken(@selectedBackground, 5%) 100%
+            ) !important;
+            filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)", endColorstr="darken(@selectedBackground, 5%)~")";
+            border-bottom-color: black;
+            color: #fff;
+        }
 
-.settings-detail-pane .listbox .sortable-item div {
-    line-height: 2em;
-}
+        & > .spacer {
+        	border: 0;
+          	display: block;
+          	overflow: hidden;
+          	visibility: hidden;
+          	margin: 0;
+            .box-sizing(border-box);
+        }
 
-.settings-detail-pane .listbox .sortable-item span.right {
-	float:right;
-}
+        .sortable-item {
+        	padding: 13px;
+            color: #000;
+            background-color: #eee;
+            .box-sizing(border-box);
+        }
 
-.settings-detail-pane .listbox .deletable-item {
-	height:  16px;
-	padding: 12px 5px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-}
+        .disabled .sortable-item {
+            color: #999;
+            background-color: #ddd;
+            font-weight: 300;
+        }
 
-.settings-detail-pane .listbox .deletable-item div {
-	width: auto;
+        .sortable-item:hover { background-color: #ccc; }
+        .disabled .sortable-item:hover { background-color: #ddd; }
+
+        .requires-enabled { display: none; }
+        .enabled .editable-item .requires-enabled { display: inline-block; }
+
+        .sortable-item div {
+            line-height: 2em;
+        }
+
+        .sortable-item span.right {
+        	float:right;
+        }
+
+        .deletable-item {
+        	height:  16px;
+        	padding: 12px 5px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+        }
+
+        .deletable-item div {
+        	width: auto;
+        }
+    }
 }
 
 .io-ox-dialog-popup input.input-large {

@@ -274,7 +274,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 }
 
                 this.append(
-                    $('<div class="control-groicon-cloud-uploadup">').append(
+                    $('<div class="control-group">').append(
                         $('<label class="url-label control-label" for="url-value">').text(_.noI18n('URL')),
                         $('<div class="controls">').append(link)
                     )
