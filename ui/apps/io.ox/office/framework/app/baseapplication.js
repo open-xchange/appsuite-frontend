@@ -1173,16 +1173,12 @@ define('io.ox/office/framework/app/baseapplication',
         this.failRestore = function (point) {
 
             var // the result Deferred object
-                def = $.Deferred(),
-                // the application window
-                win = this.getWindow();
+                def = $.Deferred();
 
             // set file descriptor and import the document
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            // always resolve the deferred (expected by the core launcher)
-            win.busy();
             importDocument(point).always(function () {
-                win.idle();
+                // always resolve the deferred (expected by the core launcher)
                 def.resolve();
             });
 
@@ -1227,7 +1223,10 @@ define('io.ox/office/framework/app/baseapplication',
 
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
+
+                // show busy indicator, hide after initialization failure or after import
                 win.busy();
+                self.on('docs:init:error docs:import:after', function () { win.idle(); });
 
                 // wait for pending initialization, kill the application if no
                 // file descriptor is present after fail-restore (using absence
@@ -1265,9 +1264,6 @@ define('io.ox/office/framework/app/baseapplication',
                     Utils.warn('BaseApplication.launch(): initialization failed.');
                     def.resolve();
                 });
-
-                // finally remove the busy indicator
-                def.always(function () { win.idle(); });
             });
 
             return def.promise();
