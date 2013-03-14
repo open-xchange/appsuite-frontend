@@ -270,13 +270,19 @@ define('io.ox/office/framework/app/basecontroller',
          * it contains a matching keyboard shortcut definition.
          *
          * @param {jQuery.Event} event
-         *  The jQuery 'keydown' event.
+         *  The jQuery 'keydown' event. If a matching shortcut definition has
+         *  been found, propagation of the event will be stopped, and the
+         *  browser default action will be suppressed.
          */
         function shortcutHandler(event) {
             if (event.keyCode in shortcuts) {
                 _(shortcuts[event.keyCode]).each(function (shortcut) {
                     if (isMatchingShortcut(event, shortcut.definition)) {
                         callSetHandler(shortcut.key, ('value' in shortcut.definition) ? shortcut.definition.value : event);
+                        if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
+                            event.stopPropagation();
+                            event.preventDefault();
+                        }
                     }
                 });
             }
@@ -360,6 +366,11 @@ define('io.ox/office/framework/app/basecontroller',
          *          each shortcut definition may define its own value. If no
          *          value has been defined, the 'keydown' event object will be
          *          passed to the setter function.
+         *      - {Boolean} [shortcut.propagate=false]
+         *          If set to true, the 'keydown' event will propagate up to
+         *          the DOM root element, and the browser will execute its
+         *          default action. If omitted or set to false, the event will
+         *          be cancelled immediately.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.

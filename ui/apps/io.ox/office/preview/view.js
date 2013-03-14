@@ -102,8 +102,14 @@ define('io.ox/office/preview/view',
          *
          * @param {Number} newPage
          *  The one-based index of the page to be shown.
+         *
+         * @param {String} [scrollTo]
+         *  If set to the string 'top', the new page will be scrolled to the
+         *  top border. If set to the string 'bottom', the new page will be
+         *  scrolled to the bottom border. Otherwise, the scroll position will
+         *  not be changed.
          */
-        function showPage(newPage) {
+        function showPage(newPage, scrollTo) {
 
             var // a timeout for the window busy call
                 busyPromise = null;
@@ -121,7 +127,7 @@ define('io.ox/office/preview/view',
             model.loadPage(page)
             .done(function (html) {
                 pageNode[0].innerHTML = html;
-                updateZoom();
+                updateZoom(scrollTo);
             })
             .fail(function () {
                 self.showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
@@ -136,8 +142,14 @@ define('io.ox/office/preview/view',
         /**
          * Recalculates the CSS zoom and margins, according to the current page
          * size and zoom level.
+         *
+         * @param {String} [scrollTo]
+         *  If set to the string 'top', the new page will be scrolled to the
+         *  top border. If set to the string 'bottom', the new page will be
+         *  scrolled to the bottom border. Otherwise, the scroll position will
+         *  not be changed.
          */
-        function updateZoom() {
+        function updateZoom(scrollTo) {
 
             var // the current zoom factor
                 factor = self.getZoomFactor() / 100,
@@ -146,7 +158,9 @@ define('io.ox/office/preview/view',
                 // the vertical margin to adjust scroll size
                 vMargin = svgNode.height() * (factor - 1) / 2,
                 // the horizontal margin to adjust scroll size
-                hMargin = svgNode.width() * (factor - 1) / 2;
+                hMargin = svgNode.width() * (factor - 1) / 2,
+                // the application pane node
+                appPaneNode = self.getAppPaneNode();
 
             // CSS 'zoom' not supported in all browsers, need to transform with
             // scale(). But: transformations do not modify the element size, so
@@ -163,6 +177,16 @@ define('io.ox/office/preview/view',
 
             // refresh view (scroll bars may have appeared or vanished)
             self.refreshPaneLayout();
+
+            // update scroll position
+            switch (scrollTo) {
+            case 'top':
+                appPaneNode.scrollTop(0);
+                break;
+            case 'bottom':
+                appPaneNode.scrollTop(appPaneNode[0].scrollHeight);
+                break;
+            }
         }
 
         // methods ------------------------------------------------------------
@@ -184,29 +208,35 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.showFirstPage = function () {
-            showPage(1);
+            showPage(1, 'top');
             return this;
         };
 
         /**
          * Shows the previous page of the current document.
          *
+         * @param {jQuery.Event} [event]
+         *  The 'keydown' event object, if called from a keyboard shortcut.
+         *
          * @returns {PreviewView}
          *  A reference to this instance.
          */
-        this.showPreviousPage = function () {
-            showPage(page - 1);
+        this.showPreviousPage = function (event) {
+            showPage(page - 1, 'top');
             return this;
         };
 
         /**
          * Shows the next page of the current document.
          *
+         * @param {jQuery.Event} [event]
+         *  The 'keydown' event object, if called from a keyboard shortcut.
+         *
          * @returns {PreviewView}
          *  A reference to this instance.
          */
-        this.showNextPage = function () {
-            showPage(page + 1);
+        this.showNextPage = function (event) {
+            showPage(page + 1, 'top');
             return this;
         };
 
@@ -217,7 +247,7 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.showLastPage = function () {
-            showPage(model.getPageCount());
+            showPage(model.getPageCount(), 'bottom');
             return this;
         };
 
