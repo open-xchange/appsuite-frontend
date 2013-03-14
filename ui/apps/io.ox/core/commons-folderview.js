@@ -100,20 +100,52 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        function addSubFolder(e) {
+
+        function publish(e) {
             e.preventDefault();
-            e.data.app.folderView.add();
+            require(['io.ox/core/pubsub/publications'], function (publications) {
+                publications.buildPublishDialog(e.data.baton);
+            });
         }
 
-        // toolbar actions
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
-            id: 'add-folder',
+            id: 'publications',
             index: 100,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'))
-                    .on('click', { app: baton.app }, addSubFolder)
-                ));
+                var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
+                
+                this.append($('<li>').append(link));
+
+                if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
+                    link.on('click', { baton: baton }, publish);
+                } else {
+                    link.addClass('disabled').on('click', $.preventDefault);
+                }
+            }
+        });
+
+        function subscribe(e) {
+            e.preventDefault();
+            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                subscriptions.buildSubscribeDialog(e.data.baton);
+            });
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'subscribe',
+            index: 200,
+            draw: function (baton) {
+                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscribe'));
+                this.append(
+                    $('<li>').append(link),
+                    $('<li class="divider">')
+                );
+
+                if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
+                    link.on('click', { baton: baton }, subscribe);
+                } else {
+                    link.addClass('disabled').on('click', $.preventDefault);
+                }
             }
         });
 
@@ -125,7 +157,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
             id: 'add-public-folder',
-            index: 50,
+            index: 500,
             draw: function (baton) {
                 var type = baton.options.type;
                 if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
@@ -133,6 +165,23 @@ define('io.ox/core/commons-folderview',
                 this.append($('<li>').append(
                     $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'))
                     .on('click', {app: baton.app, module: type}, createPublicFolder)
+                ));
+            }
+        });
+
+        function addSubFolder(e) {
+            e.preventDefault();
+            e.data.app.folderView.add();
+        }
+
+        // toolbar actions
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-folder',
+            index: 600,
+            draw: function (baton) {
+                this.append($('<li>').append(
+                    $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'))
+                    .on('click', { app: baton.app }, addSubFolder)
                 ));
             }
         });
@@ -226,53 +275,6 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        function publish(e) {
-            e.preventDefault();
-            require(['io.ox/core/pubsub/publications'], function (publications) {
-                publications.buildPublishDialog(e.data.baton);
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'publications',
-            index: 260,
-            draw: function (baton) {
-                var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
-                this.append(
-                    $('<li>').append(link)
-                );
-
-                if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
-                    link.on('click', { baton: baton }, publish);
-                } else {
-                    link.addClass('disabled').on('click', $.preventDefault);
-                }
-            }
-        });
-
-        function subscribe(e) {
-            e.preventDefault();
-            require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
-                subscriptions.buildSubscribeDialog(e.data.baton);
-            });
-        }
-
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'subscribe',
-            index: 270,
-            draw: function (baton) {
-                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscribe'));
-                this.append(
-                    $('<li>').append(link)
-                );
-
-                if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
-                    link.on('click', { baton: baton }, subscribe);
-                } else {
-                    link.addClass('disabled').on('click', $.preventDefault);
-                }
-            }
-        });
 
         function setFolderPermissions(e) {
             e.preventDefault();

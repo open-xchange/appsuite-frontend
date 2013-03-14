@@ -30,7 +30,7 @@ define('io.ox/mail/folderview-extensions',
 
     ext.point(POINT + '/sidepanel/toolbar/add').extend({
         id: 'add-account',
-        index: 200,
+        index: 300,
         draw: function (baton) {
             this.append($('<li>').append(
                 $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
@@ -44,7 +44,7 @@ define('io.ox/mail/folderview-extensions',
 
     ext.point(POINT + '/sidepanel/toolbar/add').extend({
         id: 'subscribe-folder',
-        index: 300,
+        index: 400,
         draw: function (baton) {
             this.append($('<li>').append(
                 $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
