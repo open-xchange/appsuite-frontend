@@ -18,7 +18,8 @@ define('io.ox/contacts/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, gt, settings) {
+     'settings!io.ox/contacts',
+     'io.ox/core/print'], function (ext, links, api, config, notifications, gt, settings, print) {
 
     'use strict';
 
@@ -274,13 +275,18 @@ define('io.ox/contacts/actions',
 
                 _(list).each(function (contact) {
                     if (contact.mark_as_distributionlist !== true) {
-                        cleanedList.push(contact);
+                        var clean = {};
+                        clean.folder = contact.folder_id;
+                        clean.id = contact.id;
+                        cleanedList.push(clean);
+
                     }
                 });
+                console.log(cleanedList);
+                var options = { template: 'infostore://70213', action: 'list', columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606'};
+                print.open('contacts', cleanedList[0], options);
 
-                require(['io.ox/core/print'], function (print) {
-                    print.interim(ox.base + '/apps/io.ox/contacts/print-template-multi.html');
-                });
+
 
             });
         }
