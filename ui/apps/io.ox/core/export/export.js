@@ -113,19 +113,9 @@ define('io.ox/core/export/export',
                     getDeferred: function () {
                         var def = new $.Deferred(),
                             /**
-                             * removes busy node
-                             * @param  {object} window
-                             * @return {undefined}
-                             */
-                            idle = function (win) {
-                                $(win.document.body)
-                                    .find('.busy')
-                                    .remove();
-                            },
-                            /**
                              * appends busy node
                              * @param  {object} window
-                             * @return {undefined}
+                             * @return {object} window
                              */
                             busy = function (win) {
                                 $(win.document.body)
@@ -138,6 +128,18 @@ define('io.ox/core/export/export',
                                         .css('background-repeat', 'no-repeat')
                                         .css('background-position', 'center center')
                                     );
+                                return win;
+                            },
+                            /**
+                             * removes busy node
+                             * @param  {object} window
+                             * @return {object} window
+                             */
+                            idle = function (win) {
+                                $(win.document.body)
+                                    .find('.busy')
+                                    .remove();
+                                return win;
                             },
                             /**
                              * create, focus, return new window
@@ -182,23 +184,16 @@ define('io.ox/core/export/export',
                             })
                             .pipe(
                                 function (data) {
-                                    var hcard = vcard.getHCard(data),
-                                        enabledDataUri = false;
-                                    //data uri vs. popup
-                                    if (enabledDataUri && !_.browser.IE) {
-                                        window.location.href = "data:data:text/html;charset=utf-8," + encodeURIComponent(hcard);
-                                    } else {
-
-                                        //onready
-                                        $(win).ready(function () {
-                                            idle(win);
-                                            win.document.write(hcard);
-                                            // IE9 has problems focusing the window for the first time
-                                            setTimeout(function () {
-                                                win.focus();
-                                            }, 0);
-                                        });
-                                    }
+                                    var hcard = vcard.getHCard(data);
+                                    $(win).ready(function () {
+                                        idle(win);
+                                        win.document.write(hcard);
+                                        // IE9 has problems focusing the window for the first time
+                                        win.document.title = gt('hCard Export');
+                                        setTimeout(function () {
+                                            win.focus();
+                                        }, 0);
+                                    });
                                     def.resolve();
                                 });
                         return def;
