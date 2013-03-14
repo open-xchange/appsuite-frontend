@@ -257,6 +257,9 @@ define('io.ox/tasks/util',
                     } else {
                         task.start_date = '';
                     }
+                    if (task.date_completed) {
+                        task.date_completed = new date.Local(task.date_completed).format();
+                    }
 
                     if (task.alarm !== undefined && task.alarm !== null) {
                         task.alarm = new date.Local(task.alarm).format();

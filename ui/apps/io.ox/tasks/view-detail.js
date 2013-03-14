@@ -141,7 +141,8 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 currency: gt('Currency'),
                 trip_meter: gt('Distance'),
                 billing_information: gt('Billing information'),
-                company: gt('Company')
+                company: gt('Company'),
+                date_completed: gt('Date completed')
             };
 
             var $details = $('<div class="task-details">'), hasDetails = false;
