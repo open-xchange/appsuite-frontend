@@ -47,22 +47,22 @@ define('io.ox/office/preview/controller',
 
                 'pages/first': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getPage() > 1); },
+                    enable: function () { return view.getPage() > 1; },
                     set: function () { view.showFirstPage(); }
                 },
                 'pages/previous': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getPage() > 1); },
+                    enable: function () { return view.getPage() > 1; },
                     set: function () { view.showPreviousPage(); }
                 },
                 'pages/next': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getPage() < model.getPageCount()); },
+                    enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showNextPage(); }
                 },
                 'pages/last': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getPage() < model.getPageCount()); },
+                    enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showLastPage(); }
                 },
 
@@ -83,12 +83,12 @@ define('io.ox/office/preview/controller',
 
                 'zoom/dec': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getZoomLevel() > view.getMinZoomLevel()); },
+                    enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
                     set: function () { view.decreaseZoomLevel(); }
                 },
                 'zoom/inc': {
                     parent: 'document/valid',
-                    enable: function (enabled) { return enabled && (view.getZoomLevel() < view.getMaxZoomLevel()); },
+                    enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
                     set: function () { view.increaseZoomLevel(); }
                 },
                 'zoom/current': {
