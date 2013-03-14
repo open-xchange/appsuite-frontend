@@ -2268,12 +2268,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         NUM_7:          103,
         NUM_8:          104,
         NUM_9:          105,
+*/
         MULTIPLY:       106,
         PLUS:           107,
         MINUS:          109,
         DECIMAL_POINT:  110,
         DIVIDE:         111,
-*/
 
         F1:             112,
         F2:             113,

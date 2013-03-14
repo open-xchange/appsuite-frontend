@@ -12,11 +12,15 @@
  */
 
 define('io.ox/office/preview/controller',
-    ['io.ox/office/framework/app/basecontroller',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/framework/app/basecontroller',
      'gettext!io.ox/office/main'
-    ], function (BaseController, gt) {
+    ], function (Utils, BaseController, gt) {
 
     'use strict';
+
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
 
     // class PreviewController ================================================
 
@@ -48,22 +52,26 @@ define('io.ox/office/preview/controller',
                 'pages/first': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
-                    set: function () { view.showFirstPage(); }
+                    set: function () { view.showFirstPage(); },
+                    shortcut: { keyCode: KeyCodes.HOME }
                 },
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
-                    set: function () { view.showPreviousPage(); }
+                    set: function () { view.showPreviousPage(); },
+                    shortcut: { keyCode: KeyCodes.PAGE_UP }
                 },
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
-                    set: function () { view.showNextPage(); }
+                    set: function () { view.showNextPage(); },
+                    shortcut: { keyCode: KeyCodes.PAGE_DOWN }
                 },
                 'pages/last': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
-                    set: function () { view.showLastPage(); }
+                    set: function () { view.showLastPage(); },
+                    shortcut: { keyCode: KeyCodes.END }
                 },
 
                 'pages/current': {
@@ -84,12 +92,14 @@ define('io.ox/office/preview/controller',
                 'zoom/dec': {
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
-                    set: function () { view.decreaseZoomLevel(); }
+                    set: function () { view.decreaseZoomLevel(); },
+                    shortcut: { keyCode: KeyCodes.MINUS }
                 },
                 'zoom/inc': {
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
-                    set: function () { view.increaseZoomLevel(); }
+                    set: function () { view.increaseZoomLevel(); },
+                    shortcut: { keyCode: KeyCodes.PLUS }
                 },
                 'zoom/current': {
                     parent: 'document/valid',

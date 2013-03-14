@@ -18,6 +18,40 @@ define('io.ox/office/framework/app/basecontroller',
 
     'use strict';
 
+    // private global functions ===============================================
+
+    /**
+     * Returns whether the passed state of a control key (SHIFT, ALT, CTRL,
+     * etc.) matches the state contained in a keyboard shortcut definition.
+     *
+     * @param {Boolean} currentState
+     *  The current state of a control key, extracted from a keyboard event.
+     *
+     * @param {Boolean|Null} [expectedState]
+     *  The expected state of the control key to test against. If null, this
+     *  function returns always true. If omitted, the passed current state must
+     *  be false. Otherwise, the current state must be equal to the expected
+     *  state.
+     *
+     * @returns {Boolean}
+     *  Whether the current state of a control key matches the expected state.
+     */
+    function isMatchingControlKey(currentState, expectedState) {
+        return _.isNull(expectedState) || (currentState === (_.isBoolean(expectedState) && expectedState));
+    }
+
+    /**
+     * Returns whether the passed jQuery 'keydown' event matches the specified
+     * keyboard shortcut definition.
+     */
+    function isMatchingShortcut(event, definition) {
+        return (event.keyCode === definition.keyCode) &&
+            isMatchingControlKey(event.shiftKey, definition.shiftKey) &&
+            isMatchingControlKey(event.altKey, definition.altKey) &&
+            isMatchingControlKey(event.ctrlKey, definition.ctrlKey) &&
+            isMatchingControlKey(event.metaKey, definition.metaKey);
+    }
+
     // class BaseController ===================================================
 
     /**
@@ -48,7 +82,10 @@ define('io.ox/office/framework/app/basecontroller',
             resultCache = {},
 
             // number of item setters currently running (recursion counter)
-            runningSetters = 0;
+            runningSetters = 0,
+
+            // shortcut definitions, mapped by key code (for performance)
+            shortcuts = {};
 
         // class Item ---------------------------------------------------------
 
@@ -71,6 +108,8 @@ define('io.ox/office/framework/app/basecontroller',
                 // additional user data
                 userData = Utils.getOption(definition, 'userData');
 
+            // private methods
+
             function getAndCacheResult(type, handler, parentValue) {
 
                 var // get or create a result object in the cache
@@ -82,6 +121,8 @@ define('io.ox/office/framework/app/basecontroller',
                 }
                 return result[type];
             }
+
+            // methods
 
             /**
              * Returns whether this item is effectively enabled, by looking at
@@ -224,6 +265,23 @@ define('io.ox/office/framework/app/basecontroller',
             }
         }
 
+        /**
+         * Handles 'keydown' events and calls the setter of this item, if
+         * it contains a matching keyboard shortcut definition.
+         *
+         * @param {jQuery.Event} event
+         *  The jQuery 'keydown' event.
+         */
+        function shortcutHandler(event) {
+            if (event.keyCode in shortcuts) {
+                _(shortcuts[event.keyCode]).each(function (shortcut) {
+                    if (isMatchingShortcut(event, shortcut.definition)) {
+                        callSetHandler(shortcut.key, shortcut.definition.value);
+                    }
+                });
+            }
+        }
+
         // methods ------------------------------------------------------------
 
         /**
@@ -267,6 +325,39 @@ define('io.ox/office/framework/app/basecontroller',
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
          *      Defaults to an empty function.
+         *  @param {Object|Array} [definition.shortcut]
+         *      One or multiple keyboard shortcut definitions. If the window
+         *      root node of the application receives a 'keydown' event that
+         *      matches a shortcut definition, the setter function of this item
+         *      will be executed. Can be as single shortcut definition, or an
+         *      array of shortcut definitions. Each definition object supports
+         *      the following attributes:
+         *      - {Number} shortcut.keyCode
+         *          The key code of the shortcut (see Utils.KeyCodes).
+         *      - {Boolean|Null} [shortcut.shiftKey=false]
+         *          If set to true, the SHIFT key must be pressed. If set to
+         *          false (or omitted), the SHIFT key must not be pressed.  If
+         *          set to null, the current state of the SHIFT key will be
+         *          ignored.
+         *      - {Boolean|Null} [shortcut.altKey=false]
+         *          If set to true, the ALT key must be pressed. If set to
+         *          false (or omitted), the ALT key must not be pressed.  If
+         *          set to null, the current state of the ALT key will be
+         *          ignored.
+         *      - {Boolean|Null} [shortcut.ctrlKey=false]
+         *          If set to true, the CTRL key must be pressed. If set to
+         *          false (or omitted), the CTRL key must not be pressed.  If
+         *          set to null, the current state of the CTRL key will be
+         *          ignored.
+         *      - {Boolean|Null} [shortcut.metaKey=false]
+         *          If set to true, the META key must be pressed. If set to
+         *          false (or omitted), the META key must not be pressed.  If
+         *          set to null, the current state of the META key will be
+         *          ignored.
+         *      - {Any} [shortcut.value]
+         *          The value that will be passed to the setter function of
+         *          this item. If multiple shortcuts are defined for an item,
+         *          each shortcut definition may define its own value.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.
@@ -281,6 +372,12 @@ define('io.ox/office/framework/app/basecontroller',
         this.registerDefinition = function (key, definition) {
             if (_.isString(key) && key && _.isObject(definition)) {
                 items[key] = new Item(key, definition);
+                if (_.isObject(definition.shortcut)) {
+                    _.chain(definition.shortcut).getArray().each(function (shortcut) {
+                        var keyCode = Utils.getIntegerOption(shortcut, 'keyCode', 0);
+                        (shortcuts[keyCode] || (shortcuts[keyCode] = [])).push({ key: key, definition: shortcut });
+                    });
+                }
             }
             return this;
         };
@@ -402,6 +499,7 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         this.destroy = function () {
+            app.getWindowNode().off('keydown', shortcutHandler);
             this.events.destroy();
             items = null;
         };
@@ -410,6 +508,9 @@ define('io.ox/office/framework/app/basecontroller',
 
         // register item definitions
         this.registerDefinitions(items);
+
+        // register 'keydown' event listener for keyboard shortcuts
+        app.getWindowNode().on('keydown', shortcutHandler);
 
     } // class BaseController
 
