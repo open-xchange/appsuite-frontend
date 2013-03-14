@@ -71,7 +71,7 @@ define('io.ox/files/icons/perspective',
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.iconContainer = $('<div class="icon-container">')
+                baton.$.iconContainer = $('<div class="file-icon-container">')
             );
         }
     });
@@ -496,7 +496,7 @@ define('io.ox/files/icons/perspective',
                                 if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
                                     iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
                                 } else {
-                                    iconview.find('.icon-container').prepend(drawIcon(data));
+                                    iconview.find('.file-icon-container').prepend(drawIcon(data));
                                 }
                                 end = end + 1;
                             }
