@@ -150,7 +150,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
                 
-                this.append($('<li>').append(link));
+                this.append($('<li class="divider">'), $('<li>').append(link));
 
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
                     link.on('click', { baton: baton }, publish);
@@ -173,8 +173,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscribe'));
                 this.append(
-                    $('<li>').append(link),
-                    $('<li class="divider">')
+                    $('<li>').append(link)
                 );
 
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
