@@ -25,6 +25,7 @@ define('io.ox/core/api/group',
         requests: {
             all: {
                 columns: '1,20',
+                extendColumns: 'io.ox/core/api/group/all',
                 sort: '500', // display_name
                 order: 'asc'
             },
@@ -35,6 +36,7 @@ define('io.ox/core/api/group',
             search: {
                 action: 'search',
                 columns: '1,20,500,524',
+                extendColumns: 'io.ox/core/api/group/search',
                 sort: '500',
                 order: 'asc',
                 getData: function (query) {

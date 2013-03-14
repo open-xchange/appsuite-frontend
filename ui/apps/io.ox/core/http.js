@@ -841,7 +841,17 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          * @returns {Array} All columns
          */
         getAllColumns: getAllColumns,
-
+        
+        /**
+         * Returns the column mapping of a module
+         * @param {string} module The module name.
+         * @returns { column: fieldName } A map from numeric column IDs to
+         * the corresponding field names.
+         */
+        getColumnMapping: function (module) {
+            return _.clone(idMapping[module] || {});
+        },
+        
         /**
          * Transform objects with array-based columns into key-value-based columns
          * @param {Array} data Data

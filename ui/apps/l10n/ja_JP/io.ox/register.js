@@ -191,5 +191,15 @@ define('l10n/ja_JP/io.ox/register', [
             if (this.company) this.yomiCompany = this.company;
         }
     });
-
+    
+    // VGrid
+    
+    ext.point('io.ox/contacts/api/list').extend({
+        id: 'furigana',
+        columns: function () {
+            return [611, 'last_name', 'display_name', 612, 'company', 'email1',
+                    'email2'];
+        }
+    });
+    
 });

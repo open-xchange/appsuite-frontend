@@ -11,10 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/factory",
-    ["io.ox/core/http",
-     "io.ox/core/cache",
-     "io.ox/core/event"], function (http, cache, Events) {
+define('io.ox/core/api/factory',
+    ['io.ox/core/http',
+     'io.ox/core/cache',
+     'io.ox/core/event',
+     'io.ox/core/extensions'], function (http, cache, Events, ext) {
 
     "use strict";
 
@@ -68,7 +69,13 @@ define("io.ox/core/api/factory",
 
         // use module as id?
         o.id = o.id || o.module;
-
+        
+        _.each(o.requests, function (request, action) {
+            if (!request.extendColumns) return;
+            request.columns = factory.extendColumns(request.extendColumns,
+                o.module, request.columns);
+        });
+        
         // create 3 caches for all, list, and get requests
         var caches = {
             all: new cache.SimpleCache(o.id + "-all", true),
@@ -405,6 +412,32 @@ define("io.ox/core/api/factory",
     };
 
     factory.reduce = reduce;
+    
+    /**
+     * Extends a columns parameter using an extension point.
+     * The columns parameter is a comma-separated list of (usually numeric)
+     * column IDs. The extension point must provide a method 'columns' which
+     * returns an array of field names or column IDs to add.
+     * @param id {string} The name of the extension point.
+     * @param module {string} The module used to map columns to field names.
+     * @param columns {string} The initial value of the columns parameter.
+     * @returns {string} The extended columns parameter.
+     */
+    factory.extendColumns = function (id, module, columns) {
+        var hash = {}, // avoid duplication by using a hash instead of an array
+            
+            cols = {}, // a map from field names to column IDs
+            // http has only the reverse version of what we need
+            fields = http.getColumnMapping(module);
+        _.each(fields, function (field, col) { cols[field] = col; });
+
+        _.each(columns.split(','), function (col) { hash[col] = 1; });
+
+        _.chain(ext.point(id).invoke('columns')).flatten(true)
+            .each(function (field) { hash[cols[field] || field] = 1; });
+
+        return _.keys(hash).join();
+    };
 
     return factory;
 });

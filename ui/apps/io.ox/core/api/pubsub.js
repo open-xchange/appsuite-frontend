@@ -117,7 +117,8 @@ define('io.ox/core/api/pubsub',
             module: 'publications',
             requests: {
                 all: {
-                    columns: 'id,displayName,enabled'
+                    columns: 'id,displayName,enabled',
+                    extendColumns: 'io.ox/core/api/pubsub/publications/all'
                 }
             }
         }),
@@ -125,7 +126,8 @@ define('io.ox/core/api/pubsub',
             module: 'publicationTargets',
             requests: {
                 all: {
-                    columns: 'id,displayName,icon,module,formDescription'
+                    columns: 'id,displayName,icon,module,formDescription',
+                    extendColumns: 'io.ox/core/api/pubsub/publicationTargets/all'
                 }
             }
         }),
@@ -133,7 +135,8 @@ define('io.ox/core/api/pubsub',
             module: 'subscriptions',
             requests: {
                 all: {
-                    columns: 'id,displayName,enabled'
+                    columns: 'id,displayName,enabled',
+                    extendColumns: 'io.ox/core/api/pubsub/subscriptions/all'
                 }
             }
         }),

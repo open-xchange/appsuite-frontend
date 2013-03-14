@@ -25,12 +25,14 @@ define("io.ox/core/api/user",
         requests: {
             all: {
                 columns: "1,20,500",
+                extendColumns: 'io.ox/core/api/user/all',
                 sort: "500", // display_name
                 order: "asc"
             },
             list: {
                 action: "list",
-                columns: "1,20,500,524,555,614"
+                columns: '1,20,500,524,555,614',
+                extendColumns: 'io.ox/core/api/user/list'
             },
             get: {
                 action: "get"
@@ -38,6 +40,7 @@ define("io.ox/core/api/user",
             search: {
                 action: "search",
                 columns: "1,20,500,524",
+                extendColumns: 'io.ox/core/api/user/search',
                 sort: "500",
                 order: "asc",
                 getData: function (query) {

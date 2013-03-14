@@ -100,12 +100,14 @@ define('io.ox/files/api',
                 action: 'all',
                 folder: config.get('folder.infostore'),
                 columns: allColumns,
+                extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc'
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,701,702,703,704,705,706,707,708,709,710,711'
+                columns: allColumns,
+                extendColumns: 'io.ox/files/api/all'
             },
             get: {
                 action: 'get'
@@ -113,6 +115,7 @@ define('io.ox/files/api',
             search: {
                 action: 'search',
                 columns: allColumns, // should be the same as all-request
+                extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc',
                 getData: function (query) {

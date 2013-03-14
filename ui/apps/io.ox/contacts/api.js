@@ -30,6 +30,7 @@ define('io.ox/contacts/api',
                 action: 'all',
                 folder: '6',
                 columns: '20,1,101,500,502',
+                extendColumns: 'io.ox/contacts/api/all',
                 sort: '607', // 607 = magic field
                 order: 'asc',
                 admin: function () {
@@ -38,16 +39,16 @@ define('io.ox/contacts/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606'
-                    // 524 = internal_userid, 592 = distribution_list,
-                    // 602 = mark_as_distributionlist, 606 = image1_url
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606',
+                extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
                 action: 'get'
             },
             search: {
                 action: 'search',
-                columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606',
+                extendColumns: 'io.ox/contacts/api/list',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     opt = opt || {};

@@ -213,6 +213,7 @@ define("io.ox/mail/api",
             all: {
                 folder: "default0/INBOX",
                 columns: "601,600,611", // + flags
+                extendColumns: 'io.ox/mail/api/all',
                 sort: "610", // received_date
                 order: "desc",
                 deleted: 'true',
@@ -220,7 +221,8 @@ define("io.ox/mail/api",
             },
             list: {
                 action: "list",
-                columns: "102,600,601,602,603,604,605,607,610,611,614,652"
+                columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                extendColumns: 'io.ox/mail/api/list'
             },
             get: {
                 action: "get",
@@ -236,7 +238,8 @@ define("io.ox/mail/api",
             search: {
                 action: "search",
                 folder: "default0/INBOX",
-                columns: "601,600",
+                columns: '601,600,611',
+                extendColumns: 'io.ox/mail/api/all',
                 sort: "610",
                 order: "desc",
                 getData: function (query, options) {
