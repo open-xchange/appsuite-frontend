@@ -48,7 +48,7 @@ define('io.ox/office/preview/view',
             model = null,
 
             // the root node containing the current page contents
-            pageNode = $('<div>', { tabindex: -1 }).addClass('page'),
+            pageNode = $('<div>').addClass('page'),
 
             // current page index (one-based!)
             page = 0,
@@ -58,16 +58,9 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, grabFocusHandler, { scrollable: true, margin: '52px 30px' });
+        BaseView.call(this, app, { scrollable: true, margin: '52px 30px' });
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Sets the browser focus to the page node.
-         */
-        function grabFocusHandler() {
-            pageNode.focus();
-        }
 
         /**
          * Initialization after construction. Will be called once after

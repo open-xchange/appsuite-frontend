@@ -39,13 +39,14 @@ define('io.ox/office/framework/view/baseview',
      * @param {BaseApplication} app
      *  The application containing this view instance.
      *
-     * @param {Function} grabFocusHandler
-     *  A function that has to implement moving the browser focus into the
-     *  application pane.
-     *
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
+     *  @param {Function} [options.grabFocusHandler]
+     *      A function that has to implement moving the browser focus somewhere
+     *      into the application pane. Used in the method BaseView.grabFocus()
+     *      of this class. If omitted, the application pane itself will be
+     *      focused.
      *  @param {Boolean} [options.scrollable=false]
      *      If set to true, the application pane will be scrollable, and the
      *      application container node becomes resizeable. By default, the size
@@ -56,10 +57,13 @@ define('io.ox/office/framework/view/baseview',
      *      The margin between the fixed application pane and the embedded
      *      application container node, as CSS 'margin' attribute.
      */
-    function BaseView(app, grabFocusHandler, options) {
+    function BaseView(app, options) {
 
         var // self reference
             self = this,
+
+            // moves the browser focus into a node of the application pane
+            grabFocusHandler = Utils.getFunctionOption(options, 'grabFocusHandler'),
 
             // centered application pane
             appPane = null,
@@ -188,7 +192,11 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.grabFocus = function () {
-            grabFocusHandler.call(this);
+            if (_.isFunction(grabFocusHandler)) {
+                grabFocusHandler.call(this);
+            } else {
+                thios.getAppPaneNode().focus();
+            }
             return this;
         };
 
@@ -629,6 +637,7 @@ define('io.ox/office/framework/view/baseview',
         // create the application pane, and insert the container node
         appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
         appPane.getNode()
+            .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
             .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
 

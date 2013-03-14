@@ -276,7 +276,7 @@ define('io.ox/office/framework/app/basecontroller',
             if (event.keyCode in shortcuts) {
                 _(shortcuts[event.keyCode]).each(function (shortcut) {
                     if (isMatchingShortcut(event, shortcut.definition)) {
-                        callSetHandler(shortcut.key, shortcut.definition.value);
+                        callSetHandler(shortcut.key, ('value' in shortcut.definition) ? shortcut.definition.value : event);
                     }
                 });
             }
@@ -357,7 +357,9 @@ define('io.ox/office/framework/app/basecontroller',
          *      - {Any} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
-         *          each shortcut definition may define its own value.
+         *          each shortcut definition may define its own value. If no
+         *          value has been defined, the 'keydown' event object will be
+         *          passed to the setter function.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.
