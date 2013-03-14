@@ -532,7 +532,6 @@ define('io.ox/core/commons-folderview',
             if (_.device('small')) {
                 sidepanel.addClass('slidein');
             }
-            container.scrollTop(top);
             app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
             return $.when();
         };

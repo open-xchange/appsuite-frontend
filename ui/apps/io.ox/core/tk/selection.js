@@ -677,41 +677,42 @@ define('io.ox/core/tk/selection',
                 interval,
                 scrollSpeed = 0,
                 yMax,
-                RANGE = 2 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
+                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
                 MAX = 1, // Maximal scrolling speed in px/ms.
-                scale = MAX / RANGE;
+                scale = MAX / RANGE,
+                nodeOffsetTop = 0;
 
                 $(this).addClass('dnd-over');
+
                 if ($(this).hasClass('expandable')) {
                     clearTimeout(expandTimer);
                     expandTimer = setTimeout(function () {
                         $(self).find('.folder-arrow').trigger('click');
-                    }, 800);
+                    }, 1500);
                 }
 
                 function canScroll() {
-                    return scrollSpeed < 0 && node.scrollTop > 0 ||
-                           scrollSpeed > 0 && node.scrollTop < yMax;
+                    var scrollTop = node.scrollTop;
+                    return scrollSpeed < 0 && scrollTop > 0 ||
+                           scrollSpeed > 0 && scrollTop < yMax;
                 }
 
                 // The speed is specified in px/ms. A range of 1 to 10 results
                 // in a speed of 100 to 1000 px/s.
-                function scroll(speed) {
-                    scrollSpeed = speed;
+                function scroll() {
                     if (canScroll()) {
                         var t0 = new Date().getTime(), y0 = node.scrollTop;
                         if (interval !== undefined) clearInterval(interval);
                         interval = setInterval(function () {
                             if (canScroll()) {
-                                var dt = new Date().getTime() - t0;
-                                var y = y0 + scrollSpeed * dt;
+                                var dt = new Date().getTime() - t0,
+                                y = y0 + scrollSpeed * dt;
                                 if (y < 0) y = 0;
                                 else if (y > yMax) y = yMax;
                                 else {
                                     node.scrollTop = y;
                                     return;
                                 }
-                                node.scrollTop = y;
                             }
                             clearInterval(interval);
                             interval = undefined;
@@ -721,26 +722,30 @@ define('io.ox/core/tk/selection',
                         interval = undefined;
                     }
                 }
-                $(node).on('mousemove', function (e) {
-                    if (helper === null) return;
 
-                    var y = e.pageY - $(node).offset().top;
+                $(node).on('mousemove.dnd', function (e) {
+                    if (helper === null) return;
+                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
+                    var y = e.pageY - nodeOffsetTop;
                     yMax = node.scrollHeight - node.clientHeight;
 
                     if (y < RANGE) {
-                        scroll((y - RANGE) * scale);
+                        scrollSpeed = (y - RANGE) * scale;
                     } else if (node.clientHeight - y < RANGE) {
-                        scroll((RANGE - node.clientHeight + y) * scale);
+                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
                     } else {
-                        scroll(0);
+                        scrollSpeed = 0;
                     }
-                }).on('mouseleave', function (e) {
-                    scroll(0);
-                    $(node).off('mousemove mouseleave');
+                    scroll();
+                }).on('mouseleave.dnd', function (e) {
+                    scrollSpeed = 0;
+                    scroll();
+                    $(node).off('mousemove.dnd mouseleave.dnd');
                 });
             }
 
             function out() {
+                clearTimeout(expandTimer);
                 $(this).removeClass('dnd-over');
             }
 
@@ -790,6 +795,7 @@ define('io.ox/core/tk/selection',
             }
 
             function drop(e) {
+                clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
                 $(this).trigger('selection:drop', [baton]);
