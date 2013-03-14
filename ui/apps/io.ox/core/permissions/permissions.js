@@ -339,7 +339,7 @@ define('io.ox/core/permissions/permissions',
 
                     if (isFolderAdmin) {
 
-                        dialog.addButton('cancel', gt('Cancel')).addPrimaryButton('save', gt('Save'));
+                        dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
                                 $('<input type="text" class="add-participant permissions-participant-input-field">'),

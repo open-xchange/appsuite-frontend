@@ -630,11 +630,9 @@ define('io.ox/core/api/folder',
                         return !!data['com.openexchange.publish.publicationFlag'];
                     case 'subscribed':
                         return !!data['com.openexchange.subscribe.subscriptionFlag'];
-                    case 'accessible':
+                    case 'unlocked':
                         // maybe need a better word. It's shared TO others
-                        if (data.permissions.length <= 1) {
-                            return false; // not shared
-                        }
+                        if (!data.permissions || data.permissions.length <= 1) return false;
                         // only shared BY me, not TO me
                         return data.type === 1 || data.type === 7 ||
                             (data.module === 'infostore' && data.created_by === ox.user_id);

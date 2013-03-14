@@ -880,7 +880,26 @@ define('io.ox/core/tk/folderviews',
             if (capabilities.has('publication') && api.is('published|subscribed', data)) {
                 this.find('.folder-label').append(
                     $('<i class="icon-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                    .on('click', {folder: data}, openPubSubSettings)
+                    .on('click', { folder: data }, openPubSubSettings)
+                );
+            }
+        }
+    });
+
+    function openPermissions(e) {
+        require(['io.ox/core/permissions/permissions'], function (controller) {
+            controller.show(e.data.folder);
+        });
+    }
+
+    ext.point('io.ox/foldertree/folder').extend({
+        index: 300,
+        id: 'shared',
+        customize: function (data) {
+            if (api.is('unlocked', data)) {
+                this.find('.folder-label').append(
+                    $('<i class="icon-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
+                    .on('click', { folder: data.id }, openPermissions)
                 );
             }
         }
