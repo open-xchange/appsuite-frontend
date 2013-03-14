@@ -172,6 +172,11 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        applyRefDate: function () {
+            this.startDate.setTime(this.refDate.getTime());
+            this.trigger('onRefresh');
+        },
+
         /**
          * setup setting params
          */

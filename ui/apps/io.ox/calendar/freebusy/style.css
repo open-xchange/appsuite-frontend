@@ -69,11 +69,20 @@
         z-index: 10;
     }
 
-    .view-dropdown {
+    .close-control {
         position: absolute;
         top: 20px;
         right: 13px;
         z-index: 20;
+        i { margin-left: 0.5em; }
+    }
+
+    .view-dropdown {
+        padding-top: 5px;
+        .dropdown-menu {
+            top: auto;
+            bottom: 110%;
+        }
     }
 
     .participants-view:after {

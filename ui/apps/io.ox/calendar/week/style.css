@@ -77,7 +77,8 @@
         top: @weekview-toolbar-height + @weekview-footer-height;
     }
 
-    .dayview .week-view-container {
+    .dayview .week-view-container,
+    &.dayview .week-view-container {
         top: @weekview-toolbar-height;
     }
 
@@ -145,7 +146,8 @@
         .overflow(hidden);
     }
 
-    .dayview .footer-container {
+    .dayview .footer-container,
+    &.dayview .footer-container {
         display: none;
     }
 

@@ -22,10 +22,11 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/contacts/util',
      'io.ox/calendar/api',
      'io.ox/core/notifications',
+     'io.ox/core/date',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
 
@@ -45,7 +46,9 @@ define('io.ox/calendar/freebusy/controller',
                 modes = { day: 1, workweek: 2, week: 3 },
                 calendarViews = {},
                 // folder data
-                folderData = {};
+                folderData = {},
+                // shared navigation date
+                refDate = new date.Local();
 
             this.promise = state.promise();
 
@@ -240,6 +243,7 @@ define('io.ox/calendar/freebusy/controller',
                     collection: this.appointments,
                     keyboard: false,
                     mode: modes[mode],
+                    refDate: refDate,
                     showFulltime: false,
                     startDate: options.start_date,
                     todayClass: ''
@@ -277,6 +281,8 @@ define('io.ox/calendar/freebusy/controller',
                 this.appointments.reset([]);
                 view.render();
                 view.showAll(false);
+
+                return view;
             };
 
             this.getCalendarViewInstance('workweek');
@@ -373,9 +379,8 @@ define('io.ox/calendar/freebusy/controller',
             this.changeMode = function (mode) {
                 if (currentMode !== mode) {
                     this.getCalendarViewInstance(mode);
-                    this.refresh();
                     _.defer(function () {
-                        self.getCalendarView().setScrollPos();
+                        self.getCalendarView().setScrollPos().applyRefDate();
                     });
                 }
             };
@@ -394,13 +399,14 @@ define('io.ox/calendar/freebusy/controller',
             this.$el.append(
                 templates.getHeadline(standalone),
                 templates.getParticipantsScrollpane().append(this.participantsView),
-                templates.getIntervalDropdown().on('click', 'li a', changeView),
+                !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
-                    (!standalone ? templates.getBackButton() : templates.getQuitButton()).on('click', clickButton),
+                    templates.getIntervalDropdown().on('click', 'li a', changeView),
                     this.autoCompleteControls,
                     templates.getPopover(standalone)
                 )
-            );
+            )
+            .on('click', '.close-control a', clickButton);
         },
 
         getInstance: function (options, callback) {

@@ -50,7 +50,7 @@ define('io.ox/calendar/freebusy/templates',
         },
 
         getIntervalDropdown: function () {
-            return $('<div class="view-dropdown dropdown">').append(
+            return $('<div class="view-dropdown dropdown pull-right">').append(
                 $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" tabindex="4">').text(gt('Change view')),
                 $.txt(' '), $('<b class="caret">'),
                 $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
@@ -91,12 +91,18 @@ define('io.ox/calendar/freebusy/templates',
                 });
         },
 
-        getBackButton: function () {
-            return $('<button class="btn pull-right" tabindex="3" data-action="cancel">').text(gt('Back to appointment'));
+        getBackControl: function () {
+            return $('<div class="close-control">').append(
+                $('<a href="#" tabindex="3" data-action="cancel">').text(gt('Back to appointment')),
+                $('<i class="icon-reply">')
+            );
         },
 
-        getQuitButton: function () {
-            return $('<button class="btn pull-right" tabindex="3" data-action="quit">').text(gt('Quit'));
+        getQuitControl: function () {
+            return $('<div class="close-control">').append(
+                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')),
+                $('<i class="icon-remove">')
+            );
         },
 
         informAboutfallback: function (data) {
