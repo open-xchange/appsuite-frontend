@@ -90,7 +90,7 @@ function jsFilter (data) {
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-    
+
     // Check for NBSPs, Eclipse doesn't like them
     if (data.indexOf('\xa0') >= 0) {
         _.each(data.split(/\r\n?|\n/), function (line, lineno) {
@@ -101,7 +101,7 @@ function jsFilter (data) {
                          ':' + (col + 1));
         });
     }
-    
+
     var tree = parse(data, self.task.name);
 
     // Custom processing of the parsed AST
@@ -204,7 +204,7 @@ utils.topLevelTask('default', ['buildApp'], function() {
     utils.summary('default')();
 });
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "print.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
 //html

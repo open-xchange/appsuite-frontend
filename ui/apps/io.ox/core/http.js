@@ -396,7 +396,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             // get id
             column = columns[i];
             id = ids[column] || column;
-            if (id === undefined) {
+            // check for length since mighty backend might magically add unrequested columns
+            if (id === undefined && i < columns.length) {
                 console.error('Undefined column', data, module, columns, 'index', i);
             }
             // extend object
@@ -846,7 +847,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          * @returns {Array} All columns
          */
         getAllColumns: getAllColumns,
-        
+
         /**
          * Returns the column mapping of a module
          * @param {string} module The module name.
@@ -856,7 +857,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
         },
-        
+
         /**
          * Transform objects with array-based columns into key-value-based columns
          * @param {Array} data Data

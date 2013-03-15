@@ -230,6 +230,11 @@ define('io.ox/mail/util',
             return getDateFormated(timestamp, options);
         },
 
+        getFullDate: function (timestamp) {
+            var t = new date.Local(date.Local.utc(timestamp));
+            return t.format(date.DATE_TIME);
+        },
+
         getSmartTime: function (timestamp) {
             var now = new Date(),
                 zone = now.getTimezoneOffset(),

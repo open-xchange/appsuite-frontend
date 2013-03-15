@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="apps/themes/login/print.css">
+</head>
+<body>
+
+
+<script type="text/template" class="mail">
+{{~it.data :item}}
+<div class="item">
+    <b class="date pull-left">{{! item.from }}</b>
+    <span class="date pull-right">{{! item.date }}</span>
+    <div class="clear"></div>
+    <h1>{{! item.subject}}</h1>
+    <div class="to-and-cc">
+        <label>{{! it.i18n.to }}</label> {{! item.to }}
+        {{? item.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! item.cc }}{{?}}
+    </div>
+    <pre class="content">{{! item.content }}</pre>
+</div>
+{{~}}
+</script>
+
+
+<script type="text/template" class="phonelist">
+<h1>{{! it.i18n.phonelist }}</h1>
+<table border="0">
+<thead>
+    <tr>
+        <th>{{! it.i18n.name }}</th>
+        <th>{{! it.i18n.phone }}</th>
+        <th>{{! it.i18n.cellphone }}</th>
+    </tr>
+</thead>
+<tbody>
+{{~it.data :item}}
+    <tr>
+        <td><b>{{! item.name }}</b></td>
+        <td>{{! item.phone1 || '-' }}</td>
+        <td>{{! item.cellphone1 || '-' }}</td>
+    </tr>
+    <tr>
+        <td>{{! item.where }}</td>
+        <td>{{! item.phone2 }}</td>
+        <td>{{! item.cellphone2 }}</td>
+    </tr>
+    <tr>
+        <td colspan="3" class="spacer">&nbsp;</td>
+    </tr>
+{{~}}
+</tbody>
+</table>
+</script>
+
+
+<script type="text/template" class="appointment">
+{{~it.data :item}}
+<div class="item">
+    <span class="date pull-left">{{! item.date }}</span>
+    <span class="time pull-right">{{! item.time }}</span>
+    <div class="clear"></div>
+    <h1>{{! item.subject}}</h1>
+    <p class="location">{{! item.location }}</p>
+    {{? item.content !== '' }}<pre class="content">{{! item.content }}</pre>{{?}}
+    <p class="participants top-border">
+    {{? item.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    </p>
+</div>
+{{~}}
+</script>
+
+
+<script type="text/template" class="task">
+{{~it.data :item}}
+<div class="item">
+    {{? item.start }}<span class="date pull-left"><label>{{! it.i18n.start }}:</label> {{! item.start }}</span>{{?}}
+    {{? item.due }}<span class="time pull-right"><label>{{! it.i18n.due }}:</label> {{! item.due }}</span>{{?}}
+    <div class="clear"></div>
+    <h1>{{! item.subject}}</h1>
+    <p class="state">{{= item.state }}</p>
+    {{? item.content !== '' }}<pre class="content">{{! item.content }}</pre>{{?}}
+    {{? item.numParticipants > 0 }}
+    <p class="participants top-border">
+    {{? item.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    {{? item.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
+        <i class="spacer"></i>
+    {{?}}
+    </p>
+    {{?}}
+</div>
+{{~}}
+</script>
+
+
+<!-- the only magic we need here; asks UI to use the upper template -->
+<script>window.opener[location.search.substr(1)](document);</script>
+
+</body>
+</html>
