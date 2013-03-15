@@ -2223,7 +2223,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         '9':            57,
 */
 
-        MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186)
+        MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
+        MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
+        MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
 
 /* enable when needed
         A:              65,
@@ -2269,11 +2271,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         NUM_8:          104,
         NUM_9:          105,
 */
-        MULTIPLY:       106,
-        PLUS:           107,
-        MINUS:          109,
-        DECIMAL_POINT:  110,
-        DIVIDE:         111,
+        NUM_MULTIPLY:   106,
+        NUM_PLUS:       107,
+        NUM_MINUS:      109,
+        NUM_POINT:      110,
+        NUM_DIVIDE:     111,
 
         F1:             112,
         F2:             113,
@@ -2292,10 +2294,14 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         SCROLL_LOCK:    145
 
 /* enable when needed
-        SEMICOLON:      186,
-        EQUAL_SIGN:     187,
+        MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
+        MOZ_PLUS:       171,    // Plus sign in Firefox, German keyboard (otherwise: 187 EQUAL_SIGN)
+        MOZ_DASH:       173,    // Dash sign in Firefox (otherwise: 189 DASH)
+
+        SEMICOLON:      186,    // (but Firefox: 59 MOZ_SEMICOLON)
+        EQUAL_SIGN:     187,    // (but Firefox: 61 MOZ_EQUAL_SIGN)
         COMMA:          188,
-        DASH:           189,    // Firefox sends 109 (NumPad MINUS)
+        DASH:           189,    // (but Firefox: 173 MOZ_DASH)
         PERIOD:         190,
         SLASH:          191,
         GRAVE:          192,
@@ -2303,7 +2309,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         BACKSLASH:      220,
         CLOSE_BRACKET:  221,
         APOSTROPH:      222,
-        OPEN_ANGLE:     226     // German keyboard
+        OPEN_ANGLE:     226     // Open angle, German keyboard (but Firefox: 60 MOZ_OPEN_ANGLE)
 */
     };
 
