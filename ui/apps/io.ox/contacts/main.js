@@ -120,21 +120,27 @@ define("io.ox/contacts/main",
             }
         });
 
+        // The label function can be overwritten by an extension.
+        var getLabel = function (data) {
+            return (data.sort_name || '#').slice(0, 1).toUpperCase();
+        };
+        ext.point('io.ox/contacts/getLabel').each(function (extension) {
+            if (extension.getLabel) getLabel = extension.getLabel;
+        });
+        
         // add label template
         grid.addLabelTemplate({
             build: function () {
             },
             set: function (data, fields, index) {
-                var name = data.last_name || data.display_name || "#";
-                this.text(_.noI18n(name.substr(0, 1).toUpperCase()));
+                this.text(_.noI18n(getLabel(data)));
             }
         });
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             if (!data) { return false; }
-            var name = data.last_name || data.display_name || "#",
-                prefix = _.noI18n(name.substr(0, 1).toUpperCase());
+            var prefix = getLabel(data);
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 

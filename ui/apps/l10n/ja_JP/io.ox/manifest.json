@@ -2,7 +2,7 @@
     "namespace": [
         "io.ox/contacts/view-detail",
         "io.ox/contacts/edit/view-form",
-        "io.ox/contacts/api"
+        "io.ox/contacts/main"
     ],
     "device": "ja_JP"
 }

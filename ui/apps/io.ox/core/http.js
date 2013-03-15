@@ -154,7 +154,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "601" : "image1_content_type",
             "602" : "mark_as_distributionlist",
             "605" : "default_address",
-            "606" : "image1_url"
+            "606" : "image1_url",
+            "607" : "sort_name",
+            "610" : "yomiFirstName",
+            "611" : "yomiLastName",
+            "612" : "yomiCompany"
         },
         "calendar" : {
             "200" : "title",
@@ -355,7 +359,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     delete idMapping.files["101"]; // not "common" here (exception)
     delete idMapping.files["104"];
     $.extend(idMapping.tasks, idMapping.common);
-    $.extend(idMapping.user, idMapping.contacts, idMapping.common);
+    // See bug #25300
+    idMapping.user = $.extend({}, idMapping.contacts, idMapping.common, idMapping.user);
 
     var that = {};
 

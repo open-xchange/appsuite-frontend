@@ -166,13 +166,13 @@ define('l10n/ja_JP/io.ox/register', [
             for (var i = 0; i < value.length; i++) {
                 var c = value.charCodeAt(i);
                 
-                // Convert Hiragana to Katakana
+                // convert hiragana to katakana
                 if (c >= 0x3041 && c <= 0x309e) c += 0x60;
                 
-                // Copy only Katakana (and Hiragana "yori")
-                if (c >= 0x309f && c <= 0x30ff || // Katakana
-                    c >= 0x31f0 && c <= 0x31ff || // Katakana phonetic extensions
-                    c >= 0xff61 && c <= 0xff9f)   // halfwidth Katakana
+                // copy only katakana (and hiragana "yori")
+                if (c >= 0x309f && c <= 0x30ff || // katakana
+                    c >= 0x31f0 && c <= 0x31ff || // katakana phonetic extensions
+                    c >= 0xff61 && c <= 0xff9f)   // halfwidth katakana
                 {
                     kana.push(c);
                 }
@@ -194,11 +194,34 @@ define('l10n/ja_JP/io.ox/register', [
     
     // VGrid
     
-    ext.point('io.ox/contacts/api/list').extend({
+    var exceptions = { 0x3094: 0x3046, 0x3095: 0x304b, 0x3096: 0x3051,
+            0x309f: 0x3088, 0x30f4: 0x30a6, 0x30f5: 0x30ab, 0x30f6: 0x30b1,
+            0x30ff: 0x30b3, 0x31f0: 0x30af, 0x31f1: 0x30b7, 0x31f2: 0x30b9,
+            0x31f3: 0x30c8, 0x31f4: 0x30cc, 0x31f5: 0x30cf, 0x31f6: 0x30d2,
+            0x31f7: 0x30d5, 0x31f8: 0x30d8, 0x31f9: 0x30d8, 0x31fa: 0x30e0,
+            0x31fb: 0x30e9, 0x31fc: 0x30ea, 0x31fd: 0x30eb, 0x31fe: 0x30ec,
+            0x31ff: 0x30ed },
+        ranges = [0x304a, 0x3054, 0x305e, 0x3069, 0x306e,
+                  0x307d, 0x3082, 0x3088, 0x308d],
+        letters = [0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
+                   0x306f, 0x307e, 0x3084, 0x3089, 0x308f];
+    
+    ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
-        columns: function () {
-            return [611, 'last_name', 'display_name', 612, 'company', 'email1',
-                    'email2'];
+        getLabel: function (data) {
+            var c = (data.sort_name || '#').slice(0, 1).toUpperCase()
+                                                       .charCodeAt(0);
+            // special handling of kana characters
+            if (c >= 0x3040 && c < 0x3100) {
+                c = exceptions[c] || c;
+                
+                // convert katakana to hiragana
+                if (c >= 0x30a1 && c <= 0x30fe) c -= 0x60;
+                
+                // find the hiragana which represents the entire range
+                c = letters[_.sortedIndex(ranges, c)];
+            }
+            return String.fromCharCode(c);
         }
     });
     
