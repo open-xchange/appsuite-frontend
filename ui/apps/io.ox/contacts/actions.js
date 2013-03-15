@@ -300,7 +300,7 @@ define('io.ox/contacts/actions',
                                     template: 'infostore://12495', // tobias
                                     view: 'text',
                                     format: 'template',
-                                    columns: '501,502,519,526'
+                                    columns: '501,502,519,526,542,543,547,548,549,551,552'
                                 },
                                 data: cleanedList
                             });

@@ -3,35 +3,48 @@ BEGIN
 END
 <html>
     <head>
-    <title></title>
-    <style></style>
+    <title>${helper.contacts.labels.i18n("Phone list")}</title>
+    <style type="text/css">
+        ${templates.include( "infostore://12507" )}
+    </style>
+    
     </head>
     <body>
         <div class="phone-list" style="text-align:center;">
-            <h3>Phone list</h3>
-            <hr></hr>
+            <h3>${helper.contacts.labels.i18n("Phone list")}</h3>
             <table width="100%">
                 <thead>
                     <tr>
-                        <th style="text-align: left;">Name, Department, City</th>
-                        <th style="text-align: left;">Phone</th>
-                        <th style="text-align: left;">Mobile</th>
+                        <th style="">${helper.contacts.labels.i18n("Name")}, ${helper.contacts.labels.i18n("Department")}, ${helper.contacts.labels.i18n("City")}</th>
+                        <th style="">${helper.contacts.labels.i18n("Phone")}</th>
+                        <th style="">${helper.contacts.labels.i18n("Mobile")}</th>
                     </tr>
                 </thead>
                 <tbody>
-                <#if data?is_hash>
-                    <#assign data = [data]>
-                </#if>
+                <#assign arrayOfNames = ['first_name','last_name','department','city_business','telephone_business1','telephone_business2','telephone_company','telephone_home1','telephone_home2','cellular_telephone1','cellular_telephone2']>
+                <#assign arrayOfNumbers = ['501','502','519','526','542','543','547','548','549','551','552']>
+                
                 <#list data as contact>
                     <tr>
-                        <td style="text-align: left;">${contact[0]}, ${contact[1]}<br>${contact[2]}, ${contact[3]}</td>
-                        <td style="text-align: left;"></td>
-                        <td style="text-align: left;">+1 248 701 77777</td>
+                        <#if contact[2]?? && contact[2] != "" && contact[3] != "">
+                        <td><span class="name">${helper.contacts.enhanced.getFullname(arrayOfNames, contact)}</span><br>${contact[2]!""}, ${contact[3]!""}</td>
+                        <#else>
+                        <td><span class="name">${helper.contacts.enhanced.getFullname(arrayOfNames, contact)}</span><br>${contact[2]!""}${contact[3]!""}</td>
+                        </#if>
+                        
+                        <td>
+                            <#assign telarray = helper.contacts.enhanced.getStandardPhones(arrayOfNames, contact)>
+                            ${telarray[0]!""}<br>
+                            ${telarray[1]!""}
+                        </td>
+                        <td>
+                            <#assign mobileArray = helper.contacts.enhanced.getCellphones(arrayOfNames, contact)>
+                            ${mobileArray[0]!""}<br>
+                            ${mobileArray[1]!""}
+                        </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="spacer" colspan="3"></td>
                     </tr>
                 </#list>
                 

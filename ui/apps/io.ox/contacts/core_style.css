@@ -1,0 +1,30 @@
+@page  {
+    margin: 1.5cm 1.5cm 2.0cm 1.5cm; /* top right bottom left */
+}
+body {
+    color: #333333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+th {
+	font-style: italic;
+}
+
+td, th {
+	text-align: left;
+	vertical-align: top;
+}
+
+h3 {
+	text-align: left;
+}
+
+.name {
+	font-weight: bold;
+}
+
+.spacer {
+	height: 15px;
+}
