@@ -917,7 +917,6 @@ define('io.ox/core/tk/folderviews',
 
             var folder = tmplFolder.clone()
                 .append(
-                    $('<img>', { src: '', alt: '' }).addClass('folder-icon'),
                     $('<span>').addClass('folder-label')
                 )
                 .attr('data-obj-id', data.id);
