@@ -3,11 +3,40 @@ BEGIN
 END
 <html>
     <head>
-        <title></title>
-        <style>
-        </style>
+    <title></title>
+    <style></style>
     </head>
     <body>
-        
+        <div class="phone-list" style="text-align:center;">
+            <h3>Phone list</h3>
+            <hr></hr>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Name, Department, City</th>
+                        <th style="text-align: left;">Phone</th>
+                        <th style="text-align: left;">Mobile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <#if data?is_hash>
+                    <#assign data = [data]>
+                </#if>
+                <#list data as contact>
+                    <tr>
+                        <td style="text-align: left;">${contact[0]}, ${contact[1]}<br>${contact[2]}, ${contact[3]}</td>
+                        <td style="text-align: left;"></td>
+                        <td style="text-align: left;">+1 248 701 77777</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </#list>
+                
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>

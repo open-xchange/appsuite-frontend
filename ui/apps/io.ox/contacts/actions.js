@@ -18,8 +18,7 @@ define('io.ox/contacts/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'io.ox/core/print'], function (ext, links, api, config, notifications, gt, settings, print) {
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, gt, settings) {
 
     'use strict';
 
@@ -270,6 +269,7 @@ define('io.ox/contacts/actions',
         requires: 'some read',
 
         multiple: function (list) {
+            var win;
             api.getList(list).done(function (list) {
                 var cleanedList = [];
 
@@ -282,9 +282,40 @@ define('io.ox/contacts/actions',
 
                     }
                 });
-                console.log(cleanedList);
-                var options = { template: 'infostore://70213', action: 'list', columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606'};
-                print.open('contacts', cleanedList[0], options);
+
+                require(['io.ox/core/print'], function (print) {
+                    win = print.openURL();
+                    win.document.title = gt('Print');
+
+                    require(['io.ox/core/http'], function (http) {
+
+                        var getPrintable = function (cleanedList) {
+                            return http.PUT({
+                                module: 'contacts',
+                                dataType: 'text',
+                                params: {
+                                    action: 'list',
+//                                    template: 'infostore://70170', // dev
+//                                    template: 'infostore://70213', //  ui-dev
+                                    template: 'infostore://12495', // tobias
+                                    view: 'text',
+                                    format: 'template',
+                                    columns: '501,502,519,526'
+                                },
+                                data: cleanedList
+                            });
+                        };
+
+                        getPrintable(cleanedList)
+                        .done(function (print) {
+                            var $content = $('<div>').append(print);
+                            win.document.write($content.html());
+                            win.print();
+                        });
+
+                    });
+                });
+
 
 
 
