@@ -293,7 +293,12 @@ define('io.ox/office/framework/app/basecontroller',
 
             // executes the item setter defined in the passed shortcut
             function callSetHandlerForShortcut(shortcut) {
-                callSetHandler(shortcut.key, shortcut.definition.value, event);
+
+                var // call value resolver function, or take constant value
+                    value = _.isFunction(shortcut.definition.value) ?
+                        shortcut.definition.value(self.get(shortcut.key)) : shortcut.definition.value;
+
+                callSetHandler(shortcut.key, value, event);
                 if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -408,10 +413,13 @@ define('io.ox/office/framework/app/basecontroller',
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Any} [shortcut.value]
+         *      - {Any|Function} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
-         *          each shortcut definition may define its own value.
+         *          each shortcut definition may define its own value. If this
+         *          option contains a function, it will receive the current
+         *          value of the controller item as first parameter, and its
+         *          return value will be passed to the setter function.
          *      - {Boolean} [shortcut.propagate=false]
          *          If set to true, the event will propagate up to the DOM root
          *          element, and the browser will execute its default action
