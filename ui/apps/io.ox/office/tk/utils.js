@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
+define('io.ox/office/tk/utils',
+    ['io.ox/office/tk/config',
+     'io.ox/core/gettext'
+    ], function (Config, gettext) {
 
     'use strict';
 
@@ -23,6 +26,29 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         // selector for the label <span> element in a control caption
         LABEL_SELECTOR = 'span[data-role="label"]';
+
+    // private global functions ===============================================
+
+    /**
+     * Writes a message to the browser output console.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
+     *
+     * @param {String} [level='log']
+     *  The log level of the message. The string 'log' will create a
+     *  generic log message, the string 'info' will create an information,
+     *  the string 'warn' will create a warning message, and the string
+     *  'error' will create an error message.
+     */
+    function log(message, level) {
+        // check that the browser console supports the operation
+        if (_.isFunction(window.console[level])) {
+            window.console[level](message);
+        } else {
+            window.console.log(level.toUpperCase() + ': ' + message);
+        }
+    }
 
     // static class Utils =====================================================
 
@@ -2315,63 +2341,41 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // console output =========================================================
 
-    Utils.MIN_LOG_LEVEL = 'log';
-
     /**
-     * Writes a message to the browser output console.
+     * Writes a log message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
      * @param {String} message
      *  The message text to be written to the console.
+     */
+    Utils.log = Config.isDebug() ? function (message) { log(message, 'log'); } : $.noop;
+
+    /**
+     * Writes an info message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
-     * @param {String} [level='log']
-     *  The log level of the message. The string 'log' will create a generic
-     *  log message, the string 'info' will create an information, the string
-     *  'warn' will create a warning message, and the string 'error' will
-     *  create an error message.
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.log = (function () {
-
-        var // supported log levels, sorted by severity
-            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
-
-        return function (message, level) {
-
-            // validate passed log level and get its index
-            level = LOG_LEVELS.contains(level) ? level : 'log';
-
-            // do not log if index is less than index of configured log level
-            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
-
-                // check that the browser console supports the operation
-                if (_.isFunction(window.console[level])) {
-                    window.console[level](message);
-                } else {
-                    window.console.log(level.toUpperCase() + ': ' + message);
-                }
-            }
-        };
-    }());
+    Utils.info = Config.isDebug() ? function (message) { log(message, 'info'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'info').
+     * Writes a warning message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.info = function (message) {
-        Utils.log(message, 'info');
-    };
+    Utils.warn = Config.isDebug() ? function (message) { log(message, 'warn'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'warn').
+     * Writes an error message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.warn = function (message) {
-        Utils.log(message, 'warn');
-    };
-
-    /**
-     * Shortcut for Utils.log(message, 'error').
-     */
-    Utils.error = function (message) {
-        Utils.log(message, 'error');
-    };
+    Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
 
     // global initialization ==================================================
 
