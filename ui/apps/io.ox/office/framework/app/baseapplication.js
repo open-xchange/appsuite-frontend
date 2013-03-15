@@ -768,33 +768,6 @@ define('io.ox/office/framework/app/baseapplication',
          * events. The event handler will be activated when the application
          * window is visible; and deactivated, when the application window is
          * hidden.
-         *
-         * @param {Function} resizeHandler
-         *  The resize handler function bound to 'resize' events of the browser
-         *  window. Will be triggered once when the application window becomes
-         *  visible.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.registerWindowResizeHandler = function (resizeHandler) {
-            this.getWindow().on({
-                show: function () {
-                    $(window).on('resize', resizeHandler);
-                    resizeHandler();
-                },
-                hide: function () {
-                    $(window).off('resize', resizeHandler);
-                }
-            });
-            return this;
-        };
-
-        /**
-         * Registers a handler at the browser window that listens to resize
-         * events. The event handler will be activated when the application
-         * window is visible; and deactivated, when the application window is
-         * hidden.
          * @param {String} event
          *  The document event that the handler should be registered for.
          *
