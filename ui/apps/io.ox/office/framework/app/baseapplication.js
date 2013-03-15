@@ -820,6 +820,35 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Registers a handler at the document that listens to document
+         * events. The event handler will be activated when the application
+         * window is visible; and deactivated, when the application window is
+         * hidden.
+         * @param {String} event
+         *  The document event that the handler should be registered for.
+         *
+         * @param {Function} documentHandler
+         *  The document handler function bound to  events of the browser
+         *  document. Will be triggered once when the application window becomes
+         *  visible.
+         *
+         * @returns {BaseApplication}
+         *  A reference to this application instance.
+         */
+        this.registerDocumentHandler = function (event, documentHandler) {
+            this.getWindow().on({
+                show: function () {
+                    $(document).on(event, documentHandler);
+                    documentHandler();
+                },
+                hide: function () {
+                    $(document).off(event, documentHandler);
+                }
+            });
+            return this;
+        };
+
+        /**
          * Executes all registered quit handlers and returns a Deferred object
          * that will be resolved or rejected according to the rasults of the
          * handlers.
