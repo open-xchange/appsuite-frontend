@@ -172,7 +172,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants dont have an id but the display name is already given
-                                userApi.get(participant.id).done(function (userInformation) {
+                                userApi.get({id: participant.id}).done(function (userInformation) {
                                         drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {
                                         failedToLoad(node, table, participant);
