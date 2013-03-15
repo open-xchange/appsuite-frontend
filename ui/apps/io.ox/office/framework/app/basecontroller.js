@@ -84,8 +84,11 @@ define('io.ox/office/framework/app/basecontroller',
             // number of item setters currently running (recursion counter)
             runningSetters = 0,
 
-            // shortcut definitions, mapped by key code (for performance)
-            shortcuts = {};
+            // shortcut definitions for 'keydown', mapped by key code (for performance)
+            keyShortcuts = {},
+
+            // shortcut definitions for 'keypress', mapped by char code (for performance)
+            charShortcuts = {};
 
         // class Item ---------------------------------------------------------
 
@@ -266,25 +269,43 @@ define('io.ox/office/framework/app/basecontroller',
         }
 
         /**
-         * Handles 'keydown' events and calls the setter of this item, if
-         * it contains a matching keyboard shortcut definition.
+         * Handles 'keydown' and 'keypress' events and calls the setter of this
+         * item, if it contains a matching keyboard shortcut definition.
          *
          * @param {jQuery.Event} event
-         *  The jQuery 'keydown' event. If a matching shortcut definition has
-         *  been found, propagation of the event will be stopped, and the
-         *  browser default action will be suppressed.
+         *  The jQuery event object. If a matching shortcut definition has been
+         *  found, propagation of the event will be stopped, and the browser
+         *  default action will be suppressed.
          */
-        function shortcutHandler(event) {
-            if (event.keyCode in shortcuts) {
-                _(shortcuts[event.keyCode]).each(function (shortcut) {
-                    if (isMatchingShortcut(event, shortcut.definition)) {
-                        callSetHandler(shortcut.key, shortcut.definition.value, event);
-                        if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
-                            event.stopPropagation();
-                            event.preventDefault();
+        function keyHandler(event) {
+
+            // executes the item setter defined in the passed shortcut
+            function callSetHandlerForShortcut(shortcut) {
+                callSetHandler(shortcut.key, shortcut.definition.value, event);
+                if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            }
+
+            switch (event.type) {
+            case 'keydown':
+                // process all shortcut definitions for the key code in the passed event
+                if (event.keyCode in keyShortcuts) {
+                    _(keyShortcuts[event.keyCode]).each(function (shortcut) {
+                        // check if the additional control keys match the shortcut definition
+                        if (isMatchingShortcut(event, shortcut.definition)) {
+                            callSetHandlerForShortcut(shortcut);
                         }
-                    }
-                });
+                    });
+                }
+                break;
+            case 'keypress':
+                // process all shortcut definitions for the char code in the passed event
+                if (event.charCode in charShortcuts) {
+                    _(charShortcuts[event.charCode]).each(callSetHandlerForShortcut);
+                }
+                break;
             }
         }
 
@@ -336,46 +357,56 @@ define('io.ox/office/framework/app/basecontroller',
          *      setter function.
          *  @param {Object|Array} [definition.shortcut]
          *      One or multiple keyboard shortcut definitions. If the window
-         *      root node of the application receives a 'keydown' event that
-         *      matches a shortcut definition, the setter function of this item
-         *      will be executed, and will receive the 'keydown' event in its
-         *      second parameter. Can be as single shortcut definition, or an
-         *      array of shortcut definitions. Each definition object supports
-         *      the following attributes:
-         *      - {Number} shortcut.keyCode
-         *          The key code of the shortcut (see Utils.KeyCodes).
+         *      root node of the application receives a 'keydown' or 'keypress'
+         *      event that matches a shortcut definition, the setter function
+         *      of this item will be executed, and will receive the event
+         *      object in its second parameter. Can be as single shortcut
+         *      definition, or an array of shortcut definitions. Each
+         *      definition object supports the following attributes:
+         *      - {Number|String} [shortcut.charCode]
+         *          If specified, the shortcut definition will be matched
+         *          against 'keypress' events, and the value represents the
+         *          numeric code point of a Unicode character, or the Unicode
+         *          character as a string.
+         *      - {Number} [shortcut.keyCode]
+         *          If specified, the shortcut definition will be matched
+         *          against 'keydown' events, and the value represents the raw
+         *          key code as defined in Utils.KeyCodes.
          *      - {Boolean|Null} [shortcut.shiftKey=false]
-         *          If set to true, the SHIFT key must be pressed. If set to
-         *          false (or omitted), the SHIFT key must not be pressed.  If
-         *          set to null, the current state of the SHIFT key will be
-         *          ignored.
+         *          If set to true, the SHIFT key must be pressed when the
+         *          'keydown' events is received. If set to false (or omitted),
+         *          the SHIFT key must not be pressed. If set to null, the
+         *          current state of the SHIFT key will be ignored. Has no
+         *          effect when evaluating 'keypress' events.
          *      - {Boolean|Null} [shortcut.altKey=false]
-         *          If set to true, the ALT key must be pressed. If set to
-         *          false (or omitted), the ALT key must not be pressed.  If
-         *          set to null, the current state of the ALT key will be
-         *          ignored.
+         *          If set to true, the ALT key must be pressed when the
+         *          'keydown' events is received. If set to false (or omitted),
+         *          the ALT key must not be pressed. If set to null, the
+         *          current state of the ALT key will be ignored. Has no effect
+         *          when evaluating 'keypress' events.
          *      - {Boolean|Null} [shortcut.ctrlKey=false]
-         *          If set to true, the CTRL key must be pressed. If set to
-         *          false (or omitted), the CTRL key must not be pressed.  If
-         *          set to null, the current state of the CTRL key will be
-         *          ignored.
+         *          If set to true, the CTRL key must be pressed when the
+         *          'keydown' events is received. If set to false (or omitted),
+         *          the CTRL key must not be pressed. If set to null, the
+         *          current state of the CTRL key will be ignored. Has no
+         *          effect when evaluating 'keypress' events.
          *      - {Boolean|Null} [shortcut.metaKey=false]
-         *          If set to true, the META key must be pressed. If set to
-         *          false (or omitted), the META key must not be pressed.  If
-         *          set to null, the current state of the META key will be
-         *          ignored.
+         *          If set to true, the META key must be pressed when the
+         *          'keydown' events is received. If set to false (or omitted),
+         *          the META key must not be pressed. If set to null, the
+         *          current state of the META key will be ignored. Has no
+         *          effect when evaluating 'keypress' events.
          *      - {Any} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
          *          each shortcut definition may define its own value.
          *      - {Boolean} [shortcut.propagate=false]
-         *          If set to true, the 'keydown' event will propagate up to
-         *          the DOM root element, and the browser will execute its
-         *          default action (but the setter function called by this
-         *          shortcut receives the event any may decide to cancel
-         *          propagation manually). If omitted or set to false, the
-         *          event will be cancelled immediately after calling the
-         *          setter function.
+         *          If set to true, the event will propagate up to the DOM root
+         *          element, and the browser will execute its default action
+         *          (but the setter function called by this shortcut receives
+         *          the event any may decide to cancel propagation manually).
+         *          If omitted or set to false, the event will be cancelled
+         *          immediately after calling the setter function.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.
@@ -392,8 +423,14 @@ define('io.ox/office/framework/app/basecontroller',
                 items[key] = new Item(key, definition);
                 if (_.isObject(definition.shortcut)) {
                     _.chain(definition.shortcut).getArray().each(function (shortcut) {
-                        var keyCode = Utils.getIntegerOption(shortcut, 'keyCode', 0);
-                        (shortcuts[keyCode] || (shortcuts[keyCode] = [])).push({ key: key, definition: shortcut });
+                        var keyCode = Utils.getIntegerOption(shortcut, 'keyCode', -1),
+                            charCode = Utils.getIntegerOption(shortcut, 'charCode') || Utils.getStringOption(shortcut, 'charCode', '').charCodeAt(0);
+                        if (keyCode > 0) {
+                            (keyShortcuts[keyCode] || (keyShortcuts[keyCode] = [])).push({ key: key, definition: shortcut });
+                        }
+                        if (charCode > 0) {
+                            (charShortcuts[charCode] || (charShortcuts[charCode] = [])).push({ key: key, definition: shortcut });
+                        }
                     });
                 }
             }
@@ -517,7 +554,7 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         this.destroy = function () {
-            app.getWindowNode().off('keydown', shortcutHandler);
+            app.getWindowNode().off('keydown keypress', keyHandler);
             this.events.destroy();
             items = null;
         };
@@ -528,7 +565,7 @@ define('io.ox/office/framework/app/basecontroller',
         this.registerDefinitions(items);
 
         // register 'keydown' event listener for keyboard shortcuts
-        app.getWindowNode().on('keydown', shortcutHandler);
+        app.getWindowNode().on('keydown keypress', keyHandler);
 
     } // class BaseController
 

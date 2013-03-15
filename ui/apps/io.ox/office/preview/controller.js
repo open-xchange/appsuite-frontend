@@ -93,13 +93,13 @@ define('io.ox/office/preview/controller',
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
                     set: function () { view.decreaseZoomLevel(); },
-                    shortcut: { keyCode: KeyCodes.MINUS }
+                    shortcut: { charCode: '-' }
                 },
                 'zoom/inc': {
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
                     set: function () { view.increaseZoomLevel(); },
-                    shortcut: { keyCode: KeyCodes.PLUS }
+                    shortcut: { charCode: '+' }
                 },
                 'zoom/current': {
                     parent: 'document/valid',
