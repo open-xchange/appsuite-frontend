@@ -61,7 +61,6 @@ define('io.ox/mail/print',
                     copy: gt.npgettext('CC', 'Copy', 'Copy', 1)
                 },
 
-                file: 'print.html',
                 process: process,
                 selection: selection,
                 selector: '.mail',

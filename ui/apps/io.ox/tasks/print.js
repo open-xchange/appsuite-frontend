@@ -68,7 +68,6 @@ define('io.ox/tasks/print',
                     unconfirmed: gt('Unconfirmed')
                 },
 
-                file: 'print.html',
                 process: process,
                 selection: selection,
                 selector: '.task',

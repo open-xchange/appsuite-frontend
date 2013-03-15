@@ -198,7 +198,6 @@ define('io.ox/calendar/print',
                     unconfirmed: gt('Unconfirmed')
                 },
 
-                file: 'print.html',
                 process: process,
                 selection: selection,
                 selector: '.appointment',

@@ -78,7 +78,6 @@ define('io.ox/contacts/print',
                     cellphone: gt('Cell phone')
                 },
 
-                file: 'print.html',
                 filter: function (o) {
                     // ignore distribution lists plus
                     // contacts should have at least one phone number to appear on a phone list

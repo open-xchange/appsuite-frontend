@@ -59,7 +59,7 @@ define('io.ox/core/print',
 
         request: function (manager, selection) {
 
-            var win = this.openURL('blank.html');
+            var win = this.openURL(ox.base + '/busy.html');
 
             require([manager], function (m) {
                 if (_.isFunction(m.open)) {
@@ -78,7 +78,7 @@ define('io.ox/core/print',
                 get: $.noop,
                 selection: [],
                 i18n: {},
-                file: 'print.html'
+                file: ox.base + '/print.html'
             }, options);
 
             options.selection = _.chain(options.selection).toArray().compact();
@@ -138,7 +138,7 @@ define('io.ox/core/print',
         getWindowOptions: function (url) {
             var o = { width: 750, height: Math.min(screen.availHeight - 100, 1050), top: 40 };
             o.left = (screen.availWidth - o.width) / 2 >> 0;
-            o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=no,toolbar=no,location=yes,scrollbars=yes,status=no';
+            o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=no,toolbar=no,location=no,scrollbars=yes,status=no';
             return o;
         },
 
