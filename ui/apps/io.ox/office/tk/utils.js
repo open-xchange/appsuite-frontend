@@ -2236,7 +2236,6 @@ define('io.ox/office/tk/utils',
         INSERT:         45,
         DELETE:         46,
 
-/* enable when needed
         '0':            48,
         '1':            49,
         '2':            50,
@@ -2247,13 +2246,11 @@ define('io.ox/office/tk/utils',
         '7':            55,
         '8':            56,
         '9':            57,
-*/
 
         MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
         MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
         MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
 
-/* enable when needed
         A:              65,
         B:              66,
         C:              67,
@@ -2280,12 +2277,11 @@ define('io.ox/office/tk/utils',
         X:              88,
         Y:              89,
         Z:              90,
-*/
+
         LEFT_WINDOWS:   91,
         RIGHT_WINDOWS:  92,
         SELECT:         93,
 
-/* enable when needed
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
         NUM_2:          98,
@@ -2296,7 +2292,7 @@ define('io.ox/office/tk/utils',
         NUM_7:          103,
         NUM_8:          104,
         NUM_9:          105,
-*/
+
         NUM_MULTIPLY:   106,
         NUM_PLUS:       107,
         NUM_MINUS:      109,
