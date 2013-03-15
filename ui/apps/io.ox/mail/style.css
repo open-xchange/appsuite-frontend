@@ -501,6 +501,14 @@
             border: 0px none;
             .border-radius(0px);
         }
+
+        /* Fix for Bug 24995 */
+        .calendar-detail .label {
+            display:block;
+            text-shadow: none;
+            font-weight: normal;
+            background-color: transparent;
+        }
     }
 
     .mail-warning {
