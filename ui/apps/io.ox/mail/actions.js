@@ -176,7 +176,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/print', {
         id: 'print',
-        requires: 'some',
+        requires: function () {
+            return _.device('!small');
+        },
         multiple: function (list, baton) {
                 var data = baton.data,
                     win;
