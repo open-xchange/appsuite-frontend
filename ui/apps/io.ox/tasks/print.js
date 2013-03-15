@@ -37,7 +37,6 @@ define('io.ox/tasks/print',
 
     function process(data) {
         return calendarPrint.load(data).pipe(function (unified) {
-            console.log('tasks', unified, data);
             return _.extend(unified, {
                 original: data,
                 subject: data.title,

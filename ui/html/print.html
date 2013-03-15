@@ -18,7 +18,7 @@
         <label>{{! it.i18n.to }}</label> {{! item.to }}
         {{? item.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! item.cc }}{{?}}
     </div>
-    <pre class="content">{{! item.content }}</pre>
+    <pre class="content">{{= item.content }}</pre>
 </div>
 {{~}}
 </script>
@@ -66,20 +66,16 @@
     {{? item.content !== '' }}<pre class="content">{{! item.content }}</pre>{{?}}
     <p class="participants top-border">
     {{? item.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span><br>
     {{?}}
     {{? item.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span><br>
     {{?}}
     {{? item.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span><br>
     {{?}}
     {{? item.hasDeclined }}
         <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
-        <i class="spacer"></i>
     {{?}}
     </p>
 </div>
@@ -99,20 +95,16 @@
     {{? item.numParticipants > 0 }}
     <p class="participants top-border">
     {{? item.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span><br>
     {{?}}
     {{? item.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span><br>
     {{?}}
     {{? item.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>
-        <i class="spacer"></i>
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span><br>
     {{?}}
     {{? item.hasDeclined }}
         <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
-        <i class="spacer"></i>
     {{?}}
     </p>
     {{?}}

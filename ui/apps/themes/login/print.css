@@ -78,11 +78,6 @@ td.spacer {
     line-height: 2em;
 }
 
-i.spacer {
-    width: 1em;
-    display: inline-block;
-}
-
 .pull-right {
     float: right;
 }
@@ -100,4 +95,5 @@ i.spacer {
 .person { white-space: nowrap; }
 .comment { color: #555; }
 .accepted .person { color: #353; }
+.tentative .person { color: #CA8812; }
 .declined .person { color: #800; text-decoration: line-through; }

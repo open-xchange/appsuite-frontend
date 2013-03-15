@@ -17,8 +17,9 @@ define('io.ox/contacts/actions',
      'io.ox/contacts/api',
      'io.ox/core/config',
      'io.ox/core/notifications',
+     'io.ox/core/print',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, gt, settings) {
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, gt, settings) {
 
     'use strict';
 
@@ -265,6 +266,15 @@ define('io.ox/contacts/actions',
     });
 
     new Action('io.ox/contacts/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/contacts/print', list);
+        }
+    });
+
+    new Action('io.ox/contacts/actions/print-disabled', {
 
         requires: 'some read',
 

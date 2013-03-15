@@ -256,6 +256,15 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/print-appointment', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/calendar/print', list);
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
         requires: 'one',
         action: function (baton) {
             var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';

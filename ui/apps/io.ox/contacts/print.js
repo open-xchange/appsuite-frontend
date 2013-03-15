@@ -61,8 +61,9 @@ define('io.ox/contacts/print',
 
                 file: 'print.html',
                 filter: function (o) {
-                    // should have at least one phone number to appear on a phone list
-                    return !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
+                    // ignore distribution lists plus
+                    // contacts should have at least one phone number to appear on a phone list
+                    return !o.mark_as_distributionlist && !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
                 },
                 process: process,
                 selection: selection,

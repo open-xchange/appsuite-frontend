@@ -175,6 +175,15 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/mail/print', list);
+        }
+    });
+
+    new Action('io.ox/mail/actions/print#disabled', {
         id: 'print',
         requires: function () {
             return _.device('!small');

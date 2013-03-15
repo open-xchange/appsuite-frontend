@@ -59,7 +59,7 @@ define('io.ox/mail/print',
                 file: 'print.html',
                 process: process,
                 selection: selection,
-                selector: '.phonelist',
+                selector: '.mail',
                 window: win
             });
         }

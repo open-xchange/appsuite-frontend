@@ -180,8 +180,6 @@ define("io.ox/calendar/view-detail",
                 participants = $i > MIN ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
 
-            console.log('yeah', data);
-
             // has participants? should always be true. Was $i > 1 (see bug #23295).
             if ($i > MIN) {
 
