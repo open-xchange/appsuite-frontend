@@ -125,20 +125,20 @@
         }
 
         .selectable[selected] {
-        	background-color: @selectedBackground !important;
+        	background-color: @selectedBackground;
             background-image: -webkit-gradient(
                 linear,
                 left top,
                 left bottom,
                 color-stop(0, lighten(@selectedBackground, 20%)),
                 color-stop(1, darken(@selectedBackground, 5%))
-            ) !important;
+            );
             background-image: -o-linear-gradient(top, lighten(@selectedBackground, 20%) 0%, darken(@selectedBackground, 5%) 100%) !important;
             background-image: -moz-linear-gradient(
                 center top,
                 lighten(@selectedBackground, 20%) 0%,
                 darken(@selectedBackground, 5%) 100%
-            ) !important;
+            );
             filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)", endColorstr="darken(@selectedBackground, 5%)~")";
             border-bottom-color: black;
             color: #fff;
