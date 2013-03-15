@@ -561,7 +561,14 @@ define('io.ox/mail/actions',
         id: 'saveEML',
         requires: 'some',
         multiple: function (data) {
-            window.open(api.getUrl(data, 'eml'));
+            var url;
+            if (!_.isObject(_(data).first().parent)) {
+                url = api.getUrl(data, 'eml');
+            } else {
+                // download attachment eml
+                url = api.getUrl(_(data).first(), 'download');
+            }
+            window.location.assign(url);
         }
     });
 
