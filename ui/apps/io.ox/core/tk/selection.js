@@ -60,7 +60,8 @@ define('io.ox/core/tk/selection',
             prev = empty,
             changed,
             apply,
-            click,
+            mouseupHandler,
+            mousedownHandler,
             clear,
             isSelected,
             select,
@@ -68,6 +69,7 @@ define('io.ox/core/tk/selection',
             toggle,
             isMultiple,
             isRange,
+            isDragged,
             getIndex,
             getNode,
             selectFirst,
@@ -87,6 +89,10 @@ define('io.ox/core/tk/selection',
 
         isRange = function (e) {
             return e && e.shiftKey && multiple;
+        };
+
+        isDragged = function (e) {
+            return $(e.currentTarget).hasClass('dnd-over');
         };
 
         hasMultiple = function () {
@@ -195,10 +201,27 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        // click handler
-        click = function (e) {
-            // Fix weird contextmenu glitch
-            if (e.button === 2 || e.ctrlKey) { e.preventDefault(); }
+        mousedownHandler = function (e) {
+            var key, id;
+            if (!e.isDefaultPrevented()) {
+                key = $(this).attr('data-obj-id');
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                // exists?
+                if (id !== undefined) {
+                    // clear?
+                    if (!isMultiple(e)) {
+                        if (hasMultiple() || self.serialize(id) !== self.serialize(last)) {
+                            if (!isSelected(id)) {
+                                clear();
+                                apply(id, e);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        mouseupHandler = function (e) {
             var key, id;
             if (!e.isDefaultPrevented()) {
                 key = $(this).attr('data-obj-id');
@@ -208,12 +231,18 @@ define('io.ox/core/tk/selection',
                     // clear?
                     if (!isMultiple(e)) {
                         if (!isSelected(id) || hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            clear();
-                            apply(id, e);
+                            if (!isDragged(e)) {
+                                clear();
+                                apply(id, e);
+                            }
                         }
                     } else {
                         // apply
-                        apply(id, e);
+                        if (isSelected(id) || e.metaKey || e.ctrlKey) {
+                            if (!isDragged(e)) {
+                                apply(id, e);
+                            }
+                        }
                     }
                 }
             }
@@ -630,12 +659,14 @@ define('io.ox/core/tk/selection',
             this.clear();
             this.keyboard(false);
             this.events.destroy();
-            container.off('click contextmenu');
+            container.off('mousedown mouseup contextmenu');
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
 
         // bind general click handler
-        container.on('click contextmenu', '.selectable', click);
+        container.on('contextmenu', function (e) { e.preventDefault(); });
+        container.on('mousedown', '.selectable', mousedownHandler);
+        container.on('mouseup', '.selectable', mouseupHandler);
 
         /*
         * DND
@@ -818,7 +849,7 @@ define('io.ox/core/tk/selection',
             if (!Modernizr.touch) {
                 // draggable?
                 if (options.draggable) {
-                    container.on('mousedown.dnd', '.selectable.selected', start);
+                    container.on('mousedown.dnd', '.selectable', start);
                 }
                 // dropzone?
                 if (options.dropzone) {
