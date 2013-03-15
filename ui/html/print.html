@@ -36,6 +36,11 @@
 </thead>
 <tbody>
 {{~it.data :item}}
+    {{? it.length >= 30 && item.thumbIndex(item.original.last_name) }}
+    <tr>
+        <td colspan="3" class="thumb-index">{{! item.thumbIndex.get() }}</td>
+    </tr>
+    {{?}}
     <tr>
         <td><b>{{! item.name }}</b></td>
         <td>{{! item.phone1 || '-' }}</td>

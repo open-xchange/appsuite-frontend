@@ -18,10 +18,15 @@ define('io.ox/mail/print',
 
     'use strict';
 
+    var regImageSrc = /(<img[^>]+src=")\/ajax/g;
+
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
-        var content = String(data.attachments[0].content || '');
-        return $.trim(content.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
+        var source = String(data.attachments[0].content || ''),
+            isLarge = source.length > 1024 * 512; // > 512 KB
+        // replace images on source level
+        source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+        return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
     }
 
     function getList(data, field) {

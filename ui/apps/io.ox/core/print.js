@@ -90,9 +90,9 @@ define('io.ox/core/print',
                     return _.isString(obj) ? obj : _.cid(obj);
                 })
                 .uniq()
-                .map(function getData(cid) {
+                .map(function getData(cid, index) {
                     return options.get(_.cid(cid)).pipe(function (obj) {
-                        return options.process ? options.process(obj) : obj;
+                        return options.process ? options.process(obj, index, options) : obj;
                     });
                 })
                 .value()
@@ -107,8 +107,10 @@ define('io.ox/core/print',
                 if (options.sortBy) {
                     args = args.sortBy(options.sortBy);
                 }
+                // stop chaining
+                args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args.value(), i18n: options.i18n }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length }),
                     url = options.file + '?' + id;
                 if (options.window) {
                     options.window.location = url;

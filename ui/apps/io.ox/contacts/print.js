@@ -30,16 +30,35 @@ define('io.ox/contacts/print',
         return _([data.cellular_telephone1, data.cellular_telephone2]).compact()[index] || '';
     }
 
-    function process(data) {
+    function process(data, index, options) {
         return {
+            original: data,
             name: util.getFullName(data),
             sort_name: util.getSortName(data),
             where: getWhere(data),
             phone1: getPhone(data, 0),
             phone2: getPhone(data, 1),
             cellphone1: getCellPhone(data, 0),
-            cellphone2: getCellPhone(data, 1)
+            cellphone2: getCellPhone(data, 1),
+            thumbIndex: options.thumbIndex
         };
+    }
+
+    function createThumbIndex() {
+        var current = '', fn;
+        fn = function (name) {
+            name = String(name).substr(0, 1).toUpperCase();
+            if (name === current) {
+                return false;
+            } else {
+                current = name;
+                return true;
+            }
+        };
+        fn.get = function () {
+            return current;
+        };
+        return fn;
     }
 
     return {
@@ -69,7 +88,9 @@ define('io.ox/contacts/print',
                 selection: selection,
                 selector: '.phonelist',
                 sortBy: 'sort_name',
-                window: win
+                window: win,
+
+                thumbIndex: createThumbIndex()
             });
         }
     };

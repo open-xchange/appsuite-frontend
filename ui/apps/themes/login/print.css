@@ -90,6 +90,24 @@ td.spacer {
     clear: both;
 }
 
+img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    margin-bottom: 2em;
+    border: 0;
+}
+
+/* Phone list */
+
+.thumb-index {
+    color: #CCC;
+    font-size: 32px;
+    line-height: 1.2em;
+    font-weight: bold;
+    padding: 0em 0 0.5em 0;
+}
+
 /* Calendar & Tasks */
 
 .person { white-space: nowrap; }
