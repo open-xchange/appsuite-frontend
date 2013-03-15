@@ -20,7 +20,10 @@ define('io.ox/office/preview/view',
 
     'use strict';
 
-    var // predefined zoom-out factors
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes,
+
+        // predefined zoom-out factors
         ZOOMOUT_FACTORS = [25, 35, 50, 75],
 
         // predefined zoom-in factors
@@ -63,6 +66,46 @@ define('io.ox/office/preview/view',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'keydown' events and show the previous/next page, if the
+         * respective page boundary has been reached.
+         */
+        function keyHandler(event) {
+
+            var // the scrollable application pane node
+                scrollNode = self.getAppPaneNode()[0],
+                // the original scroll position
+                scrollPos = scrollNode.scrollTop;
+
+            // ignore all key events with additional control keys
+            if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
+                return;
+            }
+
+            // handle supported keys
+            switch (event.keyCode) {
+
+            case KeyCodes.UP_ARROW:
+            case KeyCodes.PAGE_UP:
+                app.executeDelayed(function () {
+                    if ((scrollPos === 0) && (scrollNode.scrollTop === 0)) {
+                        showPage(page - 1, 'bottom');
+                    }
+                });
+                break;
+
+            case KeyCodes.DOWN_ARROW:
+            case KeyCodes.PAGE_DOWN:
+                app.executeDelayed(function () {
+                    var bottomPos = Math.max(0, scrollNode.scrollHeight - scrollNode.clientHeight);
+                    if ((scrollPos === bottomPos) && (scrollNode.scrollTop === bottomPos)) {
+                        showPage(page + 1, 'top');
+                    }
+                });
+                break;
+            }
+        }
+
+        /**
          * Initialization after construction. Will be called once after
          * construction of the application is finished.
          */
@@ -94,6 +137,9 @@ define('io.ox/office/preview/view',
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);
+
+            // listen to specific scroll keys to switch to previous/next page
+            self.getAppPaneNode().on('keydown', keyHandler);
         }
 
         /**
@@ -339,7 +385,7 @@ define('io.ox/office/preview/view',
          */
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
-            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()));
+            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
         };
 
         // initialization -----------------------------------------------------

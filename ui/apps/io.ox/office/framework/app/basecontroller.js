@@ -278,7 +278,7 @@ define('io.ox/office/framework/app/basecontroller',
             if (event.keyCode in shortcuts) {
                 _(shortcuts[event.keyCode]).each(function (shortcut) {
                     if (isMatchingShortcut(event, shortcut.definition)) {
-                        callSetHandler(shortcut.key, ('value' in shortcut.definition) ? shortcut.definition.value : event);
+                        callSetHandler(shortcut.key, shortcut.definition.value, event);
                         if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
                             event.stopPropagation();
                             event.preventDefault();
@@ -330,12 +330,16 @@ define('io.ox/office/framework/app/basecontroller',
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
-         *      Defaults to an empty function.
+         *      Defaults to an empty function. If the setter has been triggered
+         *      by a registered keyboard shortcut (see below), the 'keydown'
+         *      event object will be passed to the second parameter of the
+         *      setter function.
          *  @param {Object|Array} [definition.shortcut]
          *      One or multiple keyboard shortcut definitions. If the window
          *      root node of the application receives a 'keydown' event that
          *      matches a shortcut definition, the setter function of this item
-         *      will be executed. Can be as single shortcut definition, or an
+         *      will be executed, and will receive the 'keydown' event in its
+         *      second parameter. Can be as single shortcut definition, or an
          *      array of shortcut definitions. Each definition object supports
          *      the following attributes:
          *      - {Number} shortcut.keyCode
@@ -363,14 +367,15 @@ define('io.ox/office/framework/app/basecontroller',
          *      - {Any} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
-         *          each shortcut definition may define its own value. If no
-         *          value has been defined, the 'keydown' event object will be
-         *          passed to the setter function.
+         *          each shortcut definition may define its own value.
          *      - {Boolean} [shortcut.propagate=false]
          *          If set to true, the 'keydown' event will propagate up to
          *          the DOM root element, and the browser will execute its
-         *          default action. If omitted or set to false, the event will
-         *          be cancelled immediately.
+         *          default action (but the setter function called by this
+         *          shortcut receives the event any may decide to cancel
+         *          propagation manually). If omitted or set to false, the
+         *          event will be cancelled immediately after calling the
+         *          setter function.
          *  @param {Boolean} [definition.done=true]
          *      If set to false, the browser focus will not be moved to the
          *      application pane after an item setter has been executed.

@@ -58,14 +58,14 @@ define('io.ox/office/preview/controller',
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
-                    set: function (event) { view.showPreviousPage(event); },
-                    shortcut: { keyCode: KeyCodes.PAGE_UP, propagate: true }
+                    set: function () { view.showPreviousPage(); },
+                    shortcut: [{ keyCode: KeyCodes.PAGE_UP, altKey: true }, { keyCode: KeyCodes.PAGE_UP, metaKey: true }]
                 },
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
-                    set: function (event) { view.showNextPage(event); },
-                    shortcut: { keyCode: KeyCodes.PAGE_DOWN, propagate: true }
+                    set: function () { view.showNextPage(); },
+                    shortcut: [{ keyCode: KeyCodes.PAGE_DOWN, altKey: true }, { keyCode: KeyCodes.PAGE_DOWN, metaKey: true }]
                 },
                 'pages/last': {
                     parent: 'document/valid',
