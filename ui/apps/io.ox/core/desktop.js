@@ -270,11 +270,11 @@ define("io.ox/core/desktop",
          *  window. Will be triggered once when the application window becomes
          *  visible.
          *
-         * @returns {BaseApplication}
+         * @returns {ox.io.App}
          *  A reference to this application instance.
          */
         registerWindowResizeHandler: function (resizeHandler) {
-            this.getWindow().on({
+            var handlers = {
                 show: function () {
                     $(window).on('resize', resizeHandler);
                     resizeHandler();
@@ -282,7 +282,8 @@ define("io.ox/core/desktop",
                 hide: function () {
                     $(window).off('resize', resizeHandler);
                 }
-            });
+            };
+            if (this.getWindow().on(handlers).state.visible) handlers.show();
             return this;
         },
         

@@ -40,15 +40,6 @@ define('l10n/ja_JP/io.ox/register', [
     
     // Edit view
     
-    ext.point('io.ox/contacts/edit/main/model').extend({
-        id: 'stealContact',
-        customizeModel: function (c) {
-            c.on('change', function () {
-                console.log('changed', this, arguments);
-            });
-        }
-    });
-    
     ext.point('io.ox/contacts/edit/personal')
         .replace({ id: 'last_name', index: 200 })
         .replace({ id: 'first_name', index: 300 });
@@ -204,7 +195,8 @@ define('l10n/ja_JP/io.ox/register', [
         ranges = [0x304a, 0x3054, 0x305e, 0x3069, 0x306e,
                   0x307d, 0x3082, 0x3088, 0x308d],
         letters = [0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
-                   0x306f, 0x307e, 0x3084, 0x3089, 0x308f];
+                   0x306f, 0x307e, 0x3084, 0x3089, 0x308f],
+        kana = _.map(letters, function (c) { return String.fromCharCode(c); });
     
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
@@ -224,5 +216,44 @@ define('l10n/ja_JP/io.ox/register', [
             return String.fromCharCode(c);
         }
     });
+    
+    function isCollapsed(node) {
+        return node.children().last().outerHeight() * 36 > node.height();
+    }
+    
+    ext.point('io.ox/contacts/thumbIndex').extend({
+        index: 200,
+        id: 'furigana',
+        draw: function (baton) {
+            if (baton.furiganaRegistered) return;
+            baton.furiganaRegistered = true;
+            var self = this;
+            baton.app.registerWindowResizeHandler(_.debounce(function () {
+                if (isCollapsed(self) === baton.furiganaCollapsed) return;
+                ext.point('io.ox/contacts/thumbIndex')
+                    .invoke('draw', self, baton);
+            }, 300));
+        },
+        getIndex: function (baton) {
+            baton.furiganaCollapsed = isCollapsed(this);
+            if (baton.furiganaCollapsed) {
+                var firstLetter = _.min(_.keys(baton.labels),
+                        function (label) { return label.charCodeAt(0); }),
+                    abc = new baton.Thumb({
+                        label: _.noI18n('ABC'),
+                        text: firstLetter,
+                        enabled: function (baton) { return firstLetter <= 'z'; }
+                    });
+                baton.data = [abc].concat(_.map(kana, baton.Thumb));
+            } else {
+                baton.data = _.map(
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').concat(kana),
+                    baton.Thumb);
+            }
+        }
+    });
+    $(window).resize(_.debounce(function () {
+        
+    }, 300));
     
 });
