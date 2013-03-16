@@ -14,10 +14,11 @@ define('io.ox/calendar/print',
     ['io.ox/core/print',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
+     'io.ox/contacts/util',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
-     'gettext!io.ox/calendar'], function (print, api, util, userAPI, groupAPI, resourceAPI, gt) {
+     'gettext!io.ox/calendar'], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, gt) {
 
     'use strict';
 
@@ -26,6 +27,8 @@ define('io.ox/calendar/print',
             var obj = confirmations[user.id];
             user.status = obj.status || 0;
             user.comment = obj.comment || '';
+            // polish display_name
+            user.display_name = contactsUtil.getFullName(user);
         });
         return users;
     }
@@ -50,23 +53,16 @@ define('io.ox/calendar/print',
     }
 
     function getConfirmationLists(internal, external, resources) {
-        var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] };
-        _([].concat(internal, external, resources)).each(function (obj) {
-            switch (obj.status) {
+        var states = { unconfirmed: [], accepted: [], declined: [], tentative: [] },
             // 0 = unconfirmed, 1 = accepted, 2 = declined, 3 = tentative
-            case 0:
-                states.unconfirmed.push(obj);
-                break;
-            case 1:
-                states.accepted.push(obj);
-                break;
-            case 2:
-                states.declined.push(obj);
-                break;
-            case 3:
-                states.tentative.push(obj);
-                break;
-            }
+            map = { 0: 'unconfirmed', 1: 'accepted', 2: 'declined', 3: 'tentative' };
+        _([].concat(internal, external, resources)).each(function (obj) {
+            var state = map[obj.status] || 'unconfirmed';
+            states[state].push(obj);
+        });
+        // sort by display_name
+        _(states).each(function (list, state) {
+            states[state] = _(list).sortBy('display_name');
         });
         return states;
     }
