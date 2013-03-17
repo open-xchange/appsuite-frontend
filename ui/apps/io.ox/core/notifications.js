@@ -276,6 +276,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         node.remove();
                         node = null;
                     });
+                },
+
+                documentClick = function (e) {
+                    // click on notification?
+                    if (e && $(e.target).closest('#io-ox-notifications-popups').length) return;
+                    // otherwise: fade out
+                    fader();
                 };
 
             return function (type, message) {
@@ -308,18 +315,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         container.empty().append(
-                            $('<div class="alert alert-' + o.type + '">')
+                            $('<div class="alert alert-' + o.type + ' alert-block user-select-text">')
                             .append(
+                                $('<a href="#" class="close">&times;</a>').click(fader),
                                 o.headline ? $('<b>').text(o.headline) : $(),
                                 $('<div>').html(_.escape(o.message).replace(/\n/g, '<br>'))
                             )
                         );
                         if (!active) {
-                            $('body').on('click tap', fader);
+                            $('body').on('click tap', documentClick);
                         }
                         active = true;
                         clear();
-                        timer = setTimeout(fader, TIMEOUT);
+                        timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
                     }, 0);
                 }
             };
