@@ -26,6 +26,7 @@ body {
 @media print {
     body { padding: 0; }
     thead { display: table-header-group; }
+    /* chrome currently doesn't support page-break-... */
     tbody.no-break, header { page-break-inside: avoid; }
 }
 
