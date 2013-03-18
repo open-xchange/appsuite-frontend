@@ -11,8 +11,10 @@
  */
 
 var fs = require("fs");
-var http = require("http");
 var path = require("path");
+if (fs.existsSync) path.existsSync = fs.existsSync;
+
+var http = require("http");
 var readline = require('readline');
 var util = require("util");
 var utils = require("./lib/build/fileutils");
