@@ -399,10 +399,13 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickycontact', 'contacts', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.display_name
+                widgets.add('stickycontact', {
+                    plugin: 'contacts',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.display_name
+                    }
                 });
                 notifications.yell('success', gt('This distribution list has been added to the portal'));
             });

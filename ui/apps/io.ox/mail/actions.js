@@ -586,10 +586,13 @@ define('io.ox/mail/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickymail', 'mail', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.subject
+                widgets.add('stickymail', {
+                    plugin: 'mail',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.subject
+                    }
                 });
                 notifications.yell('success', gt('This mail has been added to the portal'));
             });

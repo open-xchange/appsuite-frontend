@@ -441,10 +441,13 @@ define('io.ox/files/actions',
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickyfile', 'files', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.filename || baton.data.title
+                widgets.add('stickyfile', {
+                    plugin: 'files',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.filename || baton.data.title
+                    }
                 });
                 notifications.yell('success', gt('This file has been added to the portal'));
             });
@@ -642,7 +645,7 @@ define('io.ox/files/actions',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal'
     }));
-    
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'publish',
         index: 1000,
