@@ -33,6 +33,8 @@ define('io.ox/core/print',
 
         window[id] = function (document) {
             try {
+                //probably some naming conflict in ie within templates
+                //do not use 'item' as doT variable name for current element
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
                     compiled = doT.template(template);

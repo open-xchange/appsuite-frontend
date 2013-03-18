@@ -8,19 +8,19 @@
 
 
 <script type="text/template" class="mail">
-{{~it.data :item}}
+{{~it.data :element}}
 <section class="item">
     <header>
-        <b class="date pull-left">{{! item.from }}</b>
-        <span class="date pull-right">{{! item.date }}</span>
+        <b class="date pull-left">{{! element.from }}</b>
+        <span class="date pull-right">{{! element.date }}</span>
         <div class="clear"></div>
-        <h1>{{! item.subject}}</h1>
+        <h1>{{! element.subject}}</h1>
         <div class="to-and-cc">
-            <label>{{! it.i18n.to }}</label> {{! item.to }}&nbsp;&nbsp;
-            {{? item.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! item.cc }}{{?}}
+            <label>{{! it.i18n.to }}</label> {{! element.to }}&nbsp;&nbsp;
+            {{? element.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! element.cc }}{{?}}
         </div>
     </header>
-    <pre class="content">{{= item.content }}</pre>
+    <pre class="content">{{= element.content }}</pre>
 </section>
 {{~}}
 </script>
@@ -36,17 +36,17 @@
         <th>{{! it.i18n.cellphone }}</th>
     </tr>
 </thead>
-{{~it.data :item}}
+{{~it.data :element}}
 <tbody class="no-break">
-    {{? it.length >= 30 && item.thumbIndex(item.original.last_name) }}
+    {{? it.length >= 30 && element.thumbIndex(element.original.last_name) }}
     <tr>
-        <td colspan="3" class="thumb-index">{{! item.thumbIndex.get() }}</td>
+        <td colspan="3" class="thumb-index">{{! element.thumbIndex.get() }}</td>
     </tr>
     {{?}}
     <tr>
-        <td><b>{{! item.name }}</b><br>{{! item.where }}</td>
-        <td>{{! item.phone1 || '-' }}<br>{{! item.phone2 }}</td>
-        <td>{{! item.cellphone1 || '-' }}<br>{{! item.cellphone2 }}</td>
+        <td><b>{{! element.name }}</b><br>{{! element.where }}</td>
+        <td>{{! element.phone1 || '-' }}<br>{{! element.phone2 }}</td>
+        <td>{{! element.cellphone1 || '-' }}<br>{{! element.cellphone2 }}</td>
     </tr>
     <tr>
         <td colspan="3" class="spacer">&nbsp;</td>
@@ -58,28 +58,28 @@
 
 
 <script type="text/template" class="appointment">
-{{~it.data :item}}
+{{~it.data :element}}
 <section class="item">
     <header>
-        <span class="date pull-left">{{! item.date }}</span>
-        <span class="time pull-right">{{! item.time }}</span>
+        <span class="date pull-left">{{! element.date }}</span>
+        <span class="time pull-right">{{! element.time }}</span>
         <div class="clear"></div>
-        <h1>{{! item.subject}}</h1>
-        <p class="location">{{! item.location }}</p>
+        <h1>{{! element.subject}}</h1>
+        <p class="location">{{! element.location }}</p>
     </header>
-    {{? item.content !== '' }}<pre class="content">{{! item.content }}</pre>{{?}}
+    {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
     <p class="participants top-border">
-    {{? item.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>&nbsp;&nbsp;
+    {{? element.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>&nbsp;&nbsp;
+    {{? element.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>&nbsp;&nbsp;
+    {{? element.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasDeclined }}
-        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
+    {{? element.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
     {{?}}
     </p>
 </section>
@@ -88,29 +88,29 @@
 
 
 <script type="text/template" class="task">
-{{~it.data :item}}
+{{~it.data :element}}
 <section class="item">
     <header>
-        {{? item.start }}<span class="date pull-left"><label>{{! it.i18n.start }}:</label> {{! item.start }}</span>{{?}}
-        {{? item.due }}<span class="time pull-right"><label>{{! it.i18n.due }}:</label> {{! item.due }}</span>{{?}}
+        {{? element.start }}<span class="date pull-left"><label>{{! it.i18n.start }}:</label> {{! element.start }}</span>{{?}}
+        {{? element.due }}<span class="time pull-right"><label>{{! it.i18n.due }}:</label> {{! element.due }}</span>{{?}}
         <div class="clear"></div>
-        <h1>{{! item.subject}}</h1>
-        <p class="state">{{= item.state }}</p>
-        {{? item.content !== '' }}<pre class="content">{{! item.content }}</pre>{{?}}
+        <h1>{{! element.subject}}</h1>
+        <p class="state">{{= element.state }}</p>
+        {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
     </header>
-    {{? item.numParticipants > 0 }}
+    {{? element.numParticipants > 0 }}
     <p class="participants top-border">
-    {{? item.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= item.strings.accepted }}</span>&nbsp;&nbsp;
+    {{? element.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= item.strings.tentative }}</span>&nbsp;&nbsp;
+    {{? element.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= item.strings.unconfirmed }}</span>&nbsp;&nbsp;
+    {{? element.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
     {{?}}
-    {{? item.hasDeclined }}
-        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= item.strings.declined }}</span>
+    {{? element.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
     {{?}}
     </p>
     {{?}}
