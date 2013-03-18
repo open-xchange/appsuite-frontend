@@ -175,8 +175,19 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/mail/print', list);
+        }
+    });
+
+    new Action('io.ox/mail/actions/print#disabled', {
         id: 'print',
-        requires: 'some',
+        requires: function () {
+            return _.device('!small');
+        },
         multiple: function (list, baton) {
                 var data = baton.data,
                     win;
@@ -559,7 +570,14 @@ define('io.ox/mail/actions',
         id: 'saveEML',
         requires: 'some',
         multiple: function (data) {
-            window.open(api.getUrl(data, 'eml'));
+            var url;
+            if (!_.isObject(_(data).first().parent)) {
+                url = api.getUrl(data, 'eml');
+            } else {
+                // download attachment eml
+                url = api.getUrl(_(data).first(), 'download');
+            }
+            window.location.assign(url);
         }
     });
 

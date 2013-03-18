@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite
-Version:        7.2.0
-%define         ox_release 0
+Version:        7.0.1
+%define         ox_release 8
 Release:        %{ox_release}
 Group:          Applications/Productivity
 Vendor:         Open-Xchange

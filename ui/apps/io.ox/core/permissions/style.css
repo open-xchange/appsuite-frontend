@@ -62,6 +62,10 @@
             i { font-size: 64px; line-height: 64px; color: #eee; }
         }
 
+        .readwrite {
+            margin-right: 36px;
+        }
+
         .readonly {
             color: #888;
 

@@ -10,7 +10,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/print', [], function () {
+define('io.ox/core/print',
+    ['io.ox/core/http',
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'], function (http, notifications, gt) {
 
     'use strict';
 
@@ -20,14 +23,122 @@ define('io.ox/core/print', [], function () {
             mail: 'super-mail-template.tmpl',
             contacts: 'super-contacts-template.tmpl',
             tasks: 'super-tasks-template.tmpl'
+        },
+
+        callbacks = {};
+
+    function addCallback(options, it) {
+
+        var id = 'print_' + _.now();
+
+        window[id] = function (document) {
+            try {
+                var selector = options.selector || 'script',
+                    template = $(document.body).find('[type="text/template"]').filter(selector).html(),
+                    compiled = doT.template(template);
+                $(document.body).html(compiled(it));
+                document.title = ox.serverConfig.pageTitle + ' ' + gt('Printout');
+            } catch (e) {
+                console.error(e);
+            }
         };
 
-    return {
+        return id;
+    }
+
+    function removeCallbacks() {
+        for (var id in callbacks) {
+            if (callbacks[id].closed) {
+                delete callbacks[id];
+                delete window[id];
+            }
+        }
+    }
+
+    var that = {
+
+        request: function (manager, selection) {
+
+            var win = this.openURL(ox.base + '/busy.html');
+
+            require([manager], function (m) {
+                if (_.isFunction(m.open)) {
+                    m.open(selection, win);
+                } else {
+                    console.error('Missing function "open" in:', manager, m);
+                }
+            });
+
+            return win;
+        },
+
+        smart: function (options) {
+
+            options = _.extend({
+                get: $.noop,
+                selection: [],
+                i18n: {},
+                file: ox.base + '/print.html'
+            }, options);
+
+            options.selection = _.chain(options.selection).toArray().compact();
+            http.pause();
+
+            $.when.apply($,
+                _.chain(options.selection)
+                .map(function getCID(obj) {
+                    return _.isString(obj) ? obj : _.cid(obj);
+                })
+                .uniq()
+                .map(function getData(cid, index) {
+                    return options.get(_.cid(cid)).pipe(function (obj) {
+                        return options.process ? options.process(obj, index, options) : obj;
+                    });
+                })
+                .value()
+            )
+            .done(function () {
+                var args = _.chain(arguments).toArray();
+                // filter?
+                if (options.filter) {
+                    args = args.filter(options.filter);
+                }
+                // sort?
+                if (options.sortBy) {
+                    args = args.sortBy(options.sortBy);
+                }
+                // stop chaining
+                args = args.value();
+                // create new callback & open print window
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length }),
+                    url = options.file + '?' + id;
+                if (options.window) {
+                    options.window.location = url;
+                    callbacks[id] = options.window;
+                } else {
+                    callbacks[id] = that.openURL(url);
+                }
+                // remove old callbacks
+                removeCallbacks();
+            })
+            .fail(function () {
+                if (options.window) {
+                    options.window.close();
+                }
+                notifications.yell({
+                    type: 'error',
+                    headline: gt('Error'),
+                    message: gt.ngettext('Cannot print this item', 'Cannot print these items', options.selection.length)
+                });
+            });
+
+            http.resume();
+        },
 
         getWindowOptions: function (url) {
-            var o = { width: 750, height: screen.availHeight - 100, top: 40 };
+            var o = { width: 750, height: Math.min(screen.availHeight - 100, 1050), top: 40 };
             o.left = (screen.availWidth - o.width) / 2 >> 0;
-            o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=0,toolbar=0,location=1,status=0';
+            o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=no,toolbar=no,location=no,scrollbars=yes,status=no';
             return o;
         },
 
@@ -75,4 +186,6 @@ define('io.ox/core/print', [], function () {
             return this.openURL(url);
         }
     };
+
+    return that;
 });

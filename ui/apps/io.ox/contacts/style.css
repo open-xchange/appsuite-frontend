@@ -44,9 +44,10 @@
 .contact-grid-index .thumb-index {
     font-size: 8pt;
     line-height: 10pt;
-    padding: 5px 10px 4px 10px;
+    padding: 5px 5px 4px 5px;
     font-weight: bold;
     text-align: center;
+    white-space: nowrap;
     cursor: pointer;
     background-color: #eee;
     background-image: -webkit-gradient(

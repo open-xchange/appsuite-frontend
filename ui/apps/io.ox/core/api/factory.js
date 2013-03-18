@@ -74,6 +74,7 @@ define('io.ox/core/api/factory',
             if (!request.extendColumns) return;
             request.columns = factory.extendColumns(request.extendColumns,
                 o.module, request.columns);
+            delete request.extendColumns;
         });
         
         // create 3 caches for all, list, and get requests

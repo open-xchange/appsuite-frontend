@@ -1,3 +1,7 @@
+* 2013-03-15 - viktor.pracht@open-xchange.com
+
+ - Implemented story 44467673: Implement Japanese letters in the contact VGrid.
+
 * 2013-03-12 - viktor.pracht@open-xchange.com
 
  - Implemented story 44469315: Ensure that all contact and user searches also search furigana fields.

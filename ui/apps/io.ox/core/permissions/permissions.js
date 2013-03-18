@@ -216,7 +216,7 @@ define('io.ox/core/permissions/permissions',
             );
             if (baton.admin) {
                 node.append(
-                    $('<div>').append(
+                    $('<div class="readwrite">').append(
                         // folder rights
                         gt('Folder permissions'), $.txt(_.noI18n(': ')),
                             addDropdown('folder', baton), $.txt(_.noI18n('. ')),

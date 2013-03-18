@@ -31,7 +31,7 @@ define("io.ox/core/api/user",
             },
             list: {
                 action: "list",
-                columns: '1,20,500,524,555,614',
+                columns: '1,20,500,501,502,505,524,555,614',
                 extendColumns: 'io.ox/core/api/user/list'
             },
             get: {

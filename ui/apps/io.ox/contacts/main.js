@@ -44,14 +44,7 @@ define("io.ox/contacts/main",
         thumbs,
         gridContainer,
         right,
-        fullIndex =
-            //#. Address book thumb index
-            //#. (guess translation is only needed for Asian languages)
-            //#. This string is simply split at spaces (can be more or less than 26 characters)
-            gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
-
-    // we have to fix the string first, otherwise we get false positives during i18n debug
-    fullIndex = _.noI18n.fix(fullIndex).split(' ');
+        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     // launcher
     app.setLauncher(function (options) {
@@ -179,27 +172,62 @@ define("io.ox/contacts/main",
         /**
          * Thumb index
          */
-        function drawThumb(char, enabled) {
+        function Thumb(opt) {
+            if (this instanceof Thumb) {
+                if (_.isString(opt)) {
+                    this.text = opt;
+                } else {
+                    _.extend(this, opt || {});
+                }
+            } else {
+                return new Thumb(opt);
+            }
+        }
+        
+        Thumb.prototype.draw = function (baton) {
             var node = $('<div>')
-                .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
-                .text(_.noI18n(char));
-            if (enabled) {
-                node.on('click', { text: char }, grid.scrollToLabelText);
+                .addClass('thumb-index border-bottom')
+                .text(this.label || _.noI18n(this.text));
+            if (this.enabled(baton)) {
+                node.on('click', { text: this.text }, grid.scrollToLabelText);
+            } else {
+                node.addClass('thumb-index-disabled');
             }
             return node;
-        }
-
+        };
+        
+        Thumb.prototype.enabled = function (baton) {
+            return this.text in baton.labels;
+        };
+        
         // draw thumb index
+        var baton = new ext.Baton({ app: app, data: [], Thumb: Thumb });
+        
         grid.on('change:ids', function () {
-            // get labels
-            thumbs.empty();
-            var textIndex = grid.getLabels().textIndex || {};
-            _(fullIndex).each(function (char) {
-                // add thumb
-                thumbs.append(drawThumb(char, char in textIndex));
-            });
+            ext.point('io.ox/contacts/thumbIndex')
+                .invoke('draw', thumbs, baton);
         });
-
+        
+        ext.point('io.ox/contacts/thumbIndex').extend({
+            index: 100,
+            id: 'draw',
+            draw: function () {
+                // get labels
+                baton.labels = grid.getLabels().textIndex || {};
+                // update thumb list
+                ext.point('io.ox/contacts/thumbIndex')
+                    .invoke('getIndex', thumbs, baton);
+                
+                thumbs.empty();
+                _(baton.data).each(function (thumb) {
+                    thumbs.append(thumb.draw(baton));
+                });
+            },
+            getIndex: function (baton) {
+                baton.data = _.map(fullIndex, baton.Thumb);
+            }
+        });
+        
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

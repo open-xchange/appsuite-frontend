@@ -65,7 +65,11 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         $name = $('<input type="text" class="span12">').attr('placeholder', gt("Name"))
                     ),
                     $('<div class="row-fluid">').append(
-                        $signature = $('<textarea class="span12" rows="10">')
+                        $signature = $('<textarea class="span12" rows="10">').on('keydown', function (e) {
+                            if (e.which === 38 || e.which === 40) {//if arrowkey up and down are pressed the settingsmenu would move to the next item for exsample mails
+                                e.stopPropagation();//this must be prevented to allow the use of the arrowkeys properly in the textarea see bug:25114
+                            }
+                        })
                     ),
                     $('<div class="row-fluid">').append(
                         $('<label>').text(gt('Signature insertion:')),

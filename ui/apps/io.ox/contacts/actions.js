@@ -17,8 +17,9 @@ define('io.ox/contacts/actions',
      'io.ox/contacts/api',
      'io.ox/core/config',
      'io.ox/core/notifications',
+     'io.ox/core/print',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, gt, settings) {
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, gt, settings) {
 
     'use strict';
 
@@ -265,22 +266,68 @@ define('io.ox/contacts/actions',
     });
 
     new Action('io.ox/contacts/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/contacts/print', list);
+        }
+    });
+
+    new Action('io.ox/contacts/actions/print-disabled', {
 
         requires: 'some read',
 
         multiple: function (list) {
+            var win;
             api.getList(list).done(function (list) {
                 var cleanedList = [];
 
                 _(list).each(function (contact) {
                     if (contact.mark_as_distributionlist !== true) {
-                        cleanedList.push(contact);
+                        var clean = {};
+                        clean.folder = contact.folder_id;
+                        clean.id = contact.id;
+                        cleanedList.push(clean);
+
                     }
                 });
 
                 require(['io.ox/core/print'], function (print) {
-                    print.interim(ox.base + '/apps/io.ox/contacts/print-template-multi.html');
+                    win = print.openURL();
+                    win.document.title = gt('Print');
+
+                    require(['io.ox/core/http'], function (http) {
+
+                        var getPrintable = function (cleanedList) {
+                            return http.PUT({
+                                module: 'contacts',
+                                dataType: 'text',
+                                params: {
+                                    action: 'list',
+//                                    template: 'infostore://70170', // dev
+//                                    template: 'infostore://70213', //  ui-dev
+                                    template: 'infostore://12495', // tobias
+                                    view: 'text',
+                                    format: 'template',
+                                    columns: '501,502,519,526,542,543,547,548,549,551,552'
+                                },
+                                data: cleanedList
+                            });
+                        };
+
+                        getPrintable(cleanedList)
+                        .done(function (print) {
+                            var $content = $('<div>').append(print);
+                            win.document.write($content.html());
+                            win.print();
+                        });
+
+                    });
                 });
+
+
+
 
             });
         }

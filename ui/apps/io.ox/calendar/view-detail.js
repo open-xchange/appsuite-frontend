@@ -175,6 +175,7 @@ define("io.ox/calendar/view-detail",
         index: 500,
         id: "participants",
         draw: function (data) {
+
             var list = data.participants || {}, $i = list.length, MIN = 0,
                 participants = $i > MIN ? $("<div>").addClass("participants") : $(),
                 confirmations = {};

@@ -259,6 +259,34 @@ define("io.ox/core/desktop",
             return this.has('window') ? this.has('window').getTitle() : '';
         },
 
+        /**
+         * Registers a handler at the browser window that listens to resize
+         * events. The event handler will be activated when the application
+         * window is visible; and deactivated, when the application window is
+         * hidden.
+         *
+         * @param {Function} resizeHandler
+         *  The resize handler function bound to 'resize' events of the browser
+         *  window. Will be triggered once when the application window becomes
+         *  visible.
+         *
+         * @returns {ox.io.App}
+         *  A reference to this application instance.
+         */
+        registerWindowResizeHandler: function (resizeHandler) {
+            var handlers = {
+                show: function () {
+                    $(window).on('resize', resizeHandler);
+                    resizeHandler();
+                },
+                hide: function () {
+                    $(window).off('resize', resizeHandler);
+                }
+            };
+            if (this.getWindow().on(handlers).state.visible) handlers.show();
+            return this;
+        },
+        
         setState: function (obj) {
             for (var id in obj) {
                 _.url.hash(id, String(obj[id]));

@@ -11,10 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils',
-    ['io.ox/office/tk/config',
-     'io.ox/core/gettext'
-    ], function (Config, gettext) {
+define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     'use strict';
 
@@ -26,29 +23,6 @@ define('io.ox/office/tk/utils',
 
         // selector for the label <span> element in a control caption
         LABEL_SELECTOR = 'span[data-role="label"]';
-
-    // private global functions ===============================================
-
-    /**
-     * Writes a message to the browser output console.
-     *
-     * @param {String} message
-     *  The message text to be written to the console.
-     *
-     * @param {String} [level='log']
-     *  The log level of the message. The string 'log' will create a
-     *  generic log message, the string 'info' will create an information,
-     *  the string 'warn' will create a warning message, and the string
-     *  'error' will create an error message.
-     */
-    function log(message, level) {
-        // check that the browser console supports the operation
-        if (_.isFunction(window.console[level])) {
-            window.console[level](message);
-        } else {
-            window.console.log(level.toUpperCase() + ': ' + message);
-        }
-    }
 
     // static class Utils =====================================================
 
@@ -2236,6 +2210,7 @@ define('io.ox/office/tk/utils',
         INSERT:         45,
         DELETE:         46,
 
+/* enable when needed
         '0':            48,
         '1':            49,
         '2':            50,
@@ -2246,11 +2221,13 @@ define('io.ox/office/tk/utils',
         '7':            55,
         '8':            56,
         '9':            57,
+*/
 
         MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
         MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
         MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
 
+/* enable when needed
         A:              65,
         B:              66,
         C:              67,
@@ -2277,11 +2254,12 @@ define('io.ox/office/tk/utils',
         X:              88,
         Y:              89,
         Z:              90,
-
+*/
         LEFT_WINDOWS:   91,
         RIGHT_WINDOWS:  92,
         SELECT:         93,
 
+/* enable when needed
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
         NUM_2:          98,
@@ -2292,7 +2270,7 @@ define('io.ox/office/tk/utils',
         NUM_7:          103,
         NUM_8:          104,
         NUM_9:          105,
-
+*/
         NUM_MULTIPLY:   106,
         NUM_PLUS:       107,
         NUM_MINUS:      109,
@@ -2337,41 +2315,63 @@ define('io.ox/office/tk/utils',
 
     // console output =========================================================
 
-    /**
-     * Writes a log message to the browser output console, if debug mode is
-     * enabled in the global configuration.
-     *
-     * @param {String} message
-     *  The message text to be written to the console.
-     */
-    Utils.log = Config.isDebug() ? function (message) { log(message, 'log'); } : $.noop;
+    Utils.MIN_LOG_LEVEL = 'log';
 
     /**
-     * Writes an info message to the browser output console, if debug mode is
-     * enabled in the global configuration.
+     * Writes a message to the browser output console.
      *
      * @param {String} message
      *  The message text to be written to the console.
+     *
+     * @param {String} [level='log']
+     *  The log level of the message. The string 'log' will create a generic
+     *  log message, the string 'info' will create an information, the string
+     *  'warn' will create a warning message, and the string 'error' will
+     *  create an error message.
      */
-    Utils.info = Config.isDebug() ? function (message) { log(message, 'info'); } : $.noop;
+    Utils.log = (function () {
+
+        var // supported log levels, sorted by severity
+            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
+
+        return function (message, level) {
+
+            // validate passed log level and get its index
+            level = LOG_LEVELS.contains(level) ? level : 'log';
+
+            // do not log if index is less than index of configured log level
+            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
+
+                // check that the browser console supports the operation
+                if (_.isFunction(window.console[level])) {
+                    window.console[level](message);
+                } else {
+                    window.console.log(level.toUpperCase() + ': ' + message);
+                }
+            }
+        };
+    }());
 
     /**
-     * Writes a warning message to the browser output console, if debug mode is
-     * enabled in the global configuration.
-     *
-     * @param {String} message
-     *  The message text to be written to the console.
+     * Shortcut for Utils.log(message, 'info').
      */
-    Utils.warn = Config.isDebug() ? function (message) { log(message, 'warn'); } : $.noop;
+    Utils.info = function (message) {
+        Utils.log(message, 'info');
+    };
 
     /**
-     * Writes an error message to the browser output console, if debug mode is
-     * enabled in the global configuration.
-     *
-     * @param {String} message
-     *  The message text to be written to the console.
+     * Shortcut for Utils.log(message, 'warn').
      */
-    Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
+    Utils.warn = function (message) {
+        Utils.log(message, 'warn');
+    };
+
+    /**
+     * Shortcut for Utils.log(message, 'error').
+     */
+    Utils.error = function (message) {
+        Utils.log(message, 'error');
+    };
 
     // global initialization ==================================================
 

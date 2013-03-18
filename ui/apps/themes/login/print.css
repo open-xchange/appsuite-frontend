@@ -1,0 +1,125 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+html {
+    width: 100%;
+}
+
+body {
+    padding: 30px;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    max-width: 21cm;
+    margin: 0 auto;
+}
+
+@media print {
+    body { padding: 0; }
+    thead { display: table-header-group; }
+    tbody.no-break, header { page-break-inside: avoid; }
+}
+
+h1 {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 200;
+    margin: 0.4em 0 0.4em 0;
+    clear: both;
+}
+
+a, a:visited { color: #08c; }
+
+p {
+    padding: 0;
+    margin: 0.5em 0 0.5em 0;
+}
+
+.item {
+    margin: 0 0 2cm 0;
+}
+
+label {
+    color: #888;
+}
+
+.content, .top-border {
+    margin: 1em 0 0 0;
+    padding-top: 1em;
+    border-top: 1px solid #CCC;
+}
+
+pre.content {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    white-space: pre-line;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    line-height: 1.2em;
+    padding: 1em 1em 1em 0;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: normal;
+    font-style: italic;
+}
+
+td {
+    line-height: 1.2em;
+    padding: 0 1em 0 0;
+    vertical-align: top;
+}
+
+td.spacer {
+    line-height: 2em;
+}
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    margin-bottom: 2em;
+    border: 0;
+}
+
+/* Phone list */
+
+.thumb-index {
+    color: #CCC;
+    font-size: 32px;
+    line-height: 1.2em;
+    font-weight: bold;
+    padding: 0em 0 0.5em 0;
+}
+
+/* Calendar & Tasks */
+
+.person { white-space: nowrap; }
+.comment { color: #555; }
+.accepted .person { color: #353; }
+.tentative .person { color: #CA8812; }
+.declined .person { color: #800; text-decoration: line-through; }
