@@ -123,6 +123,24 @@ define('io.ox/files/icons/perspective',
         return (str.length <= 40 ? str : str.substr(0, 40) + '..') + extension;
     }
 
+    function dropZoneInit(app) {
+        if (_.browser.IE === undefined || _.browser.IE > 9) {
+            dropZoneOff();
+            dropZone = new dnd.UploadZone({
+                ref: 'io.ox/files/dnd/actions'
+            }, app);
+            dropZoneOn();
+        }
+    }
+
+    function dropZoneOn() {
+        if (dropZone) dropZone.include();
+    }
+
+    function dropZoneOff() {
+        if (dropZone) dropZone.remove();
+    }
+
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
@@ -234,6 +252,15 @@ define('io.ox/files/icons/perspective',
                         }
                         dialog.show(e, function (popup) {
                             popup.append(viewDetail.draw(file));
+                        });
+                        dialog.on('close', function () {
+                            if (dropZone) {
+                                var tmp = app.currentFile;
+                                app.currentFile = null;
+                                dropZone.update();
+                                dropZoneInit(app);
+                                app.currentFile = tmp;
+                            }
                         });
                     });
                 } else {
@@ -515,35 +542,16 @@ define('io.ox/files/icons/perspective',
 
         render: function (app) {
             this.main.addClass('files-icon-perspective').empty();
-
-            var that = this;
-
-            if (_.browser.IE === undefined || _.browser.IE > 9) {
-                dropZone = new dnd.UploadZone({
-                    ref: 'io.ox/files/dnd/actions'
-                }, app);
-                if (dropZone) dropZone.include();
-            }
-            app.on('perspective:icons:hide', function () {
-                if (dropZone) dropZone.remove();
-                // shortcutPoint.deactivate();
-            });
-
-            app.on('perspective:icons:show', function () {
-                if (dropZone) dropZone.include();
-                // shortcutPoint.deactivate();
-            });
-            if (dropZone) dropZone.include();
-
-            app.on('folder:change', function (e, id, folder) {
-                if (_.browser.IE === undefined || _.browser.IE > 9) {
-                    dropZone.remove();
-                    if (dropZone) dropZone.include();
-                }
+            var self = this;
+            dropZoneInit(app);
+            app.on('perspective:icons:hide', dropZoneOff)
+               .on('perspective:icons:show', dropZoneOn)
+               .on('folder:change', function (e, id, folder) {
+                dropZoneInit(app);
                 app.getWindow().search.close();
-                that.main.closest('.search-open').removeClass('search-open');
-                that.main.empty();
-                that.draw(app);
+                self.main.closest('.search-open').removeClass('search-open');
+                self.main.empty();
+                self.draw(app);
             });
 
             this.draw(app);
