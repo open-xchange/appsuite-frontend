@@ -376,6 +376,11 @@ define('io.ox/core/api/factory',
                 // merge defaults for search
                 var opt = $.extend({}, o.requests.search, options || {}),
                     getData = opt.getData;
+
+                if (o.requests.search.omitFolder) {
+                    opt = _.omit(opt, ['folder', 'omitFolder']);
+                }
+
                 // remove getData functions
                 delete opt.getData;
                 // go!

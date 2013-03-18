@@ -118,6 +118,7 @@ define('io.ox/files/api',
                 extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc',
+                omitFolder: true,
                 getData: function (query) {
                     return { pattern: query };
                 }
