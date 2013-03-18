@@ -832,6 +832,14 @@ define('io.ox/core/tk/selection',
                 $(this).trigger('selection:drop', [baton]);
             }
 
+            function resist(e) {
+                var deltaX = Math.abs(e.pageX - e.data.x),
+                    deltaY = Math.abs(e.pageY - e.data.y);
+                if (deltaX > 15 || deltaY > 15) {
+                    $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                }
+            }
+
             function start(e) {
                 source = $(this);
                 data = self.unique(self.unfold());
@@ -840,7 +848,9 @@ define('io.ox/core/tk/selection',
                     var node = $(this), selector = node.attr('data-dropzones');
                     (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
                 });
-                $(document).on('mousemove.dnd', drag).on('mouseup.dnd', stop);
+                $(document)
+                    .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
+                    .on('mouseup.dnd', stop);
                 // prevent text selection
                 e.preventDefault();
             }
