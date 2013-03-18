@@ -373,7 +373,7 @@ define("io.ox/calendar/api",
 
     api.getInvites = function () {
 
-        var start = _.now() - 2 * DAY;//HOUR;
+        var start = _.now() - 2 * HOUR;
 
         return api.getUpdates({
             folder: 'all',
