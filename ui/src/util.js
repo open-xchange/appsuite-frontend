@@ -161,7 +161,7 @@
     _.display = {};
 
     _(queries).each(function (query, key) {
-        _.display[key] = !!matchMedia(query).matches;
+        _.display[key] = Modernizr.mq(query);
     });
 
         // aliases
