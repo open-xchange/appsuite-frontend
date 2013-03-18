@@ -555,6 +555,10 @@ msgstr ""
 #. %2$s is the max storagespace
 #, c-format
 #. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
 #. %1$s is the current page index in office document preview
 #. %2$s is the number of pages in office document preview
 #, c-format
@@ -621,6 +625,7 @@ msgstr ""
 msgid "Remind me again"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Reminder (objective case): in X minutes
@@ -1891,6 +1896,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:106
 #: apps/io.ox/calendar/settings/pane.js:96
@@ -1900,6 +1906,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -1941,6 +1948,7 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
