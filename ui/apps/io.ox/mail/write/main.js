@@ -604,7 +604,7 @@ define('io.ox/mail/write/main',
                 tmp = tmp[0].split(/\:/, 2);
                 // save data
                 data = {
-                    to: [['', tmp[1]]],
+                    to: mailUtil.parseRecipients(tmp[1]) || [['', tmp[1]]],
                     subject: params.subject,
                     attachments: [{ content: params.body || '' }]
                 };
