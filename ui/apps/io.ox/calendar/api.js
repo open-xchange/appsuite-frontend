@@ -26,7 +26,8 @@ define("io.ox/calendar/api",
     var all_cache = {},
         get_cache = {},
         participant_cache = {},
-        DAY = 60000 * 60 * 24;
+        HOUR = 60000 * 60,
+        DAY = HOUR * 24;
 
     var api = {
 
@@ -337,12 +338,8 @@ define("io.ox/calendar/api",
                     timezone: "UTC"
                 };
 
-            if (o.folder !== undefined) {
-                params.folder = o.folder;
-            }
-
-            if (!params.folder) {
-                params.folder = config.get('folder.calendar');
+            if (o.folder !== 'all') {
+                params.folder = o.folder || config.get('folder.calendar');
             }
 
             // do not know if cache is a good idea
@@ -376,11 +373,12 @@ define("io.ox/calendar/api",
 
     api.getInvites = function () {
 
-        var start = _.now();
+        var start = _.now() - 2 * DAY;//HOUR;
 
         return api.getUpdates({
+            folder: 'all',
             start: start,
-            end: start + 28 * 5 * DAY, //next four month?!?
+            end: start + 28 * 5 * DAY, // next four month?!?
             timestamp: 0,
             recurrence_master: true
         })
