@@ -542,7 +542,7 @@ define('io.ox/mail/write/main',
                 if (mail.format === 'text') {
                     content = content.replace(/<br>\n?/g, '\n');
                     // backend sends html entities, these need to be transformed into plain text
-                    content = $('<div />').html(content).text();
+                    content = $('<div>').html(content).text();
                 }
                 // image URL fix
                 if (editorMode === 'html') {

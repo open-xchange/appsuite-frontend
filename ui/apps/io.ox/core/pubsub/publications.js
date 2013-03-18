@@ -110,7 +110,6 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
 
                     self.model.fetch().done(function (model, collection) {
                         var publications = pubsub.publications();
-
                         //update the model-(collection)
                         //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "publications.update(model)" call
                         if (self.model.collection) {
@@ -121,10 +120,14 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection
-                            baton.model = model;
-                            sendInvitation(baton);
-                        } else
+                            baton.model = self.model;
+                            sendInvitation(baton).always(function () {
+                                popup.close();
+                            });
+                        } else {
+                            // close popup now
                             popup.close();
+                        }
                     });
                 }).fail(function (error) {
                     popup.idle();
@@ -285,12 +288,13 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     });
 
     function sendInvitation(baton) {
-        require(['io.ox/mail/write/main'], function (m) {
+        return require(['io.ox/mail/write/main']).pipe(function (m) {
             //predefined data for mail
             var url = baton.model.url().replace('http://ox/', 'http://appsuite-dev.open-xchange.com/'),
                 data = {
                     folder_id: 'default0/INBOX',
                     subject: gt('Publication'),
+                    // did this ever work?
                     attachments: {
                         html: [{ content: '<a href="' + url + '">' + url + '</a>' }],
                         text: [{ content: url }]
@@ -303,12 +307,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                          baton.model.attributes.target].toString()
                     }
                 } || {};
-            //use default email dialog
-            m.getApp().launch().done(function () {
-                this.compose(data)
-                    .done(function () {
-                        baton.popup.close();
-                    });
+            // use default email dialog
+            return m.getApp().launch().pipe(function () {
+                return this.compose(data);
             });
         });
     }
