@@ -391,7 +391,7 @@ define('io.ox/calendar/invitations/register',
         if (status > 0) {
             switch (status) {
             case 1:
-                message = gt('You already accepted this invitation');
+                message = gt('You have accepted this invitation');
                 className = 'accepted';
                 selector = 'button.btn-success';
                 break;
