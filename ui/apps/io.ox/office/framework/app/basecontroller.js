@@ -45,9 +45,24 @@ define('io.ox/office/framework/app/basecontroller',
      * keyboard shortcut definition.
      */
     function isMatchingShortcut(event, definition) {
-        return (event.keyCode === definition.keyCode) &&
-            isMatchingControlKey(event.shiftKey, definition.shiftKey) &&
-            isMatchingControlKey(event.altKey, definition.altKey) &&
+
+        // 'shiftKey' option must always match
+        if ((event.keyCode !== definition.keyCode) || !isMatchingControlKey(event.shiftKey, definition.shiftKey)) {
+            return false;
+        }
+
+        // when 'altOrMetaKey' is set, ignore 'altKey' and 'metaKey' options
+        if (definition.altOrMetaKey === true) {
+            return (event.altKey !== event.metaKey) && isMatchingControlKey(event.ctrlKey, definition.ctrlKey);
+        }
+
+        // when 'ctrlOrMetaKey' is set, ignore 'ctrlKey' and 'metaKey' options
+        if (definition.ctrlOrMetaKey === true) {
+            return (event.ctrlKey !== event.metaKey) && isMatchingControlKey(event.altKey, definition.altKey);
+        }
+
+        // otherwise, options 'altKey', 'ctlKey' and 'metaKey' options must match
+        return isMatchingControlKey(event.altKey, definition.altKey) &&
             isMatchingControlKey(event.ctrlKey, definition.ctrlKey) &&
             isMatchingControlKey(event.metaKey, definition.metaKey);
     }
@@ -401,6 +416,22 @@ define('io.ox/office/framework/app/basecontroller',
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
+         *      - {Boolean} [shortcut.altOrMetaKey]
+         *          Convenience option that if set to true, matches if either
+         *          the ALT key, or the META key are pressed. Has the same
+         *          effect as defining two separate shortcuts, one with the
+         *          'altKey' option set to true, and one with the 'metaKey'
+         *          option set to true, while keeping the other option false.
+         *          Must not be used in a shortcut definition where these
+         *          options are set explicitly.
+         *      - {Boolean} [shortcut.ctrlOrMetaKey=false]
+         *          Convenience option that if set to true, matches if either
+         *          the CTRL key, or the META key are pressed. Has the same
+         *          effect as defining two separate shortcuts, one with the
+         *          'ctrlKey' option set to true, and one with the 'metaKey'
+         *          option set to true, while keeping the other option false.
+         *          Must not be used in a shortcut definition where these
+         *          options are set explicitly.
          *      - {Any|Function} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
