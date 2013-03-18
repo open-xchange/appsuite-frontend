@@ -106,8 +106,8 @@ define('io.ox/office/framework/app/basecontroller',
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
-                // whether to return browser focus to application pane (default: true)
-                done = Utils.getBooleanOption(definition, 'done', true),
+                // behavior for returning browser focus to application
+                focus = Utils.getStringOption(definition, 'focus', 'direct'),
                 // additional user data
                 userData = Utils.getOption(definition, 'userData');
 
@@ -178,18 +178,30 @@ define('io.ox/office/framework/app/basecontroller',
                         enabled = false;
                         self.update();
                     }
-
                 } else {
                     // item is disabled
                     def = $.Deferred().reject();
+                }
+
+                // focus back to application
+                switch (focus) {
+                case 'direct':
+                    grabApplicationFocus();
+                    break;
+                case 'wait':
+                    // execute in a timeout, needed for dialogs which are closed after resolve/reject
+                    def.always(function () { app.executeDelayed(grabApplicationFocus); });
+                    break;
+                case 'never':
+                    break;
+                default:
+                    Utils.warn('BaseController.Item.change(): unknown focus mode: ' + focus);
                 }
 
                 // post processing after the setter is finished
                 def.always(function () {
                     enabled = true;
                     self.update();
-                    // return focus to application pane
-                    if (done) { grabApplicationFocus(); }
                 });
 
                 return this;
@@ -407,9 +419,19 @@ define('io.ox/office/framework/app/basecontroller',
          *          the event any may decide to cancel propagation manually).
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
-         *  @param {Boolean} [definition.done=true]
-         *      If set to false, the browser focus will not be moved to the
-         *      application pane after an item setter has been executed.
+         *  @param {String} [definition.focus='direct']
+         *      Determines how to return the browser focus to the application
+         *      pane after executing the setter function of this item. The
+         *      following values are supported:
+         *      - 'direct': (default) The focus will return directly after the
+         *          setter function has been executed, regardless of the return
+         *          value of the setter.
+         *      - 'never': The focus will not be returned to the application
+         *          pane. The setter function is responsible for application
+         *          focus handling.
+         *      - 'wait': The controller will wait until the Deferred object
+         *          returned by the setter function gets resolved or rejected,
+         *          and then sets the browser focus to the application pane.
          *  @param {Any} [definition.userData]
          *      Additional user data that will be provided by the method
          *      'Item.getUserData()'. Can be used in all item getter and setter
