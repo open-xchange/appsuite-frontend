@@ -522,6 +522,24 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
     </dd>
 </dl>
 <dl>
+    <dt>skipDeb</dt>
+    <dd>
+        <p>Whether to skip the generation of Debian source packages.</p>
+        <p><b>Used by:</b> <code>dist</code>.</p>
+        <p><b>Default:</b> <code>false</code></p>
+        <p>
+            This is useful when Debian packages are not required and/or
+            <code>dpkg-source</code> is not available, e.g. on RPM based
+            systems.
+        </p>
+        <p>
+            Even when using this flag, at least the file
+            <code>debian/changelog</code> is still required, because it is used
+            to store the package name and version. 
+        </p>
+    </dd>
+</dl>
+<dl>
     <dt>tag</dt>
     <dd>
         <p>The Subversion tag of the CLDR to checkout.</p>
@@ -664,21 +682,24 @@ An up-to-date list of tasks can be printed using the -T command line option.
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
                 <code>destDir</code>, <code>l10nDir</code>,
                 <code>manifestDir</code>, <code>package</code>,
-                <code>revision</code>, <code>version</code>.
+                <code>revision</code>, <code>skipDeb</code>,
+                <code>version</code>.
             </li>
         </ul>
         <p>
             This task cleans the source tree by calling <code>clean</code> and
             packs the source into an archive which can be used to create Debian
             and RPM packages. The necessary Debian metadata is created alongside
-            the source archive. All files necessary fro Debian packaging are
+            the source archive. All files necessary for Debian packaging are
             placed in the directory specified by <code>destDir</code>.
             The generated <code>.orig.tar.bz2</code> archive can also be used
             together with the <code>.spec</code> file to generate RPM packages.
         </p>
         <p>
-            The program <code>dpkg-source</code> is required by this task.
-            It is used to generate Debian-specific packaging metadata.
+            Unless the variable <code>skipDeb</code> is set to
+            <code>true</code>, the program <code>dpkg-source</code> is required
+            by this task. It is used to generate Debian-specific packaging
+            metadata.
         </p>
         <p>
             The variables <code>version</code> and <code>revision</code> specify

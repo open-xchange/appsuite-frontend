@@ -679,6 +679,7 @@ task("dist", [distDest], function () {
     }
     function dpkgSource(code) {
         if (code) return fail('tar exited with code ' + code);
+        if (envBoolean('skipDeb')) return done();
         utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }
