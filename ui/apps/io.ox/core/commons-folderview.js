@@ -530,7 +530,7 @@ define('io.ox/core/commons-folderview',
             app.settings.set('folderview/visible', visible = true).save();
             app.getWindow().nodes.body.addClass('side-shift');
 
-            sidepanel.addClass('side-shift').attr('style', '').show();
+            sidepanel.addClass('side-shift').show();
             if (_.device('small')) {
                 sidepanel.addClass('slidein');
             }
