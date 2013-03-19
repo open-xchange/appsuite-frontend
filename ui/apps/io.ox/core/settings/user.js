@@ -49,6 +49,9 @@ define('io.ox/core/settings/user', [
                     dialogs.idle($node);
                 });
             });
+        },
+        getCurrentUser: function () {
+            return factory.realm('default').get({});
         }
     };
 
