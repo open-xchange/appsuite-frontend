@@ -115,13 +115,16 @@ define('io.ox/files/icons/perspective',
               '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&format=preview_image&delivery=view';
     }
 
-    function cut(str) {
-        str = String(str || '');
-        var parts = str.split('.'),
-            extension = parts.length > 1 ? '.' + parts.pop() : '';
-        str = parts.join('.');
-        return (str.length <= 40 ? str : str.substr(0, 40) + '..') + extension;
-    }
+    function cut(str, maxLen, cutPos) {
+            if (!cutPos) cutPos = 20;
+            if (!maxLen) maxLen = 70;
+            str = String(str || '');
+            if (str.length > maxLen) {
+                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - 8);
+            } else {
+                return str;
+            }
+        }
 
     function dropZoneInit(app) {
         if (_.browser.IE === undefined || _.browser.IE > 9) {
@@ -170,7 +173,7 @@ define('io.ox/files/icons/perspective',
             }
             this.append(
                 wrap.append(img),
-                $('<div class="title drag-title">').text(gt.noI18n(cut(file.title))),
+                $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
                 $('<input type="checkbox" class="reflect-selection" style="display:none">')
             );
         }

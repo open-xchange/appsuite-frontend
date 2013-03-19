@@ -242,6 +242,21 @@
     user-select: text;
 }
 
+.vgrid-cell.file {
+
+    display: table-row;
+    padding: 0 13px 0 13px;
+    
+    .name {
+        display: table-cell;
+        vertical-align: middle;
+        white-space: normal;
+        height: 3em;
+        line-height: 1em;
+        word-break: break-word;
+    }
+}
+
 /** small screens **/
 @media all and (max-width: 480px) {
     .files-iconview  {

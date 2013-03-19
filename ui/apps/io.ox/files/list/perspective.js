@@ -44,9 +44,21 @@ define('io.ox/files/list/perspective',
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.title || data.filename || '\u00A0');
+                var title = data.title || data.filename || '\u00A0';
+                fields.name.text(cut(title));
             }
         });
+
+        function cut(str, maxLen, cutPos) {
+            if (!cutPos) cutPos = 20;
+            if (!maxLen) maxLen = 70;
+            str = String(str || '');
+            if (str.length > maxLen) {
+                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - 8);
+            } else {
+                return str;
+            }
+        }
 
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
