@@ -249,13 +249,14 @@ define('io.ox/core/pubsub/settings/pane',
             return this;
         },
         onToggle: function (ev) {
-            var model = this.model;
+            var model = this.model,
+                view = this;
             ev.preventDefault();
             model.set('enabled', !model.get('enabled')).save().fail(function (res) {
                 model.set('enabled', !model.get('enabled'));
-                this.render();
+                view.render();
             });
-            this.render();
+            view.render();
         },
         onEdit: function (ev) {
             var baton = ext.Baton({model: this.model, view: this});
