@@ -563,6 +563,7 @@ $(window).load(function () {
                     _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
                 }
             }
+
             // got session via hash?
             if (_.url.hash('session')) {
 
@@ -571,20 +572,20 @@ $(window).load(function () {
                 ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
                 ox.language = _.url.hash('language');
 
-                if (_.url.hash('store') === 'true') {
-                    session.store();
-                }
+                // set store cookie?
+                (_.url.hash('store') === 'true' : session.store() : $.when()).always(function () {
 
-                // cleanup login params
-                _.url.hash({'session': null, 'user': null, 'user_id': null, 'language': null, 'store': null});
+                    // cleanup login params
+                    _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
 
-                var ref = _.url.hash('ref');
-                ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                _.url.redirect(ref ? ref : '#');
+                    var ref = _.url.hash('ref');
+                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
+                    _.url.redirect(ref ? ref : '#');
 
-                fetchUserSpecificServerConfig().done(function () {
-                    loadCoreFiles().done(function () {
-                        loadCore();
+                    fetchUserSpecificServerConfig().done(function () {
+                        loadCoreFiles().done(function () {
+                            loadCore();
+                        });
                     });
                 });
 
@@ -761,7 +762,7 @@ $(window).load(function () {
     );
 
     // reload if files have change; need this during development
-    if (false && Modernizr.applicationcache && _.browser.webkit && ox.debug) {
+    if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {
 
         (function () {
 
