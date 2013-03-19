@@ -170,7 +170,7 @@ define("io.ox/core/extPatterns/links",
 
     var InlineLinks = function (options) {
 
-        var self = _.extend(this, {'classes': "io-ox-inline-links"}, options);
+        var extension = _.extend(this, { classes: 'io-ox-inline-links' }, options);
 
         this.draw = function (baton) {
 
@@ -178,15 +178,15 @@ define("io.ox/core/extPatterns/links",
 
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
-                node = $("<div>").appendTo(this),
+                node = $('<div>').appendTo(this),
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
-            if (options.attributes) {
-                node.attr(options.attributes);
+            if (extension.attributes) {
+                node.attr(extension.attributes);
             }
-            if (options.classes) {
-                node.addClass(options.classes);
+            if (extension.classes) {
+                node.addClass(extension.classes);
             }
-            drawLinks(self, new Collection(baton.data), node, baton, args).done(function () {
+            drawLinks(extension, new Collection(baton.data), node, baton, args).done(function () {
                 // add toggle unless multi-selection
                 node = node.children("div:first");
                 var all = node.children(), lo = node.children('[data-prio="lo"]');
