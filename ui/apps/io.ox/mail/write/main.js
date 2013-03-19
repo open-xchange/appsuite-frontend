@@ -835,7 +835,7 @@ define('io.ox/mail/write/main',
                 } else if ('File' in window && file instanceof window.File) {
                     // add dropped file
                     files.push(file);
-                } else if (file && ('id' in file) && ('size' in file)) {
+                } else if (file && ('id' in file) && ('file_size' in file)) {
                     // infostore id
                     (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
                 } else if (file && ('id' in file) && ('display_name' in file)) {
