@@ -904,16 +904,38 @@ define('io.ox/mail/write/main',
                         var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
                             isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
                             sep = mailAPI.separator,
-                            base, folder, id;
+                            base, folder, id, msgrefs, ids;
                         if (isReply || isForward) {
-                            base = _(mail.data.msgref.split(sep));
-                            folder = base.initial().join(sep);
-                            id = base.last();
-                            mailAPI.get({ folder: folder, id: id }).done(function (data) {
+                            //single vs. multiple
+                            if (mail.data.msgref) {
+                                msgrefs = [ mail.data.msgref ];
+                            } else {
+                                msgrefs = _.chain(mail.data.attachments)
+                                    .filter(function (attachment) {
+                                        return attachment.content_type === 'message/rfc822';
+                                    })
+                                    .map(function (attachment) { return attachment.msgref; })
+                                    .value();
+                            }
+                            //prepare
+                            ids = _.map(msgrefs, function (obj) {
+                                base = _(obj.split(sep));
+                                folder = base.initial().join(sep);
+                                id = base.last();
+                                return { folder_id: folder, id: id };
+                            });
+                            //update cache
+                            mailAPI.getList(ids).pipe(function (data) {
                                 // update answered/forwarded flag
-                                if (isReply) data.flags |= 1;
-                                if (isForward) data.flags |= 256;
-                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data)).done(function () {
+                                if (isReply || isForward) {
+                                    var len = data.length;
+                                    for (var i = 0; i < len; i++) {
+                                        if (isReply) data[i].flags |= 1;
+                                        if (isForward) data[i].flags |= 256;
+                                    }
+                                }
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
+                                .done(function () {
                                     mailAPI.trigger('refresh.list');
                                 });
                             });
