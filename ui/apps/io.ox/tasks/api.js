@@ -371,7 +371,6 @@ define('io.ox/tasks/api', ['io.ox/core/http',
 
         function filter(task) {
             return task.participants.length === 0 || delegatedToMe(task.participants);
-
         }
 
         return function () {

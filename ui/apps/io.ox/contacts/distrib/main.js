@@ -87,7 +87,7 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
-            return contactModel.factory.realm("edit").retain().get(obj).done(function (data) {
+            return contactModel.factory.realm("edit").retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
                 model = data;
