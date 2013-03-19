@@ -54,6 +54,11 @@
         top: 2px;
     }
 
+    .subject .empty {
+        font-style: italic;
+        color: #aaa;
+    }
+
     /* unread */
     &.unread i.icon-bookmark { display: inline-block; float:left; }
 

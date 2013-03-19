@@ -29,8 +29,9 @@ define('plugins/portal/files/register',
         preview: function (baton) {
 
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
-                var options = { width: 300, height: 300, scaleType: 'cover' };
-                var url = (api.getUrl(baton.data, 'view') + '&' + $.param(options)).replace(/([\(\)])/g, '\\$1');
+                var data = { folder_id: baton.data.folder_id, id: baton.data.id },
+                    options = { width: 300, height: 300, scaleType: 'cover' },
+                    url = api.getUrl(data, 'view') + '&' + $.param(options);
                 this.addClass('photo-stream').append(
                     $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
                 );

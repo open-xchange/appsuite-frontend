@@ -16,7 +16,8 @@ define('io.ox/mail/view-grid-template',
      'io.ox/mail/api',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
-     'less!io.ox/mail/style.css'], function (util, api, VGrid, account) {
+     'gettext!io.ox/core/mail',
+     'less!io.ox/mail/style.css'], function (util, api, VGrid, account, gt) {
 
     'use strict';
 
@@ -67,7 +68,12 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                fields.subject.text(_.noI18n($.trim(data.subject)));
+                var subject = $.trim(data.subject);
+                if (subject !== '') {
+                    fields.subject.removeClass('empty').text(_.noI18n(subject));
+                } else {
+                    fields.subject.addClass('empty').text(gt('No subject'));
+                }
                 if (!data.threadSize || data.threadSize <= 1) {
                     fields.threadSize.text(_.noI18n('')).css('display', 'none');
                 } else {
