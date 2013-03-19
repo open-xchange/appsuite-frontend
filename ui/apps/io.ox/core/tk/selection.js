@@ -264,12 +264,12 @@ define('io.ox/core/tk/selection',
         select = function (id, quiet) {
             if (id) {
                 var key = self.serialize(id);
-                selectedItems[key] = id;
                 getNode(key)
                     .addClass(self.classSelected)
                     .find('input.reflect-selection')
-                    .attr('checked', 'checked').end()
+                    .attr('checked', 'checked')
                     .intoViewport(container);
+                selectedItems[key] = id;
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -543,21 +543,34 @@ define('io.ox/core/tk/selection',
         };
 
         this.selectRange = function (a, b) {
+
+            var tmp, i, id, key;
+
             if (bHasIndex) {
                 // get indexes
                 a = getIndex(a);
                 b = getIndex(b);
                 // swap?
                 if (a > b) {
-                    var tmp = a;
+                    tmp = a;
                     a = b;
                     b = tmp;
                 }
                 // loop
-                for (; a <= b; a++) {
-                    select(observedItems[a]);
+                for (i = a; i <= b; i++) {
+                    // get id
+                    id = observedItems[i];
+                    // select first & last one via "normal" select
+                    if (i === a || i === b) {
+                        select(id);
+                    } else {
+                        // fast & simple
+                        key = this.serialize(id);
+                        selectedItems[key] = id;
+                    }
                 }
-                // event
+                // fast update - just updates existing nodes instead of looking for thousands
+                this.update();
             }
             return this;
         };
@@ -666,6 +679,7 @@ define('io.ox/core/tk/selection',
         // bind general click handler
         container.on('contextmenu', function (e) { e.preventDefault(); });
         container.on('mousedown', '.selectable', mousedownHandler);
+        // why mouse up? always double processing?
         container.on('mouseup', '.selectable', mouseupHandler);
 
         /*

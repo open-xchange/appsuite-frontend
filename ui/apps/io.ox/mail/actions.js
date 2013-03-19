@@ -333,7 +333,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
@@ -351,7 +351,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markread', {
         id: 'markread',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
@@ -367,9 +367,9 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/markspam', {
-        id: 'marspam',
+        id: 'markspam',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (data && (data.flags & api.FLAGS.SPAM) === 0);
@@ -385,18 +385,17 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
         requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .pipe(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
+            return require(['io.ox/preview/main']).pipe(function (p) {
+                var list = _.getArray(e.context);
+                // is at least one attachment supported?
+                return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                    return memo || new p.Preview({
+                        filename: obj.filename,
+                        mimetype: obj.content_type
+                    })
+                    .supportsPreview();
+                }, false);
+            });
         },
         multiple: function (list, baton) {
             // open side popup
