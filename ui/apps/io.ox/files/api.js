@@ -106,8 +106,8 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: allColumns,
-                extendColumns: 'io.ox/files/api/all'
+                columns: '20,1,5,700,702,703,704',
+                extendColumns: 'io.ox/files/api/list'
             },
             get: {
                 action: 'get'
