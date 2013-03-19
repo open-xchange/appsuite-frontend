@@ -470,6 +470,10 @@
 
         &.plain-text {
             white-space: pre-wrap;
+
+            blockquote {
+                white-space:normal;
+            }
         }
 
         // reset bootstrap stuff
