@@ -30,7 +30,7 @@ define("plugins/portal/tasks/register",
         },
 
         load: function (baton) {
-            return taskApi.getAllFromAllFolders().done(function (data) { //super special getAll method
+            return taskApi.getAllMyTasks().done(function (data) { // super special getAll method
                 baton.data = data;
             });
         },
@@ -42,14 +42,13 @@ define("plugins/portal/tasks/register",
             var tasks = _(baton.data).filter(function (task) {
                 return task.end_date !== null && task.status !== 3;
             });
-            tasks = tasks.slice(0, 10);
 
             if (tasks.length === 0) {
                 this.append(content.text(gt("You don't have any tasks that are either due soon or overdue.")));
                 return;
             }
 
-            _(tasks).each(function (task) {
+            _(tasks.slice(0, 10)).each(function (task) {
                 task = util.interpretTask(task);
                 content.append(
                     $('<div class="item">').data('item', task).append(
