@@ -60,6 +60,8 @@ function envBoolean(name) {
 }
 
 var debug = envBoolean('debug');
+var disableStrictMode = envBoolean('disableStrictMode');
+
 if (debug) console.info("Debug mode: on");
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
@@ -111,6 +113,15 @@ function jsFilter (data) {
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
+    if (disableStrictMode) {
+        tree2 = tree2.scanner({
+            name: 'function',
+            matcher: strictModeMatcher
+        }, strictModeHandler).scanner({
+            name: 'defun',
+            matcher: strictModeMatcher
+        }, strictModeHandler);
+    }
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
 
@@ -141,17 +152,30 @@ function jsFilter (data) {
     function assertHandler(scope) {
         if (scope.refs.assert === undefined) return ['num', 0];
     }
+    function strictModeMatcher(tree) {
+        return tree[3] && tree[3][0] && tree[3][0][0] == 'stat' &&
+            tree[3][0][1] && tree[3][0][1][0] == 'string' &&
+            tree[3][0][1][1] == 'use strict';
+    }
+    function strictModeHandler(scope, walk) {
+        this[3][0][1][1] = 'no strict';
+        return [this[0], this[1], this[2].slice(), pro.MAP(this[3], walk)];
+    }
 
     // UglifyJS
-    if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
-    tree = pro.ast_lift_variables(tree);
-    tree = pro.ast_mangle(tree);
-    tree = pro.ast_squeeze(tree, { make_seqs: false });
+    if (!disableStrictMode) {
+        if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
+        tree = pro.ast_lift_variables(tree);
+        tree = pro.ast_mangle(tree);
+        tree = pro.ast_squeeze(tree, { make_seqs: false });
+    }
+    
     // use split_lines
     return catchParseErrors(function (data) {
         return pro.split_lines(data, 500);
-    }, pro.gen_code(tree, { })) + ';';
+    }, pro.gen_code(tree, { beautify: debug })) + ';';
 }
+
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
 

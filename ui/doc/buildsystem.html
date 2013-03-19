@@ -385,6 +385,23 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
     </dd>
 </dl>
 <dl>
+    <dt>disableStrictMode</dt>
+    <dd>
+        <p>
+            Removes all <code>"use strict"</code> directives from processed
+            JavaScript code.
+        </p>
+        <p><b>Used by:</b> <code>app</code>, <code>default</code>.</p>
+        <p><b>Default:</b> <code>false</code></p>
+        <p>
+            Some debugging tools which use code instrumentation have problems
+            when the debugged code uses strict mode. This setting enables code
+            processing even whe using <code>debug</code> mode, so line numbers
+            will not match the original source code.
+        </p>
+    </dd>
+</dl>
+<dl>
     <dt>from</dt>
     <dd>
         <p>The root of the printed dependency tree between Jake tasks.</p>
@@ -583,9 +600,10 @@ An up-to-date list of tasks can be printed using the -T command line option.
         <ul class="params">
             <li>
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
-                <code>debug</code>, <code>l10nDir</code>,
-                <code>manifestDir</code>, <code>package</code>,
-                <code>revision</code>, <code>version</code>.
+                <code>debug</code>, <code>disableStrictMode</code>,
+                <code>l10nDir</code>, <code>manifestDir</code>,
+                <code>package</code>, <code>revision</code>,
+                <code>version</code>.
             </li>
         </ul>
         <p>This is the main task used to build external apps.</p>
@@ -626,9 +644,10 @@ An up-to-date list of tasks can be printed using the -T command line option.
         <ul class="params">
             <li>
                 <b>Variables:</b> <code>BASEDIR</code>, <code>builddir</code>,
-                <code>debug</code>, <code>l10nDir</code>,
-                <code>manifestDir</code>, <code>package</code>,
-                <code>revision</code>, <code>version</code>.
+                <code>debug</code>, <code>disableStrictMode</code>,
+                <code>l10nDir</code>, <code>manifestDir</code>,
+                <code>package</code>, <code>revision</code>,
+                <code>version</code>.
             </li>
         </ul>
         <p>
