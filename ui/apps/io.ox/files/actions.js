@@ -169,7 +169,7 @@ define('io.ox/files/actions',
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
-                api.getList(list, undefined, {columns: '20,1,5,700,702,703,704'}).done(function (list) {
+                api.getList(list).done(function (list) {
                     m.getApp().launch().done(function () {
                         this.compose({ infostore_ids: list });
                     });

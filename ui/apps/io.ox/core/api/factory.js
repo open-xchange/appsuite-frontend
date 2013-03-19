@@ -183,7 +183,6 @@ define('io.ox/core/api/factory',
                 // async getter
                 var getter = function () {
                     var params = _.extend({}, o.requests.list);
-                    params.columns = options.columns ? options.columns : params.columns;
                     if (options.allColumns) {
                         params.columns = http.getAllColumns(o.module, true);
                     }
