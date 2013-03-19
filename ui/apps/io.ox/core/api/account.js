@@ -155,7 +155,7 @@ define('io.ox/core/api/account',
      * @return an array containing the personal name (might be empty!) and the primary address
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+        return api.get(accountId || 0).pipe(function (account) { return getAddressArray(account.personal || '', account.primary_address); });
     };
 
     function getAddressArray(name, address) {
