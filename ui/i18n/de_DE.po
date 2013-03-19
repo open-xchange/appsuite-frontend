@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: Tue Jan 08 2013 04:14:01 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-03-18 13:13+0100\n"
+"PO-Revision-Date: 2013-03-19 10:43+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: en_US\n"
@@ -1085,7 +1085,6 @@ msgid "files"
 msgstr "Dateien"
 
 #: apps/io.ox/mail/view-detail.js:1051
-#, fuzzy
 msgid ""
 "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 msgstr ""
@@ -2974,7 +2973,6 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Dieser Ordner enthält Veröffentlichungen und/oder Abonnements"
 
 #: apps/io.ox/core/tk/folderviews.js:901
-#, fuzzy
 msgid "You share this folder with other users"
 msgstr "Sie teilen diesen Ordner mit anderen Benutzern"
 
@@ -3428,18 +3426,16 @@ msgid "New Folder"
 msgstr "Neuer Ordner"
 
 #: apps/io.ox/core/pubsub/model.js:195
-#, fuzzy
 msgid "Publication must have a target."
-msgstr "Die Veröffentlichung muss ein Ziel enthalten "
+msgstr "Die Veröffentlichung muss ein Ziel enthalten."
 
 #: apps/io.ox/core/pubsub/model.js:199
-#, fuzzy
 msgid "Publication must have a site."
 msgstr "Die Veröffentlichung muss eine Webseite enthalten"
 
 #: apps/io.ox/core/pubsub/model.js:207
 msgid "Model is incomplete."
-msgstr ""
+msgstr "Unvollständige Angaben"
 
 #: apps/io.ox/core/pubsub/model.js:209
 msgid "You have to enter a username and password to subscribe."
@@ -3451,7 +3447,6 @@ msgid "Publications and Subscriptions"
 msgstr "Veröffentlichungen und Abonnements"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:64
-#, fuzzy
 msgid "Only showing items related to folder \"%1$s\""
 msgstr ""
 "Es werden nur Objekte angezeigt, die zum Ordner \"%1$s\" in Bezug stehen."
@@ -3461,9 +3456,8 @@ msgid "Show all items"
 msgstr "Alle Objekte anzeigen"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:142
-#, fuzzy
 msgid "Link"
-msgstr "Verlinkung"
+msgstr "Link"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:201
 #: apps/io.ox/portal/settings/pane.js:162
@@ -3476,12 +3470,10 @@ msgid "Enable"
 msgstr "Aktivieren"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:270
-#, fuzzy
 msgid "Subscription refresh"
 msgstr "Abonnement aktualisieren"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:271
-#, fuzzy
 msgid ""
 "A refresh takes some time, so please be patient, while the refresh runs in "
 "the background. Only one refresh per subscription and per session is allowed."
@@ -3564,7 +3556,6 @@ msgid "No matching templates on this Server"
 msgstr "Dieser Server enthält keine passenden Vorlagen"
 
 #: apps/io.ox/core/pubsub/publications.js:243
-#, fuzzy
 msgid "Add cipher code"
 msgstr "Verschlüsselung hinzufügen"
 
@@ -3573,7 +3564,6 @@ msgid "Publication"
 msgstr "Veröffentlichung"
 
 #: apps/io.ox/core/pubsub/publications.js:324
-#, fuzzy
 #: apps/io.ox/core/pubsub/publications.js:329
 msgid "Share Link by E-mail"
 msgstr "Link per E-Mail freigeben"
@@ -3624,7 +3614,6 @@ msgstr ""
 "Zugriffsschutz, z.B. durch eine gute Passwort-Absicherung."
 
 #: apps/io.ox/core/pubsub/publications.js:364
-#, fuzzy
 msgid "Show legal information"
 msgstr "Rechtliche Informationen anzeigen"
 
@@ -3683,11 +3672,10 @@ msgid "Printout"
 msgstr "Ausdruck"
 
 #: apps/io.ox/core/print.js:131
-#, fuzzy
 msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
-msgstr[0] "Druckauftrag ist fehlgeschlagen"
-msgstr[1] "Druckaufträge sind fehlgeschlagen"
+msgstr[0] "Objekt kann nicht gedruckt werden"
+msgstr[1] "Objekte können nicht gedruckt werden"
 
 #: apps/io.ox/core/desktop.js:489
 msgid "There are unsaved changes."
@@ -4838,9 +4826,8 @@ msgid "Billing information"
 msgstr "Rechnungsinformation"
 
 #: apps/io.ox/tasks/view-detail.js:145
-#, fuzzy
 msgid "Date completed"
-msgstr "Löschen"
+msgstr "Datum der Fertigstellung"
 
 #: apps/io.ox/tasks/view-detail.js:168
 msgid "Not yet confirmed"
@@ -5046,9 +5033,8 @@ msgid "Due"
 msgstr "Fällig"
 
 #: apps/io.ox/tasks/print.js:64
-#, fuzzy
 msgid "Start"
-msgstr "Beginnt am"
+msgstr "Beginn"
 
 #: apps/io.ox/tasks/actions.js:65
 msgid "Do you really want to delete this task?"
