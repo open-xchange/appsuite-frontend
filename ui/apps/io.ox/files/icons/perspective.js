@@ -241,6 +241,7 @@ define('io.ox/files/icons/perspective',
                     if (dropZone) {
                         dropZone.update();
                     }
+                    file.app = app;
                     popup.append(viewDetail.draw(file));
                 });
             }
@@ -254,6 +255,7 @@ define('io.ox/files/icons/perspective',
                             dropZone.update();
                         }
                         dialog.show(e, function (popup) {
+                            file.app = app;
                             popup.append(viewDetail.draw(file));
                         });
                         dialog.on('close', function () {
