@@ -191,5 +191,16 @@ define("io.ox/core/api/user",
         return node;
     };
 
+    /**
+     * get a contact model of the currently logged in user
+     *
+     * @return {object} a contact model of the current user
+     */
+    api.getCurrentUser = function () {
+        return require(['io.ox/core/settings/user']).then(function (api) {
+            return api.getCurrentUser();
+        });
+    };
+
     return api;
 });

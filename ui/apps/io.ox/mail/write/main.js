@@ -306,14 +306,8 @@ define('io.ox/mail/write/main',
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
                 accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
-            return accountAPI.get(accountID).pipe(function (data) {
-                var primary_address = null;
-                // TODO: don’t handle default user separately
-                if (accountID === "0") {
-                    primary_address = settings.get('defaultSendAddress');
-                }
-                return {'displayname'    : data.personal,
-                        'primaryaddress' : primary_address || data.primary_address};
+            return accountAPI.getPrimaryAddress(accountID).then(function (data) {
+                return {displayname: data[0], primaryaddress: data[1]};
             });
         };
 

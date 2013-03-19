@@ -155,8 +155,22 @@ define('io.ox/core/api/account',
      * @return an array containing the personal name (might be empty!) and the primary address
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+        return api.get(accountId || 0).then(addPersonalFallback).then(function (account) {
+            return getAddressArray(account.personal || '', account.primary_address);
+        });
     };
+
+    function addPersonalFallback(account) {
+        if (!account.personal) {
+            return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
+                return userAPI.getCurrentUser().then(function (user) {
+                    account.personal = contactsUtil.getMailFullName(user.toJSON());
+                    return account;
+                });
+            });
+        }
+        return account;
+    }
 
     function getAddressArray(name, address) {
         name = $.trim(name || '');
@@ -194,13 +208,17 @@ define('io.ox/core/api/account',
      * @return - the personal name and a list of (alias) addresses usable for sending
      */
     api.getSenderAddresses = function (accountId) {
-        return this.get(accountId || 0).pipe(getSenderAddress);
+        return this.get(accountId || 0).then(addPersonalFallback).then(getSenderAddress);
     };
 
     api.getAllSenderAddresses = function () {
-        return api.all().pipe(function (list) {
-            return $.when.apply($, _(list).map(getSenderAddress)).pipe(function () {
+        return api.all().then(function (list) {
+            return $.when.apply($, _(list).map(addPersonalFallback)).then(function () {
                 return _(arguments).flatten(true);
+            }).then(function (list) {
+                return $.when.apply($, _(list).map(getSenderAddress)).then(function () {
+                    return _(arguments).flatten(true);
+                });
             });
         });
     };
