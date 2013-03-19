@@ -30,7 +30,7 @@ define('io.ox/calendar/week/perspective',
         dialog:         null,   // sidepopup
         app:            null,   // the app
         view:           null,   // the current view obj
-        modes:          { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 }, // all available modes
+        views:          {},     // containing all views
 
         /**
          * open sidepopup to show appointment
@@ -184,6 +184,12 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        print: function () {
+            if (this.view) {
+                this.view.print();
+            }
+        },
+
         /**
          * refresh appointment data
          */
@@ -195,30 +201,40 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
-        /**
-         * trigger view save function
-         */
-        save: function () {
-            // save scrollposition
+        afterShow: function (app, opt) {
+            // hide current view
             if (this.view) {
-                this.view.save();
+                this.view.$el.hide();
             }
-        },
 
-        /**
-         * trigger view restore function
-         */
-        restore: function () {
-            // restore scrollposition
-            if (this.view) {
-                this.view.restore();
-            }
-        },
+            // init views
+            if (this.views[opt.perspective] === undefined) {
+                this.view = new View({
+                    collection: this.collection,
+                    mode: opt.perspective.split(":")[1],
+                    refDate: this.app.refDate,
+                    appExtPoint: 'io.ox/calendar/week/view/appointment'
+                });
 
-        print: function () {
-            if (this.view) {
-                this.view.print();
+                // bind listener for view events
+                this.view
+                    .on('showAppointment', this.showAppointment, this)
+                    .on('openCreateAppointment', this.openCreateAppointment, this)
+                    .on('openEditAppointment', this.openEditAppointment, this)
+                    .on('updateAppointment', this.updateAppointment, this)
+                    .on('onRefresh', this.refresh, this);
+
+                this.views[opt.perspective] = this.view.render();
+                this.main.append(this.view.$el.show());
+                this.view.setScrollPos();
+            } else {
+                this.view = this.views[opt.perspective];
+                this.view.setStartDate(app.refDate);
+                this.view.$el.show();
             }
+
+            // renew data
+            this.refresh();
         },
 
         /**
@@ -227,67 +243,37 @@ define('io.ox/calendar/week/perspective',
          * @param  {Object} opt perspective options
          */
         render: function (app, opt) {
+            var self = this;
+
             // init perspective
             this.app = app;
-            this.collection = new Backbone.Collection([]);
             this.main.addClass('calendar-week-view').empty();
+            this.collection = new Backbone.Collection([]);
 
-            delete this.view;
+            // create sidepopup object with eventlistener
+            this.dialog = new dialogs.SidePopup()
+                .on('close', function () {
+                    $('.appointment', this.main).removeClass('opac current');
+                });
 
-            this.view = new View({
-                collection: this.collection,
-                mode: this.modes[opt.perspective],
-                refDate: app.refDate,
-                appExtPoint: 'io.ox/calendar/week/view/appointment'
-            });
+            // watch for api refresh
+            api.on('create update delete', $.proxy(this.refresh, this))
+                .on('delete', function () {
+                    // Close dialog after delete
+                    self.dialog.close();
+                })
+                .on('create update', function (e, obj) {
+                    self.view.setStartDate(obj.start_date);
+                });
 
-            var self = this,
-                refresh = $.proxy(function () {
-                    self.refresh();
-                }, this);
-
-            // bind listener for view events
-            this.view
-                .on('showAppointment', this.showAppointment, this)
-                .on('openCreateAppointment', this.openCreateAppointment, this)
-                .on('openEditAppointment', this.openEditAppointment, this)
-                .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefresh', this.refresh, this);
-
-            this.main.append(this.view.render().$el);
-
-            if (!opt.rendered) {
-                // create sidepopup object with eventlistener
-                this.dialog = new dialogs.SidePopup()
-                    .on('close', function () {
-                        $('.appointment', this.main).removeClass('opac current');
-                    });
-
-                // watch for api refresh
-                api.on('create update delete', refresh, this)
-                    .on('delete', function () {
-                        // Close dialog after delete
-                        self.dialog.close();
-                    })
-                    .on('create update', function (e, obj) {
-                        self.view.setStartDate(obj.start_date);
-                    });
-
-                // watch for folder change
-                app.on('folder:change', refresh, this)
-                    .getWindow()
-                    .on('show', refresh, this)
-                    .on('show', $.proxy(this.restore, this))
-                    .on('beforehide', $.proxy(this.save, this))
-                    .on('change:perspective', function () {
-                        self.view.unbindKeys();
-                        self.dialog.close();
-                    });
-            }
-
-            this.view.setScrollPos();
-
-            this.refresh();
+            // watch for folder change
+            this.app.on('folder:change', $.proxy(this.refresh, this))
+                .getWindow()
+                .on('show', $.proxy(this.refresh, this))
+                .on('change:perspective', function () {
+                    self.view.unbindKeys();
+                    self.dialog.close();
+                });
         }
     });
 

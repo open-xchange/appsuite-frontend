@@ -64,7 +64,6 @@ define('io.ox/calendar/week/view',
         kwInfo:         null,   // current KW
         showAllCheck:   null,   // show all folders check-box
         showAllCon:     null,   // container
-        firstScroll:    false,
 
         // init values from prespective
         initialize: function (opt) {
@@ -83,21 +82,21 @@ define('io.ox/calendar/week/view',
             this.showFulltime = opt.showFulltime === false ? false : true;
             this.todayClass = 'todayClass' in opt ? opt.todayClass : 'today';
             this.allowLasso = 'allowLasso' in opt ? opt.allowLasso : true;
-            this.mode = opt.mode || 1;
+            this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || new date.Local();
 
             switch (this.mode) {
-            case 1: // day
+            case 'day':
                 this.$el.addClass('dayview');
                 this.columns = 1;
                 break;
-            case 2: // workweek
+            case 'workweek':
                 this.$el.addClass('workweekview');
                 this.columns = 5;
                 break;
             default:
-            case 3: // week
+            case 'week':
                 this.$el.addClass('weekview');
                 this.columns = 7;
                 break;
@@ -136,7 +135,6 @@ define('io.ox/calendar/week/view',
          *        LoacalDate: date object in the reference week
          */
         setStartDate: function (opt) {
-
             if (opt) {
                 // number | LocalDate
                 if (typeof opt === 'number' || opt instanceof date.Local) {
@@ -157,16 +155,16 @@ define('io.ox/calendar/week/view',
 
             // normalize startDate to beginning of the week or day
             switch (this.mode) {
-            case 1: // day
+            case 'day':
                 this.startDate.setHours(0, 0, 0, 0);
                 break;
-            case 2: // workweek
+            case 'workweek':
                 // settings independent, set startDate to Monday of the current week
                 var weekStart = date.Local.utc((this.startDate.getDays() - this.startDate.getDay() + this.workWeekStart) * date.DAY);
                 this.startDate = new date.Local(weekStart);
                 break;
             default:
-            case 3: // week
+            case 'week':
                 this.startDate.setStartOfWeek();
                 break;
             }
@@ -560,9 +558,11 @@ define('io.ox/calendar/week/view',
             // create and animate timeline
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
+
             if (!Modernizr.touch) {
                 this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
             }
+            this.fulltimePane.css({ height: (this.showFulltime ? 21 : 1) + 'px'});
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);
@@ -639,6 +639,8 @@ define('io.ox/calendar/week/view',
                     )
             );
 
+            this.renderFooter();
+
             return this;
         },
 
@@ -682,6 +684,42 @@ define('io.ox/calendar/week/view',
         },
 
         /**
+         * render footer with current date information
+         * show and hide timeline
+         */
+        renderFooter: function () {
+            var days = [],
+                tmpDate = new date.Local(this.startDate.getTime());
+
+            // refresh footer, timeline and today-label
+            this.timeline.hide();
+            for (var d = 0; d < this.columns; d++) {
+                var day = $('<div>')
+                    .addClass('weekday')
+                    .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
+                    .width(100 / this.columns + '%');
+                // mark today
+                if (new date.Local().getDays() === tmpDate.getDays()) {
+                    $('.day[date="' + d + '"]', this.pane).addClass(this.todayClass);
+                    day.addClass('today');
+                    this.timeline.show();
+                }
+                days.push(day);
+                tmpDate.add(date.DAY);
+            }
+
+            this.footer.empty().append(days);
+
+            this.kwInfo.text(
+                gt.noI18n(this.columns > 1 ?
+                    this.startDate
+                        .formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
+                    this.startDate.format(date.DAYOFWEEK_DATE)
+                )
+            );
+        },
+
+        /**
          * clear all appointments from current week and render all appointments form collection
          */
         renderAppointments: function () {
@@ -696,40 +734,9 @@ define('io.ox/calendar/week/view',
             var self = this,
                 draw = {},
                 fulltimeColPos = [0],
-                days = [],
-                hasToday = false,
-                tmpDate = new date.Local(self.startDate),
                 fulltimeCount = 0;
 
-            // refresh footer, timeline and today-label
-            for (var d = 0; d < this.columns; d++) {
-                var day = $('<div>')
-                    .addClass('weekday')
-                    .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
-                    .width(100 / this.columns + '%');
-                // mark today
-                if (new date.Local().setHours(0, 0, 0, 0).getTime() === tmpDate.getTime()) {
-                    $('.day[date="' + d + '"]', this.pane).addClass(this.todayClass);
-                    day.addClass('today');
-                    hasToday = true;
-                }
-                days.push(day);
-                tmpDate.add(date.DAY);
-            }
-            this.footer.empty().append(days);
-            this.kwInfo.text(
-                gt.noI18n(this.columns > 1 ?
-                    self.startDate
-                        .formatInterval(new date.Local(self.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
-                    self.startDate.format(date.DAYOFWEEK_DATE)
-                )
-            );
-
-            if (hasToday) {
-                this.timeline.show();
-            } else {
-                this.timeline.hide();
-            }
+            this.renderFooter();
 
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
@@ -824,20 +831,14 @@ define('io.ox/calendar/week/view',
             }, this);
 
             // calculate full-time appointment container height
-            var ftHeight = 0;
+            var ftHeight = 1;
             if (this.showFulltime) {
                 ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
+                this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             }
-            this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.css({ height: ftHeight + 'px' });
-            this.pane.css({ top: (ftHeight || 7) + 'px' });
+            this.pane.css({ top: ftHeight + 'px' });
 
-            if (!this.firstScroll) {
-                this.setScrollPos();
-                this.firstScroll = true;
-            }
-
-            // control note in full-time appointment area
             this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
 
             // fix for hidden scrollbars on small DIVs (esp. Firefox Win)
@@ -1467,6 +1468,7 @@ define('io.ox/calendar/week/view',
         save: function () {
             // save scrollposition
             this.restoreCache.scrollPosition = this.pane.scrollTop();
+            console.log('save', this.restoreCache.scrollPosition);
         },
 
         /**
@@ -1475,6 +1477,7 @@ define('io.ox/calendar/week/view',
         restore: function () {
             // restore scrollposition
             if (this.restoreCache.scrollPosition) {
+                console.log('restore', this.restoreCache.scrollPosition);
                 this.pane.scrollTop(this.restoreCache.scrollPosition);
             }
         },
@@ -1485,9 +1488,9 @@ define('io.ox/calendar/week/view',
                 self = this,
                 folder = this.folder(this.folder()),
                 templates = {
-                    1: {id: 69803, name: 'cp_dayview_table.tmpl'},
-                    2: {id: 69806, name: 'cp_weekview_table.tmpl'},
-                    3: {id: 69806, name: 'cp_weekview_table.tmpl'}
+                    'day': {id: 69803, name: 'cp_dayview_table.tmpl'},
+                    'workweek': {id: 69806, name: 'cp_weekview_table.tmpl'},
+                    'week': {id: 69806, name: 'cp_weekview_table.tmpl'}
                 };
             var tmpl = templates[self.mode],
                 data = null;

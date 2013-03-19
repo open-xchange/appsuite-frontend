@@ -286,7 +286,7 @@ define("io.ox/core/desktop",
             if (this.getWindow().on(handlers).state.visible) handlers.show();
             return this;
         },
-        
+
         setState: function (obj) {
             for (var id in obj) {
                 _.url.hash(id, String(obj[id]));
@@ -542,26 +542,24 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
-        var cur = null;
         var Perspective = function (name) {
             // init
-            var rendered = false,
-                initialized = false;
-
             this.main = $();
             this.name = name;
+            this.rendered = false;
+            this.render = $.noop;
+            this.save = $.noop;
+            this.restore = $.noop;
+            this.afterShow = $.noop;
 
-            this.show = function (app, options) {
+            this.show = function (app, opt) {
                 var win = app.getWindow();
 
-                if (options.perspective === win.currentPerspective) {
+                if (opt.perspective === win.currentPerspective) {
                     return;
                 }
-                // make sure it's initialized
-                if (!initialized) {
-                    this.main = win.addPerspective(this);
-                    initialized = true;
-                }
+
+                this.main = win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
@@ -569,44 +567,36 @@ define("io.ox/core/desktop",
                 } else {
                     win.trigger('change:initialPerspective', name);
                 }
-                // set perspective
+
+                // set perspective (show)
                 win.setPerspective(this);
 
-                _.url.hash('perspective', options.perspective);
+                _.url.hash('perspective', opt.perspective);
 
                 // render?
-
-                if (!rendered || options.perspective.split(":").length > 1) {
-                    options.rendered = rendered;
-                    this.render(app, options);
-                    rendered = true;
+                if (!this.rendered) {
+                    this.render(app, opt);
+                    this.rendered = true;
                 }
-                win.currentPerspective = options.perspective;
+
+                win.currentPerspective = opt.perspective;
                 win.updateToolbar();
-            };
-
-            this.render = $.noop;
-            this.save = $.noop;
-            this.restore = $.noop;
-
-            this.setRendered = function (value) {
-                rendered = value;
+                this.afterShow(app, opt);
             };
         };
 
         Perspective.show = function (app, p) {
-            var per = p;
-            if (_.isString(p) && (/:/).test(p)) {
-                per = p.split(":")[0];
-            }
-            return require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
-                if (cur && (per === 'month' || per === 'week')) {
-                    cur.save();
+            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
+                var oldPers = app.getWindow().getPerspective();
+
+                if (oldPers && _.isFunction(oldPers.save)) {
+                    oldPers.save();
                 }
-                cur = perspective;
-                perspective.show(app, { perspective: p });
-                if (per === 'month' || per === 'week') {
-                    cur.restore();
+
+                newPers.show(app, { perspective: p });
+
+                if (newPers && _.isFunction(newPers.restore)) {
+                    newPers.restore();
                 }
             });
         };
@@ -751,7 +741,7 @@ define("io.ox/core/desktop",
 
                 var quitOnClose = false,
                     // perspectives
-                    perspectives = { main: true },
+                    perspectives = {},
                     self = this,
                     firstShow = true;
 
@@ -1079,6 +1069,8 @@ define("io.ox/core/desktop",
                         var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
+                    } else {
+                        return this.nodes[id];
                     }
                 };
 

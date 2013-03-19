@@ -15,7 +15,7 @@
     @appointment-lasso: rgba(0, 136, 204, 0.30);//rgba(0, 0, 0, 0.4);
 
     @weekview-time-with: 58px;
-    @weekview-footer-height: 25px;
+    @weekview-footer-height: 21px;
     @weekview-toolbar-height: 41px;
 
     @SMALL-weekview-time-with: 45px;
@@ -98,12 +98,14 @@
     .fulltime-container {
         position: relative;
         width: 100%;
+        height: @weekview-footer-height;
         overflow-y: scroll;
         overflow-x: hidden;
     }
 
     .fulltime {
         position: absolute;
+        height: @weekview-footer-height;
         border-bottom: 1px solid #ccc;
         left: @weekview-time-with;
         right: 0;
@@ -130,7 +132,7 @@
         .overflow-y(scroll);
         .overflow-x(hidden);
         position: absolute;
-        top: @weekview-toolbar-height + @weekview-footer-height;
+        top: @weekview-footer-height;
         left: 0;
         right: 0;
         bottom: 0;
@@ -141,7 +143,7 @@
         height: @weekview-footer-height;
         left: 0;
         right: 0;
-        top: @weekview-toolbar-height + 4px;
+        top: @weekview-toolbar-height;
         width: 100%;
         .overflow(hidden);
     }

@@ -45,6 +45,11 @@ define('io.ox/calendar/month/perspective',
         dialog: $(),        // sidepopup
         isScrolling: false, // scrolling
 
+        /**
+         * open sidepopup to show appointment
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         */
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
@@ -56,20 +61,35 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
+        /**
+         * open create appointment dialog
+         * @param  {Event}  e        given event
+         * @param  {number} startTS  timestamp of the day
+         */
         createAppointment: function (e, startTS) {
             // add current time to start timestamp
             var now = new date.Local(),
                 offset = 30 * date.MINUTE;
             startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
+
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
 
+        /**
+         * open edit dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, {data: obj});
         },
 
+        /**
+         * update appointment data
+         * @param  {Object} obj new appointment data
+         */
         updateAppointment: function (obj) {
             var self = this;
             _.each(obj, function (el, i) {
@@ -195,6 +215,11 @@ define('io.ox/calendar/month/perspective',
             return this.updateWeeks({start: start, weeks: weeks});
         },
 
+        /**
+         * wrapper for scrollTop funciton
+         * @param  {number} top scrollposition
+         * @return {number}     new scroll position
+         */
         scrollTop: function (top) {
             // scrollTop checks arity, so just passing an undefined top does not work here
             return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
@@ -212,7 +237,10 @@ define('io.ox/calendar/month/perspective',
             this.updateWeeks({start: this.firstWeek, weeks: weeks});
         },
 
-        getFirsts: function (e) {
+        /**
+         * update global 'tops' object with current positions of all first days of all months
+         */
+        getFirsts: function () {
             this.tops = {};
             var self = this;
             if (this.pane) {
@@ -222,6 +250,12 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
+        /**
+         * scroll to given month
+         * @param  {object} opt
+         *          string|LocalDate date: date target as LocalDate or string (next|prev|today)
+         *          number           duration: duration of the scroll animation
+         */
         gotoMonth: function (opt) {
             if (!this.isScrolling) {
                 this.isScrolling = true;
@@ -267,6 +301,10 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
+        /**
+         * get current folder data
+         * @return {Deferred} Deferred with folder data on resolve
+         */
         getFolder: function () {
             var self = this,
                 def = $.Deferred();
@@ -274,20 +312,22 @@ define('io.ox/calendar/month/perspective',
                 // switch only visible on private folders
                 self.showAllCon[data.type === 1 ? 'show' : 'hide']();
                 self.folder = data;
-                def.resolve();
+                def.resolve(data);
             });
             return def;
         },
 
-        save: function (e, p) {
-            // save scrollposition
-        },
-
+        /**
+         * perspective restore function. will be triggered on show
+         */
         restore: function () {
             // goto current date position
             this.gotoMonth();
         },
 
+        /**
+         * print current month
+         */
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 self = this;
