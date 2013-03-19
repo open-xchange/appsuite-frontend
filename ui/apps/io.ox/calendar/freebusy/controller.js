@@ -43,7 +43,6 @@ define('io.ox/calendar/freebusy/controller',
                 emptyCollection = new Backbone.Collection([]),
                 // calendar views (day, workweek, week)
                 currentMode = '',
-                modes = { day: 1, workweek: 2, week: 3 },
                 calendarViews = {},
                 // folder data
                 folderData = {},
@@ -121,7 +120,7 @@ define('io.ox/calendar/freebusy/controller',
 
             this.getInterval = function () {
                 var start = this.getCalendarView().startDate;
-                return { start: start + 0, end: start + api.DAY * 7 };
+                return { start: start + 0, end: start + date.WEEK };
             };
 
             function toModel(obj) {
@@ -242,7 +241,7 @@ define('io.ox/calendar/freebusy/controller',
                     appExtPoint: 'io.ox/calendar/week/view/appointment',
                     collection: this.appointments,
                     keyboard: false,
-                    mode: modes[mode],
+                    mode: mode,
                     refDate: refDate,
                     showFulltime: false,
                     startDate: options.start_date,
@@ -254,7 +253,7 @@ define('io.ox/calendar/freebusy/controller',
                 view
                     // listen to refresh event
                     .on('onRefresh', function () {
-                        self.appointments.reset([]);
+                        // self.appointments.reset([]);
                         self.refreshChangedInterval();
                     })
                     // listen to create event
@@ -277,10 +276,9 @@ define('io.ox/calendar/freebusy/controller',
 
                 view.folder(folderData);
 
-                this.$el.append(view.$el.addClass('abs calendar-week-view'));
-                this.appointments.reset([]);
-                view.render();
                 view.showAll(false);
+                view.render();
+                this.$el.append(view.$el.addClass('abs calendar-week-view'));
 
                 return view;
             };

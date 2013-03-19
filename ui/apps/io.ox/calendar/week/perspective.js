@@ -168,20 +168,12 @@ define('io.ox/calendar/week/perspective',
          */
         getAppointments: function (obj) {
             // fetch appointments
-            var collection = this.collection;
-            if (collection) {
-                api.getAll(obj).done(function (list) {
-                    collection
-                        .reset(_(list).map(function (obj) {
-                            var m = new Backbone.Model(obj);
-                            m.id = _.cid(obj);
-                            return m;
-                        }));
-                    collection = null;
-                }).fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
-                });
-            }
+            var self = this;
+            api.getAll(obj).done(function (list) {
+                self.view.reset(obj.start, list);
+            }).fail(function () {
+                notifications.yell('error', gt('An error occured. Please try again.'));
+            });
         },
 
         print: function () {
@@ -257,7 +249,7 @@ define('io.ox/calendar/week/perspective',
                 });
 
             // watch for api refresh
-            api.on('create update delete', $.proxy(this.refresh, this))
+            api.on('create update delete refresh.all', $.proxy(this.refresh, this))
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();

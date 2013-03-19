@@ -355,7 +355,8 @@ define('io.ox/calendar/month/perspective',
                 .empty()
                 .append(this.scaffold = View.drawScaffold());
 
-            this.pane = $('.scrollpane', this.scaffold).before(
+            this.pane = $('.scrollpane', this.scaffold);
+            this.scaffold.prepend(
                 $('<div>')
                     .addClass('toolbar')
                     .append(
