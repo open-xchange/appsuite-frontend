@@ -249,9 +249,11 @@ define('io.ox/core/pubsub/settings/pane',
             return this;
         },
         onToggle: function (ev) {
+            var model = this.model;
             ev.preventDefault();
-            this.model.set('enabled', !this.model.get('enabled')).save().fail(function (res) {
-                res.model.set('enabled', !res.model.get('enabled'));
+            model.set('enabled', !model.get('enabled')).save().fail(function (res) {
+                model.set('enabled', !model.get('enabled'));
+                this.render();
             });
             this.render();
         },
