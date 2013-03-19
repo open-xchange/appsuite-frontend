@@ -116,15 +116,15 @@ define('io.ox/files/icons/perspective',
     }
 
     function cut(str, maxLen, cutPos) {
-            if (!cutPos) cutPos = 20;
-            if (!maxLen) maxLen = 70;
-            str = String(str || '');
-            if (str.length > maxLen) {
-                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - 8);
-            } else {
-                return str;
-            }
+        if (!cutPos) cutPos = 15;
+        if (!maxLen) maxLen = 70;
+        str = String(str || '');
+        if (str.length > maxLen) {
+            return str.substr(0, cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
+        } else {
+            return str;
         }
+    }
 
     function dropZoneInit(app) {
         if (_.browser.IE === undefined || _.browser.IE > 9) {

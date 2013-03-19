@@ -50,11 +50,11 @@ define('io.ox/files/list/perspective',
         });
 
         function cut(str, maxLen, cutPos) {
-            if (!cutPos) cutPos = 20;
+            if (!cutPos) cutPos = 25;
             if (!maxLen) maxLen = 70;
             str = String(str || '');
             if (str.length > maxLen) {
-                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - 8);
+                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
             } else {
                 return str;
             }
