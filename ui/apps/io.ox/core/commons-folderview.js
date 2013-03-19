@@ -100,6 +100,11 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function addTopLevelFolder(e) {
+            e.preventDefault();
+            e.data.app.folderView.add('1', { module: 'mail' });
+        }
+
         function addSubFolder(e) {
             e.preventDefault();
             e.data.app.folderView.add();
@@ -107,8 +112,22 @@ define('io.ox/core/commons-folderview',
 
          // toolbar actions
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
-            id: 'add-folder',
+            id: 'add-toplevel-folder',
             index: 100,
+            draw: function (baton) {
+                if (baton.options.type === 'mail') {
+                    // only show for mail
+                    this.append($('<li>').append(
+                        $('<a href="#" data-action="add-toplevel-folder">').text(gt('Add new folder'))
+                        .on('click', { app: baton.app }, addTopLevelFolder)
+                    ));
+                }
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+            id: 'add-folder',
+            index: 200,
             draw: function (baton) {
                 this.append($('<li>').append(
                     $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'))
@@ -149,7 +168,7 @@ define('io.ox/core/commons-folderview',
             index: 500,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
-                
+
                 this.append($('<li class="divider">'), $('<li>').append(link));
 
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
@@ -184,7 +203,7 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-       
+
 
         function renameFolder(e) {
             e.preventDefault();

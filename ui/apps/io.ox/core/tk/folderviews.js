@@ -550,12 +550,12 @@ define('io.ox/core/tk/folderviews',
                         easyOut: true
                     })
                     .header(
-                        $('<h4>').text(gt('Add new subfolder'))
+                        $('<h4>').text(folder === '1' ? gt('Add new folder') : gt('Add new subfolder'))
                     )
                     .build(function () {
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
-                                api.getBreadcrumb(folder, { subfolders: false }),
+                                folder !== '1' ? api.getBreadcrumb(folder, { subfolders: false }) : [],
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
@@ -563,8 +563,8 @@ define('io.ox/core/tk/folderviews',
                             )
                         );
                     })
-                    .addButton('cancel', gt('Cancel'))
                     .addPrimaryButton('add', gt('Add folder'))
+                    .addButton('cancel', gt('Cancel'))
                     .show(function () {
                         this.find('input').focus();
                     })
