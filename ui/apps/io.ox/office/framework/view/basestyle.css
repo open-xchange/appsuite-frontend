@@ -159,7 +159,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     /* horizontal padding in control elements */
     @control-padding: 8px;
     /* space between control caption elements */
-    @caption-spacing: 5px;
+    @caption-spacing: 6px;
 
     position: relative;
     .box-sizing(border-box);
@@ -293,7 +293,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         /* left/right padding to controls */
         @toolbox-padding: 13px;
         /* default spacing between controls */
-        @control-spacing: 8px;
+        @control-spacing: 9px;
         /* standard height of controls */
         @control-height: 36px;
         /* border radius for controls */
