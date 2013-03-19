@@ -1149,8 +1149,12 @@ define('io.ox/office/framework/app/baseapplication',
             var // create the new restore point with basic information
                 restorePoint = {
                     module: this.getName(),
-                    point: { file: file }
+                    point: { file: _.clone(file) }
                 };
+
+            // OX Files inserts reference to application object into file descriptor,
+            // remove it to be able to serialize without cyclic references
+            delete restorePoint.point.file.app;
 
             // call all fail-save handlers and add their data to the restore point
             _(failSaveHandlers).each(function (failSaveHandler) {
