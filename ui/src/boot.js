@@ -204,12 +204,12 @@ $(window).load(function () {
 
     // teach require.js to use deferred objects
     var req = window.req = require;
-    require = function (deps, callback) {
+    require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
-            var def = $.Deferred().done(callback || $.noop);
+            var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
-            return def;
+            return def.promise();
         } else {
             // bypass
             return req.apply(this, arguments);
@@ -217,12 +217,7 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    require([
-        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
-        'themes', 'io.ox/core/settings'
-    ])
-    .done(function (http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
 
         serverUp();
 
@@ -751,15 +746,22 @@ $(window).load(function () {
                 autoLogin();
             });
         });
-    })
-    .fail(function () {
+    }
+
+    function loadFail() {
         console.error('Server down', this, arguments);
         serverDown();
-    });
+    }
 
+    require([
+        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
+        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
+        'themes', 'io.ox/core/settings'],
+        loadSuccess, loadFail
+    );
 
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {
+    if (false && Modernizr.applicationcache && _.browser.webkit && ox.debug) {
 
         (function () {
 
