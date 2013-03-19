@@ -199,7 +199,7 @@ define('io.ox/contacts/edit/view-form', [
             }
         }
     };
-    
+
     _.each(['home', 'business', 'other'], function (type) {
         var fields = meta.sections[type + '_address'];
         meta.sections[type + '_address'] = _.compact(_.aprintf(
@@ -212,7 +212,7 @@ define('io.ox/contacts/edit/view-form', [
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s'),
             function (i) { return fields[i]; }, $.noop));
     });
-    
+
     function dateField(options) {
         options.point.extend(new forms.DateControlGroup({
             id: options.field,
@@ -288,8 +288,9 @@ define('io.ox/contacts/edit/view-form', [
             index: 300,
             id: 'inline-actions',
             ref: ref + '/edit/view/inline',
+            classes: 'form-horizontal',
             customizeNode: function ($node) {
-                $node.addClass("span7");
+                $node.addClass("controls");
                 $node.css({marginBottom: '20px'});
             }
         }));
@@ -312,7 +313,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
-            cssClasses: "btn",
+            cssClasses: "btn control",
             tabIndex: 11,
             tagtype: "button"
         }));
@@ -324,11 +325,11 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             label: gt("Save"),
             ref: ref + "/actions/edit/save",
-            cssClasses: "btn btn-primary",
+            cssClasses: "btn btn-primary control",
             tabIndex: 10,
             tagtype: "button"
         }));
-        
+
         // attachment Drag & Drop
         views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
             id: 'attachment',

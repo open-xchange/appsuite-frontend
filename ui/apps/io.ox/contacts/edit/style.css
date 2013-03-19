@@ -24,17 +24,17 @@
     }
 
     .btn {
-        margin-left: 13px;
+        margin-right: 13px;
     }
-    
+
     .contact_attachments_buttons .btn {
     	margin-left: -1px;
     }
-    
+
     .attachment-edit-row {
  		margin-bottom: 9px;
  	}
-    
+
  	.io-ox-core-tk-attachment {
 	 	.delete {
 	 		width: 25px;
