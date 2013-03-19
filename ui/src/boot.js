@@ -573,7 +573,7 @@ $(window).load(function () {
                 ox.language = _.url.hash('language');
 
                 // set store cookie?
-                (_.url.hash('store') === 'true' : session.store() : $.when()).always(function () {
+                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
 
                     // cleanup login params
                     _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });

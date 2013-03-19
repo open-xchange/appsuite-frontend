@@ -133,7 +133,13 @@ define('io.ox/files/list/view-detail',
         index: 500,
         draw: function (baton) {
             this.append(
-                folderAPI.getBreadcrumb(baton.data.folder_id, { handler: baton.data.app.folder.set, subfolder: false, last: false })
+                folderAPI.getBreadcrumb(baton.data.folder_id, {
+                    exclude: ['9'],
+                    handler: baton.data.app.folder.set,
+                    last: false,
+                    prefix: gt('Saved in'),
+                    subfolder: false
+                })
             );
         }
     });
