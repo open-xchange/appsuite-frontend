@@ -128,10 +128,20 @@ define('io.ox/files/list/view-detail',
         }
     });
 
+    ext.point('io.ox/files/details').extend({
+        id: 'breadcrumb',
+        index: 500,
+        draw: function (baton) {
+            this.append(
+                folderAPI.getBreadcrumb(baton.data.folder_id, { handler: baton.data.app.folder.set, subfolder: false, last: false })
+            );
+        }
+    });
+
     // Upload Field
     ext.point('io.ox/files/details').extend({
         id: 'upload',
-        index: 400,
+        index: 600,
         draw: function (baton) {
             if (!ox.uploadsEnabled) return;
             var self = this, file = baton.data;
@@ -229,7 +239,7 @@ define('io.ox/files/list/view-detail',
 
     ext.point('io.ox/files/details').extend({
         id: 'versions',
-        index: 500,
+        index: 700,
         draw: function (baton, detailView, allVersions) {
 
             var $content;
