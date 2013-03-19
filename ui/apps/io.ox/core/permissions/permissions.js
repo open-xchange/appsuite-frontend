@@ -361,7 +361,7 @@ define('io.ox/core/permissions/permissions',
                         autocomplete.on('update', function () {
                             var baton = {list: []};
                             collection.any(function (item) {
-                                baton.list.push({id: item.get('entity'), type: item.get('isGroup') ? 2 : 1});
+                                baton.list.push({id: item.get('entity'), type: item.get('group') ? 2 : 1});
                             });
                             $.data(node, 'baton', baton);
                         });
