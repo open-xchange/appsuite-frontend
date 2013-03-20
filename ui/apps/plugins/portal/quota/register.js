@@ -49,7 +49,8 @@ define("plugins/portal/quota/register",
         });
 
         return _(fields).select(function (q) {
-            return (q.quota && q.usage);
+            //must check against undefined otherwise 0 values would lead to not displaying the quota. See Bug 25110
+            return (q.quota !== undefined && q.usage !== undefined);
         });
     },
 
@@ -57,7 +58,6 @@ define("plugins/portal/quota/register",
         var contentFields = $('<div>').addClass('content no-pointer');
 
         this.append(contentFields);
-
         _.each(availableQuota(quota), function (q) {
             addQuotaArea(contentFields, q);
         });
@@ -115,12 +115,21 @@ define("plugins/portal/quota/register",
             label.text(gt('unlimited'));
             bar.remove();
         } else {
-            label.text(
-                //#. %1$s is the storagespace in use
-                //#. %2$s is the max storagespace
-                //#, c-format
-                gt('%1$s of %2$s', strings.fileSize(quota.usage), strings.fileSize(quota.quota))
-            );
+            if (quota.name === "mailcount") {//mailcount must not be shown in bytes
+                label.text(
+                        //#. %1$s is the number of mails in use
+                        //#. %2$s is the max number of mails
+                        //#, c-format
+                        gt('%1$s of %2$s', quota.usage, quota.quota)
+                    );
+            } else {
+                label.text(
+                    //#. %1$s is the storagespace in use
+                    //#. %2$s is the max storagespace
+                    //#, c-format
+                    gt('%1$s of %2$s', strings.fileSize(quota.usage), strings.fileSize(quota.quota))
+                );
+            }
 
             bar.addClass('progress progress-striped')
             .append(buildbar(quota.usage, quota.quota));
