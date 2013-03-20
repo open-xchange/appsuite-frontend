@@ -13,7 +13,8 @@
 define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
-     'gettext!plugins/portal'], function (ext, api, gt) {
+     'io.ox/preview/main',
+     'gettext!plugins/portal'], function (ext, api, preview, gt) {
 
     'use strict';
 
@@ -28,18 +29,24 @@ define('plugins/portal/files/register',
 
         preview: function (baton) {
 
+            var content = $('<div class="content pointer">'), data, options, url;
+
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
-                var data = { folder_id: baton.data.folder_id, id: baton.data.id },
-                    options = { width: 300, height: 300, scaleType: 'cover' },
-                    url = api.getUrl(data, 'view') + '&' + $.param(options);
-                this.addClass('photo-stream').append(
-                    $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
-                );
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                options = { width: 300, height: 300, scaleType: 'cover' };
+                url = api.getUrl(data, 'view') + '&' + $.param(options);
+                this.addClass('photo-stream');
+                content.css('backgroundImage', 'url(' + url + ')');
             } else {
-                this.append(
-                    $('<div class="content pointer">')
-                );
+                // try images url via preview engines
+                baton.data.url = api.getUrl(baton.data, 'bare');
+                if ((url = preview.getPreviewImage(baton.data))) {
+                    this.addClass('preview');
+                    content.css('backgroundImage', 'url(' + url + ')');
+                }
             }
+
+            this.append(content);
         },
 
         draw: function (baton) {

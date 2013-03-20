@@ -215,7 +215,7 @@
         text-align: center;
     }
 
-    .photo-stream {
+    .photo-stream, .preview {
         .content {
             top: 0; right: 0; bottom: 0; left: 0;
             z-index: 1;
@@ -233,6 +233,12 @@
             text-shadow: 0px 0px 5px #fff;
             background-color: rgba(255, 255, 255, 0.50);
             border-top: 1px solid rgba(0, 0, 0, 0.20);
+        }
+    }
+
+    .preview {
+        h2 {
+            background-color: rgba(255, 255, 255, 0.80);
         }
     }
 
@@ -350,7 +356,7 @@
         .content {
             left: 0;
         }
-        .photo-stream {
+        .photo-stream, .preview {
             .content, h2 { right: 13px; }
         }
     }
