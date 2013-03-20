@@ -573,7 +573,7 @@ msgstr "E-Mail-Speicherplatz"
 
 #: apps/plugins/portal/quota/register.js:48
 msgid "Mail count quota"
-msgstr "E-Mail-Quota"
+msgstr "E-Mail-Anzahl"
 
 #: apps/plugins/portal/quota/register.js:115
 msgid "unlimited"
