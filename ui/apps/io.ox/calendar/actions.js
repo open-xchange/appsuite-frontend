@@ -165,7 +165,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'one modify',
+        requires: 'one delete',
         action: function (baton) {
             var params = baton.data,
                 o = {
