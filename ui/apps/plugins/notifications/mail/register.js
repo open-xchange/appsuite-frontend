@@ -136,7 +136,8 @@ define('plugins/notifications/mail/register',
         }
     });
 
-    /* Mail notifications disabled for release-7.0.1 see Bug 24938 and 24953
+    // Mail notifications disabled for release-7.0.1 see Bug 24938 and 24953
+    // re enabled
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
@@ -177,7 +178,6 @@ define('plugins/notifications/mail/register',
             api.checkInbox();
         }
     });
-    */
 
     return true;
 });

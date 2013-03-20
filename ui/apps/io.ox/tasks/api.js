@@ -210,7 +210,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
             task.folder_id = newFolder;
         }
-        task.notification = true;//set allways (OX6 does this too)
+        task.notification = true;//set always (OX6 does this too)
 
         if (useFolder === undefined) {//if no folder is given use default
             useFolder = api.getDefaultFolder();
@@ -260,7 +260,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     //used by done/undone actions when used with multiple selection
     api.updateMultiple = function (list, modifications) {
         http.pause();
-        modifications.notification = true;//set allways (OX6 does this too)
+        modifications.notification = true;//set always (OX6 does this too)
         var keys  = [];
 
         _(list).map(function (obj) {

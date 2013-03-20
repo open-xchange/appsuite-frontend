@@ -164,31 +164,19 @@ define('io.ox/core/settings/pane',
 
     // Auto open notification area
     (function () {
+        var options = {};
+        
+        options.never = gt("Never");
+        options.noEmail = gt("On new Notifications except mails");
+        options.always = gt("On every new Notification");
+        
         if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend(new forms.ControlGroup({
+            point.extend(new forms.SelectControlGroup({
                 id: 'autoOpenNotfication',
                 index: 700,
                 attribute: 'autoOpenNotification',
-                label: gt("Automatic opening of notification area on new notifications."),
-                control: $('<input type="checkbox">'),
-                updateElement: function () {
-                    var value = this.model.get(this.attribute);
-                    if (value) {
-                        value = 'checked';
-                    } else {
-                        value = undefined;
-                    }
-                    this.nodes.element.attr('checked', value);
-                },
-                updateModel: function () {
-                    var value = this.nodes.element.attr('checked');
-                    if (value) {
-                        value = true;
-                    } else {
-                        value = false;
-                    }
-                    this.model.set(this.attribute, value);
-                }
+                label: gt("Automatic opening of notification area"),
+                selectOptions: options
             }));
         }
     }());

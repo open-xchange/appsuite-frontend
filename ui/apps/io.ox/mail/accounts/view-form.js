@@ -61,7 +61,7 @@ define('io.ox/mail/accounts/view-form',
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
-                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is allways valid even if inputfields contain wrong values
+                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
                 var self = this;
