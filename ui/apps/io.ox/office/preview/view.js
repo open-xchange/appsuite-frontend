@@ -13,10 +13,12 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, BaseView, gt) {
+    ], function (Utils, Button, Label, BaseView, gt) {
 
     'use strict';
 
@@ -119,21 +121,18 @@ define('io.ox/office/preview/view',
             model = app.getModel();
 
             topPane.createToolBox('top')
-                .createButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+                .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }));
 
             bottomPane.createToolBox('bottom')
-                .createGroupContainer(function () {
-                    this.createButton('pages/first',    { icon: 'docs-first-page',    tooltip: gt('Show first page') })
-                        .createButton('pages/previous', { icon: 'docs-previous-page', tooltip: gt('Show previous page') })
-                        .createLabel('pages/current',   {                             tooltip: gt('Current page and total page count') })
-                        .createButton('pages/next',     { icon: 'docs-next-page',     tooltip: gt('Show next page') })
-                        .createButton('pages/last',     { icon: 'docs-last-page',     tooltip: gt('Show last page') });
-                })
-                .createGroupContainer(function () {
-                    this.createButton('zoom/dec',    { icon: 'docs-zoom-out', tooltip: gt('Zoom out') })
-                        .createLabel('zoom/current', {                        tooltip: gt('Current zoom factor') })
-                        .createButton('zoom/inc',    { icon: 'docs-zoom-in',  tooltip: gt('Zoom in') });
-                });
+                .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
+                .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
+                .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
+                .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
+                .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                .addGap()
+                .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
+                .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
+                .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }));
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);

@@ -59,11 +59,69 @@ define('io.ox/office/framework/view/toolbox',
             baseKey = 'view/toolbox/' + id,
 
             // the label for the heading button
-            headingLabel = Utils.getStringOption(options, 'label');
+            headingLabel = Utils.getStringOption(options, 'label'),
+
+            // the heading button
+            headingButton = null,
+
+            // the current line node as target for new container nodes
+            lineNode = null,
+
+            // the current container node as target for new groups
+            containerNode = null;
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, app, options);
+        Component.call(this, app, Utils.extendOptions({ groupInserter: groupInserter }, options));
+
+        // private methods ----------------------------------------------------
+
+        function groupInserter(group) {
+            if (group === headingButton) {
+                self.getNode().append(group.getNode());
+            } else {
+                if (!lineNode) {
+                    lineNode = Utils.createContainerNode('group-line');
+                    self.getNode().append(lineNode);
+                }
+                if (!containerNode) {
+                    containerNode = Utils.createContainerNode('group-container');
+                    lineNode.append(containerNode);
+                }
+                containerNode.append(group.getNode());
+            }
+        }
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * A gap will be inserted before the next inserted group in the current
+         * line.
+         *
+         * @param {Number} [width=9]
+         *  The width of the gap, in pixels.
+         *
+         * @returns {ToolBox}
+         *  A reference to this instance.
+         */
+        this.addGap = function (width) {
+            if (containerNode) {
+                containerNode.css('margin-right', (_.isNumber(width) ? width : 9) + 'px');
+            }
+            containerNode = null;
+            return this;
+        };
+
+        /**
+         * New groups will be inserted into a new line in this tool box.
+         *
+         * @returns {ToolBox}
+         *  A reference to this instance.
+         */
+        this.newLine = function () {
+            lineNode = containerNode = null;
+            return this;
+        };
 
         // initialization -----------------------------------------------------
 
@@ -81,7 +139,8 @@ define('io.ox/office/framework/view/toolbox',
             });
 
             // create the heading button
-            this.createButton(baseKey + '/expand', { classes: 'heading', label: headingLabel });
+            headingButton = new Button({ classes: 'heading', label: headingLabel });
+            this.addGroup(baseKey + '/expand', headingButton);
         }
 
     } // class ToolBox

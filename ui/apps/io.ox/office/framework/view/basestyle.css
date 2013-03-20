@@ -155,7 +155,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 }
 
 .group {
-
     /* horizontal padding in control elements */
     @control-padding: 8px;
     /* space between control caption elements */
@@ -321,74 +320,37 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         /* size the tool box according to its floated children */
         overflow: hidden;
 
-        .group, > .group-container {
-            display: inline-block;
-            float: left;
-        }
-
-        /* show groups in a horizontal bar */
-        > .group, > .group-container {
-            margin-right: @control-spacing;
+        > .group-line {
+            display: block;
             margin-bottom: @control-spacing;
-            .border-radius(@border-radius);
-            .box-shadow(2px 2px 6px fade(white, 10%));
 
-            &.right {
-                float: right;
-                margin-right: 0;
+            > .group-container {
+                display: inline-block;
+                .border-radius(@border-radius);
             }
-
-            &.right + .right {
-                margin-right: @control-spacing;
-            }
-
-            &:last-child:not(.right) {
-                margin-right: 0;
-            }
-
-            /* line break */
-            &.line-break {
-                clear: both;
-            }
-        }
-
-        > .group-container > .group {
-            &:first-child {
-                .border-top-left-radius(@border-radius);
-                .border-bottom-left-radius(@border-radius);
-            }
-            &:last-child {
-                .border-top-right-radius(@border-radius);
-                .border-bottom-right-radius(@border-radius);
-            }
-            + .group {
-                margin-left: -1px;
-            }
-        }
-
-        >.group, > .group-container > .group:first-child {
-            > *:first-child {
-                .border-top-left-radius(@border-radius);
-                .border-bottom-left-radius(@border-radius);
-            }
-        }
-
-        >.group, > .group-container > .group:last-child {
-            > *:last-child {
-                .border-top-right-radius(@border-radius);
-                .border-bottom-right-radius(@border-radius);
-            }
-        }
-
-        /* groups spanning the full width of the pane */
-        > .group.full-width {
-            width: 100%;
-            margin-right: 0;
         }
 
         .group {
-            /* repeat background, needed for overlay panes with transparent background */
-            background: @pane-fill-color;
+            display: inline-block;
+            .box-shadow(2px 2px 6px fade(white, 10%));
+
+            + .group {
+                margin-left: -1px;
+            }
+
+            &:first-child {
+                &, > *:first-child {
+                    .border-top-left-radius(@border-radius);
+                    .border-bottom-left-radius(@border-radius);
+                }
+            } 
+
+            &:last-child {
+                &, > *:last-child {
+                    .border-top-right-radius(@border-radius);
+                    .border-bottom-right-radius(@border-radius);
+                }
+            }
 
             label, a.button, input {
                 height: @control-height;
@@ -507,7 +469,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                     }
                 }
             }
-
         } /* end of .group */
 
         /* add specific design properties for the heading button */
@@ -515,7 +476,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             margin-top: -@control-spacing;
             padding-top: @heading-height + 2 * @control-spacing;
 
-            > .group.heading {
+            .group.heading {
                 position: absolute;
                 top: @control-spacing;
                 left: -1px;
@@ -544,8 +505,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
             }
 
-            /* collapsed: hide all groups following the heading button */
-            &.collapsed > .group.heading ~ * {
+            /* collapsed: hide all lines following the heading button */
+            &.collapsed > .group-line {
                 display: none;
             }
         }
@@ -576,7 +537,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     > .view-component.toolbox {
         overflow: visible;
 
-        > .group, > .group-container {
+        .group-container {
+            background: @pane-fill-color;
+        }
+        
+        .group {
             .drop-shadow();
         }
     }
