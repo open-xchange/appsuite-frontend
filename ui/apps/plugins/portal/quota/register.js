@@ -74,10 +74,8 @@ define("plugins/portal/quota/register",
         var width       = (Math.min(usage, size) / Math.max(usage, size)) * 100,
             progressbar = $('<div>').addClass('bar').css('width', width + '%');
 
-        if (width < 70) {
-            progressbar.addClass('default'); // blue instead of green
-        } else if (width < 90) {
-            progressbar.addClass('default'); // still blue instead of green
+        if (width < 90) {
+            progressbar.addClass('default'); // removed unnecessary if
         } else {
             progressbar.addClass('bar-danger');
         }
@@ -127,7 +125,7 @@ define("plugins/portal/quota/register",
                     //#. %1$s is the storagespace in use
                     //#. %2$s is the max storagespace
                     //#, c-format
-                    gt('%1$s of %2$s', strings.fileSize(quota.usage), strings.fileSize(quota.quota))
+                    gt('%1$s of %2$s', strings.fileSize(quota.usage, 2), strings.fileSize(quota.quota, 2))
                 );
             }
 
