@@ -352,6 +352,7 @@ define('io.ox/contacts/actions',
         },
 
         multiple: function (list) {
+            var distLists = [];
 
             function mapList(obj) {
                 if (obj.id) {
@@ -365,7 +366,8 @@ define('io.ox/contacts/actions',
 
             function mapContact(obj) {
                 if (obj.distribution_list && obj.distribution_list.length) {
-                    return _(obj.distribution_list).map(mapList);
+                    distLists.push(obj);
+                    return;
                 } else if (obj.internal_userid) {
                     // internal user
                     return { type: 1, id: obj.internal_userid };
@@ -379,15 +381,48 @@ define('io.ox/contacts/actions',
                 return obj.type === 1 || !!obj.mail;
             }
 
+            function filterForDistlists(list) {
+                var cleaned = [];
+                _(list).each(function (single) {
+                    if (!single.mark_as_distributionlist) {
+                        cleaned.push(single);
+                    } else {
+                        distLists = distLists.concat(single.distribution_list);
+                    }
+                });
+                return cleaned;
+            }
+
             api.getList(list).done(function (list) {
                 // set participants
-                var participants = _.chain(list).map(mapContact).flatten(true).filter(filterContact).value();
+                var def = $.Deferred(),
+                    resolvedContacts = [],
+                    cleanedList = filterForDistlists(list),
+                    participants = _.chain(cleanedList).map(mapContact).flatten(true).filter(filterContact).value();
+
+                distLists = _.union(distLists);
+
+                api.getList(distLists).done(function (obj) {
+                    resolvedContacts = resolvedContacts.concat(obj);
+                    def.resolve();
+                });
+
                 // open app
-                require(['io.ox/calendar/edit/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.create({ participants: participants, folder_id: config.get('folder.calendar') });
+                def.done(function () {
+                    resolvedContacts = _.chain(resolvedContacts).map(mapContact).flatten(true).filter(filterContact).value();
+
+                    participants = participants.concat(resolvedContacts);
+//                    participants = _.uniq(participants, false, function (single) {
+//                        return single.id;
+//                    });
+
+                    require(['io.ox/calendar/edit/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            this.create({ participants: participants, folder_id: config.get('folder.calendar') });
+                        });
                     });
                 });
+
             });
         }
     });
