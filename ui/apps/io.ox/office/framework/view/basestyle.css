@@ -209,13 +209,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         span {
             display: inline-block;
             vertical-align: top;
-
-            /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
-            > i[class^="docs-"] {
-                position: relative;
-                top: 8px;
-                vertical-align: top;
-            }
         }
 
         > .caption {
@@ -364,6 +357,13 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
             label, a.button {
                 line-height: @control-height - 2px;
+
+                /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
+                span > i[class^="docs-"] {
+                    position: relative;
+                    top: 8px;
+                    vertical-align: top;
+                }
             }
 
             /* selected toggle/radio buttons */
