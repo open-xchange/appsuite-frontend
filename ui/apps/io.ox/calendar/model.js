@@ -59,7 +59,6 @@ define('io.ox/calendar/model',
                 });
             },
             getParticipants: function (options) {
-
                 if (this._participants) {
                     return this._participants;
                 }
@@ -204,9 +203,9 @@ define('io.ox/calendar/model',
     return {
         setDefaultParticipants: function (model, options) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
+                var userID = configAPI.get('identifier');
                 if (folderAPI.is('private', folder)) {
                     if (options.create) {
-                        var userID = configAPI.get('identifier');
                         // it's a private folder for the current user, add him by default
                         // as participant
                         model.getParticipants().addUniquely({id: userID, type: 1});
@@ -214,16 +213,19 @@ define('io.ox/calendar/model',
                         // use a new, custom and unused property in his model to specify that he can't be removed
                         model.getParticipants().get(userID).set('ui_removable', false);
                     } else {
-                        var userID = configAPI.get('identifier');
                         if (model.get('organizerId') === userID) {
                             model.getParticipants().get(userID).set('ui_removable', false);
                         }
                     }
-
                 } else if (folderAPI.is('public', folder)) {
-                    // if public folder, current user will be added
-                    model.getParticipants().addUniquely({id: configAPI.get('identifier'), type: 1});
-
+                    if (options.create) {
+                        // if public folder, current user will be added
+                        model.getParticipants().addUniquely({id: userID, type: 1});
+                    } else {
+                        if (model.get('organizerId') === userID) {
+                            model.getParticipants().get(userID).set('ui_removable', false);
+                        }
+                    }
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
                     model.getParticipants().addUniquely({id: folder.created_by, type: 1});
