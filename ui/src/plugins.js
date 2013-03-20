@@ -157,17 +157,22 @@
         }
     });
 
-    function setTheme(theme) {
+    function setTheme(theme, customPart) {
         currentTheme = theme;
-        return $.when.apply($, _.map(lessFiles, function (file) {
-            return less(file.source).done(function(css) {
-                if (file.node) {
-                    file.node.text(relativeCSS(file.path, css));
-                } else {
-                    file.node = insert(file.name, css, "#theme");
-                };
-            });
-        }));
+        return $.when(
+            !customPart ? $.when() : less(customPart).done(function (css) {
+                insert(themeLess.path + 'style.less', css, "#custom");
+            }),
+            $.when.apply($, _.map(lessFiles, function (file) {
+                return less(file.source).done(function(css) {
+                    if (file.node) {
+                        file.node.text(relativeCSS(file.path, css));
+                    } else {
+                        file.node = insert(file.name, css, "#theme");
+                    };
+                });
+            }))
+        );
     }
 
     // themes module
@@ -192,8 +197,8 @@
                     $('head #favicon').attr({ href: path + 'favicon.ico' }).detach().appendTo('head');
                     themeLess.path = path;
                     themeLess.name = path + 'dynamic.less';
-                    themeLess.source = style1 + (style2 || '');
-                    return setTheme(def1 + (def2 || ''));
+                    themeLess.source = style1;
+                    return setTheme(def1 + (def2 || ''), style2);
                 });
         },
         /**
