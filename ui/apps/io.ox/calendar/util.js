@@ -455,13 +455,15 @@ define("io.ox/calendar/util",
         },
 
         getConfirmationStatus: function (obj, id) {
-            var hash = this.getConfirmations(obj);
-            return hash[id || ox.user_id].status || 1;
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].status : 1;
         },
 
         getConfirmationMessage: function (obj, id) {
-            var hash = this.getConfirmations(obj);
-            return hash[id || ox.user_id].comment || "";
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].comment : '';
         },
 
         // returns a set of rows, each containing 7 days
