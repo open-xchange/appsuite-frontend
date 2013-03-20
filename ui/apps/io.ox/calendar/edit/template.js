@@ -55,12 +55,13 @@ define('io.ox/calendar/edit/template',
     });
 
     // buttons
+    var mainButtons;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'buttons',
         draw: function (baton) {
-            var saveButton;
-            this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
+            var save, discard;
+            this.append(save = $('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
@@ -71,13 +72,14 @@ define('io.ox/calendar/edit/template',
                     baton.model.save();
                 })
             );
-            this.append($('<button class="btn" data-action="discard" >')
+            this.append(discard = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
                 .css({float: 'right'})
                 .on('click', function () {
                     baton.app.quit();
                 })
             );
+            mainButtons = save.add(discard);
         }
     });
 
@@ -91,10 +93,10 @@ define('io.ox/calendar/edit/template',
         },
         showConflicts: function (conflicts) {
             var self = this,
-                hardConflict = false,
-                saveButton = $('[data-action="save"]', this.$el.closest('.io-ox-calendar-edit'));
+                hardConflict = false;
 
-            saveButton.addClass('disabled').off('click');
+            mainButtons.hide();
+
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
                 if (conflict.hard_conflict) {
@@ -124,9 +126,7 @@ define('io.ox/calendar/edit/template',
                                         .on('click', function (e) {
                                             e.preventDefault();
                                             self.$el.empty();
-                                            saveButton.removeClass('disabled').on('click', function () {
-                                                self.model.save();
-                                            });
+                                            mainButtons.show();
                                         }),
                                     '&nbsp;',
                                     $acceptButton
