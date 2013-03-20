@@ -456,12 +456,12 @@ define("io.ox/calendar/util",
 
         getConfirmationStatus: function (obj, id) {
             var hash = this.getConfirmations(obj);
-            return (hash[id || ox.user_id] || { status: 1, comment: "" }).status;
+            return hash[id || ox.user_id].status || 1;
         },
 
         getConfirmationMessage: function (obj, id) {
             var hash = this.getConfirmations(obj);
-            return (hash[id || ox.user_id] || { status: 1, comment: "" }).comment;
+            return hash[id || ox.user_id].comment || "";
         },
 
         // returns a set of rows, each containing 7 days
