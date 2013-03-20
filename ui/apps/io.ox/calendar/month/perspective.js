@@ -333,7 +333,6 @@ define('io.ox/calendar/month/perspective',
                 self = this;
             print.open('printCalendar', null, {
                 template: 'cp_monthview_table.tmpl',
-                usertemplate: 'infostore://69805',
                 start: self.current.local,
                 end: end.local
             });

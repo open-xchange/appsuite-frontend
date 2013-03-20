@@ -1485,9 +1485,9 @@ define('io.ox/calendar/week/view',
                 self = this,
                 folder = this.folder(this.folder()),
                 templates = {
-                    'day': {id: 69803, name: 'cp_dayview_table.tmpl'},
-                    'workweek': {id: 69806, name: 'cp_weekview_table.tmpl'},
-                    'week': {id: 69806, name: 'cp_weekview_table.tmpl'}
+                    'day': {name: 'cp_dayview_table.tmpl'},
+                    'workweek': {name: 'cp_weekview_table.tmpl'},
+                    'week': {name: 'cp_weekview_table.tmpl'}
                 };
             var tmpl = templates[self.mode],
                 data = null;
@@ -1496,7 +1496,6 @@ define('io.ox/calendar/week/view',
             }
             print.open('printCalendar', data, {
                 template: tmpl.name,
-                usertemplate: 'infostore://' + tmpl.id,
                 start: start,
                 end: end,
                 work_day_start_time: self.workStart * date.HOUR,
