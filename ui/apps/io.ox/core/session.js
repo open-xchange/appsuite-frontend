@@ -30,14 +30,13 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         return language in languages ? language : false;
     };
 
-    var set = function (data, language, store) {
+    var set = function (data, language) {
         ox.session = data.session || '';
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
-        return store ? that.store().then(finished, finished) : finished();
-        function finished() { return $.when(data); }
+        // should not hide store() request here; made debugging hard
     };
 
     var that = {
@@ -57,23 +56,27 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 }
             })
             // If autologin fails, try the token login
-            .then(null, function () {
-                if (!_.url.hash('serverToken')) return;
-                return http.POST({
-                    module: 'login',
-                    jsessionid: _.url.hash('jsessionid'),
-                    appendColumns: false,
-                    appendSession: false,
-                    processResponse: false,
-                    timeout: TIMEOUTS.AUTOLOGIN,
-                    params: {
-                        action: 'tokens',
-                        client: that.client(),
-                        serverToken: _.url.hash('serverToken'),
-                        clientToken: _.url.hash('clientToken')
-                    }
-                }).then(function (response) { return response.data; });
-            })
+            .then(
+                null,
+                function () {
+                    if (!_.url.hash('serverToken')) return;
+                    return http.POST({
+                        module: 'login',
+                        jsessionid: _.url.hash('jsessionid'),
+                        appendColumns: false,
+                        appendSession: false,
+                        processResponse: false,
+                        timeout: TIMEOUTS.AUTOLOGIN,
+                        params: {
+                            action: 'tokens',
+                            client: that.client(),
+                            serverToken: _.url.hash('serverToken'),
+                            clientToken: _.url.hash('clientToken')
+                        }
+                    })
+                    .then(function (response) { return response.data; });
+                }
+            )
             .done(function () {
                 store = _.url.hash('store');
                 _.url.hash({
@@ -84,7 +87,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 });
             })
             .then(function (data) {
-                return set(data, undefined, store);
+                set(data);
+                return that.store().then(function () {
+                    return data;
+                });
             });
         },
 
@@ -134,7 +140,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            set(data, language, store).done(def.resolve(data));
+                            set(data, language);
+                            that.store().done(function () {
+                                def.resolve(data);
+                            });
                         })
                         .fail(def.reject);
                     }
@@ -143,21 +152,23 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     set({ session: 'offline', user: username }, language);
                     def.resolve({ session: ox.session, user: ox.user });
                 }
-
                 return def;
             };
         }()),
 
         store: function () {
-            // GET request
-            return http.GET({
+            var def = $.Deferred();
+            // change from GET to POST request, cause firefox has a
+            // problem otherwise if caches are empty
+            http.POST({
                 module: 'login',
                 appendColumns: false,
                 processResponse: false,
-                params: {
-                    action: 'store'
-                }
-            });
+                params: { action: 'store' }
+            })
+            // makes store() always successful (should never block)
+            .always(def.resolve);
+            return def;
         },
 
         logout: function () {
