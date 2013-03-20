@@ -21,7 +21,6 @@ define('io.ox/mail/autoforward/settings/model',
     'use strict';
 
     function providePreparedData(attributes) {
-        console.log(attributes);
         var preparedData = {
                 "rulename": "autoforward",
 

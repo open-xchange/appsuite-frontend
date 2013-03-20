@@ -20,76 +20,90 @@ define('io.ox/mail/vacationnotice/settings/model',
 
     'use strict';
 
+    function providePreparedData(attributes) {
+        var newAttributes = {
+                days: attributes.days,
+                id: attributes.internal_id,
+                subject: attributes.subject,
+                text: attributes.text
+            },
+
+            preparedData = {
+                "actioncmds": [newAttributes]
+            };
+
+        if (attributes.id !== undefined) {
+            preparedData.id = attributes.id;
+        }
+
+        var addresses = [];
+        _(attributes).each(function (value, attribute) {
+            if (value === true && attribute !== 'activateTimeFrame') {
+                addresses.push(attribute);
+                preparedData.active = true;
+            }
+        });
+
+        if (!_.isEmpty(addresses)) {
+            newAttributes.addresses = addresses;
+
+        } else {
+            newAttributes.addresses = [attributes.primaryMail];
+            preparedData.active = false;
+        }
+
+
+        var testForTimeframe = {
+                "id": "allof",
+                "tests": []
+            };
+
+        if (attributes.dateFrom) {
+            testForTimeframe.tests.push(
+                {
+                    "id": "currentdate",
+                    "comparison": "ge",
+                    "datepart": "date",
+                    "datevalue": [attributes.dateFrom]
+                }
+            );
+        }
+
+        if (attributes.dateUntil) {
+            testForTimeframe.tests.push(
+                {
+                    "id": "currentdate",
+                    "comparison": "le",
+                    "datepart": "date",
+                    "datevalue": [attributes.dateUntil]
+                }
+            );
+        }
+
+        if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
+            testForTimeframe = { id: "true" };
+        }
+
+        preparedData.test = testForTimeframe;
+
+        return preparedData;
+    }
+
     function buildFactory(ref, api) {
         var factory = new ModelFactory({
             api: api,
             ref: ref,
 
             update: function (model) {
+                return api.update(providePreparedData(model.attributes));
+            },
 
-                var newAttributes = {
-                        days: model.attributes.days,
-                        id: model.attributes.id,
-                        subject: model.attributes.subject,
-                        text: model.attributes.text
-                    };
+            create: function (model) {
+                var preparedData = providePreparedData(model.attributes);
+                preparedData.rulename = gt("vacation notice");
+                preparedData.flags = ["vacation"];
 
-                var preparedData = {
-                        "actioncmds": [newAttributes],
-                        "id": model.attributes.mainID
-                    };
-
-                var addresses = [];
-                _(model.attributes).each(function (value, attribute) {
-                    if (value === true && attribute !== 'activateTimeFrame') {
-                        addresses.push(attribute);
-                        preparedData.active = true;
-                    }
-                });
-
-                if (!_.isEmpty(addresses)) {
-                    newAttributes.addresses = addresses;
-
-                } else {
-                    newAttributes.addresses = [model.attributes.primaryMail];
-                    preparedData.active = false;
-                }
-
-
-                var testForTimeframe = {
-                        "id": "allof",
-                        "tests": []
-                    };
-
-                if (model.attributes.dateFrom) {
-                    testForTimeframe.tests.push(
-                        {
-                            "id": "currentdate",
-                            "comparison": "ge",
-                            "datepart": "date",
-                            "datevalue": [model.attributes.dateFrom]
-                        }
-                    );
-                }
-
-                if (model.attributes.dateUntil) {
-                    testForTimeframe.tests.push(
-                        {
-                            "id": "currentdate",
-                            "comparison": "le",
-                            "datepart": "date",
-                            "datevalue": [model.attributes.dateUntil]
-                        }
-                    );
-                }
-
-                if (testForTimeframe.tests.length === 0 || model.attributes.activateTimeFrame === false) {
-                    testForTimeframe = { id: "true" };
-                }
-
-                preparedData.test = testForTimeframe;
-
-                return api.update(preparedData);
+                return api.create(preparedData);
             }
 
         });

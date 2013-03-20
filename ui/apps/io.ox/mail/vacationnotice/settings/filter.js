@@ -26,46 +26,66 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/vacationnotice/model', api);
 
+    function createDateDefaults(vacationData) {
+        var myDateStart = new date.Local(date.Local.utc(_.now())),
+            myDateEnd = new date.Local(date.Local.utc(_.now()));
+
+        myDateStart = myDateStart.addUTC(date.DAY);
+        myDateEnd = myDateEnd.addUTC(date.DAY + date.WEEK);
+
+        vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
+        vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
+
+        vacationData.activateTimeFrame = false;
+    }
+
     return {
         editVacationtNotice: function ($node, multiValues, primaryMail) {
             var deferred = $.Deferred();
 
             api.getRules('vacation').done(function (data) {
-                var vacationData = data[0].actioncmds[0],
+                var defaultNotice = {
+                    days: "7",
+                    internal_id: gt('vacation'),
+                    subject: "",
+                    text: ""
+                },
+                    vacationData,
                     VacationEdit,
                     vacationNotice;
-                vacationData.mainID = data[0].id;
-                vacationData.primaryMail = primaryMail;
 
-                if (_(data[0].test).size() === 2) {
-                    _(data[0].test.tests).each(function (value) {
-                        if (value.comparison === 'ge') {
-                            vacationData.dateFrom = value.datevalue[0];
-                        } else {
-                            vacationData.dateUntil = value.datevalue[0];
-                        }
-                    });
 
-                    vacationData.activateTimeFrame = true;
+                if (data[0] && data[0].actioncmds[0]) {
+                    vacationData = data[0].actioncmds[0];
+                    vacationData.internal_id = vacationData.id;
+                    vacationData.id = data[0].id;
 
+                    if (_(data[0].test).size() === 2) {
+                        _(data[0].test.tests).each(function (value) {
+                            if (value.comparison === 'ge') {
+                                vacationData.dateFrom = value.datevalue[0];
+                            } else {
+                                vacationData.dateUntil = value.datevalue[0];
+                            }
+                        });
+
+                        vacationData.activateTimeFrame = true;
+
+                    } else {
+                        createDateDefaults(vacationData);
+                    }
                 } else {
-                    var myDateStart = new date.Local(date.Local.utc(_.now())),
-                        myDateEnd = new date.Local(date.Local.utc(_.now()));
-
-                    myDateStart = myDateStart.addUTC(date.DAY);
-                    myDateEnd = myDateEnd.addUTC(date.DAY + date.WEEK);
-
-                    vacationData.dateFrom = date.Local.localTime(myDateStart.getTime());
-                    vacationData.dateUntil = date.Local.localTime(myDateEnd.getTime());
-
-                    vacationData.activateTimeFrame = false;
+                    vacationData = defaultNotice;
+                    createDateDefaults(vacationData);
                 }
 
-                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
+                vacationData.primaryMail = primaryMail;
 
+
+                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
                 vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
-                if (data[0].active === true) {
+                if (data[0] && data[0].active === true) {
                     _(vacationData.addresses).each(function (mail) {
                         vacationNotice.model.set(mail, true);
                     });
