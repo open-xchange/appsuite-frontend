@@ -210,6 +210,13 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         span {
             display: inline-block;
             vertical-align: top;
+
+            /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
+            > i[class^="docs-"] {
+                position: relative;
+                top: 8px;
+                vertical-align: top;
+            }
         }
 
         > .caption {
