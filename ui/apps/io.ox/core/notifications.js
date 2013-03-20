@@ -75,7 +75,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             this.subviews = options.subviews || {};
         },
         render: function (notifications) {
-            var self = this;
+            var self = this,
+                empty = true;//check if notification area is empty
             self.$el.empty();
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
@@ -84,15 +85,18 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         self.subviews[type] = new category.ListView({ collection: category.collection});
                     }
                 });
-            } else {
-                self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
             }
 
             _(self.subviews).each(function (category) {
                 if (category.collection.length > 0) {
                     self.$el.append(category.render().el);
+                    empty = false;
                 }
             });
+            
+            if (empty) {
+                self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
+            }
 
             return self;
         }
