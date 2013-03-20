@@ -100,7 +100,7 @@ define('io.ox/core/print',
                 .value()
             )
             .done(function () {
-                var args = _.chain(arguments).toArray();
+                var args = _.chain(arguments).toArray(), all = args.value().length;
                 // filter?
                 if (options.filter) {
                     args = args.filter(options.filter);
@@ -112,7 +112,7 @@ define('io.ox/core/print',
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
                     url = options.file + '?' + id;
                 if (options.window) {
                     options.window.location = url;

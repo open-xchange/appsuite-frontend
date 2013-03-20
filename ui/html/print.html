@@ -27,6 +27,9 @@
 
 
 <script type="text/template" class="phonelist">
+{{? it.filtered > 0 }}
+<div class="note">{{! it.i18n.filtered(it.filtered) }}. <i>{{! it.i18n.notPrinted }}.</i></div>
+{{?}}
 <h1>{{! it.i18n.phonelist }}</h1>
 <table border="0">
 <thead>

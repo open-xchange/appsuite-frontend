@@ -75,7 +75,15 @@ define('io.ox/contacts/print',
                     phonelist: gt('Phone list'),
                     name: gt('Name') + ', ' + gt('Department') + ', ' + gt('City'),
                     phone: gt('Phone'),
-                    cellphone: gt('Cell phone')
+                    cellphone: gt('Cell phone'),
+                    filtered: function (n) {
+                        return gt.format(gt.ngettext(
+                            'Note: One contact is not shown due to missing phone numbers',
+                            'Note: %1$d contacts are not shown due to missing phone numbers',
+                            n
+                        ), n);
+                    },
+                    notPrinted: gt('This note will not be printed')
                 },
 
                 filter: function (o) {
@@ -83,6 +91,7 @@ define('io.ox/contacts/print',
                     // contacts should have at least one phone number to appear on a phone list
                     return !o.mark_as_distributionlist && !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
                 },
+
                 process: process,
                 selection: selection,
                 selector: '.phonelist',
