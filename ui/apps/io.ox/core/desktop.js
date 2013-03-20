@@ -831,6 +831,7 @@ define("io.ox/core/desktop",
                                 firstShow = false;
                             }
                             ox.ui.windowManager.trigger("window.show", self);
+                            ox.ui.apps.trigger('resume', self.app);
                         });
                     } else {
                         _.call(cont);
