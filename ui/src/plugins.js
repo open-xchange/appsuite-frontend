@@ -27,9 +27,9 @@
     }
 
     function insert(name, css, selector) {
-        return $('<style type="text/css">' + relativeCSS(dirname(name), css) +
-                 '</style>')
-            .attr("data-require-src", name).insertBefore($(selector).first());
+        return $('<style type="text/css">' + relativeCSS(dirname(name), css) + '</style>')
+            .attr("data-require-src", name)
+            .insertAfter(selector);
     }
 
     // Replace the load function of RequireJS with our own, which fetches
@@ -55,7 +55,7 @@
             var next = deps[modulename];
             if (next && next.length) context.require(next);
             queue.push(url);
-            
+
             function loaded() {
                 var q = queue;
                 queue = [];
@@ -64,7 +64,7 @@
                 if (queue.length) console.error('recursive require', queue);
             }
         };
-        
+
         define('text', { load: function (name, parentRequire, load, config) {
             req(['/text;' + name], load, load.error);
         } });
@@ -77,7 +77,7 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                load(insert(config.baseUrl + name, css, "title"));
+                load(insert(config.baseUrl + name, css, "#css"));
             });
         }
     });
@@ -147,7 +147,7 @@
                     source: data.less
                 };
                 file.path = dirname(file.name);
-                if (data.css) file.node = insert(file.name, data.css, "script");
+                if (data.css) file.node = insert(file.name, data.css, "#css");
                 lessFiles.push(file);
                 load();
             }).fail(function (e) {
@@ -164,7 +164,7 @@
                 if (file.node) {
                     file.node.text(relativeCSS(file.path, css));
                 } else {
-                    file.node = insert(file.name, css, "script");
+                    file.node = insert(file.name, css, "#theme");
                 };
             });
         }));
