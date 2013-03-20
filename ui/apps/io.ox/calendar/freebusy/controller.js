@@ -129,6 +129,11 @@ define('io.ox/calendar/freebusy/controller',
                 return model;
             }
 
+            function getColorByIndex(index) {
+                var model = self.participants.at(index);
+                return model ? model.index : 0;
+            }
+
             this.loadAppointments = function () {
                 var list = self.getParticipants(), options = self.getInterval();
                 api.freebusy(list, options).done(function (data) {
@@ -144,7 +149,7 @@ define('io.ox/calendar/freebusy/controller',
                                     })
                                     .map(function (obj) {
                                         // store index
-                                        obj.index = index;
+                                        obj.index = getColorByIndex(index);
                                         // add appointments without access to cache
                                         cache[_.cid(obj)] = obj;
                                         return obj;
@@ -290,17 +295,9 @@ define('io.ox/calendar/freebusy/controller',
             this.participantsView = templates.getParticipantsView();
 
             function customize() {
-                var index = this.model.collection.indexOf(this.model) || 0;
                 this.$el.addClass('with-participant-color').append(
-                    templates.getParticipantColor(index)
+                    templates.getParticipantColor(this.model.index)
                 );
-            }
-
-            function updateParticipantColors() {
-                self.participants.each(function (model, index) {
-                    templates.updateParticipantColor(self.participantsView, model.cid, index);
-                    model.set('index', index);
-                });
             }
 
             function drawParticipant(model) {
@@ -313,15 +310,20 @@ define('io.ox/calendar/freebusy/controller',
             function removeParticipant(model) {
                 var cid = model.cid;
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
-                updateParticipantColors();
             }
 
             this.participants
-                .on('add', drawParticipant)
                 .on('remove', removeParticipant)
+                .on('add', function (model) {
+                    model.index = templates.getFreeColor(self.participants);
+                    drawParticipant(model);
+                })
                 .on('reset', function () {
                     self.participantsView.empty();
-                    self.participants.each(drawParticipant);
+                    self.participants.each(function (model, index) {
+                        model.index = index;
+                        drawParticipant(model);
+                    });
                 })
                 .on('add remove reset', function () {
                     self.refreshChangedParticipants();
@@ -361,8 +363,8 @@ define('io.ox/calendar/freebusy/controller',
                                 obj.type = 1;
                                 obj.sort_name = contactsUtil.getSortName(obj);
                             });
-                            _(list).chain().sortBy('sort_name').each(function (obj) {
-                                self.participants.add(obj);
+                            _(list).chain().sortBy('sort_name').each(function (data) {
+                                self.participants.add(data);
                             });
                         })
                         .always(function () {
