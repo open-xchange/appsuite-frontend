@@ -278,11 +278,41 @@ define('io.ox/tasks/actions',
             print.request('io.ox/tasks/print', list);
         }
     });
-
+    
     new Action('io.ox/tasks/actions/print-disabled', {
         id: 'print',
-        action: function (baton) {
-            print.open('tasks', baton.data, { template: 'infostore://70045', id: baton.data.id, folder: baton.data.folder_id || baton.data.folder });
+        requires: function () {
+            return _.device('!small');
+        },
+        multiple: function (list) {
+            if (list.length === 1) {
+                print.open('tasks', list[0], { template: 'infostore://12496', id: list[0].id, folder: list[0].folder_id || list[0].folder }).print();
+            } else if (list.length > 1) {
+                require(['io.ox/core/http'], function (http) {
+                    var win = print.openURL();
+                    win.document.title = gt('Print tasks');
+                    http.PUT({
+                        module: 'tasks',
+                        params: {
+                            action: 'list',
+                            template: 'infostore://12500',
+                            format: 'template',
+                            columns: '200,201,202,203,220,300,301,302,303,305,307,308,309,312,313,314,315,221,226',
+                            timezone: 'UTC'
+                        },
+                        data: http.simplify(list)
+                    }).done(function (result) {
+                        var content = $('<div>').append(result),
+                            head = $('<div>').append(content.find('style')),
+                            body = $('<div>').append(content.find('.print-tasklist'));
+                        win.document.write(head.html() + body.html());
+                        win.print();
+                    }).fail(function () {
+                        console.log(arguments);
+                    });
+                });
+                
+            }
         }
     });
 
