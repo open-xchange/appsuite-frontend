@@ -444,6 +444,7 @@ define('io.ox/office/framework/view/baseview',
 
                 // execute callback
                 if (_.isFunction(callback)) {
+                    this.find('.header, .footer').empty();
                     callback.call(this, this.find('.header'), this.find('.footer'));
                 }
             });
