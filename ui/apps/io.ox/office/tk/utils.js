@@ -21,6 +21,9 @@ define('io.ox/office/tk/utils',
     var // the ISO code of the language used by gettext
         language = null,
 
+        // the CSS classes added to localized icons
+        localeClasses = null,
+
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
@@ -1915,7 +1918,7 @@ define('io.ox/office/tk/utils',
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + language)
+        return $('<i>').addClass(icon + ' ' + localeClasses)
             .toggleClass('icon-white', white === true)
             .toggleClass('retina', _.display.retina === true);
     };
@@ -2375,8 +2378,15 @@ define('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
-    // get current language
-    gettext.language.done(function (lang) { language = lang; });
+    // get current language and build CSS classes added to icons
+    gettext.language.done(function (lang) {
+        var pos = lang.indexOf('_');
+        language = lang;
+        localeClasses = 'lc-' + lang;
+        if ((pos === 2) || (pos === 3)) {
+            localeClasses += ' lc-' + lang.substr(0, pos);
+        }
+    });
 
     // exports ================================================================
 
