@@ -19,6 +19,7 @@ define('plugins/portal/files/register',
 
     'use strict';
 
+
     ext.point('io.ox/portal/widget/stickyfile').extend({
 
         load: function (baton) {
@@ -30,7 +31,9 @@ define('plugins/portal/files/register',
         },
 
         preview: function (baton) {
-            var content = $('<div class="content pointer">'), data, options, url;
+            var content = $('<div class="content pointer">'),
+                data, options, url,
+                widgetCol = portalWidgets.getCollection();
 
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
@@ -52,28 +55,22 @@ define('plugins/portal/files/register',
 
         draw: function (baton) {
             var popup = this.busy();
+
+            api.on('delete', function (event, elements) {
+                var filename = baton.data.filename;
+
+                if (_(elements).any(function (element) { return element.filename === filename; })) {
+                    var widgetCol = portalWidgets.getCollection();
+                    widgetCol.remove(baton.model);
+                }
+            });
+
             require(['io.ox/files/list/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });
             });
-        },
-
-        error: function (error, baton) {
-            var errorMessage,
-                widgetCol = portalWidgets.getCollection();
-
-            if (error.code !== "IFO-0300")
-                return;
-
-            widgetCol.remove(baton.model);
-
-
-            errorMessage = $('<div class="content error">').append(
-                $('<div class="errorMessage">').text(gt("The file that should be shown here could not be found. It was probably deleted. We'll remove this tile now. It will be gone the next time you refresh this view."))
-            );
-            $(this).find('div.content.error').empty().append(errorMessage);
         }
     });
 });
