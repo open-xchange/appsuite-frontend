@@ -60,6 +60,7 @@ define('io.ox/core/tk/selection',
             prev = empty,
             changed,
             apply,
+            clickHandler,
             mouseupHandler,
             mousedownHandler,
             clear,
@@ -67,6 +68,7 @@ define('io.ox/core/tk/selection',
             select,
             deselect,
             toggle,
+            isCheckbox,
             isMultiple,
             isRange,
             isDragged,
@@ -81,10 +83,14 @@ define('io.ox/core/tk/selection',
             fnKey,
             hasMultiple;
 
-        isMultiple = function (e) {
+        isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
                 isEditable = editable && closest.length;
-            return isEditable || (multiple && e && (e.metaKey || e.ctrlKey));
+            return isEditable;
+        };
+
+        isMultiple = function (e) {
+            return multiple && e && (e.metaKey || e.ctrlKey);
         };
 
         isRange = function (e) {
@@ -201,52 +207,67 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        mousedownHandler = function (e) {
-            var key, id;
+        clickHandler = function (e) {
+            var node, key, id;
             if (!e.isDefaultPrevented()) {
-                key = $(this).attr('data-obj-id');
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                // checkbox click?
+                if (id !== undefined && isCheckbox(e)) {
+                    apply(id, e);
+                }
+            }
+        };
+
+        mousedownHandler = function (e) {
+            var node, key, id;
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
-                console.log('YEAH!', key, id);
-                if (id !== undefined) {
-                    // clear?
-                    if (2 > 1 || !isMultiple(e)) {
-                        if (hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            if (!isSelected(id)) {
-                                clear();
-                                apply(id, e);
-                            }
+                if (id !== undefined && !isCheckbox(e)) {
+                    // explicit multiple?
+                    if (isMultiple(e)) {
+                        apply(id, e);
+                        return;
+                    }
+                    // selected?
+                    if (isSelected(id)) {
+                        // but one of many?
+                        if (hasMultiple()) {
+                            node.addClass('selection-select');
+                        } else {
+                            node.addClass('selection-toggle');
                         }
+                    } else {
+                        clear();
+                        apply(id, e);
                     }
                 }
             }
         };
 
         mouseupHandler = function (e) {
-            var key, id;
+            var node, key, id;
             if (!e.isDefaultPrevented()) {
-                key = $(this).attr('data-obj-id');
+                node = $(this);
+                key = node.attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {
-                    // clear?
-                    if (!isMultiple(e)) {
-                        if (!isSelected(id) || hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            if (!isDragged(e)) {
-                                clear();
-                                apply(id, e);
-                            }
-                        }
-                    } else {
-                        // apply
-                        if (isSelected(id) || e.metaKey || e.ctrlKey) {
-                            if (!isDragged(e)) {
-                                apply(id, e);
-                            }
-                        }
+                    if (node.hasClass('selection-toggle')) {
+                        apply(id, e);
+                    } else if (node.hasClass('selection-select')) {
+                        clear();
+                        apply(id, e);
                     }
                 }
             }
+            // remove helper classes
+            container.find('.selection-toggle, .selection-select')
+                .removeClass('selection-toggle selection-select');
         };
 
         getIndex = function (id) {
@@ -678,10 +699,10 @@ define('io.ox/core/tk/selection',
         };
 
         // bind general click handler
-        container.on('contextmenu', function (e) { e.preventDefault(); });
-        container.on('mousedown', '.selectable', mousedownHandler);
-        // why mouse up? always double processing?
-        container.on('mouseup', '.selectable', mouseupHandler);
+        container.on('contextmenu', function (e) { e.preventDefault(); })
+            .on('mousedown', '.selectable', mousedownHandler)
+            .on('mouseup', '.selectable', mouseupHandler)
+            .on('click', '.selectable', clickHandler);
 
         /*
         * DND
