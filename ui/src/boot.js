@@ -749,8 +749,8 @@ $(window).load(function () {
         });
     }
 
-    function loadFail() {
-        console.error('Server down', this, arguments);
+    function loadFail(e) {
+        console.error('Server down', e.message, e);
         serverDown();
     }
 

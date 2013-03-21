@@ -207,9 +207,10 @@ define('io.ox/core/tk/selection',
                 key = $(this).attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
+                console.log('YEAH!', key, id);
                 if (id !== undefined) {
                     // clear?
-                    if (!isMultiple(e)) {
+                    if (2 > 1 || !isMultiple(e)) {
                         if (hasMultiple() || self.serialize(id) !== self.serialize(last)) {
                             if (!isSelected(id)) {
                                 clear();

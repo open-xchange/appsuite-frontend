@@ -22,7 +22,7 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: 30 //_.browser.IE ? 20 : 10
+    waitSeconds: 15 //_.browser.IE ? 20 : 10
 });
 
 // jQuery AMD fix
