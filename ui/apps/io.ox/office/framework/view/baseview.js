@@ -434,6 +434,26 @@ define('io.ox/office/framework/view/baseview',
             return this;
         };
 
+        this.enterBusy = function (callback) {
+
+            // enter busy state, and extend the blocker element
+            app.getWindow().busy(null, null, function () {
+
+                // special marker for custom CSS formatting
+                this.addClass('io-ox-office-blocker');
+
+                // execute callback
+                if (_.isFunction(callback)) {
+                    callback.call(this, this.find('.header'), this.find('.footer'));
+                }
+            });
+        };
+
+        this.leaveBusy = function () {
+            app.getWindow().idle();
+            return this;
+        };
+
         /**
          * Returns whether an alert banner is currently visible.
          *

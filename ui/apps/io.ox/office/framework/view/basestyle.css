@@ -11,9 +11,6 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-/* restrict all definitions to office applications */
-.io-ox-office-main {
-
 /* ========================================================================= */
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
@@ -53,6 +50,14 @@
     -ms-box-shadow: @shadow1, @shadow2;
     box-shadow: @shadow1, @shadow2;
 }
+
+/* shadow for hovering elements */
+.drop-shadow(@size: 5px) {
+    .box-shadow(0 @size 2 * @size fade(black, 20%));
+}
+
+/* restrict all definitions to office applications */
+.io-ox-office-main {
 
 /* ========================================================================= */
 /* icons                                                                     */
@@ -148,11 +153,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
-
-/* shadow for hovering elements */
-.drop-shadow(@size: 5px) {
-    .box-shadow(0 @size 2 * @size fade(black, 20%));
-}
 
 .group {
     /* horizontal padding in control elements */
@@ -694,6 +694,47 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 /* ========================================================================= */
 
 } /* end of .io-ox-office-main */
+
+/* ========================================================================= */
+/* busy blocker                                                              */
+/* ========================================================================= */
+
+.io-ox-office-blocker {
+
+    .header {
+        top: 0;
+        padding: 20px 70px;
+        text-align: left;
+    }
+
+    .footer > div {
+        margin: 13px 0;
+        padding: 0 13px;
+
+        .alert {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
+            .drop-shadow();
+
+            > div {
+                margin: 8px 13px;
+                
+                &.title {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        > button {
+            .drop-shadow();
+        }
+
+        button:focus, button:active {
+            outline: none;
+        }
+    }
+}
 
 /* ========================================================================= */
 /* alerts                                                                    */
