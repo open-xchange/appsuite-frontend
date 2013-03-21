@@ -923,6 +923,7 @@ define('io.ox/calendar/week/view',
                 paneOffset = self.pane.children().first().width() + this.$el.offset().left,
                 paneHeight = self.height();
 
+            // add resizable and draggable plugin to all appointments with modify class
             $('.week-container .day>.appointment.modify', this.$el)
                 .resizable({
                     handles: "n, s",
@@ -1119,42 +1120,66 @@ define('io.ox/calendar/week/view',
                     start: function (e, ui) {
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
-                        d.my = {};
-                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el)
-                            .addClass('opac')
-                            .css({
-                                left : 0,
-                                width: '100%',
-                                maxWidth: '100%',
-                                zIndex: 999
-                            });
-                        d.my.firstPos = parseInt(d.my.all.first().closest('.day').attr('date'), 10);
-                        d.my.lastPos = parseInt(d.my.all.last().closest('.day').attr('date'), 10);
-                        d.my.initPos = parseInt($(this).closest('.day').attr('date'), 10);
-                        d.my.firstTop = d.my.all.first().position().top;
-                        d.my.lastHeight = d.my.all.last().outerHeight();
-                        d.my.lastTop = ui.position.top;
+                        d.my = {
+                            all: $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el)
+                                .addClass('opac')
+                                .css({
+                                    left : 0,
+                                    width: '100%',
+                                    maxWidth: '100%',
+                                    zIndex: 999
+                                })
+                            };
+                        _.extend(d.my, {
+                            firstPos: parseInt(d.my.all.first().closest('.day').attr('date'), 10),
+                            lastPos: parseInt(d.my.all.last().closest('.day').attr('date'), 10),
+                            initPos: parseInt($(this).closest('.day').attr('date'), 10),
+                            firstTop: d.my.all.first().position().top,
+                            lastHeight: d.my.all.last().outerHeight(),
+                            lastTop: ui.position.top,
+                            height: $(this).height()
+                        });
                     },
                     drag: function (e, ui) {
+                        // console.log(ui.position.left, ui.originalPosition.left);
                         var d = $(this).data('draggable'),
-                            left = ui.position.left -= ui.originalPosition.left,
+                            left = ui.position.left -= ui.originalPosition.left, // normalize to colWith
                             move = Math.floor(left / colWidth),
                             day = d.my.initPos + move,
                             top = ui.position.top;
+
                         // correct position
-                        if (d.my.firstPos === d.my.lastPos) {
+                        if (d.my.firstPos === d.my.lastPos) { // start and end on same day
                             d.my.mode = 4;
-                        } else if (day === d.my.firstPos + move) {
+                        } else if (day === d.my.firstPos + move) { // drag first element
                             d.my.mode = 3;
-                        } else if (day === d.my.lastPos + move) {
+                        } else if (day === d.my.lastPos + move) { // drag last element
                             d.my.mode = 2;
-                        } else {
+                        } else { // drag in all other cases
                             d.my.mode = 1;
                         }
 
-                        // sync left position
-                        d.my.all
-                            .css('left', left);
+                        // abort moving
+                        if (day < 0 || day >= self.columns) {
+                            left = ui.position.left = d.my.lastLeft;
+                        } else {
+                            // hide apppintment parts outside of the pane
+                            if (d.my.mode < 4) {
+                                d.my.all.show();
+                                if (d.my.firstPos + move < 0) {
+                                    d.my.all.slice(0, Math.abs(d.my.firstPos + move)).hide();
+                                } else if (d.my.lastPos + move >= self.columns) {
+                                    d.my.all.slice((d.my.lastPos + move - self.columns + 1) * -1).hide();
+                                }
+                            }
+                        }
+
+                        if (d.my.mode === 4 && (top < 0 || (top + d.my.height) > paneHeight)) {
+                            top = ui.position.top = d.my.lastTop;
+                        }
+
+                        // apply new position
+                        d.my.all.css('left', left);
 
                         // elements do not move
                         if (ui.position.top < 0 || d.my.mode <= 2) {
@@ -1221,6 +1246,7 @@ define('io.ox/calendar/week/view',
                             }
                         }
                         d.my.lastTop = top;
+                        d.my.lastLeft = left;
                     },
                     stop: function (e, ui) {
                         var d = $(this).data('draggable'),
