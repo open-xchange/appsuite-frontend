@@ -703,35 +703,41 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     .header {
         top: 0;
-        padding: 20px 70px;
-        text-align: left;
     }
 
-    .footer > div {
-        margin: 13px 0;
-        padding: 0 13px;
+    .header, .footer {
 
-        .alert {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 0;
-            .drop-shadow();
+        > div {
+            margin: 13px 0;
+            padding: 0 13px;
 
-            > div {
-                margin: 8px 13px;
+            &.filename {
+                padding-left: 70px;
+                text-align: left;
+            }
+
+            > button {
+                .drop-shadow();
+            }
+
+            > .alert {
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 0;
+                .drop-shadow();
+
+                > div {
+                    margin: 8px 13px;
                 
-                &.title {
-                    font-weight: bold;
+                    &.title {
+                        font-weight: bold;
+                    }
                 }
             }
-        }
 
-        > button {
-            .drop-shadow();
-        }
-
-        button:focus, button:active {
-            outline: none;
+            button:focus, button:active {
+                outline: none;
+            }
         }
     }
 }
