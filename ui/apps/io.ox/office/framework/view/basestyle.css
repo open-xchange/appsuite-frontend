@@ -108,10 +108,10 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         > .app-container {
             position: absolute;
             display: block;
-            top: 0; bottom: 0; 
+            top: 0; bottom: 0;
             left: 0; right: 0;
-        } 
-        
+        }
+
         /* scrollable application pane, center container node horizontally into application pane */
         &.scrollable {
             .overflow(auto);
@@ -162,7 +162,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     position: relative;
     .box-sizing(border-box);
-    
+
     /* hidden groups ('important' to overrule display modes from other rules) */
     &.hidden {
         display: none !important;
@@ -320,6 +320,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             > .group-container {
                 display: inline-block;
                 .border-radius(@border-radius);
+                vertical-align: top;
             }
         }
 
@@ -336,7 +337,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                     .border-top-left-radius(@border-radius);
                     .border-bottom-left-radius(@border-radius);
                 }
-            } 
+            }
 
             &:last-child {
                 &, > *:last-child {
@@ -442,11 +443,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                         &:-ms-input-placeholder { .placeholder-color(); }
                     }
                 }
-                
+
                 /* effects for all elements in combo fields */
                 &.combo-field.focused {
                     .box-shadow(@focus-glow-effect);
-    
+
                     > input, > a.button.dropdown-button {
                         &, &:hover, &:focus, &:active {
                             background: white;
@@ -525,7 +526,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     > .view-component.toolbox {
         display: inline-block;
-        
+
         &:not(:last-child) { padding-right: 4px; }
         &:not(:first-child) { padding-left: 4px; }
     }
@@ -540,7 +541,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         .group-container {
             background: @pane-fill-color;
         }
-        
+
         .group {
             .drop-shadow();
         }
@@ -617,7 +618,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
             }
         }
-    
+
         /* default design: selected, hover, focus with background color */
         &.design-default {
 
