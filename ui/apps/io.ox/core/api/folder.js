@@ -667,8 +667,8 @@ define('io.ox/core/api/folder',
                 // hide folders where your only permission is to see the foldername (rights !== 1)
                 // return (rights & 256 || rights & 512 || rights & 8192) > 0;
                 return perm(rights, 7) > 0 ||
-                        (!isSystem && this.is('public', data) && data.folder_id !== '10') &&
-                        rights !== 1;
+                        (!isSystem && this.is('public', data) && data.folder_id !== '10') && rights !== 1;
+                        // please use parantheses properly OR OR AND or OR AND AND?
             case 'create':
                 // can create objects?
                 return perm(rights, 0) > 1;

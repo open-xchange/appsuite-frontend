@@ -906,7 +906,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     return memo && _.isNumber(obj);
                 }, true);
                 for (i = 0; (obj = data[i]); i++) {
-                    key = useInternalUserId ? obj.internal_userid : _.cid(obj);
+                    key = useInternalUserId ? (obj.internal_userid || obj.user_id || obj.id) : _.cid(obj);
                     hash[key] = obj;
                 }
                 // fix order (uses folder!)

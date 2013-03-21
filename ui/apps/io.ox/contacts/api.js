@@ -384,6 +384,24 @@ define('io.ox/contacts/api',
         });
     };
 
+    // dirty copy/paste hack until I know hat fetchCache is good for
+    api.getPictureURLSync = function (obj, options) {
+
+        var defaultUrl = ox.base + '/apps/themes/default/dummypicture.png';
+        if (!_.isObject(obj)) { return defaultUrl; }
+
+        // duck checks
+        if (api.looksLikeResource(obj)) {
+            return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+        } else if (api.looksLikeDistributionList(obj)) {
+            return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+        } else if (obj.image1_url) {
+            return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
+        } else {
+            return defaultUrl;
+        }
+    };
+
    /**
     * gets deferred for fetching picture url
     *
@@ -402,6 +420,7 @@ define('io.ox/contacts/api',
             };
 
         // param empty/null
+        // och bitte klammern nutzen wenn ein ODER dabei ist - ist das jetzt genau so gewollt!?
         if (typeof obj === 'string' && obj === '' || typeof obj === 'object' && obj === null) {
             return deferred.resolve(defaultUrl);
         }
