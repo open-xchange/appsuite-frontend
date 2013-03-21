@@ -1485,9 +1485,9 @@ define('io.ox/calendar/week/view',
                 self = this,
                 folder = this.folder(this.folder()),
                 templates = {
-                    'day': {name: 'cp_dayview_table.tmpl'},
-                    'workweek': {name: 'cp_weekview_table.tmpl'},
-                    'week': {name: 'cp_weekview_table.tmpl'}
+                    'day': {name: 'print_dayview_table.tmpl'},
+                    'workweek': {name: 'print_weekview_table.tmpl'},
+                    'week': {name: 'print_weekview_table.tmpl'}
                 };
             var tmpl = templates[self.mode],
                 data = null;
