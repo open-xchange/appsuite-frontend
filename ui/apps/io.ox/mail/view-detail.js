@@ -163,7 +163,6 @@ define('io.ox/mail/view-detail',
     var delayedRead = function (data, node) {
         setTimeout(function () {
             api.tracker.applyAutoRead(data);
-            ext.point('io.ox/mail/detail/notification').invoke('action', node, data);
             node = data = null;
         }, 0); // without visual transition
     };
@@ -475,7 +474,6 @@ define('io.ox/mail/view-detail',
                         container.replaceWith(self.draw(tmp));
                     }),
                 drawnAlternatively = false;
-
             try {
 
                 // threaded & send by myself (and not in sent folder)?
@@ -1193,15 +1191,6 @@ define('io.ox/mail/view-detail',
                 if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
                 content = null;
             }, 0);
-        }
-    });
-
-    //Extensionpoint to remove read mails in notification Area
-    ext.point('io.ox/mail/detail/notification').extend({
-        index: 100,
-        id: 'update-notification',
-        action: function (data) {
-            api.trigger('remove-unseen-mails', [data]);
         }
     });
 

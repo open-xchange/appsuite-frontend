@@ -59,7 +59,7 @@ define('io.ox/mail/folderview-extensions',
 
         mailAPI.markRead(item).done(function () {
             // TODO: unify events?
-            mailAPI.trigger("remove-unseen-mails", item); //remove notifications in notification area
+            mailAPI.trigger('seen', item); //remove notifications in notification area
             folderAPI.trigger('update:unread', item);
         });
     }

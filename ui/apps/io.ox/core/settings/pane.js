@@ -167,8 +167,8 @@ define('io.ox/core/settings/pane',
         var options = {};
         
         options.never = gt("Never");
-        options.noEmail = gt("On new Notifications except mails");
-        options.always = gt("On every new Notification");
+        options.noEmail = gt("On new notifications except mails");
+        options.always = gt("On every new notification");
         
         if (settings.isConfigurable('autoOpenNotificationarea')) {
             point.extend(new forms.SelectControlGroup({

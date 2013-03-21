@@ -43,17 +43,24 @@ define('plugins/notifications/mail/register',
             )
         );
     }
+    
+    function showMail(obj, node) {
+        // fetch plain text mail; don't use cache
+        api.get(obj, false).done(function (data) {
+            drawItem(node, data);
+        }).fail(function () {
+            node.append(
+                $.fail(gt('Couldn\'t load that email.'), function () {
+                    showMail(obj, node);
+                })
+            );
+        });
+    }
 
     ext.point('io.ox/core/notifications/mail/item').extend({
         draw: function (baton) {
-
-            var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' }),
-                node = this;
-
-            // fetch plain text mail; don't use cache
-            api.get(obj, false).done(function (data) {
-                drawItem(node, data);
-            });
+            var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' });
+            showMail(obj, this);
         }
     });
 
@@ -64,23 +71,19 @@ define('plugins/notifications/mail/register',
         events: {
             'click [data-action="open-app"]': 'openApp',
             'click .item': 'openMail',
-            'dispose .item': 'removeNotification' //triggered by detailView
+            'dispose .item': 'removeNotification' //seems to be unused
         },
 
         initialize: function () {
             var self = this;
-            this.model = new Backbone.Model({ unread: 0 });
             this.collection.on('reset add remove', this.render, this);
-            api.on('unseen-mail', function (e, data) {
-                self.model.set('unread', _(data).size());
-            });
         },
 
         render: function () {
             var i = 0, $i = Math.min(this.collection.size(), 3), baton;
             baton = ext.Baton({ view: this });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
-
+            
             for (; i < $i; i++) {
                 baton = ext.Baton({ model: this.collection.at(i), view: this });
                 ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
@@ -93,22 +96,31 @@ define('plugins/notifications/mail/register',
             var cid = $(e.currentTarget).data('cid'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
-                self = this;
+                cleanUp = function (e, mails) {
+                    _(mails).each(function (obj) {
+                        if (cid === _.cid(obj)) {
+                            e.data.popup.close();
+                        }
+                    });
+                };
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
             } else {
+                
                 // fetch proper mail first
                 api.get(_.cid(cid)).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
                         // open SidePopup without array
-                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
                             .on("close", function () {
                                 overlay.trigger("mail-detail-closed");
+                                api.off('delete', cleanUp);
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
+                                api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
                             });
                     });
                 });
@@ -136,8 +148,6 @@ define('plugins/notifications/mail/register',
         }
     });
 
-    /* Mail notifications disabled for release-7.0.1 see Bug 24938 and 24953
-
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
         index: 200,
@@ -162,14 +172,26 @@ define('plugins/notifications/mail/register',
             }
 
             api.on('new-mail', function (e, mails) {
+                if (!_.isArray(mails)) {
+                    mails = [].concat(mails);
+                }
                 addMails(e, mails);
                 notifications.collection.trigger('reset');
             });
-            api.on('add-unseen-mails', function (e, mails) {
-                addMails(e, mails);
-                notifications.collection.trigger('add');
+            api.on('move', function (e, mails, newFolder) {
+                if (!_.isArray(mails)) {
+                    mails = [].concat(mails);
+                }
+                if (newFolder !== 'default0/INBOX') {//moved out of Inbox
+                    removeMails(e, mails);
+                    notifications.collection.trigger('remove');
+                }
             });
-            api.on('remove-unseen-mails', function (e, mails) {
+            
+            api.on('delete seen', function (e, mails) {
+                if (!_.isArray(mails)) {
+                    mails = [].concat(mails);
+                }
                 removeMails(e, mails);
                 notifications.collection.trigger('remove');
             });
@@ -177,7 +199,6 @@ define('plugins/notifications/mail/register',
             api.checkInbox();
         }
     });
-    */
 
     return true;
 });

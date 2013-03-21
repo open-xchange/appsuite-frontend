@@ -145,7 +145,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             //auto open on new notification
             this.badges.push(badgeView);
-            var set = settings.get('autoOpenNotification', 'never');
+            var set = settings.get('autoOpenNotification', 'noEmail');
             
             function changeAutoOpen(value) {
                 badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers

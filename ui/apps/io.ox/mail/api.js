@@ -669,6 +669,7 @@ define("io.ox/mail/api",
             api.trigger('refresh.list');
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                 reloadFolders(list);
+                api.trigger('seen', list);//used by notification area
             });
         });
     };
@@ -699,6 +700,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
+                    api.trigger('move', list, targetFolderId);
                     folderAPI.reload(targetFolderId, list);
                 });
         });
@@ -1040,7 +1042,6 @@ define("io.ox/mail/api",
                     api.trigger('new-mail', recent);
                     lastUnseenMail = recent[0].received_date;
                 }
-                api.trigger('unseen-mail', unseen);
             }
             return {
                 unseen: unseen,

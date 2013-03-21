@@ -342,9 +342,7 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list).done(function () {
-                api.trigger("add-unseen-mails", list); //create notifications in notification area
-            });
+            api.markUnread(list);
         }
     });
 
@@ -360,9 +358,7 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list).done(function () {
-                api.trigger("remove-unseen-mails", list); //remove notifications in notification area
-            });
+            api.markRead(list);
         }
     });
 
