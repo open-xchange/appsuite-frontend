@@ -47,6 +47,7 @@ define('io.ox/calendar/week/view',
         showFulltime:   true,   // show area for fulltime appointments
 
         startDate:      null,   // start of day/week as local date (use as reference point)
+        apiRefTime:     null,   // current reference time for api calls
         clickTimer:     null,   // timer to separate single and double click
         todayClass:     null,   // CSS classname for today column
         clicks:         0,      // click counter
@@ -121,13 +122,20 @@ define('io.ox/calendar/week/view',
          * avoids processing concurrent requests in wrong order
          */
         reset: function (startDate, data) {
-            if (startDate === this.startDate.getTime()) {
+            if (startDate === this.apiRefTime.getTime()) {
+                var s = this.startDate.getTime(),
+                    e = s + (this.columns * date.DAY);
                 // reset collection; transform raw dato to proper models
-                this.collection.reset(_(data).map(function (obj) {
-                    var model = new Backbone.Model(obj);
-                    model.id = _.cid(obj);
-                    return model;
-                }));
+                data = _(data)
+                    .filter(function (obj) {
+                        return (obj.start_date > s && obj.start_date < e) || (obj.end_date > s && obj.end_date < e);
+                    })
+                    .map(function (obj) {
+                        var model = new Backbone.Model(obj);
+                        model.id = _.cid(obj);
+                        return model;
+                    });
+                this.collection.reset(data);
                 this.renderAppointments();
             }
         },
@@ -1443,18 +1451,20 @@ define('io.ox/calendar/week/view',
          */
         folder: function (data) {
             if (data) {
+                // set view data
                 this.folderData = data;
                 this.showAll(data.type === 1);
 
+                // monthly chunks
+                this.apiRefTime = new date.Local(this.startDate.getYear(), this.startDate.getMonth(), 1);
+
                 // return update data
                 var obj = {
-                    start: this.startDate.getTime(),
-                    end: this.startDate.getTime() + date.WEEK
+                    start: this.apiRefTime.getTime(),
+                    end: new date.Local(this.apiRefTime).addMonths(1).getTime(),
+                    folder: (data.type > 1 || this.showAll() === false) ? data.id : 0
                 };
-                // do folder magic
-                if (data.type > 1 || this.showAll() === false) {
-                    obj.folder = data.id;
-                }
+
                 return obj;
             } else {
                 return this.folderData;
