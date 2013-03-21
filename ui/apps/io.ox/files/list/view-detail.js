@@ -76,7 +76,6 @@ define('io.ox/files/list/view-detail',
             id: 'preview',
             index: 300,
             draw: function (baton) {
-
                 function isEnabled(file) {
                     if (!file.filename) {
                         return false;
@@ -268,7 +267,6 @@ define('io.ox/files/list/view-detail',
                     $content.append($entryRow);
                 });
             }
-
             if (baton.data.number_of_versions >= 1) { // || (file.current_version && file.version > 1);)
 
                 this.append(
@@ -366,7 +364,6 @@ define('io.ox/files/list/view-detail',
     });
 
     var draw = function (baton) {
-
         if (!baton) return $('<div>');
 
         baton = ext.Baton.ensure(baton);
@@ -374,8 +371,8 @@ define('io.ox/files/list/view-detail',
         var node = $.createViewContainer(baton.data, filesAPI);
         node.on('redraw', createRedraw(node)).addClass('file-details view');
 
+        baton.data.app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' });
         ext.point('io.ox/files/details').invoke('draw', node, baton);
-
         return node;
     };
 

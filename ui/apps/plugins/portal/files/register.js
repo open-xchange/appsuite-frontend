@@ -14,14 +14,24 @@ define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/preview/main',
-     'gettext!plugins/portal'], function (ext, api, preview, gt) {
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal'], function (ext, api, preview, portalWidgets, gt) {
 
     'use strict';
 
     ext.point('io.ox/portal/widget/stickyfile').extend({
 
         load: function (baton) {
-            var props = baton.model.get('props') || {};
+            var props = baton.model.get('props') || {},
+                widgetCol = portalWidgets.getCollection();
+
+            api.on('delete', function (event, element) {
+                widgetCol.remove(baton.model);
+                ox.trigger('refresh');
+                console.log("TEBUG", $(this), $('[data-widget-id="stickyfile_2"]'), element, baton);
+                //TODO close side-popup
+                //TODO unregister
+            });
             return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {
                 baton.data = data;
             });
