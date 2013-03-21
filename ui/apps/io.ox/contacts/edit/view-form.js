@@ -136,9 +136,9 @@ define('io.ox/contacts/edit/view-form', [
                     className: 'div',
                     index: options.index,
                     module: 7,
-                    finishedCallback: function () {
-                        var attr = this.model.attributes;
-                        api.get({ id: attr.id, folder: attr.folder_id }, false)
+                    finishedCallback: function (model, id) {
+                        var attr = model.attributes;
+                        api.get({ id: id, folder: attr.folder_id }, false)
                             .pipe(function (data) {
                                 return $.when(
                                     api.caches.get.add(data),
