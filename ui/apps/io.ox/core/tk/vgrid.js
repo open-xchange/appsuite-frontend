@@ -247,6 +247,10 @@ define('io.ox/core/tk/vgrid',
             dragType: ''
         }, options || {});
 
+        if (options.settings) {
+            options.editable = options.settings.get('vgrid/editable', true);
+        }
+
         // mobile
         if (_.device('small')) {
             // override options, no toggles and no multiple selection for the moment
@@ -865,6 +869,12 @@ define('io.ox/core/tk/vgrid',
             loadData[mode] = fn;
         };
 
+        this.updateSettings = function (type, value) {
+            if (options.settings) {
+                options.settings.set('vgrid/' + type, value).save();
+            }
+        };
+
         this.addTemplate = function (obj) {
             template.add(obj);
         };
@@ -991,12 +1001,12 @@ define('io.ox/core/tk/vgrid',
                 if (flag) {
                     node.addClass('editable');
                     this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
-                    this.prop('editable', true);
                 } else {
                     node.removeClass('editable');
                     this.selection.setEditable(false);
-                    this.prop('editable', false);
                 }
+                this.prop('editable', flag);
+                this.updateSettings('editable', flag);
             }
         };
 

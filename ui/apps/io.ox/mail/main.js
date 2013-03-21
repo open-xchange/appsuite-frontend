@@ -44,7 +44,7 @@ define('io.ox/mail/main',
             if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 //sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
-                app.updateGridSettings('sort', option);
+                grid.updateSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
@@ -69,9 +69,9 @@ define('io.ox/mail/main',
         scrollpane;
 
     // for saving the persistent settings
-    app.updateGridSettings = function (type, value) {
-        settings.set('vgrid/' + type, value).save();
-    };
+    // app.updateGridSettings = function (type, value) {
+    //     settings.set('vgrid/' + type, value).save();
+    // };
 
     // launcher
     app.setLauncher(function () {
@@ -111,7 +111,7 @@ define('io.ox/mail/main',
         var options = ext.point('io.ox/mail/vgrid/options').options();
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
-        options.editable = settings.get('vgrid/editable', true);
+        options.settings = settings;
 
         grid = new VGrid(left, options);
 
@@ -146,10 +146,8 @@ define('io.ox/mail/main',
 
         // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         // look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) { app.updateGridSettings('unread', value); });
-        grid.on('change:prop:order', function (e, value) { app.updateGridSettings('order', value); });
-        grid.on('change:prop:editable', function (e, value) { app.updateGridSettings('editable', value); });
-
+        grid.on('change:prop:unread', function (e, value) { grid.updateSettings('unread', value); });
+        grid.on('change:prop:order', function (e, value) { grid.updateSettings('order', value); });
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);

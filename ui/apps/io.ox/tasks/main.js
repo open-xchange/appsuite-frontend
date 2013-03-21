@@ -72,7 +72,7 @@ define('io.ox/tasks/main',
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(left, {settings: settings});
 
         grid.addTemplate(template.main);
 
