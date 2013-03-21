@@ -22,23 +22,14 @@ define('plugins/portal/files/register',
     ext.point('io.ox/portal/widget/stickyfile').extend({
 
         load: function (baton) {
-            var props = baton.model.get('props') || {},
-                widgetCol = portalWidgets.getCollection();
+            var props = baton.model.get('props') || {};
 
-            api.on('delete', function (event, element) {
-                widgetCol.remove(baton.model);
-                ox.trigger('refresh');
-                console.log("TEBUG", $(this), $('[data-widget-id="stickyfile_2"]'), element, baton);
-                //TODO close side-popup
-                //TODO unregister
-            });
             return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {
                 baton.data = data;
             });
         },
 
         preview: function (baton) {
-
             var content = $('<div class="content pointer">'), data, options, url;
 
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
@@ -67,6 +58,22 @@ define('plugins/portal/files/register',
                     popup.idle().append(view.draw(data));
                 });
             });
+        },
+
+        error: function (error, baton) {
+            var errorMessage,
+                widgetCol = portalWidgets.getCollection();
+
+            if (error.code !== "IFO-0300")
+                return;
+
+            widgetCol.remove(baton.model);
+
+
+            errorMessage = $('<div class="content error">').append(
+                $('<div class="errorMessage">').text(gt("The file that should be shown here could not be found. It was probably deleted. We'll remove this tile now. It will be gone the next time you refresh this view."))
+            );
+            $(this).find('div.content.error').empty().append(errorMessage);
         }
     });
 });

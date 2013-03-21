@@ -258,6 +258,7 @@ define('io.ox/portal/main',
                         })
                     )
                 );
+                point.invoke('error', node, errorData, baton);
                 node.removeClass('pending');
             });
     }
