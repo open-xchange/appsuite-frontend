@@ -267,7 +267,7 @@ define('io.ox/core/tk/selection',
                 getNode(key)
                     .addClass(self.classSelected)
                     .find('input.reflect-selection')
-                    .attr('checked', 'checked')
+                    .attr('checked', 'checked').end()
                     .intoViewport(container);
                 selectedItems[key] = id;
                 last = id;
