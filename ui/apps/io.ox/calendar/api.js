@@ -61,13 +61,14 @@ define("io.ox/calendar/api",
             }
         },
 
-        getAll: function (o) {
+        getAll: function (o, useCache) {
 
             o = $.extend({
                 start: _.now(),
                 end: _.now() + 28 * 1 * DAY,
                 order: 'asc'
             }, o || {});
+            useCache = useCache === undefined ? true : !!useCache;
 
             var key = o.folder + "." + o.start + "." + o.end + "." + o.order,
                 params = {
@@ -89,7 +90,7 @@ define("io.ox/calendar/api",
                 params.folder = o.folder;
             }
 
-            if (all_cache[key] === undefined) {
+            if (all_cache[key] === undefined  || !useCache) {
                 return http.GET({
                         module: "calendar",
                         params: params
