@@ -12,14 +12,12 @@
  */
 
 define("io.ox/calendar/main",
-    ["io.ox/calendar/api",
-     "io.ox/core/date",
-     "io.ox/calendar/util",
+    ["io.ox/core/date",
      "io.ox/core/config",
      "io.ox/core/commons",
      "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, date, util, config, commons, settings) {
+     "less!io.ox/calendar/style.css"], function (date, config, commons, settings) {
 
     "use strict";
 
