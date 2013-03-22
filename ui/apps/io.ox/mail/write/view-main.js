@@ -685,26 +685,37 @@ define("io.ox/mail/write/view-main",
         if (list.length) {
             // loop over all attachments
             _(list).each(function (file) {
-                // get size
-                var size = file.size || file.file_size,
-                info = '';
-                size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+
+                /*
+                 * Files and VCard are very close here
+                 * there's no real separation
+                 */
+
+                var icon, name, size, info,
+                    isFile = 'size' in file || 'file_size' in file;
 
                 // if file get size
-                if (file.size || file.file_size) {
+                if (isFile) {
                     // filesize
+                    size = file.size || file.file_size;
+                    size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                     info = $('<span>').addClass('filesize').text(size);
+                    icon = $('<i>').addClass('icon-paper-clip');
+                    name = file.filename || file.name || '';
                 } else {
                     // vcard
                     info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                    icon = $('<i>').addClass('icon-list-alt');
+                    name = contactsUtil.getFullName(file);
                 }
 
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
-                        (file.filename || file.name ? $('<i>').addClass('icon-paper-clip') : $('<i>').addClass('icon-list-alt')),
+                        // icon
+                        icon,
                         // filename
-                        $('<div class="row-1">').text(_.noI18n(file.filename || file.name || file.display_name || '')),
+                        $('<div class="row-1">').text(_.noI18n(name)),
                         // filesize / preview
                         $('<div class="row-2">').append(
                             info,

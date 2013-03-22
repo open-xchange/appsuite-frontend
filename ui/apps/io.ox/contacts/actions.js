@@ -237,20 +237,9 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/vcard', {
 
         capabilities: 'webmail',
-
-        requires: function (e) {
-            var ctx = e.context;
-            if (ctx.id === 0 && ctx.folder_id === 0) {
-                return false;
-            } else {
-                var list = [].concat(e.context);
-                return api.getList(list).pipe(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
-                });
-            }
-        },
+        requires: 'some read',
+        // don't need complex checks here, we simple allow all
+        // don't even need an email address
 
         multiple: function (list) {
             api.getList(list).done(function (list) {
