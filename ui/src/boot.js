@@ -219,8 +219,6 @@ $(window).load(function () {
 
     function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
 
-        serverUp();
-
         gotoCore = function (viaAutoLogin) {
             if (ox.signin === true) {
                 // show loader
@@ -493,7 +491,7 @@ $(window).load(function () {
             });
         }
 
-        function getCachedServerConfig(configCache, cacheKey, def) {
+        function getCachedServerConfig(configCache, cacheKey, useFallback, def) {
             if (!configCache || !cacheKey) {
                 setFallbackConfig();
                 def.resolve();
@@ -502,10 +500,13 @@ $(window).load(function () {
             configCache.get(cacheKey).done(function (data) {
                 if (data !== null) {
                     updateServerConfig(data);
-                } else {
+                    def.resolve();
+                } else if (useFallback) {
                     setFallbackConfig();
+                    def.resolve();
+                } else {
+                    def.reject();
                 }
-                def.resolve();
             });
         }
 
@@ -524,10 +525,10 @@ $(window).load(function () {
                     def.resolve();
                 })
                 .fail(function () {
-                    getCachedServerConfig(configCache, cacheKey, def);
+                    getCachedServerConfig(configCache, cacheKey, false, def);
                 });
             } else {
-                getCachedServerConfig(configCache, cacheKey, def);
+                getCachedServerConfig(configCache, cacheKey, true, def);
             }
             return def;
         }
@@ -737,15 +738,23 @@ $(window).load(function () {
         };
 
         appCache.done(function () {
-            fetchGeneralServerConfig().done(function () {
-                // set page title now
-                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                if (ox.signin) {
-                    themes.set(ox.serverConfig.signinTheme || 'login');
+            fetchGeneralServerConfig().then(
+                function success() {
+                    // now we're sure the server is up
+                    serverUp();
+                    // set page title now
+                    document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                    if (ox.signin) {
+                        themes.set(ox.serverConfig.signinTheme || 'login');
+                    }
+                    // continue
+                    autoLogin();
+                },
+                function fail() {
+                    // nope, had some stuff in the caches but server is down
+                    serverDown();
                 }
-                // continue
-                autoLogin();
-            });
+            );
         });
     }
 
