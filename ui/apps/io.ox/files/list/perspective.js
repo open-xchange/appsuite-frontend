@@ -80,7 +80,7 @@ define('io.ox/files/list/perspective',
         };
 
         selectFile = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            right.idle().empty().append(viewDetail.draw(data, app));
             right.parent().scrollTop(0);
             app.currentFile = data;
             if (dropZone) {

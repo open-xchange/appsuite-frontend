@@ -128,11 +128,15 @@ define('io.ox/files/list/view-detail',
     ext.point(POINT).extend({
         id: 'breadcrumb',
         index: 500,
-        draw: function (baton) {
+        draw: function (baton, app) {
+            var folderSet;
+            if (app) {
+                folderSet = app.folder.set;
+            }
             this.append(
                 folderAPI.getBreadcrumb(baton.data.folder_id, {
                     exclude: ['9'],
-                    // handler: baton.data.app.folder.set,
+                    handler: folderSet,
                     last: false,
                     prefix: gt('Saved in'),
                     subfolder: false
@@ -366,16 +370,14 @@ define('io.ox/files/list/view-detail',
         }
     });
 
-    var draw = function (baton) {
+    var draw = function (baton, app) {
         if (!baton) return $('<div>');
-
         baton = ext.Baton.ensure(baton);
 
         var node = $.createViewContainer(baton.data, filesAPI);
 
         node.on('redraw', createRedraw(node)).addClass('file-details view');
-
-        ext.point(POINT).invoke('draw', node, baton);
+        ext.point(POINT).invoke('draw', node, baton, app);
 
         return node;
     };
