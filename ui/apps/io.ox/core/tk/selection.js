@@ -237,9 +237,7 @@ define('io.ox/core/tk/selection',
                     if (isSelected(id)) {
                         // but one of many?
                         if (hasMultiple()) {
-                            node.addClass('selection-select');
-                        } else {
-                            node.addClass('selection-toggle');
+                            node.addClass('pending-select');
                         }
                     } else {
                         clear();
@@ -257,17 +255,14 @@ define('io.ox/core/tk/selection',
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {
-                    if (node.hasClass('selection-toggle')) {
-                        apply(id, e);
-                    } else if (node.hasClass('selection-select')) {
+                    if (node.hasClass('pending-select')) {
                         clear();
                         apply(id, e);
                     }
                 }
             }
             // remove helper classes
-            container.find('.selection-toggle, .selection-select')
-                .removeClass('selection-toggle selection-select');
+            container.find('.pending-select').removeClass('pending-select');
         };
 
         getIndex = function (id) {
