@@ -80,7 +80,6 @@ define('io.ox/files/list/perspective',
         };
 
         selectFile = function (data) {
-            data.app = app;
             right.idle().empty().append(viewDetail.draw(data));
             right.parent().scrollTop(0);
             app.currentFile = data;
