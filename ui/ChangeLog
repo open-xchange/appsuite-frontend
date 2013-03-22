@@ -1,3 +1,7 @@
+* 2031-03-22 - viktor.pracht@open-xchange.com
+
+ - Fixed bug #25090: revision shown wrong for app suite ui on sles11
+
 * 2013-03-15 - viktor.pracht@open-xchange.com
 
  - Implemented story 44467673: Implement Japanese letters in the contact VGrid.
