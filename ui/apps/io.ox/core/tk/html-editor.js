@@ -51,7 +51,14 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         var self = $(elem),
             tagName = elem.tagName,
             children = self.children(),
-            text;
+            text,
+            unwrapDiv = true;
+
+        if (tagName === 'DIV' && self.attr('id') && self.attr('id').indexOf('ox-text-p') !== -1) {
+            // OX Text Paragraph DIV
+            unwrapDiv = false;
+        }
+
         // remove attributes
         self.removeAttr('id title alt rel');
         // is closed tag?
@@ -98,7 +105,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
         } else {
             // extraneous DIV?
-            if (tagName === 'DIV' && !self.attr('class') && !self.attr('style')) {
+            if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
                 children.eq(0).unwrap();
                 return false;
             }
