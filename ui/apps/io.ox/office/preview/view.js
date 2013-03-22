@@ -63,7 +63,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, { scrollable: true, margin: '52px 30px' });
+        BaseView.call(this, app, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
 
         // private methods ----------------------------------------------------
 

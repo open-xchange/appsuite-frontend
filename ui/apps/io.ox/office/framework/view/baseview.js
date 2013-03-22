@@ -83,11 +83,8 @@ define('io.ox/office/framework/view/baseview',
             // inner shadows for application pane
             shadowNodes = {},
 
-            // alert banner currently shown
-            currentAlert = null,
-
-            // timeout for current alert auto-close
-            currentAlertTimeout = null;
+            // alert banner currently shown, and its running timeout
+            currentAlertInfo = null;
 
         // base constructor ---------------------------------------------------
 
@@ -109,12 +106,17 @@ define('io.ox/office/framework/view/baseview',
          */
         function refreshPaneLayout() {
 
-            var // current offsets representing available space in the application window
-                offsets = { top: 0, bottom: 0, left: 0, right: 0 };
+            var // the root node of the application pane
+                appPaneNode = appPane.getNode(),
+                // current offsets representing available space in the application window
+                offsets = { top: 0, bottom: 0, left: 0, right: 0 },
+                // margin for the alert banner, to keep a maximum width
+                alertMargin = 0;
 
-            function updatePaneNode(paneNode) {
+            function updatePane(pane) {
 
-                var position = paneNode.data('pane-pos'),
+                var paneNode = pane.getNode(),
+                    position = paneNode.data('pane-pos'),
                     horizontal = isHorizontalPosition(position),
                     leading = isLeadingPosition(position),
                     visible = paneNode.css('display') !== 'none',
@@ -146,32 +148,32 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
-            // update fixed view panes and fixed alert banner
-            _(fixedPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
-            if (currentAlert && !currentAlert.hasClass(OVERLAY_CLASS)) {
-                updatePaneNode(currentAlert);
-            }
+            // update fixed view panes
+            _(fixedPanes).each(updatePane);
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
-            appPane.getNode().css(offsets);
+            appPaneNode.css(offsets);
             shadowNodes.top.css({ top: offsets.top - 10, height: 10, left: offsets.left, right: offsets.right });
             shadowNodes.bottom.css({ bottom: offsets.bottom - 10, height: 10, left: offsets.left, right: offsets.right });
             shadowNodes.left.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
             shadowNodes.right.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
 
             // skip scroll bars of application pane for overlay panes
-            if (Utils.hasVerticalScrollBar(self.getAppPaneNode())) {
+            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-x'))) {
                 offsets.right += Utils.SCROLLBAR_WIDTH;
             }
-            if (Utils.hasHorizontalScrollBar(self.getAppPaneNode())) {
+            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-y'))) {
                 offsets.bottom += Utils.SCROLLBAR_HEIGHT;
             }
 
-            // update overlay alert banner and overlay view panes
-            if (currentAlert && currentAlert.hasClass(OVERLAY_CLASS)) {
-                updatePaneNode(currentAlert);
+            // update alert banner
+            if (_.isObject(currentAlertInfo)) {
+                alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
+                currentAlertInfo.alert.css({ top: offsets.top + 9, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
             }
-            _(overlayPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
+
+            // update overlay view panes
+            _(overlayPanes).each(updatePane);
         }
 
         /**
@@ -434,22 +436,55 @@ define('io.ox/office/framework/view/baseview',
             return this;
         };
 
+        /**
+         * Sets the application into the busy state by displaying a window
+         * blocker element covering the entire GUI of the application. The
+         * contents of the header and footer in the blocker element are
+         * cleared, and the passed callback may insert new contents into these
+         * elements.
+         *
+         * @param {Function} [callback]
+         *  A function that can fill custom contents into the header and footer
+         *  of the window blocker element. Receives the following parameters:
+         *  (1) {jQuery} header
+         *      The header element above the centered progress bar.
+         *  (2) {jQuery} footer
+         *      The footer element below the centered progress bar.
+         *  (3) {jQuery} blocker
+         *      The entire window blocker element (containing the header,
+         *      footer, and progress bar elements).
+         *  Will be called in the context of this view instance.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
         this.enterBusy = function (callback) {
 
             // enter busy state, and extend the blocker element
             app.getWindow().busy(null, null, function () {
 
-                // special marker for custom CSS formatting
-                this.addClass('io-ox-office-blocker');
+                var // the window blocker element (bound to 'this')
+                    blocker = this;
+
+                // special marker for custom CSS formatting, clear header/footer
+                blocker.addClass('io-ox-office-blocker').find('.header, .footer').empty();
 
                 // execute callback
                 if (_.isFunction(callback)) {
-                    this.find('.header, .footer').empty();
-                    callback.call(this, this.find('.header'), this.find('.footer'));
+                    callback.call(self, blocker.find('.header'), blocker.find('.footer'), blocker);
                 }
             });
+
+            return this;
         };
 
+        /**
+         * Leaves the busy state of the application. Hides the window blocker
+         * element covering the entire GUI of the application.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
         this.leaveBusy = function () {
             app.getWindow().idle();
             return this;
@@ -462,7 +497,7 @@ define('io.ox/office/framework/view/baseview',
          *  Whether an alert banner is visible.
          */
         this.hasAlert = function () {
-            return _.isObject(currentAlert);
+            return _.isObject(currentAlertInfo);
         };
 
         /**
@@ -511,46 +546,38 @@ define('io.ox/office/framework/view/baseview',
                 // create a new alert node
                 alert = $.alert(title, message)
                     .removeClass('alert-error')
-                    .addClass('alert-' + type + ' in hide')
+                    .addClass('alert-' + type)
                     .data('pane-pos', 'top'),
                 // auto-close timeout delay
-                timeout = Utils.getIntegerOption(options, 'timeout', 5000);
-
-            function toggleOverlay(state) {
-                alert.toggleClass(OVERLAY_CLASS, state);
-                refreshPaneLayout();
-            }
+                timeout = Utils.getIntegerOption(options, 'timeout', 5000),
+                // the timer for auto-close
+                timer = null;
 
             // Hides the alert with a specific animation.
             function closeAlert() {
-                toggleOverlay(true);
-                alert.slideUp('fast', function () {
-                    alert.remove();
-                    currentAlert = null;
-                    // slideUp() may run into application quit and cause JS errors, guard
-                    // by using a delayed callback which will not be executed after quit
-                    app.executeDelayed(refreshPaneLayout);
-                });
+                currentAlertInfo = null;
+                if (timer) { timer.abort(); }
+                alert.off('click').fadeOut('slow', function () { alert.remove(); });
             }
 
-            function buttonClickHandler() {
-                closeAlert();
-                app.getController().change(buttonKey);
+            // remove the alert banner currently shown
+            if (currentAlertInfo) {
+                if (currentAlertInfo.timer) {
+                    currentAlertInfo.timer.abort();
+                }
+                currentAlertInfo.alert.remove();
             }
 
-            // remove alert banner currently shown, update reference to current alert
-            if (currentAlertTimeout) { currentAlertTimeout.abort(); }
-            currentAlertTimeout = null;
-            if (currentAlert) { currentAlert.remove(); }
-            currentAlert = alert;
+            // store reference to current alert
+            currentAlertInfo = { alert: alert };
 
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // alert can be closed by clicking anywhere in the banner
-                alert.click(closeAlert);
+                alert.on('click', closeAlert);
                 // initialize auto-close
                 if (timeout > 0) {
-                    currentAlertTimeout = app.executeDelayed(closeAlert, { delay: timeout });
+                    timer = currentAlertInfo.timer = app.executeDelayed(closeAlert, { delay: timeout });
                 }
             } else {
                 // remove closer button
@@ -558,24 +585,23 @@ define('io.ox/office/framework/view/baseview',
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
-            alert.click(function () { self.grabFocus(); });
+            alert.on('click', function () { self.grabFocus(); });
 
             // insert the push button into the alert banner
             if (_.isString(buttonLabel) && _.isString(buttonKey)) {
-                alert.append(
-                    $.button({ label: buttonLabel }).addClass('btn-' + type + ' btn-mini').click(buttonClickHandler)
+                alert.prepend(
+                    $.button({ label: buttonLabel })
+                        .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
+                        .on('click', function () {
+                            closeAlert();
+                            app.getController().change(buttonKey);
+                        })
                 );
             }
 
             // insert and show the new alert banner
             app.getWindowNode().append(alert);
-            toggleOverlay(true);
-            // after alert is visible, remove overlay mode, and refresh pane layout again
-            alert.slideDown('fast', function () {
-                // slideDown() may run into application quit and cause JS errors, guard
-                // by using a delayed callback which will not be executed after quit
-                app.executeDelayed(function () { toggleOverlay(false); });
-            });
+            refreshPaneLayout();
 
             return this;
         };

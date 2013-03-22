@@ -534,6 +534,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 /* modified shadow effect for groups in transparent panes */
 .view-pane.overlay {
+    z-index: 1000;
 
     > .view-component.toolbox {
         overflow: visible;
@@ -561,7 +562,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 &.dropdown-container {
     display: inline-block;
     position: absolute;
-    z-index: 1000;
+    z-index: 1010;
     margin: 0;
     padding: 0;
     overflow: visible;
@@ -692,6 +693,25 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 } /* end of &.dropdown-container */
 
 /* ========================================================================= */
+/* alert banners                                                             */
+/* ========================================================================= */
+
+.alert {
+    position: absolute;
+    z-index: 2000;
+    padding: 8px 14px;
+    .drop-shadow();
+
+    h4 { margin-bottom: 8px; }
+    p { margin: 0; }
+
+    button {
+        float: right;
+        margin-left: 14px;
+    }
+
+    .close { right: 0; }
+}
 
 } /* end of .io-ox-office-main */
 
@@ -709,7 +729,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
         > div {
             margin: 13px 0;
-            padding: 0 13px;
+            padding: 0 10px;
 
             &.filename {
                 padding-left: 70px;
@@ -746,17 +766,28 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 /* alerts                                                                    */
 /* ========================================================================= */
 
+@media all and (max-width: 520px) {
+    
+.io-ox-office-main .alert {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    margin: 0;
+}
+
+}
+
+/*
 body .window-body .window-content.io-ox-office-main .alert {
     position: absolute;
     .box-sizing(border-box);
-    top: 0;
-    left: 0;
-    right: 0;
-    width: auto;
-    margin: 0;
+    top: 10px;
+    left: 50%;
+    width: 400px;
+    z-index: 2000;
+    margin-left: -200px;
     padding: 4px 13px;
-    z-index: 100;
-    .border-radius(0);
+    .drop-shadow();
 
     h4, p, button {
         float: left;
@@ -776,3 +807,4 @@ body .window-body .window-content.io-ox-office-main .alert {
         right: 0;
     }
 }
+*/
