@@ -793,7 +793,8 @@ define('io.ox/calendar/week/view',
                         // draw across multiple days
                         while (true && maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
-                                sel = '[date="' + Math.floor((startLocal.getTime() - this.startDate.getTime()) / date.DAY) + '"]';
+                                // old solution sel = '[date="' + (startLocal.getTime() - this.startDate.getTime()) / date.DAY + '"]';
+                                sel = '[date="' + (startLocal.getDays() - this.startDate.getDays()) + '"]';
                             maxCount++;
 
                             if (start !== end) {
