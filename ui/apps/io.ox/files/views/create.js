@@ -52,7 +52,8 @@ define('io.ox/files/views/create', [
                                 title: $form.find('input[type="text"]').val()
                             },
                             folder: folder
-                        }).done(function () {
+                        }).done(function (data) {
+                            api.propagate('new', data);
                             notifications.yell('success', gt('This file has been added'));
                         }).fail(function (e) {
                             if (e && e.code && e.code === 'UPL-0005')
