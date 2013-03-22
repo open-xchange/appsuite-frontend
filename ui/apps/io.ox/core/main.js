@@ -50,7 +50,9 @@ define("io.ox/core/main",
 
             $.when.apply($, deferreds).always(function () {
                 session.logout().always(function () {
-                    _.url.redirect("signin" + (opt.autologout ? "#autologout=true" : ""));
+                    // get logout locations
+                    var location = settings.get('customLocations/logout');
+                    _.url.redirect(location || ('signin' + (opt.autologout ? '#autologout=true' : '')));
                 });
             });
         });

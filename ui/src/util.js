@@ -300,12 +300,12 @@
          * Redirect
          */
         redirect: function (path) {
-            location.href = _.url.get(path);
+            location.href = (/^http/i).test(path) ? path : _.url.get(path);
         },
 
         get: function (path) {
             var l = location;
-            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
         }
     };
 
