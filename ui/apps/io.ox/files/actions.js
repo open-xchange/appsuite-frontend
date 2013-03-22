@@ -249,7 +249,8 @@ define('io.ox/files/actions',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list).done(function () {
+                            api.remove(list).done(function (data) {
+                                api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccces);
                             }).fail(function () {
                                 notifications.yell('error', responseFail);
