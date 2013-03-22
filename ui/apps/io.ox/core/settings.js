@@ -48,12 +48,12 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     // once cache for all
     var settingsCache = new cache.SimpleCache('settings', true);
 
-    var Settings = function (path) {
+    var Settings = function (path, tree, meta) {
 
-        var tree = {},
-            meta = {},
-            self = this,
-            detached = false;
+        var self = this, detached = false;
+
+        tree = tree || {};
+        meta = meta || {};
 
         this.get = function (path, defaultValue) {
             return get(tree, path, defaultValue);
@@ -249,12 +249,42 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         Event.extend(this);
     };
 
+    var list = 'io.ox/core io.ox/core/updates io.ox/mail io.ox/contacts io.ox/calendar'.split(' '), promise;
+
+    function preload(path) {
+        if (!promise) {
+            promise = http.PUT({
+                module: 'jslob',
+                params: { action: 'list' },
+                data: list
+            })
+            .then(function (data) {
+                var hash = {};
+                _(data).each(function (jslob) {
+                    hash[jslob.id] = { tree: jslob.tree, meta: jslob.meta };
+                });
+                return hash;
+            });
+        }
+        return promise.then(function (hash) {
+            return hash[path] || { tree: {}, meta: {} };
+        });
+    }
+
     return {
         load: function (name, req, load, config) {
-            var settings = new Settings(name);
-            settings.load().done(function () {
-                load(settings);
-            });
+            // bulk load?
+            if (_(list).contains(name)) {
+                preload(name).done(function (data) {
+                    var settings = new Settings(name, data.tree, data.meta);
+                    load(settings);
+                });
+            } else {
+                var settings = new Settings(name);
+                settings.load().done(function () {
+                    load(settings);
+                });
+            }
         }
     };
 });

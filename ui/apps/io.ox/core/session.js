@@ -41,6 +41,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     var that = {
 
+        set: set,
+
         autoLogin: function () {
             var store = false;
             // GET request
@@ -74,7 +76,9 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             clientToken: _.url.hash('clientToken')
                         }
                     })
-                    .then(function (response) { return response.data; });
+                    .then(function (response) {
+                        return response.data;
+                    });
                 }
             )
             .done(function () {
@@ -86,11 +90,9 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     store: null
                 });
             })
-            .then(function (data) {
+            .done(function (data) {
                 set(data);
-                return that.store().then(function () {
-                    return data;
-                });
+                // no "store" request here; just auto-login
             });
         },
 

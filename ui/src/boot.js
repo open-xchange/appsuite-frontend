@@ -555,11 +555,26 @@ $(window).load(function () {
                 return manifests.manager.loadPluginsFor('core');
             }
 
-            var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;
+            // we just need to be online for auto-login
+            var useAutoLogin = ox.online, initialized;
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
-                    initialize();
+                    fetchGeneralServerConfig().then(
+                        function success() {
+                            // now we're sure the server is up
+                            serverUp();
+                            // set page title now
+                            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            themes.set(ox.serverConfig.signinTheme || 'login');
+                            // continue
+                            initialize();
+                        },
+                        function fail() {
+                            // nope, had some stuff in the caches but server is down
+                            serverDown();
+                        }
+                    );
                 } else {
                     var ref = (location.hash || '').replace(/^#/, '');
                     _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
@@ -575,7 +590,7 @@ $(window).load(function () {
                 ox.language = _.url.hash('language');
 
                 // set store cookie?
-                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
+                return (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
 
                     // cleanup login params
                     _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
@@ -592,20 +607,30 @@ $(window).load(function () {
                 });
 
             } else {
+
                 // try auto login!?
-                (useAutoLogin ? session.autoLogin() : $.when())
-                .done(function () {
-                    if (useAutoLogin) {
-                        fetchUserSpecificServerConfig().done(function () {
-                            loadCoreFiles().done(function () { gotoCore(true); });
-                        });
-                    } else {
+                return (useAutoLogin ? session.autoLogin() : $.when()).then(
+                    function loginSuccess(data) {
+                        // now we're sure the server is up
+                        serverUp();
+                        // are we on login page?
+                        if (ox.signin) {
+                            gotoCore(true)
+                        } else {
+                            fetchUserSpecificServerConfig().done(function () {
+                                // apply session data & page title
+                                session.set(data);
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                loadCoreFiles().done(function () {
+                                    loadCore();
+                                });
+                            });
+                        }
+                    },
+                    function loginFailed() {
                         continueWithoutAutoLogin();
                     }
-                })
-                .fail(function () {
-                    continueWithoutAutoLogin();
-                });
+                );
             }
         };
 
@@ -739,23 +764,8 @@ $(window).load(function () {
         };
 
         appCache.done(function () {
-            fetchGeneralServerConfig().then(
-                function success() {
-                    // now we're sure the server is up
-                    serverUp();
-                    // set page title now
-                    document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                    if (ox.signin) {
-                        themes.set(ox.serverConfig.signinTheme || 'login');
-                    }
-                    // continue
-                    autoLogin();
-                },
-                function fail() {
-                    // nope, had some stuff in the caches but server is down
-                    serverDown();
-                }
-            );
+            // try auto login first
+            autoLogin();
         });
     }
 

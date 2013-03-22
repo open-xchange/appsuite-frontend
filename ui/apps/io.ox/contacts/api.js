@@ -313,7 +313,7 @@ define('io.ox/contacts/api',
     };
 
     /** @define {object} simple contact cache */
-    var fetchCache = new cache.SimpleCache('contacts-fetching', false);
+    var fetchCache = new cache.SimpleCache('contacts-fetching', true);
 
     api.clearFetchCache = function () {
         return fetchCache.clear();
