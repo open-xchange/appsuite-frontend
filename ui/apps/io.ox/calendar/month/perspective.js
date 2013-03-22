@@ -354,6 +354,12 @@ define('io.ox/calendar/month/perspective',
                 .empty()
                 .append(this.scaffold = View.drawScaffold());
 
+            var refresh = function () {
+                self.getFolder().done(function () {
+                    self.update();
+                });
+            };
+
             this.pane = $('.scrollpane', this.scaffold);
             this.scaffold.prepend(
                 $('<div>')
@@ -370,7 +376,7 @@ define('io.ox/calendar/month/perspective',
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
-                                                this.app.trigger('folder:change');
+                                                refresh();
                                             }, this))
                                     )
                             ),
@@ -460,12 +466,6 @@ define('io.ox/calendar/month/perspective',
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });
-
-            var refresh = function () {
-                self.getFolder().done(function () {
-                    self.update();
-                });
-            };
 
             // watch for api refresh
             api.on('create update', refresh)
