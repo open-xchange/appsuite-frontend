@@ -15,25 +15,23 @@
 define('io.ox/files/list/view-detail',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/layouts',
      'io.ox/core/extPatterns/actions',
-     'io.ox/core/tk/keys',
      'io.ox/core/date',
-     'io.ox/core/event',
      'io.ox/files/actions',
      'io.ox/files/api',
      'io.ox/preview/main',
-     'io.ox/core/tk/upload',
      'io.ox/core/api/user',
      'io.ox/core/api/folder',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
-     'less!io.ox/files/style.less'], function (ext, links, layouts, actionPerformer, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, attachments, gt) {
+     'less!io.ox/files/style.less'], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
 
     'use strict';
 
+    var POINT = 'io.ox/files/details';
+
     // Title
-    ext.point('io.ox/files/details').extend({
+    ext.point(POINT).extend({
         id: 'title',
         index: 100,
         draw: function (baton) {
@@ -48,7 +46,7 @@ define('io.ox/files/list/view-detail',
     });
 
     // Inline Actions
-    ext.point('io.ox/files/details').extend(new links.InlineLinks({
+    ext.point(POINT).extend(new links.InlineLinks({
         index: 200,
         id: 'inline-links',
         ref: 'io.ox/files/links/inline'
@@ -72,7 +70,7 @@ define('io.ox/files/list/view-detail',
             };
         }
 
-        ext.point('io.ox/files/details').extend({
+        ext.point(POINT).extend({
             id: 'preview',
             index: 300,
             draw: function (baton) {
@@ -110,7 +108,7 @@ define('io.ox/files/list/view-detail',
     }());
 
     // Description
-    ext.point('io.ox/files/details').extend({
+    ext.point(POINT).extend({
         id: 'description',
         index: 400,
         draw: function (baton) {
@@ -127,7 +125,7 @@ define('io.ox/files/list/view-detail',
         }
     });
 
-    ext.point('io.ox/files/details').extend({
+    ext.point(POINT).extend({
         id: 'breadcrumb',
         index: 500,
         draw: function (baton) {
@@ -144,50 +142,50 @@ define('io.ox/files/list/view-detail',
     });
 
     // Upload Field
-    ext.point('io.ox/files/details').extend({
+    ext.point(POINT).extend({
         id: 'upload',
         index: 600,
         draw: function (baton) {
             if (!ox.uploadsEnabled) return;
             var self = this, file = baton.data;
 
-            this.append(
-                $('<h4>').text(gt('Upload a new version'))
-            );
+            var $node,
+            $commentArea,
+            $comment,
+            $uploadButton,
+            $input = attachments.fileUploadWidget({
+                displayLabel: true,
+                displayButton: false,
+                displayLabelText: gt('Upload a new version')
+            });
 
-            var $node = $('<form>').appendTo(this),
-            $commentArea = $('<textarea rows="5"></textarea>'),
-            $comment = $('<div class="span12">').hide().append(
-                $('<label>').text(gt('Version Comment')),
-                $commentArea
-            ),
-            $button = $('<button>').css({'margin-top': 25}).text(gt('Upload'))
-                .addClass('btn btn-primary')
-                .attr({
-                    'disabled': 'disabled',
-                    'data-action': 'upload'
-                }),
-            $input = attachments.fileUploadWidget('span9');
-
-            $node.append(
+            $node = $('<form>').append(
                 $('<div>').addClass('row-fluid').append(
-                    $input,
-                    $('<div>').addClass('span3').append(
-                        $button
+                    $('<div class="pull-left">').append(
+                        $input
+                    ),
+                    $uploadButton = $('<button class="uploadbutton">', { 'data-action': 'upload' }).addClass('btn btn-primary pull-right').text(gt('Upload file')),
+                    $('<div>').addClass('comment').append(
+                        $comment = $('<div class="row-fluid">').append(
+                            $('<label>').text(gt('Version Comment')),
+                            $commentArea = $('<textarea rows="5"></textarea>')
+                        ).hide()
                     )
-                ),
-                $comment
-            );
+                )
+            ).appendTo(this);
 
             var resetCommentArea = function () {
-                $button.removeClass('disabled').text(gt('Upload new version'));
-                $commentArea.removeClass('disabled').val('');
-                $comment.hide();
+                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
+                    $uploadButton.show().text(gt('Upload new version'));
+                    $commentArea.removeClass('disabled').val('');
+                    $comment.hide();
+                    $uploadButton.hide();
+                }
             };
 
-            $button.on('click', function () {
-
-                $button.addClass('disabled').text(gt('Uploading...'));
+            $uploadButton.on('click', function (e) {
+                e.preventDefault();
+                $(this).addClass('disabled').text(gt('Uploading...'));
                 $commentArea.addClass('disabled');
 
                 if (_.browser.IE !== 9) {
@@ -213,36 +211,27 @@ define('io.ox/files/list/view-detail',
                 }
                 return false;
             });
-
+            
             $input.on('change', function () {
-                $button.removeAttr('disabled');
-                $comment.show();
-                $commentArea.focus();
+                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
+                    $uploadButton.show();
+                    $comment.show();
+                    $commentArea.focus();
+                }
+            }).find('[data-dismiss="fileupload"]').on('click', function (e) {
+                e.preventDefault();
+                resetCommentArea(e);
             });
 
-            new KeyListener($comment).on('shift+enter', function (evt) {
-                evt.preventDefault();
-                evt.stopImmediatePropagation();
-                $button.click();
-            }).include();
         }
     });
 
     // Version List
     var versionSorter = function (version1, version2) {
-        if (version1.version === version2.version) {
-            return 0;
-        }
-        if (version1.current_version) {
-            return -1;
-        }
-        if (version2.current_version) {
-            return 1;
-        }
         return version2.version - version1.version;
     };
 
-    ext.point('io.ox/files/details').extend({
+    ext.point(POINT).extend({
         id: 'versions',
         index: 700,
         draw: function (baton, detailView, allVersions) {
@@ -253,27 +242,34 @@ define('io.ox/files/list/view-detail',
                 _.chain(allVersions)
                 .sort(versionSorter)
                 .each(function (version) {
-                    var $entryRow = $('<div>')
-                            .addClass('row-fluid version ' + (version.current_version ? 'current' : ''))
+                    var $versionnumber;
+                    var $entryRow = $('<tr>')
+                            .addClass('version ' + (version.current_version ? 'info' : ''))
                             .append(
-                                $('<div>').addClass('span1').append(
+                                $versionnumber = $('<td>').append(
                                     $('<span>').text(gt.noI18n(version.version)).addClass('versionLabel')
                                 )
-                            ),
-                        $detailsPane = $('<div>').addClass('span11').appendTo($entryRow);
+                            );
+
+                    
                     var baton = ext.Baton({ data: version });
                     baton.isCurrent = version.id === baton.data.current_version;
-                    new layouts.Grid({ ref: 'io.ox/files/details/version' }).draw.call($detailsPane, baton);
+                    ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
                     $content.append($entryRow);
                 });
             }
-            if (baton.data.number_of_versions >= 1) { // || (file.current_version && file.version > 1);)
 
-                this.append(
-                    $('<h4>').text(gt('File versions'))
+            if (baton.data.number_of_versions >= 1) {
+
+                $content = $('<table class="versiontable table table-striped table-hover table-bordered">').append(
+                    $('<thead>').append(
+                        $('<tr>').append(
+                            $('<th>').text('#'),
+                            $('<th>').text(gt('File'))
+                        )
+                    )
                 );
-
-                $content = $('<div class="versions">');
+            
 
                 // Then let's fetch all versions and update the table accordingly
                 if (!allVersions) {
@@ -282,32 +278,51 @@ define('io.ox/files/list/view-detail',
                     drawAllVersions(allVersions);
                 }
 
-                this.append($content);
+                var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).text($historyDefaultLabel)
+                        .on('click', function (e) {
+                        e.preventDefault();
+                        if ($content.is(':hidden')) {
+                            $(this).text(gt('Version history') + ' (' + baton.data.number_of_versions + ')');
+                        } else {
+                            $(this).text($historyDefaultLabel);
+                        }
+                        $content.toggle();
+                    });
+
+                this.append(
+                    $historyButton,
+                    $content
+                );
             }
         }
     });
 
     // dropdown
-    ext.point('io.ox/files/details/version/dropdown').extend(new links.DropdownLinks({
+    ext.point(POINT + '/version/dropdown').extend(new links.DropdownLinks({
+        index: 10,
         label: '',
         ref: 'io.ox/files/versions/links/inline'
     }));
 
     // Extensions for the version detail table
-    ext.point('io.ox/files/details/version').extend({ index: 10,
+    ext.point(POINT + '/version').extend({ index: 10,
         id: 'filename',
-        dim: {
-            span: 6
-        },
         draw: function (baton) {
-            baton.label = baton.data.filename || 'YEAH';
-            ext.point('io.ox/files/details/version/dropdown').invoke('draw', this, baton);
+            baton.label = baton.data.filename;
+            var row;
+            
+            this.append(
+                row = $('<td>')
+            );
+
+            ext.point(POINT + '/version/dropdown').invoke('draw', row, baton);
         }
     });
 
     // Basic Info Fields
     var bytesToSize = function (bytes) {
-        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'], i;
+        var sizes = ['B', 'KB', 'MB', 'GB', 'TB'], i;
         if (bytes === 0) {
             return 'n/a';
         } else {
@@ -316,50 +331,38 @@ define('io.ox/files/list/view-detail',
         }
     };
 
-    ext.point('io.ox/files/details/version').extend({
-        index: 20,
+    ext.point(POINT + '/version').extend({
         id: 'size',
-        dim: {
-            span: 2
-        },
+        index: 20,
         draw: function (baton) {
-            this.text(gt.noI18n(bytesToSize(baton.data.file_size))).css({textAlign: 'right'});
+            this.find('td:last').append($('<span class="size pull-left">').text(gt.noI18n(bytesToSize(baton.data.file_size))));
         }
     });
 
-    ext.point('io.ox/files/details/version').extend({
-        index: 30,
+    ext.point(POINT + '/version').extend({
         id: 'created_by',
-        dim: {
-            span: 4,
-            orientation: 'right'
-        },
-        draw: function (baton) {
-            this.append($('<span>').append(userAPI.getLink(baton.data.created_by)).addClass('pull-right'));
-        }
-    });
-
-    ext.point('io.ox/files/details/version').extend({
         index: 40,
-        id: 'comment',
-        dim: {
-            span: 8
-        },
         draw: function (baton) {
-            this.addClass('version-comment').text(gt.noI18n(baton.data.version_comment || '\u00A0'));
+            this.find('td:last').append($('<span class="pull-right createdby">').append(userAPI.getLink(baton.data.created_by)));
         }
     });
 
-    ext.point('io.ox/files/details/version').extend({
-        index: 50,
+    ext.point(POINT + '/version').extend({
         id: 'creation_date',
-        dim: {
-            span: 4,
-            orientation: 'right'
-        },
+        index: 30,
         draw: function (baton) {
             var d = new date.Local(date.Local.utc(baton.data.creation_date));
-            this.append($('<span class="pull-right">').text(gt.noI18n(d.format(date.DATE_TIME))));
+            this.find('td:last').append($('<span class="pull-right creationdate">').text(gt.noI18n(d.format(date.DATE_TIME))));
+        }
+    });
+
+    ext.point(POINT + '/version').extend({
+        id: 'comment',
+        index: 50,
+        draw: function (baton) {
+            if (baton.data.version_comment !== null &&  baton.data.version_comment !== '') {
+                this.find('td:last').append($('<div class="comment">').append($('<span>').addClass('version-comment').text(gt.noI18n(baton.data.version_comment || '\u00A0'))));
+            }
         }
     });
 
@@ -369,10 +372,12 @@ define('io.ox/files/list/view-detail',
         baton = ext.Baton.ensure(baton);
 
         var node = $.createViewContainer(baton.data, filesAPI);
+
         node.on('redraw', createRedraw(node)).addClass('file-details view');
 
         baton.data.app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' });
-        ext.point('io.ox/files/details').invoke('draw', node, baton);
+        ext.point(POINT).invoke('draw', node, baton);
+
         return node;
     };
 
