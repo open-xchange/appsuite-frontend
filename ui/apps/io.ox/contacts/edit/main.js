@@ -152,7 +152,6 @@ define('io.ox/contacts/edit/main',
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
                                 model.factory.realm('edit').release();
