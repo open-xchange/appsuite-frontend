@@ -138,7 +138,7 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
-        updateWeeks: function (obj) {
+        updateWeeks: function (obj, useCache) {
             // fetch appointments
             var self = this;
             obj = $.extend({
@@ -149,7 +149,7 @@ define('io.ox/calendar/month/perspective',
                 obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
-            return api.getAll(obj).done(function (list) {
+            return api.getAll(obj, useCache).done(function (list) {
                 if (list.length > 0) {
                     // update single week view collections
                     var start = obj.start;
@@ -225,7 +225,7 @@ define('io.ox/calendar/month/perspective',
             return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
         },
 
-        update: function () {
+        update: function (useCache) {
             var today = new date.Local(),
                 day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
             if (!day.hasClass('today')) {
@@ -234,7 +234,7 @@ define('io.ox/calendar/month/perspective',
             }
             this.showAll.prop('checked', settings.get('showAllPrivateAppointments', false));
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
-            this.updateWeeks({start: this.firstWeek, weeks: weeks});
+            this.updateWeeks({start: this.firstWeek, weeks: weeks}, useCache);
         },
 
         /**
@@ -360,6 +360,12 @@ define('io.ox/calendar/month/perspective',
                 });
             };
 
+            var reload = function () {
+                self.getFolder().done(function () {
+                    self.update(false);
+                });
+            };
+
             this.pane = $('.scrollpane', this.scaffold);
             this.scaffold.prepend(
                 $('<div>')
@@ -475,6 +481,7 @@ define('io.ox/calendar/month/perspective',
                     refresh();
                 });
             app.on('folder:change', refresh)
+                .on('folder:delete', reload)
                 .getWindow()
                 .on('show', refresh)
                 .on('show', $.proxy(this.restore, this))

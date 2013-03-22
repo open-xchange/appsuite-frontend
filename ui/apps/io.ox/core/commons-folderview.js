@@ -607,6 +607,7 @@ define('io.ox/core/commons-folderview',
                     });
 
                     api.on('delete', function (e, id) {
+                        app.trigger('folder:delete', id);
                         tree.removeNode(id);
                         tree.idle();
                     });

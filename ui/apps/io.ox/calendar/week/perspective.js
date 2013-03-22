@@ -166,11 +166,11 @@ define('io.ox/calendar/week/perspective',
          * get appointments and update collection
          * @param  {Object} obj object containing start and end timestamp
          */
-        getAppointments: function () {
+        getAppointments: function (useCache) {
             // fetch appointments
             var self = this,
                 obj = self.view.getRequestParam();
-            api.getAll(obj).done(function (list) {
+            api.getAll(obj, useCache).done(function (list) {
                 self.view.reset(obj.start, list);
             }).fail(function () {
                 notifications.yell('error', gt('An error occured. Please try again.'));
@@ -189,13 +189,13 @@ define('io.ox/calendar/week/perspective',
         /**
          * refresh appointment data
          */
-        refresh: function () {
+        refresh: function (useCache) {
             var self = this;
             this.app.folder.getData().done(function (data) {
                 // update view folder data
                 self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments();
+                self.getAppointments(useCache);
             });
         },
 
@@ -253,6 +253,9 @@ define('io.ox/calendar/week/perspective',
             this.main.addClass('calendar-week-view').empty();
             this.collection = new Backbone.Collection([]);
 
+            var refresh = function () { self.refresh(true); },
+                reload = function () { self.refresh(false); };
+
             // create sidepopup object with eventlistener
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
@@ -260,7 +263,7 @@ define('io.ox/calendar/week/perspective',
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', $.proxy(this.refresh, this))
+            api.on('create update delete refresh.all', refresh)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
@@ -270,9 +273,10 @@ define('io.ox/calendar/week/perspective',
                 });
 
             // watch for folder change
-            this.app.on('folder:change', $.proxy(this.refresh, this))
+            this.app.on('folder:change', refresh)
+                .on('folder:delete', reload)
                 .getWindow()
-                .on('show', $.proxy(this.refresh, this))
+                .on('show', refresh)
                 .on('change:perspective', function () {
                     self.view.unbindKeys();
                     self.dialog.close();
