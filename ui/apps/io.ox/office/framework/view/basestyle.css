@@ -705,12 +705,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     h4 { margin-bottom: 8px; }
     p { margin: 0; }
 
-    button {
+    button, .close {
+        position: static;
         float: right;
-        margin-left: 14px;
+        margin: 0 0 8px 14px;
     }
-
-    .close { right: 0; }
 }
 
 } /* end of .io-ox-office-main */
@@ -776,35 +775,3 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 }
 
 }
-
-/*
-body .window-body .window-content.io-ox-office-main .alert {
-    position: absolute;
-    .box-sizing(border-box);
-    top: 10px;
-    left: 50%;
-    width: 400px;
-    z-index: 2000;
-    margin-left: -200px;
-    padding: 4px 13px;
-    .drop-shadow();
-
-    h4, p, button {
-        float: left;
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    h4 {
-        font-size: 16px;
-    }
-
-    p {
-        font-size: 13px;
-    }
-
-    .close {
-        right: 0;
-    }
-}
-*/

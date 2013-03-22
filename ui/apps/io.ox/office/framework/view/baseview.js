@@ -83,8 +83,8 @@ define('io.ox/office/framework/view/baseview',
             // inner shadows for application pane
             shadowNodes = {},
 
-            // alert banner currently shown, and its running timeout
-            currentAlertInfo = null;
+            // alert banner currently shown
+            currentAlert = null;
 
         // base constructor ---------------------------------------------------
 
@@ -167,9 +167,9 @@ define('io.ox/office/framework/view/baseview',
             }
 
             // update alert banner
-            if (_.isObject(currentAlertInfo)) {
+            if (_.isObject(currentAlert)) {
                 alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
-                currentAlertInfo.alert.css({ top: offsets.top + 9, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
+                currentAlert.css({ top: offsets.top + 9, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
             }
 
             // update overlay view panes
@@ -497,7 +497,7 @@ define('io.ox/office/framework/view/baseview',
          *  Whether an alert banner is visible.
          */
         this.hasAlert = function () {
-            return _.isObject(currentAlertInfo);
+            return _.isObject(currentAlert);
         };
 
         /**
@@ -544,44 +544,31 @@ define('io.ox/office/framework/view/baseview',
                 // the controller key of the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
                 // create a new alert node
-                alert = $.alert(title, message)
-                    .removeClass('alert-error')
-                    .addClass('alert-' + type)
+                alert = $('<div>')
+                    .addClass('alert alert-' + type)
+                    .append($('<h4>').text(title), $('<p>').text(message))
                     .data('pane-pos', 'top'),
                 // auto-close timeout delay
-                timeout = Utils.getIntegerOption(options, 'timeout', 5000),
-                // the timer for auto-close
-                timer = null;
+                delay = Utils.getIntegerOption(options, 'timeout', 5000);
 
             // Hides the alert with a specific animation.
             function closeAlert() {
-                currentAlertInfo = null;
-                if (timer) { timer.abort(); }
-                alert.off('click').fadeOut('slow', function () { alert.remove(); });
+                currentAlert = null;
+                alert.off('click').stop().fadeOut(function () { alert.remove(); });
             }
 
-            // remove the alert banner currently shown
-            if (currentAlertInfo) {
-                if (currentAlertInfo.timer) {
-                    currentAlertInfo.timer.abort();
-                }
-                currentAlertInfo.alert.remove();
-            }
-
-            // store reference to current alert
-            currentAlertInfo = { alert: alert };
+            // remove the alert banner currently shown, store reference to new alert
+            if (currentAlert) { currentAlert.stop().remove(); }
+            currentAlert = alert;
 
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
-                // alert can be closed by clicking anywhere in the banner
-                alert.on('click', closeAlert);
+                // add closer symbol
+                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
+                    // alert can be closed by clicking anywhere in the banner
+                    .on('click', closeAlert);
                 // initialize auto-close
-                if (timeout > 0) {
-                    timer = currentAlertInfo.timer = app.executeDelayed(closeAlert, { delay: timeout });
-                }
-            } else {
-                // remove closer button
-                alert.find('a.close').remove();
+                alert.delay(delay).fadeOut(function () { currentAlert = null; alert.remove(); });
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
