@@ -31,22 +31,25 @@ define('io.ox/mail/autoforward/settings/register',
     ext.point("io.ox/autoforward/settings/detail").extend({
         index: 100,
         draw: function () {
-            var $node = this;
+            var $node = this,
+                $container = $('<div>');
+
+            $node.append($container);
+
             require(["io.ox/mail/autoforward/settings/filter"], function (filters) {
 
                 userAPI.get().done(function (user) {
                     var multiValues = {};
-
-                    filters.editAutoForward($node, multiValues, user.email1).done(function (filter) {
+                    filters.editAutoForward($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         filter.on('update create', function () {
                             require("io.ox/core/notifications").yell("success", gt("Your auto forward has been saved"));
                         });
                     }).fail(function () {
-                        $node.append(
+                        $container.append(
                             $.fail(gt("Couldn't load your auto forward."), function () {
                                 filters.editAutoForward($node).done(function () {
-                                    $node.find('[data-action="discard"]').hide();
+                                    $container.find('[data-action="discard"]').hide();
                                 });
                             })
                         );

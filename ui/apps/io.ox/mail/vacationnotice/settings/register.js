@@ -45,9 +45,11 @@ define('io.ox/mail/vacationnotice/settings/register',
     ext.point("io.ox/vacation/settings/detail").extend({
         index: 100,
         draw: function () {
-            var $node = this;
-            require(["io.ox/mail/vacationnotice/settings/filter"], function (filters) {
+            var $node = this,
+                $container = $('<div>');
 
+            $node.append($container);
+            require(["io.ox/mail/vacationnotice/settings/filter"], function (filters) {
                 userAPI.get().done(function (user) {
 
                     var multiValues = {
@@ -55,14 +57,14 @@ define('io.ox/mail/vacationnotice/settings/register',
                         days: createDaysObject(1, 31)
                     };
 
-                    filters.editVacationtNotice($node, multiValues, user.email1).done(function (filter) {
+                    filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         touchAttributes(filterModel);
                         filter.on('update', function () {
                             require("io.ox/core/notifications").yell("success", gt("Your vacation notice has been saved"));
                         });
                     }).fail(function () {
-                        $node.append(
+                        $container.append(
                             $.fail(gt("Couldn't load your vacation notice."), function () {
                                 filters.editVacationtNotice($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
