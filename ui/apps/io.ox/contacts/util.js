@@ -21,7 +21,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
      * @param {number} index The 1-based index of the value.
      * @param {String} value The value to return.
      * @type { format: string, params: [string] }
-     * @result A result object for getFullNameFormat or getMailFormat.
+     * @result The result object for a get*Format function.
      */
     function single(index, value) {
         var params = new Array(index);
@@ -134,9 +134,11 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
             //combine first name and last name
             if (obj.last_name && obj.first_name) {
                 return {
-                    //#. %1$s is the first name
-                    //#. %2$s is the last name
-                    format: gt('%1$s %2$s'),
+                    format:
+                        //#. Name in mail addresses
+                        //#. %1$s is the first name
+                        //#. %2$s is the last name
+                        gt.pgettext('mail address', '%1$s %2$s'),
                     params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
                 };
             }

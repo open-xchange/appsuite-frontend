@@ -823,7 +823,13 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), self.getTitle());
+                            document.title = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                self.getTitle());
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -974,7 +980,13 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), title);
+                            document.title = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                title);
                         }
                         this.trigger('change:title');
                     } else {
