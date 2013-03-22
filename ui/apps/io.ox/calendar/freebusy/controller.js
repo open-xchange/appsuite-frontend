@@ -118,11 +118,6 @@ define('io.ox/calendar/freebusy/controller',
                 });
             };
 
-            this.getInterval = function () {
-                var start = this.getCalendarView().startDate;
-                return { start: start + 0, end: start + date.WEEK };
-            };
-
             function toModel(obj) {
                 var model = new Backbone.Model(obj);
                 model.id = _.cid(obj);
@@ -135,7 +130,8 @@ define('io.ox/calendar/freebusy/controller',
             }
 
             this.loadAppointments = function () {
-                var list = self.getParticipants(), options = self.getInterval();
+                var list = self.getParticipants(),
+                    options = self.getCalendarView().getRequestParam();
                 api.freebusy(list, options).done(function (data) {
                     // check for weekView cause it might get null if user quits
                     if (self.getCalendarView()) {

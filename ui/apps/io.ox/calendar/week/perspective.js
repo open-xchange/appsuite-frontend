@@ -166,9 +166,10 @@ define('io.ox/calendar/week/perspective',
          * get appointments and update collection
          * @param  {Object} obj object containing start and end timestamp
          */
-        getAppointments: function (obj) {
+        getAppointments: function () {
             // fetch appointments
-            var self = this;
+            var self = this,
+                obj = self.view.getRequestParam();
             api.getAll(obj).done(function (list) {
                 self.view.reset(obj.start, list);
             }).fail(function () {
@@ -176,6 +177,9 @@ define('io.ox/calendar/week/perspective',
             });
         },
 
+        /**
+         * call view print function
+         */
         print: function () {
             if (this.view) {
                 this.view.print();
@@ -188,11 +192,18 @@ define('io.ox/calendar/week/perspective',
         refresh: function () {
             var self = this;
             this.app.folder.getData().done(function (data) {
+                // update view folder data
+                self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments(self.view.folder(data));
+                self.getAppointments();
             });
         },
 
+        /**
+         * handle different views in this perspective
+         * @param  {object} app the application
+         * @param  {object} opt options from perspective
+         */
         afterShow: function (app, opt) {
             // hide current view
             if (this.view) {

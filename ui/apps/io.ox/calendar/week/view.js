@@ -120,6 +120,8 @@ define('io.ox/calendar/week/view',
         /**
          * reset appointment collection
          * avoids processing concurrent requests in wrong order
+         * @param  {number} startDate starttime from initail request
+         * @param  {array}  data      all appointments returend by API
          */
         reset: function (startDate, data) {
             if (startDate === this.apiRefTime.getTime()) {
@@ -181,6 +183,8 @@ define('io.ox/calendar/week/view',
                 this.startDate.setStartOfWeek();
                 break;
             }
+            // set api reference date to the beginning of the month
+            this.apiRefTime = new date.Local(this.startDate.getYear(), this.startDate.getMonth(), 1);
         },
 
         /**
@@ -1480,21 +1484,21 @@ define('io.ox/calendar/week/view',
                 // set view data
                 this.folderData = data;
                 this.showAll(data.type === 1);
-
-                // monthly chunks
-                this.apiRefTime = new date.Local(this.startDate.getYear(), this.startDate.getMonth(), 1);
-
-                // return update data
-                var obj = {
-                    start: this.apiRefTime.getTime(),
-                    end: new date.Local(this.apiRefTime).addMonths(1).getTime(),
-                    folder: (data.type > 1 || this.showAll() === false) ? data.id : 0
-                };
-
-                return obj;
-            } else {
-                return this.folderData;
             }
+            return this.folderData;
+        },
+
+        /**
+         * collect request parameter to realize monthly chunks
+         * @return {object} object with startdate, enddate and folderID
+         */
+        getRequestParam: function () {
+            // return update data
+            return {
+                start: this.apiRefTime.getTime(),
+                end: new date.Local(this.apiRefTime).addMonths(2).getTime(),
+                folder: (this.folderData.type > 1 || this.showAll() === false) ? this.folderData.id : 0
+            };
         },
 
         /**
