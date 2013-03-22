@@ -112,6 +112,7 @@ define('plugins/portal/recentfiles/register',
         ext.point('io.ox/portal/widget/' + type + '/settings').extend({
             title: title,
             type: type,
+            unique: true,
             editable: false
         });
     });
