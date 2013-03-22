@@ -357,13 +357,12 @@ define('io.ox/calendar/invitations/register',
     }
 
     function loadAppointment(baton) {
-        require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (api, settings) {
+        require(['io.ox/calendar/api', 'io.ox/calendar/util', 'settings!io.ox/calendar'], function (api, calendarUtil, settings) {
+            util = calendarUtil;
             api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
                 function success(appointment) {
                     baton.appointment = appointment;
-                    if (appointment.end_date > _.now()) {
-                        drawAppointmentDetails(baton, api, settings);
-                    }
+                    drawAppointmentDetails(baton, api, settings);
                 },
                 function fail() {
                     // bad luck or most probably the appointment is deleted
@@ -505,10 +504,7 @@ define('io.ox/calendar/invitations/register',
                     id: address[0]
                 };
 
-                require(['io.ox/calendar/util'], function (calendarUtil) {
-                    util = calendarUtil;
-                    loadAppointment(baton);
-                });
+                loadAppointment(baton);
             }
         }
     });

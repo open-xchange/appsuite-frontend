@@ -87,12 +87,6 @@ define('io.ox/core/cache',
                     return instance;
                 };
 
-            if (persistent) {
-                console.log('+++ persistent cache instance', name);
-            } else {
-                console.log('fluent cache instance', name);
-            }
-
             this.clear = function () {
                 return getStorageLayer().clear();
             };
