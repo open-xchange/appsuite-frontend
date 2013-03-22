@@ -207,6 +207,7 @@ define('io.ox/files/icons/perspective',
         draw: function (app) {
             var options = ext.point('io.ox/files/icons/options').options(),
                 win = app.getWindow(),
+                scrollpane,
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
                 start,
@@ -225,7 +226,7 @@ define('io.ox/files/icons/perspective',
                 inline;
 
             this.main.append(
-                $('<div class="files-iconview">').append(iconview)
+                scrollpane = $('<div class="files-iconview">').append(iconview)
             );
 
             Selection.extend(this, iconview, { draggable: true, dragType: 'mail' });
@@ -281,7 +282,7 @@ define('io.ox/files/icons/perspective',
             };
 
             drawIcons = function (files) {
-                iconContainer.find('.scroll-spacer', win).before(
+                iconContainer.find('.scroll-spacer').before(
                     _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
                         return drawIcon(file);
@@ -291,9 +292,36 @@ define('io.ox/files/icons/perspective',
 
             redraw = function (ids) {
                 drawIcons(ids);
-                $('.files-iconview').on('scroll', function (event) {
-                    if ($('.files-scrollable-pane', win).length > 0 && $('.files-scrollable-pane', win)[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
-                        $(this).off('scroll');
+                scrollpane.on('scroll', function (e) {
+                    /*
+                     *  How this works:
+                     *
+                     *      +--------+     0
+                     *      |        |
+                     *      |        |
+                     *      |        |
+                     *      |        |
+                     *   +--+--------+--+  scrollTop
+                     *   |  |        |  |
+                     *   |  |        |  |
+                     *   |  |        |  |  height
+                     *   |  |        |  |
+                     *   |  |        |  |
+                     *   +--+--------+--+  bottom
+                     *      |        |
+                     *      |        |
+                     *      +--------+     scrollHeight
+                     *
+                     *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
+                     *
+                     */
+                    var scrollTop = scrollpane.scrollTop(),
+                        scrollHeight = scrollpane.prop('scrollHeight'),
+                        height = scrollpane.outerHeight(),
+                        bottom = scrollTop + height;
+                    // scrolled to bottom?
+                    if (bottom > (scrollHeight - 50)) {
+                        scrollpane.off('scroll');
                         start = end;
                         end = end + layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
@@ -322,7 +350,7 @@ define('io.ox/files/icons/perspective',
 
                 // add element to provoke scrolling
                 iconContainer.append(
-                    $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
+                    $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
                 );
 
                 loadFiles(app)
