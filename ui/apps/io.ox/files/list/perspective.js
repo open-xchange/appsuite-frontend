@@ -131,8 +131,7 @@ define('io.ox/files/list/perspective',
                 return api.uploadFile({ file: file, folder: app.folder.get() })
                     .done(function (data) {
                         // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
+                        app.invalidateFolder(data);
                         // TODO: Error Handling
                     }).fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
@@ -161,8 +160,7 @@ define('io.ox/files/list/perspective',
                     })
                     .done(function (data) {
                         // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
+                        app.invalidateFolder(data);
                         // TODO: Error Handling
                     }).fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
@@ -211,7 +209,9 @@ define('io.ox/files/list/perspective',
         commons.addGridToolbarFolder(app, grid);
 
         app.invalidateFolder = function (data) {
+            api.propagate('change', data);
             if (data) {
+                grid.selection.clearIndex();
                 grid.selection.set([data]);
             }
             grid.refresh();
