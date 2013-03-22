@@ -153,7 +153,6 @@ define('io.ox/mail/accounts/settings',
                     validateMailaccount(data, alertPlaceholder, def);
                 } else {
                     var data = {};
-                    console.log('no configdata recived');
                     data.primary_address = newMailaddress;
                     if (args) {
                         args.data = data;
@@ -165,7 +164,6 @@ define('io.ox/mail/accounts/settings',
             })
             .fail(function () {
                 var data = {};
-                console.log('no configdata recived');
                 data.primary_address = newMailaddress;
                 if (args) {
                     args.data = data;
