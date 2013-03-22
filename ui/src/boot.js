@@ -510,9 +510,10 @@ $(window).load(function () {
             });
         }
 
+        var configCache = new cache.SimpleCache('manifests', true);
+
         function fetchServerConfig(cacheKey) {
             var def = $.Deferred();
-            var configCache = new cache.SimpleCache(cacheKey, true);
             if (ox.online) {
                 http.GET({
                     module: 'apps/manifests',

@@ -364,6 +364,8 @@ define('io.ox/core/api/folder',
                     })
                     .done(function () {
                         api.trigger('delete', id, folder_id);
+                        api.trigger('delete:' + id, data);
+                        api.trigger('delete:' + data.module, data);
                     });
                 });
             })

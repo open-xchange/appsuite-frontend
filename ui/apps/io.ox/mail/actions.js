@@ -24,9 +24,8 @@ define('io.ox/mail/actions',
      'io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
-     'io.ox/core/api/conversion',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, conversionAPI,  settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, settings) {
 
     'use strict';
 
@@ -499,8 +498,8 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var attachment = baton.data;
-            conversionAPI.convert(
-                {
+            require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
+                conversionAPI.convert({
                     identifier: 'com.openexchange.mail.vcard',
                     args: [
                         {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
@@ -510,20 +509,24 @@ define('io.ox/mail/actions',
                 }, {
                     identifier: 'com.openexchange.contact.json',
                     args: []
-                }
-            ).done(function (data) {
-                    //TODO: Handle data not being an array or containing more than one contact
-                    var contact = data[0];
-                    contact.folder_id = config.get('folder.contacts');
-                    require(['io.ox/contacts/edit/main'], function (m) {
-                        if (m.reuse('edit', contact)) {
-                            return;
-                        }
-                        m.getApp(contact).launch();
-                    });
-                }).fail(function (data) {
-                    console.err('FAILED!', data);
-                });
+                })
+                .then(
+                    function success(data) {
+                        //TODO: Handle data not being an array or containing more than one contact
+                        var contact = data[0];
+                        contact.folder_id = config.get('folder.contacts');
+                        require(['io.ox/contacts/edit/main'], function (m) {
+                            if (m.reuse('edit', contact)) {
+                                return;
+                            }
+                            m.getApp(contact).launch();
+                        });
+                    },
+                    function fail(data) {
+                        console.err('FAILED!', data);
+                    }
+                );
+            });
         }
     });
 
@@ -539,25 +542,27 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var attachment = baton.data;
-            conversionAPI.convert({
-                identifier: 'com.openexchange.mail.ical',
-                args: [
-                    {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
-                    {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
-                    {'com.openexchange.mail.conversion.sequenceid': attachment.id}
-                ]
-            },
-            {
-                identifier: 'com.openexchange.ical',
-                args: [
-                    {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
-                    {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
-                ]
-            })
-            .done(function (data) {
-                notifications.yell('success', gt('The appointment has been added to your calendar'));
-            })
-            .fail(notifications.yell);
+            require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
+                conversionAPI.convert({
+                    identifier: 'com.openexchange.mail.ical',
+                    args: [
+                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                    ]
+                },
+                {
+                    identifier: 'com.openexchange.ical',
+                    args: [
+                        {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
+                        {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
+                    ]
+                })
+                .done(function (data) {
+                    notifications.yell('success', gt('The appointment has been added to your calendar'));
+                })
+                .fail(notifications.yell);
+            });
         }
     });
 

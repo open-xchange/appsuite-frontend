@@ -79,8 +79,8 @@ define('io.ox/core/api/factory',
 
         // create 3 caches for all, list, and get requests
         var caches = {
-            all: new cache.SimpleCache(o.id + "-all", true),
-            list: new cache.ObjectCache(o.id + "-list", true, o.keyGenerator),
+            all: new cache.SimpleCache(o.id + "-all", false),
+            list: new cache.ObjectCache(o.id + "-list", false, o.keyGenerator),
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
 

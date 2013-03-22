@@ -16,11 +16,13 @@ define('io.ox/calendar/invitations/register',
      'io.ox/core/http',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar/main',
-     "io.ox/calendar/util",
      "io.ox/core/notifications",
-     "less!io.ox/calendar/style.css"], function (ext, http, settings, gt, util, notifications) {
+     "less!io.ox/calendar/style.css"], function (ext, http, settings, gt, notifications) {
 
     'use strict';
+
+    // we set this once we need it (stupid workaround, otherwise we always load full calendar)
+    var util;
 
     var regex = /text\/calendar.*?method=(.+)/i;
 
@@ -503,7 +505,10 @@ define('io.ox/calendar/invitations/register',
                     id: address[0]
                 };
 
-                loadAppointment(baton);
+                require(['io.ox/calendar/util'], function (calendarUtil) {
+                    util = calendarUtil;
+                    loadAppointment(baton);
+                });
             }
         }
     });

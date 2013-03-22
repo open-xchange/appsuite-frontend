@@ -102,20 +102,19 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
             set: function (key, data, options) {
-                key = "" + key;
-                fluent[key] = JSON.stringify(data);
-                return readwrite(function (cache) {
-                    try {
-                        return OP(cache.put({
-                            key: key,
-                            data: JSON.stringify(data)
-                        }));
-                    } catch (e) {
-                        // SKIP
-                        console.error("Could not serialize", id, key, data);
-                        return $.Deferred().reject();
-                    }
+                key = '' + key;
+                try {
+                    data = JSON.stringify(data);
+                    fluent[key] = data;
+                } catch (e) {
+                    console.error('Could not serialize', id, key, data);
+                }
+                // don't wait for this
+                readwrite(function (cache) {
+                    return OP(cache.put({ key: key, data: data }));
                 });
+                // go back to work
+                return $.when();
             },
             remove: function (key) {
                 key = "" + key;

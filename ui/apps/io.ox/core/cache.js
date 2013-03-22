@@ -68,11 +68,7 @@ define('io.ox/core/cache',
                 // use persistent storage?
                 persist = (persitentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
-                            if (ox.user !== '') {
-                                return true;
-                            } else {
-                                return false;
-                            }
+                            return ox.user !== '';
                         } :
                         function () {
                             return false;
@@ -90,6 +86,12 @@ define('io.ox/core/cache',
                     instance = layer.getInstance(id);
                     return instance;
                 };
+
+            if (persistent) {
+                console.log('+++ persistent cache instance', name);
+            } else {
+                console.log('fluent cache instance', name);
+            }
 
             this.clear = function () {
                 return getStorageLayer().clear();

@@ -45,12 +45,14 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         return clone(tmp);
     };
 
+    // once cache for all
+    var settingsCache = new cache.SimpleCache('settings', true);
+
     var Settings = function (path) {
 
         var tree = {},
             meta = {},
             self = this,
-            settingsCache = new cache.SimpleCache('settings', true),
             detached = false;
 
         this.get = function (path, defaultValue) {

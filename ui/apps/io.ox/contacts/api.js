@@ -232,7 +232,7 @@ define('io.ox/contacts/api',
             });
     };
 
-    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', true);
+    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', false);
 
     api.on('refresh.all', function () {
         autocompleteCache.clear();
@@ -313,7 +313,7 @@ define('io.ox/contacts/api',
     };
 
     /** @define {object} simple contact cache */
-    var fetchCache = new cache.SimpleCache('contacts-fetching', true);
+    var fetchCache = new cache.SimpleCache('contacts-fetching', false);
 
     api.clearFetchCache = function () {
         return fetchCache.clear();

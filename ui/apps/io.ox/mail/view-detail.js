@@ -23,10 +23,9 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
-     'io.ox/core/pubsub/api',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder, pubsubApi) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
 
     'use strict';
 
@@ -1065,14 +1064,17 @@ define('io.ox/mail/view-detail',
                         var self = this,
                             opt = opt || {};
                         //create folder; create and refresh subscription
-                        pubsubApi.autoSubscribe(pub.module, pub.name, pub.url)
-                        .done(function (data) {
+                        require(['io.ox/core/pubsub/api']).done(function (pubsubApi) {
+                            pubsubApi.autoSubscribe(pub.module, pub.name, pub.url).then(
+                                function success(data) {
                                     notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
                                     //refresh folder views
                                     folder.trigger('update');
-                                })
-                        .fail(function (data) {
-                            notifications.yell('error', data.error || gt('An unknown error occurred'));
+                                },
+                                function fail(data) {
+                                    notifications.yell('error', data.error || gt('An unknown error occurred'));
+                                }
+                            );
                         });
                     }
                 });

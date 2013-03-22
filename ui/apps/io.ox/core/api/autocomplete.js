@@ -10,6 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
+
 define('io.ox/core/api/autocomplete',
       ['io.ox/core/http',
        'io.ox/contacts/api',

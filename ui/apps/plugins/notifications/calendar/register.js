@@ -301,7 +301,7 @@ define('plugins/notifications/calendar/register',
                 .on("confirmation-changed", removeInvites)
                 .on('remove-calendar-notifications', removeInvites)
                 .getInvites();
-            
+
             function removeInvites(e, invites) {
               //make sure we have an array
                 invites = invites ? [].concat(invites) : [];
@@ -319,7 +319,7 @@ define('plugins/notifications/calendar/register',
                     InviteNotifications.collection.trigger('remove');
                 }
             }
-            
+
             function removeReminders(e, reminders) {
                 //make sure we have an array
                 reminders = reminders ? [].concat(reminders) : [];
@@ -342,7 +342,7 @@ define('plugins/notifications/calendar/register',
                 .on('reminder-calendar', function (e, reminder) {
                     var tmp = [],
                         counter = reminder.length;
-                    
+
                     _(reminder).each(function (remObj, index) {
                         var obj = {
                             id: remObj.target_id,
@@ -359,13 +359,13 @@ define('plugins/notifications/calendar/register',
                                 remdata: remObj,
                                 caldata: data
                             };
-                            
+
                             // do not add user suppressed ('remind me later') reminders
                             if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                 tmp.push(inObj);
                             }
                             counter--;
-                            
+
                             if (counter === 0) {//all data processed. Update Collection
                                 ReminderNotifications.collection.reset(tmp);
                             }
