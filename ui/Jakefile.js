@@ -169,7 +169,7 @@ function jsFilter (data) {
         tree = pro.ast_mangle(tree);
         tree = pro.ast_squeeze(tree, { make_seqs: false });
     }
-    
+
     // use split_lines
     return catchParseErrors(function (data) {
         return pro.split_lines(data, 500);
@@ -459,6 +459,7 @@ function docFile(file, title) {
 
 docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
+docFile("extensions", "Extension Points");
 docFile("extensionpoints_contact", "Extension Points / Contact App");
 docFile("extensionpoints_mail", "Extension Points / Mail App");
 docFile("libs", "External Libs");
