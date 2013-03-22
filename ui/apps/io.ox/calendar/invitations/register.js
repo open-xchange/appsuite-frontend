@@ -359,7 +359,9 @@ define('io.ox/calendar/invitations/register',
             api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
                 function success(appointment) {
                     baton.appointment = appointment;
-                    drawAppointmentDetails(baton, api, settings);
+                    if (appointment.end_date > _.now()) {
+                        drawAppointmentDetails(baton, api, settings);
+                    }
                 },
                 function fail() {
                     // bad luck or most probably the appointment is deleted
