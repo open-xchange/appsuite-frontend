@@ -74,14 +74,16 @@ define('io.ox/core/cache',
                             return false;
                         }),
 
+                // define id now; user & language should never change on-the-fly
+                id = 'appsuite.cache.' + (ox.user || 'anonymous') + '.' + (ox.language || 'en_US') + '.' + (name || ''),
+
                 getStorageLayer = function () {
-                    var layer = null, instance, id;
+                    var layer = null, instance;
                     if (persist()) {
                         layer = persitentCache;
                     } else {
                         layer = fluentCache;
                     }
-                    id = 'appsuite.cache.' + (ox.user || 'anonymous') + '.' + (ox.language || 'en_US') + '.' + (name || '');
 
                     instance = layer.getInstance(id);
                     return instance;

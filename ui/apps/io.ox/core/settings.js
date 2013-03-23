@@ -46,11 +46,12 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     };
 
     // once cache for all
-    var settingsCache = new cache.SimpleCache('settings', true);
+    var settingsCache;
 
     var Settings = function (path, tree, meta) {
 
-        var self = this, detached = false;
+        var self = this, detached = false,
+            initial = JSON.parse(JSON.stringify(tree || {}));
 
         tree = tree || {};
         meta = meta || {};
@@ -166,6 +167,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     if (!detached) {
                         tree = data[0].tree;
                         meta = data[0].meta;
+                        initial = JSON.parse(JSON.stringify(tree));
                         return applyDefaults();
                     } else {
                         return $.when();
@@ -238,6 +240,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     console.warn('Not saving detached settings.', path);
                 }
 
+                if (!custom && _.isEqual(initial, tree)) return $.when();
+
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
                 save(data.tree);
@@ -273,6 +277,10 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
     return {
         load: function (name, req, load, config) {
+            // init cache?
+            if (!settingsCache) {
+                settingsCache = new cache.SimpleCache('settings', true);
+            }
             // bulk load?
             if (_(list).contains(name)) {
                 preload(name).done(function (data) {

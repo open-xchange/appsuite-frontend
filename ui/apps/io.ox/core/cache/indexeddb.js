@@ -76,7 +76,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     try {
                         return $.Deferred().resolve(JSON.parse(fluent[key]));
                     } catch (e) {
-                        console.error("Could not deserialize", id, key, fluent[key], e);
+                        console.error('Failed to deserialize cached data', key, 'cache', id, 'data', { data: fluent[key] }, e.message, e);
                         return $.Deferred().resolve(null);
                     }
                 }
@@ -90,7 +90,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                                 def.resolve(data);
                             } catch (e) {
                                 // ignore broken values
-                                console.error("Could not deserialize", id, key, fluent[key], e);
+                                console.error('Failed to deserialize cached data', key, 'cache', id, 'data', { data: obj.data }, e.message, e);
+                                def.resolve(null);
                             }
                         } else {
                             def.resolve(null);

@@ -497,9 +497,9 @@ $(window).load(function () {
                 def.resolve();
                 return;
             }
-            configCache.get(cacheKey).done(function (data) {
-                if (data !== null) {
-                    updateServerConfig(data);
+            configCache.get(cacheKey).done(function (co) {
+                if (co !== null) {
+                    updateServerConfig(co.data);
                     def.resolve();
                 } else if (useFallback) {
                     setFallbackConfig();
@@ -510,23 +510,33 @@ $(window).load(function () {
             });
         }
 
-        var configCache = new cache.SimpleCache('manifests', true);
+        var configCache,
+            HOUR = 60000 * 60,
+            DAY = HOUR * 24;
 
         function fetchServerConfig(cacheKey) {
             var def = $.Deferred();
             if (ox.online) {
-                http.GET({
-                    module: 'apps/manifests',
-                    params: { action: 'config' },
-                    appendSession: (cacheKey === 'userconfig')
-                })
-                .done(function (data) {
-                    configCache.add(cacheKey, data);
-                    updateServerConfig(data);
-                    def.resolve();
-                })
-                .fail(function () {
-                    getCachedServerConfig(configCache, cacheKey, false, def);
+                // check cache
+                configCache.get(cacheKey).done(function (co) {
+                    if (co !== null && co.timestamp > (_.now() - HOUR * 12)) {
+                        def.resolve();
+                        updateServerConfig(co.data);
+                    }
+                    // fetch fresh manifests
+                    http.GET({
+                        module: 'apps/manifests',
+                        params: { action: 'config' },
+                        appendSession: (cacheKey === 'userconfig')
+                    })
+                    .done(function (data) {
+                        configCache.add(cacheKey, { data: data, timestamp: _.now() });
+                        updateServerConfig(data);
+                        def.resolve();
+                    })
+                    .fail(function () {
+                        getCachedServerConfig(configCache, cacheKey, false, def);
+                    });
                 });
             } else {
                 getCachedServerConfig(configCache, cacheKey, true, def);
@@ -609,7 +619,12 @@ $(window).load(function () {
             } else {
 
                 // try auto login!?
-                return (useAutoLogin ? session.autoLogin() : $.when()).then(
+                return (useAutoLogin ? session.autoLogin() : $.when())
+                .always(function () {
+                    // init manifest cache now (have ox.user now)
+                    configCache  = new cache.SimpleCache('manifests', true);
+                })
+                .then(
                     function loginSuccess(data) {
                         // now we're sure the server is up
                         serverUp();
