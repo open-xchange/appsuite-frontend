@@ -158,19 +158,26 @@
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
     };
 
-    _.display = {};
+    var display = {};
 
     _(queries).each(function (query, key) {
-        _.display[key] = Modernizr.mq(query);
+        display[key] = Modernizr.mq(query);
     });
 
-        // aliases
-    _.display.smartphone = _.display.small;
-    _.display.tablet = _.display.medium;
-    _.display.desktop = _.display.large;
+    // aliases
+    display.smartphone = display.small;
+    display.tablet = display.medium;
+    display.desktop = display.large;
 
     // extend underscore utilities
     _.mixin({
+
+        // returns current device size
+        display: function () {
+            if (display.small) return 'small';
+            if (display.medium) return 'medium';
+            return 'large';
+        },
 
         // combination of browser & display
         device: function (condition, debug) {
@@ -179,16 +186,16 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
-            // no arguments?
+            // no arguments?s
             if (arguments.length === 0) {
-                return _.extend({}, browserLC, _.display, misc);
+                return _.extend({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;
             // check condition
             condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return browserLC[match] || _.display[match] || misc[match] || 'false';
+                return browserLC[match] || display[match] || misc[match] || 'false';
             });
             if (debug) {
                 console.debug(condition);

@@ -1920,7 +1920,7 @@ define('io.ox/office/tk/utils',
     Utils.createIcon = function (icon, white) {
         return $('<i>').addClass(icon + ' ' + localeClasses)
             .toggleClass('icon-white', white === true)
-            .toggleClass('retina', _.display.retina === true);
+            .toggleClass('retina', _.device('retina'));
     };
 
     /**

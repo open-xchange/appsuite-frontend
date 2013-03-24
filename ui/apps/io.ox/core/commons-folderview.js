@@ -451,7 +451,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, fnResize, fnAnimationEnd,
+            fnHide, fnShow, restoreWidth, makeResizable, fnAnimationEnd,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -487,11 +487,15 @@ define('io.ox/core/commons-folderview',
             });
         };
 
-        fnResize = function () {
+        restoreWidth = $.noop;
+
+        makeResizable = function () {
+
             var resizeBar, minSidePanelWidth, windowContainer, maxSidePanelWidth, windowHeadWidth;
 
-            sidepanel.append(resizeBar = $('<div>').addClass('resizebar'));
-            minSidePanelWidth = sidepanel.width() - resizeBar.width();
+            sidepanel.append(resizeBar = $('<div class="resizebar">'));
+            // needs to match min-width!
+            minSidePanelWidth = 170;
 
             function getWidths() {
                 windowContainer   = sidepanel.closest('.window-container-center');
@@ -499,21 +503,33 @@ define('io.ox/core/commons-folderview',
                 windowHeadWidth   = windowContainer.find('.window-head').width();
             }
 
-            getWidths();
+            function applyWidth(width) {
+                sidepanel.css({ width: width + 'px', left: (0 - width) + 'px' })
+                    .closest('.window-body.side-shift').css('left', (width + windowHeadWidth) + 'px');
+                windowContainer.data('resize-width', width);
+            }
+
+            restoreWidth = function () {
+                var width = app.settings.get('folderview/width/' + _.display(), 250);
+                applyWidth(width);
+            };
 
             resizeBar.off('mousedown').on('mousedown', function (e) {
                 e.preventDefault();
                 windowContainer.on('mousemove', function (e) {
-                    var newpos = e.pageX - windowHeadWidth - resizeBar.width();
-                    if (newpos < maxSidePanelWidth && newpos > minSidePanelWidth) {
-                        sidepanel.css({width: newpos + resizeBar.width(), left: -newpos - resizeBar.width()})
-                            .closest('.window-body.side-shift').css('left', e.pageX);
+                    var newWidth = e.pageX - windowHeadWidth;
+                    if (newWidth < maxSidePanelWidth && newWidth > minSidePanelWidth) {
+                        applyWidth(newWidth);
                     }
                 });
             });
 
+            getWidths();
+
             windowContainer.on('mouseup', function (e) {
                 windowContainer.off('mousemove');
+                var width = $(this).data('resize-width') || 250;
+                app.settings.set('folderview/width/' + _.display(), width).save();
             });
 
             $(window).on('resize', _.debounce(getWidths, 200));
@@ -593,6 +609,12 @@ define('io.ox/core/commons-folderview',
 
             // paint now
             return tree.paint().pipe(function () {
+
+                if (_.device('!touch')) {
+                    makeResizable();
+                    restoreWidth();
+                }
+
                 return tree.select(app.folder.get()).done(function () {
 
                     tree.selection.on('change', onChangeFolder);
@@ -647,8 +669,6 @@ define('io.ox/core/commons-folderview',
                         $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
                         return false;
                     });
-
-                    if (_.device('!touch')) fnResize();
 
                     initTree = loadTree = null;
                 });
