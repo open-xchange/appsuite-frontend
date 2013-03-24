@@ -613,6 +613,8 @@ $(window).load(function () {
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
                     _.url.redirect(ref ? ref : '#');
 
+                    configCache  = new cache.SimpleCache('manifests', true);
+
                     fetchUserSpecificServerConfig().done(function () {
                         loadCoreFiles().done(function () {
                             loadCore();
