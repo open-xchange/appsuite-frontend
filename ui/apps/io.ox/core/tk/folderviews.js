@@ -343,7 +343,7 @@ define('io.ox/core/tk/folderviews',
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
 
-            nodes.folder = tmplFolder.clone().on('dblclick click', '.folder-arrow, .folder-label', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick mousedown', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
                 nodes.folder.css('paddingLeft', (0 + level * 30) + 'px');

@@ -828,12 +828,15 @@ define('io.ox/mail/view-detail',
         index: 140,
         id: 'subject',
         draw: function (baton) {
+            var subject = $.trim(baton.data.subject);
             this.append(
-                $('<div>').addClass('mail-detail-clear-left'),
-                $('<div class="subject clear-title">').append(
+                $('<div class="mail-detail-clear-left">'),
+                $('<div>')
+                .addClass('subject clear-title' + (subject === '' ? ' empty' : ''))
+                .append(
                     $('<i class="icon-bookmark">'),
                     // inject some zero width spaces for better word-break
-                    $.txt(_.noI18n($.trim(baton.data.subject) || '\u00A0')),
+                    $.txt(_.noI18n(subject || gt('No subject'))),
                     $('<span class="priority">').append(util.getPriority(baton.data))
                 )
             );

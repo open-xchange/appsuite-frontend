@@ -616,6 +616,7 @@ $(window).load(function () {
                     configCache  = new cache.SimpleCache('manifests', true);
 
                     fetchUserSpecificServerConfig().done(function () {
+                        serverUp();
                         loadCoreFiles().done(function () {
                             loadCore();
                         });

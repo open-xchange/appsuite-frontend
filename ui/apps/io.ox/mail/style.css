@@ -294,6 +294,11 @@
         word-break: break-word;
     }
 
+    .subject.empty {
+        font-style: italic;
+        color: #aaa;
+    }
+
     .from.list {
         display:block;
     }

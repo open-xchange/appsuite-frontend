@@ -222,6 +222,8 @@ define('io.ox/core/tk/selection',
 
         mousedownHandler = function (e) {
             var node, key, id;
+            // we check for isDefaultPrevented because elements inside .selectable
+            // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
