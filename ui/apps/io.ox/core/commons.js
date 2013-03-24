@@ -465,5 +465,29 @@ define('io.ox/core/commons',
             });
     };
 
+    // located here since we need a translation for 'Retry'
+
+    $.fail = function (msg, retry) {
+        var tmp = $("<div>")
+            .addClass('io-ox-fail')
+            .append(
+                $('<span>').text(msg)
+            );
+        if (retry) {
+            tmp.append(
+                $('<span>').text(' ')
+            )
+            .append(
+                $('<a>', { href: '#' }).text(gt('Retry'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    $(this).closest('.io-ox-center').remove();
+                    retry.apply(this, arguments);
+                })
+            );
+        }
+        return tmp.center();
+    };
+
     return commons;
 });

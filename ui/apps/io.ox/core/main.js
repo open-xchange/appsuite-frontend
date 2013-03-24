@@ -769,7 +769,10 @@ define("io.ox/core/main",
 
                     dialog.on('click', '.footer .btn', def.resolve);
                     dialog.on('click', '.content .close', function (e) {
-                        ox.ui.App.removeRestorePoint($(this).data('id'));
+                        ox.ui.App.removeRestorePoint($(this).data('id')).done(function (list) {
+                            // continue if list is empty
+                            if (list.length === 0) def.resolve();
+                        });
                     });
 
                     topbar.hide();

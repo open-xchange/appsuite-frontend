@@ -423,7 +423,9 @@ define("io.ox/core/desktop",
                 if (pos > -1) {
                     list.splice(pos, 1);
                 }
-                return appCache.add('savepoints', list);
+                return appCache.add('savepoints', list).then(function () {
+                    return list;
+                });
             });
         },
 

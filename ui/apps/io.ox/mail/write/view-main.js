@@ -795,7 +795,6 @@ define("io.ox/mail/write/view-main",
             // not accepted but has content -> shake
             node.attr('disabled', 'disabled')
                 .css({ border: '1px solid #a00', backgroundColor: '#fee' })
-                .shake()
                 .done(function () {
                     node.css({ border: '', backgroundColor: '' })
                         .removeAttr('disabled').focus();

@@ -713,7 +713,7 @@ define('io.ox/core/tk/vgrid',
                 container.hide().parent().idle()
                     .find('.io-ox-fail').parent().remove().end().end()
                     .append(
-                        $.fail(gt(list.error || 'Could not load this list'), function () {
+                        $.fail(list.error || gt('Could not load this list'), function () {
                             container.show();
                             loadAll();
                         })
