@@ -487,6 +487,18 @@ define('io.ox/core/tk/vgrid',
             }
         };
 
+        function detachPoolItem(index, defaultClassName) {
+            pool[index].detach();
+            pool[index].node[0].className = defaultClassName || template.getDefaultClassName();
+        }
+
+        function detachPool() {
+            var i = 0, $i = pool.length, defaultClassName = template.getDefaultClassName();
+            for (; i < $i; i++) {
+                detachPoolItem(i, defaultClassName);
+            }
+        }
+
         paint = (function () {
 
             // calling this via LFO, so that we always get the latest data
@@ -536,8 +548,7 @@ define('io.ox/core/tk/vgrid',
                 // any nodes left to clear?
                 if ($i < numRows) {
                     for (; i < numRows; i++) {
-                        pool[i].detach();
-                        pool[i].node[0].className = defaultClassName;
+                        detachPoolItem(i, defaultClassName);
                     }
                 }
 
@@ -566,7 +577,7 @@ define('io.ox/core/tk/vgrid',
 
                 // get all items
                 var lfo = _.lfo(cont, offset);
-                return chunkLoader.load(offset, numRows, {mode: currentMode})
+                return chunkLoader.load(offset, numRows, { mode: currentMode })
                     .done(lfo)
                     .fail(function () {
                         // continue with dummy array
@@ -627,7 +638,10 @@ define('io.ox/core/tk/vgrid',
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
-                scrollpane.append($.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty')));
+                detachPool();
+                scrollpane.append(
+                    $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
+                );
             }
             // trigger event
             if (!quiet) {
