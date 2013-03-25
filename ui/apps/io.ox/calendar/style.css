@@ -247,26 +247,30 @@
     min-width: 236px;
 }
 
-.popover-content .timezones {
-    width: 260px;
-}
+.popover.timezones {
 
-.popover-content .timezones .clear {
-    clear: both;
-}
+    width: 280px;
 
-.popover-content .timezones i {
-    font-style: normal;
-    display: inline-block;
-    float: right;
-}
+    .popover-content {
 
-.popover-content .timezones b {
-    font-weight: normal;
-    padding-left: 1em;
-    width: 3em;
-    display: inline-block;
-    float: right;
+        .list .clear {
+            clear: both;
+        }
+
+        .list i {
+            font-style: normal;
+            display: inline-block;
+            float: right;
+        }
+
+        .list b {
+            font-weight: normal;
+            padding-left: 1em;
+            width: 3em;
+            display: inline-block;
+            float: right;
+        }
+    }
 }
 
 /* Invitations */

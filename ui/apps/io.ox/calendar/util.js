@@ -281,6 +281,7 @@ define("io.ox/calendar/util",
         },
 
         addTimezoneLabel: function (parent, data) {
+
             var current = date.Local.getTTInfoLocal(data.start_date);
 
             parent.append(
@@ -293,6 +294,9 @@ define("io.ox/calendar/util",
                     trigger: 'hover',
                     container: $('#tmp'),
                     placement: function (tip, element) {
+                        // add missing outer class
+                        $(tip).addClass('timezones');
+                        // get placement
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
@@ -305,7 +309,7 @@ define("io.ox/calendar/util",
                 var div = $('<div>');
                 _(zones).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<div>').addClass('clear').append(
+                    div.append($('<div class="clear">').append(
                         $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
                         $('<b>').append($('<span>')
                             .addClass('label label-info')
@@ -313,7 +317,7 @@ define("io.ox/calendar/util",
                         $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
-                return '<div class="timezones">' + div.html() + '</div>';
+                return '<div class="list">' + div.html() + '</div>';
             }
 
             return parent;

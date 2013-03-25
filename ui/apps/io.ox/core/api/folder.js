@@ -449,11 +449,13 @@ define('io.ox/core/api/folder',
                     return subFolderCache.clear().then(function () {
                         // renew all subfolder entries
                         http.pause();
-                        _(keys).map(function (id) {
-                            // need cache: false here, otherwise requests get not collected by http.pause()
-                            return api.getSubFolders({ folder: id, cache: false });
-                        });
-                        return http.resume();
+                        return $.when.apply($,
+                            _(keys).map(function (id) {
+                                // need cache: false here, otherwise requests get not collected by http.pause()
+                                return api.getSubFolders({ folder: id, cache: false });
+                            }),
+                            http.resume()
+                        );
                     });
                 })
                 .done(function () {

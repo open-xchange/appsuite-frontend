@@ -14,15 +14,16 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
 	'use strict';
 
-    var SCHEMA = 1;
-    var QUEUE_DELAY = 5000;
-
-	var instances = {},
+    var SCHEMA = 1,
+        QUEUE_DELAY = 5000,
+        instances = {},
         moduleDefined = $.Deferred(),
-        db, defunct = false, opened, that;
+        db,
+        defunct = false,
+        opened,
+        that;
 
-    defunct = !(Modernizr.indexeddb && window.indexedDB);
-    if (defunct) {
+    if ((defunct = !(Modernizr.indexeddb && window.indexedDB))) {
         return $.when();
     }
 
@@ -30,9 +31,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         var fluent = {},
             queue = { timer: null, list: [] },
-            myDB;
-
-        var dbOpened = $.Deferred();// OP(opened);
+            myDB,
+            dbOpened = $.Deferred(); // OP(opened);
 
         OP(db.transaction("databases", "readwrite").objectStore("databases").put({ name: id })).done(function (db) {
             var opened =  window.indexedDB.open(id, SCHEMA);
@@ -69,11 +69,11 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             },
 
             get: function (key) {
-                key = String(key);
                 if (_.isUndefined(key) || _.isNull(key)) {
                     return $.Deferred().resolve(null);
                 }
-                if (fluent[key]) {
+                key = String(key);
+                if (key in fluent) {
                     try {
                         return $.Deferred().resolve(JSON.parse(fluent[key]));
                     } catch (e) {
@@ -82,25 +82,21 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     }
                 }
                 return read(function (cache) {
-                    var def = $.Deferred();
-                    function found(obj) {
+                    return OP(cache.get(key)).then(function found(obj) {
                         if (!_.isUndefined(obj) && !_.isNull(obj)) {
                             try {
                                 var data = JSON.parse(obj.data);
                                 fluent[key] = obj.data;
-                                def.resolve(data);
+                                return $.Deferred().resolve(data);
                             } catch (e) {
                                 // ignore broken values
                                 console.error('Failed to deserialize cached data', key, 'cache', id, 'data', { data: obj.data }, e.message, e);
-                                def.resolve(null);
+                                return $.Deferred().resolve(null);
                             }
                         } else {
-                            def.resolve(null);
+                            return $.Deferred().resolve(null);
                         }
-                    }
-                    OP(cache.get(key)).done(found);
-
-                    return def;
+                    });
                 });
             },
 
