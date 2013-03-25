@@ -662,9 +662,9 @@ task("dist", [distDest], function () {
     var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
-    function replaceL10n(spec, token, languages) {
+    function replaceL10n(spec, key, languages) {
         return spec.replace(
-            new RegExp('## ' + token + ' ##.*\n([\s\S]+?)^## end ##.*', 'gm'),
+            new RegExp('## ' + key + ' ##.*\\n([\\s\\S]+?)^## end ##.*', 'gm'),
             function (m, block) {
                 block = block.replace(/^#/gm, '');
                 return _.map(languages, function (Lang) {
