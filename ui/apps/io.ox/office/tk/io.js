@@ -91,7 +91,10 @@ define('io.ox/office/tk/io',
      *  The promise of the request. Will be resolved with the 'data' object
      *  returned by the response, if available; or the valid return value of
      *  the result filter callback function, if specified. Otherwise, the
-     *  promise will be rejected.
+     *  promise will be rejected. Contains the additional method 'abort()' that
+     *  allows to abort the running request. The returned Promise will neither
+     *  be resolved nor rejected. Calling this method has no effect, if the
+     *  request is finished already.
      */
     IO.sendRequest = function (options) {
 

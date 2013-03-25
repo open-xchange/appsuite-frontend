@@ -593,9 +593,20 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 };
             }
 
-            $.ajax(ajaxOptions)
-                // TODO: remove backend fix
-                .pipe(function (response) {
+            var ajax = $.ajax(ajaxOptions);
+
+            // add an 'abort()' method to the Deferred and all Promises it creates
+            var abortFunc = function () { ajax.abort(); },
+                promiseFunc = _.bind(r.def.promise, r.def);
+            _.extend(r.def, {
+                abort: abortFunc,
+                promise: function () {
+                    return _.extend(promiseFunc(), { abort: abortFunc });
+                }
+            });
+
+            // TODO: remove backend fix
+            ajax.pipe(function (response) {
                     if (fixPost) {
                         // Extract the JSON text
                         var matches = /\((\{.*?\})\)/.exec(response);

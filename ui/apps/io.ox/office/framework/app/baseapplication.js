@@ -537,8 +537,9 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
          *
-         * @returns
-         *  The promise of the request.
+         * @returns {jQuery.Promise}
+         *  The Promise of the request. See method IO.sendRequest() for
+         *  details.
          */
         this.sendRequest = function (options) {
 
@@ -564,9 +565,10 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
          *
-         * @returns
-         *  The promise of the request. Will be rejected immediately, if this
-         *  application is not connected to a document file.
+         * @returns {jQuery.Promise}
+         *  The Promise of the request. Will be rejected immediately, if this
+         *  application is not connected to a document file. See method
+         *  IO.sendRequest() for details.
          */
         this.sendFilterRequest = function (options) {
 
@@ -596,9 +598,10 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
          *
-         * @returns
-         *  The promise of the request. Will be rejected immediately, if this
-         *  application is not connected to a document file.
+         * @returns {jQuery.Promise}
+         *  The Promise of the request. Will be rejected immediately, if this
+         *  application is not connected to a document file. See method
+         *  IO.sendRequest() for details.
          */
         this.sendConverterRequest = function (options) {
 
@@ -621,7 +624,7 @@ define('io.ox/office/framework/app/baseapplication',
          * Creates and returns the URL of server requests used to convert a
          * document file with the document filter module.
          *
-         * @param {Object} [params]
+         * @param {Object} [options]
          *  Additional parameters inserted into the URL.
          *
          * @returns {String|Undefined}
