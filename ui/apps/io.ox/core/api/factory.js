@@ -79,7 +79,8 @@ define('io.ox/core/api/factory',
 
         // create 3 caches for all, list, and get requests
         var caches = {
-            all: new cache.SimpleCache(o.id + "-all", false),
+            all: new cache.SimpleCache(o.id + "-all", true),
+            //no persistant cache for list, because burst-writes block read (stupid queue implementation)
             list: new cache.ObjectCache(o.id + "-list", false, o.keyGenerator),
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
