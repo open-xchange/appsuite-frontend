@@ -221,10 +221,6 @@ define('io.ox/calendar/model',
                     if (options.create) {
                         // if public folder, current user will be added
                         model.getParticipants().addUniquely({id: userID, type: 1});
-                    } else {
-                        if (model.get('organizerId') === userID) {
-                            model.getParticipants().get(userID).set('ui_removable', false);
-                        }
                     }
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
