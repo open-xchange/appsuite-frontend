@@ -356,6 +356,7 @@ define('io.ox/calendar/week/view',
         },
 
         onLassoESC: function (e) {
+            e.preventDefault();
             if (e.which === 27) {
                 this.cleanUpLasso();
                 $(document).off('keyup', $.proxy(this.onLassoESC, this));
@@ -367,6 +368,7 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e mouseevents on day container
          */
         onLasso: function (e) {
+            e.preventDefault();
             if (this.allowLasso === false || !folderAPI.can('create', this.folder())) {
                 return;
             }
