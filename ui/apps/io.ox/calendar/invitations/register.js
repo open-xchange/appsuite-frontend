@@ -15,14 +15,12 @@ define('io.ox/calendar/invitations/register',
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'settings!io.ox/calendar',
+     'io.ox/calendar/util',
      'gettext!io.ox/calendar/main',
      "io.ox/core/notifications",
-     "less!io.ox/calendar/style.css"], function (ext, http, settings, gt, notifications) {
+     "less!io.ox/calendar/style.css"], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';
-
-    // we set this once we need it (stupid workaround, otherwise we always load full calendar)
-    var util;
 
     var regex = /text\/calendar.*?method=(.+)/i;
 
@@ -357,8 +355,7 @@ define('io.ox/calendar/invitations/register',
     }
 
     function loadAppointment(baton) {
-        require(['io.ox/calendar/api', 'io.ox/calendar/util', 'settings!io.ox/calendar'], function (api, calendarUtil, settings) {
-            util = calendarUtil;
+        require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (api, settings) {
             api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
                 function success(appointment) {
                     baton.appointment = appointment;
