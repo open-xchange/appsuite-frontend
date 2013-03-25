@@ -482,13 +482,21 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var lang = ox.language.slice(0, 2) === 'de' ? 'de_DE' : 'en_US';
-                var helpLink = "help/" + lang + "/index.html";
+                var a, helpLink = "help/" + ox.language + "/index.html";
                 this.append(
                     $('<li>').append(
-                        $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
+                        a = $('<a target="_blank">').attr({href: helpLink})
+                                                    .text(gt('Help'))
                     )
                 );
+                $.ajax(helpLink, {
+                    type: 'HEAD',
+                    statusCode: {
+                        404: function () {
+                            a.attr('href', 'help/en_US/index.html');
+                        }
+                    }
+                });
             }
         });
 

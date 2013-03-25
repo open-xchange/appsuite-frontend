@@ -23,17 +23,13 @@ Architecture: all
 Depends: ${misc:Depends}, nodejs (>= 0.4.0)
 Description: SDK for the OX App Suite HTML5 client
 
-Package: open-xchange-appsuite-help-de-de
-Architecture: all
-Depends: ${misc:Depends}
-Provides: open-xchange-appsuite-help
-Description: Online help for OX App Suite (de_DE)
-
-Package: open-xchange-appsuite-help-en-us
-Architecture: all
-Depends: ${misc:Depends}
-Provides: open-xchange-appsuite-help
-Description: Online help for OX App Suite (en_US)
+## help ##
+#Package: open-xchange-appsuite-help-## lang ##
+#Architecture: all
+#Depends: ${misc:Depends}
+#Provides: open-xchange-appsuite-help
+#Description: Online help for OX App Suite (## Lang ##)
+## end ##
 
 ## l10n ##
 #Package: open-xchange-appsuite-l10n-## lang ##
@@ -42,4 +38,4 @@ Description: Online help for OX App Suite (en_US)
 #Provides: open-xchange-appsuite-l10n
 #Breaks: open-xchange-l10n-## lang ## (<< 7.0.1)
 #Description: Translation of the OX App Suite HTML5 client (## Lang ##)
-## end l10n ##
+## end ##

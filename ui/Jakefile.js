@@ -662,17 +662,22 @@ task("dist", [distDest], function () {
     var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
-    function addL10n(spec) {
-        return spec.replace(/## l10n ##.*\n([\s\S]+?)^## end l10n ##.*/gm,
+    function replaceL10n(spec, token, languages) {
+        return spec.replace(
+            new RegExp('## ' + token + ' ##.*\n([\s\S]+?)^## end ##.*', 'gm'),
             function (m, block) {
                 block = block.replace(/^#/gm, '');
-                return _.map(i18n.languages(), function (Lang) {
+                return _.map(languages, function (Lang) {
                     var lang = Lang.toLowerCase().replace(/_/g, '-');
                     return block.replace(/## ([Ll])ang ##/g, function (m, L) {
                         return L === 'L' ? Lang : lang;
                     });
                 }).join('\n');
             });
+    }
+    function addL10n(spec) {
+        spec = replaceL10n(spec, 'l10n', i18n.languages());
+        return replaceL10n(spec, 'help', fs.readdirSync('help'));
     }
     function tar(code) {
         if (code) return fail('cp exited with code ' + code);
