@@ -15,8 +15,9 @@
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
+     'io.ox/core/api/account',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, settings, gt) {
+     'gettext!io.ox/core'], function (ext, date, accountAPI, settings, gt) {
 
     'use strict';
 
@@ -69,8 +70,10 @@ define('io.ox/mail/util',
         // mail addresses hash
         addresses = {};
 
-    _(settings.get('addresses', [])).each(function (address) {
-        addresses[address.toLowerCase()] = true;
+    accountAPI.getAllSenderAddresses().done(function (sendAddresses) {
+        _(sendAddresses).chain().pluck(1).each(function (address) {
+            addresses[address.toLowerCase()] = true;
+        });
     });
 
 
