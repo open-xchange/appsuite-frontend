@@ -142,7 +142,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
         datePicker: function ($anchor, attribute, options) {
             var self = this,
                 originalContent = $anchor.html();
-            self[attribute] = options.initial || _.now();
+
+            if (options.initial) {
+                self[attribute] = _.isFunction(options.initial) ? options.initial() : options.initial;
+            } else {
+                self[attribute] = _.now();
+            }
 
             function renderDate() {
                 var value = self[attribute];
@@ -160,6 +165,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
 
             function drawState() {
+                if (_.isFunction(options.initial) && self[attribute] <= options.model.get('start_date')) {
+                    self[attribute] = options.initial();
+                }
                 var value = renderDate();
                 $anchor.text(value);
                 self.trigger("redraw", self);
@@ -472,7 +480,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'date',
                         ending: endingOptions,
                         until: CalendarWidgets.datePicker,
-                        initial: self.model.get('start_date')
+                        model: self.model,
+                        initial: function () {
+                            return self.model.get('start_date') + (4 * dateAPI.WEEK);
+                        }
                     }).on("change:ending", this.endingChanged, this).on("change", this.updateModel, this),
                     after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
                         id: 'after',
