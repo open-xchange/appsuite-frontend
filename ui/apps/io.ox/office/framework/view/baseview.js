@@ -168,8 +168,13 @@ define('io.ox/office/framework/view/baseview',
 
             // update alert banner
             if (_.isObject(currentAlert)) {
-                alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
-                currentAlert.css({ top: offsets.top + 9, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
+                if (app.getWindowNode().width() <= 640) {
+                    alertMargin = Math.max((app.getWindowNode().width() - 500) / 2, 10);
+                    currentAlert.css({ top: offsets.top + 56, left: alertMargin, right: alertMargin });
+                } else {
+                    alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
+                    currentAlert.css({ top: offsets.top + 10, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
+                }
             }
 
             // update overlay view panes

@@ -700,7 +700,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     position: absolute;
     z-index: 2000;
     padding: 8px 14px;
-    .drop-shadow();
+    .box-shadow(0px 5px 15px -5px black); 
 
     h4 { margin-bottom: 8px; }
     p { margin: 0; }
