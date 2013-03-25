@@ -193,8 +193,12 @@
                             'text!themes/style.less',
                             'text!themes/' + name + '/style.less'])
                 .pipe(function (def1, def2, style1, style2) {
-                    var path = ox.base + '/apps/themes/' + name + '/';
+                    var path = ox.base + '/apps/themes/' + name + '/',
+                        icons = [57, 72, 114];
                     $('head #favicon').attr({ href: path + 'favicon.ico' }).detach().appendTo('head');
+                    for (var i = 0; i < icons.length; i++) {
+                        $('head #icon' + icons[i]).attr({ href: path + 'icon' + icons[i] + '.png' }).detach().appendTo('head');
+                    }
                     themeLess.path = path;
                     themeLess.name = path + 'dynamic.less';
                     themeLess.source = style1;
