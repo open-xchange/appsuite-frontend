@@ -430,6 +430,7 @@ define('io.ox/core/api/folder',
                     )
                     .pipe(function (getRequest) {
                         // return proper data
+                        api.trigger('create', getRequest[0]);
                         return getRequest[0];
                     });
                 });
@@ -440,24 +441,24 @@ define('io.ox/core/api/folder',
         },
 
         sync: function () {
-            // action=update doesn't inform us about new unread mails, so we need another approach
-
             // renew subfoldercache
             // get all folders from subfolder cache
-            return subFolderCache.keys().pipe(function (keys) {
-                // clear subfolder cache
-                subFolderCache.clear();
-
-                // renew all subfolder entries
-                http.pause();
-                _(keys).map(function (id) {
-                    return api.getSubFolders({ folder: id, cache: false });
+            return subFolderCache.keys()
+                .then(function (keys) {
+                    // clear subfolder cache (to get rid of deprecated stuff)
+                    return subFolderCache.clear().then(function () {
+                        // renew all subfolder entries
+                        http.pause();
+                        _(keys).map(function (id) {
+                            // need cache: false here, otherwise requests get not collected by http.pause()
+                            return api.getSubFolders({ folder: id, cache: false });
+                        });
+                        return http.resume();
+                    });
+                })
+                .done(function () {
+                    api.trigger('refresh');
                 });
-
-                api.trigger('update');
-
-                return http.resume();
-            });
         },
 
         update: function (options, storage) {

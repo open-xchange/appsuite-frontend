@@ -36,6 +36,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         ox.user_id = data.user_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
     };
 

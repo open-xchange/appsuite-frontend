@@ -598,10 +598,12 @@ $(window).load(function () {
             // got session via hash?
             if (_.url.hash('session')) {
 
-                ox.session = _.url.hash('session');
-                ox.user = _.url.hash('user');
-                ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
-                ox.language = _.url.hash('language');
+                session.set({
+                    session: _.url.hash('session'),
+                    user: _.url.hash('user'),
+                    user_id: parseInt(_.url.hash('user_id') || '0', 10),
+                    language: ox.language
+                });
 
                 // set store cookie?
                 return (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {

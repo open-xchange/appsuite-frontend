@@ -27,6 +27,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     function IndexeddbStorage(id) {
+
         var fluent = {},
             queue = { timer: null, list: [] },
             myDB;
@@ -40,16 +41,14 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 myDB = e.target.result;
                 myDB.createObjectStore("cache", {keyPath: "key"});
             };
-            OP(opened).done(dbOpened.resolve).fail(dbOpened.reject);
+            OP(opened).then(dbOpened.resolve, dbOpened.reject);
         });
 
         function operation(fn, readwrite) {
-            var def = $.Deferred();
-            dbOpened.done(function (db) {
-                var tx = readwrite ? db.transaction(["cache"], "readwrite") : db.transaction(["cache"]);
-                fn(tx.objectStore("cache")).done(def.resolve).fail(def.reject);
+            return dbOpened.then(function (db) {
+                var tx = db.transaction(['cache'], readwrite ? 'readwrite' : 'readonly');
+                return fn(tx.objectStore('cache'));
             });
-            return def;
         }
 
         function read(fn) {
@@ -61,14 +60,16 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         }
 
         _.extend(this, {
+
             clear: function () {
                 fluent = {};
-                return readwrite(function (cache) {
-                    return OP(cache.clear());
+                return readwrite(function (tx) {
+                    return OP(tx.clear(), 'clear');
                 });
             },
+
             get: function (key) {
-                key = "" + key;
+                key = String(key);
                 if (_.isUndefined(key) || _.isNull(key)) {
                     return $.Deferred().resolve(null);
                 }
@@ -102,8 +103,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return def;
                 });
             },
+
             set: function (key, data, options) {
-                key = '' + key;
+                key = String(key);
                 try {
                     data = JSON.stringify(data);
                     fluent[key] = data;
@@ -117,8 +119,9 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 // go back to work
                 return $.when();
             },
+
             remove: function (key) {
-                key = "" + key;
+                key = String(key);
                 if (fluent[key]) {
                     delete fluent[key];
                 }
@@ -126,6 +129,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return OP(cache['delete'](key));
                 });
             },
+
             keys: function () {
                 return read(function (cache) {
                     var def = $.Deferred(),
@@ -142,6 +146,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     return def;
                 });
             },
+
             close: function () {
                 if (myDB) {
                     myDB.close();
@@ -175,21 +180,26 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     };
 
     // Adapter for IndexedDB operations to the familiar deferreds
-    function OP(request) {
+    function OP(request, type) {
         var def = $.Deferred();
-        request.onerror = function (event) {
-            def.reject(event);
-        };
-        request.onblocked = function (event) {
-            def.reject(event);
-        };
-        request.onsuccess = function (event) {
-            def.resolve(event.target.result);
-        };
+        request.onerror = function (e) { def.reject(e); };
+        request.onblocked = function (e) { def.reject(e); };
+        // stupid stupid workaround for stupid stupid runtime bug / or API is hard to understand
+        // clear seems to return far too early; maybe browser bug.
+        // Occurred during folder tree debugging. test code:
+        // api = require('io.ox/core/api/folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
+        if (type === 'clear' && request.transaction) {
+            request.transaction.oncomplete = function (e) {
+                def.resolve();
+            };
+        } else {
+            request.onsuccess = function (e) { def.resolve(e.target.result); };
+        }
         return def;
     }
 
     function ITER(request) {
+
         var callbacks = {
             step: [],
             end: [],

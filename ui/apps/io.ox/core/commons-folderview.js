@@ -138,8 +138,8 @@ define('io.ox/core/commons-folderview',
 
         function createPublicFolder(e) {
             e.preventDefault();
-            //public folder has the magic id 2
-            e.data.app.folderView.add("2", {module: e.data.module});
+            // public folder has the magic id 2
+            e.data.app.folderView.add('2', { module: e.data.module });
         }
 
         ext.point(POINT + '/sidepanel/toolbar/add').extend({
@@ -625,17 +625,15 @@ define('io.ox/core/commons-folderview',
 
                     api.on('delete:prepare', function (e, id, folder_id) {
                         tree.select(folder_id);
-                        tree.busy();
+                        tree.removeNode(id);
                     });
 
                     api.on('delete', function (e, id) {
                         app.trigger('folder:delete', id);
-                        tree.removeNode(id);
-                        tree.idle();
                     });
 
-                    api.on('update:prepare', function () {
-                        tree.busy();
+                    api.on('refresh', function () {
+                        tree.repaint();
                     });
 
                     api.on('update', function (e, id, newId, data) {
@@ -651,13 +649,12 @@ define('io.ox/core/commons-folderview',
                                 tree.select(config.get('folder.' + options.type) + '');
                             }
                             tree.repaint();
-                            tree.idle();
                         }
                     });
 
                     api.on('delete:fail update:fail create:fail', function (e, error) {
-                        tree.idle();
                         notifications.yell(error);
+                        tree.repaint();
                     });
 
                     api.on('update:unread', function (e, id, data) {
