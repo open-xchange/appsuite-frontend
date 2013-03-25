@@ -1,6 +1,7 @@
 Name:           open-xchange-appsuite
 Version:        7.2.0
-Release:        1
+%define         ox_release 0
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
@@ -83,7 +84,7 @@ Online help for OX App Suite (en_US)
 %install
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{release}
+    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 find "%{buildroot}$APPSUITE" -type d \
@@ -106,7 +107,7 @@ sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{release}
+    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
 %files

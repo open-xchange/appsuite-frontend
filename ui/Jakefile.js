@@ -680,7 +680,7 @@ task("dist", [distDest], function () {
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
             .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
-            .replace(/^(Release:\s*)\S+/gm, '$01' + rev)));
+            .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
         file = path.join(dest, 'debian/control');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
 
