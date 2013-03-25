@@ -88,8 +88,16 @@ define('io.ox/office/framework/app/basecontroller',
             items = {
 
                 'app/quit': {
-                    // quit in a timeout (otherwise this controller becomes invalid while still running)
-                    set: function () { _.defer(function () { app.quit(); }); }
+                    set: function () {
+                        var def = $.Deferred();
+                        // quit in a timeout (otherwise this controller becomes invalid while still running)
+                        _.defer(function () {
+                            // failed quit means that application continues to run
+                            app.quit().fail(function () { def.resolve(); });
+                        });
+                        return def;
+                    },
+                    focus: 'wait' // application may resume
                 }
             },
 

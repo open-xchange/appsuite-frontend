@@ -1292,23 +1292,25 @@ define('io.ox/office/framework/app/baseapplication',
             callHandlers(beforeQuitHandlers)
             .done(function () {
 
-                // cancel all running timeouts
-                _(delayTimeouts).each(function (timeout) {
-                    window.clearTimeout(timeout);
-                });
-
                 // execute quit handlers, simply defer without caring about the result
                 callHandlers(quitHandlers)
                 .always(function () {
 
+                    // cancel all running timeouts
+                    _(delayTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+                    // prevent to start new timeouts
+                    delayTimeouts = null;
+
                     // OX application does not trigger 'quit' events
                     self.trigger('docs:quit');
 
-                    // destroy class members
+                    // destroy MVC instances
                     controller.destroy();
                     view.destroy();
                     model.destroy();
-                    model = view = controller = delayTimeouts = null;
+                    model = view = controller = null;
 
                     // always resolve (really close the application), regardless
                     // of the result of the quit handlers

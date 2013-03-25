@@ -394,7 +394,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.showPane = function (id) {
-            return this.togglePane(id, false);
+            return this.togglePane(id, true);
         };
 
         /**
@@ -407,7 +407,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.hidePane = function (id) {
-            return this.togglePane(id, true);
+            return this.togglePane(id, false);
         };
 
         /**
@@ -534,10 +534,11 @@ define('io.ox/office/framework/view/baseview',
          *  @param {String} [options.buttonLabel]
          *      If specified, a push button will be shown with the passed
          *      caption label.
-         *  @param {String} [options.buttonKey]
+         *  @param {Function|String} [options.buttonAction]
          *      Must be specified together with the 'options.buttonLabel'
-         *      option. When the button has been pressed, the controller item
-         *      with the passed key will be executed.
+         *      option. When the button has been pressed, the passed function
+         *      will be executed. If set to a string, the controller item with
+         *      the passed key will be executed instead.
          *
          * @returns {BaseView}
          *  A reference to this instance.
@@ -546,7 +547,9 @@ define('io.ox/office/framework/view/baseview',
 
             var // the label of the push button to be shown in the alert banner
                 buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
-                // the controller key of the push button
+                // the callback action for the push button
+                buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
+                // the controller key for the push button
                 buttonKey = Utils.getStringOption(options, 'buttonKey'),
                 // create a new alert node
                 alert = $('<div>')
@@ -579,14 +582,19 @@ define('io.ox/office/framework/view/baseview',
             // return focus to application pane when alert has been clicked (also if not closeable)
             alert.on('click', function () { self.grabFocus(); });
 
+            // create a function that executes the specified controller item
+            if (_.isString(buttonKey)) {
+                buttonAction = function () { app.getController().change(buttonKey); };
+            }
+
             // insert the push button into the alert banner
-            if (_.isString(buttonLabel) && _.isString(buttonKey)) {
+            if (_.isString(buttonLabel) && _.isFunction(buttonAction)) {
                 alert.prepend(
                     $.button({ label: buttonLabel })
                         .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
                         .on('click', function () {
                             closeAlert();
-                            app.getController().change(buttonKey);
+                            buttonAction.call(self);
                         })
                 );
             }
