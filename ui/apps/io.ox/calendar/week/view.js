@@ -53,7 +53,7 @@ define('io.ox/calendar/week/view',
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
-        restoreCache:   {},     // object, which contains data for save and restore functions
+        restoreCache:   null,     // object, which contains data for save and restore functions
         extPoint:       null,
 
         // define view events
@@ -1509,7 +1509,7 @@ define('io.ox/calendar/week/view',
          */
         save: function () {
             // save scrollposition
-            this.restoreCache.scrollPosition = this.pane.scrollTop();
+            this.restoreCache = this.pane.scrollTop();
         },
 
         /**
@@ -1517,8 +1517,8 @@ define('io.ox/calendar/week/view',
          */
         restore: function () {
             // restore scrollposition
-            if (this.restoreCache.scrollPosition) {
-                this.pane.scrollTop(this.restoreCache.scrollPosition);
+            if (this.restoreCache) {
+                this.pane.scrollTop(this.restoreCache);
             }
         },
 

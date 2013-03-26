@@ -186,6 +186,18 @@ define('io.ox/calendar/week/perspective',
             }
         },
 
+        restore: function () {
+            if (this.view.restore) {
+                this.view.restore();
+            }
+        },
+
+        save: function () {
+            if (this.view.save) {
+                this.view.save();
+            }
+        },
+
         /**
          * refresh appointment data
          */
@@ -276,6 +288,8 @@ define('io.ox/calendar/week/perspective',
             this.app.on('folder:change', refresh)
                 .on('folder:delete', reload)
                 .getWindow()
+                .on('beforehide', $.proxy(this.save, this))
+                .on('show', $.proxy(this.restore, this))
                 .on('show', refresh)
                 .on('change:perspective', function () {
                     self.view.unbindKeys();
