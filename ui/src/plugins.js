@@ -82,6 +82,15 @@
         }
     });
 
+    // bootstrap-css
+    define("bootstrap-css", {
+        load: function (name, parentRequire, load, config) {
+            require(["text!" + name]).done(function (css) {
+                load(insert(config.baseUrl + name, css, "#bootstrap"));
+            });
+        }
+    });
+
     var currentTheme = "";
     var themeLess = {}, lessFiles = [themeLess];
     var themeCSS;

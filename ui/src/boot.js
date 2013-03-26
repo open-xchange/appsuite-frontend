@@ -27,7 +27,7 @@ $(window).load(function () {
 
     if (!ox.signin) {
         // interim solution for speed
-        require(['css!io.ox/core/bootstrap/css/bootstrap.min.css']);
+        require(['bootstrap-css!io.ox/core/bootstrap/css/bootstrap.min.css']);
         // use the following line again - once we have pre-compiled bootstrap back
         // see Bug 24814 - Significant performance decrease compared to 7.0.0
         // require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
