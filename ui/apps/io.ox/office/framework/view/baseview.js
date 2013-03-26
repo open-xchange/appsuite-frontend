@@ -26,7 +26,7 @@ define('io.ox/office/framework/view/baseview',
         OVERLAY_CLASS = 'overlay',
 
         // the global root element used to store DOM elements temporarily
-        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).prependTo('body');
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
 
     // class BaseView =========================================================
 
@@ -65,6 +65,9 @@ define('io.ox/office/framework/view/baseview',
         var // self reference
             self = this,
 
+            // CSS classes to be added at the window root node
+            windowNodeClasses = 'io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main',
+
             // moves the browser focus into a node of the application pane
             grabFocusHandler = Utils.getFunctionOption(options, 'grabFocusHandler'),
 
@@ -90,7 +93,7 @@ define('io.ox/office/framework/view/baseview',
             currentAlert = null,
 
             // the temporary container for all nodes while application is hidden
-            tempNode = $('<div>').appendTo(tempStorageNode);
+            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode);
 
         // base constructor ---------------------------------------------------
 
@@ -278,6 +281,24 @@ define('io.ox/office/framework/view/baseview',
         this.insertContentNode = function (contentNode) {
             appContainerNode.append(contentNode);
             return this.refreshPaneLayout();
+        };
+
+        /**
+         * Inserts new DOM nodes into the private storage container. The nodes
+         * will not be visible but will be part of the living DOM, thus it will
+         * be possible to access and modify the geometry of the nodes.
+         *
+         * @param {HTMLElement|jQuery}
+         *  The DOM node(s) to be inserted into the private storage container.
+         *  If this object is a jQuery collection, inserts all contained DOM
+         *  nodes into the container.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.insertTemporaryNode = function (node) {
+            tempStorageNode.append(node);
+            return this;
         };
 
         /**
@@ -709,7 +730,7 @@ define('io.ox/office/framework/view/baseview',
             .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
 
         // add the main application pane to the application window
-        app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {

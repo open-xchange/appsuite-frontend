@@ -2137,8 +2137,8 @@ define('io.ox/office/tk/utils',
      * @param {Function} [equality=_.isEqual]
      *  A comparison function that returns whether the specified value should
      *  be considered being equal to the values of the buttons in the passed
-     *  button collection. If omitted, uses _.isEqual() which compares arrays and
-     *  objects deeply.
+     *  button collection. If omitted, uses _.isEqual() which compares arrays
+     *  and objects deeply.
      *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
