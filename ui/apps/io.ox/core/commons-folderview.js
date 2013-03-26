@@ -22,6 +22,13 @@ define('io.ox/core/commons-folderview',
 
     function initExtensions(POINT, app) {
 
+        // mobile quirks
+        if (_.device('small')) {
+            //nobody needs options and create in folder tree on mobile
+            ext.point(POINT + '/sidepanel/toolbar').disable('add');
+            ext.point(POINT + '/sidepanel/toolbar').disable('options');
+        }
+
         // default options
         ext.point(POINT + '/options').extend({
             id: 'defaults',

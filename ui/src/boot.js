@@ -147,6 +147,10 @@ $(window).load(function () {
         $('html').addClass('no-ellipsis');
     }
 
+    if (_.device('iOS')) {
+        $('html').addClass('ios');
+    }
+
     // be busy
     $('#background_loader').busy();
 

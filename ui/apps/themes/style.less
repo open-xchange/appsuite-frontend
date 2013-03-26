@@ -1772,7 +1772,26 @@ ul.dropdown-menu li a.disabled { color:#999; }
     .window-head { padding-left: 40px; } // iOS landscape back button fix
 }
 
-@media all and (max-width: 480px) {
+@media all and (max-device-width: 480px) {
+
+    .ios .io-ox-foldertree {
+        .overflow();
+    }
+    .foldertree-sidepanel {
+
+        .foldertree-container {
+
+
+            &.io-ox-foldertree {
+
+                .folder.selectable:hover {
+                    background-color: inherit;
+                }
+            }
+        }
+    }
+
+
 
     #io-ox-notifications-popups {
         top: 10px;
@@ -1789,9 +1808,15 @@ ul.dropdown-menu li a.disabled { color:#999; }
         font-size: 15pt;
     }
     .foldertree-sidepanel.side-shift {
+        width: @small-folderTreeShift;
         .box-shadow(0px 0px 10px 3px #333);
     }
-     .core-boot-dialog {
+    .io-ox-foldertree {
+        .folder-arrow, .folder-arrow i {
+            width: 50px;
+        }
+    }
+    .core-boot-dialog {
         .btn {
             width: 100%;
         }

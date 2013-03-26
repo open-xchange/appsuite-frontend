@@ -33,7 +33,9 @@ define('io.ox/core/tk/folderviews',
 
         tmplFolder = $('<div class="folder selectable">').append('<div class="folder-row">'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
-
+        MOBILEFOLDERPADDING = 15,
+        DESKTOPFOLDERPADDING = 30,
+        SUBFOLDERPADDING = _.device('small') ? MOBILEFOLDERPADDING : DESKTOPFOLDERPADDING,
         refreshHash = {},
 
         TRUE = function () { return true; };
@@ -324,7 +326,7 @@ define('io.ox/core/tk/folderviews',
             nodes.folder = tmplFolder.clone().on('dblclick mousedown', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
-                nodes.folder.css('paddingLeft', (0 + level * 30) + 'px');
+                nodes.folder.css('paddingLeft', (0 + level * SUBFOLDERPADDING) + 'px');
             }
 
             nodes.sub = tmplSub.clone();
