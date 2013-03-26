@@ -149,7 +149,7 @@ define('io.ox/calendar/settings/pane',
             );
         },
         save: function () {
-            calendarViewSettings.model.save();
+            return calendarViewSettings.model.save();
         }
     });
 });

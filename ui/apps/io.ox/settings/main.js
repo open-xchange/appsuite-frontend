@@ -102,16 +102,20 @@ define('io.ox/settings/main',
                 }
                 break;
             case 'hide':
+            case 'logout':
                 if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                    var settingsID = currentSelection.id + '/settings';
-                    ext.point(settingsID + '/detail').invoke('save');
+                    var settingsID = currentSelection.id + '/settings',
+                        defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
                     changeStatus = false;
+                    return $.when.apply($, defs);
                 }
                 break;
             default:
                 var settingsID = currentSelection.id + '/settings';
                 ext.point(settingsID + '/detail').invoke('save');
             }
+
+            return $.when();
         };
 
         win.nodes.controls.append(
@@ -248,6 +252,13 @@ define('io.ox/settings/main',
         });
         win.on('hide', function () {
             saveSettings('hide');
+        });
+
+        // listen for logout event
+        ext.point('io.ox/core/logout').extend({
+            logout: function () {
+                return saveSettings('logout');
+            }
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);

@@ -32,29 +32,30 @@ define("io.ox/core/main",
         DURATION = 250;
 
     var logout = function (opt) {
+
         opt = _.extend({
             autologout: false
         }, opt || {});
+
         $("#background_loader").fadeIn(DURATION, function () {
-            $("#io-ox-core").hide();
 
-            var deferreds = [];
-            ext.point("io.ox/core/logout").each(function (extension) {
-                if (extension.logout) {
-                    var def = extension.logout();
-                    if (def) {
-                        deferreds.push(def);
-                    }
+            $('#io-ox-core').hide();
+
+            var deferreds = ext.point('io.ox/core/logout').invoke('logout').compact().value();
+
+            $.when.apply($, deferreds).then(
+                function logout() {
+                    session.logout().always(function () {
+                        // get logout locations
+                        var location = settings.get('customLocations/logout');
+                        _.url.redirect(location || ('signin' + (opt.autologout ? '#autologout=true' : '')));
+                    });
+                },
+                function cancel() {
+                    $('#io-ox-core').show();
+                    $("#background_loader").fadeOut(DURATION);
                 }
-            });
-
-            $.when.apply($, deferreds).always(function () {
-                session.logout().always(function () {
-                    // get logout locations
-                    var location = settings.get('customLocations/logout');
-                    _.url.redirect(location || ('signin' + (opt.autologout ? '#autologout=true' : '')));
-                });
-            });
+            );
         });
     };
 

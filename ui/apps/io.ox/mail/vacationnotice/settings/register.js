@@ -77,16 +77,15 @@ define('io.ox/mail/vacationnotice/settings/register',
         },
 
         save: function () {
-            filterModel.save().done(function () {
-                touchAttributes(filterModel);
-            })
-            .done(function () {
-                notifications.yell('success', gt('Your vacation notice has been saved'));
-            })
-            .fail(function () {
-                notifications.yell('error', gt('Could not save vacation notice'));
-            });
-
+            return filterModel.save().then(
+                function success() {
+                    touchAttributes(filterModel);
+                    notifications.yell('success', gt('Your vacation notice has been saved'));
+                },
+                function fail() {
+                    notifications.yell('error', gt('Could not save vacation notice'));
+                }
+            );
         }
     });
 });
