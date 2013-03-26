@@ -677,7 +677,10 @@ task("dist", [distDest], function () {
     }
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
-        return replaceL10n(spec, 'help', fs.readdirSync('help'));
+        if (path.existsSync('help')) {
+            spec = replace(spec, 'help', fs.readdirSync('help'));
+        }
+        return spec;
     }
     function tar(code) {
         if (code) return fail('cp exited with code ' + code);
