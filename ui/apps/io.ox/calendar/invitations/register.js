@@ -40,12 +40,12 @@ define('io.ox/calendar/invitations/register',
 
     var buttonClasses = {
         'accept': 'btn-success',
-        'accept_and_replace': 'btn-primary',
+        'accept_and_replace': 'btn-inverse',
         'accept_and_ignore_conflicts': 'btn-success',
-        'accept_party_crasher': 'btn-primary',
-        'create': 'pull-left btn-primary',
-        'update': 'pull-left btn-primary',
-        'delete': 'pull-left btn-primary',
+        'accept_party_crasher': 'btn-inverse',
+        'create': 'pull-left btn-inverse',
+        'update': 'pull-left btn-inverse',
+        'delete': 'pull-left btn-inverse',
         'declinecounter': 'pull-left btn-danger',
         'tentative': 'btn-warning',
         'decline': 'btn-danger',
@@ -318,19 +318,23 @@ define('io.ox/calendar/invitations/register',
         var text = gt.format(gt.ngettext('You already have %1$d appointment in this timeframe.',
             'You already have %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
-        $node.append($('<div class="alert alert-error">').append(text).append($('<a href="#">').text(gt(" Show"))).on("click", function (e) {
-            e.preventDefault();
-
-            require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
-                $node.find(".alert").remove();
-                $node.append(
-                    $('<div>').css({marginTop: "2em", marginBottom: "2em"}).append(
-                        conflictList.drawList(change.conflicts)
-                    )
-                );
-            });
-
-        }));
+        $node.append(
+            $('<div class="alert alert-info">').append(
+                $.txt(text),
+                $.txt(' '),
+                $('<a href="#">').text(gt('Show conflicts')).on('click', function (e) {
+                    e.preventDefault();
+                    require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
+                        $node.find(".alert").remove();
+                        $node.append(
+                            $('<div>').css({marginTop: "2em", marginBottom: "2em"}).append(
+                                conflictList.drawList(change.conflicts)
+                            )
+                        );
+                    });
+                })
+            )
+        );
 
         return $node;
     }

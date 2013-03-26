@@ -11,7 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/model", "io.ox/core/api/account", 'io.ox/core/api/folder'], function (ext, keychainModel, AccountApi, folderAPI) {
+define("io.ox/mail/accounts/model",
+    ["io.ox/core/extensions",
+     "io.ox/keychain/model",
+     "io.ox/core/api/account",
+     'io.ox/core/api/folder'], function (ext, keychainModel, AccountApi, folderAPI) {
+
     "use strict";
 
     var AccountModel = keychainModel.Account.extend({
@@ -72,19 +77,18 @@ define("io.ox/mail/accounts/model", ["io.ox/core/extensions", "io.ox/keychain/mo
 
         },
 
-        validationCheck: function (defered, data) {
-            data.name = data.primary_address;
-            data.personal = data.primary_address; // needs to be calculated
-            data.unified_inbox_enabled = false;
-            data.mail_secure = true;
-            data.transport_secure = true;
-            data.transport_credentials = false;
+        validationCheck: function (data) {
 
-            AccountApi.validate(data).done(function (response) {
-                return defered.resolve(response);
-            }).fail(function (response) {
-                return defered.resolve(response);
-            });
+            data = _.extend({
+                unified_inbox_enabled: false,
+                mail_secure: true,
+                transport_secure: true,
+                transport_credentials: false
+            }, data);
+
+            data.name = data.personal = data.primary_address;
+
+            return AccountApi.validate(data);
         },
 
         save: function (obj, defered) {

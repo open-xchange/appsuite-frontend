@@ -113,33 +113,35 @@ define('io.ox/mail/accounts/settings',
             var deferedValidation = $.Deferred(),
                 deferedSave = $.Deferred();
 
-            myModel.validationCheck(deferedValidation, data);
-            deferedValidation.done(function (response) {
-                if (response === false) {
-                    var message = gt('There was no suitable server found for this mail/password combination');
+            myModel.validationCheck(data).then(
+                function success(response) {
+                    if (response === false) {
+                        var message = gt('There was no suitable server found for this mail/password combination');
+                        drawAlert(alertPlaceholder, message);
+                        autoconfigDialogbox.idle();
+                    } else {
+                        myModel.save(data, deferedSave);
+                        deferedSave.done(function (response) {
+                            if (response.error_id) {
+                                autoconfigDialogbox.close();
+                                failDialog(response.error);
+                            } else {
+                                autoconfigDialogbox.close();
+                                if (collection) {
+                                    collection.add([response]);
+                                }
+                                successDialog();
+                                def.resolve(response);
+                            }
+                        });
+                    }
+                },
+                function fail() {
+                    var message = gt('Failed to connect.');
                     drawAlert(alertPlaceholder, message);
                     autoconfigDialogbox.idle();
-                } else {
-                    myModel.save(data, deferedSave);
-                    deferedSave.done(function (response) {
-                        if (response.error_id) {
-                            autoconfigDialogbox.close();
-                            failDialog(response.error);
-                        } else {
-                            autoconfigDialogbox.close();
-                            if (collection) {
-                                collection.add([response]);
-                            }
-                            successDialog();
-                            def.resolve(response);
-                        }
-                    });
                 }
-            }).fail(function () {
-                var message = gt('Failed to connect.');
-                drawAlert(alertPlaceholder, message);
-                autoconfigDialogbox.idle();
-            });
+            );
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, alertPlaceholder, def) {
@@ -210,8 +212,8 @@ define('io.ox/mail/accounts/settings',
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('add', gt('Add'))
+                .addButton('cancel', gt('Cancel'))
                 .show(function () {
                     inputFieldMail.focus();
                 });

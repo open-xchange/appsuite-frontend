@@ -385,7 +385,9 @@ define('io.ox/core/api/account',
             appendColumns: false,
             params: { action: 'validate' },
             data: data
-        });
+        })
+        // always successful but either true or false
+        .then(null, function () { $.Deferred().resolve(false); });
     };
 
     /**
