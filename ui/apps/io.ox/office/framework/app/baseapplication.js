@@ -148,10 +148,10 @@ define('io.ox/office/framework/app/baseapplication',
      * - 'docs:import:error': Directly after the event 'docs:import:after',
      *      if an error occurred while importing the document described in the
      *      file descriptor.
-     * - 'docs:quit': Before the application will be really closed, after all
-     *      registered before-quit handlers have been called, and none was
-     *      rejected, after all registered quit handlers have been called, and
-     *      before the application will finally be destroyed.
+     * - 'docs:destroy:before': Before the model/view/controller instances of
+     *      the application will be destroyed, after all registered before-quit
+     *      handlers have been called, and none was rejected, after all
+     *      registered quit handlers have been called.
      * - 'docs:resume': After all registered before-quit handlers have been
      *      called, and at least one was rejected. The application continues to
      *      run normally.
@@ -758,40 +758,11 @@ define('io.ox/office/framework/app/baseapplication',
             // bind event handler to events
             $(target).on(events, handler);
 
-            // unbind handler when application is closed
-            this.on('docs:quit', function () {
+            // unbind event handler when application is closed
+            this.on('quit', function () {
                 $(target).off(events, handler);
             });
 
-            return this;
-        };
-
-        /**
-         * Registers a handler at the browser window that listens to resize
-         * events. The event handler will be activated when the application
-         * window is visible; and deactivated, when the application window is
-         * hidden.
-         * @param {String} event
-         *  The document event that the handler should be registered for.
-         *
-         * @param {Function} documentHandler
-         *  The document handler function bound to  events of the browser
-         *  document. Will be triggered once when the application window becomes
-         *  visible.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.registerDocumentHandler = function (event, documentHandler) {
-            this.getWindow().on({
-                show: function () {
-                    $(document).on(event, documentHandler);
-                    documentHandler();
-                },
-                hide: function () {
-                    $(document).off(event, documentHandler);
-                }
-            });
             return this;
         };
 
@@ -1303,15 +1274,6 @@ define('io.ox/office/framework/app/baseapplication',
                     // prevent to start new timeouts
                     delayTimeouts = null;
 
-                    // OX application does not trigger 'quit' events
-                    self.trigger('docs:quit');
-
-                    // destroy MVC instances
-                    controller.destroy();
-                    view.destroy();
-                    model.destroy();
-                    model = view = controller = null;
-
                     // always resolve (really close the application), regardless
                     // of the result of the quit handlers
                     currentQuitDef.resolve();
@@ -1328,6 +1290,16 @@ define('io.ox/office/framework/app/baseapplication',
         // prevent usage of these methods in derived classes
         delete this.setLauncher;
         delete this.setQuit;
+
+        // destroy MVC instances after core 'quit' event (after window has been hidden)
+        this.on('quit', function () {
+            // trigger listeners before destroying the MVC instances
+            self.trigger('docs:destroy:before');
+            controller.destroy();
+            view.destroy();
+            model.destroy();
+            model = view = controller = null;
+        });
 
         // set application title to current file name
         this.updateTitle();

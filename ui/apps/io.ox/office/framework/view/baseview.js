@@ -23,7 +23,10 @@ define('io.ox/office/framework/view/baseview',
     'use strict';
 
     var // CSS marker class for panes in overlay mode
-        OVERLAY_CLASS = 'overlay';
+        OVERLAY_CLASS = 'overlay',
+
+        // the global root element used to store DOM elements temporarily
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).prependTo('body');
 
     // class BaseView =========================================================
 
@@ -84,7 +87,10 @@ define('io.ox/office/framework/view/baseview',
             shadowNodes = {},
 
             // alert banner currently shown
-            currentAlert = null;
+            currentAlert = null,
+
+            // the temporary container for all nodes while application is hidden
+            tempNode = $('<div>').appendTo(tempStorageNode);
 
         // base constructor ---------------------------------------------------
 
@@ -185,8 +191,22 @@ define('io.ox/office/framework/view/baseview',
          * Updates the view after the application becomes active/visible.
          */
         function windowShowHandler() {
-            app.getController().update();
-            self.grabFocus();
+            // move all application nodes from temporary storage into view
+            app.getWindowNode().append(tempNode.children());
+            // do not update GUI and grab focus while document is still being imported
+            if (app.isImportFinished()) {
+                app.getController().update();
+                self.grabFocus();
+            }
+        }
+
+        /**
+         * Updates the view after the application becomes inactive/hidden.
+         */
+        function windowHideHandler() {
+            // move all application nodes from view to temporary storage
+            tempNode.append(app.getWindowNode().children());
+            refreshPaneLayout();
         }
 
         // methods ------------------------------------------------------------
@@ -228,7 +248,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.detachAppPane = function () {
-            this.getAppPaneNode().detach();
+            appContainerNode.detach();
             return this;
         };
 
@@ -239,7 +259,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            app.getWindowNode().prepend(this.getAppPaneNode());
+            this.getAppPaneNode().append(appContainerNode);
             return this;
         };
 
@@ -699,11 +719,15 @@ define('io.ox/office/framework/view/baseview',
         // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
 
-        // after import, update all view components every time the window will be shown
-        app.on('docs:import:after', function () {
-            app.getWindow().on('show', windowShowHandler);
-            windowShowHandler();
-        });
+        // keep application in DOM while application is hidden, applications
+        // may want to access element geometry in background tasks
+        app.getWindow().on({ show: windowShowHandler, hide: windowHideHandler });
+
+        // after import, update all view components
+        app.on('docs:import:after', windowShowHandler);
+
+        // remove hidden container node when application has been closed
+        app.on('quit', function () { tempNode.remove(); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {

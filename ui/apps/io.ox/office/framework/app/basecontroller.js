@@ -623,7 +623,6 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         this.destroy = function () {
-            app.getWindowNode().off('keydown keypress', keyHandler);
             this.events.destroy();
             items = null;
         };
