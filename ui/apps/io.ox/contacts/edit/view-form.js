@@ -291,7 +291,7 @@ define('io.ox/contacts/edit/view-form', [
             classes: 'form-horizontal',
             customizeNode: function ($node) {
                 $node.addClass("controls");
-                $node.css({marginBottom: '20px'});
+                $node.css({marginBottom: '20px', clear: 'both'});
             }
         }));
 
