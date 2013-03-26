@@ -154,7 +154,7 @@ define('io.ox/mail/actions',
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea class="mail-source-view input-xlarge" rows="15" readonly="readonly">')
+                        textarea = $('<textarea class="mail-source-view" rows="15" readonly="readonly">')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
                                 e.stopPropagation();
