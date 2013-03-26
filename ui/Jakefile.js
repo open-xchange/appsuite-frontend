@@ -678,7 +678,7 @@ task("dist", [distDest], function () {
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
         if (path.existsSync('help')) {
-            spec = replace(spec, 'help', fs.readdirSync('help'));
+            spec = replaceL10n(spec, 'help', fs.readdirSync('help'));
         }
         return spec;
     }
