@@ -880,6 +880,19 @@ define("io.ox/mail/api",
             deferred = handleSendTheGoodOldWay(data, form);
         }
 
+        deferred.then(function (result) {
+            var base = _(result.data.split(api.separator)),
+                id = base.last(),
+                folder = base.without(id).join(api.separator);
+            api.get({ folder_id: folder, id: id }).then(function (mail) {
+                $.when(api.caches.list.add(data), api.caches.get.add(data))
+                .done(function () {
+                    api.trigger('refresh.list');
+                });
+            });
+            return result;
+        });
+
         return deferred;
     };
 
