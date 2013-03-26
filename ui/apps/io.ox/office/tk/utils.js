@@ -2134,14 +2134,22 @@ define('io.ox/office/tk/utils',
      *  button with the specified value has been found, deactivates all buttons
      *  and does not activate a button.
      *
+     * @param {Function} [equality=_.equals]
+     *  A comparison function that returns whether the specified value should
+     *  be considered being equal to the values of the buttons in the passed
+     *  button collection. If omitted, uses _.equal() which compares arrays and
+     *  objects deeply.
+     *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
      */
-    Utils.selectOptionButton = function (buttons, value) {
+    Utils.selectOptionButton = function (buttons, value, equality) {
 
-        var // find the button to be activated
+        var // the predicate function to use for comparison
+            equals = _.isFunction(equality) ? equality : _.equals,
+            // find the button to be activated
             button = (_.isUndefined(value) || _.isNull(value)) ? $() : buttons.filter(function () {
-                return _.isEqual(value, Utils.getControlValue($(this)));
+                return equals(value, Utils.getControlValue($(this)));
             });
 
         // remove highlighting from all buttons, highlight active button

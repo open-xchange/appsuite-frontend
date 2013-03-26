@@ -87,6 +87,11 @@ define('io.ox/office/tk/control/radiolist',
      *          The button element of the activated list item (may be empty, if
      *          no list item is active).
      *      Will be called in the context of this radio group instance.
+     *  @param {Function} [options.equality=_.equals]
+     *      A comparison function that returns whether an arbitrary value
+     *      should be considered being equal to the value of a list item in the
+     *      drop-down menu. If omitted, uses _.equal() which compares arrays
+     *      and objects deeply.
      */
     function RadioList(options) {
 
@@ -110,6 +115,9 @@ define('io.ox/office/tk/control/radiolist',
 
             // custom update handler for the caption of the menu button
             updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler'),
+
+            // comparator for list item values
+            equality = Utils.getFunctionOption(options, 'equality'),
 
             // whether split button is enabled
             hasSplitButton = !_.isUndefined(splitValue) && !_.isNull(splitValue),
@@ -155,7 +163,7 @@ define('io.ox/office/tk/control/radiolist',
             var // the target caption button
                 captionButton = self.getCaptionButton(),
                 // activate an option button
-                optionButton = Utils.selectOptionButton(self.getItems(), value),
+                optionButton = Utils.selectOptionButton(self.getItems(), value, equality),
                 // the options used to create the list item button
                 buttonOptions = optionButton.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
