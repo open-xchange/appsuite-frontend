@@ -38,10 +38,10 @@ define('io.ox/office/tk/control/radiogroup',
      *      value specified in this option, and the action handler will return
      *      this value instead of the value of the button that has been
      *      switched off.
-     *  @param {Function} [options.equality=_.equals]
+     *  @param {Function} [options.equality=_.isEqual]
      *      A comparison function that returns whether an arbitrary value
      *      should be considered being equal to the value of the buttons in
-     *      this group. If omitted, uses _.equal() which compares arrays and
+     *      this group. If omitted, uses _.isEqual() which compares arrays and
      *      objects deeply.
      */
     function RadioGroup(options) {
