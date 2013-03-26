@@ -123,7 +123,7 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().busy();
                             });
                         }
-                        self.model.on('create update', _.bind(self.onSave, self));
+
                         self.model.on('backendError', function (response) {
                             try {
                                 self.getWindow().idle();
@@ -216,13 +216,6 @@ define('io.ox/calendar/edit/main',
                     var baton = { model: self.model, app: self, callbacks: {} };
                     baton.callbacks.extendDescription = app.extendDescription;
                     app.view = self.view = new MainView(baton);
-
-                    self.model.on('create update', _.bind(self.onSave, self));
-                    self.view.on('save:success', function () {
-                        self.considerSaved = true;
-                        self.view.idle();
-                        self.quit();
-                    });
 
                     self.setTitle(gt('Create appointment'));
 

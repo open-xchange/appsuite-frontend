@@ -55,13 +55,13 @@ define('io.ox/calendar/edit/template',
     });
 
     // buttons
-    var mainButtons;
+    var saveButton, discardButton;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'buttons',
         draw: function (baton) {
             var save, discard;
-            this.append(save = $('<button class="btn btn-primary" data-action="save" >')
+            this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
@@ -69,17 +69,18 @@ define('io.ox/calendar/edit/template',
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
-                    baton.model.save();
+                    baton.model.save().done(function () {
+                        baton.app.onSave();
+                    });
                 })
             );
-            this.append(discard = $('<button class="btn" data-action="discard" >')
+            this.append(discardButton = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
                 .css({float: 'right'})
                 .on('click', function () {
                     baton.app.quit();
                 })
             );
-            mainButtons = save.add(discard);
         }
     });
 
@@ -95,7 +96,8 @@ define('io.ox/calendar/edit/template',
             var self = this,
                 hardConflict = false;
 
-            mainButtons.hide();
+            saveButton.hide();
+            discardButton.hide();
 
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
@@ -113,7 +115,7 @@ define('io.ox/calendar/edit/template',
                     .on('click', function (e) {
                         e.preventDefault();
                         self.model.set('ignore_conflicts', true);
-                        self.model.save();
+                        saveButton.click();
                     });
                 self.$el.empty().append(
                     conflictList,
@@ -126,12 +128,13 @@ define('io.ox/calendar/edit/template',
                                         .on('click', function (e) {
                                             e.preventDefault();
                                             self.$el.empty();
-                                            mainButtons.show();
+                                            saveButton.show();
+                                            discardButton.show();
                                         }),
                                     '&nbsp;',
                                     $acceptButton
-                                    )
-                            )
+                                )
+                        )
                     );
 
             });
