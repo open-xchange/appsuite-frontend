@@ -307,7 +307,13 @@ define('io.ox/mail/write/main',
                 accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
             return accountAPI.getPrimaryAddress(accountID).then(function (data) {
-                return {displayname: data[0], primaryaddress: data[1]};
+                var primary;
+                if (accountID === '0') {
+                    // primary address is not the default send address for the
+                    // internal mail account (with id 0) - This is odd
+                    primary = settings.get('defaultSendAddress');
+                }
+                return {displayname: data[0], primaryaddress: primary || data[1]};
             });
         };
 
