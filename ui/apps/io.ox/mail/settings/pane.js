@@ -74,7 +74,15 @@ define('io.ox/mail/settings/pane',
         },
         render: function () {
             var self = this;
-            api.getAllSenderAddresses().done(function (addresses) {
+            /* TODO: only the default account (id: 0) can have multiple aliases for now
+             * all other accounts can only have one address (the primary address)
+             * So the option is only for the default account, for now. This should
+             * be changed in the future. If more (e.g. external) addresses are shown
+             * here, server _will_ respond with an error, when these are selected.
+             *
+             * THIS COMMENT IS IMPORTANT, DON’T REMOVE
+             */
+            api.getSenderAddresses(0).done(function (addresses) {
                 self.$el.empty().append(
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,
