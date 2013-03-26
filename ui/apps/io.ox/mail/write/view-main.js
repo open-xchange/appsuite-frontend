@@ -598,6 +598,7 @@ define("io.ox/mail/write/view-main",
                         this.textarea = $('<textarea>')
                         .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
                         .addClass('text-editor')
+                        .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
                     )
                 )
             );

@@ -80,6 +80,10 @@
 .io-ox-mail-write textarea {
     -webkit-border-radius: 0;
     -webkit-appearance: none;
+
+    &.monospace {
+        font-family: monospace;
+    }
 }
 
 .touch .io-ox-mail-write textarea {
