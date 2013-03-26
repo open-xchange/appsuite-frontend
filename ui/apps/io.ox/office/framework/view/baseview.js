@@ -550,7 +550,7 @@ define('io.ox/office/framework/view/baseview',
                 // the callback action for the push button
                 buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
                 // the controller key for the push button
-                buttonKey = Utils.getStringOption(options, 'buttonKey'),
+                buttonKey = Utils.getStringOption(options, 'buttonAction'),
                 // create a new alert node
                 alert = $('<div>')
                     .addClass('alert alert-' + type)

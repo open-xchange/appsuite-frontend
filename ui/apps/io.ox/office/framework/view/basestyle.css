@@ -56,6 +56,11 @@
     .box-shadow(0 @size 2 * @size fade(black, 20%));
 }
 
+/* shadow for alert banners */
+.alert-shadow() {
+    .box-shadow(0 5px 15px -5px black);
+}
+
 /* restrict all definitions to office applications */
 .io-ox-office-main {
 
@@ -700,7 +705,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     position: absolute;
     z-index: 2000;
     padding: 8px 14px;
-    .box-shadow(0px 5px 15px -5px black); 
+    .alert-shadow();
 
     h4 { margin-bottom: 8px; }
     p { margin: 0; }
@@ -725,7 +730,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     }
 
     .header, .footer {
-
         > div {
             margin: 13px 0;
             padding: 0 10px;
@@ -743,11 +747,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 max-width: 500px;
                 margin: 0 auto;
                 padding: 0;
-                .drop-shadow();
+                .alert-shadow();
 
                 > div {
                     margin: 8px 13px;
-                
+
                     &.title {
                         font-weight: bold;
                     }
@@ -759,19 +763,4 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             }
         }
     }
-}
-
-/* ========================================================================= */
-/* alerts                                                                    */
-/* ========================================================================= */
-
-@media all and (max-width: 520px) {
-    
-.io-ox-office-main .alert {
-    left: 10px;
-    right: 10px;
-    width: auto;
-    margin: 0;
-}
-
 }
