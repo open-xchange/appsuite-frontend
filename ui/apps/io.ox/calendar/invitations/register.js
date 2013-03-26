@@ -146,59 +146,56 @@ define('io.ox/calendar/invitations/register',
             drawScaffold.call(baton.$.well = $well);
 
             if (accepted) {
-
-                baton.$.well.find('.itip-actions').remove();
-
-            } else {
-
-                baton.$.well.find('.itip-actions').addClass('block').append(
-
-                    _(priority).chain()
-                    .filter(function (action) {
-                        return _(baton.analysis.actions).contains(action);
-                    })
-                    .map(function (action) {
-                        return $('<button class="btn">')
-                            .attr('data-action', action)
-                            .addClass(buttonClasses[action])
-                            .text(i18n[action])
-                            .add($.txt('\u00A0'));
-                    })
-                    .value()
-                )
-                .on('click', 'button', function (e) {
-                    e.preventDefault();
-                    var action = $(this).attr('data-action');
-                    if (action === 'ignore') {
-                        //deleteMailIfNeeded(baton);
-                    }
-                    // be busy
-                    baton.$.well.empty().busy();
-                    http.PUT({
-                        module: 'calendar/itip',
-                        params: {
-                            action: action,
-                            dataSource: 'com.openexchange.mail.ical',
-                            descriptionFormat: 'html'
-                        },
-                        data: {
-                            "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                            "com.openexchange.mail.conversion.mailid": baton.data.id,
-                            "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
-                        }
-                    })
-                    .done(function () {
-                        notifications.yell('success', success[action]);
-                        // deleteMailIfNeeded(baton);
-                        // update well
-                        rerender(baton);
-                    })
-                    .fail(notifications.yell);
-                })
-                // disable buttons - don't know why we have an array of appointments but just one set of buttons
-                // so, let's use the first one
-                .find(selector).addClass('disabled').attr('disabled', 'disabled');
+                baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
             }
+
+            baton.$.well.find('.itip-actions').addClass('block').append(
+
+                _(priority).chain()
+                .filter(function (action) {
+                    return _(baton.analysis.actions).contains(action);
+                })
+                .map(function (action) {
+                    return $('<button class="btn">')
+                        .attr('data-action', action)
+                        .addClass(buttonClasses[action])
+                        .text(i18n[action])
+                        .add($.txt('\u00A0'));
+                })
+                .value()
+            )
+            .on('click', 'button', function (e) {
+                e.preventDefault();
+                var action = $(this).attr('data-action');
+                if (action === 'ignore') {
+                    //deleteMailIfNeeded(baton);
+                }
+                // be busy
+                baton.$.well.empty().busy();
+                http.PUT({
+                    module: 'calendar/itip',
+                    params: {
+                        action: action,
+                        dataSource: 'com.openexchange.mail.ical',
+                        descriptionFormat: 'html'
+                    },
+                    data: {
+                        "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
+                        "com.openexchange.mail.conversion.mailid": baton.data.id,
+                        "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                    }
+                })
+                .done(function () {
+                    notifications.yell('success', success[action]);
+                    // deleteMailIfNeeded(baton);
+                    // update well
+                    rerender(baton);
+                })
+                .fail(notifications.yell);
+            })
+            // disable buttons - don't know why we have an array of appointments but just one set of buttons
+            // so, let's use the first one
+            .find(selector).addClass('disabled').attr('disabled', 'disabled');
 
             baton.$.well.find('.appointmentInfo').append(
                 _(appointments).map(function (appointment) {
@@ -380,7 +377,7 @@ define('io.ox/calendar/invitations/register',
         return this.append(
             $('<div class="muted">').text(gt("This email contains an appointment")),
             $('<div class="appointmentInfo">'),
-            $('<div class="itip-action-container">').css({ textAlign: 'right', marginTop: '1em' }).append(
+            $('<div class="itip-action-container">').css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' }).append(
                 $('<div class="itip-actions">')
             )
         );
