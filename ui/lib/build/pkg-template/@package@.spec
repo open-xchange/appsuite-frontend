@@ -1,6 +1,7 @@
 Name:           @package@
 Version:        @version@
-Release:        1
+%define         ox_release 1
+Release:        %{ox_release}
 Group:          Applications/Productivity
 Packager:       @maintainer@
 License:        @licenseName@
@@ -23,13 +24,11 @@ Requires:       open-xchange-appsuite-manifest
 
 %install
 sh /opt/open-xchange-appsuite-devel/bin/build-appsuite app \
-    builddir="%{buildroot}/opt/open-xchange/appsuite" \
-    version=%{version} revision=%{release}
+    builddir="%{buildroot}/opt/open-xchange/appsuite"
 
 %clean
 sh /opt/open-xchange-appsuite-devel/bin/build-appsuite clean \
-    builddir="%{buildroot}/opt/open-xchange/appsuite" \
-    version=%{version} revision=%{release}
+    builddir="%{buildroot}/opt/open-xchange/appsuite"
 
 %files
 %defattr(-,root,root)
