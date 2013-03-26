@@ -359,13 +359,14 @@ define('io.ox/core/permissions/permissions',
                             autocomplete = new AddParticipantsView({ el: node });
 
                         autocomplete.render({
-                            parentSelector: '.permissions-dialog > .modal-footer',
                             autoselect: true,
-                            users: true,
+                            parentSelector: '.permissions-dialog > .modal-footer',
+                            placement: 'top',
                             contacts: false,
+                            distributionlists: false,
                             groups: true,
                             resources: false,
-                            distributionlists: false
+                            users: true
                         });
                         //add recipents to baton-data-node; used to filter sugestions list in view
                         autocomplete.on('update', function () {
@@ -382,7 +383,7 @@ define('io.ox/core/permissions/permissions',
                                     bits: 257, // default is 'view folder' plus 'read all'
                                     group: isGroup
                                 };
-                            if (!obj.entity) {
+                            if (!('entity' in obj)) {
                                 notifications.yell(
                                     'error',
                                     data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.')
