@@ -133,25 +133,26 @@ define('io.ox/mail/accounts/view-form',
                     valdef = $.Deferred();
                 
                 this.model.save(false, deferedSave);
-                deferedSave.done(function (data) {//carefull here! there is no fail possible for this defered. Even errors result in done (backbone specific)
+                deferedSave.done(function (data) {
+                    self.dialog.close();
+                    if (self.collection) {
+                        self.collection.add([data]);
+                    }
+                    if (self.model.isNew()) {
+                        self.succes();
+                    }
+                })
+                .fail(function (data) {
                     if (data.error) {//manual check for error
                         if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
                             notifications.yell('error', gt('Login must not be empty.'));
                         } else if (data.code === "SVL-0002") {
                             notifications.yell('error',
-                                    //#. %1$s the missing request parameter
-                                    //#, c-format
-                                    gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                                               //#. %1$s the missing request parameter
+                                               //#, c-format
+                                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
                         } else {
                             notifications.yell('error', _.noI18n(data.error));
-                        }
-                    } else {
-                        self.dialog.close();
-                        if (self.collection) {
-                            self.collection.add([data]);
-                        }
-                        if (self.model.isNew()) {
-                            self.succes();
                         }
                     }
                 });

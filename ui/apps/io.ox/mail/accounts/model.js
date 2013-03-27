@@ -107,7 +107,7 @@ define("io.ox/mail/accounts/model",
                     folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
-                    return defered.resolve(response);
+                    return defered.reject(response);
                 });
             } else {
                 if (obj) {
@@ -118,7 +118,7 @@ define("io.ox/mail/accounts/model",
                     folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
-                    return defered.resolve(response);
+                    return defered.reject(response);
                 });
             }
 
