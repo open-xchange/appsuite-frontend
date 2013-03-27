@@ -57,7 +57,7 @@ define('io.ox/mail/accounts/view-form',
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
-                
+
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
@@ -65,7 +65,7 @@ define('io.ox/mail/accounts/view-form',
             },
             render: function () {
                 var self = this;
-                window.account = self.model;
+                window.account = self.model; //FIXME: WTF?
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
@@ -81,9 +81,9 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                        model.set('login', value);
-                    }
-                
+                    model.set('login', value);
+                }
+
                 if (self.model.get('id') !== 0) {//check for primary account
                     
                     //refreshrate field needs to be toggled
