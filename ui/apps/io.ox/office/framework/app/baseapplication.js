@@ -269,7 +269,10 @@ define('io.ox/office/framework/app/baseapplication',
             delayTimeouts = [],
 
             // Deferred object used to lock execution of debounced methods
-            debouncedLock = null;
+            debouncedLock = null,
+
+            // has the document been renamed
+            renamed = false;
 
         // private methods ----------------------------------------------------
 
@@ -524,6 +527,16 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.isImportFinished = function () {
             return imported;
+        };
+
+        /**
+         * Return whether the document has been renamed.
+         *
+         * @returns {Boolean}
+         *  Whether the document has been renamed.
+         */
+        this.isRenamed = function () {
+            return renamed;
         };
 
         // server requests ----------------------------------------------------
@@ -1101,6 +1114,7 @@ define('io.ox/office/framework/app/baseapplication',
                 })
                 .then(function (fileName) {
                     file.filename = fileName;
+                    renamed = true;
                     // TODO: what if filter request succeeds, but Files API fails?
                     return FilesAPI.propagate('change', file);
                 });
