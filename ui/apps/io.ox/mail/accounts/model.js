@@ -15,7 +15,8 @@ define("io.ox/mail/accounts/model",
     ["io.ox/core/extensions",
      "io.ox/keychain/model",
      "io.ox/core/api/account",
-     'io.ox/core/api/folder'], function (ext, keychainModel, AccountApi, folderAPI) {
+     'io.ox/core/api/folder',
+     'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountApi, folderAPI, gt) {
 
     "use strict";
 
@@ -28,31 +29,31 @@ define("io.ox/mail/accounts/model",
         validation: {
             name: {
                 required: true,
-                msg: 'The account must be named'
+                msg: gt('The account must be named')
             },
             primary_address: {
                 required: true,
-                fn: 'isMailAddress'
+                fn: gt('isMailAddress')
             },
             mail_server: {
                 required: true,
-                msg: 'This field has to be filled'
+                msg: gt('This field has to be filled')
             },
             mail_port: {
                 required: true,
-                msg: 'This field has to be filled'
+                msg: gt('This field has to be filled')
             },
             login: {
                 required: true,
-                msg: 'This field has to be filled'
+                msg: gt('This field has to be filled')
             },
             transport_server: {
                 required: true,
-                msg: 'This field has to be filled'
+                msg: gt('This field has to be filled')
             },
             transport_port: {
                 required: true,
-                msg: 'This field has to be filled'
+                msg: gt('This field has to be filled')
             }
         },
         isMailAddress: function (newMailaddress) {
@@ -69,7 +70,7 @@ define("io.ox/mail/accounts/model",
             var regEmail = /\@/.test(newMailaddress);
 
             if (!regEmail) {
-                return 'This is not a valid email address';
+                return gt('This is not a valid email address');
             }
         },
 
@@ -93,8 +94,21 @@ define("io.ox/mail/accounts/model",
 
         save: function (obj, defered) {
             var that = this;
+            //TODO: refactor, so no deferred object is needed here and API response is
+            // returned directly
+            if (!defered) {
+                defered = $.Deferred();
+            }
+
             if (this.attributes.id !== undefined) {
-                var mods = this.attributes;
+                var fill_attributes = this.attributes,
+                    mods;
+
+                //don’t send passwords if not changed
+                if (!fill_attributes.password) { delete fill_attributes.password; }
+                if (!fill_attributes.transport_password) { delete fill_attributes.transport_password; }
+
+                mods = _.extend(this.changed, fill_attributes);
                 if (this.attributes.id === 0) {//primary mail account only allows editing of display name and unified mail
                     mods = {
                             id: that.attributes.id,
@@ -102,7 +116,7 @@ define("io.ox/mail/accounts/model",
                             unified_inbox_enabled: that.attributes.unified_inbox_enabled
                         };
                 }
-                AccountApi.update(mods).done(function (response) {
+                return AccountApi.update(mods).done(function (response) {
                     folderAPI.folderCache.remove('default' + that.attributes.id);
                     folderAPI.trigger('update');
                     return defered.resolve(response);
@@ -114,7 +128,7 @@ define("io.ox/mail/accounts/model",
                     this.attributes = obj;
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
-                AccountApi.create(this.attributes).done(function (response) {
+                return AccountApi.create(this.attributes).done(function (response) {
                     folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {

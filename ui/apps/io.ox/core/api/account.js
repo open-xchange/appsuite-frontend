@@ -442,17 +442,23 @@ define('io.ox/core/api/account',
             params: {action: 'update'},
             data: data
         })
-        .then(function () {
-            // reload account
-            return http.GET({
-                module: 'account',
-                params: { action: 'get', id: data.id },
-                appendColumns: false
-            })
-            .done(function (data) {
-                accountsAllCache.merge(data, _.now());
-                api.trigger('refresh.all');
-                api.trigger('update', data);
+        .then(function (result) {
+            return accountsAllCache.remove(data).then(function () {
+                if (!_.isObject(result)) {
+                    // update call didn’t return the new account -> get the data ourselves
+                    return api.get(data.id).then(function (data) {
+                        api.trigger('refresh.all');
+                        api.trigger('update', data);
+                        return data;
+                    });
+                } else {
+                    // update call returned the new account (this is the case for mail)
+                    return accountsAllCache.add(result, _.now()).then(function () {
+                        api.trigger('refresh.all');
+                        api.trigger('update', result);
+                        return result;
+                    });
+                }
             });
         });
     };

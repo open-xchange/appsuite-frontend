@@ -57,7 +57,7 @@ define('io.ox/mail/accounts/view-form',
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
-                
+
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
@@ -65,7 +65,7 @@ define('io.ox/mail/accounts/view-form',
             },
             render: function () {
                 var self = this;
-                window.account = self.model;
+                window.account = self.model; //FIXME: WTF?
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
@@ -81,9 +81,9 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                        model.set('login', value);
-                    }
-                
+                    model.set('login', value);
+                }
+
                 if (self.model.get('id') !== 0) {//check for primary account
                     
                     //refreshrate field needs to be toggled
@@ -128,12 +128,10 @@ define('io.ox/mail/accounts/view-form',
                 'click .save': 'onSave'
             },
             onSave: function () {
-                var self = this,
-                    deferedSave = $.Deferred(),
-                    valdef = $.Deferred();
+                var self = this;
                 
-                this.model.save(false, deferedSave);
-                deferedSave.done(function (data) {
+                this.model.save()
+                .done(function (data) {
                     self.dialog.close();
                     if (self.collection) {
                         self.collection.add([data]);
@@ -143,17 +141,15 @@ define('io.ox/mail/accounts/view-form',
                     }
                 })
                 .fail(function (data) {
-                    if (data.error) {//manual check for error
-                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                            notifications.yell('error', gt('Login must not be empty.'));
-                        } else if (data.code === "SVL-0002") {
-                            notifications.yell('error',
-                                               //#. %1$s the missing request parameter
-                                               //#, c-format
-                                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
-                        } else {
-                            notifications.yell('error', _.noI18n(data.error));
-                        }
+                    if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                        notifications.yell('error', gt('Login must not be empty.'));
+                    } else if (data.code === "SVL-0002") {
+                        notifications.yell('error',
+                                           //#. %1$s the missing request parameter
+                                           //#, c-format
+                                           gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                    } else {
+                        notifications.yell('error', _.noI18n(data.error));
                     }
                 });
             }
