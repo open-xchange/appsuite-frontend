@@ -44,14 +44,18 @@ define('plugins/notifications/mail/register',
         );
     }
     
-    function showMail(obj, node) {
+    function showMail(obj, node, model) {
+        
         // fetch plain text mail; don't use cache
         api.get(obj, false).done(function (data) {
+            //update model
+            model.set(data);
+            //draw
             drawItem(node, data);
         }).fail(function () {
             node.append(
                 $.fail(gt('Couldn\'t load that email.'), function () {
-                    showMail(obj, node);
+                    showMail(obj, node, model);
                 })
             );
         });
@@ -59,8 +63,13 @@ define('plugins/notifications/mail/register',
 
     ext.point('io.ox/core/notifications/mail/item').extend({
         draw: function (baton) {
-            var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' });
-            showMail(obj, this);
+            //to avoid unnecessary requests check if the model is already complete, if not get it and fill in the missing data
+            if (baton.model.get('attachments')) {//attachments contains the actual text
+                drawItem(this, baton.model.attributes);
+            } else {//mail model not complete
+                var obj = _.extend(api.reduce(baton.model.toJSON()), { unseen: true, view: 'text' });
+                showMail(obj, this, baton.model);
+            }
         }
     });
 
@@ -147,6 +156,10 @@ define('plugins/notifications/mail/register',
             }
         }
     });
+    
+    //minicache to store mails that are seen already
+    //if mails are added to the notification collection after seen is triggered they are never set to seen correctly otherwise
+    var seenMails = {};
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
@@ -156,8 +169,8 @@ define('plugins/notifications/mail/register',
 
             function addMails(e, mails) {//adds mails to notificationview
                 var mailsToAdd = [];
-                for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present
-                    if (!(notifications.collection._byId[mails[i].id])) {
+                for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present and not seen
+                    if (!(notifications.collection._byId[mails[i].id]) && !(seenMails[mails[i].id])) {
                         mailsToAdd.push(mails[i]);
                     }
                 }
@@ -168,6 +181,7 @@ define('plugins/notifications/mail/register',
             function removeMails(e, mails) {//removes mails from notificationview
                 _(mails).each(function (mail) {
                     notifications.collection.remove(notifications.collection._byId[mail.id]);
+                    seenMails[mail.id] = true;//make sure this mail is not added again because it's seen already
                 });
             }
 
