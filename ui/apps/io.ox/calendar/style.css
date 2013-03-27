@@ -18,8 +18,30 @@
     padding: 0.75em 13px 0.75em 13px;
 }
 
-.vgrid-cell.calendar.hardconflict {
-    background-color: #FF9694;
+/* conflicts*/
+.additional-info {
+
+    .vgrid-cell.calendar {
+        padding: 7px 0px;
+    }
+
+    .vgrid-cell.calendar.hardconflict {
+        background-color: #FF9694;
+    }
+
+    .vgrid-cell.calendar:last-child {
+        border: none;
+    }
+
+    .buttons {
+        display: inline-block;
+        width: 100%;
+        margin: 10px 0px;
+
+        .span12 {
+            position: relative;
+        }
+    }
 }
 
 .vgrid-cell.vgrid-label.calendar-label {

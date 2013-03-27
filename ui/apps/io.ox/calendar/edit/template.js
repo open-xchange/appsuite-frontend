@@ -119,20 +119,17 @@ define('io.ox/calendar/edit/template',
                     });
                 self.$el.empty().append(
                     conflictList,
-                    $('<div class="row">')
-                        .css('margin-top', '10px').append(
-                            $('<span class="span12">')
-                                .css('text-align', 'right').append(
+                    $('<div>').addClass('buttons').append(
+                            $('<span class="span12">').append(
                                     $('<a class="btn">')
-                                        .text(gt('Cancel'))
+                                        .text(gt('Hide conflicts'))
                                         .on('click', function (e) {
                                             e.preventDefault();
                                             self.$el.empty();
                                             saveButton.show();
                                             discardButton.show();
                                         }),
-                                    '&nbsp;',
-                                    $acceptButton
+                                    $acceptButton.css({position: 'absolute', right: '0px'})
                                 )
                         )
                     );
