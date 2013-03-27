@@ -111,16 +111,16 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/buttons').extend({
         id: 'default',
         draw: function () {
-            this
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('import', gt('Import'));
+            this.addPrimaryButton('import', gt('Import'))
+                .addButton('cancel', gt('Cancel'));
         }
     });
 
     return {
         show: function (module, id) {
+
             var id = String(id),
-                dialog = new dialogs.ModalDialog({}),
+                dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}},
                 form;
 
@@ -142,16 +142,17 @@ define('io.ox/core/import/import',
                         .invoke('draw', this);
                     this.getPopup().addClass('import-dialog');
                 })
-                .show()
-                .done(function (action) {
-                    var type;
+                .on('import', function () {
 
-                    if (action !== 'import') {
-                        dialog = null;
+                    var type = baton.nodes.select.val() || '',
+                        file = baton.nodes.file_upload.find('input[type=file]'),
+                        popup = this;
+
+                    if (file.val() === '') {
+                        notifications.yell('error', gt('Please select a file to import'));
+                        popup.idle();
                         return;
                     }
-
-                    type = baton.nodes.select.val() || '';
 
                     api.import_file({
                         file: baton.nodes.file_upload.find('input[type=file]')[0].files[0],
@@ -170,11 +171,14 @@ define('io.ox/core/import/import',
                             ox.trigger('refresh^');
                         }
                         notifications.yell('success', gt('Data imported successfully'));
+                        popup.close();
                     })
                     .fail(function (res) {
                         notifications.yell('error', res && res.error || gt('An unknown error occurred'));
+                        popup.idle();
                     });
-                });
+                })
+                .show();
             });
         }
     };

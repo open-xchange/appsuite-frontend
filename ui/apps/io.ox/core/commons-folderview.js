@@ -292,7 +292,6 @@ define('io.ox/core/commons-folderview',
                 this.append(
                     $('<li>').append(link)
                 );
-
                 if (api.can('import', baton.data)) {
                     link.on('click', { baton: baton }, importData);
                 } else {
