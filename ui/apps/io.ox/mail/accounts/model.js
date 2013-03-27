@@ -95,7 +95,14 @@ define("io.ox/mail/accounts/model",
         save: function (obj, defered) {
             var that = this;
             if (this.attributes.id !== undefined) {
-                var mods = this.attributes;
+                var fill_attributes = this.attributes,
+                    mods;
+
+                //don’t send passwords if not changed
+                if (!fill_attributes.password) { delete fill_attributes.password; }
+                if (!fill_attributes.transport_password) { delete fill_attributes.transport_password; }
+
+                mods = _.extend(this.changed, fill_attributes);
                 if (this.attributes.id === 0) {//primary mail account only allows editing of display name and unified mail
                     mods = {
                             id: that.attributes.id,
