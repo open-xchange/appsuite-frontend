@@ -528,8 +528,8 @@ $(window).load(function () {
                 // check cache
                 configCache.get(cacheKey).done(function (co) {
                     if (co !== null && co.timestamp > (_.now() - HOUR * 12)) {
-                        def.resolve();
                         updateServerConfig(co.data);
+                        def.resolve();
                     }
                     // fetch fresh manifests
                     http.GET({
@@ -603,10 +603,10 @@ $(window).load(function () {
             if (_.url.hash('session')) {
 
                 session.set({
+                    language: _.url.hash('language'),
                     session: _.url.hash('session'),
                     user: _.url.hash('user'),
-                    user_id: parseInt(_.url.hash('user_id') || '0', 10),
-                    language: ox.language
+                    user_id: parseInt(_.url.hash('user_id') || '0', 10)
                 });
 
                 // set store cookie?
