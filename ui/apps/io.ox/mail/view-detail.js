@@ -84,20 +84,48 @@ define('io.ox/mail/view-detail',
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
+    var insertEmoticons = (function () {
+
+        var emotes = {
+            ':-)': 'smile',
+            ':)': 'smile',
+            ';-)': 'wink',
+            ';)': 'wink',
+            ':-D': 'laugh',
+            ':D': 'laugh',
+            ':-|': 'neutral',
+            ':|': 'neutral',
+            ':-(': 'sad',
+            ':(': 'sad'
+        };
+
+        var regex = /((:|;)-?[)|(D])/g;
+
+        return function (text) {
+            if (!settings.get('displayEmomticons')) return text;
+            return text.replace(regex, function (match) {
+                var emote = emotes[match];
+                return emote === '' ? match : '<i class="emote ' + emote + '"></i>';
+            });
+        };
+    }());
+
     var beautifyText = function (text) {
 
         var content = markupQuotes(
-            $.trim(text)
-            // remove line breaks
-            .replace(/\n|\r/g, '')
-            // replace leading BR
-            .replace(/^\s*(<br\/?>\s*)+/g, '')
-            // reduce long BR sequences
-            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-            // remove split block quotes
-            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
-            // add markup for email addresses
-            .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>')
+            insertEmoticons(
+                $.trim(text)
+                // remove line breaks
+                .replace(/\n|\r/g, '')
+                // replace leading BR
+                .replace(/^\s*(<br\/?>\s*)+/g, '')
+                // reduce long BR sequences
+                .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
+                // remove split block quotes
+                .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
+                // add markup for email addresses
+                .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>')
+            )
         );
 
         return content;
