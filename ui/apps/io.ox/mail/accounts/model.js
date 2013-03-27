@@ -94,6 +94,12 @@ define("io.ox/mail/accounts/model",
 
         save: function (obj, defered) {
             var that = this;
+            //TODO: refactor, so no deferred object is needed here and API response is
+            // returned directly
+            if (!defered) {
+                defered = $.Deferred();
+            }
+
             if (this.attributes.id !== undefined) {
                 var fill_attributes = this.attributes,
                     mods;
@@ -110,7 +116,7 @@ define("io.ox/mail/accounts/model",
                             unified_inbox_enabled: that.attributes.unified_inbox_enabled
                         };
                 }
-                AccountApi.update(mods).done(function (response) {
+                return AccountApi.update(mods).done(function (response) {
                     folderAPI.folderCache.remove('default' + that.attributes.id);
                     folderAPI.trigger('update');
                     return defered.resolve(response);
@@ -122,7 +128,7 @@ define("io.ox/mail/accounts/model",
                     this.attributes = obj;
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
-                AccountApi.create(this.attributes).done(function (response) {
+                return AccountApi.create(this.attributes).done(function (response) {
                     folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
