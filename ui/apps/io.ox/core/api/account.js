@@ -319,12 +319,13 @@ define('io.ox/core/api/account',
     api.create = function (data) {
         return http.PUT({
             module: 'account',
-            params: {action: 'new'},
-            data: data
+            params: { action: 'new' },
+            data: data,
+            appendColumns: false
         })
         .done(function (d) {
             accountsAllCache.add(d, _.now()).done(function () {
-                api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+                api.trigger('account_created', { id: d.id, email: d.primary_address, name: d.name });
             });
         });
     };
@@ -423,14 +424,27 @@ define('io.ox/core/api/account',
 //        });
 //    };
     api.update = function (data) {
+        // don't send computed data
+        delete data.mail_url;
+        delete data.transport_url;
+        // update
         return http.PUT({
             module: 'account',
             params: {action: 'update'},
             data: data
-        }).done(function () {
-            accountsAllCache.merge(data, _.now());
-            api.trigger('refresh.all');
-            api.trigger('update', data);
+        })
+        .then(function () {
+            // reload account
+            return http.GET({
+                module: 'account',
+                params: { action: 'get', id: data.id },
+                appendColumns: false
+            })
+            .done(function (data) {
+                accountsAllCache.merge(data, _.now());
+                api.trigger('refresh.all');
+                api.trigger('update', data);
+            });
         });
     };
 
