@@ -337,7 +337,7 @@ define('io.ox/core/api/folder',
             }, options || {});
 
             // get folder
-            return this.get({ folder: opt.folder }).pipe(function (data) {
+            return this.get({ folder: opt.folder }).then(function (data) {
 
                 var id = data.id, folder_id = data.folder_id;
 
@@ -346,9 +346,9 @@ define('io.ox/core/api/folder',
                     folderCache.remove(id),
                     subFolderCache.remove(id),
                     subFolderCache.remove(folder_id),
-                    visibleCache.remove(data.module)
+                    visibleCache.clear()
                 )
-                .pipe(function () {
+                .then(function () {
                     // trigger event
                     api.trigger('delete:prepare', id, folder_id);
                     // delete on server
@@ -379,7 +379,8 @@ define('io.ox/core/api/folder',
             // options
             var opt = $.extend({
                 folder: null,
-                autorename: true
+                autorename: true,
+                silent: false
             }, options || {});
 
             // default data
@@ -430,8 +431,11 @@ define('io.ox/core/api/folder',
                     )
                     .pipe(function (getRequest) {
                         // return proper data
-                        api.trigger('create', getRequest[0]);
-                        return getRequest[0];
+                        var data = getRequest[0];
+                        if (!options.silent) {
+                            api.trigger('create', data);
+                        }
+                        return data;
                     });
                 });
             })

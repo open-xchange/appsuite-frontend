@@ -51,42 +51,64 @@ define('io.ox/core/pubsub/subscriptions',
             api.sources.getAll().done(function (data) {
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
-                function saveModel() {
+                function removeFolder(id) {
+                    return folderApi.remove({ folder: id });
+                }
+
+                function saveModel(newFolder) {
 
                     notifications.yell('info', gt('Checking credentials... This may take a few seconds.'));
                     var folder = self.model.attributes.folder;
-                    self.model.save().done(function (id) {
-                        api.subscriptions.refresh({id: id, folder: folder}).done(function (data) {
-                            notifications.yell('info', gt('Subscription successfully created.'));
-                            app.folder.set(folder).done(function () {
-                                app.folderView.idle().repaint();
-                                popup.close();
-                            });
-                        }).fail(function (error) {
+
+                    self.model.save().then(
+                        function saveSuccess(id) {
+                            api.subscriptions.refresh({ id: id, folder: folder }).then(
+                                function refreshSuccess(data) {
+                                    notifications.yell('info', gt('Subscription successfully created.'));
+                                    popup.close();
+                                    app.folderView.idle().repaint().done(function () {
+                                        app.folder.set(folder);
+                                    });
+                                },
+                                function refreshFail(error) {
+                                    popup.idle();
+                                    popup.getBody().find('.control-group:not(:first)').addClass('error');
+                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                    api.subscriptions.destroy(id);
+                                    if (newFolder) {
+                                        removeFolder(folder);
+                                    }
+                                }
+                            );
+                        },
+                        function saveFail(error) {
                             popup.idle();
-                            popup.getBody().find('.control-group:not(:first)').addClass('error');
-                            showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
-                            api.subscriptions.destroy(id);
-                        });
-                    }).fail(function (error) {
-                        popup.idle();
-                        if (!self.model.valid) {
-                            if (!error.model) {
-                                showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
-                            } else {
-                                console.log('Validation error', error.model);
+                            if (!self.model.valid) {
+                                if (!error.model) {
+                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                } else {
+                                    notifications.yell({
+                                        type: 'error',
+                                        headline: gt('Error'),
+                                        message: gt('The subscription could not be created.')
+                                    });
+                                }
+                            }
+                            if (newFolder) {
+                                removeFolder(folder);
                             }
                         }
-
-                    });
+                    );
                 }
 
                 popup.getBody().addClass('form-horizontal');
                 ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
                 popup.show();
                 popup.on('subscribe', function (action) {
+
                     popup.busy();
                     var invalid;
+
                     _.each(popup.getBody().find('input'), function (input) {
                         if (!$(input).val()) {
                             $(input).closest('.control-group').addClass('error');
@@ -112,11 +134,12 @@ define('io.ox/core/pubsub/subscriptions',
                             data: {
                                 title: service.displayName || gt('New Folder'),
                                 module: self.model.get('entityModule')
-                            }
+                            },
+                            silent: true
                         })
                         .pipe(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
-                            saveModel();
+                            saveModel(true);
                         });
                     } else {
                         saveModel();

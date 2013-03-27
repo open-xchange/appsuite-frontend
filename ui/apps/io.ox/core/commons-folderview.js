@@ -624,6 +624,12 @@ define('io.ox/core/commons-folderview',
 
                     changeFolderOn();
 
+                    api.on('create', function (e, data) {
+                        tree.repaint().done(function () {
+                            tree.select(data.id);
+                        });
+                    });
+
                     api.on('delete:prepare', function (e, id, folder_id) {
                         tree.select(folder_id);
                         tree.removeNode(id);

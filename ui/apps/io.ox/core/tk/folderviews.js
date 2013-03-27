@@ -504,11 +504,6 @@ define('io.ox/core/tk/folderviews',
                     title: $.trim(title) || gt('New folder'),
                     module: opt.module
                 }
-            })
-            .done(function (data) {
-                self.repaint().done(function () {
-                    self.select(data.id);
-                });
             });
         };
 
@@ -971,12 +966,19 @@ define('io.ox/core/tk/folderviews',
             return paint({ cache: false });
         };
 
-        this.removeNode = this.repaintNode = this.internal.repaint;
+        // removeNode should not trigger repaint; just be busy
+        this.removeNode = function () {
+            this.busy();
+        };
 
         this.select = function (data) {
             this.selection.set(data);
             return $.when();
         };
+
+        api.on('delete', function () {
+            self.repaint();
+        });
     }
 
     return {
