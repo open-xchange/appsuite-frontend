@@ -584,7 +584,7 @@ define('io.ox/office/framework/app/basecontroller',
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: 50 });
+            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: 50, maxDelay: 500 });
 
         }()); // BaseController.update()
 

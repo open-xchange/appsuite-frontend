@@ -1001,10 +1001,20 @@ define('io.ox/office/framework/app/baseapplication',
          *  of the current script.
          *
          * @param {Object} [options]
-         *  A map with options controlling the behavior of the created
-         *  debounced method. Supports all options of the method
-         *  BaseApplication.executeDelayed(). Especially, repeated execution
-         *  of the deferred callback function is supported.
+         *  A map with options controlling the behavior of the debounced method
+         *  created by this method. Supports all options also supported by the
+         *  method BaseApplication.executeDelayed(). Especially, delayed and
+         *  repeated execution of the deferred callback function is supported.
+         *  Note that the delay time will restart after each call of the
+         *  debounced method, causing the execution of the deferred callback to
+         *  be postponed until the debounced method has not been called again
+         *  during the delay (this is the behavior of the _.debounce() method).
+         *  Additionally, supports the following options:
+         *  @param {Number} [options.maxDelay]
+         *      If specified, a delay time used as a hard limit to execute the
+         *      deferred callback after the first call of the debounced method,
+         *      even if it has been called repeatedly afterwards and the normal
+         *      delay time is still running.
          *
          * @returns {Function}
          *  The debounced method that can be called multiple times, and that
@@ -1014,39 +1024,71 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // the current timer used to execute the callback
-                timer = null,
+            var // whether to not restart the timer on repeated calls with delay time
+                maxDelay = Utils.getIntegerOption(options, 'maxDelay', 0),
+                // the current timer used to execute the callback
+                debounceTimer = null,
+                // timer used for the maxDelay option
+                maxTimer = null,
+                // first call in this stack frame
+                firstCall = true,
                 // whether execution of the deferred callback function has been postponed already
                 postponed = false;
 
-            // creates a timeout that executes the callback, if not already done
-            function createTimeout() {
+            // callback for a delay timer, executing the deferred callback
+            function timerCallback() {
+
+                // postpone execution if debounced methods are currently locked
+                if (debouncedLock) {
+                    postponed = true;
+                    debouncedLock.done(createTimers);
+                    return;
+                }
+
+                // execute the callback and return its result (for repeated execution)
+                postponed = false;
+                return deferredCallback();
+            }
+
+            // aborts and clears all timers
+            function clearTimers() {
+                if (debounceTimer) { debounceTimer.abort(); }
+                if (maxTimer) { maxTimer.abort(); }
+                debounceTimer = maxTimer = null;
+                firstCall = true;
+            }
+
+            // creates the timers that execute the deferred callback
+            function createTimers() {
+
+                // abort running timer on first call
+                if (firstCall && debounceTimer) {
+                    debounceTimer.abort();
+                    debounceTimer = null;
+                }
 
                 // create a new timeout executing the callback function
-                timer = self.executeDelayed(function () {
+                if (!debounceTimer) {
+                    debounceTimer = self.executeDelayed(timerCallback, options).always(clearTimers);
+                }
 
-                    // postpone execution if debounced methods are currently locked
-                    if (debouncedLock) {
-                        postponed = true;
-                        debouncedLock.done(createTimeout);
-                        return;
-                    }
+                // reset the first-call flag, but set it back in a direct
+                // timeout, this helps to prevent recreation of the browser
+                // timeout on every call of the debounced method
+                firstCall = false;
+                _.defer(function () { firstCall = true; });
 
-                    // execute the callback and return its result (for repeated execution)
-                    postponed = false;
-                    return deferredCallback();
-
-                }, options);
-
-                // reset timer reference after execution
-                timer.always(function () { timer = null; });
+                // on first call, create a timer for the maximum delay
+                if (!maxTimer && (maxDelay > 0)) {
+                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).always(clearTimers);
+                }
             }
 
             // create and return the debounced method
             return function () {
 
-                // create a timeout executing the callback function
-                if (!timer && !postponed) { createTimeout(); }
+                // create a new timeout executing the callback function
+                if (!postponed) { createTimers(); }
 
                 // call the direct callback with the passed arguments
                 return directCallback.apply(undefined, _.toArray(arguments));
