@@ -1104,12 +1104,14 @@ define('io.ox/core/tk/vgrid',
 
         this.on('change:prop:folder', function (e, value, previous) {
             if (previous !== undefined) {
+                this.scrollTop(0);
                 selectFirstAllowed = false;
                 self.selection.resetLastIndex();
             }
         });
 
         this.on('change:mode', function (e, value, previous) {
+            this.scrollTop(0);
             self.selection.clear();
             self.selection.resetLastIndex();
             selectFirstAllowed = (value === 'search');
