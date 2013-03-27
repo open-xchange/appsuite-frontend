@@ -143,17 +143,15 @@ define('io.ox/mail/accounts/view-form',
                     }
                 })
                 .fail(function (data) {
-                    if (data.error) {//manual check for error
-                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                            notifications.yell('error', gt('Login must not be empty.'));
-                        } else if (data.code === "SVL-0002") {
-                            notifications.yell('error',
-                                               //#. %1$s the missing request parameter
-                                               //#, c-format
-                                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
-                        } else {
-                            notifications.yell('error', _.noI18n(data.error));
-                        }
+                    if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                        notifications.yell('error', gt('Login must not be empty.'));
+                    } else if (data.code === "SVL-0002") {
+                        notifications.yell('error',
+                                           //#. %1$s the missing request parameter
+                                           //#, c-format
+                                           gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                    } else {
+                        notifications.yell('error', _.noI18n(data.error));
                     }
                 });
             }
