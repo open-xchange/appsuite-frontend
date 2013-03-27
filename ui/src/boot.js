@@ -602,27 +602,29 @@ $(window).load(function () {
             // got session via hash?
             if (_.url.hash('session')) {
 
-                session.set({
-                    language: _.url.hash('language'),
-                    session: _.url.hash('session'),
-                    user: _.url.hash('user'),
-                    user_id: parseInt(_.url.hash('user_id') || '0', 10)
-                });
-
                 // set store cookie?
                 return (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
-
-                    // cleanup login params
-                    _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
 
                     var ref = _.url.hash('ref');
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
                     _.url.redirect(ref ? ref : '#');
 
-                    configCache  = new cache.SimpleCache('manifests', true);
+                    configCache = new cache.SimpleCache('manifests', true);
 
+                    // fetch user config (need session now)
+                    ox.session = _.url.hash('session');
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
+                        // store login data (cause we have all valid languages now)
+                        session.set({
+                            language: _.url.hash('language'),
+                            session: _.url.hash('session'),
+                            user: _.url.hash('user'),
+                            user_id: parseInt(_.url.hash('user_id') || '0', 10)
+                        });
+                        // cleanup url
+                        _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
+                        // go ...
                         loadCoreFiles().done(function () {
                             loadCore();
                         });
