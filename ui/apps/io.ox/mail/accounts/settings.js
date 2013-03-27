@@ -237,6 +237,7 @@ define('io.ox/mail/accounts/settings',
                 autoconfigDialogbox.on('skip', function (e) {
                     autoconfigDialogbox.close();
                     def.reject();
+                    //primary address needs to be provided, why? fails without
                     args.data = {primary_address: inputFieldMail.val()};
                     createExtpointForNewAccount(args);
                 });
