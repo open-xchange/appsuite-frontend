@@ -62,6 +62,7 @@ define('plugins/portal/files/register',
                 if (_(elements).any(function (element) { return element.filename === filename; })) {
                     var widgetCol = portalWidgets.getCollection();
                     widgetCol.remove(baton.model);
+                    popup.remove();
                 }
             });
 

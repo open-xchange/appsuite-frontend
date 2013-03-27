@@ -403,6 +403,7 @@ define("io.ox/core/tk/dialogs",
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
+            closeByEvent, //for example: The view within this SidePopup closes itself
             previousProp,
             timer = null,
 
@@ -468,6 +469,10 @@ define("io.ox/core/tk/dialogs",
             }
         };
 
+        closeByEvent = function (e) {
+            close(e);
+        };
+
         close = function (e) {
             // use this to check if it's open
             if (self.nodes.closest) {
@@ -475,6 +480,7 @@ define("io.ox/core/tk/dialogs",
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
                 self.nodes.click.off("click", closeByClick);
+                pane.off('delete');
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -549,7 +555,9 @@ define("io.ox/core/tk/dialogs",
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
                 self.nodes.closest.on("scroll", closeByScroll);
+                pane.on("remove", closeByEvent);
                 $(document).on("keydown", closeByEscapeKey);
+
 
                 // decide for proper side
                 var docWidth = $('body').width(), mode,
