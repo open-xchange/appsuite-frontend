@@ -128,12 +128,10 @@ define('io.ox/mail/accounts/view-form',
                 'click .save': 'onSave'
             },
             onSave: function () {
-                var self = this,
-                    deferedSave = $.Deferred(),
-                    valdef = $.Deferred();
+                var self = this;
                 
-                this.model.save(false, deferedSave);
-                deferedSave.done(function (data) {
+                this.model.save()
+                .done(function (data) {
                     self.dialog.close();
                     if (self.collection) {
                         self.collection.add([data]);
