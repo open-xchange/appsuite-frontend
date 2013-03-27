@@ -323,9 +323,15 @@ define('io.ox/core/api/account',
             data: data,
             appendColumns: false
         })
-        .done(function (d) {
-            accountsAllCache.add(d, _.now()).done(function () {
-                api.trigger('account_created', { id: d.id, email: d.primary_address, name: d.name });
+        .then(function (data) {
+            // reload all accounts
+            return accountsAllCache.clear()
+            .then(function () {
+                return api.all();
+            })
+            .then(function () {
+                api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
+                return data;
             });
         });
     };
