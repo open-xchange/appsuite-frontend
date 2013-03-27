@@ -582,6 +582,7 @@ define('io.ox/files/icons/perspective',
             app.on('perspective:icons:hide', dropZoneOff)
                .on('perspective:icons:show', dropZoneOn)
                .on('folder:change', function (e, id, folder) {
+                app.currentFile = null;
                 dropZoneInit(app);
                 app.getWindow().search.close();
                 self.main.closest('.search-open').removeClass('search-open');

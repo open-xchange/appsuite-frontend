@@ -218,6 +218,7 @@ define('io.ox/files/list/perspective',
         };
 
         app.on('folder:change', function (e, id, folder) {
+            app.currentFile = null;
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();
                 if (dropZone) dropZone.include();
