@@ -59,15 +59,19 @@
         max-width: 800px;
     }
 
-    h1.pane-headline {
+    h1, h1.pane-headline {
         font-family: @lightFontFamily;
         font-weight: 200;
         font-size: 26px;
         line-height: 32px;
-        margin: 0 0 1em 0;
+        margin: 2em 0 1em 0;
     }
 
-    h2.pane-headline {
+    h1:first-child, h1.pane-headline:first-child {
+        margin: 0 0 2em 0;
+    }
+
+    h2, h2.pane-headline {
         font-size: 20px;
         line-height: 24px;
         margin: 2em 0 1.5em 0;
@@ -191,6 +195,36 @@
 
         .deletable-item div {
         	width: auto;
+        }
+    }
+
+    .error-log {
+        margin: 0;
+        list-style-type: none;
+        li {
+            margin-bottom: 26px;
+        }
+        li:last-child {
+            border-bottom: 0px none;
+        }
+        .message {
+        }
+        .error-id {
+            color: #555;
+        }
+        .url {
+            font-style: italic;
+            color: #888;
+            clear: both;
+            .ellipsis();
+        }
+        .stack-trace {
+            clear: both;
+        }
+        .summary {
+            font-size: 13px;
+            line-height: 16px;
+            color: #888;
         }
     }
 }

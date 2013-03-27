@@ -364,6 +364,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
     var that = {};
 
+    // error log
+    var log = {
+
+        collection: Backbone ? new Backbone.Collection([]) : null,
+
+        add: function (error, options) {
+            if (log.collection) {
+                var params = $.param(options.params || {}),
+                    url = options.url + (params ? '?' + params : '');
+                log.collection.add(
+                    new Backbone.Model(error)
+                    .set({
+                        index: log.collection.length,
+                        timestamp: _.now(),
+                        url: url
+                    })
+                );
+            }
+        }
+    };
+
     // get all columns of a module
     var getAllColumns = function (module, join) {
         // get ids
@@ -603,6 +624,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 promise: function () {
                     return _.extend(promiseFunc(), { abort: abortFunc });
                 }
+            });
+
+            // log errors
+            r.def.fail(function (error) {
+                log.add(error, r.o);
             });
 
             // TODO: remove backend fix
@@ -1009,6 +1035,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 def.resolve([]);
             }
             return def;
+        },
+
+        log: function () {
+            return log.collection;
         }
     };
 
