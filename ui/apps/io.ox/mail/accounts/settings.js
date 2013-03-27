@@ -214,6 +214,7 @@ define('io.ox/mail/accounts/settings',
                 )
                 .addPrimaryButton('add', gt('Add'))
                 .addButton('cancel', gt('Cancel'))
+                .addAlternativeButton('skip', gt('Skip'))
                 .show(function () {
                     inputFieldMail.focus();
                 });
@@ -231,6 +232,13 @@ define('io.ox/mail/accounts/settings',
                         inputFieldPassword.focus();
                         autoconfigDialogbox.idle();
                     }
+                });
+
+                autoconfigDialogbox.on('skip', function (e) {
+                    autoconfigDialogbox.close();
+                    def.reject();
+                    args.data = {primary_address: inputFieldMail.val()};
+                    createExtpointForNewAccount(args);
                 });
             });
 
