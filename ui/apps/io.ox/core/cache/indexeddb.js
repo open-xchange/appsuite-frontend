@@ -122,7 +122,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     delete fluent[key];
                 }
                 return readwrite(function (cache) {
-                    return OP(cache['delete'](key));
+                    return OP(cache['delete'](key), 'delete');
                 });
             },
 
@@ -184,7 +184,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         // clear seems to return far too early; maybe browser bug.
         // Occurred during folder tree debugging. test code:
         // api = require('io.ox/core/api/folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
-        if (type === 'clear' && request.transaction) {
+        if ((type === 'clear' || type === 'delete') && request.transaction) {
             request.transaction.oncomplete = function (e) {
                 def.resolve();
             };
