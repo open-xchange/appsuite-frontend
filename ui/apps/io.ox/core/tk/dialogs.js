@@ -316,7 +316,7 @@ define("io.ox/core/tk/dialogs",
                 nodes.footer.append(nodes.footer.rowfluid);
 
                 _.each(nodes.buttons, function (buttonNode) {
-                    nodes.footer.rowfluid.prepend(buttonNode/*.addClass('btn-large')*/);
+                    nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
                     buttonNode.wrap('<div class="span3">');
                 });
             }

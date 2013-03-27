@@ -2,14 +2,35 @@
     height: 300px;
     color: red;
 }
+/* ios momentum scrolling, breakes mobile chrome if applied to all devices */
+.ios {
+    .io-ox-dialog-popup {
+        -webkit-overflow-scrolling: touch;
+    }
+}
 
 @media all and (max-width: 480px) {
-    .io-ox-dialog-popup .modal-footer .btn {
-        width: 100%;
-        margin: 2px 0;
-    }
+    /* mobile stuff */
     .io-ox-dialog-popup {
+        .modal-footer {
+            .row-fluid {
+                [class*="span"] {
+                    margin-left: 0;
+                }
+                .btn {
+                    width: 100%;
+                    margin: 2px 0;
+                }
+                .span3 {
+                    width: inherit;
+                }
+            }
+        }
+        h3 {
+            font-size: 20px;
+        }
         overflow-y: scroll;
+
         border-radius: 0;
         -webkit-border-radius: 0;
         -moz-border-radius: 0;
@@ -20,9 +41,5 @@
 
         margin-top: 0;
         top: 10px;
-
-        h3 {
-            font-size: 20px;
-        }
     }
 }
