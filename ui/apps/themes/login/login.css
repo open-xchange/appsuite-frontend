@@ -306,5 +306,23 @@ body.down #io-ox-login-container .alert.alert-info {
         margin-left: 0;
         width: auto;
     }
+    body.down #io-ox-login-container .alert {
+        font-size: 16px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        width: initial;
+        margin-top: 0;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        background-color: #fcf8e3;
+        border: 1px solid #fbeed5;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        a {
+            font-weight: bold;
+        }
+    }
 }
 
