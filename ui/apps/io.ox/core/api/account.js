@@ -15,8 +15,9 @@ define('io.ox/core/api/account',
     ['io.ox/core/config',
      'io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/event'
-    ], function (config, http, Cache, Events) {
+     'io.ox/core/event',
+     'io.ox/core/api/folder'
+    ], function (config, http, Cache, Events, folderAPI) {
 
     'use strict';
 
@@ -331,6 +332,7 @@ define('io.ox/core/api/account',
             })
             .then(function () {
                 api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
+                folderAPI.propagate('account:create');
                 return data;
             });
         });
@@ -379,6 +381,7 @@ define('io.ox/core/api/account',
             accountsAllCache.remove(data).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('delete');
+                folderAPI.propagate('account:delete');
             });
         });
     };

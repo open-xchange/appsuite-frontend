@@ -851,6 +851,21 @@ define('io.ox/core/api/folder',
         return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
     };
 
+    // central hub to coordinate events and caches
+    // (see files/api.js for a full implementation for files)
+    api.propagate = function (type, id) {
+
+        var ready = $.when();
+
+        if (/^(account:create|account:delete)$/.test(type)) {
+            // need to refresh subfolders of root folder 1
+            return api.getSubFolders({ folder: '1', cache: false }).done(function () {
+                api.trigger('refresh');
+            });
+        }
+
+        return ready;
+    };
 
     /**
      * Create a Breadcrum widget for a given folder.
