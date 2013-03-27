@@ -331,6 +331,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
         .group {
             display: inline-block;
+            background: @pane-fill-color;
             .box-shadow(2px 2px 6px fade(white, 10%));
 
             + .group {
@@ -543,10 +544,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     > .view-component.toolbox {
         overflow: visible;
-
-        .group-container {
-            background: @pane-fill-color;
-        }
 
         .group {
             .drop-shadow();
@@ -771,7 +768,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 #io-ox-office-temp {
     position: absolute;
-    top: 100%;
+    top: -100%;
+    bottom: 100%;
     left: 0;
     right: 0;
     overflow: hidden;
