@@ -17,7 +17,8 @@ define('io.ox/calendar/edit/view-addparticipants',
        'io.ox/mail/util',
        'io.ox/participants/model',
        'io.ox/participants/views',
-       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
+       'io.ox/core/notifications',
+       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, notifications, gt) {
 
     'use strict';
 
@@ -158,42 +159,48 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
+
             var selectedItem = this.autoparticipants.getSelectedItem(),
                 self = this;
 
             if (selectedItem) {
                 return this.autoparticipants.trigger('selected', selectedItem);
-            } else {
-                var node = this.$('input.add-participant'),
-                    val = node.val(),
-                    list = mailUtil.parseRecipients(val);
-                if (list.length) {
-                    // add n extenal users
-                    _.each(list, function (elem) {
-                        self.select({
-                            id: Math.random(),
-                            display_name: elem[0],
-                            mail: elem[1],
-                            image1_url: '',
-                            type: 5 // TYPE_EXTERNAL_USER
-                        });
-                    });
-                } else {
-                    node.attr('disabled', 'disabled')
-                        .css({border: '1px solid #a00', backgroundColor: '#fee'})
-                        .shake()
-                        .done(function () {
-                            node.css({ border: '', backgroundColor: '' })
-                                .removeAttr('disabled').focus();
-                        });
-                }
             }
+
+            var node = this.$('input.add-participant'),
+                placeholder = node.attr('placeholder'),
+                val = $.trim(node.val()),
+                list = mailUtil.parseRecipients(val);
+
+            if (val === '') {
+                if (!placeholder) {
+                    node.attr('placeholder', gt('Search here') + ' ...');
+                }
+                node.focus();
+                return;
+            }
+
+            if (list.length === 0) {
+                node.focus();
+                return;
+            }
+
+            // add n extenal users
+            _.each(list, function (elem) {
+                self.select({
+                    id: Math.random(),
+                    display_name: elem[0],
+                    mail: elem[1],
+                    image1_url: '',
+                    type: 5 // TYPE_EXTERNAL_USER
+                });
+            });
         },
+
         select: function (obj) {
             this.$('.add-participant').val('');
             this.trigger('select', obj);
         }
-
     });
 
     return AddParticipantView;
