@@ -174,10 +174,8 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications">').text(gt('Publish'));
-
+                var link = $('<a href="#" data-action="publications">').text(gt('Publication'));
                 this.append($('<li class="divider">'), $('<li>').append(link));
-
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore') {
                     link.on('click', { baton: baton }, publish);
                 } else {
@@ -197,11 +195,10 @@ define('io.ox/core/commons-folderview',
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscribe'));
+                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscription'));
                 this.append(
                     $('<li>').append(link)
                 );
-
                 if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
                     link.on('click', { baton: baton }, subscribe);
                 } else {
@@ -209,8 +206,6 @@ define('io.ox/core/commons-folderview',
                 }
             }
         });
-
-
 
         function renameFolder(e) {
             e.preventDefault();

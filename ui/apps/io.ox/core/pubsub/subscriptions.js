@@ -19,7 +19,8 @@ define('io.ox/core/pubsub/subscriptions',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
-     'gettext!io.ox/core/pubsub'
+     'gettext!io.ox/core/pubsub',
+     'settings!io.ox/core'
     ],
     function (ext, pubsub, api, folderApi, notifications, dialogs, keychainApi, gt) {
 
@@ -95,23 +96,26 @@ define('io.ox/core/pubsub/subscriptions',
                             $(input).closest('.control-group').removeClass('error');
                         }
                     });
+
                     if (invalid) { return; }
 
                     if (baton.newFolder) {
+
                         var service = _.first(_(baton.services).select(function (t) {
                             return t.id === baton.model.get('source');
                         }));
 
+                        // add new folders under module's default folder!
+                        var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
                         folderApi.create({
-                            folder: self.model.attributes.folder,
+                            folder: folder,
                             data: {
                                 title: service.displayName || gt('New Folder'),
-                                module: self.model.attributes.entityModule
+                                module: self.model.get('entityModule')
                             }
                         })
                         .pipe(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
-
                             saveModel();
                         });
                     } else {
