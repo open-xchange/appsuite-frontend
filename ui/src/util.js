@@ -561,7 +561,7 @@
             setTimeout(function () {
                 fn();
                 setInterval(fn, interval * (num || 1));
-            }, interval - (_.utc() % interval) + 1);
+            }, interval - (_.now() % interval) + 1);
         },
 
         wait: function (t) {

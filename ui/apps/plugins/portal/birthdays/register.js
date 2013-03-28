@@ -16,11 +16,12 @@ define('plugins/portal/birthdays/register',
      'io.ox/core/date',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
-     'less!plugins/portal/birthdays/style.css'], function (ext, api, date, util, gt) {
+     'settings!io.ox/core',
+     'less!plugins/portal/birthdays/style.css'], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 
-    var WEEKS = 8,
+    var WEEKS = 12,
         RANGE = WEEKS * date.WEEK,
         sidepopup;
 
@@ -45,7 +46,7 @@ define('plugins/portal/birthdays/register',
 
         load: function (baton) {
             var aDay = 24 * 60 * 60 * 1000,
-                start = _.now() - aDay, //yes, one could try to calculate 00:00Z this day, but hey...
+                start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
                 end = start + WEEKS * aDay;
             return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;
@@ -65,11 +66,12 @@ define('plugins/portal/birthdays/register',
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
-                // add buy-a-gift link
+                // add buy-a-gift
+                var url = settings.get('customLocations/buy-a-gift', 'http://www.amazon.de/');
                 $list.append(
                     $('<div class="buy-a-gift">').append(
                         $('<i class="icon-gift">'), $.txt(' '),
-                        $('<a href="http://www.amazon.de/" target="_blank">').text(gt('Buy a gift'))
+                        $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
                     )
                 );
                 // loop
