@@ -839,25 +839,30 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         FORM: function (options) {
 
             options = _.extend({
-                form: $(),
-                url: 'files?action=new',
+                module: 'files',
+                action: 'new',
                 data: {},
+                params: {},
+                form: $(),
                 field: 'json'
             }, options);
 
-            var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
+            var name = 'formpost_' + _.now(),
+                callback = 'callback_' + options.action,
+                def = $.Deferred(),
+                data = JSON.stringify(options.data),
+                url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
+                form = options.form;
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
             );
 
-            window.callback_new = function (response) {
+            window[callback] = function (response) {
                 def[(response && response.error ? 'reject' : 'resolve')](response);
-                window.callback_new = data = form = def = null;
+                window[callback] = data = form = def = null;
                 $('#' + name).remove();
             };
-
-            data = JSON.stringify(options.data);
 
             if (form.find('input[name="' + options.field + '"]').length) {
                 form.find('input[name="' + options.field + '"]').val(data);
@@ -870,7 +875,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             form.attr({
                 method: 'post',
                 enctype: 'multipart/form-data',
-                action: ox.apiRoot + '/' + options.url + '&session=' + ox.session,
+                action: url + '&' + _.serialize(options.params),
                 target: name
             })
             .submit();

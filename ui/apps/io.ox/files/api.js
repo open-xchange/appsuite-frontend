@@ -229,7 +229,10 @@ define('io.ox/files/api',
             if (options.form) {
                 options.form.off('submit');
             }
-            return http.FORM({ form: options.form, data: options.json }).pipe(success);
+            return http.FORM({
+                form: options.form,
+                data: options.json
+            }).pipe(success);
         }
     };
 

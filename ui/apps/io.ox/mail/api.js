@@ -945,7 +945,13 @@ define("io.ox/mail/api",
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        return http.FORM({ data: data, form: form, field: 'json_0', url: 'mail?action=new' });
+        return http.FORM({
+            module: 'mail',
+            action: 'new',
+            data: data,
+            form: form,
+            field: 'json_0'
+        });
     }
 
     api.saveAttachments = function (list, target) {

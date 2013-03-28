@@ -62,8 +62,8 @@ define('io.ox/contacts/model',
 
             update: function (model) {
                 // Some special handling for profile pictures
-                var data = model.changedSinceLoading();
-                var file = data.pictureFile;
+                var data = model.changedSinceLoading(),
+                    file = data.pictureFile;
                 if (file) {
                     delete data.pictureFile;
                     return api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file);
@@ -71,7 +71,9 @@ define('io.ox/contacts/model',
                     return api.update({id: model.id, folder: model.get('folder_id'), data: data});
                 }
             },
+
             updateEvents: ['edit'],
+
             create: function (model) {
                 // Some special handling for profile pictures
                 var json, file;
@@ -85,6 +87,7 @@ define('io.ox/contacts/model',
 
                 return api.create(json, file);
             },
+
             destroy: function (model) {
                 return api.remove({id: model.id, folder_id: model.get('folder_id')});
             }

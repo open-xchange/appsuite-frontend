@@ -244,7 +244,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         }));
 
-
         point.extend(new views.AttributeView({
             id: ref + '/edit/view/display_name_header',
             index: 150,
@@ -268,7 +267,6 @@ define('io.ox/contacts/edit/view-form', [
                 this.append($('<div>').css({clear: 'both'}));
             }
         });
-
 
         // Show backend errors
         point.extend(new forms.ErrorAlert({
@@ -294,19 +292,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         }));
 
-        //cancel
-
-//        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
-//            id: "imagereset",
-//            index: 100,
-//            label: gt("Reset image"),
-//            ref: ref + "/actions/edit/reset-image",
-//            cssClasses: "btn",
-//            tabIndex: 10,
-//            tagtype: "button"
-//        }));
-
-
         views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
             id: "discard",
             index: 100,
@@ -318,7 +303,6 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Save
-
         views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
             id: "save",
             index: 100,
@@ -342,7 +326,6 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         // Edit Actions
-
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
             action: function (options, baton) {
@@ -400,7 +383,6 @@ define('io.ox/contacts/edit/view-form', [
 
                 var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                     isRare = _(meta.rare).indexOf(field) > -1;
-
 
                 if (meta.special[field]) {
                     meta.special[field]({
