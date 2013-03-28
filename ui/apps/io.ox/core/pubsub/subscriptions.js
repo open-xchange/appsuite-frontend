@@ -62,13 +62,13 @@ define('io.ox/core/pubsub/subscriptions',
 
                     self.model.save().then(
                         function saveSuccess(id) {
+                            //set id, if none is present (new model)
+                            if (!self.model.id) { self.model.id = id; }
                             api.subscriptions.refresh({ id: id, folder: folder }).then(
                                 function refreshSuccess(data) {
                                     notifications.yell('info', gt('Subscription successfully created.'));
                                     popup.close();
-                                    app.folderView.idle().repaint().done(function () {
-                                        app.folder.set(folder);
-                                    });
+                                    return self.model;
                                 },
                                 function refreshFail(error) {
                                     popup.idle();
@@ -79,7 +79,22 @@ define('io.ox/core/pubsub/subscriptions',
                                         removeFolder(folder);
                                     }
                                 }
-                            );
+                            ).then(function (model) {
+                                return model.fetch();
+                            }).then(function (model, collection) {
+                                var subscriptions = pubsub.subscriptions();
+                                //update the model-(collection)
+                                //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "subscriptions.update(model)" call
+                                if (self.model.collection) {
+                                    self.model.set(model);
+                                } else {
+                                    subscriptions.add(model);
+                                }
+                            }).then(function () {
+                                return app.folderView.idle().repaint();
+                            }).done(function () {
+                                app.folder.set(folder);
+                            });
                         },
                         function saveFail(error) {
                             popup.idle();
