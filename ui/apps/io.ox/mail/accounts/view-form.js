@@ -76,7 +76,7 @@ define('io.ox/mail/accounts/view-form',
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
                 //check if pop3 refresh rate needs to be displayed
-                if (self.model.get('mail_protocol') === 'imap') {
+                if (self.model.get('mail_protocol') !== 'pop3') {
                     pop3node.hide();
                 }
 
@@ -88,7 +88,7 @@ define('io.ox/mail/accounts/view-form',
                     
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
-                        if (value === 'imap') {
+                        if (value !== 'pop3') {
                             pop3node.hide();
                         } else {
                             pop3node.show();
