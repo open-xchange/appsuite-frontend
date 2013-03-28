@@ -106,6 +106,8 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 deferred.resolve(vacationNotice.model);
 
+            }).fail(function (error) {
+                deferred.reject(error);
             });
 
             return deferred;

@@ -72,6 +72,8 @@ define('io.ox/mail/autoforward/settings/filter', [
 
                 }
 
+            }).fail(function (error) {
+                deferred.reject(error);
             });
 
             return deferred;
