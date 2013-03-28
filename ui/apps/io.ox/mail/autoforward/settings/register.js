@@ -45,9 +45,13 @@ define('io.ox/mail/autoforward/settings/register',
                         filter.on('update create', function () {
                             require("io.ox/core/notifications").yell("success", gt("Your auto forward has been saved"));
                         });
-                    }).fail(function () {
+                    }).fail(function (error) {
+                        var msg;
+                        if (error.code === 'MAIL_FILTER-0015') {
+                            msg = gt('Unable to contact mailfilter backend.');
+                        }
                         $container.append(
-                            $.fail(gt("Couldn't load your auto forward."), function () {
+                            $.fail(msg || gt("Couldn't load your auto forward."), function () {
                                 filters.editAutoForward($node).done(function () {
                                     $container.find('[data-action="discard"]').hide();
                                 });

@@ -63,9 +63,13 @@ define('io.ox/mail/vacationnotice/settings/register',
                         filter.on('update', function () {
                             require("io.ox/core/notifications").yell("success", gt("Your vacation notice has been saved"));
                         });
-                    }).fail(function () {
+                    }).fail(function (error) {
+                        var msg;
+                        if (error.code === 'MAIL_FILTER-0015') {
+                            msg = gt('Unable to contact mailfilter backend.');
+                        }
                         $container.append(
-                            $.fail(gt("Couldn't load your vacation notice."), function () {
+                            $.fail(msg || gt("Couldn't load your vacation notice."), function () {
                                 filters.editVacationtNotice($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
                                 });
