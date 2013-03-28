@@ -129,8 +129,7 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().idle();
                             } catch (e) {
                                 if (response.code === 'UPL-0005') {//uploadsize to big
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(this.attributes)), false);
-                                    api.trigger('update:' + encodeURIComponent(_.cid(this.attributes)));//redraw detailview to get rid of busy animation
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
                                 }
                                 notifications.yell('error', response.error);
                             }

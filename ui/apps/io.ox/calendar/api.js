@@ -28,6 +28,8 @@ define("io.ox/calendar/api",
         participant_cache = {},
         HOUR = 60000 * 60,
         DAY = HOUR * 24;
+    // object to store appointments, that have attachments uploading atm
+    var uploadInProgress = {};
 
     var api = {
 
@@ -178,7 +180,7 @@ define("io.ox/calendar/api",
                     return api.get(getObj)
                         .pipe(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), true);
+                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
@@ -195,9 +197,8 @@ define("io.ox/calendar/api",
             delete get_cache[key];
             return api.get(obj)
                 .pipe(function (data) {
-                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), false);
                     api.trigger('update', data);
-                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
                 });
         },
 
@@ -250,7 +251,7 @@ define("io.ox/calendar/api",
                 return api.get(getObj)
                         .pipe(function (data) {
                             if (attachmentHandlingNeeded) {
-                                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), true);
+                                api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
                             }
                             api.trigger('create', data);
                             api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
@@ -516,6 +517,24 @@ define("io.ox/calendar/api",
                 }
             });
         });
+    };
+    
+    //for busy animation in detail View
+    //ask if this appointment has attachments uploading at the moment
+    api.uploadInProgress = function (key) {
+        return uploadInProgress[key] || false;//return true boolean
+    };
+    
+    //add appointment to the list
+    api.addToUploadList = function (key) {
+        uploadInProgress[key] = true;
+    };
+    
+    //remove appointment from the list
+    api.removeFromUploadList = function (key) {
+        delete uploadInProgress[key];
+        //trigger refresh
+        api.trigger('update:' + key);
     };
 
     api.reduce = factory.reduce;

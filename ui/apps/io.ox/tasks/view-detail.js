@@ -20,16 +20,12 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                    'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
     'use strict';
     
-    var attachmentsBusy = false; //check if attachments are uploding atm
     var taskDetailView = {
 
         draw: function (data) {
             if (!data) {
                 return $('<div>');
             }
-            
-            api.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
-            api.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
             
             var task = util.interpretTask(data, true),
                 // outer node
@@ -114,7 +110,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
             $('<div>').text(gt.noI18n(task.title)).addClass('title clear-title').appendTo(node);
 
-            if (attachmentsBusy) {
+            if (api.uploadInProgress(encodeURIComponent(_.cid(data)))) {
                 $('<div>').addClass('attachments-container')
                     .append(
                         $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
@@ -276,10 +272,6 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             });
         }
     });
-    
-    function setAttachmentsbusy(e, state) {
-        attachmentsBusy = state;
-    }
 
     var attachmentFail = function (container, task) {
         container.empty().append(

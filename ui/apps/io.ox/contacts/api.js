@@ -21,6 +21,9 @@ define('io.ox/contacts/api',
      ], function (ext, http, apiFactory, notifications, cache, settings) {
 
     'use strict';
+    
+    // object to store contacts, that have attachments uploading atm
+    var uploadInProgress = {};
 
     // generate basic API
     var api = apiFactory({
@@ -119,7 +122,7 @@ define('io.ox/contacts/api',
                 )
                 .pipe(function () {
                     if (attachmentHandlingNeeded) {
-                        api.trigger('AttachmentHandlingInProgress:' + d.folder_id + '.' + d.id, {state: true, redraw: true});
+                        api.addToUploadList(d.folder_id + '.' + d.id);//to make the detailview show the busy animation
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
@@ -134,7 +137,8 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
-                    api.trigger('AttachmentHandlingInProgress:' + o.folder + '.' + o.id, {state: true, redraw: true});
+                    api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
+                    api.trigger('update:' + o.folder + '.' + o.id);
                     return {folder_id: o.folder, id: o.id};
                 });
             } else {
@@ -165,7 +169,7 @@ define('io.ox/contacts/api',
                             )
                             .done(function () {
                                 if (attachmentHandlingNeeded) {
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: true, redraw: false});
+                                    api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
                                 }
                                 api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 api.trigger('update', data);
@@ -650,6 +654,24 @@ define('io.ox/contacts/api',
 
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
+    };
+    
+    //for busy animation in detail View
+    //ask if this contact has attachments uploading at the moment
+    api.uploadInProgress = function (key) {
+        return uploadInProgress[key] || false;//return true boolean
+    };
+    
+    //add contact to the list
+    api.addToUploadList = function (key) {
+        uploadInProgress[key] = true;
+    };
+    
+    //remove contact from the list
+    api.removeFromUploadList = function (key) {
+        delete uploadInProgress[key];
+        //trigger refresh
+        api.trigger('update:' + key);
     };
 
     return api;

@@ -17,6 +17,8 @@ define('io.ox/tasks/api', ['io.ox/core/http',
 
     'use strict';
 
+    // object to store tasks, that have attachments uploading atm
+    var uploadInProgress = {};
 
     // generate basic API
     var api = apiFactory({
@@ -112,7 +114,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             appendColumns: false
         }).done(function (response) {
             if (attachmentHandlingNeeded) {
-                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(task)), true);
+                api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
             api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
             return response;
@@ -244,7 +246,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             return obj;
         }).done(function () {
             if (attachmentHandlingNeeded) {
-                api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(task)), true);
+                api.addToUploadList(encodeURIComponent(_.cid(task)));//to make the detailview show the busy animation
             }
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
@@ -415,6 +417,24 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             api.trigger('confirm-tasks', confirmTasks);//same here
             return list;
         });
+    };
+    
+    //for busy animation in detail View
+    //ask if this task has attachments uploading at the moment
+    api.uploadInProgress = function (key) {
+        return uploadInProgress[key] || false;//return true boolean
+    };
+    
+    //add task to the list
+    api.addToUploadList = function (key) {
+        uploadInProgress[key] = true;
+    };
+    
+    //remove task from the list
+    api.removeFromUploadList = function (key) {
+        delete uploadInProgress[key];
+        //trigger refresh
+        api.trigger('update:' + key);
     };
 
     // global refresh

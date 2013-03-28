@@ -34,8 +34,6 @@ define("io.ox/calendar/view-detail",
         });
     };
 
-    var attachmentsBusy = false; //check if attachments are uploding atm
-
     // draw via extension points
 
     // draw appointment date & time
@@ -431,7 +429,7 @@ define("io.ox/calendar/view-detail",
         index: 600,
         draw: function (data) {
             var $node;
-            if (attachmentsBusy) {
+            if (calAPI.uploadInProgress(encodeURIComponent(_.cid(data)))) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
                         $node = $('<div>').css({width: '30%', height: '12px'}).busy()
@@ -456,18 +454,12 @@ define("io.ox/calendar/view-detail",
         $(this).replaceWith(e.data.view.draw(data));
     }
 
-    function setAttachmentsbusy(e, state) {
-        attachmentsBusy = state;
-    }
-
     return {
 
         draw: function (data, options) {
 
             try {
                 var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
-                calAPI.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
-                calAPI.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
                 node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
 

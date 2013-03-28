@@ -147,8 +147,7 @@ define('io.ox/contacts/edit/view-form', [
                                     api.clearFetchCache()
                                 )
                                 .done(function () {
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: false, redraw: false});
-                                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
                                     api.trigger('refresh.list');
                                 });
                             });
