@@ -259,7 +259,7 @@ define('plugins/portal/twitter/register',
 
     ext.point('io.ox/portal/widget/twitter').extend({
 
-        title: "Twitter",
+        title: gt('Twitter'),
 
         initialize: function (baton) {
             keychain.submodules.twitter.on('update create delete', function () {
@@ -383,6 +383,20 @@ define('plugins/portal/twitter/register',
                     $('<div>').text(gt('Add your account'))
                 )
             );
+        },
+
+        error: function (error) {
+            if (error.code !== "OAUTH-0006")
+                return; //let the default handling do the job
+
+            $(this).empty().append(
+                $('<h2>').text(gt('Twitter')),
+                $('<div class="content">').text(gt('Click here to add your account'))
+                .on('click', {}, function () {
+                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
+                })
+            );
+            console.log("DEBUG", error);
         }
     });
 
