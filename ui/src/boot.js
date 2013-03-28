@@ -781,7 +781,7 @@ $(window).load(function () {
                         feedback('info', $(
                             '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
                         ));
-                    } else if (_.device('android || ios')) {
+                    } else if (_.device('android || (ios && small)')) {
                         // TODO remove after 7.4
                         // inform about preview mode for 7.2
                         feedback('info', gt('mobile-preview'));
