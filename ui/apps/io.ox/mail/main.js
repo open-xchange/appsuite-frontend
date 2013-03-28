@@ -104,22 +104,47 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/options').extend({
             threadView: settings.get('threadView') !== 'off',
-            selectFirstItem: settings.get('selectFirstMessage', true)
+            selectFirstItem: settings.get('selectFirstMessage', true),
+            max: 500
         });
 
         // grid
-        var options = ext.point('io.ox/mail/vgrid/options').options();
+        var originalOptions = ext.point('io.ox/mail/vgrid/options').options(),
+            options = _.extend({}, originalOptions);
+
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
         options.settings = settings;
 
+        // threadview is based on a 500 mails limit
+        // in order to view all mails in a folder we offer a link
+        options.tail = function () {
+            var threadSort = grid.prop('sort') === 'thread',
+                inAllMode = grid.getMode() === 'all',
+                isUnlimited = grid.option('max') === '0',
+                hideTail = !threadSort || !inAllMode || isUnlimited;
+            return hideTail ? $() :
+                $('<div class="vgrid-cell tail">').append(
+                    $('<a href="#">').text(gt('Load all mails. This might take some time.'))
+                );
+        };
+
         grid = new VGrid(left, options);
+
+        // tail click
+        left.on('click', '.vgrid-cell.tail', function (e) {
+            e.preventDefault();
+            grid.option('max', '0').refresh(); // unlimited
+        });
 
         // add template
         grid.addTemplate(tmpl.main);
 
-        // template changes for unified mail
+        // folder change
         grid.on('change:prop:folder', function (e, folder) {
+            // reset max
+            grid.option('max', originalOptions.max);
+            // template changes for unified mail
             var unified = folderAPI.is('unifiedmail', folder);
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
@@ -280,7 +305,8 @@ define('io.ox/mail/main',
             return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
-                    order: this.prop('order')
+                    order: this.prop('order'),
+                    max: this.option('max')
                 }, 'auto')
                 .pipe(function (response) {
                     if (unread) {

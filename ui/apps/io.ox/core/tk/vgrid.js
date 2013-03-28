@@ -334,6 +334,8 @@ define('io.ox/core/tk/vgrid',
             all = [],
             // labels
             labels = { nodes: $() },
+            // optional tail cell
+            tail = $(),
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
             // multiplier defines how much detailed data is loaded (must be >= 2)
@@ -435,6 +437,13 @@ define('io.ox/core/tk/vgrid',
                     node.css({ top: obj.top + 'px' });
                     cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
                 }
+                // add tail?
+                if (options.tail) {
+                    tail = options.tail() || $();
+                    tail.css({ top: ($i === 0 ? all.length * itemHeight : cumulatedLabelHeight) + 'px' })
+                        .appendTo(container);
+                    cumulatedLabelHeight += tail.outerHeight(true);
+                }
                 node = clone = defs = null;
                 return cumulatedLabelHeight;
             });
@@ -467,6 +476,7 @@ define('io.ox/core/tk/vgrid',
         processLabels = function () {
             // remove existing labels
             labels.nodes.remove();
+            tail.remove();
             // reset
             labels = {
                 nodes: $(),
@@ -478,7 +488,7 @@ define('io.ox/core/tk/vgrid',
             // loop
             var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
-                tmp = self.requiresLabel(i, all[i], current);
+                tmp = self.requiresLabel(i, all[i], current, $i);
                 if (tmp !== false) {
                     labels.list.push({ top: 0, text: '', pos: i });
                     numLabels++;
@@ -1026,6 +1036,25 @@ define('io.ox/core/tk/vgrid',
 
         this.setMultiple = function (flag) {
             console.warn('deprecated', flag);
+        };
+
+        this.option = function (key, value) {
+            if (key !== undefined) {
+                if (value !== undefined) {
+                    var previous = options[key];
+                    if (value !== previous) {
+                        options[key] = value;
+                        this.trigger('change:option', key, value, previous);
+                        this.trigger('change:option:' + key, value, previous);
+                        responsiveChange = true;
+                    }
+                    return this;
+                } else {
+                    return options[key];
+                }
+            } else {
+                return options;
+            }
         };
 
         this.prop = function (key, value) {
