@@ -156,7 +156,11 @@ define('io.ox/core/api/account',
      * @return an array containing the personal name (might be empty!) and the primary address
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).then(addPersonalFallback).then(function (account) {
+        return api.get(accountId || 0).then(function (account) {
+            if (!account) { return $.Deferred().reject(account); }
+            return account;
+        })
+        .then(addPersonalFallback).then(function (account) {
             return getAddressArray(account.personal || '', account.primary_address);
         });
     };
