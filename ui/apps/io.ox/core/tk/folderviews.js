@@ -496,7 +496,7 @@ define('io.ox/core/tk/folderviews',
 
         function fnKeyPress(e) {
             if (e.which === 13) {
-                e.data.popup.invoke('add');
+                e.data.popup.invoke(e.data.action);
             }
         }
 
@@ -545,7 +545,7 @@ define('io.ox/core/tk/folderviews',
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
-                                .on('keypress', { popup: this }, fnKeyPress)
+                                .on('keypress', { popup: this, action: 'add' }, fnKeyPress)
                             )
                         );
                     })
@@ -623,7 +623,7 @@ define('io.ox/core/tk/folderviews',
                                 .val(folder.title)
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
-                                .on('keypress', { popup: this }, fnKeyPress)
+                                .on('keypress', { popup: this, action: 'rename' }, fnKeyPress)
                             )
                         );
                     })
