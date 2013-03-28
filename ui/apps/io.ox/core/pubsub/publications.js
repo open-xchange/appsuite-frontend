@@ -288,30 +288,32 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     });
 
     function sendInvitation(baton) {
-        return require(['io.ox/mail/write/main']).pipe(function (m) {
-            //predefined data for mail
-            var url = baton.model.url().replace('http://ox/', 'http://appsuite-dev.open-xchange.com/'),
-                data = {
-                    folder_id: 'default0/INBOX',
-                    subject: gt('Publication'),
-                    // did this ever work?
-                    attachments: {
-                        html: [{ content: '<a href="' + url + '">' + url + '</a>' }],
-                        text: [{ content: url }]
-                    },
-                    module: baton.model.attributes.entityModule,
-                    target: baton.model.attributes.target,
-                    headers: {
-                        'X-OX-PubURL': url,
-                        'X-OX-PubType': [baton.model.attributes.entityModule,
-                                         baton.model.attributes.target].toString()
-                    }
-                } || {};
-            // use default email dialog
-            return m.getApp().launch().pipe(function () {
-                return this.compose(data);
+        return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).pipe(function (m, util, userAPI) {
+                userAPI.getCurrentUser().then(function (user) {
+                    //predefined data for mail
+                    var url = baton.model.url(),
+                        text = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), '<a href="' + url + '">' + url + '</a>'),
+                        data = {
+                            folder_id: 'default0/INBOX',
+                            subject: gt('Publication'),
+                            attachments: {
+                                html: [{ content: text }],
+                                text: [{ content: text }]
+                            },
+                            module: baton.model.attributes.entityModule,
+                            target: baton.model.attributes.target,
+                            headers: {
+                                'X-OX-PubURL': url,
+                                'X-OX-PubType': [baton.model.attributes.entityModule,
+                                                 baton.model.attributes.target].toString()
+                            }
+                        } || {};
+                    // use default email dialog
+                    return m.getApp().launch().pipe(function () {
+                        return this.compose(data);
+                    });
+                });
             });
-        });
     }
 
     ext.point('io.ox/core/pubsub/publications/dialog').extend({
