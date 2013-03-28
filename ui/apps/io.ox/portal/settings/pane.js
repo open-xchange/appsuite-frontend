@@ -74,13 +74,14 @@ define('io.ox/portal/settings/pane',
     }
 
     function repopulateAddButton() {
+
         var used = widgets.getUsedTypes(),
             allTypes = widgets.getAllTypes();
 
         $('div.controls ul.dropdown-menu').empty().append(
             _(allTypes).map(function (options) {
                 if (options.unique && _(used).contains(options.type)) {
-                    return "";
+                    return '';
                 } else {
                     return $('<li>').append(
                         $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
