@@ -277,15 +277,6 @@ define('io.ox/mail/view-detail',
                 source = $.trim(source);
                 isLarge = source.length > 1024 * 512; // > 512 KB
 
-                // hide content
-                if (data.hidecontent) {
-                    return {
-                        content: $('<div class="content">'),
-                        isLarge: false,
-                        type: 'text/html'
-                    };
-                }
-
                 // empty?
                 if (source === '') {
                     return {
@@ -1017,32 +1008,6 @@ define('io.ox/mail/view-detail',
     });
 
     /**
-     * custom content within invitation mail?
-     * @param  {object} data of invitation mail
-     * @param  {string} url of publication
-     * @return {boolean}
-     */
-    function containsCustomContent(data, url) {
-        var $content = that.getContent(data).content,
-            whitespace = new RegExp(/[\s]+/g),
-            zws = new RegExp(/[\u200b]+/g), //zero-width space
-            words, part;
-        //get words
-        $content.find('style').remove();
-        words = $content
-                .text()
-                .trim()
-                .replace(whitespace, '|')
-                .split('|');
-        //remove link
-        var words = _.filter(words, function (part) {
-            return part.replace(zws, '') !== url;
-        });
-        //fuzzy: relevant number of words?
-        return words.length > 2;
-    }
-
-    /**
      * @description actions for publication invitation mails
      */
     ext.point('io.ox/mail/detail').extend({
@@ -1068,7 +1033,6 @@ define('io.ox/mail/view-detail',
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
                 //hide mail content if invitaion
-                data.hidecontent = !containsCustomContent(data, pub.url);
                 //dom
                 var $actions, $appointmentInfo, $box;
                 $('<div class="well">').append(
