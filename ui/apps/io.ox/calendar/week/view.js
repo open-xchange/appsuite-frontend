@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -747,10 +747,6 @@ define('io.ox/calendar/week/view',
 
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
-                if (model.get('start_date') < 0) {
-                    console.error('FIXME: start_date should not be negative');
-                    throw 'FIXME: start_date should not be negative';
-                }
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || this.showDeclined) {

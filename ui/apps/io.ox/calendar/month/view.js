@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -197,11 +197,6 @@ define('io.ox/calendar/month/view',
                         start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
                         end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
                         maxCount = 7;
-
-                    if (model.get('start_date') < 0) {
-                        console.error('FIXME: start_date should not be negative');
-                        throw 'FIXME: start_date should not be negative';
-                    }
 
                     // draw across multiple days
                     while (maxCount >= 0) {

@@ -399,7 +399,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var parsedDate = date.Local.parse(value, date.TIME);
 
             // just reject the change, if it's not parsable
-            if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
+            if (value !== '' && _.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
                 setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
@@ -434,7 +434,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 return null;
             }
             // just reject the change, if it's not parsable
-            if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
+            if (_.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
                 setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);

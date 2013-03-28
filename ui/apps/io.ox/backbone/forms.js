@@ -648,7 +648,7 @@ define('io.ox/backbone/forms',
             },
 
             _toDate: function (value, attribute, model) {
-                if (!value) {
+                if (value === undefined || value === null) {//dont use !value or 0 will result in false
                     return null;
                 }
                 if (!_.isNumber(value)) {
@@ -658,11 +658,12 @@ define('io.ox/backbone/forms',
                 if (_.isNull(mydate)) {
                     return value;
                 }
+                
                 return new date.Local(mydate).format(date.DATE);
             },
 
             _toTime: function (value, attribute) {
-                if (!value) {
+                if (value === undefined || value === null) {//dont use !value or 0 will result in false
                     return null;
                 }
                 var myTime = new date.Local(parseInt(value, 10));
@@ -670,23 +671,20 @@ define('io.ox/backbone/forms',
                 if (_.isNull(myTime)) {
                     return value;
                 }
+                
                 return new date.Local(myTime).format(date.TIME);
             },
 
             _timeStrToDate: function (value, attribute, model) {
-                var myValue = parseInt(model.get(attribute), 10) || false;
-                if (!myValue) {
+                var myValue = parseInt(model.get(attribute), 10);
+                if (isNaN(myValue)) {
                     return value;
                 }
                 var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.TIME);
-
+                
                 if (_.isNull(parsedDate)) {
                     return mydate.getTime();
-                }
-
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
                 }
 
                 mydate.setHours(parsedDate.getHours());
@@ -697,20 +695,15 @@ define('io.ox/backbone/forms',
             },
 
             _dateStrToDate: function (value, attribute, model) {
-                var myValue = parseInt(model.get(attribute), 10) || false;
-                if (!myValue) {
+                var myValue = parseInt(model.get(attribute), 10);
+                if (isNaN(myValue)) {
                     return value;
                 }
                 var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.DATE);
-
+                
                 if (_.isNull(parsedDate)) {
                     return value;
-                }
-
-                // just reject the change, if it's not parsable
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
                 }
 
                 mydate.setDate(parsedDate.getDate());
