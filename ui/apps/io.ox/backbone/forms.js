@@ -37,6 +37,7 @@ define('io.ox/backbone/forms',
                         return;
                     }
                     var alert = $.alert(self.errorTitle, self.formatError(error));
+                    self.$el.find('.alert').remove();
                     self.$el.append(alert);
 
                     alert.find('.close').on('click', function () {
