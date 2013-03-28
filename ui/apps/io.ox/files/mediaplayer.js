@@ -62,10 +62,12 @@ define('io.ox/files/mediaplayer',
 
         load: function (file) {
             this.currentTrack = this.getURL(file);
-            this.mediaelement.pause();
-            this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
-            this.mediaelement.load();
-            this.mediaelement.play();
+            if (this.mediaelement) {
+                this.mediaelement.pause();
+                this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
+                this.mediaelement.load();
+                this.mediaelement.play();
+            }
         },
 
         // DRY!
@@ -317,7 +319,9 @@ define('io.ox/files/mediaplayer',
 
         close: function () {
             if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
-                this.mediaelement.pause();
+                if (this.mediaelement) { // might be null
+                    this.mediaelement.pause();
+                }
                 this.player.empty().remove();
                 this.trackdisplay.remove(); // no empty; kills inner stuff
                 this.playlist.empty().remove();
