@@ -179,43 +179,44 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/showlink', {
+
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
+            return e.collection.has('some');
         },
+
         multiple: function (list) {
+
             api.getList(list).done(function (list) {
-                var calcWidth,
-                    container = $('<div>').css('display', 'inline-block'),
-                    content  = _(list).map(function (file) {
-                    var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url), 'cleanlink': url};
-                });
 
-                if (window.clipboardData) {
-
-                    _(content).each(function (item) {
-                        var copyButton = $('<a>').attr('href', '#').addClass('btn').text(gt('copy to clipboard'));
-                        copyButton.on('click', function () {
-                            window.clipboardData.setData('Text', item.cleanlink);
-                        });
-
-                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link + ' ').append(copyButton)));
-                    });
-                } else {
-                    _(content).each(function (item) {
-                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
-                    });
-                }
-
-                // to get the width of the container
-                $('body').append(container);
-                calcWidth = container.width();
-                calcWidth = calcWidth + 30;
-
+                // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
-                        .append(container)
-                        .addButton('cancel', gt('Cancel'))
+                    new dialogs.ModalDialog({ easyOut: true, width: 600 })
+                        .build(function () {
+                            // header
+                            this.header($('<h4>').text('Direct link'));
+                            // content
+                            this.getContentNode().addClass('user-select-text max-height-200').append(
+
+                                _(list).map(function (file) {
+                                    var url = location.protocol + '//' + location.host + ox.root +
+                                        '/#app=io.ox/files&perspective=list' +
+                                        '&folder=' +  encodeURIComponent(file.folder_id) +
+                                        '&id=' + encodeURIComponent(file.id);
+
+                                    return $('<p>').append(
+                                        $('<div>').text(file.title || file.filename || ''),
+                                        $('<div>').append(
+                                            $('<a>', { href: url, target: '_blank' })
+                                            .text(
+                                                // soft-break long words (like long URLs)
+                                                url.replace(/(\S{30})/g, '$1\u200B')
+                                            )
+                                        )
+                                    );
+                                })
+                            );
+                        })
+                        .addPrimaryButton('cancel', gt('Close'))
                         .show();
                 });
             });
