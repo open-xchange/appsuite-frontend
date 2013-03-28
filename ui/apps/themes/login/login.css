@@ -299,6 +299,14 @@ body.down #io-ox-login-container .alert.alert-info {
 }
 
 @media (max-width: 480px) {
+
+    /* 100% divs on relogin page*/
+    .relogin #io-ox-login-form [class*="span"]{
+            margin-left: 0;
+            width: 100%;
+        }
+    }
+
     /* responsive re-login screen */
     #io-ox-login-screen.relogin {
         left: 5px;
@@ -306,6 +314,8 @@ body.down #io-ox-login-container .alert.alert-info {
         margin-left: 0;
         width: auto;
     }
+
+
     body.down #io-ox-login-container .alert {
         font-size: 16px;
         position: absolute;
