@@ -881,15 +881,18 @@ define("io.ox/mail/api",
         }
 
         deferred.then(function (result) {
-            var base = _(result.data.split(api.separator)),
-                id = base.last(),
-                folder = base.without(id).join(api.separator);
-            api.get({ folder_id: folder, id: id }).then(function (mail) {
-                $.when(api.caches.list.add(data), api.caches.get.add(data))
-                .done(function () {
-                    api.trigger('refresh.list');
+            //skip block if error returned
+            if (result.data) {
+                var base = _(result.data.split(api.separator)),
+                    id = base.last(),
+                    folder = base.without(id).join(api.separator);
+                api.get({ folder_id: folder, id: id }).then(function (mail) {
+                    $.when(api.caches.list.add(data), api.caches.get.add(data))
+                    .done(function () {
+                        api.trigger('refresh.list');
+                    });
                 });
-            });
+            }
             return result;
         });
 
