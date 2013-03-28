@@ -668,11 +668,12 @@ define('io.ox/core/commons-folderview',
                         tree.reloadNode(id);
                     });
 
-                    sidepanel.on('contextmenu', '.folder', function (e) {
-                        e.preventDefault();
-                        $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
-                        return false;
-                    });
+                    // just a delveopment hack - turning off - no right click menus!
+                    // sidepanel.on('contextmenu', '.folder', function (e) {
+                    //     e.preventDefault();
+                    //     $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
+                    //     return false;
+                    // });
 
                     initTree = loadTree = null;
                 });

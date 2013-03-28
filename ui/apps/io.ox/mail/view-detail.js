@@ -177,8 +177,7 @@ define('io.ox/mail/view-detail',
             link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
         } else {
             // nope, external
-            href = '#app=io.ox/files&perspective=list&folder=' + folder + (id ? '&id=' + id : '');
-            link.attr('href', href);
+            link.attr({ href: matches[0], target: '_blank' });
         }
         return link;
     };
