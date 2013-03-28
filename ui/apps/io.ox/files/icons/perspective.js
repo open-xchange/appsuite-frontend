@@ -430,7 +430,7 @@ define('io.ox/files/icons/perspective',
                             file: file,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder_id,
-                            timestamp: app.currentFile.last_modified
+                            timestamp: _.now()
                         })
                         .done(function (data) {
                             api.propagate('change', data);

@@ -199,7 +199,7 @@ define('io.ox/files/list/view-detail',
                         file: _(files).first(),
                         id: file.id,
                         folder: file.folder_id,
-                        timestamp: file.last_modified,
+                        timestamp: _.now(),
                         json: {version_comment: $commentArea.val()}
                     }).done(resetCommentArea);
                 } else {
@@ -209,13 +209,13 @@ define('io.ox/files/list/view-detail',
                         form: $node,
                         id: file.id,
                         folder: file.folder_id,
-                        timestamp: file.last_modified,
+                        timestamp: _.now(),
                         json: {version_comment: $commentArea.val()}
                     }).done(resetCommentArea);
                 }
                 return false;
             });
-            
+
             $input.on('change', function () {
                 if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
                     $uploadButton.show();
@@ -255,7 +255,7 @@ define('io.ox/files/list/view-detail',
                                 )
                             );
 
-                    
+
                     var baton = ext.Baton({ data: version });
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
@@ -273,7 +273,7 @@ define('io.ox/files/list/view-detail',
                         )
                     )
                 );
-            
+
 
                 // Then let's fetch all versions and update the table accordingly
                 if (!allVersions) {
@@ -315,7 +315,7 @@ define('io.ox/files/list/view-detail',
         draw: function (baton) {
             baton.label = baton.data.filename;
             var row;
-            
+
             this.append(
                 row = $('<td>')
             );

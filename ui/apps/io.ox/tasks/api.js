@@ -206,8 +206,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             task.id = arguments[1];
         }
 
-        var useFolder = task.folder_id || task.folder,
-            timestamp = task.last_modified || _.now();
+        var useFolder = task.folder_id || task.folder;
 
         if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
             task.folder_id = newFolder;
@@ -230,7 +229,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             params: {action: 'update',
                 folder: useFolder,
                 id: task.id,
-                timestamp: timestamp,
+                timestamp: _.now(),
                 timezone: 'UTC'
             },
             data: task,
@@ -418,18 +417,18 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             return list;
         });
     };
-    
+
     //for busy animation in detail View
     //ask if this task has attachments uploading at the moment
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
     };
-    
+
     //add task to the list
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
-    
+
     //remove task from the list
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];

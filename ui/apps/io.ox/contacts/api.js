@@ -21,7 +21,7 @@ define('io.ox/contacts/api',
      ], function (ext, http, apiFactory, notifications, cache, settings) {
 
     'use strict';
-    
+
     // object to store contacts, that have attachments uploading atm
     var uploadInProgress = {};
 
@@ -152,7 +152,7 @@ define('io.ox/contacts/api',
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp
+                        timestamp: o.timestamp || _.now()
                     },
                     data: o.data,
                     appendColumns: false
@@ -655,18 +655,18 @@ define('io.ox/contacts/api',
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
     };
-    
+
     //for busy animation in detail View
     //ask if this contact has attachments uploading at the moment
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
     };
-    
+
     //add contact to the list
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
-    
+
     //remove contact from the list
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];

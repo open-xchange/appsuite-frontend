@@ -372,19 +372,11 @@
         },
 
         /**
-         * Returns local current time as timestamp
+         * Returns local current time as timestamp in UTC!
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
-        },
-
-        /**
-         * Returns current time as UTC timestamp
-         * @returns {long} Timestamp
-         */
-        utc: function () {
-            return (new Date()).getTime() - timezoneOffset;
         },
 
         /**
