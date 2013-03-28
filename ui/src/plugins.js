@@ -59,9 +59,13 @@
             function loaded() {
                 var q = queue;
                 queue = [];
-                oldload(context, modulename,
-                    [ox.apiRoot, '/apps/load/', ox.base, ',', q.join()].join(''));
+                if (_.url.hash('debug-js')) _.each(q, load); else load(q.join());
                 if (queue.length) console.error('recursive require', queue);
+            }
+
+            function load(module) {
+                oldload(context, modulename,
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''));
             }
         };
 
