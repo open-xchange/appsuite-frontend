@@ -50,6 +50,7 @@ define('io.ox/core/tk/folderviews',
             children = null,
             painted = false,
             detached = true,
+            loading = null,
             open,
             self = this,
             data = {},
@@ -75,10 +76,14 @@ define('io.ox/core/tk/folderviews',
             },
 
             drawChildren = function (reload, method) {
+
+                if (loading) return $.Deferred().resolve([]);
+
                 // be busy
                 nodes.sub.busy().show();
+
                 // load
-                return self.loadChildren(reload)
+                loading = self.loadChildren(reload)
                     // next pipe() makes it slow for debugging
                     // .pipe(function (children) {
                     //    var def = $.Deferred();
@@ -96,7 +101,7 @@ define('io.ox/core/tk/folderviews',
                             .attr('data-folder-id', id)
                         );
                     })
-                    .pipe(function (children) {
+                    .then(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all return values which all are deferred objects.
                         // we use this array to feed $.when(). Thus, we get a proper combined deferred object
@@ -107,6 +112,9 @@ define('io.ox/core/tk/folderviews',
                             return $.when();
                         }
                         return $.when.apply(null, _(children).invoke(method, nodes.sub));
+                    })
+                    .always(function () {
+                        loading = null;
                     });
             },
 
@@ -223,7 +231,9 @@ define('io.ox/core/tk/folderviews',
 
         // load sub folders - creates instances of TreeNode - does not yet paint them
         this.loadChildren = function (reload) {
+
             var hash = {}, needsRefresh;
+
             if (children === null || reload === true) {
                 // build hash?
                 if (children !== null && reload === true) {
@@ -629,6 +639,7 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.subscribe = function (data) {
+
             var name = data.app.getName(),
                 POINT = name + '/folderview',
                 folderCache = new cache.SimpleCache('folder-all', false),
@@ -640,7 +651,6 @@ define('io.ox/core/tk/folderviews',
 
             var options;
             _(ext.point(POINT + '/options').all()).each(function (obj) {
-
                 options = _.extend(obj, options || {});
             });
 
@@ -652,8 +662,6 @@ define('io.ox/core/tk/folderviews',
                 all: true,
                 storage: storage
             });
-
-            tree.paint();
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
@@ -667,14 +675,14 @@ define('io.ox/core/tk/folderviews',
                     $('<h4>').text(gt('Subscribe IMAP folders'))
                 )
                 .build(function () {
-                    this.getContentNode().append(
-                        container
-                    );
+                    this.getContentNode().append(container);
                 })
-                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('save', gt('Save'))
+                .addButton('cancel', gt('Cancel'))
                 .show(function () {
-                }).done(function (action) {
+                    tree.paint();
+                })
+                .done(function (action) {
 
                     if (action === 'save') {
                         _(changesArray).each(function (change) {
@@ -688,8 +696,7 @@ define('io.ox/core/tk/folderviews',
                         tree.destroy();
                         tree = pane = null;
                     }
-                }
-                );
+                });
 
                 tree.container.on('change', 'input', function () {
                     var folder = $(this).val(),
@@ -698,9 +705,7 @@ define('io.ox/core/tk/folderviews',
                         tobBePushed = { folder: folder, changes: changes};
                     changesArray.push(tobBePushed);
                 });
-
             });
-
         };
     }
 

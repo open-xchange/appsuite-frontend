@@ -37,6 +37,7 @@ define('io.ox/mail/folderview-extensions',
             ));
         }
     });
+
     function subscribeIMAPFolder(e) {
         e.preventDefault();
         e.data.app.folderView.subscribe(e.data);
