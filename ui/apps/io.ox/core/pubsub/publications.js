@@ -120,7 +120,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection
-                            baton.model = self.model;
+                            baton.model.attributes = $.extend(true, baton.model.attributes, model);
                             sendInvitation(baton).always(function () {
                                 popup.close();
                             });
