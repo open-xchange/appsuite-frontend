@@ -83,7 +83,8 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.busy().show();
 
                 // load
-                loading = self.loadChildren(reload)
+                return (
+                    loading = self.loadChildren(reload)
                     // next pipe() makes it slow for debugging
                     // .pipe(function (children) {
                     //    var def = $.Deferred();
@@ -115,7 +116,8 @@ define('io.ox/core/tk/folderviews',
                     })
                     .always(function () {
                         loading = null;
-                    });
+                    })
+                );
             },
 
             paintChildren = function () {
