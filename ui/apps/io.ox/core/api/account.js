@@ -291,36 +291,6 @@ define('io.ox/core/api/account',
     /**
      * Create mail account
      */
-//    api.create = function (options) {
-//        // options
-//        var opt = $.extend({
-//            data: {},
-//            success: $.noop
-//        }, options || {});
-//        // go!
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'new'
-//            },
-//            data: opt.data,
-//            success: function (data, timestamp) {
-//                // process data
-//                data = process(data.data);
-//                // add to cache
-//                ox.api.cache.account.add(data, timestamp);
-//                // additionally, folder '1' has a new child
-//                invalidateRoot();
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify');
-//                // cont
-//                ox.util.call(opt.success, data);
-//            },
-//            error: opt.error
-//        });
-//    };
-
     api.create = function (data) {
         return http.PUT({
             module: 'account',
@@ -345,37 +315,6 @@ define('io.ox/core/api/account',
     /**
      * Remove mail account
      */
-//    api.remove = function (options) {
-//        // options
-//        var opt = $.extend({
-//            id: undefined,
-//            success: $.noop
-//        }, options || {});
-//        // go!
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'delete'
-//            },
-//            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
-//            success: function (data, timestamp) {
-//                // remove from cache
-//                ox.api.cache.account.remove(opt.id);
-//                // invalidate root
-//                invalidateRoot();
-//                // invalidate folders
-//                invalidateFolder('default' + opt.id);
-//                // invalidate unified mail
-//                invalidateUnifiedMail();
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify remove');
-//                // cont
-//                ox.util.call(opt.success, data);
-//            }
-//        });
-//    };
-
     api.remove = function (data) {
         return http.PUT({
             module: 'account',
@@ -407,35 +346,6 @@ define('io.ox/core/api/account',
     /**
      * Update account
      */
-//    api.update = function (options) {
-//        // options
-//        var opt = $.extend({
-//            data: {},
-//            success: $.noop
-//        }, options || {});
-//        // update
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'update'
-//            },
-//            data: opt.data,
-//            success: function (response) {
-//                // invalidate unified mail folders
-//                invalidateUnifiedMail();
-//                invalidateRoot();
-//                // process response
-//                var data = process(response.data);
-//                ox.api.cache.account.add(data);
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify');
-//                // continue
-//                ox.util.call(opt.success, data);
-//            },
-//            error: opt.error
-//        });
-//    };
     api.update = function (data) {
         // don't send computed data
         delete data.mail_url;
