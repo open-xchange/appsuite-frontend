@@ -49,7 +49,10 @@ define('io.ox/office/framework/view/pane',
             node = Utils.createContainerNode('view-pane', options),
 
             // view components contained in this pane
-            components = [];
+            components = [],
+
+            // all tool boxes, mapped by identifier
+            toolBoxes = {};
 
         // methods ------------------------------------------------------------
 
@@ -108,9 +111,23 @@ define('io.ox/office/framework/view/pane',
          *  The new tool box component.
          */
         this.createToolBox = function (id, options) {
-            var toolBox = new ToolBox(app, id, options);
+            var toolBox = toolBoxes[id] = new ToolBox(app, id, options);
             this.addViewComponent(toolBox);
             return toolBox;
+        };
+
+        /**
+         * Returns the specified tool box from this pane.
+         *
+         * @param {String} id
+         *  The unique identifier of the tool box.
+         *
+         * @returns {ToolBox|Null}
+         *  The specified tool box, or null if no tool box exists for the
+         *  passed identifier.
+         */
+        this.getToolBox = function (id) {
+            return (id in toolBoxes) ? toolBoxes[id] : null;
         };
 
         this.destroy = function () {
