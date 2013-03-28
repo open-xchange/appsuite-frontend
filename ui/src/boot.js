@@ -128,7 +128,7 @@ $(window).load(function () {
         // unbind
         $('#io-ox-login-form').off('submit');
         // free closures
-        cleanUp = fnChangeLanguage = changeLanguage = initialize = $.noop;
+        cleanUp = fnChangeLanguage = initialize = $.noop;
     };
 
     // searchfield fix
@@ -444,7 +444,8 @@ $(window).load(function () {
                     } else {
                         $("#io-ox-forgot-password").find("a").attr("href", ox.serverConfig.forgotPassword);
                     }
-
+                    // change language
+                    changeLanguage(ox.language);
                     // set success handler
                     loginSuccess = function () {
                         $('#io-ox-login-screen').fadeOut(DURATION, function () {
