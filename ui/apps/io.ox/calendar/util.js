@@ -286,12 +286,12 @@ define("io.ox/calendar/util",
 
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label pointer" tabindex="0">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     html: true,
                     animation: false,
-                    trigger: 'hover',
+                    trigger: 'focus',
                     container: $('#tmp'),
                     placement: function (tip, element) {
                         // add missing outer class
@@ -301,6 +301,9 @@ define("io.ox/calendar/util",
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
+                })
+                .on('dispose', function () {
+                    $(this).popover('destroy'); // avoids zombie-popovers
                 })
             );
 
