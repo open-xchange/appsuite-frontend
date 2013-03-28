@@ -152,7 +152,8 @@ define('io.ox/contacts/api',
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp || _.now()
+                        timestamp: o.timestamp || _.now(),
+                        timezone: 'UTC'
                     },
                     data: o.data,
                     appendColumns: false
@@ -188,7 +189,7 @@ define('io.ox/contacts/api',
 
         return http.UPLOAD({
                 module: 'contacts',
-                params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
+                params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now(), timezone: 'UTC' },
                 data: form,
                 fixPost: true
             })
@@ -215,7 +216,7 @@ define('io.ox/contacts/api',
         // remove
         return http.PUT({
                 module: 'contacts',
-                params: { action: 'delete', timestamp: _.now() },
+                params: { action: 'delete', timestamp: _.now(), timezone: 'UTC' },
                 appendColumns: false,
                 data: _(list).map(function (data) {
                     return { folder: data.folder_id, id: data.id };
@@ -342,7 +343,8 @@ define('io.ox/contacts/api',
                     module: 'contacts',
                     params: {
                         action: 'search',
-                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592'
+                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+                        timezone: 'UTC'
                     },
                     sort: 609,
                     data: {
@@ -589,6 +591,7 @@ define('io.ox/contacts/api',
                     action: action || 'update',
                     id: o.id,
                     folder: o.folder_id || o.folder,
+                    timezone: 'UTC',
                     timestamp: o.timestamp || _.now() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
@@ -638,7 +641,8 @@ define('io.ox/contacts/api',
             start: now,
             end: now + 604800000, // now + WEEK
             action: 'birthdays',
-            columns: '1,20,500,501,502,503,504,505,511'
+            columns: '1,20,500,501,502,503,504,505,511',
+            timezone: 'UTC'
         }, options || {});
 
         return http.GET({

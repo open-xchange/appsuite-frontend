@@ -108,8 +108,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         delete task.tempAttachmentIndicator;
         return http.PUT({
             module: 'tasks',
-            params: {action: 'new',
-                     timezone: 'UTC'},
+            params: { action: 'new', timezone: 'UTC' },
             data: task,
             appendColumns: false
         }).done(function (response) {
