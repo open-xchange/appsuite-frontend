@@ -603,11 +603,11 @@ define('io.ox/office/framework/view/baseview',
             // Hides the alert with a specific animation.
             function closeAlert() {
                 currentAlert = null;
-                alert.off('click').stop().fadeOut(function () { alert.remove(); });
+                alert.off('click').stop(true).fadeOut(function () { alert.remove(); });
             }
 
             // remove the alert banner currently shown, store reference to new alert
-            if (currentAlert) { currentAlert.stop().remove(); }
+            if (currentAlert) { currentAlert.stop(true).remove(); }
             currentAlert = alert;
 
             // make the alert banner closeable
