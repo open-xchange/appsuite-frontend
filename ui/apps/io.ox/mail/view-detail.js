@@ -105,7 +105,7 @@ define('io.ox/mail/view-detail',
             if (!settings.get('displayEmomticons')) return text;
             return text.replace(regex, function (match) {
                 var emote = emotes[match];
-                return emote === '' ? match : '<i class="emote ' + emote + '"></i>';
+                return !emote ? match : '<i class="emote ' + emote + '"></i>';
             });
         };
     }());
