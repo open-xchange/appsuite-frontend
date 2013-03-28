@@ -617,7 +617,7 @@ $(window).load(function () {
                         serverUp();
                         // store login data (cause we have all valid languages now)
                         session.set({
-                            language: _.url.hash('language'),
+                            locale: _.url.hash('language'),
                             session: _.url.hash('session'),
                             user: _.url.hash('user'),
                             user_id: parseInt(_.url.hash('user_id') || '0', 10)
