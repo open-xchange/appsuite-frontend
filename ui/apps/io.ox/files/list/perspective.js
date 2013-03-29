@@ -79,6 +79,11 @@ define('io.ox/files/list/perspective',
                 .fail(_.lfo(drawFail));
         };
 
+        showFile.cancel = function () {
+            _.lfo(selectFile);
+            _.lfo(drawFail);
+        };
+
         selectFile = function (data) {
             right.idle().empty().append(viewDetail.draw(data, app));
             right.parent().scrollTop(0);

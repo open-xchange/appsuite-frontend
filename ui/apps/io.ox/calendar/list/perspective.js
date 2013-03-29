@@ -76,6 +76,11 @@ define('io.ox/calendar/list/perspective',
                 .fail(_.lfo(drawFail, obj));
         }
 
+        showAppointment.cancel = function () {
+            _.lfo(drawAppointment);
+            _.lfo(drawFail);
+        };
+
         function drawAppointment(data) {
             right.idle().empty().append(viewDetail.draw(data));
         }

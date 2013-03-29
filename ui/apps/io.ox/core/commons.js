@@ -82,9 +82,11 @@ define('io.ox/core/commons',
                         node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
                     } else {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '').idle().empty();
                     }
                     // remember current selection

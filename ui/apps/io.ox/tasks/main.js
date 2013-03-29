@@ -163,6 +163,11 @@ define('io.ox/tasks/main',
                 .fail(_.lfo(drawFail, obj));
         };
 
+        showTask.cancel = function () {
+            _.lfo(drawTask);
+            _.lfo(drawFail);
+        };
+
         drawTask = function (data) {
             right.idle().empty().append(viewDetail.draw(data));
         };

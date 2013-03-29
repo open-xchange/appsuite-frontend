@@ -581,7 +581,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     var paused = false,
         queue = [],
         // slow mode
-        slow = _.url.hash("slow"),
+        slow = _.url.hash('slow') !== undefined,
         // fail mode
         fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
 
@@ -767,9 +767,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 r = o = null;
             }
             that.trigger("start", r.xhr);
-            if (Number(slow)) {
+            if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
-                setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
+                setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
             } else {
                 cont();
             }

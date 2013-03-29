@@ -449,6 +449,12 @@ define('io.ox/mail/main',
             }
         };
 
+        showMail.cancel = function () {
+            _.lfo(drawThread);
+            _.lfo(drawMail);
+            _.lfo(drawFail);
+        };
+
         drawThread = function (baton) {
             viewDetail.drawThread.call(right.idle().empty(), baton.set('options', {
                 failMessage: gt('Couldn\'t load that email.'),

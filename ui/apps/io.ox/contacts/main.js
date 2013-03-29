@@ -156,6 +156,11 @@ define("io.ox/contacts/main",
             }
         };
 
+        showContact.cancel = function () {
+            _.lfo(drawContact);
+            _.lfo(drawFail);
+        };
+
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
             right.idle().empty().append(viewDetail.draw(baton));
