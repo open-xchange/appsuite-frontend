@@ -25,7 +25,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var splits = document.location.toString().split('/');
     var proto = splits[0];
     var host = splits[2];
-    var url = proto + "//" + host + "/realtime/atmosphere/rt";
+    var url = proto + "//" + host + ":8080/realtime/atmosphere/rt";
     var api = {};
     var def = $.Deferred();
 
@@ -128,13 +128,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     */
 
     var request = {
-        url: url+'?session='+ox.session,
+        url: url + '?session=' + ox.session,
         contentType : "application/json",
         logLevel : 'debug',
         transport : 'long-polling',
         fallbackTransport: 'long-polling',
         timeout: 60000,
-        maxRequests : 3,
+        maxRequests : 3
     };
 
 
