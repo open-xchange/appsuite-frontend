@@ -128,14 +128,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     */
 
     var request = {
-        url: url,
+        url: url+'?session='+ox.session,
         contentType : "application/json",
         logLevel : 'debug',
         transport : 'long-polling',
         fallbackTransport: 'long-polling',
         timeout: 60000,
         maxRequests : 3,
-        headers : {session: ox.session}
     };
 
 
