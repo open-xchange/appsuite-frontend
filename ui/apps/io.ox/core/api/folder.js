@@ -857,7 +857,7 @@ define('io.ox/core/api/folder',
 
         var ready = $.when();
 
-        if (/^(account:create|account:delete)$/.test(type)) {
+        if (/^account:(create|delete|unified-enable|unified-disable)$/.test(type)) {
             // need to refresh subfolders of root folder 1
             return api.getSubFolders({ folder: '1', cache: false }).done(function () {
                 api.trigger('refresh');

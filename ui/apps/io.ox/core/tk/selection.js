@@ -435,6 +435,14 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
+        this.debug = function () {
+            console.debug('selection', {
+                selected: selectedItems,
+                observed: observedItems,
+                index: observedItemsIndex
+            });
+        };
+
         this.clearIndex = function () {
             observedItems = [];
             observedItemsIndex = {};

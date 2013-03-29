@@ -118,7 +118,6 @@ define("io.ox/mail/accounts/model",
                 }
                 return AccountApi.update(mods).done(function (response) {
                     folderAPI.folderCache.remove('default' + that.attributes.id);
-                    folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
                     return defered.reject(response);
@@ -129,7 +128,6 @@ define("io.ox/mail/accounts/model",
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
                 return AccountApi.create(this.attributes).done(function (response) {
-                    folderAPI.trigger('update');
                     return defered.resolve(response);
                 }).fail(function (response) {
                     return defered.reject(response);

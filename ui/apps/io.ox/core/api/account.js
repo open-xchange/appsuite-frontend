@@ -15,9 +15,8 @@ define('io.ox/core/api/account',
     ['io.ox/core/config',
      'io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/event',
-     'io.ox/core/api/folder'
-    ], function (config, http, Cache, Events, folderAPI) {
+     'io.ox/core/event'
+    ], function (config, http, Cache, Events) {
 
     'use strict';
 
@@ -306,7 +305,9 @@ define('io.ox/core/api/account',
             })
             .then(function () {
                 api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
-                folderAPI.propagate('account:create');
+                require(['io.ox/core/api/folder'], function (api) {
+                    api.propagate('account:create');
+                });
                 return data;
             });
         });
@@ -324,7 +325,9 @@ define('io.ox/core/api/account',
             accountsAllCache.remove(data).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('delete');
-                folderAPI.propagate('account:delete');
+                require(['io.ox/core/api/folder'], function (api) {
+                    api.propagate('account:delete');
+                });
             });
         });
     };
@@ -353,10 +356,21 @@ define('io.ox/core/api/account',
         // update
         return http.PUT({
             module: 'account',
-            params: {action: 'update'},
+            params: { action: 'update' },
             data: data
         })
         .then(function (result) {
+
+            // detect changes
+            accountsAllCache.get(result).done(function (obj) {
+                var enabled = result.unified_inbox_enabled;
+                if (obj !== null && obj.unified_inbox_enabled !== enabled) {
+                    require(['io.ox/core/api/folder'], function (api) {
+                        api.propagate(enabled ? 'account:unified-enable' : 'account:unified-disable');
+                    });
+                }
+            });
+
             return accountsAllCache.remove(data).then(function () {
                 if (!_.isObject(result)) {
                     // update call didn’t return the new account -> get the data ourselves

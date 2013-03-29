@@ -114,9 +114,11 @@ define('io.ox/core/tk/folderviews',
                         }
                         return $.when.apply(null, _(children).invoke(method, nodes.sub));
                     })
-                    .always(function () {
+                    .always(_.defer(function () {
+                        // need to use defer here, otherwise tree selection gets broken
+                        // with second repaint (visually ok but lacks addToIndex calls)
                         loading = null;
-                    })
+                    }))
                 );
             },
 
@@ -308,16 +310,12 @@ define('io.ox/core/tk/folderviews',
                 // add?
                 self.append();
                 // get folder
-                return this.reload().pipe(function (promise) {
-                    // get data
-                    data = promise;
-                    // customize, re-add to index, update arrow
-                    self.customize();
+                return this.reload().pipe(function () {
+                    // reload resets promise, calls customize & updateArrow
                     if (nodes.folder.hasClass('selectable')) {
                         tree.selection.addToIndex(data.id);
                     }
-                    updateArrow();
-                    // draw children
+                    // draw children?
                     if (isOpen()) {
                         return repaintChildren();
                     } else {
