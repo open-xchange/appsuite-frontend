@@ -136,105 +136,147 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var ChunkedLoader = function (options) {
-        var CHUNK_SIZE = 100,
-            THRESHHOLD_EAGER = 0,
-            activeLoaders = {};
+    var CHUNK_SIZE = 100,
+        CHUNK_GRID = 20;
 
-        this.MAX_CHUNK = 200;
-        this.MIN_CHUNK = 50;
+    var ChunkLoader = function (listRequest) {
 
-        this.fetch = _.identity();
-        this.all = function () {
-            return [];
-        };
+        var instance = null;
 
-        this.loadChunk = function loadChunk(index, options) {
-            if (activeLoaders[index]) {
-                return activeLoaders[index];
-            }
-            var all = this.all(options);
-            var offset = CHUNK_SIZE * index;
+        function Instance() {
 
-            var numRows = CHUNK_SIZE;
-            var subset = all.slice(offset, offset + numRows);
+            var current = -1;
 
-            if (_.isEmpty(subset)) {
-                return $.Deferred().resolve([]);
-            }
-            var fetcher = this.fetch(subset, options);
-            activeLoaders[index] = fetcher;
-
-            fetcher.always(function () {
-                activeLoaders[index] = null;
-                delete activeLoaders[index];
-            });
-
-            return fetcher;
-        };
-
-        this.getChunkLoaders = function getChunkLoaders(start, length, options) {
-            CHUNK_SIZE = Math.max(Math.min(Math.ceil(this.all().length / 3), this.MAX_CHUNK), this.MIN_CHUNK);
-            THRESHHOLD_EAGER = CHUNK_SIZE;
-
-            var end = start + length,
-                startChunk = Math.floor(start / CHUNK_SIZE),
-                endChunk = Math.floor(end / CHUNK_SIZE),
-                chunkLoaders = [];
-
-            for (var i = startChunk; i <= endChunk; i++) {
-                var lowerBound = i * CHUNK_SIZE,
-                    upperBound = lowerBound + CHUNK_SIZE;
-                if (start > lowerBound) {
-                    lowerBound = start;
-                }
-                if (end < upperBound) {
-                    upperBound = end;
-                }
-                chunkLoaders.push({
-                    loader: this.loadChunk(i, options),
-                    start: lowerBound - (i * CHUNK_SIZE),
-                    end: upperBound - (i * CHUNK_SIZE)
+            this.load = function (offset, all) {
+                // round offset
+                offset = (offset && Math.max(0, Math.floor(offset / CHUNK_GRID) * CHUNK_GRID)) || 0;
+                // nothing to do?
+                if (all.length === 0 || offset === current) return $.Deferred().resolve(null);
+                // mark as current
+                current = offset;
+                // fetch data
+                return listRequest(all.slice(offset, offset + CHUNK_SIZE)).then(function (data) {
+                    // only return data if still current offset
+                    return current === offset ? { data: data, offset: offset, length: data.length } : null;
                 });
-            }
+            };
 
-            // Fetch eagerly the next chunk, when we come close to the edge
-            if (activeLoaders.length < 5) {
-                if ((CHUNK_SIZE - (end % CHUNK_SIZE)) < THRESHHOLD_EAGER) {
-                    this.loadChunk(endChunk + 1, options);
-                }
+            this.reset = function () {
+                current = -1;
+            };
+        }
 
-                // Fetch eagerly the previous chunk, when we come close to the edge
-                if (startChunk > 0 && ((start % CHUNK_SIZE) < THRESHHOLD_EAGER)) {
-                    this.loadChunk(startChunk - 1, options);
-                }
-            }
-
-            return chunkLoaders;
+        this.load = function () {
+            return instance.load.apply(instance, arguments);
         };
 
-        this.load = function (start, length, options) {
-            var chunkLoaders = this.getChunkLoaders(start, length, options);
-            var deferreds = [];
-            _(chunkLoaders).each(function (obj) {
-                deferreds.push(obj.loader);
-            });
-            var def = $.Deferred();
-            var list = [];
-
-            $.when.apply($, deferreds).done(function () {
-                var i;
-                for (i = 0; i < arguments.length; i++) {
-                    list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
-                }
-                def.resolve(list);
-            }).fail(def.reject);
-
-            return def;
+        this.reset = function () {
+            if (instance) instance.reset();
+            instance = new Instance();
         };
 
-        _.extend(this, options);
+        this.reset();
     };
+
+    // var ChunkedLoader = function (options) {
+    //     var CHUNK_SIZE = 100,
+    //         THRESHHOLD_EAGER = 0,
+    //         activeLoaders = {};
+
+    //     this.MAX_CHUNK = 200;
+    //     this.MIN_CHUNK = 50;
+
+    //     this.fetch = _.identity();
+    //     this.all = function () {
+    //         return [];
+    //     };
+
+    //     this.loadChunk = function loadChunk(index, options) {
+    //         if (activeLoaders[index]) {
+    //             return activeLoaders[index];
+    //         }
+    //         var all = this.all(options);
+    //         var offset = CHUNK_SIZE * index;
+
+    //         var numRows = CHUNK_SIZE;
+    //         var subset = all.slice(offset, offset + numRows);
+
+    //         if (_.isEmpty(subset)) {
+    //             return $.Deferred().resolve([]);
+    //         }
+    //         var fetcher = this.fetch(subset, options);
+    //         activeLoaders[index] = fetcher;
+
+    //         fetcher.always(function () {
+    //             activeLoaders[index] = null;
+    //             delete activeLoaders[index];
+    //         });
+
+    //         return fetcher;
+    //     };
+
+    //     this.getChunkLoaders = function getChunkLoaders(start, length, options) {
+    //         CHUNK_SIZE = Math.max(Math.min(Math.ceil(this.all().length / 3), this.MAX_CHUNK), this.MIN_CHUNK);
+    //         THRESHHOLD_EAGER = CHUNK_SIZE;
+
+    //         var end = start + length,
+    //             startChunk = Math.floor(start / CHUNK_SIZE),
+    //             endChunk = Math.floor(end / CHUNK_SIZE),
+    //             chunkLoaders = [];
+
+    //         for (var i = startChunk; i <= endChunk; i++) {
+    //             var lowerBound = i * CHUNK_SIZE,
+    //                 upperBound = lowerBound + CHUNK_SIZE;
+    //             if (start > lowerBound) {
+    //                 lowerBound = start;
+    //             }
+    //             if (end < upperBound) {
+    //                 upperBound = end;
+    //             }
+    //             chunkLoaders.push({
+    //                 loader: this.loadChunk(i, options),
+    //                 start: lowerBound - (i * CHUNK_SIZE),
+    //                 end: upperBound - (i * CHUNK_SIZE)
+    //             });
+    //         }
+
+    //         // Fetch eagerly the next chunk, when we come close to the edge
+    //         if (activeLoaders.length < 5) {
+    //             if ((CHUNK_SIZE - (end % CHUNK_SIZE)) < THRESHHOLD_EAGER) {
+    //                 this.loadChunk(endChunk + 1, options);
+    //             }
+
+    //             // Fetch eagerly the previous chunk, when we come close to the edge
+    //             if (startChunk > 0 && ((start % CHUNK_SIZE) < THRESHHOLD_EAGER)) {
+    //                 this.loadChunk(startChunk - 1, options);
+    //             }
+    //         }
+
+    //         return chunkLoaders;
+    //     };
+
+    //     this.load = function (start, length, options) {
+    //         var chunkLoaders = this.getChunkLoaders(start, length, options);
+    //         var deferreds = [];
+    //         _(chunkLoaders).each(function (obj) {
+    //             deferreds.push(obj.loader);
+    //         });
+    //         var def = $.Deferred();
+    //         var list = [];
+
+    //         $.when.apply($, deferreds).done(function () {
+    //             var i;
+    //             for (i = 0; i < arguments.length; i++) {
+    //                 list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
+    //             }
+    //             def.resolve(list);
+    //         }).fail(def.reject);
+
+    //         return def;
+    //     };
+
+    //     _.extend(this, options);
+    // };
 
 
     var VGrid = function (target, options) {
@@ -362,17 +404,23 @@ define('io.ox/core/tk/vgrid',
             fnScroll,
             deserialize,
             emptyMessage,
-            chunkLoader = new ChunkedLoader({
-                all: function () {
-                    return all;
-                },
-                fetch: function (subset, options) {
-                    var load = loadData[options.mode] || loadData.all;
-                    return load.call(self, subset);
-                },
-                MAX_CHUNK: options.maxChunkSize || 200,
-                MIN_CHUNK: options.minChunkSize || 50
+
+            loader = new ChunkLoader(function (subset) {
+                var load = loadData[currentMode] || loadData.all;
+                return load.call(self, subset);
             });
+
+            // __chunkLoader = new ChunkedLoader({
+            //     all: function () {
+            //         return all;
+            //     },
+            //     fetch: function (subset, options) {
+            //         var load = loadData[options.mode] || loadData.all;
+            //         return load.call(self, subset);
+            //     },
+            //     MAX_CHUNK: options.maxChunkSize || 200,
+            //     MIN_CHUNK: options.minChunkSize || 50
+            // });
 
         // add label class
         template.node.addClass('selectable');
@@ -512,9 +560,10 @@ define('io.ox/core/tk/vgrid',
         paint = (function () {
 
             // calling this via LFO, so that we always get the latest data
-            function cont(offset, data) {
+            function cont(chunk) {
                 // vars
-                var i, $i, shift = 0, j = '', row,
+                var data = chunk.data, offset = chunk.offset,
+                    i, $i, shift = 0, j = '', row,
                     defaultClassName = template.getDefaultClassName(),
                     tmp = new Array(data.length),
                     node, index;
@@ -568,7 +617,7 @@ define('io.ox/core/tk/vgrid',
 
                 // remember bounds
                 bounds.top = offset;
-                bounds.bottom = offset + numRows;
+                bounds.bottom = offset + chunk.length;
             }
 
             return function (offset) {
@@ -586,13 +635,22 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // get all items
-                var lfo = _.lfo(cont, offset);
-                return chunkLoader.load(offset, numRows, { mode: currentMode })
-                    .done(lfo)
+                return loader.load(offset, all)
+                    .done(function (chunk) {
+                        if (chunk !== null) cont(chunk);
+                    })
                     .fail(function () {
                         // continue with dummy array
-                        lfo(new Array(numRows));
+                        cont(new Array(numRows));
                     });
+
+                // var lfo = _.lfo(cont, offset);
+                // return chunkLoader.load(offset, numRows, { mode: currentMode })
+                //     .done(lfo)
+                //     .fail(function () {
+                //         // continue with dummy array
+                //         lfo(new Array(numRows));
+                //     });
             };
 
         }());
@@ -600,7 +658,7 @@ define('io.ox/core/tk/vgrid',
         resize = function () {
             // get num of rows
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-            numRows = Math.max(numVisible * mult >> 0, minRows);
+            numRows = CHUNK_SIZE; //Math.max(numVisible * mult >> 0, minRows);
             // prepare pool
             var  i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
@@ -768,13 +826,19 @@ define('io.ox/core/tk/vgrid',
                     list = tmp.concat(list);
                 }
 
+                var changed = !_.isEqual(all, list);
+
+                if (changed) {
+                    loader.reset();
+                }
+
                 if (isArray(list)) {
                     return apply(list)
                         .always(function () {
                             self.idle();
                         })
                         .done(function () {
-                            updateSelection(list.length !== all.length || !_.isEqual(all, list));
+                            updateSelection(list.length !== all.length || changed);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -1132,6 +1196,8 @@ define('io.ox/core/tk/vgrid',
         node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
 
         this.on('change:prop:folder', function (e, value, previous) {
+            // reset chunk loader
+            loader.reset();
             if (previous !== undefined) {
                 this.scrollTop(0);
                 selectFirstAllowed = false;
@@ -1140,6 +1206,9 @@ define('io.ox/core/tk/vgrid',
         });
 
         this.on('change:mode', function (e, value, previous) {
+            // reset chunk loader
+            loader.reset();
+            // reset selection
             this.scrollTop(0);
             self.selection.clear();
             self.selection.resetLastIndex();
