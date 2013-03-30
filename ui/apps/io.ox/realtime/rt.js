@@ -28,6 +28,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var url = proto + "//" + host + "/realtime/atmosphere/rt";
     var api = {};
     var def = $.Deferred();
+    var BUFFERING = true;
 
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
@@ -162,9 +163,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             console.error(e, e.stack);
             throw e;
         }
-        var stanza = new RealtimeStanza(json);
-        api.trigger("receive", stanza);
-        api.trigger("receive:" + stanza.selector, stanza);
+        if (_.isArray(json)) {
+            _(json).each(function (stanza) {
+                stanza = new RealtimeStanza(stanza);
+                api.trigger("receive", stanza);
+                api.trigger("receive:" + stanza.selector, stanza);
+            });
+        } else {
+            var stanza = new RealtimeStanza(json);
+            api.trigger("receive", stanza);
+            api.trigger("receive:" + stanza.selector, stanza);
+        }
     };
 
     request.onClose = function (response) {
@@ -178,12 +187,31 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     var subSocket = socket.subscribe(request);
+    var queue = {
+        stanzas: [],
+        timer: null
+    };
 
     api.send = function (options) {
         options.session = options.session || ox.session;
-        subSocket.push(JSON.stringify(options));
-        if (api.debug) {
-            console.log("->", options);
+        if (BUFFERING) {
+            queue.stanzas.push(JSON.parse(JSON.stringify(options)));
+            if (!queue.timer) {
+                queue.timer = true;
+                setTimeout(function () {
+                    subSocket.push(JSON.stringify(queue.stanzas));
+                    if (api.debug) {
+                        console.log("->", queue.stanzas);
+                    }
+                    queue.stanzas = [];
+                    queue.timer = false;
+                }, 1000);
+            }
+        } else {
+            subSocket.push(JSON.stringify(options));
+            if (api.debug) {
+                console.log("->", options);
+            }
         }
     };
 
