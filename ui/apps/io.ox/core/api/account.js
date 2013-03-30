@@ -84,13 +84,21 @@ define('io.ox/core/api/account',
     Events.extend(api);
 
     api.isUnified = function (id) {
-        var match = String(id).match(/^default(\d+)/);
         // is account? (unified inbox is not a usual account)
-        return match ? !api.isAccount(match[1]) : false;
+        return !api.isAccount(id);
     };
 
     api.isAccount = function (id) {
-        return id in idHash;
+        var match = String(id).match(/^default(\d+)/);
+        return match && match[1] in idHash;
+    };
+
+    api.isPrimary = function (id) {
+        return (/^default0/).test(id);
+    };
+
+    api.isExternal = function (id) {
+        return !api.isPrimary(id) && !api.isUnified(id);
     };
 
     // is drafts, trash, spam etc.

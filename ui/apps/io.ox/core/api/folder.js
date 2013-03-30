@@ -180,6 +180,18 @@ define('io.ox/core/api/folder',
                             timestamp = _.now(); // force update
                             data = data.data;
                         }
+                        // fix order of mail folders (INBOX first)
+                        if (opt.folder === '1') {
+                            data.sort(function (a, b) {
+                                if (account.isUnified(a.id)) return -1;
+                                if (account.isUnified(b.id)) return +1;
+                                if (a.id === 'default0/INBOX') return -1;
+                                if (b.id === 'default0/INBOX') return +1;
+                                if (account.isExternal(a.id)) return +1;
+                                if (account.isExternal(b.id)) return -1;
+                                return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                            });
+                        }
                         return $.when(
                             // add to cache
                             cache.add(opt.folder, data, timestamp),
