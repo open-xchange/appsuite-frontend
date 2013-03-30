@@ -155,9 +155,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         var json = {};
         try {
             json = $.parseJSON(message);
-            if (api.debug) {
-                console.log("<-", json);
-            }
         } catch (e) {
             console.log('This doesn\'t look like valid JSON: ', message);
             console.error(e, e.stack);
@@ -165,13 +162,20 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
         if (_.isArray(json)) {
             _(json).each(function (stanza) {
+                if (api.debug) {
+                    console.log("<-", stanza);
+                }
                 stanza = new RealtimeStanza(stanza);
                 api.trigger("receive", stanza);
                 api.trigger("receive:" + stanza.selector, stanza);
             });
         } else {
+            if (api.debug) {
+                console.log("<-", json);
+            }
             var stanza = new RealtimeStanza(json);
             api.trigger("receive", stanza);
+            debugger;
             api.trigger("receive:" + stanza.selector, stanza);
         }
     };

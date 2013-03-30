@@ -13,10 +13,11 @@
 
 define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], function (rt, Event) {
     'use strict';
-
+    var counter = 0;
     function RealtimeGroup(id) {
-        var self = this, joined = false, heartbeat = null;
-        rt.on("receive:" + id, function (e, m) {
+        var self = this, joined = false, heartbeat = null, selector = "rt-group-" + counter;
+        counter++;
+        rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
         });
         this.id = id;
@@ -40,7 +41,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             joined = true;
             this.send({
                 element: "message",
-                selector: id,
+                selector: selector,
                 payloads: [
                     {
                         element: "command",
