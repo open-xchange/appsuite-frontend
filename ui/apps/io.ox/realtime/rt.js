@@ -187,6 +187,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     };
 
+    setInterval(function () {
+        console.log("HEARTBEAT");
+        subSocket.push("{\"type\": \"ping\"}");
+    }, 20000);
+
 
 
     Event.extend(api);

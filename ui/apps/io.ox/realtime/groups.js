@@ -15,13 +15,28 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     'use strict';
 
     function RealtimeGroup(id) {
-        var self = this, joined = false;
+        var self = this, joined = false, heartbeat = null;
         rt.on("receive:" + id, function (e, m) {
             self.trigger("receive", m);
         });
         this.id = id;
 
         this.join = function () {
+            if (joined) {
+                return;
+            }
+            heartbeat = setInterval(function () {
+                self.send({
+                    element: "message",
+                    payloads: [
+                        {
+                            element: "ping",
+                            namespace: "group",
+                            data: 1
+                        }
+                    ]
+                });
+            }, 60000);
             joined = true;
             this.send({
                 element: "message",
@@ -37,7 +52,11 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.leave = function () {
+            if (!joined) {
+                return;
+            }
             joined = false;
+            clearInterval(heartbeat);
             this.send({
                 element: "message",
                 payloads: [
