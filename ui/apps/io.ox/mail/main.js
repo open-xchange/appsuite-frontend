@@ -121,8 +121,9 @@ define('io.ox/mail/main',
         options.tail = function () {
             var threadSort = grid.prop('sort') === 'thread',
                 inAllMode = grid.getMode() === 'all',
+                isUnreadOnly = grid.prop('unread'),
                 isUnlimited = grid.option('max') === '0',
-                hideTail = !threadSort || !inAllMode || isUnlimited;
+                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited;
             return hideTail ? $() :
                 $('<div class="vgrid-cell tail">').append(
                     $('<a href="#">').text(gt('Load all mails. This might take some time.'))

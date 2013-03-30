@@ -261,7 +261,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         var tx = db.transaction("meta", "readwrite");
         return OP(tx.objectStore("meta").put({
             id: 'default',
-            version: ox.base
+            version: ox.version
         }));
     }
 
@@ -269,19 +269,27 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         // Drop all databases
         var def = $.Deferred();
         var deletes = [];
-        ITER(db.transaction("databases").objectStore("databases").openCursor()).step(function (cursor) {
-            if (instances[cursor.key]) {
-                instances[cursor.key].close();
-            }
-            deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key)));
-        }).end(function () {
-            $.when.apply($, deletes).done(function () {
-                instances = {};
-                OP(db.transaction("databases", "readwrite").objectStore("databases").clear()).always(function () {
-                    initializeDB().done(def.resolve).fail(def.reject);
-                }).fail(def.reject);
-            }).fail(def.reject);
-        }).fail(def.reject);
+
+        ITER(db.transaction("databases").objectStore("databases").openCursor())
+            .step(function (cursor) {
+                if (instances[cursor.key]) {
+                    instances[cursor.key].close();
+                }
+                deletes.push(OP(window.indexedDB.deleteDatabase(cursor.key), 'deleteDatabase'));
+            })
+            .end(function () {
+                $.when.apply($, deletes).then(
+                    function () {
+                        instances = {};
+                        OP(db.transaction("databases", "readwrite").objectStore("databases").clear(), 'clear')
+                        .always(function () {
+                            initializeDB().then(def.resolve, def.reject);
+                        });
+                    },
+                    def.reject
+                );
+            })
+            .fail(def.reject);
 
         return def;
     }
@@ -306,12 +314,15 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 var setupCompleted = null;
                 if (!meta) {
                     setupCompleted = initializeDB();
-                } else if (ox.online && (meta.version !== ox.base || meta.cleanUp)) {
+                } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
                     meta.cleanUp = true;
                     OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                    if (ox.debug === true) {
+                        console.warn('IndexedDB: Clearing persistent caches due to UI update');
+                    }
                     setupCompleted = destroyDB().done(function () {
                         meta.cleanUp = false;
-                        meta.version = ox.base;
+                        meta.version = ox.version;
                         OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
                     });
                 } else {

@@ -175,19 +175,6 @@ $(window).load(function () {
         ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
     });
 
-    // clear persistent caches due to update?
-    // TODO: add indexedDB once it's getting used
-    if (Modernizr.localstorage) {
-        var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
-        if (ui.version !== ox.version) {
-            if (ox.debug === true) {
-                console.warn('clearing localStorage due to UI update');
-            }
-            localStorage.clear();
-            localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
-        }
-    }
-
     // detect if backend is down
     var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
@@ -638,7 +625,7 @@ $(window).load(function () {
                 return (useAutoLogin ? session.autoLogin() : $.when())
                 .always(function () {
                     // init manifest cache now (have ox.user now)
-                    configCache  = new cache.SimpleCache('manifests', true);
+                    configCache = new cache.SimpleCache('manifests', true);
                 })
                 .then(
                     function loginSuccess(data) {
