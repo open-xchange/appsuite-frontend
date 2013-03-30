@@ -175,7 +175,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
             var stanza = new RealtimeStanza(json);
             api.trigger("receive", stanza);
-            debugger;
             api.trigger("receive:" + stanza.selector, stanza);
         }
     };
