@@ -48,9 +48,7 @@ define('io.ox/mail/view-grid-template',
                     )
                 );
                 if (that.unified) {
-                    this.append($('<div>').append(
-                        account = $('<div class="label label-info">')
-                    ));
+                    this.append(account = $('<div class="account-name">'));
                 }
                 return {
                     from: from,
@@ -85,7 +83,9 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
-                if (fields.account) fields.account.text(data.account_name);
+                if (fields.account) {
+                    fields.account.text(util.getAccountName(data));
+                }
                 if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }

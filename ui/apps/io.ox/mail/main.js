@@ -146,7 +146,7 @@ define('io.ox/mail/main',
             // reset max
             grid.option('max', originalOptions.max);
             // template changes for unified mail
-            var unified = folderAPI.is('unifiedmail', folder);
+            var unified = folderAPI.is('unifiedfolder', folder);
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
                 grid.updateTemplates();

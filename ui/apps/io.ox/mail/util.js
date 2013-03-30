@@ -78,6 +78,7 @@ define('io.ox/mail/util',
 
 
     that = {
+
         parseRecipient: function (s) {
             var recipient = $.trim(s), match, name, email;
             if ((match = recipient.match(rRecipient)) !== null) {
@@ -223,6 +224,12 @@ define('io.ox/mail/util',
         getPriority: function (data) {
             var i = '<i class="icon-star"></i>';
             return data.priority < 3 ? $('<span>').append(_.noI18n('\u00A0'), i, i, i) : $();
+        },
+
+        getAccountName: function (data) {
+            // primary account?
+            var id = window.unescape(data.id);
+            return (/^default0/).test(id) ? gt('Primary account') : (data.account_name || 'N/A');
         },
 
         getTime: function (timestamp) {

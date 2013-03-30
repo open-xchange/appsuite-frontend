@@ -95,6 +95,13 @@
     }
 
     &.selected.deleted * { color: @selectedColor !important; }
+
+    .account-name {
+        text-align: right;
+        padding: 5px 0 0 0;
+        font-style: italic;
+        color: #555;
+    }
 }
 
 /* end:unread */
@@ -230,7 +237,7 @@
 
         .mail-detail  {
             background-color: white;
-            padding: 30px 20px 30px 20px;
+            padding: 20px;
             .box-shadow(0px 2px 30px 0px #CCC);
         }
     }
@@ -244,6 +251,10 @@
     display: table;
     width: 100%;
     .box-sizing(border-box);
+
+    .io-ox-inline-links {
+        margin: 0 0 26px 0;
+    }
 
     &.io-ox-busy {
         min-height: 200px;
@@ -290,8 +301,6 @@
     }
 
     .subject {
-        padding-right: 180px;
-        word-break: break-word;
     }
 
     .subject.empty {
@@ -305,7 +314,7 @@
 
     .subject, .thread-size {
         font-size: 16pt;
-        margin: @inlineLinksMargin;
+        margin: 13px 0;
     }
 
     .from .person-link.person-sender {
@@ -337,14 +346,12 @@
     }
 
     .account-name {
-        margin: 18px 0 18px 1em;
-        float: right;
     }
 
     .flag-dropdown {
         width: 30px;
         height: 24px;
-        margin: 18px 0 18px 1em;
+        margin: 18px 0 0 1em;
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
         float:right;
@@ -384,7 +391,7 @@
         float: right;
         width: 64px;
         height: 64px;
-        margin: 0 0 1em 1.5em;
+        margin: 0 0 5px 26px;
         background-repeat: no-repeat;
         background-position: top right;
         background-size: contain;
@@ -450,6 +457,13 @@
         font-weight: bold;
     }
 
+    article.horizontal-scrolling {
+        max-width: 100%;
+        overflow-x: auto;
+        box-sizing: border-box;
+        margin-right: -10000px; /* funky trick */
+    }
+
     .content {
 
         font-family: Arial, Helvetica, sans-serif;
@@ -457,7 +471,7 @@
         line-height: 20px;
         /* max-width: 1000px; */ /* Max-width does not work here, see Bug #24505 */
         width: 100%;
-        margin-top: 1em;
+        margin-top: 26px;
         cursor: auto;
         display: table; /* for large images */
         position: relative;
@@ -616,8 +630,10 @@ h4.mail-attachment-preview {
 .mail-detail {
 
     .io-ox-inline-links {
-        z-index:10000;
+        text-align: left;
+        z-index: 12006;
     }
+
     div.dropdown ul.dropdown-menu {
         z-index:auto; // reset bootstraps z-index
     }

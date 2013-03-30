@@ -37,7 +37,7 @@ define('io.ox/core/commons-folderview',
             type: undefined,
             view: 'ApplicationFolderTree',
             // disable folder popup as it takes to much space for startup on small screens
-            visible: _.device('!small') ? app.settings.get('folderview/visible', false): false
+            visible: _.device('!small') ? app.settings.get('folderview/visible/' + _.display(), false): false
         });
 
         // draw container
@@ -548,7 +548,7 @@ define('io.ox/core/commons-folderview',
         };
 
         fnHide = function () {
-            app.settings.set('folderview/visible', visible = false).save();
+            app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
 
@@ -563,7 +563,7 @@ define('io.ox/core/commons-folderview',
         };
 
         fnShow = function () {
-            app.settings.set('folderview/visible', visible = true).save();
+            app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             app.getWindow().nodes.body.addClass('side-shift');
 
             sidepanel.addClass('side-shift').show();

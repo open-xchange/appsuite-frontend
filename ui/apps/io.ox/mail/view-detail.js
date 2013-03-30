@@ -483,7 +483,7 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data,
                 self = this,
-                node = $('<div class="mail-detail">'),
+                node = $('<section class="mail-detail">'),
                 container = $.createViewContainer(data, api)
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
@@ -491,6 +491,7 @@ define('io.ox/mail/view-detail',
                         container.replaceWith(self.draw(tmp));
                     }),
                 drawnAlternatively = false;
+
             try {
 
                 // threaded & send by myself (and not in sent folder)?
@@ -831,22 +832,11 @@ define('io.ox/mail/view-detail',
     });
 
     ext.point('io.ox/mail/detail').extend({
-        index: 135,
-        id: 'account',
-        draw: function (baton) {
-            if (!folder.is('unifiedmail', baton.data.folder_id)) return;
-            this.append(
-                $('<div>').addClass('account-name label label-info')
-                .text(_.noI18n(baton.data.account_name))
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/detail').extend({
         index: 140,
         id: 'subject',
         draw: function (baton) {
-            var subject = $.trim(baton.data.subject);
+            // soft-break long words (like long URLs)
+            var subject = $.trim(baton.data.subject).replace(/(\S{20})/g, '$1\u200B');
             this.append(
                 $('<div class="mail-detail-clear-left">'),
                 $('<div>')
@@ -905,6 +895,26 @@ define('io.ox/mail/view-detail',
                 );
                 drawAllDropDown(container, gt('All recipients'), data);
             }
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        after: 'tocopy',
+        id: 'account',
+        draw: function (baton) {
+
+            if (!folder.is('unifiedfolder', baton.data.folder_id)) return;
+
+            this.find('.to-cc').prepend(
+                $('<span class="io-ox-label">').append(
+                    $.txt(gt('Account')),
+                    $.txt(_.noI18n('\u00A0\u00A0'))
+                ),
+                $('<span class="account-name">').text(
+                    _.noI18n(util.getAccountName(baton.data))
+                ),
+                $.txt(_.noI18n(' \u00A0 '))
+            );
         }
     });
 
@@ -1079,7 +1089,7 @@ define('io.ox/mail/view-detail',
 
     // inline links for each mail
     ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
-        index: 170,
+        index: 1,
         id: 'inline-links',
         ref: 'io.ox/mail/links/inline'
     }));
@@ -1166,12 +1176,20 @@ define('io.ox/mail/view-detail',
 
             var data = baton.data, content = that.getContent(data);
 
-            this.attr({
-                'data-cid': data.folder_id + '.' + data.id,
-                'data-content-type': content.type
-            })
-            .append(
-                content.content,
+            this.append(
+                $('<article>').attr({
+                    'data-cid': data.folder_id + '.' + data.id,
+                    'data-content-type': content.type
+                })
+                .addClass(
+                    // assuming touch-pad/magic mouse for macos
+                    // chrome & safari do a good job; firefox is not smooth
+                    // ios means touch devices; that's fine
+                    _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
+                )
+                .append(
+                    content.content
+                ),
                 $('<div>').addClass('mail-detail-clear-both')
             );
 

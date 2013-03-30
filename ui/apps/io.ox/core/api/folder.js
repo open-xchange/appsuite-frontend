@@ -633,9 +633,9 @@ define('io.ox/core/api/folder',
                         return data.module === 'infostore';
                     case 'account':
                         return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
-                    case 'unifiedmail':
+                    case 'unifiedfolder':
                         id = data ? (data.id !== undefined ? data.id : data) : '';
-                        return account.isUnified(id);
+                        return account.isUnifiedFolder(id);
                     case 'external':
                         return (/^default[1-9]/).test(String(data.id)) && !this.is('unifiedmail', data);
                     case 'defaultfolder':

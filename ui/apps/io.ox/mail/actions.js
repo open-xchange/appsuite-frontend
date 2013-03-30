@@ -856,7 +856,11 @@ define('io.ox/mail/actions',
         index: 500,
         prio: 'hi',
         id: 'markunread',
-        label: gt('Mark Unread'),
+        label:
+            //#. Translation should be as short a possible
+            //#. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
+            //#. German, for example, should be "Ungelesen"
+            gt('Unread'),
         ref: 'io.ox/mail/actions/markunread'
     }));
 
@@ -864,7 +868,11 @@ define('io.ox/mail/actions',
         index: 501,
         prio: 'hi',
         id: 'markread',
-        label: gt('Mark read'),
+        label:
+            //#. Translation should be as short a possible
+            //#. Instead of "Mark as read" it's just "Mark read"
+            //#. German, for example, should be "Gelesen"
+            gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
     }));
 

@@ -77,7 +77,8 @@ define('io.ox/core/api/account',
         ox.api.cache.folder1.remove(id);
     };
 
-    var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator);
+    var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator),
+        regUnified = new RegExp('^default\\d+' + separator + '[^' + separator + ']+$');
 
     var api = {};
 
@@ -86,6 +87,10 @@ define('io.ox/core/api/account',
     api.isUnified = function (id) {
         // is account? (unified inbox is not a usual account)
         return !api.isAccount(id);
+    };
+
+    api.isUnifiedFolder = function (id) {
+        return regUnified.test(id) && api.isUnified(id);
     };
 
     api.isAccount = function (id) {

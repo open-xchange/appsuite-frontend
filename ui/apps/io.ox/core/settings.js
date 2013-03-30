@@ -91,7 +91,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 key = parts.shift();
                 if (_.isObject(tmp)) {
                     if (parts.length) {
-                        if (!(key in tmp) && !!create) {
+                        if (!_.isObject(tmp[key]) && !!create) {
                             tmp = (tmp[key] = {});
                         } else {
                             tmp = tmp[key];
