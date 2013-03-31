@@ -66,8 +66,8 @@ define('io.ox/calendar/week/perspective',
                 obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog()
-                            .append(conflictView.drawList(con.conflicts))
+                        new dialogs.ModalDialog({ easyOut: true, top: "20%", center: false })
+                            .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
                             .show()
