@@ -182,7 +182,8 @@ define('io.ox/contacts/api',
                                 }
                                 api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 api.trigger('update', data);
-                                api.trigger('refresh.list');
+                                // trigger refresh.all, since position might have changed
+                                api.trigger('refresh.all');
                             });
                         });
                 });
