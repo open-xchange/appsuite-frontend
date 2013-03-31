@@ -157,7 +157,11 @@ define('io.ox/core/tk/vgrid',
                 // fetch data
                 return listRequest(all.slice(offset, offset + CHUNK_SIZE)).then(function (data) {
                     // only return data if still current offset
-                    return current === offset ? { data: data, offset: offset, length: data.length } : null;
+                    try {
+                        return current === offset ? { data: data, offset: offset, length: data.length } : null;
+                    } finally {
+                        data = all = null;
+                    }
                 });
             };
 
@@ -826,11 +830,8 @@ define('io.ox/core/tk/vgrid',
                     list = tmp.concat(list);
                 }
 
-                var changed = !_.isEqual(all, list);
-
-                if (changed) {
-                    loader.reset();
-                }
+                // always reset loader since header data (e.g. flags) might have changed
+                loader.reset();
 
                 if (isArray(list)) {
                     return apply(list)
@@ -838,6 +839,7 @@ define('io.ox/core/tk/vgrid',
                             self.idle();
                         })
                         .done(function () {
+                            var changed = !_.isEqual(all, list);
                             updateSelection(list.length !== all.length || changed);
                         });
                 } else {
@@ -1004,6 +1006,8 @@ define('io.ox/core/tk/vgrid',
         this.repaint = _.debounce(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
+            // reset loader
+            loader.reset();
             // cannot hand over deferred due to debounce;
             // don't remove debouce cause repaint is likely wired with APIs' refresh.list
             // which may be called many times in a row
