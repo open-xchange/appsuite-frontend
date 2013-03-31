@@ -658,7 +658,7 @@ define('io.ox/backbone/forms',
                 if (_.isNull(mydate)) {
                     return value;
                 }
-                
+
                 return new date.Local(mydate).format(date.DATE);
             },
 
@@ -671,7 +671,7 @@ define('io.ox/backbone/forms',
                 if (_.isNull(myTime)) {
                     return value;
                 }
-                
+
                 return new date.Local(myTime).format(date.TIME);
             },
 
@@ -682,7 +682,7 @@ define('io.ox/backbone/forms',
                 }
                 var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.TIME);
-                
+
                 if (_.isNull(parsedDate)) {
                     return mydate.getTime();
                 }
@@ -701,7 +701,7 @@ define('io.ox/backbone/forms',
                 }
                 var mydate = new date.Local(myValue);
                 var parsedDate = date.Local.parse(value, date.DATE);
-                
+
                 if (_.isNull(parsedDate)) {
                     return value;
                 }
@@ -798,6 +798,7 @@ define('io.ox/backbone/forms',
                 var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
                 this.nodes.dayField.datepicker({
                     format: dateFormat,
+                    weekStart: date.locale.weekStart,
                     parentEl: self.nodes.controlGroup,
                     todayHighlight: true,
                     todayBtn: true
