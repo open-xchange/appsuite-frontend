@@ -79,6 +79,9 @@ define('io.ox/core/tk/folderviews',
 
                 if (loading) return $.Deferred().resolve([]);
 
+                // remove potential fail messages from previous refreshes
+                nodes.sub.find('.io-ox-fail').parent().remove();
+
                 // be busy
                 nodes.sub.busy().show();
 
