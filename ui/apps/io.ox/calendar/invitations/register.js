@@ -394,9 +394,17 @@ define('io.ox/calendar/invitations/register',
                     baton.appointment = appointment;
                     drawAppointmentDetails(baton, api, settings);
                 },
-                function fail() {
+                function fail(e) {
                     // bad luck or most probably the appointment is deleted
-                    baton.$.well.remove();
+                    baton.$.well
+                        .addClass('auto-height')
+                        .find('.appointmentInfo').text(
+                            gt('Failed to load detailed appointment data; most probably the appointment has been deleted.')
+                        )
+                        .end()
+                        .find('.itip-action-container').remove()
+                        .end()
+                        .show();
                 }
             );
         });
