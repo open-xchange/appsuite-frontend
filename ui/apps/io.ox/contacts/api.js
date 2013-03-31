@@ -88,57 +88,55 @@ define('io.ox/contacts/api',
         wat(data, 'email3');
 
         var method,
-            body,
-            attachmentHandlingNeeded = data.tempAttachmentIndicator;
+            attachmentHandlingNeeded = data.tempAttachmentIndicator,
+            opt = {
+                module: 'contacts',
+                data: data,
+                appendColumns: false,
+                fixPost: true
+            };
+
         delete data.tempAttachmentIndicator;
 
-        if ('FormData' in window && file instanceof window.File) {
-            if (file) {
-                var body = new FormData();
-                body.append('file', file);
-                body.append('json', JSON.stringify(data));
+        if (file) {
+            if (window.FormData && file instanceof window.File) {
                 method = 'UPLOAD';
+                opt.data = new FormData();
+                opt.data.append('file', file);
+                opt.data.append('json', JSON.stringify(data));
+                opt.params = { action: 'new' };
             } else {
-                body = data;
-                method = 'PUT';
+                method = 'FORM';
+                opt.form = file;
+                opt.action = 'new';
             }
-
-            // go!
-            return http[method]({
-                    module: 'contacts',
-                    params: { action: 'new' },
-                    data: body,
-                    appendColumns: false,
-                    fixPost: true
-                })
-                .pipe(function (fresh) {
-                    // UPLOAD does not process response data, so ...
-                    fresh = fresh.data || fresh;
-                    // get brand new object
-                    return api.get({ id: fresh.id, folder: data.folder_id });
-                })
-                .pipe(function (d) {
-                    return $.when(
-                        api.caches.all.grepRemove(d.folder_id + api.DELIM),
-                        fetchCache.clear()
-                    )
-                    .pipe(function () {
-                        if (attachmentHandlingNeeded) {
-                            api.addToUploadList(d.folder_id + '.' + d.id);//to make the detailview show the busy animation
-                        }
-                        api.trigger('create', { id: d.id, folder: d.folder_id });
-                        api.trigger('refresh.all');
-                        return d;
-                    });
-                });
         } else {
-            return http.FORM({
-                form: file,
-                module: 'contacts',
-                action: 'new',
-                data: data
-            });
+            method = 'PUT';
+            opt.params = { action: 'new' };
         }
+
+        // go!
+        return http[method](opt)
+            .pipe(function (fresh) {
+                // UPLOAD does not process response data, so ...
+                fresh = fresh.data || fresh;
+                // get brand new object
+                return api.get({ id: fresh.id, folder: data.folder_id });
+            })
+            .pipe(function (d) {
+                return $.when(
+                    api.caches.all.grepRemove(d.folder_id + api.DELIM),
+                    fetchCache.clear()
+                )
+                .pipe(function () {
+                    if (attachmentHandlingNeeded) {
+                        api.addToUploadList(d.folder_id + '.' + d.id);//to make the detailview show the busy animation
+                    }
+                    api.trigger('create', { id: d.id, folder: d.folder_id });
+                    api.trigger('refresh.all');
+                    return d;
+                });
+            });
     };
 
     api.update =  function (o) {
