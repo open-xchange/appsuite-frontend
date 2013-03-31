@@ -221,7 +221,7 @@
         .ellipsis();
     }
 
-    .appointment-content * {
+    .appointment-content > * {
         padding-left: 5px;
         display: inline;
     }
@@ -253,7 +253,6 @@
     .appointment .private-flag {
         float: left;
         font-size: 15px;
-        margin-right: 3px;
     }
 
     .appointment.reserved {
