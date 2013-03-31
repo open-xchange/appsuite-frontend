@@ -572,8 +572,8 @@ define('io.ox/mail/write/main',
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
                     app.dirty(true);
-                    app.getEditor().focus();
                     win.idle();
+                    app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -622,6 +622,8 @@ define('io.ox/mail/write/main',
                     // fixes a timing problem because select field is not fully
                     // drawn, when setMail is called
                     app.setFrom(data || {});
+                    // set to idle now; otherwise firefox doesn't set the focus
+                    win.idle();
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {
@@ -629,7 +631,6 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
-                    win.idle();
                     def.resolve();
                 })
                 .fail(function () {
@@ -663,9 +664,9 @@ define('io.ox/mail/write/main',
                             .done(function () {
                                 var ed = app.getEditor();
                                 ed.setCaretPosition(0);
+                                win.idle();
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                win.idle();
                                 def.resolve();
                             });
                         })
@@ -708,8 +709,8 @@ define('io.ox/mail/write/main',
                     .done(function () {
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
-                        focus('to');
                         win.idle();
+                        focus('to');
                         def.resolve();
                     });
                 })
@@ -736,8 +737,8 @@ define('io.ox/mail/write/main',
                 app.setMail({ data: data, mode: 'compose', initial: false })
                 .done(function () {
                     app.setFrom(data || {});
-                    app.getEditor().focus();
                     win.idle();
+                    app.getEditor().focus();
                     def.resolve();
                 })
                 .fail(function () {
