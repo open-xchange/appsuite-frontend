@@ -424,6 +424,28 @@ define("io.ox/calendar/view-detail",
         }
     });
 
+    // organizer
+    ext.point("io.ox/calendar/detail/details").extend({
+        index: 200,
+        id: "organizer",
+        draw: function (data) {
+            console.log('organizer', data);
+            if (data.organizerId) {
+                this.append(
+                    $('<span class="detail-label">').append(
+                        $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
+                    ),
+                    $('<span class="detail organizer">').append(
+                        $('<a href="#" class="halo-link">').data({ user_id: data.organizerId }).append(
+                            data.organizerId ? userAPI.getTextNode(data.organizerId) : ''
+                        )
+                    ),
+                    $('<br>')
+                 );
+            }
+        }
+    });
+
     ext.point("io.ox/calendar/detail").extend({
         id: 'attachments',
         index: 600,
