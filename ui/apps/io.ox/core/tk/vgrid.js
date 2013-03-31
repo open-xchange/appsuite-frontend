@@ -314,7 +314,6 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             selectFirstAllowed = true,
-            paused = false,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
@@ -807,28 +806,10 @@ define('io.ox/core/tk/vgrid',
             }
 
             function success(list) {
+
                 // mark as loaded
                 loaded = true;
                 responsiveChange = false;
-                // get list
-                if (!isArray(list)) {
-                    // try to use 'data' property
-                    self.prop('total', list.more);
-                    list = list.data;
-                }
-                // is pause? (only allow new items)
-                if (paused) {
-                    var hash = {}, tmp = [];
-                    _(all).each(function (obj) {
-                        hash[_.cid(obj)] = true;
-                    });
-                    _(list).each(function (obj) {
-                        if (!(_.cid(obj) in hash)) {
-                            tmp.push(obj);
-                        }
-                    });
-                    list = tmp.concat(list);
-                }
 
                 // always reset loader since header data (e.g. flags) might have changed
                 loader.reset();
@@ -1015,7 +996,7 @@ define('io.ox/core/tk/vgrid',
         }, 100, true);
 
         this.clear = function () {
-            return paused ? $.when() : apply([], true);
+            return apply([], true);
         };
 
         this.refresh = function (force) {
@@ -1158,14 +1139,8 @@ define('io.ox/core/tk/vgrid',
             }
         };
 
-        this.pause = function () {
-            paused = true;
-            return self;
-        };
-
-        this.resume = function () {
-            paused = false;
-            return self;
+        this.getIds = function () {
+            return all.slice(); // return shallow copy
         };
 
         this.isVisible = isVisible;

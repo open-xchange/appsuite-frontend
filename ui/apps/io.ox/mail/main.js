@@ -145,6 +145,8 @@ define('io.ox/mail/main',
         grid.on('change:prop:folder', function (e, folder) {
             // reset max
             grid.option('max', originalOptions.max);
+            // reset "unread only"
+            grid.prop('unread', false);
             // template changes for unified mail
             var unified = folderAPI.is('unifiedfolder', folder);
             if (unified !== tmpl.unified) {
@@ -264,14 +266,6 @@ define('io.ox/mail/main',
             }
         });
 
-        grid.on('change:prop:unread', function (e, value) {
-            if (value === true) {
-                grid.refresh().done(grid.pause);
-            } else {
-                grid.resume().refresh(true);
-            }
-        });
-
         grid.on('change:prop', drawGridOptions);
         drawGridOptions();
 
@@ -299,26 +293,55 @@ define('io.ox/mail/main',
             }
         });
 
+        var unseenHash = {};
+
+        function isUnseen(obj) {
+            return api.tracker.isUnseen(obj);
+        }
+
+        function updateUnseenHash(list) {
+            _(list).each(function (obj) {
+                var cid = _.cid(obj);
+                if (isUnseen(cid)) {
+                    unseenHash[cid] = true;
+                }
+            });
+        }
+
+        function resetUnseenHash() {
+            unseenHash = {};
+        }
+
         grid.setAllRequest(function () {
 
-            var sort = this.prop('sort'), unread = this.prop('unread');
-
-            return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
+            var sort = this.prop('sort'),
+                unread = this.prop('unread'),
+                call = sort === 'thread' ? 'getAllThreads' : 'getAll',
+                options = {
                     folder: this.prop('folder'),
-                    sort: sort,
+                    max: this.option('max'),
                     order: this.prop('order'),
-                    max: this.option('max')
-                }, 'auto')
-                .pipe(function (response) {
-                    if (unread) {
-                        if (response.data) { //threadview
-                            response.data = _(response.data).filter(util.isUnseen);
-                        } else { //no threadview
-                            response = _(response).filter(util.isUnseen);
+                    sort: sort
+                };
+
+            return api[call](options, 'auto').then(function (response) {
+
+                var data = response.data || response;
+
+                if (unread) {
+                    // return all mails that are either unseen or in unseenHash
+                    data = _(data).filter(function (obj) {
+                        var cid = _.cid(obj);
+                        if (cid in unseenHash) return true;
+                        if (isUnseen(cid)) {
+                            unseenHash[cid] = true;
+                            return true;
                         }
-                    }
-                    return response;
-                });
+                        return false;
+                    });
+                }
+                return data;
+            });
         });
 
         grid.setListRequest(function (ids) {
@@ -326,9 +349,25 @@ define('io.ox/mail/main',
             return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 
+        grid.on('change:prop:unread', function (e, value) {
+            var state = grid.prop('unread');
+            if (value === true) {
+                // turn on
+                grid.prop('unread', true);
+                // add all unread mails to hash
+                updateUnseenHash(grid.getIds());
+                // refresh now
+                grid.refresh();
+            } else {
+                // turn off
+                grid.prop('unread', false).refresh();
+                resetUnseenHash();
+            }
+        });
+
         win.nodes.title.on('click', '.badge', function (e) {
             e.preventDefault();
-            grid.prop('unread', !grid.prop('unread')).refresh();
+            grid.prop('unread', !grid.prop('unread'));
         });
 
 
