@@ -718,8 +718,15 @@ define('io.ox/core/tk/vgrid',
             if (!quiet) {
                 self.trigger('change:ids', all);
             }
-            // paint items
-            var offset = currentOffset || (getIndex(node.scrollTop()) - (numRows - numVisible));
+            // get proper offset
+            var top, index, offset;
+            if (currentOffset !== null) {
+                offset = currentOffset;
+            } else {
+                top = scrollpane.scrollTop();
+                index = getIndex(top);
+                offset = index - (numVisible >> 1);
+            }
             return paint(offset);
         }
 
@@ -830,10 +837,8 @@ define('io.ox/core/tk/vgrid',
             }
 
             return function () {
-                if (responsiveChange || all.length === 0) {
-                    self.busy();
-                }
                 // get all IDs
+                if (responsiveChange || all.length === 0) self.busy();
                 var load = loadIds[currentMode] || loadIds.all;
                 return load.call(self).then(_.lfo(success), _.lfo(fail));
             };
