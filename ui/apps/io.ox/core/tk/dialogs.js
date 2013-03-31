@@ -39,6 +39,7 @@ define("io.ox/core/tk/dialogs",
             innerFocus = $(),
             deferred = $.Deferred(),
             closeViaEscapeKey,
+            isBusy = false,
             self = this,
             data = {},
 
@@ -89,6 +90,7 @@ define("io.ox/core/tk/dialogs",
                 nodes.body.css('opacity', 0.5);
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
+                isBusy = true;
             },
 
             idle = function () {
@@ -96,6 +98,7 @@ define("io.ox/core/tk/dialogs",
                 nodes.body.find('input, select, button, textarea').removeAttr('disabled');
                 nodes.body.css('opacity', '');
                 innerFocus.focus();
+                isBusy = false;
             },
 
             invoke = function (e) {
@@ -233,7 +236,7 @@ define("io.ox/core/tk/dialogs",
         };
 
         closeViaEscapeKey = function (e) {
-            if (e.which === 27) {
+            if (e.which === 27 && !isBusy) {
                 invoke('cancel');
             }
         };
@@ -346,7 +349,7 @@ define("io.ox/core/tk/dialogs",
         nodes.underlay.click(function () {
             if (o && o.underlayAction) {
                 invoke(o.underlayAction);
-            } else if (o && o.easyOut) {
+            } else if (o && o.easyOut && !isBusy) {
                 invoke("cancel");
             }
         });
