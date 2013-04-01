@@ -104,7 +104,7 @@ define('io.ox/mail/main',
 
         ext.point('io.ox/mail/vgrid/options').extend({
             threadView: settings.get('threadView') !== 'off',
-            selectFirstItem: settings.get('selectFirstMessage', true),
+            selectFirst: false,
             max: 500
         });
 

@@ -182,107 +182,6 @@ define('io.ox/core/tk/vgrid',
         this.reset();
     };
 
-    // var ChunkedLoader = function (options) {
-    //     var CHUNK_SIZE = 100,
-    //         THRESHHOLD_EAGER = 0,
-    //         activeLoaders = {};
-
-    //     this.MAX_CHUNK = 200;
-    //     this.MIN_CHUNK = 50;
-
-    //     this.fetch = _.identity();
-    //     this.all = function () {
-    //         return [];
-    //     };
-
-    //     this.loadChunk = function loadChunk(index, options) {
-    //         if (activeLoaders[index]) {
-    //             return activeLoaders[index];
-    //         }
-    //         var all = this.all(options);
-    //         var offset = CHUNK_SIZE * index;
-
-    //         var numRows = CHUNK_SIZE;
-    //         var subset = all.slice(offset, offset + numRows);
-
-    //         if (_.isEmpty(subset)) {
-    //             return $.Deferred().resolve([]);
-    //         }
-    //         var fetcher = this.fetch(subset, options);
-    //         activeLoaders[index] = fetcher;
-
-    //         fetcher.always(function () {
-    //             activeLoaders[index] = null;
-    //             delete activeLoaders[index];
-    //         });
-
-    //         return fetcher;
-    //     };
-
-    //     this.getChunkLoaders = function getChunkLoaders(start, length, options) {
-    //         CHUNK_SIZE = Math.max(Math.min(Math.ceil(this.all().length / 3), this.MAX_CHUNK), this.MIN_CHUNK);
-    //         THRESHHOLD_EAGER = CHUNK_SIZE;
-
-    //         var end = start + length,
-    //             startChunk = Math.floor(start / CHUNK_SIZE),
-    //             endChunk = Math.floor(end / CHUNK_SIZE),
-    //             chunkLoaders = [];
-
-    //         for (var i = startChunk; i <= endChunk; i++) {
-    //             var lowerBound = i * CHUNK_SIZE,
-    //                 upperBound = lowerBound + CHUNK_SIZE;
-    //             if (start > lowerBound) {
-    //                 lowerBound = start;
-    //             }
-    //             if (end < upperBound) {
-    //                 upperBound = end;
-    //             }
-    //             chunkLoaders.push({
-    //                 loader: this.loadChunk(i, options),
-    //                 start: lowerBound - (i * CHUNK_SIZE),
-    //                 end: upperBound - (i * CHUNK_SIZE)
-    //             });
-    //         }
-
-    //         // Fetch eagerly the next chunk, when we come close to the edge
-    //         if (activeLoaders.length < 5) {
-    //             if ((CHUNK_SIZE - (end % CHUNK_SIZE)) < THRESHHOLD_EAGER) {
-    //                 this.loadChunk(endChunk + 1, options);
-    //             }
-
-    //             // Fetch eagerly the previous chunk, when we come close to the edge
-    //             if (startChunk > 0 && ((start % CHUNK_SIZE) < THRESHHOLD_EAGER)) {
-    //                 this.loadChunk(startChunk - 1, options);
-    //             }
-    //         }
-
-    //         return chunkLoaders;
-    //     };
-
-    //     this.load = function (start, length, options) {
-    //         var chunkLoaders = this.getChunkLoaders(start, length, options);
-    //         var deferreds = [];
-    //         _(chunkLoaders).each(function (obj) {
-    //             deferreds.push(obj.loader);
-    //         });
-    //         var def = $.Deferred();
-    //         var list = [];
-
-    //         $.when.apply($, deferreds).done(function () {
-    //             var i;
-    //             for (i = 0; i < arguments.length; i++) {
-    //                 list = list.concat(arguments[i].slice(chunkLoaders[i].start, chunkLoaders[i].end));
-    //             }
-    //             def.resolve(list);
-    //         }).fail(def.reject);
-
-    //         return def;
-    //     };
-
-    //     _.extend(this, options);
-    // };
-
-
     var VGrid = function (target, options) {
 
         options = _.extend({
@@ -290,7 +189,8 @@ define('io.ox/core/tk/vgrid',
             editable: true,
             multiple: true,
             draggable: true,
-            dragType: ''
+            dragType: '',
+            selectFirst: true
         }, options || {});
 
         if (options.settings) {
@@ -313,7 +213,6 @@ define('io.ox/core/tk/vgrid',
             loaded = false,
             responsiveChange = true,
             firstRun = true,
-            selectFirstAllowed = true,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
@@ -742,7 +641,7 @@ define('io.ox/core/tk/vgrid',
                 return id !== undefined ? id.split(/,/) : [];
             }
 
-            function restoreSelection(ids, changed) {
+            function restoreHashSelection(ids, changed) {
                 // convert ids to objects first - avoids problems with
                 // non-existing items that cannot be resolved in selections
                 // console.debug('case #1:', ids);
@@ -751,7 +650,6 @@ define('io.ox/core/tk/vgrid',
                 if (selectionChanged) {
                     // set
                     self.selection.set(ids);
-                    selectFirstAllowed = false;
                 }
                 if (selectionChanged || changed) {
                     // scroll to first selected item
@@ -764,29 +662,41 @@ define('io.ox/core/tk/vgrid',
             }
 
             function autoSelectAllowed() {
-                return options.selectFirstItem !== false && $(document).width() > 700;
+                return $(document).width() > 700;
             }
 
             return function updateSelection(changed) {
-                if (all.length) {
-                    var ids = getIds();
+
+                if (!all.length) return;
+
+                var ids = getIds();
+
+                if (ids.length) {
                     if (self.selection.contains(ids)) {
                         // if ids are given and still part of the selection
                         // we can restore that state
-                        restoreSelection(ids, changed);
+                        restoreHashSelection(ids, changed);
+                        return;
+                    } else {
+                        self.selection.clear();
                     }
-                    else if (autoSelectAllowed()) {
-                        // select first?
-                        if (selectFirstAllowed) {
-                            // console.debug('case #2: first');
-                            self.selection.selectFirst();
-                            selectFirstAllowed = false;
+                }
+
+                if (autoSelectAllowed()) {
+                    var i = self.select();
+                    if (_.isNumber(i)) {
+                        // select by index
+                        self.selection.set(all[i]);
+                        if (!isVisible(i)) {
+                            setIndex(i - 2); // not at the very top
                         }
-                        else {
-                            // set selection based on last index
-                            // console.debug('case #3: last index');
-                            self.selection.selectLastIndex();
-                        }
+                    }
+                    else if (_.isArray(i)) {
+                        // select by object (cid)
+                        self.selection.set(i);
+                    }
+                    else if (options.selectFirst) {
+                        self.selection.selectFirst();
                     }
                 }
             };
@@ -1020,7 +930,6 @@ define('io.ox/core/tk/vgrid',
             var previous = currentMode;
             currentMode = mode;
             _.url.hash('id', null);
-            selectFirstAllowed = false;
             responsiveChange = true;
             this.trigger('change:mode', currentMode, previous);
             return this.refresh();
@@ -1097,6 +1006,8 @@ define('io.ox/core/tk/vgrid',
                 if (value !== undefined) {
                     var previous = options[key];
                     if (value !== previous) {
+                        this.trigger('beforechange:option', key, value, previous);
+                        this.trigger('beforechange:option:' + key, value, previous);
                         options[key] = value;
                         this.trigger('change:option', key, value, previous);
                         this.trigger('change:option:' + key, value, previous);
@@ -1116,6 +1027,8 @@ define('io.ox/core/tk/vgrid',
                 if (value !== undefined) {
                     var previous = props[key];
                     if (value !== previous) {
+                        this.trigger('beforechange:prop', key, value, previous);
+                        this.trigger('beforechange:prop:' + key, value, previous);
                         props[key] = value;
                         this.trigger('change:prop', key, value, previous);
                         this.trigger('change:prop:' + key, value, previous);
@@ -1184,7 +1097,6 @@ define('io.ox/core/tk/vgrid',
             loader.reset();
             if (previous !== undefined) {
                 this.scrollTop(0);
-                selectFirstAllowed = false;
                 self.selection.resetLastIndex();
             }
         });
@@ -1196,8 +1108,26 @@ define('io.ox/core/tk/vgrid',
             this.scrollTop(0);
             self.selection.clear();
             self.selection.resetLastIndex();
-            selectFirstAllowed = (value === 'search');
         });
+
+        // default implementation if hash cannot be mapped
+        // returns index
+        this.select = (function () {
+
+            var hash = {};
+
+            self.on('beforechange:prop:folder', function (e, value, previous) {
+                if (previous !== undefined) {
+                    hash[previous] = self.selection.get();
+                }
+            });
+
+            return function () {
+                var folder = self.prop('folder');
+                //console.log('this.select', folder, hash[folder] || null, 'hash', hash);
+                return (currentMode === 'all' && hash[folder]) || null;
+            };
+        }());
     };
 
     // make Template accessible
