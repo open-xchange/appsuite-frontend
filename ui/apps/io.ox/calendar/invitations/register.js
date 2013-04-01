@@ -143,7 +143,7 @@ define('io.ox/calendar/invitations/register',
                 baton.$.well.replaceWith($well);
             }
 
-            drawScaffold.call(baton.$.well = $well);
+            drawScaffold.call(baton.$.well = $well, 'app');
 
             if (accepted) {
                 baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
@@ -199,7 +199,7 @@ define('io.ox/calendar/invitations/register',
 
             baton.$.well.find('.appointmentInfo').append(
                 _(appointments).map(function (appointment) {
-                    return $('<div>').append(drawAppointmentSummary(appointment));
+                    return $('<div>').append(drawSummary(appointment));
                 })
             );
 
@@ -359,9 +359,12 @@ define('io.ox/calendar/invitations/register',
         return $('<div class="well io-ox-calendar-itip-analysis">').hide();
     }
 
-    function drawScaffold() {
+    function drawScaffold(type) {
+        var text = type === 'appointment' ?
+            gt('This email contains an appointment') :
+            gt('This email contains a task');
         return this.append(
-            $('<div class="muted">').text(gt("This email contains an appointment")),
+            $('<div class="muted">').text(text),
             $('<div class="appointmentInfo">'),
             $('<div class="itip-action-container">').css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' }).append(
                 $('<div class="itip-actions">')
@@ -373,8 +376,9 @@ define('io.ox/calendar/invitations/register',
         require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (api, settings) {
             api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
                 function success(appointment) {
+                    appointment.type = 'appointment';
                     baton.appointment = appointment;
-                    drawAppointmentDetails(baton, api, settings);
+                    drawDetails(baton, api, settings);
                 },
                 function fail(e) {
                     // bad luck or most probably the appointment is deleted
@@ -392,6 +396,30 @@ define('io.ox/calendar/invitations/register',
         });
     }
 
+    function loadTask(baton) {
+        require(['io.ox/tasks/api', 'settings!io.ox/tasks'], function (api, settings) {
+            api.get({ folder: baton.task.folder_id, id: baton.task.id }).then(
+                function success(task) {
+                    task.type = 'task';
+                    baton.task = task;
+                    drawDetails(baton, api, settings);
+                },
+                function fail(e) {
+                    // bad luck or most probably the appointment is deleted
+                    baton.$.well
+                        .addClass('auto-height')
+                        .find('.appointmentInfo').text(
+                            gt('Failed to load detailed task data; most probably the task has been deleted.')
+                        )
+                        .end()
+                        .find('.itip-action-container').remove()
+                        .end()
+                        .show();
+                }
+            );
+        });
+    }
+
     function getConfirmationSelector(status) {
         if (status === 1) return 'button.btn-success';
         if (status === 2) return 'button.btn-danger';
@@ -399,12 +427,12 @@ define('io.ox/calendar/invitations/register',
         return '';
     }
 
-    function drawConfirmation(appointment) {
+    function drawConfirmation(data) {
         // 0 = none, 1 = accepted, 2 = declined, 3 = tentative
-        var status = util.getConfirmationStatus(appointment),
+        var status = util.getConfirmationStatus(data),
             message = '', className = '';
 
-        if (appointment.created_by === ox.user_id) {
+        if (data.created_by === ox.user_id) {
             message = gt('You are the organizer');
             className = 'organizer';
             return $('<div class="confirmation-status">').addClass(className).text(message);
@@ -413,15 +441,21 @@ define('io.ox/calendar/invitations/register',
         if (status > 0) {
             switch (status) {
             case 1:
-                message = gt('You have accepted this invitation');
+                message = data.type === 'appointment' ?
+                    gt('You have accepted this appointment') :
+                    gt('You have accepted this task');
                 className = 'accepted';
                 break;
             case 2:
-                message = gt('You declined this invitation');
+                message = data.type === 'appointment' ?
+                    gt('You declined this appointment') :
+                    gt('You declined this task');
                 className = 'declined';
                 break;
             case 3:
-                message = gt('You tentatively accepted this invitation');
+                message = data.type === 'appointment' ?
+                    gt('You tentatively accepted this invitation') :
+                    gt('You tentatively accepted this task');
                 className = 'tentative';
                 break;
             }
@@ -431,29 +465,30 @@ define('io.ox/calendar/invitations/register',
         return $();
     }
 
-    function drawAppointmentSummary(appointment) {
-        var recurrenceString = util.getRecurrenceString(appointment);
+    function drawSummary(data) {
+        var recurrenceString = util.getRecurrenceString(data);
         return [
-            $('<b>').text(appointment.title), $.txt(', '),
+            $('<b>').text(data.title), $.txt(', '),
             $('<span class="day">').append(
-                $.txt(gt.noI18n(util.getDateInterval(appointment))),
+                $.txt(gt.noI18n(util.getDateInterval(data))),
                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
             ),
             // confirmation
-            drawConfirmation(appointment)
+            drawConfirmation(data)
         ];
     }
 
-    function drawAppointmentDetails(baton, api, settings) {
+    function drawDetails(baton, api, settings) {
 
         var defaultReminder = settings.get('defaultReminder', 15),
             reminderSelect = $(),
-            status = util.getConfirmationStatus(baton.appointment),
+            data = baton.appointment || baton.task,
+            status = util.getConfirmationStatus(data),
             selector = getConfirmationSelector(status),
             accepted = status === 1;
 
         baton.$.well.find('.appointmentInfo').append(
-            drawAppointmentSummary(baton.appointment)
+            drawSummary(data)
         );
 
         if (accepted) {
@@ -491,8 +526,8 @@ define('io.ox/calendar/invitations/register',
                 baton.$.well.empty().busy();
 
                 api.confirm({
-                    folder: baton.appointment.folder_id,
-                    id: baton.appointment.id,
+                    folder: data.folder_id,
+                    id: data.id,
                     data: {
                         confirmation: Number($(e.target).data("action"))
                     }
@@ -501,19 +536,24 @@ define('io.ox/calendar/invitations/register',
                     if (!accepted) {
                         var reminder = parseInt(reminderSelect.find('select').val(), 10);
                         if (reminder !== defaultReminder) {
-                            baton.appointment.alarm = reminder;
-                            api.update(baton.appointment);
+                            data.alarm = reminder;
+                            api.update(data);
                         }
                     }
-                    require(["io.ox/mail/api", "settings!io.ox/core/calendar"], function (api, settings) {
+                    var dep = data.type === 'appointment' ? 'settings!io.ox/calendar' : 'settings!io.ox/tasks';
+                    require(["io.ox/mail/api", dep], function (api, settings) {
                         if (settings.get("deleteInvitationMailAfterAction")) {
                             // remove mail
-                            notifications.yell('success', successInternal[Number($(e.target).data("action"))]);
+                            notifications.yell('success', successInternal[Number($(e.target).data('action'))]);
                             api.remove([baton.data]);
                         } else {
                             // update well
-                            drawScaffold.call(baton.$.well.idle());
-                            loadAppointment(baton);
+                            drawScaffold.call(baton.$.well.idle(), data.type);
+                            if (data.type === 'appointment') {
+                                loadAppointment(baton);
+                            } else if (data.type === 'task') {
+                                loadTask(baton);
+                            }
                         }
                     });
                 })
@@ -531,21 +571,33 @@ define('io.ox/calendar/invitations/register',
         id: 'accept-decline',
         draw: function (baton) {
 
-            var $well;
+            var $well, module, reminder = baton.data.headers['X-OX-Reminder'], address;
 
-            if (baton.data.headers["X-OX-Reminder"] && baton.data.headers["X-Open-Xchange-Module"] === "Appointments") {
+            if (reminder) {
 
-                this.append(
-                    drawScaffold.call(baton.$.well = drawWell())
-                );
+                module = baton.data.headers['X-Open-Xchange-Module'];
 
-                var address = baton.data.headers["X-OX-Reminder"].split(/,\s*/);
-                baton.appointment = {
-                    folder_id: address[1],
-                    id: address[0]
-                };
+                // appointment or task?
+                if (/^(Appointments|Tasks)/.test(module)) {
 
-                loadAppointment(baton);
+                    address = reminder.split(/,\s*/);
+
+                    if (module === 'Appointments') {
+                        this.append(
+                            drawScaffold.call(baton.$.well = drawWell(), 'appointment')
+                        );
+                        baton.appointment = { folder_id: address[1], id: address[0] };
+                        return loadAppointment(baton);
+                    }
+
+                    if (module === 'Tasks') {
+                        this.append(
+                            drawScaffold.call(baton.$.well = drawWell(), 'task')
+                        );
+                        baton.task = { folder_id: address[1], id: address[0] };
+                        return loadTask(baton);
+                    }
+                }
             }
         }
     });
