@@ -335,12 +335,15 @@ define('io.ox/calendar/week/view',
             if ($(e.target).hasClass('timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.getTimeFromPos(e.target.offsetTop),
-                    startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date')) + pos;
-                this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
+                    start = this.getTimeFromDateTag($(e.currentTarget).attr('date')).add(pos);
+                this.trigger('openCreateAppointment', e, {
+                    start_date: start.getTime(),
+                    end_date: start.add(date.HOUR).getTime()
+                });
             }
             if ($(e.target).hasClass('day')) {
                 // calculate timestamp for current position
-                var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')));
+                var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')).getTime());
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
             }
         },
@@ -491,30 +494,30 @@ define('io.ox/calendar/week/view',
 
             case 'mouseup':
                 if (_.isObject(this.lasso) && e.which === 1) {
-                    var lData = this.lasso.data();
+                    var l = this.lasso.data();
 
                     // no action on 0px move
-                    if (lData.start === lData.stop && lData.lastDay === lData.startDay) {
+                    if (l.start === l.stop && l.lastDay === l.startDay) {
                         this.cleanUpLasso();
                         break;
                     }
 
-                    var start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)),
-                        end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay));
+                    var start = this.getTimeFromDateTag(Math.min(l.startDay, l.lastDay)),
+                        end = this.getTimeFromDateTag(Math.max(l.startDay, l.lastDay));
 
-                    if (lData.startDay === lData.lastDay) {
-                        start += this.getTimeFromPos(Math.min(lData.start, lData.stop));
-                        end += this.getTimeFromPos(Math.max(lData.start, lData.stop));
+                    if (l.startDay === l.lastDay) {
+                        start.add(this.getTimeFromPos(Math.min(l.start, l.stop)));
+                        end.add(this.getTimeFromPos(Math.max(l.start, l.stop)));
                     } else {
-                        start += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.stop : lData.start);
-                        end += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.start : lData.stop);
+                        start.add(this.getTimeFromPos(l.startDay > l.lastDay ? l.stop : l.start));
+                        end.add(this.getTimeFromPos(l.startDay > l.lastDay ? l.start : l.stop));
                     }
 
                     this.cleanUpLasso();
 
                     this.trigger('openCreateAppointment', e, {
-                        start_date: start,
-                        end_date: end,
+                        start_date: start.getTime(),
+                        end_date: end.getTime(),
                         lasso: true
                     });
                     e.stopImmediatePropagation();
@@ -534,12 +537,12 @@ define('io.ox/calendar/week/view',
          */
         cleanUpLasso: function () {
             if (_.isObject(this.lasso)) {
-                var lData = this.lasso.data();
+                var l = this.lasso.data();
                 // delete div and reset object
-                $.each(lData.helper, function (i, el) {
+                $.each(l.helper, function (i, el) {
                     el.remove();
                 });
-                lData = null;
+                l = null;
                 this.lasso.remove();
                 this.lasso = false;
             }
@@ -1090,10 +1093,10 @@ define('io.ox/calendar/week/view',
                         app.old_end_date = app.end_date;
                         switch (d.my.handle) {
                         case 'n':
-                            app.start_date = tmpTS + self.getTimeFromPos(d.my.top);
+                            app.start_date = tmpTS.add(self.getTimeFromPos(d.my.top)).getTime();
                             break;
                         case 's':
-                            app.end_date = tmpTS + self.getTimeFromPos(d.my.bottom);
+                            app.end_date = tmpTS.add(self.getTimeFromPos(d.my.bottom)).getTime();
                             break;
                         default:
                             break;
@@ -1144,7 +1147,6 @@ define('io.ox/calendar/week/view',
                         });
                     },
                     drag: function (e, ui) {
-                        // console.log(ui.position.left, ui.originalPosition.left);
                         var d = $(this).data('draggable'),
                             left = ui.position.left -= ui.originalPosition.left, // normalize to colWith
                             move = Math.floor(left / colWidth),
@@ -1254,9 +1256,13 @@ define('io.ox/calendar/week/view',
                     stop: function (e, ui) {
                         var d = $(this).data('draggable'),
                             off = $('.week-container', this.$el).offset(),
-                            move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
+                            move = Math.round(ui.position.left / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
+                            startTS = new date.Local(app.start_date)
+                                .add(self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top))
+                                .add(move * date.DAY)
+                                .getTime();
+
                         if (e.pageX < window.innerWidth && e.pageX > off.left && e.pageY < window.innerHeight) {
                             // save for update calculations
                             app.old_start_date = app.start_date;
@@ -1426,7 +1432,7 @@ define('io.ox/calendar/week/view',
          * @return {number}     timestamp
          */
         getTimeFromDateTag: function (tag)  {
-            return this.startDate.getTime() + (tag * date.DAY);
+            return new date.Local(this.startDate.getTime()).addUTC(tag * date.DAY);
         },
 
         /**
@@ -1436,8 +1442,7 @@ define('io.ox/calendar/week/view',
          * @return {number}           closest grid position
          */
         getTimeFromPos: function (pos, roundType) {
-            roundType = roundType || '';
-            return this.roundToGrid(pos, roundType) / this.height() * date.DAY;
+            return this.roundToGrid(pos, roundType || '') / this.height() * date.DAY;
         },
 
         /**
