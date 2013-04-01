@@ -41,8 +41,9 @@ define("io.ox/calendar/view-detail",
         index: 100,
         id: "date",
         draw: function (data) {
-            var node = $("<div>").addClass("date").appendTo(this);
-            ext.point("io.ox/calendar/detail/date").invoke("draw", node, data);
+            var node;
+            this.append(node = $('<div class="appointment-date">'));
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, data);
         }
     });
 

@@ -106,7 +106,7 @@
 
 /* Detail view */
 
-.calendar-detail .date {
+.calendar-detail .appointment-date {
     font-family: @lightFontFamily;
     font-weight: 300;
     font-size: 1.1em;
@@ -301,6 +301,10 @@
     margin-right: 14px;
 }
 
+.itip-section {
+    min-height: 100px;
+}
+
 .itip-actions {
     text-align: right;
     margin: 1em 0 0 1em;
@@ -325,7 +329,6 @@
     }
 
     .confirmation-status {
-        font-weight: bold;
         margin: 1em 0 1em 0;
     }
 

@@ -517,6 +517,7 @@ define('io.ox/mail/view-detail',
                         extension.invoke('draw', node, baton, ext.point("io.ox/mail/detail"));
                     }
                 });
+
                 if (!drawnAlternatively) {
                     ext.point('io.ox/mail/detail').invoke('draw', node, baton);
                 }
@@ -701,9 +702,26 @@ define('io.ox/mail/view-detail',
         }())
     };
 
-    //extensions
+    // extensions
+
+    // inline links for each mail
+    ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/mail/links/inline'
+    }));
 
     ext.point('io.ox/mail/detail').extend({
+        index: 200,
+        id: 'header',
+        draw: function (baton) {
+            var header = $('<header>');
+            ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
+            this.append(header);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/header').extend({
         index: 100,
         id: 'contact-picture',
         draw: function (baton) {
@@ -727,7 +745,7 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 110,
         id: 'receiveddate',
         draw: function (baton) {
@@ -748,7 +766,7 @@ define('io.ox/mail/view-detail',
         win.search.start(query);
     }
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 120,
         id: 'fromlist',
         draw: function (baton) {
@@ -765,7 +783,7 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 124,
         id: 'thread-position',
         draw: function (baton) {
@@ -800,7 +818,7 @@ define('io.ox/mail/view-detail',
         return api.changeColor(e.data.data, e.data.color);
     }
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 130,
         id: 'flag',
         draw: function (baton) {
@@ -831,7 +849,7 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 140,
         id: 'subject',
         draw: function (baton) {
@@ -860,7 +878,7 @@ define('io.ox/mail/view-detail',
             }).draw.call(node, data);
     };
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 150,
         id: 'tocopy',
         draw: function (baton) {
@@ -898,7 +916,7 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         after: 'tocopy',
         id: 'account',
         draw: function (baton) {
@@ -967,7 +985,7 @@ define('io.ox/mail/view-detail',
         $(this).remove();
     }
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 160,
         id: 'attachments',
         draw: function (baton) {
@@ -1019,7 +1037,7 @@ define('io.ox/mail/view-detail',
     /**
      * @description actions for publication invitation mails
      */
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 199,
         id: 'subscribe',
         draw: function (baton) {
@@ -1087,13 +1105,6 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    // inline links for each mail
-    ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
-        index: 1,
-        id: 'inline-links',
-        ref: 'io.ox/mail/links/inline'
-    }));
-
     // inline links for entire thread
     ext.point('io.ox/mail/thread').extend(new links.DropdownLinks({
         label: gt('Entire thread'),
@@ -1101,7 +1112,7 @@ define('io.ox/mail/view-detail',
         ref: 'io.ox/mail/links/inline'
     }));
 
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 90,
         id: 'phishing-warning',
         draw: function (baton) {
@@ -1127,7 +1138,7 @@ define('io.ox/mail/view-detail',
     });
 
     // TODO: remove click handler out of inner closure
-    ext.point('io.ox/mail/detail').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         index: 195,
         id: 'externalresources-warning',
         draw: function (baton) {
@@ -1170,7 +1181,7 @@ define('io.ox/mail/view-detail',
     }
 
     ext.point('io.ox/mail/detail').extend({
-        index: 200,
+        index: 300,
         id: 'content',
         draw: function (baton) {
 
@@ -1188,9 +1199,9 @@ define('io.ox/mail/view-detail',
                     _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
                 )
                 .append(
-                    content.content
-                ),
-                $('<div>').addClass('mail-detail-clear-both')
+                    content.content,
+                    $('<div class="mail-detail-clear-both">')
+                )
             );
 
             var content = this.find('.content');

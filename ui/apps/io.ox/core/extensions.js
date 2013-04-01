@@ -291,10 +291,22 @@ define("io.ox/core/extensions",
             return list().pluck(id).value();
         };
 
-        this.invoke = function (/* name, context */) {
+        this.invoke = function (name, context, baton) {
             var o = list(),
                 args = ['invoke'].concat($.makeArray(arguments));
-            return o.invoke.apply(o, args);
+            // manual invoke to consider baton
+            if (baton instanceof Baton) {
+                return o.map(function (ext) {
+                    if (!baton.isDisabled(self.id, ext.id)) {
+                        if (_.isFunction(ext[name])) {
+                            return ext[name].apply(context, args.slice(3));
+                        }
+                    }
+                })
+                .compact();
+            } else {
+                return o.invoke.apply(o, args);
+            }
         };
 
         this.disable = function (id) {
@@ -361,6 +373,7 @@ define("io.ox/core/extensions",
             // to be safe
             this.data = {};
             this.options = {};
+            this.flow = { disable: {} };
             this.$ = {};
             // just copy given object
             _.extend(this, obj);
@@ -401,6 +414,16 @@ define("io.ox/core/extensions",
                 clone[key] = _.extend({}, obj);
             });
             return clone;
+        },
+
+        disable: function (pointId, extensionId) {
+            var hash = this.flow.disable;
+            (hash[pointId] = hash[pointId] || []).push(extensionId);
+        },
+
+        isDisabled: function (pointId, extensionId) {
+            var list = this.flow.disable[pointId];
+            return list === undefined ? false : _(list).contains(extensionId);
         }
     };
 

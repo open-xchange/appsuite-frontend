@@ -106,7 +106,7 @@ define('io.ox/calendar/invitations/register',
         });
     }
 
-    function renderAnalysis($node, detailPoint, baton) {
+    function renderAnalysis($node, baton) {
 
         function rerender(baton) {
             analyzeAttachment(baton).done(function (results) {
@@ -214,35 +214,6 @@ define('io.ox/calendar/invitations/register',
             baton.$.well.show();
         }
 
-        var replace = {
-            content: function () {
-                var $analysisNode;
-                $node.append($analysisNode = $('<div class="io-ox-calendar-itip-analysis">'));
-                // Annotations
-                _(baton.analysis.annotations).each(function (annotation) {
-                    renderAnnotation($analysisNode, annotation, baton.analysis, detailPoint, baton);
-                });
-                // Changes
-                _(baton.analysis.changes).each(function (change) {
-                    renderChange($analysisNode, change, baton.analysis, detailPoint, baton);
-                });
-            }
-        };
-
-        var after = {
-
-            'inline-links': function () {
-
-                if (baton.analysis.actions.length === 1 && baton.analysis.actions[0] === 'ignore') {
-                    return;
-                }
-
-                render(baton);
-                $node.append(baton.$.well);
-            }
-        };
-
-
         baton.imip.analysis = baton.analysis;
 
         // Let's remove the ITip Attachments
@@ -250,41 +221,44 @@ define('io.ox/calendar/invitations/register',
             return !(/\.ics$/).test(attachment.filename);
         });
 
-        detailPoint.each(function (extension) {
-            if (replace[extension.id]) {
-                replace[extension.id]();
-            } else {
-                if (extension.drawInvitation) {
-                    extension.invoke('drawInvitation', $node, baton);
-                } else {
-                    extension.invoke('draw', $node, baton);
-                }
-            }
-            if (after[extension.id]) {
-                after[extension.id]();
-            }
+        // draw well
+        if (baton.analysis.actions.length !== 1 || baton.analysis.actions[0] !== 'ignore') {
+            render(baton);
+            $node.append(baton.$.well);
+        }
+
+        // draw appointment details
+        var $analysisNode;
+        $node.append($analysisNode = $('<div class="io-ox-calendar-itip-analysis">'));
+        // Annotations
+        _(baton.analysis.annotations).each(function (annotation) {
+            renderAnnotation($analysisNode, annotation, baton.analysis, baton);
+        });
+        // Changes
+        _(baton.analysis.changes).each(function (change) {
+            renderChange($analysisNode, change, baton.analysis, baton);
         });
     }
 
-    function renderAnnotation($node, annotation, analysis, detailPoint, baton) {
+    function renderAnnotation($node, annotation, analysis, baton) {
         $node.append(
             $('<div class="annotation">').append(
                 $('<div class="message alert">').append(annotation.message),
-                renderAppointment(annotation.appointment, baton, detailPoint)
+                renderAppointment(annotation.appointment, baton)
             )
         );
     }
 
-    function renderChange($node, change, analysis, detailPoint, baton) {
+    function renderChange($node, change, analysis, baton) {
         $node.append(
             $('<div class="change">').append(
                 renderConflicts(change),
-                renderAppointment(change.newAppointment || change.currentAppointment || change.deletedAppointment, detailPoint, baton)
+                renderAppointment(change.newAppointment || change.currentAppointment || change.deletedAppointment, baton)
             )
         );
     }
 
-    function renderAppointment(appointment, detailPoint, baton) {
+    function renderAppointment(appointment, baton) {
         if (!appointment) {
             return $();
         }
@@ -347,29 +321,37 @@ define('io.ox/calendar/invitations/register',
         });
     }
 
-    ext.point("io.ox/mail/detail/alternatives").extend({
-        index: 100,
-        id: 'imip',
-        accept: function (baton) {
+    ext.point('io.ox/mail/detail').extend({
+        index: 'first',
+        id: 'imip-check',
+        draw: function (baton) {
+            // look for itip
             var imipAttachment = discoverIMipAttachment(baton);
             if (imipAttachment) {
-                baton.imip = {
-                    attachment: imipAttachment
-                };
-                return true;
+                baton.imip = { attachment: imipAttachment };
+                // change flow
+                baton.disable('io.ox/mail/detail', 'content');
             }
-            return false;
-        },
-        draw: function (baton, detailPoint) {
-            var $node = this;
-            $node.busy();
-            analyzeAttachment(baton).done(function (analysis) {
-                $node.idle();
-                _(analysis).each(function (a, index) {
-                    var clone = baton.clone({ analysis: a, index: index });
-                    renderAnalysis($node, detailPoint, clone);
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        before: 'content',
+        id: 'imip',
+        draw: function (baton) {
+            if (baton.imip) {
+                var node;
+                this.append(
+                    node = $('<section class="itip-section">').busy()
+                );
+                analyzeAttachment(baton).done(function (analysis) {
+                    node.idle();
+                    _(analysis).each(function (a, index) {
+                        var clone = baton.clone({ analysis: a, index: index });
+                        renderAnalysis(node, clone);
+                    });
                 });
-            });
+            }
         }
     });
 
@@ -422,6 +404,12 @@ define('io.ox/calendar/invitations/register',
         var status = util.getConfirmationStatus(appointment),
             message = '', className = '';
 
+        if (appointment.created_by === ox.user_id) {
+            message = gt('You are the organizer');
+            className = 'organizer';
+            return $('<div class="confirmation-status">').addClass(className).text(message);
+        }
+
         if (status > 0) {
             switch (status) {
             case 1:
@@ -438,9 +426,9 @@ define('io.ox/calendar/invitations/register',
                 break;
             }
             return $('<div class="confirmation-status">').addClass(className).text(message);
-        } else {
-            return $();
         }
+
+        return $();
     }
 
     function drawAppointmentSummary(appointment) {
@@ -539,7 +527,7 @@ define('io.ox/calendar/invitations/register',
     }
 
     ext.point('io.ox/mail/detail').extend({
-        index: 175,
+        before: 'content',
         id: 'accept-decline',
         draw: function (baton) {
 
