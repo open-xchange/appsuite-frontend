@@ -676,15 +676,20 @@ define("io.ox/core/desktop",
         });
 
         that.on("window.close window.quit window.pre-quit", function (e, win, type) {
-
+            // fallback for different trigger functions
+            if (!type) {
+                type = e.type + '.' + e.namespace;
+            }
             var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
                 // quit?
                 if (type === "window.quit") {
+                    // remove item at pos
                     windows.splice(pos, 1);
                 }
                 // close?
                 else if (type === "window.close" || type === 'window.pre-quit') {
+                    // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
                 }
