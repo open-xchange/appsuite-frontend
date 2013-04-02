@@ -135,7 +135,7 @@ define('io.ox/core/api/pubsub',
             module: 'subscriptions',
             requests: {
                 all: {
-                    columns: 'id,displayName,enabled',
+                    columns: 'id,folder,displayName,enabled',
                     extendColumns: 'io.ox/core/api/pubsub/subscriptions/all'
                 }
             }

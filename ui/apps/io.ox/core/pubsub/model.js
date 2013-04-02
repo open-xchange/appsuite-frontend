@@ -84,7 +84,7 @@ define('io.ox/core/pubsub/model',
                     return api.subscriptions.create(model.attributes);
                 },
                 read: function (model) {
-                    return api.subscriptions.get({id: model.id});
+                    return api.subscriptions.get({id: model.id, folder: model.get('folder')});
                 },
                 update: function (model) {
                     return api.subscriptions.update(model.attributes);
