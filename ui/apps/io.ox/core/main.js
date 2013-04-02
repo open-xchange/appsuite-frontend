@@ -647,22 +647,6 @@ define("io.ox/core/main",
             }
         });
 
-        var drawDesktop = function () {
-            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
-            drawDesktop = $.noop;
-        };
-
-        ox.ui.windowManager.on("empty", function (e, isEmpty) {
-            if (isEmpty) {
-                drawDesktop();
-            }
-            if (isEmpty) {
-                ox.ui.screens.show('desktop');
-            } else {
-                ox.ui.screens.show('windowmanager');
-            }
-        });
-
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
             location.hash = '#!';
@@ -694,6 +678,21 @@ define("io.ox/core/main",
 
         baton.autoLaunchApps = _(baton.autoLaunch).map(function (m) {
             return getAutoLaunchDetails(m).app;
+        });
+
+        var drawDesktop = function () {
+            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+            drawDesktop = $.noop;
+        };
+
+        ox.ui.windowManager.on("empty", function (e, isEmpty, win) {
+            if (isEmpty) {
+                drawDesktop();
+                ox.ui.screens.show('desktop');
+                ox.launch(getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app);
+            } else {
+                ox.ui.screens.show('windowmanager');
+            }
         });
 
         // start loading stuff

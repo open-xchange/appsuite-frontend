@@ -669,6 +669,13 @@ define("io.ox/core/desktop",
             // move/add window to top of stack
             windows = _(windows).without(win);
             windows.unshift(win);
+            // add current windows to cache
+            if (windows.length > 1) {
+                var winCache = _(windows).map(function (w) {
+                    return w.name;
+                });
+                appCache.add('windows', winCache || []);
+            }
         });
 
         that.on("window.beforeshow", function (e, win) {
@@ -703,7 +710,14 @@ define("io.ox/core/desktop",
                 }
             }
 
-            that.trigger("empty", numOpen() === 0);
+            var isEmpty = numOpen() === 0;
+            if (isEmpty) {
+                appCache.get('windows').done(function (winCache) {
+                    that.trigger("empty", true, winCache ? winCache[1] || null : null);
+                });
+            } else {
+                that.trigger("empty", false);
+            }
         });
 
         return that;
