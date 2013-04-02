@@ -63,36 +63,6 @@
                 </div>
             </div>
         </div>
-		<!-- <div class="control-group">
-			<label for="range_calendar_view" class="control-label">{{=it.strings.TR_CALENDAR_VIEW}}</label>
-			<div class="controls">
-				<label class="select">
-					<select data-property="viewCalendar" id="range_calendar_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
-					</select>
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="range_team_view" class="control-label">{{=it.strings.TR_TEAM_VIEW}}</label>
-			<div class="controls">
-				<label class="select">
-					<select data-property="viewTeam" id="range_team_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
-					</select>
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="range_list_view" class="control-label">{{=it.strings.TR_LIST_VIEW}}</label>
-			<div class="controls">
-				<label class="select">
-					<select data-property="viewList" id="range_list_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
-					</select>
-				</label>
-			</div>
-		</div> -->
 	</extension>
 	<extension id='appointment'>
 		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_NEW_APPOINTMENT}}</legend>
@@ -104,6 +74,19 @@
                         {{~it.optionsReminderSelection :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
                     </select>
                 </label>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.MARK_FULLTIME_APPOINTMENTS_AS_FREE}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" name="markFulltimeAppointmentsAsFree" data-property="markFulltimeAppointmentsAsFree" value="{{=it.optionsYesAnswers.value}}">
+                    </label>
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" name="markFulltimeAppointmentsAsFree" data-property="markFulltimeAppointmentsAsFree" value="{{=it.optionsNoAnswers.value}}">
+                    </label>
+                </div>
             </div>
         </div>
 	</extension>
@@ -148,7 +131,7 @@
             </div>
         </div>
         <legend class="sectiontitle expertmode">{{=it.strings.TITLE_NOTIFICATION_MAIL_HANDLING}}</legend>
-        <div class="form-horizontal">        
+        <div class="form-horizontal">
             <div class="control-group expertmode">
                 <label class="control-label">{{=it.strings.NOTIFICATION_MAILS_ARE_DELETED}}</label>
                 <div class="controls">

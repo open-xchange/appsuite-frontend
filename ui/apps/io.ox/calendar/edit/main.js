@@ -19,7 +19,7 @@ define('io.ox/calendar/edit/main',
        'io.ox/core/notifications',
        'gettext!io.ox/calendar/edit/main',
        'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, calendarSettings) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
@@ -237,9 +237,10 @@ define('io.ox/calendar/edit/main',
                         });
                     }
 
-                    self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
-
-
+                    self.model.set('alarm', settings.get('defaultReminder', 15));
+                    if (self.model.get('full_time') === true) {
+                        self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
+                    }
                     self.considerSaved = true;
                     self.model.on('change', function () {
                         self.considerSaved = false;

@@ -43,7 +43,8 @@ define('io.ox/calendar/settings/pane',
             NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?'),
             SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
             NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
-            TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails")
+            TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
+            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
         },
 
         optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
@@ -112,7 +113,8 @@ define('io.ox/calendar/settings/pane',
                         'notifyNewModifiedDeleted',
                         'notifyAcceptedDeclinedAsCreator',
                         'notifyAcceptedDeclinedAsParticipant',
-                        'deleteInvitationMailAfterAction'
+                        'deleteInvitationMailAfterAction',
+                        'markFulltimeAppointmentsAsFree'
                     ],
                     boolParser = function (direction, value) {
                         return direction === 'ModelToView' ? value + '' : value === 'true';

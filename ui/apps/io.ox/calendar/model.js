@@ -19,7 +19,8 @@ define('io.ox/calendar/model',
         'io.ox/participants/model',
         'io.ox/core/date',
         'io.ox/core/api/folder',
-        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, configAPI) {
+        'settings!io.ox/calendar',
+        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings, configAPI) {
 
     "use strict";
 
@@ -260,10 +261,12 @@ define('io.ox/calendar/model',
         fullTimeChangeBindings: function (model) {
             // save initial values;
             var _start = model.get('full_time') ? date.Local.utc(model.get('start_date')) : model.get('start_date'),
-                _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date');
+                _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date'),
+                mark = settings.get('markFulltimeAppointmentsAsFree', false);
 
             model.on('change:full_time', function () {
                 if (model.get('full_time') === true) {
+                    // handle time
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date') - 1);
                     // parse to fulltime dates
@@ -273,7 +276,16 @@ define('io.ox/calendar/model',
                     // convert to UTC
                     model.set('start_date', date.Local.localTime(startDate.getTime()));
                     model.set('end_date', date.Local.localTime(endDate.getTime()));
+
+                    // handle shown as
+                    if (mark) {
+                        model.set('shown_as', 4);
+                    }
                 } else {
+                    if (mark) {
+                        model.set('shown_as', 1);
+                    }
+
                     model.set('start_date', _start);
                     model.set('end_date', _end);
                 }
