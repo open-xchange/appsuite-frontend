@@ -562,7 +562,12 @@ $(window).load(function () {
             }
 
             // we just need to be online for auto-login
-            var useAutoLogin = ox.online, initialized;
+            var initialized;
+
+            function gotoSignin() {
+                var ref = (location.hash || '').replace(/^#/, '');
+                _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+            }
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
@@ -582,8 +587,7 @@ $(window).load(function () {
                         }
                     );
                 } else {
-                    var ref = (location.hash || '').replace(/^#/, '');
-                    _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+                    gotoSignin();
                 }
             }
 
@@ -591,7 +595,7 @@ $(window).load(function () {
             if (_.url.hash('session')) {
 
                 // set store cookie?
-                return (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
+                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
 
                     var ref = _.url.hash('ref');
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
@@ -600,15 +604,16 @@ $(window).load(function () {
                     configCache = new cache.SimpleCache('manifests', true);
 
                     // fetch user config (need session now)
-                    ox.session = _.url.hash('session');
+                    var hash = _.url.hash();
+                    ox.session = hash.session;
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
                         // store login data (cause we have all valid languages now)
                         session.set({
-                            locale: _.url.hash('language'),
-                            session: _.url.hash('session'),
-                            user: _.url.hash('user'),
-                            user_id: parseInt(_.url.hash('user_id') || '0', 10)
+                            locale: hash.language,
+                            session: hash.session,
+                            user: hash.user,
+                            user_id: parseInt(hash.user_id || '0', 10)
                         });
                         // cleanup url
                         _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
@@ -619,10 +624,15 @@ $(window).load(function () {
                     });
                 });
 
+            } else if (!ox.online) {
+
+                // not online - no auto-login possible
+                gotoSignin();
+
             } else {
 
                 // try auto login!?
-                return (useAutoLogin ? session.autoLogin() : $.when())
+                session.autoLogin()
                 .always(function () {
                     // init manifest cache now (have ox.user now)
                     configCache = new cache.SimpleCache('manifests', true);
@@ -637,7 +647,6 @@ $(window).load(function () {
                         } else {
                             fetchUserSpecificServerConfig().done(function () {
                                 // apply session data & page title
-                                session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 loadCoreFiles().done(function () {
                                     loadCore();
