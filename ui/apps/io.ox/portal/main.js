@@ -62,13 +62,17 @@ define('io.ox/portal/main',
         id: 'header',
         index: 100,
         draw: function (baton) {
+            var $btn = $();
+            if (_.device('!small')) {
+                // please no button
+                $btn = $('<button class="btn btn-primary pull-right">')
+                    .attr('data-action', 'customize')
+                    .on('click', openSettings);
+            }
             this.append(
                 $('<div class="header">').append(
                     // button
-                    $('<button class="btn btn-primary pull-right">')
-                        .attr('data-action', 'customize')
-                        .text(gt('Customize this page'))
-                        .on('click', openSettings),
+                    $btn,
                     // greeting
                     $('<h1 class="greeting">').append(
                         baton.$.greeting = $('<span class="greeting-phrase">'),
