@@ -456,13 +456,16 @@
     @media all and (max-width: 480px) {
 
         .toolbar .info {
-            top: 40px;
-            font-size: 15px;
+            .kwinfo {
+                font-size: 15px;
+            }
+            top: 9px;
             left: 10px;
         }
         .toolbar .showall {
-            right: 30px;
-            top: 47px;
+            left: 12px;
+            top: 56px;
+            right: initial;
         }
         .pagination {
             position: absolute;
@@ -488,9 +491,12 @@
         .week-container {
             left:  @SMALL-weekview-time-with;
         }
-        .week-view-container {
-            top: @weekview-toolbar-height + @weekview-footer-height + 7 + 4;
+
+        .dayview .week-view-container,
+        &.dayview .week-view-container {
+           top: @weekview-toolbar-height + @weekview-footer-height + 7 + 4;
         }
+
    }
 }
 
