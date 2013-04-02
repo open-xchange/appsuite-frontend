@@ -247,16 +247,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         return that;
     }
 
-    // Open the Meta-Database
-    var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
-
-    opened.onupgradeneeded = function (e) {
-        // Set up object stores
-        var db = e.target.result;
-        db.createObjectStore("databases", {keyPath: "name"});
-        db.createObjectStore("meta", {keyPath: "id"});
-    };
-
     function initializeDB() {
         var tx = db.transaction("meta", "readwrite");
         return OP(tx.objectStore("meta").put({
@@ -294,58 +284,75 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         return def;
     }
 
-    OP(opened).then(
-        function success(theDB) {
-            db = theDB;
-            if (!db) {
-                defunct = true;
-                moduleDefined.resolve(that);
-                return;
-            }
+    // Open the Meta-Database
+    try {
 
-            // Setup
-            db.onerror = function (event) {
-                console.error("IndexedDB error: ", event.target.errorCode, event);
-            };
+        var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
 
-            var tx = db.transaction("meta");
+        opened.onupgradeneeded = function (e) {
+            // Set up object stores
+            var db = e.target.result;
+            db.createObjectStore("databases", {keyPath: "name"});
+            db.createObjectStore("meta", {keyPath: "id"});
+        };
 
-            OP(tx.objectStore("meta").get("default")).done(function (meta) {
-                var setupCompleted = null;
-                if (!meta) {
-                    setupCompleted = initializeDB();
-                } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
-                    meta.cleanUp = true;
-                    OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
-                    if (ox.debug === true) {
-                        console.warn('IndexedDB: Clearing persistent caches due to UI update');
-                    }
-                    setupCompleted = destroyDB().done(function () {
-                        meta.cleanUp = false;
-                        meta.version = ox.version;
-                        OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
-                    });
-                } else {
-                    setupCompleted = $.when();
+        OP(opened).then(
+            function success(theDB) {
+                db = theDB;
+                if (!db) {
+                    defunct = true;
+                    moduleDefined.resolve(that);
+                    return;
                 }
-                setupCompleted.then(
-                    function setupSuccess() {
-                        moduleDefined.resolve(that);
-                    },
-                    function setupFail() {
-                        defunct = true;
-                        console.warn('Failed to use IndexedDB');
-                        moduleDefined.resolve(that);
+
+                // Setup
+                db.onerror = function (event) {
+                    console.error("IndexedDB error: ", event.target.errorCode, event);
+                };
+
+                var tx = db.transaction("meta");
+
+                OP(tx.objectStore("meta").get("default")).done(function (meta) {
+                    var setupCompleted = null;
+                    if (!meta) {
+                        setupCompleted = initializeDB();
+                    } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
+                        meta.cleanUp = true;
+                        OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                        if (ox.debug === true) {
+                            console.warn('IndexedDB: Clearing persistent caches due to UI update');
+                        }
+                        setupCompleted = destroyDB().done(function () {
+                            meta.cleanUp = false;
+                            meta.version = ox.version;
+                            OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                        });
+                    } else {
+                        setupCompleted = $.when();
                     }
-                );
-            });
-        },
-        function fail(event) {
-            defunct = true;
-            console.warn('Failed to use IndexedDB');
-            moduleDefined.resolve(that);
-        }
-    );
+                    setupCompleted.then(
+                        function setupSuccess() {
+                            moduleDefined.resolve(that);
+                        },
+                        function setupFail() {
+                            defunct = true;
+                            console.warn('Failed to use IndexedDB');
+                            moduleDefined.resolve(that);
+                        }
+                    );
+                });
+            },
+            function fail(event) {
+                defunct = true;
+                console.warn('Failed to use IndexedDB');
+                moduleDefined.resolve(that);
+            }
+        );
+    } catch (e) {
+        defunct = true;
+        console.warn('Failed to use IndexedDB', e.message);
+        moduleDefined.resolve(that);
+    }
 
     return moduleDefined.done(function (storage) {
         ext.point("io.ox/core/cache/storage").extend(storage);
