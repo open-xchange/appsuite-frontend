@@ -174,7 +174,8 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                         failedToLoad(node, table, participant);
                                     });
                             } else {
-                                drawParticipant(table, participant, participant.display_name + ' <' + participant.mail + '>');
+                                participant.display_name = participant.display_name || participant.mail.split('@')[0] || '';
+                                drawParticipant(table, participant, $.trim(participant.display_name + ' <' + participant.mail + '>'));
                             }
                         },
                         drawParticipant = function (table, participant, name, userInformation) {
