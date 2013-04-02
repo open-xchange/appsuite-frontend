@@ -452,7 +452,10 @@ define('io.ox/office/framework/app/baseapplication',
                 id: file.id,
                 folder_id: file.folder_id,
                 filename: file.filename,
-                version: file.version
+                version: file.version,
+                mail_folder_id: file.data && file.data.mail ? file.data.mail.folder_id : null,
+                mail_id: file.data && file.data.mail ? file.data.mail.id : null,
+                attachment_id: file.data ? file.data.id : null
             } : null;
         };
 
