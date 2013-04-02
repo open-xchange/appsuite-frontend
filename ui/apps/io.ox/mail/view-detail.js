@@ -99,11 +99,14 @@ define('io.ox/mail/view-detail',
             ':(': 'sad'
         };
 
-        var regex = /((:|;)-?[)|(D])/g;
+        var regex = /(&quot)?([:;]-?[(|)D])/g;
 
         return function (text) {
-            if (!settings.get('displayEmomticons')) return text;
-            return text.replace(regex, function (match) {
+            if (!settings.get('displayEmoticons')) return text;
+            return text.replace(regex, function (all, quot, match) {
+                // if we hit &quot;-) we just return
+                if (quot) return all;
+                // otherwise find emote
                 var emote = emotes[match];
                 return !emote ? match : '<i class="emote ' + emote + '"></i>';
             });

@@ -29,7 +29,7 @@ define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
             'autoSafeDraftsAfter': false,
             'allowHtmlMessages': true,
             'allowHtmlImages': false,
-            'displayEmomticons': false,
+            'displayEmoticons': false,
             'isColorQuoted': false,
             'selectFirstMessage': true,
             'defaultSignature': false,

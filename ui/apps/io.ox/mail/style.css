@@ -578,7 +578,7 @@ h4.mail-attachment-preview {
 }
 
 .content.fixed-width-font {
-    font-family: Monaco, monospace;
+    font-family: monospace;
  }
 
 @media (max-width: 700px) {
