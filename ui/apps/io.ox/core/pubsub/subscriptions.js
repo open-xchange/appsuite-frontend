@@ -116,7 +116,7 @@ define('io.ox/core/pubsub/subscriptions',
                     );
                 }
 
-                popup.getBody().addClass('form-horizontal');
+                popup.getBody().addClass('form-horizontal max-height-200');
                 ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
                 popup.show();
                 popup.on('subscribe', function (action) {

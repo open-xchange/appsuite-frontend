@@ -97,7 +97,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                 popup.getHeader().append($('<h4>').text(gt('Publish item')));
             }
             //Body
-            popup.getBody().addClass('form-horizontal publication-dialog');
+            popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
 
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
