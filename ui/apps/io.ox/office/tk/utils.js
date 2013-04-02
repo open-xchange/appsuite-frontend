@@ -776,7 +776,7 @@ define('io.ox/office/tk/utils',
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
+                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value) && !(value instanceof $)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -802,7 +802,7 @@ define('io.ox/office/tk/utils',
         return options;
     };
 
-    // generic DOM helpers ----------------------------------------------------
+    // generic DOM/CSS helpers ------------------------------------------------
 
     /**
      * A jQuery selector that returns true if the DOM node bound to the 'this'
@@ -908,6 +908,34 @@ define('io.ox/office/tk/utils',
     Utils.getElementAttributeAsInteger = function (node, name, def) {
         var attr = $(node).attr(name);
         return _.isString(attr) ? parseInt(attr, 10) : def;
+    };
+
+    /**
+     * Returns whether the passed CSS border position is oriented vertically
+     * (either 'top' or 'bottom').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'bottom'.
+     */
+    Utils.isVerticalPosition = function (position) {
+        return (position === 'top') || (position === 'bottom');
+    };
+
+    /**
+     * Returns whether the passed CSS border position is the leading side
+     * (either 'top' or 'left').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'left'.
+     */
+    Utils.isLeadingPosition = function (position) {
+        return (position === 'top') || (position === 'left');
     };
 
     /**

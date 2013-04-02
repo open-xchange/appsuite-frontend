@@ -11,11 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/framework/view/pane',
-    ['io.ox/office/tk/utils',
-     'io.ox/office/framework/view/component',
-     'io.ox/office/framework/view/toolbox'
-    ], function (Utils, Component, ToolBox) {
+define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
@@ -30,9 +26,6 @@ define('io.ox/office/framework/view/pane',
      * @param {BaseApplication} app
      *  The application containing this pane element.
      *
-     * @param {String} id
-     *  The unique identifier of the view pane.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new view pane.
      *  The following options are supported:
@@ -42,17 +35,54 @@ define('io.ox/office/framework/view/pane',
      *  @param {Object} [options.css]
      *      Additional CSS formatting that will be set at the root DOM node of
      *      the view pane.
+     *  @param {String} [options.position='top']
+     *      The border of the application window to attach the view pane to.
+     *      Supported values are 'top', 'bottom', 'left', and 'right'.
+     *  @param {Boolean} [options.overlay=false]
+     *      If set to true, the pane will overlay the application pane instead
+     *      of reserving and consuming the space needed for its size.
+     *  @param {Boolean} [options.transparent=false]
+     *      If set to true, the background of an overlay pane will be
+     *      transparent. Has no effect if the pane is not in overlay mode.
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, the view components in a transparent overlay view
+     *      pane will be displayed half-transparent as long as the mouse does
+     *      not hover the view component. Has no effect if the pane is not in
+     *      transparent overlay mode, or if the current device is a touch
+     *      device.
+     *  @param {Function} [options.insertHandler]
+     *      A function that will be called after this view pane has been
+     *      inserted into the application window. Needed if the geometry of the
+     *      pane DOM node needs to be initialized to perform further
+     *      initialization tasks. Will be called in the context of this view
+     *      pane instance.
+     *  @param {Function} [options.componentInserter]
+     *      A function that will implement inserting the root DOM node of a new
+     *      view component into this view pane. The function receives the
+     *      reference to the new view component instance as first parameter.
+     *      Will be called in the context of this view pane instance. If
+     *      omitted, view components will be appended to the root node of this
+     *      view pane.
      */
-    function Pane(app, id, options) {
+    function Pane(app, options) {
 
         var // the container element representing the pane
             node = Utils.createContainerNode('view-pane', options),
 
+            // position of the pane in the application window
+            position = Utils.getStringOption(options, 'position', 'top'),
+
+            // overlay pane or fixed pane
+            overlay = Utils.getBooleanOption(options, 'overlay', false),
+
+            // transparent overlay pane
+            transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
+
             // view components contained in this pane
             components = [],
 
-            // all tool boxes, mapped by identifier
-            toolBoxes = {};
+            // handler called to insert a new component into this view pane
+            componentInserter = Utils.getFunctionOption(options, 'componentInserter');
 
         // methods ------------------------------------------------------------
 
@@ -64,10 +94,10 @@ define('io.ox/office/framework/view/pane',
         };
 
         /**
-         * Returns the unique identifier of this view pane.
+         * Returns the options map that has been passed to the constructor.
          */
-        this.getIdentifier = function () {
-            return id;
+        this.getOptions = function () {
+            return options;
         };
 
         /**
@@ -81,6 +111,74 @@ define('io.ox/office/framework/view/pane',
         };
 
         /**
+         * Makes this view pane visible.
+         *
+         * @returns {Pane}
+         *  A reference to this instance.
+         */
+        this.show = function () {
+            return this.toggle(true);
+        };
+
+        /**
+         * Hides this view pane.
+         *
+         * @returns {Pane}
+         *  A reference to this instance.
+         */
+        this.hide = function () {
+            return this.toggle(false);
+        };
+
+        /**
+         * Changes the visibility of this view pane.
+         *
+         * @param {Boolean} [state]
+         *  If specified, shows or hides the view pane independently from its
+         *  current visibility state. If omitted, toggles the visibility of the
+         *  view pane.
+         *
+         * @returns {Pane}
+         *  A reference to this instance.
+         */
+        this.toggle = function (state) {
+            node.toggle(state);
+            app.getView().refreshPaneLayout();
+            return this;
+        };
+
+        /**
+         * Returns the position of this view pane.
+         *
+         * @returns {String}
+         *  The border of the application window this view pane is attached to.
+         *  Possible values are 'top', 'bottom', 'left', and 'right'.
+         */
+        this.getPosition = function () {
+            return position;
+        };
+
+        /**
+         * Returns whether this pane is an overlay pane.
+         *
+         * @returns {Boolean}
+         *  Whether this view pane is an overlay pane.
+         */
+        this.isOverlay = function () {
+            return overlay;
+        };
+
+        /**
+         * Returns whether this pane is a transparent overlay pane.
+         *
+         * @returns {Boolean}
+         *  Whether this view pane is a transparent overlay pane.
+         */
+        this.isTransparent = function () {
+            return transparent;
+        };
+
+        /**
          * Adds the passed view component into this pane.
          *
          * @param {Component} component
@@ -91,49 +189,30 @@ define('io.ox/office/framework/view/pane',
          */
         this.addViewComponent = function (component) {
             components.push(component);
-            node.append(component.getNode());
+            if (_.isFunction(componentInserter)) {
+                componentInserter.call(this, component);
+            } else {
+                node.append(component.getNode());
+            }
             return this;
-        };
-
-        /**
-         * Creates a new tool box component in this pane, and registers it at
-         * the application controller.
-         *
-         * @param {String} id
-         *  The unique identifier of the tool box. Will be used to register a
-         *  controller item that handles the collapsed state of the tool box.
-         *
-         * @param {Object} [options]
-         *  A map of options for the tool box in the pane. Supports all options
-         *  supported by the ToolBox class constructor.
-         *
-         * @returns {ToolBox}
-         *  The new tool box component.
-         */
-        this.createToolBox = function (id, options) {
-            var toolBox = toolBoxes[id] = new ToolBox(app, id, options);
-            this.addViewComponent(toolBox);
-            return toolBox;
-        };
-
-        /**
-         * Returns the specified tool box from this pane.
-         *
-         * @param {String} id
-         *  The unique identifier of the tool box.
-         *
-         * @returns {ToolBox|Null}
-         *  The specified tool box, or null if no tool box exists for the
-         *  passed identifier.
-         */
-        this.getToolBox = function (id) {
-            return (id in toolBoxes) ? toolBoxes[id] : null;
         };
 
         this.destroy = function () {
             _(components).invoke('destroy');
             node = components = null;
         };
+
+        // initialization -----------------------------------------------------
+
+        // overlay mode
+        node.toggleClass('overlay', overlay);
+        if (transparent) {
+            node[Utils.isVerticalPosition(position) ? 'height' : 'width'](0);
+            // hover effect for view components embedded in the pane (not for touch devices)
+            if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
+                node.addClass('hover-effect');
+            }
+        }
 
     } // class Pane
 

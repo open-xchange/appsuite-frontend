@@ -55,7 +55,7 @@ define('io.ox/office/framework/view/component',
      *      Additional CSS formatting that will be set at the root DOM node of
      *      this view component.
      *  @param {Function} [options.groupInserter]
-     *      A function that will implement inserting the root DOM node of new
+     *      A function that will implement inserting the root DOM node of a new
      *      group into this view component. The function receives the reference
      *      to the new group instance as first parameter. Will be called in the
      *      context of this view component instance. If omitted, groups will be
@@ -211,6 +211,13 @@ define('io.ox/office/framework/view/component',
          */
         this.getNode = function () {
             return node;
+        };
+
+        /**
+         * Returns the options map that has been passed to the constructor.
+         */
+        this.getOptions = function () {
+            return options;
         };
 
         /**

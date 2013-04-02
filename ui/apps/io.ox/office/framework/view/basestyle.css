@@ -61,6 +61,17 @@
     .box-shadow(0 5px 15px -5px black);
 }
 
+.clearfix {
+    &:before, &:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
 /* restrict all definitions to office applications */
 .io-ox-office-main {
 
@@ -321,8 +332,9 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         > .group-line {
             display: block;
             margin-bottom: @control-spacing;
+            .clearfix();
 
-            > .group-container {
+            .group-container {
                 display: inline-block;
                 .border-radius(@border-radius);
                 vertical-align: top;
@@ -480,15 +492,13 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
         /* add specific design properties for the heading button */
         &.collapsing {
-            margin-top: -@control-spacing;
-            padding-top: @heading-height + 2 * @control-spacing;
+            padding-top: @heading-height + 1.5 * @control-spacing;
 
             .group.heading {
                 position: absolute;
-                top: @control-spacing;
+                top: @control-spacing * 0.5;
                 left: -1px;
                 right: -1px;
-                margin-right: 0;
                 background: fade(white, 10%);
                 .box-shadow(5px 20px 20px -20px fade(white, 10%) inset);
                 .border-radius(0);

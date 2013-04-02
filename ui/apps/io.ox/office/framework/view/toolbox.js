@@ -20,7 +20,10 @@ define('io.ox/office/framework/view/toolbox',
     'use strict';
 
     var // CSS class for tool boxes currently collapsed
-        COLLAPSED_CLASS = 'collapsed';
+        COLLAPSED_CLASS = 'collapsed',
+
+        // unique identifier to create controller items
+        uniqueId = 0;
 
     // class ToolBox ==========================================================
 
@@ -36,10 +39,6 @@ define('io.ox/office/framework/view/toolbox',
      * @param {BaseApplication} app
      *  The application containing this tool box instance.
      *
-     * @param {String} id
-     *  The unique identifier of the tool box. Will be used to register a
-     *  controller item that handles the collapsed state of the tool box.
-     *
      * @param {Object} [options]
      *  A map of options controlling the appearance and behavior of the tool
      *  box. Supports all options of the Component base class. Additionally,
@@ -50,13 +49,13 @@ define('io.ox/office/framework/view/toolbox',
      *      all its contents but the heading label) and expand (show all its
      *      contents) the tool box.
      */
-    function ToolBox(app, id, options) {
+    function ToolBox(app, options) {
 
         var // self reference
             self = this,
 
             // the unique base controller key of the tool box
-            baseKey = 'view/toolbox/' + id,
+            baseKey = 'view/toolbox/' + (uniqueId += 1),
 
             // the label for the heading button
             headingLabel = Utils.getStringOption(options, 'label'),
@@ -72,21 +71,25 @@ define('io.ox/office/framework/view/toolbox',
 
         // base constructor ---------------------------------------------------
 
-        Component.call(this, app, Utils.extendOptions({ groupInserter: groupInserter }, options));
+        Component.call(this, app, Utils.extendOptions(options, { groupInserter: groupInserter }));
 
         // private methods ----------------------------------------------------
 
+        /**
+         * Inserts the root DOM node of the passed group into this tool box.
+         */
         function groupInserter(group) {
             if (group === headingButton) {
                 self.getNode().append(group.getNode());
             } else {
                 if (!lineNode) {
-                    lineNode = Utils.createContainerNode('group-line');
+                    lineNode = $('<div>').addClass('group-line');
                     self.getNode().append(lineNode);
+                    lineNode.append($('<div>').css('float', 'left'));
                 }
                 if (!containerNode) {
-                    containerNode = Utils.createContainerNode('group-container');
-                    lineNode.append(containerNode);
+                    containerNode = $('<div>').addClass('group-container');
+                    lineNode.children().last().append(containerNode);
                 }
                 containerNode.append(group.getNode());
             }
@@ -108,6 +111,20 @@ define('io.ox/office/framework/view/toolbox',
             if (containerNode) {
                 containerNode.css('margin-right', (_.isNumber(width) ? width : 9) + 'px');
             }
+            containerNode = null;
+            return this;
+        };
+
+        /**
+         * A gap will be inserted before the next inserted group in the current
+         * line. The following groups inserted into the current line will be
+         * aligned to the right border.
+         *
+         * @returns {ToolBox}
+         *  A reference to this instance.
+         */
+        this.addRightTab = function () {
+            lineNode.append($('<div>').css('float', 'right'));
             containerNode = null;
             return this;
         };
@@ -135,7 +152,10 @@ define('io.ox/office/framework/view/toolbox',
 
             // create a controller item that collapses/expands the tool box
             app.getController().registerDefinition(baseKey + '/expand', {
-                set: function (expand) { self.getNode().toggleClass(COLLAPSED_CLASS); }
+                set: function () {
+                    self.getNode().toggleClass(COLLAPSED_CLASS);
+                    self.trigger('expand', !self.getNode().hasClass(COLLAPSED_CLASS));
+                }
             });
 
             // create the heading button

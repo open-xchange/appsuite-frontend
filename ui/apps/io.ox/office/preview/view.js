@@ -16,9 +16,11 @@ define('io.ox/office/preview/view',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
+     'io.ox/office/framework/view/pane',
+     'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, Button, Label, BaseView, gt) {
+    ], function (Utils, Button, Label, BaseView, Pane, ToolBox, gt) {
 
     'use strict';
 
@@ -113,26 +115,27 @@ define('io.ox/office/preview/view',
          */
         function initHandler() {
 
-            var // the tool pane for upper tool boxes
-                topPane = self.createPane('toppane', 'top', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }),
-                // the tool pane for lower tool boxes
-                bottomPane = self.createPane('bottompane', 'bottom', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true });
-
             model = app.getModel();
 
-            topPane.createToolBox('top')
-                .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }));
+            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
+                )
+            );
 
-            bottomPane.createToolBox('bottom')
-                .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
-                .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
-                .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
-                .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
-                .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
-                .addGap()
-                .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
-                .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
-                .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }));
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
+                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
+                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
+                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
+                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                    .addGap()
+                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
+                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
+                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
+                )
+            );
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);

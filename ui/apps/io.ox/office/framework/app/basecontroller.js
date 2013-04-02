@@ -632,7 +632,7 @@ define('io.ox/office/framework/app/basecontroller',
         // register item definitions
         this.registerDefinitions(items);
 
-        // register 'keydown' event listener for keyboard shortcuts
+        // register keyboard event listener for shortcuts
         app.getWindowNode().on('keydown keypress', keyHandler);
 
     } // class BaseController

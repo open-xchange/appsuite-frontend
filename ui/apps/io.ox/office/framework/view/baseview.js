@@ -22,10 +22,7 @@ define('io.ox/office/framework/view/baseview',
 
     'use strict';
 
-    var // CSS marker class for panes in overlay mode
-        OVERLAY_CLASS = 'overlay',
-
-        // the global root element used to store DOM elements temporarily
+    var // the global root element used to store DOM elements temporarily
         tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
 
     // class BaseView =========================================================
@@ -83,9 +80,6 @@ define('io.ox/office/framework/view/baseview',
             // all overlay view panes, in insertion order
             overlayPanes = [],
 
-            // all view panes, mapped by identifier
-            panesById = {},
-
             // inner shadows for application pane
             shadowNodes = {},
 
@@ -102,14 +96,6 @@ define('io.ox/office/framework/view/baseview',
 
         // private methods ----------------------------------------------------
 
-        function isHorizontalPosition(position) {
-            return (position === 'top') || (position === 'bottom');
-        }
-
-        function isLeadingPosition(position) {
-            return (position === 'top') || (position === 'left');
-        }
-
         /**
          * Adjusts the positions of all view pane nodes.
          */
@@ -125,20 +111,20 @@ define('io.ox/office/framework/view/baseview',
             function updatePane(pane) {
 
                 var paneNode = pane.getNode(),
-                    position = paneNode.data('pane-pos'),
-                    horizontal = isHorizontalPosition(position),
-                    leading = isLeadingPosition(position),
-                    visible = paneNode.css('display') !== 'none',
-                    sizeFunc = _.bind(horizontal ? paneNode.outerHeight : paneNode.outerWidth, paneNode),
-                    transparent = visible && paneNode.hasClass(OVERLAY_CLASS) && (sizeFunc() === 0),
-                    sizeAttr = horizontal ? 'height' : 'width',
+                    visible = pane.isVisible(),
+                    transparent = pane.isTransparent(),
+                    position = pane.getPosition(),
+                    vertical = Utils.isVerticalPosition(position),
+                    leading = Utils.isLeadingPosition(position),
+                    sizeFunc = _.bind(vertical ? paneNode.outerHeight : paneNode.outerWidth, paneNode),
+                    sizeAttr = vertical ? 'height' : 'width',
                     paneOffsets = _.clone(offsets);
 
                 // remove the position attribute at the opposite border of the pane position
-                paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
+                paneOffsets[vertical ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
 
                 // transparent overlay panes: temporarily set to auto size, adjust position of trailing panes
-                if (transparent) {
+                if (visible && transparent) {
                     paneNode.css(sizeAttr, 'auto');
                     if (!leading) {
                         paneOffsets[position] += sizeFunc();
@@ -152,7 +138,7 @@ define('io.ox/office/framework/view/baseview',
                 }
 
                 // transparent overlay panes: set zero size
-                if (transparent) {
+                if (visible && transparent) {
                     paneNode.css(sizeAttr, 0);
                 }
             }
@@ -179,6 +165,7 @@ define('io.ox/office/framework/view/baseview',
             if (_.isObject(currentAlert)) {
                 if (app.getWindowNode().width() <= 640) {
                     alertMargin = Math.max((app.getWindowNode().width() - 500) / 2, 10);
+                    // TODO: get size of existing overlay panes at top border
                     currentAlert.css({ top: offsets.top + 56, left: alertMargin, right: alertMargin });
                 } else {
                     alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
@@ -307,170 +294,24 @@ define('io.ox/office/framework/view/baseview',
          * @param {Pane} pane
          *  The view pane instance to be inserted into this view.
          *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the appearance of the view pane. The
-         *  following options are supported:
-         *  @param {Boolean} [options.overlay=false]
-         *      If set to true, the pane will float over the other panes and
-         *      application contents instead of reserving and consuming the
-         *      space needed for its size.
-         *  @param {Boolean} [options.transparent=false]
-         *      If set to true, the background of an overlay pane will be
-         *      transparent. Has no effect if the pane is not in overlay mode.
-         *  @param {Boolean} [options.hoverEffect=false]
-         *      If set to true, the view components in a transparent overlay
-         *      view pane will be displayed half-transparent as long as the
-         *      mouse does not hover the view component. Has no effect if the
-         *      pane is not in transparent overlay mode.
-         *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.addPane = function (pane, position, options) {
+        this.addPane = function (pane) {
 
-            var // overlay pane or fixed pane
-                overlay = Utils.getBooleanOption(options, 'overlay', false),
-                // the root node of the view pane
-                paneNode = pane.getNode();
+            var // callback to be executed after the pane node is inside the DOM
+                insertHandler = Utils.getFunctionOption(pane.getOptions(), 'insertHandler');
 
             // insert the pane
-            panesById[pane.getIdentifier()] = pane;
-            (overlay ? overlayPanes : fixedPanes).push(pane);
-            app.getWindowNode().append(paneNode);
+            (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
+            app.getWindowNode().append(pane.getNode());
 
-            // overlay mode and position
-            paneNode.toggleClass(OVERLAY_CLASS, overlay);
-            if (overlay && Utils.getBooleanOption(options, 'transparent', false)) {
-                paneNode[isHorizontalPosition(position) ? 'height' : 'width'](0);
-                // additional CSS classes
-                paneNode.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
+            // refresh overall layout, call insert handler
+            refreshPaneLayout();
+            if (_.isFunction(insertHandler)) {
+                insertHandler.call(pane);
             }
-            return this.setPanePosition(pane.getIdentifier(), position);
-        };
 
-        /**
-         * Creates a new view pane instance in this view.
-         *
-         * @param {String} id
-         *  The unique identifier of the new view pane.
-         *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new view pane.
-         *  Supports all options supported by the Pane class constructor, and
-         *  the method BaseView.addPane().
-         *
-         * @returns {Pane}
-         *  The new view pane.
-         */
-        this.createPane = function (id, position, options) {
-            var pane = new Pane(app, id, options);
-            this.addPane(pane, position, options);
-            return pane;
-        };
-
-        /**
-         * Returns the specified view pane which has been added with the method
-         * BaseView.createPane() before.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {Pane|Null}
-         *  The view pane with the specified identifier, or null if no view
-         *  pane has been found.
-         */
-        this.getPane = function (id) {
-            return (id in panesById) ? panesById[id] : null;
-        };
-
-        /**
-         * Changes the position of the pane.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.setPanePosition = function (id, position) {
-            if (id in panesById) {
-                panesById[id].getNode().data('pane-pos', position);
-                refreshPaneLayout();
-            }
-            return this;
-        };
-
-        /**
-         * Returns whether the specified view pane is currently visible.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {Boolean}
-         *  Whether the specified view pane is currently visible.
-         */
-        this.isPaneVisible = function (id) {
-            return (id in panesById) && panesById[id].isVisible();
-        };
-
-        /**
-         * Makes the view pane with the specified identifier visible.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showPane = function (id) {
-            return this.togglePane(id, true);
-        };
-
-        /**
-         * Hides the view pane with the specified identifier.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.hidePane = function (id) {
-            return this.togglePane(id, false);
-        };
-
-        /**
-         * Changes the visibility of the view pane with the specified
-         * identifier.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @param {Boolean} [state]
-         *  If specified, shows or hides the view pane independently from its
-         *  current visibility state. If omitted, toggles the visibility of the
-         *  view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.togglePane = function (id, state) {
-            if (id in panesById) {
-                panesById[id].getNode().toggle(state);
-                refreshPaneLayout();
-            }
             return this;
         };
 
@@ -715,15 +556,16 @@ define('io.ox/office/framework/view/baseview',
 
         this.destroy = function () {
             this.events.destroy();
-            _(panesById).invoke('destroy');
+            _(fixedPanes).invoke('destroy');
+            _(overlayPanes).invoke('destroy');
             appPane.destroy();
-            appPane = fixedPanes = overlayPanes = panesById = null;
+            appPane = fixedPanes = overlayPanes = null;
         };
 
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container node
-        appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
+        appPane = new Pane(app, { classes: 'app-pane' });
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
