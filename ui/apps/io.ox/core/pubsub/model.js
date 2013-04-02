@@ -217,16 +217,16 @@ define('io.ox/core/pubsub/model',
         publications: function () {
             if (!publications) {
                 publications = new Publications();
-                publications.fetch();
             }
+            publications.fetch();
 
             return publications;
         },
         subscriptions: function () {
             if (!subscriptions) {
                 subscriptions = new Subscriptions();
-                subscriptions.fetch();
             }
+            subscriptions.fetch();
 
             return subscriptions;
         },
