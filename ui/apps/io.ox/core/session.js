@@ -38,6 +38,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
         $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
+        ox.trigger("change:session", ox.session);
     };
 
     var that = {

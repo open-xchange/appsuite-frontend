@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/capabilities", "io.ox/realtime/atmosphere"], function (ext, Event, caps) {
+define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/realtime/atmosphere"], function (ext, Event, caps, uuids) {
     'use strict';
 
     if (!caps.has("rt")) {
@@ -21,6 +21,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         Event.extend(dummy);
         return $.Deferred().resolve(dummy);
     }
+
+    var tabId = uuids.randomUUID();
+    var connecting = false;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -128,87 +131,101 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
     */
 
-    var request = {
-        url: url + '?session=' + ox.session,
-        contentType : "application/json",
-        logLevel : 'debug',
-        transport : 'long-polling',
-        fallbackTransport: 'long-polling',
-        timeout: 60000,
-        maxRequests : 3
-    };
+    function connect() {
+        connecting = true;
+        var request = {
+            url: url + '?session=' + ox.session + "&resource=" + tabId,
+            contentType : "application/json",
+            logLevel : 'debug',
+            transport : 'long-polling',
+            fallbackTransport: 'long-polling',
+            timeout: 60000
+        };
 
 
-    //------------------------------------------------------------------------------
-    //request callbacks
+        //------------------------------------------------------------------------------
+        //request callbacks
+        request.onOpen = function (response) {
+            def.resolve(api);
+            connecting = false;
+        };
 
-    request.onOpen = function (response) {
-        def.resolve(api);
-    };
+        request.onReconnect = function (request, response) {
+            //socket.info("Reconnecting");
+        };
 
-    request.onReconnect = function (request, response) {
-        //socket.info("Reconnecting");
-    };
-
-    request.onMessage = function (response) {
-        var message = response.responseBody;
-        var json = {};
-        try {
-            json = $.parseJSON(message);
-        } catch (e) {
-            console.log('This doesn\'t look like valid JSON: ', message);
-            console.error(e, e.stack);
-            throw e;
-        }
-        if (_.isArray(json)) {
-            _(json).each(function (stanza) {
+        request.onMessage = function (response) {
+            var message = response.responseBody;
+            var json = {};
+            try {
+                json = $.parseJSON(message);
+            } catch (e) {
+                console.log('This doesn\'t look like valid JSON: ', message);
+                console.error(e, e.stack);
+                throw e;
+            }
+            if (_.isArray(json)) {
+                _(json).each(function (stanza) {
+                    if (api.debug) {
+                        console.log("<-", stanza);
+                    }
+                    stanza = new RealtimeStanza(stanza);
+                    api.trigger("receive", stanza);
+                    api.trigger("receive:" + stanza.selector, stanza);
+                });
+            } else {
                 if (api.debug) {
-                    console.log("<-", stanza);
+                    console.log("<-", json);
                 }
-                stanza = new RealtimeStanza(stanza);
+                var stanza = new RealtimeStanza(json);
                 api.trigger("receive", stanza);
                 api.trigger("receive:" + stanza.selector, stanza);
-            });
-        } else {
-            if (api.debug) {
-                console.log("<-", json);
             }
-            var stanza = new RealtimeStanza(json);
-            api.trigger("receive", stanza);
-            api.trigger("receive:" + stanza.selector, stanza);
-        }
-    };
+        };
 
-    request.onClose = function (response) {
-        if (api.debug) {
-            console.log("Closed");
-        }
-    };
+        request.onClose = function (response) {
+            if (api.debug) {
+                console.log("Closed");
+            }
+        };
 
-    request.onError = function (response) {
-        console.error(response);
-    };
+        request.onError = function (response) {
+            console.error(response);
+        };
 
-    var subSocket = socket.subscribe(request);
+        return socket.subscribe(request);
+    }
+
+
+    var subSocket = connect();
+
+    ox.on("change:session", function () {
+        subSocket = connect();
+    });
+
     var queue = {
         stanzas: [],
         timer: null
     };
 
+    function drainBuffer() {
+        if (connecting) {
+            setTimeout(drainBuffer, 1000);
+        }
+        subSocket.push(JSON.stringify(queue.stanzas));
+        if (api.debug) {
+            console.log("->", queue.stanzas);
+        }
+        queue.stanzas = [];
+        queue.timer = false;
+    }
+
     api.send = function (options) {
-        options.session = options.session || ox.session;
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
             if (!queue.timer) {
                 queue.timer = true;
-                setTimeout(function () {
-                    subSocket.push(JSON.stringify(queue.stanzas));
-                    if (api.debug) {
-                        console.log("->", queue.stanzas);
-                    }
-                    queue.stanzas = [];
-                    queue.timer = false;
-                }, 1000);
+                setTimeout(drainBuffer, 1000);
             }
         } else {
             subSocket.push(JSON.stringify(options));
