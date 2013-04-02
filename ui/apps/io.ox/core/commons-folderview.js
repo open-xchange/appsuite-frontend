@@ -675,6 +675,14 @@ define('io.ox/core/commons-folderview',
                     //     return false;
                     // });
 
+                    if (_.device('touch && small')) {
+                        // mobile stuff
+                        $('.foldertree-sidepanel').on('swipeleft', function (e) {
+                            //e.preventDefault();
+                            toggle();
+                        });
+                    }
+
                     initTree = loadTree = null;
                 });
             });

@@ -1790,16 +1790,44 @@ ul.dropdown-menu li a.disabled { color:#999; }
 @media (max-width: 700px) and (orientation:landscape) {
     .window-head { padding-left: 40px; } // iOS landscape back button fix
 }
+// mobile
+@media (max-width: 480px) {
 
-@media all and (max-device-width: 480px) {
-
-    .ios .io-ox-foldertree {
-        .overflow();
+    .ios {
+        .vgrid-tool
+        .vgrid.bottom-toolbar .vgrid-scrollpane {
+            /*bottom: 0px;
+            top: 0px;*/
+        }
+        .badge {
+            display: none;
+        }
+        #io-ox-topbar {
+            /*height: 40px;
+            position: fixed;
+            z-index: 500;
+            width: 100%;*/
+        }
+        .window-body {
+            /*bottom: 88px;*/
+        }
+        .io-ox-foldertree {
+            .overflow();
+        }
+        .window-head {
+            /*position: fixed;
+            top: initial;
+            right: initial;
+            width: 100%;
+            bottom: 0px;*/
+        }
     }
     .foldertree-sidepanel {
-
+        .foldertree-toolbar {
+            display: none;
+        }
         .foldertree-container {
-
+            bottom: 0px;
 
             &.io-ox-foldertree {
 
@@ -1809,8 +1837,6 @@ ul.dropdown-menu li a.disabled { color:#999; }
             }
         }
     }
-
-
 
     #io-ox-notifications-popups {
         top: 10px;
@@ -1875,23 +1901,41 @@ ul.dropdown-menu li a.disabled { color:#999; }
         }
     }
 }
+@keyframes slidein {
+
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+       transform: translateX(0%);
+    }
+}
+
+@keyframes slideout {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 
 @-webkit-keyframes slidein {
 
     0% {
-        -webkit-transform: translateX(-360px);
+        -webkit-transform: translateX(-100%);
     }
     100% {
-       -webkit-transform: translateX(0px);
+       -webkit-transform: translateX(0%);
     }
 }
 
 @-webkit-keyframes slideout {
     0% {
-        -webkit-transform: translateX(0px);
+        -webkit-transform: translateX(0%);
     }
     100% {
-        -webkit-transform: translateX(-360px);
+        -webkit-transform: translateX(-100%);
     }
 }
 

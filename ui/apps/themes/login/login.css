@@ -298,6 +298,7 @@ body.down #io-ox-login-container .alert.alert-info {
     #io-ox-login-header h1 { font-size: 14pt; margin: 2em 0 2em 0; }
 }
 
+// mobile
 @media (max-width: 480px) {
 
     /* 100% divs on relogin page*/

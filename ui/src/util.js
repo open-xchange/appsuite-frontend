@@ -150,9 +150,9 @@
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
-        small: '(max-device-width: 720px)',
-        medium: '(min-device-width: 721px) and (max-device-width: 1024px)',
-        large: '(min-device-width: 1025px)',
+        small: '(max-width: 480px)',
+        medium: '(min-width: 481px) and (max-width: 1024px)',
+        large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
@@ -168,7 +168,7 @@
     display.smartphone = display.small;
     display.tablet = display.medium;
     display.desktop = display.large;
-
+    _.displayInfo = display;
     // extend underscore utilities
     _.mixin({
 
