@@ -238,7 +238,7 @@ define('io.ox/files/mediaplayer',
                     this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
                 }
                 this.drawItems();
-                this.playlist.sortable({ axis: 'y' });
+                this.playlist.sortable({ axis: 'y', distance: 30 });
                 this.player.find('video, audio').parent().addClass('noI18n');
                 this.player.find('video, audio').mediaelementplayer({
                     // since we cannot resize later on ...
