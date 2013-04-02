@@ -652,6 +652,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         if (r.xhr.dataType === 'json' && data.error !== undefined) {
                             r.def.reject(data);
                         } else {
+                            // Skip Warnings (category: 13)
+                            data.data = _(data.data).map(function (o) {
+                                if (o.category !== 13) {
+                                    return o;
+                                }
+                            });
                             r.def.resolve(data);
                         }
                     }
