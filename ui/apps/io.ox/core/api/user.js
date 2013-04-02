@@ -62,7 +62,7 @@ define("io.ox/core/api/user",
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp
+                        timestamp: o.timestamp || _.now()
                     },
                     data: o.data,
                     appendColumns: false
