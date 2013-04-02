@@ -10,7 +10,7 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
-BuildRequires:  open-xchange-appsuite-devel
+BuildRequires:  open-xchange-appsuite-dev
 
 Requires:       open-xchange-appsuite-manifest
 
