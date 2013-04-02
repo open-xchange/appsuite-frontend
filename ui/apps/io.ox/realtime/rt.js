@@ -31,7 +31,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var url = proto + "//" + host + "/realtime/atmosphere/rt";
     var api = {};
     var def = $.Deferred();
-    var BUFFERING = true;
+    var BUFFERING = false;
+    var BUFFER_INTERVAL = 1000;
+    var seq = 0;
 
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
@@ -152,6 +154,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
         request.onReconnect = function (request, response) {
             //socket.info("Reconnecting");
+            request.requestCount = 0;
         };
 
         request.onMessage = function (response) {
@@ -210,7 +213,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     function drainBuffer() {
         if (connecting) {
-            setTimeout(drainBuffer, 1000);
+            setTimeout(drainBuffer, BUFFER_INTERVAL);
         }
         subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
@@ -221,11 +224,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     api.send = function (options) {
+        options.seq = seq;
+        seq++;
+        api.sendWithoutSequence(options);
+    };
+
+    api.sendWithoutSequence = function (options) {
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
             if (!queue.timer) {
                 queue.timer = true;
-                setTimeout(drainBuffer, 1000);
+                setTimeout(drainBuffer, BUFFER_INTERVAL);
             }
         } else {
             subSocket.push(JSON.stringify(options));
