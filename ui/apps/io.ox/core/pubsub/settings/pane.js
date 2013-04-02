@@ -216,9 +216,6 @@ define('io.ox/core/pubsub/settings/pane',
                 this.find('.name').append(
                     $('<i class="icon-refresh icon-spin">')
                 );
-                baton.model._refresh.done(function () {
-                    baton.view.render();
-                });
             }
         }
     });
@@ -275,7 +272,9 @@ define('io.ox/core/pubsub/settings/pane',
                     'Only one refresh per subscription and per session is allowed.'
                 )
             });
-            this.model.performRefresh();
+            this.model.performRefresh().done(function () {
+                baton.view.render();
+            });
             baton.view.render();
         },
         onRemove: function (ev) {
