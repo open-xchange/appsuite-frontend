@@ -55,6 +55,30 @@ define('io.ox/mail/write/main',
     });
 
     var UUID = 1;
+    var timerScale = {
+        minute: 60000, //60s
+        minutes: 60000
+    };
+
+    function initAutoSaveAsDraft(app) {
+        var timeout = settings.get('autoSaveDraftsAfter', false),
+            scale, timer, performAutoSave = _.bind(app.saveDraft, app);
+
+        if (!timeout) { return; }
+
+        timeout = timeout.split('_');
+        scale = timerScale[timeout[1]];
+        timeout = timeout[0];
+
+        if (!timeout || !scale) { /* settings not parsable */ return; }
+
+        if (app.autosave) {
+            window.clearTimeout(app.autosave.timer);
+        }
+        app.autosave = {
+            timer: _.delay(performAutoSave, timeout * scale)
+        };
+    }
 
     // multi instance pattern
     function createInstance() {
@@ -223,6 +247,8 @@ define('io.ox/mail/write/main',
                 }
                 if (dropZone) { dropZone.remove(); }
             });
+
+            _.defer(initAutoSaveAsDraft, app);
         });
 
         /**
@@ -1011,6 +1037,7 @@ define('io.ox/mail/write/main',
                     }
                 });
 
+            _.defer(initAutoSaveAsDraft, this);
             return def;
         };
 
@@ -1036,6 +1063,10 @@ define('io.ox/mail/write/main',
                 // clean up editors
                 for (var id in editorHash) {
                     editorHash[id].destroy();
+                }
+                //clear timer for autosave
+                if (app.autosave) {
+                    window.clearTimeout(app.autosave.timer);
                 }
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;
