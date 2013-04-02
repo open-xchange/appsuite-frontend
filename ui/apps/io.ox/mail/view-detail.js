@@ -148,7 +148,7 @@ define('io.ox/mail/view-detail',
             ox.ui.Perspective.show(app, 'list').done(function () {
                 // set proper folder
                 app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(folder + '.' + id);
+                    app.getGrid().selection.set(id);
                 });
             });
         });
