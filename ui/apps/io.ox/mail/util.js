@@ -222,8 +222,11 @@ define('io.ox/mail/util',
         },
 
         getPriority: function (data) {
-            var i = '<i class="icon-star"></i>';
-            return data.priority < 3 ? $('<span>').append(_.noI18n('\u00A0'), i, i, i) : $();
+            // normal?
+            if (data.priority === 3) return $();
+            var i = '<i class="icon-star"/>',
+                stars = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
+            return stars.addClass(data.priority < 3 ? 'high' : 'low');
         },
 
         getAccountName: function (data) {

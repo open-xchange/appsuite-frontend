@@ -561,9 +561,6 @@ $(window).load(function () {
                 return manifests.manager.loadPluginsFor('core');
             }
 
-            // we just need to be online for auto-login
-            var initialized;
-
             function gotoSignin() {
                 var ref = (location.hash || '').replace(/^#/, '');
                 _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
