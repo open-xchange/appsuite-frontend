@@ -184,7 +184,20 @@ define('io.ox/files/list/view-detail',
                     $commentArea.removeClass('disabled').val('');
                     $comment.hide();
                     $uploadButton.hide();
+                    //general upload error
+                    $uploadButton.removeClass('disabled');
+                    $input.closest('form').get(0).reset();
                 }
+            };
+
+            var uploadFailed = function (e) {
+                require(['io.ox/core/notifications']).pipe(function (notifications) {
+                    if (e && e.code && e.code === 'UPL-0005') //uploadsize to big
+                        notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                    else
+                        notifications.yell('error', gt('This file has not been added'));
+                });
+                resetCommentArea();
             };
 
             $uploadButton.on('click', function (e) {
@@ -201,7 +214,8 @@ define('io.ox/files/list/view-detail',
                         folder: file.folder_id,
                         timestamp: _.now(),
                         json: {version_comment: $commentArea.val()}
-                    }).done(resetCommentArea);
+                    }).done(resetCommentArea)
+                    .fail(uploadFailed);
                 } else {
                     $input.find('input[type="file"]').attr('name', 'file');
 
