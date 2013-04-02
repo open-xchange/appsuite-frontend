@@ -385,21 +385,23 @@ define('io.ox/core/api/account',
             });
 
             return accountsAllCache.remove(data).then(function () {
-                if (!_.isObject(result)) {
-                    // update call didn’t return the new account -> get the data ourselves
-                    return api.get(data.id).then(function (data) {
-                        api.trigger('refresh.all');
-                        api.trigger('update', data);
-                        return data;
-                    });
-                } else {
-                    // update call returned the new account (this is the case for mail)
-                    return accountsAllCache.add(result, _.now()).then(function () {
-                        api.trigger('refresh.all');
-                        api.trigger('update', result);
-                        return result;
-                    });
+                if (_.isObject(result)) {
+                    //update call returned the new object, just return it
+                    return result;
                 }
+                // update call didn’t return the new account -> get the data ourselves
+                return http.GET({
+                    module: 'account',
+                    params: { action: 'get', id: data.id },
+                    appendColumns: false
+                });
+            }).then(function (result) {
+                // update call returned the new account (this is the case for mail)
+                accountsAllCache.add(result, _.now());
+
+                api.trigger('refresh.all');
+                api.trigger('update', result);
+                return result;
             });
         });
     };
