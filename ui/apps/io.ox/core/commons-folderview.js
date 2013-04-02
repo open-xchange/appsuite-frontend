@@ -452,7 +452,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, restoreWidth, makeResizable, fnAnimationEnd,
+            fnHide, fnShow, initResize, restoreWidth, makeResizable, fnAnimationEnd,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -578,6 +578,13 @@ define('io.ox/core/commons-folderview',
             if (visible) { fnHide(); } else { fnShow();  }
         };
 
+        initResize = function () {
+            if (_.device('!touch')) {
+                makeResizable();
+                restoreWidth();
+            }
+        };
+
         initTree = function (views) {
 
             // init tree before running toolbar extensions
@@ -611,9 +618,8 @@ define('io.ox/core/commons-folderview',
             // paint now
             return tree.paint().pipe(function () {
 
-                if (_.device('!touch')) {
-                    makeResizable();
-                    restoreWidth();
+                if (options.visible === false) {
+                    initResize();
                 }
 
                 return tree.select(app.folder.get()).done(function () {
@@ -742,6 +748,7 @@ define('io.ox/core/commons-folderview',
 
         if (options.visible === true) {
             toggleTree();
+            app.getWindow().on('open', initResize);
         }
 
         // auto-open on drag
