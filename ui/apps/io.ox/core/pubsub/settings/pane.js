@@ -326,6 +326,12 @@ define('io.ox/core/pubsub/settings/pane',
 
         // handle empty lists
 
+        collection.on('remove', function (model, collection, options) {
+            if (collection.length === 0) {
+                addHint();
+            }
+        });
+
         function getHint() {
 
             var isEmpty = filteredList.length === 0,
@@ -355,10 +361,14 @@ define('io.ox/core/pubsub/settings/pane',
             return '';
         }
 
-        if ((hint = getHint())) {
-            // add node
-            node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+        function addHint() {
+            if ((hint = getHint())) {
+                // add node
+                node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+            }
         }
+
+        addHint();
     }
 
     point.extend({
