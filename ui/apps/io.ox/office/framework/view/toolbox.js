@@ -66,6 +66,9 @@ define('io.ox/office/framework/view/toolbox',
             // the current line node as target for new container nodes
             lineNode = null,
 
+            // whether next groups will be inserted into the right tab node
+            rightTab = false,
+
             // the current container node as target for new groups
             containerNode = null;
 
@@ -79,20 +82,45 @@ define('io.ox/office/framework/view/toolbox',
          * Inserts the root DOM node of the passed group into this tool box.
          */
         function groupInserter(group) {
+
+            var // the current tab node (for left/right alignment)
+                tabNode = null,
+                // whether the group takes the entire width of the tool box
+                fullWidth = Utils.getBooleanOption(group.getOptions(), 'fullWidth', false);
+
+            // the leading heading button
             if (group === headingButton) {
                 self.getNode().append(group.getNode());
-            } else {
-                if (!lineNode) {
-                    lineNode = $('<div>').addClass('group-line');
-                    self.getNode().append(lineNode);
-                    lineNode.append($('<div>').css('float', 'left'));
-                }
-                if (!containerNode) {
-                    containerNode = $('<div>').addClass('group-container');
-                    lineNode.children().last().append(containerNode);
-                }
-                containerNode.append(group.getNode());
+                return;
             }
+
+            // get or create the line node
+            if (fullWidth || !lineNode) {
+                lineNode = $('<div>').addClass('group-line');
+                self.getNode().append(lineNode);
+            }
+
+            // full-width: insert group node directly into the line
+            if (fullWidth) {
+                // class 'auto-width' expands width of group child node (button, text field) to group width
+                lineNode.append(group.getNode().addClass('auto-width').css('width', '100%'));
+                self.newLine();
+                return;
+            }
+
+            // get or create tab node
+            tabNode = lineNode.children(rightTab ? '.tab-right' : '.tab-left');
+            if (tabNode.length === 0) {
+                tabNode = $('<div>').addClass(rightTab ? 'tab-right' : 'tab-left');
+                lineNode.append(tabNode);
+            }
+
+            // get or create group container node, insert the group
+            if (!containerNode) {
+                containerNode = $('<div>').addClass('group-container');
+                tabNode.append(containerNode);
+            }
+            containerNode.append(group.getNode());
         }
 
         // methods ------------------------------------------------------------
@@ -124,8 +152,10 @@ define('io.ox/office/framework/view/toolbox',
          *  A reference to this instance.
          */
         this.addRightTab = function () {
-            lineNode.append($('<div>').css('float', 'right'));
-            containerNode = null;
+            if (!rightTab) {
+                containerNode = null;
+                rightTab = true;
+            }
             return this;
         };
 
@@ -137,6 +167,7 @@ define('io.ox/office/framework/view/toolbox',
          */
         this.newLine = function () {
             lineNode = containerNode = null;
+            rightTab = false;
             return this;
         };
 

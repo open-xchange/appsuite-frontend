@@ -245,6 +245,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         }
     }
 
+    /* automatically expand single children to group width */
+    &.auto-width > *:first-child:last-child {
+        width: 100%;
+    }
+
     /* labels -------------------------------------------------------------- */
 
     label {
@@ -333,6 +338,9 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             display: block;
             margin-bottom: @control-spacing;
             .clearfix();
+
+            > .tab-left { float: left; }
+            > .tab-right { float: right; }
 
             .group-container {
                 display: inline-block;
