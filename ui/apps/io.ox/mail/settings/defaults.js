@@ -26,7 +26,7 @@ define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
             'messageFormat': 'html',
             'lineWrapAfter': '',
             'defaultSendAddress': util.getInitialDefaultSender(),
-            'autoSafeDraftsAfter': false,
+            'autoSaveDraftsAfter': false,
             'allowHtmlMessages': true,
             'allowHtmlImages': false,
             'displayEmoticons': false,
