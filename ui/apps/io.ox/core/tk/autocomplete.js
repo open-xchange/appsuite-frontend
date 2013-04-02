@@ -339,7 +339,7 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            popup.on('touchstart mousedown', blurOff).on('touchend mouseup', blurOn);
+            popup.on('mousedown', blurOff).on('mouseup', blurOn);
         }
 
         return this;
