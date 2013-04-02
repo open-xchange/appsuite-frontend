@@ -161,6 +161,10 @@ define('io.ox/portal/widgets',
             collection.add(widget);
         },
 
+        remove: function (model) {
+            collection.remove(model);
+        },
+
         removeDisabled: function () {
             collection.remove(
                 collection.filter(function (model) {

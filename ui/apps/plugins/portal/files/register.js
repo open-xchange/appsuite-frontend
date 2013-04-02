@@ -24,10 +24,14 @@ define('plugins/portal/files/register',
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
-
-            return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {
-                baton.data = data;
-            });
+            return api.get({ folder: props.folder_id, id: props.id }).then(
+                function success(data) {
+                    baton.data = data;
+                },
+                function fail(e) {
+                    return e.code === 'IFO-0300' ? 'remove' : e;
+                }
+            );
         },
 
         preview: function (baton) {

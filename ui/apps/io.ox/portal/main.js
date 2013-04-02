@@ -249,12 +249,19 @@ define('io.ox/portal/main',
                 point.invoke('preview', node, baton);
                 node.removeClass('pending error-occurred');
             })
-            .fail(function (errorData) {
+            .fail(function (e) {
+                // special return value?
+                if (e === 'remove') {
+                    widgets.remove(baton.model);
+                    node.remove();
+                    return;
+                }
+                // show error message
                 node.find('.content').remove();
                 node.append(
                     $('<div class="content error">').append(
                         $('<div>').text(gt('An error occurred. The message was:')),
-                        $('<div class="italic">').text(errorData.error),
+                        $('<div class="italic">').text(e.error),
                         '<br />',
                         $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
                             node.addClass('pending');
@@ -262,7 +269,7 @@ define('io.ox/portal/main',
                         })
                     )
                 );
-                point.invoke('error', node, errorData, baton);
+                point.invoke('error', node, e, baton);
                 node.removeClass('pending');
             });
     }
