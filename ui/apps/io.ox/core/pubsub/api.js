@@ -52,15 +52,11 @@ define('io.ox/core/pubsub/api',
             //create subscription
             return api.subscriptions.create(o)
                 .then(function (id) {
-                    var def = $.Deferred();
                     //add to collection
-                    util.getCollection()
-                        .then(function (collection) {
-                            o.id = id;
-                            collection.add(new model.Subscription(o));
-                            def.resolve(id);
-                        });
-                    return def;
+                    var collection = util.getCollection();
+                    o.id = id;
+                    collection.add(new model.Subscription(o));
+                    return id;
                 });
         },
 
