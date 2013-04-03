@@ -56,7 +56,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 timeout: TIMEOUTS.AUTOLOGIN,
                 params: {
                     action: 'autologin',
-                    client: that.client()
+                    client: that.client(),
+                    version: that.version()
                 }
             })
             // If autologin fails, try the token login
@@ -74,6 +75,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         params: {
                             action: 'tokens',
                             client: that.client(),
+                            version: that.version(),
                             serverToken: _.url.hash('serverToken'),
                             clientToken: _.url.hash('clientToken')
                         }
@@ -138,6 +140,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 password: password,
                                 language: language,
                                 client: that.client(),
+                                version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
                                 multiple: JSON.stringify(multiple)
                             }
@@ -193,6 +196,11 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
         client: function () {
             return 'open-xchange-appsuite';
+        },
+
+        version: function () {
+            // need to work with ox.version since we don't have the server config for auto-login
+            return String(ox.version).split('.').slice(0, 3).join('.');
         }
     };
 
