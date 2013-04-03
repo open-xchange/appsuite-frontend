@@ -86,7 +86,7 @@ $(window).load(function () {
     }
 
     // Disable attachments and uploads for specific clients
-    if (!_.browser.iOS) {
+    if (_.device('iOS >= 6 && tablet')) {
         ox.uploadsEnabled = true;
     }
 
