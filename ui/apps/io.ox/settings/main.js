@@ -43,11 +43,12 @@ define('io.ox/settings/main',
             set: function (data, fields, index) {
                 this.text(data.group || '');
             }
-        },
-        requiresLabel: function (i, data, current) {
-            if (!data) { return false; }
-            return data.group !== current ? data.group : false;
         }
+        // might be good to introduce real groups!
+        // requiresLabel: function (i, data, current) {
+        //     if (!data) { return false; }
+        //     return data.group !== current ? data.group : false;
+        // }
     };
 
     // application object
@@ -147,7 +148,7 @@ define('io.ox/settings/main',
         right = vsplit.right.addClass('default-content-padding settings-detail-pane').scrollable();
 
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none' });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -157,8 +158,7 @@ define('io.ox/settings/main',
         grid.addTemplate(tmpl.main);
         grid.addLabelTemplate(tmpl.label);
 
-        grid.requiresLabel = tmpl.requiresLabel;
-
+        //grid.requiresLabel = tmpl.requiresLabel;
 
         var getAllSettingsPanes = function () {
 

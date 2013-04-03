@@ -1090,7 +1090,9 @@ define('io.ox/core/tk/vgrid',
             //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
-        node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+        if (options.toolbarPlacement !== 'none') {
+            node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+        }
 
         this.on('change:prop:folder', function (e, value, previous) {
             // reset chunk loader
