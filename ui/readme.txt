@@ -28,7 +28,7 @@ How to get the UI running in Debian/Ubuntu
 
     local.conf:
     --- snip ---
-    export buildir="/Library/WebServer/Documents/appsuite"
+    export builddir="/Library/WebServer/Documents/appsuite"
     --- snap ---
 
 
