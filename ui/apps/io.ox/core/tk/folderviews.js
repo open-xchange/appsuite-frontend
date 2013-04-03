@@ -236,6 +236,15 @@ define('io.ox/core/tk/folderviews',
             });
         };
 
+        this.data = function (obj) {
+            if (!arguments.length) {
+                return data;
+            } else {
+                data = obj;
+                return this;
+            }
+        };
+
         // load sub folders - creates instances of TreeNode - does not yet paint them
         this.loadChildren = function (reload) {
 
@@ -259,8 +268,8 @@ define('io.ox/core/tk/folderviews',
                         })
                         .map(function (folder) {
                             if (hash[folder.id] !== undefined) {
-                                // reuse
-                                var node = hash[folder.id];
+                                // reuse but update data
+                                var node = hash[folder.id].data(folder);
                                 delete hash[folder.id];
                                 return node;
                             } else {
