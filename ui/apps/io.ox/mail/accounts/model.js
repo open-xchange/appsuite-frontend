@@ -124,6 +124,17 @@ define("io.ox/mail/accounts/model",
                 });
             } else {
                 if (obj) {
+
+                    obj = _.extend({
+                        unified_inbox_enabled: false,
+                        mail_secure: true,
+                        transport_secure: true,
+                        transport_credentials: false
+                    }, obj);
+
+                    obj.name = obj.personal = obj.primary_address;
+//                    obj.name = obj.primary_address;
+
                     this.attributes = obj;
                     this.attributes.spam_handler = "NoSpamHandler";
                 }
