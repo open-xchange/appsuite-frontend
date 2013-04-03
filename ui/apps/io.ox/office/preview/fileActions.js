@@ -20,7 +20,6 @@ define('io.ox/office/preview/fileActions',
     'use strict';
 
     var Action = links.Action,
-
         SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb|pdf|rtf)$/i;
 
     new Action('io.ox/files/actions/open', {
@@ -38,4 +37,7 @@ define('io.ox/office/preview/fileActions',
             }
         }
     });
+    return {
+        SupportedExtensions: SUPPORTED_EXT
+    };
 });

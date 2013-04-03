@@ -24,8 +24,10 @@ define('io.ox/mail/actions',
      'io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
+     'io.ox/core/capabilities',
+     'io.ox/office/preview/fileActions',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, capabilities, previewfileactions, settings) {
 
     'use strict';
 
@@ -35,7 +37,10 @@ define('io.ox/mail/actions',
         isDraftMail = function (mail) {
             return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
         },
-        Action = links.Action;
+        Action = links.Action,
+        isPreviewable = function (e) {
+            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+        };
 
     // actions
 
@@ -420,9 +425,24 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/open', {
+        requires: function (e) {
+            return isPreviewable(e);
+        },
+        action: function (o) {
+            var file = o;
+            if (o.mail) {
+                file.data = {mail: o.mail, id: o.id};
+            }
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
+        }
+    });
+
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: function (e) {
+            return !isPreviewable(e);
+        },
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');
@@ -992,6 +1012,13 @@ define('io.ox/mail/actions',
         index: 200,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'open1',
+        index: 250,
+        label: gt('Open'),
+        ref: 'io.ox/mail/actions/open'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
