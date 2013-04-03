@@ -700,7 +700,11 @@ define("io.ox/core/main",
             baton.block,
             ext.loadPlugins(),
             require(baton.autoLaunchApps),
-            require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
+            require(['io.ox/core/api/account']).pipe(function (api) {
+                var def = $.Deferred();
+                api.all().always(def.resolve);
+                return def;
+            })
         );
 
         new Stage('io.ox/core/stages', {
