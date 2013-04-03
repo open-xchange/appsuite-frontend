@@ -401,7 +401,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (value !== '' && _.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
@@ -436,7 +436,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             // just reject the change, if it's not parsable
             if (_.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
 
