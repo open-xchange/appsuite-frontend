@@ -53,6 +53,36 @@ define('plugins/portal/birthdays/register',
             });
         },
 
+        preview: function (baton) {
+
+            var $list = $('<div class="content">'),
+                hash = {},
+                contacts = baton.data;
+
+            if (contacts.length === 0) {
+                $list.append(
+                    $('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
+                );
+            } else {
+                $list.addClass('pointer');
+                _(contacts).each(function (contact) {
+                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                        name = util.getFullName(contact);
+                    if (!isDuplicate(name, hash)) {
+                        $list.append(
+                            $('<div class="line">').append(
+                                $('<span class="bold">').text(name), $.txt(' '),
+                                $('<span class="accent">').text(birthday)
+                            )
+                        );
+                        markDuplicate(name, hash);
+                    }
+                });
+            }
+
+            this.append($list);
+        },
+
         draw: function (baton) {
 
             var hash = {}, $list;
@@ -119,33 +149,6 @@ define('plugins/portal/birthdays/register',
                     });
                 });
             }
-            this.append($list);
-        },
-
-        preview: function (baton) {
-
-            var $list = $('<div class="content pointer">'),
-                hash = {},
-                contacts = baton.data;
-
-            if (contacts.length === 0) {
-                $list.append($('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
-            } else {
-                _(contacts).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
-                        name = util.getFullName(contact);
-                    if (!isDuplicate(name, hash)) {
-                        $list.append(
-                            $('<div class="line">').append(
-                                $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(birthday)
-                            )
-                        );
-                        markDuplicate(name, hash);
-                    }
-                });
-            }
-
             this.append($list);
         }
     });

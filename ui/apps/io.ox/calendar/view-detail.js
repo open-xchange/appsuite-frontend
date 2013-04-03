@@ -430,7 +430,6 @@ define("io.ox/calendar/view-detail",
         index: 200,
         id: "organizer",
         draw: function (data) {
-            console.log('organizer', data);
             if (data.organizerId) {
                 this.append(
                     $('<span class="detail-label">').append(

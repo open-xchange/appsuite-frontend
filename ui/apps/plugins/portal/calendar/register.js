@@ -70,12 +70,19 @@ define("plugins/portal/calendar/register",
         },
 
         preview: function (baton) {
+
             var appointments = baton.data,
                 $content = $('<div class="content">'),
                 showDeclined = settings.get('showDeclinedAppointments', false);
 
-            if (appointments.length > 0) {
+            if (appointments.length === 0) {
+                $content.append(
+                    $('<div class="line">')
+                    .text(gt("You don't have any appointments in the near future."))
+                );
+            } else {
                 _(appointments).each(function (nextApp) {
+
                     var declined = util.getConfirmationStatus(nextApp) === 2,
                         start = new date.Local(nextApp.start_date),
                         timespan = util.getSmartDate(nextApp.start_date, true) + (nextApp.full_time ? '' : ' ' + start.format(date.TIME));
@@ -93,11 +100,6 @@ define("plugins/portal/calendar/register",
                         );
                     }
                 });
-            } else {
-                $content.append(
-                    $('<div class="item">')
-                    .text(gt("You don't have any appointments in the near future."))
-                );
             }
 
             this.append($content);
