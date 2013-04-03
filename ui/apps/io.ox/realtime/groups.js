@@ -27,7 +27,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                 return;
             }
             heartbeat = setInterval(function () {
-                self.sendWithoutSequence({
+                rt.sendWithoutSequence({
                     element: "message",
                     payloads: [
                         {
