@@ -1185,6 +1185,10 @@ define('io.ox/mail/view-detail',
                     'data-content-type': content.type
                 })
                 .addClass(
+                    // html or text mail
+                    content.type === 'text/html' ? 'text-html' : 'text-plain'
+                )
+                .addClass(
                     // assuming touch-pad/magic mouse for macos
                     // chrome & safari do a good job; firefox is not smooth
                     // ios means touch devices; that's fine

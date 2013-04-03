@@ -463,7 +463,7 @@
         font-weight: bold;
     }
 
-    article.horizontal-scrolling {
+    article.text-html.horizontal-scrolling {
         max-width: 100%;
         overflow-x: auto;
         box-sizing: border-box;
