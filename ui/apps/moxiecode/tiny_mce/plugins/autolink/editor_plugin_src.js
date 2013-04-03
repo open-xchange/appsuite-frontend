@@ -21,7 +21,6 @@
 	*/
 
 	init : function(ed, url) {
-		debugger;
 		var t = this;
 
 		// Internet Explorer has built-in automatic linking

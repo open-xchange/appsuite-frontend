@@ -213,7 +213,6 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-
         /**
          * Save settings to cache and backend.
          *
@@ -271,7 +270,12 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         }
         return promise.then(function (hash) {
-            return hash[path] || { tree: {}, meta: {} };
+            return require([path + '/settings/defaults']).then(function (defaults) {
+                if (hash[path] && hash[path].tree) {
+                    hash[path].tree = _.extend(defaults, hash[path].tree || {});
+                }
+                return hash[path] || { tree: {}, meta: {} };
+            });
         });
     }
 
@@ -283,10 +287,10 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             }
             // bulk load?
             if (_(list).contains(name)) {
-                preload(name).done(function (data) {
+                preload(name).then(function (data) {
                     var settings = new Settings(name, data.tree, data.meta);
                     load(settings);
-                });
+                }, load.error);
             } else {
                 var settings = new Settings(name);
                 settings.load().done(function () {
