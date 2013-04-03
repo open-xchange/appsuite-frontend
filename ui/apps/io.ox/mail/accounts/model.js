@@ -82,8 +82,6 @@ define("io.ox/mail/accounts/model",
 
             data = _.extend({
                 unified_inbox_enabled: false,
-                mail_secure: true,
-                transport_secure: true,
                 transport_credentials: false
             }, data);
 
@@ -127,8 +125,6 @@ define("io.ox/mail/accounts/model",
 
                     obj = _.extend({
                         unified_inbox_enabled: false,
-                        mail_secure: true,
-                        transport_secure: true,
                         transport_credentials: false
                     }, obj);
 
