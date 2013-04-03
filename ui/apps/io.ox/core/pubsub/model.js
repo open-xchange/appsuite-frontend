@@ -122,6 +122,11 @@ define('io.ox/core/pubsub/model',
                             return collection.add(pub);
                         });
                     });
+                    collection.each(function (model) {
+                        if (_(res).where({id: model.id}).length === 0) {
+                            collection.remove(model);
+                        }
+                    });
                     return collection;
                 });
             },
@@ -168,6 +173,11 @@ define('io.ox/core/pubsub/model',
                             }
                             return collection.add(sub);
                         });
+                    });
+                    collection.each(function (model) {
+                        if (_(res).where({id: model.id}).length === 0) {
+                            collection.remove(model);
+                        }
                     });
                     return collection;
                 });
