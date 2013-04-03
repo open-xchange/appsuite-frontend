@@ -30,7 +30,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     function IndexeddbStorage(id) {
 
         var fluent = {},
-            queue = { timer: null, list: [] },
+            queue,
             myDB,
             dbOpened = $.Deferred(); // OP(opened);
 
@@ -39,14 +39,14 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             opened.onupgradeneeded = function (e) {
                 // Set up object stores
                 myDB = e.target.result;
-                myDB.createObjectStore("cache", {keyPath: "key"});
+                myDB.createObjectStore("cache", { keyPath: "key" });
             };
             OP(opened).then(dbOpened.resolve, dbOpened.reject);
         });
 
         function operation(fn, readwrite) {
             return dbOpened.then(function (db) {
-                var tx = db.transaction(['cache'], readwrite ? 'readwrite' : 'readonly');
+                var tx = db.transaction('cache', readwrite ? 'readwrite' : 'readonly');
                 return fn(tx.objectStore('cache'));
             });
         }
@@ -59,10 +59,43 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             return operation(fn, true);
         }
 
+        queue = {
+
+            hash: {},
+
+            flush: _.debounce(function () {
+                // get shallow copy
+                dbOpened.then(function (db) {
+                    var tx = db.transaction('cache', 'readwrite'),
+                        store = tx.objectStore('cache'),
+                        key;
+                    // loop
+                    _(queue.hash).each(function (data, key) {
+                        store.put({ key: key, data: data });
+                    });
+                    queue.hash = {};
+                });
+            }, 500),
+
+            clear: function () {
+                this.hash = {};
+            },
+
+            add: function (key, data) {
+                this.hash[key] = data;
+                this.flush();
+            },
+
+            remove: function (key) {
+                delete this.hash[key];
+            }
+        };
+
         _.extend(this, {
 
             clear: function () {
                 fluent = {};
+                queue.clear();
                 return readwrite(function (tx) {
                     return OP(tx.clear(), 'clear');
                 });
@@ -109,9 +142,11 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     console.error('Could not serialize', id, key, data);
                 }
                 // don't wait for this
-                readwrite(function (cache) {
-                    return OP(cache.put({ key: key, data: data }));
-                });
+                queue.add(key, data);
+                // clear();
+                // readwrite(function (cache) {
+                //     return OP(cache.put({ key: key, data: data }));
+                // });
                 // go back to work
                 return $.when();
             },
@@ -121,6 +156,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 if (fluent[key]) {
                     delete fluent[key];
                 }
+                queue.remove(key);
                 return readwrite(function (cache) {
                     return OP(cache['delete'](key), 'delete');
                 });
@@ -154,11 +190,11 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     that =  {
         id: 'indexeddb',
         index: 100,
-        getInstance: function (theId) {
-            if (!instances[theId]) {
-                return instances[theId] = new IndexeddbStorage(theId);
+        getInstance: function (id) {
+            if (!instances[id]) {
+                return instances[id] = new IndexeddbStorage(id);
             }
-            return instances[theId];
+            return instances[id];
         },
         getStorageLayerName: function () {
             return 'cache/indexeddb';
