@@ -56,6 +56,10 @@
    		margin-left: 180px;
    	}
 
+    .form-horizontal.controls {
+        margin-left: 180px;
+    }
+
     .sectionheader {
         margin-top: 20px;
     }
