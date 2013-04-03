@@ -643,7 +643,8 @@ $(window).load(function () {
                             gotoCore(true)
                         } else {
                             fetchUserSpecificServerConfig().done(function () {
-                                // apply session data & page title
+                                // apply session data (again) & page title
+                                session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 loadCoreFiles().done(function () {
                                     loadCore();

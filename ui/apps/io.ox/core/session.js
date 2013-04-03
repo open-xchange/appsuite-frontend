@@ -31,9 +31,9 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
     };
 
     var set = function (data, language) {
-        ox.session = data.session || '';
-        ox.user = data.user; // might have a domain; depends on what the user entered on login
-        ox.user_id = data.user_id || 0;
+        if ('session' in data) ox.session = data.session || '';
+        if ('user' in data) ox.user = data.user || ''; // might have a domain; depends on what the user entered on login
+        if ('user_id' in data) ox.user_id = data.user_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
         $('html').attr('lang', ox.language.split('_')[0]);

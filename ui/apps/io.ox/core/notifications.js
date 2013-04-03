@@ -39,7 +39,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
-            
+
             if (newOther > 0) {//new notifications not mail
                 this.trigger('newNotifications');
             } else if (newMails > 0) {//new mail notifications
@@ -97,7 +97,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     empty = false;
                 }
             });
-            
+
             if (empty) {
                 self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
             }
@@ -146,10 +146,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //auto open on new notification
             this.badges.push(badgeView);
             var set = settings.get('autoOpenNotification', 'noEmail');
-            
+
             function changeAutoOpen(value) {
                 badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
-                
+
                 if (value === 'always') {
                     badgeView.on('newNotifications newMailNotifications', function () {
                         self.showList();
@@ -229,7 +229,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     newMails = module.collection.size() - self.oldMailCount;
                     self.oldMailCount = module.collection.size();
                 }
-                
+
                 if (module.collection.size() > 0) {
                     return memo + module.collection.size();
                 }
@@ -346,6 +346,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             };
         }())
     };
-    window.not = new NotificationController();
+
     return new NotificationController();
 });
