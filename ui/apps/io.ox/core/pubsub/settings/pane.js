@@ -220,19 +220,25 @@ define('io.ox/core/pubsub/settings/pane',
         }
     });
 
+    function performRender() {
+        this.render();
+    }
+
+    function performRemove() {
+        this.remove();
+    }
+
     var PubSubItem = Backbone.View.extend({
         tagName: 'li',
         className: '',
         initialize: function () {
-            var baton = ext.Baton({ model: this.model, view: this });
+            //TODO:switch to listenTo here, once backbone is up to date
+            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+            this.model.off('change', performRender);
+            this.model.on('change', performRender, this);
 
-            this.model.on('change', function () {
-                baton.view.render();
-            });
-
-            this.model.on('remove', function () {
-                baton.view.remove();
-            });
+            this.model.off('remove', performRemove, this);
+            this.model.on('remove', performRemove, this);
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
