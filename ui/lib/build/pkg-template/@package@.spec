@@ -23,11 +23,11 @@ Requires:       open-xchange-appsuite-manifest
 %build
 
 %install
-sh /opt/open-xchange-appsuite-devel/bin/build-appsuite app \
+sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app \
     builddir="%{buildroot}/opt/open-xchange/appsuite"
 
 %clean
-sh /opt/open-xchange-appsuite-devel/bin/build-appsuite clean \
+sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean \
     builddir="%{buildroot}/opt/open-xchange/appsuite"
 
 %files
