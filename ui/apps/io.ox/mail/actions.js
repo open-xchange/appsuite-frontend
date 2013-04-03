@@ -799,7 +799,7 @@ define('io.ox/mail/actions',
                     if (action === "create") {
 
                         //Calculate the right time
-                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
+                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
 
                         taskApi.create({title: titleInput.val(),
                             folder_id: config.get('folder.tasks'),

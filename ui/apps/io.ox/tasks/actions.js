@@ -445,7 +445,7 @@ define('io.ox/tasks/actions',
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr('finderId');
+                        var finderId = $(this).attr("value");
                         require(['io.ox/tasks/api'], function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime(),

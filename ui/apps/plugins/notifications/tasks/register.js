@@ -18,7 +18,7 @@ define('plugins/notifications/tasks/register',
      'io.ox/core/api/reminder',
      'io.ox/tasks/util',
      'less!plugins/notifications/tasks/style.css'
-    ], function (ext, gt, api, reminderApi, util, templ) {
+    ], function (ext, gt, api, reminderApi, util) {
 
     'use strict';
 
@@ -204,19 +204,22 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model;
+            var model = baton.model,
+                selectionBox;
+            
             this.attr('data-cid', model.get('cid')).attr('model-cid', model.cid)
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="task-actions">').append(
-                    $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
+                    selectionBox = $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
                     $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
                     
                 )
             );
+            util.selectDefaultReminder(selectionBox);
         }
     });
 
@@ -253,7 +256,7 @@ define('plugins/notifications/tasks/register',
                 model = this.model,
                 key = [model.get('folder_id') + '.' + model.get('id')];
             
-            dates = util.computePopupTime(endDate, this.$el.find(".dateselect :selected").attr("finderid"));
+            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").val());
             endDate = dates.alarmDate;
             reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
                 return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
