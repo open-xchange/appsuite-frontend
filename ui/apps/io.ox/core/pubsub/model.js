@@ -97,9 +97,6 @@ define('io.ox/core/pubsub/model',
         Publications = Backbone.Collection.extend({
             model: Publication,
             initialize: function () {
-                this.on('remove', function (model, collection, opt) {
-                    model.destroy();
-                });
                 this.on('change:enabled', function (model, value, opt) {
                     model.collection.sort();
                 });
@@ -138,9 +135,6 @@ define('io.ox/core/pubsub/model',
         Subscriptions = Backbone.Collection.extend({
             model: Subscription,
             initialize: function () {
-                this.on('remove', function (model, collection, opt) {
-                    model.destroy();
-                });
                 this.on('change:enabled', function (model, value, opt) {
                     model.collection.sort();
                 });

@@ -279,7 +279,7 @@ define('io.ox/core/pubsub/settings/pane',
         },
         onRemove: function (ev) {
             ev.preventDefault();
-            this.model.collection.remove(this.model);
+            this.model.destroy();
         }
     });
 
