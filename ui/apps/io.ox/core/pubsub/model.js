@@ -112,6 +112,13 @@ define('io.ox/core/pubsub/model',
                     _(res).each(function (obj) {
                         var pub = new Publication(obj);
                         pub.fetch().then(function (pub) {
+                            var model = collection.get(pub.id);
+                            if (model) {
+                                //TODO: most likely this can be removed, once backbone is uptodate
+                                //and collection.add triggers the events
+                                model.set(pub);
+                                model.trigger('change', model);
+                            }
                             return collection.add(pub);
                         });
                     });
@@ -154,6 +161,11 @@ define('io.ox/core/pubsub/model',
                     _(res).each(function (obj) {
                         var sub = new Subscription(obj);
                         sub.fetch().then(function (sub) {
+                            var model = collection.get(sub.id);
+                            if (model) {
+                                model.set(sub);
+                                model.trigger('change', model);
+                            }
                             return collection.add(sub);
                         });
                     });
