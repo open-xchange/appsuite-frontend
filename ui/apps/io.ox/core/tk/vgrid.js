@@ -389,7 +389,7 @@ define('io.ox/core/tk/vgrid',
                 }
                 // add tail?
                 if (options.tail) {
-                    tail = options.tail() || $();
+                    tail = options.tail.call(self, all.slice()) || $();
                     tail.css({ top: ($i === 0 ? all.length * itemHeight : cumulatedLabelHeight) + 'px' })
                         .appendTo(container);
                     cumulatedLabelHeight += tail.outerHeight(true);

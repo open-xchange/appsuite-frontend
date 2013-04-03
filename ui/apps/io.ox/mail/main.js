@@ -118,16 +118,24 @@ define('io.ox/mail/main',
 
         // threadview is based on a 500 mails limit
         // in order to view all mails in a folder we offer a link
-        options.tail = function () {
-            var threadSort = grid.prop('sort') === 'thread',
-                inAllMode = grid.getMode() === 'all',
-                isUnreadOnly = grid.prop('unread'),
-                isUnlimited = grid.option('max') === '0',
-                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited;
-            return hideTail ? $() :
-                $('<div class="vgrid-cell tail">').append(
-                    $('<a href="#">').text(gt('Load all mails. This might take some time.'))
-                );
+        options.tail = function (all) {
+            var threadSort = this.prop('sort') === 'thread',
+                inAllMode = this.getMode() === 'all',
+                isUnreadOnly = this.prop('unread'),
+                isUnlimited = this.option('max') === '0',
+                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited,
+                count = 0;
+            // hide?
+            if (hideTail) return $();
+            // complex count
+            count = _(all).reduce(function (sum, obj) {
+                return sum + obj.thread.length;
+            }, 0);
+            if (count < this.option('max')) return $();
+            // show tail
+            return $('<div class="vgrid-cell tail">').append(
+                $('<a href="#">').text(gt('Load all mails. This might take some time.'))
+            );
         };
 
         grid = new VGrid(left, options);
