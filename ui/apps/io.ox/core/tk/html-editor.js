@@ -400,6 +400,14 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 def.resolve();
             },
 
+            execcommand_callback: function (editor_id, elm, command) {
+                if (command === 'createlink') {
+                    _.defer(function () {
+                        $(tinyMCE.get(editor_id).getBody()).find('a').attr('target', '_blank');
+                    });
+                }
+            },
+
             theme_advanced_buttons1:
                 'bold,italic,underline,strikethrough,|,' +
                 'bullist,numlist,indent,outdent,|,' +
