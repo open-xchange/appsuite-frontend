@@ -158,10 +158,12 @@ define('io.ox/core/api/pubsub',
 
 
     ox.on('refresh^', function () {
-        subscriptions.caches.get.clear();
-        publications.caches.get.clear();
-        subscriptions.caches.all.clear();
-        publications.caches.all.clear();
+        _([publications, subscriptions]).each(function (api) {
+            api.caches.get.clear();
+            api.caches.all.clear().then(function () {
+                api.trigger('refresh:all');
+            });
+        });
     });
 
 
