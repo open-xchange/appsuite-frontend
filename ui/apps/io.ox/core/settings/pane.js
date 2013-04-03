@@ -46,7 +46,7 @@ define('io.ox/core/settings/pane',
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
                 }
             });
-            this.append(
+            this.addClass('settings-container').append(
                 $('<h1>').text(gt("Basic settings"))
             );
             new SettingView({model: model}).render().$el.appendTo(this);

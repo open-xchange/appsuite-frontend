@@ -237,17 +237,7 @@
 	text-align: center;
 }
 
-.io-ox-dialog-popup .busy_pic {
-	margin: 10px auto 10px auto;
-	background-image: url(v=7.0.0-1.20120601.132924/apps/io.ox/settings/busy.gif);
-	width: 45px;
-	height: 11px;
-	background-repeat: no-repeat;
-}
-
 .settings-detail-pane legend.sectiontitle {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-weight: 400;
 	display: block;
     width: 100%;
     padding: 0;
@@ -257,4 +247,25 @@
     color: #333;
     border: 0;
     border-bottom: 1px solid #E5E5E5;
+}
+
+
+@media screen and (max-width: 480px) {
+
+    .settings-detail-pane {
+        h1:first-child, h1.pane-headline:first-child {
+            margin: 0 0 1em 0;
+        }
+        .form-horizontal {
+
+            .control-group > label {
+                text-align: left;
+                margin-left: 5px;
+            }
+            .controls, .help-inline {
+                margin-left: 5px;
+            }
+        }
+
+   }
 }

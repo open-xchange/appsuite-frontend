@@ -115,16 +115,18 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/subject',
             index: 150,
+            fluid: true,
             label: model.fields.subject,
-            control: '<input type="text" class="span6" name="subject">',
+            control: '<input type="text" class="span12" name="subject">',
             attribute: 'subject'
         }));
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/mailtext',
             index: 200,
+            fluid: true,
             label: model.fields.text,
-            control: '<textarea rows="12" class="span6" name="text">',
+            control: '<textarea rows="12" class="span12" name="text">',
             attribute: 'text'
         }));
 
@@ -138,6 +140,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
         point.extend(new forms.ControlGroup({
             id: ref + '/edit/view/addresses',
+            fluid: true,
             index: 300,
             label: model.fields.headlineAdresses
 

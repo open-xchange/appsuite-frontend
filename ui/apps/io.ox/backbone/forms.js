@@ -77,7 +77,9 @@ define('io.ox/backbone/forms',
             this.buildControls();
 
             this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-
+            if (options.fluid) {
+                this.nodes.controlGroup.addClass('row-fluid');
+            }
             this.nodes.controlGroup.append(
                 this.buildLabel(),
                 this.buildControls()

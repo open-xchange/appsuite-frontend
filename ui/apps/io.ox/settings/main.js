@@ -133,16 +133,6 @@ define('io.ox/settings/main',
 
         win.addClass('io-ox-settings-main');
 
-        /*
-        left = $('<div>')
-            .addClass('leftside border-right')
-            .appendTo(win.nodes.main);
-
-        right = $('<div>')
-            .addClass('rightside default-content-padding settings-detail-pane')
-            .appendTo(win.nodes.main);
-        */
-
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
         right = vsplit.right.addClass('default-content-padding settings-detail-pane').scrollable();

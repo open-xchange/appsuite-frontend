@@ -10,18 +10,15 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-/*global
-define: true, _: true
-*/
+
 define('io.ox/mail/accounts/settings',
       ['io.ox/core/extensions',
-       'io.ox/settings/utils',
        'io.ox/core/api/account',
        "io.ox/mail/accounts/model",
        'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
        'gettext!io.ox/mail/accounts/settings'
-       ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs, gt) {
+       ], function (ext, api, AccountModel, AccountDetailView, dialogs, gt) {
     'use strict';
 
     ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
@@ -295,5 +292,5 @@ define('io.ox/mail/accounts/settings',
 
     return {
         mailAutoconfigDialog: mailAutoconfigDialog
-    }; //whoa return nothing at first
+    };
 });
