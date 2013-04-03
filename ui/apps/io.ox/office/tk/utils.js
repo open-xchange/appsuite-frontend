@@ -11,18 +11,18 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils',
+define.async('io.ox/office/tk/utils',
     ['io.ox/office/tk/config',
      'io.ox/core/gettext'
     ], function (Config, gettext) {
 
     'use strict';
 
-    var // the ISO code of the language used by gettext
-        language = null,
+    var // the Deferred object that will be resolved with the Utils class
+        def = $.Deferred(),
 
         // the CSS classes added to localized icons
-        localeClasses = null,
+        localeIconClasses = null,
 
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
@@ -64,6 +64,23 @@ define('io.ox/office/tk/utils',
      * loops to break the iteration process immediately.
      */
     Utils.BREAK = {};
+
+    /**
+     * The full identifier of the current locale, with leading lower-case
+     * language identifier, and trailing upper-case country identifier,
+     * separated by an underscore character, e.g. 'en_US'.
+     */
+    Utils.LOCALE = '';
+
+    /**
+     * The lower-case language identifier of the current locale, e.g. 'en'.
+     */
+    Utils.LANGUAGE = '';
+
+    /**
+     * The upper-case country identifier of the current locale, e.g. 'US'.
+     */
+    Utils.COUNTRY = '';
 
     /**
      * CSS selector for button elements.
@@ -1946,7 +1963,7 @@ define('io.ox/office/tk/utils',
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeClasses)
+        return $('<i>').addClass(icon + ' ' + localeIconClasses)
             .toggleClass('icon-white', white === true)
             .toggleClass('retina', _.device('retina'));
     };
@@ -2414,18 +2431,27 @@ define('io.ox/office/tk/utils',
 
     // global initialization ==================================================
 
-    // get current language and build CSS classes added to icons
-    gettext.language.done(function (lang) {
-        var pos = lang.indexOf('_');
-        language = lang;
-        localeClasses = 'lc-' + lang;
-        if ((pos === 2) || (pos === 3)) {
-            localeClasses += ' lc-' + lang.substr(0, pos);
+    // deferred initialization of class members according to current language
+    gettext.language.done(function (language) {
+
+        var // extract language and country identifier
+            matches = /^([a-z]+)(_([A-Z]+))?$/.exec(language);
+
+        Utils.LOCALE = language;
+        Utils.LANGUAGE = matches[1] || '';
+        Utils.COUNTRY = matches[3] || '';
+
+        localeIconClasses = 'lc-' + language;
+        if ((Utils.LANGUAGE !== '') && (Utils.COUNTRY !== '')) {
+            localeIconClasses += ' lc-' + Utils.LANGUAGE;
         }
+
+        // resolve the exported Deferred with the complete Utils class
+        def.resolve(Utils);
     });
 
     // exports ================================================================
 
-    return Utils;
+    return def;
 
 });
