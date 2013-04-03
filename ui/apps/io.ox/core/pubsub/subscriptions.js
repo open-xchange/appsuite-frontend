@@ -251,6 +251,8 @@ define('io.ox/core/pubsub/subscriptions',
                 $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
                     node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
+                        userform.parent().find('.alert-error').remove();
+                        userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
                         buildForm(userform, baton);
                     }))));
