@@ -71,13 +71,13 @@ define('io.ox/mail/accounts/view-form',
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop
                 }));
-                var pop3node = self.$el.find('[data-property="pop3_refresh_rate"]').parentsUntil('.form-horizontal', '.control-group').first();
+                var pop3nodes = self.$el.find('.control-group.pop3');
                 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
                 //check if pop3 refresh rate needs to be displayed
                 if (self.model.get('mail_protocol') !== 'pop3') {
-                    pop3node.hide();
+                    pop3nodes.hide();
                 }
 
                 function syncLogin(model, value) {
@@ -89,9 +89,9 @@ define('io.ox/mail/accounts/view-form',
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
                         if (value !== 'pop3') {
-                            pop3node.hide();
+                            pop3nodes.hide();
                         } else {
-                            pop3node.show();
+                            pop3nodes.show();
                         }
                     });
                     
