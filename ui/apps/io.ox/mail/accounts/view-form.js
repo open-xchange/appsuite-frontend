@@ -72,7 +72,7 @@ define('io.ox/mail/accounts/view-form',
                     optionsRefreshRate: optionsRefreshRatePop
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
-                
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
                 //check if pop3 refresh rate needs to be displayed
@@ -85,7 +85,7 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 if (self.model.get('id') !== 0) {//check for primary account
-                    
+
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
                         if (value !== 'pop3') {
@@ -94,18 +94,18 @@ define('io.ox/mail/accounts/view-form',
                             pop3nodes.show();
                         }
                     });
-                    
+
                     //login for server should be email-address by default;
                     if (self.model.get('login') === undefined) {
                         self.model.set('login', self.model.get('primary_address'));
                     }
-                    
+
                     //if login and mailadress are the same change login if mailadress changes
                     if (self.model.get('primary_address') === self.model.get('login') && !self.inSync) {
                         self.model.on('change:primary_address', syncLogin);
                         self.inSync = true;
                     }
-                    
+
                     //react to loginchange
                     self.model.on('change:login', function (model, value) {
                         if (value === model.get('primary_address')) {
@@ -121,15 +121,15 @@ define('io.ox/mail/accounts/view-form',
                 } else {//primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
                 }
-                
+
                 return self;
             },
             events: {
-                'click .save': 'onSave'
+                'save': 'onSave'
             },
             onSave: function () {
                 var self = this;
-                
+
                 this.model.save()
                 .done(function (data) {
                     self.dialog.close();

@@ -479,6 +479,11 @@ define("io.ox/core/tk/dialogs",
         close = function (e) {
             // use this to check if it's open
             if (self.nodes.closest) {
+
+                if (options.saveOnClose) {
+                    pane.find('.settings-detail-pane').trigger('save');
+                }
+
                 // remove handlers & avoid leaks
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
