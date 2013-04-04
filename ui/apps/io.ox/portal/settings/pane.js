@@ -19,7 +19,7 @@ define('io.ox/portal/settings/pane',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, dialogs, widgets, settings, gt) {
+       'less!io.ox/portal/style.less'], function (ext, manifests, dialogs, widgets, settings, gt) {
 
     'use strict';
 

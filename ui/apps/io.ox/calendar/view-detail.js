@@ -22,7 +22,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/tk/attachments",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar",
-     "less!io.ox/calendar/style.css"
+     "less!io.ox/calendar/style.less"
     ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";

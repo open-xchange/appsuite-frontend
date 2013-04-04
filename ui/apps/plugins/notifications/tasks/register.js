@@ -17,7 +17,7 @@ define('plugins/notifications/tasks/register',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
      'io.ox/tasks/util',
-     'less!plugins/notifications/tasks/style.css'
+     'less!plugins/notifications/tasks/style.less'
     ], function (ext, gt, api, reminderApi, util) {
 
     'use strict';

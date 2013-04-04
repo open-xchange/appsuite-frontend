@@ -17,7 +17,7 @@ define('io.ox/mail/view-grid-template',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
      'gettext!io.ox/core/mail',
-     'less!io.ox/mail/style.css'], function (util, api, VGrid, account, gt) {
+     'less!io.ox/mail/style.less'], function (util, api, VGrid, account, gt) {
 
     'use strict';
 

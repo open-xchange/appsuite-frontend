@@ -9,7 +9,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/widgets.css'], function () {
+define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/widgets.less'], function () {
 
     "use strict";
 

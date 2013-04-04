@@ -18,7 +18,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/extensions',
      'io.ox/contacts/util',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/contacts/edit/style.css'
+     'less!io.ox/contacts/edit/style.less'
      ], function (view, model, gt, ext, util, dnd) {
 
     'use strict';

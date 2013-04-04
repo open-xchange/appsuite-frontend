@@ -25,7 +25,7 @@ define("io.ox/contacts/main",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
-     "less!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.less"
     ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings) {
 
     "use strict";

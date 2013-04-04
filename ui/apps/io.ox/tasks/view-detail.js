@@ -17,7 +17,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                    'io.ox/core/extPatterns/links',
                                    'io.ox/tasks/api',
                                    'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
+                                   'less!io.ox/tasks/style.less' ], function (util, gt, ext, links, api) {
     'use strict';
     
     var taskDetailView = {

@@ -20,7 +20,7 @@ define("io.ox/contacts/view-detail",
      "io.ox/core/api/folder",
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
-     "less!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.less"
     ], function (ext, gt, util, api, actions, folderAPI, links, date) {
 
     "use strict";

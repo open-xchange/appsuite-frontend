@@ -21,7 +21,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/tk/attachments',
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
-    'less!io.ox/contacts/edit/style.css'
+    'less!io.ox/contacts/edit/style.less'
 ], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt) {
 
     "use strict";

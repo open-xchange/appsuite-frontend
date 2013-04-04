@@ -1,3 +1,2 @@
 #!/bin/sh
-rm /opt/open-xchange/appsuite/apps/themes/*/common.css || true
-rm /opt/open-xchange/appsuite/apps/themes/*/style.css || true
+rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true

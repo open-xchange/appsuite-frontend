@@ -18,7 +18,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
+      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
 

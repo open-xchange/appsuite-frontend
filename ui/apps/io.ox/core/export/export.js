@@ -20,7 +20,7 @@ define('io.ox/core/export/export',
     'io.ox/core/config',
     'io.ox/formats/vcard',
     'gettext!io.ox/core',
-    'less!io.ox/core/export/style.css'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
+    'less!io.ox/core/export/style.less'], function (ext, dialogs, api, folderApi, notifications, config, vcard, gt) {
 
     'use strict';
 

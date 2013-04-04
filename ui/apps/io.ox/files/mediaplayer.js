@@ -20,7 +20,7 @@ define('io.ox/files/mediaplayer',
      'apps/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
-     'less!mediaelement/mediaelementplayer.css',
+     'css!mediaelement/mediaelementplayer.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (commons, gt, api, folderAPI) {
 

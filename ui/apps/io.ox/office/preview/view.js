@@ -19,7 +19,7 @@ define('io.ox/office/preview/view',
      'io.ox/office/framework/view/pane',
      'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css'
+     'less!io.ox/office/preview/style.less'
     ], function (Utils, Button, Label, BaseView, Pane, ToolBox, gt) {
 
     'use strict';

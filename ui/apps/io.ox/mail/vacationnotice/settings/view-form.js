@@ -19,7 +19,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'io.ox/core/date',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/vacationnotice/settings/style.css'
+    'less!io.ox/mail/vacationnotice/settings/style.less'
 ], function (model, views, forms, actions, links, date, notifications, gt) {
 
     "use strict";

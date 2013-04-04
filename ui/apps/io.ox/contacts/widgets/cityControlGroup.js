@@ -9,7 +9,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less!io.ox/contacts/widgets/widgets.css'], function (forms) {
+define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less!io.ox/contacts/widgets/widgets.less'], function (forms) {
     "use strict";
 
     function CityControlGroup(options) {

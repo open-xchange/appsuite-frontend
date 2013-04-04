@@ -22,7 +22,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/http',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.css'], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+     'less!io.ox/core/permissions/style.less'], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 

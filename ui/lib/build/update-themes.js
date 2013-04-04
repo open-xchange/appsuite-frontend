@@ -23,14 +23,31 @@ for (var i = 0; i < themes.length; i++) {
     if (!defs2.exists()) continue;
     print('Processing', dir);
     var defs = defs1 + readFile(defs2, 'UTF-8');
-    compileLess(defs + style1, subDir('common.css'));
+    compileLess(defs + style1, subDir('less/common.css'));
     compileLess(defs + readFile(subDir('style.less'), 'UTF-8'),
-                subDir('style.css'));
+                subDir('less/style.css'));
+    recurse(defs, subDir, new java.io.File('apps'));
+}
+
+function recurse(defs, subDir, parent) {
+    var files = parent.listFiles();
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i], name = file.toString();
+        if (file.isDirectory()) {
+            recurse(defs, subDir, file);
+        } else {
+            if (name.slice(-5) !== '.less') continue;
+            if (name.slice(0, 12) === 'apps/themes/') continue;
+            compileLess(defs + readFile(file, 'UTF-8'),
+                        subDir('less' + name.slice(4)));
+        }
+    }
 }
 
 function compileLess(input, outputFile) {
     new less.Parser().parse(input, function (e, css) {
         if (e) return error(e);
+        outputFile.getParentFile().mkdirs();
         writeFile(outputFile, css.toCSS({ compress: true }));
     });
 }

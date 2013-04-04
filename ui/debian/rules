@@ -16,8 +16,7 @@ override_dh_auto_install:
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
-	rm $(FRONTEND)/apps/themes/*/common.css
-	rm $(FRONTEND)/apps/themes/*/style.css
+	rm -r $(FRONTEND)/apps/themes/*/less
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
 	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \

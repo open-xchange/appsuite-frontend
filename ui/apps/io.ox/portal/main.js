@@ -21,7 +21,7 @@ define('io.ox/portal/main',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.css',
+     'less!io.ox/portal/style.less',
      'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (ext, userAPI, date, manifests, dialogs, widgets, gt, settings) {
 

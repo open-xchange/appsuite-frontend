@@ -132,7 +132,7 @@ define("io.ox/preview/main",
                 }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
                 require(['apps/mediaelement/mediaelement-and-player.js',
-                        'less!mediaelement/mediaelementplayer.css'], function () {
+                        'css!mediaelement/mediaelementplayer.css'], function () {
 
                     var pw,
                     wW = $(window).width();

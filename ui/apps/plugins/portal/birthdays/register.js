@@ -17,7 +17,7 @@ define('plugins/portal/birthdays/register',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style.css'], function (ext, api, date, util, gt, settings) {
+     'less!plugins/portal/birthdays/style.less'], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 

@@ -16,7 +16,7 @@ define("plugins/portal/quota/register",
      'gettext!plugins/portal',
      'io.ox/core/api/quota',
      'io.ox/core/strings',
-     'less!plugins/portal/quota/style.css'
+     'less!plugins/portal/quota/style.less'
     ], function (ext, gt, api, strings) {
 
     "use strict";

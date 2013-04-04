@@ -18,7 +18,7 @@ define('io.ox/office/preview/main',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css'
+     'less!io.ox/office/preview/style.less'
     ], function (Utils, BaseApplication, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';

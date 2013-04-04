@@ -17,7 +17,7 @@ define("io.ox/calendar/main",
      "io.ox/core/commons",
      "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (date, config, commons, settings) {
+     "less!io.ox/calendar/style.less"], function (date, config, commons, settings) {
 
     "use strict";
 

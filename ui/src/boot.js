@@ -25,13 +25,7 @@ $(window).load(function () {
         ox.base = ox.base + _.now();
     }
 
-    if (!ox.signin) {
-        // interim solution for speed
-        require(['bootstrap-css!io.ox/core/bootstrap/css/bootstrap.min.css']);
-        // use the following line again - once we have pre-compiled bootstrap back
-        // see Bug 24814 - Significant performance decrease compared to 7.0.0
-        // require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
-    }
+    if (!ox.signin) require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
 
     // animations
     var DURATION = 250,

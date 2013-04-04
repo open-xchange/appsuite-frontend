@@ -1,6 +1,7 @@
 * 2013-04-04 - viktor.pracht@open-xchange.com
 
  - Fixed bug 24814: Significant performance decrease compared to 7.0.0
+ - Fixed bug 25698: unable to login with latest build on SLES11
 
 * 2013-04-02 - alexander.quast@open-xchange.com
 

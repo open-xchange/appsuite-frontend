@@ -20,7 +20,7 @@ define('plugins/portal/twitter/register',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, strings, keychain, gt, notifications, date) {
+     'less!plugins/portal/twitter/style.less'], function (ext, proxy, strings, keychain, gt, notifications, date) {
 
     'use strict';
 

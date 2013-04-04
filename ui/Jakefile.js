@@ -144,6 +144,17 @@ function jsFilter (data) {
             }
         }
         var deps = _.detect(args, ast.is("array"));
+        if (deps) {
+            _.each(deps[1], function(dep) {
+                dep = dep[1];
+                if (dep.slice(0, 5) !== 'less!') return;
+                dep = dep.slice(5);
+                if (!path.existsSync(path.join('apps', dep))) {
+                    console.warn('Missing LessCSS file ' + dep +
+                                 ' required by ' + mod);
+                }
+            });
+        }
         var f = _.detect(args, ast.is("function"));
         if (!name || !deps || !f) return;
         for (var i = 0; i < defineHooks.length; i++) {
@@ -463,13 +474,23 @@ utils.merge('manifests/' + pkgName + '.json',
 // themes
 
 _.each(utils.list('apps/themes/*/definitions.less'), function (defs) {
-    var dir = path.dirname(defs);
-    utils.concat(path.join(dir, 'common.css'),
+    var dir = path.dirname(defs), theme = path.basename(dir);
+    function subDir() {
+        return path.join.apply(path,
+            [dir].concat(Array.prototype.slice.call(arguments)));
+    }
+    utils.concat(subDir('less/common.css'),
         ['apps/themes/definitions.less', defs, 'apps/themes/style.less'],
         { filter: less.compile });
-    utils.concat(path.join(dir, 'style.css'),
-        ['apps/themes/definitions.less', defs, path.join(dir, 'style.less')],
+    utils.concat(subDir('less/style.css'),
+        ['apps/themes/definitions.less', defs, subDir('style.less')],
         { filter: less.compile });
+    _.each(utils.list('apps', '**/*.less'), function (file) {
+        if (file.slice(0, 7) === 'themes/') return;
+        utils.concat(subDir('less', file),
+            ['apps/themes/definitions.less', defs, path.join('apps', file)],
+            { filter: less.compile });
+    });
 });
 
 // docs task

@@ -17,7 +17,7 @@ define('io.ox/calendar/month/view',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/month/style.css',
+     'less!io.ox/calendar/month/style.less',
      'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
