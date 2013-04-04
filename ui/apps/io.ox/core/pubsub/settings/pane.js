@@ -28,7 +28,7 @@ define('io.ox/core/pubsub/settings/pane',
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
         SettingView = point.createView({ className: 'pubsub settings' }),
-        filter, folderState;
+        filter, folderState, dialog;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -37,6 +37,10 @@ define('io.ox/core/pubsub/settings/pane',
         require(['io.ox/files/api', 'io.ox/files/list/view-detail'], function (api, view) {
             api.get(obj).done(function (data) {
                 popup.idle().append(view.draw(data));
+            });
+            api.on('delete.version', function () {
+                // Close dialog after delete
+                dialog.close();
             });
         });
     }
@@ -94,7 +98,7 @@ define('io.ox/core/pubsub/settings/pane',
                 view.render().$el
             );
             // add side popup for single file publications
-            new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
+            dialog = new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
         }
     });
 
