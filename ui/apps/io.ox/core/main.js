@@ -898,6 +898,7 @@ define("io.ox/core/main",
     }
 
     return {
+        logout: logout,
         launch: launch,
         addLauncher: addLauncher
     };
