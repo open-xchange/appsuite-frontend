@@ -134,7 +134,6 @@ define('plugins/notifications/tasks/register',
         id: 'dueTasks',
         index: 350,
         register: function (controller) {
-
             var notifications = controller.get('io.ox/tasks', NotificationsView);
             
             function add(e, tasks, reset) {
@@ -170,7 +169,6 @@ define('plugins/notifications/tasks/register',
             api.on('delete', remove);
             api.on('new-tasks', function (e, tasks) {
                 add(e, tasks, true);
-                notifications.collection.trigger('reset');
             });
             api.on('add-overdue-tasks', function (e, tasks) {
                 add(e, tasks);
@@ -178,7 +176,6 @@ define('plugins/notifications/tasks/register',
             });
             api.on('remove-overdue-tasks', function (e, tasks) {
                 remove(e, tasks);
-                notifications.collection.trigger('remove');
             });
 
             api.getTasks();
@@ -353,7 +350,7 @@ define('plugins/notifications/tasks/register',
                             );
                         }
                     });
-                    notifications.collection.reset(items).trigger('reset');
+                    notifications.collection.reset(items);
                 });
             });
         }
@@ -504,12 +501,11 @@ define('plugins/notifications/tasks/register',
                         new Backbone.Model(task)
                     );
                 });
-                notifications.collection.reset(items).trigger('reset');
+                notifications.collection.reset(items);
             }).on('remove-task-confirmation-notification', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
-                notifications.collection.trigger("remove");
             });
         }
     });

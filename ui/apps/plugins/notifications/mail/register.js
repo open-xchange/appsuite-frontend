@@ -198,7 +198,6 @@ define('plugins/notifications/mail/register',
                 }
                 if (newFolder !== 'default0/INBOX') {//moved out of Inbox
                     removeMails(e, mails);
-                    notifications.collection.trigger('remove');
                 }
             });
             
@@ -207,7 +206,6 @@ define('plugins/notifications/mail/register',
                     mails = [].concat(mails);
                 }
                 removeMails(e, mails);
-                notifications.collection.trigger('remove');
             });
 
             api.checkInbox();

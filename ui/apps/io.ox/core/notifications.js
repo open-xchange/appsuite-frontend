@@ -197,7 +197,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 module.collection.on('remove', _.bind(this.onRemoveNotification, this));
                 module.collection.on('reset', _.bind(this.onResetNotifications, this));
                 this.notifications[key] = module;
-                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+                //$('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
             return this.notifications[key];
         },

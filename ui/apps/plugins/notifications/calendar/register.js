@@ -311,37 +311,27 @@ define('plugins/notifications/calendar/register',
             function removeInvites(e, invites) {
               //make sure we have an array
                 invites = invites ? [].concat(invites) : [];
-                var removed = false;
                 _(invites).each(function (invite) {
                     for (var i = 0; InviteNotifications.collection.length > i; i++) {
                         var model = InviteNotifications.collection.models[i];
                         if (model.attributes.data.id === invite.id && model.attributes.data.folder_id === (invite.folder || invite.folder_id)) {
                             InviteNotifications.collection.remove(model);
-                            removed = true;
                         }
                     }
                 });
-                if (removed) {
-                    InviteNotifications.collection.trigger('remove');
-                }
             }
 
             function removeReminders(e, reminders) {
                 //make sure we have an array
                 reminders = reminders ? [].concat(reminders) : [];
-                var removed = false;
                 _(reminders).each(function (reminder) {
                     for (var i = 0; ReminderNotifications.collection.length > i; i++) {
                         var model = ReminderNotifications.collection.models[i];
                         if (model.attributes.caldata.id === reminder.id && model.attributes.caldata.folder_id === (reminder.folder || reminder.folder_id)) {
                             ReminderNotifications.collection.remove(model);
-                            removed = true;
                         }
                     }
                 });
-                if (removed) {
-                    ReminderNotifications.collection.trigger('remove');
-                }
             }
 
             reminderApi
