@@ -298,9 +298,8 @@ body.down #io-ox-login-container .alert.alert-info {
     #io-ox-login-header h1 { font-size: 14pt; margin: 2em 0 2em 0; }
 }
 
-// mobile
+/* mobile stuff */
 @media (max-width: 480px) {
-
     /* 100% divs on relogin page*/
     .relogin #io-ox-login-form [class*="span"] {
         margin-left: 0;
@@ -314,11 +313,11 @@ body.down #io-ox-login-container .alert.alert-info {
         margin-left: 0;
         width: auto;
     }
-
+    /* absolute layout for alert box */
     body.down #io-ox-login-container .alert {
         font-size: 16px;
         position: absolute;
-        top: 10px;
+        top: 40%;
         left: 10px;
         right: 10px;
         width: initial;
