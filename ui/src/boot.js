@@ -738,7 +738,7 @@ $(window).load(function () {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
             // set username input type to text in IE
-            if (_.device('IE')) {
+            if (_.device('IE > 9')) {
                 $('#io-ox-login-username').attr({type: 'text'});
             }
             return $.when(
