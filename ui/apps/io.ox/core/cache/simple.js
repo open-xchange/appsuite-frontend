@@ -28,11 +28,12 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
             get: function (key) {
                 var key = String(key);
                 return $.Deferred().resolve(
-                    key in storage[id] ? storage[id][key] : null
+                    key in storage[id] ? JSON.parse(storage[id][key]) : null
                 );
             },
             set: function (key, data) {
-                storage[id][String(key)] = data;
+                // use stringify to work with copies
+                storage[id][String(key)] = JSON.stringify(data);
                 return $.Deferred().resolve(key);
             },
             remove: function (key) {

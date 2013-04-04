@@ -199,8 +199,9 @@ define('io.ox/core/api/factory',
                         // add to cache
                         var method = options.allColumns ? 'add' : 'merge';
                         // merge with or add to "get" cache
-                        $.when(caches.list.add(data), caches.get[method](data));
-                        return data;
+                        return $.when(caches.list.add(data), caches.get[method](data)).pipe(function () {
+                            return data;
+                        });
                     });
                 };
                 // empty?

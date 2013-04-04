@@ -341,7 +341,7 @@ define('io.ox/core/cache',
                     c.push(adder(data[i], timestamp));
                 }
 
-                return $.when.apply(null, c).pipe(function () {
+                return $.when.apply($, c).pipe(function () {
                     return _(arguments).without(null);
                 });
             } else {

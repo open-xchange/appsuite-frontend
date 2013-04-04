@@ -577,37 +577,40 @@ define("io.ox/calendar/util",
         },
 
         removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
-            return _(idsFromGrGroups).difference(idsFromUsers);
+            return _([].concat(idsFromGrGroups, idsFromUsers)).uniq();
         },
 
-        resolveGroupMembers: function (idsFromGroupMembers, returnArray, collectedUserIds) {
+        resolveGroupMembers: function (idsFromGroupMembers, collectedUserIds) {
 
-            var collectedIdsFromGroups = [];
-            groupAPI.getList(idsFromGroupMembers).done(function (data) {
+            return groupAPI.getList(idsFromGroupMembers)
+                .then(function (data) {
 
-                _.each(data, function (single) {
-                    _.each(single.members, function (single) {
-                        collectedIdsFromGroups.push(single);
-                    });
-                });
+                    var collectedIdsFromGroups = [];
 
-                collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
-
-                userAPI.getList(collectedIdsFromGroups).done(function (data) {
                     _.each(data, function (single) {
-                        returnArray.push({
+                        _.each(single.members, function (single) {
+                            collectedIdsFromGroups.push(single);
+                        });
+                    });
+
+                    collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
+                    return userAPI.getList(collectedIdsFromGroups);
+                })
+                .then(function (data) {
+                    return _(data).map(function (single) {
+                        return {
                             display_name: single.display_name,
                             folder_id: single.folder_id,
                             id: single.id,
                             mail: single.email1,
                             mail_field: 1
-                        });
+                        };
                     });
                 });
-            });
         },
 
         createArrayOfRecipients: function (participants, def) {
+
             var arrayOfRecipients = [],
                 arrayOfIds = [],
                 idsFromGroupMembers = [],
@@ -624,21 +627,22 @@ define("io.ox/calendar/util",
                 }
             });
 
-            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers, arrayOfIds);
+            that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).done(function (arrayOfGroupMembers) {
 
-            _.each(arrayOfGroupMembers, function (single) {
-                if (single.id !== currentUser) {
-                    arrayOfRecipients.push([single.display_name, single.mail]);
-                }
-            });
-
-            userAPI.getList(arrayOfIds).done(function (obj) {
-                _.each(obj, function (single) {
-                    arrayOfRecipients.push([single.display_name, single.email1]);
+                _.each(arrayOfGroupMembers, function (single) {
+                    if (single.id !== currentUser) {
+                        arrayOfRecipients.push([single.display_name, single.mail]);
+                    }
                 });
-                def.resolve(
-                    arrayOfRecipients
-                );
+
+                userAPI.getList(arrayOfIds).done(function (obj) {
+                    _.each(obj, function (single) {
+                        arrayOfRecipients.push([single.display_name, single.email1]);
+                    });
+                    def.resolve(
+                        arrayOfRecipients
+                    );
+                });
             });
         },
 
