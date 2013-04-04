@@ -15,6 +15,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     'use strict';
 
     if (!caps.has("rt")) {
+        console.error("Backend doesn't support realtime communication!");
         var dummy = {
             send: $.noop
         };
