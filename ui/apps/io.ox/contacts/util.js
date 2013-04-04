@@ -178,7 +178,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         
         getMail: function (obj) {
             // get the first mail address
-            return (obj.email1 || obj.email2 || obj.email3 || '').toLowerCase();
+            return (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase();
         },
 
         getDescription: function (obj) {
