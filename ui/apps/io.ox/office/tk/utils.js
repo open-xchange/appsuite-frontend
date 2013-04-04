@@ -2435,11 +2435,13 @@ define.async('io.ox/office/tk/utils',
     gettext.language.done(function (language) {
 
         var // extract language and country identifier
-            matches = /^([a-z]+)(_([A-Z]+))?$/.exec(language);
+            matches = /^([a-z]+)(_([A-Z]+))?/.exec(language);
 
         Utils.LOCALE = language;
-        Utils.LANGUAGE = matches[1] || '';
-        Utils.COUNTRY = matches[3] || '';
+        if (_.isArray(matches)) {
+            Utils.LANGUAGE = matches[1] || '';
+            Utils.COUNTRY = matches[3] || '';
+        }
 
         localeIconClasses = 'lc-' + language;
         if ((Utils.LANGUAGE !== '') && (Utils.COUNTRY !== '')) {
