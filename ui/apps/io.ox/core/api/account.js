@@ -397,11 +397,10 @@ define('io.ox/core/api/account',
                 });
             }).then(function (result) {
                 // update call returned the new account (this is the case for mail)
-                accountsAllCache.add(result, _.now());
-
+                return accountsAllCache.add(result, _.now());
+            }).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('update', result);
-                return result;
             });
         });
     };
