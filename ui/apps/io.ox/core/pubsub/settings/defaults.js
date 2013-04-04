@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/settings/accounts/settings/defaults', [], function () {
+define('io.ox/core/pubsub/settings/defaults', [], function () {
 
     'use strict';
 
