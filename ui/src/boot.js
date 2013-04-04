@@ -737,7 +737,10 @@ $(window).load(function () {
             } else {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
-
+            // set username input type to text in IE
+            if (_.device('IE')) {
+                $('#io-ox-login-username').attr({type: 'text'});
+            }
             return $.when(
                     // load extensions
                     manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
