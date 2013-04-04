@@ -33,7 +33,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var api = {};
     var def = $.Deferred();
     var BUFFERING = true;
-    var BUFFER_INTERVAL = 250;
+    var BUFFER_INTERVAL = 1000;
     var seq = 0;
 
     function matches(json, namespace, element) {
