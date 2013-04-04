@@ -447,19 +447,34 @@ define("io.ox/core/main",
                 );
             }
         });
-
+        
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
             index: 10000,
             draw: function () {
+                var el = $('<span class="badge">').hide();
+                this.append(el);
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 setTimeout(function () {
                     if (ox.online) {
-                        notifications.attach(addLauncher);
+                        notifications.attach(el, addLauncher);
                         tabManager();
                     }
                 }, 5000);
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'refresh',
+            index: 2000,
+            draw: function () {
+                this.append(
+                    addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                        refresh();
+                        return $.when();
+                    }, gt('Refresh')).attr("id", "io-ox-refresh-icon")
+                );
             }
         });
 
@@ -621,12 +636,6 @@ define("io.ox/core/main",
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
-
-                // refresh
-                addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                    refresh();
-                    return $.when();
-                }, gt('Refresh')).attr("id", "io-ox-refresh-icon");
 
                 // refresh animation
                 initRefreshAnimation();
