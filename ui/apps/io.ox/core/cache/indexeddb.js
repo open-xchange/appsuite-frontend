@@ -176,6 +176,11 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     }).fail(def.reject);
 
                     return def;
+                }).then(function (keys) {
+                    //merge keys from fluent cache
+                    return _(keys).chain()
+                    .join(_(fluent).keys())
+                    .uniq().value();
                 });
             },
 
