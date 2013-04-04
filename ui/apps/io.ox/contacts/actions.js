@@ -168,7 +168,7 @@ define('io.ox/contacts/actions',
                         .done(function (action) {
                             if (action === 'ok') {
                                 var target = _(tree.selection.get()).first();
-                                if (target && target !== folderId) {
+                                if (target && (type === 'copy' || target !== folderId)) {
                                     commit(target);
                                 }
                             }
