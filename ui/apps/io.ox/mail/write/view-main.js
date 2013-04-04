@@ -255,19 +255,23 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var node = $('<div>').addClass('fromselect-wrapper')
-                       .append(
-                           $('<label>', {'for': 'from'}).addClass('wrapping-label')
-                           .text(gt('From'))
-                    ),
-                select = $('<select>', {'name': 'from'}).css('width', '100%');
+
+            var node = $('<div class="fromselect-wrapper">').append(
+                   $('<label for="from" class="wrapping-label">').text(gt('From'))
+                ),
+                select = $('<select name="from">').css('width', '100%');
+
             accountAPI.getAllSenderAddresses().done(function (addresses) {
+                // sort by mail address (across all accounts)
+                addresses.sort(function (a, b) {
+                    a = mailUtil.formatSender(a);
+                    b = mailUtil.formatSender(b);
+                    return a < b ? -1 : +1;
+                });
                 _(addresses).each(function (address) {
-                    var option = $('<option>').text(_.noI18n(mailUtil.formatSender(address)));
-                    option.data({
-                        displayname: address[0],
-                        primaryaddress: address[1]
-                    });
+                    var value = mailUtil.formatSender(address),
+                        option = $('<option>', { value: value }).text(_.noI18n(value))
+                        .data({ displayname: address[0], primaryaddress: address[1] });
                     select.append(option);
                 });
             });

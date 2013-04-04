@@ -209,7 +209,7 @@ define('io.ox/core/api/account',
             return [getAddressArray(account.personal, account.primary_address)];
         }
         // looks like addresses continas primary address plus aliases
-        var addresses = String(account.addresses || '').split(',');
+        var addresses = String(account.addresses || '').split(',').sort();
         // build common array of [display_name, email]
         return _(addresses).map(function (address) {
             return getAddressArray(account.personal, address);
