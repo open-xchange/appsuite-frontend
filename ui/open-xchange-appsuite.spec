@@ -34,7 +34,7 @@ OX App Suite HTML5 client
 Group:          Applications/Productivity
 Summary:        Manifest and apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
-Requires:       open-xchange-halo
+Requires(post): open-xchange-halo
 Requires:       open-xchange-appsuite-l10n-en-us
 
 %description    manifest
