@@ -136,10 +136,14 @@ define('io.ox/core/commons-folderview',
             id: 'add-folder',
             index: 200,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'))
-                    .on('click', { app: baton.app }, addSubFolder)
-                ));
+                var link = $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'));
+
+                if (api.can('create', baton.data)) {
+                    link.on('click', { app: baton.app }, addSubFolder);
+                } else {
+                    link.addClass('disabled');
+                }
+                this.append($('<li>').append(link));
             }
         });
 
@@ -153,13 +157,18 @@ define('io.ox/core/commons-folderview',
             id: 'add-public-folder',
             index: 200,
             draw: function (baton) {
-                var type = baton.options.type;
+                var type = baton.options.type,
+                    link = $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'));
                 if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'))
-                    .on('click', {app: baton.app, module: type}, createPublicFolder)
-                ));
+                api.get({folder: 2}).then(function (public_folder) {
+                    if (api.can('create', public_folder)) {
+                        link.on('click', {app: baton.app, module: type}, createPublicFolder);
+                    } else {
+                        link.addClass('disabled');
+                    }
+                });
+                this.append($('<li>').append(link));
             }
         });
 
