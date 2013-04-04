@@ -1168,6 +1168,7 @@ define('io.ox/mail/view-detail',
         if (node.css('position') === 'absolute' && (pos = node.position())) {
             memo.x = Math.max(memo.x, pos.left + node.width());
             memo.y = Math.max(memo.y, pos.top + node.height());
+            memo.found = true;
         }
         return memo;
     }
@@ -1203,13 +1204,16 @@ define('io.ox/mail/view-detail',
             var content = this.find('.content');
 
             setTimeout(function () {
-                var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight },
+                var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
                     width = content.width(), height = content.height();
                 if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
                     farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
                 }
-                if (farthest.x > width) content.css('width', Math.round(farthest.x) + 'px');
-                if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
+                // only do this for absolute elements
+                if (farthest.found) {
+                    if (farthest.x > width) content.css('width', Math.round(farthest.x) + 'px');
+                    if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
+                }
                 content = null;
             }, 0);
         }
