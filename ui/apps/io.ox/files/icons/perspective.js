@@ -111,7 +111,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function getOfficePreview(file, options) {
-        return 'api/infostore?action=document&folder=' + file.folder_id + '&id=' + file.id +
+        return 'api/files?action=document&folder=' + file.folder_id + '&id=' + file.id +
               '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&format=preview_image&delivery=view';
     }
 
@@ -535,7 +535,11 @@ define('io.ox/files/icons/perspective',
                             iconview.find('.file-icon[data-obj-id="' + cid + '"]').remove();
 
                             if (indexPrev(newIds, cid)) {
-                                iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
+                                    iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
+                                } else {
+                                    iconview.find('.file-icon-container').prepend(drawIcon(data));
+                                }
                             } else {
                                 end = end - 1;
                             }
