@@ -228,6 +228,10 @@
 
 .mail-detail-pane .thread-inline-actions {
     padding: 20px 0 0px 20px;
+    
+    .dropdown {
+    	z-index: 12007 !important;/* override so dropdown is above inline links. See: Bug 25687*/
+    }
 }
 
 /* --- */
