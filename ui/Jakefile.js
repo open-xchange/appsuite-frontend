@@ -25,6 +25,7 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
+var less = require('./lib/build/less');
 
 console.info("Build path: " + utils.builddir);
 
@@ -328,6 +329,21 @@ if (path.existsSync('help')) {
     });
 }
 
+// postinst utilities
+
+utils.concat('update-themes.js', utils.list('lib',
+    ['less.js/build/require-rhino.js',
+     'less.js/build/ecma-5.js',
+     'less.js/lib/less/parser.js',
+     'less.js/lib/less/functions.js',
+     'less.js/lib/less/colors.js',
+     'less.js/lib/less/tree/*.js',
+     'less.js/lib/less/tree.js',
+     'build/update-themes.js']),
+    { to: utils.dest('share') });
+utils.copy(utils.list('lib/build', 'update-themes.sh'),
+    { to: utils.dest('share') });
+
 // external apps
 
 desc('Builds an external app');
@@ -443,6 +459,18 @@ utils.merge('manifests/' + pkgName + '.json',
             return JSON.stringify(combinedManifest, null, debug ? 4 : null);
         }
     });
+
+// themes
+
+_.each(utils.list('apps/themes/*/definitions.less'), function (defs) {
+    var dir = path.dirname(defs);
+    utils.concat(path.join(dir, 'common.css'),
+        ['apps/themes/definitions.less', defs, 'apps/themes/style.less'],
+        { filter: less.compile });
+    utils.concat(path.join(dir, 'style.css'),
+        ['apps/themes/definitions.less', defs, path.join(dir, 'style.less')],
+        { filter: less.compile });
+});
 
 // docs task
 

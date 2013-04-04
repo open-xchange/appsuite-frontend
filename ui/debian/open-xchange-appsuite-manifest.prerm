@@ -1,0 +1,3 @@
+#!/bin/sh
+rm /opt/open-xchange/appsuite/apps/themes/*/common.css
+rm /opt/open-xchange/appsuite/apps/themes/*/style.css

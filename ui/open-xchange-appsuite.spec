@@ -34,6 +34,7 @@ OX App Suite HTML5 client
 Group:          Applications/Productivity
 Summary:        Manifest and apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
+Requires:       open-xchange-halo
 Requires:       open-xchange-appsuite-l10n-en-us
 
 %description    manifest
@@ -79,7 +80,12 @@ SDK for the OX App Suite HTML5 client
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
+rm "%{buildroot}%{docroot}/apps/themes/*/common.css"
+rm "%{buildroot}%{docroot}/apps/themes/*/style.css"
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
+
+mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
+chmod +x "%{buildroot}$APPSUITE/share/update-themes.sh"
 
 find "%{buildroot}$APPSUITE" -type d \
     | sed -e 's,%{buildroot},%dir ,' > tmp/files
@@ -103,6 +109,13 @@ APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
+
+%post manifest
+/opt/open-xchange/appsuite/share/update-themes.sh
+
+%preun manifest
+rm /opt/open-xchange/appsuite/apps/themes/*/common.css
+rm /opt/open-xchange/appsuite/apps/themes/*/style.css
 
 %files
 %defattr(-,root,root)

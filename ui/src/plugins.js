@@ -26,7 +26,8 @@
                            "url($1" + path);
     }
 
-    function insert(name, css, selector) {
+    function insert(name, css, selector, node) {
+        if (node) return node.text(relativeCSS(dirname(name), css));
         return $('<style type="text/css">' + relativeCSS(dirname(name), css) + '</style>')
             .attr("data-require-src", name)
             .insertAfter(selector);
@@ -98,11 +99,9 @@
             });
         }
     });
-
-    var currentTheme = "";
-    var themeLess = {}, lessFiles = [themeLess];
-    var themeCSS;
-
+    
+    var currentTheme = ""; // Definitions which are prepended to all less files.
+    
     var less = (function () {
         var less = { tree: {} }, exports = less;
         function require(name) {
@@ -133,21 +132,28 @@
             try {
                 new less.Parser({ paths: [""] }).parse(currentTheme + data,
                     function (e, root) {
-                        if (e) def.reject(e); else {
+                        if (e) {
+                            def.reject(e);
+                        } else {
                             try {
                                 def.resolve(root.toCSS());
                             } catch (e2) {
-                                console.error("LESS error", e2);
+                                def.reject(e2);
+                                console.error("LESS exception", e2);
                             }
                         }
                     });
             } catch (e) {
-                console.error("LESS error", e);
+                def.reject(e);
+                console.error("LESS exception", e);
             }
             return def.promise();
         };
     }());
-
+    
+    var lessFiles = [];          // List of less files to recompile for theme changes.
+    var themeCommon, themeStyle; // Nodes with precompiled theme stylesheets.
+    
     define("less", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).pipe(function (data) {
@@ -174,22 +180,13 @@
         }
     });
 
-    function setTheme(theme, customPart) {
+    function setTheme(theme) {
         currentTheme = theme;
-        return $.when(
-            !customPart ? $.when() : less(customPart).done(function (css) {
-                insert(themeLess.path + 'style.less', css, "#custom");
-            }),
-            $.when.apply($, _.map(lessFiles, function (file) {
-                return less(file.source).done(function(css) {
-                    if (file.node) {
-                        file.node.text(relativeCSS(file.path, css));
-                    } else {
-                        file.node = insert(file.name, css, "#theme");
-                    };
-                });
-            }))
-        );
+        return $.when.apply($, _.map(lessFiles, function (file) {
+            return less(file.source).done(function(css) {
+                file.node = insert(file.name, css, '#theme', file.node);
+            });
+        }));
     }
 
     // themes module
@@ -207,45 +204,19 @@
             }
             return require(['text!themes/definitions.less',
                             'text!themes/' + name + '/definitions.less',
-                            'text!themes/style.less',
-                            'text!themes/' + name + '/style.less'])
-                .pipe(function (def1, def2, style1, style2) {
+                            'text!themes/' + name + '/common.css',
+                            'text!themes/' + name + '/style.css'])
+                .pipe(function (def1, def2, common, style) {
                     var path = ox.base + '/apps/themes/' + name + '/',
                         icons = [57, 72, 114];
                     $('head #favicon').attr({ href: path + 'favicon.ico' }).detach().appendTo('head');
                     for (var i = 0; i < icons.length; i++) {
                         $('head #icon' + icons[i]).attr({ href: path + 'icon' + icons[i] + '.png' }).detach().appendTo('head');
                     }
-                    themeLess.path = path;
-                    themeLess.name = path + 'dynamic.less';
-                    themeLess.source = style1;
-                    return setTheme(def1 + (def2 || ''), style2);
+                    themeCommon = insert(path, common, '#theme', themeCommon);
+                    themeStyle = insert(path, style, '#custom', themeStyle);
+                    return setTheme(def1 + (def2 || ''));
                 });
-        },
-        /**
-         * Alters the current theme.
-         * @param {Object} definitions An object with a property for every
-         * theme variable definition to change.
-         * @example
-         * require(["themes"]).done(function(themes) {
-         *     themes.alter({
-         *         "menu-background": "hsl(" + 360 * Math.random() + ",1,0.5);"
-         *     });
-         * });
-         * @type Promise
-         * @returns A promise which gets fulfilled when the theme finishes
-         * loading. Please ignore the value of the promise.
-         */
-        alter: function (definitions) {
-            return setTheme(
-                    currentTheme.replace(/^\s*@([\w-]+)\s*:.*$/gm,
-                        function (match, name) {
-                            return name in definitions ?
-                                "@" + name + ":" + definitions[name] + ";" :
-                                match;
-                        }
-                    )
-                );
         },
 
         getDefinitions: function () {

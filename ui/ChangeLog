@@ -1,3 +1,7 @@
+* 2013-04-04 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 24814: Significant performance decrease compared to 7.0.0
+
 * 2013-04-02 - alexander.quast@open-xchange.com
 
  - Fixed bug 25622: Hard to properly select a recipient at mail
