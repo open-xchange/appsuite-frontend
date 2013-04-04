@@ -102,20 +102,7 @@ define('io.ox/files/mediaplayer',
         filterMediaList: function (list, videoSupport) {
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
 
-            _.each(_.browser, function (value, key) {
-                if (!value) return;
-                switch (key) {
-                case 'Chrome':
-                    pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-                    break;
-                case 'Safari':
-                    break;
-                case 'Firefox':
-                    break;
-                case 'IE':
-                    break;
-                }
-            });
+            if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
 
             return $.grep(list, function (o) {
                 if (videoSupport) {
@@ -156,16 +143,6 @@ define('io.ox/files/mediaplayer',
                 }
             };
         }()),
-
-        quicktimeFallbackObject: function (url) {
-            return $('<object>', { 'classid' : 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B', 'codebase': 'http://www.apple.com/qtactivex/qtplugin.cab' })
-                .append($('<param>', { 'name': 'src', 'value': url, height: 240, width: 320}));
-        },
-
-        quicktimeFallbackEmbed: function (url) {
-            return $('<embed>', { src: url });
-        },
-
 
         drawPlayer: function (url, mimetype) {
             var el = '<audio>';
