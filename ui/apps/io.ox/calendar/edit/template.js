@@ -456,7 +456,7 @@ define('io.ox/calendar/edit/template',
     ext.point("io.ox/calendar/edit/dnd/actions").extend({
         id: 'attachment',
         index: 10,
-        label: gt("Drop here to upload a <b>new attachment</b>"),
+        label: gt("Drop here to upload a <b class='dndignore'>new attachment</b>"),
         multiple: function (files, app) {
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);

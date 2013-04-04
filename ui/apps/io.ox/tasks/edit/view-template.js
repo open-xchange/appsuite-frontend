@@ -551,7 +551,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,
-        label: gt('Drop here to upload a <b>new attachment</b>'),
+        label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
         multiple: function (files, view) {
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);

@@ -690,7 +690,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/dnd/actions').extend({
         id: 'create',
         index: 10,
-        label: gt('Drop here to upload a <b>new file</b>'),
+        label: gt('Drop here to upload a <b class="dndignore">new file</b>'),
         multiple: function (files, app) {
             app.queues.create.offer(files);
         }
@@ -706,11 +706,11 @@ define('io.ox/files/actions',
             if (app.currentFile.title) {
                 return gt(
                     //#. %1$s is the title of the file
-                    'Drop here to upload a <b>new version</b> of "%1$s"',
+                    'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
                     String(app.currentFile.title).replace(/</g, '&lt;')
                 );
             } else {
-                return gt('Drop here to upload a <b>new version</b>');
+                return gt('Drop here to upload a <b class="dndignore">new version</b>');
             }
         },
         action: function (file, app) {
