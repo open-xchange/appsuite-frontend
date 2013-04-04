@@ -80,8 +80,8 @@ SDK for the OX App Suite HTML5 client
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
-rm "%{buildroot}%{docroot}/apps/themes/*/common.css"
-rm "%{buildroot}%{docroot}/apps/themes/*/style.css"
+rm "%{buildroot}%{docroot}"/apps/themes/*/common.css
+rm "%{buildroot}%{docroot}"/apps/themes/*/style.css
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
