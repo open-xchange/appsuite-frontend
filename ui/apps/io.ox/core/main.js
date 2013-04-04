@@ -128,10 +128,28 @@ define("io.ox/core/main",
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
-        // construct
-        var node = $('<div class="launcher">')
-            .append(_.isString(label) ? $.txt(gt(label)) : label)
-            .hover(
+        var node = $('<div class="launcher right">'),
+            sideTags = side.split(' '),
+            wrap = false;
+        
+        if (sideTags.length > 1) {//only wrap uses 2 tags
+            wrap = true;
+            if (sideTags[0] === 'wrap') {//to make order unimportant
+                side = sideTags[1];
+            } else {
+                side = sideTags[0];
+            }
+        }
+        if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
+            node.addClass(side);
+            //add wrapper
+            label.wrap(node);
+        } else {
+            //construct
+            node.append(_.isString(label) ? $.txt(gt(label)) : label);
+        }
+        
+        node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
@@ -151,14 +169,14 @@ define("io.ox/core/main",
         if (tooltip && !Modernizr.touch) {
             node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
         }
-
-        // just add
-        if (side === 'left') {
-            node.appendTo(launchers);
-        } else {
-            node.addClass('right').appendTo(topbar);
+        // just add if not wrapped
+        if (!wrap) {
+            if (side === 'left') {
+                node.appendTo(launchers);
+            } else {
+                node.addClass('right').appendTo(topbar);
+            }
         }
-
         return node;
     };
 
@@ -633,10 +651,10 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar').extend({
             id: 'default',
             draw: function () {
-
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
 
+                
                 // refresh animation
                 initRefreshAnimation();
 

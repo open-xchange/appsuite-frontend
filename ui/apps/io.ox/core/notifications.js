@@ -133,7 +133,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             var self = this;
             var badgeView = new BadgeView({ el: el, model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            addLauncher('right', badgeView.render().$el.show(), $.proxy(this.toggleList, this));
+            addLauncher('wrap right', badgeView.render().$el.show(), $.proxy(this.toggleList, this));
             $('#io-ox-core').prepend(
                 $('<div id="io-ox-notifications" class="scrollable">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
