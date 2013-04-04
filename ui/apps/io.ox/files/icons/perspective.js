@@ -204,9 +204,11 @@ define('io.ox/files/icons/perspective',
 
     return _.extend(new ox.ui.Perspective('icons'), {
 
-        draw: function (app) {
+        render: function (app) {
+            
             var options = ext.point('io.ox/files/icons/options').options(),
                 win = app.getWindow(),
+                self = this,
                 scrollpane,
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
@@ -225,7 +227,7 @@ define('io.ox/files/icons/perspective',
                 dialog = new dialogs.SidePopup(),
                 inline;
 
-            this.main.append(
+            this.main.addClass('files-icon-perspective').empty().append(
                 scrollpane = $('<div class="files-iconview">').append(iconview)
             );
 
@@ -233,7 +235,18 @@ define('io.ox/files/icons/perspective',
 
             layout = calculateLayout(iconview.parent(), options);
 
-            var self = this;
+            dropZoneInit(app);
+
+            app.on('perspective:icons:hide', dropZoneOff)
+               .on('perspective:icons:show', dropZoneOn)
+               .on('folder:change', function (e, id, folder) {
+                    app.currentFile = null;
+                    dropZoneInit(app);
+                    app.getWindow().search.close();
+                    self.main.closest('.search-open').removeClass('search-open');
+                    iconview.empty();
+                    drawFirst();
+                });
 
             function iconClick(popup, e, target) {
                 var cid = target.attr('data-obj-id');
@@ -389,8 +402,6 @@ define('io.ox/files/icons/perspective',
                 end = end + layout.iconCols;
                 redraw(allIds.slice(start, end));
             };
-
-            drawFirst();
 
             app.queues = {};
 
@@ -576,25 +587,7 @@ define('io.ox/files/icons/perspective',
                     drawFirst();
                 }
             });
-            api.trigger('refresh.all');
-        },
-
-        render: function (app) {
-            this.main.addClass('files-icon-perspective').empty();
-            var self = this;
-            dropZoneInit(app);
-            app.on('perspective:icons:hide', dropZoneOff)
-               .on('perspective:icons:show', dropZoneOn)
-               .on('folder:change', function (e, id, folder) {
-                app.currentFile = null;
-                dropZoneInit(app);
-                app.getWindow().search.close();
-                self.main.closest('.search-open').removeClass('search-open');
-                self.main.empty();
-                self.draw(app);
-            });
-
-            this.draw(app);
+            drawFirst();
         }
     });
 });
