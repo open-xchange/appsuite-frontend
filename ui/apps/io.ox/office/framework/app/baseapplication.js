@@ -545,7 +545,7 @@ define('io.ox/office/framework/app/baseapplication',
         // server requests ----------------------------------------------------
 
         /**
-         * Sends a request to the server and returns the promise of a Deferred
+         * Sends a request to the server and returns the Promise of a Deferred
          * object waiting for the response. The unique identifier of this
          * application will be added to the request parameters automatically.
          * See method IO.sendRequest() for further details.
@@ -571,12 +571,14 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Sends a request to the document filter module on the server and
-         * returns the promise of a Deferred object waiting for the response.
-         * The module name, the unique identifier of this application, and the
-         * parameters of the file currently opened by the application will be
-         * added to the request parameters automatically. See method
-         * IO.sendRequest() for further details.
+         * Sends a request to the server and returns the Promise of a Deferred
+         * object waiting for the response. The unique identifier of this
+         * application, and the parameters of the file currently opened by the
+         * application will be added to the request parameters automatically.
+         * See method IO.sendRequest() for further details.
+         *
+         * @param {String} module
+         *  The name of the server module.
          *
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
@@ -586,7 +588,7 @@ define('io.ox/office/framework/app/baseapplication',
          *  application is not connected to a document file. See method
          *  IO.sendRequest() for details.
          */
-        this.sendFilterRequest = function (options) {
+        this.sendFileRequest = function (module, options) {
 
             // reject immediately if no file is present
             if (!this.hasFileDescriptor()) {
@@ -595,7 +597,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: BaseApplication.FILTER_MODULE_NAME,
+                module: module,
                 params: this.getFileParameters()
             }, options);
 
@@ -604,36 +606,47 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Sends a request to the document converter module on the server and
-         * returns the promise of a Deferred object waiting for the response.
-         * The module name, the unique identifier of this application, and the
-         * parameters of the file currently opened by the application will be
-         * added to the request parameters automatically. See method
-         * IO.sendRequest() for further details.
-         *
-         * @param {Object} options
-         *  Additional options. See method IO.sendRequest() for details.
-         *
-         * @returns {jQuery.Promise}
-         *  The Promise of the request. Will be rejected immediately, if this
-         *  application is not connected to a document file. See method
-         *  IO.sendRequest() for details.
+         * Sends a request to the document filter server module. See method
+         * BaseApplication.sendFileRequest() for further details.
+         */
+        this.sendFilterRequest = function (options) {
+            return this.sendFileRequest(BaseApplication.FILTER_MODULE_NAME, options);
+        };
+
+        /**
+         * Sends a request to the document converter server module. See method
+         * BaseApplication.sendFileRequest() for further details.
          */
         this.sendConverterRequest = function (options) {
+            return this.sendFileRequest(BaseApplication.CONVERTER_MODULE_NAME, options);
+        };
 
-            // reject immediately if no file is present
-            if (!this.hasFileDescriptor()) {
-                return $.Deferred().reject();
+        /**
+         * Creates and returns the URL of a server request.
+         *
+         * @param {String} module
+         *  The name of the server module.
+         *
+         * @param {Object} [options]
+         *  Additional parameters inserted into the URL.
+         *
+         * @returns {String|Undefined}
+         *  The final URL of the server request; or undefined, if the
+         *  application is not connected to a document file, or the current
+         *  session is invalid.
+         */
+        this.getServerModuleUrl = function (module, options) {
+
+            // return nothing if no file is present
+            if (!ox.session || !this.hasFileDescriptor()) {
+                return;
             }
 
-            // build default options, and add the passed options
-            options = Utils.extendOptions({
-                module: BaseApplication.CONVERTER_MODULE_NAME,
-                params: this.getFileParameters()
-            }, options);
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, this.getFileParameters(), options);
 
-            // send the request
-            return this.sendRequest(options);
+            // build and return the resulting URL
+            return ox.apiRoot + '/' + module + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
 
         /**
@@ -649,18 +662,23 @@ define('io.ox/office/framework/app/baseapplication',
          *  or the current session is invalid.
          */
         this.getFilterModuleUrl = function (options) {
+            return this.getServerModuleUrl(BaseApplication.FILTER_MODULE_NAME, options);
+        };
 
-            // return nothing if no file is present
-            if (!ox.session || !this.hasFileDescriptor()) {
-                return;
-            }
-
-            // build a default options map, and add the passed options
-            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, options);
-            options = Utils.extendOptions(this.getFileParameters(), options);
-
-            // build and return the resulting URL
-            return ox.apiRoot + '/' + BaseApplication.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+        /**
+         * Creates and returns the URL of server requests used to convert a
+         * document file with the document converter module.
+         *
+         * @param {Object} [options]
+         *  Additional parameters inserted into the URL.
+         *
+         * @returns {String|Undefined}
+         *  The final URL of the request to the document converter module; or
+         *  undefined, if the application is not connected to a document file,
+         *  or the current session is invalid.
+         */
+        this.getConverterModuleUrl = function (options) {
+            return this.getServerModuleUrl(BaseApplication.CONVERTER_MODULE_NAME, options);
         };
 
         // application setup --------------------------------------------------

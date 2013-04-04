@@ -103,6 +103,13 @@ define('io.ox/office/preview/main',
             }, options)) : $.Deferred().reject();
         };
 
+        this.getPreviewModuleUrl = function (options) {
+            return _.isNumber(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
+                action: 'convertdocument',
+                job_id: jobId
+            }, options)) : undefined;
+        };
+
         // initialization -----------------------------------------------------
 
         // fail-save handler returns data needed to restore the application after browser refresh

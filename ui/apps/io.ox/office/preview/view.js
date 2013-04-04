@@ -160,7 +160,9 @@ define('io.ox/office/preview/view',
         function showPage(newPage, scrollTo) {
 
             var // a timeout for the window busy call
-                busyPromise = null;
+                busyTimer = null,
+                // the Promise that loads the page
+                def = null;
 
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
@@ -169,12 +171,23 @@ define('io.ox/office/preview/view',
             page = newPage;
 
             // switch window to busy state after a short delay
-            busyPromise = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
+            busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
-            model.loadPage(page)
-            .done(function (html) {
-                pageNode[0].innerHTML = html;
+            if (_.browser.Chrome) {
+                // Chrome: as SVG mark-up (Chrome does not show images in linked SVG)
+                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
+                    pageNode[0].innerHTML = svgMarkup;
+                });
+            } else {
+                // preferred: as an image element linking to the SVG file
+                def = model.loadPageAsImage(page).done(function (imgNode) {
+                    pageNode.empty().append(imgNode);
+                });
+            }
+
+            // post-processing
+            def.done(function () {
                 updateZoom(scrollTo);
             })
             .fail(function () {
@@ -182,7 +195,7 @@ define('io.ox/office/preview/view',
             })
             .always(function () {
                 app.getController().update();
-                busyPromise.abort();
+                busyTimer.abort();
                 app.getWindow().idle();
             });
         }
@@ -201,12 +214,12 @@ define('io.ox/office/preview/view',
 
             var // the current zoom factor
                 factor = self.getZoomFactor() / 100,
-                // the SVG root node
-                svgNode = pageNode.children().first(),
+                // the child node of the page representing the SVG contents
+                childNode = pageNode.children().first(),
                 // the vertical margin to adjust scroll size
-                vMargin = svgNode.height() * (factor - 1) / 2,
+                vMargin = childNode.height() * (factor - 1) / 2,
                 // the horizontal margin to adjust scroll size
-                hMargin = svgNode.width() * (factor - 1) / 2,
+                hMargin = childNode.width() * (factor - 1) / 2,
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
@@ -216,11 +229,11 @@ define('io.ox/office/preview/view',
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
             // if browser zoom is not 100%) regardless of existing SVG, must
             // set its size explicitly to see anything...
-            Utils.setCssAttributeWithPrefixes(svgNode, 'transform', 'scale(' + factor + ')');
-            svgNode.css('margin', vMargin + 'px ' + hMargin + 'px');
+            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
+            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
             pageNode.css({
-                width: svgNode.width() * factor,
-                height: svgNode.height() * factor
+                width: childNode.width() * factor,
+                height: childNode.height() * factor
             });
 
             // refresh view (scroll bars may have appeared or vanished)
