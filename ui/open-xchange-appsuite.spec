@@ -114,8 +114,8 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 /opt/open-xchange/appsuite/share/update-themes.sh
 
 %preun manifest
-rm /opt/open-xchange/appsuite/apps/themes/*/common.css
-rm /opt/open-xchange/appsuite/apps/themes/*/style.css
+rm /opt/open-xchange/appsuite/apps/themes/*/common.css || true
+rm /opt/open-xchange/appsuite/apps/themes/*/style.css || true
 
 %files
 %defattr(-,root,root)
