@@ -379,7 +379,7 @@ define('io.ox/core/tk/vgrid',
             }
             // reloop to get proper height
             return $.when.apply($, defs).pipe(function () {
-                var i, obj, node;
+                var i, obj, node, top;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
                     obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
@@ -390,8 +390,8 @@ define('io.ox/core/tk/vgrid',
                 // add tail?
                 if (options.tail) {
                     tail = options.tail.call(self, all.slice()) || $();
-                    tail.css({ top: ($i === 0 ? all.length * itemHeight : cumulatedLabelHeight) + 'px' })
-                        .appendTo(container);
+                    top = all.length * itemHeight + cumulatedLabelHeight;
+                    container.append(tail.css({ top: top + 'px' }));
                     cumulatedLabelHeight += tail.outerHeight(true);
                 }
                 node = clone = defs = null;
