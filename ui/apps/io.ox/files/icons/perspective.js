@@ -342,6 +342,8 @@ define('io.ox/files/icons/perspective',
                     }
                 });
                 self.selection.update();
+                ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
+
             };
 
             drawFirst = function () {
