@@ -128,7 +128,7 @@ define("io.ox/core/main",
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
-        var node = $('<div class="launcher right">'),
+        var node = $('<div class="launcher">'),
             sideTags = side.split(' '),
             wrap = false;
         
