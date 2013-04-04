@@ -177,7 +177,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     api.trigger("receive", stanza);
                     api.trigger("receive:" + stanza.selector, stanza);
                 });
-            } else {
+            } else if (_.isObject(json)) { // json may be null
                 if (api.debug) {
                     console.log("<-", json);
                 }
