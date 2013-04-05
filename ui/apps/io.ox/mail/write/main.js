@@ -659,8 +659,8 @@ define('io.ox/mail/write/main',
                     }
                     def.resolve();
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
@@ -696,8 +696,8 @@ define('io.ox/mail/write/main',
                                 def.resolve();
                             });
                         })
-                        .fail(function () {
-                            notifications.yell('error', gt('An error occured. Please try again.'));
+                        .fail(function (e) {
+                            notifications.yell(e);
                             app.dirty(false).quit();
                             def.reject();
                         });
@@ -740,8 +740,8 @@ define('io.ox/mail/write/main',
                         def.resolve();
                     });
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
@@ -796,6 +796,7 @@ define('io.ox/mail/write/main',
                     }
                     return obj;
                 }, {}),
+                headers,
                 content,
                 mail,
                 files = [],
@@ -826,12 +827,19 @@ define('io.ox/mail/write/main',
 
             content.content_type = getContentType(editorMode);
 
+            // might fail
+            try {
+                headers = JSON.parse(data.headers);
+            } catch (e) {
+                headers = {};
+            }
+
             mail = {
                 from: [data.from] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
-                headers: JSON.parse(data.headers) || {},
+                headers: headers,
                 reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,

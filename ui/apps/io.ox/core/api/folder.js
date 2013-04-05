@@ -424,11 +424,11 @@ define('io.ox/core/api/folder',
                 return http.PUT({
                     module: 'folders',
                     params: {
-                        module: module,
                         action: 'new',
+                        autorename: opt.autorename,
                         folder_id: opt.folder,
-                        tree: '1',
-                        autorename: opt.autorename
+                        module: module,
+                        tree: '1'
                     },
                     data: opt.data,
                     appendColumns: false
@@ -443,7 +443,7 @@ define('io.ox/core/api/folder',
                         // refresh parent folder's subfolder list
                         api.getSubFolders({ folder: opt.folder, cache: false }),
                         // refresh flat lists
-                        !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
+                        (!/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when())
                     )
                     .pipe(function (getRequest) {
                         // return proper data

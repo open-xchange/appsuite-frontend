@@ -137,7 +137,6 @@ define('io.ox/core/commons-folderview',
             index: 200,
             draw: function (baton) {
                 var link = $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'));
-
                 if (api.can('create', baton.data)) {
                     link.on('click', { app: baton.app }, addSubFolder);
                 } else {
