@@ -117,7 +117,7 @@
     define("less", {
         load: function (name, parentRequire, load, config) {
             var file = {
-                path: dirname(config.baseUrl + name),
+                path: config.baseUrl + name,
                 name: name,
                 selector: '#css'
             };
@@ -151,7 +151,8 @@
                 $('head #' + i).attr({ href: path + icons[i] })
                                .detach().appendTo('head');
             }
-            themeCommon.path = themeStyle.path = path;
+            themeCommon.path = path + 'common.css';
+            themeStyle.path = path + 'style.css';
             return $.when.apply($, _.map(lessFiles, insertLess));
         },
 
