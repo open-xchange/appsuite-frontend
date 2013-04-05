@@ -844,6 +844,27 @@ define.async('io.ox/office/tk/utils',
         return (node instanceof $) ? node.get(0) : node;
     };
 
+
+    /**
+     * Checks, if a specified node is an element node.
+     *
+     * @param {Node|jQuery} node
+     * The node, that is tested, if it is an element node
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an element node.
+     */
+    Utils.isElementNode = function (node) {
+        var isElementNode = false;
+        if (node) {
+            node = Utils.getDomNode(node);
+            if ((_.isObject(node)) && (node.nodeType === 1)) {
+                isElementNode = true;
+            }
+        }
+        return isElementNode;
+    };
+
     /**
      * Returns the lower-case name of a DOM node object.
      *
