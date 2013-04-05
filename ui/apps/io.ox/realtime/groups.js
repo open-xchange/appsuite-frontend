@@ -13,19 +13,34 @@
 
 define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], function (rt, Event) {
     'use strict';
-
+    var counter = 0;
     function RealtimeGroup(id) {
-        var self = this, joined = false;
-        rt.on("receive:" + id, function (e, m) {
+        var self = this, heartbeat = null, selector = "rt-group-" + counter;
+        counter++;
+        rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
         });
         this.id = id;
 
         this.join = function () {
-            joined = true;
+            if (!heartbeat) {
+                heartbeat = setInterval(function () {
+                    rt.sendWithoutSequence({
+                        element: "message",
+                        to: id,
+                        payloads: [
+                            {
+                                element: "ping",
+                                namespace: "group",
+                                data: 1
+                            }
+                        ]
+                    });
+                }, 60000);
+            }
             this.send({
                 element: "message",
-                selector: id,
+                selector: selector,
                 payloads: [
                     {
                         element: "command",
@@ -37,7 +52,11 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.leave = function () {
-            joined = false;
+            if (!heartbeat) {
+                return;
+            }
+            clearInterval(heartbeat);
+            heartbeat = null;
             this.send({
                 element: "message",
                 payloads: [
@@ -56,7 +75,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.destroy = function () {
-            if (joined) {
+            if (heartbeat) {
                 this.leave();
             }
             rt.off("receive:" + id);

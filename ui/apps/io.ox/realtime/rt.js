@@ -11,16 +11,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/capabilities", "io.ox/realtime/atmosphere"], function (ext, Event, caps) {
+define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/realtime/atmosphere"], function (ext, Event, caps, uuids) {
     'use strict';
 
     if (!caps.has("rt")) {
+        console.error("Backend doesn't support realtime communication!");
         var dummy = {
             send: $.noop
         };
         Event.extend(dummy);
         return $.Deferred().resolve(dummy);
     }
+
+    var tabId = uuids.randomUUID();
+    var connecting = false;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -28,6 +32,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var url = proto + "//" + host + "/realtime/atmosphere/rt";
     var api = {};
     var def = $.Deferred();
+    var BUFFERING = true;
+    var BUFFER_INTERVAL = 1000;
+    var seq = 0;
 
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
@@ -127,66 +134,120 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
     */
 
-    var request = {
-        url: url,
-        contentType : "application/json",
-        logLevel : 'debug',
-        transport : 'long-polling',
-        fallbackTransport: 'long-polling',
-        timeout: 60000,
-        maxRequests : 3,
-        headers : {session: ox.session}
-    };
+    function connect() {
+        connecting = true;
+        var request = {
+            url: url + '?session=' + ox.session + "&resource=" + tabId,
+            contentType : "application/json",
+            logLevel : 'debug',
+            transport : 'long-polling',
+            fallbackTransport: 'long-polling',
+            timeout: 60000
+        };
 
 
-    //------------------------------------------------------------------------------
-    //request callbacks
+        //------------------------------------------------------------------------------
+        //request callbacks
+        request.onOpen = function (response) {
+            def.resolve(api);
+            connecting = false;
+        };
 
-    request.onOpen = function (response) {
-        def.resolve(api);
-    };
+        request.onReconnect = function (request, response) {
+            //socket.info("Reconnecting");
+            request.requestCount = 0;
+        };
 
-    request.onReconnect = function (request, response) {
-        //socket.info("Reconnecting");
-    };
-
-    request.onMessage = function (response) {
-        var message = response.responseBody;
-        var json = {};
-        try {
-            json = $.parseJSON(message);
-            if (api.debug) {
-                console.log("<-", json);
+        request.onMessage = function (response) {
+            var message = response.responseBody;
+            var json = {};
+            try {
+                json = $.parseJSON(message);
+            } catch (e) {
+                console.log('This doesn\'t look like valid JSON: ', message);
+                console.error(e, e.stack);
+                throw e;
             }
-        } catch (e) {
-            console.log('This doesn\'t look like valid JSON: ', message);
-            console.error(e, e.stack);
-            throw e;
-        }
-        var stanza = new RealtimeStanza(json);
-        api.trigger("receive", stanza);
-        api.trigger("receive:" + stanza.selector, stanza);
+            if (_.isArray(json)) {
+                _(json).each(function (stanza) {
+                    if (api.debug) {
+                        console.log("<-", stanza);
+                    }
+                    stanza = new RealtimeStanza(stanza);
+                    api.trigger("receive", stanza);
+                    api.trigger("receive:" + stanza.selector, stanza);
+                });
+            } else if (_.isObject(json)) { // json may be null
+                if (api.debug) {
+                    console.log("<-", json);
+                }
+                var stanza = new RealtimeStanza(json);
+                api.trigger("receive", stanza);
+                api.trigger("receive:" + stanza.selector, stanza);
+            }
+        };
+
+        request.onClose = function (response) {
+            if (api.debug) {
+                console.log("Closed");
+            }
+        };
+
+        request.onError = function (response) {
+            console.error(response);
+        };
+
+        return socket.subscribe(request);
+    }
+
+
+    var subSocket = connect();
+
+    ox.on("change:session", function () {
+        subSocket = connect();
+    });
+
+    var queue = {
+        stanzas: [],
+        timer: null
     };
 
-    request.onClose = function (response) {
+    function drainBuffer() {
+        if (connecting) {
+            setTimeout(drainBuffer, BUFFER_INTERVAL);
+        }
+        subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
-            console.log("Closed");
+            console.log("->", queue.stanzas);
         }
-    };
-
-    request.onError = function (response) {
-        console.error(response);
-    };
-
-    var subSocket = socket.subscribe(request);
+        queue.stanzas = [];
+        queue.timer = false;
+    }
 
     api.send = function (options) {
-        options.session = options.session || ox.session;
-        subSocket.push(JSON.stringify(options));
-        if (api.debug) {
-            console.log("->", options);
+        options.seq = seq;
+        seq++;
+        api.sendWithoutSequence(options);
+    };
+
+    api.sendWithoutSequence = function (options) {
+        if (BUFFERING) {
+            queue.stanzas.push(JSON.parse(JSON.stringify(options)));
+            if (!queue.timer) {
+                queue.timer = true;
+                setTimeout(drainBuffer, BUFFER_INTERVAL);
+            }
+        } else {
+            subSocket.push(JSON.stringify(options));
+            if (api.debug) {
+                console.log("->", options);
+            }
         }
     };
+
+    setInterval(function () {
+        subSocket.push("{\"type\": \"ping\"}");
+    }, 20000);
 
 
 

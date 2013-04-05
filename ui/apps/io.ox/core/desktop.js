@@ -260,33 +260,59 @@ define("io.ox/core/desktop",
         },
 
         /**
-         * Registers a handler at the browser window that listens to resize
-         * events. The event handler will be activated when the application
-         * window is visible; and deactivated, when the application window is
-         * hidden.
+         * Registers an event handler at a global browser object (e.g. the
+         * window, the document, or the <body> element) that listens to the
+         * specified event or events. The event handler will only be active
+         * while the application window is visible, and will be inactive while
+         * the application window is hidden.
          *
-         * @param {Function} resizeHandler
-         *  The resize handler function bound to 'resize' events of the browser
-         *  window. Will be triggered once when the application window becomes
+         * @param {Object|String} target
+         *  The target object that will trigger the specified events. Can be
+         *  any object or value that can be passed to the jQuery constructor.
+         *
+         * @param {String} eventType
+         *  The event name(s) the handler function will be registered for.
+         *
+         * @param {Function} eventHandler
+         *  The event handler function bound to the specified events. Will be
+         *  triggered once automatically when the application window becomes
          *  visible.
          *
          * @returns {ox.io.App}
          *  A reference to this application instance.
          */
-        registerWindowResizeHandler: function (resizeHandler) {
+        registerGlobalEventHandler: function (target, eventType, eventHandler) {
             var handlers = {
                 show: function () {
-                    $(window).on('resize', resizeHandler);
-                    resizeHandler();
+                    $(target).on(eventType, eventHandler);
+                    eventHandler();
                 },
                 hide: function () {
-                    $(window).off('resize', resizeHandler);
+                    $(target).off(eventType, eventHandler);
                 }
             };
             if (this.getWindow().on(handlers).state.visible) handlers.show();
             return this;
         },
-        
+
+        /**
+         * Registers an event handler at the browser window that listens to
+         * 'resize' events. The event handler will only be active while the
+         * application window is visible, and will be inactive while the
+         * application window is hidden.
+         *
+         * @param {Function} resizeHandler
+         *  The resize handler function bound to 'resize' events of the browser
+         *  window. Will be triggered once automatically when the application
+         *  window becomes visible.
+         *
+         * @returns {ox.io.App}
+         *  A reference to this application instance.
+         */
+        registerWindowResizeHandler: function (resizeHandler) {
+            return this.registerGlobalEventHandler(window, 'resize', resizeHandler);
+        },
+
         setState: function (obj) {
             for (var id in obj) {
                 _.url.hash(id, String(obj[id]));
@@ -423,7 +449,9 @@ define("io.ox/core/desktop",
                 if (pos > -1) {
                     list.splice(pos, 1);
                 }
-                return appCache.add('savepoints', list);
+                return appCache.add('savepoints', list).then(function () {
+                    return list;
+                });
             });
         },
 
@@ -542,26 +570,24 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
-        var cur = null;
         var Perspective = function (name) {
             // init
-            var rendered = false,
-                initialized = false;
-
             this.main = $();
             this.name = name;
+            this.rendered = false;
+            this.render = $.noop;
+            this.save = $.noop;
+            this.restore = $.noop;
+            this.afterShow = $.noop;
 
-            this.show = function (app, options) {
+            this.show = function (app, opt) {
                 var win = app.getWindow();
 
-                if (options.perspective === win.currentPerspective) {
+                if (opt.perspective === win.currentPerspective) {
                     return;
                 }
-                // make sure it's initialized
-                if (!initialized) {
-                    this.main = win.addPerspective(this);
-                    initialized = true;
-                }
+
+                this.main = win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
@@ -569,44 +595,36 @@ define("io.ox/core/desktop",
                 } else {
                     win.trigger('change:initialPerspective', name);
                 }
-                // set perspective
+
+                // set perspective (show)
                 win.setPerspective(this);
 
-                _.url.hash('perspective', options.perspective);
+                _.url.hash('perspective', opt.perspective);
 
                 // render?
-
-                if (!rendered || options.perspective.split(":").length > 1) {
-                    options.rendered = rendered;
-                    this.render(app, options);
-                    rendered = true;
+                if (!this.rendered) {
+                    this.render(app, opt);
+                    this.rendered = true;
                 }
-                win.currentPerspective = options.perspective;
+
+                win.currentPerspective = opt.perspective;
                 win.updateToolbar();
-            };
-
-            this.render = $.noop;
-            this.save = $.noop;
-            this.restore = $.noop;
-
-            this.setRendered = function (value) {
-                rendered = value;
+                this.afterShow(app, opt);
             };
         };
 
         Perspective.show = function (app, p) {
-            var per = p;
-            if (_.isString(p) && (/:/).test(p)) {
-                per = p.split(":")[0];
-            }
-            return require([app.get('name') + '/' + per + '/perspective'], function (perspective) {
-                if (cur && (per === 'month' || per === 'week')) {
-                    cur.save();
+            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
+                var oldPers = app.getWindow().getPerspective();
+
+                if (oldPers && _.isFunction(oldPers.save)) {
+                    oldPers.save();
                 }
-                cur = perspective;
-                perspective.show(app, { perspective: p });
-                if (per === 'month' || per === 'week') {
-                    cur.restore();
+
+                newPers.show(app, { perspective: p });
+
+                if (newPers && _.isFunction(newPers.restore)) {
+                    newPers.restore();
                 }
             });
         };
@@ -651,6 +669,13 @@ define("io.ox/core/desktop",
             // move/add window to top of stack
             windows = _(windows).without(win);
             windows.unshift(win);
+            // add current windows to cache
+            if (windows.length > 1) {
+                var winCache = _(windows).map(function (w) {
+                    return w.name;
+                });
+                appCache.add('windows', winCache || []);
+            }
         });
 
         that.on("window.beforeshow", function (e, win) {
@@ -658,15 +683,20 @@ define("io.ox/core/desktop",
         });
 
         that.on("window.close window.quit window.pre-quit", function (e, win, type) {
-
+            // fallback for different trigger functions
+            if (!type) {
+                type = e.type + '.' + e.namespace;
+            }
             var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
                 // quit?
                 if (type === "window.quit") {
+                    // remove item at pos
                     windows.splice(pos, 1);
                 }
                 // close?
                 else if (type === "window.close" || type === 'window.pre-quit') {
+                    // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
                 }
@@ -680,7 +710,14 @@ define("io.ox/core/desktop",
                 }
             }
 
-            that.trigger("empty", numOpen() === 0);
+            var isEmpty = numOpen() === 0;
+            if (isEmpty) {
+                appCache.get('windows').done(function (winCache) {
+                    that.trigger("empty", true, winCache ? winCache[1] || null : null);
+                });
+            } else {
+                that.trigger("empty", false);
+            }
         });
 
         return that;
@@ -751,7 +788,7 @@ define("io.ox/core/desktop",
 
                 var quitOnClose = false,
                     // perspectives
-                    perspectives = { main: true },
+                    perspectives = {},
                     self = this,
                     firstShow = true;
 
@@ -833,7 +870,13 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), self.getTitle());
+                            document.title = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                self.getTitle());
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -841,6 +884,7 @@ define("io.ox/core/desktop",
                                 firstShow = false;
                             }
                             ox.ui.windowManager.trigger("window.show", self);
+                            ox.ui.apps.trigger('resume', self.app);
                         });
                     } else {
                         _.call(cont);
@@ -983,7 +1027,13 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), title);
+                            document.title = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                title);
                         }
                         this.trigger('change:title');
                     } else {
@@ -1079,6 +1129,8 @@ define("io.ox/core/desktop",
                         var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
+                    } else {
+                        return this.nodes[id];
                     }
                 };
 

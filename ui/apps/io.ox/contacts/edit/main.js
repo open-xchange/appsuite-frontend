@@ -18,7 +18,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/extensions',
      'io.ox/contacts/util',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/contacts/edit/style.css'
+     'less!io.ox/contacts/edit/style.less'
      ], function (view, model, gt, ext, util, dnd) {
 
     'use strict';
@@ -152,7 +152,6 @@ define('io.ox/contacts/edit/main',
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
                                 model.factory.realm('edit').release();

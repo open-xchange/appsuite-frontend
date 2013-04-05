@@ -19,7 +19,7 @@ define('io.ox/launchpad/main',
      'io.ox/core/config',
      'io.ox/core/extensions',
      'gettext!io.ox/core',
-     'less!io.ox/launchpad/style.css'], function (desktop, api, config, ext, gt) {
+     'less!io.ox/launchpad/style.less'], function (desktop, api, config, ext, gt) {
 
     'use strict';
 

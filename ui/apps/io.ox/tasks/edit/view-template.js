@@ -399,9 +399,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var parsedDate = date.Local.parse(value, date.TIME);
 
             // just reject the change, if it's not parsable
-            if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
+            if (value !== '' && _.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
@@ -434,9 +434,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 return null;
             }
             // just reject the change, if it's not parsable
-            if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
+            if (_.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
 
@@ -510,9 +510,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var obj = {};
             obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.removeFromCache(encodeURIComponent(_.cid(obj)));
-            api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(obj)), false);
-            api.trigger('update:' + encodeURIComponent(_.cid(obj)));
+            api.removeFromCache(encodeURIComponent(_.cid(obj))).done(function () {
+                api.removeFromUploadList(encodeURIComponent(_.cid(obj)));
+            });
         }
     }));
 
@@ -551,7 +551,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,
-        label: gt('Drop here to upload a <b>new attachment</b>'),
+        label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
         multiple: function (files, view) {
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);

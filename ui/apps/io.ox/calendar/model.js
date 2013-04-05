@@ -19,7 +19,8 @@ define('io.ox/calendar/model',
         'io.ox/participants/model',
         'io.ox/core/date',
         'io.ox/core/api/folder',
-        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, configAPI) {
+        'settings!io.ox/calendar',
+        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings, configAPI) {
 
     "use strict";
 
@@ -59,7 +60,6 @@ define('io.ox/calendar/model',
                 });
             },
             getParticipants: function (options) {
-
                 if (this._participants) {
                     return this._participants;
                 }
@@ -204,9 +204,9 @@ define('io.ox/calendar/model',
     return {
         setDefaultParticipants: function (model, options) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
+                var userID = configAPI.get('identifier');
                 if (folderAPI.is('private', folder)) {
                     if (options.create) {
-                        var userID = configAPI.get('identifier');
                         // it's a private folder for the current user, add him by default
                         // as participant
                         model.getParticipants().addUniquely({id: userID, type: 1});
@@ -214,16 +214,15 @@ define('io.ox/calendar/model',
                         // use a new, custom and unused property in his model to specify that he can't be removed
                         model.getParticipants().get(userID).set('ui_removable', false);
                     } else {
-                        var userID = configAPI.get('identifier');
                         if (model.get('organizerId') === userID) {
                             model.getParticipants().get(userID).set('ui_removable', false);
                         }
                     }
-
                 } else if (folderAPI.is('public', folder)) {
-                    // if public folder, current user will be added
-                    model.getParticipants().addUniquely({id: configAPI.get('identifier'), type: 1});
-
+                    if (options.create) {
+                        // if public folder, current user will be added
+                        model.getParticipants().addUniquely({id: userID, type: 1});
+                    }
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
                     model.getParticipants().addUniquely({id: folder.created_by, type: 1});
@@ -262,10 +261,12 @@ define('io.ox/calendar/model',
         fullTimeChangeBindings: function (model) {
             // save initial values;
             var _start = model.get('full_time') ? date.Local.utc(model.get('start_date')) : model.get('start_date'),
-                _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date');
+                _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date'),
+                mark = settings.get('markFulltimeAppointmentsAsFree', false);
 
             model.on('change:full_time', function () {
                 if (model.get('full_time') === true) {
+                    // handle time
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date') - 1);
                     // parse to fulltime dates
@@ -275,7 +276,16 @@ define('io.ox/calendar/model',
                     // convert to UTC
                     model.set('start_date', date.Local.localTime(startDate.getTime()));
                     model.set('end_date', date.Local.localTime(endDate.getTime()));
+
+                    // handle shown as
+                    if (mark) {
+                        model.set('shown_as', 4);
+                    }
                 } else {
+                    if (mark) {
+                        model.set('shown_as', 1);
+                    }
+
                     model.set('start_date', _start);
                     model.set('end_date', _end);
                 }

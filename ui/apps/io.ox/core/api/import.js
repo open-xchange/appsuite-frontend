@@ -30,7 +30,12 @@ define('io.ox/core/api/import',
                 fixPost: true
             });
         } else {
-            return http.FORM({form: data.form, data: data, url: 'import?action=' + data.type});
+            return http.FORM({
+                module: 'import',
+                action: data.type,
+                form: data.form,
+                data: data
+            });
         }
     }
 

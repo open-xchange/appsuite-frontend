@@ -11,8 +11,10 @@
  */
 
 var fs = require("fs");
-var http = require("http");
 var path = require("path");
+if (fs.existsSync) path.existsSync = fs.existsSync;
+
+var http = require("http");
 var readline = require('readline');
 var util = require("util");
 var utils = require("./lib/build/fileutils");
@@ -23,6 +25,7 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
+var less = require('./lib/build/less');
 
 console.info("Build path: " + utils.builddir);
 
@@ -58,6 +61,8 @@ function envBoolean(name) {
 }
 
 var debug = envBoolean('debug');
+var disableStrictMode = envBoolean('disableStrictMode');
+
 if (debug) console.info("Debug mode: on");
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
@@ -109,6 +114,15 @@ function jsFilter (data) {
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
+    if (disableStrictMode) {
+        tree2 = tree2.scanner({
+            name: 'function',
+            matcher: strictModeMatcher
+        }, strictModeHandler).scanner({
+            name: 'defun',
+            matcher: strictModeMatcher
+        }, strictModeHandler);
+    }
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
 
@@ -130,6 +144,17 @@ function jsFilter (data) {
             }
         }
         var deps = _.detect(args, ast.is("array"));
+        if (deps) {
+            _.each(deps[1], function(dep) {
+                dep = dep[1];
+                if (dep.slice(0, 5) !== 'less!') return;
+                dep = dep.slice(5);
+                if (!path.existsSync(path.join('apps', dep))) {
+                    console.warn('Missing LessCSS file ' + dep +
+                                 ' required by ' + mod);
+                }
+            });
+        }
         var f = _.detect(args, ast.is("function"));
         if (!name || !deps || !f) return;
         for (var i = 0; i < defineHooks.length; i++) {
@@ -139,17 +164,30 @@ function jsFilter (data) {
     function assertHandler(scope) {
         if (scope.refs.assert === undefined) return ['num', 0];
     }
+    function strictModeMatcher(tree) {
+        return tree[3] && tree[3][0] && tree[3][0][0] == 'stat' &&
+            tree[3][0][1] && tree[3][0][1][0] == 'string' &&
+            tree[3][0][1][1] == 'use strict';
+    }
+    function strictModeHandler(scope, walk) {
+        this[3][0][1][1] = 'no strict';
+        return [this[0], this[1], this[2].slice(), pro.MAP(this[3], walk)];
+    }
 
     // UglifyJS
-    if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
-    tree = pro.ast_lift_variables(tree);
-    tree = pro.ast_mangle(tree);
-    tree = pro.ast_squeeze(tree, { make_seqs: false });
+    if (!disableStrictMode) {
+        if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
+        tree = pro.ast_lift_variables(tree);
+        tree = pro.ast_mangle(tree);
+        tree = pro.ast_squeeze(tree, { make_seqs: false });
+    }
+
     // use split_lines
     return catchParseErrors(function (data) {
         return pro.split_lines(data, 500);
-    }, pro.gen_code(tree, { })) + ';';
+    }, pro.gen_code(tree, { beautify: debug })) + ';';
 }
+
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
 
@@ -175,7 +213,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: ['$', '_', 'Modernizr', 'define', 'require', 'requirejs', 'ox', 'assert',
-             'include', 'doT', 'Backbone', 'BigScreen']
+             'include', 'doT', 'Backbone', 'BigScreen', 'tinyMCE']
 };
 
 function hint (data, getSrc) {
@@ -302,6 +340,21 @@ if (path.existsSync('help')) {
     });
 }
 
+// postinst utilities
+
+utils.concat('update-themes.js', utils.list('lib',
+    ['less.js/build/require-rhino.js',
+     'less.js/build/ecma-5.js',
+     'less.js/lib/less/parser.js',
+     'less.js/lib/less/functions.js',
+     'less.js/lib/less/colors.js',
+     'less.js/lib/less/tree/*.js',
+     'less.js/lib/less/tree.js',
+     'build/update-themes.js']),
+    { to: utils.dest('share') });
+utils.copy(utils.list('lib/build', 'update-themes.sh'),
+    { to: utils.dest('share') });
+
 // external apps
 
 desc('Builds an external app');
@@ -418,6 +471,43 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
+// own themes
+
+_.each(utils.list('apps/themes/*/definitions.less'), function(defs) {
+    var dir = path.dirname(defs);
+    utils.concat(path.join(dir, 'less/common.css'),
+        [utils.dest('apps/themes/definitions.less'), defs,
+         utils.dest('apps/themes/style.less')],
+        { filter: less.compile });
+    utils.concat(path.join(dir, 'less/style.css'),
+        [utils.dest('apps/themes/definitions.less'), defs,
+         path.join(dir, 'style.less')],
+        { filter: less.compile });
+    _.each(utils.list('apps', '**/*.less'), function (file) {
+        if (file.slice(0, 7) === 'themes/') return;
+        utils.concat(path.join(dir, 'less', file),
+            [utils.dest('apps/themes/definitions.less'), defs,
+             path.join('apps', file)],
+             { filter: less.compile });
+    });
+});
+
+// foreign themes
+
+_.each(utils.list(utils.dest('apps/themes'), '*/definitions.less'),
+    function (defs) {
+        if (path.existsSync(path.join('apps/themes', defs))) return;
+        var dir = path.join('apps/themes', path.dirname(defs));
+        _.each(utils.list('apps', '**/*.less'), function (file) {
+            if (file.slice(0, 7) === 'themes/') return;
+            utils.concat(path.join(dir, 'less', file),
+                [utils.dest('apps/themes/definitions.less'),
+                 utils.dest(path.join('apps/themes', defs)),
+                 path.join('apps', file)],
+                 { filter: less.compile });
+        });
+    });
+
 // docs task
 
 desc("Generates developer documentation");
@@ -433,6 +523,7 @@ function docFile(file, title) {
 
 docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
+docFile("extensions", "Extension Points");
 docFile("extensionpoints_contact", "Extension Points / Contact App");
 docFile("extensionpoints_mail", "Extension Points / Mail App");
 docFile("libs", "External Libs");
@@ -635,11 +726,12 @@ task("dist", [distDest], function () {
     var dest = path.join(distDest, tarName);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
-    function addL10n(spec) {
-        return spec.replace(/## l10n ##.*\n([\s\S]+?)^## end l10n ##.*/gm,
+    function replaceL10n(spec, key, languages) {
+        return spec.replace(
+            new RegExp('## ' + key + ' ##.*\\n([\\s\\S]+?)^## end ##.*', 'gm'),
             function (m, block) {
                 block = block.replace(/^#/gm, '');
-                return _.map(i18n.languages(), function (Lang) {
+                return _.map(languages, function (Lang) {
                     var lang = Lang.toLowerCase().replace(/_/g, '-');
                     return block.replace(/## ([Ll])ang ##/g, function (m, L) {
                         return L === 'L' ? Lang : lang;
@@ -647,12 +739,20 @@ task("dist", [distDest], function () {
                 }).join('\n');
             });
     }
+    function addL10n(spec) {
+        spec = replaceL10n(spec, 'l10n', i18n.languages());
+        if (path.existsSync('help')) {
+            spec = replaceL10n(spec, 'help', fs.readdirSync('help'));
+        }
+        return spec;
+    }
     function tar(code) {
         if (code) return fail('cp exited with code ' + code);
 
         var file = path.join(dest, pkgName + '.spec');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')
-            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)));
+            .replace(/^(Version:\s*)\S+/gm, '$01' + ver)
+            .replace(/^(%define\s+ox_release\s+)\S+/gm, '$01' + rev)));
         file = path.join(dest, 'debian/control');
         fs.writeFileSync(file, addL10n(fs.readFileSync(file, 'utf8')));
 
@@ -679,6 +779,7 @@ task("dist", [distDest], function () {
     }
     function dpkgSource(code) {
         if (code) return fail('tar exited with code ' + code);
+        if (envBoolean('skipDeb')) return done();
         utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }

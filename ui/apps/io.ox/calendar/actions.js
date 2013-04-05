@@ -165,7 +165,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'one modify',
+        requires: 'one delete',
         action: function (baton) {
             var params = baton.data,
                 o = {
@@ -279,7 +279,7 @@ define('io.ox/calendar/actions',
             var win = e.baton.window;
             if (win && win.getPerspective) {
                 var pers = win.getPerspective();
-                return pers.name !== 'list';
+                return pers && pers.name !== 'list';
             } else {
                 return false;
             }

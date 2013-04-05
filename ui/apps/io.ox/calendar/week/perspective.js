@@ -30,7 +30,7 @@ define('io.ox/calendar/week/perspective',
         dialog:         null,   // sidepopup
         app:            null,   // the app
         view:           null,   // the current view obj
-        modes:          { 'week:day': 1, 'week:workweek': 2, 'week:week': 3 }, // all available modes
+        views:          {},     // containing all views
 
         /**
          * open sidepopup to show appointment
@@ -66,8 +66,8 @@ define('io.ox/calendar/week/perspective',
                 obj = clean(obj);
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
-                        new dialogs.ModalDialog()
-                            .append(conflictView.drawList(con.conflicts))
+                        new dialogs.ModalDialog({ easyOut: true, top: "20%", center: false })
+                            .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
                             .addDangerButton('ignore', gt('Ignore conflicts'))
                             .addButton('cancel', gt('Cancel'))
                             .show()
@@ -166,59 +166,90 @@ define('io.ox/calendar/week/perspective',
          * get appointments and update collection
          * @param  {Object} obj object containing start and end timestamp
          */
-        getAppointments: function (obj) {
+        getAppointments: function (useCache) {
             // fetch appointments
-            var collection = this.collection;
-            if (collection) {
-                api.getAll(obj).done(function (list) {
-                    collection
-                        .reset(_(list).map(function (obj) {
-                            var m = new Backbone.Model(obj);
-                            m.id = _.cid(obj);
-                            return m;
-                        }));
-                    collection = null;
-                }).fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
-                });
+            var self = this,
+                obj = self.view.getRequestParam();
+            api.getAll(obj, useCache).done(function (list) {
+                self.view.reset(obj.start, list);
+            }).fail(function () {
+                notifications.yell('error', gt('An error occured. Please try again.'));
+            });
+        },
+
+        /**
+         * call view print function
+         */
+        print: function () {
+            if (this.view) {
+                this.view.print();
+            }
+        },
+
+        restore: function () {
+            if (this.view.restore) {
+                this.view.restore();
+            }
+        },
+
+        save: function () {
+            if (this.view.save) {
+                this.view.save();
             }
         },
 
         /**
          * refresh appointment data
          */
-        refresh: function () {
+        refresh: function (useCache) {
             var self = this;
             this.app.folder.getData().done(function (data) {
+                // update view folder data
+                self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments(self.view.folder(data));
+                self.getAppointments(useCache);
             });
         },
 
         /**
-         * trigger view save function
+         * handle different views in this perspective
+         * @param  {object} app the application
+         * @param  {object} opt options from perspective
          */
-        save: function () {
-            // save scrollposition
+        afterShow: function (app, opt) {
+            // hide current view
             if (this.view) {
-                this.view.save();
+                this.view.$el.hide();
             }
-        },
 
-        /**
-         * trigger view restore function
-         */
-        restore: function () {
-            // restore scrollposition
-            if (this.view) {
-                this.view.restore();
-            }
-        },
+            // init views
+            if (this.views[opt.perspective] === undefined) {
+                this.view = new View({
+                    collection: this.collection,
+                    mode: opt.perspective.split(":")[1],
+                    refDate: this.app.refDate,
+                    appExtPoint: 'io.ox/calendar/week/view/appointment'
+                });
 
-        print: function () {
-            if (this.view) {
-                this.view.print();
+                // bind listener for view events
+                this.view
+                    .on('showAppointment', this.showAppointment, this)
+                    .on('openCreateAppointment', this.openCreateAppointment, this)
+                    .on('openEditAppointment', this.openEditAppointment, this)
+                    .on('updateAppointment', this.updateAppointment, this)
+                    .on('onRefresh', this.refresh, this);
+
+                this.views[opt.perspective] = this.view.render();
+                this.main.append(this.view.$el.show());
+                this.view.setScrollPos();
+            } else {
+                this.view = this.views[opt.perspective];
+                this.view.setStartDate(app.refDate);
+                this.view.$el.show();
             }
+
+            // renew data
+            this.refresh();
         },
 
         /**
@@ -227,67 +258,43 @@ define('io.ox/calendar/week/perspective',
          * @param  {Object} opt perspective options
          */
         render: function (app, opt) {
+            var self = this;
+
             // init perspective
             this.app = app;
-            this.collection = new Backbone.Collection([]);
             this.main.addClass('calendar-week-view').empty();
+            this.collection = new Backbone.Collection([]);
 
-            delete this.view;
+            var refresh = function () { self.refresh(true); },
+                reload = function () { self.refresh(false); };
 
-            this.view = new View({
-                collection: this.collection,
-                mode: this.modes[opt.perspective],
-                refDate: app.refDate,
-                appExtPoint: 'io.ox/calendar/week/view/appointment'
-            });
+            // create sidepopup object with eventlistener
+            this.dialog = new dialogs.SidePopup()
+                .on('close', function () {
+                    $('.appointment', this.main).removeClass('opac current');
+                });
 
-            var self = this,
-                refresh = $.proxy(function () {
-                    self.refresh();
-                }, this);
+            // watch for api refresh
+            api.on('create update delete refresh.all', refresh)
+                .on('delete', function () {
+                    // Close dialog after delete
+                    self.dialog.close();
+                })
+                .on('create update', function (e, obj) {
+                    self.view.setStartDate(obj.start_date);
+                });
 
-            // bind listener for view events
-            this.view
-                .on('showAppointment', this.showAppointment, this)
-                .on('openCreateAppointment', this.openCreateAppointment, this)
-                .on('openEditAppointment', this.openEditAppointment, this)
-                .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefresh', this.refresh, this);
-
-            this.main.append(this.view.render().$el);
-
-            if (!opt.rendered) {
-                // create sidepopup object with eventlistener
-                this.dialog = new dialogs.SidePopup()
-                    .on('close', function () {
-                        $('.appointment', this.main).removeClass('opac current');
-                    });
-
-                // watch for api refresh
-                api.on('create update delete', refresh, this)
-                    .on('delete', function () {
-                        // Close dialog after delete
-                        self.dialog.close();
-                    })
-                    .on('create update', function (e, obj) {
-                        self.view.setStartDate(obj.start_date);
-                    });
-
-                // watch for folder change
-                app.on('folder:change', refresh, this)
-                    .getWindow()
-                    .on('show', refresh, this)
-                    .on('show', $.proxy(this.restore, this))
-                    .on('beforehide', $.proxy(this.save, this))
-                    .on('change:perspective', function () {
-                        self.view.unbindKeys();
-                        self.dialog.close();
-                    });
-            }
-
-            this.view.setScrollPos();
-
-            this.refresh();
+            // watch for folder change
+            this.app.on('folder:change', refresh)
+                .on('folder:delete', reload)
+                .getWindow()
+                .on('beforehide', $.proxy(this.save, this))
+                .on('show', $.proxy(this.restore, this))
+                .on('show', refresh)
+                .on('change:perspective', function () {
+                    self.view.unbindKeys();
+                    self.dialog.close();
+                });
         }
     });
 

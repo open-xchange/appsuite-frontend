@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -17,7 +17,7 @@ define('io.ox/calendar/month/view',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/month/style.css',
+     'less!io.ox/calendar/month/style.less',
      'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
@@ -198,11 +198,6 @@ define('io.ox/calendar/month/view',
                         end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
                         maxCount = 7;
 
-                    if (model.get('start_date') < 0) {
-                        console.error('FIXME: start_date should not be negative');
-                        throw 'FIXME: start_date should not be negative';
-                    }
-
                     // draw across multiple days
                     while (maxCount >= 0) {
                         maxCount--;
@@ -311,7 +306,7 @@ define('io.ox/calendar/month/view',
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        $('<i class="icon-lock private-flag">')[a.get('private_flag') ? 'show' : 'hide'](),
+                        $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
                         $('<div>').addClass('title').text(gt.noI18n(a.get('title'))),
                         $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''))
                     )

@@ -23,6 +23,25 @@ body {
     margin: 0 auto;
 }
 
+.note {
+    background-color: #08c;
+    color: #fff;
+    padding: 13px;
+    margin: 0 0 2em 0;
+}
+
+.note i {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+@media print {
+    body { padding: 0; }
+    .note { display: none; }
+    thead { display: table-header-group; }
+    /* chrome currently doesn't support page-break-... */
+    tbody.no-break, header { page-break-inside: avoid; }
+}
+
 h1 {
     font-size: 22px;
     line-height: 28px;

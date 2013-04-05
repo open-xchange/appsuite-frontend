@@ -179,43 +179,44 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/showlink', {
+
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
+            return e.collection.has('some');
         },
+
         multiple: function (list) {
+
             api.getList(list).done(function (list) {
-                var calcWidth,
-                    container = $('<div>').css('display', 'inline-block'),
-                    content  = _(list).map(function (file) {
-                    var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    return {'name': gt('File: %1$s', file.title || file.filename), 'link': gt('Direct link: %1$s', url), 'cleanlink': url};
-                });
 
-                if (window.clipboardData) {
-
-                    _(content).each(function (item) {
-                        var copyButton = $('<a>').attr('href', '#').addClass('btn').text(gt('copy to clipboard'));
-                        copyButton.on('click', function () {
-                            window.clipboardData.setData('Text', item.cleanlink);
-                        });
-
-                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link + ' ').append(copyButton)));
-                    });
-                } else {
-                    _(content).each(function (item) {
-                        container.append($('<p>').append($('<div>').text(item.name), $('<div>').text(item.link)));
-                    });
-                }
-
-                // to get the width of the container
-                $('body').append(container);
-                calcWidth = container.width();
-                calcWidth = calcWidth + 30;
-
+                // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({width: calcWidth, addclass: 'dialogreselect'})
-                        .append(container)
-                        .addButton('cancel', gt('Cancel'))
+                    new dialogs.ModalDialog({ easyOut: true, width: 600 })
+                        .build(function () {
+                            // header
+                            this.header($('<h4>').text('Direct link'));
+                            // content
+                            this.getContentNode().addClass('user-select-text max-height-200').append(
+
+                                _(list).map(function (file) {
+                                    var url = location.protocol + '//' + location.host + ox.root +
+                                        '/#app=io.ox/files&perspective=list' +
+                                        '&folder=' +  encodeURIComponent(file.folder_id) +
+                                        '&id=' + encodeURIComponent(file.id);
+
+                                    return $('<p>').append(
+                                        $('<div>').text(file.title || file.filename || ''),
+                                        $('<div>').append(
+                                            $('<a>', { href: url, target: '_blank' })
+                                            .text(
+                                                // soft-break long words (like long URLs)
+                                                url.replace(/(\S{30})/g, '$1\u200B')
+                                            )
+                                        )
+                                    );
+                                })
+                            );
+                        })
+                        .addPrimaryButton('cancel', gt('Close'))
                         .show();
                 });
             });
@@ -249,7 +250,8 @@ define('io.ox/files/actions',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            api.remove(list).done(function () {
+                            api.remove(list).done(function (data) {
+                                api.propagate('delete', list[0]);
                                 notifications.yell('success', responseSuccces);
                             }).fail(function () {
                                 notifications.yell('error', responseFail);
@@ -441,10 +443,13 @@ define('io.ox/files/actions',
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickyfile', 'files', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.filename || baton.data.title
+                widgets.add('stickyfile', {
+                    plugin: 'files',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.filename || baton.data.title
+                    }
                 });
                 notifications.yell('success', gt('This file has been added to the portal'));
             });
@@ -514,7 +519,6 @@ define('io.ox/files/actions',
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'view',
         index: 150,
-        label: gt('View'),
         icon: function () {
             return $('<i class="icon-eye-open">');
         }
@@ -642,7 +646,7 @@ define('io.ox/files/actions',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal'
     }));
-    
+
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'publish',
         index: 1000,
@@ -686,7 +690,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/dnd/actions').extend({
         id: 'create',
         index: 10,
-        label: gt('Drop here to upload a <b>new file</b>'),
+        label: gt('Drop here to upload a <b class="dndignore">new file</b>'),
         multiple: function (files, app) {
             app.queues.create.offer(files);
         }
@@ -702,11 +706,11 @@ define('io.ox/files/actions',
             if (app.currentFile.title) {
                 return gt(
                     //#. %1$s is the title of the file
-                    'Drop here to upload a <b>new version</b> of "%1$s"',
+                    'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
                     String(app.currentFile.title).replace(/</g, '&lt;')
                 );
             } else {
-                return gt('Drop here to upload a <b>new version</b>');
+                return gt('Drop here to upload a <b class="dndignore">new version</b>');
             }
         },
         action: function (file, app) {

@@ -10,18 +10,15 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-/*global
-define: true, _: true
-*/
+
 define('io.ox/mail/accounts/settings',
       ['io.ox/core/extensions',
-       'io.ox/settings/utils',
        'io.ox/core/api/account',
        "io.ox/mail/accounts/model",
        'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
        'gettext!io.ox/mail/accounts/settings'
-       ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs, gt) {
+       ], function (ext, api, AccountModel, AccountDetailView, dialogs, gt) {
     'use strict';
 
     ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
@@ -39,7 +36,7 @@ define('io.ox/mail/accounts/settings',
                     myViewNode = $("<div>").addClass("accountDetail");
                     myModel = new AccountModel(data);
                     myView = new AccountDetailView({model: myModel, node: myViewNode});
-                    myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
+                    myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
                         pane.append(myView.render().el);
                     });
                     return myView.node;
@@ -48,7 +45,7 @@ define('io.ox/mail/accounts/settings',
                 myViewNode = $("<div>").addClass("accountDetail");
                 myModel = new AccountModel(evt.data);
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
-                myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
+                myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
                     pane.append(myView.render().el);
                 });
                 myView.succes = successDialog;
@@ -113,33 +110,35 @@ define('io.ox/mail/accounts/settings',
             var deferedValidation = $.Deferred(),
                 deferedSave = $.Deferred();
 
-            myModel.validationCheck(deferedValidation, data);
-            deferedValidation.done(function (response) {
-                if (response === false) {
-                    var message = gt('There was no suitable server found for this mail/password combination');
+            myModel.validationCheck(data).then(
+                function success(response) {
+                    if (response === false) {
+                        var message = gt('There was no suitable server found for this mail/password combination');
+                        drawAlert(alertPlaceholder, message);
+                        autoconfigDialogbox.idle();
+                    } else {
+                        myModel.save(data, deferedSave);
+                        deferedSave.done(function (response) {
+                            if (response.error_id) {
+                                autoconfigDialogbox.close();
+                                failDialog(response.error);
+                            } else {
+                                autoconfigDialogbox.close();
+                                if (collection) {
+                                    collection.add([response]);
+                                }
+                                successDialog();
+                                def.resolve(response);
+                            }
+                        });
+                    }
+                },
+                function fail() {
+                    var message = gt('Failed to connect.');
                     drawAlert(alertPlaceholder, message);
                     autoconfigDialogbox.idle();
-                } else {
-                    myModel.save(data, deferedSave);
-                    deferedSave.done(function (response) {
-                        if (response.error_id) {
-                            autoconfigDialogbox.close();
-                            failDialog(response.error);
-                        } else {
-                            autoconfigDialogbox.close();
-                            if (collection) {
-                                collection.add([response]);
-                            }
-                            successDialog();
-                            def.resolve(response);
-                        }
-                    });
                 }
-            }).fail(function () {
-                var message = gt('Failed to connect.');
-                drawAlert(alertPlaceholder, message);
-                autoconfigDialogbox.idle();
-            });
+            );
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, alertPlaceholder, def) {
@@ -153,7 +152,6 @@ define('io.ox/mail/accounts/settings',
                     validateMailaccount(data, alertPlaceholder, def);
                 } else {
                     var data = {};
-                    console.log('no configdata recived');
                     data.primary_address = newMailaddress;
                     if (args) {
                         args.data = data;
@@ -165,7 +163,6 @@ define('io.ox/mail/accounts/settings',
             })
             .fail(function () {
                 var data = {};
-                console.log('no configdata recived');
                 data.primary_address = newMailaddress;
                 if (args) {
                     args.data = data;
@@ -212,8 +209,9 @@ define('io.ox/mail/accounts/settings',
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('add', gt('Add'))
+                .addButton('cancel', gt('Cancel'))
+                .addAlternativeButton('skip', gt('Manual'))
                 .show(function () {
                     inputFieldMail.focus();
                 });
@@ -231,6 +229,14 @@ define('io.ox/mail/accounts/settings',
                         inputFieldPassword.focus();
                         autoconfigDialogbox.idle();
                     }
+                });
+
+                autoconfigDialogbox.on('skip', function (e) {
+                    autoconfigDialogbox.close();
+                    def.reject();
+                    //primary address needs to be provided, why? fails without
+                    args.data = {primary_address: inputFieldMail.val()};
+                    createExtpointForNewAccount(args);
                 });
             });
 
@@ -286,5 +292,5 @@ define('io.ox/mail/accounts/settings',
 
     return {
         mailAutoconfigDialog: mailAutoconfigDialog
-    }; //whoa return nothing at first
+    };
 });

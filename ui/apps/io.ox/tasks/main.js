@@ -72,7 +72,7 @@ define('io.ox/tasks/main',
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(left, {settings: settings});
 
         grid.addTemplate(template.main);
 
@@ -161,6 +161,11 @@ define('io.ox/tasks/main',
             api.get(obj)
                 .done(_.lfo(drawTask))
                 .fail(_.lfo(drawFail, obj));
+        };
+
+        showTask.cancel = function () {
+            _.lfo(drawTask);
+            _.lfo(drawFail);
         };
 
         drawTask = function (data) {

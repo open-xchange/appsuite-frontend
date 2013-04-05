@@ -26,7 +26,7 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
-     'less!io.ox/calendar/freebusy/style.css'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
+     'less!io.ox/calendar/freebusy/style.less'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
 
@@ -43,7 +43,6 @@ define('io.ox/calendar/freebusy/controller',
                 emptyCollection = new Backbone.Collection([]),
                 // calendar views (day, workweek, week)
                 currentMode = '',
-                modes = { day: 1, workweek: 2, week: 3 },
                 calendarViews = {},
                 // folder data
                 folderData = {},
@@ -119,19 +118,20 @@ define('io.ox/calendar/freebusy/controller',
                 });
             };
 
-            this.getInterval = function () {
-                var start = this.getCalendarView().startDate;
-                return { start: start + 0, end: start + api.DAY * 7 };
-            };
-
             function toModel(obj) {
                 var model = new Backbone.Model(obj);
                 model.id = _.cid(obj);
                 return model;
             }
 
+            function getColorByIndex(index) {
+                var model = self.participants.at(index);
+                return model ? model.index : 0;
+            }
+
             this.loadAppointments = function () {
-                var list = self.getParticipants(), options = self.getInterval();
+                var list = self.getParticipants(),
+                    options = self.getCalendarView().getRequestParam();
                 api.freebusy(list, options).done(function (data) {
                     // check for weekView cause it might get null if user quits
                     if (self.getCalendarView()) {
@@ -145,7 +145,7 @@ define('io.ox/calendar/freebusy/controller',
                                     })
                                     .map(function (obj) {
                                         // store index
-                                        obj.index = index;
+                                        obj.index = getColorByIndex(index);
                                         // add appointments without access to cache
                                         cache[_.cid(obj)] = obj;
                                         return obj;
@@ -242,7 +242,7 @@ define('io.ox/calendar/freebusy/controller',
                     appExtPoint: 'io.ox/calendar/week/view/appointment',
                     collection: this.appointments,
                     keyboard: false,
-                    mode: modes[mode],
+                    mode: mode,
                     refDate: refDate,
                     showFulltime: false,
                     startDate: options.start_date,
@@ -254,7 +254,7 @@ define('io.ox/calendar/freebusy/controller',
                 view
                     // listen to refresh event
                     .on('onRefresh', function () {
-                        self.appointments.reset([]);
+                        // self.appointments.reset([]);
                         self.refreshChangedInterval();
                     })
                     // listen to create event
@@ -277,10 +277,9 @@ define('io.ox/calendar/freebusy/controller',
 
                 view.folder(folderData);
 
-                this.$el.append(view.$el.addClass('abs calendar-week-view'));
-                this.appointments.reset([]);
-                view.render();
                 view.showAll(false);
+                view.render();
+                this.$el.append(view.$el.addClass('abs calendar-week-view'));
 
                 return view;
             };
@@ -292,17 +291,9 @@ define('io.ox/calendar/freebusy/controller',
             this.participantsView = templates.getParticipantsView();
 
             function customize() {
-                var index = this.model.collection.indexOf(this.model) || 0;
                 this.$el.addClass('with-participant-color').append(
-                    templates.getParticipantColor(index)
+                    templates.getParticipantColor(this.model.index)
                 );
-            }
-
-            function updateParticipantColors() {
-                self.participants.each(function (model, index) {
-                    templates.updateParticipantColor(self.participantsView, model.cid, index);
-                    model.set('index', index);
-                });
             }
 
             function drawParticipant(model) {
@@ -315,15 +306,20 @@ define('io.ox/calendar/freebusy/controller',
             function removeParticipant(model) {
                 var cid = model.cid;
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
-                updateParticipantColors();
             }
 
             this.participants
-                .on('add', drawParticipant)
                 .on('remove', removeParticipant)
+                .on('add', function (model) {
+                    model.index = templates.getFreeColor(self.participants);
+                    drawParticipant(model);
+                })
                 .on('reset', function () {
                     self.participantsView.empty();
-                    self.participants.each(drawParticipant);
+                    self.participants.each(function (model, index) {
+                        model.index = index;
+                        drawParticipant(model);
+                    });
                 })
                 .on('add remove reset', function () {
                     self.refreshChangedParticipants();
@@ -363,8 +359,8 @@ define('io.ox/calendar/freebusy/controller',
                                 obj.type = 1;
                                 obj.sort_name = contactsUtil.getSortName(obj);
                             });
-                            _(list).chain().sortBy('sort_name').each(function (obj) {
-                                self.participants.add(obj);
+                            _(list).chain().sortBy('sort_name').each(function (data) {
+                                self.participants.add(data);
                             });
                         })
                         .always(function () {

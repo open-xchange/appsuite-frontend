@@ -1,0 +1,2 @@
+#!/bin/sh
+/opt/open-xchange/appsuite/share/update-themes.sh

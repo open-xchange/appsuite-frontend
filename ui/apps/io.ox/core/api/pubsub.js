@@ -112,16 +112,63 @@ define('io.ox/core/api/pubsub',
         });
     }
 
-    return {
-        publications: api({
-            module: 'publications',
-            requests: {
-                all: {
-                    columns: 'id,displayName,enabled',
-                    extendColumns: 'io.ox/core/api/pubsub/publications/all'
-                }
+    var publications = api({
+        module: 'publications',
+        requests: {
+            all: {
+                columns: 'id,displayName,enabled',
+                extendColumns: 'io.ox/core/api/pubsub/publications/all'
             }
-        }),
+        }
+    });
+
+    var subscriptions = $.extend(true, api({
+        module: 'subscriptions',
+        requests: {
+            all: {
+                columns: 'id,folder,displayName,enabled',
+                extendColumns: 'io.ox/core/api/pubsub/subscriptions/all'
+            }
+        }
+    }), {
+        /**
+         * refresh subscription
+         * @param  {object} data (id,folder)
+         * @return {deferred} item count
+         */
+        refresh: function (data) { //checked
+            if (!data) {
+                //triggered by global refresh
+                return;
+            }
+            var folder = data.folder || '';
+            return clearCache(this, data).pipe(function () {
+                return http.GET({
+                    module: 'subscriptions',
+                    appendColumns: false,
+                    params: {
+                        action: 'refresh',
+                        id : data.id,
+                        folder: folder
+                    }
+                });
+            });
+        }
+    });
+
+
+    ox.on('refresh^', function () {
+        _([publications, subscriptions]).each(function (api) {
+            api.caches.get.clear();
+            api.caches.all.clear().then(function () {
+                api.trigger('refresh:all');
+            });
+        });
+    });
+
+
+    return {
+        publications: publications,
         publicationTargets: api({
             module: 'publicationTargets',
             requests: {
@@ -131,40 +178,7 @@ define('io.ox/core/api/pubsub',
                 }
             }
         }),
-        subscriptions: $.extend(true, api({
-            module: 'subscriptions',
-            requests: {
-                all: {
-                    columns: 'id,displayName,enabled',
-                    extendColumns: 'io.ox/core/api/pubsub/subscriptions/all'
-                }
-            }
-        }),
-        {
-            /**
-             * refresh subscription
-             * @param  {object} data (id,folder)
-             * @return {deferred} item count
-             */
-            refresh: function (data) { //checked
-                if (!data) {
-                    //triggered by global refresh
-                    return;
-                }
-                var folder = data.folder || '';
-                return clearCache(this, data).pipe(function () {
-                    return http.GET({
-                        module: 'subscriptions',
-                        appendColumns: false,
-                        params: {
-                            action: 'refresh',
-                            id : data.id,
-                            folder: folder
-                        }
-                    });
-                });
-            }
-        }),
+        subscriptions: subscriptions,
         sources: apiFactory({
             module: 'subscriptionSources'
         })

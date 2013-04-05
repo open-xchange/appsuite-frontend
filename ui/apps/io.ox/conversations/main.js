@@ -19,7 +19,7 @@ define("io.ox/conversations/main",
      "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/date",
-     "less!io.ox/conversations/style.css",
+     "less!io.ox/conversations/style.less",
      "io.ox/conversations/actions"
     ], function (util, api, VGrid, userAPI, config, ext, date) {
 

@@ -33,7 +33,9 @@ define('io.ox/core/tk/folderviews',
 
         tmplFolder = $('<div class="folder selectable">').append('<div class="folder-row">'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
-
+        MOBILEFOLDERPADDING = 15,
+        DESKTOPFOLDERPADDING = 30,
+        SUBFOLDERPADDING = _.device('small') ? MOBILEFOLDERPADDING : DESKTOPFOLDERPADDING,
         refreshHash = {},
 
         TRUE = function () { return true; };
@@ -48,6 +50,7 @@ define('io.ox/core/tk/folderviews',
             children = null,
             painted = false,
             detached = true,
+            loading = null,
             open,
             self = this,
             data = {},
@@ -73,10 +76,18 @@ define('io.ox/core/tk/folderviews',
             },
 
             drawChildren = function (reload, method) {
+
+                if (loading) return $.Deferred().resolve([]);
+
+                // remove potential fail messages from previous refreshes
+                nodes.sub.find('.io-ox-fail').parent().remove();
+
                 // be busy
                 nodes.sub.busy().show();
+
                 // load
-                return self.loadChildren(reload)
+                return (
+                    loading = self.loadChildren(reload)
                     // next pipe() makes it slow for debugging
                     // .pipe(function (children) {
                     //    var def = $.Deferred();
@@ -94,9 +105,9 @@ define('io.ox/core/tk/folderviews',
                             .attr('data-folder-id', id)
                         );
                     })
-                    .pipe(function (children) {
+                    .then(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
-                        // invoke returns a nice array of all returns values which are deferred objects.
+                        // invoke returns a nice array of all return values which all are deferred objects.
                         // we use this array to feed $.when(). Thus, we get a proper combined deferred object
                         // that will be resolved once all child nodes are resolved.
                         if (!children || children.length === 0) {
@@ -104,8 +115,14 @@ define('io.ox/core/tk/folderviews',
                             hideArrow();
                             return $.when();
                         }
-                        return $.when.apply(null, _(children).invoke(method, nodes.sub.empty()));
-                    });
+                        return $.when.apply(null, _(children).invoke(method, nodes.sub));
+                    })
+                    .always(_.defer(function () {
+                        // need to use defer here, otherwise tree selection gets broken
+                        // with second repaint (visually ok but lacks addToIndex calls)
+                        loading = null;
+                    }))
+                );
             },
 
             paintChildren = function () {
@@ -113,7 +130,12 @@ define('io.ox/core/tk/folderviews',
             },
 
             repaintChildren = function () {
-                return drawChildren(true, 'repaint');
+                return drawChildren(true, 'repaint').done(function () {
+                    // fix changed orders by re-appending all children
+                    _(children).each(function (child) {
+                        child.append(true);
+                    });
+                });
             },
 
             updateArrow = function () {
@@ -214,81 +236,65 @@ define('io.ox/core/tk/folderviews',
             });
         };
 
+        this.data = function (obj) {
+            if (!arguments.length) {
+                return data;
+            } else {
+                data = obj;
+                return this;
+            }
+        };
+
         // load sub folders - creates instances of TreeNode - does not yet paint them
         this.loadChildren = function (reload) {
+
             var hash = {}, needsRefresh;
+
             if (children === null || reload === true) {
                 // build hash?
                 if (children !== null && reload === true) {
                     _(children).each(function (node) {
-                        hash[node.id] = node.detach();
+                        hash[node.id] = node;
                     });
                 }
-                // check cache
-                return api.caches.subFolderCache.get(id).pipe(function (data) {
-                    var wasCached = data !== null,
-                        needsRefresh = wasCached && refreshHash[id] === undefined;
-                    // get sub folders
-                    return api.getSubFolders({ folder: id, all: all, storage: storage })
-                        .done(function (list) {
-                            // needs refresh?
-                            if (needsRefresh) {
-                                _.defer(function () {
-                                    // get fresh data
-                                    api.getSubFolders({ folder: id, cache: false }).done(function (freshList) {
-                                        // compare
-                                        if (!_.isEqual(list, freshList)) {
-                                            self.repaint();
-                                        }
-                                        refreshHash[id] = false;
-                                    });
-                                });
+                // we assume that folder API takes care of clearing caches for periodic refreshes
+                // get sub folders
+                return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function (data) {
+                    // create new children array
+                    children = _.chain(data)
+                        .filter(function (folder) {
+                            // ignore system folders without sub folders, e.g. 'Shared folders'
+                            return (folder.module !== 'system' || folder.subfolders) && filter(folder);
+                        })
+                        .map(function (folder) {
+                            if (hash[folder.id] !== undefined) {
+                                // reuse but update data
+                                var node = hash[folder.id].data(folder);
+                                delete hash[folder.id];
+                                return node;
+                            } else {
+                                // new node
+                                return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
                             }
                         })
-                        .pipe(function (data) {
-                            // create new children array
-                            children = _.chain(data)
-                                .filter(function (folder) {
-                                    // ignore system folders without sub folders, e.g. 'Shared folders'
-                                    return (folder.module !== 'system' || folder.subfolders) && filter(folder);
-                                })
-                                .map(function (folder) {
-                                    if (reload && hash[folder.id] !== undefined) {
-                                        // reuse
-                                        var node = hash[folder.id];
-                                        delete hash[folder.id];
-                                        return node;
-                                    } else {
-                                        // new node
-                                        return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1, checkbox, all, storage);
-                                    }
-                                })
-                                .value();
-                            // destroy deprecated tree nodes
-                            _(hash).each(function (child) {
-                                child.destroy();
-                            });
-                            hash = null;
-                            return children;
-                        });
+                        .value();
+                    // destroy remaining and thus deprecated tree nodes
+                    _(hash).each(function (child) {
+                        child.destroy();
+                    });
+                    hash = null;
+                    return children;
                 });
             } else {
                 return $.Deferred().resolve(children);
             }
         };
 
-        this.append = function () {
-            if (detached) {
+        this.append = function (force) {
+            if (detached || force) {
                 container.append(nodes.folder, nodes.sub);
                 detached = false;
             }
-        };
-
-        this.detach = function () {
-            detached = true;
-            nodes.folder.detach();
-            nodes.sub.detach();
-            return this;
         };
 
         this.destroy = function () {
@@ -313,19 +319,15 @@ define('io.ox/core/tk/folderviews',
 
         this.repaint = function () {
             if (painted) {
-                // adD?
+                // add?
                 self.append();
                 // get folder
-                return this.reload().pipe(function (promise) {
-                    // get data
-                    data = promise;
-                    // customize, re-add to index, update arrow
-                    self.customize();
+                return this.reload().pipe(function () {
+                    // reload resets promise, calls customize & updateArrow
                     if (nodes.folder.hasClass('selectable')) {
                         tree.selection.addToIndex(data.id);
                     }
-                    updateArrow();
-                    // draw children
+                    // draw children?
                     if (isOpen()) {
                         return repaintChildren();
                     } else {
@@ -343,10 +345,10 @@ define('io.ox/core/tk/folderviews',
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
 
-            nodes.folder = tmplFolder.clone().on('dblclick click', '.folder-arrow, .folder-label', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick mousedown', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
-                nodes.folder.css('paddingLeft', (0 + level * 30) + 'px');
+                nodes.folder.css('paddingLeft', (0 + level * SUBFOLDERPADDING) + 'px');
             }
 
             nodes.sub = tmplSub.clone();
@@ -504,7 +506,7 @@ define('io.ox/core/tk/folderviews',
 
         function fnKeyPress(e) {
             if (e.which === 13) {
-                e.data.popup.invoke('add');
+                e.data.popup.invoke(e.data.action);
             }
         }
 
@@ -517,8 +519,6 @@ define('io.ox/core/tk/folderviews',
         this.addProcess = function (folder, title, opt) {
             var self = this,
             opt = opt || {};
-            // be responsive
-            this.busy();
             // call API
             return api.create({
                 folder: folder,
@@ -526,11 +526,6 @@ define('io.ox/core/tk/folderviews',
                     title: $.trim(title) || gt('New folder'),
                     module: opt.module
                 }
-            })
-            .done(function (data) {
-                self.idle().repaint().done(function () {
-                    self.select(data.id);
-                });
             });
         };
 
@@ -546,32 +541,34 @@ define('io.ox/core/tk/folderviews',
             if (folder) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
-                        width: 400,
-                        easyOut: true
+                        async: true,
+                        easyOut: true,
+                        width: 400
                     })
                     .header(
-                        $('<h4>').text(gt('Add new subfolder'))
+                        $('<h4>').text(folder === '1' ? gt('Add new folder') : gt('Add new subfolder'))
                     )
                     .build(function () {
                         this.getContentNode().append(
                             $('<div class="row-fluid">').append(
-                                api.getBreadcrumb(folder, { subfolders: false }),
+                                folder !== '1' ? api.getBreadcrumb(folder, { subfolders: false }) : [],
                                 $('<input>', { type: 'text' })
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
-                                .on('keypress', { popup: this }, fnKeyPress)
+                                .on('keypress', { popup: this, action: 'add' }, fnKeyPress)
                             )
                         );
                     })
-                    .addButton('cancel', gt('Cancel'))
                     .addPrimaryButton('add', gt('Add folder'))
+                    .addButton('cancel', gt('Cancel'))
+                    .on('add', function () {
+                        var popup = this;
+                        self.addProcess(folder, this.getContentNode().find('input').val(), opt).always(function () {
+                            popup.close();
+                        });
+                    })
                     .show(function () {
                         this.find('input').focus();
-                    })
-                    .done(function (action) {
-                        if (action === 'add') {
-                            self.addProcess(folder, this.find('input').val(), opt);
-                        }
                     });
                 });
             }
@@ -604,7 +601,7 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.renameProcess = function (folder, changes) {
-            api.update({ folder: folder, changes: changes });
+            return api.update({ folder: folder, changes: changes });
         };
 
         this.rename = function (folder) {
@@ -621,8 +618,9 @@ define('io.ox/core/tk/folderviews',
                         return;
                     }
                     new dialogs.ModalDialog({
-                        width: 400,
-                        easyOut: true
+                        async: true,
+                        easyOut: true,
+                        width: 400
                     })
                     .header(
                         $('<h4>').text(gt('Rename folder'))
@@ -635,25 +633,25 @@ define('io.ox/core/tk/folderviews',
                                 .val(folder.title)
                                 .attr('placeholder', gt('Folder name'))
                                 .addClass('span12')
-                                .on('keypress', { popup: this }, fnKeyPress)
+                                .on('keypress', { popup: this, action: 'rename' }, fnKeyPress)
                             )
                         );
                     })
+                    .addPrimaryButton('rename', gt('Rename'))
                     .addButton('cancel', gt('Cancel'))
-                    .addPrimaryButton('add', gt('Rename'))
+                    .on('rename', function () {
+                        self.renameProcess(folder.id, { title: this.getContentNode().find('input').val() })
+                            .always(this.close);
+                    })
                     .show(function () {
                         this.find('input').focus();
-                    })
-                    .done(function (action) {
-                        if (action === 'add') {
-                            self.renameProcess(folder.id, { title: this.find('input').val() });
-                        }
                     });
                 });
             }
         };
 
         this.subscribe = function (data) {
+
             var name = data.app.getName(),
                 POINT = name + '/folderview',
                 folderCache = new cache.SimpleCache('folder-all', false),
@@ -665,7 +663,6 @@ define('io.ox/core/tk/folderviews',
 
             var options;
             _(ext.point(POINT + '/options').all()).each(function (obj) {
-
                 options = _.extend(obj, options || {});
             });
 
@@ -677,8 +674,6 @@ define('io.ox/core/tk/folderviews',
                 all: true,
                 storage: storage
             });
-
-            tree.paint();
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
@@ -692,14 +687,14 @@ define('io.ox/core/tk/folderviews',
                     $('<h4>').text(gt('Subscribe IMAP folders'))
                 )
                 .build(function () {
-                    this.getContentNode().append(
-                        container
-                    );
+                    this.getContentNode().append(container);
                 })
-                .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('save', gt('Save'))
+                .addButton('cancel', gt('Cancel'))
                 .show(function () {
-                }).done(function (action) {
+                    tree.paint();
+                })
+                .done(function (action) {
 
                     if (action === 'save') {
                         _(changesArray).each(function (change) {
@@ -713,8 +708,7 @@ define('io.ox/core/tk/folderviews',
                         tree.destroy();
                         tree = pane = null;
                     }
-                }
-                );
+                });
 
                 tree.container.on('change', 'input', function () {
                     var folder = $(this).val(),
@@ -723,9 +717,7 @@ define('io.ox/core/tk/folderviews',
                         tobBePushed = { folder: folder, changes: changes};
                     changesArray.push(tobBePushed);
                 });
-
             });
-
         };
     }
 
@@ -991,12 +983,19 @@ define('io.ox/core/tk/folderviews',
             return paint({ cache: false });
         };
 
-        this.removeNode = this.repaintNode = this.internal.repaint;
+        // removeNode should not trigger repaint; just be busy
+        this.removeNode = function () {
+            this.busy();
+        };
 
         this.select = function (data) {
             this.selection.set(data);
             return $.when();
         };
+
+        api.on('delete', function () {
+            self.repaint();
+        });
     }
 
     return {

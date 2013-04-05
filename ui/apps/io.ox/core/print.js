@@ -33,6 +33,8 @@ define('io.ox/core/print',
 
         window[id] = function (document) {
             try {
+                //probably some naming conflict in ie within templates
+                //do not use 'item' as doT variable name for current element
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
                     compiled = doT.template(template);
@@ -98,7 +100,7 @@ define('io.ox/core/print',
                 .value()
             )
             .done(function () {
-                var args = _.chain(arguments).toArray();
+                var args = _.chain(arguments).toArray(), all = args.value().length;
                 // filter?
                 if (options.filter) {
                     args = args.filter(options.filter);
@@ -110,7 +112,7 @@ define('io.ox/core/print',
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
                     url = options.file + '?' + id;
                 if (options.window) {
                     options.window.location = url;

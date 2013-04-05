@@ -106,8 +106,8 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: allColumns,
-                extendColumns: 'io.ox/files/api/all'
+                columns: '20,1,5,700,702,703,704',
+                extendColumns: 'io.ox/files/api/list'
             },
             get: {
                 action: 'get'
@@ -118,6 +118,7 @@ define('io.ox/files/api',
                 extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc',
+                omitFolder: true,
                 getData: function (query) {
                     return { pattern: query };
                 }
@@ -228,7 +229,10 @@ define('io.ox/files/api',
             if (options.form) {
                 options.form.off('submit');
             }
-            return http.FORM({ form: options.form, data: options.json }).pipe(success);
+            return http.FORM({
+                form: options.form,
+                data: options.json
+            }).pipe(success);
         }
     };
 

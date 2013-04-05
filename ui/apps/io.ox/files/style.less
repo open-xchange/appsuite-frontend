@@ -135,32 +135,39 @@
     margin-right: 0.5em;
 }
 
+
 .file-details {
+
     max-width: 900px;
-}
 
-.file-details .title {
-    margin-bottom: 0.5em;
-    word-wrap: break-word;
-}
 
-.file-details .basicInfo em {
-    font-family: @lightFontFamily;
-    color: #333;
-    font-style: normal;
-    white-space: nowrap;
-}
+    .history,
+    .versiontable,
+    .uploadbutton {
+        display:none;
+    }
 
-.file-details .basicInfo span {
-    margin-left: 5px;
-    margin-right: 5px;
-}
+    .versiontable {
 
-.file-details h4 {
-    margin: 39px 0 13px;
-}
+        margin-top: 6px;
 
-.file-details {
+        .createdby,
+        .creationdate,
+        .size {
+            white-space:nowrap;
+        }
+        .createdby {
+            padding-right: 8px;
+        }
+        .dropdown {
+            float:left;
+        }
+    }
+
+    .title {
+        margin-bottom: 0.5em;
+        word-wrap: break-word;
+    }
 
     .description {
         font-family: monospace, 'Courier new';
@@ -171,62 +178,78 @@
 
     .preview {
         width: 100%;
-        text-align: center;
         margin: 26px 0;
     }
 
-    .add-comment {
-        margin: 13px 0 39px 0;
+    .comment {
+        clear:both;
+        padding-top: 8px;
+    }
+
+    form {
+        margin:0;
+
         textarea {
             width: 100%;
-            resize: none;
-            .box-sizing(border-box);
+            box-sizing: border-box;
+        }
+
+        .uploadbutton {
+            margin-top: 1.8em;
         }
     }
-}
 
-.file-details .buttons {
-    margin-bottom: 10px;
-}
+    .buttons {
+        margin-bottom: 10px;
 
-.file-details .buttons a {
-    margin-right: 10px;
-}
-
-.file-details .version.current .versionLabel {
-    font-weight: bold;
-}
-
-.file-details .version {
-    padding: 5px 5px 10px 5px;
-    .span6 div a {
-        word-break: break-all;
-        word-wrap: break-word;
+        a {
+            margin-right: 10px;
+        }
     }
+
+    .version.info .versionLabel {
+        font-weight: bold;
+    }
+
+    .version {
+        padding: 5px 5px 10px 5px;
+
+        .span6 div a {
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        .dropdown a {
+            word-break: break-all;
+        }
+
+    }
+
+    .version-comment {
+        font-family: monospace, 'Courier new';
+        white-space: pre-wrap;
+    }
+
+    .dragout {
+        color: @textColor;
+        cursor: pointer;
+    }
+
+    .dragout:focus,
+    .dragout:hover {
+        text-decoration: none;
+    }
+
+    .io-ox-inline-links {
+        margin-top: 1em;
+    }
+
+    .modal-header {
+        h1 { font-size: 20px;}
+    }
+
 }
 
-.file-details .version-comment {
-    font-family: monospace, 'Courier new';
-    white-space: pre-wrap;
-}
-
-.file-details .dragout {
-    color: @textColor;
-    cursor: pointer;
-}
-
-.file-details .dragout:focus,
-.file-details .dragout:hover {
-    text-decoration: none;
-}
-
-.file-details .io-ox-inline-links {
-    margin-top: 1em;
-}
-
-.modal-header {
-    h1 { font-size: 20px;}
-}
 .create-file {
     .fileForm {
         label {
@@ -236,10 +259,23 @@
     }
 }
 
-.dialogreselect {
-    -moz-user-select: -moz-text;
-    -webkit-user-select: text;
-    user-select: text;
+.vgrid-cell.file {
+
+    display: table-row;
+    padding: 0 13px 0 13px;
+
+    .name {
+        display: table-cell;
+        vertical-align: middle;
+        white-space: normal;
+        height: 3em;
+        line-height: 1em;
+        word-break: break-word;
+    }
+}
+
+ul.breadcrumb li.prefix {
+    white-space: nowrap;
 }
 
 /** small screens **/

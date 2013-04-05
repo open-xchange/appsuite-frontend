@@ -245,7 +245,7 @@ define('io.ox/tasks/edit/view',
                         self.model.set('alarm', null);
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
-                                self.fields.reminderDropdown.find(':selected').attr('finderId'));
+                                self.fields.reminderDropdown.val());
                         self.model.set('alarm', dates.alarmDate.getTime());
                     }
                 });

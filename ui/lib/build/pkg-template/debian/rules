@@ -8,7 +8,7 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 	FLAGS += debug=1
 endif
 
-override_dh_auto_build:
+override_dh_auto_install:
 	sh /opt/open-xchange-appsuite-dev/bin/build.sh app \
 	    builddir="debian/@package@/opt/open-xchange/appsuite" \
 	    $(FLAGS) --trace

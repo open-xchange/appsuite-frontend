@@ -22,6 +22,9 @@ define('io.ox/contacts/api',
 
     'use strict';
 
+    // object to store contacts, that have attachments uploading atm
+    var uploadInProgress = {};
+
     // generate basic API
     var api = apiFactory({
         module: 'contacts',
@@ -84,28 +87,36 @@ define('io.ox/contacts/api',
         wat(data, 'email2');
         wat(data, 'email3');
 
-        var method, body;
-        var attachmentHandlingNeeded = data.tempAttachmentIndicator;
+        var method,
+            attachmentHandlingNeeded = data.tempAttachmentIndicator,
+            opt = {
+                module: 'contacts',
+                data: data,
+                appendColumns: false,
+                fixPost: true
+            };
+
         delete data.tempAttachmentIndicator;
 
         if (file) {
-            var body = new FormData();
-            body.append('file', file);
-            body.append('json', JSON.stringify(data));
-            method = 'UPLOAD';
+            if (window.FormData && file instanceof window.File) {
+                method = 'UPLOAD';
+                opt.data = new FormData();
+                opt.data.append('file', file);
+                opt.data.append('json', JSON.stringify(data));
+                opt.params = { action: 'new' };
+            } else {
+                method = 'FORM';
+                opt.form = file;
+                opt.action = 'new';
+            }
         } else {
-            body = data;
             method = 'PUT';
+            opt.params = { action: 'new' };
         }
 
         // go!
-        return http[method]({
-                module: 'contacts',
-                params: { action: 'new' },
-                data: body,
-                appendColumns: false,
-                fixPost: true
-            })
+        return http[method](opt)
             .pipe(function (fresh) {
                 // UPLOAD does not process response data, so ...
                 fresh = fresh.data || fresh;
@@ -119,7 +130,7 @@ define('io.ox/contacts/api',
                 )
                 .pipe(function () {
                     if (attachmentHandlingNeeded) {
-                        api.trigger('AttachmentHandlingInProgress:' + d.folder_id + '.' + d.id, {state: true, redraw: true});
+                        api.addToUploadList(d.folder_id + '.' + d.id);//to make the detailview show the busy animation
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
@@ -134,7 +145,8 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
-                    api.trigger('AttachmentHandlingInProgress:' + o.folder + '.' + o.id, {state: true, redraw: true});
+                    api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
+                    api.trigger('update:' + o.folder + '.' + o.id);
                     return {folder_id: o.folder, id: o.id};
                 });
             } else {
@@ -148,7 +160,8 @@ define('io.ox/contacts/api',
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp
+                        timestamp: o.timestamp || _.now(),
+                        timezone: 'UTC'
                     },
                     data: o.data,
                     appendColumns: false
@@ -165,11 +178,12 @@ define('io.ox/contacts/api',
                             )
                             .done(function () {
                                 if (attachmentHandlingNeeded) {
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: true, redraw: false});
+                                    api.addToUploadList(encodeURIComponent(_.cid(data)));//to make the detailview show the busy animation
                                 }
                                 api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                                 api.trigger('update', data);
-                                api.trigger('refresh.list');
+                                // trigger refresh.all, since position might have changed
+                                api.trigger('refresh.all');
                             });
                         });
                 });
@@ -178,31 +192,44 @@ define('io.ox/contacts/api',
 
     api.editNewImage = function (o, changes, file) {
 
-        var form = new FormData();
-        form.append('file', file);
-        form.append('json', JSON.stringify(changes));
+        var filter = function (data) {
+            $.when(
+                api.caches.get.clear(),
+                api.caches.list.clear(),
+                fetchCache.clear()
+            ).pipe(function () {
+                api.trigger('refresh.list');
+                api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                    id: o.id,
+                    folder: o.folder_id
+                });
+            });
 
-        return http.UPLOAD({
+            return data;
+        };
+
+        if ('FormData' in window && file instanceof window.File) {
+            var form = new FormData();
+            form.append('file', file);
+            form.append('json', JSON.stringify(changes));
+
+            return http.UPLOAD({
                 module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
                 data: form,
                 fixPost: true
             })
-            .pipe(function (data) {
-                $.when(
-                    api.caches.get.clear(),
-                    api.caches.list.clear(),
-                    fetchCache.clear()
-                ).pipe(function () {
-                    api.trigger('refresh.list');
-                    api.trigger('edit', { // TODO needs a switch for created by hand or by test
-                        id: o.id,
-                        folder: o.folder_id
-                    });
-                });
-
-                return data;
-            });
+            .pipe(filter);
+        } else {
+            return http.FORM({
+                module: 'contacts',
+                action: 'update',
+                form: file,
+                data: changes,
+                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now()}
+            })
+            .pipe(filter);
+        }
     };
 
     api.remove =  function (list) {
@@ -211,7 +238,7 @@ define('io.ox/contacts/api',
         // remove
         return http.PUT({
                 module: 'contacts',
-                params: { action: 'delete', timestamp: _.now() },
+                params: { action: 'delete', timestamp: _.now(), timezone: 'UTC' },
                 appendColumns: false,
                 data: _(list).map(function (data) {
                     return { folder: data.folder_id, id: data.id };
@@ -232,7 +259,7 @@ define('io.ox/contacts/api',
             });
     };
 
-    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', true);
+    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', false);
 
     api.on('refresh.all', function () {
         autocompleteCache.clear();
@@ -338,7 +365,8 @@ define('io.ox/contacts/api',
                     module: 'contacts',
                     params: {
                         action: 'search',
-                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592'
+                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+                        timezone: 'UTC'
                     },
                     sort: 609,
                     data: {
@@ -384,6 +412,24 @@ define('io.ox/contacts/api',
         });
     };
 
+    // dirty copy/paste hack until I know hat fetchCache is good for
+    api.getPictureURLSync = function (obj, options) {
+
+        var defaultUrl = ox.base + '/apps/themes/default/dummypicture.png';
+        if (!_.isObject(obj)) { return defaultUrl; }
+
+        // duck checks
+        if (api.looksLikeResource(obj)) {
+            return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+        } else if (api.looksLikeDistributionList(obj)) {
+            return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+        } else if (obj.image1_url) {
+            return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
+        } else {
+            return defaultUrl;
+        }
+    };
+
    /**
     * gets deferred for fetching picture url
     *
@@ -402,6 +448,7 @@ define('io.ox/contacts/api',
             };
 
         // param empty/null
+        // och bitte klammern nutzen wenn ein ODER dabei ist - ist das jetzt genau so gewollt!?
         if (typeof obj === 'string' && obj === '' || typeof obj === 'object' && obj === null) {
             return deferred.resolve(defaultUrl);
         }
@@ -566,6 +613,7 @@ define('io.ox/contacts/api',
                     action: action || 'update',
                     id: o.id,
                     folder: o.folder_id || o.folder,
+                    timezone: 'UTC',
                     timestamp: o.timestamp || _.now() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
@@ -615,7 +663,8 @@ define('io.ox/contacts/api',
             start: now,
             end: now + 604800000, // now + WEEK
             action: 'birthdays',
-            columns: '1,20,500,501,502,503,504,505,511'
+            columns: '1,20,500,501,502,503,504,505,511',
+            timezone: 'UTC'
         }, options || {});
 
         return http.GET({
@@ -631,6 +680,24 @@ define('io.ox/contacts/api',
 
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
+    };
+
+    //for busy animation in detail View
+    //ask if this contact has attachments uploading at the moment
+    api.uploadInProgress = function (key) {
+        return uploadInProgress[key] || false;//return true boolean
+    };
+
+    //add contact to the list
+    api.addToUploadList = function (key) {
+        uploadInProgress[key] = true;
+    };
+
+    //remove contact from the list
+    api.removeFromUploadList = function (key) {
+        delete uploadInProgress[key];
+        //trigger refresh
+        api.trigger('update:' + key);
     };
 
     return api;

@@ -84,7 +84,7 @@ define('io.ox/core/pubsub/model',
                     return api.subscriptions.create(model.attributes);
                 },
                 read: function (model) {
-                    return api.subscriptions.get({id: model.id});
+                    return api.subscriptions.get({id: model.id, folder: model.get('folder')});
                 },
                 update: function (model) {
                     return api.subscriptions.update(model.attributes);
@@ -97,8 +97,9 @@ define('io.ox/core/pubsub/model',
         Publications = Backbone.Collection.extend({
             model: Publication,
             initialize: function () {
-                this.on('remove', function (model, collection, opt) {
-                    model.destroy();
+                var collection = this;
+                api.publications.on('refresh:all', function () {
+                    collection.fetch();
                 });
                 this.on('change:enabled', function (model, value, opt) {
                     model.collection.sort();
@@ -111,8 +112,20 @@ define('io.ox/core/pubsub/model',
                     _(res).each(function (obj) {
                         var pub = new Publication(obj);
                         pub.fetch().then(function (pub) {
+                            var model = collection.get(pub.id);
+                            if (model) {
+                                //TODO: most likely this can be removed, once backbone is uptodate
+                                //and collection.add triggers the events
+                                model.set(pub);
+                                model.trigger('change', model);
+                            }
                             return collection.add(pub);
                         });
+                    });
+                    collection.each(function (model) {
+                        if (_(res).where({id: model.id}).length === 0) {
+                            collection.remove(model);
+                        }
                     });
                     return collection;
                 });
@@ -138,8 +151,9 @@ define('io.ox/core/pubsub/model',
         Subscriptions = Backbone.Collection.extend({
             model: Subscription,
             initialize: function () {
-                this.on('remove', function (model, collection, opt) {
-                    model.destroy();
+                var collection = this;
+                api.subscriptions.on('refresh:all', function () {
+                    collection.fetch();
                 });
                 this.on('change:enabled', function (model, value, opt) {
                     model.collection.sort();
@@ -152,8 +166,18 @@ define('io.ox/core/pubsub/model',
                     _(res).each(function (obj) {
                         var sub = new Subscription(obj);
                         sub.fetch().then(function (sub) {
+                            var model = collection.get(sub.id);
+                            if (model) {
+                                model.set(sub);
+                                model.trigger('change', model);
+                            }
                             return collection.add(sub);
                         });
+                    });
+                    collection.each(function (model) {
+                        if (_(res).where({id: model.id}).length === 0) {
+                            collection.remove(model);
+                        }
                     });
                     return collection;
                 });
@@ -217,16 +241,16 @@ define('io.ox/core/pubsub/model',
         publications: function () {
             if (!publications) {
                 publications = new Publications();
-                publications.fetch();
             }
+            publications.fetch();
 
             return publications;
         },
         subscriptions: function () {
             if (!subscriptions) {
                 subscriptions = new Subscriptions();
-                subscriptions.fetch();
             }
+            subscriptions.fetch();
 
             return subscriptions;
         },

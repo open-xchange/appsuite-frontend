@@ -11,18 +11,47 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
+define.async('io.ox/office/tk/utils',
+    ['io.ox/office/tk/config',
+     'io.ox/core/gettext'
+    ], function (Config, gettext) {
 
     'use strict';
 
-    var // the ISO code of the language used by gettext
-        language = null,
+    var // the Deferred object that will be resolved with the Utils class
+        def = $.Deferred(),
+
+        // the CSS classes added to localized icons
+        localeIconClasses = null,
 
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
         LABEL_SELECTOR = 'span[data-role="label"]';
+
+    // private global functions ===============================================
+
+    /**
+     * Writes a message to the browser output console.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
+     *
+     * @param {String} [level='log']
+     *  The log level of the message. The string 'log' will create a
+     *  generic log message, the string 'info' will create an information,
+     *  the string 'warn' will create a warning message, and the string
+     *  'error' will create an error message.
+     */
+    function log(message, level) {
+        // check that the browser console supports the operation
+        if (_.isFunction(window.console[level])) {
+            window.console[level](message);
+        } else {
+            window.console.log(level.toUpperCase() + ': ' + message);
+        }
+    }
 
     // static class Utils =====================================================
 
@@ -35,6 +64,23 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * loops to break the iteration process immediately.
      */
     Utils.BREAK = {};
+
+    /**
+     * The full identifier of the current locale, with leading lower-case
+     * language identifier, and trailing upper-case country identifier,
+     * separated by an underscore character, e.g. 'en_US'.
+     */
+    Utils.LOCALE = '';
+
+    /**
+     * The lower-case language identifier of the current locale, e.g. 'en'.
+     */
+    Utils.LANGUAGE = '';
+
+    /**
+     * The upper-case country identifier of the current locale, e.g. 'US'.
+     */
+    Utils.COUNTRY = '';
 
     /**
      * CSS selector for button elements.
@@ -747,7 +793,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
+                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value) && !(value instanceof $)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -773,7 +819,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return options;
     };
 
-    // generic DOM helpers ----------------------------------------------------
+    // generic DOM/CSS helpers ------------------------------------------------
 
     /**
      * A jQuery selector that returns true if the DOM node bound to the 'this'
@@ -796,6 +842,28 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.getDomNode = function (node) {
         return (node instanceof $) ? node.get(0) : node;
+    };
+
+    /**
+     * Returns whether the passed node is a specific DOM element node.
+     *
+     * @param {Node|jQuery|Null|Undefined} node
+     *  The DOM node to be checked. May be null or undefined.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that can be used to check the passed node for a
+     *  specific type etc. The selector will be passed to the jQuery method
+     *  jQuery.is(). If this selector is a function, it will be called with the
+     *  DOM node bound to the symbol 'this'. See the jQuery API documentation
+     *  at http://api.jquery.com/is for details.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an element node that matches the passed
+     *  selector.
+     */
+    Utils.isElementNode = function (node, selector) {
+        if (!node) { return false; }
+        return (Utils.getDomNode(node).nodeType === 1) && (!selector || $(node).is(selector));
     };
 
     /**
@@ -879,6 +947,34 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.getElementAttributeAsInteger = function (node, name, def) {
         var attr = $(node).attr(name);
         return _.isString(attr) ? parseInt(attr, 10) : def;
+    };
+
+    /**
+     * Returns whether the passed CSS border position is oriented vertically
+     * (either 'top' or 'bottom').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'bottom'.
+     */
+    Utils.isVerticalPosition = function (position) {
+        return (position === 'top') || (position === 'bottom');
+    };
+
+    /**
+     * Returns whether the passed CSS border position is the leading side
+     * (either 'top' or 'left').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'left'.
+     */
+    Utils.isLeadingPosition = function (position) {
+        return (position === 'top') || (position === 'left');
     };
 
     /**
@@ -1889,9 +1985,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + language)
+        return $('<i>').addClass(icon + ' ' + localeIconClasses)
             .toggleClass('icon-white', white === true)
-            .toggleClass('retina', _.display.retina === true);
+            .toggleClass('retina', _.device('retina'));
     };
 
     /**
@@ -2105,14 +2201,22 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  button with the specified value has been found, deactivates all buttons
      *  and does not activate a button.
      *
+     * @param {Function} [equality=_.isEqual]
+     *  A comparison function that returns whether the specified value should
+     *  be considered being equal to the values of the buttons in the passed
+     *  button collection. If omitted, uses _.isEqual() which compares arrays
+     *  and objects deeply.
+     *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
      */
-    Utils.selectOptionButton = function (buttons, value) {
+    Utils.selectOptionButton = function (buttons, value, equality) {
 
-        var // find the button to be activated
+        var // the predicate function to use for comparison
+            equals = _.isFunction(equality) ? equality : _.isEqual,
+            // find the button to be activated
             button = (_.isUndefined(value) || _.isNull(value)) ? $() : buttons.filter(function () {
-                return _.isEqual(value, Utils.getControlValue($(this)));
+                return equals(value, Utils.getControlValue($(this)));
             });
 
         // remove highlighting from all buttons, highlight active button
@@ -2210,24 +2314,21 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         INSERT:         45,
         DELETE:         46,
 
-/* enable when needed
-        '0':            48,
-        '1':            49,
-        '2':            50,
-        '3':            51,
-        '4':            52,
-        '5':            53,
-        '6':            54,
-        '7':            55,
-        '8':            56,
-        '9':            57,
-*/
+        0:              48,
+        1:              49,
+        2:              50,
+        3:              51,
+        4:              52,
+        5:              53,
+        6:              54,
+        7:              55,
+        8:              56,
+        9:              57,
 
         MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
         MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
         MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
 
-/* enable when needed
         A:              65,
         B:              66,
         C:              67,
@@ -2254,12 +2355,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         X:              88,
         Y:              89,
         Z:              90,
-*/
+
         LEFT_WINDOWS:   91,
         RIGHT_WINDOWS:  92,
         SELECT:         93,
 
-/* enable when needed
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
         NUM_2:          98,
@@ -2270,7 +2370,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         NUM_7:          103,
         NUM_8:          104,
         NUM_9:          105,
-*/
+
         NUM_MULTIPLY:   106,
         NUM_PLUS:       107,
         NUM_MINUS:      109,
@@ -2315,71 +2415,67 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // console output =========================================================
 
-    Utils.MIN_LOG_LEVEL = 'log';
-
     /**
-     * Writes a message to the browser output console.
+     * Writes a log message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
      * @param {String} message
      *  The message text to be written to the console.
+     */
+    Utils.log = Config.isDebug() ? function (message) { log(message, 'log'); } : $.noop;
+
+    /**
+     * Writes an info message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
-     * @param {String} [level='log']
-     *  The log level of the message. The string 'log' will create a generic
-     *  log message, the string 'info' will create an information, the string
-     *  'warn' will create a warning message, and the string 'error' will
-     *  create an error message.
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.log = (function () {
-
-        var // supported log levels, sorted by severity
-            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
-
-        return function (message, level) {
-
-            // validate passed log level and get its index
-            level = LOG_LEVELS.contains(level) ? level : 'log';
-
-            // do not log if index is less than index of configured log level
-            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
-
-                // check that the browser console supports the operation
-                if (_.isFunction(window.console[level])) {
-                    window.console[level](message);
-                } else {
-                    window.console.log(level.toUpperCase() + ': ' + message);
-                }
-            }
-        };
-    }());
+    Utils.info = Config.isDebug() ? function (message) { log(message, 'info'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'info').
+     * Writes a warning message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.info = function (message) {
-        Utils.log(message, 'info');
-    };
+    Utils.warn = Config.isDebug() ? function (message) { log(message, 'warn'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'warn').
+     * Writes an error message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.warn = function (message) {
-        Utils.log(message, 'warn');
-    };
-
-    /**
-     * Shortcut for Utils.log(message, 'error').
-     */
-    Utils.error = function (message) {
-        Utils.log(message, 'error');
-    };
+    Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
 
     // global initialization ==================================================
 
-    // get current language
-    gettext.language.done(function (lang) { language = lang; });
+    // deferred initialization of class members according to current language
+    gettext.language.done(function (language) {
+
+        var // extract language and country identifier
+            matches = /^([a-z]+)(_([A-Z]+))?/.exec(language);
+
+        Utils.LOCALE = language;
+        if (_.isArray(matches)) {
+            Utils.LANGUAGE = matches[1] || '';
+            Utils.COUNTRY = matches[3] || '';
+        }
+
+        localeIconClasses = 'lc-' + language;
+        if ((Utils.LANGUAGE !== '') && (Utils.COUNTRY !== '')) {
+            localeIconClasses += ' lc-' + Utils.LANGUAGE;
+        }
+
+        // resolve the exported Deferred with the complete Utils class
+        def.resolve(Utils);
+    });
 
     // exports ================================================================
 
-    return Utils;
+    return def;
 
 });

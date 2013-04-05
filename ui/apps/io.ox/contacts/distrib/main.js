@@ -18,7 +18,7 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
      'io.ox/contacts/util',
-     'less!io.ox/contacts/distrib/style.css'
+     'less!io.ox/contacts/distrib/style.less'
      ], function (api, contactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
@@ -87,7 +87,7 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
-            return contactModel.factory.realm("edit").retain().get(obj).done(function (data) {
+            return contactModel.factory.realm("edit").retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
                 model = data;

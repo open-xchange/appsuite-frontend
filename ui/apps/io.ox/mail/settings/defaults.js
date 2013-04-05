@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
+define('io.ox/mail/settings/defaults', function () {
 
     'use strict';
 
@@ -25,11 +25,11 @@ define('io.ox/mail/settings/defaults', ['io.ox/mail/util'], function (util) {
             'forwardMessageAs': 'Inline',
             'messageFormat': 'html',
             'lineWrapAfter': '',
-            'defaultSendAddress': util.getInitialDefaultSender(),
-            'autoSafeDraftsAfter': false,
+            'defaultSendAddress': '',
+            'autoSaveDraftsAfter': false,
             'allowHtmlMessages': true,
             'allowHtmlImages': false,
-            'displayEmomticons': false,
+            'displayEmoticons': false,
             'isColorQuoted': false,
             'selectFirstMessage': true,
             'defaultSignature': false,

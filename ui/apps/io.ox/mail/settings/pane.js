@@ -27,10 +27,9 @@ define('io.ox/mail/settings/pane',
         staticStrings =  {
             TITLE_MAIL: gt('Mail'),
             TITLE_COMMON: gt('Common'),
-            PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails?'),
-            COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending?'),
-            COLLECT_CONTACTS_READING: gt('Automatically collect contacts in the folder "Collected addresses" while reading?'),
-            SELECT_FIRST_MAIL: gt('Automatically select first E-Mail'),
+            PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails'),
+            COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
+            COLLECT_CONTACTS_READING: gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
             USE_FIXED_WIDTH_FONT: gt('Use fixed-width font for text mails'),
             TITLE_COMPOSE: gt('Compose'),
             APPEND_VCARD: gt('Append vcard'),
@@ -45,7 +44,7 @@ define('io.ox/mail/settings/pane',
             LINEWRAP: gt('Line wrap when sending text mails after: '),
             CHARACTERS: gt(' characters'),
             DEFAULT_SENDER: gt('Default sender address:'),
-            AUTO_SAVE: gt('Auto-save Email drafts?'),
+            AUTO_SAVE: gt('Auto-save Email drafts'),
             TITLE_DISPLAY: gt('Display'),
             ALLOW_HTML: gt('Allow html formatted E-Mails'),
             BLOCK_PRE: gt('Block pre-loading of externally linked images'),
@@ -74,7 +73,15 @@ define('io.ox/mail/settings/pane',
         },
         render: function () {
             var self = this;
-            api.getAllSenderAddresses().done(function (addresses) {
+            /* TODO: only the default account (id: 0) can have multiple aliases for now
+             * all other accounts can only have one address (the primary address)
+             * So the option is only for the default account, for now. This should
+             * be changed in the future. If more (e.g. external) addresses are shown
+             * here, server _will_ respond with an error, when these are selected.
+             *
+             * THIS COMMENT IS IMPORTANT, DON’T REMOVE
+             */
+            api.getSenderAddresses(0).done(function (addresses) {
                 self.$el.empty().append(
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,

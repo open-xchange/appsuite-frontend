@@ -18,7 +18,7 @@ define('plugins/portal/recentfiles/register',
      'io.ox/core/date',
      'io.ox/core/config',
      'gettext!plugins/portal',
-     'less!plugins/portal/recentfiles/style.css'], function (ext, filesApi, userApi, date, config, gt) {
+     'less!plugins/portal/recentfiles/style.less'], function (ext, filesApi, userApi, date, config, gt) {
 
     'use strict';
 
@@ -112,6 +112,7 @@ define('plugins/portal/recentfiles/register',
         ext.point('io.ox/portal/widget/' + type + '/settings').extend({
             title: title,
             type: type,
+            unique: true,
             editable: false
         });
     });

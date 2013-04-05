@@ -99,6 +99,18 @@ define('io.ox/settings/accounts/settings/pane',
         });
 
 
+    /**
+     * Extension point for account settings detail view
+     *
+     * This extension point provides a list to manage accounts of the keyring.
+     *
+     * As an extension to basic extension points, accounts can implement a canAdd
+     * attribute of type {bool|function} to specify if the user is able to add new
+     * accounts of this type. If false, the user is able to view the account in the
+     * list and edit it, but it will be filtered from the dropdown menu of the add
+     * button.
+     *
+     */
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
         id: "accountssettings",
@@ -137,7 +149,11 @@ define('io.ox/settings/accounts/settings/pane',
                         // Enhance Add... options
                         $dropDown = this.$el.find('.dropdown-menu');
 
-                        _(api.submodules).each(function (submodule) {
+                        _(api.submodules).chain()
+                        .select(function (submodule) {
+                            return !submodule.canAdd || submodule.canAdd.apply(this);
+                        })
+                        .each(function (submodule) {
                             $dropDown.append(
                                 $('<li>').append(
                                     $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
@@ -154,7 +170,7 @@ define('io.ox/settings/accounts/settings/pane',
                                     })
                                 )
                             );
-                        });
+                        }).value();
 
                         return this;
                     },

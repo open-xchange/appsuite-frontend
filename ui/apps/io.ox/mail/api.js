@@ -277,6 +277,16 @@ define("io.ox/mail/api",
                 tracker.reset(response.data || response); // threadedAll || all
                 return response;
             },
+            listPost: function (data) {
+                _(data).map(function (obj) {
+                    if (tracker.isUnseen(obj)) {
+                        obj.flags = obj.flags & ~32;
+                    } else {
+                        obj.flags = obj.flags | 32;
+                    }
+                });
+                return data;
+            },
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 data.view = options.view;
@@ -367,7 +377,7 @@ define("io.ox/mail/api",
             order: options.order || 'desc',
             includeSent: !accountAPI.is('sent', options.folder),
             cache: false, // never use server cache
-            max: 500 // apply internal limit to build threads fast enough
+            max: options.max || 500 // apply internal limit to build threads fast enough
         });
         // use cache?
         var cid = api.cid(options);
@@ -660,6 +670,7 @@ define("io.ox/mail/api",
                     api.trigger('refresh.list');
                     update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                         reloadFolders(list);
+                        api.trigger('seen', list);//used by notification area
                     });
                 });
             });
@@ -669,6 +680,7 @@ define("io.ox/mail/api",
             api.trigger('refresh.list');
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                 reloadFolders(list);
+                api.trigger('seen', list);//used by notification area
             });
         });
     };
@@ -699,6 +711,7 @@ define("io.ox/mail/api",
                 })
                 .done(function () {
                     notifications.yell('success', 'Mail has been moved');
+                    api.trigger('move', list, targetFolderId);
                     folderAPI.reload(targetFolderId, list);
                 });
         });
@@ -878,6 +891,22 @@ define("io.ox/mail/api",
             deferred = handleSendTheGoodOldWay(data, form);
         }
 
+        deferred.then(function (result) {
+            //skip block if error returned
+            if (result.data) {
+                var base = _(result.data.split(api.separator)),
+                    id = base.last(),
+                    folder = base.without(id).join(api.separator);
+                api.get({ folder_id: folder, id: id }).then(function (mail) {
+                    $.when(api.caches.list.add(data), api.caches.get.add(data))
+                    .done(function () {
+                        api.trigger('refresh.list');
+                    });
+                });
+            }
+            return result;
+        });
+
         return deferred;
     };
 
@@ -927,7 +956,13 @@ define("io.ox/mail/api",
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        return http.FORM({ data: data, form: form, field: 'json_0', url: 'mail?action=new' });
+        return http.FORM({
+            module: 'mail',
+            action: 'new',
+            data: data,
+            form: form,
+            field: 'json_0'
+        });
     }
 
     api.saveAttachments = function (list, target) {
@@ -1030,17 +1065,15 @@ define("io.ox/mail/api",
         })
         .pipe(function (unseen) {
             var recent;
-            // found unseen mails?
-            if (unseen.length) {
-                // check most recent mail
-                recent = _(unseen).filter(function (obj) {
-                    return obj.received_date > lastUnseenMail;
-                });
-                if (recent.length > 0 && (recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'
-                    api.trigger('new-mail', recent);
+            // check most recent mail
+            recent = _(unseen).filter(function (obj) {
+                return obj.received_date > lastUnseenMail;
+            });
+            if ((recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'. Trigger even if no new mails are added to ensure read mails are removed
+                api.trigger('new-mail', recent, unseen);
+                if (recent.length > 0) {
                     lastUnseenMail = recent[0].received_date;
                 }
-                api.trigger('unseen-mail', unseen);
             }
             return {
                 unseen: unseen,

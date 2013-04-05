@@ -13,7 +13,7 @@
  */
 
 define('plugins/halo/view-detail',
-    ['plugins/halo/api', 'less!plugins/halo/style.css'], function (api) {
+    ['plugins/halo/api', 'less!plugins/halo/style.less'], function (api) {
 
     'use strict';
 

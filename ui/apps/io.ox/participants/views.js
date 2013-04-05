@@ -68,6 +68,8 @@ define("io.ox/participants/views",
 
         setDisplayName: function () {
             var text = this.model.getDisplayName();
+            //display name: 'email only' participant
+            text = text === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : text;
             this.nodes.$text.text(text);
         },
 

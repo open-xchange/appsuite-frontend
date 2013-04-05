@@ -25,9 +25,7 @@ $(window).load(function () {
         ox.base = ox.base + _.now();
     }
 
-    if (!ox.signin) {
-        require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
-    }
+    if (!ox.signin) require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
 
     // animations
     var DURATION = 250,
@@ -80,12 +78,19 @@ $(window).load(function () {
             e.preventDefault();
         });
     }
+    ox.uploadsEnabled = true;
 
-    // Disable attachments and uploads for specific clients
-    if (!_.browser.iOS) {
-        ox.uploadsEnabled = true;
+    // TODO
+    // clean this up and enhance _.device function. 'desktop' or 'tablet' are not reliable
+    // because they only look at the screen size
+    if (_.device('ios || android')) {
+        // Disable attachments and uploads for specific clients
+        ox.uploadsEnabled = false;
+        if (_.device('tablet && iOS >= 6')) {
+            // reenable if iPad with iOS 6
+            ox.uploadsEnabled = true;
+        }
     }
-
     // check for supported browser
     function isBrowserSupported() {
         var supp = false;
@@ -124,7 +129,7 @@ $(window).load(function () {
         // unbind
         $('#io-ox-login-form').off('submit');
         // free closures
-        cleanUp = fnChangeLanguage = changeLanguage = initialize = $.noop;
+        cleanUp = fnChangeLanguage = initialize = $.noop;
     };
 
     // searchfield fix
@@ -141,6 +146,10 @@ $(window).load(function () {
     // TODO: fix this; v11 support text-overflow
     if (_.browser.Firefox) {
         $('html').addClass('no-ellipsis');
+    }
+
+    if (_.device('iOS')) {
+        $('html').addClass('ios');
     }
 
     // be busy
@@ -167,19 +176,6 @@ $(window).load(function () {
         ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
     });
 
-    // clear persistent caches due to update?
-    // TODO: add indexedDB once it's getting used
-    if (Modernizr.localstorage) {
-        var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
-        if (ui.version !== ox.version) {
-            if (ox.debug === true) {
-                console.warn('clearing localStorage due to UI update');
-            }
-            localStorage.clear();
-            localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
-        }
-    }
-
     // detect if backend is down
     var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
@@ -204,12 +200,12 @@ $(window).load(function () {
 
     // teach require.js to use deferred objects
     var req = window.req = require;
-    require = function (deps, callback) {
+    require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
-            var def = $.Deferred().done(callback || $.noop);
+            var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
-            return def;
+            return def.promise();
         } else {
             // bypass
             return req.apply(this, arguments);
@@ -217,14 +213,7 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    require([
-        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
-        'themes', 'io.ox/core/settings'
-    ])
-    .done(function (http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
-
-        serverUp();
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
 
         gotoCore = function (viaAutoLogin) {
             if (ox.signin === true) {
@@ -245,7 +234,7 @@ $(window).load(function () {
                             .off('submit')
                             .attr('action', ox.apiRoot + '/redirect')
                             .removeAttr('target')
-                            .find('input[type=hidden][name=location]').val(ox.root + '/' + location /* _.url.get(location) */).end()
+                            .find('input[type=hidden][name=location]').val(ox.root + '/' + location).end()
                             .submit();
                     }
                 });
@@ -443,7 +432,8 @@ $(window).load(function () {
                     } else {
                         $("#io-ox-forgot-password").find("a").attr("href", ox.serverConfig.forgotPassword);
                     }
-
+                    // change language
+                    changeLanguage(ox.language);
                     // set success handler
                     loginSuccess = function () {
                         $('#io-ox-login-screen').fadeOut(DURATION, function () {
@@ -498,41 +488,55 @@ $(window).load(function () {
             });
         }
 
-        function getCachedServerConfig(configCache, cacheKey, def) {
+        function getCachedServerConfig(configCache, cacheKey, useFallback, def) {
             if (!configCache || !cacheKey) {
                 setFallbackConfig();
                 def.resolve();
                 return;
             }
-            configCache.get(cacheKey).done(function (data) {
-                if (data !== null) {
-                    updateServerConfig(data);
-                } else {
+            configCache.get(cacheKey).done(function (co) {
+                if (co !== null) {
+                    updateServerConfig(co.data);
+                    def.resolve();
+                } else if (useFallback) {
                     setFallbackConfig();
+                    def.resolve();
+                } else {
+                    def.reject();
                 }
-                def.resolve();
             });
         }
 
+        var configCache,
+            HOUR = 60000 * 60,
+            DAY = HOUR * 24;
+
         function fetchServerConfig(cacheKey) {
             var def = $.Deferred();
-            var configCache = new cache.SimpleCache(cacheKey, true);
             if (ox.online) {
-                http.GET({
-                    module: 'apps/manifests',
-                    params: { action: 'config' },
-                    appendSession: (cacheKey === 'userconfig')
-                })
-                .done(function (data) {
-                    configCache.add(cacheKey, data);
-                    updateServerConfig(data);
-                    def.resolve();
-                })
-                .fail(function () {
-                    getCachedServerConfig(configCache, cacheKey, def);
+                // check cache
+                configCache.get(cacheKey).done(function (co) {
+                    if (co !== null && co.timestamp > (_.now() - HOUR * 12)) {
+                        updateServerConfig(co.data);
+                        def.resolve();
+                    }
+                    // fetch fresh manifests
+                    http.GET({
+                        module: 'apps/manifests',
+                        params: { action: 'config' },
+                        appendSession: (cacheKey === 'userconfig')
+                    })
+                    .done(function (data) {
+                        configCache.add(cacheKey, { data: data, timestamp: _.now() });
+                        updateServerConfig(data);
+                        def.resolve();
+                    })
+                    .fail(function () {
+                        getCachedServerConfig(configCache, cacheKey, false, def);
+                    });
                 });
             } else {
-                getCachedServerConfig(configCache, cacheKey, def);
+                getCachedServerConfig(configCache, cacheKey, true, def);
             }
             return def;
         }
@@ -558,56 +562,101 @@ $(window).load(function () {
                 return manifests.manager.loadPluginsFor('core');
             }
 
-            var useAutoLogin = capabilities.has('autologin') && ox.online, initialized;
+            function gotoSignin() {
+                var ref = (location.hash || '').replace(/^#/, '');
+                _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+            }
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
-                    initialize();
+                    fetchGeneralServerConfig().then(
+                        function success() {
+                            // now we're sure the server is up
+                            serverUp();
+                            // set page title now
+                            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            themes.set(ox.serverConfig.signinTheme || 'login');
+                            // continue
+                            initialize();
+                        },
+                        function fail() {
+                            // nope, had some stuff in the caches but server is down
+                            serverDown();
+                        }
+                    );
                 } else {
-                    var ref = (location.hash || '').replace(/^#/, '');
-                    _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+                    gotoSignin();
                 }
             }
+
             // got session via hash?
             if (_.url.hash('session')) {
 
-                ox.session = _.url.hash('session');
-                ox.user = _.url.hash('user');
-                ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
-                ox.language = _.url.hash('language');
+                // set store cookie?
+                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
 
-                if (_.url.hash('store') === 'true') {
-                    session.store();
-                }
+                    var ref = _.url.hash('ref');
+                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
+                    _.url.redirect(ref ? ref : '#');
 
-                // cleanup login params
-                _.url.hash({'session': null, 'user': null, 'user_id': null, 'language': null, 'store': null});
+                    configCache = new cache.SimpleCache('manifests', true);
 
-                var ref = _.url.hash('ref');
-                ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                _.url.redirect(ref ? ref : '#');
-
-                fetchUserSpecificServerConfig().done(function () {
-                    loadCoreFiles().done(function () {
-                        loadCore();
+                    // fetch user config (need session now)
+                    var hash = _.url.hash();
+                    ox.session = hash.session;
+                    fetchUserSpecificServerConfig().done(function () {
+                        serverUp();
+                        // store login data (cause we have all valid languages now)
+                        session.set({
+                            locale: hash.language,
+                            session: hash.session,
+                            user: hash.user,
+                            user_id: parseInt(hash.user_id || '0', 10)
+                        });
+                        // cleanup url
+                        _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
+                        // go ...
+                        loadCoreFiles().done(function () {
+                            loadCore();
+                        });
                     });
                 });
 
+            } else if (!ox.online) {
+
+                // not online - no auto-login possible
+                gotoSignin();
+
             } else {
+
                 // try auto login!?
-                (useAutoLogin ? session.autoLogin() : $.when())
-                .done(function () {
-                    if (useAutoLogin) {
-                        fetchUserSpecificServerConfig().done(function () {
-                            loadCoreFiles().done(function () { gotoCore(true); });
-                        });
-                    } else {
+                session.autoLogin()
+                .always(function () {
+                    // init manifest cache now (have ox.user now)
+                    configCache = new cache.SimpleCache('manifests', true);
+                })
+                .then(
+                    function loginSuccess(data) {
+                        // now we're sure the server is up
+                        serverUp();
+                        // are we on login page?
+                        if (ox.signin) {
+                            gotoCore(true)
+                        } else {
+                            fetchUserSpecificServerConfig().done(function () {
+                                // apply session data (again) & page title
+                                session.set(data);
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                loadCoreFiles().done(function () {
+                                    loadCore();
+                                });
+                            });
+                        }
+                    },
+                    function loginFailed() {
                         continueWithoutAutoLogin();
                     }
-                })
-                .fail(function () {
-                    continueWithoutAutoLogin();
-                });
+                );
             }
         };
 
@@ -689,7 +738,10 @@ $(window).load(function () {
             } else {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
-
+            // set username input type to text in IE
+            if (_.device('IE > 9')) {
+                $('#io-ox-login-username').attr({type: 'text'});
+            }
             return $.when(
                     // load extensions
                     manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
@@ -727,7 +779,7 @@ $(window).load(function () {
                         feedback('info', $(
                             '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
                         ));
-                    } else if (_.device('android || ios')) {
+                    } else if (_.device('android || (ios && small)')) {
                         // TODO remove after 7.4
                         // inform about preview mode for 7.2
                         feedback('info', gt('mobile-preview'));
@@ -741,22 +793,22 @@ $(window).load(function () {
         };
 
         appCache.done(function () {
-            fetchGeneralServerConfig().done(function () {
-                // set page title now
-                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
-                if (ox.signin) {
-                    themes.set(ox.serverConfig.signinTheme || 'login');
-                }
-                // continue
-                autoLogin();
-            });
+            // try auto login first
+            autoLogin();
         });
-    })
-    .fail(function () {
-        console.error('Server down', this, arguments);
-        serverDown();
-    });
+    }
 
+    function loadFail(e) {
+        console.error('Server down', e.message, e);
+        serverDown();
+    }
+
+    require([
+        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
+        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
+        'themes', 'io.ox/core/settings'],
+        loadSuccess, loadFail
+    );
 
     // reload if files have change; need this during development
     if (Modernizr.applicationcache && _.browser.webkit && ox.debug) {

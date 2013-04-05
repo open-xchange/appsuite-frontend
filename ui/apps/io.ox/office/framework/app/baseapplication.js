@@ -148,10 +148,10 @@ define('io.ox/office/framework/app/baseapplication',
      * - 'docs:import:error': Directly after the event 'docs:import:after',
      *      if an error occurred while importing the document described in the
      *      file descriptor.
-     * - 'docs:quit': Before the application will be really closed, after all
-     *      registered before-quit handlers have been called, and none was
-     *      rejected, after all registered quit handlers have been called, and
-     *      before the application will finally be destroyed.
+     * - 'docs:destroy:before': Before the model/view/controller instances of
+     *      the application will be destroyed, after all registered before-quit
+     *      handlers have been called, and none was rejected, after all
+     *      registered quit handlers have been called.
      * - 'docs:resume': After all registered before-quit handlers have been
      *      called, and at least one was rejected. The application continues to
      *      run normally.
@@ -269,7 +269,10 @@ define('io.ox/office/framework/app/baseapplication',
             delayTimeouts = [],
 
             // Deferred object used to lock execution of debounced methods
-            debouncedLock = null;
+            debouncedLock = null,
+
+            // has the document been renamed
+            renamed = false;
 
         // private methods ----------------------------------------------------
 
@@ -449,7 +452,10 @@ define('io.ox/office/framework/app/baseapplication',
                 id: file.id,
                 folder_id: file.folder_id,
                 filename: file.filename,
-                version: file.version
+                version: file.version,
+                mail_folder_id: file.data && file.data.mail ? file.data.mail.folder_id : null,
+                mail_id: file.data && file.data.mail ? file.data.mail.id : null,
+                attachment_id: file.data ? file.data.id : null
             } : null;
         };
 
@@ -526,10 +532,20 @@ define('io.ox/office/framework/app/baseapplication',
             return imported;
         };
 
+        /**
+         * Return whether the document has been renamed.
+         *
+         * @returns {Boolean}
+         *  Whether the document has been renamed.
+         */
+        this.isRenamed = function () {
+            return renamed;
+        };
+
         // server requests ----------------------------------------------------
 
         /**
-         * Sends a request to the server and returns the promise of a Deferred
+         * Sends a request to the server and returns the Promise of a Deferred
          * object waiting for the response. The unique identifier of this
          * application will be added to the request parameters automatically.
          * See method IO.sendRequest() for further details.
@@ -537,8 +553,9 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
          *
-         * @returns
-         *  The promise of the request.
+         * @returns {jQuery.Promise}
+         *  The Promise of the request. See method IO.sendRequest() for
+         *  details.
          */
         this.sendRequest = function (options) {
 
@@ -554,21 +571,24 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Sends a request to the document filter module on the server and
-         * returns the promise of a Deferred object waiting for the response.
-         * The module name, the unique identifier of this application, and the
-         * parameters of the file currently opened by the application will be
-         * added to the request parameters automatically. See method
-         * IO.sendRequest() for further details.
+         * Sends a request to the server and returns the Promise of a Deferred
+         * object waiting for the response. The unique identifier of this
+         * application, and the parameters of the file currently opened by the
+         * application will be added to the request parameters automatically.
+         * See method IO.sendRequest() for further details.
+         *
+         * @param {String} module
+         *  The name of the server module.
          *
          * @param {Object} options
          *  Additional options. See method IO.sendRequest() for details.
          *
-         * @returns
-         *  The promise of the request. Will be rejected immediately, if this
-         *  application is not connected to a document file.
+         * @returns {jQuery.Promise}
+         *  The Promise of the request. Will be rejected immediately, if this
+         *  application is not connected to a document file. See method
+         *  IO.sendRequest() for details.
          */
-        this.sendFilterRequest = function (options) {
+        this.sendFileRequest = function (module, options) {
 
             // reject immediately if no file is present
             if (!this.hasFileDescriptor()) {
@@ -577,7 +597,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // build default options, and add the passed options
             options = Utils.extendOptions({
-                module: BaseApplication.FILTER_MODULE_NAME,
+                module: module,
                 params: this.getFileParameters()
             }, options);
 
@@ -586,42 +606,54 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Sends a request to the document converter module on the server and
-         * returns the promise of a Deferred object waiting for the response.
-         * The module name, the unique identifier of this application, and the
-         * parameters of the file currently opened by the application will be
-         * added to the request parameters automatically. See method
-         * IO.sendRequest() for further details.
-         *
-         * @param {Object} options
-         *  Additional options. See method IO.sendRequest() for details.
-         *
-         * @returns
-         *  The promise of the request. Will be rejected immediately, if this
-         *  application is not connected to a document file.
+         * Sends a request to the document filter server module. See method
+         * BaseApplication.sendFileRequest() for further details.
+         */
+        this.sendFilterRequest = function (options) {
+            return this.sendFileRequest(BaseApplication.FILTER_MODULE_NAME, options);
+        };
+
+        /**
+         * Sends a request to the document converter server module. See method
+         * BaseApplication.sendFileRequest() for further details.
          */
         this.sendConverterRequest = function (options) {
+            return this.sendFileRequest(BaseApplication.CONVERTER_MODULE_NAME, options);
+        };
 
-            // reject immediately if no file is present
-            if (!this.hasFileDescriptor()) {
-                return $.Deferred().reject();
+        /**
+         * Creates and returns the URL of a server request.
+         *
+         * @param {String} module
+         *  The name of the server module.
+         *
+         * @param {Object} [options]
+         *  Additional parameters inserted into the URL.
+         *
+         * @returns {String|Undefined}
+         *  The final URL of the server request; or undefined, if the
+         *  application is not connected to a document file, or the current
+         *  session is invalid.
+         */
+        this.getServerModuleUrl = function (module, options) {
+
+            // return nothing if no file is present
+            if (!ox.session || !this.hasFileDescriptor()) {
+                return;
             }
 
-            // build default options, and add the passed options
-            options = Utils.extendOptions({
-                module: BaseApplication.CONVERTER_MODULE_NAME,
-                params: this.getFileParameters()
-            }, options);
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, this.getFileParameters(), options);
 
-            // send the request
-            return this.sendRequest(options);
+            // build and return the resulting URL
+            return ox.apiRoot + '/' + module + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
 
         /**
          * Creates and returns the URL of server requests used to convert a
          * document file with the document filter module.
          *
-         * @param {Object} [params]
+         * @param {Object} [options]
          *  Additional parameters inserted into the URL.
          *
          * @returns {String|Undefined}
@@ -630,18 +662,23 @@ define('io.ox/office/framework/app/baseapplication',
          *  or the current session is invalid.
          */
         this.getFilterModuleUrl = function (options) {
+            return this.getServerModuleUrl(BaseApplication.FILTER_MODULE_NAME, options);
+        };
 
-            // return nothing if no file is present
-            if (!ox.session || !this.hasFileDescriptor()) {
-                return;
-            }
-
-            // build a default options map, and add the passed options
-            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, options);
-            options = Utils.extendOptions(this.getFileParameters(), options);
-
-            // build and return the resulting URL
-            return ox.apiRoot + '/' + BaseApplication.FILTER_MODULE_NAME + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+        /**
+         * Creates and returns the URL of server requests used to convert a
+         * document file with the document converter module.
+         *
+         * @param {Object} [options]
+         *  Additional parameters inserted into the URL.
+         *
+         * @returns {String|Undefined}
+         *  The final URL of the request to the document converter module; or
+         *  undefined, if the application is not connected to a document file,
+         *  or the current session is invalid.
+         */
+        this.getConverterModuleUrl = function (options) {
+            return this.getServerModuleUrl(BaseApplication.CONVERTER_MODULE_NAME, options);
         };
 
         // application setup --------------------------------------------------
@@ -755,40 +792,11 @@ define('io.ox/office/framework/app/baseapplication',
             // bind event handler to events
             $(target).on(events, handler);
 
-            // unbind handler when application is closed
-            this.on('docs:quit', function () {
+            // unbind event handler when application is closed
+            this.on('quit', function () {
                 $(target).off(events, handler);
             });
 
-            return this;
-        };
-
-        /**
-         * Registers a handler at the browser window that listens to resize
-         * events. The event handler will be activated when the application
-         * window is visible; and deactivated, when the application window is
-         * hidden.
-         * @param {String} event
-         *  The document event that the handler should be registered for.
-         *
-         * @param {Function} documentHandler
-         *  The document handler function bound to  events of the browser
-         *  document. Will be triggered once when the application window becomes
-         *  visible.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.registerDocumentHandler = function (event, documentHandler) {
-            this.getWindow().on({
-                show: function () {
-                    $(document).on(event, documentHandler);
-                    documentHandler();
-                },
-                hide: function () {
-                    $(document).off(event, documentHandler);
-                }
-            });
             return this;
         };
 
@@ -1014,10 +1022,20 @@ define('io.ox/office/framework/app/baseapplication',
          *  of the current script.
          *
          * @param {Object} [options]
-         *  A map with options controlling the behavior of the created
-         *  debounced method. Supports all options of the method
-         *  BaseApplication.executeDelayed(). Especially, repeated execution
-         *  of the deferred callback function is supported.
+         *  A map with options controlling the behavior of the debounced method
+         *  created by this method. Supports all options also supported by the
+         *  method BaseApplication.executeDelayed(). Especially, delayed and
+         *  repeated execution of the deferred callback function is supported.
+         *  Note that the delay time will restart after each call of the
+         *  debounced method, causing the execution of the deferred callback to
+         *  be postponed until the debounced method has not been called again
+         *  during the delay (this is the behavior of the _.debounce() method).
+         *  Additionally, supports the following options:
+         *  @param {Number} [options.maxDelay]
+         *      If specified, a delay time used as a hard limit to execute the
+         *      deferred callback after the first call of the debounced method,
+         *      even if it has been called repeatedly afterwards and the normal
+         *      delay time is still running.
          *
          * @returns {Function}
          *  The debounced method that can be called multiple times, and that
@@ -1027,39 +1045,71 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // the current timer used to execute the callback
-                timer = null,
+            var // whether to not restart the timer on repeated calls with delay time
+                maxDelay = Utils.getIntegerOption(options, 'maxDelay', 0),
+                // the current timer used to execute the callback
+                debounceTimer = null,
+                // timer used for the maxDelay option
+                maxTimer = null,
+                // first call in this stack frame
+                firstCall = true,
                 // whether execution of the deferred callback function has been postponed already
                 postponed = false;
 
-            // creates a timeout that executes the callback, if not already done
-            function createTimeout() {
+            // callback for a delay timer, executing the deferred callback
+            function timerCallback() {
+
+                // postpone execution if debounced methods are currently locked
+                if (debouncedLock) {
+                    postponed = true;
+                    debouncedLock.done(createTimers);
+                    return;
+                }
+
+                // execute the callback and return its result (for repeated execution)
+                postponed = false;
+                return deferredCallback();
+            }
+
+            // aborts and clears all timers
+            function clearTimers() {
+                if (debounceTimer) { debounceTimer.abort(); }
+                if (maxTimer) { maxTimer.abort(); }
+                debounceTimer = maxTimer = null;
+                firstCall = true;
+            }
+
+            // creates the timers that execute the deferred callback
+            function createTimers() {
+
+                // abort running timer on first call
+                if (firstCall && debounceTimer) {
+                    debounceTimer.abort();
+                    debounceTimer = null;
+                }
 
                 // create a new timeout executing the callback function
-                timer = self.executeDelayed(function () {
+                if (!debounceTimer) {
+                    debounceTimer = self.executeDelayed(timerCallback, options).always(clearTimers);
+                }
 
-                    // postpone execution if debounced methods are currently locked
-                    if (debouncedLock) {
-                        postponed = true;
-                        debouncedLock.done(createTimeout);
-                        return;
-                    }
+                // reset the first-call flag, but set it back in a direct
+                // timeout, this helps to prevent recreation of the browser
+                // timeout on every call of the debounced method
+                firstCall = false;
+                _.defer(function () { firstCall = true; });
 
-                    // execute the callback and return its result (for repeated execution)
-                    postponed = false;
-                    return deferredCallback();
-
-                }, options);
-
-                // reset timer reference after execution
-                timer.always(function () { timer = null; });
+                // on first call, create a timer for the maximum delay
+                if (!maxTimer && (maxDelay > 0)) {
+                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).always(clearTimers);
+                }
             }
 
             // create and return the debounced method
             return function () {
 
-                // create a timeout executing the callback function
-                if (!timer && !postponed) { createTimeout(); }
+                // create a new timeout executing the callback function
+                if (!postponed) { createTimers(); }
 
                 // call the direct callback with the passed arguments
                 return directCallback.apply(undefined, _.toArray(arguments));
@@ -1127,6 +1177,7 @@ define('io.ox/office/framework/app/baseapplication',
                 })
                 .then(function (fileName) {
                     file.filename = fileName;
+                    renamed = true;
                     // TODO: what if filter request succeeds, but Files API fails?
                     return FilesAPI.propagate('change', file);
                 });
@@ -1149,8 +1200,12 @@ define('io.ox/office/framework/app/baseapplication',
             var // create the new restore point with basic information
                 restorePoint = {
                     module: this.getName(),
-                    point: { file: file }
+                    point: { file: _.clone(file) }
                 };
+
+            // OX Files inserts reference to application object into file descriptor,
+            // remove it to be able to serialize without cyclic references
+            delete restorePoint.point.file.app;
 
             // call all fail-save handlers and add their data to the restore point
             _(failSaveHandlers).each(function (failSaveHandler) {
@@ -1285,23 +1340,16 @@ define('io.ox/office/framework/app/baseapplication',
             callHandlers(beforeQuitHandlers)
             .done(function () {
 
-                // cancel all running timeouts
-                _(delayTimeouts).each(function (timeout) {
-                    window.clearTimeout(timeout);
-                });
-
                 // execute quit handlers, simply defer without caring about the result
                 callHandlers(quitHandlers)
                 .always(function () {
 
-                    // OX application does not trigger 'quit' events
-                    self.trigger('docs:quit');
-
-                    // destroy class members
-                    controller.destroy();
-                    view.destroy();
-                    model.destroy();
-                    model = view = controller = delayTimeouts = null;
+                    // cancel all running timeouts
+                    _(delayTimeouts).each(function (timeout) {
+                        window.clearTimeout(timeout);
+                    });
+                    // prevent to start new timeouts
+                    delayTimeouts = null;
 
                     // always resolve (really close the application), regardless
                     // of the result of the quit handlers
@@ -1319,6 +1367,16 @@ define('io.ox/office/framework/app/baseapplication',
         // prevent usage of these methods in derived classes
         delete this.setLauncher;
         delete this.setQuit;
+
+        // destroy MVC instances after core 'quit' event (after window has been hidden)
+        this.on('quit', function () {
+            // trigger listeners before destroying the MVC instances
+            self.trigger('docs:destroy:before');
+            controller.destroy();
+            view.destroy();
+            model.destroy();
+            model = view = controller = null;
+        });
 
         // set application title to current file name
         this.updateTitle();

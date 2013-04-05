@@ -181,7 +181,6 @@ define("io.ox/participants/model",
                 var duplicates = [];
                 self.each(function (p, index) {
                     if (idMap[p.id]) {
-                        console.log('DUPLICATE', p.id);
                         duplicates.push(p);
                     } else {
                         idMap[p.id] = true;

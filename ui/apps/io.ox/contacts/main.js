@@ -25,7 +25,7 @@ define("io.ox/contacts/main",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
-     "less!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.less"
     ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings) {
 
     "use strict";
@@ -74,7 +74,7 @@ define("io.ox/contacts/main",
         commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         // grid
-        grid = new VGrid(gridContainer);
+        grid = new VGrid(gridContainer, {settings: settings});
 
         // add template
         grid.addTemplate({
@@ -120,7 +120,7 @@ define("io.ox/contacts/main",
         ext.point('io.ox/contacts/getLabel').each(function (extension) {
             if (extension.getLabel) getLabel = extension.getLabel;
         });
-        
+
         // add label template
         grid.addLabelTemplate({
             build: function () {
@@ -156,6 +156,11 @@ define("io.ox/contacts/main",
             }
         };
 
+        showContact.cancel = function () {
+            _.lfo(drawContact);
+            _.lfo(drawFail);
+        };
+
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
             right.idle().empty().append(viewDetail.draw(baton));
@@ -183,7 +188,7 @@ define("io.ox/contacts/main",
                 return new Thumb(opt);
             }
         }
-        
+
         Thumb.prototype.draw = function (baton) {
             var node = $('<div>')
                 .addClass('thumb-index border-bottom')
@@ -195,19 +200,19 @@ define("io.ox/contacts/main",
             }
             return node;
         };
-        
+
         Thumb.prototype.enabled = function (baton) {
             return this.text in baton.labels;
         };
-        
+
         // draw thumb index
         var baton = new ext.Baton({ app: app, data: [], Thumb: Thumb });
-        
+
         grid.on('change:ids', function () {
             ext.point('io.ox/contacts/thumbIndex')
                 .invoke('draw', thumbs, baton);
         });
-        
+
         ext.point('io.ox/contacts/thumbIndex').extend({
             index: 100,
             id: 'draw',
@@ -217,7 +222,7 @@ define("io.ox/contacts/main",
                 // update thumb list
                 ext.point('io.ox/contacts/thumbIndex')
                     .invoke('getIndex', thumbs, baton);
-                
+
                 thumbs.empty();
                 _(baton.data).each(function (thumb) {
                     thumbs.append(thumb.draw(baton));
@@ -227,7 +232,7 @@ define("io.ox/contacts/main",
                 baton.data = _.map(fullIndex, baton.Thumb);
             }
         });
-        
+
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

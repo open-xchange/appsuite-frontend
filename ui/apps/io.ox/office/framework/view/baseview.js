@@ -16,14 +16,14 @@ define('io.ox/office/framework/view/baseview',
      'io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/framework/view/basestyle.css',
+     'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
     ], function (Events, Utils, Pane, gt) {
 
     'use strict';
 
-    var // CSS marker class for panes in overlay mode
-        OVERLAY_CLASS = 'overlay';
+    var // the global root element used to store DOM elements temporarily
+        tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
 
     // class BaseView =========================================================
 
@@ -62,6 +62,9 @@ define('io.ox/office/framework/view/baseview',
         var // self reference
             self = this,
 
+            // CSS classes to be added at the window root node
+            windowNodeClasses = 'io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main',
+
             // moves the browser focus into a node of the application pane
             grabFocusHandler = Utils.getFunctionOption(options, 'grabFocusHandler'),
 
@@ -77,17 +80,14 @@ define('io.ox/office/framework/view/baseview',
             // all overlay view panes, in insertion order
             overlayPanes = [],
 
-            // all view panes, mapped by identifier
-            panesById = {},
-
             // inner shadows for application pane
             shadowNodes = {},
 
             // alert banner currently shown
             currentAlert = null,
 
-            // timeout for current alert auto-close
-            currentAlertTimeout = null;
+            // the temporary container for all nodes while application is hidden
+            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode);
 
         // base constructor ---------------------------------------------------
 
@@ -96,38 +96,35 @@ define('io.ox/office/framework/view/baseview',
 
         // private methods ----------------------------------------------------
 
-        function isHorizontalPosition(position) {
-            return (position === 'top') || (position === 'bottom');
-        }
-
-        function isLeadingPosition(position) {
-            return (position === 'top') || (position === 'left');
-        }
-
         /**
          * Adjusts the positions of all view pane nodes.
          */
         function refreshPaneLayout() {
 
-            var // current offsets representing available space in the application window
-                offsets = { top: 0, bottom: 0, left: 0, right: 0 };
+            var // the root node of the application pane
+                appPaneNode = appPane.getNode(),
+                // current offsets representing available space in the application window
+                offsets = { top: 0, bottom: 0, left: 0, right: 0 },
+                // margin for the alert banner, to keep a maximum width
+                alertMargin = 0;
 
-            function updatePaneNode(paneNode) {
+            function updatePane(pane) {
 
-                var position = paneNode.data('pane-pos'),
-                    horizontal = isHorizontalPosition(position),
-                    leading = isLeadingPosition(position),
-                    visible = paneNode.css('display') !== 'none',
-                    sizeFunc = _.bind(horizontal ? paneNode.outerHeight : paneNode.outerWidth, paneNode),
-                    transparent = visible && paneNode.hasClass(OVERLAY_CLASS) && (sizeFunc() === 0),
-                    sizeAttr = horizontal ? 'height' : 'width',
+                var paneNode = pane.getNode(),
+                    visible = pane.isVisible(),
+                    transparent = pane.isTransparent(),
+                    position = pane.getPosition(),
+                    vertical = Utils.isVerticalPosition(position),
+                    leading = Utils.isLeadingPosition(position),
+                    sizeFunc = _.bind(vertical ? paneNode.outerHeight : paneNode.outerWidth, paneNode),
+                    sizeAttr = vertical ? 'height' : 'width',
                     paneOffsets = _.clone(offsets);
 
                 // remove the position attribute at the opposite border of the pane position
-                paneOffsets[horizontal ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
+                paneOffsets[vertical ? (leading ? 'bottom' : 'top') : (leading ? 'right' : 'left')] = '';
 
                 // transparent overlay panes: temporarily set to auto size, adjust position of trailing panes
-                if (transparent) {
+                if (visible && transparent) {
                     paneNode.css(sizeAttr, 'auto');
                     if (!leading) {
                         paneOffsets[position] += sizeFunc();
@@ -141,45 +138,65 @@ define('io.ox/office/framework/view/baseview',
                 }
 
                 // transparent overlay panes: set zero size
-                if (transparent) {
+                if (visible && transparent) {
                     paneNode.css(sizeAttr, 0);
                 }
             }
 
-            // update fixed view panes and fixed alert banner
-            _(fixedPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
-            if (currentAlert && !currentAlert.hasClass(OVERLAY_CLASS)) {
-                updatePaneNode(currentAlert);
-            }
+            // update fixed view panes
+            _(fixedPanes).each(updatePane);
 
             // update the application pane and the shadow nodes (jQuery interprets numbers as pixels automatically)
-            appPane.getNode().css(offsets);
+            appPaneNode.css(offsets);
             shadowNodes.top.css({ top: offsets.top - 10, height: 10, left: offsets.left, right: offsets.right });
             shadowNodes.bottom.css({ bottom: offsets.bottom - 10, height: 10, left: offsets.left, right: offsets.right });
             shadowNodes.left.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
             shadowNodes.right.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
 
             // skip scroll bars of application pane for overlay panes
-            if (Utils.hasVerticalScrollBar(self.getAppPaneNode())) {
+            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-x'))) {
                 offsets.right += Utils.SCROLLBAR_WIDTH;
             }
-            if (Utils.hasHorizontalScrollBar(self.getAppPaneNode())) {
+            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-y'))) {
                 offsets.bottom += Utils.SCROLLBAR_HEIGHT;
             }
 
-            // update overlay alert banner and overlay view panes
-            if (currentAlert && currentAlert.hasClass(OVERLAY_CLASS)) {
-                updatePaneNode(currentAlert);
+            // update alert banner
+            if (_.isObject(currentAlert)) {
+                if (app.getWindowNode().width() <= 640) {
+                    alertMargin = Math.max((app.getWindowNode().width() - 500) / 2, 10);
+                    // TODO: get size of existing overlay panes at top border
+                    currentAlert.css({ top: offsets.top + 56, left: alertMargin, right: alertMargin });
+                } else {
+                    alertMargin = Math.max((appPaneNode.width() - 500) / 2, 10);
+                    currentAlert.css({ top: offsets.top + 10, left: offsets.left + alertMargin, right: offsets.right + alertMargin });
+                }
             }
-            _(overlayPanes).each(function (pane) { updatePaneNode(pane.getNode()); });
+
+            // update overlay view panes
+            _(overlayPanes).each(updatePane);
         }
 
         /**
          * Updates the view after the application becomes active/visible.
          */
         function windowShowHandler() {
-            app.getController().update();
-            self.grabFocus();
+            // move all application nodes from temporary storage into view
+            app.getWindowNode().append(tempNode.children());
+            // do not update GUI and grab focus while document is still being imported
+            if (app.isImportFinished()) {
+                app.getController().update();
+                self.grabFocus();
+            }
+        }
+
+        /**
+         * Updates the view after the application becomes inactive/hidden.
+         */
+        function windowHideHandler() {
+            // move all application nodes from view to temporary storage
+            tempNode.append(app.getWindowNode().children());
+            refreshPaneLayout();
         }
 
         // methods ------------------------------------------------------------
@@ -221,7 +238,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.detachAppPane = function () {
-            this.getAppPaneNode().detach();
+            appContainerNode.detach();
             return this;
         };
 
@@ -232,7 +249,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            app.getWindowNode().prepend(this.getAppPaneNode());
+            this.getAppPaneNode().append(appContainerNode);
             return this;
         };
 
@@ -254,175 +271,47 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
+         * Inserts new DOM nodes into the private storage container. The nodes
+         * will not be visible but will be part of the living DOM, thus it will
+         * be possible to access and modify the geometry of the nodes.
+         *
+         * @param {HTMLElement|jQuery}
+         *  The DOM node(s) to be inserted into the private storage container.
+         *  If this object is a jQuery collection, inserts all contained DOM
+         *  nodes into the container.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.insertTemporaryNode = function (node) {
+            tempStorageNode.append(node);
+            return this;
+        };
+
+        /**
          * Adds the passed view pane instance into this view.
          *
          * @param {Pane} pane
          *  The view pane instance to be inserted into this view.
          *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the appearance of the view pane. The
-         *  following options are supported:
-         *  @param {Boolean} [options.overlay=false]
-         *      If set to true, the pane will float over the other panes and
-         *      application contents instead of reserving and consuming the
-         *      space needed for its size.
-         *  @param {Boolean} [options.transparent=false]
-         *      If set to true, the background of an overlay pane will be
-         *      transparent. Has no effect if the pane is not in overlay mode.
-         *  @param {Boolean} [options.hoverEffect=false]
-         *      If set to true, the view components in a transparent overlay
-         *      view pane will be displayed half-transparent as long as the
-         *      mouse does not hover the view component. Has no effect if the
-         *      pane is not in transparent overlay mode.
-         *
          * @returns {BaseView}
          *  A reference to this instance.
          */
-        this.addPane = function (pane, position, options) {
+        this.addPane = function (pane) {
 
-            var // overlay pane or fixed pane
-                overlay = Utils.getBooleanOption(options, 'overlay', false),
-                // the root node of the view pane
-                paneNode = pane.getNode();
+            var // callback to be executed after the pane node is inside the DOM
+                insertHandler = Utils.getFunctionOption(pane.getOptions(), 'insertHandler');
 
             // insert the pane
-            panesById[pane.getIdentifier()] = pane;
-            (overlay ? overlayPanes : fixedPanes).push(pane);
-            app.getWindowNode().append(paneNode);
+            (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
+            app.getWindowNode().append(pane.getNode());
 
-            // overlay mode and position
-            paneNode.toggleClass(OVERLAY_CLASS, overlay);
-            if (overlay && Utils.getBooleanOption(options, 'transparent', false)) {
-                paneNode[isHorizontalPosition(position) ? 'height' : 'width'](0);
-                // additional CSS classes
-                paneNode.toggleClass('hover-effect', Utils.getBooleanOption(options, 'hoverEffect', false));
+            // refresh overall layout, call insert handler
+            refreshPaneLayout();
+            if (_.isFunction(insertHandler)) {
+                insertHandler.call(pane);
             }
-            return this.setPanePosition(pane.getIdentifier(), position);
-        };
 
-        /**
-         * Creates a new view pane instance in this view.
-         *
-         * @param {String} id
-         *  The unique identifier of the new view pane.
-         *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new view pane.
-         *  Supports all options supported by the Pane class constructor, and
-         *  the method BaseView.addPane().
-         *
-         * @returns {Pane}
-         *  The new view pane.
-         */
-        this.createPane = function (id, position, options) {
-            var pane = new Pane(app, id, options);
-            this.addPane(pane, position, options);
-            return pane;
-        };
-
-        /**
-         * Returns the specified view pane which has been added with the method
-         * BaseView.createPane() before.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {Pane|Null}
-         *  The view pane with the specified identifier, or null if no view
-         *  pane has been found.
-         */
-        this.getPane = function (id) {
-            return (id in panesById) ? panesById[id] : null;
-        };
-
-        /**
-         * Changes the position of the pane.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @param {String} position
-         *  The border of the application window to attach the view pane to.
-         *  Supported values are 'top', 'bottom', 'left', and 'right'.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.setPanePosition = function (id, position) {
-            if (id in panesById) {
-                panesById[id].getNode().data('pane-pos', position);
-                refreshPaneLayout();
-            }
-            return this;
-        };
-
-        /**
-         * Returns whether the specified view pane is currently visible.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {Boolean}
-         *  Whether the specified view pane is currently visible.
-         */
-        this.isPaneVisible = function (id) {
-            return (id in panesById) && panesById[id].isVisible();
-        };
-
-        /**
-         * Makes the view pane with the specified identifier visible.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.showPane = function (id) {
-            return this.togglePane(id, false);
-        };
-
-        /**
-         * Hides the view pane with the specified identifier.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.hidePane = function (id) {
-            return this.togglePane(id, true);
-        };
-
-        /**
-         * Changes the visibility of the view pane with the specified
-         * identifier.
-         *
-         * @param {String} id
-         *  The unique identifier of the view pane.
-         *
-         * @param {Boolean} [state]
-         *  If specified, shows or hides the view pane independently from its
-         *  current visibility state. If omitted, toggles the visibility of the
-         *  view pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.togglePane = function (id, state) {
-            if (id in panesById) {
-                panesById[id].getNode().toggle(state);
-                refreshPaneLayout();
-            }
             return this;
         };
 
@@ -431,6 +320,60 @@ define('io.ox/office/framework/view/baseview',
          */
         this.refreshPaneLayout = function () {
             refreshPaneLayout();
+            return this;
+        };
+
+        /**
+         * Sets the application into the busy state by displaying a window
+         * blocker element covering the entire GUI of the application. The
+         * contents of the header and footer in the blocker element are
+         * cleared, and the passed callback may insert new contents into these
+         * elements.
+         *
+         * @param {Function} [callback]
+         *  A function that can fill custom contents into the header and footer
+         *  of the window blocker element. Receives the following parameters:
+         *  (1) {jQuery} header
+         *      The header element above the centered progress bar.
+         *  (2) {jQuery} footer
+         *      The footer element below the centered progress bar.
+         *  (3) {jQuery} blocker
+         *      The entire window blocker element (containing the header,
+         *      footer, and progress bar elements).
+         *  Will be called in the context of this view instance.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.enterBusy = function (callback) {
+
+            // enter busy state, and extend the blocker element
+            app.getWindow().busy(null, null, function () {
+
+                var // the window blocker element (bound to 'this')
+                    blocker = this;
+
+                // special marker for custom CSS formatting, clear header/footer
+                blocker.addClass('io-ox-office-blocker').find('.header, .footer').empty();
+
+                // execute callback
+                if (_.isFunction(callback)) {
+                    callback.call(self, blocker.find('.header'), blocker.find('.footer'), blocker);
+                }
+            });
+
+            return this;
+        };
+
+        /**
+         * Leaves the busy state of the application. Hides the window blocker
+         * element covering the entire GUI of the application.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.leaveBusy = function () {
+            app.getWindow().idle();
             return this;
         };
 
@@ -473,10 +416,11 @@ define('io.ox/office/framework/view/baseview',
          *  @param {String} [options.buttonLabel]
          *      If specified, a push button will be shown with the passed
          *      caption label.
-         *  @param {String} [options.buttonKey]
+         *  @param {Function|String} [options.buttonAction]
          *      Must be specified together with the 'options.buttonLabel'
-         *      option. When the button has been pressed, the controller item
-         *      with the passed key will be executed.
+         *      option. When the button has been pressed, the passed function
+         *      will be executed. If set to a string, the controller item with
+         *      the passed key will be executed instead.
          *
          * @returns {BaseView}
          *  A reference to this instance.
@@ -485,76 +429,61 @@ define('io.ox/office/framework/view/baseview',
 
             var // the label of the push button to be shown in the alert banner
                 buttonLabel = Utils.getStringOption(options, 'buttonLabel'),
-                // the controller key of the push button
-                buttonKey = Utils.getStringOption(options, 'buttonKey'),
+                // the callback action for the push button
+                buttonAction = Utils.getFunctionOption(options, 'buttonAction'),
+                // the controller key for the push button
+                buttonKey = Utils.getStringOption(options, 'buttonAction'),
                 // create a new alert node
-                alert = $.alert(title, message)
-                    .removeClass('alert-error')
-                    .addClass('alert-' + type + ' in hide')
+                alert = $('<div>')
+                    .addClass('alert alert-' + type)
+                    .append($('<h4>').text(title), $('<p>').text(message))
                     .data('pane-pos', 'top'),
                 // auto-close timeout delay
-                timeout = Utils.getIntegerOption(options, 'timeout', 5000);
-
-            function toggleOverlay(state) {
-                alert.toggleClass(OVERLAY_CLASS, state);
-                refreshPaneLayout();
-            }
+                delay = Utils.getIntegerOption(options, 'timeout', 5000);
 
             // Hides the alert with a specific animation.
             function closeAlert() {
-                toggleOverlay(true);
-                alert.slideUp('fast', function () {
-                    alert.remove();
-                    currentAlert = null;
-                    // slideUp() may run into application quit and cause JS errors, guard
-                    // by using a delayed callback which will not be executed after quit
-                    app.executeDelayed(refreshPaneLayout);
-                });
+                currentAlert = null;
+                alert.off('click').stop(true).fadeOut(function () { alert.remove(); });
             }
 
-            function buttonClickHandler() {
-                closeAlert();
-                app.getController().change(buttonKey);
-            }
-
-            // remove alert banner currently shown, update reference to current alert
-            if (currentAlertTimeout) { currentAlertTimeout.abort(); }
-            currentAlertTimeout = null;
-            if (currentAlert) { currentAlert.remove(); }
+            // remove the alert banner currently shown, store reference to new alert
+            if (currentAlert) { currentAlert.stop(true).remove(); }
             currentAlert = alert;
 
             // make the alert banner closeable
             if (Utils.getBooleanOption(options, 'closeable', false)) {
-                // alert can be closed by clicking anywhere in the banner
-                alert.click(closeAlert);
+                // add closer symbol
+                alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
+                    // alert can be closed by clicking anywhere in the banner
+                    .on('click', closeAlert);
                 // initialize auto-close
-                if (timeout > 0) {
-                    currentAlertTimeout = app.executeDelayed(closeAlert, { delay: timeout });
-                }
-            } else {
-                // remove closer button
-                alert.find('a.close').remove();
+                alert.delay(delay).fadeOut(function () { currentAlert = null; alert.remove(); });
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
-            alert.click(function () { self.grabFocus(); });
+            alert.on('click', function () { self.grabFocus(); });
+
+            // create a function that executes the specified controller item
+            if (_.isString(buttonKey)) {
+                buttonAction = function () { app.getController().change(buttonKey); };
+            }
 
             // insert the push button into the alert banner
-            if (_.isString(buttonLabel) && _.isString(buttonKey)) {
-                alert.append(
-                    $.button({ label: buttonLabel }).addClass('btn-' + type + ' btn-mini').click(buttonClickHandler)
+            if (_.isString(buttonLabel) && _.isFunction(buttonAction)) {
+                alert.prepend(
+                    $.button({ label: buttonLabel })
+                        .addClass('btn-' + ((type === 'error') ? 'danger' : type) + ' btn-mini')
+                        .on('click', function () {
+                            closeAlert();
+                            buttonAction.call(self);
+                        })
                 );
             }
 
             // insert and show the new alert banner
             app.getWindowNode().append(alert);
-            toggleOverlay(true);
-            // after alert is visible, remove overlay mode, and refresh pane layout again
-            alert.slideDown('fast', function () {
-                // slideDown() may run into application quit and cause JS errors, guard
-                // by using a delayed callback which will not be executed after quit
-                app.executeDelayed(function () { toggleOverlay(false); });
-            });
+            refreshPaneLayout();
 
             return this;
         };
@@ -627,22 +556,23 @@ define('io.ox/office/framework/view/baseview',
 
         this.destroy = function () {
             this.events.destroy();
-            _(panesById).invoke('destroy');
+            _(fixedPanes).invoke('destroy');
+            _(overlayPanes).invoke('destroy');
             appPane.destroy();
-            appPane = fixedPanes = overlayPanes = panesById = null;
+            appPane = fixedPanes = overlayPanes = null;
         };
 
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container node
-        appPane = new Pane(app, 'mainApplicationPane', { classes: 'app-pane' });
+        appPane = new Pane(app, { classes: 'app-pane' });
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
             .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
 
         // add the main application pane to the application window
-        app.getWindowNode().addClass('io-ox-office-main ' + app.getName().replace(/[.\/]/g, '-') + '-main').append(appPane.getNode());
+        app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
 
         // add shadow nodes above application pane, but below other panes
         _(['top', 'bottom', 'left', 'right']).each(function (border) {
@@ -652,11 +582,15 @@ define('io.ox/office/framework/view/baseview',
         // listen to browser window resize events when the application window is visible
         app.registerWindowResizeHandler(refreshPaneLayout);
 
-        // after import, update all view components every time the window will be shown
-        app.on('docs:import:after', function () {
-            app.getWindow().on('show', windowShowHandler);
-            windowShowHandler();
-        });
+        // keep application in DOM while application is hidden, applications
+        // may want to access element geometry in background tasks
+        app.getWindow().on({ show: windowShowHandler, hide: windowHideHandler });
+
+        // after import, update all view components
+        app.on('docs:import:after', windowShowHandler);
+
+        // remove hidden container node when application has been closed
+        app.on('quit', function () { tempNode.remove(); });
 
         // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
         app.on('docs:init:after', function () {

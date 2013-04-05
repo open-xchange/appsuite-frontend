@@ -111,33 +111,35 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
-    var getLinks = function (self, collection, node, baton, args) {
+    var getLinks = function (self, collection, baton, args) {
         return actions.applyCollection(self.ref, collection, baton, args);
     };
 
     var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
         baton = ext.Baton.ensure(baton);
-        var linkNode = $('<div>');
-        var def = getLinks(self, collection, linkNode, baton, args).always(function (links) {
-            // count resolved links
-            var count = 0;
-            // draw links
-            _(links).each(function (link) {
-                if (_.isFunction(link.draw)) {
-                    link.draw.call(bootstrapMode ? $('<li>').appendTo(linkNode) : linkNode, baton);
-                    if (_.isFunction(link.customize)) {
-                        link.customize.call(linkNode.find('a'), baton);
+        var nav = $('<nav>').appendTo(node);
+        return getLinks(self, collection, baton, args)
+            .always(function (links) {
+                // count resolved links
+                var count = 0;
+                // draw links
+                _(links).each(function (link) {
+                    if (_.isFunction(link.draw)) {
+                        link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                        if (_.isFunction(link.customize)) {
+                            link.customize.call(nav.find('a'), baton);
+                        }
+                        count++;
                     }
-                    count++;
+                });
+                // empty?
+                if (count === 0) {
+                    nav.addClass('empty');
                 }
+            })
+            .then(function () {
+                return nav;
             });
-            // empty?
-            if (count === 0) {
-                linkNode.addClass('empty');
-            }
-        });
-        node.append(linkNode);
-        return def;
     };
 
     var ToolbarLinks = function (options) {
@@ -170,7 +172,7 @@ define("io.ox/core/extPatterns/links",
 
     var InlineLinks = function (options) {
 
-        var self = _.extend(this, options);
+        var extension = _.extend(this, { classes: 'io-ox-inline-links' }, options);
 
         this.draw = function (baton) {
 
@@ -178,22 +180,20 @@ define("io.ox/core/extPatterns/links",
 
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
-                node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
-            if (options.attributes) {
-                node.attr(options.attributes);
-            }
-            if (options.classes) {
-                _(options.classes).each(function (cl) {
-                    node.addClass(cl);
-                });
-            }
-            drawLinks(self, new Collection(baton.data), node, baton, args).done(function () {
+
+            drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
+                // customize
+                if (extension.attributes) {
+                    nav.attr(extension.attributes);
+                }
+                if (extension.classes) {
+                    nav.addClass(extension.classes);
+                }
                 // add toggle unless multi-selection
-                node = node.children("div:first");
-                var all = node.children(), lo = node.children('[data-prio="lo"]');
+                var all = nav.children(), lo = nav.children('[data-prio="lo"]');
                 if (!multiple && all.length > 5 && lo.length > 1) {
-                    node.append(
+                    nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
                             $('<a href="#" data-toggle="dropdown" data-action="more">').append(
                                 $.txt(gt('More')),
@@ -208,7 +208,7 @@ define("io.ox/core/extPatterns/links",
                 }
                 all = lo = null;
                 if (options.customizeNode) {
-                    options.customizeNode(node);
+                    options.customizeNode(nav);
                 }
             });
         };
@@ -314,7 +314,7 @@ define("io.ox/core/extPatterns/links",
                 )
             );
             // get links
-            return getLinks(extension, new Collection(baton.data), ul, baton, args).done(function (links) {
+            return getLinks(extension, new Collection(baton.data), baton, args).done(function (links) {
                 if (links.length > 1) {
                     // call draw method to fill dropdown
                     _(links).chain()

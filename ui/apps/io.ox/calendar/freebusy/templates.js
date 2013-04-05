@@ -16,6 +16,8 @@ define('io.ox/calendar/freebusy/templates',
 
     'use strict';
 
+    var MAX_COLOR = 10;
+
     return {
 
         getMainContainer: function () {
@@ -36,17 +38,31 @@ define('io.ox/calendar/freebusy/templates',
             return $('<div class="abs participants-view-scrollpane">');
         },
 
+        getFreeColor: function (collection) {
+            var used = {}, i, index = 0, min = Infinity;
+            for (i = 0; i < MAX_COLOR; i++) {
+                used[i] = 0;
+            }
+            collection.each(function (model) {
+                if (model.index !== undefined) { // due to the one that asks for a color
+                    used[model.index % MAX_COLOR]++;
+                }
+            });
+            for (i = 0; i < MAX_COLOR; i++) {
+                if (used[i] < min) {
+                    index = i;
+                    min = used[i];
+                }
+            }
+            return index;
+        },
+
         getColorClass: function (index) {
-            return 'color-index-' + (index % 10); // ((index * 2) % 9);
+            return 'color-index-' + (index % MAX_COLOR);
         },
 
         getParticipantColor: function (index) {
             return $('<div class="participant-color">').addClass(this.getColorClass(index));
-        },
-
-        updateParticipantColor: function (container, cid, index) {
-            var node = container.find('[data-cid="' + cid + '"] .participant-color');
-            node.attr('class', 'participant-color ' + this.getColorClass(index));
         },
 
         getIntervalDropdown: function () {

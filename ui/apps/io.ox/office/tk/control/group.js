@@ -116,6 +116,13 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
+         * Returns the options that have been passed to the constructor.
+         */
+        this.getOptions = function () {
+            return options;
+        };
+
+        /**
          * Returns the position and size of the group node in the browser
          * window.
          *

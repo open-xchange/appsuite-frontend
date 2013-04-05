@@ -41,6 +41,11 @@ define('io.ox/office/tk/control/combofield',
      *      If set to true, the label of the first list item that starts with
      *      the text currently edited will be inserted into the text field.
      *      The remaining text appended to the current text will be selected.
+     *  @param {Function} [options.equality=_.isEqual]
+     *      A comparison function that returns whether an arbitrary value
+     *      should be considered being equal to the value of a list item in the
+     *      drop-down menu. If omitted, uses _.isEqual() which compares arrays
+     *      and objects deeply.
      */
     function ComboField(options) {
 
@@ -48,7 +53,10 @@ define('io.ox/office/tk/control/combofield',
             self = this,
 
             // search the list items and insert label into text field while editing
-            typeAhead = Utils.getBooleanOption(options, 'typeAhead', false);
+            typeAhead = Utils.getBooleanOption(options, 'typeAhead', false),
+
+            // comparator for list item values
+            equality = Utils.getFunctionOption(options, 'equality');
 
         // base constructors --------------------------------------------------
 
@@ -83,7 +91,7 @@ define('io.ox/office/tk/control/combofield',
         function itemUpdateHandler(value) {
 
             var // activate a button representing a list item
-                button = Utils.selectOptionButton(self.getItems(), value);
+                button = Utils.selectOptionButton(self.getItems(), value, equality);
 
             // scroll to make the element visible
             scrollToListItem(button);

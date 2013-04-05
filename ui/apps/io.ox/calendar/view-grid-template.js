@@ -18,7 +18,7 @@ define("io.ox/calendar/view-grid-template",
      "gettext!io.ox/calendar",
      "io.ox/core/api/user",
      "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.css"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
+     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
 
     "use strict";
     var fnClickPerson = function (e) {

@@ -14,7 +14,8 @@ define.async("io.ox/mail/accounts/keychain",
              ["io.ox/core/extensions",
              "io.ox/core/api/account",
              "io.ox/core/api/user",
-             "io.ox/core/event"], function (ext, accountAPI, userAPI, Events) {
+             "io.ox/core/capabilities",
+             "io.ox/core/event"], function (ext, accountAPI, userAPI, capabilities, Events) {
 
     "use strict";
 
@@ -93,6 +94,9 @@ define.async("io.ox/mail/accounts/keychain",
         id: "mail",
         displayName: "Mail Account",
         actionName: "mailaccount",
+        canAdd: function () {
+            return capabilities.has('multiple_mail_accounts');
+        },
         getAll: function () {
             return _(accounts).map(function (account) { return account; });
         },

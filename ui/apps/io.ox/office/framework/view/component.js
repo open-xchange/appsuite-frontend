@@ -13,11 +13,8 @@
 
 define('io.ox/office/framework/view/component',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils',
-     'io.ox/office/tk/control/group',
-     'io.ox/office/tk/control/label',
-     'io.ox/office/tk/control/button'
-    ], function (Events, Utils, Group, Label, Button) {
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -57,6 +54,12 @@ define('io.ox/office/framework/view/component',
      *  @param {Object} [options.css]
      *      Additional CSS formatting that will be set at the root DOM node of
      *      this view component.
+     *  @param {Function} [options.groupInserter]
+     *      A function that will implement inserting the root DOM node of a new
+     *      group into this view component. The function receives the reference
+     *      to the new group instance as first parameter. Will be called in the
+     *      context of this view component instance. If omitted, groups will be
+     *      appended to the root node of this view component.
      */
     function Component(app, options) {
 
@@ -66,14 +69,14 @@ define('io.ox/office/framework/view/component',
             // create the DOM root element representing the view component
             node = Utils.createContainerNode('view-component', options),
 
-            // the current target node for new groups
-            targetNode = node,
-
             // all control groups, as plain array
             groups = [],
 
             // all control groups, mapped by key
-            groupsByKey = {};
+            groupsByKey = {},
+
+            // handler called to insert a new group into this view component
+            groupInserter = Utils.getFunctionOption(options, 'groupInserter');
 
         // base constructor ---------------------------------------------------
 
@@ -107,7 +110,11 @@ define('io.ox/office/framework/view/component',
             groups.push(group);
 
             // insert the group into this view component
-            targetNode.append(group.getNode());
+            if (_.isFunction(groupInserter)) {
+                groupInserter.call(self, group);
+            } else {
+                node.append(group.getNode());
+            }
 
             // always forward 'cancel' events (e.g. closed drop-down menu)
             group.on('cancel', function () { self.trigger('cancel'); });
@@ -207,6 +214,13 @@ define('io.ox/office/framework/view/component',
         };
 
         /**
+         * Returns the options map that has been passed to the constructor.
+         */
+        this.getOptions = function () {
+            return options;
+        };
+
+        /**
          * Adds the passed control group as a 'private group' to this view
          * component. Change events of the group will not be forwarded to the
          * listeners of this view component. Instead, the caller has to
@@ -248,79 +262,6 @@ define('io.ox/office/framework/view/component',
                 self.trigger('change', key, value);
             });
 
-            return this;
-        };
-
-        /**
-         * Creates a new label control, and inserts it into this view
-         * component.
-         *
-         * @param {String} key
-         *  The unique key of the label.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new label
-         *  element. Supports all generic formatting options (see method
-         *  Utils.createLabel() for details.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.createLabel = function (key, options) {
-            return this.addGroup(key, new Label(options));
-        };
-
-        /**
-         * Creates a new push button or toggle button, and inserts it to this
-         * view component.
-         *
-         * @param {String} key
-         *  The unique key of the button.
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new button.
-         *  Supports all options of the Button class constructor.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.createButton = function (key, options) {
-            return this.addGroup(key, new Button(options));
-        };
-
-        /**
-         * Adds a container node that will take all groups that will be
-         * inserted in the passed callback function. The groups are still
-         * independent from each other, but may be rendered in a different way.
-         *
-         * @param {Function} callback
-         *  The callback function that will be called from this method. All
-         *  groups created from this function will be inserted into the
-         *  container node created initially. Will be called in the context of
-         *  this view component ('this' can be used to create new groups in
-         *  this view component).
-         *
-         * @param {Object} [options]
-         *  A map of options to control the properties of the new container
-         *  node. The following options are supported:
-         *  @param {String} [options.classes]
-         *      Additional CSS classes that will be set at the container node.
-         *  @param {Object} [options.css]
-         *      Additional CSS formatting that will be set at the container
-         *      node.
-         *
-         * @returns {Component}
-         *  A reference to this view component.
-         */
-        this.createGroupContainer = function (callback, options) {
-
-            // create the container node for the groups,
-            // always insert into root node (do not nest group containers)
-            targetNode = Utils.createContainerNode('group-container', options).appendTo(node);
-
-            // execute the passed callback function, restore current target node
-            callback.call(this);
-            targetNode = node;
             return this;
         };
 
@@ -405,7 +346,7 @@ define('io.ox/office/framework/view/component',
          * view component from the page.
          */
         this.destroy = function () {
-            node.off().remove();
+            node.remove();
             this.events.destroy();
             _(groups).invoke('destroy');
             self = node = groups = groupsByKey = null;

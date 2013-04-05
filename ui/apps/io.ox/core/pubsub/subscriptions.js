@@ -19,7 +19,8 @@ define('io.ox/core/pubsub/subscriptions',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
-     'gettext!io.ox/core/pubsub'
+     'gettext!io.ox/core/pubsub',
+     'settings!io.ox/core'
     ],
     function (ext, pubsub, api, folderApi, notifications, dialogs, keychainApi, gt) {
 
@@ -50,42 +51,79 @@ define('io.ox/core/pubsub/subscriptions',
             api.sources.getAll().done(function (data) {
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
-                function saveModel() {
+                function removeFolder(id) {
+                    return folderApi.remove({ folder: id });
+                }
+
+                function saveModel(newFolder) {
 
                     notifications.yell('info', gt('Checking credentials... This may take a few seconds.'));
                     var folder = self.model.attributes.folder;
-                    self.model.save().done(function (id) {
-                        api.subscriptions.refresh({id: id, folder: folder}).done(function (data) {
-                            notifications.yell('info', gt('Subscription successfully created.'));
-                            app.folder.set(folder).done(function () {
-                                app.folderView.idle().repaint();
-                                popup.close();
+
+                    self.model.save().then(
+                        function saveSuccess(id) {
+                            //set id, if none is present (new model)
+                            if (!self.model.id) { self.model.id = id; }
+                            api.subscriptions.refresh({ id: id, folder: folder }).then(
+                                function refreshSuccess(data) {
+                                    notifications.yell('info', gt('Subscription successfully created.'));
+                                    popup.close();
+                                    return self.model;
+                                },
+                                function refreshFail(error) {
+                                    popup.idle();
+                                    popup.getBody().find('.control-group:not(:first)').addClass('error');
+                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                    api.subscriptions.destroy(id);
+                                    if (newFolder) {
+                                        removeFolder(folder);
+                                    }
+                                }
+                            ).then(function (model) {
+                                return model.fetch();
+                            }).then(function (model, collection) {
+                                var subscriptions = pubsub.subscriptions();
+                                //update the model-(collection)
+                                //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "subscriptions.update(model)" call
+                                if (self.model.collection) {
+                                    self.model.set(model);
+                                } else {
+                                    subscriptions.add(model);
+                                }
+                            }).then(function () {
+                                return app.folderView.idle().repaint();
+                            }).done(function () {
+                                app.folder.set(folder);
                             });
-                        }).fail(function (error) {
+                        },
+                        function saveFail(error) {
                             popup.idle();
-                            popup.getBody().find('.control-group:not(:first)').addClass('error');
-                            showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
-                            api.subscriptions.destroy(id);
-                        });
-                    }).fail(function (error) {
-                        popup.idle();
-                        if (!self.model.valid) {
-                            if (!error.model) {
-                                showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
-                            } else {
-                                console.log('Validation error', error.model);
+                            if (!self.model.valid) {
+                                if (!error.model) {
+                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                } else {
+                                    notifications.yell({
+                                        type: 'error',
+                                        headline: gt('Error'),
+                                        message: gt('The subscription could not be created.')
+                                    });
+                                }
+                            }
+                            if (newFolder) {
+                                removeFolder(folder);
                             }
                         }
-
-                    });
+                    );
                 }
 
-                popup.getBody().addClass('form-horizontal');
+                popup.getBody().addClass('form-horizontal max-height-200');
                 ext.point(POINT + '/dialog').invoke('draw', popup.getBody(), baton);
                 popup.show();
                 popup.on('subscribe', function (action) {
+
                     popup.busy();
                     var invalid;
+
                     _.each(popup.getBody().find('input'), function (input) {
                         if (!$(input).val()) {
                             $(input).closest('.control-group').addClass('error');
@@ -95,24 +133,28 @@ define('io.ox/core/pubsub/subscriptions',
                             $(input).closest('.control-group').removeClass('error');
                         }
                     });
+
                     if (invalid) { return; }
 
                     if (baton.newFolder) {
+
                         var service = _.first(_(baton.services).select(function (t) {
                             return t.id === baton.model.get('source');
                         }));
 
+                        // add new folders under module's default folder!
+                        var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
                         folderApi.create({
-                            folder: self.model.attributes.folder,
+                            folder: folder,
                             data: {
                                 title: service.displayName || gt('New Folder'),
-                                module: self.model.attributes.entityModule
-                            }
+                                module: self.model.get('entityModule')
+                            },
+                            silent: true
                         })
                         .pipe(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
-
-                            saveModel();
+                            saveModel(true);
                         });
                     } else {
                         saveModel();
@@ -209,6 +251,8 @@ define('io.ox/core/pubsub/subscriptions',
                 $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
                 $('<div>').addClass('controls').append(
                     node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
+                        userform.parent().find('.alert-error').remove();
+                        userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
                         buildForm(userform, baton);
                     }))));

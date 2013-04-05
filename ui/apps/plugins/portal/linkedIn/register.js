@@ -17,7 +17,8 @@ define("plugins/portal/linkedIn/register",
      'io.ox/oauth/proxy',
      'io.ox/core/strings',
      'io.ox/keychain/api',
-     'gettext!plugins/portal'], function (ext, http, proxy, strings, keychain, gt) {
+     'io.ox/core/capabilities',
+     'gettext!plugins/portal'], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
     "use strict";
 
@@ -125,7 +126,7 @@ define("plugins/portal/linkedIn/register",
         title: 'LinkedIn',
 
         isEnabled: function () {
-            return keychain.isEnabled('linkedin');
+            return keychain.isEnabled('linkedin') && capabilities.has('linkedinPlus');
         },
 
         requiresSetUp: function () {

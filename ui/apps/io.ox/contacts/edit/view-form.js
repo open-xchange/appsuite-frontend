@@ -21,7 +21,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/tk/attachments',
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
-    'less!io.ox/contacts/edit/style.css'
+    'less!io.ox/contacts/edit/style.less'
 ], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt) {
 
     "use strict";
@@ -136,9 +136,9 @@ define('io.ox/contacts/edit/view-form', [
                     className: 'div',
                     index: options.index,
                     module: 7,
-                    finishedCallback: function () {
-                        var attr = this.model.attributes;
-                        api.get({ id: attr.id, folder: attr.folder_id }, false)
+                    finishedCallback: function (model, id) {
+                        var attr = model.attributes;
+                        api.get({ id: id, folder: attr.folder_id }, false)
                             .pipe(function (data) {
                                 return $.when(
                                     api.caches.get.add(data),
@@ -147,8 +147,7 @@ define('io.ox/contacts/edit/view-form', [
                                     api.clearFetchCache()
                                 )
                                 .done(function () {
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), {state: false, redraw: false});
-                                    api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
                                     api.trigger('refresh.list');
                                 });
                             });
@@ -199,7 +198,7 @@ define('io.ox/contacts/edit/view-form', [
             }
         }
     };
-    
+
     _.each(['home', 'business', 'other'], function (type) {
         var fields = meta.sections[type + '_address'];
         meta.sections[type + '_address'] = _.compact(_.aprintf(
@@ -212,7 +211,7 @@ define('io.ox/contacts/edit/view-form', [
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s'),
             function (i) { return fields[i]; }, $.noop));
     });
-    
+
     function dateField(options) {
         options.point.extend(new forms.DateControlGroup({
             id: options.field,
@@ -245,7 +244,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         }));
 
-
         point.extend(new views.AttributeView({
             id: ref + '/edit/view/display_name_header',
             index: 150,
@@ -270,7 +268,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-
         // Show backend errors
         point.extend(new forms.ErrorAlert({
             id: ref + '/edit/view/backendErrors',
@@ -288,52 +285,39 @@ define('io.ox/contacts/edit/view-form', [
             index: 300,
             id: 'inline-actions',
             ref: ref + '/edit/view/inline',
+            classes: 'form-horizontal',
             customizeNode: function ($node) {
-                $node.addClass("span7");
-                $node.css({marginBottom: '20px'});
+                $node.addClass("controls");
+                $node.css({marginBottom: '20px', clear: 'both'});
             }
         }));
-
-        //cancel
-
-//        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
-//            id: "imagereset",
-//            index: 100,
-//            label: gt("Reset image"),
-//            ref: ref + "/actions/edit/reset-image",
-//            cssClasses: "btn",
-//            tabIndex: 10,
-//            tagtype: "button"
-//        }));
-
 
         views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
             id: "discard",
             index: 100,
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
-            cssClasses: "btn",
+            cssClasses: "btn control",
             tabIndex: 11,
             tagtype: "button"
         }));
 
         // Save
-
         views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
             id: "save",
             index: 100,
             label: gt("Save"),
             ref: ref + "/actions/edit/save",
-            cssClasses: "btn btn-primary",
+            cssClasses: "btn btn-primary control",
             tabIndex: 10,
             tagtype: "button"
         }));
-        
+
         // attachment Drag & Drop
         views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
             id: 'attachment',
             index: 100,
-            label: gt('Drop here to upload a <b>new attachment</b>'),
+            label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
             multiple: function (files, view) {
                 _(files).each(function (fileData) {
                     view.baton.attachmentList.addFile(fileData);
@@ -342,7 +326,6 @@ define('io.ox/contacts/edit/view-form', [
         });
 
         // Edit Actions
-
         new actions.Action(ref + '/actions/edit/save', {
             id: 'save',
             action: function (options, baton) {
@@ -400,7 +383,6 @@ define('io.ox/contacts/edit/view-form', [
 
                 var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                     isRare = _(meta.rare).indexOf(field) > -1;
-
 
                 if (meta.special[field]) {
                     meta.special[field]({

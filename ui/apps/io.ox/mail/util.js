@@ -14,9 +14,10 @@
 
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
-     'io.ox/core/config',
      'io.ox/core/date',
-     'gettext!io.ox/core'], function (ext, config, date, gt) {
+     'io.ox/core/api/account',
+     'settings!io.ox/mail',
+     'gettext!io.ox/core'], function (ext, date, accountAPI, settings, gt) {
 
     'use strict';
 
@@ -69,12 +70,15 @@ define('io.ox/mail/util',
         // mail addresses hash
         addresses = {};
 
-    _(config.get('mail.addresses', [])).each(function (address) {
-        addresses[address.toLowerCase()] = true;
+    accountAPI.getAllSenderAddresses().done(function (sendAddresses) {
+        _(sendAddresses).chain().pluck(1).each(function (address) {
+            addresses[address.toLowerCase()] = true;
+        });
     });
 
 
     that = {
+
         parseRecipient: function (s) {
             var recipient = $.trim(s), match, name, email;
             if ((match = recipient.match(rRecipient)) !== null) {
@@ -218,8 +222,17 @@ define('io.ox/mail/util',
         },
 
         getPriority: function (data) {
-            var i = '<i class="icon-star"></i>';
-            return data.priority < 3 ? $('<span>').append(_.noI18n('\u00A0'), i, i, i) : $();
+            // normal?
+            if (data.priority === 3) return $();
+            var i = '<i class="icon-star"/>',
+                stars = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
+            return stars.addClass(data.priority < 3 ? 'high' : 'low');
+        },
+
+        getAccountName: function (data) {
+            // primary account?
+            var id = window.unescape(data.id);
+            return (/^default0/).test(id) ? gt('Primary account') : (data.account_name || 'N/A');
         },
 
         getTime: function (timestamp) {
@@ -298,7 +311,7 @@ define('io.ox/mail/util',
         },
 
         getInitialDefaultSender: function () {
-            var mailArray = _(config.get('modules.mail.sendaddress', []));
+            var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
         },
 

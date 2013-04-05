@@ -17,7 +17,7 @@ define("io.ox/editor/main",
      "io.ox/core/tk/model",
      "io.ox/core/tk/view",
      "gettext!io.ox/editor",
-     "less!io.ox/editor/style.css"
+     "less!io.ox/editor/style.less"
     ], function (api, folderAPI, Model, View, gt) {
 
     'use strict';

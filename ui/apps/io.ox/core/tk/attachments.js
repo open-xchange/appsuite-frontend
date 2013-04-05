@@ -290,7 +290,7 @@ define('io.ox/core/tk/attachments',
 
         var fileUploadWidget = function (options) {
             var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid'));
-            if (options.displayLabel) node.append($('<label>').text(gt('File')));
+            if (options.displayLabel) node.append($('<label>').text(options.displayLabelText || gt('File')));
             node.append(
                 $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
                     .append($('<div>').addClass('input-append').append(
@@ -303,8 +303,8 @@ define('io.ox/core/tk/attachments',
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
                             (options.multi ? $('<input type="file" name="file" multiple="multiple">') : $('<input name="file" type="file">'))
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Remove')),
-                        (options.displayButton ? $('<button>', { 'data-action': 'add' }).addClass('btn').text(gt('Upload file')) : '')
+                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        (options.displayButton ? $('<button>', { 'data-action': 'upload' }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
                     )
                 )
             );

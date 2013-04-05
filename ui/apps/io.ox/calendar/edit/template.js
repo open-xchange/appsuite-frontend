@@ -55,11 +55,12 @@ define('io.ox/calendar/edit/template',
     });
 
     // buttons
+    var saveButton, discardButton;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'buttons',
         draw: function (baton) {
-            var saveButton;
+            var save, discard;
             this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
@@ -68,10 +69,12 @@ define('io.ox/calendar/edit/template',
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
-                    baton.model.save();
+                    baton.model.save().done(function () {
+                        baton.app.onSave();
+                    });
                 })
             );
-            this.append($('<button class="btn" data-action="discard" >')
+            this.append(discardButton = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
                 .css({float: 'right'})
                 .on('click', function () {
@@ -91,10 +94,11 @@ define('io.ox/calendar/edit/template',
         },
         showConflicts: function (conflicts) {
             var self = this,
-                hardConflict = false,
-                saveButton = $('[data-action="save"]', this.$el.closest('.io-ox-calendar-edit'));
+                hardConflict = false;
 
-            saveButton.addClass('disabled').off('click');
+            saveButton.hide();
+            discardButton.hide();
+
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
                 if (conflict.hard_conflict) {
@@ -111,27 +115,23 @@ define('io.ox/calendar/edit/template',
                     .on('click', function (e) {
                         e.preventDefault();
                         self.model.set('ignore_conflicts', true);
-                        self.model.save();
+                        saveButton.click();
                     });
                 self.$el.empty().append(
                     conflictList,
-                    $('<div class="row">')
-                        .css('margin-top', '10px').append(
-                            $('<span class="span12">')
-                                .css('text-align', 'right').append(
+                    $('<div>').addClass('buttons').append(
+                            $('<span class="span12">').append(
                                     $('<a class="btn">')
-                                        .text(gt('Cancel'))
+                                        .text(gt('Hide conflicts'))
                                         .on('click', function (e) {
                                             e.preventDefault();
                                             self.$el.empty();
-                                            saveButton.removeClass('disabled').on('click', function () {
-                                                self.model.save();
-                                            });
+                                            saveButton.show();
+                                            discardButton.show();
                                         }),
-                                    '&nbsp;',
-                                    $acceptButton
-                                    )
-                            )
+                                    $acceptButton.css({position: 'absolute', right: '0px'})
+                                )
+                        )
                     );
 
             });
@@ -456,7 +456,7 @@ define('io.ox/calendar/edit/template',
     ext.point("io.ox/calendar/edit/dnd/actions").extend({
         id: 'attachment',
         index: 10,
-        label: gt("Drop here to upload a <b>new attachment</b>"),
+        label: gt("Drop here to upload a <b class='dndignore'>new attachment</b>"),
         multiple: function (files, app) {
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);

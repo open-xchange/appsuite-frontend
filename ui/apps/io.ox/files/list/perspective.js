@@ -32,7 +32,7 @@ define('io.ox/files/list/perspective',
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
         right = vsplit.right.addClass('default-content-padding').scrollable(),
-        grid = new VGrid(left),
+        grid = new VGrid(left, {settings: app.settings}),
         dropZone;
 
         grid.addTemplate({
@@ -44,9 +44,21 @@ define('io.ox/files/list/perspective',
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.title || data.filename || '\u00A0');
+                var title = data.title || data.filename || '\u00A0';
+                fields.name.text(cut(title));
             }
         });
+
+        function cut(str, maxLen, cutPos) {
+            if (!cutPos) cutPos = 25;
+            if (!maxLen) maxLen = 70;
+            str = String(str || '');
+            if (str.length > maxLen) {
+                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
+            } else {
+                return str;
+            }
+        }
 
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
@@ -67,8 +79,13 @@ define('io.ox/files/list/perspective',
                 .fail(_.lfo(drawFail));
         };
 
+        showFile.cancel = function () {
+            _.lfo(selectFile);
+            _.lfo(drawFail);
+        };
+
         selectFile = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            right.idle().empty().append(viewDetail.draw(data, app));
             right.parent().scrollTop(0);
             app.currentFile = data;
             if (dropZone) {
@@ -119,8 +136,7 @@ define('io.ox/files/list/perspective',
                 return api.uploadFile({ file: file, folder: app.folder.get() })
                     .done(function (data) {
                         // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
+                        app.invalidateFolder(data);
                         // TODO: Error Handling
                     }).fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
@@ -145,12 +161,11 @@ define('io.ox/files/list/perspective',
                         file: data,
                         id: app.currentFile.id,
                         folder: app.currentFile.folder_id,
-                        timestamp: app.currentFile.last_modified
+                        timestamp: _.now()
                     })
                     .done(function (data) {
                         // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
+                        app.invalidateFolder(data);
                         // TODO: Error Handling
                     }).fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
@@ -199,13 +214,16 @@ define('io.ox/files/list/perspective',
         commons.addGridToolbarFolder(app, grid);
 
         app.invalidateFolder = function (data) {
+            api.propagate('change', data);
             if (data) {
+                grid.selection.clearIndex();
                 grid.selection.set([data]);
             }
             grid.refresh();
         };
 
         app.on('folder:change', function (e, id, folder) {
+            app.currentFile = null;
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();
                 if (dropZone) dropZone.include();

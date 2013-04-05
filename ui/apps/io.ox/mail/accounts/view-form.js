@@ -57,55 +57,55 @@ define('io.ox/mail/accounts/view-form',
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
-                
+
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
-                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is allways valid even if inputfields contain wrong values
+                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
                 var self = this;
-                window.account = self.model;
+                window.account = self.model; //FIXME: WTF?
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop
                 }));
-                var pop3node = self.$el.find('[data-property="pop3_refresh_rate"]').parentsUntil('.form-horizontal', '.control-group').first();
-                
+                var pop3nodes = self.$el.find('.control-group.pop3');
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
                 //check if pop3 refresh rate needs to be displayed
-                if (self.model.get('mail_protocol') === 'imap') {
-                    pop3node.hide();
+                if (self.model.get('mail_protocol') !== 'pop3') {
+                    pop3nodes.hide();
                 }
 
                 function syncLogin(model, value) {
-                        model.set('login', value);
-                    }
-                
+                    model.set('login', value);
+                }
+
                 if (self.model.get('id') !== 0) {//check for primary account
-                    
+
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
-                        if (value === 'imap') {
-                            pop3node.hide();
+                        if (value !== 'pop3') {
+                            pop3nodes.hide();
                         } else {
-                            pop3node.show();
+                            pop3nodes.show();
                         }
                     });
-                    
+
                     //login for server should be email-address by default;
                     if (self.model.get('login') === undefined) {
                         self.model.set('login', self.model.get('primary_address'));
                     }
-                    
+
                     //if login and mailadress are the same change login if mailadress changes
                     if (self.model.get('primary_address') === self.model.get('login') && !self.inSync) {
                         self.model.on('change:primary_address', syncLogin);
                         self.inSync = true;
                     }
-                    
+
                     //react to loginchange
                     self.model.on('change:login', function (model, value) {
                         if (value === model.get('primary_address')) {
@@ -121,38 +121,35 @@ define('io.ox/mail/accounts/view-form',
                 } else {//primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
                 }
-                
+
                 return self;
             },
             events: {
-                'click .save': 'onSave'
+                'save': 'onSave'
             },
             onSave: function () {
-                var self = this,
-                    deferedSave = $.Deferred(),
-                    valdef = $.Deferred();
-                
-                this.model.save(false, deferedSave);
-                deferedSave.done(function (data) {//carefull here! there is no fail possible for this defered. Even errors result in done (backbone specific)
-                    if (data.error) {//manual check for error
-                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                            notifications.yell('error', gt('Login must not be empty.'));
-                        } else if (data.code === "SVL-0002") {
-                            notifications.yell('error',
-                                    //#. %1$s the missing request parameter
-                                    //#, c-format
-                                    gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
-                        } else {
-                            notifications.yell('error', _.noI18n(data.error));
-                        }
+                var self = this;
+
+                this.model.save()
+                .done(function (data) {
+                    self.dialog.close();
+                    if (self.collection) {
+                        self.collection.add([data]);
+                    }
+                    if (self.model.isNew()) {
+                        self.succes();
+                    }
+                })
+                .fail(function (data) {
+                    if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                        notifications.yell('error', gt('Login must not be empty.'));
+                    } else if (data.code === "SVL-0002") {
+                        notifications.yell('error',
+                                           //#. %1$s the missing request parameter
+                                           //#, c-format
+                                           gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
                     } else {
-                        self.dialog.close();
-                        if (self.collection) {
-                            self.collection.add([data]);
-                        }
-                        if (self.model.isNew()) {
-                            self.succes();
-                        }
+                        notifications.yell('error', _.noI18n(data.error));
                     }
                 });
             }

@@ -32,27 +32,30 @@ define("io.ox/core/main",
         DURATION = 250;
 
     var logout = function (opt) {
+
         opt = _.extend({
             autologout: false
         }, opt || {});
+
         $("#background_loader").fadeIn(DURATION, function () {
-            $("#io-ox-core").hide();
 
-            var deferreds = [];
-            ext.point("io.ox/core/logout").each(function (extension) {
-                if (extension.logout) {
-                    var def = extension.logout();
-                    if (def) {
-                        deferreds.push(def);
-                    }
+            $('#io-ox-core').hide();
+
+            var deferreds = ext.point('io.ox/core/logout').invoke('logout').compact().value();
+
+            $.when.apply($, deferreds).then(
+                function logout() {
+                    session.logout().always(function () {
+                        // get logout locations
+                        var location = settings.get('customLocations/logout');
+                        _.url.redirect(location || ('signin' + (opt.autologout ? '#autologout=true' : '')));
+                    });
+                },
+                function cancel() {
+                    $('#io-ox-core').show();
+                    $("#background_loader").fadeOut(DURATION);
                 }
-            });
-
-            $.when.apply($, deferreds).always(function () {
-                session.logout().always(function () {
-                    _.url.redirect("signin" + (opt.autologout ? "#autologout=true" : ""));
-                });
-            });
+            );
         });
     };
 
@@ -125,10 +128,19 @@ define("io.ox/core/main",
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
-        // construct
-        var node = $('<div class="launcher">')
-            .append(_.isString(label) ? $.txt(gt(label)) : label)
-            .hover(
+        var node = $('<div class="launcher">'),
+            sideTags = side.split(' '),
+            wrap = false;
+        
+        if (sideTags.length > 1) {//only wrap uses 2 tags
+            wrap = true;
+            if (sideTags[0] === 'wrap') {//to make order unimportant
+                side = sideTags[1];
+            } else {
+                side = sideTags[0];
+            }
+        }
+        node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
@@ -143,19 +155,28 @@ define("io.ox/core/main",
                     self.idle().empty().append(content).css('width', '');
                 });
             });
+        
+        if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
+            node.addClass(side);
+            //add wrapper
+            label.wrap(node);
+        } else {
+            //construct
+            node.append(_.isString(label) ? $.txt(gt(label)) : label);
+        }
 
         // tooltip
         if (tooltip && !Modernizr.touch) {
             node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
         }
-
-        // just add
-        if (side === 'left') {
-            node.appendTo(launchers);
-        } else {
-            node.addClass('right').appendTo(topbar);
+        // just add if not wrapped
+        if (!wrap) {
+            if (side === 'left') {
+                node.appendTo(launchers);
+            } else {
+                node.addClass('right').appendTo(topbar);
+            }
         }
-
         return node;
     };
 
@@ -383,7 +404,7 @@ define("io.ox/core/main",
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || 'icon-pencil';
-                launcher.addClass('user-content').addClass(cls).prepend($('<i class="' + icon + '">'));
+                launcher.addClass('user-content').addClass(cls).prepend($('<span>').append($('<i class="' + icon + '">')));
             }
         }
 
@@ -444,19 +465,34 @@ define("io.ox/core/main",
                 );
             }
         });
-
+        
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
             index: 10000,
             draw: function () {
+                var el = $('<span class="badge">').hide();
+                this.append(el);
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 setTimeout(function () {
                     if (ox.online) {
-                        notifications.attach(addLauncher);
+                        notifications.attach(el, addLauncher);
                         tabManager();
                     }
                 }, 5000);
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'refresh',
+            index: 2000,
+            draw: function () {
+                this.append(
+                    addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                        refresh();
+                        return $.when();
+                    }, gt('Refresh')).attr("id", "io-ox-refresh-icon")
+                );
             }
         });
 
@@ -480,13 +516,21 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var lang = ox.language.slice(0, 2) === 'de' ? 'de_DE' : 'en_US';
-                var helpLink = "help/" + lang + "/index.html";
+                var a, helpLink = "help/" + ox.language + "/index.html";
                 this.append(
                     $('<li>').append(
-                        $('<a target="_blank">').attr({href: helpLink}).text(gt('Help'))
+                        a = $('<a target="_blank">').attr({href: helpLink})
+                                                    .text(gt('Help'))
                     )
                 );
+                $.ajax(helpLink, {
+                    type: 'HEAD',
+                    statusCode: {
+                        404: function () {
+                            a.attr('href', 'help/en_US/index.html');
+                        }
+                    }
+                });
             }
         });
 
@@ -607,16 +651,10 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar').extend({
             id: 'default',
             draw: function () {
-
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
 
-                // refresh
-                addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                    refresh();
-                    return $.when();
-                }, gt('Refresh')).attr("id", "io-ox-refresh-icon");
-
+                
                 // refresh animation
                 initRefreshAnimation();
 
@@ -633,22 +671,6 @@ define("io.ox/core/main",
                     gt('Your session is expired'), $.txt(_.noI18n('.')), $('<br>'),
                     $('<small>').text(gt('Please sign in again to continue'))
                 );
-            }
-        });
-
-        var drawDesktop = function () {
-            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
-            drawDesktop = $.noop;
-        };
-
-        ox.ui.windowManager.on("empty", function (e, isEmpty) {
-            if (isEmpty) {
-                drawDesktop();
-            }
-            if (isEmpty) {
-                ox.ui.screens.show('desktop');
-            } else {
-                ox.ui.screens.show('windowmanager');
             }
         });
 
@@ -685,12 +707,31 @@ define("io.ox/core/main",
             return getAutoLaunchDetails(m).app;
         });
 
+        var drawDesktop = function () {
+            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+            drawDesktop = $.noop;
+        };
+
+        ox.ui.windowManager.on("empty", function (e, isEmpty, win) {
+            if (isEmpty) {
+                drawDesktop();
+                ox.ui.screens.show('desktop');
+                ox.launch(getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app);
+            } else {
+                ox.ui.screens.show('windowmanager');
+            }
+        });
+
         // start loading stuff
         baton.loaded = $.when(
             baton.block,
             ext.loadPlugins(),
             require(baton.autoLaunchApps),
-            require(['io.ox/core/api/account']).pipe(function (api) { return api.all(); })
+            require(['io.ox/core/api/account']).pipe(function (api) {
+                var def = $.Deferred();
+                api.all().always(def.resolve);
+                return def;
+            })
         );
 
         new Stage('io.ox/core/stages', {
@@ -767,7 +808,10 @@ define("io.ox/core/main",
 
                     dialog.on('click', '.footer .btn', def.resolve);
                     dialog.on('click', '.content .close', function (e) {
-                        ox.ui.App.removeRestorePoint($(this).data('id'));
+                        ox.ui.App.removeRestorePoint($(this).data('id')).done(function (list) {
+                            // continue if list is empty
+                            if (list.length === 0) def.resolve();
+                        });
                     });
 
                     topbar.hide();
@@ -854,6 +898,7 @@ define("io.ox/core/main",
     }
 
     return {
+        logout: logout,
         launch: launch,
         addLauncher: addLauncher
     };

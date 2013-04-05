@@ -77,20 +77,33 @@ define('io.ox/core/api/account',
         ox.api.cache.folder1.remove(id);
     };
 
-    var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator);
+    var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator),
+        regUnified = new RegExp('^default\\d+' + separator + '[^' + separator + ']+$');
 
     var api = {};
 
     Events.extend(api);
 
     api.isUnified = function (id) {
-        var match = String(id).match(/^default(\d+)/);
         // is account? (unified inbox is not a usual account)
-        return match ? !api.isAccount(match[1]) : false;
+        return !api.isAccount(id);
+    };
+
+    api.isUnifiedFolder = function (id) {
+        return regUnified.test(id) && api.isUnified(id);
     };
 
     api.isAccount = function (id) {
-        return id in idHash;
+        var match = String(id).match(/^default(\d+)/);
+        return match && match[1] in idHash;
+    };
+
+    api.isPrimary = function (id) {
+        return (/^default0/).test(id);
+    };
+
+    api.isExternal = function (id) {
+        return !api.isPrimary(id) && !api.isUnified(id);
     };
 
     // is drafts, trash, spam etc.
@@ -155,8 +168,26 @@ define('io.ox/core/api/account',
      * @return an array containing the personal name (might be empty!) and the primary address
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).pipe(function (account) { return [account.personal || '', account.primary_address]; });
+        return api.get(accountId || 0).then(function (account) {
+            if (!account) { return $.Deferred().reject(account); }
+            return account;
+        })
+        .then(addPersonalFallback).then(function (account) {
+            return getAddressArray(account.personal || '', account.primary_address);
+        });
     };
+
+    function addPersonalFallback(account) {
+        if (!account.personal) {
+            return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
+                return userAPI.getCurrentUser().then(function (user) {
+                    account.personal = contactsUtil.getMailFullName(user.toJSON());
+                    return account;
+                });
+            });
+        }
+        return account;
+    }
 
     function getAddressArray(name, address) {
         name = $.trim(name || '');
@@ -178,7 +209,7 @@ define('io.ox/core/api/account',
             return [getAddressArray(account.personal, account.primary_address)];
         }
         // looks like addresses continas primary address plus aliases
-        var addresses = String(account.addresses || '').split(',');
+        var addresses = String(account.addresses || '').split(',').sort();
         // build common array of [display_name, email]
         return _(addresses).map(function (address) {
             return getAddressArray(account.personal, address);
@@ -194,13 +225,17 @@ define('io.ox/core/api/account',
      * @return - the personal name and a list of (alias) addresses usable for sending
      */
     api.getSenderAddresses = function (accountId) {
-        return this.get(accountId || 0).pipe(getSenderAddress);
+        return this.get(accountId || 0).then(addPersonalFallback).then(getSenderAddress);
     };
 
     api.getAllSenderAddresses = function () {
-        return api.all().pipe(function (list) {
-            return $.when.apply($, _(list).map(getSenderAddress)).pipe(function () {
+        return api.all().then(function (list) {
+            return $.when.apply($, _(list).map(addPersonalFallback)).then(function () {
                 return _(arguments).flatten(true);
+            }).then(function (list) {
+                return $.when.apply($, _(list).map(getSenderAddress)).then(function () {
+                    return _(arguments).flatten(true);
+                });
             });
         });
     };
@@ -268,45 +303,25 @@ define('io.ox/core/api/account',
     /**
      * Create mail account
      */
-//    api.create = function (options) {
-//        // options
-//        var opt = $.extend({
-//            data: {},
-//            success: $.noop
-//        }, options || {});
-//        // go!
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'new'
-//            },
-//            data: opt.data,
-//            success: function (data, timestamp) {
-//                // process data
-//                data = process(data.data);
-//                // add to cache
-//                ox.api.cache.account.add(data, timestamp);
-//                // additionally, folder '1' has a new child
-//                invalidateRoot();
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify');
-//                // cont
-//                ox.util.call(opt.success, data);
-//            },
-//            error: opt.error
-//        });
-//    };
-
     api.create = function (data) {
         return http.PUT({
             module: 'account',
-            params: {action: 'new'},
-            data: data
+            params: { action: 'new' },
+            data: data,
+            appendColumns: false
         })
-        .done(function (d) {
-            accountsAllCache.add(d, _.now()).done(function () {
-                api.trigger('account_created', {id: d.id, email: d.primary_address, name: d.name});
+        .then(function (data) {
+            // reload all accounts
+            return accountsAllCache.clear()
+            .then(function () {
+                return api.all();
+            })
+            .then(function () {
+                api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
+                require(['io.ox/core/api/folder'], function (api) {
+                    api.propagate('account:create');
+                });
+                return data;
             });
         });
     };
@@ -314,37 +329,6 @@ define('io.ox/core/api/account',
     /**
      * Remove mail account
      */
-//    api.remove = function (options) {
-//        // options
-//        var opt = $.extend({
-//            id: undefined,
-//            success: $.noop
-//        }, options || {});
-//        // go!
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'delete'
-//            },
-//            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
-//            success: function (data, timestamp) {
-//                // remove from cache
-//                ox.api.cache.account.remove(opt.id);
-//                // invalidate root
-//                invalidateRoot();
-//                // invalidate folders
-//                invalidateFolder('default' + opt.id);
-//                // invalidate unified mail
-//                invalidateUnifiedMail();
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify remove');
-//                // cont
-//                ox.util.call(opt.success, data);
-//            }
-//        });
-//    };
-
     api.remove = function (data) {
         return http.PUT({
             module: 'account',
@@ -354,6 +338,9 @@ define('io.ox/core/api/account',
             accountsAllCache.remove(data).done(function () {
                 api.trigger('refresh.all');
                 api.trigger('delete');
+                require(['io.ox/core/api/folder'], function (api) {
+                    api.propagate('account:delete');
+                });
             });
         });
     };
@@ -367,50 +354,54 @@ define('io.ox/core/api/account',
             appendColumns: false,
             params: { action: 'validate' },
             data: data
-        });
+        })
+        // always successful but either true or false
+        .then(null, function () { $.Deferred().resolve(false); });
     };
 
     /**
      * Update account
      */
-//    api.update = function (options) {
-//        // options
-//        var opt = $.extend({
-//            data: {},
-//            success: $.noop
-//        }, options || {});
-//        // update
-//        ox.api.http.PUT({
-//            module: 'account',
-//            appendColumns: false,
-//            params: {
-//                action: 'update'
-//            },
-//            data: opt.data,
-//            success: function (response) {
-//                // invalidate unified mail folders
-//                invalidateUnifiedMail();
-//                invalidateRoot();
-//                // process response
-//                var data = process(response.data);
-//                ox.api.cache.account.add(data);
-//                // trigger folder event
-//                ox.api.folder.dispatcher.trigger('modify');
-//                // continue
-//                ox.util.call(opt.success, data);
-//            },
-//            error: opt.error
-//        });
-//    };
     api.update = function (data) {
+        // don't send computed data
+        delete data.mail_url;
+        delete data.transport_url;
+        // update
         return http.PUT({
             module: 'account',
-            params: {action: 'update'},
+            params: { action: 'update' },
             data: data
-        }).done(function () {
-            accountsAllCache.merge(data, _.now());
-            api.trigger('refresh.all');
-            api.trigger('update', data);
+        })
+        .then(function (result) {
+
+            // detect changes
+            accountsAllCache.get(result).done(function (obj) {
+                var enabled = result.unified_inbox_enabled;
+                if (obj !== null && obj.unified_inbox_enabled !== enabled) {
+                    require(['io.ox/core/api/folder'], function (api) {
+                        api.propagate(enabled ? 'account:unified-enable' : 'account:unified-disable');
+                    });
+                }
+            });
+
+            return accountsAllCache.remove(data).then(function () {
+                if (_.isObject(result)) {
+                    //update call returned the new object, just return it
+                    return result;
+                }
+                // update call didn’t return the new account -> get the data ourselves
+                return http.GET({
+                    module: 'account',
+                    params: { action: 'get', id: data.id },
+                    appendColumns: false
+                });
+            }).then(function (result) {
+                // update call returned the new account (this is the case for mail)
+                return accountsAllCache.add(result, _.now());
+            }).done(function () {
+                api.trigger('refresh.all');
+                api.trigger('update', result);
+            });
         });
     };
 

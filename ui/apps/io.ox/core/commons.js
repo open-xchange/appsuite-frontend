@@ -82,9 +82,11 @@ define('io.ox/core/commons',
                         node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
                     } else {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '').idle().empty();
                     }
                     // remember current selection
@@ -463,6 +465,30 @@ define('io.ox/core/commons',
                 }
                 api = update = data = node = getter = null;
             });
+    };
+
+    // located here since we need a translation for 'Retry'
+
+    $.fail = function (msg, retry) {
+        var tmp = $("<div>")
+            .addClass('io-ox-fail')
+            .append(
+                $('<span>').text(msg)
+            );
+        if (retry) {
+            tmp.append(
+                $('<span>').text(' ')
+            )
+            .append(
+                $('<a>', { href: '#' }).text(gt('Retry'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    $(this).closest('.io-ox-center').remove();
+                    retry.apply(this, arguments);
+                })
+            );
+        }
+        return tmp.center();
     };
 
     return commons;

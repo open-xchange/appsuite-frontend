@@ -42,6 +42,7 @@ define('io.ox/mail/print',
             cc: getList(data, 'cc'),
             subject: data.subject,
             date: util.getFullDate(data.received_date || data.sent_date),
+            sort_date: -(data.received_date || data.sent_date),
             content: getContent(data)
         };
     }
@@ -64,6 +65,7 @@ define('io.ox/mail/print',
                 process: process,
                 selection: selection,
                 selector: '.mail',
+                sortBy: 'sort_date',
                 window: win
             });
         }

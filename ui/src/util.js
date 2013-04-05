@@ -88,12 +88,12 @@
 
      // supported browsers
     _.browserSupport = {
-        'Chrome': '20',
-        'Safari': '5',
-        'Firefox': '10',
-        'IE': '9',
-        'Android': '4.2',
-        'iOS': '6'
+        'Chrome'    : 20,
+        'Safari'    : 5,
+        'Firefox'   : 10,
+        'IE'        : 9,
+        'Android'   : 4.2,
+        'iOS'       : 6.0
     };
 
     // browser detection - adopted from prototype.js
@@ -150,27 +150,37 @@
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
-        small: '(max-device-width: 720px)',
-        medium: '(min-device-width: 721px) and (max-device-width: 1024px)',
-        large: '(min-device-width: 1025px)',
+        small: '(max-width: 480px)',
+        medium: '(min-width: 481px) and (max-width: 1024px)',
+        large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
     };
 
-    _.display = {};
+    var display = {};
 
     _(queries).each(function (query, key) {
-        _.display[key] = !!matchMedia(query).matches;
+        display[key] = Modernizr.mq(query);
     });
 
-        // aliases
-    _.display.smartphone = _.display.small;
-    _.display.tablet = _.display.medium;
-    _.display.desktop = _.display.large;
-
+    // aliases
+    // TODO
+    // fix this because it only looks on screen size and does not mean
+    // desktop is a real desktop PC. This might causes errors later
+    display.smartphone = display.small;
+    display.tablet = display.medium;
+    display.desktop = display.large;
+    _.displayInfo = display;
     // extend underscore utilities
     _.mixin({
+
+        // returns current device size
+        display: function () {
+            if (display.small) return 'small';
+            if (display.medium) return 'medium';
+            return 'large';
+        },
 
         // combination of browser & display
         device: function (condition, debug) {
@@ -179,16 +189,16 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
-            // no arguments?
+            // no arguments?s
             if (arguments.length === 0) {
-                return _.extend({}, browserLC, _.display, misc);
+                return _.extend({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;
             // check condition
             condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
                 match = match.toLowerCase();
-                return browserLC[match] || _.display[match] || misc[match] || 'false';
+                return browserLC[match] || display[match] || misc[match] || 'false';
             });
             if (debug) {
                 console.debug(condition);
@@ -300,12 +310,12 @@
          * Redirect
          */
         redirect: function (path) {
-            location.href = _.url.get(path);
+            location.href = (/^http/i).test(path) ? path : _.url.get(path);
         },
 
         get: function (path) {
             var l = location;
-            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
         }
     };
 
@@ -365,19 +375,11 @@
         },
 
         /**
-         * Returns local current time as timestamp
+         * Returns local current time as timestamp in UTC!
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
-        },
-
-        /**
-         * Returns current time as UTC timestamp
-         * @returns {long} Timestamp
-         */
-        utc: function () {
-            return (new Date()).getTime() - timezoneOffset;
         },
 
         /**
@@ -562,7 +564,7 @@
             setTimeout(function () {
                 fn();
                 setInterval(fn, interval * (num || 1));
-            }, interval - (_.utc() % interval) + 1);
+            }, interval - (_.now() % interval) + 1);
         },
 
         wait: function (t) {

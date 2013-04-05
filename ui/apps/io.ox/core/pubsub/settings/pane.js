@@ -28,7 +28,7 @@ define('io.ox/core/pubsub/settings/pane',
 
     var point = views.point('io.ox/core/pubsub/settings/list'),
         SettingView = point.createView({ className: 'pubsub settings' }),
-        filter, folderState;
+        filter, folderState, dialog;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -37,6 +37,10 @@ define('io.ox/core/pubsub/settings/pane',
         require(['io.ox/files/api', 'io.ox/files/list/view-detail'], function (api, view) {
             api.get(obj).done(function (data) {
                 popup.idle().append(view.draw(data));
+            });
+            api.on('delete.version', function () {
+                // Close dialog after delete
+                dialog.close();
             });
         });
     }
@@ -94,7 +98,7 @@ define('io.ox/core/pubsub/settings/pane',
                 view.render().$el
             );
             // add side popup for single file publications
-            new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
+            dialog = new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
         }
     });
 
@@ -216,26 +220,29 @@ define('io.ox/core/pubsub/settings/pane',
                 this.find('.name').append(
                     $('<i class="icon-refresh icon-spin">')
                 );
-                baton.model._refresh.done(function () {
-                    baton.view.render();
-                });
             }
         }
     });
+
+    function performRender() {
+        this.render();
+    }
+
+    function performRemove() {
+        this.remove();
+    }
 
     var PubSubItem = Backbone.View.extend({
         tagName: 'li',
         className: '',
         initialize: function () {
-            var baton = ext.Baton({ model: this.model, view: this });
+            //TODO:switch to listenTo here, once backbone is up to date
+            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+            this.model.off('change', performRender);
+            this.model.on('change', performRender, this);
 
-            this.model.on('change', function () {
-                baton.view.render();
-            });
-
-            this.model.on('remove', function () {
-                baton.view.remove();
-            });
+            this.model.off('remove', performRemove, this);
+            this.model.on('remove', performRemove, this);
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
@@ -249,9 +256,11 @@ define('io.ox/core/pubsub/settings/pane',
             return this;
         },
         onToggle: function (ev) {
+            var model = this.model;
             ev.preventDefault();
-            this.model.set('enabled', !this.model.get('enabled')).save().fail(function (res) {
-                res.model.set('enabled', !res.model.get('enabled'));
+
+            model.set('enabled', !model.get('enabled')).save().fail(function (res) {
+                model.set('enabled', !model.get('enabled'));
             });
             this.render();
         },
@@ -273,12 +282,14 @@ define('io.ox/core/pubsub/settings/pane',
                     'Only one refresh per subscription and per session is allowed.'
                 )
             });
-            this.model.performRefresh();
+            this.model.performRefresh().done(function () {
+                baton.view.render();
+            });
             baton.view.render();
         },
         onRemove: function (ev) {
             ev.preventDefault();
-            this.model.collection.remove(this.model);
+            this.model.destroy();
         }
     });
 
@@ -324,6 +335,12 @@ define('io.ox/core/pubsub/settings/pane',
 
         // handle empty lists
 
+        collection.on('remove', function (model, collection, options) {
+            if (collection.length === 0) {
+                addHint();
+            }
+        });
+
         function getHint() {
 
             var isEmpty = filteredList.length === 0,
@@ -353,10 +370,14 @@ define('io.ox/core/pubsub/settings/pane',
             return '';
         }
 
-        if ((hint = getHint())) {
-            // add node
-            node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+        function addHint() {
+            if ((hint = getHint())) {
+                // add node
+                node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+            }
         }
+
+        addHint();
     }
 
     point.extend({

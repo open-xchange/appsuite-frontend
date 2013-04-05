@@ -19,7 +19,7 @@ define('io.ox/calendar/edit/main',
        'io.ox/core/notifications',
        'gettext!io.ox/calendar/edit/main',
        'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, calendarSettings) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
@@ -123,14 +123,13 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().busy();
                             });
                         }
-                        self.model.on('create update', _.bind(self.onSave, self));
+
                         self.model.on('backendError', function (response) {
                             try {
                                 self.getWindow().idle();
                             } catch (e) {
                                 if (response.code === 'UPL-0005') {//uploadsize to big
-                                    api.trigger('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(this.attributes)), false);
-                                    api.trigger('update:' + encodeURIComponent(_.cid(this.attributes)));//redraw detailview to get rid of busy animation
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
                                 }
                                 notifications.yell('error', response.error);
                             }
@@ -217,13 +216,6 @@ define('io.ox/calendar/edit/main',
                     baton.callbacks.extendDescription = app.extendDescription;
                     app.view = self.view = new MainView(baton);
 
-                    self.model.on('create update', _.bind(self.onSave, self));
-                    self.view.on('save:success', function () {
-                        self.considerSaved = true;
-                        self.view.idle();
-                        self.quit();
-                    });
-
                     self.setTitle(gt('Create appointment'));
 
                     // create app window
@@ -245,9 +237,10 @@ define('io.ox/calendar/edit/main',
                         });
                     }
 
-                    self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
-
-
+                    self.model.set('alarm', settings.get('defaultReminder', 15));
+                    if (self.model.get('full_time') === true) {
+                        self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
+                    }
                     self.considerSaved = true;
                     self.model.on('change', function () {
                         self.considerSaved = false;

@@ -18,7 +18,7 @@ define('io.ox/office/preview/main',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css'
+     'less!io.ox/office/preview/style.less'
     ], function (Utils, BaseApplication, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
@@ -101,6 +101,13 @@ define('io.ox/office/preview/main',
             return _.isNumber(jobId) ? this.sendConverterRequest(Utils.extendOptions({
                 params: { action: 'convertdocument', job_id: jobId }
             }, options)) : $.Deferred().reject();
+        };
+
+        this.getPreviewModuleUrl = function (options) {
+            return _.isNumber(jobId) ? this.getConverterModuleUrl(Utils.extendOptions({
+                action: 'convertdocument',
+                job_id: jobId
+            }, options)) : undefined;
         };
 
         // initialization -----------------------------------------------------

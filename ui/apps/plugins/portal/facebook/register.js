@@ -18,7 +18,7 @@ define('plugins/portal/facebook/register',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, strings, keychain, gt) {
+     'less!plugins/portal/facebook/style.less'], function (ext, proxy, strings, keychain, gt) {
 
     'use strict';
 
@@ -115,7 +115,7 @@ define('plugins/portal/facebook/register',
 
     ext.point('io.ox/portal/widget/facebook').extend({
 
-        title: 'Facebook',
+        title: gt('Facebook'),
 
         initialize: function (baton) {
             keychain.submodules.facebook.on('update create delete', function () {
@@ -246,6 +246,20 @@ define('plugins/portal/facebook/register',
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="icon-remove io-ox-portal-action">'))
             );
+        },
+
+        error: function (error) {
+            if (error.code !== "OAUTH-0006")
+                return; //let the default handling do the job
+
+            $(this).empty().append(
+                $('<h2>').text(gt('Facebook')),
+                $('<div class="content">').text(gt('Click here to add your account'))
+                .on('click', {}, function () {
+                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp');
+                })
+            );
+            console.log("DEBUG", error);
         }
     });
 

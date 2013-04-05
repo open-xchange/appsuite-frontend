@@ -45,9 +45,24 @@ define('io.ox/office/framework/app/basecontroller',
      * keyboard shortcut definition.
      */
     function isMatchingShortcut(event, definition) {
-        return (event.keyCode === definition.keyCode) &&
-            isMatchingControlKey(event.shiftKey, definition.shiftKey) &&
-            isMatchingControlKey(event.altKey, definition.altKey) &&
+
+        // 'shiftKey' option must always match
+        if ((event.keyCode !== definition.keyCode) || !isMatchingControlKey(event.shiftKey, definition.shiftKey)) {
+            return false;
+        }
+
+        // when 'altOrMetaKey' is set, ignore 'altKey' and 'metaKey' options
+        if (definition.altOrMetaKey === true) {
+            return (event.altKey !== event.metaKey) && isMatchingControlKey(event.ctrlKey, definition.ctrlKey);
+        }
+
+        // when 'ctrlOrMetaKey' is set, ignore 'ctrlKey' and 'metaKey' options
+        if (definition.ctrlOrMetaKey === true) {
+            return (event.ctrlKey !== event.metaKey) && isMatchingControlKey(event.altKey, definition.altKey);
+        }
+
+        // otherwise, options 'altKey', 'ctlKey' and 'metaKey' options must match
+        return isMatchingControlKey(event.altKey, definition.altKey) &&
             isMatchingControlKey(event.ctrlKey, definition.ctrlKey) &&
             isMatchingControlKey(event.metaKey, definition.metaKey);
     }
@@ -73,8 +88,16 @@ define('io.ox/office/framework/app/basecontroller',
             items = {
 
                 'app/quit': {
-                    // quit in a timeout (otherwise this controller becomes invalid while still running)
-                    set: function () { _.defer(function () { app.quit(); }); }
+                    set: function () {
+                        var def = $.Deferred();
+                        // quit in a timeout (otherwise this controller becomes invalid while still running)
+                        _.defer(function () {
+                            // failed quit means that application continues to run
+                            app.quit().fail(function () { def.resolve(); });
+                        });
+                        return def;
+                    },
+                    focus: 'wait' // application may resume
                 }
             },
 
@@ -106,8 +129,8 @@ define('io.ox/office/framework/app/basecontroller',
                 getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
                 setHandler = Utils.getFunctionOption(definition, 'set'),
-                // whether to return browser focus to application pane (default: true)
-                done = Utils.getBooleanOption(definition, 'done', true),
+                // behavior for returning browser focus to application
+                focus = Utils.getStringOption(definition, 'focus', 'direct'),
                 // additional user data
                 userData = Utils.getOption(definition, 'userData');
 
@@ -178,18 +201,30 @@ define('io.ox/office/framework/app/basecontroller',
                         enabled = false;
                         self.update();
                     }
-
                 } else {
                     // item is disabled
                     def = $.Deferred().reject();
+                }
+
+                // focus back to application
+                switch (focus) {
+                case 'direct':
+                    grabApplicationFocus();
+                    break;
+                case 'wait':
+                    // execute in a timeout, needed for dialogs which are closed after resolve/reject
+                    def.always(function () { app.executeDelayed(grabApplicationFocus); });
+                    break;
+                case 'never':
+                    break;
+                default:
+                    Utils.warn('BaseController.Item.change(): unknown focus mode: ' + focus);
                 }
 
                 // post processing after the setter is finished
                 def.always(function () {
                     enabled = true;
                     self.update();
-                    // return focus to application pane
-                    if (done) { grabApplicationFocus(); }
                 });
 
                 return this;
@@ -281,7 +316,12 @@ define('io.ox/office/framework/app/basecontroller',
 
             // executes the item setter defined in the passed shortcut
             function callSetHandlerForShortcut(shortcut) {
-                callSetHandler(shortcut.key, shortcut.definition.value, event);
+
+                var // call value resolver function, or take constant value
+                    value = _.isFunction(shortcut.definition.value) ?
+                        shortcut.definition.value(self.get(shortcut.key)) : shortcut.definition.value;
+
+                callSetHandler(shortcut.key, value, event);
                 if (!Utils.getBooleanOption(shortcut.definition, 'propagate', false)) {
                     event.stopPropagation();
                     event.preventDefault();
@@ -396,10 +436,29 @@ define('io.ox/office/framework/app/basecontroller',
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Any} [shortcut.value]
+         *      - {Boolean} [shortcut.altOrMetaKey]
+         *          Convenience option that if set to true, matches if either
+         *          the ALT key, or the META key are pressed. Has the same
+         *          effect as defining two separate shortcuts, one with the
+         *          'altKey' option set to true, and one with the 'metaKey'
+         *          option set to true, while keeping the other option false.
+         *          Must not be used in a shortcut definition where these
+         *          options are set explicitly.
+         *      - {Boolean} [shortcut.ctrlOrMetaKey=false]
+         *          Convenience option that if set to true, matches if either
+         *          the CTRL key, or the META key are pressed. Has the same
+         *          effect as defining two separate shortcuts, one with the
+         *          'ctrlKey' option set to true, and one with the 'metaKey'
+         *          option set to true, while keeping the other option false.
+         *          Must not be used in a shortcut definition where these
+         *          options are set explicitly.
+         *      - {Any|Function} [shortcut.value]
          *          The value that will be passed to the setter function of
          *          this item. If multiple shortcuts are defined for an item,
-         *          each shortcut definition may define its own value.
+         *          each shortcut definition may define its own value. If this
+         *          option contains a function, it will receive the current
+         *          value of the controller item as first parameter, and its
+         *          return value will be passed to the setter function.
          *      - {Boolean} [shortcut.propagate=false]
          *          If set to true, the event will propagate up to the DOM root
          *          element, and the browser will execute its default action
@@ -407,9 +466,19 @@ define('io.ox/office/framework/app/basecontroller',
          *          the event any may decide to cancel propagation manually).
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
-         *  @param {Boolean} [definition.done=true]
-         *      If set to false, the browser focus will not be moved to the
-         *      application pane after an item setter has been executed.
+         *  @param {String} [definition.focus='direct']
+         *      Determines how to return the browser focus to the application
+         *      pane after executing the setter function of this item. The
+         *      following values are supported:
+         *      - 'direct': (default) The focus will return directly after the
+         *          setter function has been executed, regardless of the return
+         *          value of the setter.
+         *      - 'never': The focus will not be returned to the application
+         *          pane. The setter function is responsible for application
+         *          focus handling.
+         *      - 'wait': The controller will wait until the Deferred object
+         *          returned by the setter function gets resolved or rejected,
+         *          and then sets the browser focus to the application pane.
          *  @param {Any} [definition.userData]
          *      Additional user data that will be provided by the method
          *      'Item.getUserData()'. Can be used in all item getter and setter
@@ -515,7 +584,7 @@ define('io.ox/office/framework/app/basecontroller',
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKey, triggerUpdate);
+            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: 100, maxDelay: 1000 });
 
         }()); // BaseController.update()
 
@@ -554,7 +623,6 @@ define('io.ox/office/framework/app/basecontroller',
         };
 
         this.destroy = function () {
-            app.getWindowNode().off('keydown keypress', keyHandler);
             this.events.destroy();
             items = null;
         };
@@ -564,7 +632,7 @@ define('io.ox/office/framework/app/basecontroller',
         // register item definitions
         this.registerDefinitions(items);
 
-        // register 'keydown' event listener for keyboard shortcuts
+        // register keyboard event listener for shortcuts
         app.getWindowNode().on('keydown keypress', keyHandler);
 
     } // class BaseController

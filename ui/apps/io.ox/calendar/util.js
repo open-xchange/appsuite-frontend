@@ -281,22 +281,29 @@ define("io.ox/calendar/util",
         },
 
         addTimezoneLabel: function (parent, data) {
+
             var current = date.Local.getTTInfoLocal(data.start_date);
 
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label pointer" tabindex="0">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     html: true,
                     animation: false,
-                    trigger: 'hover',
+                    trigger: 'focus',
                     container: $('#tmp'),
                     placement: function (tip, element) {
+                        // add missing outer class
+                        $(tip).addClass('timezones');
+                        // get placement
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
+                })
+                .on('dispose', function () {
+                    $(this).popover('destroy'); // avoids zombie-popovers
                 })
             );
 
@@ -305,7 +312,7 @@ define("io.ox/calendar/util",
                 var div = $('<div>');
                 _(zones).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<div>').addClass('clear').append(
+                    div.append($('<div class="clear">').append(
                         $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
                         $('<b>').append($('<span>')
                             .addClass('label label-info')
@@ -313,7 +320,7 @@ define("io.ox/calendar/util",
                         $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
-                return '<div class="timezones">' + div.html() + '</div>';
+                return '<div class="list">' + div.html() + '</div>';
             }
 
             return parent;
@@ -432,7 +439,11 @@ define("io.ox/calendar/util",
             return $.trim(gt.noI18n(data.note) || "")
                 .replace(/\n{3,}/g, "\n\n")
                 .replace(/</g, "&lt;")
-                .replace(/(https?\:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+                .replace(/(https?\:\/\/\S+)/g, function ($1) {
+                    // soft-break long words (like long URLs)
+                    $1 = $1.replace(/(\S{20})/g, '$1\u200B');
+                    return '<a href="' + $1 + '" target="_blank">' + $1 + '</a>';
+                });
         },
 
         getConfirmations: function (data) {
@@ -455,13 +466,15 @@ define("io.ox/calendar/util",
         },
 
         getConfirmationStatus: function (obj, id) {
-            var hash = this.getConfirmations(obj);
-            return (hash[id || ox.user_id] || { status: 1, comment: "" }).status;
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].status : 1;
         },
 
         getConfirmationMessage: function (obj, id) {
-            var hash = this.getConfirmations(obj);
-            return (hash[id || ox.user_id] || { status: 1, comment: "" }).comment;
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].comment : '';
         },
 
         // returns a set of rows, each containing 7 days
@@ -564,37 +577,40 @@ define("io.ox/calendar/util",
         },
 
         removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
-            return _(idsFromGrGroups).difference(idsFromUsers);
+            return _([].concat(idsFromGrGroups, idsFromUsers)).uniq();
         },
 
-        resolveGroupMembers: function (idsFromGroupMembers, returnArray, collectedUserIds) {
+        resolveGroupMembers: function (idsFromGroupMembers, collectedUserIds) {
 
-            var collectedIdsFromGroups = [];
-            groupAPI.getList(idsFromGroupMembers).done(function (data) {
+            return groupAPI.getList(idsFromGroupMembers)
+                .then(function (data) {
 
-                _.each(data, function (single) {
-                    _.each(single.members, function (single) {
-                        collectedIdsFromGroups.push(single);
-                    });
-                });
+                    var collectedIdsFromGroups = [];
 
-                collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
-
-                userAPI.getList(collectedIdsFromGroups).done(function (data) {
                     _.each(data, function (single) {
-                        returnArray.push({
+                        _.each(single.members, function (single) {
+                            collectedIdsFromGroups.push(single);
+                        });
+                    });
+
+                    collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
+                    return userAPI.getList(collectedIdsFromGroups);
+                })
+                .then(function (data) {
+                    return _(data).map(function (single) {
+                        return {
                             display_name: single.display_name,
                             folder_id: single.folder_id,
                             id: single.id,
                             mail: single.email1,
                             mail_field: 1
-                        });
+                        };
                     });
                 });
-            });
         },
 
         createArrayOfRecipients: function (participants, def) {
+
             var arrayOfRecipients = [],
                 arrayOfIds = [],
                 idsFromGroupMembers = [],
@@ -611,21 +627,22 @@ define("io.ox/calendar/util",
                 }
             });
 
-            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers, arrayOfIds);
+            that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).done(function (arrayOfGroupMembers) {
 
-            _.each(arrayOfGroupMembers, function (single) {
-                if (single.id !== currentUser) {
-                    arrayOfRecipients.push([single.display_name, single.mail]);
-                }
-            });
-
-            userAPI.getList(arrayOfIds).done(function (obj) {
-                _.each(obj, function (single) {
-                    arrayOfRecipients.push([single.display_name, single.email1]);
+                _.each(arrayOfGroupMembers, function (single) {
+                    if (single.id !== currentUser) {
+                        arrayOfRecipients.push([single.display_name, single.mail]);
+                    }
                 });
-                def.resolve(
-                    arrayOfRecipients
-                );
+
+                userAPI.getList(arrayOfIds).done(function (obj) {
+                    _.each(obj, function (single) {
+                        arrayOfRecipients.push([single.display_name, single.email1]);
+                    });
+                    def.resolve(
+                        arrayOfRecipients
+                    );
+                });
             });
         },
 

@@ -255,19 +255,23 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var node = $('<div>').addClass('fromselect-wrapper')
-                       .append(
-                           $('<label>', {'for': 'from'}).addClass('wrapping-label')
-                           .text(gt('From'))
-                    ),
-                select = $('<select>', {'name': 'from'}).css('width', '100%');
+
+            var node = $('<div class="fromselect-wrapper">').append(
+                   $('<label for="from" class="wrapping-label">').text(gt('From'))
+                ),
+                select = $('<select name="from">').css('width', '100%');
+
             accountAPI.getAllSenderAddresses().done(function (addresses) {
+                // sort by mail address (across all accounts)
+                addresses.sort(function (a, b) {
+                    a = mailUtil.formatSender(a);
+                    b = mailUtil.formatSender(b);
+                    return a < b ? -1 : +1;
+                });
                 _(addresses).each(function (address) {
-                    var option = $('<option>').text(_.noI18n(mailUtil.formatSender(address)));
-                    option.data({
-                        displayname: address[0],
-                        primaryaddress: address[1]
-                    });
+                    var value = mailUtil.formatSender(address),
+                        option = $('<option>', { value: value }).text(_.noI18n(value))
+                        .data({ displayname: address[0], primaryaddress: address[1] });
                     select.append(option);
                 });
             });
@@ -598,6 +602,7 @@ define("io.ox/mail/write/view-main",
                         this.textarea = $('<textarea>')
                         .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
                         .addClass('text-editor')
+                        .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
                     )
                 )
             );
@@ -685,26 +690,37 @@ define("io.ox/mail/write/view-main",
         if (list.length) {
             // loop over all attachments
             _(list).each(function (file) {
-                // get size
-                var size = file.size || file.file_size,
-                info = '';
-                size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
+
+                /*
+                 * Files and VCard are very close here
+                 * there's no real separation
+                 */
+
+                var icon, name, size, info,
+                    isFile = 'size' in file || 'file_size' in file;
 
                 // if file get size
-                if (file.size || file.file_size) {
+                if (isFile) {
                     // filesize
+                    size = file.size || file.file_size;
+                    size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                     info = $('<span>').addClass('filesize').text(size);
+                    icon = $('<i>').addClass('icon-paper-clip');
+                    name = file.filename || file.name || '';
                 } else {
                     // vcard
                     info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                    icon = $('<i>').addClass('icon-list-alt');
+                    name = contactsUtil.getFullName(file);
                 }
 
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
-                        (file.filename || file.name ? $('<i>').addClass('icon-paper-clip') : $('<i>').addClass('icon-list-alt')),
+                        // icon
+                        icon,
                         // filename
-                        $('<div class="row-1">').text(_.noI18n(file.filename || file.name || file.display_name || '')),
+                        $('<div class="row-1">').text(_.noI18n(name)),
                         // filesize / preview
                         $('<div class="row-2">').append(
                             info,
@@ -784,7 +800,6 @@ define("io.ox/mail/write/view-main",
             // not accepted but has content -> shake
             node.attr('disabled', 'disabled')
                 .css({ border: '1px solid #a00', backgroundColor: '#fee' })
-                .shake()
                 .done(function () {
                     node.css({ border: '', backgroundColor: '' })
                         .removeAttr('disabled').focus();

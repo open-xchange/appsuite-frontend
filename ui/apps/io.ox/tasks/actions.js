@@ -27,8 +27,8 @@ define('io.ox/tasks/actions',
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
-        requires: function () {
-            return _.device('!small');
+        requires: function (e) {
+            return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
@@ -50,7 +50,7 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        requires: 'some',
+        requires: 'some delete',
         action: function (baton) {
             var data = baton.data,
                 numberOfTasks = data.length || 1;
@@ -475,7 +475,7 @@ define('io.ox/tasks/actions',
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr('finderId');
+                        var finderId = $(this).attr("value");
                         require(['io.ox/tasks/api'], function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime(),

@@ -18,8 +18,70 @@ define('io.ox/office/preview/model',
 
     'use strict';
 
-    var // maximum number of pages in page cache
-        CACHE_SIZE = 100;
+    // class Cache ============================================================
+
+    /**
+     * Caches arbitrary elements and maintains a maximum cache size. Creates
+     * new elements on demand via a callback function.
+     *
+     * @param {Number} cacheSize
+     *  The maximum size of the cache.
+     *
+     * @param {Function} createElementHandler
+     *  A callback function that will be called when the cache does not contain
+     *  the requested element. Receives the element key as first parameter.
+     *  Must return the element that will be stored in this cache.
+     *
+     * @param {Object} [context]
+     *  The context used to call the createElementHandler callback function.
+     */
+    function Cache(cacheSize, createElementHandler, context) {
+
+        var // cached elements, mapped by key
+            elements = {},
+
+            // last used keys, in order of access
+            lastKeys = [];
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Clears all elements from this cache.
+         *
+         * @returns {Cache}
+         *  A reference to this instance.
+         */
+        this.clear = function () {
+            elements = {};
+            lastKeys = [];
+            return this;
+        };
+
+        /**
+         * Returns the element stored under the specified key. If the element
+         * does not exist yet, calls the callback function passed to the
+         * constructor, and stores its result in this cache.
+         *
+         * @param {String|Number} key
+         *  The key of the requested element.
+         *
+         * @returns {Any}
+         *  The element that has been already cached, or that has been created
+         *  by the callback function passed to the constructor.
+         */
+        this.getElement = function (key) {
+            if (!(key in elements)) {
+                elements[key] = createElementHandler.call(context, key);
+                lastKeys = _(lastKeys).without(key);
+                lastKeys.push(key);
+                if (lastKeys.length > cacheSize) {
+                    delete elements[lastKeys.shift()];
+                }
+            }
+            return elements[key];
+        };
+
+    } // class Cache
 
     // class PreviewModel =====================================================
 
@@ -36,15 +98,69 @@ define('io.ox/office/preview/model',
         var // the total page count of the document
             pageCount = 0,
 
-            // the page cache, mapped by one-based page number
-            pageCache = {},
+            // the page cache containing Deferred objects with <img> elements
+            imageCache = new Cache(100, createImageNode),
 
-            // last shown pages, in order of visiting
-            lastPages = [];
+            // the page cache containing Deferred objects with SVG mark-up as strings
+            svgCache = new Cache(100, loadSvgMarkup);
 
         // base constructor ---------------------------------------------------
 
         BaseModel.call(this, app);
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Creates an <img> element containing the SVG mark-up of the specified
+         * page.
+         *
+         * @param {Number} page
+         *  The one-based page number.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved with the
+         *  <img> element as jQuery object.
+         */
+        function createImageNode(page) {
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the URL of the new image element
+                srcUrl = app.getPreviewModuleUrl({ convert_format: 'html', convert_action: 'getpage', page_number: page, returntype: 'file' }),
+                // the new image element
+                imgNode = $('<img>', { src: srcUrl });
+
+            // wait that the image is loaded
+            imgNode.one('load', function () { def.resolve(imgNode); });
+
+            return def.promise();
+        }
+
+        /**
+         * Loads the SVG mark-up of the specified page.
+         *
+         * @param {Number} page
+         *  The one-based page number.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved with the SVG
+         *  mark-up.
+         */
+        function loadSvgMarkup(page) {
+
+            return app.sendPreviewRequest({
+                params: {
+                    convert_format: 'html',
+                    convert_action: 'getpage',
+                    page_number: page
+                },
+                resultFilter: function (data) {
+                    // extract SVG mark-up, returning undefined will reject the entire request
+                    return Utils.getStringOption(data, 'HTMLPages');
+                }
+            })
+            .promise();
+        }
 
         // methods ------------------------------------------------------------
 
@@ -57,8 +173,8 @@ define('io.ox/office/preview/model',
          */
         this.setPageCount = function (count) {
             pageCount = count;
-            pageCache = {};
-            lastPages = [];
+            imageCache.clear();
+            svgCache.clear();
         };
 
         /**
@@ -73,43 +189,33 @@ define('io.ox/office/preview/model',
 
         /**
          * Returns the Promise of a Deferred object that will be resolved with
-         * the HTML contents of the specified page.
+         * the <img> element containing the SVG mark-up of the specified page.
          *
          * @param {Number} page
          *  The one-based index of the requested page.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
-         *  HTML snippet representing the specified page, or rejected on error.
+         *  completed <img> element containing the SVG mark-up of the specified
+         *  page (as jQuery object), or rejected on error.
          */
-        this.loadPage = function (page) {
+        this.loadPageAsImage = function (page) {
+            return imageCache.getElement(page);
+        };
 
-            // first, try the page cache (returns a resolved Deferred object)
-            if (page in pageCache) {
-                return $.Deferred().resolve(pageCache[page]);
-            }
-
-            // load page from server
-            return app.sendPreviewRequest({
-                params: {
-                    convert_format: 'html',
-                    convert_action: 'getpage',
-                    page_number: page
-                },
-                resultFilter: function (data) {
-                    // extract HTML source, returning undefined will reject the entire request
-                    return Utils.getStringOption(data, 'HTMLPages');
-                }
-            })
-            .done(function (html) {
-                // store page in cache
-                pageCache[page] = html;
-                lastPages = _(lastPages).without(page);
-                lastPages.push(page);
-                if (lastPages.length > CACHE_SIZE) {
-                    delete pageCache[lastPages.shift()];
-                }
-            });
+        /**
+         * Returns the Promise of a Deferred object that will be resolved with
+         * the SVG mark-up of the specified page.
+         *
+         * @param {Number} page
+         *  The one-based index of the requested page.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved with the
+         *  SVG mark-up of the specified page as string, or rejected on error.
+         */
+        this.loadPageAsSvg = function (page) {
+            return svgCache.getElement(page);
         };
 
     } // class PreviewModel

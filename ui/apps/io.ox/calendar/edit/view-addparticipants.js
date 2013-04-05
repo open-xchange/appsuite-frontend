@@ -17,7 +17,8 @@ define('io.ox/calendar/edit/view-addparticipants',
        'io.ox/mail/util',
        'io.ox/participants/model',
        'io.ox/participants/views',
-       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
+       'io.ox/core/notifications',
+       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, notifications, gt) {
 
     'use strict';
 
@@ -58,44 +59,54 @@ define('io.ox/calendar/edit/view-addparticipants',
                     api: autocompleteAPI,
                     // reduce suggestion list
                     reduce: function (data) {
+                        var baton = $.data(self.$el, 'baton') || {list: []},
+                            hash = {},
+                            list,
+                            //get numeric type
+                            getType = function (obj) {
+                                switch (obj.type) {
+                                case 'user':
+                                case 1:
+                                    return 1;
+                                case 'group':
+                                case 2:
+                                    return 2;
+                                case 'resource':
+                                case 3:
+                                    return 3;
+                                case 4:
+                                    return 4;
+                                case 'contact':
+                                case 5:
+                                    return 5;
+                                }
+                            },
+                            //set hash for doublet check
+                            getHash = function (list) {
+                                var hash = {};
+                                _(baton.list).each(function (obj) {
+                                    // handle contacts/external contacts
+                                    if ((getType(obj) === 1 || getType(obj) === 5) && obj.email) {
+                                        hash[obj.email] = true;
+                                    }
+                                    hash[obj.type + '|' + obj.id] = true;
+                                });
+                                return hash;
+                            },
+                            // remove doublets from list
+                            filterDoubletes = function (list, hash) {
+                                return _(data).filter(function (recipient) {
+                                    var type = getType(recipient),
+                                        uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id],
+                                        uniqueMail = recipient.email ? !hash[recipient.email] : true;
+                                    return uniqueId && uniqueMail;
+                                });
+                            };
 
                         // updating baton-data-node
                         self.trigger('update');
-                        var baton = $.data(self.$el, 'baton') || {list: []},
-                            hash = {},
-                            list;
-                        _(baton.list).each(function (obj) {
-                            // handle contacts/external contacts
-                            if (obj.type === 1 || obj.type === 5) {
-                                hash[obj.email] = true;
-                                hash[obj.type + '|' + obj.id] = true;
-                            } else {
-                                hash[obj.type + '|' + obj.id] = true;
-                            }
-                        });
-
-                        // filter doublets
-                        list = _(data).filter(function (recipient) {
-                            var type, uniqueId, uniqueMail;
-                            switch (recipient.type) {
-                            case 'user':
-                                type = 1;
-                                break;
-                            case 'contact':
-                                type = 5;
-                                break;
-                            case 'group':
-                                type = 2;
-                                break;
-                            case 'resource':
-                                type = 3;
-                                break;
-                            }
-                            uniqueId = type === 1 ? !hash[type + '|' + recipient.data.internal_userid || ''] : !hash[type + '|' + recipient.data.id];
-                            uniqueMail = !hash[recipient.email];
-                            return uniqueId && uniqueMail;
-                        });
-
+                        hash = getHash(list);
+                        list = filterDoubletes(list, hash);
                         //return number of query hits and the filtered list
                         return { list: list, hits: data.length };
                     },
@@ -148,42 +159,48 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
+
             var selectedItem = this.autoparticipants.getSelectedItem(),
                 self = this;
 
             if (selectedItem) {
                 return this.autoparticipants.trigger('selected', selectedItem);
-            } else {
-                var node = this.$('input.add-participant'),
-                    val = node.val(),
-                    list = mailUtil.parseRecipients(val);
-                if (list.length) {
-                    // add n extenal users
-                    _.each(list, function (elem) {
-                        self.select({
-                            id: Math.random(),
-                            display_name: elem[0],
-                            mail: elem[1],
-                            image1_url: '',
-                            type: 5 // TYPE_EXTERNAL_USER
-                        });
-                    });
-                } else {
-                    node.attr('disabled', 'disabled')
-                        .css({border: '1px solid #a00', backgroundColor: '#fee'})
-                        .shake()
-                        .done(function () {
-                            node.css({ border: '', backgroundColor: '' })
-                                .removeAttr('disabled').focus();
-                        });
-                }
             }
+
+            var node = this.$('input.add-participant'),
+                placeholder = node.attr('placeholder'),
+                val = $.trim(node.val()),
+                list = mailUtil.parseRecipients(val);
+
+            if (val === '') {
+                if (!placeholder) {
+                    node.attr('placeholder', gt('Search here') + ' ...');
+                }
+                node.focus();
+                return;
+            }
+
+            if (list.length === 0) {
+                node.focus();
+                return;
+            }
+
+            // add n extenal users
+            _.each(list, function (elem) {
+                self.select({
+                    id: Math.random(),
+                    display_name: elem[0],
+                    mail: elem[1],
+                    image1_url: '',
+                    type: 5 // TYPE_EXTERNAL_USER
+                });
+            });
         },
+
         select: function (obj) {
             this.$('.add-participant').val('');
             this.trigger('select', obj);
         }
-
     });
 
     return AddParticipantView;

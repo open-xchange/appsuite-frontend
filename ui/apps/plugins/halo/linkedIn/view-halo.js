@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "less!io.ox/linkedIn/style.css"], function (viewer) {
+define("plugins/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "less!io.ox/linkedIn/style.less"], function (viewer) {
 
     "use strict";
 

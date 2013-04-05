@@ -573,7 +573,7 @@ msgstr "E-Mail-Speicherplatz"
 
 #: apps/plugins/portal/quota/register.js:48
 msgid "Mail count quota"
-msgstr "E-Mail-Quota"
+msgstr "E-Mail-Anzahl"
 
 #: apps/plugins/portal/quota/register.js:115
 msgid "unlimited"
@@ -2262,8 +2262,8 @@ msgid ""
 "\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
 "\"options\" data-attribute=\"month\">october</a>. "
 msgstr ""
-"Der Termin findet jedes Jahr am Tag <a href=\"#\"  data-widget=\"custom\" "
-"data-attribute=\"dayInMonth\">10</a> in <a href=\"#\" data-widget=\"options"
+"Der Termin findet jedes Jahr am <a href=\"#\"  data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10.</a> <a href=\"#\" data-widget=\"options"
 "\" data-attribute=\"month\">Oktober</a> statt. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:386

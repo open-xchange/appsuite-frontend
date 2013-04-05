@@ -25,7 +25,7 @@ define('io.ox/tasks/settings/pane',
         staticStrings =  {
         TITLE_TASKS: gt('Tasks'),
         TITLE_COMMON: gt('Common'),
-        INTERVAL_IN_MINUTES: gt('Interval of the reminder in minutes'),
+        INTERVAL_IN_MINUTES: gt('Default time for reminder'),
         TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
         TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
         NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
@@ -33,7 +33,24 @@ define('io.ox/tasks/settings/pane',
     },
         optionsYes = {label: gt('Yes'), value: true},
         optionsNo = {label: gt('No'), value: false},
-        optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
+        optionsInterval = [{label: gt('in 5 minutes'), value: '5'},
+                           {label: gt('in 15 minutes'), value: '15'},
+                           {label: gt('in 30 minutes'), value: '30'},
+                           {label: gt('in one hour'), value: '60'},
+                           {label: gt('this morning'), value: 'd0'},
+                           {label: gt('by noon'), value: 'd1'},
+                           {label: gt('this afternoon'), value: 'd2'},
+                           {label: gt('tonight'), value: 'd3'},
+                           {label: gt('late in the evening'), value: 'd4'},
+                           {label: gt('tomorrow'), value: 't'},
+                           {label: gt('next Sunday'), value: 'w0'},
+                           {label: gt('next Monday'), value: 'w1'},
+                           {label: gt('next Tuesday'), value: 'w2'},
+                           {label: gt('next Wednesday'), value: 'w3'},
+                           {label: gt('next Thursday'), value: 'w4'},
+                           {label: gt('next Friday'), value: 'w5'},
+                           {label: gt('next Saturday'), value: 'w6'},
+                           {label: gt('in one week'), value: 'ww'}],
 
         tasksViewSettings;
 
@@ -51,14 +68,12 @@ define('io.ox/tasks/settings/pane',
             self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString());
             self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString());
             self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString());
-            self.model.set('interval', self.model.get('interval').toString());
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
                 optionsNoAnswers: optionsNo,
                 optionsIntervalMinutes: optionsInterval
             }));
-            
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             self._modelBinder.bind(self.model, self.el, defaultBindings);
             
@@ -92,7 +107,6 @@ define('io.ox/tasks/settings/pane',
             makeBool('notifyAcceptedDeclinedAsCreator');
             makeBool('notifyAcceptedDeclinedAsParticipant');
             makeBool('notifyNewModifiedDeleted');
-            tasksViewSettings.model.set('interval', parseInt(tasksViewSettings.model.get('interval'), 10));
             tasksViewSettings.model.save();
         }
     });

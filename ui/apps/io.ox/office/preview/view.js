@@ -13,10 +13,14 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
+     'io.ox/office/framework/view/pane',
+     'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css'
-    ], function (Utils, BaseView, gt) {
+     'less!io.ox/office/preview/style.less'
+    ], function (Utils, Button, Label, BaseView, Pane, ToolBox, gt) {
 
     'use strict';
 
@@ -61,7 +65,7 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, { scrollable: true, margin: '52px 30px' });
+        BaseView.call(this, app, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
 
         // private methods ----------------------------------------------------
 
@@ -111,29 +115,27 @@ define('io.ox/office/preview/view',
          */
         function initHandler() {
 
-            var // the tool pane for upper tool boxes
-                topPane = self.createPane('toppane', 'top', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true }),
-                // the tool pane for lower tool boxes
-                bottomPane = self.createPane('bottompane', 'bottom', { classes: 'inline right', overlay: true, transparent: true, hoverEffect: true });
-
             model = app.getModel();
 
-            topPane.createToolBox('top')
-                .createButton('app/quit', { icon: 'icon-remove', tooltip: gt('Close document') });
+            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
+                )
+            );
 
-            bottomPane.createToolBox('bottom')
-                .createGroupContainer(function () {
-                    this.createButton('pages/first',    { icon: 'docs-first-page',    tooltip: gt('Show first page') })
-                        .createButton('pages/previous', { icon: 'docs-previous-page', tooltip: gt('Show previous page') })
-                        .createLabel('pages/current',   {                             tooltip: gt('Current page and total page count') })
-                        .createButton('pages/next',     { icon: 'docs-next-page',     tooltip: gt('Show next page') })
-                        .createButton('pages/last',     { icon: 'docs-last-page',     tooltip: gt('Show last page') });
-                })
-                .createGroupContainer(function () {
-                    this.createButton('zoom/dec',    { icon: 'docs-zoom-out', tooltip: gt('Zoom out') })
-                        .createLabel('zoom/current', {                        tooltip: gt('Current zoom factor') })
-                        .createButton('zoom/inc',    { icon: 'docs-zoom-in',  tooltip: gt('Zoom in') });
-                });
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
+                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
+                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
+                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
+                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                    .addGap()
+                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
+                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
+                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
+                )
+            );
 
             // insert the page node into the application pane
             self.insertContentNode(pageNode);
@@ -158,7 +160,9 @@ define('io.ox/office/preview/view',
         function showPage(newPage, scrollTo) {
 
             var // a timeout for the window busy call
-                busyPromise = null;
+                busyTimer = null,
+                // the Promise that loads the page
+                def = null;
 
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
@@ -167,12 +171,23 @@ define('io.ox/office/preview/view',
             page = newPage;
 
             // switch window to busy state after a short delay
-            busyPromise = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
+            busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
-            model.loadPage(page)
-            .done(function (html) {
-                pageNode[0].innerHTML = html;
+            if (_.browser.Chrome) {
+                // Chrome: as SVG mark-up (Chrome does not show images in linked SVG)
+                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
+                    pageNode[0].innerHTML = svgMarkup;
+                });
+            } else {
+                // preferred: as an image element linking to the SVG file
+                def = model.loadPageAsImage(page).done(function (imgNode) {
+                    pageNode.empty().append(imgNode);
+                });
+            }
+
+            // post-processing
+            def.done(function () {
                 updateZoom(scrollTo);
             })
             .fail(function () {
@@ -180,7 +195,7 @@ define('io.ox/office/preview/view',
             })
             .always(function () {
                 app.getController().update();
-                busyPromise.abort();
+                busyTimer.abort();
                 app.getWindow().idle();
             });
         }
@@ -199,12 +214,12 @@ define('io.ox/office/preview/view',
 
             var // the current zoom factor
                 factor = self.getZoomFactor() / 100,
-                // the SVG root node
-                svgNode = pageNode.children().first(),
+                // the child node of the page representing the SVG contents
+                childNode = pageNode.children().first(),
                 // the vertical margin to adjust scroll size
-                vMargin = svgNode.height() * (factor - 1) / 2,
+                vMargin = childNode.height() * (factor - 1) / 2,
                 // the horizontal margin to adjust scroll size
-                hMargin = svgNode.width() * (factor - 1) / 2,
+                hMargin = childNode.width() * (factor - 1) / 2,
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
@@ -214,11 +229,11 @@ define('io.ox/office/preview/view',
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
             // if browser zoom is not 100%) regardless of existing SVG, must
             // set its size explicitly to see anything...
-            Utils.setCssAttributeWithPrefixes(svgNode, 'transform', 'scale(' + factor + ')');
-            svgNode.css('margin', vMargin + 'px ' + hMargin + 'px');
+            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
+            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
             pageNode.css({
-                width: svgNode.width() * factor,
-                height: svgNode.height() * factor
+                width: childNode.width() * factor,
+                height: childNode.height() * factor
             });
 
             // refresh view (scroll bars may have appeared or vanished)

@@ -20,7 +20,7 @@ define("io.ox/contacts/view-detail",
      "io.ox/core/api/folder",
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
-     "less!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.less"
     ], function (ext, gt, util, api, actions, folderAPI, links, date) {
 
     "use strict";
@@ -33,8 +33,6 @@ define("io.ox/contacts/view-detail",
             })
             .join(arguments[0] || "");
     };
-
-    var attachmentsBusy = false; //check if attachments are uploding atm
 
     function addField(label, value, node, fn) {
         if (value) {
@@ -243,8 +241,8 @@ define("io.ox/contacts/view-detail",
         index: 110,
         id: "attachments",
         draw: function (baton) {
-            if (attachmentsBusy) {
-                drawBusyAttachments(this, false);
+            if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
+                drawBusyAttachments(this);
             }
             else if (baton.data.number_of_attachments > 0) {
                 ext.point('io.ox/contacts/detail-attach').invoke('draw', this, baton.data);
@@ -252,21 +250,11 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    function  drawBusyAttachments(node, simple) {
-        if (simple) {
-            node.find('.attachments-value').empty().busy();
-            if (node.find('.attachments-value').length === 0) {
-                var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').insertAfter(node.find('.contact-header'));
-                $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
-                var linkContainer = $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).addClass('attachments-value').appendTo(attachmentsBusyNode);
-                linkContainer.busy();
-            }
-        } else {
-            var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').appendTo(node);
-            $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
-            var linkContainer = $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).addClass('attachments-value').appendTo(attachmentsBusyNode);
-            linkContainer.busy();
-        }
+    function  drawBusyAttachments(node) {
+        var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').appendTo(node);
+        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
+        var linkContainer = $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).addClass('attachments-value').appendTo(attachmentsBusyNode);
+        linkContainer.busy();
     }
 
     ext.point('io.ox/contacts/detail-attach').extend({
@@ -479,13 +467,6 @@ define("io.ox/contacts/view-detail",
         $(this).replaceWith(e.data.view.draw(data));
     }
 
-    function setAttachmentsbusy(e, data) {
-        attachmentsBusy = data.state;
-        if (data.redraw) {
-            drawBusyAttachments(e.data.node, true);
-        }
-    }
-
     return {
 
         draw: function (baton) {
@@ -498,8 +479,6 @@ define("io.ox/contacts/view-detail",
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
-                api.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(baton.data)), {node: node}, setAttachmentsbusy);
-                api.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(baton.data)), {node: node}, setAttachmentsbusy);
                 node.addClass('contact-detail view');
                 ext.point('io.ox/contacts/detail').invoke('draw', node, baton);
 

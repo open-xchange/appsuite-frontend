@@ -69,18 +69,19 @@ define('io.ox/core/api/factory',
 
         // use module as id?
         o.id = o.id || o.module;
-        
+
         _.each(o.requests, function (request, action) {
             if (!request.extendColumns) return;
             request.columns = factory.extendColumns(request.extendColumns,
                 o.module, request.columns);
             delete request.extendColumns;
         });
-        
+
         // create 3 caches for all, list, and get requests
         var caches = {
             all: new cache.SimpleCache(o.id + "-all", true),
-            list: new cache.ObjectCache(o.id + "-list", true, o.keyGenerator),
+            //no persistant cache for list, because burst-writes block read (stupid queue implementation)
+            list: new cache.ObjectCache(o.id + "-list", false, o.keyGenerator),
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
 
@@ -376,6 +377,11 @@ define('io.ox/core/api/factory',
                 // merge defaults for search
                 var opt = $.extend({}, o.requests.search, options || {}),
                     getData = opt.getData;
+
+                if (o.requests.search.omitFolder) {
+                    opt = _.omit(opt, ['folder', 'omitFolder']);
+                }
+
                 // remove getData functions
                 delete opt.getData;
                 // go!
@@ -413,7 +419,7 @@ define('io.ox/core/api/factory',
     };
 
     factory.reduce = reduce;
-    
+
     /**
      * Extends a columns parameter using an extension point.
      * The columns parameter is a comma-separated list of (usually numeric)
@@ -426,7 +432,7 @@ define('io.ox/core/api/factory',
      */
     factory.extendColumns = function (id, module, columns) {
         var hash = {}, // avoid duplication by using a hash instead of an array
-            
+
             cols = {}, // a map from field names to column IDs
             // http has only the reverse version of what we need
             fields = http.getColumnMapping(module);

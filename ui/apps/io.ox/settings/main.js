@@ -18,7 +18,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
+      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
 
@@ -43,11 +43,12 @@ define('io.ox/settings/main',
             set: function (data, fields, index) {
                 this.text(data.group || '');
             }
-        },
-        requiresLabel: function (i, data, current) {
-            if (!data) { return false; }
-            return data.group !== current ? data.group : false;
         }
+        // might be good to introduce real groups!
+        // requiresLabel: function (i, data, current) {
+        //     if (!data) { return false; }
+        //     return data.group !== current ? data.group : false;
+        // }
     };
 
     // application object
@@ -102,16 +103,20 @@ define('io.ox/settings/main',
                 }
                 break;
             case 'hide':
+            case 'logout':
                 if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                    var settingsID = currentSelection.id + '/settings';
-                    ext.point(settingsID + '/detail').invoke('save');
+                    var settingsID = currentSelection.id + '/settings',
+                        defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
                     changeStatus = false;
+                    return $.when.apply($, defs);
                 }
                 break;
             default:
                 var settingsID = currentSelection.id + '/settings';
                 ext.point(settingsID + '/detail').invoke('save');
             }
+
+            return $.when();
         };
 
         win.nodes.controls.append(
@@ -128,15 +133,12 @@ define('io.ox/settings/main',
 
         win.addClass('io-ox-settings-main');
 
-        left = $('<div>')
-            .addClass('leftside border-right')
-            .appendTo(win.nodes.main);
+        var vsplit = commons.vsplit(win.nodes.main, app);
+        left = vsplit.left.addClass('leftside border-right');
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane').scrollable();
 
-        right = $('<div>')
-            .addClass('rightside default-content-padding settings-detail-pane')
-            .appendTo(win.nodes.main);
 
-        grid = new VGrid(left, { multiple: false, draggable: false });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none' });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -146,8 +148,7 @@ define('io.ox/settings/main',
         grid.addTemplate(tmpl.main);
         grid.addLabelTemplate(tmpl.label);
 
-        grid.requiresLabel = tmpl.requiresLabel;
-
+        //grid.requiresLabel = tmpl.requiresLabel;
 
         var getAllSettingsPanes = function () {
 
@@ -248,6 +249,13 @@ define('io.ox/settings/main',
         });
         win.on('hide', function () {
             saveSettings('hide');
+        });
+
+        // listen for logout event
+        ext.point('io.ox/core/logout').extend({
+            logout: function () {
+                return saveSettings('logout');
+            }
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);

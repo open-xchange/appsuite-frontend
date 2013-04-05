@@ -26,10 +26,11 @@
                            "url($1" + path);
     }
 
-    function insert(name, css, selector) {
-        return $('<style type="text/css">' + relativeCSS(dirname(name), css) +
-                 '</style>')
-            .attr("data-require-src", name).insertBefore($(selector).first());
+    function insert(name, css, selector, node) {
+        if (node) return node.text(relativeCSS(dirname(name), css));
+        return $('<style type="text/css">' + relativeCSS(dirname(name), css) + '</style>')
+            .attr("data-require-src", name)
+            .insertAfter(selector);
     }
 
     // Replace the load function of RequireJS with our own, which fetches
@@ -55,16 +56,24 @@
             var next = deps[modulename];
             if (next && next.length) context.require(next);
             queue.push(url);
-            
+
             function loaded() {
                 var q = queue;
                 queue = [];
-                oldload(context, modulename,
-                    [ox.apiRoot, '/apps/load/', ox.base, ',', q.join()].join(''));
+                if (_.url.hash('debug-js')) {
+                    _.each(q, load);
+                } else {
+                    load(q.join(), modulename);
+                }
                 if (queue.length) console.error('recursive require', queue);
             }
+
+            function load(module, modulename) {
+                oldload(context, modulename || module,
+                    [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''));
+            }
         };
-        
+
         define('text', { load: function (name, parentRequire, load, config) {
             req(['/text;' + name], load, load.error);
         } });
@@ -77,99 +86,42 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                load(insert(config.baseUrl + name, css, "title"));
+                load(insert(config.baseUrl + name, css, "#css"));
             });
         }
     });
 
-    var currentTheme = "";
-    var themeLess = {}, lessFiles = [themeLess];
-    var themeCSS;
-
-    var less = (function () {
-        var less = { tree: {} }, exports = less;
-        function require(name) {
-            return less[name.split("/")[1]];
-        }
-        (function () {
-            var window; // pretend we're not in a browser
-            //@include ../lib/less.js/lib/less/parser.js
-        }());
-        //@include ../lib/less.js/lib/less/tree.js
-        //@include ../lib/less.js/lib/less/colors.js
-        //@include ../lib/less.js/lib/less/functions.js
-        //@include ../lib/less.js/lib/less/tree/*.js
-        less.Parser.importer = function (file, paths, callback) {
-            var filename = paths[0] ? paths[0] + "/" + file : file;
-            window.require(["text!" + filename], function (data) {
-                new less.Parser({
-                    paths: [filename.replace(/(?:^(\/)|\/|^)[^\/]*$/, "$1")],
-                    filename: filename
-                }).parse(data, function (e, root) {
-                    if (e) return console.error("LESS error", e);
-                    callback(root);
-                });
+        // Name of the current theme, or falsy before a theme is set.
+    var theme = '',
+        // LessCSS files of the current theme.
+        themeCommon = { name: 'common.css', selector: '#theme' },
+        themeStyle = { name: 'style.css', selector: '#custom' },
+        // List of LessCSS files to update for theme changes.
+        lessFiles = [themeCommon, themeStyle];
+    
+    function insertLess(file) {
+        return require(['text!themes/' + theme + '/less/' + file.name])
+            .done(function (css) {
+                file.node = insert(file.path, css, file.selector, file.node);
             });
-        };
-        return function (data) {
-            var def = new $.Deferred();
-            try {
-                new less.Parser({ paths: [""] }).parse(currentTheme + data,
-                    function (e, root) {
-                        if (e) def.reject(e); else {
-                            try {
-                                def.resolve(root.toCSS());
-                            } catch (e2) {
-                                console.error("LESS error", e2);
-                            }
-                        }
-                    });
-            } catch (e) {
-                console.error("LESS error", e);
-            }
-            return def.promise();
-        };
-    }());
-
+    }
+    
     define("less", {
         load: function (name, parentRequire, load, config) {
-            require(["text!" + name]).pipe(function (data) {
-                if (currentTheme) {
-                    return less(data).pipe(function (css) {
-                        return { less: data, css: css };
-                    });
-                } else {
-                    return { less: data };
-                }
-            }).done(function (data) {
-                var file = {
-                    name: config.baseUrl + name,
-                    source: data.less
-                };
-                file.path = dirname(file.name);
-                if (data.css) file.node = insert(file.name, data.css, "script");
-                lessFiles.push(file);
+            var file = {
+                path: dirname(config.baseUrl + name),
+                name: name,
+                selector: '#css'
+            };
+            lessFiles.push(file);
+            if (theme) {
+                insertLess(file).then(load, load.error);
+            } else {
                 load();
-            }).fail(function (e) {
-                console.error("LESS error", e);
-                load();
-            });
+            }
         }
     });
-
-    function setTheme(theme) {
-        currentTheme = theme;
-        return $.when.apply($, _.map(lessFiles, function (file) {
-            return less(file.source).done(function(css) {
-                if (file.node) {
-                    file.node.text(relativeCSS(file.path, css));
-                } else {
-                    file.node = insert(file.name, css, "script");
-                };
-            });
-        }));
-    }
-
+    
     // themes module
     define("themes", {
         /**
@@ -183,43 +135,16 @@
             if (ox.offline) {
                 name = 'default'; // FIXME: App Cache manifest may have to be generated by backend
             }
-            return require(['text!themes/definitions.less',
-                            'text!themes/' + name + '/definitions.less',
-                            'text!themes/style.less',
-                            'text!themes/' + name + '/style.less'])
-                .pipe(function (def1, def2, style1, style2) {
-                    var path = ox.base + '/apps/themes/' + name + '/';
-                    $('head #favicon').attr({ href: path + 'favicon.ico' }).detach().appendTo('head');
-                    themeLess.path = path;
-                    themeLess.name = path + 'dynamic.less';
-                    themeLess.source = style1 + (style2 || '');
-                    return setTheme(def1 + (def2 || ''));
-                });
-        },
-        /**
-         * Alters the current theme.
-         * @param {Object} definitions An object with a property for every
-         * theme variable definition to change.
-         * @example
-         * require(["themes"]).done(function(themes) {
-         *     themes.alter({
-         *         "menu-background": "hsl(" + 360 * Math.random() + ",1,0.5);"
-         *     });
-         * });
-         * @type Promise
-         * @returns A promise which gets fulfilled when the theme finishes
-         * loading. Please ignore the value of the promise.
-         */
-        alter: function (definitions) {
-            return setTheme(
-                    currentTheme.replace(/^\s*@([\w-]+)\s*:.*$/gm,
-                        function (match, name) {
-                            return name in definitions ?
-                                "@" + name + ":" + definitions[name] + ";" :
-                                match;
-                        }
-                    )
-                );
+            theme = name;
+            var path = ox.base + '/apps/themes/' + name + '/',
+            icons = { favicon: 'favicon.ico', icon57: 'icon57.png',
+                      icon72: 'icon72.png', icon114: 'icon114.png' };
+            for (var i in icons) {
+                $('head #' + i).attr({ href: path + icons[i] })
+                               .detach().appendTo('head');
+            }
+            themeCommon.path = themeStyle.path = path;
+            return $.when.apply($, _.map(lessFiles, insertLess));
         },
 
         getDefinitions: function () {

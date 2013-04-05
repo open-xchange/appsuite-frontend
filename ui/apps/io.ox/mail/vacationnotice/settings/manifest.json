@@ -1,3 +1,4 @@
 {
-    namespace: ['io.ox/settings/main']
+    namespace: ['io.ox/settings/main'],
+    requires: 'mailfilter'
 }

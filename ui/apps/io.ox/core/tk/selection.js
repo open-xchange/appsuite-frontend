@@ -60,6 +60,7 @@ define('io.ox/core/tk/selection',
             prev = empty,
             changed,
             apply,
+            clickHandler,
             mouseupHandler,
             mousedownHandler,
             clear,
@@ -67,6 +68,7 @@ define('io.ox/core/tk/selection',
             select,
             deselect,
             toggle,
+            isCheckbox,
             isMultiple,
             isRange,
             isDragged,
@@ -81,10 +83,14 @@ define('io.ox/core/tk/selection',
             fnKey,
             hasMultiple;
 
-        isMultiple = function (e) {
+        isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
                 isEditable = editable && closest.length;
-            return isEditable || (multiple && e && (e.metaKey || e.ctrlKey));
+            return isEditable;
+        };
+
+        isMultiple = function (e) {
+            return multiple && e && (e.metaKey || e.ctrlKey);
         };
 
         isRange = function (e) {
@@ -201,51 +207,64 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        mousedownHandler = function (e) {
-            var key, id;
+        clickHandler = function (e) {
+            var node, key, id;
             if (!e.isDefaultPrevented()) {
-                key = $(this).attr('data-obj-id');
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                // checkbox click?
+                if (id !== undefined && isCheckbox(e)) {
+                    apply(id, e);
+                }
+            }
+        };
+
+        mousedownHandler = function (e) {
+            var node, key, id;
+            // we check for isDefaultPrevented because elements inside .selectable
+            // might also react on mousedown/click, e.g. folder tree open/close toggle
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
-                if (id !== undefined) {
-                    // clear?
-                    if (!isMultiple(e)) {
-                        if (hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            if (!isSelected(id)) {
-                                clear();
-                                apply(id, e);
-                            }
+                if (id !== undefined && !isCheckbox(e)) {
+                    // explicit multiple?
+                    if (isMultiple(e)) {
+                        apply(id, e);
+                        return;
+                    }
+                    // selected?
+                    if (isSelected(id)) {
+                        // but one of many?
+                        if (hasMultiple()) {
+                            node.addClass('pending-select');
                         }
+                    } else {
+                        clear();
+                        apply(id, e);
                     }
                 }
             }
         };
 
         mouseupHandler = function (e) {
-            var key, id;
+            var node, key, id;
             if (!e.isDefaultPrevented()) {
-                key = $(this).attr('data-obj-id');
+                node = $(this);
+                key = node.attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
                 if (id !== undefined) {
-                    // clear?
-                    if (!isMultiple(e)) {
-                        if (!isSelected(id) || hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            if (!isDragged(e)) {
-                                clear();
-                                apply(id, e);
-                            }
-                        }
-                    } else {
-                        // apply
-                        if (isSelected(id) || e.metaKey || e.ctrlKey) {
-                            if (!isDragged(e)) {
-                                apply(id, e);
-                            }
-                        }
+                    if (node.hasClass('pending-select')) {
+                        clear();
+                        apply(id, e);
                     }
                 }
             }
+            // remove helper classes
+            container.find('.pending-select').removeClass('pending-select');
         };
 
         getIndex = function (id) {
@@ -264,12 +283,12 @@ define('io.ox/core/tk/selection',
         select = function (id, quiet) {
             if (id) {
                 var key = self.serialize(id);
-                selectedItems[key] = id;
                 getNode(key)
                     .addClass(self.classSelected)
                     .find('input.reflect-selection')
                     .attr('checked', 'checked').end()
                     .intoViewport(container);
+                selectedItems[key] = id;
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -416,6 +435,14 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
+        this.debug = function () {
+            console.debug('selection', {
+                selected: selectedItems,
+                observed: observedItems,
+                index: observedItemsIndex
+            });
+        };
+
         this.clearIndex = function () {
             observedItems = [];
             observedItemsIndex = {};
@@ -543,21 +570,34 @@ define('io.ox/core/tk/selection',
         };
 
         this.selectRange = function (a, b) {
+
+            var tmp, i, id, key;
+
             if (bHasIndex) {
                 // get indexes
                 a = getIndex(a);
                 b = getIndex(b);
                 // swap?
                 if (a > b) {
-                    var tmp = a;
+                    tmp = a;
                     a = b;
                     b = tmp;
                 }
                 // loop
-                for (; a <= b; a++) {
-                    select(observedItems[a]);
+                for (i = a; i <= b; i++) {
+                    // get id
+                    id = observedItems[i];
+                    // select first & last one via "normal" select
+                    if (i === a || i === b) {
+                        select(id);
+                    } else {
+                        // fast & simple
+                        key = this.serialize(id);
+                        selectedItems[key] = id;
+                    }
                 }
-                // event
+                // fast update - just updates existing nodes instead of looking for thousands
+                this.update();
             }
             return this;
         };
@@ -664,9 +704,10 @@ define('io.ox/core/tk/selection',
         };
 
         // bind general click handler
-        container.on('contextmenu', function (e) { e.preventDefault(); });
-        container.on('mousedown', '.selectable', mousedownHandler);
-        container.on('mouseup', '.selectable', mouseupHandler);
+        container.on('contextmenu', function (e) { e.preventDefault(); })
+            .on('mousedown', '.selectable', mousedownHandler)
+            .on('mouseup', '.selectable', mouseupHandler)
+            .on('click', '.selectable', clickHandler);
 
         /*
         * DND
@@ -832,6 +873,14 @@ define('io.ox/core/tk/selection',
                 $(this).trigger('selection:drop', [baton]);
             }
 
+            function resist(e) {
+                var deltaX = Math.abs(e.pageX - e.data.x),
+                    deltaY = Math.abs(e.pageY - e.data.y);
+                if (deltaX > 15 || deltaY > 15) {
+                    $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                }
+            }
+
             function start(e) {
                 source = $(this);
                 data = self.unique(self.unfold());
@@ -840,7 +889,9 @@ define('io.ox/core/tk/selection',
                     var node = $(this), selector = node.attr('data-dropzones');
                     (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
                 });
-                $(document).on('mousemove.dnd', drag).on('mouseup.dnd', stop);
+                $(document)
+                    .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
+                    .on('mouseup.dnd', stop);
                 // prevent text selection
                 e.preventDefault();
             }

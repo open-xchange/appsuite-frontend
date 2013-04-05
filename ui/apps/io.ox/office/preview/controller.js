@@ -53,25 +53,25 @@ define('io.ox/office/preview/controller',
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
                     set: function () { view.showFirstPage(); },
-                    shortcut: { keyCode: KeyCodes.HOME }
+                    shortcut: { keyCode: KeyCodes.HOME, altKey: null, ctrlKey: null, metaKey: null }
                 },
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
                     set: function () { view.showPreviousPage(); },
-                    shortcut: [{ keyCode: KeyCodes.PAGE_UP, altKey: true }, { keyCode: KeyCodes.PAGE_UP, metaKey: true }]
+                    shortcut: { keyCode: KeyCodes.PAGE_UP, altOrMetaKey: true }
                 },
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showNextPage(); },
-                    shortcut: [{ keyCode: KeyCodes.PAGE_DOWN, altKey: true }, { keyCode: KeyCodes.PAGE_DOWN, metaKey: true }]
+                    shortcut: { keyCode: KeyCodes.PAGE_DOWN, altOrMetaKey: true }
                 },
                 'pages/last': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showLastPage(); },
-                    shortcut: { keyCode: KeyCodes.END }
+                    shortcut: { keyCode: KeyCodes.END, altKey: null, ctrlKey: null, metaKey: null }
                 },
 
                 'pages/current': {

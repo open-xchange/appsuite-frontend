@@ -31,7 +31,7 @@ define("io.ox/core/api/user",
             },
             list: {
                 action: "list",
-                columns: '1,20,500,501,502,505,524,555,614',
+                columns: '1,20,500,501,502,505,524,555,606,614',
                 extendColumns: 'io.ox/core/api/user/list'
             },
             get: {
@@ -62,7 +62,7 @@ define("io.ox/core/api/user",
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp
+                        timestamp: o.timestamp || _.now()
                     },
                     data: o.data,
                     appendColumns: false
@@ -157,16 +157,15 @@ define("io.ox/core/api/user",
     */
     api.getPictureURL = function (id, options) {
         //get contact object first (userId != contactId)
-        return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
-            .pipe(
-                function (data, contactsAPI) {
-                    //call contactsAPI to share a picture cache
-                    return contactsAPI.getPictureURL(data[0] || data, options);
-                },
-                function () {
-                    return ox.base + "/apps/themes/default/dummypicture.png";
-                }
-            );
+        return $.when(api.get({ id: id }), require(["io.ox/contacts/api"])).then(
+            function (data, contactsAPI) {
+                //call contactsAPI to share a picture cache
+                return contactsAPI.getPictureURL(data[0] || data, options);
+            },
+            function () {
+                return ox.base + "/apps/themes/default/dummypicture.png";
+            }
+        );
     };
 
     /**
@@ -189,6 +188,17 @@ define("io.ox/core/api/user",
             })
             .always(clear);
         return node;
+    };
+
+    /**
+     * get a contact model of the currently logged in user
+     *
+     * @return {object} a contact model of the current user
+     */
+    api.getCurrentUser = function () {
+        return require(['io.ox/core/settings/user']).then(function (api) {
+            return api.getCurrentUser();
+        });
     };
 
     return api;

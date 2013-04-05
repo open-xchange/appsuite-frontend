@@ -34,11 +34,11 @@ define('io.ox/core/cache',
 
     ox.cache = {
         clear: function () {
-            ext.point("io.ox/core/cache/storage").each(function (storage) {
-                if (storage.clear && storage.isUsable()) {
-                    storage.clear();
-                }
-            });
+            return $.when.apply($,
+                ext.point("io.ox/core/cache/storage").map(function (storage) {
+                    return storage.clear && storage.isUsable() ? storage.clear() : $.when();
+                })
+            );
         }
     };
 
@@ -48,6 +48,7 @@ define('io.ox/core/cache',
         }
         storages[storage.id] = storage;
     });
+
     // #!&cacheStorage=localstorage
     preferredPersistentCache = _.url.hash('cacheStorage') ? _.url.hash('cacheStorage') : preferredPersistentCache;
 
@@ -63,29 +64,27 @@ define('io.ox/core/cache',
                     persistent: preferredPersistentCache
                 }, options || {}),
 
-                persitentCache = storages[opt.persistent],
+                persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = (persitentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
+                persist = (persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
-                            if (ox.user !== '') {
-                                return true;
-                            } else {
-                                return false;
-                            }
+                            return ox.user !== '';
                         } :
                         function () {
                             return false;
                         }),
 
+                // define id now; user & language should never change on-the-fly
+                id = _(['appsuite.cache',  ox.user, ox.language, name || '']).compact().join('.'),
+
                 getStorageLayer = function () {
-                    var layer = null, instance, id;
+                    var layer = null, instance;
                     if (persist()) {
-                        layer = persitentCache;
+                        layer = persistentCache;
                     } else {
                         layer = fluentCache;
                     }
-                    id = 'appsuite.cache.' + (ox.user || 'anonymous') + '.' + (ox.language || 'en_US') + '.' + (name || '');
 
                     instance = layer.getInstance(id);
                     return instance;
@@ -342,7 +341,7 @@ define('io.ox/core/cache',
                     c.push(adder(data[i], timestamp));
                 }
 
-                return $.when.apply(null, c).pipe(function () {
+                return $.when.apply($, c).pipe(function () {
                     return _(arguments).without(null);
                 });
             } else {

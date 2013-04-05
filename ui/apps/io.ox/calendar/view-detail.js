@@ -22,7 +22,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/tk/attachments",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar",
-     "less!io.ox/calendar/style.css"
+     "less!io.ox/calendar/style.less"
     ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
@@ -34,8 +34,6 @@ define("io.ox/calendar/view-detail",
         });
     };
 
-    var attachmentsBusy = false; //check if attachments are uploding atm
-
     // draw via extension points
 
     // draw appointment date & time
@@ -43,8 +41,9 @@ define("io.ox/calendar/view-detail",
         index: 100,
         id: "date",
         draw: function (data) {
-            var node = $("<div>").addClass("date").appendTo(this);
-            ext.point("io.ox/calendar/detail/date").invoke("draw", node, data);
+            var node;
+            this.append(node = $('<div class="appointment-date">'));
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, data);
         }
     });
 
@@ -426,12 +425,33 @@ define("io.ox/calendar/view-detail",
         }
     });
 
+    // organizer
+    ext.point("io.ox/calendar/detail/details").extend({
+        index: 200,
+        id: "organizer",
+        draw: function (data) {
+            if (data.organizerId) {
+                this.append(
+                    $('<span class="detail-label">').append(
+                        $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
+                    ),
+                    $('<span class="detail organizer">').append(
+                        $('<a href="#" class="halo-link">').data({ user_id: data.organizerId }).append(
+                            data.organizerId ? userAPI.getTextNode(data.organizerId) : ''
+                        )
+                    ),
+                    $('<br>')
+                 );
+            }
+        }
+    });
+
     ext.point("io.ox/calendar/detail").extend({
         id: 'attachments',
         index: 600,
         draw: function (data) {
             var $node;
-            if (attachmentsBusy) {
+            if (calAPI.uploadInProgress(encodeURIComponent(_.cid(data)))) {
                 this.append(
                         $('<div class="io-ox-label">').text(gt('Attachments')),
                         $node = $('<div>').css({width: '30%', height: '12px'}).busy()
@@ -456,18 +476,12 @@ define("io.ox/calendar/view-detail",
         $(this).replaceWith(e.data.view.draw(data));
     }
 
-    function setAttachmentsbusy(e, state) {
-        attachmentsBusy = state;
-    }
-
     return {
 
         draw: function (data, options) {
 
             try {
                 var node = $.createViewContainer(data, calAPI).on('redraw', { view: this }, redraw);
-                calAPI.off('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
-                calAPI.on('AttachmentHandlingInProgress:' + encodeURIComponent(_.cid(data)), setAttachmentsbusy);
                 node.addClass('calendar-detail view').attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data, options);
 

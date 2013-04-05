@@ -33,7 +33,7 @@ define('io.ox/calendar/list/perspective',
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable(),
-            grid = new VGrid(left);
+            grid = new VGrid(left, {settings: settings});
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
@@ -75,6 +75,11 @@ define('io.ox/calendar/list/perspective',
                 .done(_.lfo(drawAppointment))
                 .fail(_.lfo(drawFail, obj));
         }
+
+        showAppointment.cancel = function () {
+            _.lfo(drawAppointment);
+            _.lfo(drawFail);
+        };
 
         function drawAppointment(data) {
             right.idle().empty().append(viewDetail.draw(data));

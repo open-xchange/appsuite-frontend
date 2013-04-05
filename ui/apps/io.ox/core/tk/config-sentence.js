@@ -156,8 +156,8 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             this.on("change:" + attribute, drawState);
 
         },
-        custom: function ($anchor, attribute, options) {
-            options.call(this, $anchor, attribute, options);
+        custom: function ($anchor, attribute, func, options) {
+            func.call(this, $anchor, attribute, options);
         }
     };
 
@@ -173,7 +173,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 opts = options[attribute] || options;
             // TODO: Use ExtensionPoints here
             if (Widgets[widget]) {
-                Widgets[widget].call(self, $anchor, attribute, opts);
+                Widgets[widget].call(self, $anchor, attribute, opts, options);
             }
         });
 

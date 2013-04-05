@@ -21,7 +21,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
      * @param {number} index The 1-based index of the value.
      * @param {String} value The value to return.
      * @type { format: string, params: [string] }
-     * @result A result object for getFullNameFormat or getMailFormat.
+     * @result The result object for a get*Format function.
      */
     function single(index, value) {
         var params = new Array(index);
@@ -118,6 +118,47 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         },
 
         /**
+         * compute the format of a full name in mail context
+         *
+         * In mail context (and may be others), the full name is formated a
+         * little different than in address book.
+         *
+         * @param obj {Object} a contact object with at least the attributes
+         *      related to the name set
+         *
+         * @returns An object with a format
+         * string and an array of replacements which can be used e.g. as
+         * parameters to gettext.format to obtain the full name.
+         */
+        getMailFullNameFormat: function (obj) {
+            //combine first name and last name
+            if (obj.last_name && obj.first_name) {
+                return {
+                    format:
+                        //#. Name in mail addresses
+                        //#. %1$s is the first name
+                        //#. %2$s is the last name
+                        gt.pgettext('mail address', '%1$s %2$s'),
+                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
+                };
+            }
+
+            // use existing display name?
+            if (obj.display_name) {
+                return single(4, String(obj.display_name).replace(/"|'/g, ''));
+            }
+            // fallback
+            if (obj.last_name) { return single(2, obj.last_name); }
+            if (obj.first_name) { return single(1, obj.first_name); }
+            return { format: _.noI18n(''), params: [] };
+        },
+
+        getMailFullName: function (obj) {
+            var fmt = this.getMailFullNameFormat(obj);
+            return gt.format(fmt.format, fmt.params);
+        },
+
+        /**
          * Returns the mail as a format object similar to getFullnameFormat.
          * @param obj {Object} A contact object.
          * @type {
@@ -137,7 +178,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         
         getMail: function (obj) {
             // get the first mail address
-            return (obj.email1 || obj.email2 || obj.email3 || '').toLowerCase();
+            return (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase();
         },
 
         getDescription: function (obj) {

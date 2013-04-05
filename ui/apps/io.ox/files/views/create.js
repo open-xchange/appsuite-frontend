@@ -33,7 +33,7 @@ define('io.ox/files/views/create', [
 
             $form.on('submit', function (e) { e.preventDefault(); });
 
-            dialog.header($('<h1>').addClass('clear-title').text(gt('Add new file')));
+            dialog.header($('<h4>').text(gt('Add new file')));
             dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
             dialog
                 .addPrimaryButton('save', gt('Save'), 'save')
@@ -52,7 +52,8 @@ define('io.ox/files/views/create', [
                                 title: $form.find('input[type="text"]').val()
                             },
                             folder: folder
-                        }).done(function () {
+                        }).done(function (data) {
+                            api.propagate('new', data);
                             notifications.yell('success', gt('This file has been added'));
                         }).fail(function (e) {
                             if (e && e.code && e.code === 'UPL-0005')
@@ -77,7 +78,7 @@ define('io.ox/files/views/create', [
             index: 100,
             draw: function () {
                 this.append(
-                    $('<label>').text(gt.pgettext('description', 'Title')),
+                    $('<label>').text(gt.pgettext('title', 'Title')),
                     $('<input type="text" name="title">').addClass('span12')
                 );
             }
@@ -96,13 +97,8 @@ define('io.ox/files/views/create', [
             index: 300,
             draw: function () {
                 this.append(
-                    $('<label>').text(gt('Comment')),
-                    $('<textarea name="description" rows="4" class="span12"></textarea>').keyup(function () {
-                            var pad = parseInt($(this).css('padding-top'), 10),
-                                contentHeight = this.scrollHeight;
-                            if ($.browser.mozilla) { $(this).height(1); } else { contentHeight -= pad * 2; }
-                            if (contentHeight > $(this).height()) $(this).height(contentHeight);
-                        })
+                    $('<label>').text(gt('Description')),
+                    $('<textarea name="description" rows="8" class="span12"></textarea>')
                 );
             }
         });

@@ -45,13 +45,16 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         return clone(tmp);
     };
 
-    var Settings = function (path) {
+    // once cache for all
+    var settingsCache;
 
-        var tree = {},
-            meta = {},
-            self = this,
-            settingsCache = new cache.SimpleCache('settings', true),
-            detached = false;
+    var Settings = function (path, tree, meta) {
+
+        var self = this, detached = false,
+            initial = JSON.parse(JSON.stringify(tree || {}));
+
+        tree = tree || {};
+        meta = meta || {};
 
         this.get = function (path, defaultValue) {
             return get(tree, path, defaultValue);
@@ -88,7 +91,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 key = parts.shift();
                 if (_.isObject(tmp)) {
                     if (parts.length) {
-                        if (!(key in tmp) && !!create) {
+                        if (!_.isObject(tmp[key]) && !!create) {
                             tmp = (tmp[key] = {});
                         } else {
                             tmp = tmp[key];
@@ -164,6 +167,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     if (!detached) {
                         tree = data[0].tree;
                         meta = data[0].meta;
+                        initial = JSON.parse(JSON.stringify(tree));
                         return applyDefaults();
                     } else {
                         return $.when();
@@ -209,7 +213,6 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-
         /**
          * Save settings to cache and backend.
          *
@@ -236,6 +239,8 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     console.warn('Not saving detached settings.', path);
                 }
 
+                if (!custom && _.isEqual(initial, tree)) return $.when();
+
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
                 save(data.tree);
@@ -247,12 +252,51 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         Event.extend(this);
     };
 
+    var list = 'io.ox/core io.ox/core/updates io.ox/mail io.ox/contacts io.ox/calendar'.split(' '), promise;
+
+    function preload(path) {
+        if (!promise) {
+            promise = http.PUT({
+                module: 'jslob',
+                params: { action: 'list' },
+                data: list
+            })
+            .then(function (data) {
+                var hash = {};
+                _(data).each(function (jslob) {
+                    hash[jslob.id] = { tree: jslob.tree, meta: jslob.meta };
+                });
+                return hash;
+            });
+        }
+        return promise.then(function (hash) {
+            return require([path + '/settings/defaults']).then(function (defaults) {
+                if (hash[path] && hash[path].tree) {
+                    hash[path].tree = _.extend(defaults, hash[path].tree || {});
+                }
+                return hash[path] || { tree: {}, meta: {} };
+            });
+        });
+    }
+
     return {
         load: function (name, req, load, config) {
-            var settings = new Settings(name);
-            settings.load().done(function () {
-                load(settings);
-            });
+            // init cache?
+            if (!settingsCache) {
+                settingsCache = new cache.SimpleCache('settings', true);
+            }
+            // bulk load?
+            if (_(list).contains(name)) {
+                preload(name).then(function (data) {
+                    var settings = new Settings(name, data.tree, data.meta);
+                    load(settings);
+                }, load.error);
+            } else {
+                var settings = new Settings(name);
+                settings.load().done(function () {
+                    load(settings);
+                });
+            }
         }
     };
 });

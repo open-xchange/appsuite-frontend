@@ -19,7 +19,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
     'io.ox/core/date',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/autoforward/settings/style.css'
+    'less!io.ox/mail/autoforward/settings/style.less'
 ], function (model, views, forms, actions, links, date, notifications, gt) {
 
     "use strict";

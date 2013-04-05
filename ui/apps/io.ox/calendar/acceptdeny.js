@@ -99,11 +99,11 @@ define('io.ox/calendar/acceptdeny',
                     .done(function () {
                         if (showReminderSelect) {
                             var reminder = parseInt(reminderSelect.find('select').val(), 10);
-                            if (reminder !== defaultReminder) {
-                                delete o.data;
-                                o.alarm = reminder;
-                                api.update(o);
-                            }
+                            // if (reminder !== defaultReminder) {
+                            delete o.data;
+                            o.alarm = reminder;
+                            api.update(o);
+                            // }
                         }
                     }).fail(function (err) {
                         console.log('ERROR', err);

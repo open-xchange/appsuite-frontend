@@ -16,7 +16,8 @@ define('io.ox/mail/view-grid-template',
      'io.ox/mail/api',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
-     'less!io.ox/mail/style.css'], function (util, api, VGrid, account) {
+     'gettext!io.ox/core/mail',
+     'less!io.ox/mail/style.less'], function (util, api, VGrid, account, gt) {
 
     'use strict';
 
@@ -39,17 +40,15 @@ define('io.ox/mail/view-grid-template',
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
+                            unread = $('<i class="icon-bookmark">'),
                             answered = $('<i class="icon-circle-arrow-left">'),
                             forwarded = $('<i class="icon-circle-arrow-right">'),
-                            unread = $('<i class="icon-bookmark">'),
                             subject = $('<span class="drag-title">')
                         )
                     )
                 );
                 if (that.unified) {
-                    this.append($('<div>').append(
-                        account = $('<div class="label label-info">')
-                    ));
+                    this.append(account = $('<div class="account-name">'));
                 }
                 return {
                     from: from,
@@ -67,7 +66,12 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                fields.subject.text(_.noI18n($.trim(data.subject)));
+                var subject = $.trim(data.subject);
+                if (subject !== '') {
+                    fields.subject.removeClass('empty').text(_.noI18n(subject));
+                } else {
+                    fields.subject.addClass('empty').text(gt('No subject'));
+                }
                 if (!data.threadSize || data.threadSize <= 1) {
                     fields.threadSize.text(_.noI18n('')).css('display', 'none');
                 } else {
@@ -79,7 +83,9 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
-                if (fields.account) fields.account.text(data.account_name);
+                if (fields.account) {
+                    fields.account.text(util.getAccountName(data));
+                }
                 if (util.isUnseen(data) || api.tracker.isPartiallyUnseen(data)) {
                     this.addClass('unread');
                 }

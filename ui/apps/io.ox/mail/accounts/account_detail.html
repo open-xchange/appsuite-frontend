@@ -26,8 +26,9 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.UNIFIED_MAIL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="unified_inbox_enabled" />
+					{{=it.strings.UNIFIED_MAIL}}
 				</label>
 			</div>
 		</div>
@@ -47,8 +48,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.SERVER_SSL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="mail_secure" />
+					{{=it.strings.SERVER_SSL}}
 				</label>
 			</div>
 		</div>
@@ -84,7 +86,7 @@
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
 			<div class="controls">
 				<label class="select">
@@ -94,19 +96,21 @@
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.LEAVE_MESSAGES}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="pop3_expunge_on_quit" />
+					{{=it.strings.LEAVE_MESSAGES}}
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.DELETING_ON_LOCAL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="pop3_delete_write_through">
+					{{=it.strings.DELETING_ON_LOCAL}}
 				</label>
 			</div>
 		</div>
@@ -116,8 +120,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.SERVER_OUT_SSL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="transport_secure" />
+					{{=it.strings.SERVER_OUT_SSL}}
 				</label>
 			</div>
 		</div>
@@ -140,8 +145,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.LOGIN_AND_PASS}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="mail-common-selectfirst" />
+					{{=it.strings.LOGIN_AND_PASS}}
 				</label>
 			</div>
 		</div>
@@ -158,11 +164,6 @@
 			<div class="controls">
 				<label class="text">
 					<input type="password" data-property="transport_password" id="label_25"></label>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls">
-				<button class="save btn btn-primary" data-action="save">Save</button>
 			</div>
 		</div>
 	</div>

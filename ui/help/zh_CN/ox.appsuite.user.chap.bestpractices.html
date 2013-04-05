@@ -1,0 +1,909 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>最佳实践</title>
+<link rel="stylesheet" type="text/css" href="book.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="index.html" title="">
+<link rel="up" href="index.html" title="">
+<link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html" title="实现 iCal 导入">
+<link rel="next" href="ox.appsuite.user.index.html" title="索引">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">最佳实践</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html">Prev</a> </td>
+<th width="60%" align="center"> </th>
+<td width="20%" align="right"> <a accesskey="n" href="ox.appsuite.user.index.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div lang="en-EN" class="chapter">
+<div class="titlepage"><div><div><h1 class="title">
+<a name="ox.appsuite.user.chap.bestpractices"></a>最佳实践</h1></div></div></div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="qandaset"><a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice">Frequently Asked Questions</a></span></dt>
+<dd><dl>
+<dt>1.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">一般问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">我可以在哪里找到我的个人数据和设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.changepassword">我如何更改我的密码？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.hiddenelements">为何找不到特定的按钮或输入字段？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unreadbadge">如何通知我有关新电子邮件或约会邀请？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">我如何从社交网路或新闻页阅读当前消息？</a>
+</dt>
+</dl></dd>
+<dt>2.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">有关电子邮件和联系人的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">我如何一次发送电子邮件到多个地址？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.cc_or_bcc">
+						Copy to...
+						和
+						Blind copy to...
+						的用途是什么？
+					</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.draft">我习惯发送一样或类似内容的电子邮件。我如何加快此步骤？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.externalaccounts">我可否访问发送到我的谷歌电子邮件户口的邮件？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.autoforward">我如何自动转发电子邮件到我的替代者？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">我如何从我的社交网路使用联系人？</a>
+</dt>
+</dl></dd>
+<dt>3.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">有关任务、日历、和约会的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">我应该何时使用一个任务，又何时应该使用一个约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email_to_task">我如何从一个电子邮件创建一个任务？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.assistant">我如何以代表身份组织别人的约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as">我如何使用可用性功能，例如：空闲、忙碌、缺席等等？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">我如何使用日历循环设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">如何在创建约会时寻找空闲时间？</a>
+</dt>
+</dl></dd>
+<dt>4.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">有关数据组织和团队工作的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">我如何向我的外部伙伴，令某些联系人可用？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">我如何向我的外部伙伴，分享指定文档？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">我要和其他用户分享一个文件夹。我必须设置哪些权限？</a>
+</dt>
+</dl></dd>
+</dl></dd>
+</dl>
+</div>
+<a class="indexterm" name="idm139660599561920"></a><a class="indexterm" name="idm139660595828576"></a><a class="indexterm" name="idm139660597393072"></a><div class="qandaset">
+<a name="ox.appsuite.user.practice"></a><dl>
+<dt>1.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">一般问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">我可以在哪里找到我的个人数据和设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.changepassword">我如何更改我的密码？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.hiddenelements">为何找不到特定的按钮或输入字段？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unreadbadge">如何通知我有关新电子邮件或约会邀请？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">我如何从社交网路或新闻页阅读当前消息？</a>
+</dt>
+</dl></dd>
+<dt>2.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">有关电子邮件和联系人的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">我如何一次发送电子邮件到多个地址？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.cc_or_bcc">
+						Copy to...
+						和
+						Blind copy to...
+						的用途是什么？
+					</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.draft">我习惯发送一样或类似内容的电子邮件。我如何加快此步骤？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.externalaccounts">我可否访问发送到我的谷歌电子邮件户口的邮件？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.autoforward">我如何自动转发电子邮件到我的替代者？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">我如何从我的社交网路使用联系人？</a>
+</dt>
+</dl></dd>
+<dt>3.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">有关任务、日历、和约会的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">我应该何时使用一个任务，又何时应该使用一个约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email_to_task">我如何从一个电子邮件创建一个任务？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.assistant">我如何以代表身份组织别人的约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as">我如何使用可用性功能，例如：空闲、忙碌、缺席等等？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">我如何使用日历循环设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">如何在创建约会时寻找空闲时间？</a>
+</dt>
+</dl></dd>
+<dt>4.  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">有关数据组织和团队工作的问题</a>
+</dt>
+<dd><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">我如何向我的外部伙伴，令某些联系人可用？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">我如何向我的外部伙伴，分享指定文档？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">我要和其他用户分享一个文件夹。我必须设置哪些权限？</a>
+</dt>
+</dl></dd>
+</dl>
+<table border="0" style="width: 100%;">
+<colgroup>
+<col align="left" width="1%">
+<col>
+</colgroup>
+<tbody>
+<tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
+<a name="ox.appsuite.user.practice.common"></a>1. 一般问题</h3></td></tr>
+<tr class="toc"><td align="left" valign="top" colspan="2"><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">我可以在哪里找到我的个人数据和设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.changepassword">我如何更改我的密码？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.hiddenelements">为何找不到特定的按钮或输入字段？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unreadbadge">如何通知我有关新电子邮件或约会邀请？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">我如何从社交网路或新闻页阅读当前消息？</a>
+</dt>
+</dl></td></tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.personaldata"></a><a name="idm139660599810992"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我可以在哪里找到我的个人数据和设定？</p>
+<a class="indexterm" name="idm139660597320352"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						您可以自定义以下数据和设定：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>您访问组件的密码可以在组件设定里找到。</p></li>
+<li class="listitem"><p>
+									学习如何
+									<a class="link" href="ox.appsuite.user.sect.firststeps.personaldata.html#ox.appsuite.user.task.personaldata" title="如何更改您的个人联系人数据：">更改您的个人数据</a>
+									。
+								</p></li>
+<li class="listitem"><p>
+									学习如何
+									<a class="link" href="ox.appsuite.user.sect.firststeps.globalsettings.html#ox.appsuite.user.task.globalsettings" title="如何自定义基本设置：">自定义基本设定</a>
+									。
+								</p></li>
+<li class="listitem"><p>
+									学习如何
+									<a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">设置更多电子邮件户口</a>
+									。
+								</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.changepassword"></a><a name="idm139660587481376"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何更改我的密码？</p>
+<a class="indexterm" name="idm139660587480624"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						为了更改密码，单击
+						<span class="guibutton"><strong>我的密码</strong></span>
+						（在
+						<span class="guilabel"><strong>用户数据</strong></span>
+						方块里，
+						<span class="phrase">
+							<span class="guilabel"><strong>门户</strong></span>
+						</span>
+						
+						
+						
+						应用程序）。在
+						<a class="link" href="ox.appsuite.user.sect.firststeps.changepassword.html#ox.appsuite.user.task.changepassword" title="如何更改密码：">指示</a>
+						里获取更多信息
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.hiddenelements"></a><a name="idm139660585372992"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>为何找不到特定的按钮或输入字段？</p>
+<a class="indexterm" name="idm139660585372288"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						如果不见某些的按钮或输入字段，可能因为以下原因：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>一个功能在当前对话里不可用。</p></li>
+<li class="listitem"><p>
+									要保持用户界面越简洁越好，少用的控制元件会不显示。在这情况下会显示一个
+									<span class="guibutton"><strong>更多</strong></span>
+									按钮。要检视所有功能，单击此按钮。
+								</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.unreadbadge"></a><a name="idm139660592231200"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>如何通知我有关新电子邮件或约会邀请？</p>
+<a class="indexterm" name="idm139660592230496"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						如果有新的电子邮件或约会通知，菜单栏右边的
+						<span class="guilabel"><strong>未读标记</strong></span>
+						图标
+						<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.unreadbadge"></a><img src="images/appsuite_user_icon_unreadbadge.png"></span>
+						显示新对象数。单击图标打开
+						<span class="guilabel"><strong>通知区域</strong></span>
+						。它包含新对象的信息。从那裏你也可以直接激活功能，例如读取新电子邮件或确认新约会。可在
+						<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="用户界面">用户界面</a>
+						中找到更多信息。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.socialmessaging"></a><a name="idm139660592257456"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何从社交网路或新闻页阅读当前消息？</p>
+<a class="indexterm" name="idm139660592256752"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						在
+						<span class="phrase">
+							<span class="guilabel"><strong>门户</strong></span>
+						</span>
+						
+						
+						
+						应用程序里，您可以
+						<a class="link" href="ox.appsuite.user.sect.portal.customize.add.html#ox.appsuite.user.task.portal.tile.add" title="如何添加新门户方块：">添加</a>
+						新闻方块，以从社交网路、新闻页阅读当前消息，或观看特定网页的照片。
+					</p></td>
+</tr>
+<tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
+<a name="ox.appsuite.user.practice.mail_contacts"></a>2. 有关电子邮件和联系人的问题</h3></td></tr>
+<tr class="toc"><td align="left" valign="top" colspan="2"><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">我如何一次发送电子邮件到多个地址？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.cc_or_bcc">
+						Copy to...
+						和
+						Blind copy to...
+						的用途是什么？
+					</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.draft">我习惯发送一样或类似内容的电子邮件。我如何加快此步骤？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.externalaccounts">我可否访问发送到我的谷歌电子邮件户口的邮件？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.autoforward">我如何自动转发电子邮件到我的替代者？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">我如何从我的社交网路使用联系人？</a>
+</dt>
+</dl></td></tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.email.recipients"></a><a name="idm139660586232592"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何一次发送电子邮件到多个地址？</p>
+<a class="indexterm" name="idm139660586231888"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						要一次发送电子邮件到多个地址，您可以从以下的选项选择：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>
+									在输入字段里输入所有收件人
+									<span class="guibutton"><strong>To...</strong></span>
+									、
+									<span class="guibutton"><strong>Copy to...</strong></span>
+									、或
+									<span class="guibutton"><strong>Blind copy to...</strong></span>
+									使用自动完成功能更简单的输入地址。
+									<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.cc_or_bcc" title="Q:">此常见问答列表</a>
+									提供不同输入字段的差异解说。
+								</p></li>
+<li class="listitem"><p>
+									如果您定期发送电子邮件到同一群人，创建一个通讯组列表（在
+									<span class="phrase">
+										<span class="guilabel"><strong>地址薄</strong></span>
+									</span>
+									
+									
+									
+									应用程序）和添加电子邮件地址到通讯组列表。信息请找
+									<a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">???TITLE???</a>
+									。
+								</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.email.cc_or_bcc"></a><a name="idm139660586221024"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>
+						<span class="guibutton"><strong>Copy to...</strong></span>
+						和
+						<span class="guibutton"><strong>Blind copy to...</strong></span>
+						的用途是什么？
+					</p>
+<a class="indexterm" name="idm139660586218832"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						输入在
+						<span class="guibutton"><strong>To...</strong></span>
+						或
+						<span class="guibutton"><strong>Copy to...</strong></span>
+						输入字段的收件人，可以被输入在
+						<span class="guibutton"><strong>To...</strong></span>
+						或
+						<span class="guibutton"><strong>Copy to...</strong></span>
+						输入字段的收件人检视到。输入再
+						<span class="guibutton"><strong>Blind copy to...</strong></span>
+						输入字段的收件人，不可以被输入在
+						<span class="guibutton"><strong>To...</strong></span>
+						、
+						<span class="guibutton"><strong>Copy to...</strong></span>
+						、
+						<span class="guibutton"><strong>Blind copy to...</strong></span>
+						输入字段的收件人检视到。实际上，这表示：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>
+									如果您发送电子邮件给一个团队，而每一个收件人应该能够看到还有谁收到该电子邮件，就把收件人输入在
+									<span class="guibutton"><strong>To...</strong></span>
+									或
+									<span class="guibutton"><strong>Copy to...</strong></span>
+									输入字段里。
+								</p></li>
+<li class="listitem"><p>
+									如果您发送电子邮件给一个团队，而每一个收件人不应该能够看到还有谁收到该电子邮件，就把收件人输入在
+									<span class="guibutton"><strong>Blind copy to...</strong></span>
+									输入字段里。
+								</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.email.draft"></a><a name="idm139660587461568"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我习惯发送一样或类似内容的电子邮件。我如何加快此步骤？</p>
+<a class="indexterm" name="idm139660587460864"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						利用保存电子邮件成草稿的能力。在
+						<a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html#ox.appsuite.user.concept.email.draft">???TITLE???</a>
+						可找到更多信息。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.externalaccounts"></a><a name="idm139660589352704"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我可否访问发送到我的谷歌电子邮件户口的邮件？</p>
+<a class="indexterm" name="idm139660589352000"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						您可以设置外部电子邮件户口连接很多电子邮件服务提供者，例如谷歌电子邮件。您只需要您在相应提供者的户口数据。在您设置外部电子邮件户口一刻，您就能从文件夹树访问电子邮件。在
+						<a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">???TITLE???</a>
+						可找到更多信息。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.autoforward"></a><a name="idm139660589347408"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何自动转发电子邮件到我的替代者？</p>
+<a class="indexterm" name="idm139660589346704"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						在设定里打开
+						<span class="guilabel"><strong>自动转发</strong></span>
+						功能。在
+						<a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html#ox.appsuite.user.concept.email.autoforward">???TITLE???</a>
+						可找到更多信息。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.subscribe.socialnetworks"></a><a name="idm139660589341808"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何从我的社交网路使用联系人？</p>
+<a class="indexterm" name="idm139660589341104"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						您可以订阅联系人，使用社交网路的联系人。在
+						<a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="订阅数据">订阅数据</a>
+						可找到更多信息。
+					</p></td>
+</tr>
+<tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
+<a name="ox.appsuite.user.practice.calendar"></a>3. 有关任务、日历、和约会的问题</h3></td></tr>
+<tr class="toc"><td align="left" valign="top" colspan="2"><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">我应该何时使用一个任务，又何时应该使用一个约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email_to_task">我如何从一个电子邮件创建一个任务？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.assistant">我如何以代表身份组织别人的约会？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as">我如何使用可用性功能，例如：空闲、忙碌、缺席等等？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial">我如何使用日历循环设定？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">如何在创建约会时寻找空闲时间？</a>
+</dt>
+</dl></td></tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.task_or_appointment"></a><a name="idm139660587445968"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我应该何时使用一个任务，又何时应该使用一个约会？</p>
+<a class="indexterm" name="idm139660587445264"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						应该使用一个约会或一个任务，要基于以下准则：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>一个约会举行于一个订立的时间。如果您需要在订立的时间执行一个动作，就为此动作创建一个约会。</p></li>
+<li class="listitem"><p>一个任务有一个截止日期，有时候也有一个优先度。如果您对一个动作的时间预定比较宽松，和只注重截止日期，就为此动作输入一个任务。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.email_to_task"></a><a name="idm139660587439312"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何从一个电子邮件创建一个任务？</p>
+<a class="indexterm" name="idm139660587438608"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						使用
+						<span class="guilabel"><strong>提醒</strong></span>
+						功能（在
+						<span class="phrase">
+							<span class="guilabel"><strong>电子邮件</strong></span>
+						</span>
+						
+						
+						
+						应用程序的显示区域里）。更多信息可以找
+						<a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder">???TITLE???</a>
+						。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.calendar.assistant"></a><a name="idm139660587432176"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何以代表身份组织别人的约会？</p>
+<a class="indexterm" name="idm139660587431472"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>问其他人分享一个有写入权限的日历文件夹。然后在分享文件夹里输入此人的约会。其他人将会成为该约会的组织者。</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.calendar.display_as"></a><a name="idm139660587427952"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何使用可用性功能，例如：空闲、忙碌、缺席等等？</p>
+<a class="indexterm" name="idm139660587427248"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						如果您要在创建约会时避免冲突，使用
+						<span class="guilabel"><strong>空闲</strong></span>
+						可用性。其他所有可用性都会因为重叠约会，而引起冲突消息。
+					</p></td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.calendar.serial"></a><a name="idm139660585075968"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何使用日历循环设定？</p>
+<a class="indexterm" name="idm139660585075216"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 1：</strong></span>
+						一个约会应该每 2 天举行一次。它应该在 2013 年 1 月 7 日开始。该约会应该举行五次。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>在 2013 年 1 月 7 日开始</p></li>
+<li class="listitem" style="list-style-type: none"><p>每天</p></li>
+<li class="listitem" style="list-style-type: none"><p>约会会每 2 天重复。</p></li>
+<li class="listitem" style="list-style-type: none"><p>系列在 5 个约会后结束。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 2：</strong></span>
+						一个约会应该在每个星期二和星期五进行。它应该在 2013 年 1 月 8 日开始。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>在 2013 年 1 月 8 日开始</p></li>
+<li class="listitem" style="list-style-type: none"><p>每周</p></li>
+<li class="listitem" style="list-style-type: none"><p>约会在每个星期的星期二、星期五重复。</p></li>
+<li class="listitem" style="list-style-type: none"><p>系列永远不会结束。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 3：</strong></span>
+						一个约会应该在每两个星期三进行一次。它应该在 2013 年 1 月 9 日开始。最后一次约会应该是在 2013 年 3 月 27 日。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>在 2013 年 1 月 9 日开始</p></li>
+<li class="listitem" style="list-style-type: none"><p>每周</p></li>
+<li class="listitem" style="list-style-type: none"><p>约会在每两个星期的星期三重复。</p></li>
+<li class="listitem" style="list-style-type: none"><p>系列在 2013 年 3 月 27 日结束。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 4：</strong></span>
+						约会应该在每月的第一个星期一进行。它应该在 2013 年 1 月 4 日开始。该约会应该举行十二次。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>在 2013 年 2 月 4 日开始</p></li>
+<li class="listitem" style="list-style-type: none"><p>每月</p></li>
+<li class="listitem" style="list-style-type: none"><p>约会在每月的第一个星期一重复。</p></li>
+<li class="listitem" style="list-style-type: none"><p>系列在 12 个约会后结束。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 5：</strong></span>
+						一个约会应该在每年十一月的最后一个星期五进行。它应该在 2013 年 11 月 29 日开始。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>在 2013 年 11 月 29 日开始</p></li>
+<li class="listitem" style="list-style-type: none"><p>每年</p></li>
+<li class="listitem" style="list-style-type: none"><p>约会在每年十一月的最后一个星期五重复。</p></li>
+<li class="listitem" style="list-style-type: none"><p>系列永远不会结束。</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.scheduling"></a><a name="idm139660590894944"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>如何在创建约会时寻找空闲时间？</p>
+<a class="indexterm" name="idm139660590894240"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top"><p>
+						在创建一个约会时单击
+						<span class="guibutton"><strong>寻找一个空闲时间</strong></span>
+						，或单击工具条里的
+						<span class="guibutton"><strong>排程</strong></span>
+						图标
+						<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.scheduling"></a><img src="images/appsuite_user_icon_toolbar_schedule.png"></span>
+						。在
+						<a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html#ox.appsuite.user.concept.calendar.freebusy">???TITLE???</a>
+						可找到更多信息。
+					</p></td>
+</tr>
+<tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
+<a name="ox.appsuite.user.practice.dataexchange"></a>4. 有关数据组织和团队工作的问题</h3></td></tr>
+<tr class="toc"><td align="left" valign="top" colspan="2"><dl>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">我如何向我的外部伙伴，令某些联系人可用？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">我如何向我的外部伙伴，分享指定文档？</a>
+</dt>
+<dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">我要和其他用户分享一个文件夹。我必须设置哪些权限？</a>
+</dt>
+</dl></td></tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.publish.contacts"></a><a name="idm139660590883632"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何向我的外部伙伴，令某些联系人可用？</p>
+<a class="indexterm" name="idm139660590882928"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						您可以让外部合作者访问您组件地址簿的联系人，或访问您像 LinkedIn 的社交网路联系人。为此，请进行以下操作：
+						</p>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><p>从您的社交网路添加联系人到一个地址簿。</p></li>
+<li class="listitem"><p>创建一个新联系人文件夹。从您的地址簿复制所有您想分享的联系人到此联系人文件夹。</p></li>
+<li class="listitem"><p>
+									发布此联系人文件夹。Informationen finden Sie in
+									<a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="发布数据">发布数据</a>
+								</p></li>
+</ol></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.publish.files"></a><a name="idm139660585949568"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我如何向我的外部伙伴，分享指定文档？</p>
+<a class="indexterm" name="idm139660585948864"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						您可以向外部伙伴分享文档文件夹的容。您可以进行以下操作：
+						</p>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><p>
+									在
+									<span class="phrase">
+										<span class="guilabel"><strong>文件</strong></span>
+									</span>
+									
+									
+									
+									应用程序里，您可以把文档收集在分离的文件夹里。
+								</p></li>
+<li class="listitem"><p>
+									发布此文件夹Publish。信息请找
+									<a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="发布数据">发布数据</a>
+									.
+								</p></li>
+</ol></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="question">
+<td align="left" valign="top">
+<a name="ox.appsuite.user.practice.rights"></a><a name="idm139660585940224"></a><p><b>Q:</b></p>
+</td>
+<td align="left" valign="top">
+<p>我要和其他用户分享一个文件夹。我必须设置哪些权限？</p>
+<a class="indexterm" name="idm139660585939520"></a>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 1：</strong></span>
+						一个用户应该允许看到一个文件夹中的对象，但是不应该允许更改或删除对象。用户不应该允许创建新对象。设定：
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：新文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、无编辑权限、无删除权限</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 2：</strong></span>
+						一个用户应该允许看到一个文件夹中的对象，但是不应该允许更改或删除对象。用户应该允许创建和编辑对象。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：新文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、无编辑权限、无删除权限</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 3：</strong></span>
+						一个用户不应该允许看到一个文件夹里的对象。可是用户应该允许创建和编辑新对象。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象</p></li>
+<li class="listitem"><p>对象权限：读取自已的对象、编辑自已的对象、删除自已的对象</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 4：</strong></span>
+						一个用户应该允许看到和编辑所有对象。用户应该允许创建和编辑子文件夹和自已的对象。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+<tr class="answer">
+<td align="left" valign="top"><p><b>A:</b></p></td>
+<td align="left" valign="top">
+<p>
+						<span class="phrase"><strong>示例 5：</strong></span>
+						一个用户应该拥有所有权限。用户应该允许向其他用户授予权限。
+						</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+<li class="listitem"><p>管理权：是</p></li>
+</ul></div>
+<p>
+					</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html">Prev</a> </td>
+<td width="20%" align="center"> </td>
+<td width="40%" align="right"> <a accesskey="n" href="ox.appsuite.user.index.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">实现 iCal 导入 </td>
+<td width="20%" align="center">
+<a accesskey="h" href="index.html">Home</a> | <a accesskey="t" href="bk01-toc.html">ToC</a>
+</td>
+<td width="40%" align="right" valign="top"> 索引</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

@@ -12,9 +12,11 @@
  */
 define("io.ox/core/api/mailfilter",
         ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
+
     "use strict";
 
     var api = {
+
         deleteRule: function (ruleId) {
 
             return http.PUT({
@@ -22,7 +24,6 @@ define("io.ox/core/api/mailfilter",
                 params: {action: "delete"},
                 data: {id: ruleId}
             });
-
         },
 
         create: function (data) {

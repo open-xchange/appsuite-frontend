@@ -21,7 +21,7 @@ define('io.ox/portal/widgets',
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = [];
+	var DEV_PLUGINS = ['plugins/portal/mail/register', 'plugins/portal/flickr/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -58,7 +58,9 @@ define('io.ox/portal/widgets',
         },
 
         getSettings: function () {
+
             var prot = {};
+
             _(settings.get('widgets/protected')).each(function (obj, id) {
                 obj.protectedWidget = true;
                 prot[id] = obj;
@@ -112,10 +114,8 @@ define('io.ox/portal/widgets',
         },
 
         getUsedTypes: function () {
-            return collection.pluck('plugin')
-                .map(function (id) {
-                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
-                });
+            // mmmh, chain() on collection seems broken
+            return _(collection.pluck('type')).uniq().sort();
         },
 
         getColors: function () {
@@ -159,6 +159,10 @@ define('io.ox/portal/widgets',
             settings.set('widgets/user/' + id, widget).save();
 
             collection.add(widget);
+        },
+
+        remove: function (model) {
+            collection.remove(model);
         },
 
         removeDisabled: function () {
