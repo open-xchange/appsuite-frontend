@@ -167,13 +167,30 @@ define('plugins/notifications/mail/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
-            function addMails(e, mails) {//adds mails to notificationview
+            function addMails(e, mails, unseenMails) {//adds mails to notificationview and remove elsewhere read ones
                 var mailsToAdd = [];
+                //add new ones
                 for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present and not seen
                     if (!(notifications.collection._byId[mails[i].id]) && !(seenMails[mails[i].id])) {
                         mailsToAdd.push(mails[i]);
                     }
                 }
+                //remove elsewhere read ones
+                var found  = [],
+                    unseenArray = [],
+                    mailsToRemove;
+                _(notifications.collection.models).each(function (mail) {
+                    found.push(mail.get('id'));
+                });
+                _(unseenMails).each(function (mail) {
+                    unseenArray.push(mail.id);
+                });
+                mailsToRemove = _.difference(found, unseenArray);//mails in the collection that are not unseen need to be removed
+
+                _(mailsToRemove).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id]);
+                    seenMails[id] = true;//make sure this mail is not added again because it's seen already
+                });
                 _(mailsToAdd.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
@@ -184,12 +201,20 @@ define('plugins/notifications/mail/register',
                     seenMails[mail.id] = true;//make sure this mail is not added again because it's seen already
                 });
             }
+            function removeFolder(e, folder) {//removes mails of a whole folder from notificationview
+                _(notifications.collection.models).each(function (mail) {
+                    if (mail.get('folder_id') === folder) {
+                        notifications.collection.remove(notifications.collection._byId[mail.id]);
+                        seenMails[mail.id] = true;//make sure this mail is not added again because it's seen already
+                    }
+                });
+            }
 
-            api.on('new-mail', function (e, mails) {
+            api.on('new-mail', function (e, mails, unseenMails) {
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);
                 }
-                addMails(e, mails);
+                addMails(e, mails, unseenMails);
                 notifications.collection.trigger('reset');
             });
             api.on('move', function (e, mails, newFolder) {
@@ -205,7 +230,12 @@ define('plugins/notifications/mail/register',
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);
                 }
-                removeMails(e, mails);
+                if (mails.length > 0 && !mails[0].id) {//check if we have a folder seen action
+                    removeFolder(e, mails[0].folder);
+                } else {
+                    removeMails(e, mails);
+                }
+                
             });
 
             api.checkInbox();

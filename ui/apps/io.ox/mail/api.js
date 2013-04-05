@@ -670,6 +670,7 @@ define("io.ox/mail/api",
                     api.trigger('refresh.list');
                     update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                         reloadFolders(list);
+                        api.trigger('seen', list);//used by notification area
                     });
                 });
             });
@@ -1064,14 +1065,13 @@ define("io.ox/mail/api",
         })
         .pipe(function (unseen) {
             var recent;
-            // found unseen mails?
-            if (unseen.length) {
-                // check most recent mail
-                recent = _(unseen).filter(function (obj) {
-                    return obj.received_date > lastUnseenMail;
-                });
-                if (recent.length > 0 && (recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'
-                    api.trigger('new-mail', recent);
+            // check most recent mail
+            recent = _(unseen).filter(function (obj) {
+                return obj.received_date > lastUnseenMail;
+            });
+            if ((recent.flags & 2) !== 2) { // ignore mails 'mark as deleted'. Trigger even if no new mails are added to ensure read mails are removed
+                api.trigger('new-mail', recent, unseen);
+                if (recent.length > 0) {
                     lastUnseenMail = recent[0].received_date;
                 }
             }
