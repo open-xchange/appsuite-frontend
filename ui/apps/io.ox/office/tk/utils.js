@@ -844,25 +844,26 @@ define.async('io.ox/office/tk/utils',
         return (node instanceof $) ? node.get(0) : node;
     };
 
-
     /**
-     * Checks, if a specified node is an element node.
+     * Returns whether the passed node is a specific DOM element node.
      *
-     * @param {Node|jQuery} node
-     * The node, that is tested, if it is an element node
+     * @param {Node|jQuery|Null|Undefined} node
+     *  The DOM node to be checked. May be null or undefined.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that can be used to check the passed node for a
+     *  specific type etc. The selector will be passed to the jQuery method
+     *  jQuery.is(). If this selector is a function, it will be called with the
+     *  DOM node bound to the symbol 'this'. See the jQuery API documentation
+     *  at http://api.jquery.com/is for details.
      *
      * @returns {Boolean}
-     *  Whether the passed node is an element node.
+     *  Whether the passed node is an element node that matches the passed
+     *  selector.
      */
-    Utils.isElementNode = function (node) {
-        var isElementNode = false;
-        if (node) {
-            node = Utils.getDomNode(node);
-            if ((_.isObject(node)) && (node.nodeType === 1)) {
-                isElementNode = true;
-            }
-        }
-        return isElementNode;
+    Utils.isElementNode = function (node, selector) {
+        if (!node) { return false; }
+        return (Utils.getDomNode(node).nodeType === 1) && (!selector || $(node).is(selector));
     };
 
     /**
