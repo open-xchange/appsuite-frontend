@@ -208,13 +208,11 @@ define('io.ox/core/tk/autocomplete',
                         .addClass('io-ox-center')
                         .append(
                             // fail container/content
-                            $('<div>')
-                            .addClass('io-ox-fail')
-                            .html(gt('Could not load this list. '))
-                            .append(
+                            $('<div class="io-ox-fail">').append(
+                                $.txt(gt('Could not load this list')),
+                                $.txt('. '),
                                 //link
-                                $('<a href="#">')
-                                .text(gt('Retry'))
+                                $('<a href="#">').text(gt('Retry'))
                                 .on('click', function () {
                                         self.trigger('keyup', { isRetry: true });
                                     }

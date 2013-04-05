@@ -644,7 +644,6 @@ define('io.ox/core/tk/vgrid',
             function restoreHashSelection(ids, changed) {
                 // convert ids to objects first - avoids problems with
                 // non-existing items that cannot be resolved in selections
-                // console.debug('case #1:', ids);
                 ids = _(ids).map(deserialize);
                 var selectionChanged = !self.selection.equals(ids), cid, index;
                 if (selectionChanged) {
@@ -675,6 +674,7 @@ define('io.ox/core/tk/vgrid',
                     if (self.selection.contains(ids)) {
                         // if ids are given and still part of the selection
                         // we can restore that state
+                        //console.debug('case #1 restoreHashSelection()', ids);
                         restoreHashSelection(ids, changed);
                         return;
                     } else {
@@ -684,6 +684,7 @@ define('io.ox/core/tk/vgrid',
 
                 if (autoSelectAllowed()) {
                     var i = self.select();
+                    //console.debug('case #2 select() >> index', i);
                     if (_.isNumber(i)) {
                         // select by index
                         self.selection.set(all[i]);
@@ -693,9 +694,11 @@ define('io.ox/core/tk/vgrid',
                     }
                     else if (_.isArray(i)) {
                         // select by object (cid)
+                        //console.debug('case #3 select() >> object (cid)', i);
                         self.selection.set(i);
                     }
                     else if (options.selectFirst) {
+                        //console.debug('case #4 select() >> first', i);
                         self.selection.selectFirst();
                     }
                 }
