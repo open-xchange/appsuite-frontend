@@ -228,7 +228,7 @@
 
 .mail-detail-pane .thread-inline-actions {
     padding: 20px 0 0px 20px;
-    
+
     .dropdown {
     	z-index: 12007 !important;/* override so dropdown is above inline links. See: Bug 25687*/
     }
@@ -486,6 +486,12 @@
         display: block; /* for large images (see bug #22756 and #25033) */
         position: relative;
         overflow: hidden; /* helper for absolutely positioned elements */
+
+        * {
+            /* fixes https://bugs.open-xchange.com/show_bug.cgi?id=25737 */
+            font-size: 100%;
+            line-height: 1.4em;
+        }
 
         /* TODO: remove / temp. fix for bootstrap */
         [class*="span"] {
