@@ -557,6 +557,21 @@ example-app_0.0.1-1.debian.tar.bz2  example-app_0.0.1.orig.tar.bz2</code>
     </dd>
 </dl>
 <dl>
+    <dt>skipLess</dt>
+    <dd>
+        <p>Whether to skip the preprocessing of LessCSS files.</p>
+        <p><b>Used by:</b> <code>app</code>, <code>default</code>.</p>
+        <p><b>Default:</b> <code>false</code></p>
+        <p>
+            This flag skips the generation of CSS files in
+            the <code>apps/themes/*/less</code> directories of all themes.
+            It is used by the packaging system, where the LessCSS files are
+            precompiled after installation on the target system instead of
+            while building the package.
+        </p>
+    </dd>
+</dl>
+<dl>
     <dt>tag</dt>
     <dd>
         <p>The Subversion tag of the CLDR to checkout.</p>

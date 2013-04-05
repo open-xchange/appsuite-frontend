@@ -471,42 +471,45 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
-// own themes
+// themes
 
-_.each(utils.list('apps/themes/*/definitions.less'), function(defs) {
-    var dir = path.dirname(defs);
-    utils.concat(path.join(dir, 'less/common.css'),
-        [utils.dest('apps/themes/definitions.less'), defs,
-         utils.dest('apps/themes/style.less')],
-        { filter: less.compile });
-    utils.concat(path.join(dir, 'less/style.css'),
-        [utils.dest('apps/themes/definitions.less'), defs,
-         path.join(dir, 'style.less')],
-        { filter: less.compile });
-    _.each(utils.list('apps', '**/*.less'), function (file) {
-        if (file.slice(0, 7) === 'themes/') return;
-        utils.concat(path.join(dir, 'less', file),
+if (!envBoolean('skipLess')) {
+    
+    // own themes
+    _.each(utils.list('apps/themes/*/definitions.less'), function(defs) {
+        var dir = path.dirname(defs);
+        utils.concat(path.join(dir, 'less/common.css'),
             [utils.dest('apps/themes/definitions.less'), defs,
-             path.join('apps', file)],
-             { filter: less.compile });
-    });
-});
-
-// foreign themes
-
-_.each(utils.list(utils.dest('apps/themes'), '*/definitions.less'),
-    function (defs) {
-        if (path.existsSync(path.join('apps/themes', defs))) return;
-        var dir = path.join('apps/themes', path.dirname(defs));
+             utils.dest('apps/themes/style.less')],
+            { filter: less.compile });
+        utils.concat(path.join(dir, 'less/style.css'),
+            [utils.dest('apps/themes/definitions.less'), defs,
+             path.join(dir, 'style.less')],
+            { filter: less.compile });
         _.each(utils.list('apps', '**/*.less'), function (file) {
             if (file.slice(0, 7) === 'themes/') return;
             utils.concat(path.join(dir, 'less', file),
-                [utils.dest('apps/themes/definitions.less'),
-                 utils.dest(path.join('apps/themes', defs)),
+                [utils.dest('apps/themes/definitions.less'), defs,
                  path.join('apps', file)],
                  { filter: less.compile });
         });
     });
+    
+    // foreign themes
+    _.each(utils.list(utils.dest('apps/themes'), '*/definitions.less'),
+        function (defs) {
+            if (path.existsSync(path.join('apps/themes', defs))) return;
+            var dir = path.join('apps/themes', path.dirname(defs));
+            _.each(utils.list('apps', '**/*.less'), function (file) {
+                if (file.slice(0, 7) === 'themes/') return;
+                utils.concat(path.join(dir, 'less', file),
+                    [utils.dest('apps/themes/definitions.less'),
+                     utils.dest(path.join('apps/themes', defs)),
+                     path.join('apps', file)],
+                     { filter: less.compile });
+            });
+        });
+}
 
 // docs task
 

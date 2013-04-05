@@ -30,6 +30,16 @@ sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app \
 sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean \
     builddir="%{buildroot}/opt/open-xchange/appsuite"
 
+%post
+if [ "$1" = 1 ]; then
+    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+    [ -x $UPDATE ] && $UPDATE
+fi
+
+%postun
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+[ -x $UPDATE ] && $UPDATE
+
 %files
 %defattr(-,root,root)
 %dir /opt/open-xchange

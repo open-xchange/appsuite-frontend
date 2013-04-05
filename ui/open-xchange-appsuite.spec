@@ -78,9 +78,8 @@ SDK for the OX App Suite HTML5 client
 
 %install
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
+sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
-rm -r "%{buildroot}%{docroot}"/apps/themes/*/less
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
@@ -110,11 +109,17 @@ sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
 %post manifest
-/opt/open-xchange/appsuite/share/update-themes.sh
+if [ "$1" = 1 ]; then
+    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+    [ -x $UPDATE ] && $UPDATE
+fi
 
 %postun manifest
 if [ "$1" = 0 ]; then
     rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true
+else
+    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+    [ -x $UPDATE ] && $UPDATE
 fi
 
 %files

@@ -9,12 +9,12 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 endif
 
 override_dh_auto_install:
-	sh /opt/open-xchange-appsuite-dev/bin/build.sh app \
+	sh /opt/open-xchange-appsuite-dev/bin/build.sh app skipLess=1 \
 	    builddir="debian/@package@/opt/open-xchange/appsuite" \
 	    $(FLAGS) --trace
 
 override_dh_auto_clean:
-	sh /opt/open-xchange-appsuite-dev/bin/build.sh clean \
+	sh /opt/open-xchange-appsuite-dev/bin/build.sh clean skipLess=1 \
 	    builddir="debian/@package@/opt/open-xchange/appsuite" \
 	    $(FLAGS) --trace
 
