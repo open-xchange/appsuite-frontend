@@ -692,15 +692,20 @@ define("io.ox/mail/write/view-main",
             _(list).each(function (file) {
 
                 /*
-                 * Files and VCard are very close here
+                 * Files, VCard, and Messages are very close here
                  * there's no real separation
                  */
 
                 var icon, name, size, info,
+                    isMessage = 'message' in file,
                     isFile = 'size' in file || 'file_size' in file;
 
-                // if file get size
-                if (isFile) {
+                // message?
+                if (isMessage) {
+                    info = $('<span>').addClass('filesize').text('');
+                    icon = $('<i>').addClass('icon-paper-clip');
+                    name = file.message.subject || '\u00A0';
+                } else if (isFile) {
                     // filesize
                     size = file.size || file.file_size;
                     size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';

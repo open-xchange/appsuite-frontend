@@ -659,8 +659,8 @@ define('io.ox/mail/write/main',
                     }
                     def.resolve();
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
@@ -696,8 +696,8 @@ define('io.ox/mail/write/main',
                                 def.resolve();
                             });
                         })
-                        .fail(function () {
-                            notifications.yell('error', gt('An error occured. Please try again.'));
+                        .fail(function (e) {
+                            notifications.yell(e);
                             app.dirty(false).quit();
                             def.reject();
                         });
@@ -740,8 +740,8 @@ define('io.ox/mail/write/main',
                         def.resolve();
                     });
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
