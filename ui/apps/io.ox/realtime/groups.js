@@ -15,7 +15,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     'use strict';
     var counter = 0;
     function RealtimeGroup(id) {
-        var self = this, joined = false, heartbeat = null, selector = "rt-group-" + counter;
+        var self = this, heartbeat = null, selector = "rt-group-" + counter;
         counter++;
         rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
@@ -52,6 +52,9 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.leave = function () {
+            if (!heartbeat) {
+                return;
+            }
             clearInterval(heartbeat);
             heartbeat = null;
             this.send({
@@ -72,7 +75,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.destroy = function () {
-            if (joined) {
+            if (heartbeat) {
                 this.leave();
             }
             rt.off("receive:" + id);
