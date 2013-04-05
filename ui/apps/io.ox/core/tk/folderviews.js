@@ -51,6 +51,7 @@ define('io.ox/core/tk/folderviews',
             painted = false,
             detached = true,
             loading = null,
+            wasOpen = false,
             open,
             self = this,
             data = {},
@@ -114,6 +115,8 @@ define('io.ox/core/tk/folderviews',
                             nodes.sub.idle().hide(); // Robustness. Sometimes the folder interface seems unsure about subfolders.
                             hideArrow();
                             return $.when();
+                        } else {
+                            wasOpen = true;
                         }
                         return $.when.apply(null, _(children).invoke(method, nodes.sub));
                     })
@@ -327,8 +330,9 @@ define('io.ox/core/tk/folderviews',
                     if (nodes.folder.hasClass('selectable')) {
                         tree.selection.addToIndex(data.id);
                     }
-                    // draw children?
-                    if (isOpen()) {
+                    // draw children? check wasOpen cause we might have to draw
+                    // newly added subfolders (which won't appear for closed folders)
+                    if (wasOpen || isOpen()) {
                         return repaintChildren();
                     } else {
                         return $.when();
