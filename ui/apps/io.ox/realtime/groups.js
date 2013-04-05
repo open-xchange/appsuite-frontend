@@ -23,23 +23,21 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         this.id = id;
 
         this.join = function () {
-            if (joined) {
-                return;
+            if (!heartbeat) {
+                heartbeat = setInterval(function () {
+                    rt.sendWithoutSequence({
+                        element: "message",
+                        to: id,
+                        payloads: [
+                            {
+                                element: "ping",
+                                namespace: "group",
+                                data: 1
+                            }
+                        ]
+                    });
+                }, 60000);
             }
-            heartbeat = setInterval(function () {
-                rt.sendWithoutSequence({
-                    element: "message",
-                    to: id,
-                    payloads: [
-                        {
-                            element: "ping",
-                            namespace: "group",
-                            data: 1
-                        }
-                    ]
-                });
-            }, 60000);
-            joined = true;
             this.send({
                 element: "message",
                 selector: selector,
@@ -54,11 +52,8 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.leave = function () {
-            if (!joined) {
-                return;
-            }
-            joined = false;
             clearInterval(heartbeat);
+            heartbeat = null;
             this.send({
                 element: "message",
                 payloads: [
