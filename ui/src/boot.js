@@ -25,8 +25,6 @@ $(window).load(function () {
         ox.base = ox.base + _.now();
     }
 
-    if (!ox.signin) require(['less!io.ox/core/bootstrap/css/bootstrap.less']);
-
     // animations
     var DURATION = 250,
         // flags

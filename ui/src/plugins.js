@@ -99,6 +99,14 @@
         // List of LessCSS files to update for theme changes.
         lessFiles = [themeCommon, themeStyle];
     
+    if (!ox.signin) {
+        lessFiles.push({
+            path: ox.base + '/io.ox/core/bootstrap/css/bootstrap.less',
+            name: 'io.ox/core/bootstrap/css/bootstrap.less',
+            selector: '#bootstrap'
+        });
+    }
+    
     function insertLess(file) {
         return require(['text!themes/' + theme + '/less/' + file.name])
             .done(function (css) {
