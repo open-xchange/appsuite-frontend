@@ -165,6 +165,9 @@
     });
 
     // aliases
+    // TODO
+    // fix this because it only looks on screen size and does not mean
+    // desktop is a real desktop PC. This might causes errors later
     display.smartphone = display.small;
     display.tablet = display.medium;
     display.desktop = display.large;

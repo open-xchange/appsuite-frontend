@@ -78,12 +78,19 @@ $(window).load(function () {
             e.preventDefault();
         });
     }
+    ox.uploadsEnabled = true;
 
-    // Disable attachments and uploads for specific clients
-    if (_.device('desktop || (tablet && iOS >= 6)')) {
-        ox.uploadsEnabled = true;
+    // TODO
+    // clean this up and enhance _.device function. 'desktop' or 'tablet' are not reliable
+    // because they only look at the screen size
+    if (_.device('ios || android')) {
+        // Disable attachments and uploads for specific clients
+        ox.uploadsEnabled = false;
+        if (_.device('tablet && iOS >= 6')) {
+            // reenable if iPad with iOS 6
+            ox.uploadsEnabled = true;
+        }
     }
-
     // check for supported browser
     function isBrowserSupported() {
         var supp = false;
