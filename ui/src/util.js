@@ -103,6 +103,8 @@
         chrome = ua.indexOf('Chrome/') > -1,
         MacOS = ua.indexOf('Macintosh') > -1,
         Windows = ua.indexOf('Windows') > -1,
+        Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1),
+        WindowsPhone = ua.indexOf('Windows Phone') > -1,
         Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
         iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
 
@@ -126,6 +128,8 @@
         Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ?
             ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** OS **/
+        Blackberry: Blackberry,
+        WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
         iOS: iOS,
         MacOS: MacOS,
         Android : Android,
@@ -158,19 +162,18 @@
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
     };
 
+
     var display = {};
 
     _(queries).each(function (query, key) {
         display[key] = Modernizr.mq(query);
     });
 
-    // aliases
-    // TODO
-    // fix this because it only looks on screen size and does not mean
-    // desktop is a real desktop PC. This might causes errors later
-    display.smartphone = display.small;
-    display.tablet = display.medium;
-    display.desktop = display.large;
+    var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+    // define devices as combination of screensize and OS
+    display.smartphone = display.small && mobileOS;
+    display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+    display.desktop = !mobileOS;
     _.displayInfo = display;
     // extend underscore utilities
     _.mixin({
