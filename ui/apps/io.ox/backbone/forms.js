@@ -206,18 +206,23 @@ define('io.ox/backbone/forms',
             this.nodes.dropelements = {};
 
             function createSelect(name, from, to, setter, format) {
-                var node = self.nodes.dropelements[name] = $('<select>').attr({
-                        'name': name,
-                        'size': 1
-                    }),
-                    step = from < to ? 1 : -1,
-                    d = new date.Local(0);
-                $('<option>').appendTo(node);
-                for (var i = from; i !== to; i += step) {
+                var node = self.nodes.dropelements[name] = $('<select size="1">').attr('name', name),
+                    i = Math.min(from, to),
+                    $i = Math.max(from, to),
+                    d = new date.Local(0),
+                    options = [];
+                for (; i <= $i; i++) {
                     setter.call(d, i);
-                    $('<option>').val(i).text(d.format(format)).appendTo(node);
+                    options.push($('<option>').val(i).text(d.format(format)));
                 }
-                node.appendTo(parent);
+                // revert?
+                if (from > to) {
+                    options.reverse();
+                }
+                // add empty option
+                options.unshift($('<option>').text(''));
+                // append
+                parent.append(node.append(options));
             }
 
             date.getFormat(date.DATE).replace(

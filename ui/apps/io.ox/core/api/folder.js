@@ -45,7 +45,7 @@ define('io.ox/core/api/folder',
                         id: id,
                         tree: '1',
                         altNames: true,
-                        timestamp: 'UTC'
+                        timezone: 'UTC'
                     }
                 })
                 .done(function (data, timestamp) {
@@ -172,7 +172,7 @@ define('io.ox/core/api/folder',
                             tree: '1',
                             all: opt.all ? '1' : '0',
                             altNames: true,
-                            timestamp: 'UTC'
+                            timezone: 'UTC'
                         },
                         appendColumns: true
                     })
@@ -224,7 +224,7 @@ define('io.ox/core/api/folder',
                     cache: true,
                     storage: null,
                     altNames: true,
-                    timestamp: 'UTC'
+                    timezone: 'UTC'
                 }, options || {}),
                 // get cache
                 cache = opt.storage || folderCache,
@@ -295,7 +295,7 @@ define('io.ox/core/api/folder',
                                 content_type: opt.type,
                                 tree: '1',
                                 altNames: true,
-                                timestamp: 'UTC'
+                                timezone: 'UTC'
                             }
                         })
                         .pipe(function (data, timestamp) {
@@ -517,7 +517,7 @@ define('io.ox/core/api/folder',
                             action: 'update',
                             id: opt.folder,
                             tree: '1',
-                            timestamp: 'UTC'
+                            timezone: 'UTC'
                         },
                         data: opt.changes || {},
                         appendColumns: false

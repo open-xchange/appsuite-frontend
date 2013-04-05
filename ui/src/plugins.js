@@ -99,6 +99,14 @@
         // List of LessCSS files to update for theme changes.
         lessFiles = [themeCommon, themeStyle];
     
+    if (!ox.signin) {
+        lessFiles.push({
+            path: ox.base + '/io.ox/core/bootstrap/css/bootstrap.less',
+            name: 'io.ox/core/bootstrap/css/bootstrap.less',
+            selector: '#bootstrap'
+        });
+    }
+    
     function insertLess(file) {
         return require(['text!themes/' + theme + '/less/' + file.name])
             .done(function (css) {
@@ -109,7 +117,7 @@
     define("less", {
         load: function (name, parentRequire, load, config) {
             var file = {
-                path: dirname(config.baseUrl + name),
+                path: config.baseUrl + name,
                 name: name,
                 selector: '#css'
             };
@@ -143,7 +151,8 @@
                 $('head #' + i).attr({ href: path + icons[i] })
                                .detach().appendTo('head');
             }
-            themeCommon.path = themeStyle.path = path;
+            themeCommon.path = path + 'common.css';
+            themeStyle.path = path + 'style.css';
             return $.when.apply($, _.map(lessFiles, insertLess));
         },
 

@@ -69,9 +69,7 @@ define("io.ox/calendar/view-grid-template",
                             $.txt(')')
                         );
                 }
-                if (data.location) {
-                    fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                }
+                fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);

@@ -34,7 +34,7 @@ define('io.ox/files/icons/perspective',
         thumbnailHeight: 90,
         fileIconWidth: 158,
         fileIconHeight: 182,
-        fileFilterRegExp: '.*' // was: '^[^.].*$'
+        fileFilterRegExp: false //'.*' // was: '^[^.].*$'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -181,13 +181,14 @@ define('io.ox/files/icons/perspective',
 
     function loadFiles(app) {
         if (!app.getWindow().search.active) {
-            return api.getAll({ folder: app.folder.get() });
+            return api.getAll({ folder: app.folder.get() }, false);
         } else {
             return api.search(app.getWindow().search.query);
         }
     }
 
     function filterFiles(files, options) {
+        if (!options.fileFilterRegExp) { return files; }
         return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
     }
 
@@ -342,8 +343,6 @@ define('io.ox/files/icons/perspective',
                     }
                 });
                 self.selection.update();
-                ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
-
             };
 
             drawFirst = function () {
@@ -374,12 +373,11 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
-                        baton.allIds = filterFiles(ids, options);
+                        baton.allIds = allIds = filterFiles(ids, options);
 
-                        allIds = baton.allIds;
                         self.selection.init(allIds);
-
                         redraw(allIds.slice(start, end));
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                     })
                     .fail(function (response) {
                         iconview.idle();
@@ -496,9 +494,18 @@ define('io.ox/files/icons/perspective',
 
             api.on('refresh.all', function () {
                 if (!app.getWindow().search.active) {
-                    api.getAll({ folder: app.folder.get() }).done(function (ids) {
+                    api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
-                        var hash = {}, oldhash = {}, oldIds, newIds, changed = [], deleted, added, indexPrev, indexPrevPosition, indexNextPosition;
+                        var hash = {},
+                        oldhash  = {},
+                        oldIds   = [],
+                        newIds   = [],
+                        changed  = [],
+                        deleted  = [],
+                        added    = [],
+                        indexPrev,
+                        indexPrevPosition,
+                        indexNextPosition;
 
                         indexPrev = function (index, cid) {
                             return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
@@ -531,12 +538,20 @@ define('io.ox/files/icons/perspective',
                         oldIds = _.map(allIds, _.cid);
                         newIds = _.map(ids, _.cid);
 
-                        deleted = _.difference(oldIds, newIds);
-                        added   = _.difference(newIds, oldIds);
+                        for (var id in oldIds) {
+                            if (-1 === newIds.indexOf(oldIds[id])) {
+                                deleted.push(oldIds[id]);
+                            }
+                        }
 
-                        allIds  = ids;
+                        for (var id in newIds) {
+                            if (-1 === oldIds.indexOf(newIds[id])) {
+                                added.push(newIds[id]);
+                            }
+                        }
 
-                        baton.allIds = ids;
+                        baton.allIds = allIds = ids;
+
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                         _(changed).each(function (cid) {
@@ -582,8 +597,7 @@ define('io.ox/files/icons/perspective',
                         });
 
                         recalculateLayout();
-
-                        hash = oldhash = ids = null;
+                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
                 } else {
                     drawFirst();

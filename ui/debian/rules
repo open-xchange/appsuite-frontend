@@ -12,11 +12,10 @@ BACKEND := debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite
 FRONTEND := debian/open-xchange-appsuite/var/www/appsuite
 
 override_dh_auto_install:
-	sh build.sh builddir=$(FRONTEND) manifestDir=$(BACKEND) \
+	sh build.sh skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
-	rm -r $(FRONTEND)/apps/themes/*/less
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
 	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
@@ -30,7 +29,7 @@ override_dh_auto_install:
 	chmod +x tmp/build-appsuite
 
 override_dh_auto_clean:
-	sh build.sh clean builddir=$(FRONTEND) manifestDir=$(BACKEND) \
+	sh build.sh clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
         helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace

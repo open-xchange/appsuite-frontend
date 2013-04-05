@@ -79,6 +79,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                 this.leave();
             }
             rt.off("receive:" + id);
+            delete groups[id];
         };
 
         Event.extend(this);
