@@ -85,14 +85,25 @@
 }
 
 #io-ox-top-logo-small {
-    width: 63px;
+    width: 60px;
     height: 22px;
-    margin: 7px 13px 0 13px;
+    margin: 8px 13px 0 13px;
     float: right;
-    background-image: url(logo-small.png);
+    background-image: url(_logo-small.png);
     background-repeat: no-repeat;
 }
 
+/** High res logo for retina screens **/
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-moz-min-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5),
+    only screen and (min-resolution: 240dpi) {
+
+    #io-ox-top-logo-small {
+        background-size: 60px 22px;
+        background-image: url(logo-large.png);
+    }
+}
 /* ------------------------------------- */
 /* ipad: better fat finger support */
 
@@ -100,8 +111,6 @@
 .touch #io-ox-topbar .launcher { font-size: @topbarFontSize + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
 .touch #io-ox-screens { top: 40px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
-.touch #io-ox-top-logo-small { margin-top: 6px; }
-
 .touch body { font-size: @touchFontSize; }
 
 .touch .scrollable .scrollable-pane { -webkit-transform: translate3d(0, 0, 0); }
