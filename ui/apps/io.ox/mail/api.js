@@ -277,6 +277,16 @@ define("io.ox/mail/api",
                 tracker.reset(response.data || response); // threadedAll || all
                 return response;
             },
+            listPost: function (data) {
+                _(data).map(function (obj) {
+                    if (tracker.isUnseen(obj)) {
+                        obj.flags = obj.flags & ~32;
+                    } else {
+                        obj.flags = obj.flags | 32;
+                    }
+                });
+                return data;
+            },
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 data.view = options.view;

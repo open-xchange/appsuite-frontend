@@ -22,7 +22,7 @@ define('io.ox/core/api/folder',
     'use strict';
 
     var // folder object cache
-        folderCache = new cache.SimpleCache('folder', true),
+        folderCache = new cache.SimpleCache('folder', false),
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
 
@@ -44,7 +44,8 @@ define('io.ox/core/api/folder',
                         action: 'get',
                         id: id,
                         tree: '1',
-                        altNames: true
+                        altNames: true,
+                        timestamp: 'UTC'
                     }
                 })
                 .done(function (data, timestamp) {
@@ -170,7 +171,8 @@ define('io.ox/core/api/folder',
                             parent: opt.folder,
                             tree: '1',
                             all: opt.all ? '1' : '0',
-                            altNames: true
+                            altNames: true,
+                            timestamp: 'UTC'
                         },
                         appendColumns: true
                     })
@@ -194,11 +196,11 @@ define('io.ox/core/api/folder',
                         }
                         return $.when(
                             // add to cache
-                            cache.add(opt.folder, data, timestamp),
+                            cache.add(opt.folder, data),
                             // also add to folder cache
                             $.when.apply($,
                                 _(data).map(function (folder) {
-                                    return folderCache.add(folder.id, folder, timestamp);
+                                    return folderCache.add(folder.id, folder);
                                 })
                             )
                         )
@@ -221,7 +223,8 @@ define('io.ox/core/api/folder',
                     event: false,
                     cache: true,
                     storage: null,
-                    altNames: true
+                    altNames: true,
+                    timestamp: 'UTC'
                 }, options || {}),
                 // get cache
                 cache = opt.storage || folderCache,
@@ -291,7 +294,8 @@ define('io.ox/core/api/folder',
                                 action: 'allVisible',
                                 content_type: opt.type,
                                 tree: '1',
-                                altNames: true
+                                altNames: true,
+                                timestamp: 'UTC'
                             }
                         })
                         .pipe(function (data, timestamp) {
@@ -512,7 +516,8 @@ define('io.ox/core/api/folder',
                         params: {
                             action: 'update',
                             id: opt.folder,
-                            tree: '1'
+                            tree: '1',
+                            timestamp: 'UTC'
                         },
                         data: opt.changes || {},
                         appendColumns: false

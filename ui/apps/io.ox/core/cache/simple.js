@@ -70,6 +70,9 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
         clear: function () {
             storage = {};
             instances = {};
+        },
+        dump: function () {
+            console.debug('fluent', storage);
         }
     };
 
