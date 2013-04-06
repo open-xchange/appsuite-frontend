@@ -190,7 +190,7 @@ define('io.ox/contacts/actions',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 && ctx.folder_id === 0) {
+            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -328,7 +328,7 @@ define('io.ox/contacts/actions',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 && ctx.folder_id === 0) {
+            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
                 return false;
             } else {
                 var list = [].concat(ctx);
