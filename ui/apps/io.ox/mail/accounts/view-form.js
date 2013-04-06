@@ -164,8 +164,8 @@ define('io.ox/mail/accounts/view-form',
             onFolderSelect: function (e) {
                 var self = this;
                 if (self.model.get('id') !== 0) {
-                    var property = $(e.srcElement).prev().attr('data-property'),
-                        id = $(e.srcElement).prev().val(),
+                    var property = $(e.currentTarget).prev().attr('data-property'),
+                        id = self.model.get(property),
                         accountName = self.model.get('name');
                     require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
 
@@ -182,7 +182,6 @@ define('io.ox/mail/accounts/view-form',
                         dialog.show(function () {
                             tree.paint().done(function () {
                                 tree.select(id);
-//                                tree.select(id);
                             });
                         })
                         .done(function (action) {
