@@ -93,6 +93,7 @@ define('io.ox/calendar/edit/template',
             'conflicts': 'showConflicts'
         },
         showConflicts: function (conflicts) {
+
             var self = this,
                 hardConflict = false;
 
@@ -108,32 +109,38 @@ define('io.ox/calendar/edit/template',
             });
 
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
-                var conflictList = c.drawList(conflicts),
-                    $acceptButton = hardConflict ? null : $('<a class="btn btn-danger">')
-                    .addClass('btn')
-                    .text(gt('Ignore conflicts'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        self.model.set('ignore_conflicts', true);
-                        saveButton.click();
-                    });
                 self.$el.empty().append(
-                    conflictList,
-                    $('<div>').addClass('buttons').append(
-                            $('<span class="span12">').append(
-                                    $('<a class="btn">')
-                                        .text(gt('Hide conflicts'))
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            self.$el.empty();
-                                            saveButton.show();
-                                            discardButton.show();
-                                        }),
-                                    $acceptButton.css({position: 'absolute', right: '0px'})
-                                )
+                    // appointment list
+                    c.drawList(conflicts),
+                    // hardConflict?
+                    hardConflict ?
+                        $('<div class="alert alert-info hard-conflict">').text(gt('Conflicts with resources cannot be ignored')) :
+                        $(),
+                    // buttons
+                    $('<div class="buttons">').append(
+                        $('<span class="span12">').css('textAlign', 'right').append(
+                            // hide/cancel
+                            $('<a class="btn">')
+                                .text(gt('Hide conflicts'))
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    self.$el.empty();
+                                    saveButton.show();
+                                    discardButton.show();
+                                }),
+                            // accept/ignore
+                            hardConflict ? $() :
+                                $('<a class="btn btn-danger">')
+                                .css('marginLeft', '1em')
+                                .text(gt('Ignore conflicts'))
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    self.model.set('ignore_conflicts', true);
+                                    saveButton.click();
+                                })
                         )
-                    );
-
+                    )
+                );
             });
         }
     });
