@@ -126,6 +126,7 @@ define('io.ox/mail/accounts/view-form',
                     });
                 } else {//primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
+                    self.$el.find('button.btn.folderselect').hide();
                 }
 
                 return self;
