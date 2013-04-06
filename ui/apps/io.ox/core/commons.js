@@ -107,6 +107,10 @@ define('io.ox/core/commons',
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
             });
+            // clean up selection index on delete
+            api.on('beforedelete', function (e, ids) {
+                grid.selection.removeFromIndex(ids);
+            });
         },
 
         /**
@@ -226,7 +230,10 @@ define('io.ox/core/commons',
          * Wire grid and API refresh
          */
         wireGridAndRefresh: function (grid, api, win) {
-            var refreshAll = function () {
+            var refreshAll = function (e) {
+                    if (e.type === 'refresh:all:local') {
+                        grid.invalidateLabels();
+                    }
                     grid.refresh(true);
                 },
                 refreshList = function () {

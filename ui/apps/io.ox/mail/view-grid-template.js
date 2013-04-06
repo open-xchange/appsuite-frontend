@@ -110,12 +110,17 @@ define('io.ox/mail/view-grid-template',
         thread: {
             build: function () {
             },
-            set: function (data, fields, index, prev) {
+            set: function (data, fields, index, prev, grid) {
                 var self = this.removeClass('vgrid-label').addClass('thread-summary').empty(),
                     thread = api.getThread(prev);
                 return api.getList(thread).done(function (list) {
-                    var length = list.length;
-                    _(list.slice(1)).each(function (data, index) {
+                    var length = list.length, subset = list.slice(1);
+                    // update selection
+                    if (!grid.selection.contains(subset)) {
+                        grid.selection.insertAt(subset, index);
+                    }
+                    // draw labels
+                    _(subset).each(function (data, index) {
                         self.append(
                             $('<div class="thread-summary-item selectable">')
                             .addClass(util.isUnseen(data) ? 'unread' : undefined)

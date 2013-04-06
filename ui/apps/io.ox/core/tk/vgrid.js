@@ -75,11 +75,11 @@ define('io.ox/core/tk/vgrid',
             this.detached = true;
         }
 
-        Row.prototype.update = function (data, index, id, prev) {
+        Row.prototype.update = function (data, index, id, prev, grid) {
             // loop over setters
             var i = 0, setters = this.set, $i = setters.length, rets = [];
             for (; i < $i; i++) {
-                rets.push(setters[i].call(this.node, data, this.fields, index, prev) || DONE);
+                rets.push(setters[i].call(this.node, data, this.fields, index, prev, grid) || DONE);
             }
             // set composite id?
             if (id !== undefined) {
@@ -294,6 +294,7 @@ define('io.ox/core/tk/vgrid',
             hScrollToLabel,
             paintLabels,
             processLabels,
+            invalidLabels = false,
             cloneRow,
             currentOffset = null,
             paint,
@@ -364,7 +365,7 @@ define('io.ox/core/tk/vgrid',
                 // draw
                 clone = label.getClone();
                 clone.node.addClass('vgrid-label').data('label-index', i);
-                defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
+                defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}, self));
                 text = clone.node.text();
                 // convert Umlauts
                 text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
@@ -395,6 +396,7 @@ define('io.ox/core/tk/vgrid',
                     cumulatedLabelHeight += tail.outerHeight(true);
                 }
                 node = clone = defs = null;
+                invalidLabels = false;
                 return cumulatedLabelHeight;
             });
         };
@@ -596,7 +598,7 @@ define('io.ox/core/tk/vgrid',
 
         function apply(list, quiet) {
             // changed?
-            if (list.length !== all.length || !_.isEqual(all, list)) {
+            if (invalidLabels || list.length !== all.length || !_.isEqual(all, list)) {
                 // store
                 all = list;
                 currentOffset = null;
@@ -684,9 +686,9 @@ define('io.ox/core/tk/vgrid',
 
                 if (autoSelectAllowed()) {
                     var i = self.select();
-                    //console.debug('case #2 select() >> index', i);
                     if (_.isNumber(i)) {
                         // select by index
+                        //console.debug('case #2 select() >> index', i);
                         self.selection.set(all[i]);
                         if (!isVisible(i)) {
                             setIndex(i - 2); // not at the very top
@@ -749,7 +751,7 @@ define('io.ox/core/tk/vgrid',
                 }
             }
 
-            return function () {
+            return function (repaint) {
                 // get all IDs
                 if (responsiveChange || all.length === 0) self.busy();
                 var load = loadIds[currentMode] || loadIds.all;
@@ -900,6 +902,11 @@ define('io.ox/core/tk/vgrid',
 
         this.repaintLabels = function () {
             return initLabels();
+        };
+
+        this.invalidateLabels = function () {
+            // use case: delete items; esp. mail thread summary
+            invalidLabels = true;
         };
 
         this.repaint = _.debounce(function () {
@@ -1129,7 +1136,6 @@ define('io.ox/core/tk/vgrid',
 
             return function () {
                 var folder = self.prop('folder');
-                //console.log('this.select', folder, hash[folder] || null, 'hash', hash);
                 return (currentMode === 'all' && hash[folder]) || null;
             };
         }());

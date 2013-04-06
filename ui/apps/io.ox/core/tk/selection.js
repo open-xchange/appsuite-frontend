@@ -458,9 +458,33 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
+        this.removeFromIndex = function (list) {
+            var hash = {}, index = 0;
+            // build hash of CIDs to delete
+            _([].concat(list)).each(function (obj) {
+                hash[self.serialize(obj)] = true;
+            });
+            // reset index
+            observedItemsIndex = {};
+            // rebuild list
+            observedItems = _(observedItems).filter(function (obj) {
+                var key = self.serialize(obj);
+                if (key in hash) {
+                    return false;
+                } else {
+                    observedItemsIndex[key] = index++;
+                    return true;
+                }
+            });
+        };
+
         this.hasIndex = function (flag) {
             bHasIndex = !!flag;
             return this;
+        };
+
+        this.lalla = function () {
+            return observedItemsIndex;
         };
 
         /**

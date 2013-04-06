@@ -278,11 +278,13 @@ define("io.ox/mail/api",
                 return response;
             },
             listPost: function (data) {
-                _(data).map(function (obj) {
-                    if (tracker.isUnseen(obj)) {
-                        obj.flags = obj.flags & ~32;
-                    } else {
-                        obj.flags = obj.flags | 32;
+                _(data).each(function (obj) {
+                    if (obj) {
+                        if (tracker.isUnseen(obj)) {
+                            obj.flags = obj.flags & ~32;
+                        } else {
+                            obj.flags = obj.flags | 32;
+                        }
                     }
                 });
                 return data;
@@ -1099,10 +1101,11 @@ define("io.ox/mail/api",
     api.localRemove = function (list, hash) {
         // reverse lookup first to get affacted top-level elements
         var reverse = {};
-        _(hash).each(function (obj) {
-            var threadCID = tracker.getThreadCID(obj);
+        _(hash).each(function (value, cid) {
+            var threadCID = tracker.getThreadCID(cid);
             if (threadCID !== undefined) {
-                reverse[threadCID] = true;
+                // is a thread, but we store the inner cid since we loop over root elements
+                reverse[threadCID] = cid;
             }
         });
         // loop over list and check occurence via hash
@@ -1130,7 +1133,7 @@ define("io.ox/mail/api",
             // case #3: found via reverse lookup
             if (cid in reverse) {
                 obj.thread = _(obj.thread).filter(function (o) {
-                    return _.cid(o) !== cid;
+                    return _.cid(o) !== reverse[cid];
                 });
                 return true;
             }
