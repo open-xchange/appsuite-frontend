@@ -231,6 +231,28 @@
           to { color: #555; }
     }
 
+    @darkGray: #555;
+
+    .badge {
+        background-color: @darkGray;
+    }
+
+    .icon-refresh {
+        color: @darkGray;
+        .transition(color 0.2s linear);
+    }
+
+    .icon-refresh.icon-spin {
+        color: #fff;
+    }
+
+    .icon-refresh.icon-spin.icon-spin-paused {
+        -webkit-animation-play-state: paused;
+        -moz-animation-play-state: paused;
+        animation-play-state: paused;
+        color: @darkGray;
+    }
+
     .launcher.io-ox-progress i {
         -moz-animation-direction: alternate;
         -moz-animation-duration: 0.75s;

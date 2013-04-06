@@ -346,7 +346,7 @@ define("io.ox/mail/api",
         BLUE:        2,
         PURPLE:      5,
         PINK:        8,
-        GREY:        4
+        GRAY:        4
     };
 
     // control for each folder:
