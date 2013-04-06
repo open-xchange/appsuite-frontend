@@ -931,22 +931,27 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
             },
             render: function () {
-                this.$el.append(
-                    $('<div class="row-fluid">').append(
-                        this.controls.checkboxLabel.append(
-                            this.controls.checkbox,
-                            this.nodes.summary,
-                            this.controls.detailToggle
-                        )
-                    ),
-                    $('<div class="row-fluid">&nbsp;</div>'),
-                    this.nodes.typeChoice,
-                    this.nodes.hint,
-                    this.nodes.alternative1,
-                    this.nodes.alternative2,
-                    $('<div class="row-fluid">&nbsp;</div>'),
-                    this.nodes.endsChoice
-                );
+                // only allow editing recurrence if either master or single appointment.
+                // hide it for recurring appointments and exceptions, i.e.
+                // if rec_pos is unset or zero
+                if (!this.model.get('recurrence_position')) {
+                    this.$el.append(
+                        $('<div class="row-fluid">').append(
+                            this.controls.checkboxLabel.append(
+                                this.controls.checkbox,
+                                this.nodes.summary,
+                                this.controls.detailToggle
+                            )
+                        ),
+                        $('<div class="row-fluid">&nbsp;</div>'),
+                        this.nodes.typeChoice,
+                        this.nodes.hint,
+                        this.nodes.alternative1,
+                        this.nodes.alternative2,
+                        $('<div class="row-fluid">&nbsp;</div>'),
+                        this.nodes.endsChoice
+                    );
+                }
             }
         }, options);
     };
