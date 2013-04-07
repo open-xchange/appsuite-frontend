@@ -591,7 +591,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'vcard',
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         label: gt('Send vCard'),
         ref: 'io.ox/contacts/actions/vcard'
     }));

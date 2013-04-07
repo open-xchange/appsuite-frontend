@@ -417,6 +417,8 @@ define("io.ox/core/extensions",
         },
 
         disable: function (pointId, extensionId) {
+            // typical developer mistake (forget pointId actually)
+            if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');
             var hash = this.flow.disable;
             (hash[pointId] = hash[pointId] || []).push(extensionId);
         },
