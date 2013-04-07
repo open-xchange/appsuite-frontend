@@ -842,17 +842,17 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
-        id: 'reply-all',
-        label: gt('Reply All'),
-        ref: 'io.ox/mail/actions/reply-all'
+        id: 'reply',
+        label: gt('Reply'),
+        ref: 'io.ox/mail/actions/reply'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
-        id: 'reply',
-        label: gt('Reply'),
-        ref: 'io.ox/mail/actions/reply'
+        id: 'reply-all',
+        label: gt('Reply All'),
+        ref: 'io.ox/mail/actions/reply-all'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
