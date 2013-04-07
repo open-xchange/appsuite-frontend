@@ -345,6 +345,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'monthlyDay',
                         ordinal: {
                             options: {
+                                '-1': //#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
+                                    gt("last"),
+
                                 1:  //#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("first"),
 
