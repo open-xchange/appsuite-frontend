@@ -1356,7 +1356,7 @@ define("io.ox/core/desktop",
 
                     new links.ActionGroup(opt.name + '/links/toolbar', {
                         id: 'search',
-                        index: 900,
+                        index: 300,
                         icon: function () {
                             return $('<i class="icon-search">');
                         }

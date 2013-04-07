@@ -19,7 +19,10 @@ define("io.ox/mail/api",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
      "io.ox/core/notifications",
-     'settings!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings) {
+     'settings!io.ox/mail',
+     'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings, gt) {
+
+    // SHOULD NOT USE notifications inside API!
 
     'use strict';
 
@@ -556,7 +559,7 @@ define("io.ox/mail/api",
 
 
     api.expunge = function (folder_id) {
-        notifications.yell('info', 'Cleaning up... This may take a few seconds.');
+        notifications.yell('info', gt('Cleaning up... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: "mail",
@@ -572,13 +575,13 @@ define("io.ox/mail/api",
                 return data;
             });
         }).done(function () {
-            notifications.yell('success', 'The folder has been cleaned up.');
+            notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
     };
 
     api.clear = function (folder_id) {
-        notifications.yell('info', 'Emptying folder... This may take a few seconds.');
+        notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: 'folders',
@@ -595,7 +598,7 @@ define("io.ox/mail/api",
                 return data;
             });
         }).done(function () {
-            notifications.yell('success', 'The folder has been emptied.');
+            notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
         });
     };
@@ -712,7 +715,7 @@ define("io.ox/mail/api",
                     });
                 })
                 .done(function () {
-                    notifications.yell('success', 'Mail has been moved');
+                    notifications.yell('success', gt('Mail has been moved'));
                     api.trigger('move', list, targetFolderId);
                     folderAPI.reload(targetFolderId, list);
                 });
@@ -724,7 +727,7 @@ define("io.ox/mail/api",
             .pipe(clearCaches(list, targetFolderId))
             .done(refreshAll)
             .done(function () {
-                notifications.yell('success', 'Mail has been copied');
+                notifications.yell('success', gt('Mail has been copied'));
                 folderAPI.reload(targetFolderId, list);
             });
     };

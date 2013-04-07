@@ -370,7 +370,7 @@ define('io.ox/calendar/actions',
 
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'view',
-        index: 150,
+        index: 400,
         icon: function () {
             return $('<i class="icon-eye-open">');
         }
@@ -415,7 +415,7 @@ define('io.ox/calendar/actions',
 
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'freebusy',
-        index: 700,
+        index: 500,
         icon: function () {
             return $('<i class="icon-group">');
         }
@@ -430,15 +430,13 @@ define('io.ox/calendar/actions',
 
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'print',
-        index: 700,
+        index: 600,
         icon: function () {
             return $('<i class="icon-print">');
         }
     });
 
     new ActionLink(POINT + '/links/toolbar/print', {
-        index: 700,
-        id: 'print',
         label: gt('Print'),
         ref: 'io.ox/calendar/detail/actions/print'
     });
