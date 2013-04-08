@@ -134,6 +134,7 @@ define('io.ox/core/tk/selection',
                 // remember
                 last = prev = id;
                 lastValidIndex = getIndex(id);
+                console.log('apply', id, lastValidIndex);
             }
             // event
             changed();
@@ -280,7 +281,7 @@ define('io.ox/core/tk/selection',
             return selectedItems[self.serialize(id)] !== undefined;
         };
 
-        select = function (id, quiet) {
+        select = function (id, silent) {
             if (id) {
                 var key = self.serialize(id);
                 getNode(key)
@@ -295,7 +296,7 @@ define('io.ox/core/tk/selection',
                     prev = id;
                     lastValidIndex = lastIndex;
                 }
-                if (quiet !== true) {
+                if (silent !== true) {
                     self.trigger('select', key);
                 }
             }
@@ -534,11 +535,11 @@ define('io.ox/core/tk/selection',
         /**
          * Clear selection
          */
-        this.clear = function (quiet) {
+        this.clear = function (silent) {
             // internal clear
             clear();
             // trigger event
-            if (quiet !== true) {
+            if (silent !== true) {
                 self.trigger('clear');
                 changed();
             }
@@ -566,7 +567,7 @@ define('io.ox/core/tk/selection',
         /**
          * Set selection
          */
-        this.set = function (list, quiet) {
+        this.set = function (list, silent) {
             // previous
             var previous = this.get(), current;
             // clear
@@ -583,7 +584,7 @@ define('io.ox/core/tk/selection',
             // reset last index
             lastIndex = -1;
             // event?
-            if (!_.isEqual(previous, this.get()) && quiet !== true) {
+            if (!_.isEqual(previous, this.get()) && silent !== true) {
                 changed();
             }
             return this;
@@ -651,6 +652,12 @@ define('io.ox/core/tk/selection',
 
         this.resetLastIndex = function () {
             lastValidIndex = -1;
+        };
+
+        this.setLastIndex = function (obj) {
+            prev = obj;
+            lastValidIndex = getIndex(obj);
+            return this;
         };
 
         this.selectLastIndex = function () {
