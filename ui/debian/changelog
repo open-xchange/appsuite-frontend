@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.2.0-3) unstable; urgency=low
+
+  * Third candidate for 7.2.0 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 08 Apr 2013 14:35:45 +0200
+
 open-xchange-appsuite (7.2.0-2) unstable; urgency=low
 
   * Second candidate for 7.2.0 release
