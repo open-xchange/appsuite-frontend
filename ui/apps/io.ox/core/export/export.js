@@ -46,7 +46,7 @@ define('io.ox/core/export/export',
             nodes.row = $('<div class="row-fluid">').appendTo($(this));
 
             //lable and select
-            nodes.label = $('<label class="span3">').text(gt('Format')).css({'padding-top': '5px', 'padding-left': '5px'}).appendTo(nodes.row);
+            nodes.label = $('<label class="span3">').text(gt('Format')).appendTo(nodes.row);
             nodes.select = $('<select class="span9">').appendTo(nodes.row);
 
             //add option
