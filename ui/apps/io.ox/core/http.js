@@ -647,19 +647,19 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     // process response
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);
+                    } else if (r.xhr.dataType === 'json' && data.error !== undefined) {
+                    // error handling if JSON (e.g. for UPLOAD)
+                        r.def.reject(data);
+                    } else if (_.isArray(data.data)) {
+                    // Skip Warnings (category: 13)
+                        data.data = _(data.data).map(function (o) {
+                            if (o.category !== 13) {
+                                return o;
+                            }
+                        });
+                        r.def.resolve(data);
                     } else {
-                        // error handling if JSON (e.g. for UPLOAD)
-                        if (r.xhr.dataType === 'json' && data.error !== undefined) {
-                            r.def.reject(data);
-                        } else {
-                            // Skip Warnings (category: 13)
-                            data.data = _(data.data).map(function (o) {
-                                if (o.category !== 13) {
-                                    return o;
-                                }
-                            });
-                            r.def.resolve(data);
-                        }
+                        r.def.resolve(data);
                     }
                     r = null;
                 })

@@ -128,16 +128,19 @@ define('io.ox/files/list/perspective',
         // Uploads
         app.queues = {};
 
+        var uploadedFiles = [];
+
         app.queues.create = upload.createQueue({
             start: function () {
                 win.busy();
+                grid.selection.clearIndex();
             },
             progress: function (file) {
+                var self = this;
                 return api.uploadFile({ file: file, folder: app.folder.get() })
                     .done(function (data) {
                         // select new item
-                        app.invalidateFolder(data);
-                        // TODO: Error Handling
+                        uploadedFiles.push(data);
                     }).fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             if (e && e.code && e.code === 'UPL-0005')
@@ -148,6 +151,11 @@ define('io.ox/files/list/perspective',
                     });
             },
             stop: function () {
+                api.trigger('refresh.all');
+                grid.selection.clearIndex();
+                grid.selection.set(uploadedFiles);
+                uploadedFiles = [];
+                grid.refresh();
                 win.idle();
             }
         });

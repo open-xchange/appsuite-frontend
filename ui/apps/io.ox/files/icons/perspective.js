@@ -416,8 +416,6 @@ define('io.ox/files/icons/perspective',
                     .progress(function (e) {
                         var sub = e.loaded / e.total;
                         win.busy(pct + sub / files.length, sub);
-                    }).done(function (data) {
-                        api.propagate('change', data);
                     }).fail(function (e) {
                         if (e && e.code && e.code === 'UPL-0005')
                             notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
@@ -426,6 +424,7 @@ define('io.ox/files/icons/perspective',
                     });
                 },
                 stop: function () {
+                    api.trigger('refresh.all');
                     win.idle();
                 }
             });
@@ -443,9 +442,7 @@ define('io.ox/files/icons/perspective',
                             folder: app.currentFile.folder_id,
                             timestamp: _.now()
                         })
-                        .done(function (data) {
-                            api.propagate('change', data);
-                        }).progress(function (e) {
+                        .progress(function (e) {
                             var sub = e.loaded / e.total;
                             win.busy(pct + sub / files.length, sub);
                         }).fail(function (e) {
