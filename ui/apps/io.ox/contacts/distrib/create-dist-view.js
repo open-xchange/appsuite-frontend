@@ -40,7 +40,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         control: '<input type="text" class="input-xlarge">',
         buildControls: function () {
             var self = this,
-                buttonText = (_.isEmpty(self.model.get('distribution_list'))) ?  gt("Create list") : gt("Save");
+                buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
                 // element
