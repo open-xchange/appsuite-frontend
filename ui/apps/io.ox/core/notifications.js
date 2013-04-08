@@ -308,6 +308,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     );
                 }
 
+                if (type === 'close') return fader();
+
                 var o = {};
 
                 // catch server error?

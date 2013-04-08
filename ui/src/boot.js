@@ -219,6 +219,7 @@ $(window).load(function () {
                 $('#background_loader').fadeIn(DURATION, function () {
                     var ref = _.url.hash('ref'),
                         location = '#?' + enc(_.rot('session=' + ox.session + '&user=' + ox.user +
+                            '&secretCookie=' + $('#io-ox-login-store-box').prop('checked') +
                             '&user_id=' + ox.user_id + '&language=' + ox.language + (ref ? '&ref=' + enc(ref) : ''), 1)
                         );
                     // use redirect servlet for real login request
@@ -409,6 +410,12 @@ $(window).load(function () {
 
             var queue = [];
 
+            function fnKeyPress(e) {
+                if (e.which === 13) {
+                    e.data.popup.invoke(e.data.action);
+                }
+            }
+
             ox.relogin = function (request, deferred) {
                 if (!ox.online) {
                     return;
@@ -418,41 +425,54 @@ $(window).load(function () {
                     queue = [{ request: request, deferred: deferred }];
                     // set flag
                     relogin = true;
-                    // set header (if we come around here, we have extensions)
-                    extensions.point('io.ox/core/relogin').invoke('draw', $('#io-ox-login-header').find('h1').empty());
-                    // bind
-                    $('#io-ox-login-form').on('submit', fnSubmit);
-                    $('#io-ox-login-username').val(ox.user || '');
-                    $('#io-ox-login-password').val('');
-                    // hide forgot password?
-                    if (ox.serverConfig.forgotPassword === false) {
-                        $("#io-ox-forgot-password").remove();
-                    } else {
-                        $("#io-ox-forgot-password").find("a").attr("href", ox.serverConfig.forgotPassword);
-                    }
-                    // change language
-                    changeLanguage(ox.language);
-                    // set success handler
-                    loginSuccess = function () {
-                        $('#io-ox-login-screen').fadeOut(DURATION, function () {
-                            $('#io-ox-login-screen-decorator').hide();
-                            // process queue
-                            var i = 0, item, http = require('io.ox/core/http');
-                            for (; (item = queue[i]); i++) {
-                                http.retry(item.request)
-                                    .done(item.deferred.resolve)
-                                    .fail(item.deferred.fail);
-                            }
-                            // set flag
-                            relogin = false;
-                        });
-                    };
-                    // show login dialog
-                    $('#io-ox-login-screen-decorator').show();
-                    $('#io-ox-login-screen').addClass('relogin').fadeIn(DURATION, function () {
-                        $('#io-ox-login-password').focus().select();
+                    require(['io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/core', 'settings!io.ox/core'], function (dialogs, notifications, gt, settings) {
+                        new dialogs.ModalDialog({ easyOut: false, async: true, width: 400 })
+                            .build(function () {
+                                this.getHeader().append(
+                                    $('<h4>').text(gt('Your session is expired')),
+                                    $('<div>').text(gt('Please sign in again to continue'))
+                                );
+                                this.getContentNode().append(
+                                    $('<label>').text(gt('Password')),
+                                    $('<input type="password" name"relogin-password" class="input-xlarge">')
+                                    .on('keypress', { popup: this, action: 'relogin' }, fnKeyPress)
+                                );
+                            })
+                            .addPrimaryButton('relogin', gt('Relogin'))
+                            .addAlternativeButton('cancel', gt('Cancel'))
+                            .on('cancel', function () {
+                                var location = settings.get('customLocations/logout');
+                                _.url.redirect(location || ox.logoutLocation);
+                            })
+                            .on('relogin', function () {
+                                var self = this.busy();
+                                // relogin
+                                session.login(ox.user, this.getContentNode().find('input').val(), ox.secretCookie).then(
+                                    function success() {
+                                        notifications.yell('close');
+                                        self.getContentNode().find('input').val('');
+                                        self.close();
+                                        // process queue
+                                        var i = 0, item, http = require('io.ox/core/http');
+                                        for (; (item = queue[i]); i++) {
+                                            http.retry(item.request)
+                                                .done(item.deferred.resolve)
+                                                .fail(item.deferred.fail);
+                                        }
+                                        // set flag
+                                        relogin = false;
+                                    },
+                                    function fail(error) {
+                                        notifications.yell(error);
+                                        self.idle();
+                                        self.getContentNode().find('input').focus().select();
+                                    }
+                                );
+                            })
+                            .show(function () {
+                                this.find('input').focus();
+                            });
                     });
-
                 } else {
                     // enqueue last request
                     queue.push({ request: request, deferred: deferred });
@@ -461,7 +481,7 @@ $(window).load(function () {
         }());
 
         function updateServerConfig(data) {
-            ox.serverConfig = data;
+            ox.serverConfig = data || {};
             capabilities.reset();
             manifests.reset();
         }
@@ -562,7 +582,7 @@ $(window).load(function () {
 
             function gotoSignin() {
                 var ref = (location.hash || '').replace(/^#/, '');
-                _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
+                _.url.redirect((ox.serverConfig.logoutLocation || ox.logoutLocation) + (ref ? '#ref=' + enc(ref) : ''));
             }
 
             function continueWithoutAutoLogin() {
@@ -583,7 +603,8 @@ $(window).load(function () {
                         }
                     );
                 } else {
-                    gotoSignin();
+                    // we need to fetch the server config to get custom logout locations
+                    fetchGeneralServerConfig().always(gotoSignin);
                 }
             }
 
@@ -602,6 +623,7 @@ $(window).load(function () {
                     // fetch user config (need session now)
                     var hash = _.url.hash();
                     ox.session = hash.session;
+                    ox.secretCookie = _.url.hash('secretCookie') === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
                         // store login data (cause we have all valid languages now)
@@ -612,7 +634,14 @@ $(window).load(function () {
                             user_id: parseInt(hash.user_id || '0', 10)
                         });
                         // cleanup url
-                        _.url.hash({ session: null, user: null, user_id: null, language: null, store: null });
+                        _.url.hash({
+                            language: null,
+                            session: null,
+                            user: null,
+                            user_id: null,
+                            secretCookie: null,
+                            store: null
+                        });
                         // go ...
                         loadCoreFiles().done(function () {
                             loadCore();
