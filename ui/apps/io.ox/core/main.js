@@ -68,6 +68,7 @@ define("io.ox/core/main",
     gt('Mail');
     gt('Address Book');
     gt('Calendar');
+    gt('Scheduling');
     gt('Tasks');
     gt('Files');
     gt('Conversations');
