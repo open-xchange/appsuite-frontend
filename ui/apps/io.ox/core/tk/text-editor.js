@@ -22,6 +22,17 @@ define('io.ox/core/tk/text-editor', [], function () {
 
         textarea = $(textarea);
 
+        if (_.device('tablet && iOS >= 6')) {
+            textarea.on('click', function () {
+                if (textarea.get(0).selectionStart < 100) {
+                    _.defer(function () {
+                        window.scrollTo(0, 0);
+                        document.body.scrollTop = 0;
+                    });
+                }
+            });
+        }
+
         var def = $.when(),
 
             trim = function (str) {
