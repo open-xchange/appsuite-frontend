@@ -63,6 +63,12 @@ define('io.ox/files/list/perspective',
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        // The list request is not needed and is too slow
+        // ids contains all required information
+        grid.setListRequest(function (ids) {
+            return $.Deferred().resolve(ids);
+        });
+
         // LFO callback
         app.currentFile = null;
 
