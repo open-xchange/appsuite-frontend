@@ -143,7 +143,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             transport : 'long-polling',
             fallbackTransport: 'long-polling',
             timeout: 60000,
-            messageDelimiter: null
+            messageDelimiter: null,
+            maxRequest: 999999999999999999999999999999999999999999999999999999999999999
         };
 
 
