@@ -2,7 +2,7 @@
 /tmp
 /ox.pot
 /debian/files
-/debian/@package@*/
-/debian/@package@*.debhelper.log
-/debian/@package@*.substvars
+/debian/*/
+/debian/*.debhelper.log
+/debian/*.substvars
 /local.conf
