@@ -192,11 +192,6 @@ define('io.ox/files/list/perspective',
                         timestamp: _.now(),
                         silent: position < files.length - 1
                     })
-                    .done(function (data) {
-                        // select new item
-                        app.invalidateFolder(data);
-                        // TODO: Error Handling
-                    })
                     .progress(function (e) {
                         var sub = e.loaded / e.total;
                         win.busy(pct + sub / files.length, sub);
