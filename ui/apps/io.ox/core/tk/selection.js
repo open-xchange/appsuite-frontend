@@ -134,7 +134,6 @@ define('io.ox/core/tk/selection',
                 // remember
                 last = prev = id;
                 lastValidIndex = getIndex(id);
-                console.log('apply', id, lastValidIndex);
             }
             // event
             changed();
