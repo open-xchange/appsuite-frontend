@@ -281,7 +281,9 @@ define('io.ox/calendar/week/perspective',
                     self.dialog.close();
                 })
                 .on('create update', function (e, obj) {
-                    self.view.setStartDate(obj.start_date);
+                    if (obj.recurrence_type === 0) {
+                        self.view.setStartDate(obj.start_date);
+                    }
                 });
 
             // watch for folder change

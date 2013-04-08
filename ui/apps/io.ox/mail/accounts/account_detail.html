@@ -10,11 +10,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-                    <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
-                    <div class="controls">
-                        <label class="text">
-                            <input type="text" data-property="personal" id="personal" />
-                        </label>
+            <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="personal" id="personal" />
+                </label>
+            </div>
 		</div>
 		<div class="control-group">
 			<label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
@@ -167,4 +168,37 @@
 			</div>
 		</div>
 	</div>
+	<legend class="sectiontitle">{{=it.strings.TITLE_FOLDER_SETTINGS}}</legend>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label for="label_26" class="control-label">{{=it.strings.FOLDER_SEND}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="sent_fullname" disabled="disabled" id="label_26" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_29" class="control-label">{{=it.strings.FOLDER_TRASH}}</label>
+            <div class="controls">
+                <label class="text">
+	                    <input type="text" data-property="trash_fullname" disabled="disabled" id="label_29" />
+	                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_27" class="control-label">{{=it.strings.FOLDER_DRAFTS}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="drafts_fullname" disabled="disabled" id="label_27" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_28" class="control-label">{{=it.strings.FOLDER_SPAM}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="spam_fullname" disabled="disabled" id="label_28" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+        </div>
+    </div>
 </div>

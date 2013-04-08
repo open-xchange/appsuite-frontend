@@ -21,10 +21,7 @@ define('io.ox/files/settings/pane',
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
             TITLE_FILES: gt('Files'),
-            DEFAULT_VIEW: gt('Default view'),
-            TITLE_MEDIAPLAYER: gt('Mediaplayer'),
-            AUDIO_ENABLED: gt('Audio enabled'),
-            VIDEO_ENABLED: gt('Video enabled')
+            DEFAULT_VIEW: gt('Default view')
         },
         optionsView = [{label: gt('Icon view'), value: 'icons'},
                        {label: gt('List view'), value: 'list'}],

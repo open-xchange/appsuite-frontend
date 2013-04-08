@@ -107,6 +107,10 @@ define('io.ox/core/commons',
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
             });
+            // clean up selection index on delete
+            api.on('beforedelete', function (e, ids) {
+                grid.selection.removeFromIndex(ids);
+            });
         },
 
         /**
@@ -163,26 +167,24 @@ define('io.ox/core/commons',
                 app.getWindow().search.stop();
             }
 
-            // disable for 7.0.1
-            var isMail = false && app.get('name') === 'io.ox/mail';
+            // right now, only mail folders support "total"
+            var supportsTotal = app.get('name') === 'io.ox/mail';
 
-            function updateUnreadCount(id, data) {
-                var unread = data.unread,
-                    node = grid.getToolbar().find('.folder-unread-count[data-folder-id="' + id + '"]');
-                node[unread > 0 ? 'show' : 'hide']().text(unread);
+            function updateFolderCount(id, data) {
+                var total = data.total,
+                    node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
+                node[total > 0 ? 'show' : 'hide']().text('(' + total + ')');
             }
 
             function drawFolderName(folder_id) {
                 var link = $('<a href="#" data-action="open-folderview">')
                     .append(folderAPI.getTextNode(folder_id))
                     .on('click', fnOpen);
-                if (isMail) {
-                    folderAPI.get({ folder: folder_id }).done(function (data) {
-                        link.after(
-                            $.txt(' '),
-                            $('<b class="label folder-unread-count">').attr('data-folder-id', folder_id).hide()
-                        );
-                    });
+                if (supportsTotal) {
+                    link.after(
+                        $.txt(' '),
+                        $('<span class="folder-count">').attr('data-folder-id', folder_id).hide()
+                    );
                 }
                 return link;
             }
@@ -203,9 +205,9 @@ define('io.ox/core/commons',
             });
 
             // unread counter for mail
-            if (isMail) {
-                folderAPI.on('update:unread', function (e, id, data) {
-                    updateUnreadCount(id, data);
+            if (supportsTotal) {
+                folderAPI.on('update:total', function (e, id, data) {
+                    updateFolderCount(id, data);
                 });
             }
 
@@ -228,7 +230,10 @@ define('io.ox/core/commons',
          * Wire grid and API refresh
          */
         wireGridAndRefresh: function (grid, api, win) {
-            var refreshAll = function () {
+            var refreshAll = function (e) {
+                    if (e.type === 'refresh:all:local') {
+                        grid.invalidateLabels();
+                    }
                     grid.refresh(true);
                 },
                 refreshList = function () {

@@ -795,7 +795,7 @@ define('io.ox/mail/view-detail',
         RED:        gt('Red'),
         BLUE:       gt('Blue'),
         GREEN:      gt('Green'),
-        GREY:       gt('Grey'),
+        GRAY:       gt('Gray'),
         PURPLE:     gt('Purple'),
         LIGHTGREEN: gt('Light green'),
         ORANGE:     gt('Orange'),
@@ -852,7 +852,7 @@ define('io.ox/mail/view-detail',
                 $('<div>')
                 .addClass('subject clear-title' + (subject === '' ? ' empty' : ''))
                 .append(
-                    $('<i class="icon-bookmark">'),
+                    $('<i class="icon-unread icon-circle">'),
                     // inject some zero width spaces for better word-break
                     $.txt(_.noI18n(subject || gt('No subject'))),
                     $('<span class="priority">').append(util.getPriority(baton.data))

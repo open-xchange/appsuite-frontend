@@ -19,7 +19,10 @@ define("io.ox/mail/api",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
      "io.ox/core/notifications",
-     'settings!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings) {
+     'settings!io.ox/mail',
+     'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings, gt) {
+
+    // SHOULD NOT USE notifications inside API!
 
     'use strict';
 
@@ -278,11 +281,13 @@ define("io.ox/mail/api",
                 return response;
             },
             listPost: function (data) {
-                _(data).map(function (obj) {
-                    if (tracker.isUnseen(obj)) {
-                        obj.flags = obj.flags & ~32;
-                    } else {
-                        obj.flags = obj.flags | 32;
+                _(data).each(function (obj) {
+                    if (obj) {
+                        if (tracker.isUnseen(obj)) {
+                            obj.flags = obj.flags & ~32;
+                        } else {
+                            obj.flags = obj.flags | 32;
+                        }
                     }
                 });
                 return data;
@@ -344,7 +349,7 @@ define("io.ox/mail/api",
         BLUE:        2,
         PURPLE:      5,
         PINK:        8,
-        GREY:        4
+        GRAY:        4
     };
 
     // control for each folder:
@@ -554,7 +559,7 @@ define("io.ox/mail/api",
 
 
     api.expunge = function (folder_id) {
-        notifications.yell('info', 'Cleaning up... This may take a few seconds.');
+        notifications.yell('info', gt('Cleaning up... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: "mail",
@@ -570,13 +575,13 @@ define("io.ox/mail/api",
                 return data;
             });
         }).done(function () {
-            notifications.yell('success', 'The folder has been cleaned up.');
+            notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
     };
 
     api.clear = function (folder_id) {
-        notifications.yell('info', 'Emptying folder... This may take a few seconds.');
+        notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: 'folders',
@@ -593,7 +598,7 @@ define("io.ox/mail/api",
                 return data;
             });
         }).done(function () {
-            notifications.yell('success', 'The folder has been emptied.');
+            notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
         });
     };
@@ -710,7 +715,7 @@ define("io.ox/mail/api",
                     });
                 })
                 .done(function () {
-                    notifications.yell('success', 'Mail has been moved');
+                    notifications.yell('success', gt('Mail has been moved'));
                     api.trigger('move', list, targetFolderId);
                     folderAPI.reload(targetFolderId, list);
                 });
@@ -722,7 +727,7 @@ define("io.ox/mail/api",
             .pipe(clearCaches(list, targetFolderId))
             .done(refreshAll)
             .done(function () {
-                notifications.yell('success', 'Mail has been copied');
+                notifications.yell('success', gt('Mail has been copied'));
                 folderAPI.reload(targetFolderId, list);
             });
     };
@@ -1099,10 +1104,11 @@ define("io.ox/mail/api",
     api.localRemove = function (list, hash) {
         // reverse lookup first to get affacted top-level elements
         var reverse = {};
-        _(hash).each(function (obj) {
-            var threadCID = tracker.getThreadCID(obj);
+        _(hash).each(function (value, cid) {
+            var threadCID = tracker.getThreadCID(cid);
             if (threadCID !== undefined) {
-                reverse[threadCID] = true;
+                // is a thread, but we store the inner cid since we loop over root elements
+                reverse[threadCID] = cid;
             }
         });
         // loop over list and check occurence via hash
@@ -1130,7 +1136,7 @@ define("io.ox/mail/api",
             // case #3: found via reverse lookup
             if (cid in reverse) {
                 obj.thread = _(obj.thread).filter(function (o) {
-                    return _.cid(o) !== cid;
+                    return _.cid(o) !== reverse[cid];
                 });
                 return true;
             }

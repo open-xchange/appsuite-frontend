@@ -131,7 +131,7 @@ define("io.ox/core/main",
         var node = $('<div class="launcher">'),
             sideTags = side.split(' '),
             wrap = false;
-        
+
         if (sideTags.length > 1) {//only wrap uses 2 tags
             wrap = true;
             if (sideTags[0] === 'wrap') {//to make order unimportant
@@ -155,7 +155,7 @@ define("io.ox/core/main",
                     self.idle().empty().append(content).css('width', '');
                 });
             });
-        
+
         if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
             node.addClass(side);
             //add wrapper
@@ -182,29 +182,40 @@ define("io.ox/core/main",
 
     function initRefreshAnimation() {
 
-        var count = 0, timer = null;
+        var count = 0,
+            timer = null,
+            useSpinner = _.device('webkit || firefox'),
+            duration = useSpinner ? 500 : 1500;
 
         function off() {
             if (count === 0 && timer === null) {
-                $("#io-ox-refresh-icon").removeClass("io-ox-progress");
+                if (useSpinner) {
+                    $('#io-ox-refresh-icon').find('i').addClass('icon-spin-paused');
+                } else {
+                    $('#io-ox-refresh-icon').removeClass('io-ox-progress');
+                }
             }
         }
 
-        http.on("start", function () {
+        http.on('start', function () {
             if (count === 0) {
                 if (timer === null) {
-                    $("#io-ox-refresh-icon").addClass("io-ox-progress");
+                    if (useSpinner) {
+                        $('#io-ox-refresh-icon').find('i').addClass('icon-spin').removeClass('icon-spin-paused');
+                    } else {
+                        $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                    }
                 }
                 clearTimeout(timer);
                 timer = setTimeout(function () {
                     timer = null;
                     off();
-                }, 1500);
+                }, duration);
             }
             count++;
         });
 
-        http.on("stop", function () {
+        http.on('stop', function () {
             count = Math.max(0, count - 1);
             off();
         });
@@ -465,7 +476,7 @@ define("io.ox/core/main",
                 );
             }
         });
-        
+
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
             index: 10000,
@@ -488,7 +499,7 @@ define("io.ox/core/main",
             index: 2000,
             draw: function () {
                 this.append(
-                    addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                    addLauncher("right", $('<i class="icon-refresh">'), function () {
                         refresh();
                         return $.when();
                     }, gt('Refresh')).attr("id", "io-ox-refresh-icon")
@@ -654,7 +665,7 @@ define("io.ox/core/main",
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
 
-                
+
                 // refresh animation
                 initRefreshAnimation();
 

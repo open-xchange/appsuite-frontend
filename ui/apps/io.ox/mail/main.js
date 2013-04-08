@@ -400,9 +400,6 @@ define('io.ox/mail/main',
             function refresh(list, index) {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
-                    if (list) {
-                        grid.selection.insertAt(list.slice(1), index);
-                    }
                 });
             }
 

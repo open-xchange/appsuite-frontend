@@ -231,6 +231,32 @@
           to { color: #555; }
     }
 
+    @darkGray: #555;
+
+    .badge {
+        background-color: @darkGray;
+    }
+
+    .badge.badge-info {
+        background-color: @linkColor;
+    }
+
+    .icon-refresh {
+        color: @darkGray;
+        .transition(color 0.2s linear);
+    }
+
+    .icon-refresh.icon-spin {
+        color: #fff;
+    }
+
+    .icon-refresh.icon-spin.icon-spin-paused {
+        -webkit-animation-play-state: paused;
+        -moz-animation-play-state: paused;
+        animation-play-state: paused;
+        color: @darkGray;
+    }
+
     .launcher.io-ox-progress i {
         -moz-animation-direction: alternate;
         -moz-animation-duration: 0.75s;
@@ -503,7 +529,6 @@
     line-height: 1.15em;
 }
 
-
 .toolbar-button {
 
     font-size: 22px;
@@ -520,7 +545,7 @@
     & > a i { color: @linkOnDark; }
     & > a i.accent-color { color: @linkAccentColor; }
     &:hover > a i { color: darken(@linkOnDark, 30%); text-decoration: none; }
-    &:hover > a i.accent-color { color: darken(@linkAccentColor, 20%); }
+    &:hover > a i.accent-color { color: @linkAccentColorHover; }
     & > a.disabled i { color: #555; cursor: default; }
 
     ul { font-size: 14px; line-height: 20px; }
@@ -732,6 +757,10 @@ a.button {
     text-align: center;
     margin: 0 30px;
     .ellipsis();
+    .folder-count {
+        font-size: 13px;
+        color: #888;
+    }
 }
 
 .vgrid.top-toolbar .vgrid-toolbar {
@@ -1147,7 +1176,7 @@ span.hint {
 .io-ox-action-link {
     display: inline-block;
     white-space: nowrap;
-    margin-left: 0.75em;
+    margin-left: 22px;
 }
 
 .io-ox-action-link:first-child {
@@ -1678,6 +1707,10 @@ a.toolbar-action, .toolbar-action > a {
 
 .label.pointer {
     cursor: pointer;
+}
+
+.breadcrumb > li.prefix {
+    white-space: nowrap;
 }
 
 .dropdown {

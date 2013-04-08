@@ -19,14 +19,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                    'io.ox/tasks/actions',
                                    'less!io.ox/tasks/style.less' ], function (util, gt, ext, links, api) {
     'use strict';
-    
+
     var taskDetailView = {
 
         draw: function (data) {
             if (!data) {
                 return $('<div>');
             }
-            
+
             var task = util.interpretTask(data, true),
                 // outer node
                 self = this;
@@ -38,7 +38,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
 
                 infoPanel = $('<div>').addClass('info-panel');
-            
+
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
@@ -76,26 +76,26 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             );
 
             var blackStars,
-                greyStars;
+                grayStars;
 
             switch (data.priority) {
             case 1:
                 blackStars = '\u2605';
-                greyStars = '\u2605\u2605';
+                grayStars = '\u2605\u2605';
                 break;
             case 2:
                 blackStars = '\u2605\u2605';
-                greyStars = '\u2605';
+                grayStars = '\u2605';
                 break;
             case 3:
                 blackStars = '\u2605\u2605\u2605';
-                greyStars = '';
+                grayStars = '';
                 break;
             }
             $('<br>').appendTo(infoPanel);
-            $('<div>').append($('<span>').text(gt.noI18n(greyStars)).css('color', '#aaa'),
+            $('<div>').append($('<span>').text(gt.noI18n(grayStars)).css('color', '#aaa'),
                               $('<span>').text(gt.noI18n(blackStars))).addClass('priority').appendTo(infoPanel);
-            blackStars = greyStars = null;
+            blackStars = grayStars = null;
 
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find('br:first');
@@ -161,7 +161,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 require(['io.ox/core/api/user'], function (userApi) {
                     var table,
                         states = [
-                            [gt('Not yet confirmed'), 'grey'],
+                            [gt('Not yet confirmed'), 'gray'],
                             [gt('Confirmed'), 'green'],
                             [gt('Declined'), 'red'],
                             [gt('Tentative'), 'yellow']
@@ -206,10 +206,10 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                         },
                         intParticipants = [],
                         extParticipants = [];
-                    
-                    
+
+
                     //divide participants into internal and external users
-                    
+
                     _(task.participants).each(function (participant) {
                         if (participant.type === 5) {
                             extParticipants.push(participant);
@@ -237,7 +237,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             return node;
         }
     };
-    
+
     // inline links for each task
     ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,

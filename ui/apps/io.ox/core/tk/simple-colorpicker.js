@@ -16,7 +16,7 @@ define('io.ox/core/tk/simple-colorpicker', [], function () {
     'use strict';
 
     var colors = [
-        // grey
+        // gray
         '#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA', '#888888', '#555555', '#333333', '#000000',
         // blue
         '#0B3861', '#084B8A', '#045FB4', '#0174DF', '#2E9AFE', '#81BEF7', '#A9D0F5', '#CEE3F6', '#E0ECF8', '#EFF5FB',

@@ -518,7 +518,7 @@ define('io.ox/files/actions',
 
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'view',
-        index: 150,
+        index: 400,
         icon: function () {
             return $('<i class="icon-eye-open">');
         }

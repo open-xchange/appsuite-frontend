@@ -196,7 +196,7 @@ define('io.ox/files/api',
         function success(data) {
             // clear folder cache
             var fid = String(options.json.folder_id);
-            return api.propagate('new', { folder_id: fid }).pipe(function () {
+            return api.propagate('new', { folder_id: fid }, true).pipe(function () {
                 api.trigger('create.file');
                 return { folder_id: fid, id: parseInt(data.data, 10) };
             });
@@ -274,10 +274,7 @@ define('io.ox/files/api',
                 var id = options.json.id || options.id,
                     folder_id = String(options.json.folder_id),
                     obj = { folder_id: folder_id, id: id };
-                return api.propagate('change', obj).pipe(function () {
-                    api.trigger('create.version', obj);
-                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
-                });
+                return api.propagate('change', obj, options.silent);
             });
     };
 

@@ -15,13 +15,14 @@ define('io.ox/calendar/conflicts/conflictList',
     ['io.ox/core/extensions',
      'io.ox/calendar/api',
      'gettext!io.ox/calendar/conflicts/conflicts'], function (ext, calAPI, gt) {
+
 	'use strict';
 
 	return {
         drawList: function (conflicts) {
-            var conflictList = $('<div>')
-                .append($('<h4 class="text-error">').text(gt('Conflicts detected')));
-
+            var conflictList = $('<div>').append(
+                $('<h4 class="text-error">').text(gt('Conflicts detected'))
+            );
             require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                 function (dialogs, viewGrid) {
                     _.map(conflicts, function (c) { c.conflict = true; });

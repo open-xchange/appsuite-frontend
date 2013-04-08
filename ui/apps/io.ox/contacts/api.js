@@ -470,10 +470,9 @@ define('io.ox/contacts/api',
             var id = obj.contact_id || obj.id,
                 folder = obj.folder_id || obj.folder,
                 key = folder + '|' + id;
-            if (id) {
+            if (id && folder) { // need both; folder might be null/0 if from halo view
                 fetchCache.get(key).pipe(function (url) {
-                    if (url)
-                    {
+                    if (url) {
                         deferred.resolve(url);
                     } else {
                         api.get({ id: id, folder: folder }).then(
