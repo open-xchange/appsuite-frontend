@@ -247,7 +247,7 @@ define('io.ox/contacts/edit/view-form', [
         point.extend(new views.AttributeView({
             id: ref + '/edit/view/display_name_header',
             index: 150,
-            tagName: 'span',
+            tagName: 'div',
             className: 'clear-title',
             attribute: 'display_name'
         }));
