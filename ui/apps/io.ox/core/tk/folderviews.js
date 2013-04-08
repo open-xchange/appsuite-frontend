@@ -84,7 +84,7 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.find('.io-ox-fail').parent().remove();
 
                 // be busy
-                nodes.sub.busy().show();
+                if (children === null || isOpen()) nodes.sub.busy().show();
 
                 // load
                 return (
