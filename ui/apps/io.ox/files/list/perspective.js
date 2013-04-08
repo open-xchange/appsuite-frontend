@@ -135,13 +135,19 @@ define('io.ox/files/list/perspective',
                 win.busy();
                 grid.selection.clearIndex();
             },
-            progress: function (file) {
-                var self = this;
+            progress: function (file, position, files) {
+                var pct = position / files.length;
+                win.busy(pct, 0);
                 return api.uploadFile({ file: file, folder: app.folder.get() })
                     .done(function (data) {
                         // select new item
                         uploadedFiles.push(data);
-                    }).fail(function (e) {
+                    })
+                    .progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    })
+                    .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             if (e && e.code && e.code === 'UPL-0005')
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
@@ -160,22 +166,36 @@ define('io.ox/files/list/perspective',
             }
         });
 
+        var currentVersionUpload;
+
         app.queues.update = upload.createQueue({
             start: function () {
                 win.busy();
+                currentVersionUpload = {
+                    id: app.currentFile.id,
+                    folder: app.currentFile.folder_id
+                };
             },
-            progress: function (data) {
+            progress: function (data, position, files) {
+                var pct = position / files.length;
+                win.busy(pct, 0);
                 return api.uploadNewVersion({
                         file: data,
-                        id: app.currentFile.id,
-                        folder: app.currentFile.folder_id,
-                        timestamp: _.now()
+                        id: currentVersionUpload.id,
+                        folder: currentVersionUpload.folder,
+                        timestamp: _.now(),
+                        silent: position < files.length - 1
                     })
                     .done(function (data) {
                         // select new item
                         app.invalidateFolder(data);
                         // TODO: Error Handling
-                    }).fail(function (e) {
+                    })
+                    .progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    })
+                    .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             if (e && e.code && e.code === 'UPL-0005')
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));

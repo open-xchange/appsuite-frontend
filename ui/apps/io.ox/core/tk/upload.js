@@ -423,6 +423,8 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         this.stop = function () {
             delegate.stop(files[position], position, files);
             this.trigger('stop', files[position], position, files);
+            position = 0;
+            processing = false;
         };
     }
 
