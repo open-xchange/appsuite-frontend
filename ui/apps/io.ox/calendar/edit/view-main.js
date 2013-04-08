@@ -19,7 +19,7 @@ define('io.ox/calendar/edit/view-main',
 
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
         tagName: 'div',
-        className: 'io-ox-calendar-edit container-fluid',
+        className: 'io-ox-calendar-edit container-fluid default-content-padding',
         render: function () {
             var self = this;
             var rows = [];

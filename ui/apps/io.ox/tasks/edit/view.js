@@ -30,7 +30,7 @@ define('io.ox/tasks/edit/view',
     var point = views.point('io.ox/tasks/edit/view'),
         TaskEditView = point.createView({
         tagName: 'div',
-        className: 'io-ox-tasks-edit  task-edit-wrapper container-fluid',
+        className: 'io-ox-tasks-edit task-edit-wrapper container-fluid default-content-padding',
         init: function () {
             //needed to do it this way, otherwise data stays for next instance of view and causes errors
             this.fields = {};
