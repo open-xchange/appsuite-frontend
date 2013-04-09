@@ -59,7 +59,7 @@ define('io.ox/files/views/create', [
                             if (e && e.code && e.code === 'UPL-0005')
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                             else
-                                notifications.yell('error', gt('!!!This file has not been added'));
+                                notifications.yell('error', gt('This file has not been added'));
                         });
                     }
                 });
