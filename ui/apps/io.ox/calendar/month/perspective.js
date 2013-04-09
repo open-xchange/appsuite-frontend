@@ -212,7 +212,8 @@ define('io.ox/calendar/month/perspective',
             }
             // update first positions
             self.getFirsts();
-            return this.updateWeeks({start: start, weeks: weeks});
+            this.updateWeeks({start: start, weeks: weeks});
+            return $.when();
         },
 
         /**
@@ -277,22 +278,22 @@ define('io.ox/calendar/month/perspective',
                     scrollToDate = function (pos) {
                         // scroll to position
                         if (param.duration === 0) {
-                            self.scrollTop(pos);
+                            firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
                         } else {
-                            self.pane.animate({scrollTop : pos}, param.duration, function () {
+                            self.pane.animate({scrollTop : pos + self.scrollTop() + 2}, param.duration, function () {
                                 self.isScrolling = false;
                             });
                         }
                     };
 
                 if (firstDay.length > 0) {
-                    scrollToDate(firstDay.position().top  + this.scrollTop() + 2);
+                    scrollToDate(firstDay.position().top);
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
                         this.drawWeeks({up: true}).done(function () {
                             firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
+                            scrollToDate(firstDay.position().top);
                         });
                     } else {
                         self.isScrolling = false;
@@ -397,7 +398,7 @@ define('io.ox/calendar/month/perspective',
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({
-                                                    duration: 400,
+                                                    duration: _.device('desktop') ? 400 : 0,
                                                     date: 'prev'
                                                 });
                                             }, this)),
@@ -406,7 +407,7 @@ define('io.ox/calendar/month/perspective',
                                         ).on('click', $.proxy(function (e) {
                                             e.preventDefault();
                                             this.gotoMonth({
-                                                duration: 800,
+                                                duration: _.device('desktop') ? 800 : 0,
                                                 date: 'today'
                                             });
                                         }, this)),
@@ -416,7 +417,7 @@ define('io.ox/calendar/month/perspective',
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({
-                                                    duration: 400,
+                                                    duration: _.device('desktop') ? 400 : 0,
                                                     date: 'next'
                                                 });
                                             }, this))
@@ -427,20 +428,17 @@ define('io.ox/calendar/month/perspective',
 
             this.pane
                 .on('scrollstop', $.proxy(function (e) {
-                    var top = this.scrollTop(),
-                        month = false;
-
-                    // check position for infinite scroll
-                    if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - this.scrollOffset) {
+                    var month = false;
+                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
                         this.drawWeeks();
                     }
-                    if (top <= this.scrollOffset) {
+                    if (this.scrollTop() <= this.scrollOffset) {
                         this.drawWeeks({up: true});
                     }
 
                     // find first visible month on scroll-position
                     for (var y in this.tops) {
-                        if (!month || top + this.scrollOffset >= y) {
+                        if (!month || this.scrollTop() + this.scrollOffset >= y) {
                             month = this.tops[y];
                         } else {
                             break;
