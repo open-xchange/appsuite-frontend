@@ -89,9 +89,9 @@ define("io.ox/contacts/view-detail",
     function addMail(label, value, data) {
         return addField(label, value, this, function (node) {
             node
-            .addClass('blue')
+            .addClass('email')
             .append(
-                $('<a href="#" class="blue">')
+                $('<a href="#">')
                 .attr({ href: 'mailto:' + value }).text(_.noI18n(value))
                 .on('click', { email: value, display_name: data.display_name }, clickMail)
             );
@@ -101,9 +101,9 @@ define("io.ox/contacts/view-detail",
     function addPhone(label, value, node) {
         return addField(label, value, node, function (node) {
             node
-            .addClass("blue")
+            .addClass("tel")
             .append(
-                $('<a href="#" class="blue">')
+                $('<a href="#">')
                 .attr({ href: 'callto:' + value }).text(_.noI18n(value))
             );
         });
@@ -131,7 +131,7 @@ define("io.ox/contacts/view-detail",
                 if (line) a.append($.txt(line), $('<br>'));
             });
             a.append(
-                $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
+                $('<small class="maps">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
             );
             node.append(a);
         });
