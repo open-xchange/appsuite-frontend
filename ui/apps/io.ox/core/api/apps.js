@@ -57,7 +57,7 @@ define('io.ox/core/api/apps',
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
             obj.id = id;
-            obj.icon = ox.base + '/apps/io.ox/core/images/' + (obj.icon || 'default.png');
+            obj.icon = ox.base + ((obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, "/apps/$1") + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
             obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             obj.visible = obj.visible !== false;
             return obj;
