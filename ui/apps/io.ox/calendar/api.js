@@ -462,9 +462,10 @@ define("io.ox/calendar/api",
         freebusy: {}
     };
 
-    api.freebusy = function (list, options) {
+    api.freebusy = function (list, options, useCache) {
 
         list = [].concat(list);
+        useCache = useCache === undefined ? true : !!useCache;
 
         if (list.length === 0) {
             return $.Deferred().resolve([]);
@@ -480,7 +481,7 @@ define("io.ox/calendar/api",
         _(list).each(function (obj) {
             var key = [obj.type, obj.id, options.start, options.end].join('-');
             // in cache?
-            if (key in api.caches.freebusy) {
+            if (key in api.caches.freebusy && useCache) {
                 result.push(api.caches.freebusy[key]);
             } else {
                 result.push(key);
@@ -518,18 +519,18 @@ define("io.ox/calendar/api",
             });
         });
     };
-    
+
     //for busy animation in detail View
     //ask if this appointment has attachments uploading at the moment
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
     };
-    
+
     //add appointment to the list
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
-    
+
     //remove appointment from the list
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];

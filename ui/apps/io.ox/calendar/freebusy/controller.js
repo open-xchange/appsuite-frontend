@@ -129,10 +129,10 @@ define('io.ox/calendar/freebusy/controller',
                 return model ? model.index : 0;
             }
 
-            this.loadAppointments = function () {
+            this.loadAppointments = function (useCache) {
                 var list = self.getParticipants(),
                     options = self.getCalendarView().getRequestParam();
-                api.freebusy(list, options).done(function (data) {
+                api.freebusy(list, options, useCache).done(function (data) {
                     // check for weekView cause it might get null if user quits
                     if (self.getCalendarView()) {
                         cache = {};
@@ -194,9 +194,9 @@ define('io.ox/calendar/freebusy/controller',
                 }
             };
 
-            this.refresh = function () {
+            this.refresh = function (useCache) {
                 if (self.getCalendarView()) {
-                    self.loadAppointments();
+                    self.loadAppointments(useCache);
                 }
             };
 
@@ -212,7 +212,7 @@ define('io.ox/calendar/freebusy/controller',
             this.appointments = new Backbone.Collection([]);
 
             this.getCalendarView = function () {
-                return calendarViews[currentMode];
+                return calendarViews ? calendarViews[currentMode] : null;
             };
 
             this.getCalendarViewInstance = function (mode) {
@@ -280,6 +280,10 @@ define('io.ox/calendar/freebusy/controller',
                 view.showAll(false);
                 view.render();
                 this.$el.append(view.$el.addClass('abs calendar-week-view'));
+
+                api.on('create refresh.all', function () {
+                    self.refresh(false);
+                });
 
                 return view;
             };

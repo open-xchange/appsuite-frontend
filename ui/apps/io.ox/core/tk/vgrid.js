@@ -345,7 +345,8 @@ define('io.ox/core/tk/vgrid',
             var obj = labels.list[index];
             if (obj !== undefined) {
                 scrollpane.scrollTop(obj.top);
-                self.selection.set(all[obj.pos]);
+                // use select instead of set to udpate lastIndex internally
+                self.selection.set(all[obj.pos]).setLastIndex(all[obj.pos]);
             }
         };
 

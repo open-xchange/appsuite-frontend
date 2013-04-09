@@ -12,7 +12,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 BuildRequires:  open-xchange-appsuite-dev
 
-Requires:       open-xchange-appsuite-manifest
+Requires(post): open-xchange-appsuite-manifest
 
 %description
 @description@

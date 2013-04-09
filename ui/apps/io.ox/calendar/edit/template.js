@@ -185,7 +185,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'span6',
+        className: 'span4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -195,14 +195,25 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'span6',
-        labelClassName: 'control-label desc where-I-want-to-add-a-link',
+        className: 'span4',
+        labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
         nextTo: 'start-date'
+    });
+
+    point.basicExtend({
+        id: 'find-free-time-1',
+        index: 550,
+        nextTo: 'end-date',
+        draw: function () {
+            this.append(
+                $('<div class="span4"><label class="find-free-time"></div>')
+            );
+        }
     });
 
     // full time
@@ -290,7 +301,7 @@ define('io.ox/calendar/edit/template',
     // participants label
     point.extend(new forms.SectionLegend({
         id: 'participants_legend',
-        className: 'span12 where-I-want-to-add-a-link',
+        className: 'span12 find-free-time',
         label: gt('Participants'),
         index: 1300
     }));
@@ -498,7 +509,7 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            var selector = 'label.where-I-want-to-add-a-link, .where-I-want-to-add-a-link legend';
+            var selector = 'label.find-free-time, .find-free-time legend';
             this.parent().find(selector).append(
                 $('<a href="#" class="pull-right">').text(gt('Find a free time'))
                     .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)

@@ -23,9 +23,11 @@ window.ox = {
     base: 'v=@ version @',
     debug: @debug@,
     language: 'en_US',
+    logoutLocation: 'signin',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     revision: '@ revision @',
     root: root,
+    secretCookie: false, // auto-login
     serverConfig: {},
     session: '',
     signin: false,

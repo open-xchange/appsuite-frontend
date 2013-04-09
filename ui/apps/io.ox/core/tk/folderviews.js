@@ -84,7 +84,7 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.find('.io-ox-fail').parent().remove();
 
                 // be busy
-                nodes.sub.busy().show();
+                if (children === null || isOpen()) nodes.sub.busy().show();
 
                 // load
                 return (
@@ -386,7 +386,7 @@ define('io.ox/core/tk/folderviews',
                 var def = isOpen() ? paintChildren() : $.when();
                 updateArrow();
                 // add to DOM
-                if (checkbox && (data.own_rights & 0x3f80)) {
+                if (checkbox && ((data.own_rights & 0x3f80 /* read access */) || data.subscribed /* to get rid of folder */)) {
                     nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter, nodes.subscriber);
                 } else {
                     nodes.folder.find('.folder-row').append(nodes.arrow, nodes.label, nodes.counter);
@@ -699,12 +699,10 @@ define('io.ox/core/tk/folderviews',
                     tree.paint();
                 })
                 .done(function (action) {
-
                     if (action === 'save') {
                         _(changesArray).each(function (change) {
                             api.update(change, storage);
                         });
-
                         tree.destroy();
                         tree = pane = null;
                     }
@@ -717,7 +715,7 @@ define('io.ox/core/tk/folderviews',
                 tree.container.on('change', 'input', function () {
                     var folder = $(this).val(),
                         checkboxStatus = $(this).is(':checked'),
-                        changes = {subscribed: checkboxStatus},
+                        changes = { subscribed: checkboxStatus },
                         tobBePushed = { folder: folder, changes: changes};
                     changesArray.push(tobBePushed);
                 });

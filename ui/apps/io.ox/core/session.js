@@ -62,7 +62,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
             })
             // If autologin fails, try the token login
             .then(
-                null,
+                function (data) {
+                    ox.secretCookie = true;
+                    return data;
+                },
                 function () {
                     if (!_.url.hash('serverToken')) return;
                     return http.POST({
@@ -148,9 +151,11 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         .done(function (data) {
                             // store session
                             set(data, language);
-                            that.store().done(function () {
+                            if (store) {
+                                that.store().done(function () { def.resolve(data); });
+                            } else {
                                 def.resolve(data);
-                            });
+                            }
                         })
                         .fail(def.reject);
                     }
