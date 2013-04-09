@@ -856,6 +856,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.nodes.endsChoice.hide();
             },
             updateSuggestions: function () {
+                if (!this.model.get("start_date")) {
+                    return;
+                }
                 var self = this,
                     startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date"))),
                     dayBits = 1 << startDate.getDay(),

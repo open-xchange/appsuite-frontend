@@ -19,8 +19,7 @@ define('io.ox/calendar/model',
         'io.ox/participants/model',
         'io.ox/core/date',
         'io.ox/core/api/folder',
-        'settings!io.ox/calendar',
-        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings, configAPI) {
+        'settings!io.ox/calendar'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
     "use strict";
 
@@ -204,7 +203,7 @@ define('io.ox/calendar/model',
     return {
         setDefaultParticipants: function (model, options) {
             return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
-                var userID = configAPI.get('identifier');
+                var userID = ox.user_id;
                 if (folderAPI.is('private', folder)) {
                     if (options.create) {
                         // it's a private folder for the current user, add him by default
@@ -240,7 +239,9 @@ define('io.ox/calendar/model',
                     return;
                 }
                 updatingEnd = true;
-                model.set('end_date', model.get('start_date') + length);
+                if (model.get('start_date') && _.isNumber(length)) {
+                    model.set('end_date', model.get('start_date') + length);
+                }
                 updatingEnd = false;
             });
 
@@ -251,7 +252,9 @@ define('io.ox/calendar/model',
                 var tmpLength = model.get('end_date') - model.get('start_date');
                 if (tmpLength < 0) {
                     updatingStart = true;
-                    model.set('start_date', model.get('end_date') - length);
+                    if (model.get('end_date') && _.isNumber(length)) {
+                        model.set('start_date', model.get('end_date') - length);
+                    }
                     updatingStart = false;
                 } else {
                     length = tmpLength;

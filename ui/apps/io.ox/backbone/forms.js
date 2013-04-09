@@ -687,11 +687,12 @@ define('io.ox/backbone/forms',
                 if (isNaN(myValue)) {
                     return value;
                 }
-                var mydate = new date.Local(myValue);
-                var parsedDate = date.Local.parse(value, date.TIME);
-
+                var parsedDate = date.Local.parse(value.toUpperCase(), date.TIME),
+                    mydate = new date.Local(myValue);
+                // parsing error
                 if (_.isNull(parsedDate)) {
-                    return mydate.getTime();
+                    // trigger validate error
+                    return undefined;
                 }
 
                 mydate.setHours(parsedDate.getHours());
@@ -768,37 +769,37 @@ define('io.ox/backbone/forms',
                 var self = this;
                 this.nodes = {};
                 this.$el.append(
-                        this.nodes.controlGroup = $('<div class="control-group">').append(
-                            $('<label>').addClass(options.labelClassName || '').text(this.label),
-                            $('<div class="control">').append(
-                                function () {
-                                    self.nodes.dayField = $('<input type="text" class="input-small">');
-                                    if (options.initialStateDisabled) {
-                                        self.nodes.dayField.attr('disabled', true);
-                                    }
+                    this.nodes.controlGroup = $('<div class="control-group">').append(
+                        $('<label>').addClass(options.labelClassName || '').text(this.label),
+                        $('<div class="control">').append(
+                            function () {
+                                self.nodes.dayField = $('<input type="text" class="input-small">');
+                                if (options.initialStateDisabled) {
+                                    self.nodes.dayField.attr('disabled', true);
+                                }
 
-                                    if (options.display === "DATETIME") {
-                                        self.nodes.timezoneField = $('<span class="label">');
-                                        if (self.model.get(self.attribute)) {
-                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
-                                        } else {
-                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
-                                        }
-                                    }
-
-                                    if (options.display === "DATE") {
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
-                                    } else if (options.display === "DATETIME") {
-                                        self.nodes.timeField = $('<input type="text" class="input-mini">');
-                                        if (self.model.get('full_time')) {
-                                            self.nodes.timeField.hide();
-                                            self.nodes.timezoneField.hide();
-                                        }
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
+                                if (options.display === "DATETIME") {
+                                    self.nodes.timezoneField = $('<span class="label">');
+                                    if (self.model.get(self.attribute)) {
+                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
+                                    } else {
+                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
                                     }
                                 }
-                            )
+
+                                if (options.display === "DATE") {
+                                    return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                } else if (options.display === "DATETIME") {
+                                    self.nodes.timeField = $('<input type="text" class="input-mini">');
+                                    if (self.model.get('full_time')) {
+                                        self.nodes.timeField.hide();
+                                        self.nodes.timezoneField.hide();
+                                    }
+                                    return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
+                                }
+                            }
                         )
+                    )
                 );
                 this.setValueInField();
                 // get the right date format
@@ -850,7 +851,13 @@ define('io.ox/backbone/forms',
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
             },
             updateModelTime: function () {
-                this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
+                var time = BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model);
+                if (time && _.isNumber(time)) {
+                    this.model.set(this.attribute, time);
+                    this.model.trigger("valid");
+                } else {
+                    this.model.trigger("invalid:" + this.attribute, [gt('Please enter a valid date')]);
+                }
             },
             showError: function (messages) {
                 this.removeError();
