@@ -46,7 +46,7 @@ define('io.ox/settings/accounts/settings/pane',
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text(gt('Do you really want to delete this account?')
+                    .text(gt('Do you really want to delete this account?'))
                     .addPrimaryButton('delete', gt('Delete account'))
                     .addButton('cancel', gt('Cancel'))
                     .show()
