@@ -238,7 +238,7 @@ msgstr "Zaktualizuj do wersji premium"
 
 #: apps/plugins/portal/upsell/register.js:34
 msgid "Click here for free trial."
-msgstr "Kliknij tutaj, aby uzyskać darmową wersję próbną."
+msgstr "Zamów pełna; wersje;"
 
 #: apps/plugins/portal/mail/register.js:28
 #: apps/plugins/portal/mail/register.js:75
