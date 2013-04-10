@@ -1,3 +1,7 @@
+* 2013-04-10 - viktor.pracht@open-xchange.com
+
+ - Fixed bug 25813: Updating does not update themes
+
 * 2013-04-04 - viktor.pracht@open-xchange.com
 
  - Fixed bug 24814: Significant performance decrease compared to 7.0.0

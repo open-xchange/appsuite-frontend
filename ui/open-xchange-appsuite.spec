@@ -122,6 +122,10 @@ else
     [ -x $UPDATE ] && $UPDATE
 fi
 
+%triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+[ -x $UPDATE ] && $UPDATE
+
 %files
 %defattr(-,root,root)
 %doc readme.txt
