@@ -38,6 +38,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var BUFFER_INTERVAL = 1000;
     var seq = 0;
 
+    Event.extend(api);
+
+
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
     }
@@ -147,21 +150,25 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 60
+            maxRequest: 300
         };
 
 
         //------------------------------------------------------------------------------
         //request callbacks
+        var triggering = false;
         request.onOpen = function (response) {
             connecting = false;
             def.resolve(api);
-            api.trigger("open");
+            if (!triggering) {
+                api.trigger("open");
+                triggering = false;
+            }
         };
 
         request.onReconnect = function (request, response) {
             //socket.info("Reconnecting");
-            if (request.requestCount === 30) {
+            if (request.requestCount > 30) {
                 reconnect();
             }
         };
@@ -206,7 +213,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 console.log("Closed");
             }
             if (shouldReconnect) {
-                reconnect = false;
+                shouldReconnect = false;
                 subSocket = connect();
             } else {
                 subSocket = null;
@@ -257,6 +264,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (subSocket === null) {
             subSocket = connect();
             reconnectBuffer.push(options);
+            return;
         }
         if (connecting) {
             // Buffer messages until connect went through
@@ -285,14 +293,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
 
     setInterval(function () {
-        if (!connecting) {
+        if (!connecting && subSocket) {
             subSocket.push("{\"type\": \"ping\"}");
         }
     }, 20000);
 
 
 
-    Event.extend(api);
 
     return def;
 });
