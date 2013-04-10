@@ -33,7 +33,7 @@ define("io.ox/mail/accounts/model",
             },
             primary_address: {
                 required: true,
-                fn: gt('isMailAddress')
+                fn: _.noI18n('isMailAddress')
             },
             mail_server: {
                 required: true,
