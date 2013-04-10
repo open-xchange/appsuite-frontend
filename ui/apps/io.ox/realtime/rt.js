@@ -25,6 +25,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     var tabId = uuids.randomUUID();
     var connecting = false;
+    var shouldReconnect = false;
+    var connected = false;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -136,6 +138,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     function connect() {
         connecting = true;
+
         var request = {
             url: url + '?session=' + ox.session + "&resource=" + tabId,
             contentType : "application/json",
@@ -144,20 +147,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 99999999999999999999999999999999999999999999999999
+            maxRequest: 60
         };
 
 
         //------------------------------------------------------------------------------
         //request callbacks
         request.onOpen = function (response) {
-            def.resolve(api);
             connecting = false;
+            def.resolve(api);
+            api.trigger("open");
         };
 
         request.onReconnect = function (request, response) {
             //socket.info("Reconnecting");
-            request.requestCount = 0;
+            if (request.requestCount === 30) {
+                reconnect();
+            }
         };
 
         request.onMessage = function (response) {
@@ -187,10 +193,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 api.trigger("receive", stanza);
                 api.trigger("receive:" + stanza.selector, stanza);
                 if (json.error && /^SES-0203/.test(json.error)) {
-                    subSocket.close();
-                    connecting = true;
                     if (json.error.indexOf(ox.session) === -1) {
-                        subSocket = connect();
+                        reconnect();
                     }
                 }
 
@@ -201,6 +205,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             if (api.debug) {
                 console.log("Closed");
             }
+            if (shouldReconnect) {
+                reconnect = false;
+                subSocket = connect();
+            } else {
+                subSocket = null;
+            }
         };
 
         request.onError = function (response) {
@@ -210,6 +220,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         return socket.subscribe(request);
     }
 
+    function reconnect() {
+        shouldReconnect = true;
+        subSocket.close();
+    }
 
     var subSocket = connect();
 
@@ -222,10 +236,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         timer: null
     };
 
+    var reconnectBuffer = [];
+
     function drainBuffer() {
-        if (connecting) {
-            setTimeout(drainBuffer, BUFFER_INTERVAL);
-        }
         subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
             console.log("->", queue.stanzas);
@@ -241,6 +254,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
+        if (subSocket === null) {
+            subSocket = connect();
+            reconnectBuffer.push(options);
+        }
+        if (connecting) {
+            // Buffer messages until connect went through
+            reconnectBuffer.push(options);
+            return;
+        }
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
             if (!queue.timer) {
@@ -255,8 +277,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     };
 
+    api.on("open", function () {
+        _(reconnectBuffer).each(function (options) {
+            api.sendWithoutSequence(options);
+        });
+        reconnectBuffer = [];
+    });
+
     setInterval(function () {
-        subSocket.push("{\"type\": \"ping\"}");
+        if (!connecting) {
+            subSocket.push("{\"type\": \"ping\"}");
+        }
     }, 20000);
 
 
