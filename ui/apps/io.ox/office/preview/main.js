@@ -53,7 +53,7 @@ define('io.ox/office/preview/main',
          * descriptor.
          *
          * @param {Object} [point]
-         *  The save point if called from fail-restore.
+         *  The save point, if called from fail-restore.
          *
          * @returns {jQuery.Promise}
          *  The promise of a Deferred object that will be resolved when the

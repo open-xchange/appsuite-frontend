@@ -65,9 +65,39 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
+        BaseView.call(this, app, buildViewHandler, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Builds the contents of this view instance, after the document has
+         * been loaded.
+         */
+        function buildViewHandler() {
+
+            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
+                )
+            );
+
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
+                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
+                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
+                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
+                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                    .addGap()
+                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
+                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
+                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
+                )
+            );
+
+            // listen to specific scroll keys to switch to previous/next page
+            self.getAppPaneNode().on('keydown', keyHandler);
+        }
 
         /**
          * Handles 'keydown' events and show the previous/next page, if the
@@ -107,41 +137,6 @@ define('io.ox/office/preview/view',
                 });
                 break;
             }
-        }
-
-        /**
-         * Initialization after construction. Will be called once after
-         * construction of the application is finished.
-         */
-        function initHandler() {
-
-            model = app.getModel();
-
-            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
-                )
-            );
-
-            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
-                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
-                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
-                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
-                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
-                    .addGap()
-                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
-                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
-                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
-                )
-            );
-
-            // insert the page node into the application pane
-            self.insertContentNode(pageNode);
-
-            // listen to specific scroll keys to switch to previous/next page
-            self.getAppPaneNode().on('keydown', keyHandler);
         }
 
         /**
@@ -406,7 +401,10 @@ define('io.ox/office/preview/view',
         // initialization -----------------------------------------------------
 
         // initialization after construction
-        app.registerInitHandler(initHandler);
+        app.on('docs:init', function () {
+            model = app.getModel();
+            self.insertContentNode(pageNode);
+        });
 
     } // class PreviewView
 

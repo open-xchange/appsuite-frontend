@@ -1977,17 +1977,11 @@ define.async('io.ox/office/tk/utils',
      * @param {String} icon
      *  The CSS class name of the icon. Will be set at the created element.
      *
-     * @param {Boolean} [white]
-     *  If set to true, the icon will be shown in white color instead in black
-     *  color.
-     *
      * @returns {jQuery}
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeIconClasses)
-            .toggleClass('icon-white', white === true)
-            .toggleClass('retina', _.device('retina'));
+        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', _.device('retina'));
     };
 
     /**
@@ -2047,8 +2041,7 @@ define.async('io.ox/office/tk/utils',
             caption.append($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')))
+                .append(Utils.createIcon(icon))
             );
         }
 
