@@ -70,14 +70,19 @@ define('io.ox/office/preview/model',
          *  by the callback function passed to the constructor.
          */
         this.getElement = function (key) {
+
+            // execute callback handler for missing elements
             if (!(key in elements)) {
                 elements[key] = createElementHandler.call(context, key);
-                lastKeys = _(lastKeys).without(key);
-                lastKeys.push(key);
-                if (lastKeys.length > cacheSize) {
-                    delete elements[lastKeys.shift()];
-                }
             }
+
+            // update array of last used keys
+            lastKeys = _(lastKeys).without(key);
+            lastKeys.push(key);
+            if (lastKeys.length > cacheSize) {
+                delete elements[lastKeys.shift()];
+            }
+
             return elements[key];
         };
 
@@ -102,7 +107,10 @@ define('io.ox/office/preview/model',
             imageCache = new Cache(100, createImageNode),
 
             // the page cache containing Deferred objects with SVG mark-up as strings
-            svgCache = new Cache(100, loadSvgMarkup);
+            svgCache = new Cache(100, loadSvgMarkup),
+
+            // current timer fetching more pages in the background
+            fetchPagesTimer = null;
 
         // base constructor ---------------------------------------------------
 
@@ -131,7 +139,11 @@ define('io.ox/office/preview/model',
                 imgNode = $('<img>', { src: srcUrl });
 
             // wait that the image is loaded
-            imgNode.one('load', function () { def.resolve(imgNode); });
+            Utils.log('PreviewModel.createImageNode(): reading page ' + page);
+            imgNode.one('load', function () {
+                Utils.log('Image for page ' + page  + ' loaded');
+                def.resolve(imgNode);
+            });
 
             return def.promise();
         }
@@ -148,6 +160,7 @@ define('io.ox/office/preview/model',
          */
         function loadSvgMarkup(page) {
 
+            Utils.log('PreviewModel.loadSvgMarkup(): reading page ' + page);
             return app.sendPreviewRequest({
                 params: {
                     convert_format: 'html',
@@ -160,6 +173,49 @@ define('io.ox/office/preview/model',
                 }
             })
             .promise();
+        }
+
+        /**
+         * Fetches more pages from the server and stores them in the specified
+         * page cache. Fetches the next five pages and the previous five pages
+         * of the specified page, as well as the very last page.
+         *
+         * @param {Cache} cache
+         *  The cache instance to be filled with more pages.
+         *
+         * @param {Number} page
+         *  The one-based index of the page whose siblings will be fetched and
+         *  cached.
+         */
+        function fetchSiblingPages(cache, page) {
+
+            var // all page numbers to be fetched
+                fetchPages = [];
+
+            // stop running timer
+            if (fetchPagesTimer) { fetchPagesTimer.abort(); }
+
+            // build the array of page numbers to be fetched (start with direct
+            // next and previous sibling of the page, then fetch more distant
+            // pages.
+            _(5).times(function (index) {
+                var nextPage = page + index + 1,
+                    prevPage = page - index - 1;
+                if (nextPage <= pageCount) { fetchPages.push(nextPage); }
+                if (prevPage >= 1) { fetchPages.push(prevPage); }
+            });
+
+            // finally fetch the first and last page to always keep them in the cache
+            if (page > 1) { fetchPages.push(1); }
+            if (page < pageCount) { fetchPages.push(pageCount); }
+
+            // start the background task
+            fetchPagesTimer = app.processArrayDelayed(function (pages) {
+                // The method processArrayDelayed() passes one-element array.
+                // Returning a Deferred object causes processArrayDelayed() to
+                // wait until it is resolved, or to abort if it is rejected.
+                return cache.getElement(pages[0]);
+            }, _.unique(fetchPages), { chunkLength: 1 });
         }
 
         // methods ------------------------------------------------------------
@@ -200,7 +256,9 @@ define('io.ox/office/preview/model',
          *  page (as jQuery object), or rejected on error.
          */
         this.loadPageAsImage = function (page) {
-            return imageCache.getElement(page);
+            return imageCache.getElement(page).done(function () {
+                fetchSiblingPages(imageCache, page);
+            });
         };
 
         /**
@@ -215,7 +273,9 @@ define('io.ox/office/preview/model',
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
         this.loadPageAsSvg = function (page) {
-            return svgCache.getElement(page);
+            return svgCache.getElement(page).done(function () {
+                fetchSiblingPages(svgCache, page);
+            });
         };
 
     } // class PreviewModel
