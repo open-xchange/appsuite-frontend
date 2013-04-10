@@ -172,15 +172,15 @@ define('io.ox/office/preview/view',
             busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
-            if (_.browser.Chrome) {
-                // Chrome: as SVG mark-up (Chrome does not show images in linked SVG)
-                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
-                    pageNode[0].innerHTML = svgMarkup;
-                });
-            } else {
-                // preferred: as an image element linking to the SVG file
+            if (_.browser.Safari) {
+                // as an image element linking to the SVG file
                 def = model.loadPageAsImage(page).done(function (imgNode) {
                     pageNode.empty().append(imgNode);
+                });
+            } else {
+                // as SVG mark-up (Chrome does not show images in linked SVG)
+                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
+                    pageNode[0].innerHTML = svgMarkup;
                 });
             }
 
@@ -214,27 +214,34 @@ define('io.ox/office/preview/view',
                 factor = self.getZoomFactor() / 100,
                 // the child node of the page representing the SVG contents
                 childNode = pageNode.children().first(),
-                // the vertical margin to adjust scroll size
-                vMargin = childNode.height() * (factor - 1) / 2,
-                // the horizontal margin to adjust scroll size
-                hMargin = childNode.width() * (factor - 1) / 2,
+                // the vertical/horizontal margin to adjust scroll size
+                vMargin = 0, hMargin = 0,
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
-            // CSS 'zoom' not supported in all browsers, need to transform with
-            // scale(). But: transformations do not modify the element size, so
-            // we need to modify page margin to get the correct scroll size.
-            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
-            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
-
-            // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
-            // if browser zoom is not 100%) regardless of existing SVG, must
-            // set its size explicitly to see anything...
-            if (_.browser.Chrome) {
-                pageNode.css({
-                    width: childNode.width() * factor,
-                    height: childNode.height() * factor
+            if (childNode.is('img')) {
+                // IE: must use width/height element attributes (instead of CSS attributes)
+                childNode.css('max-width', 'none').attr({
+                    width: childNode[0].naturalWidth * factor,
+                    height: childNode[0].naturalHeight * factor
                 });
+            } else {
+
+                // the vertical margin to adjust scroll size
+                vMargin = childNode.height() * (factor - 1) / 2;
+                // the horizontal margin to adjust scroll size
+                hMargin = childNode.width() * (factor - 1) / 2;
+
+                // CSS 'zoom' not supported in all browsers, need to transform with
+                // scale(). But: transformations do not modify the element size, so
+                // we need to modify page margin to get the correct scroll size.
+                Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
+                childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
+
+                // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
+                // if browser zoom is not 100%) regardless of existing SVG, must
+                // set its size explicitly to see anything...
+                pageNode.width(childNode.width() * factor).height(childNode.height() * factor);
             }
 
             // refresh view (scroll bars may have appeared or vanished)
