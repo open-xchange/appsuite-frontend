@@ -29,7 +29,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var splits = document.location.toString().split('/');
     var proto = splits[0];
     var host = splits[2];
-    var url = proto + "//" + host + "/realtime/atmosphere/rt";
+    var url = proto + "//" + host + (_.url.hash("realtimePath") || "/realtime") + "/atmosphere/rt";
     var api = {};
     var def = $.Deferred();
     var BUFFERING = true;
@@ -144,7 +144,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 999999999999999999999999999999999999999999999999999999999999999
+            maxRequest: 99999999999999999999999999999999999999999999999999
         };
 
 
@@ -186,6 +186,14 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 var stanza = new RealtimeStanza(json);
                 api.trigger("receive", stanza);
                 api.trigger("receive:" + stanza.selector, stanza);
+                if (json.error && /^SES-0203/.test(json.error)) {
+                    subSocket.close();
+                    connecting = true;
+                    if (json.error.indexOf(ox.session) === -1) {
+                        subSocket = connect();
+                    }
+                }
+
             }
         };
 
