@@ -43,7 +43,7 @@ define('io.ox/office/tk/io',
      *  filter function.
      *
      * @param {Object} [context]
-     *  The context object that will be bound to the passed filter fucntion.
+     *  The context object that will be bound to the passed filter function.
      *
      * @returns {Function}
      *  A new function that returns a Deferred object that has been resolved or
