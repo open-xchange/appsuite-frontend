@@ -1541,13 +1541,13 @@ input.nice-input {
 
         &.io-ox-foldertree {
 
-            .section .section-title { color: #888; }
-            .folder.selectable .folder-label { color: #ccc; }
-            .folder.unreadable .folder-label { color: #888; }
+            .section .section-title { color: @foldertreeSectionTitleColor; }
+            .folder.selectable .folder-label { color: @foldertreeActiveLabelColor; }
+            .folder.unreadable .folder-label { color: @foldertreePassiveLabelColor; }
             .folder-icon { display: none; }
 
             .folder.selectable.dnd-over,
-            .folder.selectable:hover { background-color: #555; }
+            .folder.selectable:hover { background-color: @foldertreeHoverBackground; }
 
             .io-ox-fail {
                 background-color: #2a2a2a;
@@ -1556,11 +1556,11 @@ input.nice-input {
 
             .folder.selected {
                 background-image: none !important;
-                background-color: #2a2a2a !important;
+                background-color: @foldertreeSelectedBackground !important;
                 font-weight: bold;
             }
 
-            .folder-counter-badge { background-color: #555; color: white; }
+            .folder-counter-badge { background-color: @foldertreeCounterBadgeBackground; color: @foldertreeCounterBadgeColor; }
 
             .folder.show-counter {
                 .folder-label { color: @linkOnDark !important; }
@@ -1576,8 +1576,8 @@ input.nice-input {
         top: auto;
         height: 40px - 1;
         line-height: 40px - 1;
-        border-top: 1px solid #222;
-        background-color: #333;
+        border-top: 1px solid darken(@foldertreeSidepanelBackground, 3%);
+        background-color: darken(@foldertreeSidepanelBackground, 6%);
     }
 
     &.side-shift {
