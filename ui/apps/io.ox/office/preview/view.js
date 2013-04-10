@@ -65,15 +65,18 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, buildViewHandler, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
+        BaseView.call(this, app, {
+            initHandler: initHandler,
+            scrollable: true,
+            margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px'
+        });
 
         // private methods ----------------------------------------------------
 
         /**
-         * Builds the contents of this view instance, after the document has
-         * been loaded.
+         * Initialization after construction.
          */
-        function buildViewHandler() {
+        function initHandler() {
 
             self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
