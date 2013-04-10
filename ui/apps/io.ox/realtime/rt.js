@@ -26,7 +26,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var tabId = uuids.randomUUID();
     var connecting = false;
     var shouldReconnect = false;
-    var connected = false;
+    var disconnected = true;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -159,6 +159,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         var triggering = false;
         request.onOpen = function (response) {
             connecting = false;
+            disconnected = false;
             def.resolve(api);
             if (!triggering) {
                 triggering = true;
@@ -217,7 +218,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 shouldReconnect = false;
                 subSocket = connect();
             } else {
-                subSocket = null;
+                disconnected = true;
             }
         };
 
@@ -234,7 +235,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     var subSocket = connect();
-
+    disconnected = false;
     ox.on("change:session", function () {
         subSocket = connect();
     });
@@ -262,7 +263,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
-        if (subSocket === null && !connecting) {
+        if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
             return;
@@ -294,7 +295,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
 
     setInterval(function () {
-        if (!connecting && subSocket) {
+        if (!connecting && !disconnected) {
             subSocket.push("{\"type\": \"ping\"}");
         }
     }, 20000);
