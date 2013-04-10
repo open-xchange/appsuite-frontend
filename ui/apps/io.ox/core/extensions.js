@@ -299,7 +299,7 @@ define("io.ox/core/extensions",
                 return o.map(function (ext) {
                     if (!baton.isDisabled(self.id, ext.id)) {
                         if (_.isFunction(ext[name])) {
-                            return ext[name].apply(context, args.slice(3));
+                            return ext.invoke.apply(context, args.slice(1, 4));
                         }
                     }
                 })
@@ -502,9 +502,11 @@ ext.point("io.ox/calendar/detail").disable("date");
 
 // Extend "draw" function (to introduce "customize")
 var ext = require("io.ox/core/extensions");
-ext.addWrapper("draw", function (e) {
-    e.original();
-    ext.point(e.id).invoke("customize", this, e.args);
+ext.addWrapper('draw', function (wrapper) {
+    //call extensions 'draw' function
+    wrapper.original();
+    //call extensions 'customize' function
+    wrapper.extension.invoke('customize', this, wrapper.args);
 });
 
 // use new "customize" function
