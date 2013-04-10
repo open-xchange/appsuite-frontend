@@ -43,10 +43,8 @@ define("io.ox/core/extensions",
         // for debugging purposes
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
-        },
+        };
 
-        // function wrappers
-        wrappers = {};
 
     // never leak
     $(window).on("unload", function () {
@@ -144,21 +142,7 @@ define("io.ox/core/extensions",
                 var args = $.makeArray(arguments).slice(2),
                     fn = ext[name];
                 if (fn) {
-                    // wrap
-                    if (wrappers[name]) {
-                        return wrappers[name].call(context, {
-                            args: args,
-                            extension: ext,
-                            original: function () {
-                                return fn.apply(context, args);
-                            },
-                            id: point.id + "/" + ext.id,
-                            module: that,
-                            point: point
-                        });
-                    } else {
-                        return fn.apply(context, args);
-                    }
+                    return fn.apply(context, args);
                 }
             };
         }
@@ -474,11 +458,6 @@ define("io.ox/core/extensions",
             });
         },
 
-        // add wrapper
-        addWrapper: function (name, fn) {
-            wrappers[name] = fn;
-        },
-
         Baton: Baton,
 
         indexSorter: indexSorter
@@ -499,15 +478,6 @@ ext.point("io.ox/calendar/detail").disable("participants");
 // Disable date
 var ext = require("io.ox/core/extensions");
 ext.point("io.ox/calendar/detail").disable("date");
-
-// Extend "draw" function (to introduce "customize")
-var ext = require("io.ox/core/extensions");
-ext.addWrapper('draw', function (wrapper) {
-    //call extensions 'draw' function
-    wrapper.original();
-    //call extensions 'customize' function
-    wrapper.extension.invoke('customize', this, wrapper.args);
-});
 
 // use new "customize" function
 var ext = require("io.ox/core/extensions");
