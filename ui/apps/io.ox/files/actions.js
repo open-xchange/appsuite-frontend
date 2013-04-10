@@ -153,7 +153,7 @@ define('io.ox/files/actions',
                         _(list).each(function (file) {
                             var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
                             var label = gt('File: %1$s', file.title || file.filename);
-                            html.push(label + '\n' + gt('Direct link: %1$s', '<a href="' + url + '">' + url + '</a>'));
+                            html.push(label + '\n' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
                             text.push(label + '\n' + gt('Direct link: %1$s', url));
                         });
                         this.compose({ attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
