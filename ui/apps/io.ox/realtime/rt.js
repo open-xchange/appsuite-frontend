@@ -262,7 +262,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
-        if (subSocket === null) {
+        if (subSocket === null && !connecting) {
             subSocket = connect();
             reconnectBuffer.push(options);
             return;
