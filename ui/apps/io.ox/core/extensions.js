@@ -279,11 +279,11 @@ define("io.ox/core/extensions",
             return list().map(cb);
         };
 
-        this.select = function (cb) {
+        this.filter = this.select = function (cb) {
             return list().select(cb).value();
         };
 
-        this.inject = function (cb, memo) {
+        this.reduce = this.inject = function (cb, memo) {
             return list().inject(cb, memo).value();
         };
 
