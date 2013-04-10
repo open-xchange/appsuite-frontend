@@ -235,7 +235,7 @@ define("io.ox/core/extensions",
         };
 
         this.clear = function () {
-            extensions = [];
+            extensions = replacements = [];
         };
 
         this.all = function () {
