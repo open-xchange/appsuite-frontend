@@ -161,6 +161,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             connecting = false;
             def.resolve(api);
             if (!triggering) {
+                triggering = true;
                 api.trigger("open");
                 triggering = false;
             }
