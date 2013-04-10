@@ -224,15 +224,18 @@ define('io.ox/office/preview/view',
             // CSS 'zoom' not supported in all browsers, need to transform with
             // scale(). But: transformations do not modify the element size, so
             // we need to modify page margin to get the correct scroll size.
+            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
+            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
+
             // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
             // if browser zoom is not 100%) regardless of existing SVG, must
             // set its size explicitly to see anything...
-            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
-            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
-            pageNode.css({
-                width: childNode.width() * factor,
-                height: childNode.height() * factor
-            });
+            if (_.browser.Chrome) {
+                pageNode.css({
+                    width: childNode.width() * factor,
+                    height: childNode.height() * factor
+                });
+            }
 
             // refresh view (scroll bars may have appeared or vanished)
             self.refreshPaneLayout();
