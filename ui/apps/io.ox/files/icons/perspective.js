@@ -206,7 +206,6 @@ define('io.ox/files/icons/perspective',
     return _.extend(new ox.ui.Perspective('icons'), {
 
         render: function (app) {
-            
             var options = ext.point('io.ox/files/icons/options').options(),
                 win = app.getWindow(),
                 self = this,
@@ -416,7 +415,8 @@ define('io.ox/files/icons/perspective',
                     .progress(function (e) {
                         var sub = e.loaded / e.total;
                         win.busy(pct + sub / files.length, sub);
-                    }).fail(function (e) {
+                    })
+                    .fail(function (e) {
                         if (e && e.code && e.code === 'UPL-0005')
                             notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                         else

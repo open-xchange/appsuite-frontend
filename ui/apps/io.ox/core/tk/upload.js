@@ -97,7 +97,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             };
         }
 
-        
+
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
             $actionNode.append($("<div>").html(action.label).center()).on({
@@ -423,6 +423,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         this.stop = function () {
             delegate.stop(files[position], position, files);
             this.trigger('stop', files[position], position, files);
+            files = [];
             position = 0;
             processing = false;
         };
