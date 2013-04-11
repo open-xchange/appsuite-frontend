@@ -38,6 +38,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var BUFFER_INTERVAL = 1000;
     var seq = 0;
     var request = null;
+    var resendBuffer = {};
 
     Event.extend(api);
 
@@ -140,6 +141,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
     */
 
+    function received(stanza) {
+        if (stanza.get("atmosphere", "received")) {
+            _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
+                delete resendBuffer[Number(receipt.data)];
+                if (api.debug) {
+                    console.log("Received receipt for " + receipt.data);
+                }
+            });
+
+        } else {
+            api.trigger("receive", stanza);
+            api.trigger("receive:" + stanza.selector, stanza);
+        }
+    }
+
+
     function connect() {
         connecting = true;
 
@@ -177,6 +194,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
         };
 
+
         request.onMessage = function (response) {
             request.requestCount = 0;
             var message = response.responseBody;
@@ -194,16 +212,14 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         console.log("<-", stanza);
                     }
                     stanza = new RealtimeStanza(stanza);
-                    api.trigger("receive", stanza);
-                    api.trigger("receive:" + stanza.selector, stanza);
+                    received(stanza);
                 });
             } else if (_.isObject(json)) { // json may be null
                 if (api.debug) {
                     console.log("<-", json);
                 }
                 var stanza = new RealtimeStanza(json);
-                api.trigger("receive", stanza);
-                api.trigger("receive:" + stanza.selector, stanza);
+                received(stanza);
                 if (json.error) {
                     console.log(json.error);
                 }
@@ -278,6 +294,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
+        if (!_.isUndefined(options.seq)) {
+            resendBuffer[options.seq] = options;
+        }
         if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
@@ -316,8 +335,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     }, 20000);
 
-
-
+    setInterval(function () {
+        _(resendBuffer).each(function (m) {
+            api.sendWithoutSequence(m);
+        });
+    }, 5000);
 
     return def;
 });
