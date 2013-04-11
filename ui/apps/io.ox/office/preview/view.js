@@ -174,15 +174,15 @@ define('io.ox/office/preview/view',
             busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
-            if (_.browser.Safari) {
-                // as an image element linking to the SVG file
-                def = model.loadPageAsImage(page).done(function (imgNode) {
-                    pageNode.empty().append(imgNode);
-                });
-            } else {
+            if (_.browser.Chrome) {
                 // as SVG mark-up (Chrome does not show images in linked SVG)
                 def = model.loadPageAsSvg(page).done(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
+                });
+            } else {
+                // preferred: as an image element linking to the SVG file
+                def = model.loadPageAsImage(page).done(function (imgNode) {
+                    pageNode.empty().append(imgNode);
                 });
             }
 
