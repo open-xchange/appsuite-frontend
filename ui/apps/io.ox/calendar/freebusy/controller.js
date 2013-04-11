@@ -279,7 +279,7 @@ define('io.ox/calendar/freebusy/controller',
 
                 view.showAll(false);
                 view.render();
-                this.$el.append(view.$el.addClass('abs calendar-week-view'));
+                this.$el.append(view.$el.addClass('abs week-view'));
 
                 api.on('create refresh.all', function () {
                     self.refresh(false);

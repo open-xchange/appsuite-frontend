@@ -18,7 +18,6 @@ define('io.ox/calendar/week/view',
      'io.ox/core/api/folder',
      'io.ox/core/print',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/week/style.less',
      'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, print, settings) {
 
     'use strict';
@@ -81,7 +80,7 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote = $('<div>').addClass('note');
             this.timeline = $('<div>').addClass('timeline');
             this.dayLabel = $('<div>').addClass('footer');
-            this.kwInfo = $('<span>').addClass('kwinfo');
+            this.kwInfo = $('<div>').addClass('info');
             this.showAllCheck = $('<input/>').attr('type', 'checkbox');
             this.showAllCon = $('<div>').addClass('showall');
 
@@ -602,9 +601,7 @@ define('io.ox/calendar/week/view',
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        $('<div>').addClass('info').append(
-                            this.kwInfo
-                        ),
+                        this.kwInfo,
                         this.showAllCon
                             .empty()
                             .append(
@@ -637,10 +634,7 @@ define('io.ox/calendar/week/view',
                     ),
                 $('<div>')
                     .addClass('footer-container')
-                    .append(
-                        $('<div>').addClass('footer-label'),
-                        this.dayLabel
-                    ),
+                    .append(this.dayLabel),
                 $('<div>')
                     .addClass('week-view-container')
                     .append(

@@ -10,76 +10,14 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-.calendar-week-view {
+@weekviewTimeWithSmall: @weekviewTimeWith - 13;
+@weekviewFooterHeight: 21px;
 
-    @appointment-lasso: rgba(0, 136, 204, 0.30);//rgba(0, 0, 0, 0.4);
-
-    @weekview-time-with: 58px;
-    @weekview-footer-height: 21px;
-    @weekview-toolbar-height: 41px;
-
-    @SMALL-weekview-time-with: 45px;
+.io-ox-calendar-main .week-view {
 
     * {
         .box-sizing(border-box);
         -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
-
-    .toolbar {
-        background-color: #fff;
-        height: @weekview-toolbar-height;
-        text-align: center;
-        padding: 3px;
-    }
-
-    .toolbar .info {
-        position: absolute;
-        left: @weekview-time-with;
-    }
-
-    .toolbar .kwinfo {
-        line-height: 38px;
-        font-family: @lightFontFamily;
-        font-size: 20px;
-    }
-
-    .toolbar .showall {
-        position: absolute;
-        display: inline;
-        right: 20px;
-        top: 10px;
-    }
-
-    .toolbar .showall label {
-        display: inline;
-        text-align: left;
-        padding-left: 10px;
-    }
-
-    .toolbar .showall input {
-        margin-left: 0;
-    }
-
-    .toolbar .pagination {
-        margin: 0 0 0 58px;
-    }
-
-    .toolbar .pagination a {
-        line-height: 26px;
-        height: 34px;
-    }
-
-    .week-view-container {
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        top: @weekview-toolbar-height + @weekview-footer-height;
-    }
-
-    .dayview .week-view-container,
-    &.dayview .week-view-container {
-        top: @weekview-toolbar-height;
     }
 
     .week {
@@ -90,413 +28,352 @@
         display: inline-block;
         border-right: 1px solid #ccc;
         overflow: hidden;
-        background-color: #fff;
         .transition(background-color 0.4s);
         .backface-visibility(hidden);
     }
 
-    .fulltime-container {
-        position: relative;
-        width: 100%;
-        height: @weekview-footer-height;
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
-    .fulltime {
-        position: absolute;
-        height: @weekview-footer-height;
-        border-bottom: 1px solid #ccc;
-        left: @weekview-time-with;
-        right: 0;
-    }
-
-    .fulltime .note {
-        position: absolute;
-        background: none;
-        width: 100%;
-        font-size: 12px;
-        font-weight: 200;
-        color: #aaa;
-        text-align: right;
-        .ellipsis();
-        .user-select(none);
-        padding: 0px 10px;
-    }
-
-    .fulltime .day {
-        border: none;
-    }
-
-    .scrollpane {
-        .overflow-y(scroll);
-        .overflow-x(hidden);
-        position: absolute;
-        top: @weekview-footer-height;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
     .footer-container {
-        position: absolute;
-        height: @weekview-footer-height;
+
+        height: @weekviewFooterHeight;
         left: 0;
         right: 0;
-        top: @weekview-toolbar-height;
         width: 100%;
         .overflow(hidden);
+
+        .footer {
+
+            position: absolute;
+            line-height: @weekviewFooterHeight - 1;
+            right: 0;
+            left: @weekviewTimeWith;
+            white-space: nowrap;
+
+            .weekday {
+
+                display: inline-block;
+                font-size: 13px;
+                text-align: left;
+                .ellipsis();
+
+                &.today {
+                    font-weight: bold;
+                }
+
+            }
+
+        }
+
     }
 
-    .dayview .footer-container,
-    &.dayview .footer-container {
-        display: none;
-    }
+    .week-view-container {
 
-    .footer-label {
-        height: 100%;
-        width: @weekview-time-with;
         position: absolute;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        top: @calendarToolbarHeight + @weekviewFooterHeight;
+
+        .fulltime-container {
+
+            position: relative;
+            width: 100%;
+            height: @weekviewFooterHeight;
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            .fulltime {
+
+                position: relative;
+                height: 100%;
+                border-bottom: 1px solid #ccc;
+                margin-left: @weekviewTimeWith;
+
+                .note {
+                    position: absolute;
+                    background: none;
+                    width: 100%;
+                    font-size: 12px;
+                    font-weight: 200;
+                    color: #aaa;
+                    text-align: right;
+                    .ellipsis();
+                    .user-select(none);
+                    padding: 0px 10px;
+                }
+
+                .day {
+                    border: none;
+                }
+
+                .appointment-content {
+                    border-left: 1px solid rgba(255, 255, 255, 0.6);
+                }
+
+            }
+
+        }
+
+        .scrollpane {
+
+            .overflow-y(scroll);
+            .overflow-x(hidden);
+            position: absolute;
+            top: @weekviewFooterHeight;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            .week-container-label {
+
+                width: @weekviewTimeWith;
+                position: absolute;
+
+                .time {
+
+                    position: relative;
+                    height: 48px;
+
+                    .number {
+                        font-size: 12px;
+                        position: absolute;
+                        right: 8px;
+                        bottom: -9px;
+                    }
+
+                }
+
+            }
+
+            .week-container {
+
+                left: @weekviewTimeWith;
+                right: 0;
+                position: absolute;
+
+                .timeline {
+                    position: absolute;
+                    height: 1px;
+                    width: 100%;
+                    background-color: @weekviewTimeline;
+                    z-index: 10;
+                    .user-select(none);
+                }
+
+            }
+
+        }
+
     }
 
-    .footer {
-        position: absolute;
-        line-height: @weekview-footer-height - 1;
-        right: 0;
-        left: @weekview-time-with;
-        white-space: nowrap;
-        background-color: white;
-    }
+    /* Hide days in dayview */
+    .dayview {
 
-    .week-container {
-        left: @weekview-time-with;
-        right: 0;
-        position: absolute;
+        .week-view-container {
+            top: @calendarToolbarHeight;
+        }
+
+        .footer-container {
+            display: none;
+        }
+
     }
 
     .day {
+
         position: relative;
         height: 100%;
         float: left;
         border-left: 1px solid #ccc;
         background-color: rgba(0, 0, 0, 0.01);
-    }
 
-    .day.today .timeslot.in {
-        background-color: #daefff;
-        background-color: rgba(0, 136, 204, 0.10);
-    }
+        .timeslot {
 
-    .day.today .timeslot.out {
-        background-color: #daefff;
-        background-color: rgba(0, 136, 204, 0.20);
-    }
+            border-bottom: 1px solid #ccc;
+            height: 24px;
 
-    .week-container-label {
-        width: @weekview-time-with;
-        position: absolute;
-    }
+            &:nth-child(2n+1) {
+                border-bottom-style: dotted;
+            }
 
-    .timeslot {
-        border-bottom: 1px solid #ccc;
-        height: 24px;
-    }
+            &:last-child, .time:last-child {
+                border: none;
+            }
 
-    .time {
-        position: relative;
-        height: 48px;
-    }
+            &.in {
+                background-color: @weekviewDayIn;
+            }
 
-    .time .number {
-        font-size: 12px;
-        position: absolute;
-        right: 8px;
-        bottom: -9px;
-    }
+            &.out {
+                background-color: @weekviewDayOut;
+            }
 
-    .timeline {
-        position: absolute;
-        height: 1px;
-        width: 100%;
-        background-color: red;
-        z-index: 10;
-        .user-select(none);
-    }
+        }
 
-    .day .timeslot:nth-child(2n+1) {
-        border-bottom-style: dotted;
-    }
+        &.today .timeslot {
 
-    .day .timeslot:last-child, .time:last-child {
-        border: none;
-    }
+            &.in {
+                background-color: darken(@weekviewDayIn, 5%);
+            }
 
-    .timeslot.out {
-        background-color: #e0e0e0;
-    }
+            &.out {
+                background-color: darken(@weekviewDayOut, 3%);
+            }
 
-    .timeslot.in {
-        background-color: #fff;
-    }
+        }
 
-    .weekday {
-        display: inline-block;
-        font-size: 13px;
-        text-align: left;
-        .ellipsis();
-    }
-
-    .weekday.today {
-        font-weight: bold;
-    }
-
-    .week-container .appointment {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .fulltime .appointment-content {
-        border-left: 1px solid rgba(255, 255, 255, 0.6);
     }
 
     .appointment {
+
         position: absolute;
         background-color: #ccc;
         opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
+
+        &.modify {
+            cursor: pointer;
+        }
+
+        &.border {
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        &.current {
+            z-index: 9 !important;
+        }
+
+        &.lasso {
+            border: 1px solid #08c;
+            background-color: @weekviewAppointmentLasso;
+            width: 100%;
+            cursor: default;
+            .box-sizing(border-box);
+        }
+
+        .private-flag {
+            float: left;
+            font-size: 15px;
+            margin-right: 3px;
+        }
+
+        .appointment-content {
+            height: 100%;
+            font-size: 12px;
+            color: #fff;
+            padding: 0px 7px 0px 7px;
+            .ellipsis();
+
+            * {
+                .ellipsis();
+            }
+
+        }
+
+        /* Resize bars */
+        .ui-resizable-handle {
+            position: absolute;
+            font-size: 0.1px;
+            display: block;
+        }
+
+        .ui-resizable-disabled .ui-resizable-handle,.ui-resizable-autohide .ui-resizable-handle {
+            display: none;
+        }
+
+        .ui-resizable-n {
+            cursor: n-resize;
+            height: 7px;
+            width: 100%;
+            top: -3px;
+            left: 0;
+        }
+
+        .ui-resizable-s {
+            cursor: s-resize;
+            height: 7px;
+            width: 100%;
+            bottom: -3px;
+            left: 0;
+        }
+
+        .ui-resizable-e {
+            cursor: e-resize;
+            width: 7px;
+            right: 0px;
+            top: 0;
+            height: 100%;
+        }
+
+        .ui-resizable-w {
+            cursor: w-resize;
+            width: 7px;
+            left: 0px;
+            top: 0;
+            height: 100%;
+        }
+
     }
 
-    .appointment-content {
-        height: 100%;
-        font-size: 12px;
-        color: white;
-        padding: 0px 7px 0px 7px;
-        .ellipsis();
-    }
-
-    .appointment-content * {
-        .ellipsis();
-    }
-
-    .appointment.modify {
-        cursor: pointer;
-    }
-
-    .appointment.border {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .appointment.current {
-        z-index: 9 !important;
-    }
-
-    .appointment.opac {
-        opacity: 0.5;
-        .transition(opacity 0.2s);
-    }
-
-    .appointment.lasso {
-        border: 1px solid #08c;
-        background-color: @appointment-lasso;
-        width: 100%;
-        cursor: default;
-        .box-sizing(border-box);
-    }
-
-    .appointment .location {
-        color: #ccc;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    /* shown_as colors */
-    @appointment-reserved: #08c; /* blue */
-    @appointment-temporary: #ffbb00; /* yellow */
-    @appointment-absent: #913f3f; /* red */
-    @appointment-free: #8eb360; /* green */
-    @appointment-private: #555; /* gray */
-
-    @appointment-unconfirmed-alpha: 0.4;
-    @appointment-declined-alpha: 0.3;
-    @appointment-declined-font: #888;
-    @appointment-hover-pct: 15%;
-
-    /* appointment status styles */
-    .appointment .private-flag {
-        float: left;
-        font-size: 15px;
-        margin-right: 3px;
-    }
-
-    .appointment.reserved {
-        background-color: @appointment-reserved;
-    }
-
-    .appointment.temporary {
-        background-color: @appointment-temporary;
-    }
-
-    .appointment.absent {
-        background-color: @appointment-absent;
-    }
-
-    .appointment.free {
-        background-color: @appointment-free;
-    }
-
-    .appointment.declined .appointment-content * {
-        text-decoration: line-through;
-        color: @appointment-declined-font;
-    }
-
-    .appointment.private {
-        background-color: @appointment-private;
-    }
-
-    .appointment.private.disabled {
-        cursor: normal;
-    }
-
-    /* hover */
-    .appointment.reserved.hover {
-        background-color: darken(@appointment-reserved, @appointment-hover-pct);
-    }
-
-    .appointment.temporary.hover {
-        background-color: darken(@appointment-temporary, @appointment-hover-pct);
-    }
-
-    .appointment.absent.hover {
-        background-color: darken(@appointment-absent, @appointment-hover-pct);
-    }
-
-    .appointment.free.hover {
-        background-color: darken(@appointment-free, @appointment-hover-pct);
-    }
-
-   .appointment.private.hover {
-        background-color: darken(@appointment-private, @appointment-hover-pct);
-    }
-
-    /* unconfirmed */
-    .appointment.reserved.unconfirmed {
-        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.temporary.unconfirmed {
-        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.absent.unconfirmed {
-        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.free.unconfirmed {
-        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
-    }
-
-    /* declined */
-    .appointment.reserved.declined {
-        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-declined-alpha);
-    }
-
-    .appointment.temporary.declined {
-        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-declined-alpha);
-    }
-
-    .appointment.absent.declined {
-        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-declined-alpha);
-    }
-
-    .appointment.free.declined {
-        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-declined-alpha);
-    }
-
-    .ui-resizable-handle {
-        position: absolute;
-        font-size: 0.1px;
-        display: block;
-    }
-
-    .ui-resizable-disabled .ui-resizable-handle,.ui-resizable-autohide .ui-resizable-handle {
-        display: none;
-    }
-
-    .ui-resizable-n {
-        cursor: n-resize;
-        height: 7px;
-        width: 100%;
-        top: -3px;
-        left: 0;
-    }
-
-    .ui-resizable-s {
-        cursor: s-resize;
-        height: 7px;
-        width: 100%;
-        bottom: -3px;
-        left: 0;
-    }
-
-    .ui-resizable-e {
-        cursor: e-resize;
-        width: 7px;
-        right: 0px;
-        top: 0;
-        height: 100%;
-    }
-
-    .ui-resizable-w {
-        cursor: w-resize;
-        width: 7px;
-        left: 0px;
-        top: 0;
-        height: 100%;
-    }
-
+    /* Mobile */
     @media all and (max-width: 480px) {
 
-        .toolbar .info {
-            .kwinfo {
+        .toolbar {
+
+            .info {
+
+                top: 9px;
+                left: 10px;
                 font-size: 15px;
+
             }
-            top: 9px;
-            left: 10px;
-        }
-        .toolbar .showall {
-            left: 12px;
-            top: 56px;
-            right: initial;
-        }
-        .pagination {
-            position: absolute;
-            top: 9px;
-            left: 0;
-            right: 0;
-        }
-        .footer {
-            line-height: inherit;
-            right: auto;
-            background-color: none;
-            left: 10px;
-        }
-        .weekday {
-            font-size:  18px;
-        }
-        .fulltime {
-            left: @SMALL-weekview-time-with;
-        }
-        .week-container-label {
-            width: @SMALL-weekview-time-with;
-        }
-        .week-container {
-            left:  @SMALL-weekview-time-with;
+
+            .showall {
+                left: 12px;
+                top: 42px;
+                right: initial;
+            }
+
+            .pagination {
+                position: absolute;
+                top: 9px;
+                left: 0;
+                right: 0;
+            }
+
         }
 
-        .dayview .week-view-container,
-        &.dayview .week-view-container {
-           top: @weekview-toolbar-height + @weekview-footer-height + 7 + 4;
+        .week-view-container {
+
+            .fulltime-container {
+
+                .fulltime {
+                    margin-left: @weekviewTimeWithSmall;
+                }
+            }
+
+            .scrollpane {
+
+                .week-container-label {
+                    width: @weekviewTimeWithSmall;
+                }
+
+                .week-container {
+                    left:  @weekviewTimeWithSmall;
+                }
+
+            }
+
         }
 
-   }
+        .dayview {
+
+            .week-view-container {
+               top: @calendarToolbarHeight + 25;
+            }
+
+        }
+
+    }
+
 }
-

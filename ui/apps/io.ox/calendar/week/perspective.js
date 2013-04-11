@@ -18,7 +18,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
-     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+     'gettext!io.ox/calendar',
+     'less!io.ox/calendar/week/style.less'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -262,7 +263,7 @@ define('io.ox/calendar/week/perspective',
 
             // init perspective
             this.app = app;
-            this.main.addClass('calendar-week-view').empty();
+            this.main.addClass('week-view').empty();
             this.collection = new Backbone.Collection([]);
 
             var refresh = function () { self.refresh(true); },
