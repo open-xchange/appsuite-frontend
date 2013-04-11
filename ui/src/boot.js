@@ -422,7 +422,7 @@ $(window).load(function () {
                 }
                 if (!relogin) {
                     // enqueue last request
-                    queue = [{ request: request, deferred: deferred }];
+                    queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
                     // set flag
                     relogin = true;
                     require(['io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/core', 'settings!io.ox/core'], function (dialogs, notifications, gt, settings) {
@@ -475,7 +475,9 @@ $(window).load(function () {
                     });
                 } else {
                     // enqueue last request
-                    queue.push({ request: request, deferred: deferred });
+                    if (request && deferred) {
+                        queue.push({ request: request, deferred: deferred });
+                    }
                 }
             };
         }());
