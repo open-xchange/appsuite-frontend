@@ -461,10 +461,15 @@ define('io.ox/office/framework/view/baseview',
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // add closer symbol
                 alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
+                    .css('cursor', 'pointer')
                     // alert can be closed by clicking anywhere in the banner
-                    .on('click', closeAlert);
-                // initialize auto-close
-                alert.delay(delay).fadeOut(function () { currentAlert = null; alert.remove(); });
+                    .on('click', closeAlert)
+                    // initialize auto-close
+                    .delay(delay)
+                    .fadeOut(function () {
+                        currentAlert = null;
+                        alert.remove();
+                    });
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
