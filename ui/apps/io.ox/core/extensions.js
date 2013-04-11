@@ -283,7 +283,7 @@ define("io.ox/core/extensions",
                 return o.map(function (ext) {
                     if (!baton.isDisabled(self.id, ext.id)) {
                         if (_.isFunction(ext[name])) {
-                            return ext.invoke.apply(context, args.slice(1, 4));
+                            return ext[name].apply(context, args.slice(3));
                         }
                     }
                 })
