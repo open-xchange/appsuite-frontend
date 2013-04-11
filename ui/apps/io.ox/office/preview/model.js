@@ -229,6 +229,7 @@ define('io.ox/office/preview/model',
             pageCount = count;
             imageCache.clear();
             svgCache.clear();
+            if (fetchPagesTimer) { fetchPagesTimer.abort(); }
         };
 
         /**
