@@ -168,7 +168,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 9999999999999999999999999999999999
+            maxRequest: 60
         };
 
 
@@ -186,10 +186,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
         };
 
+        var reconnectCount = 0;
+
         request.onReconnect = function (request, response) {
-            //socket.info("Reconnecting");
-            request.requestCount = 0;
-            if (request.requestCount > 30) {
+            reconnectCount++;
+            if (reconnectCount > 30) {
                 reconnect();
             }
         };
@@ -220,17 +221,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 var stanza = new RealtimeStanza(json);
                 received(stanza);
-                if (json.error) {
-                    console.log(json.error);
-                }
+                
                 if (json.error && /^SES-0203/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1) {
-                        console.log("Try reconnect with new session: " + ox.session);
+                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected) {
                         reconnect();
                     } else {
-                        console.log("disconnect and relogin");
-                        disconnected = true;
                         subSocket.close();
+                        disconnected = true;
                         ox.relogin();
                     }
                 }
@@ -251,8 +248,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         };
 
         request.onError = function (response) {
-            // TODO: (cisco)
-            console.log("onError: ", response);
         };
 
         return socket.subscribe(request);
