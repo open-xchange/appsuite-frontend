@@ -221,9 +221,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 var stanza = new RealtimeStanza(json);
                 received(stanza);
-                
-                if (json.error && /^SES-0203/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected) {
+                if (json.error && /^SES/.test(json.error)) {
+                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
                     } else {
                         subSocket.close();
