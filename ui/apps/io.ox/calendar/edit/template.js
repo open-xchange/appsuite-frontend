@@ -55,19 +55,26 @@ define('io.ox/calendar/edit/template',
     });
 
     // buttons
+    var saveButton, discardButton;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'buttons',
         draw: function (baton) {
-            var saveButton;
+            var save, discard;
             this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
-                    baton.model.save();
+                    //check if attachments are changed
+                    if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
+                        baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                    }
+                    baton.model.save().done(function () {
+                        baton.app.onSave();
+                    });
                 })
             );
-            this.append($('<button class="btn" data-action="discard" >')
+            this.append(discardButton = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
                 .css({float: 'right'})
                 .on('click', function () {
@@ -86,11 +93,13 @@ define('io.ox/calendar/edit/template',
             'conflicts': 'showConflicts'
         },
         showConflicts: function (conflicts) {
-            var self = this,
-                hardConflict = false,
-                saveButton = $('[data-action="save"]', this.$el.closest('.io-ox-calendar-edit'));
 
-            saveButton.addClass('disabled').off('click');
+            var self = this,
+                hardConflict = false;
+
+            saveButton.hide();
+            discardButton.hide();
+
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
                 if (conflict.hard_conflict) {
@@ -100,36 +109,38 @@ define('io.ox/calendar/edit/template',
             });
 
             require(["io.ox/calendar/conflicts/conflictList"], function (c) {
-                var conflictList = c.drawList(conflicts),
-                    $acceptButton = hardConflict ? null : $('<a class="btn btn-danger">')
-                    .addClass('btn')
-                    .text(gt('Ignore conflicts'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        self.model.set('ignore_conflicts', true);
-                        self.model.save();
-                    });
                 self.$el.empty().append(
-                    conflictList,
-                    $('<div class="row">')
-                        .css('margin-top', '10px').append(
-                            $('<span class="span12">')
-                                .css('text-align', 'right').append(
-                                    $('<a class="btn">')
-                                        .text(gt('Cancel'))
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            self.$el.empty();
-                                            saveButton.removeClass('disabled').on('click', function () {
-                                                self.model.save();
-                                            });
-                                        }),
-                                    '&nbsp;',
-                                    $acceptButton
-                                    )
-                            )
-                    );
-
+                    // appointment list
+                    c.drawList(conflicts),
+                    // hardConflict?
+                    hardConflict ?
+                        $('<div class="alert alert-info hard-conflict">').text(gt('Conflicts with resources cannot be ignored')) :
+                        $(),
+                    // buttons
+                    $('<div class="buttons">').append(
+                        $('<span class="span12">').css('textAlign', 'right').append(
+                            // hide/cancel
+                            $('<a class="btn">')
+                                .text(gt('Hide conflicts'))
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    self.$el.empty();
+                                    saveButton.show();
+                                    discardButton.show();
+                                }),
+                            // accept/ignore
+                            hardConflict ? $() :
+                                $('<a class="btn btn-danger">')
+                                .css('marginLeft', '1em')
+                                .text(gt('Ignore conflicts'))
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    self.model.set('ignore_conflicts', true);
+                                    saveButton.click();
+                                })
+                        )
+                    )
+                );
             });
         }
     });
@@ -170,12 +181,11 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
-
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'span6',
+        className: 'span4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -185,7 +195,7 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'span6',
+        className: 'span4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
@@ -193,6 +203,17 @@ define('io.ox/calendar/edit/template',
         label: gt('Ends on')
     }), {
         nextTo: 'start-date'
+    });
+
+    point.basicExtend({
+        id: 'find-free-time-1',
+        index: 550,
+        nextTo: 'end-date',
+        draw: function () {
+            this.append(
+                $('<div class="span4"><label class="find-free-time"></div>')
+            );
+        }
     });
 
     // full time
@@ -233,57 +254,6 @@ define('io.ox/calendar/edit/template',
 
     // alarms
     (function () {
-        var reminderListValues = [
-            {value: -1, format: 'string'},
-            {value: 0, format: 'minutes'},
-            {value: 15, format: 'minutes'},
-            {value: 30, format: 'minutes'},
-            {value: 45, format: 'minutes'},
-
-            {value: 60, format: 'hours'},
-            {value: 120, format: 'hours'},
-            {value: 240, format: 'hours'},
-            {value: 360, format: 'hours'},
-            {value: 420, format: 'hours'},
-            {value: 720, format: 'hours'},
-
-            {value: 1440, format: 'days'},
-            {value: 2880, format: 'days'},
-            {value: 4320, format: 'days'},
-            {value: 5760, format: 'days'},
-            {value: 7200, format: 'days'},
-            {value: 8640, format: 'days'},
-
-            {value: 10080, format: 'weeks'},
-            {value: 20160, format: 'weeks'},
-            {value: 30240, format: 'weeks'},
-            {value: 40320, format: 'weeks'}
-        ];
-
-        var options = {};
-        _(reminderListValues).each(function (item, index) {
-            var i;
-            switch (item.format) {
-            case 'string':
-                options[item.value] = gt('No reminder');
-                break;
-            case 'minutes':
-                options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-                break;
-            case 'hours':
-                i = Math.floor(item.value / 60);
-                options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-                break;
-            case 'days':
-                i  = Math.floor(item.value / 60 / 24);
-                options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-                break;
-            case 'weeks':
-                i = Math.floor(item.value / 60 / 24 / 7);
-                options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-                break;
-            }
-        });
         point.extend(new forms.SelectBoxField({
             id: 'alarm',
             index: 800,
@@ -291,9 +261,8 @@ define('io.ox/calendar/edit/template',
             className: "span4",
             attribute: 'alarm',
             label: gt("Reminder"),
-            selectOptions: options
+            selectOptions: util.getReminderOptions()
         }));
-
     }());
 
     // shown as
@@ -332,7 +301,7 @@ define('io.ox/calendar/edit/template',
     // participants label
     point.extend(new forms.SectionLegend({
         id: 'participants_legend',
-        className: 'span12',
+        className: 'span12 find-free-time',
         label: gt('Participants'),
         index: 1300
     }));
@@ -349,16 +318,6 @@ define('io.ox/calendar/edit/template',
                 }).render().$el);
         }
     });
-    point.extend(new forms.CheckBoxField({
-        id: 'notify',
-        labelClassName: 'control-label desc',
-        //headerClassName: 'control-label desc',
-        className: 'span12',
-        //header: gt('Notify all participants via e-mail.'),
-        label: gt('Notify all participants by E-mail.'),
-        attribute: 'notification',
-        index: 1410
-    }));
 
     // add participants
     point.basicExtend({
@@ -366,18 +325,17 @@ define('io.ox/calendar/edit/template',
         index: 1500,
         draw: function (options) {
             var node = this;
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = options.model.getParticipants();
-
-                node.append(
-                    $('<div class="input-append">').append(
-                        $('<input type="text" class="add-participant">'),
+            node.append(
+                    $('<div class="input-append span6">').append(
+                        $('<input type="text" class="add-participant">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
 
+            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
+
+                var collection = options.model.getParticipants();
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render();
 
@@ -388,7 +346,7 @@ define('io.ox/calendar/edit/template',
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
                     });
                     $.data(node, 'baton', baton);
                 });
@@ -437,6 +395,22 @@ define('io.ox/calendar/edit/template',
         }
     });
 
+    point.extend(new forms.CheckBoxField({
+        id: 'notify',
+        labelClassName: 'control-label desc',
+        //headerClassName: 'control-label desc',
+        className: 'span6',
+        //header: gt('Notify all participants via e-mail.'),
+        label: gt('Notify all participants by E-mail.'),
+        attribute: 'notification',
+        index: 1510,
+        customizeNode: function () {
+            this.$el.css("paddingTop", "5px");
+        }
+    }), {
+        nextTo: "add-participant"
+    });
+
     // Attachments
 
     // attachments label
@@ -453,7 +427,16 @@ define('io.ox/calendar/edit/template',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1700,
-        module: 1
+        module: 1,
+        finishedCallback: function (model, id) {
+            var obj = {};
+            obj.id = model.attributes.id || id;//new objects have no id in model yet
+            obj.folder_id = model.attributes.folder_id || model.attributes.folder;
+            if (model.attributes.recurrence_position !== null) {
+                obj.recurrence_position = model.attributes.recurrence_position;
+            }
+            api.attachmentCallback(obj);
+        }
     }));
 
     point.basicExtend({
@@ -461,10 +444,9 @@ define('io.ox/calendar/edit/template',
         index: 1800,
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
-                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
-                $input = $inputWrap.find('input[type="file"]'),
-                $button = $inputWrap.find('button[data-action="add"]')
-                    .on('click', function (e) {
+                $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                $input = $inputWrap.find('input[type="file"]')
+                    .on('change', function (e) {
                 e.preventDefault();
                 if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
@@ -492,12 +474,11 @@ define('io.ox/calendar/edit/template',
     ext.point("io.ox/calendar/edit/dnd/actions").extend({
         id: 'attachment',
         index: 10,
-        label: gt("Drop here to upload a <b>new attachment</b>"),
+        label: gt("Drop here to upload a <b class='dndignore'>new attachment</b>"),
         multiple: function (files, app) {
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);
             });
-
         }
     });
 
@@ -506,6 +487,33 @@ define('io.ox/calendar/edit/template',
         index: 10000,
         draw: function () {
             this.append('<div>').css('height', '100px');
+        }
+    });
+
+    function openFreeBusyView(e) {
+        var app = e.data.app, model = e.data.model;
+        e.preventDefault();
+        ox.launch('io.ox/calendar/freebusy/main', {
+            app: app,
+            start_date: model.get('start_date'),
+            end_date: model.get('end_date'),
+            folder: model.get('folder_id'),
+            participants: model.get('participants'),
+            model: model
+        });
+    }
+
+    // link free/busy view
+    point.basicExtend({
+        id: 'link-free-busy',
+        index: 100000,
+        draw: function (baton) {
+            // because that works
+            var selector = 'label.find-free-time, .find-free-time legend';
+            this.parent().find(selector).append(
+                $('<a href="#" class="pull-right">').text(gt('Find a free time'))
+                    .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
+            );
         }
     });
 

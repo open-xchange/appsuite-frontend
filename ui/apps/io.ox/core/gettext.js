@@ -80,10 +80,11 @@ define("io.ox/core/gettext", [], function () {
         }
 
         if (_.url.hash('debug-i18n')) {
-            gettext.format = function (text) {
-                var args = new Array(arguments.length);
-                for (var i = 0; i < arguments.length; i++) {
-                    var arg = String(arguments[i]);
+            gettext.format = function (text, params) {
+                var args = _.isArray(params) ? [text].concat(params) :
+                        Array.prototype.slice(arguments, 0);
+                for (var i = 0; i < args.length; i++) {
+                    var arg = String(args[i]);
                     if (isTranslated(arg)) {
                         arg = arg.slice(1, -1);
                     } else {

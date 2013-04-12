@@ -26,6 +26,18 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         return evt.originalEvent && evt.originalEvent.dataTransfer && (_(evt.originalEvent.dataTransfer.types).contains("Files") || _(evt.originalEvent.dataTransfer.types).contains("application/x-moz-file"));
     }
 
+    /**
+     * is node flaged as 'ignore'
+     * @param  {event} evt
+     * @return {boolean}
+     */
+    function ignored(evt) {
+        //TODO: parent node should stay hovered when entering a ignored child
+        //dragleave: reset hover in parent node when re-enter
+        //removeOverlay: safari removes all hover nodes
+        return (evt.target && $(evt.target).hasClass('dndignore')) || false;
+    }
+
     // We provide a few events:
     // "dragover" if someone threatens to drop a file into the window
     // "dragend" when she released the file
@@ -56,7 +68,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         };
 
         removeOverlay = function (event) {
-            if (!isFileDND(event)) {
+            if (!isFileDND(event) || ignored(event)) {
                 return;
             }
             $overlay.detach();
@@ -125,7 +137,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
                 },
                 dragleave: function (e) {
-                    if (!isFileDND(e)) {
+                    if (!isFileDND(e) || ignored(e)) {
                         return;
                     }
                     self.trigger("dragleave", action.id, action);
@@ -411,6 +423,8 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         this.stop = function () {
             delegate.stop(files[position], position, files);
             this.trigger('stop', files[position], position, files);
+            position = 0;
+            processing = false;
         };
     }
 

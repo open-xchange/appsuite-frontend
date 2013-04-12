@@ -17,13 +17,12 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                    'io.ox/core/extPatterns/links',
                                    'io.ox/tasks/api',
                                    'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
+                                   'less!io.ox/tasks/style.less' ], function (util, gt, ext, links, api) {
     'use strict';
 
     var taskDetailView = {
 
         draw: function (data) {
-
             if (!data) {
                 return $('<div>');
             }
@@ -77,26 +76,26 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             );
 
             var blackStars,
-                greyStars;
+                grayStars;
 
             switch (data.priority) {
             case 1:
                 blackStars = '\u2605';
-                greyStars = '\u2605\u2605';
+                grayStars = '\u2605\u2605';
                 break;
             case 2:
                 blackStars = '\u2605\u2605';
-                greyStars = '\u2605';
+                grayStars = '\u2605';
                 break;
             case 3:
                 blackStars = '\u2605\u2605\u2605';
-                greyStars = '';
+                grayStars = '';
                 break;
             }
             $('<br>').appendTo(infoPanel);
-            $('<div>').append($('<span>').text(gt.noI18n(greyStars)).css('color', '#aaa'),
+            $('<div>').append($('<span>').text(gt.noI18n(grayStars)).css('color', '#aaa'),
                               $('<span>').text(gt.noI18n(blackStars))).addClass('priority').appendTo(infoPanel);
-            blackStars = greyStars = null;
+            blackStars = grayStars = null;
 
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find('br:first');
@@ -111,7 +110,13 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
             $('<div>').text(gt.noI18n(task.title)).addClass('title clear-title').appendTo(node);
 
-            if (task.number_of_attachments > 0) {
+            if (api.uploadInProgress(encodeURIComponent(_.cid(data)))) {
+                $('<div>').addClass('attachments-container')
+                    .append(
+                        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('attachments'),
+                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
+                    .appendTo(node);
+            } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', node, task);
             }
 
@@ -132,7 +137,8 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 currency: gt('Currency'),
                 trip_meter: gt('Distance'),
                 billing_information: gt('Billing information'),
-                company: gt('Company')
+                company: gt('Company'),
+                date_completed: gt('Date completed')
             };
 
             var $details = $('<div class="task-details">'), hasDetails = false;
@@ -155,32 +161,40 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 require(['io.ox/core/api/user'], function (userApi) {
                     var table,
                         states = [
-                            [gt('Not yet confirmed'), 'grey'],
+                            [gt('Not yet confirmed'), 'gray'],
                             [gt('Confirmed'), 'green'],
                             [gt('Declined'), 'red'],
                             [gt('Tentative'), 'yellow']
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants dont have an id but the display name is already given
-                                userApi.getName(participant.id).done(function (name) {
-                                        drawParticipant(table, participant, name);
+                                userApi.get({id: participant.id}).done(function (userInformation) {
+                                        drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {
                                         failedToLoad(node, table, participant);
                                     });
                             } else {
-                                drawParticipant(table, participant, participant.display_name);
+                                participant.display_name = participant.display_name || participant.mail.split('@')[0] || '';
+                                drawParticipant(table, participant, $.trim(participant.display_name + ' <' + participant.mail + '>'));
                             }
                         },
-                        drawParticipant = function (table, participant, name) {
+                        drawParticipant = function (table, participant, name, userInformation) {
                             var row;
-                            table.append(row = $('<tr>').append(
-                                $('<td class="participants-table-name">').text(name))
-                            );
-                            if (participant.confirmation !== undefined) {
-                                row.append(
-                                    $('<td>').text(states[participant.confirmation][0]),
-                                    $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation][1]))
-                                    );
+                            if (userInformation) {
+                                table.append(row = $('<tr>').append(
+                                    $('<td class="halo-link">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
+                                );
+                            } else {
+                                table.append(row = $('<tr>').append(
+                                    $('<td class="halo-link">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
+                                );
+                            }
+                            row.append(
+                                $('<td>').append($('<div>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1])),
+                                $('<td>').text(states[participant.confirmation || 0][0])
+                                );
+                            if (participant.confirmmessage) {
+                                row.append($('<td>').addClass('participants-table-confirmmessage').text(_.noI18n('\u00A0\u00A0\u00A0' + participant.confirmmessage)));
                             }
                         },
                         failedToLoad = function (node, table, participant) {
@@ -189,13 +203,34 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                                     lookupParticipant(node, table, participant);
                                 })
                             );
-                        };
-                    node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $("<table class='task-participants-table'>"));
+                        },
+                        intParticipants = [],
+                        extParticipants = [];
+
+
+                    //divide participants into internal and external users
 
                     _(task.participants).each(function (participant) {
-                        lookupParticipant(node, table, participant);
+                        if (participant.type === 5) {
+                            extParticipants.push(participant);
+                        } else {
+                            intParticipants.push(participant);
+                        }
                     });
+                    if (intParticipants.length > 0) {
+                        node.append($('<label class="detail-label">').text(gt('Participants')),
+                                table = $("<table class='task-participants-table'>"));
+                        _(intParticipants).each(function (participant) {
+                            lookupParticipant(node, table, participant);
+                        });
+                    }
+                    if (extParticipants.length > 0) {
+                        node.append($('<label class="detail-label">').text(gt('External participants')),
+                                table = $("<table class='task-participants-table'>"));
+                        _(extParticipants).each(function (participant) {
+                            lookupParticipant(node, table, participant);
+                        });
+                    }
                 });
             }
 

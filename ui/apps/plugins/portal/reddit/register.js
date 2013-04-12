@@ -18,7 +18,7 @@ define('plugins/portal/reddit/register',
     'use strict';
 
     // avoid JSHINT errors
-    var MediaPlayer = function () { }, settings = {};
+    var MediaPlayer = function () { }, settings = {};
 
     var drawPlugin = function (index) {
         if (!index) {

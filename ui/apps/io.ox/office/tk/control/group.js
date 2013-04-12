@@ -25,7 +25,10 @@ define('io.ox/office/tk/control/group',
         HIDDEN_CLASS = 'hidden',
 
         // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled';
+        DISABLED_CLASS = 'disabled',
+
+        // CSS class for the group node while any embedded control is focused
+        FOCUSED_CLASS = 'focused';
 
     // class Group ============================================================
 
@@ -55,21 +58,13 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
-     *  @param {String} [options.design='default']
-     *      Changes the appearance of the control elements and the group.
-     *      Supported values are:
-     *      'default': transparent background; active state and mouse hover
-     *      effect with fill colors; keyboard focus effect with border lines
-     *      (the default design). Exception: *focused* text fields behave as
-     *      described in the 'white' design (white background, glow effect).
-     *      'white': White background with shadow; mouse hover effect with
-     *      darker shadow; keyboard focus effect and drop-down effect with
-     *      glowing shadow.
-     *      'framed': transparent background; active state, mouse hover effect,
-     *      and keyboard focus effect with colored border lines.
      *  @param {String} [options.classes]
      *      Additional CSS classes that will be set at the root DOM node of
      *      this instance.
+     *  @param {Boolean} [options.visible=true]
+     *      If set to false, the group will be hidden permanently. Can be used
+     *      to hide groups depending on a certain condition while initializing
+     *      view components.
      */
     function Group(options) {
 
@@ -118,6 +113,13 @@ define('io.ox/office/tk/control/group',
          */
         this.getNode = function () {
             return groupNode;
+        };
+
+        /**
+         * Returns the options that have been passed to the constructor.
+         */
+        this.getOptions = function () {
+            return options;
         };
 
         /**
@@ -385,21 +387,30 @@ define('io.ox/office/tk/control/group',
         // initialization -----------------------------------------------------
 
         // formatting and tool tip
-        groupNode
-            .addClass('design-' + Utils.getStringOption(options, 'design', 'default'))
-            .addClass(Utils.getStringOption(options, 'classes', ''));
+        groupNode.addClass(Utils.getStringOption(options, 'classes', ''));
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
-        // add event handlers
-        groupNode
-            .on('keydown keypress keyup', keyHandler)
-            // suppress events for disabled controls
-            .on('mousedown dragover drop contextmenu', function (event) {
-                if (!self.isEnabled()) {
-                    event.preventDefault();
-                    self.trigger('cancel');
-                }
-            });
+        if (Utils.getBooleanOption(options, 'visible', true)) {
+            // add event handlers
+            groupNode
+                .on('keydown keypress keyup', keyHandler)
+                // suppress events for disabled controls
+                .on('mousedown dragover drop contextmenu', function (event) {
+                    if (!self.isEnabled()) {
+                        event.preventDefault();
+                        self.trigger('cancel');
+                    }
+                })
+                .on('focusin focusout', function () {
+                    _.defer(function () {
+                        // cannot rely on the order of focusin/focusout events, simply check
+                        // if focus is inside the group (after browser has processed the event!)
+                        groupNode.toggleClass(FOCUSED_CLASS, Utils.containsFocusedControl(groupNode));
+                    });
+                });
+        } else {
+            this.hide();
+        }
 
     } // class Group
 

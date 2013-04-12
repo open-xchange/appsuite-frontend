@@ -100,12 +100,14 @@ define('io.ox/files/api',
                 action: 'all',
                 folder: config.get('folder.infostore'),
                 columns: allColumns,
+                extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc'
             },
             list: {
                 action: 'list',
-                columns: '20,1,700,701,702,703,704,705,706,707,709,711'
+                columns: '20,1,5,700,702,703,704',
+                extendColumns: 'io.ox/files/api/list'
             },
             get: {
                 action: 'get'
@@ -113,8 +115,10 @@ define('io.ox/files/api',
             search: {
                 action: 'search',
                 columns: allColumns, // should be the same as all-request
+                extendColumns: 'io.ox/files/api/all',
                 sort: '700',
                 order: 'asc',
+                omitFolder: true,
                 getData: function (query) {
                     return { pattern: query };
                 }
@@ -122,7 +126,13 @@ define('io.ox/files/api',
         },
         pipe: {
             all: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                    api.caches.get.merge(obj);
+                    api.caches.versions.remove(String(obj.id));
+                    // this can be solved smarter once backend send correct
+                    // number_of_version in "all" requests; always zero now
+                });
                 return data;
             },
             list: function (data) {
@@ -186,7 +196,7 @@ define('io.ox/files/api',
         function success(data) {
             // clear folder cache
             var fid = String(options.json.folder_id);
-            return api.propagate('new', { folder_id: fid }).pipe(function () {
+            return api.propagate('new', { folder_id: fid }, true).pipe(function () {
                 api.trigger('create.file');
                 return { folder_id: fid, id: parseInt(data.data, 10) };
             });
@@ -219,7 +229,10 @@ define('io.ox/files/api',
             if (options.form) {
                 options.form.off('submit');
             }
-            return http.FORM({ form: options.form, data: options.json }).pipe(success);
+            return http.FORM({
+                form: options.form,
+                data: options.json
+            }).pipe(success);
         }
     };
 
@@ -261,10 +274,7 @@ define('io.ox/files/api',
                 var id = options.json.id || options.id,
                     folder_id = String(options.json.folder_id),
                     obj = { folder_id: folder_id, id: id };
-                return api.propagate('change', obj).pipe(function () {
-                    api.trigger('create.version', obj);
-                    return { folder_id: folder_id, id: id, timestamp: data.timestamp};
-                });
+                return api.propagate('change', obj, options.silent);
             });
     };
 
@@ -409,7 +419,7 @@ define('io.ox/files/api',
     };
 
     api.versions = function (options) {
-        options = _.extend({ action: 'versions' }, options);
+        options = _.extend({ action: 'versions', timezone: 'utc' }, options);
         if (!options.id) {
             throw new Error('Please specify an id for which to fetch versions');
         }

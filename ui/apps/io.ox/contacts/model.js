@@ -62,16 +62,18 @@ define('io.ox/contacts/model',
 
             update: function (model) {
                 // Some special handling for profile pictures
-                var data = model.changedSinceLoading();
-                var file = data.pictureFile;
+                var data = model.changedSinceLoading(),
+                    file = data.pictureFile;
                 if (file) {
                     delete data.pictureFile;
-                    return api.editNewImage({id: model.id, folder_id: model.get('folder_id'), timestamp: model.get('last_modified')}, data, file);
+                    return api.editNewImage({id: model.id, folder_id: model.get('folder_id') }, data, file);
                 } else {
-                    return api.update({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified'), data: data});
+                    return api.update({id: model.id, folder: model.get('folder_id'), data: data});
                 }
             },
+
             updateEvents: ['edit'],
+
             create: function (model) {
                 // Some special handling for profile pictures
                 var json, file;
@@ -85,13 +87,14 @@ define('io.ox/contacts/model',
 
                 return api.create(json, file);
             },
+
             destroy: function (model) {
                 return api.remove({id: model.id, folder_id: model.get('folder_id')});
             }
         });
 
         Validators.validationFor(ref, {
-            display_name: { format: 'string', mandatory: true},
+            display_name: { format: 'string' },
             first_name: { format: 'string'},
             last_name: { format: 'string'},
             second_name: { format: 'string'},
@@ -213,7 +216,7 @@ define('io.ox/contacts/model',
         last_name: gt('Last name'),
         second_name: gt('Middle name'),
         suffix: gt('Suffix'),
-        title: gt('Title'), // Anrede
+        title: gt.pgettext('salutation', 'Title'),
         street_home: gt('Street'),
         postal_code_home: gt('Postcode'),
         city_home: gt('Town'),

@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>那一个权限可以授予？</title>
+<link rel="stylesheet" type="text/css" href="book.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="index.html" title="">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="权限">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="权限">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="现有文件夹的权限">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">那一个权限可以授予？</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.dataorganisation.rights.html">Prev</a> </td>
+<th width="60%" align="center">权限</th>
+<td width="20%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.dataorganisation.rights.defined"></a>那一个权限可以授予？</h3></div></div></div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles"></a><p>为了简单的授予逻辑权限组合，默认有一些特定用户角色：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>
+		<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="拥有人">拥有人</a>
+	      </p></li>
+<li class="listitem"><p>
+              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="管理员">管理员</a>
+            </p></li>
+<li class="listitem"><p>
+		<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="作者">作者</a>
+	      </p></li>
+<li class="listitem"><p>
+              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="访问者">访问者</a>
+            </p></li>
+</ul></div>
+<p>
+      </p>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>拥有人 </b>一个文件夹拥有人有此文件夹的所有权限。拥有人可以授予其他用户该文件夹的权限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+<li class="listitem"><p>管理权：是</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>管理员 </b>一个文件夹管理员拥有此文件夹的权限。管理员可以授予其他用户此文件夹的权限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+<li class="listitem"><p>管理权：是</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>作者 </b>一个作者可以更改存在的对象、创建和编辑对象、和创建子文件夹。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：创建对象和子文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、编辑所有对象、删除所有对象</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.rights.roles.guest"></a><p><b>访问者 </b>一个访问者可以读取存在的对象，却不可更改。访问者可以创建子文件夹、在那里创建和编辑新对象。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>文件夹权限：新文件夹</p></li>
+<li class="listitem"><p>对象权限：读取所有对象、无编辑权限、无删除权限</p></li>
+<li class="listitem"><p>管理权：无</p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.folder.rights"></a><p>用具角色的默认权限是可以更改的。可以授予以下权限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>文件夹权限</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>新文件夹</p></li>
+<li class="listitem"><p>创建对象</p></li>
+<li class="listitem"><p>创建对象和子文件夹</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>对象权向，读取</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>无读取权限</p></li>
+<li class="listitem"><p>读取自己的对象</p></li>
+<li class="listitem"><p>读取所有对象</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>对象权向，编辑</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>无编辑权限</p></li>
+<li class="listitem"><p>编辑自己的对象</p></li>
+<li class="listitem"><p>编辑所有对象</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>文件夹权限，删除</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>无删除权限</p></li>
+<li class="listitem"><p>删除自己的对象</p></li>
+<li class="listitem"><p>删除所有对象</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>管理权</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>是</p></li>
+<li class="listitem"><p>否</p></li>
+</ul></div>
+</li>
+</ul></div>
+<p>
+      </p>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.dataorganisation.rights.html">Prev</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="ox.appsuite.user.sect.dataorganisation.rights.html">Up</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">权限 </td>
+<td width="20%" align="center">
+<a accesskey="h" href="index.html">Home</a> | <a accesskey="t" href="bk01-toc.html">ToC</a>
+</td>
+<td width="40%" align="right" valign="top"> 现有文件夹的权限</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

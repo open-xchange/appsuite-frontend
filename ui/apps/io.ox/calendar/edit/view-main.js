@@ -26,7 +26,6 @@ define('io.ox/calendar/edit/view-main',
             var rowPerExtensionId = {};
 
             ext.point('io.ox/calendar/edit/section/header').invoke("draw", self.$el, self.baton);
-
             this.point.each(function (extension) {
                 var row = null;
                 if (extension.nextTo) {

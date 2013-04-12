@@ -220,43 +220,20 @@ define('io.ox/tasks/edit/view',
                 .addClass('btn btn-primary task-edit-save')
                 .text(saveBtnText)
                 .on('click', function (e) {
-                    var callbacks = {
-                        success: function (model, response) {
-                            app.markClean();
-                            app.quit();
-                        },
-                        error: function (model, response) {
-                            setTimeout(function () {notifications.yell('error', response.error); }, 300);
-                            console.log(model);
-                            console.log(response);
-                        }
-                    };
-                    function attachmentHandlingOver() {
-                        self.model.off('finishedAttachmentHandling', attachmentHandlingOver);
-                        app.markClean();
-                        app.quit();
-                    }
+
                     //check if waiting for attachmenthandling is needed
                     if (self.baton.attachmentList.attachmentsToAdd.length +
                         self.baton.attachmentList.attachmentsToDelete.length > 0) {
-                        callbacks.success = function () {
-                            //look busy while uploading and deleting Attachments
-                            self.$el.busy(true);
-                        };
-                        self.model.on('finishedAttachmentHandling', attachmentHandlingOver);
+                        self.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
                     e.stopPropagation();
-                    if (self.model.get('id')) {
-                        self.model.sync('update', self.model, callbacks);
-                    } else {
-                        if (self.model.get('alarm') === null) {//alarm must not be null on create action
-                            self.model.set('alarm', undefined);
-                        }
-                        if (self.model.get('status') === 3 || self.model.get('status') === '3') {
-                            self.model.set('date_completed', _.now());
-                        }
-                        self.model.sync('create', self.model, callbacks);
-                    }
+                    self.model.save().done(function () {
+                        app.markClean();
+                        app.quit();
+                    }).fail(function (response) {
+                        setTimeout(function () {notifications.yell('error', response.error); }, 300);
+                        console.log(response);
+                    });
 
                 });
             //row 4
@@ -268,7 +245,7 @@ define('io.ox/tasks/edit/view',
                         self.model.set('alarm', null);
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
-                                self.fields.reminderDropdown.find(':selected').attr('finderId'));
+                                self.fields.reminderDropdown.val());
                         self.model.set('alarm', dates.alarmDate.getTime());
                     }
                 });

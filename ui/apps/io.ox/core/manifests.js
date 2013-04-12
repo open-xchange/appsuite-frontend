@@ -96,6 +96,7 @@ define.async('io.ox/core/manifests',
                     return;
                 }
             }
+            if (manifest.device && !_.device(manifest.device)) return;
             var namespaces = manifest.namespace;
             if (!_.isArray(namespaces)) {
                 namespaces = [manifest.namespace];
@@ -126,7 +127,7 @@ define.async('io.ox/core/manifests',
             manifestManager.pluginPoints = {};
             manifestManager.plugins = {};
             manifestManager.apps = {};
-            
+
             _(ox.serverConfig.manifests).each(process);
             if (_.url.hash('customManifests')) {
                 console.info("Loading custom manifests");

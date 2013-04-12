@@ -1,4 +1,4 @@
 {
 	namespace: "portal",
-	requires: "oauth linkedin"
+	requires: "oauth linkedinPlus"
 }

@@ -41,7 +41,10 @@ define('io.ox/calendar/settings/pane',
             TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
             NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for appointment creator?'),
             NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for appointment participant?'),
-            SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments')
+            SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
+            NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
+            TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
+            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
         },
 
         optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
@@ -109,7 +112,9 @@ define('io.ox/calendar/settings/pane',
                         'showDeclinedAppointments',
                         'notifyNewModifiedDeleted',
                         'notifyAcceptedDeclinedAsCreator',
-                        'notifyAcceptedDeclinedAsParticipant'
+                        'notifyAcceptedDeclinedAsParticipant',
+                        'deleteInvitationMailAfterAction',
+                        'markFulltimeAppointmentsAsFree'
                     ],
                     boolParser = function (direction, value) {
                         return direction === 'ModelToView' ? value + '' : value === 'true';
@@ -146,7 +151,7 @@ define('io.ox/calendar/settings/pane',
             );
         },
         save: function () {
-            calendarViewSettings.model.save();
+            return calendarViewSettings.model.save();
         }
     });
 });

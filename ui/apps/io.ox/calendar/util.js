@@ -199,6 +199,63 @@ define("io.ox/calendar/util",
             }
         },
 
+        getReminderOptions: function () {
+            var inputid = _.uniqueId('dialog'),
+                reminderListValues = [
+                {value: -1, format: 'string'},
+                {value: 0, format: 'minutes'},
+                {value: 15, format: 'minutes'},
+                {value: 30, format: 'minutes'},
+                {value: 45, format: 'minutes'},
+
+                {value: 60, format: 'hours'},
+                {value: 120, format: 'hours'},
+                {value: 240, format: 'hours'},
+                {value: 360, format: 'hours'},
+                {value: 420, format: 'hours'},
+                {value: 720, format: 'hours'},
+
+                {value: 1440, format: 'days'},
+                {value: 2880, format: 'days'},
+                {value: 4320, format: 'days'},
+                {value: 5760, format: 'days'},
+                {value: 7200, format: 'days'},
+                {value: 8640, format: 'days'},
+
+                {value: 10080, format: 'weeks'},
+                {value: 20160, format: 'weeks'},
+                {value: 30240, format: 'weeks'},
+                {value: 40320, format: 'weeks'}
+            ],
+            options = {};
+
+            _(reminderListValues).each(function (item, index) {
+                var i;
+                switch (item.format) {
+                case 'string':
+                    options[item.value] = gt('No reminder');
+                    break;
+                case 'minutes':
+                    options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
+                    break;
+                case 'hours':
+                    i = Math.floor(item.value / 60);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
+                    break;
+                case 'days':
+                    i  = Math.floor(item.value / 60 / 24);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
+                    break;
+                case 'weeks':
+                    i = Math.floor(item.value / 60 / 24 / 7);
+                    options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
+                    break;
+                }
+            });
+
+            return options;
+        },
+
         onSameDay: function (t1, t2) {
             // don't change this to date.Local; this is just a simple comparison
             return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
@@ -224,22 +281,29 @@ define("io.ox/calendar/util",
         },
 
         addTimezoneLabel: function (parent, data) {
+
             var current = date.Local.getTTInfoLocal(data.start_date);
 
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label pointer" tabindex="0">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     html: true,
                     animation: false,
-                    trigger: 'hover',
+                    trigger: 'focus',
                     container: $('#tmp'),
                     placement: function (tip, element) {
+                        // add missing outer class
+                        $(tip).addClass('timezones');
+                        // get placement
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
+                })
+                .on('dispose', function () {
+                    $(this).popover('destroy'); // avoids zombie-popovers
                 })
             );
 
@@ -248,7 +312,7 @@ define("io.ox/calendar/util",
                 var div = $('<div>');
                 _(zones).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<div>').addClass('clear').append(
+                    div.append($('<div class="clear">').append(
                         $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
                         $('<b>').append($('<span>')
                             .addClass('label label-info')
@@ -256,7 +320,7 @@ define("io.ox/calendar/util",
                         $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
-                return '<div class="timezones">' + div.html() + '</div>';
+                return '<div class="list">' + div.html() + '</div>';
             }
 
             return parent;
@@ -375,7 +439,11 @@ define("io.ox/calendar/util",
             return $.trim(gt.noI18n(data.note) || "")
                 .replace(/\n{3,}/g, "\n\n")
                 .replace(/</g, "&lt;")
-                .replace(/(https?\:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+                .replace(/(https?\:\/\/\S+)/g, function ($1) {
+                    // soft-break long words (like long URLs)
+                    $1 = $1.replace(/(\S{20})/g, '$1\u200B');
+                    return '<a href="' + $1 + '" target="_blank">' + $1 + '</a>';
+                });
         },
 
         getConfirmations: function (data) {
@@ -395,6 +463,18 @@ define("io.ox/calendar/util",
                 };
             });
             return hash;
+        },
+
+        getConfirmationStatus: function (obj, id) {
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].status : 1;
+        },
+
+        getConfirmationMessage: function (obj, id) {
+            var hash = this.getConfirmations(obj),
+                user = id || ox.user_id;
+            return hash[user] ? hash[user].comment : '';
         },
 
         // returns a set of rows, each containing 7 days
@@ -497,37 +577,40 @@ define("io.ox/calendar/util",
         },
 
         removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
-            return _(idsFromGrGroups).difference(idsFromUsers);
+            return _([].concat(idsFromGrGroups, idsFromUsers)).uniq();
         },
 
-        resolveGroupMembers: function (idsFromGroupMembers, returnArray, collectedUserIds) {
+        resolveGroupMembers: function (idsFromGroupMembers, collectedUserIds) {
 
-            var collectedIdsFromGroups = [];
-            groupAPI.getList(idsFromGroupMembers).done(function (data) {
+            return groupAPI.getList(idsFromGroupMembers)
+                .then(function (data) {
 
-                _.each(data, function (single) {
-                    _.each(single.members, function (single) {
-                        collectedIdsFromGroups.push(single);
-                    });
-                });
+                    var collectedIdsFromGroups = [];
 
-                collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
-
-                userAPI.getList(collectedIdsFromGroups).done(function (data) {
                     _.each(data, function (single) {
-                        returnArray.push({
+                        _.each(single.members, function (single) {
+                            collectedIdsFromGroups.push(single);
+                        });
+                    });
+
+                    collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
+                    return userAPI.getList(collectedIdsFromGroups);
+                })
+                .then(function (data) {
+                    return _(data).map(function (single) {
+                        return {
                             display_name: single.display_name,
                             folder_id: single.folder_id,
                             id: single.id,
                             mail: single.email1,
                             mail_field: 1
-                        });
+                        };
                     });
                 });
-            });
         },
 
         createArrayOfRecipients: function (participants, def) {
+
             var arrayOfRecipients = [],
                 arrayOfIds = [],
                 idsFromGroupMembers = [],
@@ -544,21 +627,22 @@ define("io.ox/calendar/util",
                 }
             });
 
-            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers, arrayOfIds);
+            that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).done(function (arrayOfGroupMembers) {
 
-            _.each(arrayOfGroupMembers, function (single) {
-                if (single.id !== currentUser) {
-                    arrayOfRecipients.push([single.display_name, single.mail]);
-                }
-            });
-
-            userAPI.getList(arrayOfIds).done(function (obj) {
-                _.each(obj, function (single) {
-                    arrayOfRecipients.push([single.display_name, single.email1]);
+                _.each(arrayOfGroupMembers, function (single) {
+                    if (single.id !== currentUser) {
+                        arrayOfRecipients.push([single.display_name, single.mail]);
+                    }
                 });
-                def.resolve(
-                    arrayOfRecipients
-                );
+
+                userAPI.getList(arrayOfIds).done(function (obj) {
+                    _.each(obj, function (single) {
+                        arrayOfRecipients.push([single.display_name, single.email1]);
+                    });
+                    def.resolve(
+                        arrayOfRecipients
+                    );
+                });
             });
         },
 

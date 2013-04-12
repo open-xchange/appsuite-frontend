@@ -22,6 +22,7 @@ define("io.ox/participants/model",
     // TODO: Bulk Loading
 
     var ParticipantModel = Backbone.Model.extend({
+
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
         TYPE_RESOURCE: 3,
@@ -34,31 +35,53 @@ define("io.ox/participants/model",
             email1: '',
             image1_url: ''
         },
+
         initialize: function () {
             var self = this;
-            if (self.get('internal_userid')) {
-                self.id = self.get('internal_userid');
-                self.set({
-                    id: self.get('internal_userid'),
+            if (this.get('internal_userid')) {
+                this.cid = 'internal_' + this.get('internal_userid');
+                this.set({
+                    id: this.get('internal_userid'),
                     type: this.TYPE_USER
                 });
             }
-            if (self.get('entity')) {
-                self.id = parseInt(self.get('entity'), 10);
-                self.set({
-                    id: parseInt(self.get('entity'), 10),
+            else if (this.get('entity')) {
+                this.cid = 'entity_' + parseInt(this.get('entity'), 10);
+                this.set({
+                    id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
                 });
             }
+            else {
+                switch (this.get('type')) {
+                case this.TYPE_USER:
+                    this.cid = 'internal_' + this.get('id');
+                    break;
+                case this.TYPE_USER_GROUP:
+                    this.cid = 'usergroup_' + this.get('id');
+                    break;
+                case this.TYPE_RESOURCE:
+                    this.cid = 'resource_' + this.get('id');
+                    break;
+                case this.TYPE_RESOURCE_GROUP:
+                    this.cid = 'resourcegroup_' + this.get('id');
+                    break;
+                case this.TYPE_EXTERNAL_USER:
+                    this.cid = 'external_' + (this.get('id') || this.get('mail'));
+                    this.set('id', this.get('id') || this.get('mail'));
+                    break;
+                case this.TYPE_DISTLIST_USER_GROUP:
+                    this.cid = 'distlist_' + this.get('id');
+                    break;
+                }
+            }
+
             this.fetch().done(function () {
                 self.trigger("fetch");
                 self.trigger("change");
             });
-            if (this.get('type') === this.TYPE_EXTERNAL_USER) {
-                this.id = this.get('mail');
-                this.set('id', this.get('mail'));
-            }
         },
+
         fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
@@ -134,13 +157,13 @@ define("io.ox/participants/model",
         },
 
         getDisplayName: function () {
-            return util.getDisplayName(this.toJSON());
+            return util.getFullName(this.toJSON());
         },
         getEmail: function () {
             return util.getMail(this.toJSON());
         },
         getImage: function () {
-            return util.getImage(this.toJSON());
+            return util.getImage(this.toJSON(), { scaleType: 'cover', width: 54, height: 54 });
         },
         markAsUnremovable: function () {
             this.set('ui_removable', false);
@@ -149,6 +172,7 @@ define("io.ox/participants/model",
     });
 
     var ParticipantsCollection = Backbone.Collection.extend({
+
         initialize: function () {
             var self = this;
             self.on("change", function () {
@@ -164,9 +188,10 @@ define("io.ox/participants/model",
                 });
                 self.remove(duplicates);
             });
-
         },
+
         model: ParticipantModel,
+
         addUniquely: function (models, options) {
             var self = this;
             if (!_.isArray(models)) {

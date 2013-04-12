@@ -12,11 +12,15 @@
  */
 
 define('io.ox/office/preview/controller',
-    ['io.ox/office/tk/app/controller',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/framework/app/basecontroller',
      'gettext!io.ox/office/main'
-    ], function (Controller, gt) {
+    ], function (Utils, BaseController, gt) {
 
     'use strict';
+
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
 
     // class PreviewController ================================================
 
@@ -25,35 +29,53 @@ define('io.ox/office/preview/controller',
      *
      * @constructor
      *
-     * @extends Controller
+     * @extends BaseController
      *
      * @param {PreviewApplication} app
      *  The OX Preview application that has created this controller instance.
      */
     function PreviewController(app) {
 
-        var // all the little controller items
+        var // the model instance
+            model = null,
+
+            // the view instance
+            view = null,
+
+            // all the little controller items
             items = {
 
+                'document/valid': {
+                    enable: function () { return model.getPageCount() > 0; }
+                },
+
                 'pages/first': {
-                    enable: function () { return app.getPage() > 1; },
-                    set: function () { app.firstPage(); }
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() > 1; },
+                    set: function () { view.showFirstPage(); },
+                    shortcut: { keyCode: KeyCodes.HOME, altKey: null, ctrlKey: null, metaKey: null }
                 },
                 'pages/previous': {
-                    enable: function () { return app.getPage() > 1; },
-                    set: function () { app.previousPage(); }
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() > 1; },
+                    set: function () { view.showPreviousPage(); },
+                    shortcut: { keyCode: KeyCodes.PAGE_UP, altOrMetaKey: true }
                 },
                 'pages/next': {
-                    enable: function () { return app.getPage() < app.getPageCount(); },
-                    set: function () { app.nextPage(); }
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() < model.getPageCount(); },
+                    set: function () { view.showNextPage(); },
+                    shortcut: { keyCode: KeyCodes.PAGE_DOWN, altOrMetaKey: true }
                 },
                 'pages/last': {
-                    enable: function () { return app.getPage() < app.getPageCount(); },
-                    set: function () { app.lastPage(); }
+                    parent: 'document/valid',
+                    enable: function () { return view.getPage() < model.getPageCount(); },
+                    set: function () { view.showLastPage(); },
+                    shortcut: { keyCode: KeyCodes.END, altKey: null, ctrlKey: null, metaKey: null }
                 },
 
                 'pages/current': {
-                    enable: function () { return app.getPageCount() > 0; },
+                    parent: 'document/valid',
                     get: function () {
                         // the gettext comments must be located directly before gt(), but
                         // 'return' cannot be the last token in a line
@@ -62,7 +84,33 @@ define('io.ox/office/preview/controller',
                             //#. %1$s is the current page index in office document preview
                             //#. %2$s is the number of pages in office document preview
                             //#, c-format
-                            gt('%1$s of %2$s', app.getPage(), app.getPageCount());
+                            gt('%1$s of %2$s', view.getPage(), model.getPageCount());
+                        return label;
+                    }
+                },
+
+                'zoom/dec': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
+                    set: function () { view.decreaseZoomLevel(); },
+                    shortcut: { charCode: '-' }
+                },
+                'zoom/inc': {
+                    parent: 'document/valid',
+                    enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
+                    set: function () { view.increaseZoomLevel(); },
+                    shortcut: { charCode: '+' }
+                },
+                'zoom/current': {
+                    parent: 'document/valid',
+                    get: function () {
+                        // the gettext comments must be located directly before gt(), but
+                        // 'return' cannot be the last token in a line
+                        // -> use a temporary variable to store the result
+                        var label =
+                            //#. %1$d is the current zoom factor, in percent
+                            //#, c-format
+                            gt('%1$d%', view.getZoomFactor());
                         return label;
                     }
                 }
@@ -70,18 +118,25 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        Controller.call(this, app);
+        BaseController.call(this, app);
 
         // initialization -----------------------------------------------------
 
         // register item definitions
         this.registerDefinitions(items);
 
+        // initialization after construction
+        app.on('docs:init', function () {
+            // model and view are not available at construction time
+            model = app.getModel();
+            view = app.getView();
+        });
+
     } // class PreviewController
 
     // exports ================================================================
 
-    // derive this class from class Controller
-    return Controller.extend({ constructor: PreviewController });
+    // derive this class from class BaseController
+    return BaseController.extend({ constructor: PreviewController });
 
 });

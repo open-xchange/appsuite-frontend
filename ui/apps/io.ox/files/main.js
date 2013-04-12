@@ -16,9 +16,10 @@ define('io.ox/files/main',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'settings!io.ox/files',
+     'io.ox/core/extPatterns/actions',
      'io.ox/files/actions',
      'less!io.ox/files/style.less'
-    ], function (commons, gt, settings) {
+    ], function (commons, gt, settings, actions) {
 
     'use strict';
 
@@ -32,7 +33,7 @@ define('io.ox/files/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
-            title: gt('Files'),
+            title: 'Files',
             toolbar: true,
             search: true
         }));
@@ -45,8 +46,12 @@ define('io.ox/files/main',
         // folder tree
         commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/files/actions/move', null, baton);
+        });
+
         // go!
-        commons.addFolderSupport(app, null, 'infostore')
+        return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default

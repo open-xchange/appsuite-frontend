@@ -22,9 +22,6 @@
 				<label class="checkbox expertmode" >{{=it.strings.USE_FIXED_WIDTH_FONT}}
 					<input type="checkbox" data-property="useFixedWidthFont">
 				</label>
-				<label class="checkbox expertmode" >{{=it.strings.SELECT_FIRST_MAIL}}
-                    <input type="checkbox" data-property="selectFirstMessage">
-                </label>
 			</div>
 		</div>
 	</extension>
@@ -106,7 +103,7 @@
 				<label for="label_456" class="control-label">{{=it.strings.AUTO_SAVE}}</label>
 				<div class="controls">
 					<label class="select">
-						<select data-property="autoSafeDraftsAfter" id="label_456" class="input-xlarge">
+						<select data-property="autoSaveDraftsAfter" id="label_456" class="input-xlarge">
 							{{~it.optionsAutoSaveMinutes :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 						</select>
 					</label>
@@ -127,7 +124,7 @@
 					<input type="checkbox" data-property="allowHtmlImages">
 				</label>
 				<label class="checkbox">{{=it.strings.DISPLAY_EMOTICONS}}
-					<input type="checkbox" data-property="displayEmomticons">
+					<input type="checkbox" data-property="displayEmoticons">
 				</label>
 				<label class="checkbox">{{=it.strings.COLOR_QUOTED}}
 					<input type="checkbox" data-property="isColorQuoted">

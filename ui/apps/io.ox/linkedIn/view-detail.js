@@ -15,7 +15,7 @@ define("io.ox/linkedIn/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/tk/dialogs",
      "io.ox/core/http",
-     "less!io.ox/linkedIn/style.css"], function (ext, dialogs, http) {
+     "less!io.ox/linkedIn/style.less"], function (ext, dialogs, http) {
 
     "use strict";
 

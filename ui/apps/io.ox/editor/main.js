@@ -17,7 +17,7 @@ define("io.ox/editor/main",
      "io.ox/core/tk/model",
      "io.ox/core/tk/view",
      "gettext!io.ox/editor",
-     "less!io.ox/editor/style.css"
+     "less!io.ox/editor/style.less"
     ], function (api, folderAPI, Model, View, gt) {
 
     'use strict';
@@ -46,27 +46,21 @@ define("io.ox/editor/main",
         }
 
         // launcher
-        app.setLauncher(function () {
+        app.setLauncher(function (options) {
 
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
-                title: gt('Simple Pad'),
+                title: 'Simple Pad',
                 close: true,
                 search: false
             }));
 
-            win.nodes.main
-            .addClass('io-ox-editor')
-            .append(
-                container = container
-                .append(
-                    $('<form>').addClass('form-inline')
-                    .on('submit', false)
-                    .append(
+            win.nodes.main.addClass('io-ox-editor').append(
+                container = container.append(
+                    $('<form class="form-inline">').on('submit', false).append(
                         // header
-                        header = $('<div>').addClass('header')
-                        .append(
+                        header = $('<div class="header">').append(
                             // document title
                             view.createTextField({ property: 'title', wrap: false })
                                 .find('input').attr({
@@ -87,99 +81,125 @@ define("io.ox/editor/main",
                             $('<button>', { tabindex: 3 }).addClass("discard btn").text(gt('Discard')).on('click', fnClose)
                         ),
                         // body
-                        $('<div>').addClass('body')
-                        .append(
+                        $('<div class="body">').append(
                             // editor
                             textarea = $('<textarea data-property="content" tabindex="2">')
+                                .attr({
+                                    placeholder: gt('You can quick-save your changes via Ctrl+Enter.')
+                                })
                                 .on('keydown', function (e) {
                                     if (e.which === 13 && e.ctrlKey) {
+                                        e.preventDefault();
                                         app.save();
                                     }
                                 })
+                                .val(' ') // to avoid flicker due to placeholder
                         )
                     )
                 )
             );
+
+            // set state
+            if ('id' in options) {
+                app.load({ folder_id: options.folder, id: options.id });
+            } else if (_.url.hash('id')) {
+                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id') });
+            } else {
+                app.create();
+            }
         });
 
-        var showOk = function (str) {
-            container.find('.alert').remove();
-            var a = $.alert('', str).removeClass('alert-error').addClass('alert-success').insertAfter(header);
-            // hide via timer or keyboard
-            var timer, hide = function () {
+
+        var feedback = (function () {
+
+            var timer;
+
+            function hide() {
                 clearTimeout(timer);
                 textarea.off('keydown.timer');
-                a.remove();
-                a = timer = hide = null;
+                container.find('.alert').remove();
+                timer = null;
+            }
+
+            return function (type, message) {
+
+                // catch server error?
+                if (_.isObject(type) && 'error' in type) {
+                    message = type.error;
+                    type = 'error';
+                }
+
+                // remove existing alert
+                container.find('.alert').remove();
+
+                $.alert(type === 'error' ? gt('Error') : '', message, 'alert-' + type)
+                    .on('click', hide).insertAfter(header);
+
+                // hide via timer or keyboard
+                timer = setTimeout(hide, 10000);
+                if (type === 'success') { textarea.on('keydown.timer', hide); }
             };
-            timer = setTimeout(hide, 10000);
-            textarea.on('keydown.timer', hide);
-        };
 
-        var showError = function (data) {
-            container.find('.alert').remove();
-            $.alert(gt('Error'), data.error).insertAfter(header);
-        };
-
-        // normalize namespace
-        window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
+        }());
 
         function showSuccess(data) {
-            folderAPI.get({ folder: model.get('folder_id') })
-                .done(function (data) {
-                    showOk(gt('Document saved in folder "%1$s"', data.title));
-                    setTimeout(function () {
-                        textarea.focus();
-                    });
+            folderAPI.get({ folder: model.get('folder_id') }).done(function (data) {
+                feedback('success', gt('Document saved in folder "%1$s".', data.title));
+                setTimeout(function () {
+                    textarea.focus();
                 });
+            });
         }
 
         app.create = function (options) {
-
             var opt = options || {};
-
-            model.initialize({ folder_id: opt.folder || 0, title: '', content: '' });
-
+            opt.folder = opt.folder || opt.folder_id || 0;
+            model.initialize({ folder_id: opt.folder, title: '', content: '' });
             win.show(function () {
-                textarea.focus();
+                app.setState({ folder: opt.folder });
+                textarea.val('').focus();
             });
         };
 
         app.save = function () {
             // be busy
-            win.busy();
+            feedback('info', gt('Saving latest changes ...'));
             // vars
-            var builder, content, title, file, filename, folder, json;
+            var blob, content, title, file, filename, folder, json;
             // generate blob
             content = textarea.val();
-            builder = new window.BlobBuilder();
-            builder.append(content);
+            blob = new window.Blob([content], { type: 'text/plain' });
             // get data
             title = $.trim(container.find('.title').val());
-            file = builder.getBlob('text/plain');
-            filename = String(title || 'text').toLowerCase() + '.txt';
+            filename = String(title || content.substr(0, 20) || 'unnamed').toLowerCase();
+            // has file extension?
+            if (!/\.\w{1,4}$/.test(filename)) {
+                filename += '.txt';
+            }
+            // make filename visible to user
+            model.set('filename', filename);
+            model.set('title', filename);
+            container.find('.title').val(filename);
+            // get all model attributes
             json = model.get();
             delete json.content;
             // create or update?
             if (model.has('id')) {
                 // update
-                return api.uploadNewVersion({ json: json, file: file, filename: filename })
-                    .always(win.idle)
+                return api.uploadNewVersion({ json: json, file: blob, filename: filename })
                     .done(function () {
                         model.save();
                         showSuccess();
                     })
-                    .fail(showError);
-
+                    .fail(feedback);
             } else {
                 // create
                 return api.uploadFile({ json: json, file: file, filename: filename })
-                    .always(win.idle)
                     .done(function (data) {
                         model.initialize($.extend(data, { content: content }));
                         showSuccess();
                     })
-                    .fail(showError);
+                    .fail(feedback);
             }
         };
 
@@ -189,14 +209,15 @@ define("io.ox/editor/main",
                 // load file
                 win.busy();
                 $.when(
-                    api.get(o).fail(showError),
-                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view'), dataType: 'text' })
+                    api.get(o).fail(feedback),
+                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view') + '&' + _.now(), dataType: 'text' })
                 )
                 .done(function (data, text) {
-                    model.initialize($.extend(data, { content: text[0] }));
-                    container.find('.title').val($.trim(data.title));
                     textarea.val(text[0]);
                     win.idle();
+                    app.setState({ folder: o.folder_id, id: o.id });
+                    model.initialize($.extend(data, { content: text[0] }));
+                    container.find('.title').val($.trim(data.title));
                     textarea.focus();
                     def.resolve();
                 })

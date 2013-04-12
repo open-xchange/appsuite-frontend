@@ -20,7 +20,7 @@ define('io.ox/files/mediaplayer',
      'apps/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
-     'less!mediaelement/mediaelementplayer.css',
+     'css!mediaelement/mediaelementplayer.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (commons, gt, api, folderAPI) {
 
@@ -62,10 +62,12 @@ define('io.ox/files/mediaplayer',
 
         load: function (file) {
             this.currentTrack = this.getURL(file);
-            this.mediaelement.pause();
-            this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
-            this.mediaelement.load();
-            this.mediaelement.play();
+            if (this.mediaelement) {
+                this.mediaelement.pause();
+                this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
+                this.mediaelement.load();
+                this.mediaelement.play();
+            }
         },
 
         // DRY!
@@ -100,20 +102,7 @@ define('io.ox/files/mediaplayer',
         filterMediaList: function (list, videoSupport) {
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
 
-            _.each(_.browser, function (value, key) {
-                if (!value) return;
-                switch (key) {
-                case 'Chrome':
-                    pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-                    break;
-                case 'Safari':
-                    break;
-                case 'Firefox':
-                    break;
-                case 'IE':
-                    break;
-                }
-            });
+            if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
 
             return $.grep(list, function (o) {
                 if (videoSupport) {
@@ -154,16 +143,6 @@ define('io.ox/files/mediaplayer',
                 }
             };
         }()),
-
-        quicktimeFallbackObject: function (url) {
-            return $('<object>', { 'classid' : 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B', 'codebase': 'http://www.apple.com/qtactivex/qtplugin.cab' })
-                .append($('<param>', { 'name': 'src', 'value': url, height: 240, width: 320}));
-        },
-
-        quicktimeFallbackEmbed: function (url) {
-            return $('<embed>', { src: url });
-        },
-
 
         drawPlayer: function (url, mimetype) {
             var el = '<audio>';
@@ -236,7 +215,7 @@ define('io.ox/files/mediaplayer',
                     this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
                 }
                 this.drawItems();
-                this.playlist.sortable({ axis: 'y' });
+                this.playlist.sortable({ axis: 'y', distance: 30 });
                 this.player.find('video, audio').parent().addClass('noI18n');
                 this.player.find('video, audio').mediaelementplayer({
                     // since we cannot resize later on ...
@@ -317,7 +296,9 @@ define('io.ox/files/mediaplayer',
 
         close: function () {
             if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
-                this.mediaelement.pause();
+                if (this.mediaelement) { // might be null
+                    this.mediaelement.pause();
+                }
                 this.player.empty().remove();
                 this.trackdisplay.remove(); // no empty; kills inner stuff
                 this.playlist.empty().remove();

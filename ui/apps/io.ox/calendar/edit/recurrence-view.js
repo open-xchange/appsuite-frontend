@@ -142,7 +142,12 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
         datePicker: function ($anchor, attribute, options) {
             var self = this,
                 originalContent = $anchor.html();
-            self[attribute] = options.initial || _.now();
+
+            if (options.initial) {
+                self[attribute] = _.isFunction(options.initial) ? options.initial() : options.initial;
+            } else {
+                self[attribute] = _.now();
+            }
 
             function renderDate() {
                 var value = self[attribute];
@@ -160,6 +165,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
             }
 
             function drawState() {
+                if (_.isFunction(options.initial) && self[attribute] <= options.model.get('start_date')) {
+                    self[attribute] = options.initial();
+                }
                 var value = renderDate();
                 $anchor.text(value);
                 self.trigger("redraw", self);
@@ -337,6 +345,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         id: 'monthlyDay',
                         ordinal: {
                             options: {
+                                '-1': //#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
+                                    gt("last"),
+
                                 1:  //#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
                                     gt("first"),
 
@@ -471,7 +482,11 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
                         id: 'date',
                         ending: endingOptions,
-                        until: CalendarWidgets.datePicker
+                        until: CalendarWidgets.datePicker,
+                        model: self.model,
+                        initial: function () {
+                            return self.model.get('start_date') + (4 * dateAPI.WEEK);
+                        }
                     }).on("change:ending", this.endingChanged, this).on("change", this.updateModel, this),
                     after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
                         id: 'after',
@@ -919,22 +934,27 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
             },
             render: function () {
-                this.$el.append(
-                    $('<div class="row-fluid">').append(
-                        this.controls.checkboxLabel.append(
-                            this.controls.checkbox,
-                            this.nodes.summary,
-                            this.controls.detailToggle
-                        )
-                    ),
-                    $('<div class="row-fluid">&nbsp;</div>'),
-                    this.nodes.typeChoice,
-                    this.nodes.hint,
-                    this.nodes.alternative1,
-                    this.nodes.alternative2,
-                    $('<div class="row-fluid">&nbsp;</div>'),
-                    this.nodes.endsChoice
-                );
+                // only allow editing recurrence if either master or single appointment.
+                // hide it for recurring appointments and exceptions, i.e.
+                // if rec_pos is unset or zero
+                if (!this.model.get('recurrence_position')) {
+                    this.$el.append(
+                        $('<div class="row-fluid">').append(
+                            this.controls.checkboxLabel.append(
+                                this.controls.checkbox,
+                                this.nodes.summary,
+                                this.controls.detailToggle
+                            )
+                        ),
+                        $('<div class="row-fluid">&nbsp;</div>'),
+                        this.nodes.typeChoice,
+                        this.nodes.hint,
+                        this.nodes.alternative1,
+                        this.nodes.alternative2,
+                        $('<div class="row-fluid">&nbsp;</div>'),
+                        this.nodes.endsChoice
+                    );
+                }
             }
         }, options);
     };

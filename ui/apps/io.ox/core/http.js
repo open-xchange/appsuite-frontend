@@ -154,7 +154,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "601" : "image1_content_type",
             "602" : "mark_as_distributionlist",
             "605" : "default_address",
-            "606" : "image1_url"
+            "606" : "image1_url",
+            "607" : "sort_name",
+            "610" : "yomiFirstName",
+            "611" : "yomiLastName",
+            "612" : "yomiCompany"
         },
         "calendar" : {
             "200" : "title",
@@ -295,7 +299,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1021": "transport_protocol",
             "1022": "transport_secure",
             "1023": "transport_login",
-            "1024": "transport_passord",
+            "1024": "transport_password",
             "1025": "unified_inbox_enabled",
             "1026": "trash_fullname",
             "1027": "sent_fullname",
@@ -324,6 +328,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "804": "file_size",
             "805": "file_mimetype",
             "806": "rtf_flag"
+        },
+        "subscriptions": {
+            "id": "id",
+            "folder": "folder",
+            "source": "source",
+            "displayName": "displayName",
+            "enabled": "enabled"
+        },
+        "publications": {
+            "id": "id",
+            "entity": "entity",
+            "entityModule": "entityModule",
+            "target": "target",
+            "enabled": "enabled"
+        },
+        "subscriptionSources": {
+            "id": "id",
+            "displayName": "displayName",
+            "icon": "icon",
+            "module": "module",
+            "formDescription": "formDescription"
         }
     };
 
@@ -334,9 +359,31 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     delete idMapping.files["101"]; // not "common" here (exception)
     delete idMapping.files["104"];
     $.extend(idMapping.tasks, idMapping.common);
-    $.extend(idMapping.user, idMapping.contacts, idMapping.common);
+    // See bug #25300
+    idMapping.user = $.extend({}, idMapping.contacts, idMapping.common, idMapping.user);
 
     var that = {};
+
+    // error log
+    var log = {
+
+        collection: Backbone ? new Backbone.Collection([]) : null,
+
+        add: function (error, options) {
+            if (log.collection) {
+                var params = $.param(options.params || {}),
+                    url = options.url + (params ? '?' + params : '');
+                log.collection.add(
+                    new Backbone.Model(error)
+                    .set({
+                        index: log.collection.length,
+                        timestamp: _.now(),
+                        url: url
+                    })
+                );
+            }
+        }
+    };
 
     // get all columns of a module
     var getAllColumns = function (module, join) {
@@ -370,7 +417,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             // get id
             column = columns[i];
             id = ids[column] || column;
-            if (id === undefined) {
+            // check for length since mighty backend might magically add unrequested columns
+            if (id === undefined && i < columns.length) {
                 console.error('Undefined column', data, module, columns, 'index', i);
             }
             // extend object
@@ -533,7 +581,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     var paused = false,
         queue = [],
         // slow mode
-        slow = _.url.hash("slow"),
+        slow = _.url.hash('slow') !== undefined,
         // fail mode
         fail = _.url.hash('fail') !== undefined || ox.fail !== undefined;
 
@@ -556,9 +604,35 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 }, false);
             }
 
-            $.ajax(ajaxOptions)
-                // TODO: remove backend fix
-                .pipe(function (response) {
+            // simulation: abort request and return url in fail handler
+            if (r.o.simulate) {
+                if (ajaxOptions.beforeSend)
+                    console.error('existing beforeSend method will be overwritten');
+                ajaxOptions.beforeSend = function (jqXHR) {
+                    this.targeturl = this.url;
+                    jqXHR.abort();
+                };
+            }
+
+            var ajax = $.ajax(ajaxOptions);
+
+            // add an 'abort()' method to the Deferred and all Promises it creates
+            var abortFunc = function () { ajax.abort(); },
+                promiseFunc = _.bind(r.def.promise, r.def);
+            _.extend(r.def, {
+                abort: abortFunc,
+                promise: function () {
+                    return _.extend(promiseFunc(), { abort: abortFunc });
+                }
+            });
+
+            // log errors
+            r.def.fail(function (error) {
+                log.add(error, r.o);
+            });
+
+            // TODO: remove backend fix
+            ajax.pipe(function (response) {
                     if (fixPost) {
                         // Extract the JSON text
                         var matches = /\((\{.*?\})\)/.exec(response);
@@ -573,19 +647,29 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     // process response
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);
+                    } else if (r.xhr.dataType === 'json' && data.error !== undefined) {
+                    // error handling if JSON (e.g. for UPLOAD)
+                        r.def.reject(data);
+                    } else if (_.isArray(data.data)) {
+                    // Skip Warnings (category: 13)
+                        data.data = _(data.data).map(function (o) {
+                            if (o.category !== 13) {
+                                return o;
+                            }
+                        });
+                        r.def.resolve(data);
                     } else {
-                        // error handling if JSON (e.g. for UPLOAD)
-                        if (r.xhr.dataType === 'json' && data.error !== undefined) {
-                            r.def.reject(data);
-                        } else {
-                            r.def.resolve(data);
-                        }
+                        r.def.resolve(data);
                     }
                     r = null;
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    that.trigger("stop fail", r.xhr);
-                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                    if (r.o.simulate)
+                        r.def.resolve(this.targeturl);
+                    else {
+                        that.trigger("stop fail", r.xhr);
+                        r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                    }
                     r = null;
                 });
         }
@@ -689,9 +773,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 r = o = null;
             }
             that.trigger("start", r.xhr);
-            if (Number(slow)) {
+            if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
-                setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
+                setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
             } else {
                 cont();
             }
@@ -761,25 +845,30 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         FORM: function (options) {
 
             options = _.extend({
-                form: $(),
-                url: 'files?action=new',
+                module: 'files',
+                action: 'new',
                 data: {},
+                params: {},
+                form: $(),
                 field: 'json'
             }, options);
 
-            var name = 'formpost_' + _.now(), def = $.Deferred(), data, form = options.form;
+            var name = 'formpost_' + _.now(),
+                callback = 'callback_' + options.action,
+                def = $.Deferred(),
+                data = JSON.stringify(options.data),
+                url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
+                form = options.form;
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
             );
 
-            window.callback_new = function (response) {
+            window[callback] = function (response) {
                 def[(response && response.error ? 'reject' : 'resolve')](response);
-                window.callback_new = data = form = def = null;
+                window[callback] = data = form = def = null;
                 $('#' + name).remove();
             };
-
-            data = JSON.stringify(options.data);
 
             if (form.find('input[name="' + options.field + '"]').length) {
                 form.find('input[name="' + options.field + '"]').val(data);
@@ -792,7 +881,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             form.attr({
                 method: 'post',
                 enctype: 'multipart/form-data',
-                action: ox.apiRoot + '/' + options.url + '&session=' + ox.session,
+                action: url + '&' + _.serialize(options.params),
                 target: name
             })
             .submit();
@@ -806,6 +895,16 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          * @returns {Array} All columns
          */
         getAllColumns: getAllColumns,
+
+        /**
+         * Returns the column mapping of a module
+         * @param {string} module The module name.
+         * @returns { column: fieldName } A map from numeric column IDs to
+         * the corresponding field names.
+         */
+        getColumnMapping: function (module) {
+            return _.clone(idMapping[module] || {});
+        },
 
         /**
          * Transform objects with array-based columns into key-value-based columns
@@ -855,7 +954,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     return memo && _.isNumber(obj);
                 }, true);
                 for (i = 0; (obj = data[i]); i++) {
-                    key = useInternalUserId ? obj.internal_userid : _.cid(obj);
+                    key = useInternalUserId ? (obj.internal_userid || obj.user_id || obj.id) : _.cid(obj);
                     hash[key] = obj;
                 }
                 // fix order (uses folder!)
@@ -947,6 +1046,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 def.resolve([]);
             }
             return def;
+        },
+
+        log: function () {
+            return log.collection;
         }
     };
 

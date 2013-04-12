@@ -13,8 +13,9 @@
  */
 
 define("io.ox/core/extPatterns/actions",
-    ["io.ox/core/extensions",
-     "io.ox/core/collection"], function (ext, Collection) {
+    ['io.ox/core/extensions',
+     'io.ox/core/upsell',
+     'io.ox/core/collection'], function (ext, upsell, Collection) {
 
     "use strict";
 
@@ -45,7 +46,7 @@ define("io.ox/core/extPatterns/actions",
         });
     };
 
-    var invoke = function (point, scope, baton) {
+    var invoke = function (ref, scope, baton) {
 
         // make sure we have a baton
         baton = ext.Baton.ensure(baton);
@@ -53,7 +54,22 @@ define("io.ox/core/extPatterns/actions",
         // add a list to track which items are processed
         baton.tracker = [].concat(baton.data);
 
-        var list = ext.point(point).list(), i = 0, $i = list.length, extension, tmp;
+        var point = ext.point(ref),
+            capabilities = point.pluck('capabilities'),
+            list = point.list(), i = 0, $i = list.length, extension, tmp;
+
+        // check capabilities upfront; if no action can be applied due to missing
+        // capabilities, we try to offer upsell
+        if (!upsell.any(capabilities)) {
+            if (upsell.enabled(capabilities)) {
+                upsell.trigger({
+                    type: 'inline-action',
+                    id: ref,
+                    missing: upsell.missing(capabilities)
+                });
+            }
+            return;
+        }
 
         // loop over all actions; skip 'default' extension if preventDefault was called
         for (; i < $i && !baton.isPropagationStopped(); i++) {
@@ -89,7 +105,6 @@ define("io.ox/core/extPatterns/actions",
                 // get return value
                 var ret = _.isFunction(action.requires) ?
                         action.requires({ collection: collection, context: baton.data, baton: baton }) : true;
-
                 // is not deferred?
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
@@ -149,10 +164,18 @@ define("io.ox/core/extPatterns/actions",
                 var links = ext.point(ref).map(function (link) {
                     // defer decision
                     var def = $.Deferred();
+                    // store capabilities
+                    var capabilities = ext.point(link.ref).pluck('capabilities');
                     // process actions
                     if (link.isEnabled && !link.isEnabled.apply(link, args)) {
+                        // link is disabled
                         def.resolve({ link: link, state: false });
-                    } else {
+                    }
+                    else if (!upsell.visible(capabilities)) {
+                        // no capabilities match AND no upsell available
+                        def.resolve({ link: link, state: false });
+                    }
+                    else {
                         // combine actions
                         processActions(link.ref, collection, baton).done(function () {
                             var state = _(arguments).any(function (bool) { return bool === true; });

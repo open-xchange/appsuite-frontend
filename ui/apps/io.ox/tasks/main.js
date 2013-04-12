@@ -14,6 +14,7 @@
 define('io.ox/tasks/main',
     ['io.ox/tasks/api',
      'io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/tk/vgrid',
      'io.ox/tasks/view-grid-template',
@@ -21,7 +22,7 @@ define('io.ox/tasks/main',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks'
-    ], function (api, ext, gt, VGrid, template, commons, util, viewDetail, settings) {
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings) {
 
     'use strict';
 
@@ -49,7 +50,7 @@ define('io.ox/tasks/main',
         };
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
 
         // get window
         win = ox.ui.createWindow({
@@ -71,7 +72,7 @@ define('io.ox/tasks/main',
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(left, {settings: settings});
 
         grid.addTemplate(template.main);
 
@@ -162,6 +163,11 @@ define('io.ox/tasks/main',
                 .fail(_.lfo(drawFail, obj));
         };
 
+        showTask.cancel = function () {
+            _.lfo(drawTask);
+            _.lfo(drawFail);
+        };
+
         drawTask = function (data) {
             right.idle().empty().append(viewDetail.draw(data));
         };
@@ -215,8 +221,13 @@ define('io.ox/tasks/main',
 
         commons.addGridToolbarFolder(app, grid);
 
+        // drag & drop
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/tasks/actions/move', null, baton);
+        });
+
         //ready for show
-        commons.addFolderSupport(app, grid, 'tasks')
+        commons.addFolderSupport(app, grid, 'tasks', options.folder)
             .done(commons.showWindow(win, grid));
     });
 

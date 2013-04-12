@@ -42,15 +42,25 @@ define('io.ox/office/tk/io',
      *  the Deferred object will be resolved with the return value of this
      *  filter function.
      *
+     * @param {Object} [context]
+     *  The context object that will be bound to the passed filter fucntion.
+     *
      * @returns {Function}
      *  A new function that returns a Deferred object that has been resolved or
      *  rejected depending on the result of the passed filter callback
      *  function.
      */
-    IO.createDeferredFilter = function (filter) {
+    IO.createDeferredFilter = function (filter, context) {
+
+        // create and return a function that call the filter and returns a resolved/rejected Deferred object
         return function (response) {
-            var def = $.Deferred(),
-                value = filter(response);
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // call passed filter callback
+                value = _.isObject(response) ? filter.call(context, response) : undefined;
+
+            // resolve the Deferred object, if the value returned by the filter function is not undefined
             return _.isUndefined(value) ? def.reject() : def.resolve(value);
         };
     };
@@ -81,7 +91,10 @@ define('io.ox/office/tk/io',
      *  The promise of the request. Will be resolved with the 'data' object
      *  returned by the response, if available; or the valid return value of
      *  the result filter callback function, if specified. Otherwise, the
-     *  promise will be rejected.
+     *  promise will be rejected. Contains the additional method 'abort()' that
+     *  allows to abort the running request. The returned Promise will neither
+     *  be resolved nor rejected. Calling this method has no effect, if the
+     *  request is finished already.
      */
     IO.sendRequest = function (options) {
 
@@ -122,7 +135,9 @@ define('io.ox/office/tk/io',
      * @returns {jQuery.Promise}
      *  The Promise of a Deferred object that will be resolved with the result
      *  object containing the data URL, or rejected if the read operation
-     *  failed.
+     *  failed. If the file size is known, the Promise will be notified about
+     *  the progress of the operation (a floating-point number between 0.0 and
+     *  1.0).
      */
     IO.readClientFileAsDataUrl = function (fileDesc) {
 
@@ -147,10 +162,10 @@ define('io.ox/office/tk/io',
                 def.reject();
             };
 
-            // register progress handler, Deferred object will be notified with percentage
+            // register progress handler, Deferred object will be notified
             reader.onprogress = function (event) {
                 if (event.lengthComputable) {
-                    def.notify(Math.round((event.loaded / event.total) * 100));
+                    def.notify(event.loaded / event.total);
                 }
             };
 

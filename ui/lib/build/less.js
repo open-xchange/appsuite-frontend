@@ -295,6 +295,11 @@ exports.parse = function(data, src) {
     return result;
 };
 
+exports.compile = function(data) {
+    // TODO: use this.getSrc() in error messages
+    return exports.parse(data, this.task.name).toCSS({ compress: utils.debug });
+};
+
 exports.parseFile = function(filename) {
     return exports.parse(fs.readFileSync(filename, "utf8"), filename);
 };

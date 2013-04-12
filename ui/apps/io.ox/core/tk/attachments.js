@@ -40,12 +40,22 @@ define('io.ox/core/tk/attachments',
 
                     function uploadOnSave(response) {
                         self.model.off('create update', uploadOnSave);
-                        self.save(response.id, response.folder || response.folder_id);
+                        var id = self.model.attributes.id,
+                            folder = self.model.attributes.folder || self.model.attributes.folder_id;
+
+                        if (id === undefined && response !== undefined) {
+                            id = response.id;
+                        }
+                        if (folder && id) {
+                            self.save(id, folder);
+                        }
                     }
 
                     this.model.on('create update', uploadOnSave);
                 },
-
+                finishedCallback: function (model, id) {
+                    model.trigger("finishedAttachmentHandling");
+                },
                 render: function () {
                     var self = this,
                         odd = true,
@@ -166,7 +176,7 @@ define('io.ox/core/tk/attachments',
                             self.model.trigger('backendError', resp);
                         }).done(function () {
                             allDone--;
-                            if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
                         });
                     }
 
@@ -176,18 +186,18 @@ define('io.ox/core/tk/attachments',
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                                if (allDone <= 0) { self.finishedCallback(self.model, id); }
                             });
                         } else {
                             attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                                 self.model.trigger('backendError', resp);
                             }).done(function () {
                                 allDone -= 2;
-                                if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                                if (allDone <= 0) { self.finishedCallback(self.model, id); }
                             });
                         }
                     }
-                    if (allDone <= 0) { self.model.trigger("finishedAttachmentHandling"); }
+                    if (allDone <= 0) { self.finishedCallback(self.model, id); }
                     this.attachmentsToAdd = [];
                     this.attachmentsToDelete = [];
                     this.attachmentsOnServer = [];
@@ -280,7 +290,7 @@ define('io.ox/core/tk/attachments',
 
         var fileUploadWidget = function (options) {
             var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid'));
-            if (options.displayLabel) node.append($('<label>').text(gt('File')));
+            if (options.displayLabel) node.append($('<label>').text(options.displayLabelText || gt('File')));
             node.append(
                 $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
                     .append($('<div>').addClass('input-append').append(
@@ -293,8 +303,8 @@ define('io.ox/core/tk/attachments',
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
                             (options.multi ? $('<input type="file" name="file" multiple="multiple">') : $('<input name="file" type="file">'))
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Remove')),
-                        (options.displayButton ? $('<button>', { 'data-action': 'add' }).addClass('btn').text(gt('Upload file')) : '')
+                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        (options.displayButton ? $('<button>', { 'data-action': 'upload' }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
                     )
                 )
             );

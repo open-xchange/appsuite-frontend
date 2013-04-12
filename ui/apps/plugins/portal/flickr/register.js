@@ -67,7 +67,7 @@ define('plugins/portal/flickr/register',
             var photo, size = '', url;
 
             // set title
-            this.find('h2').text(baton.model.get('props').query || 'Flickr');
+            this.find('h2').text(baton.model.get('props').query || 'Flickr');
 
             // get a photo
             if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {

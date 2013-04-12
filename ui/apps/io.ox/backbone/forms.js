@@ -37,6 +37,7 @@ define('io.ox/backbone/forms',
                         return;
                     }
                     var alert = $.alert(self.errorTitle, self.formatError(error));
+                    self.$el.find('.alert').remove();
                     self.$el.append(alert);
 
                     alert.find('.close').on('click', function () {
@@ -76,7 +77,9 @@ define('io.ox/backbone/forms',
             this.buildControls();
 
             this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-
+            if (options.fluid) {
+                this.nodes.controlGroup.addClass('row-fluid');
+            }
             this.nodes.controlGroup.append(
                 this.buildLabel(),
                 this.buildControls()
@@ -140,14 +143,14 @@ define('io.ox/backbone/forms',
         };
 
         this.onValidationError = function (messages) {
-            this.nodes.controls.find('.help-block.error').remove();
+            this.removeError();
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
             });
             this.nodes.controlGroup.addClass('error');
             this.nodes.controls.append(helpBlock);
-            this.nodes.element.select();
+            if (this.nodes.element) this.nodes.element.select();
         };
 
         this.modelEvents = {};
@@ -191,179 +194,82 @@ define('io.ox/backbone/forms',
 
     function DateControlGroup(options) {
 
-        this.tagName = 'div';
+        ControlGroup.call(this, _.extend({
+            buildElement: buildElement,
+            setValueInElement: setValueInElement,
+            updateModel: updateModel
+        }, options || {}));
 
-        this.init = function () {
-            this.nodes = {};
-        };
-
-        this.buildControlGroup = function () {
-            if (this.nodes.controlGroup) {
-                return this.nodes.controlGroup;
-            }
-            this.buildControls();
-
-            this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-
-            this.nodes.controlGroup.append(
-                this.buildLabel(),
-                this.buildControls()
-            );
-        };
-
-        this.buildControls = function () {
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                    this.buildElement(),
-                    this.buildDropElements())
-                    );
-        };
-
-        this.buildLabel = function () {
-            return this.nodes.label || (this.nodes.label = $('<label class="control-label">').text(this.label));
-        };
-
-        this.buildElement = function () {
+        function buildElement() {
             var self = this;
-            if (this.nodes.element) {
-                return this.nodes.element;
+            var parent = $('<span>');
+            this.nodes.dropelements = {};
+
+            function createSelect(name, from, to, setter, format) {
+                var node = self.nodes.dropelements[name] = $('<select size="1">').attr('name', name),
+                    i = Math.min(from, to),
+                    $i = Math.max(from, to),
+                    d = new date.Local(0),
+                    options = [];
+                for (; i <= $i; i++) {
+                    setter.call(d, i);
+                    options.push($('<option>').val(i).text(d.format(format)));
+                }
+                // revert?
+                if (from > to) {
+                    options.reverse();
+                }
+                // add empty option
+                options.unshift($('<option>').text(''));
+                // append
+                parent.append(node.append(options));
             }
-            this.nodes.element = $(this.control).addClass('control');
-            this.nodes.element.on('change', function () {
-                self.updateModel();
-            });
 
-            return this.nodes.element;
-        };
-
-        this.buildDropElements = function () {
-            var self = this,
-                collectedDate = function (submittedValue) {
-                var dayValue = self.nodes.dropelements.find('[name="day"]').val(),
-                    monthValue = self.nodes.dropelements.find('[name="month"]').val(),
-                    yearValue = self.nodes.dropelements.find('[name="year"]').val(),
-                    collectedString = new date.Local();
-
-                if (submittedValue === '') {
-                    return {formated: '', stamp: ''};
-                } else {
-                    collectedString.setDate(dayValue);
-                    collectedString.setMonth(monthValue);
-
-                    yearValue = (yearValue !== '') ? yearValue : new Date().getFullYear();
-
-                    collectedString.setYear(yearValue);
-                    return {formated: collectedString.format(date.DATE), stamp: collectedString};
-                }
-
-            },
-                createSelect = function (name, from, to) {
-                var node = $('<select>').attr({
-                    'name': name,
-                    'size': 1
-                }),
-                    arrayOfValues = [];
-                if (name === 'month') {
-                    arrayOfValues.push($('<option>').text(''));
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').val(i).text(gt.noI18n(date.locale.months[i])));
+            date.getFormat(date.DATE).replace(
+                /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
+                function (match, y, m, d) {
+                    var proto = date.Local.prototype;
+                    if (y) {
+                        var year = (new date.Local()).getYear();
+                        createSelect('year', year, year - 150, proto.setYear, y);
+                    } else if (m) {
+                        createSelect('month', 0, 11, proto.setMonth, 'MMMM');
+                    } else if (d) {
+                        createSelect('day', 1, 31, proto.setDate, match);
                     }
-
-                } else if (name === 'day') {
-                    arrayOfValues.push($('<option>').text(''));
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').text(i));
-                    }
-                } else {
-                    for (var i = from; i <= to; i += 1) {
-                        arrayOfValues.push($('<option>').text(i));
-                    }
-                    arrayOfValues.push($('<option>').text(''));
-                    arrayOfValues.reverse();
-                }
-
-                _(arrayOfValues).each(function (val) {
-                    node.append(val);
                 });
-
-                return node;
-            };
-
-            this.nodes.element.css('display', 'none');
-
-            this.nodes.dropelements = $('<span>').append(
-                createSelect('day', 1, 31),
-                createSelect('month', 0, 11),
-                createSelect('year', 1900,  new Date().getFullYear())
-            );
-            this.nodes.dropelements.on('change', 'select', function () {
-
-                var dateObj = collectedDate($(this).val());
-                self.nodes.element.val(dateObj.formated);
-                self.nodes.element.data('dateobject', dateObj.stamp);
-                self.nodes.element.trigger('change');
+            parent.on('change', 'select', function () {
+                self.updateModel($(this).val() === '');
             });
 
-            return this.nodes.dropelements;
-        };
-
-        this.setValueInElement = function (valueFromModel) {
-            this.nodes.element.val(valueFromModel);
-        };
-
-        this.setValueInModel = function (valueFromElement) {
-            this.model.set(this.attribute, valueFromElement);
-        };
-
-        this.updateElement = function () {
-            this.setValueInElement(this.model.get(this.attribute));
-        };
-
-        this.updateModel = function () {
-            this.setValueInModel(this.nodes.element.val());
-        };
-
-        this.removeError = function () {
-            this.nodes.controlGroup.removeClass('error');
-            this.nodes.controls.find('.help-block.error').remove();
-        };
-
-        this.handleRareModelChange = function () {
-            if (this.model.isSet(this.attribute)) {
-                this.nodes.controlGroup.show();
-            }
-        };
-
-        this.render = function () {
-            this.buildControlGroup();
-            this.updateElement();
-            if (this.rare && !this.model.isSet(this.attribute)) {
-                this.nodes.controlGroup.hide();
-            }
-        };
-
-        this.onValidationError = function (messages) {
-            var helpBlock =  $('<div class="help-block error">');
-            _(messages).each(function (msg) {
-                helpBlock.append($.txt(msg));
-            });
-            this.nodes.controlGroup.addClass('error');
-            this.nodes.controls.append(helpBlock);
-            this.nodes.element.select();
-        };
-
-        this.modelEvents = {};
-
-
-        if (options.rare) {
-            this.modelEvents['change:' + options.attribute] = 'handleRareModelChange updateElement';
-        } else {
-            this.modelEvents['change:' + options.attribute] = 'updateElement';
+            return parent;
         }
 
-        this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
-        this.modelEvents['valid:' + options.attribute] = 'removeError';
+        function setValueInElement(valueFromModel) {
+            if (!this.nodes.dropelements) return;
 
-        _.extend(this, options); // May override any of the above aspects
+            var de = this.nodes.dropelements;
+            if (valueFromModel) {
+                var d = new date.Local(date.Local.utc(valueFromModel));
+                de.year.val(d.getYear());
+                de.month.val(d.getMonth());
+                de.day.val(d.getDate());
+            } else {
+                de.year.val('');
+                de.month.val('');
+                de.day.val('');
+            }
+        }
+
+        function updateModel(clear) {
+            var de = this.nodes.dropelements;
+            this.setValueInModel(clear ? null :
+                date.Local.localTime(new date.Local(
+                    de.year.val()  || new date.Local().getYear(),
+                    de.month.val() || 0,
+                    de.day.val()   || 1)));
+        }
+
     }
 
     function addErrorHandling(options, object) {
@@ -475,6 +381,9 @@ define('io.ox/backbone/forms',
                 var self = this;
                 this.nodes = {};
                 this.nodes.select = $('<select>');
+                if (options.multiple) {
+                    this.nodes.select.attr('multiple', 'multiple');
+                }
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.select.append(
                         $("<option>", {value: value}).text(label)
@@ -502,6 +411,18 @@ define('io.ox/backbone/forms',
             render: function () {
                 this.nodes = {};
                 this.$el.append(this.nodes.legend = $('<legend>').text(this.label).addClass('sectiontitle'));
+            }
+        }, options);
+    }
+
+    function Header(options) {
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                this.$el.append($('<div>').append(
+                      $('<div>').addClass('clear-title').text(options.label),
+                      $('<div>').addClass('settings sectiondelimiter')
+                  ));
             }
         }, options);
     }
@@ -734,7 +655,7 @@ define('io.ox/backbone/forms',
             },
 
             _toDate: function (value, attribute, model) {
-                if (!value) {
+                if (value === undefined || value === null) {//dont use !value or 0 will result in false
                     return null;
                 }
                 if (!_.isNumber(value)) {
@@ -744,11 +665,12 @@ define('io.ox/backbone/forms',
                 if (_.isNull(mydate)) {
                     return value;
                 }
+
                 return new date.Local(mydate).format(date.DATE);
             },
 
             _toTime: function (value, attribute) {
-                if (!value) {
+                if (value === undefined || value === null) {//dont use !value or 0 will result in false
                     return null;
                 }
                 var myTime = new date.Local(parseInt(value, 10));
@@ -756,12 +678,13 @@ define('io.ox/backbone/forms',
                 if (_.isNull(myTime)) {
                     return value;
                 }
+
                 return new date.Local(myTime).format(date.TIME);
             },
 
             _timeStrToDate: function (value, attribute, model) {
-                var myValue = parseInt(model.get(attribute), 10) || false;
-                if (!myValue) {
+                var myValue = parseInt(model.get(attribute), 10);
+                if (isNaN(myValue)) {
                     return value;
                 }
                 var mydate = new date.Local(myValue);
@@ -769,10 +692,6 @@ define('io.ox/backbone/forms',
 
                 if (_.isNull(parsedDate)) {
                     return mydate.getTime();
-                }
-
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
                 }
 
                 mydate.setHours(parsedDate.getHours());
@@ -783,8 +702,8 @@ define('io.ox/backbone/forms',
             },
 
             _dateStrToDate: function (value, attribute, model) {
-                var myValue = parseInt(model.get(attribute), 10) || false;
-                if (!myValue) {
+                var myValue = parseInt(model.get(attribute), 10);
+                if (isNaN(myValue)) {
                     return value;
                 }
                 var mydate = new date.Local(myValue);
@@ -792,11 +711,6 @@ define('io.ox/backbone/forms',
 
                 if (_.isNull(parsedDate)) {
                     return value;
-                }
-
-                // just reject the change, if it's not parsable
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
                 }
 
                 mydate.setDate(parsedDate.getDate());
@@ -859,12 +773,19 @@ define('io.ox/backbone/forms',
                             $('<div class="control">').append(
                                 function () {
                                     self.nodes.dayField = $('<input type="text" class="input-small">');
-                                    self.nodes.timezoneField = $('<span class="label">');
-                                    if (self.model.get(self.attribute)) {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
-                                    } else {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+                                    if (options.initialStateDisabled) {
+                                        self.nodes.dayField.attr('disabled', true);
                                     }
+
+                                    if (options.display === "DATETIME") {
+                                        self.nodes.timezoneField = $('<span class="label">');
+                                        if (self.model.get(self.attribute)) {
+                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
+                                        } else {
+                                            self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+                                        }
+                                    }
+
                                     if (options.display === "DATE") {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === "DATETIME") {
@@ -884,26 +805,46 @@ define('io.ox/backbone/forms',
                 var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
                 this.nodes.dayField.datepicker({
                     format: dateFormat,
+                    weekStart: date.locale.weekStart,
                     parentEl: self.nodes.controlGroup,
                     todayHighlight: true,
                     todayBtn: true
                 });
-                this.nodes.timeField.combobox(comboboxHours);
+
+                if (options.display === "DATETIME") {
+                    this.nodes.timeField.combobox(comboboxHours);
+                    this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+                }
 
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+
+                if (options.overwritePositioning) {
+                    this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
+                }
 
                 return this;
             },
+
+            repositioning: function () {
+                var element = this.nodes.controlGroup;
+
+                this.nodes.controlGroup.find('.datepicker.dropdown-menu').css({
+                    top: $(element)[0].offsetTop + $(element)[0].offsetHeight,
+                    left: $(element)[0].offsetLeft
+                });
+            },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                if (value) {
+                if (value && options.display === "DATETIME") {
                     this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
-                } else {
+                } else if (options.display === "DATETIME") {
                     this.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
                 }
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+
+                if (options.display === "DATETIME") {
+                    this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+                }
             },
             updateModelDate: function () {
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
@@ -947,60 +888,12 @@ define('io.ox/backbone/forms',
         SelectControlGroup: SelectControlGroup,
         DateControlGroup: DateControlGroup,
         Section: Section,
+        Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
-        DatePicker: DatePicker,
-        utils: {
-            date2string: function (value) {
-                if (_.isNumber(value)) {
-                    return (new date.Local(date.Local.utc(value)));
-                }
-                return value;
-            },
-
-            controlGroup: {
-                date: {
-                    setValueInElement: function (valueFromModel) {
-                        var transformedValue = forms.utils.date2string(valueFromModel),
-                            transformedValueFormated;
-
-                        if (this.nodes.dropelements) {
-                            var allSelects = this.nodes.dropelements.find('select'),
-                            singleValues = [];
-                            if (_.isObject(transformedValue)) {
-                                transformedValueFormated = transformedValue.format(date.DATE);
-                            } else {
-                                transformedValueFormated = transformedValue;
-                            }
-
-                            if (transformedValue !== undefined && transformedValue !== null) {
-                                singleValues.push(transformedValue.getDate(), transformedValue.getMonth(), transformedValue.getYear());
-                            }
-
-                            _(allSelects).each(function (element, key) {
-                                $(element).val(singleValues[key]);
-                            });
-                        }
-
-                        this.nodes.element.val(transformedValueFormated);
-
-                    },
-
-                    setValueInModel: function (valueFromElement) {
-                        var timestamp = this.nodes.element.data().dateobject.t;
-                        if (valueFromElement === '') {
-                            valueFromElement = timestamp = null;
-                        }
-                        if (this.model.set(this.attribute, timestamp)) {
-                            this.$el.removeClass('error');
-                            this.nodes.controls.find('.help-block.error').remove();
-                        }
-                    }
-                }
-            }
-        }
+        DatePicker: DatePicker
     };
 
     return forms;

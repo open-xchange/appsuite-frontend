@@ -25,10 +25,12 @@ function () {
         defaultReminder: 15,
         viewView: 'week:workweek',
         showDeclinedAppointments: true,
+        markFulltimeAppointmentsAsFree: false,
         notifyNewModifiedDeleted: true,
         notifyAcceptedDeclinedAsCreator: false,
         notifyAcceptedDeclinedAsParticipant: false,
-        showAllPrivateAppointments: false
+        showAllPrivateAppointments: false,
+        deleteInvitationMailAfterAction: true
     };
 
     return settingsDefaults;

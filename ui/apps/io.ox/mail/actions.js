@@ -21,11 +21,13 @@ define('io.ox/mail/actions',
      'io.ox/core/config',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
+     'io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
+     'io.ox/office/preview/fileActions',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, contactAPI, account, capabilities, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, capabilities, previewfileactions, settings) {
 
     'use strict';
 
@@ -35,7 +37,10 @@ define('io.ox/mail/actions',
         isDraftMail = function (mail) {
             return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
         },
-        Action = links.Action;
+        Action = links.Action,
+        isPreviewable = function (e) {
+            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+        };
 
     // actions
 
@@ -54,7 +59,7 @@ define('io.ox/mail/actions',
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
-            var check = _(list).any(function (o) {
+            var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
             if (check) {
@@ -154,7 +159,7 @@ define('io.ox/mail/actions',
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea class="mail-source-view input-xlarge" rows="15" readonly="readonly">')
+                        textarea = $('<textarea class="mail-source-view" rows="15" readonly="readonly">')
                         .on('keydown', function (e) {
                             if (e.which !== 27) {
                                 e.stopPropagation();
@@ -173,6 +178,96 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/mail/print', list);
+        }
+    });
+
+    new Action('io.ox/mail/actions/print#disabled', {
+        id: 'print',
+        requires: function () {
+            return _.device('!small');
+        },
+        multiple: function (list, baton) {
+                var data = baton.data,
+                    win;
+                //single vs. multi
+                if (list.length === 1) {
+                    win = print.open('mail', data, {
+                            template: 'infostore://70170',
+                            id: data.id,
+                            folder: data.folder_id,
+                            view: 'text',
+                            format: 'template'
+                        });
+                    win.print();
+                } else {
+                    win = print.openURL();
+                    win.document.title = gt('Print');
+
+                    require(['io.ox/core/http'], function (http) {
+                        /**
+                         * returns data for requested list elements
+                         * @param  {array} list of data objects
+                         * @return {deferred} arrray of objects sorted by received_date
+                         */
+                        var getList = function (list) {
+                            return api.getList(list)
+                            .pipe(function (data) {
+                                //sort and map for print request
+                                return _.chain(data)
+                                        .sortBy(function (mail) {
+                                            return 1 - mail.received_date;
+                                        })
+                                        .map(function (mail) {
+                                            return { id: mail.id, folder: mail.folder_id };
+                                        })
+                                        .value();
+                            });
+                        };
+                        /**
+                         * returns printable content ob submitted ids
+                         * @param  {array} listmin of data objects
+                         * @return {deferred} print content
+                         */
+                        var getPrintable = function (listmin) {
+                            return http.PUT({
+                                module: 'mail',
+                                dataType: 'text',
+                                params: {
+                                    action: 'list',
+                                    template: 'infostore://70170',
+                                    view: 'text',
+                                    format: 'template',
+                                    columns: '602,603,604,605,606,607,610'
+                                },
+                                data: listmin
+                            });
+                        };
+
+                        //get received_date for sorting
+                        getList(list)
+                        .pipe(function (listmin) {
+                            //get content for popup
+                            getPrintable(listmin)
+                            .done(function (print) {
+                                var $content = $('<div>').append(print),
+                                    head = $('<div>').append($content.find('style')),
+                                    body = $('<div>').append($content.find('.mail-detail'));
+                                win.document.write(head.html() + body.html());
+                                win.print();
+                            });
+                        });
+                    });
+                }
+                win.focus();
+            }
+    });
+
     function moveAndCopy(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
@@ -180,51 +275,57 @@ define('io.ox/mail/actions',
             requires: 'toplevel some',
             multiple: function (list, baton) {
                 var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
+
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
-                    var dialog = new dialogs.ModalDialog({ easyOut: true })
-                        .header($('<h3>').text(label))
-                        .addPrimaryButton("ok", label)
-                        .addButton("cancel", gt("Cancel"));
-                    dialog.getBody().css({ height: '250px' });
-                    var folderId = String(list[0].folder_id),
-                        id = settings.get('folderpopup/last') || folderId,
-                        tree = new views.FolderTree(dialog.getBody(), {
-                            type: 'mail',
-                            open: settings.get('folderpopup/open', []),
-                            toggle: function (open) {
-                                settings.set('folderpopup/open', open).save();
+
+                    function commit(target) {
+                        if (type === "move" && vGrid) vGrid.busy();
+                        api[type](list, target).then(
+                            function () {
+                                notifications.yell('success', success);
+                                folderAPI.reload(target, list);
+                                if (type === "move" && vGrid) vGrid.idle();
                             },
-                            select: function (id) {
-                                settings.set('folderpopup/last', id).save();
-                            }
-                        });
-                    dialog.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var target = _(tree.selection.get()).first();
-                            if (target && target !== folderId) {
-                                if (type === "move" && vGrid) {//add busy animation
-                                    vGrid.busy();
+                            notifications.yell
+                        );
+                    }
+
+                    if (baton.target) {
+                        commit(baton.target);
+                    } else {
+                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h3>').text(label))
+                            .addPrimaryButton("ok", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().css({ height: '250px' });
+                        var folderId = String(list[0].folder_id),
+                            id = settings.get('folderpopup/last') || folderId,
+                            tree = new views.FolderTree(dialog.getBody(), {
+                                type: 'mail',
+                                open: settings.get('folderpopup/open', []),
+                                toggle: function (open) {
+                                    settings.set('folderpopup/open', open).save();
+                                },
+                                select: function (id) {
+                                    settings.set('folderpopup/last', id).save();
                                 }
-                                api[type](list, target).then(
-                                    function () {
-                                        notifications.yell('success', success);
-                                        folderAPI.reload(target, list);
-                                        if (type === "move" && vGrid) {//remove busy animation
-                                            vGrid.idle();
-                                        }
-                                    },
-                                    notifications.yell
-                                );
+                            });
+                        dialog.show(function () {
+                            tree.paint().done(function () {
+                                tree.select(id);
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'ok') {
+                                var target = _(tree.selection.get()).first();
+                                if (target && (type === 'copy' || target !== folderId)) {
+                                    commit(target);
+                                }
                             }
-                        }
-                        tree.destroy();
-                        tree = dialog = null;
-                    });
+                            tree.destroy();
+                            tree = dialog = null;
+                        });
+                    }
                 });
             }
         });
@@ -236,7 +337,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
@@ -245,16 +346,14 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list).done(function () {
-                api.trigger("add-unseen-mails", list); //create notifications in notification area
-            });
+            api.markUnread(list);
         }
     });
 
     new Action('io.ox/mail/actions/markread', {
         id: 'markread',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
@@ -263,16 +362,14 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list).done(function () {
-                api.trigger("remove-unseen-mails", list); //remove notifications in notification area
-            });
+            api.markRead(list);
         }
     });
 
     new Action('io.ox/mail/actions/markspam', {
-        id: 'marspam',
+        id: 'markspam',
         requires: function (e) {
-            return api.getList(e.context).pipe(function (list) {
+            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
                         return memo || (data && (data.flags & api.FLAGS.SPAM) === 0);
@@ -288,25 +385,22 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
         requires: function (e) {
-            return require(['io.ox/preview/main'])
-                .pipe(function (p) {
-                    var list = _.getArray(e.context);
-                    // is at least one attachment supported?
-                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({
-                            filename: obj.filename,
-                            mimetype: obj.content_type
-                        })
-                        .supportsPreview();
-                    }, false);
-                });
+            return require(['io.ox/preview/main']).pipe(function (p) {
+                var list = _.getArray(e.context);
+                // is at least one attachment supported?
+                return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                    return memo || new p.Preview({
+                        filename: obj.filename,
+                        mimetype: obj.content_type
+                    })
+                    .supportsPreview();
+                }, false);
+            });
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             // open side popup
-            var e = $.Event();
-            e.target = this;
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
-                new dialogs.SidePopup().show(e, function (popup) {
+                new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, i) {
                         var pre = new p.Preview({
                             data: data,
@@ -331,9 +425,24 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/open', {
+        requires: function (e) {
+            return isPreviewable(e);
+        },
+        action: function (o) {
+            var file = o;
+            if (o.mail) {
+                file.data = {mail: o.mail, id: o.id};
+            }
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
+        }
+    });
+
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: function (e) {
+            return !isPreviewable(e);
+        },
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');
@@ -378,15 +487,14 @@ define('io.ox/mail/actions',
                 // download zip file
                 url = api.getUrl(list, 'zip');
             }
-            window.open(url);
+            window.location.assign(url);
         }
     });
 
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('infostore');
-        },
+        capabilities: 'infostore',
+        requires: 'some',
         multiple: function (list) {
             notifications.yell('info', 'Attachments will be saved!');
             api.saveAttachments(list)
@@ -397,24 +505,114 @@ define('io.ox/mail/actions',
         }
     });
 
+
+    new Action('io.ox/mail/actions/vcard', {
+        id: 'vcard',
+        capabilities: 'contacts',
+        requires: function (e) {
+            var context = e.context,
+                hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
+                isVCardType = context.content_type && !!context.content_type.match(/^text\/vcard/i),
+                isDirctoryType = context.content_type && !!context.content_type.match(/^text\/directory/i);
+            return  (hasRightSuffix && isDirctoryType) || isVCardType;
+        },
+        action: function (baton) {
+            var attachment = baton.data;
+            require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
+                conversionAPI.convert({
+                    identifier: 'com.openexchange.mail.vcard',
+                    args: [
+                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                    ]
+                }, {
+                    identifier: 'com.openexchange.contact.json',
+                    args: []
+                })
+                .then(
+                    function success(data) {
+                        //TODO: Handle data not being an array or containing more than one contact
+                        var contact = data[0];
+                        contact.folder_id = config.get('folder.contacts');
+                        require(['io.ox/contacts/edit/main'], function (m) {
+                            if (m.reuse('edit', contact)) {
+                                return;
+                            }
+                            m.getApp(contact).launch();
+                        });
+                    },
+                    function fail(data) {
+                        console.err('FAILED!', data);
+                    }
+                );
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/ical', {
+        id: 'ical',
+        capabilities: 'calendar',
+        requires: function (e) {
+            var context = e.context,
+                hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
+                isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
+                isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
+            return hasRightSuffix || isCalendarType || isAppType;
+        },
+        action: function (baton) {
+            var attachment = baton.data;
+            require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
+                conversionAPI.convert({
+                    identifier: 'com.openexchange.mail.ical',
+                    args: [
+                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
+                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
+                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                    ]
+                },
+                {
+                    identifier: 'com.openexchange.ical',
+                    args: [
+                        {'com.openexchange.groupware.calendar.folder': config.get('folder.calendar')},
+                        {'com.openexchange.groupware.task.folder': config.get('folder.tasks')}
+                    ]
+                })
+                .done(function (data) {
+                    notifications.yell('success', gt('The appointment has been added to your calendar'));
+                })
+                .fail(notifications.yell);
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/save', {
         id: 'saveEML',
         requires: 'some',
         multiple: function (data) {
-            window.open(api.getUrl(data, 'eml'));
+            var url;
+            if (!_.isObject(_(data).first().parent)) {
+                url = api.getUrl(data, 'eml');
+            } else {
+                // download attachment eml
+                url = api.getUrl(_(data).first(), 'download');
+            }
+            window.location.assign(url);
         }
     });
 
     new Action('io.ox/mail/actions/add-to-portal', {
-        require: function (e) {
-            return e.collection.has('one') && capabilities.has('!disablePortal');
-        },
+        capabilities: 'portal', // was: !disablePortal
+        requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickymail', 'mail', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.subject
+                widgets.add('stickymail', {
+                    plugin: 'mail',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.subject
+                    }
                 });
                 notifications.yell('success', gt('This mail has been added to the portal'));
             });
@@ -426,10 +624,8 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/sendmail', {
         requires: 'some',
         action: function (baton) {
-
             var data = baton.data,
                 recipients = data.to.concat(data.cc).concat(data.from);
-
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose({ folder_id: data.folder_id, to: recipients });
@@ -440,9 +636,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/createdistlist', {
         id: 'create-distlist',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('contacts');
-        },
+        capabilities: 'contacts',
+        requires: 'some',
         action: function (baton) {
 
             var data = baton.data,
@@ -497,9 +692,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('calendar');
-        },
+        capabilities: 'calendar',
+        requires: 'some',
         action: function (baton) {
             var data = baton.data,
                 collectedRecipients = [],
@@ -558,9 +752,8 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
-        requires: function () {
-            return capabilities.has('tasks');
-        },
+        capabilities: 'tasks',
+        requires: 'one',
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskApi, tasksUtil) {
@@ -606,7 +799,7 @@ define('io.ox/mail/actions',
                     if (action === "create") {
 
                         //Calculate the right time
-                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
+                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
 
                         taskApi.create({title: titleInput.val(),
                             folder_id: config.get('folder.tasks'),
@@ -649,17 +842,17 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
-        id: 'reply-all',
-        label: gt('Reply All'),
-        ref: 'io.ox/mail/actions/reply-all'
+        id: 'reply',
+        label: gt('Reply'),
+        ref: 'io.ox/mail/actions/reply'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
-        id: 'reply',
-        label: gt('Reply'),
-        ref: 'io.ox/mail/actions/reply'
+        id: 'reply-all',
+        label: gt('Reply All'),
+        ref: 'io.ox/mail/actions/reply-all'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -683,7 +876,11 @@ define('io.ox/mail/actions',
         index: 500,
         prio: 'hi',
         id: 'markunread',
-        label: gt('Mark Unread'),
+        label:
+            //#. Translation should be as short a possible
+            //#. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
+            //#. German, for example, should be "Ungelesen"
+            gt('Unread'),
         ref: 'io.ox/mail/actions/markunread'
     }));
 
@@ -691,7 +888,11 @@ define('io.ox/mail/actions',
         index: 501,
         prio: 'hi',
         id: 'markread',
-        label: gt('Mark read'),
+        label:
+            //#. Translation should be as short a possible
+            //#. Instead of "Mark as read" it's just "Mark read"
+            //#. German, for example, should be "Gelesen"
+            gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
     }));
 
@@ -751,6 +952,14 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1050,
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/mail/actions/print'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
         prio: 'lo',
         id: 'reminder',
@@ -778,6 +987,20 @@ define('io.ox/mail/actions',
     // Attachments
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'vcard',
+        index: 50,
+        label: gt('Add to address book'),
+        ref: 'io.ox/mail/actions/vcard'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'ical',
+        index: 50,
+        label: gt('Add to calendar'),
+        ref: 'io.ox/mail/actions/ical'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
@@ -789,6 +1012,13 @@ define('io.ox/mail/actions',
         index: 200,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'open1',
+        index: 250,
+        label: gt('Open'),
+        ref: 'io.ox/mail/actions/open'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({

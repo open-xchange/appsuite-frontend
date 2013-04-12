@@ -17,8 +17,9 @@ define('io.ox/contacts/edit/main',
      'gettext!io.ox/contacts',
      'io.ox/core/extensions',
      'io.ox/contacts/util',
-     'less!io.ox/contacts/edit/style.css'
-     ], function (view, model, gt, ext, util) {
+     'io.ox/core/extPatterns/dnd',
+     'less!io.ox/contacts/edit/style.less'
+     ], function (view, model, gt, ext, util, dnd) {
 
     'use strict';
 
@@ -37,7 +38,7 @@ define('io.ox/contacts/edit/main',
 
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
-                title: gt('Edit Contact'),
+                title: 'Edit Contact',
                 chromeless: true
             });
 
@@ -76,8 +77,26 @@ define('io.ox/contacts/edit/main',
                                 }
                                 considerSaved = true;
                                 win.idle();
+                                if (app.dropZone) {app.dropZone.remove(); }
                                 app.quit();
                             });
+
+                            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                                app.dropZone = new dnd.UploadZone({
+                                    ref: 'io.ox/contacts/edit/dnd/actions'
+                                }, editView);
+                            }
+
+                            win.on('show', function () {
+                                if (app.dropZone) {app.dropZone.include(); }
+                            });
+
+                            win.on('hide', function () {
+                                if (app && app.dropZone) {
+                                    app.dropZone.remove();
+                                }
+                            });
+
                             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
                             contact.on('change:display_name', function () {
@@ -88,7 +107,10 @@ define('io.ox/contacts/edit/main',
                     // create model & view
 
                     if (data.id) {
-                        model.factory.realm('edit').retain().get(data).done(function (contact) {
+                        model.factory.realm('edit').retain().get({
+                            id: data.id,
+                            folder: data.folder_id
+                        }).done(function (contact) {
                             handelContact(contact);
                         });
                     } else {
@@ -130,7 +152,6 @@ define('io.ox/contacts/edit/main',
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
                                 model.factory.realm('edit').release();
@@ -149,10 +170,18 @@ define('io.ox/contacts/edit/main',
 
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
-            customizeModel: function (contact) {
-                contact.on('change:first_name change:last_name change:title', function () {
-                    contact.set('display_name', util.getFullName(contact.toJSON()));
-                });
+            customizeModel: function (contact, value, options) {
+                contact.on('change:first_name change:last_name change:title',
+                    function (model, value, options) {
+                        if (options.changes.display_name) return;
+                        var dn = model.get('display_name');
+                        // only change display name if empty or previous default
+                        if (!dn || dn === util.getFullName(model.previousAttributes()))
+                        {
+                            model.set('display_name',
+                                      util.getFullName(model.toJSON()));
+                        }
+                    });
             }
         });
 

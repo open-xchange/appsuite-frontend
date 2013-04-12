@@ -27,8 +27,8 @@ define('io.ox/mail/write/main',
      'io.ox/core/notifications',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
+     'less!io.ox/mail/style.less',
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
 
     'use strict';
 
@@ -55,6 +55,30 @@ define('io.ox/mail/write/main',
     });
 
     var UUID = 1;
+    var timerScale = {
+        minute: 60000, //60s
+        minutes: 60000
+    };
+
+    function initAutoSaveAsDraft(app) {
+        var timeout = settings.get('autoSaveDraftsAfter', false),
+            scale, timer, performAutoSave = _.bind(app.saveDraft, app);
+
+        if (!timeout) { return; }
+
+        timeout = timeout.split('_');
+        scale = timerScale[timeout[1]];
+        timeout = timeout[0];
+
+        if (!timeout || !scale) { /* settings not parsable */ return; }
+
+        if (app.autosave) {
+            window.clearTimeout(app.autosave.timer);
+        }
+        app.autosave = {
+            timer: _.delay(performAutoSave, timeout * scale)
+        };
+    }
 
     // multi instance pattern
     function createInstance() {
@@ -194,6 +218,7 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
                     $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
+                    $('<input>', { type: 'hidden', name: 'headers', value: '' }),
                     view.leftside,
                     view.rightside
                 )
@@ -222,6 +247,8 @@ define('io.ox/mail/write/main',
                 }
                 if (dropZone) { dropZone.remove(); }
             });
+
+            _.defer(initAutoSaveAsDraft, app);
         });
 
         /**
@@ -305,25 +332,28 @@ define('io.ox/mail/write/main',
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
                 accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
 
-            return accountAPI.get(accountID).pipe(function (data) {
-                var primary_address = null;
-                // TODO: don’t handle default user separately
-                if (accountID === "0") {
-                    primary_address = settings.get('defaultSendAddress');
+            return accountAPI.getPrimaryAddress(accountID).then(function (data) {
+                var primary;
+                if (accountID === '0') {
+                    // primary address is not the default send address for the
+                    // internal mail account (with id 0) - This is odd
+                    primary = settings.get('defaultSendAddress');
                 }
-                return {'displayname'    : data.personal,
-                        'primaryaddress' : primary_address || data.primary_address};
+                return {displayname: data[0], primaryaddress: primary || data[1]};
             });
         };
 
         app.getFrom = function () {
             var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
-
             return [from_field.data('displayname'), from_field.data('primaryaddress')];
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
+                if (data.from && data.from.length === 2) {
+                    // from is already set in the mail, prefer this
+                    from = { displayname: data.from[0], primaryaddress: data.from[1] };
+                }
                 view.leftside.find('.fromselect-wrapper select').val(mailUtil.formatSender(from.displayname, from.primaryaddress));
             });
         };
@@ -385,6 +415,11 @@ define('io.ox/mail/write/main',
             if (list && list.length) {
                 view.showSection('bcc', false);
             }
+        };
+
+        app.setReplyTo = function (value) {
+            if (config.get('ui.mail.replyTo.configurable', false) === false) return;
+            view.form.find('input#writer_field_replyTo').val(value);
         };
 
         app.setAttachments = function (list) {
@@ -458,6 +493,16 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
+
+        /**
+         * store headers data in form
+         * @param {object} header key/value pairs
+         * @returns {undefined}
+         */
+        app.setHeaders = function (headers) {
+            view.form.find('input[name=headers]').val(JSON.stringify(headers) || '{}');
+        };
+
         var windowTitles = {
             compose: gt('Compose new mail'),
             replyall: gt('Reply all'),
@@ -496,14 +541,18 @@ define('io.ox/mail/write/main',
             this.setTo(data.to);
             this.setCC(data.cc);
             this.setBCC(data.bcc);
+            this.setReplyTo(data.headers && data.headers['Reply-To']);
             this.setAttachments(data.attachments);
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
+            this.setHeaders(data.headers);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
+            // add files (from contacts)
+            this.addFiles(data.contacts_ids);
             // app title
             var title = windowTitles[composeMode = mail.mode];
             win.nodes.main.find('h1.title').text(title);
@@ -514,11 +563,13 @@ define('io.ox/mail/write/main',
             // set format
             return app.setFormat(mail.format).done(function () {
                 // set body
-                var content = data.attachments && data.attachments.length ? (data.attachments[0].content || '') : '';
+                // attachments: could contain separate html and text content
+                var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[mail.format] || []) : (undefined),
+                    content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 if (mail.format === 'text') {
                     content = content.replace(/<br>\n?/g, '\n');
                     // backend sends html entities, these need to be transformed into plain text
-                    content = $('<div />').html(content).text();
+                    content = $('<div>').html(content).text();
                 }
                 // image URL fix
                 if (editorMode === 'html') {
@@ -547,8 +598,8 @@ define('io.ox/mail/write/main',
                 _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
                     app.dirty(true);
-                    app.getEditor().focus();
                     win.idle();
+                    app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -580,7 +631,7 @@ define('io.ox/mail/write/main',
                 tmp = tmp[0].split(/\:/, 2);
                 // save data
                 data = {
-                    to: [['', tmp[1]]],
+                    to: mailUtil.parseRecipients(tmp[1]) || [['', tmp[1]]],
                     subject: params.subject,
                     attachments: [{ content: params.body || '' }]
                 };
@@ -593,6 +644,12 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
+                    // set data again, to use correct sender field
+                    // fixes a timing problem because select field is not fully
+                    // drawn, when setMail is called
+                    app.setFrom(data || {});
+                    // set to idle now; otherwise firefox doesn't set the focus
+                    win.idle();
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {
@@ -600,11 +657,10 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
-                    win.idle();
                     def.resolve();
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
@@ -634,14 +690,14 @@ define('io.ox/mail/write/main',
                             .done(function () {
                                 var ed = app.getEditor();
                                 ed.setCaretPosition(0);
+                                win.idle();
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                win.idle();
                                 def.resolve();
                             });
                         })
-                        .fail(function () {
-                            notifications.yell('error', gt('An error occured. Please try again.'));
+                        .fail(function (e) {
+                            notifications.yell(e);
                             app.dirty(false).quit();
                             def.reject();
                         });
@@ -679,13 +735,13 @@ define('io.ox/mail/write/main',
                     .done(function () {
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
-                        focus('to');
                         win.idle();
+                        focus('to');
                         def.resolve();
                     });
                 })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
+                .fail(function (e) {
+                    notifications.yell(e);
                     app.dirty(false).quit();
                     def.reject();
                 });
@@ -706,8 +762,9 @@ define('io.ox/mail/write/main',
             win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: false })
                 .done(function () {
-                    app.getEditor().focus();
+                    app.setFrom(data || {});
                     win.idle();
+                    app.getEditor().focus();
                     def.resolve();
                 })
                 .fail(function () {
@@ -739,6 +796,7 @@ define('io.ox/mail/write/main',
                     }
                     return obj;
                 }, {}),
+                headers,
                 content,
                 mail,
                 files = [],
@@ -747,7 +805,8 @@ define('io.ox/mail/write/main',
                         .map(function (recipient) {
                             return ['"' + recipient[0] + '"', recipient[1]];
                         });
-                };
+                },
+                replyTo = parse(data.replyTo)[0] || [];
 
             data.from = this.getFrom();
 
@@ -768,11 +827,20 @@ define('io.ox/mail/write/main',
 
             content.content_type = getContentType(editorMode);
 
+            // might fail
+            try {
+                headers = JSON.parse(data.headers);
+            } catch (e) {
+                headers = {};
+            }
+
             mail = {
                 from: [data.from] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
+                headers: headers,
+                reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
@@ -802,9 +870,12 @@ define('io.ox/mail/write/main',
                 } else if ('File' in window && file instanceof window.File) {
                     // add dropped file
                     files.push(file);
-                } else if (file && 'id' in file) {
+                } else if (file && ('id' in file) && ('file_size' in file)) {
                     // infostore id
                     (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
+                } else if (file && ('id' in file) && ('display_name' in file)) {
+                    // contacts id
+                    (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
                 } else if (this.files && this.files.length) {
                     // process normal upload
                     _(this.files).each(function (file) {
@@ -832,6 +903,10 @@ define('io.ox/mail/write/main',
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
             }
+            // get flat cids for data.contacts_ids
+            if (mail.data.contacts_ids) {
+                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+            }
             // move nested messages into attachment array
             _(mail.data.nested_msgs).each(function (obj) {
                 mail.data.attachments.push({
@@ -850,26 +925,52 @@ define('io.ox/mail/write/main',
                 win.preQuit();
                 // send!
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
-                    if (result.error) {
+                    if (result.error && !result.warnings) {
                         win.idle().show();
                         // TODO: check if backend just says "A severe error occured"
                         notifications.yell(result);
                     } else {
-                        notifications.yell('success', gt('Mail has been sent'));
+                        if (result.warnings)
+                            //warnings
+                            notifications.yell('warning', result.warnings.error);
+                        else
+                            notifications.yell('success', gt('Mail has been sent'));
                         // update base mail
                         var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
                             isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
                             sep = mailAPI.separator,
-                            base, folder, id;
+                            base, folder, id, msgrefs, ids;
                         if (isReply || isForward) {
-                            base = _(mail.data.msgref.split(sep));
-                            folder = base.initial().join(sep);
-                            id = base.last();
-                            mailAPI.get({ folder: folder, id: id }).done(function (data) {
+                            //single vs. multiple
+                            if (mail.data.msgref) {
+                                msgrefs = [ mail.data.msgref ];
+                            } else {
+                                msgrefs = _.chain(mail.data.attachments)
+                                    .filter(function (attachment) {
+                                        return attachment.content_type === 'message/rfc822';
+                                    })
+                                    .map(function (attachment) { return attachment.msgref; })
+                                    .value();
+                            }
+                            //prepare
+                            ids = _.map(msgrefs, function (obj) {
+                                base = _(obj.split(sep));
+                                folder = base.initial().join(sep);
+                                id = base.last();
+                                return { folder_id: folder, id: id };
+                            });
+                            //update cache
+                            mailAPI.getList(ids).pipe(function (data) {
                                 // update answered/forwarded flag
-                                if (isReply) data.flags |= 1;
-                                if (isForward) data.flags |= 256;
-                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data)).done(function () {
+                                if (isReply || isForward) {
+                                    var len = data.length;
+                                    for (var i = 0; i < len; i++) {
+                                        if (isReply) data[i].flags |= 1;
+                                        if (isForward) data[i].flags |= 256;
+                                    }
+                                }
+                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
+                                .done(function () {
                                     mailAPI.trigger('refresh.list');
                                 });
                             });
@@ -918,6 +1019,10 @@ define('io.ox/mail/write/main',
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
             }
+            // get flat cids for data.contacts_ids
+            if (mail.data.contacts_ids) {
+                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+            }
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
@@ -940,6 +1045,7 @@ define('io.ox/mail/write/main',
                     }
                 });
 
+            _.defer(initAutoSaveAsDraft, this);
             return def;
         };
 
@@ -965,6 +1071,10 @@ define('io.ox/mail/write/main',
                 // clean up editors
                 for (var id in editorHash) {
                     editorHash[id].destroy();
+                }
+                //clear timer for autosave
+                if (app.autosave) {
+                    window.clearTimeout(app.autosave.timer);
                 }
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;

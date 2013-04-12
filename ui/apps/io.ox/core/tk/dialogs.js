@@ -11,32 +11,36 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
+define("io.ox/core/tk/dialogs",
+    ['io.ox/core/event',
+    'gettext!io.ox/core',
+    'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
 
     'use strict';
 
     // scaffolds
-    var underlay = $("<div>").hide().addClass("abs io-ox-dialog-underlay"),
-        popup = $("<div>").hide().addClass("io-ox-dialog-popup")
+    var underlay = $('<div class="abs io-ox-dialog-underlay">').hide(),
+        popup = $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $("<div>").addClass("modal-header"),
-                $("<div>").addClass("modal-body"),
-                $("<div>").addClass("modal-footer")
+                $('<div class="modal-header">'),
+                $('<div class="modal-body">'),
+                $('<div class="modal-footer">')
             );
 
     var Dialog = function (options) {
 
         var nodes = {
+                buttons: [],
                 underlay: underlay.clone().appendTo('body'),
                 popup: popup.clone().appendTo('body')
             },
 
+            lastFocus = $(),
+            innerFocus = $(),
             deferred = $.Deferred(),
-
             closeViaEscapeKey,
-
+            isBusy = false,
             self = this,
-
             data = {},
 
             o = _.extend({
@@ -50,10 +54,27 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 // maxWidth (px), maxHeight (px)
             }, options),
 
+            keepFocus = function (e) {
+                if (!nodes.popup.get(0).contains(e.target)) {
+                    e.stopPropagation();
+                    nodes.popup.focus();
+                }
+            },
+
             close = function () {
-                $(document).off("keydown", closeViaEscapeKey);
+                self.trigger('close');
+                nodes.popup.off('keydown', closeViaEscapeKey);
+                document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
+
+                // restore focus
+                lastFocus = lastFocus.closest(':visible');
+                if (lastFocus.hasClass('dropdown')) {
+                    lastFocus.children().first().focus();
+                } else {
+                    lastFocus.focus();
+                }
                 // self destruction
                 for (var prop in self) {
                     delete self[prop];
@@ -64,16 +85,23 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             },
 
             busy = function () {
-                nodes.footer.find('button').attr('disabled', 'disabled');
-                nodes.body.find('input').attr('disabled', 'disabled');
+                nodes.footer.find('input, select, button').attr('disabled', 'disabled');
+                nodes.body.find('input, select, button, textarea').attr('disabled', 'disabled');
+                nodes.body.css('opacity', 0.5);
+                innerFocus = $(document.activeElement);
+                nodes.popup.focus();
+                isBusy = true;
             },
 
             idle = function () {
-                nodes.footer.find('button').removeAttr('disabled');
-                nodes.body.find('input').removeAttr('disabled');
+                nodes.footer.find('input, select, button').removeAttr('disabled');
+                nodes.body.find('input, select, button, textarea').removeAttr('disabled');
+                nodes.body.css('opacity', '');
+                innerFocus.focus();
+                isBusy = false;
             },
 
-            process = function (e) {
+            invoke = function (e) {
                 var action = e.data ? e.data.action : e,
                     async = o.async && action !== 'cancel';
                 // be busy?
@@ -95,13 +123,12 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
+
         if (o.addclass) {
             nodes.popup.addClass(o.addclass);
         }
         // add event hub
         Events.extend(this);
-
-        this.process = process;
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -132,7 +159,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         this.text = function (str) {
             var p = nodes.body;
             p.find(".plain-text").remove();
-            p.append($("<h4>").addClass("plain-text").text(str || ""));
+            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ""));
             return this;
         };
 
@@ -155,7 +182,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             var opt = {
                 label: label,
                 data: { action: action },
-                click: process,
+                click: invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse
@@ -166,6 +193,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             }
 
             var button = $.button(opt);
+            nodes.buttons.push(button);
             return button.addClass(options.classes);
         };
 
@@ -196,7 +224,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');
-            nodes.footer.append(button);
+            nodes.footer.prepend(button);
             return this;
         };
 
@@ -208,8 +236,8 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
         };
 
         closeViaEscapeKey = function (e) {
-            if (e.which === 27) {
-                process("cancel");
+            if (e.which === 27 && !isBusy) {
+                invoke('cancel');
             }
         };
 
@@ -217,19 +245,30 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             if (!o || o.async)  {
                 close();
             } else {
-                process('cancel');
+                invoke('cancel');
             }
+        };
+
+        this.invoke = function (action) {
+            invoke(action);
+            return this;
         };
 
         this.idle = function () {
             idle();
+            return this;
         };
 
         this.busy = function () {
             busy();
+            return this;
         };
 
         this.show = function (callback) {
+
+            // remember focussed element
+            lastFocus = $(document.activeElement);
+            document.addEventListener('focus', keepFocus, true); // not via jQuery!
 
             // empty header?
             if (nodes.header.children().length === 0) {
@@ -249,25 +288,39 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                     dim[d] = o[id];
                 }
                 // apply document limits
-                var max = $(document)[d]() - 100;
+                var max = $(document)[d]() - 50;
                 if (dim[d] && dim[d] > max) {
                     dim[d] = max;
                 }
             });
 
-            // apply dimensions
-            if (o.center) {
-                // center vertically
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    top: "50%",
-                    marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
-                });
-            } else {
-                // use fixed top position
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    top: o.top || "0px"
+            // apply dimensions, only on desktop and pad
+            if (_.device('!small')) {
+                if (o.center) {
+                    // center vertically
+                    nodes.popup.css({
+                        width: dim.width + "px",
+                        top: "50%",
+                        marginTop: 0 - (dim.height / 2 >> 0) + "px"
+                    });
+                } else {
+                    // use fixed top position
+                    nodes.popup.css({
+                        width: dim.width + "px",
+                        top: o.top || "0px"
+                    });
+                }
+            }
+
+            if (_.device('small')) {
+
+                // rebuild button section for mobile devices
+                nodes.footer.rowfluid = $('<div class="row-fluid">');
+                nodes.footer.append(nodes.footer.rowfluid);
+
+                _.each(nodes.buttons, function (buttonNode) {
+                    nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
+                    buttonNode.wrap('<div class="span3">');
                 });
             }
 
@@ -281,11 +334,11 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             }
 
             if (o.easyOut) {
-                $(document).on("keydown", closeViaEscapeKey);
+                nodes.popup.on('keydown', closeViaEscapeKey);
             }
 
             if (callback) {
-                callback.call(nodes.popup);
+                callback.call(nodes.popup, this);
             }
 
             this.trigger('show');
@@ -295,20 +348,31 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
 
         nodes.underlay.click(function () {
             if (o && o.underlayAction) {
-                process(o.underlayAction);
-            } else if (o && o.easyOut) {
-                process("cancel");
+                invoke(o.underlayAction);
+            } else if (o && o.easyOut && !isBusy) {
+                invoke("cancel");
             }
         });
 
         nodes.popup.click(function () {
             if (o && o.defaultAction) {
-                process(o.defaultAction);
+                invoke(o.defaultAction);
             }
         });
 
         this.setUnderlayAction = function (action) {
             o.underlayAction = action;
+            return this;
+        };
+
+        this.topmost = function () {
+            nodes.underlay.addClass('topmost');
+            nodes.popup.addClass('topmost');
+            return this;
+        };
+
+        this.setUnderlayStyle =  function (css) {
+            nodes.underlay.css(css || {});
             return this;
         };
 
@@ -330,7 +394,8 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
     var SidePopup = function (options) {
 
         options = _.extend({
-            modal: false
+            modal: false,
+            arrow: true
         }, options || {});
 
         var processEvent,
@@ -341,6 +406,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
+            closeByEvent, //for example: The view within this SidePopup closes itself
             previousProp,
             timer = null,
 
@@ -406,13 +472,23 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             }
         };
 
+        closeByEvent = function (e) {
+            close(e);
+        };
+
         close = function (e) {
             // use this to check if it's open
             if (self.nodes.closest) {
+
+                if (options.saveOnClose) {
+                    pane.find('.settings-detail-pane').trigger('save');
+                }
+
                 // remove handlers & avoid leaks
-                $(document).off("keydown", closeByEscapeKey);
+                $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
                 self.nodes.click.off("click", closeByClick);
+                pane.off('delete');
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -446,15 +522,15 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
-                target: target || my.parents(".window-body, .notifications-overlay")
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .io-ox-dialog-popup, .notifications-overlay"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .io-ox-dialog-popup, .notifications-overlay"),
+                target: target || my.parents(".window-body, .io-ox-dialog-popup, .notifications-overlay")
             };
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .notifications-overlay").css("zIndex") || 1) + 2;
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .notifications-overlay").css("zIndex") || 1) + 2;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);
@@ -487,7 +563,9 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
                 self.nodes.closest.on("scroll", closeByScroll);
+                pane.on("remove", closeByEvent);
                 $(document).on("keydown", closeByEscapeKey);
+
 
                 // decide for proper side
                 var docWidth = $('body').width(), mode,
@@ -581,7 +659,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
             nodes.pane.fadeOut();
         },
 
-        process = function (e) {
+        invoke = function (e) {
             deferred.resolve(e.data);
             close();
         };
@@ -601,7 +679,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
                 $.button({
                     label: label,
                     data: action,
-                    click: process
+                    click: invoke
                 })
             );
             return this;
@@ -614,7 +692,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core', 'less
 
         this.toggle = function () {
             if (this.visible) {
-                process("toggeled");
+                invoke("toggeled");
             } else {
                 this.show();
             }

@@ -49,8 +49,12 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
             return string.substring(0, left)  + "..." + string.substring(right, string.length);
         },
 
-        fileSize: function (size) {
+        fileSize: function (size, decimalPlaces) {
             var i = 0, $i = n_size.length;
+            if (decimalPlaces > 10) {//for security so math.pow doesn't get really high values
+                decimalPlaces = 10;
+            }
+            var dp = Math.pow(10, decimalPlaces || 0);
             while (size > 1024 && i < $i) {
                 size = size / 1024;
                 i++;
@@ -59,7 +63,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                 //#. File size
                 //#. %1$d is the number
                 //#. %2$s is the unit (B, KB, MB etc.)
-                gt('%1$d %2$s', Math.round(size, 1), n_size[i]));
+                gt('%1$d %2$s', (Math.round(size * dp, 1) / dp), n_size[i]));
         }
 
     };

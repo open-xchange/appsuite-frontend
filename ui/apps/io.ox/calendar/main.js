@@ -12,13 +12,12 @@
  */
 
 define("io.ox/calendar/main",
-    ["io.ox/calendar/api",
-     "io.ox/calendar/util",
+    ["io.ox/core/date",
      "io.ox/core/config",
      "io.ox/core/commons",
      "settings!io.ox/calendar",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, util, config, commons, settings) {
+     "less!io.ox/calendar/style.less"], function (date, config, commons, settings) {
 
     "use strict";
 
@@ -31,13 +30,9 @@ define("io.ox/calendar/main",
     // corrupt data fix
     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
 
-    // First mobile handling, just for the moment a workaround until we have
-    // the backend calls for this
 
-    if (_.browser.iOS || _.browser.android) {
-        // force listview for iOS device
-        lastPerspective = 'list';
-    }
+    // force listview on small devices
+    lastPerspective = _.device('small') ? 'list': lastPerspective;
 
     // launcher
     app.setLauncher(function (options) {
@@ -50,13 +45,15 @@ define("io.ox/calendar/main",
         }));
 
         app.settings = settings;
+        app.refDate = new date.Local();
+
         win.addClass("io-ox-calendar-main");
 
         // folder tree
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar', config.get('folder.calendar'))
+        commons.addFolderSupport(app, null, 'calendar', options.folder || config.get('folder.calendar'))
             .pipe(commons.showWindow(win))
             .done(function () {
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);

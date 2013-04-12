@@ -21,9 +21,6 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // CSS marker class for the group node while focus is in text field
-        FOCUS_CLASS = 'text-focus',
-
         // default validator without any restrictions on the field text
         defaultValidator = null;
 
@@ -74,7 +71,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, Utils.extendOptions({ design: 'white' }, options));
+        Group.call(this, options);
 
         // private methods ----------------------------------------------------
 
@@ -125,7 +122,6 @@ define('io.ox/office/tk/control/textfield',
                     initialText = textField.val();
                 }
                 validationFieldState = getFieldState();
-                self.getNode().addClass(FOCUS_CLASS);
                 break;
             case 'focus:key':
                 // select entire text when reaching the field with keyboard
@@ -144,7 +140,6 @@ define('io.ox/office/tk/control/textfield',
                     textField.val(initialText);
                     initialText = null;
                 }
-                self.getNode().removeClass(FOCUS_CLASS);
                 break;
             }
         }
@@ -282,6 +277,7 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
             .registerChangeHandler('commit', { node: textField, valueResolver: commitHandler });
+
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
@@ -359,7 +355,8 @@ define('io.ox/office/tk/control/textfield',
          *  destroy the selection when changing the text). When returning the
          *  boolean value false, the previous state of the text field (as it
          *  was after the last validation) will be restored. Otherwise, the
-         *  valueof the text field is considered valid will not be modified.
+         *  value of the text field is considered to be valid and will not be
+         *  modified.
          */
         this.validate = function (text) {
         };
@@ -433,10 +430,10 @@ define('io.ox/office/tk/control/textfield',
     TextField.NumberValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // minimum and maximum
-            min = Utils.getIntegerOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
-            max = Utils.getIntegerOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
+            min = Utils.getNumberOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
+            max = Utils.getNumberOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
             digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
-            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '(\\.[0-9]*)?' : '') + '$');
+            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '([.,][0-9]*)?' : '') + '$');
 
         // base constructor ---------------------------------------------------
 
@@ -445,11 +442,12 @@ define('io.ox/office/tk/control/textfield',
         // methods ------------------------------------------------------------
 
         this.valueToText = function (value) {
+            // TODO L10N of decimal separator
             return _.isFinite(value) ? String(Utils.roundDigits(value, digits)) : '';
         };
 
         this.textToValue = function (text) {
-            var value = parseFloat(text);
+            var value = parseFloat(text.replace(/,/g, '.'));
             return (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
         };
 

@@ -1,0 +1,228 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+/* VGrid elements */
+
+.vgrid-cell.contact {
+    height: 40px;
+    padding: 0.75em 13px 0.75em 13px;
+}
+
+.vgrid-cell.contact .private_flag {
+	float: left;
+	color: #AAA;
+	font-size: 17px;
+	margin-right: 3px;
+}
+
+.vgrid-cell.contact .fullname {
+    font-weight: bold;
+}
+
+/* Tabs */
+
+.abs.contact-grid-container {
+    left: 37px;
+    overflow: auto;
+}
+
+.contact-grid-index {
+    width: 35px;
+    overflow: hidden;
+}
+
+.contact-grid-index .thumb-index {
+    font-size: 8pt;
+    line-height: 10pt;
+    padding: 5px 5px 4px 5px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: #eee;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.20, #fff),
+        color-stop(1.00, #eee)
+    );
+    background-image: -o-linear-gradient(
+        top,
+        #fff 0%,
+        #eee 80%
+    );
+    background-image: -moz-linear-gradient(
+        center top,
+        #fff 20%,
+        #eee 100%
+    );
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');"
+}
+
+.contact-grid-index .thumb-index.thumb-index-disabled,
+.contact-grid-index .thumb-index.thumb-index-disabled:hover {
+    color: #ccc;
+    font-weight: normal;
+    background-color: #fff;
+    background-image: none;
+    border-bottom-color: #ddd;
+    cursor: default;
+}
+
+.contact-grid-index .thumb-index:hover {
+    color: white;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.20, #555),
+        color-stop(1.00, #111)
+    );
+    background-image: -o-linear-gradient(
+        top, #555 20%, #111 100%
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #111 0%,
+        #555 80%
+    );
+}
+
+/* Detail view */
+
+.contact-detail, .contact-detail-edit  {
+    width: 100%;
+}
+
+.contact-detail {
+
+    .contact-header {
+        min-height: 90px;
+    }
+
+    .field-label {
+        font-family: @lightFontFamily;
+        font-weight: 300;
+        color: #555;
+        text-align: right;
+        vertical-align: top;
+        // fix spans
+        padding-right: 2em;
+    }
+
+    .field-value {
+        font-weight: normal;
+        vertical-align: top;
+        padding-bottom: 0.5em;
+    }
+
+    .name {
+        margin-bottom: 0.25em;
+        display: inline-block;
+        & > div {
+            display: inline-block;
+        }
+    }
+
+    .private-flag {
+	    color: #AAA;
+		font-size: 20pt;
+		margin-right: 5px;
+		line-height: 1.2em;
+		float: left;
+    }
+
+    .job {
+        font-size: 1.25em;
+        color: #888;
+        & > div {
+            display: inline-block;
+        }
+    }
+
+    .picture {
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        float: right;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    
+    .attachment-item{
+		color: #333;
+	}
+
+    .io-ox-inline-links {
+        margin: 2em 0;
+    }
+
+    .breadcrumb {
+        margin: 3em 0 0 0;
+    }
+}
+
+/*new contact form*/
+
+
+.btn.btn-inverse {
+	vertical-align: top;
+}
+
+.hidden{
+	display: none;
+}
+
+.mandatory.hidden{
+	display: block;
+}
+
+.hidden.filled{
+	display: table-row;
+}
+
+.savebutton{
+	float: right;
+}
+
+.contact-edit{
+	overflow: auto;
+}
+
+.change-pic-link {
+	width: auto;
+	float: right;
+}
+
+input#image1 {
+	width: 300px;
+}
+
+.contact-detail input {
+	width: 270px;
+}
+
+.picture-uploader {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    float: left;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-clip: content-box;
+}
+
+

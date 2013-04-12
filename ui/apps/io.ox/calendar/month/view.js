@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -17,7 +17,7 @@ define('io.ox/calendar/month/view',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/month/style.css',
+     'less!io.ox/calendar/month/style.less',
      'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
@@ -56,7 +56,7 @@ define('io.ox/calendar/month/view',
         onClickAppointment: function (e) {
             var cid = $(e.currentTarget).data('cid'),
                 cT = $('[data-cid="' + cid + '"]', this.pane);
-            if (cT.hasClass('appointment') && !cT.hasClass('private')) {
+            if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
                     obj = _.cid(cid + '');
 
@@ -180,11 +180,8 @@ define('io.ox/calendar/month/view',
             // loop over all appointments
             this.collection.each(function (model) {
 
-                var hash = util.getConfirmations(model.attributes),
-                    conf = hash[myself] || { status: 1, comment: "" };
-
                 // is declined?
-                if (conf.status !== 2 || settings.get('showDeclinedAppointments', false)) {
+                if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
 
                     var startTSUTC = Math.max(model.get('start_date'), this.weekStart),
                         endTSUTC = Math.min(model.get('end_date'), this.weekEnd) - 1;
@@ -200,11 +197,6 @@ define('io.ox/calendar/month/view',
                         start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
                         end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
                         maxCount = 7;
-
-                    if (model.get('start_date') < 0) {
-                        console.error('FIXME: start_date should not be negative');
-                        throw 'FIXME: start_date should not be negative';
-                    }
 
                     // draw across multiple days
                     while (maxCount >= 0) {
@@ -298,15 +290,13 @@ define('io.ox/calendar/month/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
-                hash = util.getConfirmations(a.attributes),
-                conf = hash[myself] || { status: 1, comment: "" },
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
-                classes = 'private';
+                classes = 'private disabled';
             } else {
-                classes = util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf.status) +
+                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
+                    ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
             }
 
@@ -316,7 +306,7 @@ define('io.ox/calendar/month/view',
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        $('<i class="icon-lock private-flag">')[a.get('private_flag') ? 'show' : 'hide'](),
+                        $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
                         $('<div>').addClass('title').text(gt.noI18n(a.get('title'))),
                         $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''))
                     )

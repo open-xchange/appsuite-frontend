@@ -12,7 +12,8 @@
  */
 define('io.ox/tasks/util',
     ['gettext!io.ox/tasks',
-     'io.ox/core/date'], function (gt, date) {
+     'settings!io.ox/tasks',
+     'io.ox/core/date'], function (gt, settings, date) {
 
     'use strict';
 
@@ -36,21 +37,27 @@ define('io.ox/tasks/util',
                                 gt('next Saturday')];
 
     var util = {
-            computePopupTime: function (time, finderId) {
+            computePopupTime: function (time, value) {
                 var endDate = new Date(time.getTime()),
                     weekDay = endDate.getDay(),
                     alarmDate = new Date(time.getTime());
 
-                switch (finderId) {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                    alarmDate.setTime(alarmDate.getTime() + lookupArray[finderId]);
+                switch (value) {
+                case '5':
+                    alarmDate.setTime(alarmDate.getTime() + lookupArray[0]);
+                    break;
+                case '15':
+                    alarmDate.setTime(alarmDate.getTime() + lookupArray[1]);
+                    break;
+                case '30':
+                    alarmDate.setTime(alarmDate.getTime() + lookupArray[2]);
+                    break;
+                case '60':
+                    alarmDate.setTime(alarmDate.getTime() + lookupArray[3]);
                     break;
                 default:
                     alarmDate.setTime(prepareTime(alarmDate));
-                    switch (finderId) {
+                    switch (value) {
                     case 'd0':
                         alarmDate.setHours(6);
                         break;
@@ -68,7 +75,7 @@ define('io.ox/tasks/util',
                         break;
                     default:
                         alarmDate.setHours(6);
-                        switch (finderId) {
+                        switch (value) {
                         case 't':
                             alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24);
                             break;
@@ -133,6 +140,40 @@ define('io.ox/tasks/util',
                     };
                 return result;
             },
+            
+            //selects the default reminder if its available, otherwise the next item
+            selectDefaultReminder: function (node) {
+                var interval = settings.get('interval', '5'),
+                    options  = [];
+                _(node.prop('options')).each(function (obj) {
+                    options.push($(obj).val());
+                });
+                if (!(_.contains(options, interval))) {//default option not present
+                    //check if its today or weekday
+                    if (interval[0] === 'd') {
+                        var found = false;
+                        for (var i = parseInt(interval[1], 10) + 1; i < 5; i++) {
+                            if (_.contains(options, 'd' + i)) {
+                                found = true;
+                                interval = 'd' + i;
+                                break;
+                            }
+                        }
+                        
+                        if (!found) {//too late for today. use tomorrow
+                            interval = 't';
+                        }
+                    } else {//weekday not found. must be either tomorrow or today
+                        var weekDay = new Date().getDay();
+                        if (weekDay === parseInt(interval[1], 10)) {//its today, make it next week
+                            interval = 'ww';
+                        } else {//must be tomorrow
+                            interval = 't';
+                        }
+                    }
+                }
+                node.val(interval);
+            },
 
             //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (time, bootstrapDropdown) {
@@ -141,10 +182,10 @@ define('io.ox/tasks/util',
                 }
 
                 //normal times
-                var appendString = "<option finderId='0'>" + gt('in 5 minutes') + '</option>' +
-                "<option finderId='1'>" + gt('in 15 minutes') + '</option>' +
-                "<option finderId='2'>" + gt('in 30 minutes') + '</option>' +
-                "<option finderId='3'>" + gt('in one hour') + '</option>';
+                var appendString = "<option value='5'>" + gt('in 5 minutes') + '</option>' +
+                "<option value='15'>" + gt('in 15 minutes') + '</option>' +
+                "<option value='30'>" + gt('in 30 minutes') + '</option>' +
+                "<option value='60'>" + gt('in one hour') + '</option>';
 
                 // variable daytimes
                 var i = time.getHours(),
@@ -164,7 +205,7 @@ define('io.ox/tasks/util',
 
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
-                    appendString = appendString + "<option finderId='d" + i + "'>" + temp + '</option>';
+                    appendString = appendString + "<option value='d" + i + "'>" + temp + '</option>';
                     i++;
                 }
 
@@ -174,11 +215,11 @@ define('io.ox/tasks/util',
 
                 i = (time.getDay() + 2) % 7;
 
-                appendString = appendString + "<option finderId='t'>" + gt('tomorrow') + '</option>';
+                appendString = appendString + "<option value='t'>" + gt('tomorrow') + '</option>';
 
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
-                    appendString = appendString + "<option finderId='w" + i + "'>" + temp + '</option>';
+                    appendString = appendString + "<option value='w" + i + "'>" + temp + '</option>';
                     if (i < 6) {
                         i++;
                     } else {
@@ -186,7 +227,7 @@ define('io.ox/tasks/util',
                     }
 
                     if (i === startday) {
-                        appendString = appendString + "<option finderId='ww'>" + gt('in one week') + '</option>';
+                        appendString = appendString + "<option value='ww'>" + gt('in one week') + '</option>';
                         circleIncomplete = false;
                     }
                 }
@@ -200,7 +241,7 @@ define('io.ox/tasks/util',
             },
 
             //change status number to status text. format enddate to presentable string
-            //if detail alarm and startdate get converted too and status text is set for more states than overdue and success
+            //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, detail)
             {
                 task = _.copy(task, true);
@@ -256,6 +297,9 @@ define('io.ox/tasks/util',
                         task.start_date = new date.Local(task.start_date).format();
                     } else {
                         task.start_date = '';
+                    }
+                    if (task.date_completed) {
+                        task.date_completed = new date.Local(task.date_completed).format();
                     }
 
                     if (task.alarm !== undefined && task.alarm !== null) {

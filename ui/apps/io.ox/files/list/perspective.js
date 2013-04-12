@@ -32,7 +32,7 @@ define('io.ox/files/list/perspective',
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
         right = vsplit.right.addClass('default-content-padding').scrollable(),
-        grid = new VGrid(left),
+        grid = new VGrid(left, {settings: app.settings}),
         dropZone;
 
         grid.addTemplate({
@@ -44,12 +44,30 @@ define('io.ox/files/list/perspective',
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.title || data.filename || '\u00A0');
+                var title = data.title || data.filename || '\u00A0';
+                fields.name.text(cut(title));
             }
         });
 
+        function cut(str, maxLen, cutPos) {
+            if (!cutPos) cutPos = 25;
+            if (!maxLen) maxLen = 70;
+            str = String(str || '');
+            if (str.length > maxLen) {
+                return str.substr(0, maxLen - cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
+            } else {
+                return str;
+            }
+        }
+
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
+
+        // The list request is not needed and is too slow
+        // ids contains all required information
+        grid.setListRequest(function (ids) {
+            return $.Deferred().resolve(ids);
+        });
 
         // LFO callback
         app.currentFile = null;
@@ -67,8 +85,13 @@ define('io.ox/files/list/perspective',
                 .fail(_.lfo(drawFail));
         };
 
+        showFile.cancel = function () {
+            _.lfo(selectFile);
+            _.lfo(drawFail);
+        };
+
         selectFile = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            right.idle().empty().append(viewDetail.draw(data, app));
             right.parent().scrollTop(0);
             app.currentFile = data;
             if (dropZone) {
@@ -111,18 +134,26 @@ define('io.ox/files/list/perspective',
         // Uploads
         app.queues = {};
 
+        var uploadedFiles = [];
+
         app.queues.create = upload.createQueue({
             start: function () {
                 win.busy();
+                grid.selection.clearIndex();
             },
-            progress: function (file) {
+            progress: function (file, position, files) {
+                var pct = position / files.length;
+                win.busy(pct, 0);
                 return api.uploadFile({ file: file, folder: app.folder.get() })
                     .done(function (data) {
                         // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
-                        // TODO: Error Handling
-                    }).fail(function (e) {
+                        uploadedFiles.push(data);
+                    })
+                    .progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    })
+                    .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             if (e && e.code && e.code === 'UPL-0005')
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
@@ -132,27 +163,40 @@ define('io.ox/files/list/perspective',
                     });
             },
             stop: function () {
+                api.trigger('refresh.all');
+                grid.selection.clearIndex();
+                grid.selection.set(uploadedFiles);
+                uploadedFiles = [];
+                grid.refresh();
                 win.idle();
             }
         });
 
+        var currentVersionUpload;
+
         app.queues.update = upload.createQueue({
             start: function () {
                 win.busy();
+                currentVersionUpload = {
+                    id: app.currentFile.id,
+                    folder: app.currentFile.folder_id
+                };
             },
-            progress: function (data) {
+            progress: function (data, position, files) {
+                var pct = position / files.length;
+                win.busy(pct, 0);
                 return api.uploadNewVersion({
                         file: data,
-                        id: app.currentFile.id,
-                        folder: app.currentFile.folder_id,
-                        timestamp: app.currentFile.last_modified
+                        id: currentVersionUpload.id,
+                        folder: currentVersionUpload.folder,
+                        timestamp: _.now(),
+                        silent: position < files.length - 1
                     })
-                    .done(function (data) {
-                        // select new item
-                        grid.selection.set([data]);
-                        grid.refresh();
-                        // TODO: Error Handling
-                    }).fail(function (e) {
+                    .progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    })
+                    .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             if (e && e.code && e.code === 'UPL-0005')
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
@@ -199,29 +243,19 @@ define('io.ox/files/list/perspective',
         commons.addGridToolbarFolder(app, grid);
 
         app.invalidateFolder = function (data) {
+            api.propagate('change', data);
             if (data) {
+                grid.selection.clearIndex();
                 grid.selection.set([data]);
             }
             grid.refresh();
         };
 
         app.on('folder:change', function (e, id, folder) {
+            app.currentFile = null;
             if (_.browser.IE === undefined || _.browser.IE > 9) {
                 dropZone.remove();
                 if (dropZone) dropZone.include();
-            }
-            // reset first
-            win.nodes.title.find('.has-publications').remove();
-            // published?
-            if (folder['com.openexchange.publish.publicationFlag']) {
-                win.nodes.title.prepend(
-                    $('<img>', {
-                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
-                        title: gt('This folder has publications'),
-                        alt: ''
-                    })
-                    .addClass('has-publications')
-                );
             }
         });
 

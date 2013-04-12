@@ -14,7 +14,9 @@
  */
 
 define("io.ox/preview/main",
-    ["io.ox/core/extensions", "gettext!io.ox/preview", 'io.ox/core/capabilities'], function (ext, gt, caps) {
+    ['io.ox/core/extensions',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/preview'], function (ext, capabilities, gt) {
 
     "use strict";
 
@@ -127,10 +129,10 @@ define("io.ox/preview/main",
                     preload: 'metadata',
                     controls: 'control',
                     autoplay: false
-                }).hide().appendTo(this);
+                }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
                 require(['apps/mediaelement/mediaelement-and-player.js',
-                        'less!mediaelement/mediaelementplayer.css'], function () {
+                        'css!mediaelement/mediaelementplayer.css'], function () {
 
                     var pw,
                     wW = $(window).width();
@@ -184,13 +186,18 @@ define("io.ox/preview/main",
     }
 
     // if available register office typed renderer
-    if (caps.has('document_preview')) {
+    if (capabilities.has('document_preview')) {
         Renderer.point.extend(new Engine({
             id: "office",
             index: 10,
             supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
              'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
-             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots' ],
+             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots', 'rtf' ],
+            getUrl: function (file, options) {
+                options = _.extend({ width: 400 }, options);
+                var url = file.dataURL || file.url;
+                return url + '&format=preview_image&width=' + options.width + '&delivery=view&scaleType=contain';
+            },
             draw: function (file, options) {
 
                 var $a = clickableLink(file, function (e) {
@@ -346,6 +353,13 @@ define("io.ox/preview/main",
         protectedMethods: {
             clickableLink: clickableLink,
             dragOutHandler: dragOutHandler
+        },
+
+        // convenience method
+        getPreviewImage: function (file) {
+            var preview = new Preview(file);
+            window.preview = preview;
+            return preview && preview.renderer && preview.renderer.getUrl ? preview.renderer.getUrl(file) : '';
         }
     };
 });

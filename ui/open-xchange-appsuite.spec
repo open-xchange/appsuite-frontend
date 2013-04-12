@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite
-Version:        7.0.1
-%define         ox_release 8
+Version:        7.2.0
+%define         ox_release 0
 Release:        %{ox_release}
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -34,6 +34,7 @@ OX App Suite HTML5 client
 Group:          Applications/Productivity
 Summary:        Manifest and apps included in the OX App Suite HTML5 client
 Requires:       open-xchange-core
+Requires(post): open-xchange-halo
 Requires:       open-xchange-appsuite-l10n-en-us
 
 %description    manifest
@@ -49,32 +50,26 @@ Requires:       nodejs >= 0.4.0
 %description    dev
 SDK for the OX App Suite HTML5 client
 
-%package        help-de-de
-Group:          Applications/Productivity
-Summary:        Online help for OX App Suite (de_DE)
-Provides:       open-xchange-appsuite-help
-
-%description    help-de-de
-Online help for OX App Suite (de_DE)
-
-%package        help-en-us
-Group:          Applications/Productivity
-Summary:        Online help for OX App Suite (en_US)
-Provides:       open-xchange-appsuite-help
-
-%description    help-en-us
-Online help for OX App Suite (en_US)
+## help ##
+#%package       help-## lang ##
+#Group:         Applications/Productivity
+#Summary:       Online help for OX App Suite (## Lang ##)
+#Provides:      open-xchange-appsuite-help
+#
+#%description   help-## lang ##
+#Online help for OX App Suite (## Lang ##)
+## end ##
 
 ## l10n ##
-#%package l10n-## lang ##
-#Group: Applications/Productivity
-#Summary: Translation of the OX App Suite HTML5 client (## Lang ##)
-#Requires: open-xchange-l10n-## lang ##
-#Provides: open-xchange-appsuite-l10n
+#%package       l10n-## lang ##
+#Group:         Applications/Productivity
+#Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+#Requires:      open-xchange-l10n-## lang ##
+#Provides:      open-xchange-appsuite-l10n
 #
-#%description l10n-## lang ##
+#%description   l10n-## lang ##
 #Translation of the OX App Suite HTML5 client (## Lang ##)
-## end l10n ##
+## end ##
 
 %prep
 %setup -q
@@ -83,9 +78,12 @@ Online help for OX App Suite (en_US)
 
 %install
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{release}
+sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
+    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
+
+mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
+chmod +x "%{buildroot}$APPSUITE/share/update-themes.sh"
 
 find "%{buildroot}$APPSUITE" -type d \
     | sed -e 's,%{buildroot},%dir ,' > tmp/files
@@ -94,7 +92,7 @@ find "%{buildroot}$APPSUITE" \( -type f -o -type l \) \
 ## l10n ##
 #find tmp/l10n \( -type f -o -type l \) -name '*.## Lang ##.js' \
 #    | sed -e "s,tmp/l10n/,$APPSUITE," > tmp/files-## lang ##
-## end l10n ##
+## end ##
 cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
 mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
@@ -107,8 +105,26 @@ sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
 sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{release}
+    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
+
+%post manifest
+if [ "$1" = 1 ]; then
+    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+    [ -x $UPDATE ] && $UPDATE
+fi
+
+%postun manifest
+if [ "$1" = 0 ]; then
+    rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true
+else
+    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+    [ -x $UPDATE ] && $UPDATE
+fi
+
+%triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+[ -x $UPDATE ] && $UPDATE
 
 %files
 %defattr(-,root,root)
@@ -127,15 +143,12 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 /opt/open-xchange-appsuite-dev
 %attr(644,root,root) /opt/open-xchange-appsuite-dev/lib/sax-js/examples/switch-bench.js
 
-%files help-de-de
-%defattr(-,root,root)
-%dir %{docroot}/help
-%{docroot}/help/de_DE
-
-%files help-en-us
-%defattr(-,root,root)
-%dir %{docroot}/help
-%{docroot}/help/en_US
+## help ##
+#%files help-## lang ##
+#%defattr(-,root,root)
+#%dir %{docroot}/help
+#%{docroot}/help/## Lang ##
+## end ##
 
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##
@@ -144,7 +157,7 @@ rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 #%dir /opt/open-xchange/etc/languages
 #%dir /opt/open-xchange/etc/languages/appsuite
 #/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-## lang ##.properties
-## end l10n ##
+## end ##
 
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com

@@ -11,25 +11,27 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/mail/main",
-    ["io.ox/mail/util",
-     "io.ox/mail/api",
-     "io.ox/core/extensions",
-     "io.ox/core/commons",
-     "io.ox/core/config",
-     "io.ox/core/tk/vgrid",
-     "io.ox/mail/view-detail",
-     "io.ox/mail/view-grid-template",
-     "gettext!io.ox/mail",
-     "io.ox/core/tk/upload",
-     "io.ox/core/extPatterns/dnd",
-     "io.ox/core/notifications",
-     "io.ox/core/api/folder",
-     "io.ox/core/api/account",
-     "settings!io.ox/mail",
-     "io.ox/mail/actions",
-     "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications, folderAPI, account, settings) {
+define('io.ox/mail/main',
+    ['io.ox/mail/util',
+     'io.ox/mail/api',
+     'io.ox/core/extensions',
+     'io.ox/core/commons',
+     'io.ox/core/config',
+     'io.ox/core/tk/vgrid',
+     'io.ox/mail/view-detail',
+     'io.ox/mail/view-grid-template',
+     'gettext!io.ox/mail',
+     'io.ox/core/tk/upload',
+     'io.ox/core/extPatterns/dnd',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/core/notifications',
+     'io.ox/core/api/folder',
+     'io.ox/core/api/account',
+     'settings!io.ox/mail',
+     'io.ox/mail/actions',
+     'less!io.ox/mail/style.less',
+     'io.ox/mail/folderview-extensions'
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, actions, notifications, folderAPI, account, settings) {
 
     'use strict';
 
@@ -42,7 +44,7 @@ define("io.ox/mail/main",
             if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 //sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
-                app.updateGridSettings('sort', option);
+                grid.updateSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
@@ -67,9 +69,9 @@ define("io.ox/mail/main",
         scrollpane;
 
     // for saving the persistent settings
-    app.updateGridSettings = function (type, value) {
-        settings.set('vgrid/' + type, value).save();
-    };
+    // app.updateGridSettings = function (type, value) {
+    //     settings.set('vgrid/' + type, value).save();
+    // };
 
     // launcher
     app.setLauncher(function () {
@@ -77,7 +79,7 @@ define("io.ox/mail/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
-            title: gt("Inbox"),
+            title: "Inbox",
             search: true
         });
 
@@ -102,19 +104,64 @@ define("io.ox/mail/main",
 
         ext.point('io.ox/mail/vgrid/options').extend({
             threadView: settings.get('threadView') !== 'off',
-            selectFirstItem: settings.get('selectFirstMessage', true)
+            selectFirst: false,
+            max: 500
         });
 
         // grid
-        var options = ext.point('io.ox/mail/vgrid/options').options();
+        var originalOptions = ext.point('io.ox/mail/vgrid/options').options(),
+            options = _.extend({}, originalOptions);
+
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
-        options.editable = settings.get('vgrid/editable', true);
+        options.settings = settings;
+
+        // threadview is based on a 500 mails limit
+        // in order to view all mails in a folder we offer a link
+        options.tail = function (all) {
+            var threadSort = this.prop('sort') === 'thread',
+                inAllMode = this.getMode() === 'all',
+                isUnreadOnly = this.prop('unread'),
+                isUnlimited = this.option('max') === '0',
+                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited,
+                count = 0;
+            // hide?
+            if (hideTail) return $();
+            // complex count
+            count = _(all).reduce(function (sum, obj) {
+                return sum + obj.thread.length;
+            }, 0);
+            if (count < this.option('max')) return $();
+            // show tail
+            return $('<div class="vgrid-cell tail">').append(
+                $('<a href="#">').text(gt('Load all mails. This might take some time.'))
+            );
+        };
 
         grid = new VGrid(left, options);
 
+        // tail click
+        left.on('click', '.vgrid-cell.tail', function (e) {
+            e.preventDefault();
+            grid.option('max', '0').refresh(); // unlimited
+        });
+
         // add template
         grid.addTemplate(tmpl.main);
+
+        // folder change
+        grid.on('change:prop:folder', function (e, folder) {
+            // reset max
+            grid.option('max', originalOptions.max);
+            // reset "unread only"
+            grid.prop('unread', false);
+            // template changes for unified mail
+            var unified = folderAPI.is('unifiedfolder', folder);
+            if (unified !== tmpl.unified) {
+                tmpl.unified = unified;
+                grid.updateTemplates();
+            }
+        });
 
         //get sorting settings
         var sortSettings = {};
@@ -135,10 +182,8 @@ define("io.ox/mail/main",
 
         // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         // look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) { app.updateGridSettings('unread', value); });
-        grid.on('change:prop:order', function (e, value) { app.updateGridSettings('order', value); });
-        grid.on('change:prop:editable', function (e, value) { app.updateGridSettings('editable', value); });
-
+        grid.on('change:prop:unread', function (e, value) { grid.updateSettings('unread', value); });
+        grid.on('change:prop:order', function (e, value) { grid.updateSettings('order', value); });
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
@@ -229,14 +274,6 @@ define("io.ox/mail/main",
             }
         });
 
-        grid.on('change:prop:unread', function (e, value) {
-            if (value === true) {
-                grid.refresh().done(grid.pause);
-            } else {
-                grid.resume().refresh(true);
-            }
-        });
-
         grid.on('change:prop', drawGridOptions);
         drawGridOptions();
 
@@ -264,25 +301,55 @@ define("io.ox/mail/main",
             }
         });
 
+        var unseenHash = {};
+
+        function isUnseen(obj) {
+            return api.tracker.isUnseen(obj);
+        }
+
+        function updateUnseenHash(list) {
+            _(list).each(function (obj) {
+                var cid = _.cid(obj);
+                if (isUnseen(cid)) {
+                    unseenHash[cid] = true;
+                }
+            });
+        }
+
+        function resetUnseenHash() {
+            unseenHash = {};
+        }
+
         grid.setAllRequest(function () {
 
-            var sort = this.prop('sort'), unread = this.prop('unread');
-
-            return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
+            var sort = this.prop('sort'),
+                unread = this.prop('unread'),
+                call = sort === 'thread' ? 'getAllThreads' : 'getAll',
+                options = {
                     folder: this.prop('folder'),
-                    sort: sort,
-                    order: this.prop('order')
-                }, 'auto')
-                .pipe(function (response) {
-                    if (unread) {
-                        if (response.data) { //threadview
-                            response.data = _(response.data).filter(util.isUnseen);
-                        } else { //no threadview
-                            response = _(response).filter(util.isUnseen);
+                    max: this.option('max'),
+                    order: this.prop('order'),
+                    sort: sort
+                };
+
+            return api[call](options, 'auto').then(function (response) {
+
+                var data = response.data || response;
+
+                if (unread) {
+                    // return all mails that are either unseen or in unseenHash
+                    data = _(data).filter(function (obj) {
+                        var cid = _.cid(obj);
+                        if (cid in unseenHash) return true;
+                        if (isUnseen(cid)) {
+                            unseenHash[cid] = true;
+                            return true;
                         }
-                    }
-                    return response;
-                });
+                        return false;
+                    });
+                }
+                return data;
+            });
         });
 
         grid.setListRequest(function (ids) {
@@ -290,9 +357,25 @@ define("io.ox/mail/main",
             return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 
+        grid.on('change:prop:unread', function (e, value) {
+            var state = grid.prop('unread');
+            if (value === true) {
+                // turn on
+                grid.prop('unread', true);
+                // add all unread mails to hash
+                updateUnseenHash(grid.getIds());
+                // refresh now
+                grid.refresh();
+            } else {
+                // turn off
+                grid.prop('unread', false).refresh();
+                resetUnseenHash();
+            }
+        });
+
         win.nodes.title.on('click', '.badge', function (e) {
             e.preventDefault();
-            grid.prop('unread', !grid.prop('unread')).refresh();
+            grid.prop('unread', !grid.prop('unread'));
         });
 
 
@@ -317,9 +400,6 @@ define("io.ox/mail/main",
             function refresh(list, index) {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
-                    if (list) {
-                        grid.selection.insertAt(list.slice(1), index);
-                    }
                 });
             }
 
@@ -414,6 +494,12 @@ define("io.ox/mail/main",
             }
         };
 
+        showMail.cancel = function () {
+            _.lfo(drawThread);
+            _.lfo(drawMail);
+            _.lfo(drawFail);
+        };
+
         drawThread = function (baton) {
             viewDetail.drawThread.call(right.idle().empty(), baton.set('options', {
                 failMessage: gt('Couldn\'t load that email.'),
@@ -492,6 +578,11 @@ define("io.ox/mail/main",
             );
 
         }());
+
+        // drag & drop
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/mail/actions/move', null, baton);
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)

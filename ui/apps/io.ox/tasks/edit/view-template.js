@@ -19,8 +19,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/calendar/util',
                                           'io.ox/participants/views',
                                           'io.ox/core/tk/attachments',
+                                          'io.ox/tasks/api',
                                           'io.ox/core/extensions'],
-                                          function (gt, views, date, notifications, forms, util, pViews, attachments, ext) {
+                                          function (gt, views, date, notifications, forms, util, pViews, attachments, api, ext) {
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -331,7 +332,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
                     });
                     $.data(node, 'baton', baton);
                 });
@@ -398,9 +399,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var parsedDate = date.Local.parse(value, date.TIME);
 
             // just reject the change, if it's not parsable
-            if (value !== '' && (_.isNull(parsedDate) || parsedDate.getTime() === 0)) {
+            if (value !== '' && _.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
             //set hours to 6:00 am if nothing is set
@@ -433,9 +434,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 return null;
             }
             // just reject the change, if it's not parsable
-            if (_.isNull(parsedDate) || parsedDate.getTime() === 0) {
+            if (_.isNull(parsedDate)) {
                 model.trigger('change:' + attribute);//reset inputfields
-                setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
+                //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
 
@@ -504,7 +505,15 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         registerAs: 'attachmentList',
         className: 'div',
         index: 1900,
-        module: 4
+        module: 4,
+        finishedCallback: function (model, id) {
+            var obj = {};
+            obj.id = model.attributes.id || id;
+            obj.folder_id = model.attributes.folder_id || model.attributes.folder;
+            api.removeFromCache(encodeURIComponent(_.cid(obj))).done(function () {
+                api.removeFromUploadList(encodeURIComponent(_.cid(obj)));
+            });
+        }
     }));
 
     point.basicExtend({
@@ -512,10 +521,9 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 2000,
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm').addClass('span12'),
-                $inputWrap = attachments.fileUploadWidget({displayButton: true, multi: true}),
-                $input = $inputWrap.find('input[type="file"]'),
-                $button = $inputWrap.find('button[data-action="add"]')
-                    .on('click', function (e) {
+                $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                $input = $inputWrap.find('input[type="file"]')
+                   .on('change', function (e) {
                 e.preventDefault();
                 if (_.browser.IE !== 9) {
                     _($input[0].files).each(function (fileData) {
@@ -543,7 +551,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,
-        label: gt('Drop here to upload a <b>new attachment</b>'),
+        label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
         multiple: function (files, view) {
             _(files).each(function (fileData) {
                 view.baton.attachmentList.addFile(fileData);

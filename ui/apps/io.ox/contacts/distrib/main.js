@@ -18,7 +18,7 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
      'io.ox/contacts/util',
-     'less!io.ox/contacts/distrib/style.css'
+     'less!io.ox/contacts/distrib/style.less'
      ], function (api, contactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
@@ -36,19 +36,18 @@ define('io.ox/contacts/distrib/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: gt('Distribution List'),
+            title: 'Distribution List',
             userContent: true
         });
 
         app.create = function (folderId, initdata) {
+
             initialDistlist = {
                 folder_id: folderId,
                 mark_as_distributionlist: true,
                 last_name: ''
             };
 
-            // set state
-            app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
 
@@ -88,7 +87,7 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
-            return contactModel.factory.realm("edit").retain().get(obj).done(function (data) {
+            return contactModel.factory.realm("edit").retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
                 model = data;

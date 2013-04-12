@@ -88,43 +88,131 @@
 
      // supported browsers
     _.browserSupport = {
-        'Chrome': '20',
-        'Safari': '5',
-        'Firefox': '10',
-        'IE': '9'
+        'Chrome'    : 20,
+        'Safari'    : 5,
+        'Firefox'   : 10,
+        'IE'        : 9,
+        'Android'   : 4.2,
+        'iOS'       : 6.0
     };
 
     // browser detection - adopted from prototype.js
     var ua = navigator.userAgent,
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1;
+        chrome = ua.indexOf('Chrome/') > -1,
+        MacOS = ua.indexOf('Macintosh') > -1,
+        Windows = ua.indexOf('Windows') > -1,
+        Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1),
+        WindowsPhone = ua.indexOf('Windows Phone') > -1,
+        Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined,
+        iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
 
-    // add namespaces
+    // add namespaces, just sugar
     _.browser = {
         /** is IE? */
-        IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
-            : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
+        IE: navigator.appName === "Microsoft Internet Explorer" ?
+            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : undefined,
         /** is Opera? */
-        Opera: isOpera ? ua.split('Opera/')[1].split(' ')[0].split('.')[0]: undefined,
+        Opera: isOpera ?
+            ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
+        Safari: !iOS && !Android && webkit && !chrome ?
+            ua.split('Version/')[1].split(' Safari')[0] : undefined,
         /** Chrome */
-        Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
+        Chrome: webkit && chrome ?
+            ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
-        /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1,
-        /** iOS **/
-        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i),
-        /** Android **/
-        android: !!navigator.userAgent.match(/Android/i)
+        Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ?
+            ua.split('Firefox/')[1].split('.')[0] : undefined,
+        /** OS **/
+        Blackberry: Blackberry,
+        WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
+        iOS: iOS,
+        MacOS: MacOS,
+        Android : Android,
+        Windows: Windows
     };
 
+    var browserLC = {};
+
+    _(_.browser).each(function (value, key) {
+        // ensure version is a number, not a string
+        // Only major versions will be kept
+        // '7.2.3' will be 7.2
+        // '6.0.1' will be 6
+        if (_.isString(value)) {
+            value = parseFloat(value, 10);
+            _.browser[key] = value;
+        }
+        key = key.toLowerCase();
+        _.browser[key] = browserLC[key] = value;
+    });
+
+    // do media queries here
+    // TODO define sizes to match pads and phones
+    var queries = {
+        small: '(max-width: 480px)',
+        medium: '(min-width: 481px) and (max-width: 1024px)',
+        large: '(min-width: 1025px)',
+        landscape: '(orientation: landscape)',
+        portrait: '(orientation: portrait)',
+        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
+    };
+
+
+    var display = {};
+
+    _(queries).each(function (query, key) {
+        display[key] = Modernizr.mq(query);
+    });
+
+    var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+    // define devices as combination of screensize and OS
+    display.smartphone = display.small && mobileOS;
+    display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+    display.desktop = !mobileOS;
+    _.displayInfo = display;
     // extend underscore utilities
     _.mixin({
+
+        // returns current device size
+        display: function () {
+            if (display.small) return 'small';
+            if (display.medium) return 'medium';
+            return 'large';
+        },
+
+        // combination of browser & display
+        device: function (condition, debug) {
+            // add support for language checks
+            var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
+            misc[lang] = true;
+            misc[lang.split('_')[0] + '_*'] = true;
+            misc.touch = Modernizr.touch;
+            // no arguments?s
+            if (arguments.length === 0) {
+                return _.extend({}, browserLC, display, misc);
+            }
+            // true for undefined, null, empty string
+            if (!condition) return true;
+            // check condition
+            condition = String(condition || 'true').replace(/[a-z_*]+/ig, function (match) {
+                match = match.toLowerCase();
+                return browserLC[match] || display[match] || misc[match] || 'false';
+            });
+            if (debug) {
+                console.debug(condition);
+            }
+            try {
+                return new Function('return !!(' + condition + ')')();
+            } catch (e) {
+                console.error('_.device()', condition, e);
+                return false;
+            }
+        },
 
         /**
          * Serialize object (key/value pairs) to fit into URLs (e.g. a=1&b=2&c=HelloWorld)
@@ -225,12 +313,12 @@
          * Redirect
          */
         redirect: function (path) {
-            location.href = _.url.get(path);
+            location.href = (/^http/i).test(path) ? path : _.url.get(path);
         },
 
         get: function (path) {
             var l = location;
-            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
         }
     };
 
@@ -290,19 +378,11 @@
         },
 
         /**
-         * Returns local current time as timestamp
+         * Returns local current time as timestamp in UTC!
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
-        },
-
-        /**
-         * Returns current time as UTC timestamp
-         * @returns {long} Timestamp
-         */
-        utc: function () {
-            return (new Date()).getTime() - timezoneOffset;
         },
 
         /**
@@ -414,7 +494,37 @@
                         return params[index++];
                     }
                 )
-                .replace(/%%/, "%");
+                .replace(/%%/g, '%');
+        },
+
+        /**
+         * Array-based printf uses a callback function to collect parts of the
+         * format string in an array. Useful to construct DOM nodes based on
+         * translated text.
+         * @param {String} str the format string using printf syntax.
+         * @param {Function(index)} formatCb A callback function which converts
+         * a format specifier to an array element. Its parameter is a 0-based
+         * index of the format specifier.
+         * @param {Function(text)} textCb An optional callback function which
+         * converts text between format specifiers to an array element. Its
+         * parameter is the text to convert. If not specified, formatCb is
+         * called for both, format specifiers and the text between them.
+         */
+        aprintf: function (str, formatCb, textCb) {
+            var result = [], index = 0;
+            if (!textCb) textCb = formatCb;
+            String(str).replace(
+                /%(([0-9]+)\$)?[A-Za-z]|((?:%%|[^%])+)/g,
+                function (match, pos, n, text) {
+                    if (text) {
+                        result.push(textCb(text.replace(/%%/g, '%')));
+                    } else {
+                        if (pos) index = n - 1;
+                        result.push(formatCb(index++));
+                    }
+                    return '';
+                });
+            return result;
         },
 
         /**
@@ -457,7 +567,7 @@
             setTimeout(function () {
                 fn();
                 setInterval(fn, interval * (num || 1));
-            }, interval - (_.utc() % interval) + 1);
+            }, interval - (_.now() % interval) + 1);
         },
 
         wait: function (t) {
@@ -526,8 +636,12 @@
                     // join
                     tmp = encode(o.id);
                     f = o.folder_id !== undefined ? o.folder_id : o.folder;
-                    if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
-                    if (o[r] !== undefined && o[r] !== null) { tmp += '.' + encode(o[r]); }
+                    if (o[r] !== undefined && o[r] !== null) {
+                        // if we have a recurrence position we need a folder
+                        tmp = encode(f || 0) + '.' + tmp + '.' + encode(o[r]);
+                    } else {
+                        if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    }
                     return tmp;
                 }
             };
@@ -540,6 +654,14 @@
 
         fallback: function (o, defaultValue) {
             return _.isSet(o) ? o : defaultValue;
+        },
+
+        toHash: function (array, prop) {
+            var tmp = {};
+            _(array).each(function (obj) {
+                tmp[obj[prop]] = obj;
+            });
+            return tmp;
         },
 
         noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
@@ -557,7 +679,9 @@
         }, $());
     };
 
-
+    _.escapeRegExp = function (s) {
+        return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+    };
 
     window.assert = function (value, message) {
         if (value) return;

@@ -24,7 +24,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     "use strict";
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false});
+    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false });
 
     var point = views.point('io.ox/contacts/distrib/create-dist-view'),
         ContactCreateDistView = point.createView({
@@ -98,7 +98,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                         newMember = self.copyContact(self.$el, data.data, data.email);
                     } else {
                         //normalise
-                        if (nameValue !== '' || mailValue !== '') {
+                        if (nameValue !== '' || mailValue !== '') {
                             nameValue = nameValue === '' ? mailValue : nameValue;
                             mailValue = mailValue === '' ? nameValue : mailValue;
                             newMember = self.copyContact(self.$el, nameValue, mailValue);

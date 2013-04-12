@@ -160,7 +160,7 @@ function (ext, View, Model, gt, settings, api) {
                                  this.createControlsWrapper().append(
                                      this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
                                      this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
-                                     this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails')}),
+                                     this.createCheckbox({property: 'displayEmoticons', label: gt('Display emoticons as graphics in text E-Mails')}),
                                      this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')})
                                  )
                             ),

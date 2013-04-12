@@ -18,7 +18,7 @@ define("io.ox/calendar/view-grid-template",
      "gettext!io.ox/calendar",
      "io.ox/core/api/user",
      "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.css"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
+     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
 
     "use strict";
     var fnClickPerson = function (e) {
@@ -58,10 +58,7 @@ define("io.ox/calendar/view-grid-template",
                 };
             },
             set: function (data, fields, index) {
-                var hash = util.getConfirmations(data),
-                    conf = hash[ox.user_id] || { status: 1, comment: "" };
-
-                this.addClass(util.getConfirmationClass(conf.status) + (data.hard_conflict ? ' hardconflict' : ''));
+                this.addClass(util.getConfirmationClass(util.getConfirmationStatus(data)) + (data.hard_conflict ? ' hardconflict' : ''));
                 fields.title
                     .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
@@ -72,9 +69,7 @@ define("io.ox/calendar/view-grid-template",
                             $.txt(')')
                         );
                 }
-                if (data.location) {
-                    fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                }
+                fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);

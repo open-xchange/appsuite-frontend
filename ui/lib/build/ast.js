@@ -117,7 +117,7 @@ Scanner.prototype.scan = function(tree) {
         var oldWalker = walkers[scanner.walker.name];
         walkers[scanner.walker.name] = function() {
             if (scanner.walker.matcher(this)) {
-                var val = scanner.callback.call(this, scope);
+                var val = scanner.callback.call(this, scope, w.walk);
                 if (val != null) return val;
             }
             if (oldWalker) return oldWalker.apply(this, arguments);

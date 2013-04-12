@@ -6,3 +6,4 @@
 /debian/open-xchange-appsuite*.debhelper.log
 /debian/open-xchange-appsuite*.substvars
 /local.conf
+/apps/themes/*/less

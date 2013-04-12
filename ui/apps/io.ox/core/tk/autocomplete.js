@@ -39,7 +39,9 @@ define('io.ox/core/tk/autocomplete',
 
                 //get data
                 source: function (val) {
-                    return this.api.search(val);
+                    return this.api.search(val).pipe(function (data) {
+                        return o.placement === 'top' ? data.reverse() : data;
+                    });
                 },
 
                 //remove untwanted items
@@ -50,7 +52,7 @@ define('io.ox/core/tk/autocomplete',
                 //object related unique string
                 stringify: function (data) {
                     var value;
-                    if (data.type === 'resource' || data.type === 'group')
+                    if (data.type === 'resource' || data.type === 'group')
                         value = data.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '');
                     else
                         value = data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
@@ -90,14 +92,23 @@ define('io.ox/core/tk/autocomplete',
                     processData = typeof processData === 'undefined' ? true : processData;
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
-                        children.removeClass('selected')
-                            .eq(i).addClass('selected')
-                            .intoViewport(popup);
+                        children.removeClass('selected').eq(i).addClass('selected').intoViewport(popup);
                         index = i;
-                        if (processData)
+                        if (processData) {
                             update();
+                        }
                     }
                 },
+
+            selectFirst = function () {
+                var length = scrollpane.children().length;
+                if (o.placement === 'top') {
+                    select(length - 1, false);
+                } else {
+                    select(0, false);
+                }
+            },
+
 
             fnBlur = function (e) {
                     setTimeout(close, 200);
@@ -127,7 +138,19 @@ define('io.ox/core/tk/autocomplete',
                         var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
                         var myLeft = off.left -  (self.closest(o.parentSelector).offsetParent().offset().left);
 
-                        popup.css({ top: myTop, left: myLeft, width: w }).show();
+                        popup.removeClass('top-placement bottom-placement');
+
+                        if (o.placement === 'top') {
+                            // top
+                            popup.addClass('top-placement').css({ top: myTop - h - popup.outerHeight(), left: myLeft, width: w });
+                        } else {
+                            // bottom
+                            popup.addClass('bottom-placement').css({ top: myTop, left: myLeft, width: w });
+                        }
+
+                        popup.show();
+
+                        window.popup = popup;
 
                         isOpen = true;
                     }
@@ -168,8 +191,9 @@ define('io.ox/core/tk/autocomplete',
                         emptyPrefix = "\u0000";
                         index = -1;
                         //select first element without updating input field
-                        if (o.autoselect)
-                            select(0, false);
+                        if (o.autoselect) {
+                            selectFirst();
+                        }
                     } else {
                         // leads to no results if returned data wasn't filtered before (allready participant)
                         emptyPrefix = data.hits ? emptyPrefix : query;
@@ -184,13 +208,11 @@ define('io.ox/core/tk/autocomplete',
                         .addClass('io-ox-center')
                         .append(
                             // fail container/content
-                            $('<div>')
-                            .addClass('io-ox-fail')
-                            .html(gt('Could not load this list. '))
-                            .append(
+                            $('<div class="io-ox-fail">').append(
+                                $.txt(gt('Could not load this list')),
+                                $.txt('. '),
                                 //link
-                                $('<a href="#">')
-                                .text(gt('Retry'))
+                                $('<a href="#">').text(gt('Retry'))
                                 .on('click', function () {
                                         self.trigger('keyup', { isRetry: true });
                                     }
@@ -271,7 +293,7 @@ define('io.ox/core/tk/autocomplete',
             fnKeyUp = _.debounce(function (e, isRetry) {
                 e.stopPropagation();
                 var val = $.trim($(this).val());
-                isRetry = isRetry || false;
+                isRetry = isRetry || false;
                 if (val.length >= o.minLength) {
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastValue = val;
@@ -315,7 +337,7 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            popup.on('touchstart mousedown', blurOff).on('touchend mouseup', blurOn);
+            popup.on('mousedown', blurOff).on('mouseup', blurOn);
         }
 
         return this;

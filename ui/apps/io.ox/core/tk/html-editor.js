@@ -51,7 +51,14 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         var self = $(elem),
             tagName = elem.tagName,
             children = self.children(),
-            text;
+            text,
+            unwrapDiv = true;
+
+        if (tagName === 'DIV' && self.attr('id') && self.attr('id').indexOf('ox-text-p') !== -1) {
+            // OX Text Paragraph DIV
+            unwrapDiv = false;
+        }
+
         // remove attributes
         self.removeAttr('id title alt rel');
         // is closed tag?
@@ -98,7 +105,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
         } else {
             // extraneous DIV?
-            if (tagName === 'DIV' && !self.attr('class') && !self.attr('style')) {
+            if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
                 children.eq(0).unwrap();
                 return false;
             }
@@ -366,11 +373,13 @@ define.async('io.ox/core/tk/html-editor', [], function () {
     function Editor(textarea) {
         var def = $.Deferred(), ed;
         (textarea = $(textarea)).tinymce({
+
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
-            plugins: 'paste',
+            plugins: 'autolink,paste',
             theme: 'advanced',
             skin: 'ox',
             language: lookupTinyMCELanguage(),
+            gecko_spellcheck: true,
 
             init_instance_callback: function () {
                 // get internal editor reference
@@ -389,6 +398,14 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                     });
                 // done!
                 def.resolve();
+            },
+
+            execcommand_callback: function (editor_id, elm, command) {
+                if (command === 'createlink') {
+                    _.defer(function () {
+                        $(tinyMCE.get(editor_id).getBody()).find('a').attr('target', '_blank');
+                    });
+                }
             },
 
             theme_advanced_buttons1:

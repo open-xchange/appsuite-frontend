@@ -160,56 +160,6 @@
         return this.wrap($('<div>').addClass('io-ox-center')).parent();
     };
 
-    $.fail = function (msg, retry) {
-        var tmp = $("<div>")
-            .addClass('io-ox-fail')
-            .append(
-                $('<span>').text(msg)
-            );
-        if (retry) {
-            tmp.append(
-                $('<span>').text(' ')
-            )
-            .append(
-                $('<a>', { href: '#' }).text('Retry')
-                .on('click', function (e) {
-                    e.preventDefault();
-                    $(this).closest('.io-ox-center').remove();
-                    retry.apply(this, arguments);
-                })
-            );
-        }
-        return tmp.center();
-    };
-
-    // simple shake effect
-
-    $.fn.shake = function (num, dist, d) {
-        // defaults
-        num = num || 4;
-        dist = dist || 10;
-        d = d || 25;
-        // return deferred
-        var def = $.Deferred(), count = 0, max = num * 3,
-        node = this.eq(0),
-        position = node.css('position'),
-        inc = function () {
-            if (++count === max) {
-                node.css('position', position);
-                def.resolve();
-            }
-        };
-        if (position !== 'absolute') {
-            node.css('position', 'relative');
-        }
-        for (var i = 0; i < num; i++) {
-            node.animate({ left: -dist }, d, inc)
-            .animate({ left: dist }, d * 2, inc)
-            .animate({ left: 0 }, d, inc);
-        }
-        return def;
-    };
-
     $.txt = function (str) {
         return document.createTextNode(str !== undefined ? str : '');
     };
@@ -282,8 +232,8 @@
         };
     }());
 
-    $.alert = function (title, text) {
-        return $('<div>').addClass('alert alert-block alert-error fade in')
+    $.alert = function (title, text, classes) {
+        return $('<div>').addClass('alert alert-block ' + (classes || 'alert-error'))
             .append(
                 $('<a>', { href: '#' }).addClass('close').attr('data-dismiss', 'alert').html('&times;'),
                 title ? $('<h4>').addClass('alert-heading').text(title) : $(),

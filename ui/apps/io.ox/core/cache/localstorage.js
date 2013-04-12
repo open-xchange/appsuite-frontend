@@ -192,12 +192,31 @@ define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext
             items = null;
         },
 
-        getInstance: function (id) {
-            if (!instances[id]) {
-                return instances[id] = new WebStorage(id);
+        getInstance: (function () {
+
+            var firstRun = true;
+
+            function clear() {
+                // clear caches due to version change?
+                var ui = JSON.parse(localStorage.getItem('appsuite-ui') || '{}');
+                if (ui.version !== ox.version) {
+                    if (ox.debug === true) {
+                        console.warn('LocalStorage: Clearing persistent caches due to UI update');
+                    }
+                    localStorage.clear();
+                    localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
+                }
+                firstRun = false;
             }
-            return instances[id];
-        },
+
+            return function (id) {
+                if (firstRun) clear();
+                if (!instances[id]) {
+                    return instances[id] = new WebStorage(id);
+                }
+                return instances[id];
+            };
+        }()),
 
         clear: function () {
             fluent = {};

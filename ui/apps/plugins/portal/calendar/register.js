@@ -17,9 +17,10 @@ define("plugins/portal/calendar/register",
      "io.ox/core/date",
      "io.ox/calendar/util",
      "gettext!plugins/portal",
+     'settings!io.ox/calendar',
      'io.ox/core/strings',
      'io.ox/calendar/api'
-    ], function (ext, date, util, gt, strings, api) {
+    ], function (ext, date, util, gt, settings, strings, api) {
 
     'use strict';
 
@@ -62,36 +63,43 @@ define("plugins/portal/calendar/register",
 
         load: function (baton) {
             return api.getAll().pipe(function (ids) {
-                return api.getList(ids.slice(0, 10)).done(function (data) {
+                return api.getList(ids.slice(0, 14)).done(function (data) {
                     baton.data = data;
                 });
             });
         },
 
         preview: function (baton) {
+
             var appointments = baton.data,
-                $content = $('<div class="content">');
+                $content = $('<div class="content">'),
+                showDeclined = settings.get('showDeclinedAppointments', false);
 
-            if (appointments.length > 0) {
-                _(appointments).each(function (nextApp) {
-                    var start = new date.Local(nextApp.start_date),
-                        timespan = util.getSmartDate(nextApp.start_date, true) + (nextApp.full_time ? '' : ' ' + start.format(date.TIME));
-
-                    $content.append(
-                        $('<div class="item">')
-                        .data('item', nextApp)
-                        .append(
-                            $('<span class="normal accent">').text(timespan), $.txt(' '),
-                            $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
-                            $('<span class="gray">').text(nextApp.location || '')
-                        )
-                    );
-                });
-            } else {
+            if (appointments.length === 0) {
                 $content.append(
-                    $('<div class="item">')
+                    $('<div class="line">')
                     .text(gt("You don't have any appointments in the near future."))
                 );
+            } else {
+                _(appointments).each(function (nextApp) {
+
+                    var declined = util.getConfirmationStatus(nextApp) === 2,
+                        start = new date.Local(nextApp.start_date),
+                        timespan = util.getSmartDate(nextApp.start_date, true) + (nextApp.full_time ? '' : ' ' + start.format(date.TIME));
+
+                    if (showDeclined || !declined) {
+                        $content.append(
+                            $('<div class="item">')
+                            .css('text-decoration', declined ? 'line-through' : 'none')
+                            .data('item', nextApp)
+                            .append(
+                                $('<span class="normal accent">').text(timespan), $.txt(' '),
+                                $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
+                                $('<span class="gray">').text(nextApp.location || '')
+                            )
+                        );
+                    }
+                });
             }
 
             this.append($content);

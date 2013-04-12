@@ -22,7 +22,7 @@ define("plugins/halo/linkedIn/register", ["io.ox/core/extensions"], function (ex
         },
         draw: function ($node, providerName, liResponse) {
             var deferred = new $.Deferred();
-            require(["plugins/halo/linkedIn/view-halo", "less!io.ox/linkedIn/style.css"], function (base) {
+            require(["plugins/halo/linkedIn/view-halo", "less!io.ox/linkedIn/style.less"], function (base) {
                 if (liResponse.values) {
                     liResponse = liResponse.values[0];
                 }

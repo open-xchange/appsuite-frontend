@@ -287,10 +287,26 @@ define("io.ox/core/extensions",
             return list().inject(cb, memo).value();
         };
 
-        this.invoke = function (/* name, context */) {
+        this.pluck = function (id) {
+            return list().pluck(id).value();
+        };
+
+        this.invoke = function (name, context, baton) {
             var o = list(),
                 args = ['invoke'].concat($.makeArray(arguments));
-            return o.invoke.apply(o, args);
+            // manual invoke to consider baton
+            if (baton instanceof Baton) {
+                return o.map(function (ext) {
+                    if (!baton.isDisabled(self.id, ext.id)) {
+                        if (_.isFunction(ext[name])) {
+                            return ext[name].apply(context, args.slice(3));
+                        }
+                    }
+                })
+                .compact();
+            } else {
+                return o.invoke.apply(o, args);
+            }
         };
 
         this.disable = function (id) {
@@ -357,6 +373,7 @@ define("io.ox/core/extensions",
             // to be safe
             this.data = {};
             this.options = {};
+            this.flow = { disable: {} };
             this.$ = {};
             // just copy given object
             _.extend(this, obj);
@@ -388,6 +405,27 @@ define("io.ox/core/extensions",
         set: function (property, obj) {
             _.extend(this[property], obj);
             return this;
+        },
+
+        // shallow copy (since batons also contain DOM nodes)
+        clone: function (options) {
+            var clone = new Baton(options);
+            _(this).each(function (obj, key) {
+                clone[key] = _.extend({}, obj);
+            });
+            return clone;
+        },
+
+        disable: function (pointId, extensionId) {
+            // typical developer mistake (forget pointId actually)
+            if (arguments.length < 2) console.warn('Baton.disable(pointId, extensionId) needs two arguments!');
+            var hash = this.flow.disable;
+            (hash[pointId] = hash[pointId] || []).push(extensionId);
+        },
+
+        isDisabled: function (pointId, extensionId) {
+            var list = this.flow.disable[pointId];
+            return list === undefined ? false : _(list).contains(extensionId);
         }
     };
 

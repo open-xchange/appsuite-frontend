@@ -13,36 +13,63 @@
 define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
-     'gettext!plugins/portal'], function (ext, api, gt) {
+     'io.ox/preview/main',
+     'io.ox/portal/widgets',
+     'gettext!plugins/portal'], function (ext, api, preview, portalWidgets, gt) {
 
     'use strict';
+
 
     ext.point('io.ox/portal/widget/stickyfile').extend({
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
-            return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {
-                baton.data = data;
-            });
+            return api.get({ folder: props.folder_id, id: props.id }).then(
+                function success(data) {
+                    baton.data = data;
+                },
+                function fail(e) {
+                    return e.code === 'IFO-0300' ? 'remove' : e;
+                }
+            );
         },
 
         preview: function (baton) {
+            var content = $('<div class="content pointer">'),
+                data, options, url,
+                widgetCol = portalWidgets.getCollection();
 
             if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
-                var options = { width: 300, height: 300, scaleType: 'cover' };
-                var url = (api.getUrl(baton.data, 'view') + '&' + $.param(options)).replace(/([\(\)])/g, '\\$1');
-                this.addClass('photo-stream').append(
-                    $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
-                );
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                options = { width: 300, height: 300, scaleType: 'cover' };
+                url = api.getUrl(data, 'view') + '&' + $.param(options);
+                this.addClass('photo-stream');
+                content.css('backgroundImage', 'url(' + url + ')');
             } else {
-                this.append(
-                    $('<div class="content pointer">')
-                );
+                // try images url via preview engines
+                baton.data.url = api.getUrl(baton.data, 'bare');
+                if ((url = preview.getPreviewImage(baton.data))) {
+                    this.addClass('preview');
+                    content.css('backgroundImage', 'url(' + url + ')');
+                }
             }
+
+            this.append(content);
         },
 
         draw: function (baton) {
             var popup = this.busy();
+
+            api.on('delete', function (event, elements) {
+                var filename = baton.data.filename;
+
+                if (_(elements).any(function (element) { return element.filename === filename; })) {
+                    var widgetCol = portalWidgets.getCollection();
+                    widgetCol.remove(baton.model);
+                    popup.remove();
+                }
+            });
+
             require(['io.ox/files/list/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
                 api.get(obj).done(function (data) {

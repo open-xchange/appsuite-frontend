@@ -18,7 +18,7 @@ define('plugins/portal/facebook/register',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, strings, keychain, gt) {
+     'less!plugins/portal/facebook/style.less'], function (ext, proxy, strings, keychain, gt) {
 
     'use strict';
 
@@ -74,12 +74,12 @@ define('plugins/portal/facebook/register',
         var wall = resultsets.data[0].fql_result_set,
             profiles = resultsets.data[1].fql_result_set;
 
-        if (!wall || wall.length === 0) {
+        if (!wall || wall.length === 0) {
             content.append(
                 $('<div class="paragraph">').text(gt('No wall posts yet.')));
         } else {
             _(wall).each(function (post) {
-                var message = strings.shorten(post.message || post.description || '', 150);
+                var message = strings.shorten(post.message || post.description || post.attachment.caption || '', 150);
                 content.append(
                     $('<div class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
@@ -115,7 +115,7 @@ define('plugins/portal/facebook/register',
 
     ext.point('io.ox/portal/widget/facebook').extend({
 
-        title: 'Facebook',
+        title: gt('Facebook'),
 
         initialize: function (baton) {
             keychain.submodules.facebook.on('update create delete', function () {
@@ -246,6 +246,20 @@ define('plugins/portal/facebook/register',
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="icon-remove io-ox-portal-action">'))
             );
+        },
+
+        error: function (error) {
+            if (error.code !== "OAUTH-0006")
+                return; //let the default handling do the job
+
+            $(this).empty().append(
+                $('<h2>').text(gt('Facebook')),
+                $('<div class="content">').text(gt('Click here to add your account'))
+                .on('click', {}, function () {
+                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp');
+                })
+            );
+            console.log("DEBUG", error);
         }
     });
 
@@ -311,6 +325,17 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             this.text(post.message);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'location',
+        index: 128,
+        accepts: function (post) {
+            return (post.type === 285 && post.attachment && post.attachment.caption);
+        },
+        draw: function (post) {
+            this.text(post.attachment.caption);
         }
     });
 

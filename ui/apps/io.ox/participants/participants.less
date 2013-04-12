@@ -1,43 +1,84 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ */
+
 .participant-wrapper {
-    cursor: pointer;
+
     position: relative;
-    margin: 5px 0;
-}
-.participant-wrapper .remove {
-    display: inline-block;
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    bottom: 1px;
-    width: 36px;
-    height: 60px;
-    line-height: 1em;
-    background-color: white;
-    color: #CCC;
-    cursor: pointer;
-}
-.participant-wrapper .remove:hover {
-    background-color: #a00;
-    color: #fff;
-    text-decoration: none;
-}
+    margin: 0 0 2px 0;
+    min-height: 54px; /* for floating icon */
 
-.participant-wrapper .participant-email{
-    color: @linkColor;
-}
+    line-height: 20px;
 
-.participant-wrapper .remove .icon {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    margin-top: -0.5em;
-    text-align: center;
-}
-.participant-wrapper .extra-decorator {
-    color: #888;
+    .autocomplete-item & {
+        margin: 0;
+    }
 
-}
-.participant-wrapper .participant-name {
-    font-weight: bold;
+    &.pointer {
+        cursor: pointer;
+    }
+
+    .remove {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 30px;
+        line-height: 1em;
+        background-color: #f5f5f5;
+        color: #ccc;
+        cursor: pointer;
+        display: none;
+    }
+
+    .remove:hover {
+        background-color: #a00;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .remove .icon {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin-top: -0.5em;
+        text-align: center;
+    }
+
+    &.removable {
+        padding-right: 40px;
+        .remove {
+            display: block;
+        }
+    }
+
+    .extra-decorator {
+        color: #888;
+    }
+
+    .participant-name {
+        padding-top: 7px;
+        font-weight: bold;
+        .ellipsis();
+    }
+
+    .participant-email{
+        color: @linkColor;
+        .ellipsis();
+    }
+
+    &.three-rows {
+        line-height: 18px;
+        .participant-name {
+            padding-top: 0;
+        }
+    }
 }

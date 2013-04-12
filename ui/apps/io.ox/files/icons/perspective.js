@@ -21,8 +21,9 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/api/folder',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
+     'io.ox/core/tk/selection',
      'io.ox/core/notifications'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, notifications) {
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/files/icons/perspective',
         thumbnailHeight: 90,
         fileIconWidth: 158,
         fileIconHeight: 182,
-        fileFilterRegExp: '.*' // was: '^[^.].*$'
+        fileFilterRegExp: false //'.*' // was: '^[^.].*$'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -70,7 +71,7 @@ define('io.ox/files/icons/perspective',
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.iconContainer = $('<div class="icon-container">')
+                baton.$.iconContainer = $('<div class="file-icon-container">')
             );
         }
     });
@@ -110,16 +111,37 @@ define('io.ox/files/icons/perspective',
     }
 
     function getOfficePreview(file, options) {
-        return 'api/infostore?action=document&folder=' + file.folder_id + '&id=' + file.id +
+        return 'api/files?action=document&folder=' + file.folder_id + '&id=' + file.id +
               '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&format=preview_image&delivery=view';
     }
 
-    function cut(str) {
+    function cut(str, maxLen, cutPos) {
+        if (!cutPos) cutPos = 15;
+        if (!maxLen) maxLen = 70;
         str = String(str || '');
-        var parts = str.split('.'),
-            extension = parts.length > 1 ? '.' + parts.pop() : '';
-        str = parts.join('.');
-        return (str.length <= 40 ? str : str.substr(0, 40) + '..') + extension;
+        if (str.length > maxLen) {
+            return str.substr(0, cutPos).trim() + '\u2026' + str.substr(str.length - cutPos).trim();
+        } else {
+            return str;
+        }
+    }
+
+    function dropZoneInit(app) {
+        if (_.browser.IE === undefined || _.browser.IE > 9) {
+            dropZoneOff();
+            dropZone = new dnd.UploadZone({
+                ref: 'io.ox/files/dnd/actions'
+            }, app);
+            dropZoneOn();
+        }
+    }
+
+    function dropZoneOn() {
+        if (dropZone) dropZone.include();
+    }
+
+    function dropZoneOff() {
+        if (dropZone) dropZone.remove();
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -129,14 +151,14 @@ define('io.ox/files/icons/perspective',
                 img,
                 wrap = $('<div class="wrap">'),
                 iElement;
-            this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
+            this.addClass('file-icon pull-left selectable').attr('data-obj-id', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, iconError);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, iconError);
             } else if (Caps.has('document_preview') &&
-                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf).*$/i).test(file.file_mimetype) ||
-                    (/^text\/.*(plain).*$/i).test(file.file_mimetype)) {
+                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
+                    (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
                 iElement = drawGeneric(file.filename);
                 wrap.append(iElement);
                 img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
@@ -151,20 +173,22 @@ define('io.ox/files/icons/perspective',
             }
             this.append(
                 wrap.append(img),
-                $('<div class="title">').text(gt.noI18n(cut(file.title)))
+                $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
+                $('<input type="checkbox" class="reflect-selection" style="display:none">')
             );
         }
     });
 
     function loadFiles(app) {
         if (!app.getWindow().search.active) {
-            return api.getAll({ folder: app.folder.get() });
+            return api.getAll({ folder: app.folder.get() }, false);
         } else {
             return api.search(app.getWindow().search.query);
         }
     }
 
     function filterFiles(files, options) {
+        if (!options.fileFilterRegExp) { return files; }
         return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
     }
 
@@ -181,9 +205,12 @@ define('io.ox/files/icons/perspective',
 
     return _.extend(new ox.ui.Perspective('icons'), {
 
-        draw: function (app) {
+        render: function (app) {
+            
             var options = ext.point('io.ox/files/icons/options').options(),
                 win = app.getWindow(),
+                self = this,
+                scrollpane,
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
                 start,
@@ -201,25 +228,63 @@ define('io.ox/files/icons/perspective',
                 dialog = new dialogs.SidePopup(),
                 inline;
 
-            this.main.append(
-                $('<div class="files-iconview">').append(iconview)
+            this.main.addClass('files-icon-perspective').empty().append(
+                scrollpane = $('<div class="files-iconview">').append(iconview)
             );
+
+            Selection.extend(this, iconview, { draggable: true, dragType: 'mail' });
 
             layout = calculateLayout(iconview.parent(), options);
 
-            function iconClick(popup, e, target) {
+            dropZoneInit(app);
 
-                var cid = target.attr('data-cid');
+            app.on('perspective:icons:hide', dropZoneOff)
+               .on('perspective:icons:show', dropZoneOn)
+               .on('folder:change', function (e, id, folder) {
+                    app.currentFile = null;
+                    dropZoneInit(app);
+                    app.getWindow().search.close();
+                    self.main.closest('.search-open').removeClass('search-open');
+                    iconview.empty();
+                    drawFirst();
+                });
+
+            function iconClick(popup, e, target) {
+                var cid = target.attr('data-obj-id');
                 api.get(_.cid(cid)).done(function (file) {
                     app.currentFile = file;
                     if (dropZone) {
                         dropZone.update();
                     }
-                    popup.append(viewDetail.draw(file));
+                    popup.append(viewDetail.draw(file, app));
                 });
             }
 
-            dialog.delegate(iconview, '.file-icon', iconClick);
+            iconview.on('click', '.selectable', function (e) {
+                var cid = _.cid($(this).attr('data-obj-id'));
+                if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                    api.get(cid).done(function (file) {
+                        app.currentFile = file;
+                        if (dropZone) {
+                            dropZone.update();
+                        }
+                        dialog.show(e, function (popup) {
+                            popup.append(viewDetail.draw(file, app));
+                        });
+                        dialog.on('close', function () {
+                            if (dropZone) {
+                                var tmp = app.currentFile;
+                                app.currentFile = null;
+                                dropZone.update();
+                                dropZoneInit(app);
+                                app.currentFile = tmp;
+                            }
+                        });
+                    });
+                } else {
+                    dialog.close();
+                }
+            });
 
             drawIcon = function (file) {
                 var node = $('<div>');
@@ -230,7 +295,7 @@ define('io.ox/files/icons/perspective',
             };
 
             drawIcons = function (files) {
-                iconContainer.find('.scroll-spacer', win).before(
+                iconContainer.find('.scroll-spacer').before(
                     _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
                         return drawIcon(file);
@@ -240,9 +305,36 @@ define('io.ox/files/icons/perspective',
 
             redraw = function (ids) {
                 drawIcons(ids);
-                $('.files-iconview').on('scroll', function (event) {
-                    if ($('.files-scrollable-pane', win).length > 0 && $('.files-scrollable-pane', win)[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
-                        $(this).off('scroll');
+                scrollpane.on('scroll', function (e) {
+                    /*
+                     *  How this works:
+                     *
+                     *      +--------+     0
+                     *      |        |
+                     *      |        |
+                     *      |        |
+                     *      |        |
+                     *   +--+--------+--+  scrollTop
+                     *   |  |        |  |
+                     *   |  |        |  |
+                     *   |  |        |  |  height
+                     *   |  |        |  |
+                     *   |  |        |  |
+                     *   +--+--------+--+  bottom
+                     *      |        |
+                     *      |        |
+                     *      +--------+     scrollHeight
+                     *
+                     *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
+                     *
+                     */
+                    var scrollTop = scrollpane.scrollTop(),
+                        scrollHeight = scrollpane.prop('scrollHeight'),
+                        height = scrollpane.outerHeight(),
+                        bottom = scrollTop + height;
+                    // scrolled to bottom?
+                    if (bottom > (scrollHeight - 50)) {
+                        scrollpane.off('scroll');
                         start = end;
                         end = end + layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
@@ -250,6 +342,7 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
+                self.selection.update();
             };
 
             drawFirst = function () {
@@ -270,7 +363,7 @@ define('io.ox/files/icons/perspective',
 
                 // add element to provoke scrolling
                 iconContainer.append(
-                    $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
+                    $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
                 );
 
                 loadFiles(app)
@@ -280,11 +373,11 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
-                        baton.allIds = filterFiles(ids, options);
+                        baton.allIds = allIds = filterFiles(ids, options);
 
-                        allIds = baton.allIds;
-
+                        self.selection.init(allIds);
                         redraw(allIds.slice(start, end));
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                     })
                     .fail(function (response) {
                         iconview.idle();
@@ -309,8 +402,6 @@ define('io.ox/files/icons/perspective',
                 end = end + layout.iconCols;
                 redraw(allIds.slice(start, end));
             };
-
-            drawFirst();
 
             app.queues = {};
 
@@ -349,8 +440,9 @@ define('io.ox/files/icons/perspective',
                             file: file,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder_id,
-                            timestamp: app.currentFile.last_modified
-                        }).progress(function (e) {
+                            timestamp: _.now()
+                        })
+                        .progress(function (e) {
                             var sub = e.loaded / e.total;
                             win.busy(pct + sub / files.length, sub);
                         }).fail(function (e) {
@@ -391,7 +483,7 @@ define('io.ox/files/icons/perspective',
 
             api.on('update', function (e, obj) {
                 // update icon
-                var cid = _.cid(obj), icon = iconview.find('.file-icon[data-cid="' + cid + '"]');
+                var cid = _.cid(obj), icon = iconview.find('.file-icon[data-obj-id="' + cid + '"]');
                 if (icon.length) {
                     icon.replaceWith(drawIcon(obj));
                 }
@@ -399,9 +491,18 @@ define('io.ox/files/icons/perspective',
 
             api.on('refresh.all', function () {
                 if (!app.getWindow().search.active) {
-                    api.getAll({ folder: app.folder.get() }).done(function (ids) {
+                    api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
-                        var hash = {}, oldhash = {}, oldIds, newIds, changed = [], deleted, added, indexPrev, indexPrevPosition, indexNextPosition;
+                        var hash = {},
+                        oldhash  = {},
+                        oldIds   = [],
+                        newIds   = [],
+                        changed  = [],
+                        deleted  = [],
+                        added    = [],
+                        indexPrev,
+                        indexPrevPosition,
+                        indexNextPosition;
 
                         indexPrev = function (index, cid) {
                             return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
@@ -434,12 +535,20 @@ define('io.ox/files/icons/perspective',
                         oldIds = _.map(allIds, _.cid);
                         newIds = _.map(ids, _.cid);
 
-                        deleted = _.difference(oldIds, newIds);
-                        added   = _.difference(newIds, oldIds);
+                        for (var id in oldIds) {
+                            if (-1 === newIds.indexOf(oldIds[id])) {
+                                deleted.push(oldIds[id]);
+                            }
+                        }
 
-                        allIds  = ids;
+                        for (var id in newIds) {
+                            if (-1 === oldIds.indexOf(newIds[id])) {
+                                added.push(newIds[id]);
+                            }
+                        }
 
-                        baton.allIds = ids;
+                        baton.allIds = allIds = ids;
+
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                         _(changed).each(function (cid) {
@@ -448,10 +557,14 @@ define('io.ox/files/icons/perspective',
                                 prev = indexPrevPosition(newIds, cid),
                                 next = indexNextPosition(newIds, cid);
 
-                            iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
+                            iconview.find('.file-icon[data-obj-id="' + cid + '"]').remove();
 
                             if (indexPrev(newIds, cid)) {
-                                iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
+                                    iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
+                                } else {
+                                    iconview.find('.file-icon-container').prepend(drawIcon(data));
+                                }
                             } else {
                                 end = end - 1;
                             }
@@ -460,7 +573,7 @@ define('io.ox/files/icons/perspective',
 
                         _(deleted).each(function (cid) {
 
-                            iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
+                            iconview.find('.file-icon[data-obj-id="' + cid + '"]').remove();
                             end = end - 1;
 
                         });
@@ -471,60 +584,23 @@ define('io.ox/files/icons/perspective',
                                 prev = indexPrevPosition(newIds, cid);
 
                             if (indexPrev(newIds, cid)) {
-                                if (iconview.find('.file-icon[data-cid="' + prev + '"]').length) {
-                                    iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
+                                    iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
                                 } else {
-                                    iconview.find('.icon-container').prepend(drawIcon(data));
+                                    iconview.find('.file-icon-container').prepend(drawIcon(data));
                                 }
                                 end = end + 1;
                             }
                         });
 
                         recalculateLayout();
-
-                        hash = oldhash = ids = null;
+                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
                 } else {
                     drawFirst();
                 }
             });
-            api.trigger('refresh.all');
-        },
-
-        render: function (app) {
-            this.main.addClass('files-icon-perspective').empty();
-
-            var that = this;
-
-            if (_.browser.IE === undefined || _.browser.IE > 9) {
-                dropZone = new dnd.UploadZone({
-                    ref: 'io.ox/files/dnd/actions'
-                }, app);
-                if (dropZone) dropZone.include();
-            }
-            app.on('perspective:icons:hide', function () {
-                if (dropZone) dropZone.remove();
-                // shortcutPoint.deactivate();
-            });
-
-            app.on('perspective:icons:show', function () {
-                if (dropZone) dropZone.include();
-                // shortcutPoint.deactivate();
-            });
-            if (dropZone) dropZone.include();
-
-            app.on('folder:change', function (e, id, folder) {
-                if (_.browser.IE === undefined || _.browser.IE > 9) {
-                    dropZone.remove();
-                    if (dropZone) dropZone.include();
-                }
-                app.getWindow().search.close();
-                that.main.closest('.search-open').removeClass('search-open');
-                that.main.empty();
-                that.draw(app);
-            });
-
-            this.draw(app);
+            drawFirst();
         }
     });
 });

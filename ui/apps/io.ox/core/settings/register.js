@@ -19,7 +19,8 @@ define('io.ox/core/settings/register', ['io.ox/core/extensions', 'gettext!io.ox/
         id: 'users',
         title: gt("My contact data"),
         ref: 'io.ox/users',
-        loadSettingPane: false
+        loadSettingPane: false,
+        index: 750
     });
 
     ext.point("io.ox/users/settings/detail").extend({

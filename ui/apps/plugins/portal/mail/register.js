@@ -33,29 +33,36 @@ define('plugins/portal/mail/register',
 
         load: function (baton) {
             return api.getAll({ folder: api.getDefaultFolder() }, false).pipe(function (mails) {
-                return api.getList(mails.slice(0, 10)).done(function (data) {
+                return api.getList(mails.slice(0, 20)).done(function (data) {
                     baton.data = data;
                 });
             });
         },
 
         preview: function (baton) {
+
             var $content = $('<div class="content">');
-            if (baton.data && baton.data.length) {
-                _(baton.data).each(function (mail) {
-                    var received = new date.Local(mail.received_date).format(date.DATE);
-                    $content.append(
-                        $('<div class="item">')
-                        .data('item', mail)
-                        .append(
-                            $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
-                            $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
-                            $('<span class="accent">').text(received)
-                        )
-                    );
-                });
+
+            // remove deleted mails
+            var list = _(baton.data).filter(function (obj) {
+                return !util.isDeleted(obj);
+            });
+
+            if (list && list.length) {
+                $content.append(
+                    _(list).map(function (mail) {
+                        var received = new date.Local(mail.received_date).format(date.DATE);
+                        return $('<div class="item">')
+                            .data('item', mail)
+                            .append(
+                                $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
+                                $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
+                                $('<span class="accent">').text(received)
+                            );
+                    })
+                );
             } else {
-                $content.text(gt('No mails at all!'));
+                $content.text(gt('No mails in your inbox'));
             }
             this.append($content);
         },

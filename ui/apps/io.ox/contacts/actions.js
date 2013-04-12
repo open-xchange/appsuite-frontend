@@ -17,8 +17,9 @@ define('io.ox/contacts/actions',
      'io.ox/contacts/api',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/contacts'], function (ext, links, api, config, notifications, capabilities, gt) {
+     'io.ox/core/print',
+     'gettext!io.ox/contacts',
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, gt, settings) {
 
     'use strict';
 
@@ -61,7 +62,9 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/update', {
         index: 100,
         id: 'edit',
-        requires: 'one modify',
+        requires:  function (e) {
+            return e.collection.has('one') && e.collection.has('modify') && _.device('!small');
+        },
         action: function (baton) {
             var data = baton.data;
             if (data.mark_as_distributionlist === true) {
@@ -83,7 +86,9 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/create', {
         index: 100,
         id: 'create',
-		requires: 'create',
+		requires:  function (e) {
+            return e.collection.has('create') && _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/contacts/edit/main'], function (m) {
                 var def = $.Deferred();
@@ -100,7 +105,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create-dist',
 		requires: function (e) {
-            return e.collection.has('create');
+            return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
@@ -111,67 +116,89 @@ define('io.ox/contacts/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title, success) {
-        return function (list) {
-            require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
 
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(title))
-                    .addPrimaryButton('ok', title)
-                    .addButton('cancel', gt('Cancel')),
-                    item = _(list).first(),
-                    id = String(item.folder_id || item.folder),
-                    tree = new views.FolderList(dialog.getBody().css('height', '250px'), { type: type });
+    function moveAndCopy(type, label, success, requires) {
 
-                dialog
-                    .show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var selectedFolder = tree.selection.get();
-                            if (selectedFolder.length === 1) {
-                                // move action
-                                api[apiAction](list, selectedFolder[0]).then(
-                                    function () {
-                                        notifications.yell('success', success);
-                                    },
-                                    notifications.yell
-                                );
+        new Action('io.ox/contacts/actions/' + type, {
+            id: type,
+            requires: requires,
+            multiple: function (list, baton) {
+
+                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
+
+                    function commit(target) {
+                        if (type === "move" && vGrid) vGrid.busy();
+                        api[type](list, target).then(
+                            function () {
+                                notifications.yell('success', success);
+                                folderAPI.reload(target, list);
+                                if (type === "move" && vGrid) vGrid.idle();
+                            },
+                            notifications.yell
+                        );
+                    }
+
+                    if (baton.target) {
+                        commit(baton.target);
+                    } else {
+                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h3>').text(label))
+                            .addPrimaryButton("ok", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().css({ height: '250px' });
+                        var folderId = String(list[0].folder_id),
+                            id = settings.get('folderpopup/last') || folderId,
+                            tree = new views.FolderTree(dialog.getBody(), {
+                                type: 'contacts',
+                                open: settings.get('folderpopup/open', []),
+                                toggle: function (open) {
+                                    settings.set('folderpopup/open', open).save();
+                                },
+                                select: function (id) {
+                                    settings.set('folderpopup/last', id).save();
+                                }
+                            });
+                        dialog.show(function () {
+                            tree.paint().done(function () {
+                                tree.select(id);
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'ok') {
+                                var target = _(tree.selection.get()).first();
+                                if (target && (type === 'copy' || target !== folderId)) {
+                                    commit(target);
+                                }
                             }
-                        }
-                        tree.destroy();
-                        tree = dialog = null;
-                    });
-            });
-        };
-    };
+                            tree.destroy();
+                            tree = dialog = null;
+                        });
+                    }
+                });
+            }
+        });
+    }
 
-    new Action('io.ox/contacts/actions/move', {
-        id: 'move',
-        requires: 'some delete',
-        multiple: copyMove('contacts', 'move', gt('Move'), gt('Contacts have been moved'))
-    });
-
-    new Action('io.ox/contacts/actions/copy', {
-        id: 'copy',
-        requires: 'some read',
-        multiple: copyMove('contacts', 'copy', gt('Copy'), gt('Contacts have been copied'))
-    });
+    moveAndCopy('move', gt('Move'), gt('Contacts have been moved'), 'some delete');
+    moveAndCopy('copy', gt('Copy'), gt('Contacts have been copied'), 'some read');
 
     new Action('io.ox/contacts/actions/send', {
 
+        capabilities: 'webmail',
+
         requires: function (e) {
-            if (!capabilities.has('webmail')) {
+            var ctx = e.context;
+            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
                 return false;
             } else {
-                var list = [].concat(e.context);
+                var list = [].concat(ctx);
                 return api.getList(list).pipe(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
+                    }, 0).value() > 0);
+                    return test;
                 });
             }
         },
@@ -207,13 +234,104 @@ define('io.ox/contacts/actions',
         }
     });
 
+    new Action('io.ox/contacts/actions/vcard', {
+
+        capabilities: 'webmail',
+        requires: 'some read',
+        // don't need complex checks here, we simple allow all
+        // don't even need an email address
+
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                require(['io.ox/mail/write/main'], function (m) {
+                    api.getList(list).done(function (list) {
+                        m.getApp().launch().done(function () {
+                            this.compose({ contacts_ids: list });
+                        });
+                    });
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/contacts/print', list);
+        }
+    });
+
+    new Action('io.ox/contacts/actions/print-disabled', {
+
+        requires: 'some read',
+
+        multiple: function (list) {
+            var win;
+            api.getList(list).done(function (list) {
+                var cleanedList = [];
+
+                _(list).each(function (contact) {
+                    if (contact.mark_as_distributionlist !== true) {
+                        var clean = {};
+                        clean.folder = contact.folder_id;
+                        clean.id = contact.id;
+                        cleanedList.push(clean);
+
+                    }
+                });
+
+                require(['io.ox/core/print'], function (print) {
+                    win = print.openURL();
+                    win.document.title = gt('Print');
+
+                    require(['io.ox/core/http'], function (http) {
+
+                        var getPrintable = function (cleanedList) {
+                            return http.PUT({
+                                module: 'contacts',
+                                dataType: 'text',
+                                params: {
+                                    action: 'list',
+//                                    template: 'infostore://70170', // dev
+//                                    template: 'infostore://70213', //  ui-dev
+                                    template: 'infostore://12495', // tobias
+                                    view: 'text',
+                                    format: 'template',
+                                    columns: '501,502,519,526,542,543,547,548,549,551,552'
+                                },
+                                data: cleanedList
+                            });
+                        };
+
+                        getPrintable(cleanedList)
+                        .done(function (print) {
+                            var $content = $('<div>').append(print);
+                            win.document.write($content.html());
+                            win.print();
+                        });
+
+                    });
+                });
+
+
+
+
+            });
+        }
+    });
+
     new Action('io.ox/contacts/actions/invite', {
 
+        capabilities: 'calendar',
+
         requires: function (e) {
-            if (!capabilities.has('calendar')) {
+            var ctx = e.context;
+            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
                 return false;
             } else {
-                var list = [].concat(e.context);
+                var list = [].concat(ctx);
                 return api.getList(list).pipe(function (list) {
                     return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                         return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
@@ -223,6 +341,7 @@ define('io.ox/contacts/actions',
         },
 
         multiple: function (list) {
+            var distLists = [];
 
             function mapList(obj) {
                 if (obj.id) {
@@ -236,10 +355,11 @@ define('io.ox/contacts/actions',
 
             function mapContact(obj) {
                 if (obj.distribution_list && obj.distribution_list.length) {
-                    return _(obj.distribution_list).map(mapList);
-                } else if (obj.internal_userid) {
+                    distLists.push(obj);
+                    return;
+                } else if (obj.internal_userid || obj.user_id) {
                     // internal user
-                    return { type: 1, id: obj.internal_userid };
+                    return { type: 1, id: obj.internal_userid || obj.user_id};
                 } else {
                     // external user
                     return { type: 5, display_name: obj.display_name, mail: obj.email1 || obj.email2 || obj.email3 };
@@ -250,31 +370,176 @@ define('io.ox/contacts/actions',
                 return obj.type === 1 || !!obj.mail;
             }
 
+            function filterForDistlists(list) {
+                var cleaned = [];
+                _(list).each(function (single) {
+                    if (!single.mark_as_distributionlist) {
+                        cleaned.push(single);
+                    } else {
+                        distLists = distLists.concat(single.distribution_list);
+                    }
+                });
+                return cleaned;
+            }
+
             api.getList(list).done(function (list) {
                 // set participants
-                var participants = _.chain(list).map(mapContact).flatten(true).filter(filterContact).value();
+                var def = $.Deferred(),
+                    resolvedContacts = [],
+                    cleanedList = filterForDistlists(list),
+                    participants = _.chain(cleanedList).map(mapContact).flatten(true).filter(filterContact).value();
+
+                distLists = _.union(distLists);
+
+                api.getList(distLists).done(function (obj) {
+                    resolvedContacts = resolvedContacts.concat(obj);
+                    def.resolve();
+                });
+
                 // open app
-                require(['io.ox/calendar/edit/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.create({ participants: participants, folder_id: config.get('folder.calendar') });
+                def.done(function () {
+                    resolvedContacts = _.chain(resolvedContacts).map(mapContact).flatten(true).filter(filterContact).value();
+
+                    participants = participants.concat(resolvedContacts);
+//                    participants = _.uniq(participants, false, function (single) {
+//                        return single.id;
+//                    });
+
+                    require(['io.ox/calendar/edit/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            this.create({ participants: participants, folder_id: config.get('folder.calendar') });
+                        });
                     });
                 });
+
             });
         }
     });
 
     new Action('io.ox/contacts/actions/add-to-portal', {
+        capabilities: 'portal',
         requires: function (e) {
             return e.collection.has('one') && !!e.context.mark_as_distributionlist;
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickycontact', 'contacts', {
-                    id: baton.data.id,
-                    folder_id: baton.data.folder_id,
-                    title: baton.data.display_name
+                widgets.add('stickycontact', {
+                    plugin: 'contacts',
+                    props: {
+                        id: baton.data.id,
+                        folder_id: baton.data.folder_id,
+                        title: baton.data.display_name
+                    }
                 });
                 notifications.yell('success', gt('This distribution list has been added to the portal'));
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/add-to-contactlist', {
+        requires: function (e) {
+            return e.collection.has('one') && !e.context.folder_id && !e.context.id;
+        },
+        action: function (baton) {
+            require(['io.ox/contacts/edit/main'], function (m) {
+                var def = $.Deferred(),
+                    contact = baton.data;
+                contact.folder_id = config.get('folder.contacts') + '';
+                _.map(contact, function (value, key, contact) {
+                    if (!!!value) {
+                        delete contact[key];
+                    }
+                });
+                m.getApp(contact).launch(def);
+                def.done(function (data) {
+                    // baton.app.getGrid().selection.set(data);
+                });
+            });
+        }
+    });
+
+    //attachment actions
+    new Action('io.ox/contacts/actions/preview-attachment', {
+        id: 'preview',
+        requires: function (e) {
+            return require(['io.ox/preview/main'])
+                .pipe(function (p) {
+                    var list = _.getArray(e.context);
+                    // is at least one attachment supported?
+                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                        return memo || new p.Preview({
+                            filename: obj.filename,
+                            mimetype: obj.content_type
+                        })
+                        .supportsPreview();
+                    }, false);
+                });
+        },
+        multiple: function (list, baton) {
+            require(['io.ox/core/tk/dialogs',
+                     'io.ox/preview/main',
+                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
+                //build Sidepopup
+                new dialogs.SidePopup().show(baton.e, function (popup) {
+                    _(list).each(function (data, index) {
+                        data.dataURL = attachmentApi.getUrl(data, 'view');
+                        var pre = new p.Preview(data, {
+                            width: popup.parent().width(),
+                            height: 'auto'
+                        });
+                        if (pre.supportsPreview()) {
+                            popup.append(
+                                $('<h4>').text(data.filename)
+                            );
+                            pre.appendTo(popup);
+                            popup.append($('<div>').text('\u00A0'));
+                        }
+                    });
+                    if (popup.find('h4').length === 0) {
+                        popup.append($('<h4>').text(gt('No preview available')));
+                    }
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/open-attachment', {
+        id: 'open',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                _(list).each(function (data) {
+                    var url = attachmentApi.getUrl(data, 'open');
+                    window.open(url);
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/download-attachment', {
+        id: 'download',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                _(list).each(function (data) {
+                    var url = attachmentApi.getUrl(data, 'download');
+                    window.open(url);
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/save-attachment', {
+        id: 'save',
+        capabilities: 'infostore',
+        requires: 'some',
+        multiple: function (list) {
+            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                //cannot be converted to multiple request because of backend bug (module overides params.module)
+                _(list).each(function (data) {
+                    attachmentApi.save(data);
+                });
+                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
         }
     });
@@ -324,6 +589,21 @@ define('io.ox/contacts/actions',
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'vcard',
+        index: INDEX += 100,
+        prio: 'lo',
+        label: gt('Send vCard'),
+        ref: 'io.ox/contacts/actions/vcard'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'print',
+        index:  INDEX += 100,
+        label: gt('Print'),
+        ref: 'io.ox/contacts/actions/print'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'invite',
         index: INDEX += 100,
         prio: 'hi',
@@ -366,5 +646,41 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         label: gt('Copy'),
         ref: 'io.ox/contacts/actions/copy'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-contactlist',
+        index: INDEX += 100,
+        label: gt('Add to address book'),
+        ref: 'io.ox/contacts/actions/add-to-contactlist'
+    }));
+
+    // Attachments
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 100,
+        label: gt('Preview'),
+        ref: 'io.ox/contacts/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'open',
+        index: 200,
+        label: gt('Open in new tab'),
+        ref: 'io.ox/contacts/actions/open-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'download',
+        index: 300,
+        label: gt('Download'),
+        ref: 'io.ox/contacts/actions/download-attachment'
+    }));
+
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'save',
+        index: 400,
+        label: gt('Save in file store'),
+        ref: 'io.ox/contacts/actions/save-attachment'
     }));
 });

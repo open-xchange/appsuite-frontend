@@ -16,11 +16,12 @@ define('plugins/portal/birthdays/register',
      'io.ox/core/date',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
-     'less!plugins/portal/birthdays/style.css'], function (ext, api, date, util, gt) {
+     'settings!io.ox/core',
+     'less!plugins/portal/birthdays/style.less'], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 
-    var WEEKS = 8,
+    var WEEKS = 12,
         RANGE = WEEKS * date.WEEK,
         sidepopup;
 
@@ -45,11 +46,41 @@ define('plugins/portal/birthdays/register',
 
         load: function (baton) {
             var aDay = 24 * 60 * 60 * 1000,
-                start = _.now() - aDay, //yes, one could try to calculate 00:00Z this day, but hey...
+                start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
                 end = start + WEEKS * aDay;
             return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;
             });
+        },
+
+        preview: function (baton) {
+
+            var $list = $('<div class="content">'),
+                hash = {},
+                contacts = baton.data;
+
+            if (contacts.length === 0) {
+                $list.append(
+                    $('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
+                );
+            } else {
+                $list.addClass('pointer');
+                _(contacts).each(function (contact) {
+                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
+                        name = util.getFullName(contact);
+                    if (!isDuplicate(name, hash)) {
+                        $list.append(
+                            $('<div class="line">').append(
+                                $('<span class="bold">').text(name), $.txt(' '),
+                                $('<span class="accent">').text(birthday)
+                            )
+                        );
+                        markDuplicate(name, hash);
+                    }
+                });
+            }
+
+            this.append($list);
         },
 
         draw: function (baton) {
@@ -65,11 +96,12 @@ define('plugins/portal/birthdays/register',
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
-                // add buy-a-gift link
+                // add buy-a-gift
+                var url = settings.get('customLocations/buy-a-gift', 'http://www.amazon.de/');
                 $list.append(
                     $('<div class="buy-a-gift">').append(
                         $('<i class="icon-gift">'), $.txt(' '),
-                        $('<a href="http://www.amazon.de/" target="_blank">').text(gt('Buy a gift'))
+                        $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
                     )
                 );
                 // loop
@@ -117,33 +149,6 @@ define('plugins/portal/birthdays/register',
                     });
                 });
             }
-            this.append($list);
-        },
-
-        preview: function (baton) {
-
-            var $list = $('<div class="content pointer">'),
-                hash = {},
-                contacts = baton.data;
-
-            if (contacts.length === 0) {
-                $list.append($('<div class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS)));
-            } else {
-                _(contacts).each(function (contact) {
-                    var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
-                        name = util.getFullName(contact);
-                    if (!isDuplicate(name, hash)) {
-                        $list.append(
-                            $('<div class="line">').append(
-                                $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(birthday)
-                            )
-                        );
-                        markDuplicate(name, hash);
-                    }
-                });
-            }
-
             this.append($list);
         }
     });

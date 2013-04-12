@@ -286,7 +286,7 @@ define("io.ox/settings/accounts/email/test",
                             me.ready = true;
                         })
                         .fail(function () {
-                            console.log('no configdata recived');
+                            console.log('no configdata received');
                         });
 
                         j.waitsFor(function () {
@@ -319,7 +319,7 @@ define("io.ox/settings/accounts/email/test",
     //                         }
     //                     })
     //                     .fail(function () {
-    //                         console.log('no configdata recived');
+    //                         console.log('no configdata received');
     //                     });
 
     //                     j.waitsFor(function () {

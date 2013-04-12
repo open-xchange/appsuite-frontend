@@ -12,7 +12,7 @@
  */
 define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/core'], function (ext, gt) {
     "use strict";
-    
+
     function ValidationErrors() {
         this.errors = {};
 
@@ -34,7 +34,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             return wrapped.each.apply(wrapped, $.makeArray(arguments));
         };
     }
-    
+
     var BasicModel = Backbone.Model.extend({
         initialize: function (obj) {
             var self = this;
@@ -117,13 +117,13 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                     isSave: true
                 });
                 if (!this.isValid()) {
-                    return $.Deferred().reject({error: gt('Invalid data')});
+                    return $.Deferred().reject({error: gt('Invalid data'), model: this});
                 }
             }
             if (this.syncer) {
                 this.trigger(action + ':start');
                 this.trigger('sync:start');
-                
+
                 return this.syncer[action].call(this.syncer, model)
                     .done(function (response) {
                         callbacks.success(model, response);
@@ -172,7 +172,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             }).values()._wrapped;
         }
     });
-    
+
     return BasicModel;
-    
+
 });

@@ -30,7 +30,7 @@ define("plugins/portal/tasks/register",
         },
 
         load: function (baton) {
-            return taskApi.getAllFromAllFolders().done(function (data) { //super special getAll method
+            return taskApi.getAllMyTasks().done(function (data) { // super special getAll method
                 baton.data = data;
             });
         },
@@ -44,11 +44,13 @@ define("plugins/portal/tasks/register",
             });
 
             if (tasks.length === 0) {
-                this.append(content.text(gt("You don't have any tasks that are either due soon or overdue.")));
+                this.append(
+                    content.text(gt('You don\'t have any tasks that are either due soon or overdue.'))
+                );
                 return;
             }
 
-            _(tasks).each(function (task) {
+            _(tasks.slice(0, 10)).each(function (task) {
                 task = util.interpretTask(task);
                 content.append(
                     $('<div class="item">').data('item', task).append(
@@ -63,6 +65,7 @@ define("plugins/portal/tasks/register",
                     )
                 );
             });
+
             this.append(content);
         },
 

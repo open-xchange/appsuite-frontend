@@ -18,8 +18,9 @@ define('io.ox/calendar/month/perspective',
      'io.ox/core/tk/dialogs',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
+     'io.ox/core/print',
      'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, settings, gt) {
+     'gettext!io.ox/calendar'], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -38,12 +39,17 @@ define('io.ox/calendar/month/perspective',
         initLoad: 2,        // amount of initial called updates
         scrollOffset: 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
-        current: null,      // current month as UTC timestamp
+        current: null,      // current month as date object
         folder: null,
         app: null,          // the current application
         dialog: $(),        // sidepopup
-        restoreCache:   {}, // object, which contains data for save and restore functions
+        isScrolling: false, // scrolling
 
+        /**
+         * open sidepopup to show appointment
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         */
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
@@ -55,20 +61,35 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
+        /**
+         * open create appointment dialog
+         * @param  {Event}  e        given event
+         * @param  {number} startTS  timestamp of the day
+         */
         createAppointment: function (e, startTS) {
             // add current time to start timestamp
             var now = new date.Local(),
                 offset = 30 * date.MINUTE;
             startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
+
             ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
         },
 
+        /**
+         * open edit dialog
+         * @param  {Event}  e   given click event
+         * @param  {Object} obj appointment object
+         */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, {data: obj});
         },
 
+        /**
+         * update appointment data
+         * @param  {Object} obj new appointment data
+         */
         updateAppointment: function (obj) {
             var self = this;
             _.each(obj, function (el, i) {
@@ -117,7 +138,7 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
-        updateWeeks: function (obj) {
+        updateWeeks: function (obj, useCache) {
             // fetch appointments
             var self = this;
             obj = $.extend({
@@ -128,7 +149,7 @@ define('io.ox/calendar/month/perspective',
                 obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
-            return api.getAll(obj).done(function (list) {
+            return api.getAll(obj, useCache).done(function (list) {
                 if (list.length > 0) {
                     // update single week view collections
                     var start = obj.start;
@@ -194,12 +215,17 @@ define('io.ox/calendar/month/perspective',
             return this.updateWeeks({start: start, weeks: weeks});
         },
 
+        /**
+         * wrapper for scrollTop funciton
+         * @param  {number} top scrollposition
+         * @return {number}     new scroll position
+         */
         scrollTop: function (top) {
             // scrollTop checks arity, so just passing an undefined top does not work here
             return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
         },
 
-        update: function () {
+        update: function (useCache) {
             var today = new date.Local(),
                 day = $('#' + today.getYear() + '-' + today.getMonth() + '-' + today.getDate(), this.pane);
             if (!day.hasClass('today')) {
@@ -208,10 +234,13 @@ define('io.ox/calendar/month/perspective',
             }
             this.showAll.prop('checked', settings.get('showAllPrivateAppointments', false));
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
-            this.updateWeeks({start: this.firstWeek, weeks: weeks});
+            this.updateWeeks({start: this.firstWeek, weeks: weeks}, useCache);
         },
 
-        getFirsts: function (e) {
+        /**
+         * update global 'tops' object with current positions of all first days of all months
+         */
+        getFirsts: function () {
             this.tops = {};
             var self = this;
             if (this.pane) {
@@ -221,34 +250,61 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
+        /**
+         * scroll to given month
+         * @param  {object} opt
+         *          string|LocalDate date: date target as LocalDate or string (next|prev|today)
+         *          number           duration: duration of the scroll animation
+         */
         gotoMonth: function (opt) {
-            var today = new date.Local(),
-                param = $.extend({
-                    date: new date.Local(today.getYear(), today.getMonth(), 1),
-                    duration: 0
-                }, opt),
-                self = this,
-                firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
-                scrollToDate = function (pos) {
-                    // scroll to position
-                    if (param.duration === 0) {
-                        self.scrollTop(pos);
+            if (!this.isScrolling) {
+                this.isScrolling = true;
+                var self = this,
+                    param = $.extend({
+                        date: self.app.refDate || new date.Local(),
+                        duration: 0
+                    }, opt);
+
+                if (typeof param.date === 'string') {
+                    if (param.date === 'today') {
+                        param.date = new date.Local();
                     } else {
-                        self.pane.animate({scrollTop : pos}, param.duration);
+                        param.date = new date.Local(self.current).addMonths(param.date === 'prev' ? -1 : 1);
                     }
-                };
-            if (firstDay.length > 0) {
-                scrollToDate(firstDay.position().top  + this.scrollTop() + 2);
-            } else {
-                if (param.date.getTime() < self.current.getTime()) {
-                    this.drawWeeks({up: true}).done(function () {
-                        firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                        scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
-                    });
+                }
+
+                var firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane),
+                    scrollToDate = function (pos) {
+                        // scroll to position
+                        if (param.duration === 0) {
+                            self.scrollTop(pos);
+                            self.isScrolling = false;
+                        } else {
+                            self.pane.animate({scrollTop : pos}, param.duration, function () {
+                                self.isScrolling = false;
+                            });
+                        }
+                    };
+
+                if (firstDay.length > 0) {
+                    scrollToDate(firstDay.position().top  + this.scrollTop() + 2);
+                } else {
+                    if (param.date.getTime() < self.current.getTime()) {
+                        this.drawWeeks({up: true}).done(function () {
+                            firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
+                            scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
+                        });
+                    } else {
+                        self.isScrolling = false;
+                    }
                 }
             }
         },
 
+        /**
+         * get current folder data
+         * @return {Deferred} Deferred with folder data on resolve
+         */
         getFolder: function () {
             var self = this,
                 def = $.Deferred();
@@ -256,35 +312,41 @@ define('io.ox/calendar/month/perspective',
                 // switch only visible on private folders
                 self.showAllCon[data.type === 1 ? 'show' : 'hide']();
                 self.folder = data;
-                def.resolve();
+                def.resolve(data);
             });
             return def;
         },
 
-        save: function (e, p) {
-            // save scrollposition
-            this.restoreCache.scrollPosition = this.scrollTop();
+        /**
+         * perspective restore function. will be triggered on show
+         */
+        restore: function () {
+            // goto current date position
+            this.gotoMonth();
         },
 
-        restore: function () {
-            // restore scrollposition
-            if (this.restoreCache.scrollPosition && this.restoreCache.scrollPosition > 0) {
-                this.scrollTop(this.restoreCache.scrollPosition);
-            } else {
-                this.gotoMonth();
-            }
+        /**
+         * print current month
+         */
+        print: function () {
+            var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
+                self = this;
+            print.open('printCalendar', null, {
+                template: 'cp_monthview_table.tmpl',
+                start: self.current.local,
+                end: end.local
+            });
         },
 
         render: function (app) {
 
-            var start = new date.Local(),
+            var start = app.refDate || new date.Local(),
                 year = start.getYear(),
                 month = start.getMonth(),
                 self = this;
 
-            this.current = new date.Local(year, month, 1);
             this.app = app;
-
+            this.current = new date.Local(year, month, 1);
             this.lastWeek = this.firstWeek = new date.Local(year, month - 1, 1).setStartOfWeek().getTime();
 
             this.main
@@ -292,7 +354,20 @@ define('io.ox/calendar/month/perspective',
                 .empty()
                 .append(this.scaffold = View.drawScaffold());
 
-            this.pane = $('.scrollpane', this.scaffold).before(
+            var refresh = function () {
+                self.getFolder().done(function () {
+                    self.update();
+                });
+            };
+
+            var reload = function () {
+                self.getFolder().done(function () {
+                    self.update(false);
+                });
+            };
+
+            this.pane = $('.scrollpane', this.scaffold);
+            this.scaffold.prepend(
                 $('<div>')
                     .addClass('toolbar')
                     .append(
@@ -307,7 +382,7 @@ define('io.ox/calendar/month/perspective',
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
-                                                this.app.trigger('folder:change');
+                                                refresh();
                                             }, this))
                                     )
                             ),
@@ -323,7 +398,7 @@ define('io.ox/calendar/month/perspective',
                                                 e.preventDefault();
                                                 this.gotoMonth({
                                                     duration: 400,
-                                                    date: new date.Local(this.current.getYear(), this.current.getMonth() - 1, 1)
+                                                    date: 'prev'
                                                 });
                                             }, this)),
                                         $('<li>').append(
@@ -331,7 +406,8 @@ define('io.ox/calendar/month/perspective',
                                         ).on('click', $.proxy(function (e) {
                                             e.preventDefault();
                                             this.gotoMonth({
-                                                duration: 800
+                                                duration: 800,
+                                                date: 'today'
                                             });
                                         }, this)),
                                         $('<li>')
@@ -341,7 +417,7 @@ define('io.ox/calendar/month/perspective',
                                                 e.preventDefault();
                                                 this.gotoMonth({
                                                     duration: 400,
-                                                    date: new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1)
+                                                    date: 'next'
                                                 });
                                             }, this))
                                     )
@@ -373,7 +449,8 @@ define('io.ox/calendar/month/perspective',
 
                     // highlight current visible month
                     if (month !== this.current.getTime()) {
-                        this.current = new date.Local(month);
+                        this.current.setTime(month);
+                        self.app.refDate.setYear(this.current.getYear(), this.current.getMonth(), self.app.refDate.getDate());
                         $('.day:not(.out)', this.pane)
                             .add($('[id^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
                             .toggleClass('out');
@@ -396,19 +473,15 @@ define('io.ox/calendar/month/perspective',
                     $('.appointment', this.main).removeClass('opac current');
                 });
 
-            var refresh = function () {
-                self.getFolder().done(function () {
-                    self.update();
-                });
-            };
-
             // watch for api refresh
-            api.on('refresh.all', refresh)
+            api.on('create update', refresh)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
+                    refresh();
                 });
             app.on('folder:change', refresh)
+                .on('folder:delete', reload)
                 .getWindow()
                 .on('show', refresh)
                 .on('show', $.proxy(this.restore, this))
@@ -416,7 +489,6 @@ define('io.ox/calendar/month/perspective',
                 .on('change:perspective', function () {
                     self.dialog.close();
                 });
-
         }
     });
 

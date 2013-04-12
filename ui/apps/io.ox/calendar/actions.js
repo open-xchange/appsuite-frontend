@@ -18,8 +18,8 @@ define('io.ox/calendar/actions',
      'gettext!io.ox/calendar/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/capabilities'
-    ], function (ext, links, api, util, gt, config, notifications, capabilities) {
+     'io.ox/core/print'
+    ], function (ext, links, api, util, gt, config, notifications, print) {
 
     'use strict';
 
@@ -38,21 +38,27 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/actions/switch-to-month-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'month');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:week');
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
-        requires: true,
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:workweek');
         }
@@ -66,9 +72,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/sendmail', {
-        requires: function () {
-            return capabilities.has('webmail');
-        },
+        capabilities: 'webmail',
         action: function (baton) {
             var def = $.Deferred();
             util.createArrayOfRecipients(baton.data.participants, def);
@@ -83,9 +87,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
-        requires: function () {
-            return capabilities.has('contacts');
-        },
+        capabilities: 'contacts',
         action: function (baton) {
             var contactsFolder = config.get('folder.contacts'),
                 def = $.Deferred();
@@ -102,7 +104,9 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
-        requires: 'one modify',
+        requires: function (e) {
+            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+        },
         action: function (baton) {
             var params = baton.data,
                 o = {
@@ -161,7 +165,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
-        requires: 'one modify',
+        requires: 'one delete',
         action: function (baton) {
             var params = baton.data,
                 o = {
@@ -219,7 +223,9 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
-        requires: 'one create',
+        requires: function (e) {
+            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+        },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)
@@ -246,6 +252,44 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
                 acceptdeny(baton.data);
             });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/print-appointment', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/calendar/print', list);
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
+        requires: 'one',
+        action: function (baton) {
+            var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';
+            if (baton.data[POS]) options[POS] = baton.data[POS];
+            print.open('calendar', baton.data, options);
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/print', {
+        id: 'print',
+        requires: function (e) {
+            var win = e.baton.window;
+            if (win && win.getPerspective) {
+                var pers = win.getPerspective();
+                return pers && pers.name !== 'list';
+            } else {
+                return false;
+            }
+        },
+        action: function (baton) {
+            var win = baton.app.getWindow(),
+                pers = win.getPerspective();
+            if (pers.print) {
+                pers.print();
+            }
         }
     });
 
@@ -293,6 +337,18 @@ define('io.ox/calendar/actions',
         multiple: copyMove('calendar', 'move', gt('Move'))
     });
 
+    new Action('io.ox/calendar/actions/freebusy', {
+        requires: function (e) {
+            return _.device('!small');
+        },
+        action: function (baton, obj) {
+            ox.launch('io.ox/calendar/freebusy/main', {
+                folder: baton.app.folder.get(),
+                participants: [{ id: ox.user_id, type: 1 }]
+            });
+        }
+    });
+
     // Links - toolbar
 
     new ActionGroup(POINT + '/links/toolbar', {
@@ -314,7 +370,7 @@ define('io.ox/calendar/actions',
 
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'view',
-        index: 150,
+        index: 400,
         icon: function () {
             return $('<i class="icon-eye-open">');
         }
@@ -355,6 +411,36 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
+    // scheduling
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'freebusy',
+        index: 500,
+        icon: function () {
+            return $('<i class="icon-group">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/freebusy', {
+        label: gt('Scheduling'),
+        ref: 'io.ox/calendar/actions/freebusy'
+    });
+
+    // print
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'print',
+        index: 600,
+        icon: function () {
+            return $('<i class="icon-print">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/print', {
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print'
+    });
+
     // FIXME: should only be visible if rights are ok
     ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({
         index: 100,
@@ -380,7 +466,7 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
-        prio: 'hi',
+        prio: 'lo',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/calendar/detail/actions/move'
@@ -388,6 +474,14 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 400,
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print-appointment'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 500,
         prio: 'hi',
         id: 'delete',
         label: gt('Delete'),

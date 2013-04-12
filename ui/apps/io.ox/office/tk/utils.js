@@ -11,18 +11,47 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
+define.async('io.ox/office/tk/utils',
+    ['io.ox/office/tk/config',
+     'io.ox/core/gettext'
+    ], function (Config, gettext) {
 
     'use strict';
 
-    var // the ISO code of the language used by gettext
-        language = null,
+    var // the Deferred object that will be resolved with the Utils class
+        def = $.Deferred(),
+
+        // the CSS classes added to localized icons
+        localeIconClasses = null,
 
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
         LABEL_SELECTOR = 'span[data-role="label"]';
+
+    // private global functions ===============================================
+
+    /**
+     * Writes a message to the browser output console.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
+     *
+     * @param {String} [level='log']
+     *  The log level of the message. The string 'log' will create a
+     *  generic log message, the string 'info' will create an information,
+     *  the string 'warn' will create a warning message, and the string
+     *  'error' will create an error message.
+     */
+    function log(message, level) {
+        // check that the browser console supports the operation
+        if (_.isFunction(window.console[level])) {
+            window.console[level](message);
+        } else {
+            window.console.log(level.toUpperCase() + ': ' + message);
+        }
+    }
 
     // static class Utils =====================================================
 
@@ -35,6 +64,23 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * loops to break the iteration process immediately.
      */
     Utils.BREAK = {};
+
+    /**
+     * The full identifier of the current locale, with leading lower-case
+     * language identifier, and trailing upper-case country identifier,
+     * separated by an underscore character, e.g. 'en_US'.
+     */
+    Utils.LOCALE = '';
+
+    /**
+     * The lower-case language identifier of the current locale, e.g. 'en'.
+     */
+    Utils.LANGUAGE = '';
+
+    /**
+     * The upper-case country identifier of the current locale, e.g. 'US'.
+     */
+    Utils.COUNTRY = '';
 
     /**
      * CSS selector for button elements.
@@ -139,31 +185,46 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {String[]} attributeNames
      *  The names of all attributes of the objects that will be compared.
      *
+     * @param {Function} [comparator=_.isEqual]
+     *  A binary predicate function that returns true if the passed attribute
+     *  values are considered being equal. Will be called, if both objects
+     *  passed to this method contain a specific attribute, and receives the
+     *  attribute values from both objects.
+     *
      * @returns {Boolean}
      *  Whether all specified attributes are equal in both objects.
      */
-    Utils.hasEqualAttributes = function (object1, object2, attributeNames) {
+    Utils.hasEqualAttributes = function (object1, object2, attributeNames, comparator) {
 
-        var // loop indexes
-            index = 0, length = attributeNames.length,
-            // current attribute name
-            attrName = '',
-            // whether the objects contain the attribute
-            hasAttr1 = false, hasAttr2 = false;
+        // default to the _isEqual() method to compare attribute values
+        comparator = _.isFunction(comparator) ? comparator : _.isEqual;
 
-        for (; index < length; index += 1) {
-            attrName = attributeNames[index];
-            hasAttr1 = attrName in object1;
-            hasAttr2 = attrName in object2;
-            if ((hasAttr1 !== hasAttr2) || (hasAttr1 && hasAttr2 && !_.isEqual(object1[attrName], object2[attrName]))) {
-                return false;
-            }
-        }
-        return true;
+        // process all specified attributes
+        return _(attributeNames).all(function (attrName) {
+            var hasAttr1 = attrName in object1,
+                hasAttr2 = attrName in object2;
+            return (hasAttr1 === hasAttr2) && (!hasAttr1 || comparator(object1[attrName], object2[attrName]));
+        });
     };
 
-    // calculation and conversion ---------------------------------------------
+    // calculation, conversion, string manipulation ---------------------------
 
+    /**
+     * Restricts the passed value to the specified numeric range.
+     *
+     * @param {Number} value
+     *  The value to be restricted to the given range.
+     *
+     * @param {Number} min
+     *  The lower border of the range.
+     *
+     * @param {Number} max
+     *  The upper border of the range.
+     *
+     * @returns {Number}
+     *  The passed value, if inside the given range, otherwise either the lower
+     *  or upper border.
+     */
     Utils.minMax = function (value, min, max) {
         return Math.min(Math.max(value, min), max);
     };
@@ -181,6 +242,22 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.roundDigits = function (value, digits) {
         var pow10 = Math.pow(10, digits);
         return _.isFinite(value) ? (Math.round(value * pow10) / pow10) : value;
+    };
+
+    /**
+     * Rounds the passed floating-point number to the specified number of
+     * significant digits, independent from the number of digits before and
+     * after the decimal point.
+     *
+     * @param {Number} value
+     *  The value to be rounded.
+     *
+     * @param {Number} digits
+     *  The number of significant digits. Must be positive.
+     */
+    Utils.roundSignificantDigits = function (value, digits) {
+        var pow10 = Math.pow(10, Math.floor(Math.log(value) / Math.log(10)));
+        return Utils.roundDigits(value / pow10, digits - 1) * pow10;
     };
 
     /**
@@ -428,6 +505,48 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
     };
 
+    /**
+     * Repeats the passed string.
+     *
+     * @param {String} text
+     *  The text to be repeated.
+     *
+     * @param {Number} count
+     *  The number of repetitions.
+     *
+     * @returns {String}
+     *  The generated string.
+     */
+    Utils.repeatString = function (text, count) {
+        return new Array(count + 1).join(text);
+    };
+
+    /**
+     * Returns the passed text with a capitalized first character.
+     *
+     * @param {String} text
+     *  The text to be converted.
+     *
+     * @returns {String}
+     *  The passed text with a capitalized first character.
+     */
+    Utils.capitalize = function (text) {
+        return (text.length > 0) ? (text[0].toUpperCase() + text.slice(1)) : '';
+    };
+
+    /**
+     * Returns the passed text with capitalized words.
+     *
+     * @param {String} text
+     *  The text to be converted.
+     *
+     * @returns {String}
+     *  The passed text with capitalized words.
+     */
+    Utils.capitalizeWords = function (text) {
+        return _(text.split(' ')).map(Utils.capitalize).join(' ');
+    };
+
     // options object ---------------------------------------------------------
 
     /**
@@ -663,19 +782,18 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  An object containing some attribute values. If undefined, creates and
      *  extends a new empty object.
      *
-     * @param {Object} [extensions]
-     *  Another object whose attributes will be inserted into the former
-     *  object. Will overwrite existing attributes in the clone of the passed
-     *  object.
+     * @param {Object} [...]
+     *  Other objects whose attributes will be inserted into the former object.
+     *  Will overwrite existing attributes in the clone of the passed object.
      *
      * @returns {Object}
      *  A new clone of the passed object, extended by the new attributes.
      */
-    Utils.extendOptions = function (options, extensions) {
+    Utils.extendOptions = function (options) {
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
+                if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value) && !(value instanceof $)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -692,14 +810,16 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         options = _.isObject(options) ? _.copy(options, true) : {};
 
         // add all extensions to the clone
-        if (_.isObject(extensions)) {
-            extend(options, extensions);
+        for (var index = 1; index < arguments.length; index += 1) {
+            if (_.isObject(arguments[index])) {
+                extend(options, arguments[index]);
+            }
         }
 
         return options;
     };
 
-    // generic DOM helpers ----------------------------------------------------
+    // generic DOM/CSS helpers ------------------------------------------------
 
     /**
      * A jQuery selector that returns true if the DOM node bound to the 'this'
@@ -722,6 +842,28 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.getDomNode = function (node) {
         return (node instanceof $) ? node.get(0) : node;
+    };
+
+    /**
+     * Returns whether the passed node is a specific DOM element node.
+     *
+     * @param {Node|jQuery|Null|Undefined} node
+     *  The DOM node to be checked. May be null or undefined.
+     *
+     * @param {String|Function|Node|jQuery} [selector]
+     *  A jQuery selector that can be used to check the passed node for a
+     *  specific type etc. The selector will be passed to the jQuery method
+     *  jQuery.is(). If this selector is a function, it will be called with the
+     *  DOM node bound to the symbol 'this'. See the jQuery API documentation
+     *  at http://api.jquery.com/is for details.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is an element node that matches the passed
+     *  selector.
+     */
+    Utils.isElementNode = function (node, selector) {
+        if (!node) { return false; }
+        return (Utils.getDomNode(node).nodeType === 1) && (!selector || $(node).is(selector));
     };
 
     /**
@@ -805,6 +947,55 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.getElementAttributeAsInteger = function (node, name, def) {
         var attr = $(node).attr(name);
         return _.isString(attr) ? parseInt(attr, 10) : def;
+    };
+
+    /**
+     * Returns whether the passed CSS border position is oriented vertically
+     * (either 'top' or 'bottom').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'bottom'.
+     */
+    Utils.isVerticalPosition = function (position) {
+        return (position === 'top') || (position === 'bottom');
+    };
+
+    /**
+     * Returns whether the passed CSS border position is the leading side
+     * (either 'top' or 'left').
+     *
+     * @param {String} position
+     *  The CSS position, one of 'top', 'bottom', 'left', or 'right'.
+     *
+     * @returns {Boolean}
+     *  Whether the passed position is either 'top' or 'left'.
+     */
+    Utils.isLeadingPosition = function (position) {
+        return (position === 'top') || (position === 'left');
+    };
+
+    /**
+     * Sets a CSS formatting attribute with all browser-specific prefixes at
+     * the passed element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose CSS attribute will be changed. If this object is
+     *  a jQuery collection, changes all contained nodes.
+     *
+     * @param {String} name
+     *  The base name of the CSS attribute.
+     *
+     * @param {Any} value
+     *  The new value of the CSS attribute.
+     */
+    Utils.setCssAttributeWithPrefixes = function (node, name, value) {
+        node = $(node);
+        _(['-webkit-', '-moz-', '-ms-', '-o-', '']).each(function (prefix) {
+            node.css(prefix + name, value);
+        });
     };
 
     /**
@@ -1259,13 +1450,43 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     (function () {
 
         var // dummy container used to calculate the scroll bar sizes
-            outerDiv = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
+            node = $('<div>').css({ width: '100px', height: '100px', overflow: 'scroll' });
 
-        $('body').append(outerDiv);
-        Utils.SCROLLBAR_WIDTH = 100 - outerDiv[0].clientWidth;
-        Utils.SCROLLBAR_HEIGHT = 100 - outerDiv[0].clientHeight;
-        outerDiv.remove();
+        $('body').append(node);
+        Utils.SCROLLBAR_WIDTH = node.width() - node[0].clientWidth;
+        Utils.SCROLLBAR_HEIGHT = node.height() - node[0].clientHeight;
+        node.remove();
     }());
+
+    /**
+     * Returns whether the passed DOM element contains a visible vertical
+     * scroll bar.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element. If this object is a jQuery collection, uses the first
+     *  node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM element contains a visible vertical scroll bar.
+     */
+    Utils.hasVerticalScrollBar = function (node) {
+        return $(node).width() > Utils.getDomNode(node).clientWidth;
+    };
+
+    /**
+     * Returns whether the passed DOM element contains a visible horizontal
+     * scroll bar.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element. If this object is a jQuery collection, uses the first
+     *  node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM element contains a visible horizontal scroll bar.
+     */
+    Utils.hasHorizontalScrollBar = function (node) {
+        return $(node).height() > Utils.getDomNode(node).clientHeight;
+    };
 
     /**
      * Returns the position and size of the specified node inside visible area
@@ -1764,7 +1985,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + (/^icon-/.test(icon) ? '' : ' io-ox-office-icon') + ((white === true) ? ' icon-white' : ''));
+        return $('<i>').addClass(icon + ' ' + localeIconClasses)
+            .toggleClass('icon-white', white === true)
+            .toggleClass('retina', _.device('retina'));
     };
 
     /**
@@ -1825,7 +2048,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
                 // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')).addClass(language))
+                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')))
             );
         }
 
@@ -1895,6 +2118,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             label = Utils.createControl('label', undefined, options);
 
         Utils.setControlCaption(label, options);
+        // must catch mouse events, otherwise IE9 enlarges width of labels to window size...
+        label.on('mousedown mouseup', false);
         return label;
     };
 
@@ -1976,14 +2201,22 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  button with the specified value has been found, deactivates all buttons
      *  and does not activate a button.
      *
+     * @param {Function} [equality=_.isEqual]
+     *  A comparison function that returns whether the specified value should
+     *  be considered being equal to the values of the buttons in the passed
+     *  button collection. If omitted, uses _.isEqual() which compares arrays
+     *  and objects deeply.
+     *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
      */
-    Utils.selectOptionButton = function (buttons, value) {
+    Utils.selectOptionButton = function (buttons, value, equality) {
 
-        var // find the button to be activated
+        var // the predicate function to use for comparison
+            equals = _.isFunction(equality) ? equality : _.isEqual,
+            // find the button to be activated
             button = (_.isUndefined(value) || _.isNull(value)) ? $() : buttons.filter(function () {
-                return _.isEqual(value, Utils.getControlValue($(this)));
+                return equals(value, Utils.getControlValue($(this)));
             });
 
         // remove highlighting from all buttons, highlight active button
@@ -1999,14 +2232,17 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new text input field.
-     *  Supports all generic options supported by the method
-     *  Utils.createControl().
+     *  Supports all generic options supported by the Utils.createControl()
+     *  method. Additionally, the following options are supported:
+     *  @param {String} [options.placeholder='']
+     *      A place holder text that will be shown in an empty text field.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        return Utils.createControl('input', { type: 'text' }, options);
+        var textField = Utils.createControl('input', { type: 'text' }, options);
+        return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 
     /**
@@ -2078,22 +2314,21 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         INSERT:         45,
         DELETE:         46,
 
-/* enable when needed
-        '0':            48,
-        '1':            49,
-        '2':            50,
-        '3':            51,
-        '4':            52,
-        '5':            53,
-        '6':            54,
-        '7':            55,
-        '8':            56,
-        '9':            57,
-*/
+        0:              48,
+        1:              49,
+        2:              50,
+        3:              51,
+        4:              52,
+        5:              53,
+        6:              54,
+        7:              55,
+        8:              56,
+        9:              57,
 
-        MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186)
+        MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186 SEMICOLON)
+        MOZ_OPEN_ANGLE: 60,     // Open angle in Firefox, German keyboard (otherwise: 226 OPEN_ANGLE)
+        MOZ_EQUAL_SIGN: 61,     // Equal sign in Firefox (otherwise: 187 EQUAL_SIGN)
 
-/* enable when needed
         A:              65,
         B:              66,
         C:              67,
@@ -2120,12 +2355,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         X:              88,
         Y:              89,
         Z:              90,
-*/
+
         LEFT_WINDOWS:   91,
         RIGHT_WINDOWS:  92,
         SELECT:         93,
 
-/* enable when needed
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
         NUM_2:          98,
@@ -2136,12 +2370,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         NUM_7:          103,
         NUM_8:          104,
         NUM_9:          105,
-        MULTIPLY:       106,
-        PLUS:           107,
-        MINUS:          109,
-        DECIMAL_POINT:  110,
-        DIVIDE:         111,
-*/
+
+        NUM_MULTIPLY:   106,
+        NUM_PLUS:       107,
+        NUM_MINUS:      109,
+        NUM_POINT:      110,
+        NUM_DIVIDE:     111,
 
         F1:             112,
         F2:             113,
@@ -2160,10 +2394,14 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         SCROLL_LOCK:    145
 
 /* enable when needed
-        SEMICOLON:      186,
-        EQUAL_SIGN:     187,
+        MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
+        MOZ_PLUS:       171,    // Plus sign in Firefox, German keyboard (otherwise: 187 EQUAL_SIGN)
+        MOZ_DASH:       173,    // Dash sign in Firefox (otherwise: 189 DASH)
+
+        SEMICOLON:      186,    // (but Firefox: 59 MOZ_SEMICOLON)
+        EQUAL_SIGN:     187,    // (but Firefox: 61 MOZ_EQUAL_SIGN)
         COMMA:          188,
-        DASH:           189,    // Firefox sends 109 (NumPad MINUS)
+        DASH:           189,    // (but Firefox: 173 MOZ_DASH)
         PERIOD:         190,
         SLASH:          191,
         GRAVE:          192,
@@ -2171,77 +2409,73 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         BACKSLASH:      220,
         CLOSE_BRACKET:  221,
         APOSTROPH:      222,
-        OPEN_ANGLE:     226     // German keyboard
+        OPEN_ANGLE:     226     // Open angle, German keyboard (but Firefox: 60 MOZ_OPEN_ANGLE)
 */
     };
 
     // console output =========================================================
 
-    Utils.MIN_LOG_LEVEL = 'log';
-
     /**
-     * Writes a message to the browser output console.
+     * Writes a log message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
      * @param {String} message
      *  The message text to be written to the console.
+     */
+    Utils.log = Config.isDebug() ? function (message) { log(message, 'log'); } : $.noop;
+
+    /**
+     * Writes an info message to the browser output console, if debug mode is
+     * enabled in the global configuration.
      *
-     * @param {String} [level='log']
-     *  The log level of the message. The string 'log' will create a generic
-     *  log message, the string 'info' will create an information, the string
-     *  'warn' will create a warning message, and the string 'error' will
-     *  create an error message.
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.log = (function () {
-
-        var // supported log levels, sorted by severity
-            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
-
-        return function (message, level) {
-
-            // validate passed log level and get its index
-            level = LOG_LEVELS.contains(level) ? level : 'log';
-
-            // do not log if index is less than index of configured log level
-            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
-
-                // check that the browser console supports the operation
-                if (_.isFunction(window.console[level])) {
-                    window.console[level](message);
-                } else {
-                    window.console.log(level.toUpperCase() + ': ' + message);
-                }
-            }
-        };
-    }());
+    Utils.info = Config.isDebug() ? function (message) { log(message, 'info'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'info').
+     * Writes a warning message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.info = function (message) {
-        Utils.log(message, 'info');
-    };
+    Utils.warn = Config.isDebug() ? function (message) { log(message, 'warn'); } : $.noop;
 
     /**
-     * Shortcut for Utils.log(message, 'warn').
+     * Writes an error message to the browser output console, if debug mode is
+     * enabled in the global configuration.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
      */
-    Utils.warn = function (message) {
-        Utils.log(message, 'warn');
-    };
-
-    /**
-     * Shortcut for Utils.log(message, 'error').
-     */
-    Utils.error = function (message) {
-        Utils.log(message, 'error');
-    };
+    Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
 
     // global initialization ==================================================
 
-    // get current language
-    gettext.language.done(function (lang) { language = lang; });
+    // deferred initialization of class members according to current language
+    gettext.language.done(function (language) {
+
+        var // extract language and country identifier
+            matches = /^([a-z]+)(_([A-Z]+))?/.exec(language);
+
+        Utils.LOCALE = language;
+        if (_.isArray(matches)) {
+            Utils.LANGUAGE = matches[1] || '';
+            Utils.COUNTRY = matches[3] || '';
+        }
+
+        localeIconClasses = 'lc-' + language;
+        if ((Utils.LANGUAGE !== '') && (Utils.COUNTRY !== '')) {
+            localeIconClasses += ' lc-' + Utils.LANGUAGE;
+        }
+
+        // resolve the exported Deferred with the complete Utils class
+        def.resolve(Utils);
+    });
 
     // exports ================================================================
 
-    return Utils;
+    return def;
 
 });

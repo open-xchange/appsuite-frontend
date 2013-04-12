@@ -1,0 +1,81 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.io-ox-editor {
+
+    overflow-y: auto;
+
+    .container {
+        width: 900px;
+        margin: 30px auto 30px auto;
+    }
+
+    .container form {
+        height: 100%;
+        margin: 0;
+    }
+
+    .header {
+        position: relative;
+        height: 50px;
+        z-index: 2;
+    }
+
+    .body {
+        position: relative;
+        top: -50px;
+        padding-top: 50px;
+        height: 100%;
+        width: 100%;
+        .box-sizing(border-box);
+        z-index: 1;
+    }
+
+    .title {
+        border: 1px solid #f5f5f5;
+        font-weight: bold;
+        width: 560px;
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .title:focus {
+        border-color: rgba(82, 168, 236, 0.8);
+    }
+
+    .save {
+        width: 120px;
+        float: right;
+    }
+
+    .discard {
+        width: 120px;
+        float: right;
+        margin-right: 10px;
+    }
+
+
+    textarea {
+
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.3333em;
+        color: #333;
+
+        .box-sizing(border-box);
+        padding: 13px;
+        width: 100%;
+        height: 100%;
+    }
+}
+

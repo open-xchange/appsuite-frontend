@@ -18,8 +18,10 @@ define("io.ox/contacts/view-detail",
      "io.ox/contacts/api",
      "io.ox/contacts/actions",
      "io.ox/core/api/folder",
-     "less!io.ox/contacts/style.css"
-    ], function (ext, gt, util, api, actions, folderAPI) {
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/date',
+     "less!io.ox/contacts/style.less"
+    ], function (ext, gt, util, api, actions, folderAPI, links, date) {
 
     "use strict";
 
@@ -33,7 +35,6 @@ define("io.ox/contacts/view-detail",
     };
 
     function addField(label, value, node, fn) {
-        var node;
         if (value) {
             node.append(
                 $('<div class="row-fluid">').append(
@@ -108,32 +109,29 @@ define("io.ox/contacts/view-detail",
         });
     }
 
-    function addAddress(label, street, code, city, country, node) {
+    function addAddress(label, data, suffix, node) {
+        var f = _.map(['street', 'postal_code', 'city', 'state', 'country'],
+                      function (field) { return data[field + suffix] || ''; });
+        if (!_.some(f)) return 0;
         return addField(label, true, node, function (node) {
+            var text =
+                //#. Format of addresses
+                //#. %1$s is the street
+                //#. %2$s is the postal code
+                //#. %3$s is the city
+                //#. %4$s is the state
+                //#. %5$s is the country
+                gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', f);
             var a = $("<a>", {
-                    href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
+                    href: "http://www.google.de/maps?q=" +
+                          encodeURIComponent(text.replace('/\n/g', ', ')),
                     target: "_blank"
                 }).addClass("nolink");
-            if (street) {
-                a.append($("<span>").text(_.noI18n(street)));
-                if (city) {
-                    a.append($("<br>"));
-                }
-            }
-            if (code) {
-                a.append($("<span>").text(_.noI18n(code + ' ')));
-            }
-            if (city) {
-                a.append($("<span>").text(_.noI18n(city)));
-            }
-            if (country) {
-                a.append($("<br>"));
-                a.append($("<span>").text(_.noI18n(country)));
-            }
+            _.each(text.split('\n'), function (line) {
+                if (line) a.append($.txt(line), $('<br>'));
+            });
             a.append(
-                $('<br>').append(
-                    $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
-                )
+                $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
             );
             node.append(a);
         });
@@ -149,10 +147,36 @@ define("io.ox/contacts/view-detail",
     });
 
     function getDescription(data) {
-        if (api.looksLikeDistributionList(data)) return gt('Distribution list');
-        if (api.looksLikeResource(data)) return gt('Resource');
-        return _.noI18n((data.company || data.position || data.profession) ?
-            join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
+        function single(index, value, translated) {
+            var params = new Array(index);
+            params[index - 1] = translated ? value : _.noI18n(value);
+            return { format: _.noI18n('%' + index + '$s'), params: params };
+        }
+        if (api.looksLikeDistributionList(data)) {
+            return single(7, gt('Distribution list'), true);
+        }
+        if (api.looksLikeResource(data)) {
+            return single(7, gt('Resource'), true);
+        }
+        if (data.company || data.position || data.profession) {
+            return {
+                format: join(', ', data.company ? '%4$s' : '',
+                                   data.position ? '%5$s' : '',
+                                   data.profession ? '%6$s' : ''),
+                params: ['', '', '', _.noI18n(data.company),
+                         _.noI18n(data.position), _.noI18n(data.profession)]
+            };
+        }
+        return util.getMailFormat(data);
+    }
+
+    function createText(format, classes) {
+        return _.aprintf(format.format, function (index) {
+            return $('<div>').addClass(classes[index])
+                             .text(_.noI18n(format.params[index]));
+        }, function (text) {
+            return $.txt(text);
+        });
     }
 
     ext.point("io.ox/contacts/detail/head").extend({
@@ -173,15 +197,17 @@ define("io.ox/contacts/view-detail",
         id: 'contact-title',
         draw: function (baton) {
             var private_flag,
-                nameText = baton.data.display_name ? baton.data.display_name : util.getFullName(baton.data);
+                name = createText(util.getFullNameFormat(baton.data),
+                    ['first_name', 'last_name', 'title', 'display_name']),
+                job = createText(getDescription(baton.data),
+                    ['email1', 'email2', 'email3', 'company', 'position',
+                     'profession', 'type']);
             this.append(
                 // right side
                 $('<div class="span8 field-value">').append(
-                    $('<div class="name clear-title">')
-                        .text(_.noI18n(nameText)),
+                    $('<div class="name clear-title">').append(name),
                     private_flag = $('<i class="icon-lock private-flag">').hide(),
-                    $('<div class="job clear-title">')
-                        .text(getDescription(baton.data))
+                    $('<div class="job clear-title">').append(job)
                 )
             );
             if (baton.data.private_flag) {
@@ -210,19 +236,89 @@ define("io.ox/contacts/view-detail",
         return (/<\w/).test(str);
     }
 
+    //attachments
+    ext.point("io.ox/contacts/detail").extend({
+        index: 110,
+        id: "attachments",
+        draw: function (baton) {
+            if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
+                drawBusyAttachments(this);
+            }
+            else if (baton.data.number_of_attachments > 0) {
+                ext.point('io.ox/contacts/detail-attach').invoke('draw', this, baton.data);
+            }
+        }
+    });
+
+    function  drawBusyAttachments(node) {
+        var attachmentsBusyNode = $('<div>').addClass('attachments-container row-fluid').appendTo(node);
+        $('<span>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentsBusyNode);
+        var linkContainer = $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).addClass('attachments-value').appendTo(attachmentsBusyNode);
+        linkContainer.busy();
+    }
+
+    ext.point('io.ox/contacts/detail-attach').extend({
+        index: 100,
+        id: 'attachments',
+        draw: function (contact) {
+            var attachmentNode;
+            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is allready there
+                attachmentNode = this;
+            } else {
+                attachmentNode = $('<div>').addClass('attachments-container row-fluid').appendTo(this);//else build new
+            }
+            $('<div>').text(gt('Attachments \u00A0\u00A0')).addClass('field-label attachments span4').appendTo(attachmentNode);
+            var linkContainer = $('<div>').addClass('attachments-value').appendTo(attachmentNode);
+            require(['io.ox/core/api/attachment'], function (api) {
+                api.getAll({folder_id: contact.folder_id, id: contact.id, module: 7}).done(function (data) {
+                    _(data).each(function (a, index) {
+                        // draw
+                        buildDropdown(linkContainer, _.noI18n(a.filename), a);
+                    });
+                    if (data.length > 1) {
+                        buildDropdown(linkContainer, gt('all'), data);
+                    }
+                    attachmentNode.delegate('a', 'click', function (e) {e.preventDefault(); });
+                }).fail(function () {
+                    attachmentFail(attachmentNode, contact);
+                });
+            });
+        }
+    });
+
+    var attachmentFail = function (container, contact) {
+        container.empty().append(
+                $.fail(gt('Could not load attachments for this contact.'), function () {
+                    ext.point('io.ox/contacts/detail-attach').invoke('draw', container, contact);
+                })
+            );
+    };
+
+    var buildDropdown = function (container, label, data) {
+        new links.DropdownLinks({
+                label: label,
+                classes: 'attachment-item',
+                ref: 'io.ox/contacts/attachment/links'
+            }).draw.call(container, data);
+    };
+
     ext.point("io.ox/contacts/detail").extend({
         index: 250,
         id: "description", // only for resources
         draw: function (baton) {
-            if ('description' in baton.data) {
+            var text = $.trim(baton.data.description || '');
+            if (text !== '') {
                 addField(gt('Description'), true, this, function (node) {
-                    var text = $.trim(baton.data.description);
-                    if (looksLikeHTML(text)) {
-                        node.html(text);
-                    } else {
-                        node.html(text.replace(/\n/g, '<br>'));
-                    }
+                    node.html(looksLikeHTML(text) ? text : text.replace(/\n/g, '<br>'));
                 });
+                if (baton.data.callbacks && 'extendDescription' in baton.data.callbacks) {
+                    addField('', '\u00A0', this, function (node) {
+                        node.append(
+                            $('<a href="#">').text(gt('Copy to description'))
+                            .on('click', { description: text.replace(/[ \t]+/g, ' ') }, baton.data.callbacks.extendDescription)
+                        );
+                    });
+                }
                 addField('', '\u00A0', this);
             }
         }
@@ -245,12 +341,8 @@ define("io.ox/contacts/view-detail",
         id: 'address',
         draw: function (baton) {
             var r = 0, data = baton.data;
-            if (data.street_business || data.city_business) {
-                r += addAddress(gt.pgettext("address", "Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
-            }
-            if (data.street_home || data.city_home) {
-                r += addAddress(gt.pgettext("address", "Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
-            }
+            addAddress(gt.pgettext("address", "Work"), data, '_business', this);
+            addAddress(gt.pgettext("address", "Home"), data, '_home', this);
             if (r > 0) { addField("", "\u00A0", this); }
         }
     });
@@ -313,10 +405,10 @@ define("io.ox/contacts/view-detail",
         index: 700,
         id: 'birthday',
         draw: function (baton) {
-            var r = 0, data = baton.data,
-                date = new Date(data.birthday);
-            if (data.birthday !== null && !isNaN(date.getDate())) {
-                r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(), this);
+            var r = 0, bday = baton.data.birthday;
+            if (bday || bday === 0) {
+                r += addField(gt("Birthday"),
+                              new date.Local(bday).format(date.DATE), this);
             }
             if (r > 0) {
                 addField("", "\u00A0", this);

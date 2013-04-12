@@ -17,7 +17,8 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, configApi) {
+     'io.ox/core/print',
+     'io.ox/core/config'], function (ext, util, links, gt, notifications, print, configApi) {
 
     'use strict';
 
@@ -26,6 +27,9 @@ define('io.ox/tasks/actions',
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/tasks/actions/create', {
+        requires: function (e) {
+            return e.collection.has('create') && _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch({ folderid: baton.app.folder.get()});
@@ -34,6 +38,9 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
+        requires: function () {
+            return _.device('!small');
+        },
         action: function (baton) {
             require(['io.ox/tasks/edit/main'], function (m) {
                 if (m.reuse('edit', baton.data)) return;
@@ -43,7 +50,7 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        requires: 'some',
+        requires: 'some delete',
         action: function (baton) {
             var data = baton.data,
                 numberOfTasks = data.length || 1;
@@ -155,51 +162,70 @@ define('io.ox/tasks/actions',
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'some',
-        action: function (baton) {
+        requires: 'some delete',
+        multiple: function (list, baton) {
             var task = baton.data,
-                numberOfTasks = task.length || 1;
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api'],
-                    function (dialogs, views, api) {
-                //build popup
-                var popup = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(gt('Move')))
-                    .addPrimaryButton('ok', gt('Move'))
-                    .addButton('cancel', gt('Cancel'));
-                popup.getBody().css({ height: '250px' });
-                var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
-                    id = String(task.folder || task.folder_id);
-                //go
-                popup.show(function () {
-                    tree.paint().done(function () {
-                        tree.select(id);
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var node = $('.io-ox-multi-selection');
-                        node.hide();
-                        node.parent().busy();
-                        var target = _(tree.selection.get()).first();
-                        // move only if folder differs from old folder
-                        if (target && target !== id) {
-                            // move action
-                            api.move(task, target)
-                            .done(function () {
-                                node.show();
-                                node.parent().idle();
-                                notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
-                            })
-                            .fail(function (response) {
-                                node.show();
-                                node.parent().idle();
-                                notifications.yell('error', gt('A severe error occured!'));
-                            });
+                numberOfTasks = task.length || 1,
+                vGrid = baton.grid || (baton.app && baton.app.getGrid());
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'],
+                    function (dialogs, views, api, folderAPI) {
+
+                function commit(target) {
+                    if (vGrid) vGrid.busy();
+                    api.move(list, target).then(
+                        function () {
+                            notifications.yell('success', gt('Tasks have been moved'));
+                            folderAPI.reload(target, list);
+                            if (vGrid) vGrid.idle();
+                        },
+                        notifications.yell
+                    );
+                }
+
+                if (baton.target) {
+                    commit(baton.target);
+                } else {
+
+                    //build popup
+                    var popup = new dialogs.ModalDialog({ easyOut: true })
+                        .header($('<h3>').text(gt('Move')))
+                        .addPrimaryButton('ok', gt('Move'))
+                        .addButton('cancel', gt('Cancel'));
+                    popup.getBody().css({ height: '250px' });
+                    var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
+                        id = String(task.folder || task.folder_id);
+                    //go
+                    popup.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id);
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var node = $('.io-ox-multi-selection');
+                            node.hide();
+                            node.parent().busy();
+                            var target = _(tree.selection.get()).first();
+                            // move only if folder differs from old folder
+                            if (target && target !== id) {
+                                // move action
+                                api.move(task, target)
+                                .done(function () {
+                                    node.show();
+                                    node.parent().idle();
+                                    notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
+                                })
+                                .fail(function (response) {
+                                    node.show();
+                                    node.parent().idle();
+                                    notifications.yell('error', gt('A severe error occured!'));
+                                });
+                            }
                         }
-                    }
-                    tree.destroy();
-                    tree = popup = null;
-                });
+                        tree.destroy();
+                        tree = popup = null;
+                    });
+                }
             });
         }
     });
@@ -232,7 +258,7 @@ define('io.ox/tasks/actions',
                         api.confirm({id: data.id,
                                      folder_id: data.folder_id,
                                      data: {confirmation: state,
-                                            confirmMessage: message}
+                                            confirmmessage: message}
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + data.folder_id + '.' + data.id);
@@ -241,6 +267,22 @@ define('io.ox/tasks/actions',
                     }
                 });
             });
+        }
+    });
+
+    new Action('io.ox/tasks/actions/print', {
+        requires: function (e) {
+            return e.collection.has('some', 'read') && _.device('!small');
+        },
+        multiple: function (list, baton) {
+            print.request('io.ox/tasks/print', list);
+        }
+    });
+
+    new Action('io.ox/tasks/actions/print-disabled', {
+        id: 'print',
+        action: function (baton) {
+            print.open('tasks', baton.data, { template: 'infostore://70045', id: baton.data.id, folder: baton.data.folder_id || baton.data.folder });
         }
     });
 
@@ -261,16 +303,12 @@ define('io.ox/tasks/actions',
                     }, false);
                 });
         },
-        multiple: function (list) {
-            var e = $.Event();
-            e.target = this;
-
+        multiple: function (list, baton) {
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
                 //build Sidepopup
-                new dialogs.SidePopup({ arrow: false, side: 'right' })
-                    .show(e, function (popup) {
+                new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
                         data.dataURL = attachmentApi.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
@@ -321,6 +359,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/save-attachment', {
         id: 'save',
+        capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
             require(['io.ox/core/api/attachment'], function (attachmentApi) {
@@ -406,7 +445,7 @@ define('io.ox/tasks/actions',
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr('finderId');
+                        var finderId = $(this).attr("value");
                         require(['io.ox/tasks/api'], function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime(),
@@ -467,6 +506,14 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'print',
+        index: 700,
+        prio: 'lo',
+        label: gt('Print'),
+        ref: 'io.ox/tasks/actions/print'
     }));
 
     // Attachments

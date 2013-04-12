@@ -4,5 +4,6 @@
     icon: "mail.png",
     category: "Basic",
     settings: true,
-    requires: "webmail"
+    requires: "webmail",
+    index: 200
 }

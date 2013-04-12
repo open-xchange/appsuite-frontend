@@ -43,7 +43,7 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		.pipe(function (data) {
 			return _(data).map(function (sig) {
 				// robustness: signature migration
-				sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
+				sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
 				return sig;
 			});
 		});

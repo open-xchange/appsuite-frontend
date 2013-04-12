@@ -17,8 +17,10 @@ define('io.ox/tasks/api', ['io.ox/core/http',
 
     'use strict';
 
+    // object to store tasks, that have attachments uploading atm
+    var uploadInProgress = {};
 
- // generate basic API
+    // generate basic API
     var api = apiFactory({
         module: 'tasks',
         keyGenerator: function (obj) {
@@ -38,6 +40,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             all: {
                 folder: folderApi.getDefaultFolder('tasks'),
                 columns: '1,20,101,200,202,203,220,300,301',
+                extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
                 cache: true, // allow DB cache
@@ -46,6 +49,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             list: {
                 action: 'list',
                 columns: '1,20,101,200,202,203,220,300,301,309',
+                extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
             get: {
@@ -54,12 +58,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             },
             search: {
                 action: 'search',
-                columns: '1,20,200,202,220,300,301',
+                columns: '1,20,101,200,202,203,220,300,301,309',
+                extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
                 timezone: 'UTC',
                 getData: function (query) {
-                    return { folder: query.folder, pattern: query.pattern };
+                    return { folder: query.folder, pattern: query.pattern, end: query.end, start: query.start };
                 }
             }
         }
@@ -96,21 +101,25 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             return participants;
         }
     }
-    
+
     api.create = function (task) {
         task.participants = repairParticipants(task.participants);
+        var attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        delete task.tempAttachmentIndicator;
         return http.PUT({
             module: 'tasks',
-            params: {action: 'new',
-                     timezone: 'UTC'},
+            params: { action: 'new', timezone: 'UTC' },
             data: task,
             appendColumns: false
         }).done(function (response) {
+            if (attachmentHandlingNeeded) {
+                api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
+            }
             api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
             return response;
         });
     };
-    
+
     api.checkForNotifications = function (ids, modifications) {
         if (modifications.folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
             api.getTasks();
@@ -119,13 +128,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             });
             return;
         }
-        
+
         var addArray = [],
             removeArray = [];
         if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
             modifications.status = parseInt(modifications.status, 10);
         }
-        
+
         if (modifications.participants) {
             var myId = configApi.get('identifier'),
                 triggered = false;
@@ -153,7 +162,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 });
             }
         }
-        
+
         if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
             require(['io.ox/core/api/reminder'], function (reminderApi) {
                 reminderApi.getReminders();
@@ -185,65 +194,75 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
 
     api.update = function (task, newFolder) {
-                //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
-                if (arguments.length > 2) {
-                    console.log("Using old api signature.");
-                    task = arguments[2];
-                    task.folder_id = arguments[3];
-                    task.id = arguments[1];
-                }
-                
-                var useFolder = task.folder_id || task.folder,
-                    timestamp = task.last_modified || _.now();
-                
-                if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
-                    task.folder_id = newFolder;
-                }
-                task.notification = true;//set allways (OX6 does this too)
-                
-                if (useFolder === undefined) {//if no folder is given use default
-                    useFolder = api.getDefaultFolder();
-                }
-                
-                if (task.status === 3 || task.status === '3') {
-                    task.date_completed = _.now();
-                } else if (task.status !== 3 && task.status !== '3') {
-                    task.date_completed = null;
-                }
-                
-                var key = useFolder + '.' + task.id;
-                return http.PUT({
-                    module: 'tasks',
-                    params: {action: 'update',
-                        folder: useFolder,
-                        id: task.id,
-                        timestamp: timestamp,
-                        timezone: 'UTC'
-                    },
-                    data: task,
-                    appendColumns: false
-                }).pipe(function () {
-                    // update cache
-                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
-                }).pipe(function () {
-                    //return object with id and folder id needed to save the attachments correctly
-                    var obj = {folder_id: useFolder, id: task.id};
-                    //notification check
-                    api.checkForNotifications([obj], task);
-                    return obj;
-                }).done(function () {
-                    //trigger refresh, for vGrid etc
-                    api.trigger('refresh.all');
-                });
+        var attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        delete task.tempAttachmentIndicator;
 
-            };
-            
+        //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
+        if (arguments.length > 2) {
+            console.log("Using old api signature.");
+            task = arguments[2];
+            task.folder_id = arguments[3];
+            task.id = arguments[1];
+        }
+
+        var useFolder = task.folder_id || task.folder;
+
+        if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
+            task.folder_id = newFolder;
+        }
+        task.notification = true;//set always (OX6 does this too)
+
+        if (useFolder === undefined) {//if no folder is given use default
+            useFolder = api.getDefaultFolder();
+        }
+
+        if (task.status === 3 || task.status === '3') {
+            task.date_completed = _.now();
+        } else if (task.status !== 3 && task.status !== '3') {
+            task.date_completed = null;
+        }
+
+        var key = useFolder + '.' + task.id;
+        return http.PUT({
+            module: 'tasks',
+            params: {action: 'update',
+                folder: useFolder,
+                id: task.id,
+                timestamp: _.now(),
+                timezone: 'UTC'
+            },
+            data: task,
+            appendColumns: false
+        }).pipe(function () {
+            // update cache
+            return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+        }).pipe(function () {
+            //return object with id and folder id needed to save the attachments correctly
+            var obj = {folder_id: useFolder, id: task.id};
+            //notification check
+            api.checkForNotifications([obj], task);
+            return obj;
+        }).done(function () {
+            if (attachmentHandlingNeeded) {
+                api.addToUploadList(encodeURIComponent(_.cid(task)));//to make the detailview show the busy animation
+            }
+            //trigger refresh, for vGrid etc
+            api.trigger('refresh.all');
+            api.refreshPortal();
+        });
+
+    };
+
+    api.removeFromCache = function (key) {
+        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
+    };
+
     //used by done/undone actions when used with multiple selection
     api.updateMultiple = function (list, modifications) {
         http.pause();
-        modifications.notification = true;//set allways (OX6 does this too)
+        modifications.notification = true;//set always (OX6 does this too)
         var keys  = [];
-        
+
         _(list).map(function (obj) {
             keys.push((obj.folder || obj.folder_id) + '.' + obj.id);
             return http.PUT({
@@ -267,9 +286,10 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             api.checkForNotifications(list, modifications);
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
+            api.refreshPortal();
         });
     };
-    
+
     api.move = function (task, newFolder) {
         var folder;
         if (!task.length) {
@@ -278,29 +298,40 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 folder = task.folder;
             }
         }
-        
+
         // call updateCaches (part of remove process) to be responsive
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
-            function refreshPortal() {
-                api.trigger("removePopup");
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
-                    var app = portal.getApp(),
-                        model = app.getWidgetCollection()._byId.tasks_0;
-                    if (model) {
-                        app.refreshWidget(model, 0);
-                    }
-                });
-            }
+
             if (!task.length) {
-                return api.update(task, newFolder).done(refreshPortal);
+                return api.update(task, newFolder);
             } else {
-                return api.updateMultiple(task, {folder_id: newFolder}).done(refreshPortal);
+                return api.updateMultiple(task, {folder_id: newFolder});
             }
         });
     };
-    
+
+    //variables so portal is only required once
+    var portalModel,
+        portalApp;
+
+    //refreshs the task portal tile
+    api.refreshPortal = function () {
+        api.trigger("removePopup");
+        if (portalModel && portalApp) {
+            portalApp.refreshWidget(portalModel, 0);
+        } else {
+            require(['io.ox/portal/main'], function (portal) {//refresh portal
+                portalApp = portal.getApp();
+                portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
+                if (portalModel) {
+                    portalApp.refreshWidget(portalModel, 0);
+                }
+            });
+        }
+    };
+
     api.confirm =  function (options) { //options.id is the id of the task not userId
         var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({
@@ -322,32 +353,38 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
     };
-    
-    //gets every task in users private folders. Used in Portal tile
+
+    // gets every task in users private folders. Used in Portal tile
     api.getAllFromAllFolders = function () {
-        return http.PUT({
-            module: 'folders',
-            params: {
-                action: 'allVisible',
-                content_type: 'tasks',
-                columns: "1"
-            }
-        }).pipe(function (response) {
-            //get the data
-            return $.when.apply($,
-                _(response['private']).map(function (value) {
-                    return api.getAll({folder: value[0]}, false);//no caching here otherwise refresh uses old cache when moving a task
-                })
-            ).pipe(function () {
-                return _.flatten(_.toArray(arguments), true);
-            });
-        });
+        return api.search({ pattern: '', end: _.now() });
     };
+
+    api.getAllMyTasks = (function () {
+
+        function delegatedToMe(participants) {
+            return _(participants).any(function (user) {
+                var isMe = user.type === 1 && user.id === ox.user_id,
+                    isDeclined = user.confirmation === 2;
+                return isMe && !isDeclined;
+            });
+        }
+
+        function filter(task) {
+            return task.participants.length === 0 || delegatedToMe(task.participants);
+        }
+
+        return function () {
+            return this.getAllFromAllFolders().pipe(function (list) {
+                return _(list).filter(filter);
+            });
+        };
+
+    }());
 
     //for notification view
     api.getTasks = function () {
 
-        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed (lots of requests)
+        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),
@@ -370,7 +407,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 for (var a = 0; a < list[i].participants.length; a++) {
                     if (list[i].participants[a].id === userId && list[i].participants[a].confirmation === 0) {
                         confirmTasks.push(list[i]);
-                        
+
                     }
                 }
             }
@@ -378,6 +415,24 @@ define('io.ox/tasks/api', ['io.ox/core/http',
             api.trigger('confirm-tasks', confirmTasks);//same here
             return list;
         });
+    };
+
+    //for busy animation in detail View
+    //ask if this task has attachments uploading at the moment
+    api.uploadInProgress = function (key) {
+        return uploadInProgress[key] || false;//return true boolean
+    };
+
+    //add task to the list
+    api.addToUploadList = function (key) {
+        uploadInProgress[key] = true;
+    };
+
+    //remove task from the list
+    api.removeFromUploadList = function (key) {
+        delete uploadInProgress[key];
+        //trigger refresh
+        api.trigger('update:' + key);
     };
 
     // global refresh

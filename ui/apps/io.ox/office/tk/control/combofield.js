@@ -41,6 +41,11 @@ define('io.ox/office/tk/control/combofield',
      *      If set to true, the label of the first list item that starts with
      *      the text currently edited will be inserted into the text field.
      *      The remaining text appended to the current text will be selected.
+     *  @param {Function} [options.equality=_.isEqual]
+     *      A comparison function that returns whether an arbitrary value
+     *      should be considered being equal to the value of a list item in the
+     *      drop-down menu. If omitted, uses _.isEqual() which compares arrays
+     *      and objects deeply.
      */
     function ComboField(options) {
 
@@ -48,7 +53,10 @@ define('io.ox/office/tk/control/combofield',
             self = this,
 
             // search the list items and insert label into text field while editing
-            typeAhead = Utils.getBooleanOption(options, 'typeAhead', false);
+            typeAhead = Utils.getBooleanOption(options, 'typeAhead', false),
+
+            // comparator for list item values
+            equality = Utils.getFunctionOption(options, 'equality');
 
         // base constructors --------------------------------------------------
 
@@ -74,7 +82,7 @@ define('io.ox/office/tk/control/combofield',
             if (!self.isReadOnly()) {
                 self.getTextFieldNode().focus();
             }
-            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
+            scrollToListItem(Utils.getSelectedButtons(self.getItems()));
         }
 
         /**
@@ -83,7 +91,7 @@ define('io.ox/office/tk/control/combofield',
         function itemUpdateHandler(value) {
 
             var // activate a button representing a list item
-                button = Utils.selectOptionButton(self.getListItems(), value);
+                button = Utils.selectOptionButton(self.getItems(), value, equality);
 
             // scroll to make the element visible
             scrollToListItem(button);
@@ -101,11 +109,11 @@ define('io.ox/office/tk/control/combofield',
             function moveListItem(delta) {
 
                 var // all list items (button elements)
-                    buttons = self.getListItems(),
+                    buttons = self.getItems(),
                     // index of the active list item
                     index = buttons.index(Utils.getSelectedButtons(buttons));
 
-                // first show the menu to be able to calculate the items-per-page value
+                // show the menu
                 self.showMenu();
                 // calculate new index, if old index is valid
                 if (index >= 0) {
@@ -114,6 +122,7 @@ define('io.ox/office/tk/control/combofield',
                 index = Utils.minMax(index, 0, buttons.length - 1);
                 // call the update handler to update the text field and list selection
                 self.update(Utils.getControlValue(buttons.eq(index)));
+                // select entire text field
                 Utils.setTextFieldSelection(self.getTextFieldNode(), true);
             }
 
@@ -161,34 +170,47 @@ define('io.ox/office/tk/control/combofield',
             var // the text field element
                 textField = self.getTextFieldNode(),
                 // current text of the text field
-                value = textField.val(),
+                fieldText = textField.val(),
                 // current selection of the text field
                 selection = Utils.getTextFieldSelection(textField),
                 // the list item button containing the text of the text field
-                button = $();
+                button = $(),
+                // the button value
+                buttonValue = null,
+                // the textual representation of the button value
+                buttonValueText = null;
 
             // show the drop-down menu when the text has been changed
-            if (typeAhead && (value !== oldFieldState.value)) {
+            if (typeAhead && (fieldText !== oldFieldState.value)) {
                 self.showMenu();
             }
 
-            // find the first button whose label starts with the entered text
-            button = self.getListItems().filter(function () {
-                var label = Utils.getControlLabel($(this));
-                return _.isString(label) && (label.length >= value.length) && (label.substr(0, value.length).toLowerCase() === value.toLowerCase());
+            // find the first button whose text representation starts with the entered text
+            button = self.getItems().filter(function () {
+                var buttonValueText = self.valueToText(Utils.getControlValue($(this)));
+                return _.isString(buttonValueText) && (buttonValueText.length >= fieldText.length) &&
+                    (buttonValueText.substr(0, fieldText.length).toLowerCase() === fieldText.toLowerCase());
             }).first();
+
+            // get value and text representation from the button
+            if (button.length > 0) {
+                buttonValue = Utils.getControlValue(button);
+                buttonValueText = self.valueToText(buttonValue);
+            }
 
             // try to add the remaining text of an existing list item, but only
             // if the text field does not contain a selection, and something
             // has been appended to the old text
-            if (typeAhead && button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
-                    (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
-                textField.val(Utils.getControlLabel(button));
-                Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
+            if (typeAhead && _.isString(buttonValueText) && (buttonValueText.length > 0) &&
+                    (selection.start === fieldText.length) && (oldFieldState.start < selection.start) &&
+                    (oldFieldState.value.substr(0, oldFieldState.start) === fieldText.substr(0, oldFieldState.start))) {
+                textField.val(buttonValueText);
+                Utils.setTextFieldSelection(textField, { start: fieldText.length, end: buttonValueText.length });
+                fieldText = buttonValueText;
             }
 
-            // update selection in drop-down list
-            itemUpdateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
+            // select entry in drop-down list, if value (not text representation) is equal
+            itemUpdateHandler(self.getFieldValue());
         }
 
         // methods ------------------------------------------------------------
@@ -208,9 +230,9 @@ define('io.ox/office/tk/control/combofield',
          *  specified, the label of the list entry will be set to the string
          *  value provided by the current validator of the text field.
          */
-        this.addListEntry = function (value, options) {
+        this.createListEntry = function (value, options) {
             options = Utils.extendOptions({ label: this.valueToText(value) }, options);
-            this.createListItem(Utils.extendOptions(options, { value: value }));
+            this.createItem(Utils.extendOptions(options, { value: value }));
             // the inserted list item may match the value in the text field
             itemUpdateHandler(this.getFieldValue());
             return this;
@@ -218,13 +240,16 @@ define('io.ox/office/tk/control/combofield',
 
         // initialization -----------------------------------------------------
 
+        // add special marker class used to adjust formatting
+        this.getNode().addClass('combo-field');
+
         // prepare group and register event handlers
         this.on('menuopen', menuOpenHandler)
             .on('validated', textFieldValidationHandler)
             .on('readonly', textFieldReadOnlyHandler)
             .registerUpdateHandler(itemUpdateHandler);
         this.getTextFieldNode()
-            .css('padding-right', '1px')
+            //.css('padding-right', '1px')
             .on('keydown keypress keyup', textFieldKeyHandler);
 
         // drop-down button is not focusable in combo fields

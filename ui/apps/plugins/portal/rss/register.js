@@ -55,7 +55,7 @@ define("plugins/portal/rss/register",
 
         load: function (baton) {
             return migrate().pipe(function () {
-                var urls = baton.model.get('props').url || [];
+                var urls = baton.model.get('props').url || [];
                 return rss.getMany(urls, 'date').done(function (data) {
                     baton.data = { items: data, title: '', link: '' };
                     // get title & link
@@ -133,7 +133,7 @@ define("plugins/portal/rss/register",
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('URL')),
-                    $url.val((props.url || []).join('\n')),
+                    $url.val((props.url || []).join('\n')),
                     $('<label>').text(gt('Description')),
                     $description.val(props.description),
                     $error

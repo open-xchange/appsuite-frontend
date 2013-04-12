@@ -20,7 +20,7 @@ define('plugins/portal/twitter/register',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, strings, keychain, gt, notifications, date) {
+     'less!plugins/portal/twitter/style.less'], function (ext, proxy, strings, keychain, gt, notifications, date) {
 
     'use strict';
 
@@ -259,7 +259,7 @@ define('plugins/portal/twitter/register',
 
     ext.point('io.ox/portal/widget/twitter').extend({
 
-        title: "Twitter",
+        title: gt('Twitter'),
 
         initialize: function (baton) {
             keychain.submodules.twitter.on('update create delete', function () {
@@ -342,7 +342,7 @@ define('plugins/portal/twitter/register',
                     'data-count': 'none',
                     'data-size': 'large',
                     'data-lang': ox.language.split('_')[0],
-                    'data-url': '',
+                    'data-url': ' ', //need to provide %20 here, so twitter detects, we set some data
                     'data-text': ' ' //there must be text in the text attribute, may be we could add an input field to the sidebar
                                       //to pre-fill the popup, leaving the default message empty for now
                 }),
@@ -383,6 +383,20 @@ define('plugins/portal/twitter/register',
                     $('<div>').text(gt('Add your account'))
                 )
             );
+        },
+
+        error: function (error) {
+            if (error.code !== "OAUTH-0006")
+                return; //let the default handling do the job
+
+            $(this).empty().append(
+                $('<h2>').text(gt('Twitter')),
+                $('<div class="content">').text(gt('Click here to add your account'))
+                .on('click', {}, function () {
+                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
+                })
+            );
+            console.log("DEBUG", error);
         }
     });
 

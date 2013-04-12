@@ -1,0 +1,159 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+@controlsHeight: 34px;
+@participantsWidth: 340px;
+@bottom: @controlsHeight + 13 * 2 + 1;
+
+.free-busy-controls {
+
+    top: auto;
+    background-color: whiteSmoke;
+    border-top: 1px solid #ddd;
+    padding: 13px;
+    height: @controlsHeight;
+
+    .add-participant {
+        width: @participantsWidth - 82;
+    }
+
+    .hint {
+        line-height: 30px;
+        position: relative;
+        left: 77px;
+        cursor: help;
+    }
+
+    .popover {
+        max-width: 380px;
+    }
+}
+
+.window-content .free-busy-view {
+
+    .user-select(none);
+
+    h1 {
+        position: absolute;
+        top: 13px;
+        left: 13px;
+        margin: 0;
+        line-height: 38px;
+        font-family: @lightFontFamily;
+        font-size: 20px;
+        font-weight: 200;
+    }
+
+    .participants-view-scrollpane {
+        top: 64px;
+        bottom: @bottom;
+        padding: 0 13px 13px 13px;
+        width: @participantsWidth;
+        .box-sizing(border-box);
+        .overflow-y();
+    }
+
+    .calendar-week-view {
+        top: 10px;
+        left: @participantsWidth;
+        bottom: @bottom;
+        z-index: 10;
+    }
+
+    .close-control {
+        position: absolute;
+        top: 20px;
+        right: 13px;
+        z-index: 20;
+        i { margin-left: 0.5em; }
+    }
+
+    .view-dropdown {
+        padding-top: 5px;
+        .dropdown-menu {
+            top: auto;
+            bottom: 110%;
+        }
+    }
+
+    .participants-view:after {
+        content: ' ';
+    }
+
+    .participant-wrapper .remove {
+        right: 11px;
+    }
+
+    .with-participant-color {
+        padding-right: 20px;
+    }
+
+    .with-participant-color.removable {
+        padding-right: 50px;
+    }
+
+    @opacity: 0.70;
+
+    .participant-color {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 10px;
+        background-color: #ccc;
+        opacity: @opacity;
+    }
+
+    .modal-footer .btn.add-button {
+        min-width: 3em;
+    }
+
+    .appointment {
+        opacity: @opacity;
+        cursor: pointer;
+    }
+
+    .appointment-content { cursor: inherit; }
+
+    .appointment.fulltime {
+        opacity: @opacity / 2;
+        z-index: 0 !important;
+    }
+
+    /* copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste */
+    .striped(@angle: 45deg) {
+        background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+        background-image: -webkit-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -moz-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: -o-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        background-image: linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+    }
+
+    .appointment.striped {
+        .striped();
+        opacity: @opacity - 0.1;
+    }
+
+    /* colors are in custom order: not rainbow */
+    .color-index-0 { background-color: #333; }
+    .color-index-1 { background-color: darken(@blueLight, 20%); }
+    .color-index-2 { background-color: @greenLight; }
+    .color-index-3 { background-color: #F7DC16; } /* better than pure yellow */
+    .color-index-4 { background-color: #CA2929; } /* custom red */
+    .color-index-5 { background-color: @orange; }
+    .color-index-6 { background-color: darken(@blue, 10%); }
+    .color-index-7 { background-color: #FF3AB8; } /* pink */
+    .color-index-8 { background-color: #378137; } /* green */
+    .color-index-9 { background-color: #590F8A; } /* purple */
+
+    .color-index-3 .appointment-content { color: #333; }
+ }

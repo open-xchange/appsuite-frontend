@@ -25,7 +25,7 @@ define("plugins/halo/contacts/register", ["io.ox/core/extensions"], function (ex
                 return;
             }
             var deferred = new $.Deferred();
-            require(["io.ox/contacts/view-detail", "less!io.ox/contacts/style.css"], function (view) {
+            require(["io.ox/contacts/view-detail", "less!io.ox/contacts/style.less"], function (view) {
                 $node.append(view.draw(contacts[0]));
                 deferred.resolve();
             });

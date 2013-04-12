@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection',
-    ['io.ox/core/api/folder'], function (api) {
+define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
 
     'use strict';
 
@@ -60,10 +59,7 @@ define('io.ox/core/collection',
 
                 // get all folders first
                 folders = _.chain(collection)
-                    .map(getFolderId)
-                    .filter(function (item) { return !!item; }) // null, undefined, 0, ''
-                    .value();
-
+                    .map(getFolderId).compact().uniq().value();
             // mail specific: toplevel? (in contrast to nested mails)
             props.toplevel = _(collection).reduce(function (memo, item) {
                 // nested mails don't have a folder_id but a filename
@@ -71,6 +67,8 @@ define('io.ox/core/collection',
             }, true);
 
             if (folders.length === 0) {
+                props.unknown = true;
+                props.read = props.modify = props['delete'] = false;
                 return $.Deferred().resolve(props);
             }
 
@@ -110,6 +108,11 @@ define('io.ox/core/collection',
 
         this.isResolved = function () {
             return properties !== unresolved;
+        };
+
+        // avoid too large selections (just freezes browsers)
+        this.isLarge = function () {
+            return items.length >= 100;
         };
 
         // check if collection satisfies a set of properties

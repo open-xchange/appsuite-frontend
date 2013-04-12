@@ -14,8 +14,10 @@
 define('io.ox/office/tk/control/radiolist',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/tk/dropdown/list'
-    ], function (Utils, Group, List) {
+     'io.ox/office/tk/control/button',
+     'io.ox/office/tk/dropdown/list',
+     'io.ox/office/tk/dropdown/grid'
+    ], function (Utils, Group, Button, List, Grid) {
 
     'use strict';
 
@@ -26,23 +28,38 @@ define('io.ox/office/tk/control/radiolist',
      *
      * @constructor
      *
-     * @extends Group
-     * @extends List
+     * @extends Group|Button
+     * @extends List|Grid
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
      *  menu. Supports all options of the Group base class, and of the List
      *  mix-in class. Additionally, the following options are supported:
-     *  @param {Boolean} [options.highlight=false]
-     *      If set to true, the drop-down button will be highlighted if a list
-     *      item in the drop-down menu is active.
-     *  @param [options.toggleValue]
-     *      If set to a value different to null or undefined, the option button
-     *      that is currently active can be clicked to be switched off. In that
-     *      case, this radio group will activate the button associated to the
-     *      value specified in this option, and the action handler will return
-     *      this value instead of the value of the button that has been
-     *      switched off.
+     *  @param {Boolean|Function} [options.highlight=false]
+     *      If set to true, the drop-down button will be highlighted, if an
+     *      existing list item in the drop-down menu is active. The drop-down
+     *      button will not be highlighted, if the value of this group is
+     *      undetermined (value null), or if there is no option button present
+     *      with the current value of this group. If set to false, the
+     *      drop-down button will never be highlighted, even if a list item in
+     *      the drop-down menu is active. If set to a function, it will be
+     *      called every time after a list item will be activated. The
+     *      drop-down button will be highlighted if this handler function
+     *      returns true. Receives the value of the selected/activated list
+     *      item as first parameter (also if this value does not correspond to
+     *      any existing list item). Will be called in the context of this
+     *      radio group instance.
+     *  @param {Any} [options.toggleValue]
+     *      If set to a value different to null, the option button that is
+     *      currently active can be clicked to be switched off. In that case,
+     *      this radio group will activate the button associated to the value
+     *      specified in this option, and the action handler will return this
+     *      value instead of the value of the button that has been switched
+     *      off.
+     *  @param {Any} [options.splitValue]
+     *      If set to a value different to null, a separate option button will
+     *      be inserted next to the drop-down menu button, representing the
+     *      value of this option.
      *  @param {String} [options.updateCaptionMode='all']
      *      Specifies how to update the caption of the drop-down button when a
      *      list item in the drop-down menu has been activated. Supports the
@@ -59,12 +76,22 @@ define('io.ox/office/tk/control/radiolist',
      *      A function that will be called after a list item has been
      *      activated, and the caption of the drop-down button has been updated
      *      according to the 'options.updateCaptionMode' option. Receives the
-     *      button element of the activated list item (as jQuery object) in the
-     *      first parameter (empty jQuery object, if no list item is active),
-     *      and the value of the selected/activated list item in the second
-     *      parameter (also if this value does not correspond to any existing
-     *      list item). Will be called in the context of this radio group
-     *      instance.
+     *      following parameters:
+     *      (1) {jQuery} captionButton
+     *          The caption button (the split button in split mode, otherwise
+     *          the drop-down button) to be updated,
+     *      (2) {Any} value
+     *          The value of the selected/activated list item, or passed to the
+     *          Group.update() method,
+     *      (3) {jQuery} [optionButton]
+     *          The button element of the activated list item (may be empty, if
+     *          no list item is active).
+     *      Will be called in the context of this radio group instance.
+     *  @param {Function} [options.equality=_.isEqual]
+     *      A comparison function that returns whether an arbitrary value
+     *      should be considered being equal to the value of a list item in the
+     *      drop-down menu. If omitted, uses _.isEqual() which compares arrays
+     *      and objects deeply.
      */
     function RadioList(options) {
 
@@ -74,19 +101,37 @@ define('io.ox/office/tk/control/radiolist',
             // whether to highlight the drop-down menu button
             highlight = Utils.getBooleanOption(options, 'highlight', false),
 
+            // custom update handler to highlight the drop down menu button
+            updateHighlightHandler = Utils.getFunctionOption(options, 'highlight'),
+
             // fall-back value for toggle click
             toggleValue = Utils.getOption(options, 'toggleValue'),
+
+            // value of the split button
+            splitValue = Utils.getOption(options, 'splitValue'),
 
             // which parts of a list item caption will be copied to the menu button
             updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
 
             // custom update handler for the caption of the menu button
-            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
+            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler'),
 
-        // base constructor ---------------------------------------------------
+            // comparator for list item values
+            equality = Utils.getFunctionOption(options, 'equality'),
 
-        Group.call(this, options);
-        List.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options));
+            // whether split button is enabled
+            hasSplitButton = !_.isUndefined(splitValue) && !_.isNull(splitValue),
+
+            // the base class for this group
+            BaseClass = hasSplitButton ? Button : Group,
+
+            // the mix-in class for the drop-down menu
+            DropDownClass = Utils.getBooleanOption(options, 'itemGrid', false) ? Grid : List;
+
+        // base constructors --------------------------------------------------
+
+        BaseClass.call(this, Utils.extendOptions(options, { value: splitValue }));
+        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options, { plainCaret: hasSplitButton }));
 
         // private methods ----------------------------------------------------
 
@@ -103,7 +148,7 @@ define('io.ox/office/tk/control/radiolist',
          * Handles 'menuopen' events.
          */
         function menuOpenHandler() {
-            scrollToListItem(Utils.getSelectedButtons(self.getListItems()));
+            scrollToListItem(Utils.getSelectedButtons(self.getItems()));
         }
 
         /**
@@ -115,15 +160,26 @@ define('io.ox/office/tk/control/radiolist',
          */
         function itemUpdateHandler(value) {
 
-            var // activate a radio button
-                button = Utils.selectOptionButton(self.getListItems(), value),
+            var // the target caption button
+                captionButton = self.getCaptionButton(),
+                // activate an option button
+                optionButton = Utils.selectOptionButton(self.getItems(), value, equality),
                 // the options used to create the list item button
-                buttonOptions = button.data('options') || {},
+                buttonOptions = optionButton.data('options') || {},
                 // the options used to set the caption of the drop-down menu button
-                captionOptions = _.clone(options);
+                captionOptions = _.clone(options),
+                // whether the drop-down button will be highlighted
+                isHighlighted = false;
 
-            // highlight the drop-down button
-            Utils.toggleButtons(self.getMenuButton(), highlight && (button.length > 0));
+            // highlight the drop-down button (call custom handler, if available)
+            if (!_.isUndefined(value) && !_.isNull(value)) {
+                if (_.isFunction(updateHighlightHandler)) {
+                    isHighlighted = updateHighlightHandler.call(self, value);
+                } else {
+                    isHighlighted = highlight && (optionButton.length > 0);
+                }
+            }
+            Utils.toggleButtons(self.getMenuButton().add(captionButton), isHighlighted);
 
             // update the caption of the drop-down menu button
             if (updateCaptionMode.length > 0) {
@@ -132,12 +188,12 @@ define('io.ox/office/tk/control/radiolist',
                         captionOptions[name] = buttonOptions[name];
                     }
                 });
-                Utils.setControlCaption(self.getMenuButton(), captionOptions);
+                Utils.setControlCaption(captionButton, captionOptions);
             }
 
             // call custom update handler
             if (_.isFunction(updateCaptionHandler)) {
-                updateCaptionHandler.call(self, button, value);
+                updateCaptionHandler.call(self, captionButton, value, optionButton);
             }
         }
 
@@ -153,10 +209,26 @@ define('io.ox/office/tk/control/radiolist',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the button element that contains the caption.
+         *
+         * @returns {jQuery}
+         *  The caption button. If this radio group contains a split button
+         *  (see the 'options.splitValue' constructor option), the split button
+         *  will be returned, otherwise the drop-down button.
+         */
+        this.getCaptionButton = function () {
+            return hasSplitButton ? this.getButtonNode() : this.getMenuButton();
+        };
+
+        /**
          * Removes all option buttons from this control.
+         *
+         * @returns {RadioList}
+         *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            this.clearListItems();
+            this.clearItemGroup();
+            return this;
         };
 
         /**
@@ -168,25 +240,26 @@ define('io.ox/office/tk/control/radiolist',
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new option
-         *  button. Supports all options supported by the method
-         *  List.createListItem(), except 'options.value' which will be set to
-         *  the 'value' parameter passed to this method.
+         *  button. Supports all options supported by the Items.createItem()
+         *  method, except 'options.value' which will be set to the 'value'
+         *  parameter passed to this method.
          *
          * @returns {RadioList}
          *  A reference to this instance.
          */
-        this.addOptionButton = function (value, options) {
+        this.createOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value });
 
             // the new button (button options needed for updating the drop-down menu button)
-            this.createListItem(buttonOptions).data('options', buttonOptions);
+            this.createItem(buttonOptions).data('options', buttonOptions);
             return this;
         };
 
         // initialization -----------------------------------------------------
 
+        // initialize caption update mode
         switch (updateCaptionMode) {
         case 'all':
             updateCaptionMode = ['icon', 'label', 'labelCss'];

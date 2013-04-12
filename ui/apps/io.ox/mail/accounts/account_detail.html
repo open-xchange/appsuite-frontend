@@ -10,11 +10,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-                    <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
-                    <div class="controls">
-                        <label class="text">
-                            <input type="text" data-property="personal" id="personal" />
-                        </label>
+            <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="personal" id="personal" />
+                </label>
+            </div>
 		</div>
 		<div class="control-group">
 			<label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
@@ -26,8 +27,9 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.UNIFIED_MAIL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="unified_inbox_enabled" />
+					{{=it.strings.UNIFIED_MAIL}}
 				</label>
 			</div>
 		</div>
@@ -47,8 +49,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.SERVER_SSL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="mail_secure" />
+					{{=it.strings.SERVER_SSL}}
 				</label>
 			</div>
 		</div>
@@ -84,7 +87,7 @@
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
 			<div class="controls">
 				<label class="select">
@@ -94,19 +97,21 @@
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.LEAVE_MESSAGES}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="pop3_expunge_on_quit" />
+					{{=it.strings.LEAVE_MESSAGES}}
 				</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group pop3">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.DELETING_ON_LOCAL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="pop3_delete_write_through">
+					{{=it.strings.DELETING_ON_LOCAL}}
 				</label>
 			</div>
 		</div>
@@ -116,8 +121,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.SERVER_OUT_SSL}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="transport_secure" />
+					{{=it.strings.SERVER_OUT_SSL}}
 				</label>
 			</div>
 		</div>
@@ -140,8 +146,9 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">{{=it.strings.LOGIN_AND_PASS}}
+				<label class="checkbox">
 					<input type="checkbox" data-property="mail-common-selectfirst" />
+					{{=it.strings.LOGIN_AND_PASS}}
 				</label>
 			</div>
 		</div>
@@ -160,10 +167,38 @@
 					<input type="password" data-property="transport_password" id="label_25"></label>
 			</div>
 		</div>
-		<div class="control-group">
-			<div class="controls">
-				<button class="save btn btn-primary" data-action="save">Save</button>
-			</div>
-		</div>
 	</div>
+	<legend class="sectiontitle">{{=it.strings.TITLE_FOLDER_SETTINGS}}</legend>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label for="label_26" class="control-label">{{=it.strings.FOLDER_SEND}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="sent_fullname" disabled="disabled" id="label_26" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_29" class="control-label">{{=it.strings.FOLDER_TRASH}}</label>
+            <div class="controls">
+                <label class="text">
+	                    <input type="text" data-property="trash_fullname" disabled="disabled" id="label_29" />
+	                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_27" class="control-label">{{=it.strings.FOLDER_DRAFTS}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="drafts_fullname" disabled="disabled" id="label_27" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+            <label for="label_28" class="control-label">{{=it.strings.FOLDER_SPAM}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="spam_fullname" disabled="disabled" id="label_28" />
+                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                </label>
+            </div>
+        </div>
+    </div>
 </div>

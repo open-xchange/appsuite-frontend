@@ -35,7 +35,7 @@ define('io.ox/core/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialogs', 'g
 			new dialogs.ModalDialog()
                 .build(function () {
 					this.getHeader().append($("<h3>").text(gt('About')));
-					ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), ox.serverConfig || {});
+					ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), ox.serverConfig || {});
                 })
                 .addPrimaryButton("cancel", gt('Close'))
                 .show();

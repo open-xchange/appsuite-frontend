@@ -1,0 +1,104 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2013
+ * Mail: info@open-xchange.com
+ *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ */
+
+.pubsub.settings {
+
+    ul {
+
+        margin-left: 0;
+        list-style-type: none;
+
+        @padding: 20px;
+
+        li.item {
+
+            padding: 0 0 @padding 0;
+            margin: 0 0 @padding 0;
+            min-height: 66px;
+            border-bottom: 1px solid #ddd;
+
+            @margin: 6px;
+            @lineHeight: 18px;
+
+            .content {
+                line-height: @lineHeight;
+                .name {
+                    font-weight: bold;
+                    margin-bottom: @margin;
+                }
+                .url {
+                    a, i { color: #888; }
+                    a:hover { color: #555; }
+                    margin-bottom: @margin;
+                }
+                .breadcrumb {
+                    background-color: transparent;
+                    li { line-height: @lineHeight; }
+                }
+                .icon-spin {
+                    margin-left: 0.5em;
+                }
+            }
+
+            &.disabled {
+                .name {
+                    color: #aaa; font-weight: normal;
+                }
+                .url {
+                    i { color: #ccc; font-style: italic; }
+                }
+            }
+        }
+
+        li.item:last-child {
+            border-bottom: 0px none;
+        }
+    }
+
+    .breadcrumb {
+        padding: 0;
+        margin: 0;
+
+        li {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .actions {
+        float: right;
+    }
+
+    .action {
+        margin-right: 1em;
+        min-width: 90px;
+        display: inline-block;
+    }
+
+    .close {
+        line-height: 16px;
+    }
+
+    .remove-filter {
+        text-decoration: underline;
+    }
+}
+
+.publication-dialog {
+
+    height: 240px;
+
+    .url-value {
+        word-break: break-all;
+    }
+}

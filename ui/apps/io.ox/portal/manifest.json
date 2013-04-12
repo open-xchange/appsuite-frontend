@@ -4,5 +4,6 @@
     icon: "portal.png",
     category: "Productivity",
     settings: true,
-    requires: "!deniedPortal"
+    requires: "!deniedPortal",
+    index: 100
 }

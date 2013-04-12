@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="apps/themes/login/print.css">
+</head>
+<body onload="setTimeout(function () { window.print(); }, 500)">
+
+
+<script type="text/template" class="mail">
+{{~it.data :element}}
+<section class="item">
+    <header>
+        <b class="date pull-left">{{! element.from }}</b>
+        <span class="date pull-right">{{! element.date }}</span>
+        <div class="clear"></div>
+        <h1>{{! element.subject}}</h1>
+        <div class="to-and-cc">
+            <label>{{! it.i18n.to }}</label> {{! element.to }}&nbsp;&nbsp;
+            {{? element.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! element.cc }}{{?}}
+        </div>
+    </header>
+    <pre class="content">{{= element.content }}</pre>
+</section>
+{{~}}
+</script>
+
+
+<script type="text/template" class="phonelist">
+{{? it.filtered > 0 }}
+<div class="note">{{! it.i18n.filtered(it.filtered) }}. <i>{{! it.i18n.notPrinted }}.</i></div>
+{{?}}
+<h1>{{! it.i18n.phonelist }}</h1>
+<table border="0">
+<thead>
+    <tr>
+        <th>{{! it.i18n.name }}</th>
+        <th>{{! it.i18n.phone }}</th>
+        <th>{{! it.i18n.cellphone }}</th>
+    </tr>
+</thead>
+{{~it.data :element}}
+<tbody class="no-break">
+    {{? it.length >= 30 && element.thumbIndex(element.original.last_name) }}
+    <tr>
+        <td colspan="3" class="thumb-index">{{! element.thumbIndex.get() }}</td>
+    </tr>
+    {{?}}
+    <tr>
+        <td><b>{{! element.name }}</b><br>{{! element.where }}</td>
+        <td>{{! element.phone1 || '-' }}<br>{{! element.phone2 }}</td>
+        <td>{{! element.cellphone1 || '-' }}<br>{{! element.cellphone2 }}</td>
+    </tr>
+    <tr>
+        <td colspan="3" class="spacer">&nbsp;</td>
+    </tr>
+</tbody>
+{{~}}
+</table>
+</script>
+
+
+<script type="text/template" class="appointment">
+{{~it.data :element}}
+<section class="item">
+    <header>
+        <span class="date pull-left">{{! element.date }}</span>
+        <span class="time pull-right">{{! element.time }}</span>
+        <div class="clear"></div>
+        <h1>{{! element.subject}}</h1>
+        <p class="location">{{! element.location }}</p>
+    </header>
+    {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
+    <p class="participants top-border">
+    {{? element.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
+    {{?}}
+    </p>
+</section>
+{{~}}
+</script>
+
+
+<script type="text/template" class="task">
+{{~it.data :element}}
+<section class="item">
+    <header>
+        {{? element.start }}<span class="date pull-left"><label>{{! it.i18n.start }}:</label> {{! element.start }}</span>{{?}}
+        {{? element.due }}<span class="time pull-right"><label>{{! it.i18n.due }}:</label> {{! element.due }}</span>{{?}}
+        <div class="clear"></div>
+        <h1>{{! element.subject}}</h1>
+        <p class="state">{{= element.state }}</p>
+        {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
+    </header>
+    {{? element.numParticipants > 0 }}
+    <p class="participants top-border">
+    {{? element.hasAccepted }}
+        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasTentative }}
+        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasUnconfirmed }}
+        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
+    {{?}}
+    {{? element.hasDeclined }}
+        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
+    {{?}}
+    </p>
+    {{?}}
+</section>
+{{~}}
+</script>
+
+
+<!-- the only magic we need here; asks UI to use the upper template -->
+<script>window.opener[location.search.substr(1)](document);</script>
+
+</body>
+</html>

@@ -17,10 +17,12 @@ define('io.ox/core/permissions/permissions',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/tk/dialogs',
+     'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/calendar/edit/view-addparticipants',
+     'io.ox/core/http',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.css'], function (ext, notifications, api, userAPI, groupAPI, dialogs, util, AddParticipantsView, gt) {
+     'less!io.ox/core/permissions/style.less'], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -102,42 +104,42 @@ define('io.ox/core/permissions/permissions',
         menus = {
             'folder': {
                 1:  //#. folder permissions
-                    gt('view the folder'),
-                2:  //#. folder permissions
+                    gt('view the folder'),
+                2:  //#. folder permissions
                     gt('create objects'),
-                4:  //#. folder permissions
+                4:  //#. folder permissions
                     gt('create objects and subfolders'),
-                64: //#. folder permissions
+                64: //#. folder permissions
                     gt('create objects and subfolders')
             },
             'read': {
                 0:  //#. object permissions - read
                     gt('no read permissions'),
-                1:  //#. object permissions - read
+                1:  //#. object permissions - read
                     gt('read own objects'),
-                2:  //#. object permissions - read
+                2:  //#. object permissions - read
                     gt('read all objects'),
-                64: //#. object permissions - read
+                64: //#. object permissions - read
                     gt('read all objects')
             },
             'write': {
                 0:  //#. object permissions - edit/modify
                     gt('no edit permissions'),
-                1:  //#. object permissions - edit/modify
+                1:  //#. object permissions - edit/modify
                     gt('edit own objects'),
-                2:  //#. object permissions - edit/modify
+                2:  //#. object permissions - edit/modify
                     gt('edit all objects'),
-                64: //#. object permissions - edit/modify
+                64: //#. object permissions - edit/modify
                     gt('edit all objects')
             },
             'delete': {
                 0:  //#. object permissions - delete
                     gt('no delete permissions'),
-                1:  //#. object permissions - delete
+                1:  //#. object permissions - delete
                     gt('delete only own objects'),
-                2:  //#. object permissions - delete
+                2:  //#. object permissions - delete
                     gt('delete all objects'),
-                64: //#. object permissions - delete
+                64: //#. object permissions - delete
                     gt('delete all objects')
             },
             'admin': {
@@ -157,23 +159,18 @@ define('io.ox/core/permissions/permissions',
         index: 100,
         id: 'folderpermissions',
         draw: function (baton) {
-            var self = this,
-                entity = baton.model.get('entity');
+
+            var self = this, entity = baton.model.get('entity');
 
             if (baton.model.get('group')) {
-                groupAPI.getName(entity)
-                .done(function (name) {
+                groupAPI.getName(entity).done(function (name) {
                     baton.name = name;
                     ext.point(POINT + '/entity').invoke('draw', self, baton);
                 });
             } else {
-                $.when(
-                    userAPI.getName(entity),
-                    userAPI.getPictureURL(entity, { width: 64, height: 64, scaleType: 'cover' })
-                )
-                .done(function (name, picture) {
-                    baton.name = name;
-                    baton.picture = picture;
+                userAPI.get({ id: String(entity) }).done(function (user) {
+                    baton.name = contactsUtil.getFullName(user);
+                    baton.picture = contactsAPI.getPictureURLSync(user, { width: 64, height: 64, scaleType: 'cover' });
                     ext.point(POINT + '/entity').invoke('draw', self, baton);
                 });
             }
@@ -216,7 +213,7 @@ define('io.ox/core/permissions/permissions',
             );
             if (baton.admin) {
                 node.append(
-                    $('<div>').append(
+                    $('<div class="readwrite">').append(
                         // folder rights
                         gt('Folder permissions'), $.txt(_.noI18n(': ')),
                             addDropdown('folder', baton), $.txt(_.noI18n('. ')),
@@ -333,35 +330,49 @@ define('io.ox/core/permissions/permissions',
                         .render().$el.appendTo(node);
                     });
 
-                    collection.reset(_(data.permissions).map(function (obj) {
-                        return new Permission(obj);
-                    }));
+                    // get all users to preload
+                    var ids = _.chain(data.permissions)
+                        .filter(function (obj) { return obj.group === false; })
+                        .pluck('entity')
+                        .value();
+
+                    dialog.getContentNode().busy();
+
+                    userAPI.getList(ids, true, { allColumns: true }).done(function (list) {
+                        // stop being busy
+                        dialog.getContentNode().idle();
+                        // draw users
+                        collection.reset(_(data.permissions).map(function (obj) {
+                            return new Permission(obj);
+                        }));
+                    });
 
                     if (isFolderAdmin) {
 
-                        dialog.addButton('cancel', gt('Cancel')).addPrimaryButton('save', gt('Save'));
+                        dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
 
                         var node =  $('<div class="autocomplete-controls input-append">').append(
                                 $('<input type="text" class="add-participant permissions-participant-input-field">'),
                                 $('<button class="btn" type="button" data-action="add">')
                                     .append($('<i class="icon-plus">'))
                             ),
-                            autocomplete = new AddParticipantsView({el: node});
+                            autocomplete = new AddParticipantsView({ el: node });
 
                         autocomplete.render({
-                            parentSelector: '.permissions-dialog > .modal-footer',
                             autoselect: true,
-                            users: true,
+                            parentSelector: '.permissions-dialog > .modal-footer',
+                            placement: 'top',
                             contacts: false,
+                            distributionlists: false,
                             groups: true,
                             resources: false,
-                            distributionlists: false
+                            users: true
                         });
                         //add recipents to baton-data-node; used to filter sugestions list in view
                         autocomplete.on('update', function () {
                             var baton = {list: []};
                             collection.any(function (item) {
-                                baton.list.push({id: item.get('entity'), type: item.get('isGroup') ? 2 : 1});
+                                baton.list.push({id: item.get('entity'), type: item.get('group') ? 2 : 1});
                             });
                             $.data(node, 'baton', baton);
                         });
@@ -372,10 +383,12 @@ define('io.ox/core/permissions/permissions',
                                     bits: 257, // default is 'view folder' plus 'read all'
                                     group: isGroup
                                 };
-                            if (!obj.entity)
-                                notifications.yell('error', data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.'));
-                            else
-                            {
+                            if (!('entity' in obj)) {
+                                notifications.yell(
+                                    'error',
+                                    data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.')
+                                );
+                            } else {
                                 // duplicate check
                                 if (!collection.any(function (item) { return item.entity === obj.entity; })) {
                                     collection.add(new Permission(obj));

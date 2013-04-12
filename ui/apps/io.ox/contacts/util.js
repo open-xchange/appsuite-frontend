@@ -11,10 +11,24 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util', [], function () {
+define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
     'use strict';
 
+    /**
+     * Creates a result for get*Format functions which consists of a single
+     * value.
+     * @param {number} index The 1-based index of the value.
+     * @param {String} value The value to return.
+     * @type { format: string, params: [string] }
+     * @result The result object for a get*Format function.
+     */
+    function single(index, value) {
+        var params = new Array(index);
+        params[index - 1] = _.noI18n(value);
+        return { format: _.noI18n('%' + index + '$s'), params: params };
+    }
+    
     return {
 
         getImage: function (obj, options) {
@@ -30,21 +44,64 @@ define('io.ox/contacts/util', [], function () {
 
         },
 
-        getFullName: function (obj) {
+        // variant of getFullName without title, all lowercase
+        getSortName: function (obj) {
+            obj = _.extend({}, obj);
+            obj.title = '';
+            return this.getFullName(obj).toLowerCase();
+        },
+        
+        /**
+         * Computes the format of a displayed full name.
+         * @param obj {Object} A contact object.
+         * @type {
+         *     format: string,
+         *     params: [first_name, last_name, title, display_name]
+         * }
+         * @returns An object with a format
+         * string and an array of replacements which can be used e.g. as
+         * parameters to gettext.format to obtain the full name.
+         */
+        getFullNameFormat: function (obj) {
             // vanity fix
             function fix(field) {
                 return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
             }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                return $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name);
+                var title = fix(obj.title);
+                return title ? {
+                    format:
+                        //#. Name with title
+                        //#. %1$s is the first name
+                        //#. %2$s is the last name
+                        //#. %3$s is the title
+                        gt('%3$s %2$s, %1$s'),
+                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name),
+                             _.noI18n(title)]
+                } : {
+                    format:
+                        //#. Name without title
+                        //#. %1$s is the first name
+                        //#. %2$s is the last name
+                        gt('%2$s, %1$s'),
+                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
+                };
             }
+            
             // use existing display name?
             if (obj.display_name) {
-                return String(obj.display_name).replace(/"|'/g, '');
+                return single(4, String(obj.display_name).replace(/"|'/g, ''));
             }
             // fallback
-            return obj.last_name || obj.first_name || '';
+            if (obj.last_name) return single(2, obj.last_name);
+            if (obj.first_name) return single(1, obj.first_name);
+            return { format: _.noI18n(''), params: [] };
+        },
+        
+        getFullName: function (obj) {
+            var fmt = this.getFullNameFormat(obj);
+            return gt.format(fmt.format, fmt.params);
         },
 
         getDisplayName: function (obj) {
@@ -60,9 +117,68 @@ define('io.ox/contacts/util', [], function () {
             return obj.last_name || obj.first_name || '';
         },
 
+        /**
+         * compute the format of a full name in mail context
+         *
+         * In mail context (and may be others), the full name is formated a
+         * little different than in address book.
+         *
+         * @param obj {Object} a contact object with at least the attributes
+         *      related to the name set
+         *
+         * @returns An object with a format
+         * string and an array of replacements which can be used e.g. as
+         * parameters to gettext.format to obtain the full name.
+         */
+        getMailFullNameFormat: function (obj) {
+            //combine first name and last name
+            if (obj.last_name && obj.first_name) {
+                return {
+                    format:
+                        //#. Name in mail addresses
+                        //#. %1$s is the first name
+                        //#. %2$s is the last name
+                        gt.pgettext('mail address', '%1$s %2$s'),
+                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
+                };
+            }
+
+            // use existing display name?
+            if (obj.display_name) {
+                return single(4, String(obj.display_name).replace(/"|'/g, ''));
+            }
+            // fallback
+            if (obj.last_name) { return single(2, obj.last_name); }
+            if (obj.first_name) { return single(1, obj.first_name); }
+            return { format: _.noI18n(''), params: [] };
+        },
+
+        getMailFullName: function (obj) {
+            var fmt = this.getMailFullNameFormat(obj);
+            return gt.format(fmt.format, fmt.params);
+        },
+
+        /**
+         * Returns the mail as a format object similar to getFullnameFormat.
+         * @param obj {Object} A contact object.
+         * @type {
+         *     format: string,
+         *     params: [email1, email2, email3]
+         * }
+         * @returns An object with a format
+         * string and an array of replacements which can be used e.g. as
+         * parameters to gettext.format to obtain the full name.
+         */
+        getMailFormat: function (obj) {
+            if (obj.email1) return single(1, obj.email1);
+            if (obj.email2) return single(2, obj.email2);
+            if (obj.email3) return single(3, obj.email3);
+            return { format: _.noI18n(''), params: [] };
+        },
+        
         getMail: function (obj) {
             // get the first mail address
-            return (obj.email1 || obj.email2 || obj.email3 || '').toLowerCase();
+            return (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase();
         },
 
         getDescription: function (obj) {

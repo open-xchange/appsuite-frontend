@@ -17,18 +17,17 @@ define('io.ox/core/settings/pane',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
          'io.ox/core/http',
+         'io.ox/core/date',
          'io.ox/core/api/apps',
          'settings!io.ox/core',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
+         function (ext, BasicModel, views, forms, http, date, appAPI, settings, gt) {
 
     'use strict';
 
     var point = views.point("io.ox/core/settings/entry"),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
-
-
 
     ext.point("io.ox/core/settings/detail").extend({
         index: 100,
@@ -47,9 +46,8 @@ define('io.ox/core/settings/pane',
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
                 }
             });
-            this.append(
-                $('<div class="clear-title">').text(gt("Basic settings")),
-                $('<div class="settings sectiondelimiter">')
+            this.addClass('settings-container').append(
+                $('<h1>').text(gt("Basic settings"))
             );
             new SettingView({model: model}).render().$el.appendTo(this);
         }
@@ -166,46 +164,149 @@ define('io.ox/core/settings/pane',
 
     // Auto open notification area
     (function () {
+        var options = {};
+
+        options.never = gt("Never");
+        options.noEmail = gt("On new notifications except mails");
+        options.always = gt("On every new notification");
+
         if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend(new forms.ControlGroup({
+            point.extend(new forms.SelectControlGroup({
                 id: 'autoOpenNotfication',
-                index: 600,
+                index: 700,
                 attribute: 'autoOpenNotification',
-                label: gt("Automatic opening of notification area on new notifications."),
-                control: $('<input type="checkbox">'),
-                updateElement: function () {
-                    var value = this.model.get(this.attribute);
-                    if (value) {
-                        value = 'checked';
-                    } else {
-                        value = undefined;
-                    }
-                    this.nodes.element.attr('checked', value);
-                },
-                updateModel: function () {
-                    var value = this.nodes.element.attr('checked');
-                    if (value) {
-                        value = true;
-                    } else {
-                        value = false;
-                    }
-                    this.model.set(this.attribute, value);
-                }
+                label: gt("Automatic opening of notification area"),
+                selectOptions: options
             }));
         }
     }());
 
-    point.basicExtend({
-        id: 'clearCache',
-        index: 200000,
+    // Auto Logout
+
+    (function () {
+        var MINUTES = 60000,
+            options = {};
+
+        options[0] = gt("Off");
+        options[5 * MINUTES] = gt("5 minutes");
+        options[10 * MINUTES] = gt("10 minutes");
+        options[15 * MINUTES] = gt("15 minutes");
+        options[30 * MINUTES] = gt("30 minutes");
+
+        point.extend(new forms.SelectControlGroup({
+            id: 'autoLogout',
+            index: 600,
+            attribute: 'autoLogout',
+            label: gt("Auto Logout"),
+            selectOptions: options,
+            updateModel: function () {
+                this.setValueInModel(this.nodes.element.val());
+                ox.autoLogoutRestart();
+            }
+        }));
+
+
+    }());
+
+    // point.basicExtend({
+    //     id: 'clearCache',
+    //     index: 200000,
+    //     draw: function () {
+    //         this.append(
+    //             $('<button class="btn">').text(gt("Clear cache")).on("click", function (e) {
+    //                 e.preventDefault();
+    //                 require(["io.ox/core/cache"], function () {
+    //                     ox.cache.clear();
+    //                 });
+    //             })
+    //         );
+    //     }
+    // });
+
+    var ErrorLogView = Backbone.View.extend({
+
+        tagName: 'ul',
+        className: 'error-log',
+
+        initialize: function () {
+            this.collection = http.log();
+            this.collection.on('add', this.renderError, this);
+        },
+
+        render: function () {
+            // clear
+            this.$el.empty();
+            // empty?
+            if (this.collection.isEmpty()) {
+                this.$el.append(
+                    $('<li class="empty">').text(gt('No errors to report'))
+                );
+            } else {
+                this.collection.each(this.renderError, this);
+            }
+            return this;
+        },
+
+        getSummary: function () {
+            return [
+                gt('Date') + ': ' + (new date.Local()).format(date.DATE_TIME),
+                gt('Host') + ': ' + location.href,
+                gt('UI version') + ': ' + ox.serverConfig.version,
+                gt('Server version') + ': ' + ox.serverConfig.serverVersion,
+                gt('Browser') + ': ' + navigator.userAgent
+            ].join(', ');
+        },
+
+        renderSummary: function () {
+            this.$el.append(
+                $('<li class="summary">').append(
+                    $('<div>').text(this.getSummary())
+                )
+            );
+        },
+
+        getMessage: function (model) {
+            return model.get('error');
+        },
+
+        getID: function (model) {
+            var id = model.get('error_id'), code = model.get('code');
+            return !id ? '' : '(ID: ' + id + (code ? ' / ' + code : '') + ')';
+        },
+
+        getStrackTrace: function (model) {
+            var stack = model.get('error_stack');
+            return _.isArray(stack) ? stack[0] + ' ...' : '';
+        },
+
+        renderError: function (model) {
+            var length = this.collection.length;
+            if (length === 1) {
+                this.$el.find('.empty').remove();
+                this.renderSummary();
+            }
+            this.$el.append(
+                $('<li class="error">').append(
+                    $('<div class="message">').append(
+                        $('<b>').text(this.getMessage(model)), $.txt(' '),
+                        $('<span class="error-id">').text(this.getID(model))
+                    ),
+                    $('<div class="url">').text(model.get('url')),
+                    $('<div class="stack-trace">').text(this.getStrackTrace(model))
+                )
+            );
+        }
+    });
+
+    var log = new ErrorLogView();
+
+    ext.point('io.ox/core/settings/detail').extend({
+        index: 'last',
+        id: 'log',
         draw: function () {
             this.append(
-                $('<button class="btn">').text(gt("Clear cache")).on("click", function (e) {
-                    e.preventDefault();
-                    require(["io.ox/core/cache"], function () {
-                        ox.cache.clear();
-                    });
-                })
+                $('<h1>').text(gt('Error log')),
+                log.render().$el
             );
         }
     });

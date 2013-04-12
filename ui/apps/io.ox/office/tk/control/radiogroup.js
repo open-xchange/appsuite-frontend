@@ -38,6 +38,11 @@ define('io.ox/office/tk/control/radiogroup',
      *      value specified in this option, and the action handler will return
      *      this value instead of the value of the button that has been
      *      switched off.
+     *  @param {Function} [options.equality=_.isEqual]
+     *      A comparison function that returns whether an arbitrary value
+     *      should be considered being equal to the value of the buttons in
+     *      this group. If omitted, uses _.isEqual() which compares arrays and
+     *      objects deeply.
      */
     function RadioGroup(options) {
 
@@ -45,7 +50,10 @@ define('io.ox/office/tk/control/radiogroup',
             self = this,
 
             // fall-back value for toggle click
-            toggleValue = Utils.getOption(options, 'toggleValue');
+            toggleValue = Utils.getOption(options, 'toggleValue'),
+
+            // comparator for list item values
+            equality = Utils.getFunctionOption(options, 'equality');
 
         // base constructor ---------------------------------------------------
 
@@ -68,7 +76,7 @@ define('io.ox/office/tk/control/radiogroup',
          *  does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
-            Utils.selectOptionButton(getOptionButtons(), value);
+            Utils.selectOptionButton(getOptionButtons(), value, equality);
         }
 
         /**
@@ -84,9 +92,13 @@ define('io.ox/office/tk/control/radiogroup',
 
         /**
          * Removes all option buttons from this radio group.
+         *
+         * @returns {RadioGroup}
+         *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
             getOptionButtons().remove();
+            return this;
         };
 
         /**
@@ -98,7 +110,7 @@ define('io.ox/office/tk/control/radiogroup',
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button.
-         *  Supports all generic formatting options for buttons (See method
+         *  Supports all generic formatting options for buttons (see method
          *  Utils.createButton() for details), except 'options.value' which
          *  will be set to the 'value' parameter passed to this function.
          *  Additionally, the following options are supported:
@@ -108,7 +120,7 @@ define('io.ox/office/tk/control/radiogroup',
          * @returns {RadioGroup}
          *  A reference to this instance.
          */
-        this.addOptionButton = function (value, options) {
+        this.createOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),

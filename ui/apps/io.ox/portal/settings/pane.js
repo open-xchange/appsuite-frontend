@@ -14,13 +14,12 @@
 define('io.ox/portal/settings/pane',
       ['io.ox/core/extensions',
        'io.ox/core/manifests',
-       'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
        'io.ox/portal/widgets',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.css'], function (ext, manifests, utils, dialogs, widgets, settings, gt) {
+       'less!io.ox/portal/style.less'], function (ext, manifests, dialogs, widgets, settings, gt) {
 
     'use strict';
 
@@ -74,13 +73,14 @@ define('io.ox/portal/settings/pane',
     }
 
     function repopulateAddButton() {
+
         var used = widgets.getUsedTypes(),
             allTypes = widgets.getAllTypes();
 
         $('div.controls ul.dropdown-menu').empty().append(
             _(allTypes).map(function (options) {
                 if (options.unique && _(used).contains(options.type)) {
-                    return "";
+                    return '';
                 } else {
                     return $('<li>').append(
                         $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
@@ -140,12 +140,17 @@ define('io.ox/portal/settings/pane',
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                .text(widgets.getTitle(data, baton.view.options.title)),
-                // close (has float: right)
-                $('<a href="#" class="close" data-action="remove">').html('&times;')
+                .text(widgets.getTitle(data, baton.view.options.title))
             );
 
-            if (data.enabled) {
+            if (!data.protectedWidget) {
+                this.append(
+                    // close (has float: right)
+                    $('<a href="#" class="close" data-action="remove">').html('&times;')
+                );
+            }
+
+            if (data.enabled && !data.protectedWidget) {
                 // editable?
                 if (baton.view.options.editable) {
                     this.append(
@@ -156,10 +161,16 @@ define('io.ox/portal/settings/pane',
                     drawChangeColor(data.color),
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
                 );
-            } else {
+            } else if (!data.protectedWidget) {
                 this.append(
                     $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
                 );
+            } else {
+                this.append("&nbsp;");
+            }
+
+            if (data.protectedWidget) {
+                // TODO
             }
         }
     });

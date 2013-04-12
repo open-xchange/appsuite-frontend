@@ -16,185 +16,135 @@ define('io.ox/calendar/edit/main',
        'io.ox/calendar/api',
        'io.ox/core/extPatterns/dnd',
        'io.ox/calendar/edit/view-main',
+       'io.ox/core/notifications',
        'gettext!io.ox/calendar/edit/main',
        'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, gt, calendarSettings) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
     function createInstance() {
 
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment'), userContent: true }),
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true }),
 
-            controller = _.extend(app, {
-                start: function () {
-                    if (_.browser.IE === undefined || _.browser.IE > 9) {
-                        app.dropZone = new dnd.UploadZone({
-                            ref: "io.ox/calendar/edit/dnd/actions"
-                        }, app);
-                    }
-                },
-                stop: function () {
-                    var self = this,
-                        df = new $.Deferred();
+        controller = _.extend(app, {
 
-                    //be gently
-                    if (self.getDirtyStatus()) {
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
-                                .text(gt("Do you really want to discard your changes?"))
-                                .addPrimaryButton('delete', gt('Discard'))
-                                .addButton('cancel', gt('Cancel'))
-                                .show()
-                                .done(function (action) {
-                                    if (action === 'delete') {
-                                        self.dispose();
-                                        df.resolve();
-                                    } else {
-                                        df.reject();
-                                    }
-                                });
-                        });
-                    } else {
-                        //just let it go
-                        self.dispose();
-                        df.resolve();
-                    }
-                    return df;
-                },
-                /*
-                * should cleanly remove every outbounding reference
-                * of all objects created. this could be a awkward task
-                * but better for longtime perf. IE still has a hu
-                * :(
-                */
-                dispose: function () {
-                    this.view.off('save', _.bind(this.onSave, this));
-                    this.model.off('change:title');
-                },
+            start: function () {
 
-                edit: function (data, options) {
+                if (_.browser.IE === undefined || _.browser.IE > 9) {
+                    app.dropZone = new dnd.UploadZone({
+                        ref: "io.ox/calendar/edit/dnd/actions"
+                    }, app);
+                }
 
-                    app.cid = 'io.ox/calendar:edit.' + _.cid(data);
+                var state = app.getState();
 
-                    var self = this;
-                    options = _.extend({}, options);
+                if ('folder' in state && 'id' in state) {
+                    api.get({ folder: state.folder, id: state.id }).done(function (data) {
+                        app.edit(data);
+                    });
+                }
+            },
 
-                    function cont(data) {
-                        app.model = self.model = appointmentModel.factory.create(data);
-                        appointmentModel.applyAutoLengthMagic(self.model);
-                        appointmentModel.fullTimeChangeBindings(self.model);
-                        appointmentModel.setDefaultParticipants(self.model, {create: false}).done(function () {
-                            app.view = self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create', app: self});
-                            //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
-                            if (_.browser.IE === undefined || _.browser.IE > 9) {
-                                self.model.on('create:start update:start', function () {
-                                    self.getWindow().busy();
-                                });
-                            }
-                            self.model.on('create update', _.bind(self.onSave, self));
-                            self.model.on('backendError', function () {
-                                self.getWindow().idle();
-                            });
+            stop: function () {
+                var self = this,
+                    df = new $.Deferred();
 
-                            self.setTitle(gt('Edit appointment'));
-
-                            // create app window
-                            var win = ox.ui.createWindow({
-                                name: 'io.ox/calendar/edit',
-                                chromeless: true
-                            });
-
-                            self.setWindow(win);
-                            if (app.dropZone) {
-                                win.on('show', function () {
-                                    app.dropZone.include();
-                                });
-
-                                win.on('hide', function () {
-                                    app.dropZone.remove();
-                                });
-                            }
-                            if (options.action === 'appointment') {
-                                // ensure to create a change exception
-                                self.model.touch('recurrence_position');
-                                self.model.set('recurrence_type', 0);
-                            }
-
-                            if (options.action === 'series') {
-
-                                // fields for recurrences
-                                var fields = ['recurrence_date_position',
-                                    'change_exceptions',
-                                    'delete_exceptions',
-                                    'recurrence_type',
-                                    'days',
-                                    'day_in_month',
-                                    'month',
-                                    'interval',
-                                    'until',
-                                    'occurrences'];
-                                var x = 0;
-                                // ensure theses fields will be send to backend to edit the whole series
-                                for (; x < fields.length; x++) {
-                                    self.model.touch(fields[x]);
+                //be gently
+                if (self.getDirtyStatus()) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Do you really want to discard your changes?"))
+                            .addPrimaryButton('delete', gt('Discard'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'delete') {
+                                    self.dispose();
+                                    df.resolve();
+                                } else {
+                                    df.reject();
                                 }
-
-                            }
-                            // init alarm
-                            if (!self.model.get('alarm')) {
-                                self.model.set('alarm', -1, {silent: true});
-                            }
-
-                            self.considerSaved = true;
-                            self.model.on('change', function () {
-                                self.considerSaved = false;
                             });
-                            $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                            self.getWindow().show(_.bind(self.onShowWindow, self));
-                        });
-                    }
+                    });
+                } else {
+                    //just let it go
+                    self.dispose();
+                    df.resolve();
+                }
+                return df;
+            },
+            /*
+            * should cleanly remove every outbounding reference
+            * of all objects created. this could be a awkward task
+            * but better for longtime perf. IE still has a hu
+            * :(
+            */
+            dispose: function () {
+                this.view.off('save', _.bind(this.onSave, this));
+                this.model.off('change:title');
+            },
 
-                    if (data) {
-                        //hash support
-                        self.setState({ folder: data.folder_id, id: data.id});
-                        cont(data);
-                    } else {
-                        api.get(self.getState())
-                            .done(cont)
-                            .fail(function (err) {
-                                // FIXME: use general error class, teardown gently for the user
-                                throw new Error(err.error);
-                            });
-                    }
-                },
-                considerSaved: false,
-                create: function (data) {
-                    var self = this;
+            // published via calllbacks objects in baton (see below)
+            // baton makes its journey through all extensions
+            // description field (resource only) uses this function to
+            // offer "Copy to description"; the click event lands here
+            extendDescription: function (e) {
+                // we simply have to look for the textarea
+                // this whole thing could be solved differently (more local)
+                // but I had no clue how to hook into the
+                // 'new forms.InputField({...})' stuff in template.js
+                e.preventDefault();
+                var textarea = app.view.$el.find('textarea.note');
+                textarea.val(textarea.val() + e.data.description);
+                notifications.yell('success', gt('Description has been copied'));
+            },
+
+            edit: function (data, options) {
+
+                app.cid = 'io.ox/calendar:edit.' + _.cid(data);
+
+                var self = this;
+                options = _.extend({}, options);
+
+                function cont(data) {
                     app.model = self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
                     appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, {create: true}).done(function () {
-                        app.view = self.view = new MainView({model: self.model, app: self});
+                    appointmentModel.setDefaultParticipants(self.model, {create: false}).done(function () {
 
-                        self.model.on('create update', _.bind(self.onSave, self));
-                        self.view.on('save:success', function () {
-                            self.considerSaved = true;
-                            self.view.idle();
-                            self.quit();
+                        var baton = { model: self.model, mode: data.id ? 'edit' : 'create', app: self, callbacks: {} };
+                        baton.callbacks.extendDescription = app.extendDescription;
+                        app.view = self.view = new MainView(baton);
+
+                        //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
+                        if (_.browser.IE === undefined || _.browser.IE > 9) {
+                            self.model.on('create:start update:start', function () {
+                                self.getWindow().busy();
+                            });
+                        }
+
+                        self.model.on('backendError', function (response) {
+                            try {
+                                self.getWindow().idle();
+                            } catch (e) {
+                                if (response.code === 'UPL-0005') {//uploadsize to big
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
+                                }
+                                notifications.yell('error', response.error);
+                            }
+
                         });
 
-                        self.setTitle(gt('Create appointment'));
+                        self.setTitle(gt('Edit appointment'));
 
                         // create app window
                         var win = ox.ui.createWindow({
                             name: 'io.ox/calendar/edit',
-                            title: gt('Create Appointment'),
                             chromeless: true
                         });
 
                         self.setWindow(win);
-
                         if (app.dropZone) {
                             win.on('show', function () {
                                 app.dropZone.include();
@@ -204,84 +154,151 @@ define('io.ox/calendar/edit/main',
                                 app.dropZone.remove();
                             });
                         }
+                        if (options.action === 'appointment') {
+                            // ensure to create a change exception
+                            self.model.touch('recurrence_position');
+                            self.model.set('recurrence_type', 0);
+                        }
 
-                        self.model.set('alarm', calendarSettings.get('defaultReminder', 15));
+                        if (options.action === 'series') {
 
+                            // fields for recurrences
+                            var fields = ['recurrence_date_position',
+                                'change_exceptions',
+                                'delete_exceptions',
+                                'recurrence_type',
+                                'days',
+                                'day_in_month',
+                                'month',
+                                'interval',
+                                'until',
+                                'occurrences'];
+                            var x = 0;
+                            // ensure theses fields will be send to backend to edit the whole series
+                            for (; x < fields.length; x++) {
+                                self.model.touch(fields[x]);
+                            }
+
+                        }
+                        // init alarm
+                        if (!self.model.get('alarm')) {
+                            self.model.set('alarm', -1, {silent: true});
+                        }
 
                         self.considerSaved = true;
                         self.model.on('change', function () {
                             self.considerSaved = false;
                         });
-
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
-
                     });
-
-                },
-                getDirtyStatus : function () {
-                    if (this.considerSaved) {
-                        return false;
-                    }
-                    return !_.isEmpty(this.model.changedSinceLoading());
-                },
-                onShowWindow: function () {
-                    var self = this;
-                    if (self.model.get('title')) {
-                        self.getWindow().setTitle(self.model.get('title'));
-                        self.setTitle(self.model.get('title'));
-                    }
-                    self.model.on('change:title', function (model, value, source) {
-                        self.getWindow().setTitle(value);
-                        self.setTitle(value);
-                    });
-                    $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
-                    $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
-                },
-                onSave: function () {
-                    this.considerSaved = true;
-                    this.getWindow().idle();
-                    var tmpFrame = $('#tmp'),
-                        self = this,
-                        attList = this.view.baton.attachmentList;
-                    if (attList.attachmentsToAdd.length > 0) {
-                        if (attList.oldMode) {
-                            tmpFrame.on('attachmentsSaved', function () {
-                                tmpFrame.off('attachmentsSaved');
-                                ox.trigger('refresh^');
-                                self.quit();
-                            });
-                        } else {
-                            this.model.on('finishedAttachmentHandling', function () {
-                                ox.trigger('refresh^');
-                                self.quit();
-                            });
-                        }
-                    } else {
-                        this.quit();
-                    }
-                },
-                failSave: function () {
-                    if (this.model) {
-                        return {
-                            module: 'io.ox/calendar/edit',
-                            point: this.model.attributes
-                        };
-                    }
-                    return {module: 'io.ox/calendar/edit'};
-                },
-                failRestore: function (point) {
-                    var df = $.Deferred();
-                    if (_.isUndefined(point.id)) {
-                        this.create(point);
-                    } else {
-                        this.edit(point);
-                    }
-                    df.resolve();
-                    return df;
                 }
 
-            });
+                if (data) {
+                    // hash support
+                    self.setState({ folder: data.folder_id, id: data.id });
+                    cont(data);
+                }
+            },
+
+            considerSaved: false,
+
+            create: function (data) {
+
+                var self = this;
+
+                app.model = self.model = appointmentModel.factory.create(data);
+                appointmentModel.applyAutoLengthMagic(self.model);
+                appointmentModel.fullTimeChangeBindings(self.model);
+                appointmentModel.setDefaultParticipants(self.model, { create: true }).done(function () {
+
+                    var baton = { model: self.model, app: self, callbacks: {} };
+                    baton.callbacks.extendDescription = app.extendDescription;
+                    app.view = self.view = new MainView(baton);
+
+                    self.setTitle(gt('Create appointment'));
+
+                    // create app window
+                    var win = ox.ui.createWindow({
+                        name: 'io.ox/calendar/edit',
+                        title: 'Create Appointment',
+                        chromeless: true
+                    });
+
+                    self.setWindow(win);
+
+                    if (app.dropZone) {
+                        win.on('show', function () {
+                            app.dropZone.include();
+                        });
+
+                        win.on('hide', function () {
+                            app.dropZone.remove();
+                        });
+                    }
+
+                    self.model.set('alarm', settings.get('defaultReminder', 15));
+                    if (self.model.get('full_time') === true) {
+                        self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
+                    }
+                    self.considerSaved = true;
+                    self.model.on('change', function () {
+                        self.considerSaved = false;
+                    });
+
+                    $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                    self.getWindow().show(_.bind(self.onShowWindow, self));
+                });
+            },
+
+            getDirtyStatus : function () {
+                if (this.considerSaved) {
+                    return false;
+                }
+                return !_.isEmpty(this.model.changedSinceLoading());
+            },
+
+            onShowWindow: function () {
+                var self = this;
+                if (self.model.get('title')) {
+                    self.getWindow().setTitle(self.model.get('title'));
+                    self.setTitle(self.model.get('title'));
+                }
+                self.model.on('change:title', function (model, value, source) {
+                    self.getWindow().setTitle(value);
+                    self.setTitle(value);
+                });
+                $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
+                $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
+            },
+
+            onSave: function () {
+                this.considerSaved = true;
+                this.getWindow().idle();
+                this.quit();
+            },
+
+            failSave: function () {
+                if (this.model) {
+                    return {
+                        module: 'io.ox/calendar/edit',
+                        point: this.model.attributes
+                    };
+                }
+                return {module: 'io.ox/calendar/edit'};
+            },
+
+            failRestore: function (point) {
+                var df = $.Deferred();
+                if (_.isUndefined(point.id)) {
+                    this.create(point);
+                } else {
+                    this.edit(point);
+                }
+                df.resolve();
+                return df;
+            }
+        });
 
         controller.setLauncher(_.bind(controller.start, controller));
         controller.setQuit(_.bind(controller.stop, controller));

@@ -295,11 +295,21 @@ exports.potHandler = function(filename) {
     });
 };
 
+var poEscapes = {
+    '\x00': '\\000', '\x01': '\\001', '\x02': '\\002', '\x03': '\\003',
+    '\x04': '\\004', '\x05': '\\005', '\x06': '\\006', '\x07': '\\007',
+    '\x08': '\\b',   '\x09': '\\t',   '\x0a': '\\n"\n"', '\x0b': '\\v',
+    '\x0c': '\\f',   '\x0d': '\\r',   '\x0e': '\\016', '\x0f': '\\017',
+    '\x10': '\\020', '\x11': '\\021', '\x12': '\\022', '\x13': '\\023',
+    '\x14': '\\024', '\x15': '\\025', '\x16': '\\026', '\x17': '\\027',
+    '\x18': '\\030', '\x19': '\\031', '\x1a': '\\032', '\x1b': '\\033',
+    '\x1c': '\\034', '\x1d': '\\035', '\x1e': '\\036', '\x1f': '\\037',
+    '"': '\\"'
+};
+
 function escapePO(s) {
-    return s.replace(/[\x00-\x1f\\"]/g, function(c) {
-        var n = Number(c.charCodeAt(0)).toString(8);
-        return "\\000".slice(0, -n.length) + n;
-    });
+    s = s.replace(/[\x00-\x1f\\"]/g, function(c) { return poEscapes[c]; });
+    return s.indexOf('\n') < 0 ? s : '"\n"' + s;
 }
 
 exports.generatePOT = function(files) {

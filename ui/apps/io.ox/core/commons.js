@@ -82,9 +82,11 @@ define('io.ox/core/commons',
                         node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
                     } else {
+                        if (draw.cancel) draw.cancel();
                         node.css('height', '').idle().empty();
                     }
                     // remember current selection
@@ -104,6 +106,10 @@ define('io.ox/core/commons',
             // list request
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
+            });
+            // clean up selection index on delete
+            api.on('beforedelete', function (e, ids) {
+                grid.selection.removeFromIndex(ids);
             });
         },
 
@@ -161,26 +167,31 @@ define('io.ox/core/commons',
                 app.getWindow().search.stop();
             }
 
-            // disable for 7.0.1
-            var isMail = false && app.get('name') === 'io.ox/mail';
+            // right now, only mail folders support "total"
+            var supportsTotal = app.get('name') === 'io.ox/mail';
 
-            function updateUnreadCount(id, data) {
-                var unread = data.unread,
-                    node = grid.getToolbar().find('.folder-unread-count[data-folder-id="' + id + '"]');
-                node[unread > 0 ? 'show' : 'hide']().text(unread);
+            function updateFolderCount(id, data) {
+                var total = data.total,
+                    node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
+                
+                //cannot use .show() .hide() here because in firefox this keeps adding display: block to the span instead of inline
+                if (total > 0) {
+                    node.css('display', 'inline');
+                } else {
+                    node.css('display', 'none');
+                }
+                node.text('(' + total + ')');
             }
 
             function drawFolderName(folder_id) {
                 var link = $('<a href="#" data-action="open-folderview">')
                     .append(folderAPI.getTextNode(folder_id))
                     .on('click', fnOpen);
-                if (isMail) {
-                    folderAPI.get({ folder: folder_id }).done(function (data) {
-                        link.after(
-                            $.txt(' '),
-                            $('<b class="label folder-unread-count">').attr('data-folder-id', folder_id).hide()
-                        );
-                    });
+                if (supportsTotal) {
+                    link.after(
+                        $.txt(' '),
+                        $('<span class="folder-count">').attr('data-folder-id', folder_id).hide()
+                    );
                 }
                 return link;
             }
@@ -201,9 +212,9 @@ define('io.ox/core/commons',
             });
 
             // unread counter for mail
-            if (isMail) {
-                folderAPI.on('update:unread', function (e, id, data) {
-                    updateUnreadCount(id, data);
+            if (supportsTotal) {
+                folderAPI.on('update:total', function (e, id, data) {
+                    updateFolderCount(id, data);
                 });
             }
 
@@ -226,7 +237,10 @@ define('io.ox/core/commons',
          * Wire grid and API refresh
          */
         wireGridAndRefresh: function (grid, api, win) {
-            var refreshAll = function () {
+            var refreshAll = function (e) {
+                    if (e.type === 'refresh:all:local') {
+                        grid.invalidateLabels();
+                    }
                     grid.refresh(true);
                 },
                 refreshList = function () {
@@ -401,13 +415,15 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-
             cid,
-
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function () {
                 if ((getter = getter || (api ? api.get : null))) {
+                    // fallback for create trigger
+                    if (!data.id) {
+                        data.id = arguments[1].id;
+                    }
                     getter(api.reduce(data)).done(function (data) {
                         if (baton instanceof ext.Baton) {
                             baton.data = data;
@@ -442,6 +458,7 @@ define('io.ox/core/commons',
             cid = encodeURIComponent(cid);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
+            api.on('create', update);
         }
 
         return node.one('dispose', function () {
@@ -456,9 +473,34 @@ define('io.ox/core/commons',
                     cid = encodeURIComponent(cid);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
+                    api.off('create', update);
                 }
                 api = update = data = node = getter = null;
             });
+    };
+
+    // located here since we need a translation for 'Retry'
+
+    $.fail = function (msg, retry) {
+        var tmp = $("<div>")
+            .addClass('io-ox-fail')
+            .append(
+                $('<span>').text(msg)
+            );
+        if (retry) {
+            tmp.append(
+                $('<span>').text(' ')
+            )
+            .append(
+                $('<a>', { href: '#' }).text(gt('Retry'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    $(this).closest('.io-ox-center').remove();
+                    retry.apply(this, arguments);
+                })
+            );
+        }
+        return tmp.center();
     };
 
     return commons;

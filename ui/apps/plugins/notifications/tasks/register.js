@@ -17,8 +17,8 @@ define('plugins/notifications/tasks/register',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
      'io.ox/tasks/util',
-     'less!plugins/notifications/tasks/style.css'
-    ], function (ext, gt, api, reminderApi, util, templ) {
+     'less!plugins/notifications/tasks/style.less'
+    ], function (ext, gt, api, reminderApi, util) {
 
     'use strict';
 
@@ -134,7 +134,6 @@ define('plugins/notifications/tasks/register',
         id: 'dueTasks',
         index: 350,
         register: function (controller) {
-
             var notifications = controller.get('io.ox/tasks', NotificationsView);
             
             function add(e, tasks, reset) {
@@ -170,7 +169,6 @@ define('plugins/notifications/tasks/register',
             api.on('delete', remove);
             api.on('new-tasks', function (e, tasks) {
                 add(e, tasks, true);
-                notifications.collection.trigger('reset');
             });
             api.on('add-overdue-tasks', function (e, tasks) {
                 add(e, tasks);
@@ -178,7 +176,6 @@ define('plugins/notifications/tasks/register',
             });
             api.on('remove-overdue-tasks', function (e, tasks) {
                 remove(e, tasks);
-                notifications.collection.trigger('remove');
             });
 
             api.getTasks();
@@ -204,19 +201,22 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model;
+            var model = baton.model,
+                selectionBox;
+            
             this.attr('data-cid', model.get('cid')).attr('model-cid', model.cid)
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="task-actions">').append(
-                    $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
+                    selectionBox = $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
                     $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
                     
                 )
             );
+            util.selectDefaultReminder(selectionBox);
         }
     });
 
@@ -253,7 +253,7 @@ define('plugins/notifications/tasks/register',
                 model = this.model,
                 key = [model.get('folder_id') + '.' + model.get('id')];
             
-            dates = util.computePopupTime(endDate, this.$el.find(".dateselect :selected").attr("finderid"));
+            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").val());
             endDate = dates.alarmDate;
             reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
                 return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
@@ -350,7 +350,7 @@ define('plugins/notifications/tasks/register',
                             );
                         }
                     });
-                    notifications.collection.reset(items).trigger('reset');
+                    notifications.collection.reset(items);
                 });
             });
         }
@@ -446,7 +446,7 @@ define('plugins/notifications/tasks/register',
                         api.confirm({id: model.get('id'),
                                      folder_id: model.get("folder_id"),
                                      data: {confirmation: state,
-                                            confirmMessage: message}
+                                            confirmmessage: message}
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));
@@ -501,12 +501,11 @@ define('plugins/notifications/tasks/register',
                         new Backbone.Model(task)
                     );
                 });
-                notifications.collection.reset(items).trigger('reset');
+                notifications.collection.reset(items);
             }).on('remove-task-confirmation-notification', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
-                notifications.collection.trigger("remove");
             });
         }
     });

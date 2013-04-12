@@ -21,11 +21,12 @@ define("io.ox/contacts/main",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "io.ox/core/extensions",
+     "io.ox/core/extPatterns/actions",
      "io.ox/core/commons",
      "gettext!io.ox/contacts",
      "settings!io.ox/contacts",
-     "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt, settings) {
+     "less!io.ox/contacts/style.less"
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, actions, commons, gt, settings) {
 
     "use strict";
 
@@ -43,14 +44,7 @@ define("io.ox/contacts/main",
         thumbs,
         gridContainer,
         right,
-        fullIndex =
-            //#. Address book thumb index
-            //#. (guess translation is only needed for Asian languages)
-            //#. This string is simply split at spaces (can be more or less than 26 characters)
-            gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
-
-    // we have to fix the string first, otherwise we get false positives during i18n debug
-    fullIndex = _.noI18n.fix(fullIndex).split(' ');
+        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     // launcher
     app.setLauncher(function (options) {
@@ -80,7 +74,7 @@ define("io.ox/contacts/main",
         commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         // grid
-        grid = new VGrid(gridContainer);
+        grid = new VGrid(gridContainer, {settings: settings});
 
         // add template
         grid.addTemplate({
@@ -119,21 +113,27 @@ define("io.ox/contacts/main",
             }
         });
 
+        // The label function can be overwritten by an extension.
+        var getLabel = function (data) {
+            return (data.sort_name || '#').slice(0, 1).toUpperCase();
+        };
+        ext.point('io.ox/contacts/getLabel').each(function (extension) {
+            if (extension.getLabel) getLabel = extension.getLabel;
+        });
+
         // add label template
         grid.addLabelTemplate({
             build: function () {
             },
             set: function (data, fields, index) {
-                var name = data.last_name || data.display_name || "#";
-                this.text(_.noI18n(name.substr(0, 1).toUpperCase()));
+                this.text(_.noI18n(getLabel(data)));
             }
         });
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             if (!data) { return false; }
-            var name = data.last_name || data.display_name || "#",
-                prefix = _.noI18n(name.substr(0, 1).toUpperCase());
+            var prefix = getLabel(data);
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
@@ -156,8 +156,14 @@ define("io.ox/contacts/main",
             }
         };
 
+        showContact.cancel = function () {
+            _.lfo(drawContact);
+            _.lfo(drawFail);
+        };
+
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
+            baton.disable('io.ox/contacts/detail', 'breadcrumb');
             right.idle().empty().append(viewDetail.draw(baton));
         };
 
@@ -172,25 +178,60 @@ define("io.ox/contacts/main",
         /**
          * Thumb index
          */
-        function drawThumb(char, enabled) {
-            var node = $('<div>')
-                .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
-                .text(_.noI18n(char));
-            if (enabled) {
-                node.on('click', { text: char }, grid.scrollToLabelText);
+        function Thumb(opt) {
+            if (this instanceof Thumb) {
+                if (_.isString(opt)) {
+                    this.text = opt;
+                } else {
+                    _.extend(this, opt || {});
+                }
+            } else {
+                return new Thumb(opt);
             }
-            return node;
         }
 
+        Thumb.prototype.draw = function (baton) {
+            var node = $('<div>')
+                .addClass('thumb-index border-bottom')
+                .text(this.label || _.noI18n(this.text));
+            if (this.enabled(baton)) {
+                node.on('click', { text: this.text }, grid.scrollToLabelText);
+            } else {
+                node.addClass('thumb-index-disabled');
+            }
+            return node;
+        };
+
+        Thumb.prototype.enabled = function (baton) {
+            return this.text in baton.labels;
+        };
+
         // draw thumb index
+        var baton = new ext.Baton({ app: app, data: [], Thumb: Thumb });
+
         grid.on('change:ids', function () {
-            // get labels
-            thumbs.empty();
-            var textIndex = grid.getLabels().textIndex || {};
-            _(fullIndex).each(function (char) {
-                // add thumb
-                thumbs.append(drawThumb(char, char in textIndex));
-            });
+            ext.point('io.ox/contacts/thumbIndex')
+                .invoke('draw', thumbs, baton);
+        });
+
+        ext.point('io.ox/contacts/thumbIndex').extend({
+            index: 100,
+            id: 'draw',
+            draw: function () {
+                // get labels
+                baton.labels = grid.getLabels().textIndex || {};
+                // update thumb list
+                ext.point('io.ox/contacts/thumbIndex')
+                    .invoke('getIndex', thumbs, baton);
+
+                thumbs.empty();
+                _(baton.data).each(function (thumb) {
+                    thumbs.append(thumb.draw(baton));
+                });
+            },
+            getIndex: function (baton) {
+                baton.data = _.map(fullIndex, baton.Thumb);
+            }
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
@@ -208,6 +249,11 @@ define("io.ox/contacts/main",
         app.getGrid = function () {
             return grid;
         };
+
+         // drag & drop
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/contacts/actions/move', null, baton);
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'contacts', options.folder)

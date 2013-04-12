@@ -11,11 +11,35 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
+define('io.ox/core/tk/selection',
+    ['io.ox/core/event',
+     'io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'], function (Events, ext, notifications, gt) {
 
     'use strict';
 
-    var Selection = function (container) {
+    function joinTextNodes(nodes, delimiter) {
+        nodes = nodes.map(function () { return $.trim($(this).text()); });
+        return $.makeArray(nodes).join(delimiter || '');
+    }
+
+    function defaultMessage(items) {
+        var title = joinTextNodes(this.find('.selected .drag-title'), ', ');
+        return title || gt.format(gt.ngettext('1 item', '%1$d items', items.length), items.length);
+    }
+
+    var Selection = function (container, options) {
+
+        options = _.extend({
+            draggable: false,
+            dragMessage: defaultMessage,
+            dragCssClass: undefined,
+            dragType: '',
+            dropzone: false,
+            dropzoneSelector: '.selectable',
+            dropType: ''
+        }, options);
 
         this.classFocus = 'focussed';
         this.classSelected = 'selected';
@@ -36,14 +60,18 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             prev = empty,
             changed,
             apply,
-            click,
+            clickHandler,
+            mouseupHandler,
+            mousedownHandler,
             clear,
             isSelected,
             select,
             deselect,
             toggle,
+            isCheckbox,
             isMultiple,
             isRange,
+            isDragged,
             getIndex,
             getNode,
             selectFirst,
@@ -55,14 +83,22 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             fnKey,
             hasMultiple;
 
-        isMultiple = function (e) {
+        isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
                 isEditable = editable && closest.length;
-            return isEditable || (multiple && e && (e.metaKey || e.ctrlKey));
+            return isEditable;
+        };
+
+        isMultiple = function (e) {
+            return multiple && e && (e.metaKey || e.ctrlKey);
         };
 
         isRange = function (e) {
             return e && e.shiftKey && multiple;
+        };
+
+        isDragged = function (e) {
+            return $(e.currentTarget).hasClass('dnd-over');
         };
 
         hasMultiple = function () {
@@ -171,26 +207,64 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             }
         };
 
-        // click handler
-        click = function (e) {
-            var key, id;
+        clickHandler = function (e) {
+            var node, key, id;
             if (!e.isDefaultPrevented()) {
-                key = $(this).attr('data-obj-id');
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                // checkbox click?
+                if (id !== undefined && isCheckbox(e)) {
+                    apply(id, e);
+                }
+            }
+        };
+
+        mousedownHandler = function (e) {
+            var node, key, id;
+            // we check for isDefaultPrevented because elements inside .selectable
+            // might also react on mousedown/click, e.g. folder tree open/close toggle
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
                 id = bHasIndex ? observedItems[getIndex(key)] : key;
                 // exists?
-                if (id !== undefined) {
-                    // clear?
-                    if (!isMultiple(e)) {
-                        if (!isSelected(id) || hasMultiple() || self.serialize(id) !== self.serialize(last)) {
-                            clear();
-                            apply(id, e);
+                if (id !== undefined && !isCheckbox(e)) {
+                    // explicit multiple?
+                    if (isMultiple(e)) {
+                        apply(id, e);
+                        return;
+                    }
+                    // selected?
+                    if (isSelected(id)) {
+                        // but one of many?
+                        if (hasMultiple()) {
+                            node.addClass('pending-select');
                         }
                     } else {
-                        // apply
+                        clear();
                         apply(id, e);
                     }
                 }
             }
+        };
+
+        mouseupHandler = function (e) {
+            var node, key, id;
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                // exists?
+                if (id !== undefined) {
+                    if (node.hasClass('pending-select')) {
+                        clear();
+                        apply(id, e);
+                    }
+                }
+            }
+            // remove helper classes
+            container.find('.pending-select').removeClass('pending-select');
         };
 
         getIndex = function (id) {
@@ -206,22 +280,22 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return selectedItems[self.serialize(id)] !== undefined;
         };
 
-        select = function (id, quiet) {
+        select = function (id, silent) {
             if (id) {
                 var key = self.serialize(id);
-                selectedItems[key] = id;
                 getNode(key)
                     .addClass(self.classSelected)
                     .find('input.reflect-selection')
                     .attr('checked', 'checked').end()
                     .intoViewport(container);
+                selectedItems[key] = id;
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
                     prev = id;
                     lastValidIndex = lastIndex;
                 }
-                if (quiet !== true) {
+                if (silent !== true) {
                     self.trigger('select', key);
                 }
             }
@@ -361,6 +435,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return this;
         };
 
+        this.debug = function () {
+            console.debug('selection', {
+                selected: selectedItems,
+                observed: observedItems,
+                index: observedItemsIndex
+            });
+        };
+
         this.clearIndex = function () {
             observedItems = [];
             observedItemsIndex = {};
@@ -376,9 +458,33 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return this;
         };
 
+        this.removeFromIndex = function (list) {
+            var hash = {}, index = 0;
+            // build hash of CIDs to delete
+            _([].concat(list)).each(function (obj) {
+                hash[self.serialize(obj)] = true;
+            });
+            // reset index
+            observedItemsIndex = {};
+            // rebuild list
+            observedItems = _(observedItems).filter(function (obj) {
+                var key = self.serialize(obj);
+                if (key in hash) {
+                    return false;
+                } else {
+                    observedItemsIndex[key] = index++;
+                    return true;
+                }
+            });
+        };
+
         this.hasIndex = function (flag) {
             bHasIndex = !!flag;
             return this;
+        };
+
+        this.lalla = function () {
+            return observedItemsIndex;
         };
 
         /**
@@ -428,11 +534,11 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         /**
          * Clear selection
          */
-        this.clear = function (quiet) {
+        this.clear = function (silent) {
             // internal clear
             clear();
             // trigger event
-            if (quiet !== true) {
+            if (silent !== true) {
                 self.trigger('clear');
                 changed();
             }
@@ -449,9 +555,20 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         /**
+         * Deselect item
+         */
+        this.deselect = function (id) {
+            deselect(id);
+            changed();
+            return this;
+        };
+
+        /**
          * Set selection
          */
-        this.set = function (list, quiet) {
+        this.set = function (list, silent) {
+            // previous
+            var previous = this.get(), current;
             // clear
             clear();
             // loop
@@ -465,8 +582,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             });
             // reset last index
             lastIndex = -1;
-            // event
-            if (quiet !== true) {
+            // event?
+            if (!_.isEqual(previous, this.get()) && silent !== true) {
                 changed();
             }
             return this;
@@ -477,21 +594,34 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.selectRange = function (a, b) {
+
+            var tmp, i, id, key;
+
             if (bHasIndex) {
                 // get indexes
                 a = getIndex(a);
                 b = getIndex(b);
                 // swap?
                 if (a > b) {
-                    var tmp = a;
+                    tmp = a;
                     a = b;
                     b = tmp;
                 }
                 // loop
-                for (; a <= b; a++) {
-                    select(observedItems[a]);
+                for (i = a; i <= b; i++) {
+                    // get id
+                    id = observedItems[i];
+                    // select first & last one via "normal" select
+                    if (i === a || i === b) {
+                        select(id);
+                    } else {
+                        // fast & simple
+                        key = this.serialize(id);
+                        selectedItems[key] = id;
+                    }
                 }
-                // event
+                // fast update - just updates existing nodes instead of looking for thousands
+                this.update();
             }
             return this;
         };
@@ -521,6 +651,12 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
         this.resetLastIndex = function () {
             lastValidIndex = -1;
+        };
+
+        this.setLastIndex = function (obj) {
+            prev = obj;
+            lastValidIndex = getIndex(obj);
+            return this;
         };
 
         this.selectLastIndex = function () {
@@ -593,17 +729,226 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             this.clear();
             this.keyboard(false);
             this.events.destroy();
-            container.off('click contextmenu');
+            container.off('mousedown mouseup contextmenu');
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
 
         // bind general click handler
-        container.on('click contextmenu', '.selectable', click);
+        container.on('contextmenu', function (e) { e.preventDefault(); })
+            .on('mousedown', '.selectable', mousedownHandler)
+            .on('mouseup', '.selectable', mouseupHandler)
+            .on('click', '.selectable', clickHandler);
+
+        /*
+        * DND
+        */
+        (function () {
+
+            var data,
+                source,
+                helper = null,
+                fast,
+                expandTimer,
+                deltaLeft = 15,
+                deltaTop = 15,
+                // move helper
+                px = 0, py = 0, x = 0, y = 0,
+                abs = Math.abs;
+
+            function move(e) {
+                // use fast access
+                x = e.pageX + deltaLeft;
+                y = e.pageY + deltaTop;
+                if (abs(px - x) >= 5 || abs(py - y) >= 5) {
+                    fast.left = x + 'px';
+                    fast.top = y + 'px';
+                    px = x;
+                    py = y;
+                }
+            }
+
+            function firstMove() {
+                // trigger DOM event
+                container.trigger('selection:dragstart');
+            }
+
+            function over() {
+                var self = this,
+                ft = $(this).closest('.foldertree-container'),
+                node = ft[0],
+                interval,
+                scrollSpeed = 0,
+                yMax,
+                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
+                MAX = 1, // Maximal scrolling speed in px/ms.
+                scale = MAX / RANGE,
+                nodeOffsetTop = 0;
+
+                $(this).addClass('dnd-over');
+
+                if ($(this).hasClass('expandable')) {
+                    clearTimeout(expandTimer);
+                    expandTimer = setTimeout(function () {
+                        $(self).find('.folder-arrow').trigger('click');
+                    }, 1500);
+                }
+
+                function canScroll() {
+                    var scrollTop = node.scrollTop;
+                    return scrollSpeed < 0 && scrollTop > 0 ||
+                           scrollSpeed > 0 && scrollTop < yMax;
+                }
+
+                // The speed is specified in px/ms. A range of 1 to 10 results
+                // in a speed of 100 to 1000 px/s.
+                function scroll() {
+                    if (canScroll()) {
+                        var t0 = new Date().getTime(), y0 = node.scrollTop;
+                        if (interval !== undefined) clearInterval(interval);
+                        interval = setInterval(function () {
+                            if (canScroll()) {
+                                var dt = new Date().getTime() - t0,
+                                y = y0 + scrollSpeed * dt;
+                                if (y < 0) y = 0;
+                                else if (y > yMax) y = yMax;
+                                else {
+                                    node.scrollTop = y;
+                                    return;
+                                }
+                            }
+                            clearInterval(interval);
+                            interval = undefined;
+                        }, 10);
+                    } else {
+                        if (interval !== undefined) clearInterval(interval);
+                        interval = undefined;
+                    }
+                }
+
+                $(node).on('mousemove.dnd', function (e) {
+                    if (helper === null) return;
+                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
+                    var y = e.pageY - nodeOffsetTop;
+                    yMax = node.scrollHeight - node.clientHeight;
+
+                    if (y < RANGE) {
+                        scrollSpeed = (y - RANGE) * scale;
+                    } else if (node.clientHeight - y < RANGE) {
+                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
+                    } else {
+                        scrollSpeed = 0;
+                    }
+                    scroll();
+                }).on('mouseleave.dnd', function (e) {
+                    scrollSpeed = 0;
+                    scroll();
+                    $(node).off('mousemove.dnd mouseleave.dnd');
+                });
+            }
+
+            function out() {
+                clearTimeout(expandTimer);
+                $(this).removeClass('dnd-over');
+            }
+
+            function drag(e) {
+                // unbind
+                $(document).off('mousemove.dnd', drag);
+                // create helper
+                helper = $('<div class="drag-helper">').append(
+                    $('<span class="badge badge-important">').text(data.length),
+                    $('<span>').text(options.dragMessage.call(container, data, source))
+                );
+                // get fast access
+                fast = helper[0].style;
+                // initial move
+                px = py = x = y = 0;
+                move(e);
+                // replace in DOM
+                helper.appendTo(document.body);
+                // bind
+                $(document).on('mousemove.dnd', move)
+                    .one('mousemove.dnd', firstMove)
+                    .on('mouseover.dnd', '.selectable', over)
+                    .on('mouseout.dnd', '.selectable', out);
+            }
+
+            function remove() {
+                if (helper !== null) {
+                    helper.remove();
+                    helper = fast = null;
+                }
+            }
+
+            function stop() {
+                // unbind handlers
+                $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
+                $('.dropzone').each(function () {
+                    var node = $(this), selector = node.attr('data-dropzones');
+                    (selector ? node.find(selector) : node).off('mouseup.dnd');
+                });
+                $('.dnd-over').removeClass('dnd-over');
+                // trigger DOM event
+                container.trigger('selection:dragstop');
+                // revert?
+                if (helper !== null) {
+                    remove();
+                }
+            }
+
+            function drop(e) {
+                clearTimeout(expandTimer);
+                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
+                    baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
+                $(this).trigger('selection:drop', [baton]);
+            }
+
+            function resist(e) {
+                var deltaX = Math.abs(e.pageX - e.data.x),
+                    deltaY = Math.abs(e.pageY - e.data.y);
+                if (deltaX > 15 || deltaY > 15) {
+                    $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                }
+            }
+
+            function start(e) {
+                source = $(this);
+                data = self.unique(self.unfold());
+                // bind events
+                $('.dropzone').each(function () {
+                    var node = $(this), selector = node.attr('data-dropzones');
+                    (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
+                });
+                $(document)
+                    .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
+                    .on('mouseup.dnd', stop);
+                // prevent text selection
+                e.preventDefault();
+            }
+
+            // drag & drop
+            if (!Modernizr.touch) {
+                // draggable?
+                if (options.draggable) {
+                    container.on('mousedown.dnd', '.selectable', start);
+                }
+                // dropzone?
+                if (options.dropzone) {
+                    container.addClass('dropzone')
+                        .attr('data-dropzones', options.dropzoneSelector)
+                        .on('drop', function (e, baton) {
+                            baton.dropType = options.dropType;
+                            self.trigger('selection:drop', baton);
+                        });
+                }
+            }
+
+        }());
     };
 
-    Selection.extend = function (obj, node) {
+    Selection.extend = function (obj, node, options) {
         // extend object
-        return (obj.selection = new Selection(node));
+        return (obj.selection = new Selection(node, options || {}));
     };
 
     return Selection;
