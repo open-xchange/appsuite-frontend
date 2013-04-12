@@ -1,3 +1,7 @@
+* 2013-04-12 - stefan.preuss@open-xchange.com
+
+  - Fixed bug #25878 : Dev: Unable to move position of inline links initially set with prio 'lo'
+
 * 2013-04-10 - viktor.pracht@open-xchange.com
 
  - Fixed bug 25813: Updating does not update themes
