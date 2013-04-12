@@ -501,11 +501,14 @@ define('io.ox/core/tk/folderviews',
         this.repaintNode = $.noop;
 
         this.destroy = function () {
-            this.events.destroy();
-            this.selection.destroy();
-            this.internal.destroy();
-            container.empty();
-            container = this.container = this.selection = this.internal = null;
+            var self = this;
+            return $.when(this.paint.running || $.when()).done(function () {
+                self.events.destroy();
+                self.selection.destroy();
+                self.internal.destroy();
+                container.empty();
+                container = self.container = self.selection = self.internal = null;
+            });
         };
 
         function fnKeyPress(e) {
@@ -703,12 +706,14 @@ define('io.ox/core/tk/folderviews',
                         _(changesArray).each(function (change) {
                             api.update(change, storage);
                         });
-                        tree.destroy();
-                        tree = pane = null;
+                        tree.destroy().done(function () {
+                            tree = pane = null;
+                        });
                     }
                     if (action === 'cancel') {
-                        tree.destroy();
-                        tree = pane = null;
+                        tree.destroy().done(function () {
+                            tree = pane = null;
+                        });
                     }
                 });
 

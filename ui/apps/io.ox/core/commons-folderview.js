@@ -427,8 +427,9 @@ define('io.ox/core/commons-folderview',
                                 api.move(folder.id, selectedFolder[0]).fail(notifications.yell);
                             }
                         }
-                        tree.destroy();
-                        tree = dialog = null;
+                        tree.destroy().done(function () {
+                            tree = dialog = null;
+                        });
                     });
                 });
             });

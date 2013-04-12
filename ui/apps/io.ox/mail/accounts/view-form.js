@@ -190,8 +190,9 @@ define('io.ox/mail/accounts/view-form',
                                 var target = _(tree.selection.get()).first();
                                 self.model.set(property, target);
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     });
                 }

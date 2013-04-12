@@ -322,8 +322,9 @@ define('io.ox/mail/actions',
                                     commit(target);
                                 }
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     }
                 });

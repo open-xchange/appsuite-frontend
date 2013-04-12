@@ -172,8 +172,9 @@ define('io.ox/contacts/actions',
                                     commit(target);
                                 }
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     }
                 });

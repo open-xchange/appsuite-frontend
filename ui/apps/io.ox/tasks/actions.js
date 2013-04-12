@@ -222,8 +222,9 @@ define('io.ox/tasks/actions',
                                 });
                             }
                         }
-                        tree.destroy();
-                        tree = popup = null;
+                        tree.destroy().done(function () {
+                            tree = popup = null;
+                        });
                     });
                 }
             });

@@ -324,8 +324,9 @@ define('io.ox/calendar/actions',
                                 .fail(notifications.yell);
                         }
                     }
-                    tree.destroy();
-                    tree = dialog = null;
+                    tree.destroy().done(function () {
+                        tree = dialog = null;
+                    });
                 });
             });
         };
