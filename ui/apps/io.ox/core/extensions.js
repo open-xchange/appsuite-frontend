@@ -470,38 +470,6 @@ define("io.ox/core/extensions",
 
 Examples
 --------
-
-// Disable participants
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").disable("participants");
-
-// Disable date
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").disable("date");
-
-// use new "customize" function
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail/date/time").extend({
-    customize: function () {
-        this.css("background", "#fc0");
-    }
-});
-
-// Replace existing extension
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").replace({
-    id: "title",
-    draw: function () {
-        this.append(
-            $("<div>").addClass("title").text("Hello World!")
-        );
-    }
-});
-
-// Shuffle extension order
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").each(function (e) {
-    e.index = Math.random() * 1000 >> 0;
-}).sort();
+for examples please hava a look at: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_improvements
 
 */

@@ -106,7 +106,8 @@ require(['io.ox/core/extensions'], function (ext) {
     ext.point("io.ox/mail/detail").extend({
         id: "lessonExample",
         index: 300,
-        draw: function(data) {
+        draw: function(baton) {
+            var data = baton.data;
             this.append("&lt;br&gt;");
             this.append($("&lt;em&gt;").append(
                 $.txt("The eMail '"),
@@ -158,10 +159,11 @@ require(["io.ox/core/extensions"], function (ext) {
                     Next, let's replace the way the time is rendered:
 <pre class="experiment">
 require(["io.ox/core/extensions", "io.ox/mail/util", "io.ox/core/date"], function (ext, util, date) {
-    ext.point("io.ox/mail/detail").replace({
+    ext.point("io.ox/mail/detail/header").replace({
         id: 'receiveddate', // The extension we want to replace has this id as well
-        draw: function (data) {
-            var timeToRender = (data.received_date || data.sent_date || 0);
+        draw: function (baton) {
+            var data = baton.data,
+                timeToRender = (data.received_date || data.sent_date || 0);
 
             this.append(
                 $('&lt;div&gt;').addClass('date list').text(timeToRender)
@@ -181,12 +183,12 @@ require(["io.ox/core/extensions"], function (ext) {
     // From the extension point 'io.ox/mail/detail' get the extension with
     // the id 'subject' (which is passed to the callback)
 
-    ext.point("io.ox/mail/detail").get("subject", function (extension) {
+    ext.point("io.ox/mail/detail/header").get("subject", function (extension) {
         // Put it last
         extension.index = 300;
     });
 
-    print("All done, subject is now shown after the body");
+    print("All done, subject is now shown after the 'to' block");
 
 });
 </pre>
