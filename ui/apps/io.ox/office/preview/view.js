@@ -212,7 +212,7 @@ define('io.ox/office/preview/view',
             .always(function () {
                 app.getController().update();
                 busyTimer.abort();
-                app.getWindow().idle();
+                self.leaveBusy();
             });
         }
 
