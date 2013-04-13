@@ -86,32 +86,40 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: apps/io.ox/calendar/week/view.js:572
-msgid "Doubleclick in this row for whole day appointment"
+#: apps/io.ox/office/preview/view.js:83
+msgid "Close document"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:137
-#: apps/io.ox/calendar/month/perspective.js:380
-#: apps/io.ox/calendar/week/view.js:610
-msgid "show all"
+#: apps/io.ox/office/preview/view.js:89
+msgid "Show first page"
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:405
-#: apps/io.ox/calendar/month/perspective.js:406 apps/io.ox/calendar/util.js:172
-#: apps/io.ox/calendar/week/view.js:626 apps/io.ox/calendar/week/view.js:629
-#: apps/plugins/portal/birthdays/register.js:124
-msgid "Today"
+#: apps/io.ox/office/preview/view.js:90
+msgid "Show previous page"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:50
-#: apps/io.ox/calendar/week/perspective.js:177 apps/io.ox/mail/write/main.js:771
-msgid "An error occured. Please try again."
+#: apps/io.ox/office/preview/view.js:91
+msgid "Current page and total page count"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:135
-#: apps/io.ox/calendar/month/perspective.js:106
-#: apps/io.ox/calendar/week/perspective.js:72
-msgid "Ignore conflicts"
+#: apps/io.ox/office/preview/view.js:92
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:93
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:95
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:96
+msgid "Current zoom factor"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:97
+msgid "Zoom in"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
@@ -152,97 +160,8 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: apps/io.ox/calendar/month/perspective.js:125
-#: apps/io.ox/calendar/week/perspective.js:107
-msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
-msgstr ""
-
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:126
-#: apps/io.ox/calendar/settings/pane.js:97
-#: apps/io.ox/calendar/week/perspective.js:107
-#: apps/io.ox/calendar/week/perspective.js:108
-#: apps/io.ox/core/permissions/permissions.js:149
-#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:34
-msgid "Yes"
-msgstr ""
-
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:127
-#: apps/io.ox/calendar/settings/pane.js:98
-#: apps/io.ox/calendar/week/perspective.js:108
-#: apps/io.ox/calendar/week/perspective.js:109
-#: apps/io.ox/core/permissions/permissions.js:147
-#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:35
-msgid "No"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:124
-#: apps/io.ox/calendar/week/perspective.js:111
-#: apps/io.ox/calendar/week/perspective.js:112
-msgid "Do you want to edit the whole series or just one appointment within the series?"
-msgstr ""
-
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. Use singular in this context
-#: apps/io.ox/calendar/actions.js:127
-#: apps/io.ox/calendar/week/perspective.js:113
-#: apps/io.ox/calendar/week/perspective.js:114
-msgid "Series"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:128
-#: apps/io.ox/calendar/week/perspective.js:114
-#: apps/io.ox/calendar/week/perspective.js:115
-msgid "Appointment"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:83
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:89
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:90
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:91
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:92
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:93
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:95
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:96
-msgid "Current zoom factor"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:97
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:300
-#: apps/io.ox/office/preview/view.js:192 apps/io.ox/office/preview/view.js:210
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:210
 msgid "Load Error"
 msgstr ""
 
@@ -250,17 +169,12 @@ msgstr ""
 msgid "An error occurred while loading the page."
 msgstr ""
 
-#. Appears in file icon view during searches
-#: apps/io.ox/files/icons/perspective.js:61
-msgid "Searched for: %1$s"
+#: apps/io.ox/office/framework/app/baseapplication.js:268
+msgid "Unnamed"
 msgstr ""
 
-#: apps/io.ox/files/icons/perspective.js:423
-#: apps/io.ox/files/icons/perspective.js:452
-#: apps/io.ox/files/list/perspective.js:161
-#: apps/io.ox/files/list/perspective.js:204
-#: apps/io.ox/files/list/view-detail.js:198 apps/io.ox/files/views/create.js:62
-msgid "This file has not been added"
+#: apps/io.ox/office/framework/app/baseapplication.js:298
+msgid "An error occurred while loading the document."
 msgstr ""
 
 #: apps/plugins/portal/rss/register.js:54
@@ -410,6 +324,13 @@ msgstr ""
 
 #: apps/plugins/portal/birthdays/register.js:104
 msgid "Buy a gift"
+msgstr ""
+
+#: apps/io.ox/calendar/month/perspective.js:405
+#: apps/io.ox/calendar/month/perspective.js:406 apps/io.ox/calendar/util.js:172
+#: apps/io.ox/calendar/week/view.js:626 apps/io.ox/calendar/week/view.js:629
+#: apps/plugins/portal/birthdays/register.js:124
+msgid "Today"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js:174 apps/plugins/portal/birthdays/register.js:124
@@ -1619,6 +1540,11 @@ msgstr ""
 msgid "Forward"
 msgstr ""
 
+#: apps/io.ox/calendar/week/perspective.js:50
+#: apps/io.ox/calendar/week/perspective.js:177 apps/io.ox/mail/write/main.js:771
+msgid "An error occured. Please try again."
+msgstr ""
+
 #: apps/io.ox/mail/write/main.js:937
 msgid "Mail has been sent"
 msgstr ""
@@ -2195,8 +2121,77 @@ msgstr ""
 msgid "4 weeks"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. folder permissions - Is Admin? YES
+#: apps/io.ox/calendar/month/perspective.js:126
+#: apps/io.ox/calendar/settings/pane.js:97
+#: apps/io.ox/calendar/week/perspective.js:107
+#: apps/io.ox/calendar/week/perspective.js:108
+#: apps/io.ox/core/permissions/permissions.js:149
+#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:34
+msgid "Yes"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. folder permissions - Is Admin? NO
+#: apps/io.ox/calendar/month/perspective.js:127
+#: apps/io.ox/calendar/settings/pane.js:98
+#: apps/io.ox/calendar/week/perspective.js:108
+#: apps/io.ox/calendar/week/perspective.js:109
+#: apps/io.ox/core/permissions/permissions.js:147
+#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:35
+msgid "No"
+msgstr ""
+
 #: apps/io.ox/calendar/list/perspective.js:90
 msgid "Couldn't load appointment data."
+msgstr ""
+
+#: apps/io.ox/calendar/list/perspective.js:137
+#: apps/io.ox/calendar/month/perspective.js:380
+#: apps/io.ox/calendar/week/view.js:610
+msgid "show all"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:572
+msgid "Doubleclick in this row for whole day appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/template.js:135
+#: apps/io.ox/calendar/month/perspective.js:106
+#: apps/io.ox/calendar/week/perspective.js:72
+msgid "Ignore conflicts"
+msgstr ""
+
+#: apps/io.ox/calendar/month/perspective.js:125
+#: apps/io.ox/calendar/week/perspective.js:107
+msgid "By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:124
+#: apps/io.ox/calendar/week/perspective.js:111
+#: apps/io.ox/calendar/week/perspective.js:112
+msgid "Do you want to edit the whole series or just one appointment within the series?"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Use singular in this context
+#: apps/io.ox/calendar/actions.js:127
+#: apps/io.ox/calendar/week/perspective.js:113
+#: apps/io.ox/calendar/week/perspective.js:114
+msgid "Series"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:128
+#: apps/io.ox/calendar/week/perspective.js:114
+#: apps/io.ox/calendar/week/perspective.js:115
+msgid "Appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:294
@@ -3869,14 +3864,6 @@ msgstr ""
 msgid "%1$d%"
 msgstr ""
 
-#: apps/io.ox/office/framework/app/baseapplication.js:271
-msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:301
-msgid "An error occurred while loading the document."
-msgstr ""
-
 #: apps/io.ox/portal/settings/pane.js:48
 msgid "Portal settings"
 msgstr ""
@@ -3974,6 +3961,14 @@ msgstr ""
 msgid "Upload new version"
 msgstr ""
 
+#: apps/io.ox/files/icons/perspective.js:423
+#: apps/io.ox/files/icons/perspective.js:452
+#: apps/io.ox/files/list/perspective.js:161
+#: apps/io.ox/files/list/perspective.js:204
+#: apps/io.ox/files/list/view-detail.js:198 apps/io.ox/files/views/create.js:62
+msgid "This file has not been added"
+msgstr ""
+
 #: apps/io.ox/files/list/view-detail.js:205
 msgid "Uploading..."
 msgstr ""
@@ -4001,6 +3996,11 @@ msgstr ""
 #: apps/io.ox/files/views/create.js:81
 msgctxt "title"
 msgid "Title"
+msgstr ""
+
+#. Appears in file icon view during searches
+#: apps/io.ox/files/icons/perspective.js:61
+msgid "Searched for: %1$s"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:155
