@@ -86,97 +86,6 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: apps/io.ox/office/preview/view.js:83
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:89
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:90
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:91
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:92
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:93
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:95
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:96
-msgid "Current zoom factor"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:97
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
-#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
-#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
-#: apps/io.ox/calendar/month/perspective.js:107
-#: apps/io.ox/calendar/week/perspective.js:72
-#: apps/io.ox/calendar/week/perspective.js:73
-#: apps/io.ox/calendar/week/perspective.js:115
-#: apps/io.ox/calendar/week/perspective.js:116 apps/io.ox/contacts/actions.js:51
-#: apps/io.ox/contacts/actions.js:149 apps/io.ox/contacts/distrib/main.js:162
-#: apps/io.ox/contacts/edit/main.js:152
-#: apps/io.ox/core/commons-folderview.js:403 apps/io.ox/core/export/export.js:71
-#: apps/io.ox/core/import/import.js:115 apps/io.ox/core/main.js:306
-#: apps/io.ox/core/main.js:317 apps/io.ox/core/main.js:318
-#: apps/io.ox/core/permissions/permissions.js:352
-#: apps/io.ox/core/pubsub/publications.js:92
-#: apps/io.ox/core/pubsub/subscriptions.js:47
-#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/folderviews.js:567
-#: apps/io.ox/core/tk/folderviews.js:596 apps/io.ox/core/tk/folderviews.js:645
-#: apps/io.ox/core/tk/folderviews.js:697 apps/io.ox/core/upsell.js:33
-#: apps/io.ox/editor/main.js:242 apps/io.ox/files/actions.js:249
-#: apps/io.ox/files/actions.js:306 apps/io.ox/files/actions.js:359
-#: apps/io.ox/files/actions.js:402 apps/io.ox/files/actions.js:489
-#: apps/io.ox/files/views/create.js:40 apps/io.ox/mail/accounts/settings.js:213
-#: apps/io.ox/mail/accounts/settings.js:215
-#: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
-#: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
-#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/preview/view.js:176
-#: apps/io.ox/office/tk/dialogs.js:28 apps/io.ox/portal/settings/pane.js:248
-#: apps/io.ox/settings/accounts/settings/pane.js:51
-#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
-#: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
-#: apps/io.ox/tasks/edit/util.js:145 apps/plugins/portal/flickr/register.js:207
-#: apps/plugins/portal/rss/register.js:143
-#: apps/plugins/portal/tumblr/register.js:177
-#: apps/plugins/portal/userSettings/register.js:61
-msgid "Cancel"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:297
-#: apps/io.ox/office/preview/view.js:210
-msgid "Load Error"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:210
-msgid "An error occurred while loading the page."
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:268
-msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:298
-msgid "An error occurred while loading the document."
-msgstr ""
-
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -217,6 +126,44 @@ msgstr ""
 #: apps/plugins/portal/rss/register.js:142
 #: apps/plugins/portal/tumblr/register.js:176
 msgid "Save"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
+#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
+#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
+#: apps/io.ox/calendar/month/perspective.js:107
+#: apps/io.ox/calendar/week/perspective.js:72
+#: apps/io.ox/calendar/week/perspective.js:73
+#: apps/io.ox/calendar/week/perspective.js:115
+#: apps/io.ox/calendar/week/perspective.js:116 apps/io.ox/contacts/actions.js:51
+#: apps/io.ox/contacts/actions.js:149 apps/io.ox/contacts/distrib/main.js:162
+#: apps/io.ox/contacts/edit/main.js:152
+#: apps/io.ox/core/commons-folderview.js:403 apps/io.ox/core/export/export.js:71
+#: apps/io.ox/core/import/import.js:115 apps/io.ox/core/main.js:306
+#: apps/io.ox/core/main.js:317 apps/io.ox/core/main.js:318
+#: apps/io.ox/core/permissions/permissions.js:352
+#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/pubsub/subscriptions.js:47
+#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/folderviews.js:567
+#: apps/io.ox/core/tk/folderviews.js:596 apps/io.ox/core/tk/folderviews.js:645
+#: apps/io.ox/core/tk/folderviews.js:697 apps/io.ox/core/upsell.js:33
+#: apps/io.ox/editor/main.js:242 apps/io.ox/files/actions.js:249
+#: apps/io.ox/files/actions.js:306 apps/io.ox/files/actions.js:359
+#: apps/io.ox/files/actions.js:402 apps/io.ox/files/actions.js:489
+#: apps/io.ox/files/views/create.js:40 apps/io.ox/mail/accounts/settings.js:213
+#: apps/io.ox/mail/accounts/settings.js:215
+#: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
+#: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
+#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/preview/view.js:176
+#: apps/io.ox/office/tk/dialogs.js:28 apps/io.ox/portal/settings/pane.js:248
+#: apps/io.ox/settings/accounts/settings/pane.js:51
+#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
+#: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
+#: apps/io.ox/tasks/edit/util.js:145 apps/plugins/portal/flickr/register.js:207
+#: apps/plugins/portal/rss/register.js:143
+#: apps/plugins/portal/tumblr/register.js:177
+#: apps/plugins/portal/userSettings/register.js:61
+msgid "Cancel"
 msgstr ""
 
 #: apps/plugins/portal/rss/register.js:163
@@ -3858,10 +3805,63 @@ msgstr ""
 msgid "Click to open."
 msgstr ""
 
+#: apps/io.ox/office/preview/view.js:83
+msgid "Close document"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:89
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:90
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:91
+msgid "Current page and total page count"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:92
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:93
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:95
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:96
+msgid "Current zoom factor"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:97
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:210
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:210
+msgid "An error occurred while loading the page."
+msgstr ""
+
 #. %1$d is the current zoom factor, in percent
 #, c-format
 #: apps/io.ox/office/preview/controller.js:113
 msgid "%1$d%"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:268
+msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:298
+msgid "An error occurred while loading the document."
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:48
