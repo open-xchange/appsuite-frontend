@@ -244,7 +244,6 @@ define('io.ox/files/icons/perspective',
                     dropZoneInit(app);
                     app.getWindow().search.close();
                     self.main.closest('.search-open').removeClass('search-open');
-                    iconview.empty();
                     drawFirst();
                 });
 

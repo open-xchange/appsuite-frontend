@@ -139,7 +139,7 @@ define("io.ox/core/desktop",
 
                     set: function (id) {
                         var def = $.Deferred();
-                        if (id !== undefined && id !== null) {
+                        if (id !== undefined && id !== null && String(id) !== folder) {
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
