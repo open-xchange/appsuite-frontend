@@ -63,6 +63,10 @@ define('io.ox/files/list/perspective',
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        if (app.getWindow().search.active) {
+            grid.setMode('search');
+        }
+
         // The list request is not needed and is too slow
         // ids contains all required information
         grid.setListRequest(function (ids) {
