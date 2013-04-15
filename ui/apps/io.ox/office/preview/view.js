@@ -78,6 +78,11 @@ define('io.ox/office/preview/view',
          */
         function initHandler() {
 
+            model = app.getModel();
+            self.insertContentNode(pageNode);
+
+            self.addPane(new Pane(app, { position: 'right' }));
+
             self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
@@ -418,14 +423,6 @@ define('io.ox/office/preview/view',
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
         };
-
-        // initialization -----------------------------------------------------
-
-        // initialization after construction
-        app.on('docs:init', function () {
-            model = app.getModel();
-            self.insertContentNode(pageNode);
-        });
 
     } // class PreviewView
 

@@ -116,6 +116,39 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     background: @pane-fill-color;
     line-height: 0;
 
+    /* side panes */
+    &.side-pane {
+        width: auto;
+
+        > .fixed-toolboxes {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: auto;
+            overflow: hidden;
+    
+            &.top { top: 0; }
+            &.bottom { bottom: 0; }
+        }
+
+        > .scrollable-toolboxes {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+
+            &.scrollable {
+                border-top-color: #181818;
+                border-bottom-color: #181818;
+            }
+        }
+    }
+
     /* the application pane in the middle between all view panes */
     &.app-pane {
         .box-sizing(content-box);
