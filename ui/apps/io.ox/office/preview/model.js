@@ -139,7 +139,11 @@ define('io.ox/office/preview/model',
                 imgNode = $('<img>', { src: srcUrl });
 
             // wait that the image is loaded
-            imgNode.one('load', function () { def.resolve(imgNode); });
+            Utils.log('PreviewModel.createImageNode(): reading page ' + page);
+            imgNode.one('load', function () {
+                Utils.log('Image for page ' + page  + ' loaded');
+                def.resolve(imgNode);
+            });
 
             return def.promise();
         }
@@ -156,6 +160,7 @@ define('io.ox/office/preview/model',
          */
         function loadSvgMarkup(page) {
 
+            Utils.log('PreviewModel.loadSvgMarkup(): reading page ' + page);
             return app.sendPreviewRequest({
                 params: {
                     convert_format: 'html',
