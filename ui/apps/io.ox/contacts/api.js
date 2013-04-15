@@ -55,13 +55,14 @@ define('io.ox/contacts/api',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     opt = opt || {};
+                    query = query + '*';
                     var data = {
-                        display_name: query + '*',
-                        first_name: query + '*',
-                        last_name: query + '*',
-                        email1: query + '*',
-                        email2: query + '*',
-                        email3: query + '*',
+                        display_name: query,
+                        first_name: query,
+                        last_name: query,
+                        email1: query,
+                        email2: query,
+                        email3: query,
                         orSearch: true,
                         emailAutoComplete: !!opt.emailAutoComplete
                     };
