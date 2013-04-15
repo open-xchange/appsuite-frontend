@@ -10,6 +10,6 @@ if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
 export BASEDIR=$(dirname $(dirname $0))
 
-if [ -f ./local.conf ]; then source ./local.conf; fi
+if [ -f ./local.conf ]; then . ./local.conf; fi
 
 $NODEJS $nodeopts "$BASEDIR/lib/jake/bin/cli.js" -f "$BASEDIR/Jakefile" "$@"
