@@ -149,6 +149,12 @@ define("io.ox/core/extensions",
 
         this.has = has;
 
+        /**
+         * registers extension if id is not taken yet
+         * @chainable
+         * @param  {extension}
+         * @return {point}
+         */
         this.extend = function (extension) {
 
             if (extension.invoke) {
@@ -194,6 +200,13 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        /**
+         * extends existing extension OR registers extension if id is not taken yet
+         * registers extension (for point) if id is not taken yet
+         * @chainable
+         * @param  {extension}
+         * @return {point}
+         */
         this.replace = function (extension) {
 
             if (!extension.id) {
@@ -222,6 +235,10 @@ define("io.ox/core/extensions",
             extensions = replacements = [];
         };
 
+        /**
+         * get all extensions
+         * @return {array}
+         */
         this.all = function () {
             return extensions;
         };
@@ -236,6 +253,10 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        /**
+         * get all extension ids
+         * @return {array}
+         */
         this.keys = function () {
             return _(extensions).pluck('id');
         };
@@ -246,6 +267,10 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        /**
+         * get all enabled extensions
+         * @return {array}
+         */
         this.list = function () {
             return list().value();
         };
@@ -311,6 +336,10 @@ define("io.ox/core/extensions",
             console.debug('Extension point', this.id, JSON.stringify(this.all()));
         };
 
+        /**
+         * get number of enabled extensions
+         * @return {integer}
+         */
         this.count = function () {
             return list().value().length;
         };
@@ -413,13 +442,18 @@ define("io.ox/core/extensions",
         }
     };
 
+    //if not allread a baton extend new baton instace with 'object'
     Baton.wrap = function (object) {
         return object instanceof Baton ? object : new Baton(object);
     };
 
     that = {
 
-        // get point
+        /**
+         * get point (if necessary also created and registered before)
+         * @param  {string} id
+         * @return {point}
+         */
         point: function (id) {
             id = id || "";
             if (registry[id] !== undefined) {
@@ -429,7 +463,10 @@ define("io.ox/core/extensions",
             }
         },
 
-        // get all ids
+        /**
+         * get extension ids
+         * @return {array} ids
+         */
         keys: function () {
             return _.keys(registry);
         },
