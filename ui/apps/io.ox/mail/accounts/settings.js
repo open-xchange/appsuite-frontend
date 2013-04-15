@@ -23,36 +23,30 @@ define('io.ox/mail/accounts/settings',
 
     'use strict';
 
+    function renderDetailView(evt, data) {
+        var myView, myModel, myViewNode;
+
+        myViewNode = $("<div>").addClass("accountDetail");
+        myModel = new AccountModel(data);
+        myView = new AccountDetailView({model: myModel, node: myViewNode});
+        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
+            pane.append(myView.render().el);
+        });
+        myView.succes = successDialog;
+        myView.collection = collection;
+        return myView.node;
+    }
+
     ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
         index: 200,
         id: "emailaccountssettings",
         draw: function (evt) {
-            var data,
-                myView,
-                myModel,
-                auto,
-                myViewNode;
             if (evt.data.id >= 0) {
                 api.get(evt.data.id).done(function (obj) {
-                    data = obj;
-                    myViewNode = $("<div>").addClass("accountDetail");
-                    myModel = new AccountModel(data);
-                    myView = new AccountDetailView({model: myModel, node: myViewNode});
-                    myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
-                        pane.append(myView.render().el);
-                    });
-                    return myView.node;
+                    renderDetailView(evt, obj);
                 });
             } else {
-                myViewNode = $("<div>").addClass("accountDetail");
-                myModel = new AccountModel(evt.data);
-                myView = new AccountDetailView({model: myModel, node: myViewNode});
-                myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
-                    pane.append(myView.render().el);
-                });
-                myView.succes = successDialog;
-                myView.collection = collection;
-                return myView.node;
+                renderDetailView(evt, evt.data);
             }
         }
     });
