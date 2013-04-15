@@ -233,6 +233,10 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
+            // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
+            if (groupNode.hasClass('white-icons')) {
+                groupNode.find('i').addClass('icon-white');
+            }
             return this;
         };
 

@@ -86,7 +86,9 @@ i[class^="docs-"] {
     vertical-align: middle;
 
     background-image: url(docs-icons-desktop-black.png);
+    &.icon-white { background-image: url(docs-icons-desktop-white.png); }
     &.retina { background-image: url(docs-icons-retina-black.png); }
+    &.icon-white.retina { background-image: url(docs-icons-retina-white.png); }
 }
 
 /* give standard Bootstrap icons a minimum width */
@@ -383,15 +385,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             label, a.button {
                 line-height: @control-height - 2px;
 
-                /* adjustments for icons */
+                /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
                 span > i[class^="docs-"] {
-                    /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
                     position: relative;
                     top: 8px;
                     vertical-align: top;
-                    /* white icons */
-                    background-image: url(docs-icons-desktop-white.png);
-                    &.retina { background-image: url(docs-icons-retina-white.png); }
                 }
             }
 
