@@ -139,10 +139,7 @@ define('io.ox/office/preview/model',
                 imgNode = $('<img>', { src: srcUrl });
 
             // wait that the image is loaded
-            imgNode.one({
-                load: function () { def.resolve(imgNode); },
-                error: function () { def.reject(); }
-            });
+            imgNode.one('load', function () { def.resolve(imgNode); });
 
             return def.promise();
         }
