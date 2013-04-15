@@ -20,6 +20,13 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
         });
+        rt.on("error", function (e) {
+            self.trigger("error");
+        });
+        rt.on("open", function (e) {
+            self.trigger("apiOpen");
+        });
+
         this.id = id;
 
         this.join = function () {
@@ -69,9 +76,14 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             });
         };
 
+        this.sendWithoutSequence = function (message) {
+            message.to = id;
+            return rt.sendWithoutSequence(message);
+        };
+
         this.send = function (message) {
             message.to = id;
-            rt.send(message);
+            return rt.send(message);
         };
 
         this.destroy = function () {

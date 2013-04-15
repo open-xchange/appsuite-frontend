@@ -98,6 +98,14 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
                 });
             }
         });
+
+        this.group.on("error", function () {
+            console.log("ERROR!");
+        });
+
+        this.group.on("apiOpen", function () {
+            console.log("apiOpen");
+        });
     }
 
     var rooms = {};

@@ -39,6 +39,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var seq = 0;
     var request = null;
     var resendBuffer = {};
+    var resendDeferreds = {};
 
     Event.extend(api);
 
@@ -147,6 +148,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
                 delete resendBuffer[Number(receipt.data)];
+                resendDeferreds[Number(receipt.data)].resolve();
                 if (api.debug) {
                     console.log("Received receipt for " + receipt.data);
                 }
@@ -290,22 +292,24 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
+        var def = $.Deferred();
         if (options.trace) {
             delete options.trace;
             options.tracer = uuids.randomUUID();
         }
         if (!_.isUndefined(options.seq)) {
             resendBuffer[options.seq] = options;
+            resendDeferreds[options.seq] = def;
         }
         if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (connecting) {
             // Buffer messages until connect went through
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
@@ -320,6 +324,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 console.log("->", options);
             }
         }
+        return def;
     };
 
     api.on("open", function () {
