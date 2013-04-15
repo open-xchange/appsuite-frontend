@@ -159,8 +159,8 @@ define('io.ox/office/preview/view',
 
             var // a timeout for the window busy call
                 busyTimer = null,
-                // the Deferred object waiting for the page contents
-                def = $.Deferred();
+                // the Promise that loads the page
+                def = null;
 
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
@@ -169,35 +169,18 @@ define('io.ox/office/preview/view',
             page = newPage;
 
             // switch window to busy state after a short delay
-            busyTimer = app.executeDelayed(function () {
-                self.enterBusy(function (header, footer) {
-
-                    var // the Cancel button
-                        buttonNode = $.button({ label: gt('Cancel') }).addClass('btn-warning').on('click', function () { def.reject(); }),
-                        // the container node for the button (hide initially, show after a delay)
-                        containerNode = $('<div>').append(buttonNode).hide();
-
-                    _.delay(function () { containerNode.show(); }, 2000);
-                    footer.append(containerNode);
-                });
-            }, { delay: 500 });
+            busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
 
             // load the requested page
             if (_.browser.Chrome) {
                 // as SVG mark-up (Chrome does not show images in linked SVG)
-                model.loadPageAsSvg(page).done(function (svgMarkup) {
+                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
-                    def.resolve();
-                }).fail(function () {
-                    def.reject();
                 });
             } else {
                 // preferred: as an image element linking to the SVG file
-                model.loadPageAsImage(page).done(function (imgNode) {
+                def = model.loadPageAsImage(page).done(function (imgNode) {
                     pageNode.empty().append(imgNode);
-                    def.resolve();
-                }).fail(function () {
-                    def.reject();
                 });
             }
 
@@ -206,7 +189,6 @@ define('io.ox/office/preview/view',
                 updateZoom(scrollTo);
             })
             .fail(function () {
-                pageNode.empty();
                 self.showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
             })
             .always(function () {
