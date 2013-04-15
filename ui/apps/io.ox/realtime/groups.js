@@ -29,7 +29,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
 
         this.id = id;
 
-        this.join = function () {
+        this.join = function (options) {
             if (!heartbeat) {
                 heartbeat = setInterval(function () {
                     rt.sendWithoutSequence({
@@ -45,8 +45,10 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                     });
                 }, 60000);
             }
+            options = options || {};
             this.send({
                 element: "message",
+                trace: options.trace,
                 selector: selector,
                 payloads: [
                     {
@@ -58,14 +60,16 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             });
         };
 
-        this.leave = function () {
+        this.leave = function (options) {
             if (!heartbeat) {
                 return;
             }
+            options = options || {};
             clearInterval(heartbeat);
             heartbeat = null;
             this.send({
                 element: "message",
+                trace: options.trace,
                 payloads: [
                     {
                         element: "command",
