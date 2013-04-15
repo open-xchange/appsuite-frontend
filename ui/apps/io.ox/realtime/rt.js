@@ -37,6 +37,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var BUFFERING = true;
     var BUFFER_INTERVAL = 1000;
     var seq = 0;
+    var request = null;
+    var resendBuffer = {};
 
     Event.extend(api);
 
@@ -96,6 +98,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.type = json.type;
         this.element = json.element;
         this.payloads = json.payloads || [];
+        this.tracer = json.tracer;
+        this.log = json.log;
 
         this.get = function (namespace, element) {
             return get(json, namespace, element);
@@ -139,18 +143,34 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
     */
 
+    function received(stanza) {
+        if (stanza.get("atmosphere", "received")) {
+            _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
+                delete resendBuffer[Number(receipt.data)];
+                if (api.debug) {
+                    console.log("Received receipt for " + receipt.data);
+                }
+            });
+
+        } else {
+            api.trigger("receive", stanza);
+            api.trigger("receive:" + stanza.selector, stanza);
+        }
+    }
+
+
     function connect() {
         connecting = true;
 
-        var request = {
+        request = {
             url: url + '?session=' + ox.session + "&resource=" + tabId,
             contentType : "application/json",
-            logLevel : 'debug',
+            logLevel : 'shutUp',
             transport : 'long-polling',
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 9999999999999999999999999999999999
+            maxRequest: 60
         };
 
 
@@ -168,14 +188,18 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
         };
 
+        var reconnectCount = 0;
+
         request.onReconnect = function (request, response) {
-            //socket.info("Reconnecting");
-            if (request.requestCount > 30) {
+            reconnectCount++;
+            if (reconnectCount > 30) {
                 reconnect();
             }
         };
 
+
         request.onMessage = function (response) {
+            request.requestCount = 0;
             var message = response.responseBody;
             var json = {};
             try {
@@ -191,19 +215,21 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         console.log("<-", stanza);
                     }
                     stanza = new RealtimeStanza(stanza);
-                    api.trigger("receive", stanza);
-                    api.trigger("receive:" + stanza.selector, stanza);
+                    received(stanza);
                 });
             } else if (_.isObject(json)) { // json may be null
                 if (api.debug) {
                     console.log("<-", json);
                 }
                 var stanza = new RealtimeStanza(json);
-                api.trigger("receive", stanza);
-                api.trigger("receive:" + stanza.selector, stanza);
-                if (json.error && /^SES-0203/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1) {
+                received(stanza);
+                if (json.error && /^SES/.test(json.error)) {
+                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
+                    } else {
+                        subSocket.close();
+                        disconnected = true;
+                        ox.relogin();
                     }
                 }
 
@@ -223,7 +249,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         };
 
         request.onError = function (response) {
-            console.error(response);
         };
 
         return socket.subscribe(request);
@@ -235,6 +260,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     var subSocket = connect();
+
     disconnected = false;
     ox.on("change:session", function () {
         subSocket = connect();
@@ -248,6 +274,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var reconnectBuffer = [];
 
     function drainBuffer() {
+        request.requestCount = 0;
         subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
             console.log("->", queue.stanzas);
@@ -263,6 +290,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
+        if (options.trace) {
+            delete options.trace;
+            options.tracer = uuids.randomUUID();
+        }
+        if (!_.isUndefined(options.seq)) {
+            resendBuffer[options.seq] = options;
+        }
         if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
@@ -280,6 +314,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 setTimeout(drainBuffer, BUFFER_INTERVAL);
             }
         } else {
+            request.requestCount = 0;
             subSocket.push(JSON.stringify(options));
             if (api.debug) {
                 console.log("->", options);
@@ -300,8 +335,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     }, 20000);
 
-
-
+    setInterval(function () {
+        _(resendBuffer).each(function (m) {
+            api.sendWithoutSequence(m);
+        });
+    }, 5000);
 
     return def;
 });
