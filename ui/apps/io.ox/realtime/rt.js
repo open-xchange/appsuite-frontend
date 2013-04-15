@@ -98,6 +98,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.type = json.type;
         this.element = json.element;
         this.payloads = json.payloads || [];
+        this.tracer = json.tracer;
+        this.log = json.log;
 
         this.get = function (namespace, element) {
             return get(json, namespace, element);
@@ -288,6 +290,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
+        if (options.trace) {
+            delete options.trace;
+            options.tracer = uuids.randomUUID();
+        }
         if (!_.isUndefined(options.seq)) {
             resendBuffer[options.seq] = options;
         }

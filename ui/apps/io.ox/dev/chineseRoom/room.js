@@ -48,6 +48,24 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
             });
         };
 
+        this.sayAndTrace = function (text) {
+            this.group.send({
+                trace: true,
+                element: "message",
+                payloads: [
+                    {
+                        element: "action",
+                        data: "say"
+                    },
+                    {
+                        element: "message",
+                        namespace: "china",
+                        data: text
+                    }
+                ]
+            });
+        };
+
         this.requestLog = function (text) {
             this.group.send({
                 element: "message",
@@ -61,6 +79,14 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.group.on("receive", function (e, m) {
+            console.log(m);
+            if (m.log) {
+                console.log("-------------------------");
+                _(m.log).each(function (entry) {
+                    console.log(entry);
+                });
+                console.log("-------------------------");
+            }
             var message = m.get("china", "message");
 
             if (message) {
