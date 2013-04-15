@@ -271,7 +271,7 @@ define('io.ox/office/preview/view',
         function showPage(newPage, scrollTo) {
 
             var // the Deferred object waiting for the page contents
-                def = $.Deferred();
+                def = null;
 
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
@@ -286,19 +286,13 @@ define('io.ox/office/preview/view',
             // load the requested page
             if (_.browser.Chrome) {
                 // as SVG mark-up (Chrome does not show images in linked SVG)
-                model.loadPageAsSvg(page).done(function (svgMarkup) {
+                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
-                    def.resolve();
-                }).fail(function () {
-                    def.reject();
                 });
             } else {
                 // preferred: as an image element linking to the SVG file
-                model.loadPageAsImage(page).done(function (imgNode) {
+                def = model.loadPageAsImage(page).done(function (imgNode) {
                     pageNode.append(imgNode);
-                    def.resolve();
-                }).fail(function () {
-                    def.reject();
                 });
             }
 
