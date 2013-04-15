@@ -67,7 +67,7 @@ define("io.ox/calendar/api",
 
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * DAY,
+                end: _.now() + (28 * DAY),
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
