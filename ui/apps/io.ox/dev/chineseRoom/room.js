@@ -79,7 +79,6 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.group.on("receive", function (e, m) {
-            console.log(m);
             if (m.log) {
                 console.log("-------------------------");
                 _(m.log).each(function (entry) {
