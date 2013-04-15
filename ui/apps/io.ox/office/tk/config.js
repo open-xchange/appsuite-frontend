@@ -16,7 +16,7 @@ define('io.ox/office/tk/config', ['io.ox/core/config'], function (CoreConfig) {
     'use strict';
 
     var // the configuration items of the module 'com.open-xchange.documents'
-        documentsConfig = CoreConfig.get(['modules', 'com.open-xchange.documents'], {});
+        documentsConfig = CoreConfig.get('modules')['com.open-xchange.documents'] || {};
 
     // static class Config ====================================================
 
