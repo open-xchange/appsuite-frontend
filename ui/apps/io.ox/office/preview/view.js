@@ -159,9 +159,7 @@ define('io.ox/office/preview/view',
          */
         function showPage(newPage, scrollTo) {
 
-            var // a timeout for the window busy call
-                busyTimer = null,
-                // the Deferred object waiting for the page contents
+            var // the Deferred object waiting for the page contents
                 def = $.Deferred();
 
             // check that the page changes inside the allowed page range
@@ -170,19 +168,9 @@ define('io.ox/office/preview/view',
             }
             page = newPage;
 
-            // switch window to busy state after a short delay
-            busyTimer = app.executeDelayed(function () {
-                self.enterBusy(function (header, footer) {
-
-                    var // the Cancel button
-                        buttonNode = $.button({ label: gt('Cancel') }).addClass('btn-warning').on('click', function () { def.reject(); }),
-                        // the container node for the button (hide initially, show after a delay)
-                        containerNode = $('<div>').append(buttonNode).hide();
-
-                    _.delay(function () { containerNode.show(); }, 2000);
-                    footer.append(containerNode);
-                });
-            }, { delay: 500 });
+            // switch application pane to busy state (this keeps the Close button active)
+            self.appPaneBusy();
+            pageNode.empty();
 
             // load the requested page
             if (_.browser.Chrome) {
@@ -196,7 +184,7 @@ define('io.ox/office/preview/view',
             } else {
                 // preferred: as an image element linking to the SVG file
                 model.loadPageAsImage(page).done(function (imgNode) {
-                    pageNode.empty().append(imgNode);
+                    pageNode.append(imgNode);
                     def.resolve();
                 }).fail(function () {
                     def.reject();
@@ -213,8 +201,10 @@ define('io.ox/office/preview/view',
             })
             .always(function () {
                 app.getController().update();
-                busyTimer.abort();
-                app.getWindow().idle();
+                // do not hide the busy animation if page has not been loaded correctly
+                if ((pageNode.width() > 0) && (pageNode.height() > 0)) {
+                    self.appPaneIdle();
+                }
             });
         }
 

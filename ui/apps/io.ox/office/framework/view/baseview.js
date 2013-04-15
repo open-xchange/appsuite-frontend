@@ -74,6 +74,9 @@ define('io.ox/office/framework/view/baseview',
             // root application container node
             appContainerNode = $('<div>').addClass('app-container'),
 
+            // busy node for the application pane
+            appBusyNode = $('<div>').addClass('abs'),
+
             // all fixed view panes, in insertion order
             fixedPanes = [],
 
@@ -232,6 +235,32 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
+         * Sets the application into the busy state by displaying a window
+         * blocker element covering the application pane. All other view panes
+         * (also the overlay panes covering the blocked application pane)
+         * remain available.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.appPaneBusy = function () {
+            appBusyNode.show().busy();
+            return this;
+        };
+
+        /**
+         * Leaves the busy state from the application pane that has been
+         * entered by the method BaseView.appPaneBusy().
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.appPaneIdle = function () {
+            appBusyNode.idle().hide();
+            return this;
+        };
+
+        /**
          * Detaches the application pane from the DOM.
          *
          * @returns {BaseView}
@@ -249,7 +278,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            this.getAppPaneNode().append(appContainerNode);
+            this.getAppPaneNode().prepend(appContainerNode);
             return this;
         };
 
@@ -574,7 +603,7 @@ define('io.ox/office/framework/view/baseview',
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
+            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')), appBusyNode.hide());
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
