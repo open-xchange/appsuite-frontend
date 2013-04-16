@@ -104,16 +104,18 @@ define('io.ox/portal/main',
     // widget scaffold
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                decoration = this.find('.decoration').length ? this.find('.decoration') : this;
             this.attr({
                 'data-widget-cid': baton.model.cid,
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
-            .addClass('widget pending' + (baton.model.get('inverse') ? ' inverse' : ''))
-            .append(
-                $('<h2 class="title">').text('\u00A0')
-            );
+            .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
+            //border decoration
+            decoration
+            .addClass('pending')
+            .append($('<h2 class="title">').text('\u00A0'));
             setColor(this, baton.model);
         }
     });
@@ -206,8 +208,9 @@ define('io.ox/portal/main',
     }
 
     app.drawScaffold = function (model) {
-        var node = $('<li>'),
-            baton = ext.Baton({ model: model, app: app });
+        var baton = ext.Baton({ model: model, app: app }),
+            decoration = $('<div>').addClass('decoration'),
+            node = $('<li>').append(decoration);
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
         if (model.get('enabled') === false) node.hide();
         appBaton.$.widgets.append(node);
@@ -244,11 +247,13 @@ define('io.ox/portal/main',
     }
 
     function loadAndPreview(point, node, baton) {
-        var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
+        var defs = point.invoke('load', node, baton).map(ensureDeferreds).value(),
+            decoration = node.find('.decoration');
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
                 point.invoke('preview', node, baton);
-                node.removeClass('pending error-occurred');
+                node.removeClass('error-occurred');
+                decoration.removeClass('pending error-occurred');
             })
             .fail(function (e) {
                 // special return value?
@@ -265,13 +270,13 @@ define('io.ox/portal/main',
                         $('<div class="italic">').text(e.error),
                         '<br />',
                         $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                            node.addClass('pending');
+                            node.find('.decoration').addClass('pending');
                             loadAndPreview(point, node, baton);
                         })
                     )
                 );
                 point.invoke('error', node, e, baton);
-                node.removeClass('pending');
+                decoration.removeClass('pending');
             });
     }
 
@@ -302,7 +307,7 @@ define('io.ox/portal/main',
 
             // setup?
             if (requiresSetUp) {
-                node.removeClass('pending');
+                node.find('.decoration').removeClass('pending');
                 app.drawDefaultSetup(baton, node);
             } else {
                 // add link?
@@ -329,7 +334,7 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point);
             _.defer(function () {
                 _.delay(function () {
-                    node.addClass('pending');
+                    node.find('.decoration').addClass('pending');
                     _.delay(function () {
                         loadAndPreview(point, node, baton);
                         node = baton = point = null;

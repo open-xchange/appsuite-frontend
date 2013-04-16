@@ -87,7 +87,9 @@ define('plugins/portal/flickr/register',
                 });
                 // use size
                 this.addClass('photo-stream').append(
-                    $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+                    $('<div class="content pointer">')
+                    .css('backgroundImage', 'url(' + url + ')')
+                    .addClass('decoration')
                 );
             }
         },

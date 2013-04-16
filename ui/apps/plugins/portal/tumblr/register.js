@@ -74,6 +74,7 @@ define('plugins/portal/tumblr/register',
                     });
                     this.addClass('photo-stream').append(
                         $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+                        .addClass('decoration')
                     );
 
                 } else {
@@ -87,6 +88,7 @@ define('plugins/portal/tumblr/register',
                     });
                     this.append(
                         $('<div class="content pointer">').html(body.join(' <span class="accent">&bull;</span> '))
+                        .addClass('decoration')
                     );
                 }
             }
