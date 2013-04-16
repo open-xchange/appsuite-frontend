@@ -86,6 +86,51 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/office/preview/view.js:88
+msgid "Close document"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:94
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:95
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:96
+msgid "Current page and total page count"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:97
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:98
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:100
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:101
+msgid "Current zoom factor"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:102
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:203 apps/io.ox/office/preview/view.js:210
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:203
+msgid "An error occurred while loading the page."
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -154,8 +199,8 @@ msgstr ""
 #: apps/io.ox/mail/accounts/settings.js:215
 #: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
 #: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
-#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/preview/view.js:176
-#: apps/io.ox/office/tk/dialogs.js:28 apps/io.ox/portal/settings/pane.js:248
+#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/tk/dialogs.js:28
+#: apps/io.ox/portal/settings/pane.js:248
 #: apps/io.ox/settings/accounts/settings/pane.js:51
 #: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
 #: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
@@ -3803,51 +3848,6 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:79
 msgid "Click to open."
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:83
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:89
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:90
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:91
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:92
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:93
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:95
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:96
-msgid "Current zoom factor"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:97
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:297
-#: apps/io.ox/office/preview/view.js:210
-msgid "Load Error"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:210
-msgid "An error occurred while loading the page."
 msgstr ""
 
 #. %1$d is the current zoom factor, in percent
