@@ -455,7 +455,11 @@ define('io.ox/office/framework/app/baseapplication',
                 version: file.version,
                 mail_folder_id: file.data && file.data.mail ? file.data.mail.folder_id : null,
                 mail_id: file.data && file.data.mail ? file.data.mail.id : null,
-                attachment_id: file.data ? file.data.id : null
+                attachment_id: file.data ? file.data.id : null,
+                task_attached: file.attached,
+                task_folder: file.folder,
+                task_id: file.id,
+                task_module: file.module
             } : null;
         };
 

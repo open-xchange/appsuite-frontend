@@ -18,13 +18,18 @@ define('io.ox/tasks/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, print, configApi) {
+     'io.ox/core/config',
+     'io.ox/core/capabilities',
+     'io.ox/office/preview/fileActions'], function (ext, util, links, gt, notifications, print, configApi, capabilities, previewfileactions) {
 
     'use strict';
 
     //  actions
     var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink,
+        isPreviewable = function (e) {
+            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+        };
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
@@ -279,7 +284,7 @@ define('io.ox/tasks/actions',
             print.request('io.ox/tasks/print', list);
         }
     });
-    
+
     new Action('io.ox/tasks/actions/print-disabled', {
         id: 'print',
         requires: function () {
@@ -312,7 +317,7 @@ define('io.ox/tasks/actions',
                         console.log(arguments);
                     });
                 });
-                
+
             }
         }
     });
@@ -364,7 +369,9 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: function (e) {
+            return !isPreviewable(e);
+        },
         multiple: function (list) {
             require(['io.ox/core/api/attachment'], function (attachmentApi) {
                 _(list).each(function (data) {
@@ -372,6 +379,15 @@ define('io.ox/tasks/actions',
                     window.open(url);
                 });
             });
+        }
+    });
+
+    new Action('io.ox/tasks/actions/open', {
+        requires: function (e) {
+            return isPreviewable(e);
+        },
+        action: function (o) {
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: o.data });
         }
     });
 
@@ -553,6 +569,13 @@ define('io.ox/tasks/actions',
         index: 100,
         label: gt('Preview'),
         ref: 'io.ox/tasks/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
+        id: 'open1',
+        index: 250,
+        label: gt('Open'),
+        ref: 'io.ox/tasks/actions/open'
     }));
 
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
