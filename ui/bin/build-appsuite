@@ -4,7 +4,7 @@ if [ -d apps ]
 then
     if [ ! -n "$OX_APPSUITE_DEV" ]
     then
-        OX_APPSUITE_DEV="$(dirname $(dirname $0))"
+        OX_APPSUITE_DEV="$(dirname $(dirname $(readlink $0)))"
     fi
     sh "$OX_APPSUITE_DEV/bin/build.sh" "$@"
 else
