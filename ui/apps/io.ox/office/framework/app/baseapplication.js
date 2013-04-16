@@ -134,16 +134,7 @@ define('io.ox/office/framework/app/baseapplication',
      * Triggers the events supported by the base class ox.ui.App, and the
      * following additional events:
      * - 'docs:init': Once during launch, after this application instance has
-     *      been constructed completely, before the registered initialization
-     *      handlers will be called. Note that the calling order of the event
-     *      listeners is not defined. See method
-     *      BaseApplication.registerInitHandler() for an alternative.
-     * - 'docs:init:after': Once during launch, after the registered
-     *      initialization handlers have been called.
-     * - 'docs:init:success': Directly after the event 'docs:init:after', if
-     *      all initialization handlers returned successfully.
-     * - 'docs:init:error': Directly after the event 'docs:init:after', if any
-     *      initialization handler failed.
+     *      been constructed completely.
      * - 'docs:import:before': Once during launch before the document described
      *      in the file descriptor will be imported by calling the import
      *      handler function passed to the constructor.
@@ -171,9 +162,7 @@ define('io.ox/office/framework/app/baseapplication',
      *  BaseApplication.getView(), or BaseApplication.getController() during
      *  construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application, or register an
-     *  initialization handler with the BaseApplication.registerInitHandler()
-     *  method.
+     *  handler for the 'docs:init' event of this application.
      *
      * @param {Function} ViewClass
      *  The constructor function of the view class. MUST derive from the class
@@ -182,8 +171,7 @@ define('io.ox/office/framework/app/baseapplication',
      *  BaseApplication.getController() during construction. For further
      *  initialization depending on valid model/view/controller instances, the
      *  constructor can register an event handler for the 'docs:init' event of
-     *  this application, or register an initialization handler with the
-     *  BaseApplication.registerInitHandler() method.
+     *  this application.
      *
      * @param {Function} ControllerClass
      *  The constructor function of the controller class. MUST derive from the
@@ -192,9 +180,7 @@ define('io.ox/office/framework/app/baseapplication',
      *  BaseApplication.getView(), or BaseApplication.getController() during
      *  construction. For further initialization depending on valid
      *  model/view/controller instances, the constructor can register an event
-     *  handler for the 'docs:init' event of this application, or register an
-     *  initialization handler with the BaseApplication.registerInitHandler()
-     *  method.
+     *  handler for the 'docs:init' event of this application.
      *
      * @param {Function} importHandler
      *  A function that will be called to import the document described in the
@@ -242,9 +228,6 @@ define('io.ox/office/framework/app/baseapplication',
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
 
-            // all registered initialization handlers
-            initHandlers = [],
-
             // all registered before-quit handlers
             beforeQuitHandlers = [],
 
@@ -281,22 +264,29 @@ define('io.ox/office/framework/app/baseapplication',
         // private methods ----------------------------------------------------
 
         /**
+         * Updates the application title according to the current file name. If
+         * the application does not contain a file descriptor, shows the
+         * localized word 'Unnamed' as title.
+         *
+         * @returns {BaseApplication}
+         *  A reference to this application instance.
+         */
+        function updateTitle() {
+            self.setTitle(self.getShortFileName() || gt('Unnamed'));
+        }
+
+        /**
          * Imports the document described by the current file descriptor, by
-         * calling the import handler passed to the constructor. Does nothing
-         * (but return a resolved Deferred object), if no file descriptor
-         * exists.
+         * calling the import handler passed to the constructor.
          *
          * @param {Object} [point]
-         *  The save point if called from fail-restore.
+         *  The save point, if called from fail-restore.
          *
          * @returns {jQuery.Promise}
          *  The result of the import handler passed to the constructor of this
          *  application.
          */
         function importDocument(point) {
-
-            // do nothing if file descriptor is missing (e.g. while restoring after browser refresh)
-            if (!file) { return $.when(); }
 
             // notify listeners
             self.trigger('docs:import:before');
@@ -440,7 +430,7 @@ define('io.ox/office/framework/app/baseapplication',
             if (_.isNull(file) && _.isObject(newFile)) {
                 file = newFile;
             }
-            this.updateTitle();
+            updateTitle();
             return this;
         };
 
@@ -513,19 +503,6 @@ define('io.ox/office/framework/app/baseapplication',
                 extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
 
             return (extensionPos >= 0) ? fileName.substring(extensionPos + 1) : null;
-        };
-
-        /**
-         * Updates the application title according to the current file name. If
-         * the application does not contain a file descriptor, shows the
-         * localized word 'Unnamed' as title.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.updateTitle = function () {
-            this.setTitle(this.getShortFileName() || gt('Unnamed'));
-            return this;
         };
 
         /**
@@ -692,30 +669,6 @@ define('io.ox/office/framework/app/baseapplication',
         // application setup --------------------------------------------------
 
         /**
-         * Registers an initialization handler function that will be executed
-         * when the application has been be constructed (especially the model,
-         * view, and controller instances). All registered initialization
-         * handlers will be called in order of their insertion. If the
-         * initialization handlers return a Deferred object, launching the
-         * application will be deferred until all Deferred objects have been
-         * resolved or rejected. If any of the handlers rejects its Deferred
-         * object, the application cannot be launched at all.
-         *
-         * @param {Function} initHandler
-         *  A function that will be called when the application has been
-         *  constructed. Will be called in the context of this application
-         *  instance. May return a Deferred object, which must be resolved or
-         *  rejected by the initialization handler function.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.registerInitHandler = function (initHandler) {
-            initHandlers.push(initHandler);
-            return this;
-        };
-
-        /**
          * Registers a quit handler function that will be executed before the
          * application will be closed.
          *
@@ -759,13 +712,13 @@ define('io.ox/office/framework/app/baseapplication',
 
         /**
          * Registers a handler function that will be executed when the
-         * application creates a new restore point.
+         * application creates a new save point.
          *
          * @param {Function} failSaveHandler
          *  A function that will be called when the application creates a new
-         *  restore point. Will be called in the context of this application
-         *  instance. Must return an object the new restore point will be
-         *  extended with.
+         *  save point. Will be called in the context of this application
+         *  instance. Must return an object the new save point will be extended
+         *  with.
          *
          * @returns {BaseApplication}
          *  A reference to this application instance.
@@ -1192,44 +1145,52 @@ define('io.ox/office/framework/app/baseapplication',
             }
 
             // update application title
-            return def.always(function () { self.updateTitle(); }).promise();
+            return def.always(updateTitle).promise();
         };
 
         /**
          * Will be called automatically from the OX core framework to create
-         * and return a restore point containing the current state of the
+         * and return a save point containing the current state of the
          * application.
          *
+         * @attention
+         *  This method is an implementation of the public API of ox.ui.App, it
+         *  is not intended to be called directly.
+         *
          * @returns {Object}
-         *  The restore point containing the application state.
+         *  The save point structure containing the application state.
          */
         this.failSave = function () {
 
-            var // create the new restore point with basic information
-                restorePoint = {
+            var // create the new save point with basic information
+                savePoint = {
                     module: this.getName(),
                     point: { file: _.clone(file) }
                 };
 
             // OX Files inserts reference to application object into file descriptor,
             // remove it to be able to serialize without cyclic references
-            delete restorePoint.point.file.app;
+            delete savePoint.point.file.app;
 
-            // call all fail-save handlers and add their data to the restore point
+            // call all fail-save handlers and add their data to the save point
             _(failSaveHandlers).each(function (failSaveHandler) {
-                _(restorePoint.point).extend(failSaveHandler.call(this));
+                _(savePoint.point).extend(failSaveHandler.call(this));
             }, this);
 
-            return restorePoint;
+            return savePoint;
         };
 
         /**
          * Will be called automatically from the OX core framework to restore
          * the state of the application after a browser refresh.
          *
+         * @attention
+         *  This method is an implementation of the public API of ox.ui.App, it
+         *  is not intended to be called directly.
+         *
          * @param {Object} point
          *  The save point containing the application state, as returned by the
-         *  last call of the BaseApplication.failSave() method.
+         *      last call of the BaseApplication.failSave() method.
          *
          * @returns {jQuery.Promise}
          *  The promise of a Deferred object that will be resolved when the
@@ -1237,15 +1198,16 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.failRestore = function (point) {
 
-            var // the result Deferred object
+            var // the result Deferred object (always resolve it, never reject, expected by the core launcher)
                 def = $.Deferred();
 
-            // set file descriptor and import the document
+            // set and check file descriptor, import the document
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            importDocument(point).always(function () {
-                // always resolve the deferred (expected by the core launcher)
+            if (this.hasFileDescriptor()) {
+                importDocument(point).always(function () { def.resolve(); });
+            } else {
                 def.resolve();
-            });
+            }
 
             return def.promise();
         };
@@ -1257,8 +1219,6 @@ define('io.ox/office/framework/app/baseapplication',
 
             var // the result Deferred object
                 def = $.Deferred(),
-                // the Deferred object waiting for the initialization handlers
-                initDef = $.Deferred(),
                 // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
@@ -1280,55 +1240,48 @@ define('io.ox/office/framework/app/baseapplication',
             view = new ViewClass(self);
             controller = new ControllerClass(self);
 
-            // disable FF spell checking
+            // disable global spell checking while this application is active
             win.on({
                 show: function () { $('body').attr('spellcheck', false); },
                 hide: function () { $('body').removeAttr('spellcheck'); }
             });
 
+            // wait for import handler, kill the application if no file descriptor
+            // is present after fail-restore (using absence of the launch option
+            // 'action' as indicator for fail-restore)
+            if (!_.isObject(launchOptions) || !_.isString(launchOptions.action)) {
+
+                // the 'open' event of the window is triggered once after launch *and* fail-restore
+                // TODO: this seems fragile, is there a better way to determine
+                // whether a valid fail-restore follows after launching the app?
+                win.one('open', function () {
+                    def.always(function () {
+                        if (!file) {
+                            _.defer(function () { self.quit(); });
+                        }
+                    });
+                });
+            }
+
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
-                // show busy indicator, hide after initialization failure or after import
+                // show busy indicator, hide after import (regardless of result)
                 win.busy();
-                self.on('docs:init:error docs:import:after', function () { win.idle(); });
-
-                // wait for pending initialization, kill the application if no
-                // file descriptor is present after fail-restore (using absence
-                // of the launch option 'action' as indicator for fail-restore)
-                if (!_.isObject(launchOptions) || !_.isString(launchOptions.action)) {
-
-                    // the 'open' event of the window is triggered once after launch and fail-restore
-                    win.on('open', function () {
-                        initDef.always(function () {
-                            if (!file) {
-                                _.defer(function () { self.quit(); });
-                            }
-                        });
-                    });
-                }
+                self.on('docs:import:after', function () { win.idle(); });
 
                 // call initialization listeners
                 self.trigger('docs:init');
 
-                // call initialization handlers, they may return Deferred objects
-                callHandlers(initHandlers)
-                .always(function () {
-                    self.trigger('docs:init:after');
-                    // this resumes pending window 'open' event handler
-                    initDef.resolve();
-                })
-                .done(function () {
-                    self.trigger('docs:init:success');
-                    // import the document, always resolve the result Deferred object (expected by the core launcher)
+                // Import the document, if launch options have been passed. No launch
+                // options are available in fail-restore, this situation will be handled
+                // by the failRestore() method above. Always resolve the result Deferred
+                // object (expected by the core launcher).
+                if (_.isObject(launchOptions)) {
                     importDocument().always(function () { def.resolve(); });
-                })
-                .fail(function () {
-                    self.trigger('docs:init:error');
-                    // failing initialization handler should have shown an error alert
-                    Utils.warn('BaseApplication.launch(): initialization failed.');
+                } else {
                     def.resolve();
-                });
+                }
             });
 
             return def.promise();
@@ -1386,7 +1339,7 @@ define('io.ox/office/framework/app/baseapplication',
         });
 
         // set application title to current file name
-        this.updateTitle();
+        updateTitle();
 
     } // class BaseApplication
 

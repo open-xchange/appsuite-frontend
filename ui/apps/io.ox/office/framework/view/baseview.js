@@ -42,6 +42,12 @@ define('io.ox/office/framework/view/baseview',
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
+     *  @param {Function} [options.initHandler]
+     *      A callback handler function called to initialize the contents of
+     *      this view instance after construction.
+     *  @param {Function} [options.deferredInitHandler]
+     *      A callback handler function called to initialize more contents of
+     *      this view instance, after the document has been imported.
      *  @param {Function} [options.grabFocusHandler]
      *      A function that has to implement moving the browser focus somewhere
      *      into the application pane. Used in the method BaseView.grabFocus()
@@ -623,16 +629,19 @@ define('io.ox/office/framework/view/baseview',
         // may want to access element geometry in background tasks
         app.getWindow().on({ show: windowShowHandler, hide: windowHideHandler });
 
-        // after import, update all view components
-        app.on('docs:import:after', windowShowHandler);
+        // after construction, call initialization handler
+        app.on('docs:init', function () {
+            Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+        });
+
+        // after import, call deferred initialization handler, and update view and controller
+        app.on('docs:import:after', function () {
+            Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            windowShowHandler();
+        });
 
         // remove hidden container node when application has been closed
         app.on('quit', function () { tempNode.remove(); });
-
-        // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-        app.on('docs:init:after', function () {
-            app.getWindowNode().find('.toolbox .group a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
-        });
 
     } // class BaseView
 
