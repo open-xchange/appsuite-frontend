@@ -77,6 +77,9 @@ define('io.ox/office/framework/view/baseview',
             // busy node for the application pane
             appBusyNode = $('<div>').addClass('abs'),
 
+            // busy node for the application pane
+            appBusyNode = $('<div>').addClass('abs'),
+
             // all fixed view panes, in insertion order
             fixedPanes = [],
 
