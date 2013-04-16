@@ -19,7 +19,8 @@ define('plugins/portal/mail/register',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/date',
-     'gettext!plugins/portal'], function (ext, links, strings, api, util, date, gt) {
+     'io.ox/core/api/account',
+     'gettext!plugins/portal'], function (ext, links, strings, api, util, date, accountAPI, gt) {
 
     'use strict';
 
@@ -32,9 +33,12 @@ define('plugins/portal/mail/register',
         },
 
         load: function (baton) {
-            return api.getAll({ folder: api.getDefaultFolder() }, false).pipe(function (mails) {
-                return api.getList(mails.slice(0, 20)).done(function (data) {
-                    baton.data = data;
+            return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
+                var folderName = mailboxName ? mailboxName + "/INBOX" : api.getDefaultFolder();
+                return api.getAll({ folder:  folderName }, false).pipe(function (mails) {
+                    return api.getList(mails.slice(0, 20)).done(function (data) {
+                        baton.data = data;
+                    });
                 });
             });
         },

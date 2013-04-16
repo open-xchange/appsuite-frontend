@@ -106,6 +106,31 @@ define('io.ox/core/api/account',
         return !api.isPrimary(id) && !api.isUnified(id);
     };
 
+    api.getUnifiedMailboxName = function () {
+        var def = $.Deferred();
+        require(['io.ox/core/api/folder'], function (folderAPI) {
+            return $.when(
+                folderAPI.getSubFolders(),
+                api.all()
+            ).then(function (folders, accounts) {
+                var mailFolders, mailAccounts, unified, diff;
+
+                mailFolders = _(folders).chain()
+                    .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })
+                    .map(function (folder) { return parseInt(folder.id.match(/^default(\d+)/)[1], 10); })
+                    .uniq().value();
+                mailAccounts = _(accounts).map(function (account) { return account.id; });
+                diff = _.difference(mailFolders, mailAccounts);
+
+                if (diff.length > 0) {
+                    return def.resolve("default" + diff[0]);
+                }
+                return def.resolve(null);
+            });
+        });
+        return def;
+    };
+
     // is drafts, trash, spam etc.
     api.is = (function () {
         var unifiedFolders = {
