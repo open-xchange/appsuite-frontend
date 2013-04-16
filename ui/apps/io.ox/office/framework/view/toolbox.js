@@ -20,10 +20,7 @@ define('io.ox/office/framework/view/toolbox',
     'use strict';
 
     var // CSS class for tool boxes currently collapsed
-        COLLAPSED_CLASS = 'collapsed',
-
-        // unique identifier to create controller items
-        uniqueId = 0;
+        COLLAPSED_CLASS = 'collapsed';
 
     // class ToolBox ==========================================================
 
@@ -53,9 +50,6 @@ define('io.ox/office/framework/view/toolbox',
 
         var // self reference
             self = this,
-
-            // the unique base controller key of the tool box
-            baseKey = 'view/toolbox/' + (uniqueId += 1),
 
             // the label for the heading button
             headingLabel = Utils.getStringOption(options, 'label'),
@@ -181,17 +175,16 @@ define('io.ox/office/framework/view/toolbox',
             // add a special marker CSS class
             this.getNode().addClass('collapsing');
 
-            // create a controller item that collapses/expands the tool box
-            app.getController().registerDefinition(baseKey + '/expand', {
-                set: function () {
-                    self.getNode().toggleClass(COLLAPSED_CLASS);
-                    self.trigger('expand', !self.getNode().hasClass(COLLAPSED_CLASS));
-                }
-            });
-
             // create the heading button
             headingButton = new Button({ classes: 'heading', label: headingLabel });
-            this.addGroup(baseKey + '/expand', headingButton);
+            this.addPrivateGroup(headingButton);
+
+            // collapse/expand the tool box when clicking the button
+            headingButton.on('change', function () {
+                self.getNode().toggleClass(COLLAPSED_CLASS);
+                self.trigger('expand', !self.getNode().hasClass(COLLAPSED_CLASS));
+                app.getView().grabFocus();
+            });
         }
 
     } // class ToolBox
