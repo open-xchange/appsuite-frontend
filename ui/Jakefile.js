@@ -787,11 +787,13 @@ task("dist", [distDest], function () {
                    { cwd: distDest }, done);
     }
     function done(code) {
-        if (code) {
+        if (!code) return complete();
+        if (envBoolean('forceDeb')) {
+            fail('dpkg-source exited with code ' + code);
+        } else {
             console.warn('dpkg-source exited with code ' + code);
             console.warn('Debian package is probably not available.');
         }
-        complete();
     }
 }, { async: true });
 
