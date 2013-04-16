@@ -1032,7 +1032,7 @@ define('io.ox/mail/write/main',
                 mail.data.flags += mailAPI.FLAGS.DRAFT;
             }
 
-            mailAPI.send(mail.data, mail.files)
+            mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
