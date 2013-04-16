@@ -155,13 +155,10 @@ define('io.ox/office/framework/app/baseapplication',
      * - 'docs:import:error': Directly after the event 'docs:import:after',
      *      if an error occurred while importing the document described in the
      *      file descriptor.
-     * - 'docs:destroy:before': Before the model/view/controller instances of
-     *      the application will be destroyed, after all registered before-quit
+     * - 'docs:destroy': Before the model/view/controller instances of the
+     *      application will be destroyed, after all registered before-quit
      *      handlers have been called, and none was rejected, after all
      *      registered quit handlers have been called.
-     * - 'docs:resume': After all registered before-quit handlers have been
-     *      called, and at least one was rejected. The application continues to
-     *      run normally.
      *
      * @constructor
      *
@@ -1368,7 +1365,6 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             })
             .fail(function () {
-                self.trigger('docs:resume');
                 currentQuitDef.reject();
             });
 
@@ -1382,7 +1378,7 @@ define('io.ox/office/framework/app/baseapplication',
         // destroy MVC instances after core 'quit' event (after window has been hidden)
         this.on('quit', function () {
             // trigger listeners before destroying the MVC instances
-            self.trigger('docs:destroy:before');
+            self.trigger('docs:destroy');
             controller.destroy();
             view.destroy();
             model.destroy();
