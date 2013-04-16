@@ -901,13 +901,15 @@ define('io.ox/calendar/week/view',
                         pos = self.calcPos(app.pos),
                         idx = Math.min(app.pos.max, positions.length),
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
+                        height = Math.max(pos.height, self.minCellHeight) - (border ? 0 : 1),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth));
+
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: Math.max(pos.height, self.minCellHeight) - (border ? 0 : 1),
-                        lineHeight: self.cellHeight + 'px',
+                        height: height + 'px',
+                        lineHeight: Math.min(height, self.cellHeight) + 'px',
                         width: width + '%',
                         minHeight: self.minCellHeight + 'px',
                         maxWidth: self.appWidth + '%',
@@ -1354,7 +1356,7 @@ define('io.ox/calendar/week/view',
                 .addClass('appointment')
                 .attr({
                     'data-cid': a.id,
-                    'data-extension-point': 'io.ox/calendar/week/view/appointment',
+                    'data-extension-point': this.extPoint,
                     'data-composite-id': a.id
                 });
 
@@ -1561,7 +1563,6 @@ define('io.ox/calendar/week/view',
                 .append(
                     $('<div>')
                     .addClass('appointment-content')
-                    .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
                         $('<div>').addClass('title').text(gt.noI18n(a.get('title'))),
