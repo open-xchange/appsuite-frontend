@@ -187,7 +187,7 @@ define('io.ox/core/commons-folderview',
                 this.append($('<li class="divider">'), $('<li>').append(link));
                 if (capabilities.has('publication') &&
                     (baton.data.module === 'contacts' || baton.data.module === 'infostore')
-                ){
+                ) {
                     link.on('click', { baton: baton }, publish);
                 } else {
                     link.addClass('disabled').on('click', $.preventDefault);
