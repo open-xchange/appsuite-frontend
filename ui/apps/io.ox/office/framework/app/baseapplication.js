@@ -67,11 +67,18 @@ define('io.ox/office/framework/app/baseapplication',
                     appFile = app.getFileDescriptor();
 
                 // TODO: check file version too?
-                return _.isObject(appFile) &&
+                if (file.id) {
+                    return _.isObject(appFile) &&
                     (file.id === appFile.id) &&
                     (file.folder_id === appFile.folder_id);
-            }) : [];
+                // this is a mail attachment
+                } else {
+                    return _.isObject(appFile) &&
+                    (file.data.id === appFile.data.id) &&
+                    (file.data.folder_id === appFile.data.folder_id);
+                }
 
+            }) : [];
         if (runningApps.length > 1) {
             Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
         }
@@ -472,7 +479,7 @@ define('io.ox/office/framework/app/baseapplication',
          *  descriptor exists.
          */
         this.getFullFileName = function () {
-            return (file && _.isString(file.filename)) ? file.filename : null;
+            return (file && _.isString(file.filename || file.data.filename)) ? file.filename || file.data.filename : null;
         };
 
         /**
