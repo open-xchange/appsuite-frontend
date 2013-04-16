@@ -351,9 +351,11 @@
 @media all and (max-width: 560px) {
     /* smartphone reduction */
     .io-ox-portal {
-        padding-right: 0;
+        @spacing: 13px;
+
+        padding-right: @spacing;
         .header {
-            margin: 0 13px 13px 0;
+            margin: 0 @spacing @spacing 0;
         }
         .widget {
             width: 100%;
@@ -367,7 +369,7 @@
             left: 0;
         }
         .photo-stream, .preview {
-            .content, h2 { right: 13px; }
+            .content { right: 13px; }
         }
     }
 }
