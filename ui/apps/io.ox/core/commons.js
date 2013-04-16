@@ -443,12 +443,18 @@ define('io.ox/core/commons',
 
             remove = function () {
                 if (node) node.remove();
+            },
+            checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links
+                if (folder === e.data.folder.toString() && api) {
+                    api.trigger('update:' + e.data.cid);
+                }
             };
 
         if (_.isArray(data)) {
             // multiple items
-            _.chain(data).map(_.cid).each(function (cid) {
+            _.chain(data).map(_.cid).each(function (cid, index) {
                 cid = encodeURIComponent(cid);
+                folderAPI.on('update',  {cid: cid, folder: data[index].folder_id || data[index].folder}, checkFolder);
                 api.on('delete:' + cid, redraw);
                 api.on('update:' + cid, redraw);
             });
@@ -456,6 +462,7 @@ define('io.ox/core/commons',
             // single item
             cid = _.cid(data);
             cid = encodeURIComponent(cid);
+            folderAPI.on('update',  {cid: cid, folder: data.folder_id}, checkFolder);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
             api.on('create', update);
@@ -465,12 +472,14 @@ define('io.ox/core/commons',
                 if (_.isArray(data)) {
                     _.chain(data).map(_.cid).each(function (cid) {
                         cid = encodeURIComponent(cid);
+                        folderAPI.off('update', checkFolder);
                         api.off('delete:' + cid, redraw);
                         api.off('update:' + cid, redraw);
                     });
                 } else {
                     cid = _.cid(data);
                     cid = encodeURIComponent(cid);
+                    folderAPI.off('update', checkFolder);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
                     api.off('create', update);
