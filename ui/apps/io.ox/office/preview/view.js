@@ -292,7 +292,8 @@ define('io.ox/office/preview/view',
             } else {
                 // preferred: as an image element linking to the SVG file
                 def = model.loadPageAsImage(page).done(function (imgNode) {
-                    pageNode.append(imgNode);
+                    pageNode.append(imgNode.css({ maxWidth: '', width: '', height: '' }));
+                    imgNode.data({ width: imgNode.width(), height: imgNode.height() });
                 });
             }
 
@@ -350,12 +351,11 @@ define('io.ox/office/preview/view',
                 appPaneNode = self.getAppPaneNode();
 
             if (childNode.is('img')) {
-                // IE: must use width/height element attributes (instead of CSS attributes)
-                childNode.css('max-width', 'none').attr({
-                    width: childNode[0].naturalWidth * factor,
-                    height: childNode[0].naturalHeight * factor
+                childNode.css({
+                    width: childNode.data('width') * factor,
+                    height: childNode.data('height') * factor
                 });
-            } else {
+            } else if (childNode.length > 0) {
 
                 // the vertical margin to adjust scroll size
                 vMargin = childNode.height() * (factor - 1) / 2;
@@ -604,7 +604,7 @@ define('io.ox/office/preview/view',
          */
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
-            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
+            showPage(Utils.getIntegerOption(point, 'page', 1, 1, app.getModel().getPageCount()), 'top');
         };
 
     } // class PreviewView
