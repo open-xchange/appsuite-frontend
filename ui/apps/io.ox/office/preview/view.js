@@ -55,7 +55,7 @@ define('io.ox/office/preview/view',
             model = null,
 
             // the root node containing the current page contents
-            pageNode = $('<div>').addClass('page'),
+            pageNode = $('<div>').addClass('page unselectable'),
 
             // current page index (one-based!)
             page = 0,

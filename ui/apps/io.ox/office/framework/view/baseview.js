@@ -83,9 +83,6 @@ define('io.ox/office/framework/view/baseview',
             // busy node for the application pane
             appBusyNode = $('<div>').addClass('abs'),
 
-            // busy node for the application pane
-            appBusyNode = $('<div>').addClass('abs'),
-
             // all fixed view panes, in insertion order
             fixedPanes = [],
 
@@ -608,7 +605,7 @@ define('io.ox/office/framework/view/baseview',
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container node
-        appPane = new Pane(app, { classes: 'app-pane' });
+        appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
