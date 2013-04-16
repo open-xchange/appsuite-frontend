@@ -16,7 +16,8 @@ define('io.ox/core/commons-folderview',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
      'io.ox/core/config',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, config, gt) {
+     'io.ox/core/capabilities',
+     'gettext!io.ox/core'], function (ext, links, notifications, api, config, capabilities, gt) {
 
     'use strict';
 
@@ -207,7 +208,9 @@ define('io.ox/core/commons-folderview',
                 this.append(
                     $('<li>').append(link)
                 );
-                if (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar') {
+                if (api.can('write', baton.data) && capabilities.has('subscription') &&
+                    (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar')
+                ) {
                     link.on('click', { baton: baton }, subscribe);
                 } else {
                     link.addClass('disabled').on('click', $.preventDefault);
