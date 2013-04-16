@@ -99,7 +99,6 @@ define('io.ox/files/carousel',
         },
 
         eventHandler: function () {
-
             var self = this;
             var pos = this.pos;
 
@@ -107,7 +106,9 @@ define('io.ox/files/carousel',
             pos.last = parseInt(this.inner.find('.item:last').attr('data-index'), 10);
             // Hide left control on start
             this.prevControl.hide();
-
+            if (this.list.length > 1) {
+                this.nextControl.show();
+            }
             // before transition
             this.container.on('slide', function () {
                 self.pos.sliding = true;
@@ -115,7 +116,6 @@ define('io.ox/files/carousel',
 
             // after transition
             this.container.on('slid', function () {
-
                 var oldpos = pos.cur;
                 pos.cur = parseInt(self.container.find('.item.active').attr('data-index'), 10);
 
@@ -126,7 +126,6 @@ define('io.ox/files/carousel',
                 } else {
                     self.prevControl.hide();
                 }
-
                 if (pos.cur < (self.list.length - 1)) {
                     self.nextControl.show();
                 } else {
@@ -253,8 +252,6 @@ define('io.ox/files/carousel',
             }
         },
 
-
-
         show: function () {
             var win;
             if (this.config.attachmentMode) {
@@ -278,6 +275,16 @@ define('io.ox/files/carousel',
         },
 
         close: function () {
+            this.container
+                .off('slid')
+                .off('slide')
+                .off('click swipeleft', '.item')
+                .off('click swiperight', '.item');
+
+            this.prevControl.off('click');
+            this.nextControl.off('click');
+            this.closeControl.off('click');
+
             if (this.closeControl.is(':visible')) {
                 this.inner.empty().remove();
                 this.container.empty().remove();
