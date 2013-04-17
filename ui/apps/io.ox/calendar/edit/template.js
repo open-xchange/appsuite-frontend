@@ -509,11 +509,13 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            var selector = 'label.find-free-time, .find-free-time legend';
-            this.parent().find(selector).append(
-                $('<a href="#" class="pull-right">').text(gt('Find a free time'))
-                    .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
-            );
+            if (capabilities.has('freebusy')) {
+                var selector = 'label.find-free-time, .find-free-time legend';
+                this.parent().find(selector).append(
+                    $('<a href="#" class="pull-right">').text(gt('Find a free time'))
+                        .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
+                );
+            }
         }
     });
 
