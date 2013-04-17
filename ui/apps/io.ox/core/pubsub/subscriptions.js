@@ -138,9 +138,10 @@ define('io.ox/core/pubsub/subscriptions',
 
                     if (baton.newFolder) {
 
-                        var service = _.first(_(baton.services).select(function (t) {
+                        //FIXME: use _.findWhere, once available, to get rid of the anonymous function
+                        var service = _(baton.services).find(function (t) {
                             return t.id === baton.model.get('source');
-                        }));
+                        });
 
                         // add new folders under module's default folder!
                         var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
@@ -178,9 +179,10 @@ define('io.ox/core/pubsub/subscriptions',
 
     function buildForm(node, baton) {
         node.empty();
-        var service = _.first(_(baton.services).select(function (t) {
+        //FIXME: use _.findWhere, once available, to get rid of the anonymous function
+        var service = _(baton.services).find(function (t) {
             return t.id === baton.model.get('source');
-        }));
+        });
 
         function setSource(id) {
             baton.model.setSource(service, { 'account': parseInt(id, 10) });
@@ -253,7 +255,10 @@ define('io.ox/core/pubsub/subscriptions',
                     node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
                         userform.parent().find('.alert-error').remove();
                         userform.parent().find('.error').removeClass('error');
-                        baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
+                        //FIXME: use _.findWhere, once available, to get rid of the anonymous function
+                        baton.model.setSource(_(baton.services).find(function (t) {
+                            return t.id === node.val();
+                        }));
                         buildForm(userform, baton);
                     }))));
 
@@ -264,7 +269,10 @@ define('io.ox/core/pubsub/subscriptions',
             });
 
             if (!baton.model.source()) {
-                baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
+                //FIXME: use _.findWhere, once available, to get rid of the anonymous function
+                baton.model.setSource(_(baton.services).find(function (t) {
+                    return t.id === node.val();
+                }));
             } else {
                 node.val(baton.model.source().service.id);
             }
