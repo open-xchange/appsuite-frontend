@@ -173,7 +173,7 @@ define('io.ox/core/commons',
             function updateFolderCount(id, data) {
                 var total = data.total,
                     node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
-                
+
                 //cannot use .show() .hide() here because in firefox this keeps adding display: block to the span instead of inline
                 if (total > 0) {
                     node.css('display', 'inline');

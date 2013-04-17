@@ -507,6 +507,22 @@ define('io.ox/mail/main',
                 }
             });
 
+            // reset on folder change
+            grid.on('change:prop:folder', function () {
+                openThreads = {};
+            });
+
+            // close if deleted
+            api.on('beforedelete', function (e, ids) {
+                var hash = {};
+                _(ids).each(function (obj) {
+                    hash[_.cid(obj)] = true;
+                });
+                _(openThreads).each(function (cid, index) {
+                    if (cid in hash) delete openThreads[index];
+                });
+            });
+
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
                     index = grid.selection.getIndex(cid) + 1;

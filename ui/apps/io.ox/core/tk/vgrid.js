@@ -466,6 +466,7 @@ define('io.ox/core/tk/vgrid',
 
             // calling this via LFO, so that we always get the latest data
             function cont(chunk) {
+
                 // vars
                 var data = chunk.data, offset = chunk.offset,
                     i, $i, shift = 0, j = '', row,
@@ -548,14 +549,6 @@ define('io.ox/core/tk/vgrid',
                         // continue with dummy array
                         cont(new Array(numRows));
                     });
-
-                // var lfo = _.lfo(cont, offset);
-                // return chunkLoader.load(offset, numRows, { mode: currentMode })
-                //     .done(lfo)
-                //     .fail(function () {
-                //         // continue with dummy array
-                //         lfo(new Array(numRows));
-                //     });
             };
 
         }());
@@ -766,6 +759,8 @@ define('io.ox/core/tk/vgrid',
             labelHeight = label.getHeight();
             // resize
             resize();
+            currentOffset = null;
+            invalidLabels = true;
             initialized = true;
             // load all IDs
             return loadAll();
