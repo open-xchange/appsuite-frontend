@@ -327,29 +327,14 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
-        app.getPrimaryAddressFromFolder = function (data) {
-
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
-
-            return accountAPI.getPrimaryAddress(accountID).then(function (data) {
-                var primary;
-                if (accountID === '0') {
-                    // primary address is not the default send address for the
-                    // internal mail account (with id 0) - This is odd
-                    primary = settings.get('defaultSendAddress');
-                }
-                return {displayname: data[0], primaryaddress: primary || data[1]};
-            });
-        };
-
         app.getFrom = function () {
             var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
             return [from_field.data('displayname'), from_field.data('primaryaddress')];
         };
 
         app.setFrom = function (data) {
-            return this.getPrimaryAddressFromFolder(data).done(function (from) {
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX';
+            return accountAPI.getPrimaryAddressFromFolder(folder_id).done(function (from) {
                 if (data.from && data.from.length === 2) {
                     // from is already set in the mail, prefer this
                     from = { displayname: data.from[0], primaryaddress: data.from[1] };
