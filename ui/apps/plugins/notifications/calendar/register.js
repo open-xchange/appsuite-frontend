@@ -233,7 +233,6 @@ define('plugins/notifications/calendar/register',
         id: 'io-ox-notifications-calendar-reminder',
 
         initialize: function () {
-            this.collection.on('reset add remove', this.render, this);
             this.collection.hidden = [];
         },
 

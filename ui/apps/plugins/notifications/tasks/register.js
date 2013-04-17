@@ -69,11 +69,6 @@ define('plugins/notifications/tasks/register',
             'click .item': 'openTask'
         },
 
-        initialize: function () {
-            var self = this;
-            this.collection.on('reset add remove', this.render, this);
-        },
-
         render: function () {
 
             var baton = ext.Baton({ view: this });
@@ -298,17 +293,6 @@ define('plugins/notifications/tasks/register',
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
 
-        initialize: function () {
-            var self = this;
-            this.collection.on('reset add remove', this.render, this);
-            //be responsive
-            api.on('delete', function (e, ids) {
-                _(ids).each(function (id) {
-                    self.collection.remove(self.collection._byId[id.id]);
-                });
-            });
-        },
-
         render: function () {
 
             var baton = ext.Baton({ view: this });
@@ -351,6 +335,11 @@ define('plugins/notifications/tasks/register',
                         }
                     });
                     notifications.collection.reset(items);
+                });
+            });
+            api.on('delete', function (e, ids) {
+                _(ids).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
             });
         }
@@ -463,17 +452,6 @@ define('plugins/notifications/tasks/register',
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
 
-        initialize: function () {
-            var self = this;
-            this.collection.on('reset add remove', this.render, this);
-            //be responsive
-            api.on('delete', function (e, ids) {
-                _(ids).each(function (id) {
-                    self.collection.remove(self.collection._byId[id.id]);
-                });
-            });
-        },
-
         render: function () {
 
             var baton = ext.Baton({ view: this });
@@ -503,6 +481,10 @@ define('plugins/notifications/tasks/register',
                 });
                 notifications.collection.reset(items);
             }).on('remove-task-confirmation-notification', function (e, ids) {
+                _(ids).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id.id]);
+                });
+            }).on('delete', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });

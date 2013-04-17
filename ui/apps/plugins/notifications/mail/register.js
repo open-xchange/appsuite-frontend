@@ -83,11 +83,6 @@ define('plugins/notifications/mail/register',
             'dispose .item': 'removeNotification' //seems to be unused
         },
 
-        initialize: function () {
-            var self = this;
-            this.collection.on('reset add remove', this.render, this);
-        },
-
         render: function () {
             var i = 0, $i = Math.min(this.collection.size(), 3), baton;
             baton = ext.Baton({ view: this });
