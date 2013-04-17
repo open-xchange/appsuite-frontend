@@ -139,7 +139,10 @@ define('io.ox/office/preview/model',
                 imgNode = $('<img>', { src: srcUrl });
 
             // wait that the image is loaded
-            imgNode.one('load', function () { def.resolve(imgNode); });
+            imgNode.one({
+                load: function () { def.resolve(imgNode); },
+                error: function () { def.reject(); }
+            });
 
             return def.promise();
         }
@@ -168,49 +171,6 @@ define('io.ox/office/preview/model',
                 }
             })
             .promise();
-        }
-
-        /**
-         * Fetches more pages from the server and stores them in the specified
-         * page cache. Fetches the next five pages and the previous five pages
-         * of the specified page, as well as the very last page.
-         *
-         * @param {Cache} cache
-         *  The cache instance to be filled with more pages.
-         *
-         * @param {Number} page
-         *  The one-based index of the page whose siblings will be fetched and
-         *  cached.
-         */
-        function fetchSiblingPages(cache, page) {
-
-            var // all page numbers to be fetched
-                fetchPages = [];
-
-            // stop running timer
-            if (fetchPagesTimer) { fetchPagesTimer.abort(); }
-
-            // build the array of page numbers to be fetched (start with direct
-            // next and previous sibling of the page, then fetch more distant
-            // pages.
-            _(5).times(function (index) {
-                var nextPage = page + index + 1,
-                    prevPage = page - index - 1;
-                if (nextPage <= pageCount) { fetchPages.push(nextPage); }
-                if (prevPage >= 1) { fetchPages.push(prevPage); }
-            });
-
-            // finally fetch the first and last page to always keep them in the cache
-            if (page > 1) { fetchPages.push(1); }
-            if (page < pageCount) { fetchPages.push(pageCount); }
-
-            // start the background task
-            fetchPagesTimer = app.processArrayDelayed(function (pages) {
-                // The method processArrayDelayed() passes one-element array.
-                // Returning a Deferred object causes processArrayDelayed() to
-                // wait until it is resolved, or to abort if it is rejected.
-                return cache.getElement(pages[0]);
-            }, _.unique(fetchPages), { chunkLength: 1 });
         }
 
         /**
