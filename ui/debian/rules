@@ -24,9 +24,6 @@ override_dh_auto_install:
 	cp -r $(FRONTEND)/apps $(BACKEND)/
 	mv $(FRONTEND)/share $(BACKEND)/
 	chmod +x $(BACKEND)/share/update-themes.sh
-	sed -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
-	    bin/build-appsuite > tmp/build-appsuite
-	chmod +x tmp/build-appsuite
 
 override_dh_auto_clean:
 	sh build.sh clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \

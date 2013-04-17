@@ -99,8 +99,6 @@ cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
-sed -i -e 's#OX_APPSUITE_DEV=.*#OX_APPSUITE_DEV="/opt/open-xchange-appsuite-dev"#' \
-    "%{buildroot}/opt/open-xchange-appsuite-dev/bin/build-appsuite"
 
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
