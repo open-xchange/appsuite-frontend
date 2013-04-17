@@ -150,14 +150,14 @@ define('io.ox/calendar/month/perspective',
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
             return api.getAll(obj, useCache).done(function (list) {
-                if (list.length > 0) {
-                    // update single week view collections
-                    var start = obj.start;
-                    for (var i = 1; i <= obj.weeks; i++) {
-                        var end = start + date.WEEK,
-                            collection = self.collections[start];
-                        if (collection) {
-                            var retList = [];
+                // update single week view collections
+                var start = obj.start;
+                for (var i = 1; i <= obj.weeks; i++) {
+                    var end = start + date.WEEK,
+                        collection = self.collections[start];
+                    if (collection) {
+                        var retList = [];
+                        if (list.length > 0) {
                             for (var j = 0; j < list.length; j++) {
                                 var mod = list[j];
                                 if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
@@ -166,11 +166,11 @@ define('io.ox/calendar/month/perspective',
                                     retList.push(m);
                                 }
                             }
-                            collection.reset(retList);
                         }
-                        start += date.WEEK;
-                        collection = null;
+                        collection.reset(retList);
                     }
+                    start += date.WEEK;
+                    collection = null;
                 }
             });
         },
