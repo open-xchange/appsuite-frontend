@@ -856,9 +856,18 @@ define('io.ox/core/tk/folderviews',
             // set title
             label.text(_.noI18n(data.title));
             // set counter (mail only)
-            if (options.type === 'mail' && data.unread && !options.checkbox) {
-                this.addClass('show-counter');
-                counter.find('span').text(gt.noI18n(data.unread || ''));
+            if (options.type === 'mail') {
+                if (!data.unread  || data.unread === 0) {//remove new mail title
+                    document.fixedtitle = false;
+                    document.title = document.temptitle;
+                }
+                if (data.unread && !options.checkbox) {
+                    this.addClass('show-counter');
+                
+                    counter.find('span').text(gt.noI18n(data.unread || ''));
+                } else {
+                    this.removeClass('show-counter');
+                }
             } else {
                 this.removeClass('show-counter');
             }

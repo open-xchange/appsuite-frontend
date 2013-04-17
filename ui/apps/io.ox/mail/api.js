@@ -1079,6 +1079,7 @@ define("io.ox/mail/api",
                 api.trigger('new-mail', recent, unseen);
                 if (recent.length > 0) {
                     lastUnseenMail = recent[0].received_date;
+                    api.newMailTitle(true);
                 }
             }
             return {
@@ -1219,6 +1220,16 @@ define("io.ox/mail/api",
             )).done(function () { api.trigger('refresh.all'); });
         });
     });
+    //new mail notice in title
+    api.newMailTitle = function (state) {
+        if (state === true) {//show new mail title
+            document.fixedtitle = true;
+            document.title = gt("New Mail");
+        } else {//stop showing new mail title
+            document.fixedtitle = false;
+            document.title = document.temptitle;
+        }
+    };
 
     return api;
 });

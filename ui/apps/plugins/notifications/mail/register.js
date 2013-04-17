@@ -230,6 +230,9 @@ define('plugins/notifications/mail/register',
                 } else {
                     removeMails(e, mails);
                 }
+                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
+                    api.newMailTitle(false);
+                }
                 
             });
 
