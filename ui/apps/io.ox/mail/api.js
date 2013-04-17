@@ -1151,8 +1151,8 @@ define("io.ox/mail/api",
         return folderAPI.getDefaultFolder('mail');
     };
 
-    api.getAccountIDFromFolder = function (inintialFolder) {
-        var accountId = /^default(\d*)\b/.exec(inintialFolder);
+    api.getAccountIDFromFolder = function (initialFolder) {
+        var accountId = /^default(\d*)\b/.exec(initialFolder);
         return accountId[1];
     };
 

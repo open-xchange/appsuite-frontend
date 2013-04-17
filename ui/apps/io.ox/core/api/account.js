@@ -94,6 +94,7 @@ define('io.ox/core/api/account',
     };
 
     api.isAccount = function (id) {
+        if (_.isNumber(id)) return id in idHash;
         var match = String(id).match(/^default(\d+)/);
         return match && match[1] in idHash;
     };
@@ -193,12 +194,32 @@ define('io.ox/core/api/account',
      * @return an array containing the personal name (might be empty!) and the primary address
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).then(function (account) {
+        return api.get(accountId || 0)
+        .then(function (account) {
             if (!account) { return $.Deferred().reject(account); }
             return account;
         })
-        .then(addPersonalFallback).then(function (account) {
+        .then(addPersonalFallback)
+        .then(function (account) {
             return getAddressArray(account.personal || '', account.primary_address);
+        });
+    };
+
+    api.getPrimaryAddressFromFolder = function (folder_id) {
+        // get account id (strict)
+        var account_id = this.parseAccountId(folder_id, true),
+            isUnified = api.isUnified(account_id);
+        // get primary address
+        return this.getPrimaryAddress(isUnified ? 0 : account_id).then(function (data) {
+            // use user-setting for primary account and unified folders
+            if (account_id === 0 || isUnified) {
+                return require(['settings!io.ox/mail']).then(function (settings) {
+                    var address = settings.get('defaultSendAddress');
+                    return { displayname: data[0], primaryaddress: address || data[1] };
+                });
+            } else {
+                return { displayname: data[0], primaryaddress: data[1] };
+            }
         });
     };
 
