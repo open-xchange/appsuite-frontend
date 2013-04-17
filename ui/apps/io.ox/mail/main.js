@@ -103,9 +103,9 @@ define('io.ox/mail/main',
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
-            threadView: settings.get('threadView') !== 'off',
+            max: settings.get('threadMax', 500),
             selectFirst: false,
-            max: 500
+            threadView: settings.get('threadView') !== 'off'
         });
 
         // grid
@@ -116,14 +116,13 @@ define('io.ox/mail/main',
         options.minChunkSize = options.minChunkSize || 10;
         options.settings = settings;
 
-        // threadview is based on a 500 mails limit
+        // threadview is based on a 500 (default) mail limit
         // in order to view all mails in a folder we offer a link
         options.tail = function (all) {
             var threadSort = this.prop('sort') === 'thread',
                 inAllMode = this.getMode() === 'all',
                 isUnreadOnly = this.prop('unread'),
-                isUnlimited = this.option('max') === '0',
-                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited,
+                hideTail = !threadSort || !inAllMode || isUnreadOnly,
                 count = 0;
             // hide?
             if (hideTail) return $();
@@ -134,7 +133,7 @@ define('io.ox/mail/main',
             if (count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#">').text(gt('Load all mails. This might take some time.'))
+                $('<a href="#">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
             );
         };
 
@@ -143,7 +142,7 @@ define('io.ox/mail/main',
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
             e.preventDefault();
-            grid.option('max', '0').refresh(); // unlimited
+            grid.prop('sort', 610).refresh();
         });
 
         // add template
@@ -151,8 +150,6 @@ define('io.ox/mail/main',
 
         // folder change
         grid.on('change:prop:folder', function (e, folder) {
-            // reset max
-            grid.option('max', originalOptions.max);
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
@@ -182,8 +179,12 @@ define('io.ox/mail/main',
 
         // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         // look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) { grid.updateSettings('unread', value); });
-        grid.on('change:prop:order', function (e, value) { grid.updateSettings('order', value); });
+        grid.on('change:prop:unread', function (e, value) {
+            grid.updateSettings('unread', value);
+        });
+        grid.on('change:prop:order', function (e, value) {
+            grid.updateSettings('order', value);
+        });
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
