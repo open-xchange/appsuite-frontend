@@ -663,7 +663,6 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     }
 
                     this.nodes.endsChoice.children().detach();
-
                     if (this.model.get('occurrences')) {
                         this.nodes.endsChoice.append(this.ends.after.$el);
                         this.ends.after.set('occurrences', this.model.get("occurrences"));
@@ -776,6 +775,9 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             });
                             break;
                         case "after":
+                            if (this.endsChoice.occurrences <= 0) {
+                                this.endsChoice.occurrences = 1;
+                            }
                             this.model.set({
                                 occurrences: this.endsChoice.occurrences
                             });
