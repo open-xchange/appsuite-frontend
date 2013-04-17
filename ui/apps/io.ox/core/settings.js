@@ -112,8 +112,9 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 self.trigger('reset', tree);
             } else {
                 resolve(path, function (tmp, key) {
+                    var previous = tmp[key];
                     tmp[key] = value;
-                    self.trigger('change:' + path, value).trigger('change', path, value);
+                    self.trigger('change:' + path, value).trigger('change', path, value, previous);
                 }, true);
             }
             return this;

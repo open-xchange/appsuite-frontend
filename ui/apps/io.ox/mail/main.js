@@ -254,6 +254,53 @@ define('io.ox/mail/main',
             return option.clone().find('a').attr('data-option', value).append($.txt(text)).end();
         }
 
+        /**
+         * @param  {event} e
+         * @param  {string} path     (key)
+         * @param  {string} value    (value t0)
+         * @param  {string} previous (value t-1)
+         * @return {undefined}
+         */
+        function handleSettingsChange(e, path, value, previous) {
+            /**
+             * update grid 'sort' property if necessary
+             * @param  {string} key
+             * @return {undefined}
+             */
+            var sortby = function (key) {
+                var isInbox = account.is('inbox', grid.prop('folder')),
+                    ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
+                                      : (value + previous).replace('inbox', '').replace('off', '') === '';
+
+                if (!ignored) {
+                    grid.prop('sort', key)
+                            .refresh()
+                            .pipe(function () {
+                                //called manually cause call skipped within refresh (sort property doesn't change)
+                                if (grid.prop('sort') === key)
+                                    drawGridOptions(undefined, 'sort');
+                                //sort must not react to the prop change event because autotoggle
+                                //uses this too and would mess up the persistent settings
+                                grid.updateSettings('sort', key);
+                            });
+                }
+            };
+
+            //switch object
+            var switcher = {
+                threadView: {
+                    on: function () { sortby('thread'); },
+                    inbox: function () { sortby('thread'); },
+                    off: function () { sortby('610'); }
+                }
+            };
+
+            //switch
+            if (switcher[path] && switcher[path][value]) {
+                switcher[path][value]();
+            }
+        }
+
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
             index: 100,
@@ -276,6 +323,7 @@ define('io.ox/mail/main',
         });
 
         grid.on('change:prop', drawGridOptions);
+        settings.on('change', handleSettingsChange);
         drawGridOptions();
 
         commons.addGridToolbarFolder(app, grid);
