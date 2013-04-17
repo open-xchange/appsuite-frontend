@@ -896,42 +896,7 @@ define("io.ox/mail/api",
             deferred = handleSendTheGoodOldWay(data, form);
         }
 
-        deferred.then(function (result) {
-            //skip block if error returned
-            if (result.data) {
-                var base = _(result.data.split(api.separator)),
-                    id = base.last(),
-                    folder = base.without(id).join(api.separator);
-                api.get({ folder_id: folder, id: id }).then(function (mail) {
-                    $.when(api.caches.list.add(data), api.caches.get.add(data))
-                    .done(function () {
-                        api.trigger('refresh.list');
-                    });
-                });
-            }
-            return result;
-        });
-
-        return deferred;
-    };
-
-    function handleSendXHR2(data, files) {
-
-        var form = new FormData();
-        // add mail data
-        form.append('json_0', JSON.stringify(data));
-        // add files
-        _(files).each(function (file, index) {
-            form.append('file_' + index, file);
-        });
-
-        return http.UPLOAD({
-            module: 'mail',
-            params: { action: 'new' },
-            data: form,
-            dataType: 'text'
-        })
-        .pipe(function (text) {
+        return deferred.then(function (text) {
             // wait a moment, then update mail index
             setTimeout(function () {
                 // clear inbox & sent folder
@@ -957,6 +922,39 @@ define("io.ox/mail/api",
             } else {
                 return {};
             }
+        })
+        .then(function (result) {
+            //skip block if error returned
+            if (result.data) {
+                var base = _(result.data.split(api.separator)),
+                    id = base.last(),
+                    folder = base.without(id).join(api.separator);
+                api.get({ folder_id: folder, id: id }).then(function (mail) {
+                    $.when(api.caches.list.add(data), api.caches.get.add(data))
+                    .done(function () {
+                        api.trigger('refresh.list');
+                    });
+                });
+            }
+            return result;
+        });
+    };
+
+    function handleSendXHR2(data, files) {
+
+        var form = new FormData();
+        // add mail data
+        form.append('json_0', JSON.stringify(data));
+        // add files
+        _(files).each(function (file, index) {
+            form.append('file_' + index, file);
+        });
+
+        return http.UPLOAD({
+            module: 'mail',
+            params: { action: 'new' },
+            data: form,
+            dataType: 'text'
         });
     }
 
