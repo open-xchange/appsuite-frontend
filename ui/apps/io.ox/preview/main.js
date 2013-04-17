@@ -202,6 +202,16 @@ define("io.ox/preview/main",
 
                 var $a = clickableLink(file, function (e) {
                         e.preventDefault();
+                        if (file.module) {
+                            file.source = 'task';
+                            file.folder_id = file.folder;
+                        } else if (file.data && file.data.mail) {
+                            file.folder_id = file.data.mail.folder_id;
+                            file.attached = file.data.id;
+                            file.id = file.data.mail.id;
+                            file.source = 'mail';
+                        }
+
                         ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
                     }),
                     width = options.width || '400',

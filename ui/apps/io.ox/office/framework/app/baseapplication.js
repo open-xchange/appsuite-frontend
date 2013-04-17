@@ -67,15 +67,16 @@ define('io.ox/office/framework/app/baseapplication',
                     appFile = app.getFileDescriptor();
 
                 // TODO: check file version too?
-                if (file.id) {
+                if (file.source) { //mail or task attachment
                     return _.isObject(appFile) &&
+                    (file.source === appFile.source) &&
                     (file.id === appFile.id) &&
+                    (file.attached === appFile.attached) &&
                     (file.folder_id === appFile.folder_id);
-                // this is a mail attachment
                 } else {
                     return _.isObject(appFile) &&
-                    (file.data.id === appFile.data.id) &&
-                    (file.data.folder_id === appFile.data.folder_id);
+                    (file.id === appFile.id) &&
+                    (file.filename === appFile.filename);
                 }
 
             }) : [];
@@ -86,7 +87,7 @@ define('io.ox/office/framework/app/baseapplication',
     }
 
     /**
-     * Creates a new application object of the specified type, and performs
+     * Creates a new application object of the specified type, and performshttp://www.welt.de/
      * basic initialization steps.
      *
      * @param {String} moduleName
@@ -447,13 +448,9 @@ define('io.ox/office/framework/app/baseapplication',
                 folder_id: file.folder_id,
                 filename: file.filename,
                 version: file.version,
-                mail_folder_id: file.data && file.data.mail ? file.data.mail.folder_id : null,
-                mail_id: file.data && file.data.mail ? file.data.mail.id : null,
-                attachment_id: file.data ? file.data.id : null,
-                task_attached: file.attached,
-                task_folder: file.folder,
-                task_id: file.id,
-                task_module: file.module
+                source: file.source,
+                attached: file.attached,
+                module: file.module
             } : null;
         };
 

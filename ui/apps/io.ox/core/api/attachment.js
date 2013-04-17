@@ -142,7 +142,8 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                     folder: data.folder,
                     id: data.id,
                     module: data.module,
-                    attached: data.attached
+                    attached: data.attached,
+                    source: 'task'
                 });
             switch (mode) {
             case 'view':

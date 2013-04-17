@@ -432,8 +432,12 @@ define('io.ox/mail/actions',
         },
         action: function (o) {
             var file = o;
-            if (o.mail) {
-                file.data = {mail: o.mail, id: o.id};
+            if (o.data.mail) {
+                file.source = 'mail';
+                file.folder_id = o.data.mail.folder_id;
+                file.attached = o.data.id;
+                file.id = o.data.mail.id;
+                file.source = 'mail';
             }
             ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
         }

@@ -390,7 +390,17 @@ define('io.ox/tasks/actions',
             return isPreviewable(e);
         },
         action: function (o) {
-            ox.launch('io.ox/office/preview/main', { action: 'load', file: o.data });
+            var file = {};
+            file.id = o.data.id;
+            file.filename = o.data.filename;
+            file.folder_id = o.data.folder;
+            file.source = 'task';
+            file.module = o.data.module;
+            file.attached = o.data.attached;
+            ox.launch('io.ox/office/preview/main', {
+                action: 'load',
+                file: file
+            });
         }
     });
 
