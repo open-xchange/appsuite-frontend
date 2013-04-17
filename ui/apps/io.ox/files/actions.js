@@ -775,7 +775,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
             var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
-            if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+            if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
+            if (_.browser.IE) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|webm)'; }
+            if (_.browser.Firefox) { pattern = '\\.(m4v|avi|wmv|mpe?g|webm)'; }
             return _(e.baton.allIds).reduce(function (memo, obj) {
                 return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
             }, false);
