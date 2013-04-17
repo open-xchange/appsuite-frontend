@@ -28,6 +28,20 @@ define('plugins/portal/mail/register',
 
         title: gt("Inbox"),
 
+        initialize: function (baton) {
+            api.on('update create delete', function (event, element) {
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.mail_0;
+
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         action: function (baton) {
             ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
         },
@@ -75,6 +89,12 @@ define('plugins/portal/mail/register',
             var popup = this.busy();
             require(['io.ox/mail/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
+
+                api.on('delete:' + encodeURIComponent(_.cid(obj)), function (event, elements) {
+                    popup.remove();
+                    api.off('delete:' + encodeURIComponent(_.cid(obj)));
+                });
+
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });

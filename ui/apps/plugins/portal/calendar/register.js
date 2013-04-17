@@ -57,6 +57,20 @@ define("plugins/portal/calendar/register",
 
         title: gt('Appointments'),
 
+        initialize: function (baton) {
+            api.on('update create delete', function (event, element) {
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
+
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         action: function (baton) {
             ox.launch('io.ox/calendar/main', { perspective: 'list' });
         },
@@ -115,6 +129,12 @@ define("plugins/portal/calendar/register",
             var popup = this.busy();
             require(['io.ox/calendar/view-detail', 'io.ox/calendar/api'], function (view, api) {
                 var obj = api.reduce(baton.item);
+
+                api.on('delete:' + encodeURIComponent(_.cid(obj)), function (event, elements) {
+                    popup.remove();
+                    api.off('delete:' + encodeURIComponent(_.cid(obj)));
+                });
+
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });
