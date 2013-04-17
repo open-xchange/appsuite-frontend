@@ -180,7 +180,12 @@ define('io.ox/core/api/pubsub',
         }),
         subscriptions: subscriptions,
         sources: apiFactory({
-            module: 'subscriptionSources'
+            module: 'subscriptionSources',
+            requests: {
+                all: {
+                    columns: 'id,displayName,icon,module,formDescription'
+                }
+            }
         })
     };
 
