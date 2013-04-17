@@ -466,17 +466,28 @@ define('io.ox/mail/write/main',
             }
         };
 
+        app.getPriority = function () {
+            var high = view.form.find('input[name=priority][value=1]'),
+                low = view.form.find('input[name=priority][value=5]');
+            if (high.prop('checked')) return 1;
+            if (low.prop('checked')) return 5;
+            return 3;
+        };
+
         app.setPriority = function (prio) {
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
             prio = prio > 3 ? 5 : prio;
             // set
-            view.form.find('input[name=priority][value=' + prio + ']')
-                .prop('checked', true);
-            // high priority?
+            view.form.find('input[name=priority][value=' + prio + ']').prop('checked', true);
+            // high or low priority?
             if (prio === 1) {
-                view.priorityOverlay.addClass('high');
+                view.priorityOverlay.attr('class', 'priority-overlay high');
+            } else if (prio === 3) {
+                view.priorityOverlay.attr('class', 'priority-overlay');
+            } else if (prio === 5) {
+                view.priorityOverlay.attr('class', 'priority-overlay low');
             }
         };
 

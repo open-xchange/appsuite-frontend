@@ -396,9 +396,15 @@
     .priority {
         font-weight: bold;
         font-size: 80%;
-        color: @mailPriority;
         vertical-align: top;
         white-space: nowrap;
+        .high {
+            color: @mailPriority;
+        }
+        .low {
+            i:first-child { color: #888; }
+            color: #ccc;
+        }
     }
 
     .contact-picture {
