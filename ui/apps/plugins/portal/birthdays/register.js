@@ -117,7 +117,7 @@ define('plugins/portal/birthdays/register',
                         birthday = new date.Local(utc);
                         next = new date.Local(now.getYear(), birthday.getMonth(), birthday.getDate());
                         // inc year?
-                        if (now - next > 0) next.addYears(1);
+                        if (next < now) next.addYears(1);
                         // get human readable delta
                         days = birthday.getDate() - now.getDate();
                         delta = (next - now) / date.DAY;
