@@ -437,6 +437,7 @@ define('io.ox/mail/actions',
                 file.folder_id = o.data.mail.folder_id;
                 file.attached = o.data.id;
                 file.id = o.data.mail.id;
+                file.filename = o.data.filename;
                 file.source = 'mail';
             }
             ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
