@@ -8,12 +8,7 @@ fi
 
 if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
-if [ -n "$OX_APPSUITE_DEV" ]
-then
-    export BASEDIR="$OX_APPSUITE_DEV"
-else
-    export BASEDIR="$(dirname "$(dirname "$(readlink "$0")")")"
-fi
+export BASEDIR="$(dirname "$(dirname "$(readlink "$0")")")"
 
 [ -f local.conf ] && . ./local.conf
 
