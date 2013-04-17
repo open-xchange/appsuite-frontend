@@ -76,7 +76,7 @@ define('io.ox/office/framework/app/baseapplication',
                 } else {
                     return _.isObject(appFile) &&
                     (file.id === appFile.id) &&
-                    (file.filename === appFile.filename);
+                    (file.folder_id === appFile.folder_id);
                 }
 
             }) : [];
