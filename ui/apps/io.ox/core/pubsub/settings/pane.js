@@ -345,8 +345,8 @@ define('io.ox/core/pubsub/settings/pane',
 
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
-                hasPublications = folderState.isPublished && type === 'pub',
-                hasSubscriptions = folderState.isSubscribed && type === 'sub',
+                hasPublications = folderState.isPublished && type === 'publication',
+                hasSubscriptions = folderState.isSubscribed && type === 'subscription',
                 notAccessible = isEmpty && (hasPublications || hasSubscriptions);
 
             if (notAccessible) {
@@ -358,11 +358,11 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (isEmpty) {
                 if (isFiltered) {
-                    return type === 'pub' ?
+                    return type === 'publication' ?
                         gt('This folder has no publications') :
                         gt('This folder has no subscriptions');
                 }
-                return type === 'pub' ?
+                return type === 'publication' ?
                     gt('You don\'t have any publications yet') :
                     gt('You don\'t have any subscriptions yet');
             }
@@ -395,8 +395,8 @@ define('io.ox/core/pubsub/settings/pane',
                 baton.subListNode = $('<ul class="subscriptions">')
             );
 
-            setupList(baton.pubListNode.empty(), baton.publications, 'pub');
-            setupList(baton.subListNode.empty(), baton.subscriptions, 'sub');
+            setupList(baton.pubListNode.empty(), baton.publications, 'publication');
+            setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
         }
     });
 });
