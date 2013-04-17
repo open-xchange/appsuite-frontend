@@ -115,7 +115,12 @@ define('io.ox/core/commons-folderview',
 
         function addSubFolder(e) {
             e.preventDefault();
-            e.data.app.folderView.add();
+            // set explicit folder?
+            if (/^(contacts|calendar|tasks)$/.test(e.data.type)) {
+                e.data.app.folderView.add(api.getDefaultFolder(e.data.type));
+            } else {
+                e.data.app.folderView.add();
+            }
         }
 
          // toolbar actions
@@ -137,9 +142,11 @@ define('io.ox/core/commons-folderview',
             id: 'add-folder',
             index: 200,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="add-subfolder">').text(gt('Add subfolder'));
+                // only mail and infostore show hierarchies
+                var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('Add private folder') : gt('Add subfolder'),
+                    link = $('<a href="#" data-action="add-subfolder">').text(label);
                 if (api.can('create', baton.data)) {
-                    link.on('click', { app: baton.app }, addSubFolder);
+                    link.on('click', { app: baton.app, type: baton.options.type }, addSubFolder);
                 } else {
                     link.addClass('disabled');
                 }
