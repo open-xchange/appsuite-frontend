@@ -283,7 +283,7 @@ define('io.ox/calendar/week/perspective',
                 })
                 .on('create update', function (e, obj) {
                     if (obj.recurrence_type === 0) {
-                        self.view.setStartDate(obj.start_date);
+                        self.view.setStartDate(obj.start_date, obj.full_time);
                     }
                 });
 

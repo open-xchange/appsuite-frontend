@@ -147,11 +147,16 @@ define('io.ox/calendar/week/view',
          *        number: Timestamp of a date in the reference week. Now if empty
          *        string: {'next', 'prev'} set next or previous week
          *        LoacalDate: date object in the reference week
+         * @param {boolean} utc     true if full-time appointment
          */
-        setStartDate: function (opt) {
+        setStartDate: function (opt, utc) {
+            utc = utc || false;
             if (opt) {
                 // number | LocalDate
                 if (typeof opt === 'number' || opt instanceof date.Local) {
+                    if (utc) {
+                        opt = date.Local.utc(opt);
+                    }
                     this.startDate = new date.Local(opt);
                     this.refDate.setTime(this.startDate.getTime());
                 }
