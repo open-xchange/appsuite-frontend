@@ -8,7 +8,9 @@ fi
 
 if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
+echo \$0: $0
 export BASEDIR="$(dirname "$(dirname "$(readlink "$0")")")"
+echo BASEDIR: $BASEDIR
 
 [ -f local.conf ] && . ./local.conf
 
