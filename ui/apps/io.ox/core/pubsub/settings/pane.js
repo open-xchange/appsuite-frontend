@@ -18,11 +18,12 @@ define('io.ox/core/pubsub/settings/pane',
          'io.ox/core/api/folder',
          'io.ox/core/tk/dialogs',
          'io.ox/core/notifications',
+         'io.ox/core/capabilities',
          'settings!io.ox/core/pubsub',
          'gettext!io.ox/core/pubsub',
          'less!io.ox/core/pubsub/style.less'
         ],
-         function (ext, model, views, folderAPI, dialogs, notifications, settings, gt) {
+         function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -308,6 +309,11 @@ define('io.ox/core/pubsub/settings/pane',
 
         var filteredList = collection.forFolder(filter),
             hintNode, hint;
+
+        if (!capabilities.has(type)) {
+            node.after($('<div class="empty">').text(gt('This feature is deactivated') + '.'));
+            return;
+        }
 
         _.each(filteredList, function (model) {
             node.append(
