@@ -106,7 +106,9 @@ define('io.ox/files/mediaplayer',
                 .on('click', $.proxy(this.minimize, this));
 
             $(document).keyup(function (e) {
-                if (e.keyCode === 27) self.close();
+                // close on ESC unless in fullscreen mode
+                // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
+                if (e.keyCode === 27 && BigScreen.element === null) self.close();
             });
         },
 
