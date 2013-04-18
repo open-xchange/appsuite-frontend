@@ -21,6 +21,23 @@ define('io.ox/core/pubsub/model',
 
     'use strict';
 
+    function createSyncer(api) {
+        return {
+            create: function (model) {
+                return api.create(model.attributes);
+            },
+            read: function (model) {
+                return api.get({id: model.id, folder: model.get('folder')});
+            },
+            update: function (model) {
+                return api.update(model.attributes);
+            },
+            destroy: function (model) {
+                return api.destroy(model.id);
+            }
+        };
+    }
+
     var Publication = BasicModel.extend({
             ref: 'io.ox/core/pubsub/publication/',
             defaults: {
@@ -31,20 +48,7 @@ define('io.ox/core/pubsub/model',
             url: function () {
                 return this.attributes[this.attributes.target].url;
             },
-            syncer: {
-                create: function (model) {
-                    return api.publications.create(model.attributes);
-                },
-                read: function (model) {
-                    return api.publications.get({id: model.id});
-                },
-                update: function (model) {
-                    return api.publications.update(model.attributes);
-                },
-                destroy: function (model) {
-                    return api.publications.destroy(model.id);
-                }
-            }
+            syncer: createSyncer(api.publications)
         }),
         Subscription = BasicModel.extend({
             ref: 'io.ox/core/pubsub/subscription/',
@@ -79,20 +83,7 @@ define('io.ox/core/pubsub/model',
                     return this._refresh;
                 }
             },
-            syncer: {
-                create: function (model) {
-                    return api.subscriptions.create(model.attributes);
-                },
-                read: function (model) {
-                    return api.subscriptions.get({id: model.id, folder: model.get('folder')});
-                },
-                update: function (model) {
-                    return api.subscriptions.update(model.attributes);
-                },
-                destroy: function (model) {
-                    return api.subscriptions.destroy(model.id);
-                }
-            }
+            syncer: createSyncer(api.subscriptions)
         }),
         Publications = Backbone.Collection.extend({
             model: Publication,
