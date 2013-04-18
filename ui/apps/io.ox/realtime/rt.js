@@ -288,7 +288,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     api.send = function (options) {
         options.seq = seq;
         seq++;
-        api.sendWithoutSequence(options);
+        return api.sendWithoutSequence(options);
     };
 
     api.sendWithoutSequence = function (options) {

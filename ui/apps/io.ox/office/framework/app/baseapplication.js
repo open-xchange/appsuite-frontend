@@ -303,8 +303,11 @@ define('io.ox/office/framework/app/baseapplication',
                 })
                 .fail(function (result) {
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),
-                        message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.'));
-                    view.showError(title, message);
+                        message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
+                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                    if (cause !== 'timeout') {
+                        view.showError(title, message);
+                    }
                     Utils.warn('BaseApplication.launch(): importing document "' + file.filename + '" failed.');
                     self.trigger('docs:import:error');
                 });
