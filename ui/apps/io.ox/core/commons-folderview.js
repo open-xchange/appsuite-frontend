@@ -67,7 +67,8 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></a>'),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                            .append($('<i class="icon-plus">')),
                         ul = $('<ul class="dropdown-menu">')
                     )
                 );
@@ -82,7 +83,8 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog accent-color"></a>'),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                            .append($('<i class="icon-cog accent-color">')),
                         ul = $('<ul class="dropdown-menu">').append(
                             $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
                         )
@@ -102,8 +104,9 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a href="#" class="toolbar-action pull-right" data-action="close"><i class="icon-remove"></a>')
-                    .on('click', { app: baton.app }, fnClose)
+                    $('<a href="#" class="toolbar-action pull-right" data-action="close">')
+                        .append($('<i class="icon-remove">'))
+                        .on('click', { app: baton.app }, fnClose)
                 );
             }
         });
