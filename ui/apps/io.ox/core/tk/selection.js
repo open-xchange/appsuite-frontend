@@ -63,6 +63,7 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
+            update,
             clear,
             isSelected,
             select,
@@ -141,21 +142,21 @@ define('io.ox/core/tk/selection',
 
         selectFirst = function (e) {
             if (bHasIndex && observedItems.length) {
-                var obj = observedItems[0];
+                var item = observedItems[0];
                 clear();
-                apply(obj, e);
-                self.trigger('select:first', obj);
+                apply(item.data, e);
+                self.trigger('select:first', item.data);
             }
         };
 
         selectPrevious = function (e) {
             if (bHasIndex) {
-                var index = getIndex(last) - 1, obj;
+                var index = getIndex(last) - 1, item;
                 if (index >= 0) {
-                    obj = observedItems[index];
+                    item = observedItems[index];
                     clear();
-                    apply(obj, e);
-                    self.trigger('select:previous', obj);
+                    apply(item.data, e);
+                    self.trigger('select:previous', item.data);
                 }
             }
         };
@@ -163,21 +164,21 @@ define('io.ox/core/tk/selection',
         selectLast = function (e) {
             if (bHasIndex && observedItems.length) {
                 var index = observedItems.length - 1,
-                    obj = observedItems[index];
+                    item = observedItems[index];
                 clear();
-                apply(obj, e);
-                self.trigger('select:last', obj);
+                apply(item.data, e);
+                self.trigger('select:last', item.data);
             }
         };
 
         selectNext = function (e) {
             if (bHasIndex) {
-                var index = getIndex(last) + 1, obj;
+                var index = getIndex(last) + 1, item;
                 if (index < observedItems.length) {
-                    obj = observedItems[index];
+                    item = observedItems[index];
                     clear();
-                    apply(obj, e);
-                    self.trigger('select:next', obj);
+                    apply(item.data, e);
+                    self.trigger('select:next', item.data);
                 }
             }
         };
@@ -212,7 +213,7 @@ define('io.ox/core/tk/selection',
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
-                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
                 // checkbox click?
                 if (id !== undefined && isCheckbox(e)) {
                     apply(id, e);
@@ -227,7 +228,7 @@ define('io.ox/core/tk/selection',
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
-                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
                 // exists?
                 if (id !== undefined && !isCheckbox(e)) {
                     // explicit multiple?
@@ -254,7 +255,7 @@ define('io.ox/core/tk/selection',
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
-                id = bHasIndex ? observedItems[getIndex(key)] : key;
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
                 // exists?
                 if (id !== undefined) {
                     if (node.hasClass('pending-select')) {
@@ -318,11 +319,29 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        clear = function () {
-            var id = '';
-            for (id in selectedItems) {
-                deselect(id);
+        update = function () {
+            // get nodes
+            var nodes = $('.selectable', container),
+                i = 0, $i = nodes.length, node = null;
+            for (; i < $i; i++) {
+                node = nodes.eq(i);
+                // is selected?
+                if (isSelected(node.attr('data-obj-id'))) {
+                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    node.addClass(self.classSelected);
+                } else {
+                    $('input.reflect-selection', node).removeAttr('checked');
+                    node.removeClass(self.classSelected);
+                }
             }
+        };
+
+        clear = function () {
+            // clear hash
+            selectedItems = {};
+            // clear nodes
+            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected);
+            container.find('.selectable input.reflect-selection').removeAttr('checked');
         };
 
         /**
@@ -346,18 +365,21 @@ define('io.ox/core/tk/selection',
             var tmp = this.get();
             // clear list
             clear();
-            observedItems = all.slice(); // shallow copy! otherwise conflict with insertAt
+            observedItems = new Array(all.length);
             observedItemsIndex = {};
             last = prev = empty;
             // build index
-            var i = 0, $i = all.length, key, reselected = false, index = lastIndex;
+            var i = 0, $i = all.length, data, cid, reselected = false, index = lastIndex;
             for (; i < $i; i++) {
-                observedItemsIndex[self.serialize(all[i])] = i;
+                data = all[i];
+                cid = self.serialize(data);
+                observedItems[i] = { data: data, cid: cid };
+                observedItemsIndex[cid] = i;
             }
             // restore selection. check if each item exists
             for (i = 0, $i = tmp.length; i < $i; i++) {
-                key = self.serialize(tmp[i]);
-                if (observedItemsIndex[key] !== undefined) {
+                cid = self.serialize(tmp[i]);
+                if (observedItemsIndex[cid] !== undefined) {
                     select(tmp[i]);
                     reselected = true;
                 }
@@ -376,14 +398,17 @@ define('io.ox/core/tk/selection',
         this.insertAt = function (list, pos) {
             // vars
             var $l = list.length,
+                insert = [],
                 // check for conflict, i.e. at least one item is already on the list
                 conflict = _(list).reduce(function (memo, obj) {
-                    return memo || (self.serialize(obj) in observedItemsIndex);
+                    var cid = self.serialize(obj);
+                    insert.push({ data: obj, cid: cid });
+                    return memo || (cid in observedItemsIndex);
                 }, false);
             // no conflict?
             if (!conflict) {
                 // insert into list
-                observedItems.splice.apply(observedItems, [pos, 0].concat(list));
+                observedItems.splice.apply(observedItems, [pos, 0].concat(insert));
                 // shift upper index
                 _(observedItemsIndex).each(function (value, key) {
                     if (value >= pos) {
@@ -410,8 +435,8 @@ define('io.ox/core/tk/selection',
             observedItems = _(observedItems).compact();
             // reset index
             observedItemsIndex = {};
-            _(observedItems).each(function (obj, i) {
-                observedItemsIndex[self.serialize(obj)] = i;
+            _(observedItems).each(function (item, i) {
+                observedItemsIndex[item.key] = i;
             });
         };
 
@@ -419,19 +444,7 @@ define('io.ox/core/tk/selection',
          * Update
          */
         this.update = function () {
-            // get nodes
-            var nodes = $('.selectable', container),
-                i = 0, $i = nodes.length, node = null;
-            for (; i < $i; i++) {
-                node = nodes.eq(i);
-                // is selected?
-                if (isSelected(node.attr('data-obj-id'))) {
-                    $('input.reflect-selection', node).attr('checked', 'checked').end()
-                        .addClass(self.classSelected);
-                } else {
-                    $('input.reflect-selection', node).removeAttr('checked');
-                }
-            }
+            update();
             return this;
         };
 
@@ -450,10 +463,10 @@ define('io.ox/core/tk/selection',
         };
 
         this.addToIndex = function (obj) {
-            var key = this.serialize(obj);
-            if (observedItemsIndex[key] === undefined) {
-                observedItemsIndex[key] = observedItems.length;
-                observedItems.push(obj);
+            var cid = this.serialize(obj);
+            if (observedItemsIndex[cid] === undefined) {
+                observedItemsIndex[cid] = observedItems.length;
+                observedItems.push({ data: obj, cid: cid });
             }
             return this;
         };
@@ -467,12 +480,12 @@ define('io.ox/core/tk/selection',
             // reset index
             observedItemsIndex = {};
             // rebuild list
-            observedItems = _(observedItems).filter(function (obj) {
-                var key = self.serialize(obj);
-                if (key in hash) {
+            observedItems = _(observedItems).filter(function (item) {
+                var cid = item.cid;
+                if (cid in hash) {
                     return false;
                 } else {
-                    observedItemsIndex[key] = index++;
+                    observedItemsIndex[cid] = index++;
                     return true;
                 }
             });
@@ -573,9 +586,9 @@ define('io.ox/core/tk/selection',
             clear();
             // loop
             _(_.isArray(list) ? list : [list]).each(function (elem) {
-                var obj;
-                if (typeof elem === 'string' && bHasIndex && (obj = observedItems[getIndex(elem)]) !== undefined) {
-                    select(obj);
+                var item;
+                if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
+                    select(item.data);
                 } else {
                     select(elem);
                 }
@@ -595,7 +608,7 @@ define('io.ox/core/tk/selection',
 
         this.selectRange = function (a, b) {
 
-            var tmp, i, id, key;
+            var tmp, i, item;
 
             if (bHasIndex) {
                 // get indexes
@@ -610,14 +623,13 @@ define('io.ox/core/tk/selection',
                 // loop
                 for (i = a; i <= b; i++) {
                     // get id
-                    id = observedItems[i];
+                    item = observedItems[i];
                     // select first & last one via "normal" select
                     if (i === a || i === b) {
-                        select(id);
+                        select(item.data);
                     } else {
                         // fast & simple
-                        key = this.serialize(id);
-                        selectedItems[key] = id;
+                        selectedItems[item.cid] = item.data;
                     }
                 }
                 // fast update - just updates existing nodes instead of looking for thousands
@@ -642,8 +654,8 @@ define('io.ox/core/tk/selection',
 
         this.selectAll = function () {
             if (bHasIndex && observedItems.length) {
-                _(observedItems).each(function (obj) {
-                    select(obj, true);
+                _(observedItems).each(function (item) {
+                    select(item.data, true);
                 });
                 changed();
             }
@@ -663,7 +675,7 @@ define('io.ox/core/tk/selection',
             if (lastValidIndex !== -1) {
                 var item = observedItems[lastValidIndex] || _.last(observedItems);
                 if (item !== undefined) {
-                    this.select(item);
+                    this.select(item.data);
                 }
             }
         };

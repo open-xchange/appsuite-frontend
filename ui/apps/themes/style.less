@@ -1183,27 +1183,32 @@ span.hint {
     margin-left: 0;
 }
 
-.io-ox-multi-selection .summary {
-    font-size: 24pt;
-    font-weight: 300;
-    line-height: 1.2em;
-    color: #ccc;
-}
+.io-ox-multi-selection {
 
-.io-ox-multi-selection .summary b {
-    color: #aaa;
-}
+    padding: 0 30px;
 
-.io-ox-multi-selection .io-ox-inline-links {
-    text-align: center;
-}
+    .summary {
+        font-size: 24pt;
+        font-weight: 300;
+        line-height: 1.2em;
+        color: #ccc;
+    }
 
-.io-ox-multi-selection .io-ox-inline-links a {
-    color: @inlineLinkColor;
-}
+    .summary b {
+        color: #aaa;
+    }
 
-.io-ox-multi-selection .io-ox-inline-links.empty {
-    display: none;
+    .io-ox-inline-links {
+        text-align: center;
+    }
+
+    .io-ox-inline-links a {
+        color: @inlineLinkColor;
+    }
+
+    .io-ox-inline-links.empty {
+        display: none;
+    }
 }
 
 .inline-buttons {
@@ -1576,8 +1581,8 @@ input.nice-input {
         top: auto;
         height: 40px - 1;
         line-height: 40px - 1;
-        border-top: 1px solid darken(@foldertreeSidepanelBackground, 3%);
-        background-color: darken(@foldertreeSidepanelBackground, 6%);
+        border-top: 1px solid darken(@foldertreeSidepanelBackground, 10%);
+        background-color: @foldertreeSidepanelBackground;
     }
 
     &.side-shift {

@@ -136,8 +136,8 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var CHUNK_SIZE = 100,
-        CHUNK_GRID = 20;
+    var CHUNK_SIZE = 200,
+        CHUNK_GRID = 40;
 
     var ChunkLoader = function (listRequest) {
 
@@ -526,6 +526,11 @@ define('io.ox/core/tk/vgrid',
                 bounds.bottom = offset + chunk.length;
             }
 
+            function fail(offset) {
+                // continue with dummy chunk
+                cont({ data: new Array(numRows), offset: offset, length: numRows });
+            }
+
             return function (offset) {
 
                 if (!initialized) {
@@ -533,7 +538,7 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // keep positive
-                offset = Math.max(offset, 0);
+                offset = Math.max(offset >> 0, 0);
                 if (offset === currentOffset) {
                     return DONE;
                 } else {
@@ -541,14 +546,19 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // get all items
-                return loader.load(offset, all)
-                    .done(function (chunk) {
-                        if (chunk !== null) cont(chunk);
-                    })
-                    .fail(function () {
-                        // continue with dummy array
-                        cont(new Array(numRows));
-                    });
+                return loader.load(offset, all).then(
+                    function (chunk) {
+                        if (chunk && chunk.data) {
+                            cont(chunk);
+                        }
+                        // no fail handling here otherweise we get empty blocks
+                        // just because of scrolling
+                    },
+                    function () {
+                        // real failure
+                        fail(offset);
+                    }
+                );
             };
 
         }());
@@ -818,10 +828,9 @@ define('io.ox/core/tk/vgrid',
         this.selection
             .on('change', function (e, list) {
                 // prevent to long URLs
-                var MAXSELECTIONSAVE = 50,
-                    id = _(list.slice(0, MAXSELECTIONSAVE)).map(function (obj) {
-                        return self.selection.serialize(obj);
-                    }).join(',');
+                var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
+                    return self.selection.serialize(obj);
+                }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
                 // propagate DOM-based select event?
                 if (list.length >= 1) {

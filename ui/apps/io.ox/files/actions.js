@@ -171,9 +171,8 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/sendlink', {
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
-        },
+        capabilities: 'webmail',
+        requires: 'some',
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -194,8 +193,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/send', {
+        capabilities: 'webmail',
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail') && ox.uploadsEnabled;
+            return e.collection.has('some') && ox.uploadsEnabled;
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
