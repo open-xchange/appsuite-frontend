@@ -116,6 +116,7 @@ define('io.ox/tasks/api', ['io.ox/core/http',
                 api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
             api.checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
+            api.trigger('create', task);
             return response;
         });
     };
