@@ -498,11 +498,13 @@ define('io.ox/backbone/forms',
                     });
                     // Show regular header
                     this.nodes.collapsedHeader.hide();
-                    this.nodes.header.show();
+                    this.nodes.header.show()
+                                     .find('a').focus(); //IE9
                 } else if (this.initialState === 'collapsed') {
                     // Show regular header
                     this.nodes.collapsedHeader.hide();
-                    this.nodes.header.show();
+                    this.nodes.header.show()
+                                     .find('a').focus(); //IE9
 
                     // show extensions
                     this.nodes.extensions.show();
@@ -524,14 +526,16 @@ define('io.ox/backbone/forms',
                         }
                     });
                     // show collapsedHeader
-                    this.nodes.collapsedHeader.show();
+                    this.nodes.collapsedHeader.show()
+                                              .find('a').focus(); //IE9
                     this.nodes.header.hide();
                 } else if (this.initialState === 'collapsed') {
                     // hide all
                     this.nodes.extensions.hide();
 
                     // show collapsedHeader
-                    this.nodes.collapsedHeader.show();
+                    this.nodes.collapsedHeader.show()
+                                            .find('a').focus(); //IE9
                     this.nodes.header.hide();
                 }
 
