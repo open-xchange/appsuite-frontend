@@ -1212,6 +1212,17 @@ define('io.ox/office/framework/app/baseapplication',
             return def.promise();
         };
 
+        /**
+         * Checks if application is processing quit handlers
+         *
+         * @returns {Boolean}
+         *  Returns true if the application is processing the before &
+         *  quit handlers.
+         */
+        this.isInQuit = function () {
+            return currentQuitDef !== null;
+        };
+
         // initialization -----------------------------------------------------
 
         // call all registered launch handlers
