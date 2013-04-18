@@ -94,7 +94,7 @@ define("io.ox/preview/main",
     Renderer.point.extend(new Engine({
         id: "image",
         index: 10,
-        supports: ["png", "jpg", "jpeg", "gif", "bmp"],
+        supports: ["image/png", "png", "image/jpeg", "jpg", "jpeg", "image/gif", "gif", "bmp"],
         draw: function (file, options) {
             var param = {
                 width: options.width || 400,
