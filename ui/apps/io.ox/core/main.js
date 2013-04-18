@@ -128,7 +128,7 @@ define("io.ox/core/main",
     }
 
     // add launcher
-    var addLauncher = function (side, label, fn, tooltip) {
+    var addLauncher = function (side, label, fn) {
         var node = $('<div class="launcher">'),
             sideTags = side.split(' '),
             wrap = false;
@@ -167,11 +167,6 @@ define("io.ox/core/main",
             node.append(
                 _.isString(label) ? $('<a href="#">').text(gt(label)) :  label
             );
-        }
-
-        // tooltip
-        if (tooltip && !Modernizr.touch) {
-            node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
         }
         // just add if not wrapped
         if (!wrap) {
@@ -511,7 +506,8 @@ define("io.ox/core/main",
                     addLauncher("right", $('<i class="icon-refresh">'), function () {
                         refresh();
                         return $.when();
-                    }, gt('Refresh')).attr("id", "io-ox-refresh-icon")
+                    })
+                    .attr("id", "io-ox-refresh-icon")
                 );
             }
         });
@@ -609,15 +605,21 @@ define("io.ox/core/main",
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var a, ul;
+                var div, a, ul;
                 this.append(
-                    $('<div class="launcher right dropdown">').append(
+                    div = $('<div class="launcher right dropdown">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
                             $('<i class="icon-cog icon-white">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
                     )
                 );
+                if (!Modernizr.touch) {
+                    div.hover(
+                        function () { $(this).addClass('hover'); },
+                        function () { $(this).removeClass('hover'); }
+                    );
+                }
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
                 a.dropdown();
             }
