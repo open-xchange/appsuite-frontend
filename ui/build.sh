@@ -1,5 +1,5 @@
 #!/bin/sh
-cd "$(dirname "$(readlink -mn "$0")")"
+cd "$(dirname "$(readlink "$0" || echo "$0")")"
 bin/build-appsuite "$@"
 
 # echo -e "\033[0;35m"
