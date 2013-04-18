@@ -577,6 +577,8 @@ define('io.ox/files/icons/perspective',
 
                         });
 
+                        self.selection.remove(deleted);
+
                         _(added).each(function (cid) {
 
                             var data = hash[cid],
@@ -590,6 +592,7 @@ define('io.ox/files/icons/perspective',
                                 }
                                 end = end + 1;
                             }
+                            self.selection.addToIndex(data);
                         });
 
                         recalculateLayout();
