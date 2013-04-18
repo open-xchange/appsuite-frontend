@@ -838,6 +838,15 @@ define('io.ox/core/tk/vgrid',
 
         // public methods
 
+        this.setApp = function (app) {
+            this.app = app;
+            return this.app;
+        };
+
+        this.getApp = function () {
+            return this.app;
+        };
+
         this.setAllRequest = function (mode, fn) {
             // parameter shift?
             if (_.isFunction(mode)) {

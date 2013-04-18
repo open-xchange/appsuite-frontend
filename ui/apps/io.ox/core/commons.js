@@ -125,6 +125,8 @@ define('io.ox/core/commons',
                         grid.selection.retriggerUnlessEmpty();
                     }
                 };
+
+            grid.setApp(win.app);
             // show
             win.on('show idle', on)
                 // hide

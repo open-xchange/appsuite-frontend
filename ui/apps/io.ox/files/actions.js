@@ -71,6 +71,36 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/audioplayer', {
+        requires: function (e) {
+            return e.collection.has('multiple') && checkAudio(e);
+        },
+        action: function (baton) {
+            baton.app = baton.grid.getApp();
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/videoplayer', {
+        requires: function (e) {
+            return e.collection.has('multiple') && checkVideo(e);
+        },
+        action: function (baton) {
+            baton.app = baton.grid.getApp();
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: true
+                });
+            });
+        }
+    });
+
     // editor
     new Action('io.ox/files/actions/editor', {
         requires: function (e) {
@@ -653,6 +683,20 @@ define('io.ox/files/actions',
         label: gt('Publish'),
         ref: 'io.ox/files/actions/publish'
     }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: 1100,
+        id: 'mediaplayer-audio',
+        label: gt('Play audio files'),
+        ref: 'io.ox/files/actions/audioplayer'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: 1200,
+        id: 'mediaplayer-video',
+        label: gt('Play video files'),
+        ref: 'io.ox/files/actions/videoplayer'
+    }));
     // version links
 
 
@@ -755,12 +799,30 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/icons/audioplayer', {
-        requires: function (e) {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename) && settings.get('audioEnabled');
+    function checkAudio(e) {
+        if (_.isUndefined(e.baton.allIds)) {
+            e.baton.allIds = e.baton.data;
+        }
+        return settings.get('audioEnabled') && _(e.baton.allIds).reduce(function (memo, obj) {
+                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename);
             }, false);
-        },
+    }
+
+    function checkVideo(e) {
+        if (_.isUndefined(e.baton.allIds)) {
+            e.baton.allIds = e.baton.data;
+        }
+        var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
+        if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
+        if (_.browser.IE) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|webm)'; }
+        if (_.browser.Firefox) { pattern = '\\.(m4v|avi|wmv|mpe?g|webm)'; }
+        return settings.get('videoEnabled') && _(e.baton.allIds).reduce(function (memo, obj) {
+            return memo || (new RegExp(pattern, 'i')).test(obj.filename);
+        }, false);
+    }
+
+    new Action('io.ox/files/icons/audioplayer', {
+        requires: checkAudio,
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
@@ -772,15 +834,7 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
-            if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
-            if (_.browser.IE) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|webm)'; }
-            if (_.browser.Firefox) { pattern = '\\.(m4v|avi|wmv|mpe?g|webm)'; }
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
-            }, false);
-        },
+        requires: checkVideo,
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
