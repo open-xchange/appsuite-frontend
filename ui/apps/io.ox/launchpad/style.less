@@ -1,84 +1,113 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
-#io-ox-launchpad .pad {
-    margin: 26px auto 26px auto;
-    width: 700px;
-    min-height: 0;
+#io-ox-launchpad {
+
+    .pad {
+        margin: 26px auto 26px auto;
+        width: 700px;
+        min-height: 0;
+    }
+
+    .section {
+        min-height: 50px;
+        margin-bottom: 2em;
+        clear: both;
+    }
+
+    h1 {
+        font-family: @lightFontFamily;
+        font-size: 1.5em;
+        font-weight: normal;
+        line-height: 2em;
+        text-shadow: 1px 1px 2px #fff;
+        margin: 0 0 1em 0;
+        border-bottom: 1px solid #bbb;
+        clear: both;
+    }
+
+    .manage-apps {
+        text-align: right;
+    }
+
+    .manage-apps .btn {
+        margin-right: 0;
+        margin-bottom: 2em;
+    }
+
+    .app {
+
+        position: relative;
+        display: inline-block;
+        width: 120px;
+        min-height: 50px;
+        padding: 0 10px 0 10px;
+        margin: 0 0 2em 0;
+        text-align: center;
+        float: left;
+        color: black;
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 0 0.25em 0;
+        }
+
+        .title {
+            font-size: 1.1em;
+            font-weight: normal;
+            line-height: 1.25em;
+            color: #555;
+            text-shadow: 0px 1px 2px #fff;
+            overflow: hidden;
+            text-overflow: ellipsis; /* does not work in 2 line mode right now */
+            height: 2.5em;
+        }
+
+        .lock {
+            font-size: 50px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.20);
+            display: none;
+        }
+
+        &.upsell .lock {
+            display: block;
+        }
+
+        &.upsell .icon {
+            opacity: 0.20;
+        }
+    }
+
+    a.app:focus {
+        outline: 0;
+        .box-shadow(none);
+    }
+
+    a.app:active {
+        opacity: 0.60;
+    }
+
+    .app:hover {
+        text-decoration: none;
+    }
+
+    .app .title.ellipsis {
+        white-space: normal;
+    }
+
+    /* touch device */
+    .touch & .pad { width: 1000px; }
+    .touch & .app { width: 180px; font-size: @touchFontSize; }
+    .touch & .app .icon { width: 64px; height: 64px; }
 }
-
-#io-ox-launchpad .section {
-    min-height: 50px;
-    margin-bottom: 2em;
-    clear: both;
-}
-
-#io-ox-launchpad h1 {
-    font-family: @lightFontFamily;
-    font-size: 1.5em;
-    font-weight: normal;
-    line-height: 2em;
-    text-shadow: 1px 1px 2px #fff;
-    margin: 0 0 1em 0;
-    border-bottom: 1px solid #bbb;
-    clear: both;
-}
-
-#io-ox-launchpad .manage-apps {
-    text-align: right;
-}
-
-#io-ox-launchpad .manage-apps .btn {
-    margin-right: 0;
-    margin-bottom: 2em;
-}
-
-#io-ox-launchpad .app {
-    display: inline-block;
-    width: 120px;
-    min-height: 50px;
-    padding: 0 10px 0 10px;
-    margin: 0 0 2em 0;
-    text-align: center;
-    float: left;
-    color: black;
-}
-
-#io-ox-launchpad a.app:focus {
-    outline: 0;
-    .box-shadow(none);
-}
-
-#io-ox-launchpad a.app:active {
-    opacity: 0.60;
-}
-
-#io-ox-launchpad .app:hover {
-    text-decoration: none;
-}
-
-#io-ox-launchpad .app .icon {
-    width: 48px;
-    height: 48px;
-    margin: 0 0 0.25em 0;
-}
-
-#io-ox-launchpad .app .title {
-    font-size: 1.1em;
-    font-weight: normal;
-    line-height: 1.25em;
-    color: #555;
-    text-shadow: 0px 1px 2px #fff;
-    overflow: hidden;
-    text-overflow: ellipsis; /* does not work in 2 line mode right now */
-    height: 2.5em;
-}
-
-#io-ox-launchpad .app .title.ellipsis {
-    white-space: normal;
-}
-
-/* touch device */
-
-.touch #io-ox-launchpad .pad {
-    width: 1000px; }
-.touch #io-ox-launchpad .app { width: 180px; font-size: @touchFontSize; }
-.touch #io-ox-launchpad .app .icon { width: 64px; height: 64px; }

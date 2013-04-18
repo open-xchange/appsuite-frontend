@@ -468,9 +468,8 @@ define('io.ox/files/actions',
     moveAndCopy('copy', gt('Copy'), gt('Files have been copied'), 'some read');
 
     new Action('io.ox/files/actions/add-to-portal', {
-        require: function (e) {
-            return e.collection.has('one') && capabilities.has('!disablePortal');
-        },
+        capabilities: 'portal',
+        require: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.add('stickyfile', {

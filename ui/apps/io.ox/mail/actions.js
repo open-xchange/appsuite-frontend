@@ -608,7 +608,7 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/add-to-portal', {
-        capabilities: 'portal', // was: !disablePortal
+        capabilities: 'portal',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {

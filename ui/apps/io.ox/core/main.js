@@ -145,7 +145,8 @@ define("io.ox/core/main",
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
-            .on('click', function () {
+            .on('click', function (e) {
+                e.preventDefault();
                 var self = $(this), content;
                 // set fixed width, hide label, be busy
                 content = self.contents();
@@ -163,7 +164,9 @@ define("io.ox/core/main",
             label.wrap(node);
         } else {
             //construct
-            node.append(_.isString(label) ? $.txt(gt(label)) : label);
+            node.append(
+                _.isString(label) ? $('<a href="#">').text(gt(label)) :  label
+            );
         }
 
         // tooltip
@@ -399,7 +402,7 @@ define("io.ox/core/main",
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
                 if (!upsell.has(model.get('requires'))) {
-                    node.addClass('upsell').prepend(
+                    node.addClass('upsell').children('a').first().prepend(
                         $('<i class="icon-lock">')
                     );
                 }
@@ -437,7 +440,12 @@ define("io.ox/core/main",
                 })
                 .text(gt(title))
             );
-            node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
+            launcherDropdown.append(
+                node.on('click', function (e) {
+                    e.preventDefault();
+                    model.launch();
+                })
+            );
             add(node, launcherDropdown, model);
             tabManager();
         });
@@ -528,21 +536,12 @@ define("io.ox/core/main",
             id: 'help',
             index: 200,
             draw: function () {
-                var a, helpLink = "help/" + ox.language + "/index.html";
+                var helpLink = 'help/' + ox.language + '/index.html';
                 this.append(
                     $('<li>').append(
-                        a = $('<a target="_blank">').attr({href: helpLink})
-                                                    .text(gt('Help'))
+                        $('<a>', { href: helpLink, target: '_blank' }).text(gt('Help'))
                     )
                 );
-                $.ajax(helpLink, {
-                    type: 'HEAD',
-                    statusCode: {
-                        404: function () {
-                            a.attr('href', 'help/en_US/index.html');
-                        }
-                    }
-                });
             }
         });
 
@@ -663,9 +662,9 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar').extend({
             id: 'default',
             draw: function () {
+
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
-
 
                 // refresh animation
                 initRefreshAnimation();

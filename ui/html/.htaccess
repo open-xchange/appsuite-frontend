@@ -60,3 +60,8 @@ ExpiresByType audio/mp3 "access plus 6 months"
 RewriteEngine On
 RewriteRule v=[^\/]+/(.+) $1 [L]
 RewriteRule ^$ core [L]
+
+# online help fallback
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule help/([a-z_A-Z]+)(.+) help/en_US$2 [L]
+

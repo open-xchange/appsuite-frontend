@@ -127,11 +127,14 @@
         white-space: nowrap;
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
+        & > a { color: @topbarLauncherColor; }
+        & > a:hover { text-decoration: none; }
     }
 
     .launcher.hover {
         color: @topbarLauncherColor-hover;
         background-color: @topbarLauncherBackgroundHover;
+        & > a { color: @topbarLauncherColor-hover; }
     }
 
     .launcher.upsell {
@@ -147,6 +150,7 @@
     .launcher.active-app {
         color: @topbarLauncherColorActive;
         background-color: @topbarLauncherBackgroundActive;
+        & > a { color: @topbarLauncherColorActive; }
     }
 
     .launcher.user-content i[class^="icon-"] { margin-right: 8px; color: #ccc; }
@@ -164,6 +168,10 @@
 
     .launcher-dropdown li {
         text-align: left;
+        &.upsell i.icon-lock {
+            color: #AAA;
+            width: 1.25em;
+        }
     }
 
     .launcher-dropdown ul {

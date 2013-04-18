@@ -18,8 +18,9 @@ define('io.ox/launchpad/main',
      'io.ox/core/api/apps',
      'io.ox/core/config',
      'io.ox/core/extensions',
+     'io.ox/core/upsell',
      'gettext!io.ox/core',
-     'less!io.ox/launchpad/style.less'], function (desktop, api, config, ext, gt) {
+     'less!io.ox/launchpad/style.less'], function (desktop, api, config, ext, upsell, gt) {
 
     'use strict';
 
@@ -45,6 +46,7 @@ define('io.ox/launchpad/main',
             '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
+            '  <div class="lock abs"><i class="icon-lock"></i></div>' +
             '</a>'
         ),
 
@@ -121,10 +123,12 @@ define('io.ox/launchpad/main',
                 });
             }
         },
+
         fnHasAppStore = function () {
             var managePoint = ext.point("io.ox/core/apps/manage");
             return managePoint.list().length > 0;
         },
+
         fnOpenAppStore = function (e) {
             e.preventDefault();
             var openedStore = false;
@@ -151,6 +155,13 @@ define('io.ox/launchpad/main',
             // clean up
             pad.parent().parent().find('.io-ox-app-clone').remove();
             pad.scrollTop(0).empty().hide();
+        },
+
+        fnUpsell = function (e) {
+            e.preventDefault();
+            var data = e.data;
+            console.log('trigger', data);
+            upsell.trigger({ type: 'app', id: data.id, missing: upsell.missing(data.requires) });
         },
 
         paint = function () {
@@ -187,10 +198,18 @@ define('io.ox/launchpad/main',
                 }
                 _(installed).each(function (data) {
                     // draw installed app
-                    if (data.visible || _.isUndefined(data.visible)) {
-                        secInstalled.append(
-                            drawApp(data).on('click', data, launchApp)
-                        );
+                    var app;
+                    if ((data.visible || _.isUndefined(data.visible)) && upsell.visible(data.requires)) {
+                        // draw
+                        app = drawApp(data);
+                        // needs upsell?
+                        if (!upsell.has(data.requires)) {
+                            app.addClass('upsell').on('click', data, fnUpsell);
+                        } else {
+                            app.on('click', data, launchApp);
+                        }
+                        // append
+                        secInstalled.append(app);
                     }
                 });
             }
