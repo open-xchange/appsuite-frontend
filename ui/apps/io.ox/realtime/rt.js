@@ -148,10 +148,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
                 delete resendBuffer[Number(receipt.data)];
-                resendDeferreds[Number(receipt.data)].resolve();
+                if (resendDeferreds[Number(receipt.data)]) {
+                    resendDeferreds[Number(receipt.data)].resolve();
+                } else {
+                    console.error("No deferred for " + receipt.data);
+                }
                 if (api.debug) {
                     console.log("Received receipt for " + receipt.data);
                 }
+                //delete resendDeferreds[Number(receipt.data)];
             });
 
         } else {
@@ -297,9 +302,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             delete options.trace;
             options.tracer = uuids.randomUUID();
         }
-        if (!_.isUndefined(options.seq)) {
+        if (_.isUndefined(options.seq)) {
+            def.resolve(); // Pretend a message without sequence numbers always arrives
+        } else {
             resendBuffer[options.seq] = options;
-            resendDeferreds[options.seq] = def;
+            if (resendDeferreds[options.seq]) {
+                def = resendDeferreds[options.seq];
+            } else {
+                resendDeferreds[options.seq] = def;
+            }
         }
         if (disconnected) {
             subSocket = connect();
@@ -333,6 +344,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         });
         reconnectBuffer = [];
     });
+
+    api.inspectStatus = function () {
+        console.log("Resend Buffer", resendBuffer);
+        console.log("Resend Deferreds", resendDeferreds);
+        console.log("Connecting", connecting);
+        console.log("Disconnected", disconnected);
+    };
 
     setInterval(function () {
         if (!connecting && !disconnected) {

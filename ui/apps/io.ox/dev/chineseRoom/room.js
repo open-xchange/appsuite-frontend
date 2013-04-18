@@ -32,7 +32,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.say = function (text) {
-            this.group.send({
+            return this.group.send({
                 element: "message",
                 payloads: [
                     {
@@ -49,7 +49,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.sayAndTrace = function (text) {
-            this.group.send({
+            return this.group.send({
                 trace: true,
                 element: "message",
                 payloads: [
@@ -67,7 +67,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.requestLog = function (text) {
-            this.group.send({
+            return this.group.send({
                 element: "message",
                 payloads: [
                     {
