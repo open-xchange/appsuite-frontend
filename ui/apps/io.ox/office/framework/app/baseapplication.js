@@ -87,7 +87,7 @@ define('io.ox/office/framework/app/baseapplication',
     }
 
     /**
-     * Creates a new application object of the specified type, and performshttp://www.welt.de/
+     * Creates a new application object of the specified type, and performs
      * basic initialization steps.
      *
      * @param {String} moduleName
