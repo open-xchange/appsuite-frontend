@@ -283,7 +283,6 @@ define('io.ox/files/actions',
                     return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
-
                 $input.val(baton.data.title || baton.data.filename);
                 var $form = $('<form>').append(
                     $('<label for="name">').append($('<b>').text(gt('Name'))),
@@ -306,7 +305,7 @@ define('io.ox/files/actions',
                 .addButton('cancel', gt('Cancel'));
 
                 dialog.show(function () {
-                    $input.select();
+                    $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
                 })
                 .done(function (action) {
                     if (action === 'rename') {
