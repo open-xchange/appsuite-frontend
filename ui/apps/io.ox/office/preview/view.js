@@ -17,10 +17,11 @@ define('io.ox/office/preview/view',
      'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/pane',
+     'io.ox/office/framework/view/sidepane',
      'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, Label, BaseView, Pane, ToolBox, gt) {
+    ], function (Utils, Button, Label, BaseView, Pane, SidePane, ToolBox, gt) {
 
     'use strict';
 
@@ -31,7 +32,20 @@ define('io.ox/office/preview/view',
         ZOOMOUT_FACTORS = [25, 35, 50, 75],
 
         // predefined zoom-in factors
-        ZOOMIN_FACTORS = [150, 200, 300, 400, 600, 800, 1200, 1600];
+        ZOOMIN_FACTORS = [150, 200, 300, 400, 600, 800, 1200, 1600],
+
+        // options for the button elements
+        QUIT_OPTIONS = { icon: 'icon-remove', tooltip: gt('Close document') },
+        FIRST_OPTIONS = { icon: 'docs-first-page', tooltip: gt('Show first page') },
+        PREV_OPTIONS = { icon: 'docs-previous-page', tooltip: gt('Show previous page') },
+        NEXT_OPTIONS = { icon: 'docs-next-page', tooltip: gt('Show next page') },
+        LAST_OPTIONS = { icon: 'docs-last-page', tooltip: gt('Show last page') },
+        ZOOMOUT_OPTIONS = { icon: 'docs-zoom-out', tooltip: gt('Zoom out') },
+        ZOOMIN_OPTIONS = { icon: 'docs-zoom-in',  tooltip: gt('Zoom in') },
+
+        // options for the label elements
+        PAGE_OPTIONS = { tooltip: gt('Current page and total page count') },
+        ZOOM_OPTIONS = { width: 65, tooltip: gt('Current zoom factor') };
 
     // class PreviewView ======================================================
 
@@ -53,6 +67,18 @@ define('io.ox/office/preview/view',
 
             // the preview model
             model = null,
+
+            // the main side pane containing the thumbnails
+            sidePane = null,
+
+            // tool pane floating over the top of the application pane
+            topOverlayPane = null,
+
+            // tool pane floating over the bottom of the application pane
+            bottomOverlayPane = null,
+
+            // container for all preview thumbnails
+            previewNode = $('<div>').addClass('preview'),
 
             // the root node containing the current page contents
             pageNode = $('<div>').addClass('page'),
@@ -81,27 +107,58 @@ define('io.ox/office/preview/view',
             model = app.getModel();
             self.insertContentNode(pageNode);
 
-            self.addPane(new Pane(app, { position: 'right' }));
-
-            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
+            // create the side pane
+            sidePane = new SidePane(app, { position: 'right', css: { width: '249px' } })
+                .addViewComponent(new ToolBox(app, { fixed: 'top' })
+                    .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
+                    .addRightTab()
+                    .addGroup('app/quit', new Button(QUIT_OPTIONS))
                 )
-            );
+                .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
+                    .addGroup('pages/first',    new Button(FIRST_OPTIONS))
+                    .addGroup('pages/previous', new Button(PREV_OPTIONS))
+                    .addGroup('pages/next',     new Button(NEXT_OPTIONS))
+                    .addGroup('pages/last',     new Button(LAST_OPTIONS))
+                    .addRightTab()
+                    .addGroup('zoom/dec', new Button(ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/inc', new Button(ZOOMIN_OPTIONS))
+                );
 
-            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+            // fill the thumbnail preview container when model has been initialized with page count
+            sidePane.getScrollableNode().append(previewNode);
+            app.getModel().on('pagecount', function (event, pageCount) {
+                _(pageCount).times(function (page) {
+                    previewNode.append($('<div>').addClass('page'));
+                });
+            });
+
+            // create the top overlay pane
+            topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
-                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
-                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
-                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
-                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
-                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                    .addGroup('app/view/sidepane', new Button({ icon: 'docs-show-sidepane', tooltip: gt('Show side panel'), value: true }))
                     .addGap()
-                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
-                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
-                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
-                )
-            );
+                    .addGroup('app/quit', new Button(QUIT_OPTIONS))
+                );
+
+            // create the bottom overlay pane
+            bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('pages/first',    new Button(FIRST_OPTIONS))
+                    .addGroup('pages/previous', new Button(PREV_OPTIONS))
+                    .addGroup('pages/current',  new Label(PAGE_OPTIONS))
+                    .addGroup('pages/next',     new Button(NEXT_OPTIONS))
+                    .addGroup('pages/last',     new Button(LAST_OPTIONS))
+                    .addGap()
+                    .addGroup('zoom/dec',     new Button(ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/current', new Label(ZOOM_OPTIONS))
+                    .addGroup('zoom/inc',     new Button(ZOOMIN_OPTIONS))
+                );
+
+            // add all panes to the view
+            self.addPane(sidePane).addPane(topOverlayPane).addPane(bottomOverlayPane);
+
+            // initially, hide the side pane, and show the overlay tool bars
+            self.toggleSidePane(false);
 
             // listen to specific scroll keys to switch to previous/next page
             self.getAppPaneNode().on('keydown', keyHandler);
@@ -272,6 +329,34 @@ define('io.ox/office/preview/view',
         }
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns whether the main side pane is currently visible.
+         *
+         * @returns {Boolean}
+         *  Whether the main side pane is currently visible.
+         */
+        this.isSidePaneVisible = function () {
+            return sidePane.isVisible();
+        };
+
+        /**
+         * Changes the visibility of the main side pane and the overlay tool
+         * box. If the side pane is visible, the overlay tool box is hidden,
+         * and vice versa.
+         *
+         * @param {Boolean} state
+         *  Whether to show or hide the main side pane.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
+        this.toggleSidePane = function (state) {
+            sidePane.toggle(state);
+            topOverlayPane.toggle(!state);
+            bottomOverlayPane.toggle(!state);
+            return this;
+        };
 
         /**
          * Returns the one-based index of the page currently shown.

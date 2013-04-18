@@ -8,11 +8,23 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
 .io-ox-office-preview-main {
+
+/* thumbnail preview in the side pane */
+.view-pane.side-pane .preview {
+    text-align: center;
+
+    .page {
+        display: inline-block;
+        width: 80px;
+        height: 110px;
+        margin: 5px;
+        background: white;
+    }
+}
 
 .page {
     /* fix for IE10, which does not render SVG text elements when line height is 0 */

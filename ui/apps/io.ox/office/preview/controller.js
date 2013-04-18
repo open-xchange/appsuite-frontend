@@ -45,6 +45,16 @@ define('io.ox/office/preview/controller',
             // all the little controller items
             items = {
 
+                // view -------------------------------------------------------
+
+                // toggle the main side pane
+                'app/view/sidepane': {
+                    get: function () { app.getView().isSidePaneVisible(); },
+                    set: function (state) { app.getView().toggleSidePane(state); }
+                },
+
+                // pages ------------------------------------------------------
+
                 'document/valid': {
                     enable: function () { return model.getPageCount() > 0; }
                 },
@@ -55,18 +65,21 @@ define('io.ox/office/preview/controller',
                     set: function () { view.showFirstPage(); },
                     shortcut: { keyCode: KeyCodes.HOME, altKey: null, ctrlKey: null, metaKey: null }
                 },
+
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
                     set: function () { view.showPreviousPage(); },
                     shortcut: { keyCode: KeyCodes.PAGE_UP, altOrMetaKey: true }
                 },
+
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
                     set: function () { view.showNextPage(); },
                     shortcut: { keyCode: KeyCodes.PAGE_DOWN, altOrMetaKey: true }
                 },
+
                 'pages/last': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
@@ -89,18 +102,22 @@ define('io.ox/office/preview/controller',
                     }
                 },
 
+                // zoom -------------------------------------------------------
+
                 'zoom/dec': {
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
                     set: function () { view.decreaseZoomLevel(); },
                     shortcut: { charCode: '-' }
                 },
+
                 'zoom/inc': {
                     parent: 'document/valid',
                     enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
                     set: function () { view.increaseZoomLevel(); },
                     shortcut: { charCode: '+' }
                 },
+
                 'zoom/current': {
                     parent: 'document/valid',
                     get: function () {

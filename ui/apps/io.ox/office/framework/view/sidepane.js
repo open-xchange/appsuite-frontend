@@ -37,20 +37,15 @@ define('io.ox/office/framework/view/sidepane',
      *  The application containing this side pane.
      *
      * @param {Object} [options]
-     *  A map of options to control the properties of the side pane. The
+     *  A map of options to control the properties of the side pane. Supports
+     *  all options supported by the base class Pane. The 'options.position'
+     *  option will be restricted to the values 'left' and 'right'. The option
+     *  'options.componentInserter' is not supported anymore. Additionally, the
      *  following options are supported:
-     *  @param {String} [options.position='right']
-     *      The position of the side pane, either 'left' or 'right'.
-     *  @param {Function} [options.insertHandler]
-     *      A function that will be called after this side pane has been
-     *      inserted into the application window. Needed if the geometry of the
-     *      pane DOM node needs to be initialized to perform further
-     *      initialization tasks. Will be called in the context of this side
-     *      pane instance.
      *  @param {Function} [options.refreshHandler]
      *      A function that will be called when the layout of the side pane
      *      needs to be refreshed. Will be called when the application
-     *      controller send 'update' events (the visibility of tool boxes may
+     *      controller sends 'update' events (the visibility of tool boxes may
      *      have changed), after expanding or collapsing a tool box, or when
      *      the size of the browser window has been changed.
      */
@@ -73,12 +68,11 @@ define('io.ox/office/framework/view/sidepane',
 
         // base constructor ---------------------------------------------------
 
-        Pane.call(this, app, {
+        Pane.call(this, app, Utils.extendOptions(options, {
             position: (Utils.getStringOption(options, 'position') === 'left') ? 'left' : 'right',
-            classes: 'side-pane',
             insertHandler: insertHandler,
             componentInserter: toolBoxInserter
-        });
+        }));
 
         // private methods ----------------------------------------------------
 
@@ -195,7 +189,7 @@ define('io.ox/office/framework/view/sidepane',
         // initialization -----------------------------------------------------
 
         // insert the container nodes for fixed and scrollable tool boxes
-        this.getNode().append(fixedTopNode, scrollableNode, fixedBottomNode);
+        this.getNode().addClass('side-pane').append(fixedTopNode, scrollableNode, fixedBottomNode);
 
     } // class SidePane
 
