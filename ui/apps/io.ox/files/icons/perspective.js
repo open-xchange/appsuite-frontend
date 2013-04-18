@@ -592,7 +592,7 @@ define('io.ox/files/icons/perspective',
                                 }
                                 end = end + 1;
                             }
-                            self.selection.addToIndex(data);
+                            self.selection.insertAt([data], self.selection.getIndex(prev) + 1);
                         });
 
                         recalculateLayout();
