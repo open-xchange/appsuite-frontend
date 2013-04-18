@@ -151,7 +151,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 if (resendDeferreds[Number(receipt.data)]) {
                     resendDeferreds[Number(receipt.data)].resolve();
                 } else {
-                    console.error("No deferred for " + receipt.data);
                 }
                 if (api.debug) {
                     console.log("Received receipt for " + receipt.data);
