@@ -156,7 +156,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 if (api.debug) {
                     console.log("Received receipt for " + receipt.data);
                 }
-                //delete resendDeferreds[Number(receipt.data)];
+                delete resendDeferreds[Number(receipt.data)];
             });
 
         } else {
