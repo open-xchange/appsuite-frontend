@@ -52,7 +52,7 @@ define('plugins/portal/flickr/register',
             });
 
             baton.feed.process = function (data) {
-                return data && data.stat === "ok" ? data.photos : {};
+                return data && data.stat === "ok" ? data.photos : {error: gt('Could not load data')};
             };
         },
 
@@ -68,29 +68,34 @@ define('plugins/portal/flickr/register',
 
             // set title
             this.find('h2').text(baton.model.get('props').query || 'Flickr');
-
-            // get a photo
-            if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {
-                // try to pick a random photo
-                photo = photo[Math.min(photo.length - 1, Math.random() * 10 >> 0)];
-            }
-
-            if (photo) {
-                // find proper image size
-                _(sizes).each(function (s) {
-                    if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
-                        if (photo['url_' + s]) {
-                            size = s;
-                            url = photo['url_' + s];
+            
+            if (baton.data.error) {
+                this.append($('<div class="content">').text(baton.data.error));
+            } else {
+    
+                // get a photo
+                if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {
+                    // try to pick a random photo
+                    photo = photo[Math.min(photo.length - 1, Math.random() * 10 >> 0)];
+                }
+    
+                if (photo) {
+                    // find proper image size
+                    _(sizes).each(function (s) {
+                        if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
+                            if (photo['url_' + s]) {
+                                size = s;
+                                url = photo['url_' + s];
+                            }
                         }
-                    }
-                });
-                // use size
-                this.addClass('photo-stream').append(
-                    $('<div class="content pointer">')
-                    .css('backgroundImage', 'url(' + url + ')')
-                    .addClass('decoration')
-                );
+                    });
+                    // use size
+                    this.addClass('photo-stream').append(
+                        $('<div class="content pointer">')
+                        .css('backgroundImage', 'url(' + url + ')')
+                        .addClass('decoration')
+                    );
+                }
             }
         },
 
