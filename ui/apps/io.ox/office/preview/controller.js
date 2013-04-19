@@ -88,7 +88,8 @@ define('io.ox/office/preview/controller',
 
                 'pages/current': {
                     parent: 'document/valid',
-                    get: function () { return view.getPageLabel(); }
+                    get: function () { return view.getPage(); },
+                    set: function (page) { view.showPage(page); }
                 },
 
                 // zoom -------------------------------------------------------
@@ -115,7 +116,7 @@ define('io.ox/office/preview/controller',
 
         // base constructor ---------------------------------------------------
 
-        BaseController.call(this, app);
+        BaseController.call(this, app, { updateDelay: 20, updateMaxDelay: 200 });
 
         // initialization -----------------------------------------------------
 

@@ -13,16 +13,18 @@
 
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/basecontrols',
      'io.ox/office/framework/view/pane',
      'io.ox/office/framework/view/sidepane',
+     'io.ox/office/framework/view/component',
      'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, Label, BaseView, BaseControls, Pane, SidePane, ToolBox, gt) {
+    ], function (Utils, Group, Button, Label, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, gt) {
 
     'use strict';
 
@@ -47,6 +49,49 @@ define('io.ox/office/preview/view',
             PAGE:    { tooltip: gt('Current page and total page count') },
             ZOOM:    { tooltip: gt('Current zoom factor'), width: 65 }
         };
+
+    // class PreviewGroup =====================================================
+
+    var PreviewGroup = Group.extend({ constructor: function (app) {
+
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
+        function createButton(page) {
+
+            var buttonNode = Utils.createButton({ value: page });
+
+            app.getModel().loadPageAsSvg(page).done(function (svgMarkup) {
+                buttonNode[0].innerHTML = svgMarkup;
+                buttonNode.children().width(buttonNode.width()).height(buttonNode.height());
+            });
+
+            return buttonNode;
+        }
+
+        function updateHandler(page) {
+            Utils.selectOptionButton(self.getNode().children(), page);
+        }
+
+        // base constructor ---------------------------------------------------
+
+        Group.call(this, { classes: 'page-preview' });
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateHandler)
+            .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR });
+
+        app.on('docs:import:success', function () {
+            self.getNode().empty();
+            _(app.getModel().getPageCount()).times(function (index) {
+                self.getNode().append(createButton(index + 1));
+            });
+        });
+
+    }}); // class PreviewComponent
 
     // class PreviewView ======================================================
 
@@ -80,9 +125,6 @@ define('io.ox/office/preview/view',
 
             // the application status label
             statusLabel = new BaseControls.StatusLabel(app),
-
-            // container for all preview thumbnails
-            previewNode = $('<div>').addClass('preview'),
 
             // the root node containing the current page contents
             pageNode = $('<div>').addClass('page'),
@@ -118,6 +160,9 @@ define('io.ox/office/preview/view',
                     .addRightTab()
                     .addGroup('app/quit', new Button(GroupOptions.QUIT))
                 )
+                .addViewComponent(new Component(app)
+                    .addGroup('pages/current', new PreviewGroup(app))
+                )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
                     .addGroup('pages/previous', new Button(GroupOptions.PREV))
@@ -128,14 +173,6 @@ define('io.ox/office/preview/view',
                     .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
                 )
             );
-
-            // fill the thumbnail preview container when model has been initialized with page count
-            sidePane.getScrollableNode().append(previewNode);
-            app.on('docs:import:success', function (event) {
-                _(model.getPageCount()).times(function (page) {
-                    previewNode.append($('<div>').addClass('page'));
-                });
-            });
 
             // create the top overlay pane
             self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
@@ -290,7 +327,7 @@ define('io.ox/office/preview/view',
          *  The new zoom level.
          */
         function changeZoom(newZoom) {
-            if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel())) {
+            if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel()) && (zoom !== newZoom)) {
                 zoom = newZoom;
                 updateZoom();
                 showStatusLabel(self.getZoomLabel());
@@ -413,6 +450,20 @@ define('io.ox/office/preview/view',
                 //#, c-format
                 gt('Page %1$s of %2$s', page, model.getPageCount());
             return label;
+        };
+
+        /**
+         * Shows the specified page of the current document.
+         *
+         * @param {Number} newPage
+         *  The one-based index of the page to be shown.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
+        this.showPage = function (newPage) {
+            showPage(newPage, 'top');
+            return this;
         };
 
         /**

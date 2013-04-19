@@ -14,15 +14,21 @@
 .io-ox-office-preview-main {
 
 /* thumbnail preview in the side pane */
-.view-pane.side-pane .preview {
+.view-pane.side-pane .group.page-preview {
     text-align: center;
 
-    .page {
-        display: inline-block;
+    a.button {
+        .box-sizing(content-box);
         width: 80px;
         height: 110px;
         margin: 5px;
-        background: white;
+        background-color: white;
+
+        &.selected {
+            margin: 2px;
+            border: 3px solid @selectedBackground;
+            .border-radius(5px);
+        }
     }
 }
 
