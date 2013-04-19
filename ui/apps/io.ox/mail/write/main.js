@@ -334,7 +334,7 @@ define('io.ox/mail/write/main',
 
         app.setFrom = function (data) {
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX';
-            return accountAPI.getPrimaryAddressFromFolder(folder_id).done(function (from) {
+            return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
                 if (data.from && data.from.length === 2) {
                     // from is already set in the mail, prefer this
                     from = { displayname: data.from[0], primaryaddress: data.from[1] };
