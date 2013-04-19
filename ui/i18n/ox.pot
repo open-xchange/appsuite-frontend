@@ -86,6 +86,83 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/office/preview/view.js:38
+msgid "Close document"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:39
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:40
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:41
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:42
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:43
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:44
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:47
+msgid "Current page and total page count"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Current zoom factor"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:113
+msgid "Hide side panel"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:138
+msgid "Show side panel"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:203 apps/io.ox/office/preview/view.js:260
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:260
+msgid "An error occurred while loading the page."
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the number of mails in use
+#. %2$s is the max number of mails
+#, c-format
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$s is the storagespace in use
+#. %2$s is the max storagespace
+#, c-format
+#: apps/io.ox/office/preview/controller.js:100
+#: apps/plugins/portal/quota/register.js:121
+#: apps/plugins/portal/quota/register.js:128
+msgid "%1$s of %2$s"
+msgstr ""
+
+#. %1$d is the current zoom factor, in percent
+#, c-format
+#: apps/io.ox/office/preview/controller.js:130
+msgid "%1$d%"
+msgstr ""
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -537,24 +614,6 @@ msgstr ""
 msgid "unlimited"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the number of mails in use
-#. %2$s is the max number of mails
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
-#, c-format
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/controller.js:87
-#: apps/plugins/portal/quota/register.js:121
-#: apps/plugins/portal/quota/register.js:128
-msgid "%1$s of %2$s"
-msgstr ""
-
 #: apps/plugins/portal/quota/register.js:146
 #: apps/plugins/portal/quota/register.js:159
 msgid "Quota"
@@ -618,6 +677,7 @@ msgstr ""
 msgid "Remind me again"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Reminder (objective case): in X minutes
@@ -2021,6 +2081,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/pane.js:97
@@ -2030,6 +2091,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -2071,6 +2133,7 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -3723,57 +3786,6 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:79
 msgid "Click to open."
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:88
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:94
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:95
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:96
-msgid "Current page and total page count"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:97
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:98
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:100
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:101
-msgid "Current zoom factor"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:102
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:297
-#: apps/io.ox/office/preview/view.js:203
-msgid "Load Error"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:203
-msgid "An error occurred while loading the page."
-msgstr ""
-
-#. %1$d is the current zoom factor, in percent
-#, c-format
-#: apps/io.ox/office/preview/controller.js:113
-msgid "%1$d%"
 msgstr ""
 
 #: apps/io.ox/office/framework/app/baseapplication.js:268
