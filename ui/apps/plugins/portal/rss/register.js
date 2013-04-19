@@ -57,8 +57,10 @@ define("plugins/portal/rss/register",
             return migrate().pipe(function () {
                 var urls = baton.model.get('props').url || [];
                 return rss.getMany(urls, 'date').done(function (data) {
+                    //limit data manually till api call can be limited
+                    data = data.slice(0, 100);
                     baton.data = { items: data, title: '', link: '' };
-                    // get title & link
+                    // get title & link of the first found feed
                     _(data).find(function (item) {
                         baton.data.title = item.feedTitle || '';
                         baton.data.link = item.feedLink || '';
