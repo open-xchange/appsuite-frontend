@@ -904,9 +904,9 @@ define('io.ox/calendar/week/view',
                         pos = self.calcPos(app.pos),
                         idx = Math.min(app.pos.max, positions.length),
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
-                        height = Math.max(pos.height, self.minCellHeight) - (border ? 0 : 1),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
-                        border = (left > 0 || (left === 0 && width < self.appWidth));
+                        border = (left > 0 || (left === 0 && width < self.appWidth)),
+                        height = Math.max(pos.height, self.minCellHeight - 1);
 
                     app.css({
                         top: pos.top,
@@ -914,7 +914,7 @@ define('io.ox/calendar/week/view',
                         height: height + 'px',
                         lineHeight: Math.min(height, self.cellHeight) + 'px',
                         width: width + '%',
-                        minHeight: self.minCellHeight + 'px',
+                        minHeight: (self.minCellHeight - 1) + 'px',
                         maxWidth: self.appWidth + '%',
                         zIndex: j
                     })
@@ -1416,12 +1416,13 @@ define('io.ox/calendar/week/view',
                 end = new date.Local(ap.end),
                 self = this,
                 calc = function (d) {
-                    return Math.floor((d.getHours() / 24 + d.getMinutes() / 1440) * self.height());
+                    return (d.getHours() / 24 + d.getMinutes() / 1440) * self.height();
                 },
-                s = calc(start);
+                s = calc(start),
+                e = calc(end);
             return {
                 top: s,
-                height: Math.max(calc(end) - s, self.gridHeight())
+                height: Math.max(Math.round(e - s), self.gridHeight()) - 1
             };
         },
 
