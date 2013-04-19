@@ -56,7 +56,7 @@ define("plugins/portal/rss/register",
         load: function (baton) {
             return migrate().pipe(function () {
                 var urls = baton.model.get('props').url || [];
-                return rss.getMany(urls, 'date').done(function (data) {
+                return rss.getMany(urls).done(function (data) {
                     //limit data manually till api call can be limited
                     data = data.slice(0, 100);
                     baton.data = { items: data, title: '', link: '' };

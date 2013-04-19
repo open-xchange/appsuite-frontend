@@ -30,6 +30,7 @@ define("io.ox/rss/api",
             });
         },
         getMany: function (urls, params) {
+            params = params || {};
             var defaults = {
                 sort: 'date',
                 order: 'desc',
@@ -37,7 +38,7 @@ define("io.ox/rss/api",
             };
             return http.PUT({
                 module: "rss",
-                params: $.extend({}, params, defaults),
+                params: $.extend({}, defaults, params),
                 data: {
                     feedUrl: urls
                 }
