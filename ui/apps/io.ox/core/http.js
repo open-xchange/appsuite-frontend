@@ -855,6 +855,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             var name = 'formpost_' + _.now(),
                 callback = 'callback_' + options.action,
+                callback_old = 'callback_' + options.module,
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
@@ -865,10 +866,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             );
 
             window[callback] = function (response) {
+                // skip warnings
+                response.data = _(response.data).map(function (o) {
+                    if (o.category !== 13) {
+                        return o;
+                    }
+                });
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
                 $('#' + name).remove();
             };
+            // fallback for some old modules (e.g. import)
+            window[callback_old] = window[callback];
 
             if (form.find('input[name="' + options.field + '"]').length) {
                 form.find('input[name="' + options.field + '"]').val(data);

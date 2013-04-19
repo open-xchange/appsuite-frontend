@@ -120,7 +120,7 @@ define('io.ox/core/import/import',
         show: function (module, id) {
 
             var id = String(id),
-                dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+                dialog = new dialogs.ModalDialog({ easyOut: true }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}},
                 form;
 
@@ -155,7 +155,7 @@ define('io.ox/core/import/import',
                     }
 
                     api.import_file({
-                        file: baton.nodes.file_upload.find('input[type=file]')[0].files[0],
+                        file: file[0].files ? file[0].files[0] : [],
                         form: form,
                         type: type,
                         folder: id

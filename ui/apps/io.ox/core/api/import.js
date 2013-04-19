@@ -34,7 +34,7 @@ define('io.ox/core/api/import',
                 module: 'import',
                 action: data.type,
                 form: data.form,
-                data: data
+                params: { folder: data.folder }
             });
         }
     }
