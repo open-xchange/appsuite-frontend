@@ -93,11 +93,16 @@ define("plugins/portal/rss/register",
         draw: (function () {
 
             function drawItem(item) {
-                var publishedDate = new date.Local(item.date).format(date.DATE);
+                var publishedDate = new date.Local(item.date).format(date.DATE),
+                    $body = $(item.body);
+
+                //replace img tags with empty src
+                $body.find('img[src=""]').replaceWith(gt('show image'));
+
                 this.append(
                     $('<div class="text">').append(
                         $('<h2>').text(item.subject),
-                        $('<div class="text-body">').html(item.body),
+                        $('<div class="text-body">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(item.feedTitle + ' - ' + publishedDate)
                         )
