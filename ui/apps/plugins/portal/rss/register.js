@@ -11,19 +11,19 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/rss/register",
-    ["io.ox/core/extensions",
-    "io.ox/core/strings",
-    "io.ox/messaging/accounts/api",
-    "io.ox/messaging/services/api",
-    "io.ox/messaging/messages/api",
+define('plugins/portal/rss/register',
+    ['io.ox/core/extensions',
+    'io.ox/core/strings',
+    'io.ox/messaging/accounts/api',
+    'io.ox/messaging/services/api',
+    'io.ox/messaging/messages/api',
     'io.ox/keychain/api',
     'io.ox/rss/api',
     'io.ox/core/date',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
 
-    "use strict";
+    'use strict';
 
     var migrate = function (settings) {
 
@@ -136,7 +136,7 @@ define("plugins/portal/rss/register",
             props = model.get('props') || {},
             that = this;
 
-        dialog.header($("<h4>").text(gt('RSS Feeds')))
+        dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('URL')),
