@@ -230,8 +230,8 @@ define('io.ox/files/actions',
                                 _(list).map(function (file) {
                                     var url = location.protocol + '//' + location.host + ox.root +
                                         '/#app=io.ox/files&perspective=list' +
-                                        '&folder=' +  encodeURIComponent(file.folder_id) +
-                                        '&id=' + encodeURIComponent(file.id);
+                                        '&folder=' + encodeURIComponent(file.folder_id) +
+                                        '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
                                     return $('<p>').append(
                                         $('<div>').text(file.title || file.filename || ''),
