@@ -30,7 +30,7 @@ define("io.ox/rss/api",
             });
         },
         getMany: function (urls, params) {
-            params = params || {};
+            params = params || {};
             var defaults = {
                 sort: 'date',
                 order: 'desc',
