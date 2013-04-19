@@ -150,7 +150,7 @@ define('io.ox/core/pubsub/subscriptions',
                             },
                             silent: true
                         })
-                        .pipe(function (folder) {
+                        .then(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
                             saveModel(true);
                         });
