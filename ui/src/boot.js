@@ -13,7 +13,7 @@
 
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
-    window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
+    window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop, info: $.noop };
 }
 
 // not document.ready casue we wait for CSS to be loaded
