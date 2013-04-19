@@ -1020,8 +1020,13 @@ input[type=search] {
 /* Dialogs */
 .io-ox-dialog-underlay {
     background-color: black;
-    opacity: 0.30;
+    opacity: 0;
     z-index: 65000;
+    .transition(opacity 0.15s linear);
+}
+
+.io-ox-dialog-underlay.in {
+    opacity: 0.30;
 }
 
 .io-ox-dialog-popup {
@@ -1046,6 +1051,16 @@ input[type=search] {
     .modal-body.max-height-250 { max-height: 250px; }
     .modal-body.max-height-300 { max-height: 300px; }
     .modal-body.max-height-350 { max-height: 350px; }
+
+    &.zero-padding {
+        .modal-body {
+            padding: 0;
+            iframe {
+                display: block;
+                .border-radius(5px 5px 0 0);
+            }
+        }
+    }
 
     .content {
         overflow: auto;
@@ -1082,8 +1097,6 @@ input[type=search] {
 .io-ox-dialog-popup.topmost {
     z-index: 65003;
 }
-
-
 
 .io-ox-dialog-pane {
     width: 500px;  /* Shrink to fit would be nicer */

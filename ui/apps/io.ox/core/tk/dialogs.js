@@ -324,7 +324,7 @@ define("io.ox/core/tk/dialogs",
                 });
             }
 
-            nodes.underlay.show();
+            nodes.underlay.show().addClass('in');
             nodes.popup.show();
 
             // focus button (if available)
