@@ -310,7 +310,7 @@ define("io.ox/core/main",
                             }, 1000);
 
                         dialog = new dialogs.ModalDialog()
-                            .header($('<h3>').text(gt('Automatic logout')))
+                            .header($('<h4>').text(gt('Automatic logout')))
                             .append(node)
                             .topmost()
                             .addPrimaryButton('cancel', gt('Cancel'))

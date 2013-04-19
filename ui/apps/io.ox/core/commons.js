@@ -437,6 +437,11 @@ define('io.ox/core/commons',
                 }
             },
 
+            move = function (e, targetFolderId) {
+                if (data) data.folder_id = targetFolderId;
+                update();
+            },
+
             // we use redraw directly if we're in multiple mode
             // each redraw handler must get the data on its own
             redraw = _.debounce(function () {
@@ -459,6 +464,7 @@ define('io.ox/core/commons',
             folderAPI.on('update',  redraw);
             api.on('delete', redraw);
             api.on('update', redraw);
+            // ignore move case for multiple
         } else {
             // single item
             cid = _.cid(data);
@@ -466,6 +472,7 @@ define('io.ox/core/commons',
             folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
+            api.on('move:' + cid, move);
             api.on('create', update);
         }
 
@@ -480,6 +487,7 @@ define('io.ox/core/commons',
                     folderAPI.off('update', checkFolder);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
+                    api.off('move:' + cid, move);
                     api.off('create', update);
                 }
                 api = update = data = node = getter = null;

@@ -566,17 +566,16 @@ define('io.ox/mail/main',
         };
 
         drawThread = function (baton) {
-            viewDetail.drawThread.call(right.idle().empty(), baton.set('options', {
+            viewDetail.drawThread.call(right.idle(), baton.set('options', {
                 failMessage: gt('Couldn\'t load that email.'),
                 retry: drawThread
             }));
         };
 
         drawMail = function (data) {
-            var baton = ext.Baton({ data: data, app: app });
-            right.idle().empty().append(
-                viewDetail.draw(baton)
-            );
+            var baton = ext.Baton({ data: data, app: app }),
+                mail = viewDetail.draw(baton);
+            right.idle().empty().append(mail);
         };
 
         drawFail = function (obj) {

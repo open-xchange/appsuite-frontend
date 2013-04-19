@@ -218,9 +218,13 @@ $(window).load(function () {
                 // show loader
                 $('#background_loader').fadeIn(DURATION, function () {
                     var ref = _.url.hash('ref'),
-                        location = '#?' + enc(_.rot('session=' + ox.session + '&user=' + ox.user +
+                        location = '#?' + enc(_.rot(
+                            'session=' + ox.session +
+                            '&user=' + ox.user +
+                            '&user_id=' + ox.user_id +
+                            '&context_id=' + ox.context_id +
                             '&secretCookie=' + $('#io-ox-login-store-box').prop('checked') +
-                            '&user_id=' + ox.user_id + '&language=' + ox.language + (ref ? '&ref=' + enc(ref) : ''), 1)
+                            '&language=' + ox.language + (ref ? '&ref=' + enc(ref) : ''), 1)
                         );
                     // use redirect servlet for real login request
                     // this even makes chrome and safari asking for storing credentials
@@ -633,7 +637,8 @@ $(window).load(function () {
                             locale: hash.language,
                             session: hash.session,
                             user: hash.user,
-                            user_id: parseInt(hash.user_id || '0', 10)
+                            user_id: parseInt(hash.user_id || '0', 10),
+                            context_id: hash.context_id
                         });
                         // cleanup url
                         _.url.hash({
@@ -641,6 +646,7 @@ $(window).load(function () {
                             session: null,
                             user: null,
                             user_id: null,
+                            context_id: null,
                             secretCookie: null,
                             store: null
                         });

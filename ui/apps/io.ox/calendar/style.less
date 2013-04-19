@@ -229,7 +229,6 @@
         color: #555;
     }
 
-    /* shown_as */
     .shown_as {
 
         &.reserved {
@@ -247,9 +246,7 @@
         &.free {
             background-color: @appointmentFree;
         }
-
     }
-
 }
 
 /* Conflicts */
@@ -397,9 +394,23 @@
     }
 
     .detail.shown_as {
+
         display: inline-block;
         height: 1em;
         width: 1em;
+
+        &.reserved {
+            background-color: @appointmentReserved;
+        }
+        &.temporary {
+            background-color: @appointmentTemporary;
+        }
+        &.absent {
+            background-color: @appointmentAbsent;
+        }
+        &.free {
+            background-color: @appointmentFree;
+        }
     }
 
     .participant {

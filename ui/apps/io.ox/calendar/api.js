@@ -440,6 +440,10 @@ define("io.ox/calendar/api",
                 // clear cache and trigger local refresh
                 all_cache = {};
                 get_cache = {};
+                _(list).each(function (obj) {
+                    var cid = encodeURIComponent(_.cid(obj));
+                    api.trigger('move:' + cid, targetFolderId);
+                });
                 api.trigger('refresh.all');
             });
     };

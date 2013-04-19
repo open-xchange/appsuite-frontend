@@ -139,24 +139,30 @@ define('io.ox/calendar/actions',
                                 }
 
                                 // disable cache with second param
-                                api.get(o, false).done(function (data) {
-                                    if (m.reuse('edit', data, {action: action})) return;
-                                    m.getApp().launch().done(function () {
-                                        if (action === 'appointment') {
-                                            data = api.removeRecurrenceInformation(data);
-                                        }
-                                        this.edit(data, {action: action});
-                                    });
-                                });
+                                api.get(o, false).then(
+                                    function (data) {
+                                        if (m.reuse('edit', data, {action: action})) return;
+                                        m.getApp().launch().done(function () {
+                                            if (action === 'appointment') {
+                                                data = api.removeRecurrenceInformation(data);
+                                            }
+                                            this.edit(data, {action: action});
+                                        });
+                                    },
+                                    notifications.yell
+                                );
                             });
                     });
                 } else {
-                    api.get(o, false).done(function (data) {
-                        if (m.reuse('edit', data)) return;
-                        m.getApp().launch().done(function () {
-                            this.edit(data);
-                        });
-                    });
+                    api.get(o, false).then(
+                        function (data) {
+                            if (m.reuse('edit', data)) return;
+                            m.getApp().launch().done(function () {
+                                this.edit(data);
+                            });
+                        },
+                        notifications.yell
+                    );
                 }
             });
         }
@@ -297,7 +303,7 @@ define('io.ox/calendar/actions',
         return function (list) {
             require(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h3>').text(title))
+                    .header($('<h4>').text(title))
                     .addPrimaryButton('ok', gt('Move'))
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('height', '250px');

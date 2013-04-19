@@ -145,7 +145,7 @@ define('io.ox/contacts/actions',
                         commit(baton.target);
                     } else {
                         var dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h3>').text(label))
+                            .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });

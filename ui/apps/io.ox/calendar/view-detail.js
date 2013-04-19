@@ -21,8 +21,9 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/folder",
      "io.ox/core/tk/attachments",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/calendar",
-     "less!io.ox/calendar/style.less"
+     'gettext!io.ox/calendar',
+     'io.ox/calendar/actions',
+     'less!io.ox/calendar/style.less'
     ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
@@ -108,9 +109,11 @@ define("io.ox/calendar/view-detail",
         index: 300,
         id: "location",
         draw: function (data) {
-            this.append(
-                $("<div>").addClass("location").text(gt.noI18n(data.location || "\u00A0"))
-            );
+            if (data.location) {
+                this.append(
+                    $('<div class="location">').text(gt.noI18n(data.location))
+                );
+            }
         }
     });
 
@@ -367,13 +370,12 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             if (data.folder_id) {
                 this.append(
-                    $("<span>")
-                        .addClass("detail-label")
+                    $('<span class="detail-label">')
                         .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
-                    $("<span>")
-                        .addClass("detail folder")
-                        .text(gt.noI18n(folderAPI.getTextNode(data.folder_id).data)),
-                    $("<br>")
+                    $('<span class="detail folder">')
+                        .attr('data-folder', data.folder_id)
+                        .append(folderAPI.getTextNode(data.folder_id)),
+                    $('<br>')
                 );
             }
         }

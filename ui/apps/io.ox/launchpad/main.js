@@ -160,7 +160,6 @@ define('io.ox/launchpad/main',
         fnUpsell = function (e) {
             e.preventDefault();
             var data = e.data;
-            console.log('trigger', data);
             upsell.trigger({ type: 'app', id: data.id, missing: upsell.missing(data.requires) });
         },
 

@@ -621,7 +621,7 @@ define('io.ox/mail/view-detail',
                             );
                         }
                     }
-                    node.get(0).appendChild(frag);
+                    node.empty().get(0).appendChild(frag);
                     // get nodes
                     nodes = node.find('.mail-detail').not('.thread-inline-actions');
                     // set initial scroll position (37px not to see thread's inline links)
@@ -633,7 +633,7 @@ define('io.ox/mail/view-detail',
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
                     console.error('mail.drawThread', e.message, e);
-                    fail(node, baton);
+                    fail(node.empty(), baton);
                 }
             }
 
@@ -646,7 +646,7 @@ define('io.ox/mail/view-detail',
 
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).then(
-                    function (list) {
+                    function sucess(list) {
 
                         var i, $i, pos, numVisible, top, bottom, defs = [];
 
@@ -678,16 +678,16 @@ define('io.ox/mail/view-detail',
                                     next(node, baton, pos, top, bottom, $.makeArray(arguments));
                                 },
                                 function () {
-                                    fail(node, baton);
+                                    fail(node.empty(), baton);
                                 }
                             );
                         } catch (e) {
                             console.error('mail.drawThread', e.message, e);
-                            fail(node, baton);
+                            fail(node.empty(), baton);
                         }
                     },
-                    function () {
-                        fail(node, baton);
+                    function fail() {
+                        fail(node.empty(), baton);
                     }
                 );
             };
