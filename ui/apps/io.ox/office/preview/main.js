@@ -78,8 +78,6 @@ define('io.ox/office/preview/main',
                 }
             })
             .done(function (data) {
-
-                // show a page of the document
                 jobId = data.JobID;
                 self.getModel().setPageCount(data.PageCount);
                 self.getView().restoreFromSavePoint(point);

@@ -16,12 +16,13 @@ define('io.ox/office/preview/view',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
+     'io.ox/office/framework/view/basecontrols',
      'io.ox/office/framework/view/pane',
      'io.ox/office/framework/view/sidepane',
      'io.ox/office/framework/view/toolbox',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, Label, BaseView, Pane, SidePane, ToolBox, gt) {
+    ], function (Utils, Button, Label, BaseView, BaseControls, Pane, SidePane, ToolBox, gt) {
 
     'use strict';
 
@@ -34,18 +35,18 @@ define('io.ox/office/preview/view',
         // predefined zoom-in factors
         ZOOMIN_FACTORS = [150, 200, 300, 400, 600, 800, 1200, 1600],
 
-        // options for the button elements
-        QUIT_OPTIONS = { icon: 'icon-remove', tooltip: gt('Close document') },
-        FIRST_OPTIONS = { icon: 'docs-first-page', tooltip: gt('Show first page') },
-        PREV_OPTIONS = { icon: 'docs-previous-page', tooltip: gt('Show previous page') },
-        NEXT_OPTIONS = { icon: 'docs-next-page', tooltip: gt('Show next page') },
-        LAST_OPTIONS = { icon: 'docs-last-page', tooltip: gt('Show last page') },
-        ZOOMOUT_OPTIONS = { icon: 'docs-zoom-out', tooltip: gt('Zoom out') },
-        ZOOMIN_OPTIONS = { icon: 'docs-zoom-in',  tooltip: gt('Zoom in') },
-
-        // options for the label elements
-        PAGE_OPTIONS = { tooltip: gt('Current page and total page count') },
-        ZOOM_OPTIONS = { width: 65, tooltip: gt('Current zoom factor') };
+        // options for the button and label elements
+        GroupOptions = {
+            QUIT:    { icon: 'icon-remove',        tooltip: gt('Close document') },
+            FIRST:   { icon: 'docs-first-page',    tooltip: gt('Show first page') },
+            PREV:    { icon: 'docs-previous-page', tooltip: gt('Show previous page') },
+            NEXT:    { icon: 'docs-next-page',     tooltip: gt('Show next page') },
+            LAST:    { icon: 'docs-last-page',     tooltip: gt('Show last page') },
+            ZOOMOUT: { icon: 'docs-zoom-out',      tooltip: gt('Zoom out') },
+            ZOOMIN:  { icon: 'docs-zoom-in',       tooltip: gt('Zoom in') },
+            PAGE:    { tooltip: gt('Current page and total page count') },
+            ZOOM:    { tooltip: gt('Current zoom factor'), width: 65 }
+        };
 
     // class PreviewView ======================================================
 
@@ -76,6 +77,9 @@ define('io.ox/office/preview/view',
 
             // tool pane floating over the bottom of the application pane
             bottomOverlayPane = null,
+
+            // the application status label
+            statusLabel = new BaseControls.StatusLabel(app),
 
             // container for all preview thumbnails
             previewNode = $('<div>').addClass('preview'),
@@ -108,54 +112,57 @@ define('io.ox/office/preview/view',
             self.insertContentNode(pageNode);
 
             // create the side pane
-            sidePane = new SidePane(app, { position: 'right', css: { width: '249px' } })
+            self.addPane(sidePane = new SidePane(app, { position: 'right', css: { width: '249px' } })
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
                     .addRightTab()
-                    .addGroup('app/quit', new Button(QUIT_OPTIONS))
+                    .addGroup('app/quit', new Button(GroupOptions.QUIT))
                 )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
-                    .addGroup('pages/first',    new Button(FIRST_OPTIONS))
-                    .addGroup('pages/previous', new Button(PREV_OPTIONS))
-                    .addGroup('pages/next',     new Button(NEXT_OPTIONS))
-                    .addGroup('pages/last',     new Button(LAST_OPTIONS))
+                    .addGroup('pages/first',    new Button(GroupOptions.FIRST))
+                    .addGroup('pages/previous', new Button(GroupOptions.PREV))
+                    .addGroup('pages/next',     new Button(GroupOptions.NEXT))
+                    .addGroup('pages/last',     new Button(GroupOptions.LAST))
                     .addRightTab()
-                    .addGroup('zoom/dec', new Button(ZOOMOUT_OPTIONS))
-                    .addGroup('zoom/inc', new Button(ZOOMIN_OPTIONS))
-                );
+                    .addGroup('zoom/dec', new Button(GroupOptions.ZOOMOUT))
+                    .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
+                )
+            );
 
             // fill the thumbnail preview container when model has been initialized with page count
             sidePane.getScrollableNode().append(previewNode);
-            app.getModel().on('pagecount', function (event, pageCount) {
-                _(pageCount).times(function (page) {
+            app.on('docs:import:success', function (event) {
+                _(model.getPageCount()).times(function (page) {
                     previewNode.append($('<div>').addClass('page'));
                 });
             });
 
             // create the top overlay pane
-            topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-show-sidepane', tooltip: gt('Show side panel'), value: true }))
                     .addGap()
-                    .addGroup('app/quit', new Button(QUIT_OPTIONS))
-                );
+                    .addGroup('app/quit', new Button(GroupOptions.QUIT))
+                )
+            );
+
+            // create the second overlay pane containing the status label
+            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true })
+                .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+            );
 
             // create the bottom overlay pane
-            bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
-                    .addGroup('pages/first',    new Button(FIRST_OPTIONS))
-                    .addGroup('pages/previous', new Button(PREV_OPTIONS))
-                    .addGroup('pages/current',  new Label(PAGE_OPTIONS))
-                    .addGroup('pages/next',     new Button(NEXT_OPTIONS))
-                    .addGroup('pages/last',     new Button(LAST_OPTIONS))
+                    .addGroup('pages/first',    new Button(GroupOptions.FIRST))
+                    .addGroup('pages/previous', new Button(GroupOptions.PREV))
+                    .addGroup('pages/next',     new Button(GroupOptions.NEXT))
+                    .addGroup('pages/last',     new Button(GroupOptions.LAST))
                     .addGap()
-                    .addGroup('zoom/dec',     new Button(ZOOMOUT_OPTIONS))
-                    .addGroup('zoom/current', new Label(ZOOM_OPTIONS))
-                    .addGroup('zoom/inc',     new Button(ZOOMIN_OPTIONS))
-                );
-
-            // add all panes to the view
-            self.addPane(sidePane).addPane(topOverlayPane).addPane(bottomOverlayPane);
+                    .addGroup('zoom/dec',     new Button(GroupOptions.ZOOMOUT))
+                    .addGroup('zoom/inc',     new Button(GroupOptions.ZOOMIN))
+                )
+            );
 
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);
@@ -202,6 +209,13 @@ define('io.ox/office/preview/view',
                 });
                 break;
             }
+        }
+
+        /**
+         * Shows the status label with the passed caption text.
+         */
+        function showStatusLabel(caption) {
+            statusLabel.update({ caption: caption, type: 'success', fadeOut: true });
         }
 
         /**
@@ -265,7 +279,22 @@ define('io.ox/office/preview/view',
                 if ((pageNode.width() > 0) && (pageNode.height() > 0)) {
                     self.appPaneIdle();
                 }
+                showStatusLabel(self.getPageLabel());
             });
+        }
+
+        /**
+         * Changes the zoom level and refreshes the page view.
+         *
+         * @param {Number} newZoom
+         *  The new zoom level.
+         */
+        function changeZoom(newZoom) {
+            if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel())) {
+                zoom = newZoom;
+                updateZoom();
+                showStatusLabel(self.getZoomLabel());
+            }
         }
 
         /**
@@ -369,6 +398,24 @@ define('io.ox/office/preview/view',
         };
 
         /**
+         * Returns the one-based index of the page currently shown.
+         *
+         * @returns {Number}
+         *  The one-based index of the current page.
+         */
+        this.getPageLabel = function () {
+            // the gettext comments must be located directly before gt(), but
+            // 'return' cannot be the last token in a line
+            // -> use a temporary variable to store the result
+            var label =
+                //#. %1$s is the current page index in office document preview
+                //#. %2$s is the number of pages in office document preview
+                //#, c-format
+                gt('Page %1$s of %2$s', page, model.getPageCount());
+            return label;
+        };
+
+        /**
          * Shows the first page of the current document.
          *
          * @returns {PreviewView}
@@ -456,10 +503,7 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.decreaseZoomLevel = function () {
-            if (zoom > this.getMinZoomLevel()) {
-                zoom -= 1;
-                updateZoom();
-            }
+            changeZoom(zoom - 1);
             return this;
         };
 
@@ -470,10 +514,8 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.increaseZoomLevel = function () {
-            if (zoom < this.getMaxZoomLevel()) {
-                zoom += 1;
-                updateZoom();
-            }
+            changeZoom(zoom + 1);
+            return this;
         };
 
         /**
@@ -484,6 +526,17 @@ define('io.ox/office/preview/view',
          */
         this.getZoomFactor = function () {
             return (zoom === 0) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
+        };
+
+        this.getZoomLabel = function () {
+            // the gettext comments must be located directly before gt(), but
+            // 'return' cannot be the last token in a line
+            // -> use a temporary variable to store the result
+            var label =
+                //#. %1$d is the current zoom factor, in percent
+                //#, c-format
+                gt('Zoom: %1$d%', this.getZoomFactor());
+            return label;
         };
 
         /**

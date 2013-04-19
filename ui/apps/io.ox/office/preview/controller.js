@@ -13,9 +13,8 @@
 
 define('io.ox/office/preview/controller',
     ['io.ox/office/tk/utils',
-     'io.ox/office/framework/app/basecontroller',
-     'gettext!io.ox/office/main'
-    ], function (Utils, BaseController, gt) {
+     'io.ox/office/framework/app/basecontroller'
+    ], function (Utils, BaseController) {
 
     'use strict';
 
@@ -89,17 +88,7 @@ define('io.ox/office/preview/controller',
 
                 'pages/current': {
                     parent: 'document/valid',
-                    get: function () {
-                        // the gettext comments must be located directly before gt(), but
-                        // 'return' cannot be the last token in a line
-                        // -> use a temporary variable to store the result
-                        var label =
-                            //#. %1$s is the current page index in office document preview
-                            //#. %2$s is the number of pages in office document preview
-                            //#, c-format
-                            gt('%1$s of %2$s', view.getPage(), model.getPageCount());
-                        return label;
-                    }
+                    get: function () { return view.getPageLabel(); }
                 },
 
                 // zoom -------------------------------------------------------
@@ -120,16 +109,7 @@ define('io.ox/office/preview/controller',
 
                 'zoom/current': {
                     parent: 'document/valid',
-                    get: function () {
-                        // the gettext comments must be located directly before gt(), but
-                        // 'return' cannot be the last token in a line
-                        // -> use a temporary variable to store the result
-                        var label =
-                            //#. %1$d is the current zoom factor, in percent
-                            //#, c-format
-                            gt('%1$d%', view.getZoomFactor());
-                        return label;
-                    }
+                    get: function () { return view.getZoomLabel(); }
                 }
             };
 
