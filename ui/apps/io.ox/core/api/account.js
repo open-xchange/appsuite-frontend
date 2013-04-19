@@ -504,5 +504,16 @@ define('io.ox/core/api/account',
         });
     };
 
+        // global refresh
+    api.refresh = function () {
+        accountsAllCache.clear().then(function () {
+            api.trigger('refresh.all');
+        });
+    };
+
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
+
     return api;
 });
