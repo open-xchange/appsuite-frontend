@@ -55,7 +55,10 @@ define("io.ox/core/tk/dialogs",
             }, options),
 
             keepFocus = function (e) {
-                if (!nodes.popup.get(0).contains(e.target)) {
+                // we have to consider that two popups might be open
+                // so we cannot just refocus the current popup
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup').length > 0;
+                if (!insidePopup) {
                     e.stopPropagation();
                     nodes.popup.focus();
                 }

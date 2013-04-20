@@ -123,6 +123,7 @@ define('plugins/upsell/simple-wizard/register',
                         opacity: 0,
                         backgroundColor: overlayColor
                     })
+                    .topmost()
                     .on('beforeshow', function () {
                         ox.trigger('upsell:show-simple-wizard:before', this);
                     })
