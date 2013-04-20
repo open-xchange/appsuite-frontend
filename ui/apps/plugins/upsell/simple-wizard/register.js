@@ -24,6 +24,7 @@ define('plugins/upsell/simple-wizard/register',
      * - overlayOpacity
      * - overlayColor
      * - zeroPadding
+     * - width
      * - height
      *
      * URL variables:
@@ -36,15 +37,23 @@ define('plugins/upsell/simple-wizard/register',
      * - $hostname
      */
 
-    var WIDTH = 750,
-        HEIGHT = 390,
-        defaultURL = 'blank.html?user=$user,user_id=$user_id,context_id=$context_id,' +
-            'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session';
+    var instance = null;
 
-    function getURL(options) {
+    var that = {
 
-        var url,
-            hash = {
+        defaultURL: 'blank.html?user=$user,user_id=$user_id,context_id=$context_id,' +
+                    'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session',
+
+        getDimensions: function () {
+            return {
+                width: settings.get('width', 750),
+                height: settings.get('height', 390)
+            };
+        },
+
+        getVariables: function (options) {
+            options = options || {};
+            return {
                 context_id: ox.context_id,
                 hostname: location.hostname,
                 id: options.id || '',
@@ -55,65 +64,93 @@ define('plugins/upsell/simple-wizard/register',
                 user: ox.user,
                 user_id: ox.user_id
             };
+        },
 
-        url = settings.get('url', defaultURL).replace(/\$(\w+)/g, function (all, key) {
-            return key in hash ? encodeURIComponent(hash[key]) : '$' + key;
-        });
-        return url;
-    }
+        getURL: function (options) {
 
-    function showUpgradeDialog(e, options) {
+            var url, hash = that.getVariables(options);
 
-        var zeroPadding = settings.get('zeroPadding', true),
-            width = settings.get('width', WIDTH),
-            height = settings.get('height', HEIGHT),
-            overlayOpacity = settings.get('overlayOpacity', '0.5'),
-            overlayColor = settings.get('overlayColor', '#000');
+            url = settings.get('url', that.defaultURL)
+                .replace(/\$(\w+)/g, function (all, key) {
+                    key = String(key).toLowerCase();
+                    return key in hash ? encodeURIComponent(hash[key]) : '$' + key;
+                });
 
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({ easyOut: false, width: width })
-                .build(function () {
-                    if (zeroPadding) {
-                        this.getPopup().addClass('zero-padding');
-                    }
-                    this.getContentNode()
-                    .busy()
-                    .css({
-                        maxHeight: height + 'px',
-                        overflow: 'hidden'
-                    })
-                    .append(
-                        // add iframe but with blank file (to avoid delay)
-                        $('<iframe src="blank.html" allowtransparency="true" border="0" frameborder="0" framespacing="0">')
+            return url;
+        },
+
+        getIFrame: function () {
+            // add iframe but with blank file (to avoid delay)
+            return $('<iframe src="blank.html" allowtransparency="true" border="0" frameborder="0" framespacing="0">');
+        },
+
+        addControls: function () {
+            this.addButton('cancel', gt('Cancel'));
+        },
+
+        open: function (e, options) {
+
+            if (instance) return;
+
+            var zeroPadding = settings.get('zeroPadding', true),
+                dimensions = that.getDimensions(),
+                overlayOpacity = settings.get('overlayOpacity', '0.5'),
+                overlayColor = settings.get('overlayColor', '#000');
+
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                instance = new dialogs.ModalDialog({ easyOut: false, width: dimensions.width })
+                    .build(function () {
+                        if (zeroPadding) {
+                            this.getPopup().addClass('zero-padding');
+                        }
+                        this.getContentNode()
+                        .busy()
                         .css({
-                            width: '100%',
-                            height: height + 'px'
+                            maxHeight: dimensions.height + 'px',
+                            overflow: 'hidden'
                         })
-                    );
-                    this.addButton('cancel', gt('Cancel'));
-                })
-                .setUnderlayStyle({
-                    opacity: 0,
-                    backgroundColor: overlayColor
-                })
-                .on('show', function () {
-                    ox.off('upsell:requires-upgrade', showUpgradeDialog);
-                    this.setUnderlayStyle({ opacity: overlayOpacity });
-                    var self = this;
-                    setTimeout(function () {
-                        self.getContentNode().idle().find('iframe').attr('src', getURL(options));
-                    }, 250);
-                })
-                .on('close', function () {
-                    ox.on('upsell:requires-upgrade', showUpgradeDialog);
-                })
-                .show();
-        });
-    }
+                        .append(
+                            // add iframe but with blank file (to avoid delay)
+                            that.getIFrame()
+                            .css({
+                                width: '100%',
+                                height: dimensions.height + 'px'
+                            })
+                        );
+                        that.addControls.call(this);
+                    })
+                    .setUnderlayStyle({
+                        opacity: 0,
+                        backgroundColor: overlayColor
+                    })
+                    .on('beforeshow', function () {
+                        ox.trigger('upsell:show-simple-wizard:before', this);
+                    })
+                    .on('show', function () {
+                        ox.off('upsell:requires-upgrade', that.open);
+                        this.setUnderlayStyle({ opacity: overlayOpacity });
+                        var self = this;
+                        setTimeout(function () {
+                            self.getContentNode().idle().find('iframe').attr('src', that.getURL(options));
+                            ox.trigger('upsell:show-simple-wizard', self);
+                        }, 250);
+                    })
+                    .on('close', function () {
+                        ox.on('upsell:requires-upgrade', that.open);
+                        ox.trigger('upsell:close-simple-wizard', this);
+                        instance = null;
+                    });
+                instance.show();
+            });
+        },
+
+        close: function () {
+            if (instance) instance.close();
+        }
+    };
 
     // register for event
-    ox.on('upsell:requires-upgrade', showUpgradeDialog);
-
+    ox.on('upsell:requires-upgrade', that.open);
     // upsell.demo(true); // useful during development
-
+    return that;
 });

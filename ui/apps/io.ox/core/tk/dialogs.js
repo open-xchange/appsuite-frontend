@@ -324,6 +324,8 @@ define("io.ox/core/tk/dialogs",
                 });
             }
 
+            this.trigger('beforeshow');
+
             nodes.underlay.show().addClass('in');
             nodes.popup.show();
 
