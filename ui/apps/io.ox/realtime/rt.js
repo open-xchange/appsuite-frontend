@@ -40,6 +40,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var request = null;
     var resendBuffer = {};
     var resendDeferreds = {};
+    var serverSequenceThreshhold = 0;
 
     Event.extend(api);
 
@@ -100,6 +101,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.element = json.element;
         this.payloads = json.payloads || [];
         this.tracer = json.tracer;
+        this.seq = _.isNull(json.seq) ? -1 : Number(json.seq);
         this.log = json.log;
 
         this.get = function (namespace, element) {
@@ -111,6 +113,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             getAll(collector, json, namespace, element);
             return collector;
         };
+
 
     }
 
@@ -159,8 +162,19 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             });
 
         } else {
-            api.trigger("receive", stanza);
-            api.trigger("receive:" + stanza.selector, stanza);
+            if (stanza.seq > -1) {
+                if (api.debug) {
+                    console.log("Sending receipt " + stanza.seq);
+                }
+                subSocket.push("{type: 'ack', seq: " + stanza.seq + "}");
+            }
+            if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
+                api.trigger("receive", stanza);
+                api.trigger("receive:" + stanza.selector, stanza);
+                if (stanza.seq !== -1) {
+                    serverSequenceThreshhold = stanza.seq;
+                }
+            }
         }
     }
 
