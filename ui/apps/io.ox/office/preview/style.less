@@ -11,6 +11,19 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
+/* ========================================================================= */
+/* generic mix-in classes                                                    */
+/* ========================================================================= */
+
+.opacity(@opacity) {
+    opacity: @opacity / 100;
+    filter: ~"alpha(opacity=@{opacity})";
+}
+
+/* ========================================================================= */
+/* OX Preview                                                                */
+/* ========================================================================= */
+
 .io-ox-office-preview-main {
 
 /* thumbnail preview in the side pane */
@@ -18,16 +31,31 @@
     text-align: center;
 
     a.button {
-        .box-sizing(content-box);
-        width: 80px;
-        height: 110px;
-        margin: 5px;
-        background-color: white;
+        width: 100px;
+        height: 120px;
+        padding: 3px;
+        border: 3px solid transparent;
+        .border-radius(5px);
+        color: white;
+        text-align: center;
 
         &.selected {
-            margin: 2px;
-            border: 3px solid @selectedBackground;
-            .border-radius(5px);
+            border-color: @selectedBackground;
+        }
+
+        > .page {
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            width: 60px;
+            height: 90px;
+        }
+
+        > .caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
     }
 }
@@ -39,6 +67,11 @@
 
     &, &:focus, &:active {
         outline: none;
+    }
+
+    &.busy {
+        .opacity(50);
+        .transition(opacity 0.5s linear 0.5s);
     }
 }
 

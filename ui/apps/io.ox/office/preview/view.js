@@ -83,8 +83,8 @@ define('io.ox/office/preview/view',
             return ((size.width > 0) && (size.height > 0)) ? size : $.Deferred().reject();
         }
 
-        // set transparence to container node while loading next page
-        node = $(node).css('opacity', 0.5);
+        // set transparency to container node while loading next page
+        node = $(node).addClass('busy');
 
         if (_.browser.Chrome) {
             // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
@@ -103,7 +103,7 @@ define('io.ox/office/preview/view',
         }
 
         // restore opacity after loading, clear node on error
-        return def.always(function () { node.css('opacity', ''); }).fail(function () { node.empty(); }).promise();
+        return def.always(function () { node.removeClass('busy'); }).fail(function () { node.empty(); }).promise();
     }
 
     // class PreviewGroup =====================================================
@@ -117,14 +117,15 @@ define('io.ox/office/preview/view',
 
         function createButton(page) {
 
-            var buttonNode = Utils.createButton({ value: page });
+            var pageNode = $('<div>').addClass('page'),
+                buttonNode = Utils.createButton({ value: page, label: String(page) });
 
             // insert the button node into the DOM before loading the image
-            self.getNode().append(buttonNode);
+            self.getNode().append(buttonNode.append(pageNode));
 
             // load the image and insert it into the button node
-            loadPageIntoNode(buttonNode, app.getModel(), page).done(function (size) {
-                buttonNode.children().width(buttonNode.width()).height(buttonNode.height());
+            loadPageIntoNode(pageNode, app.getModel(), page).done(function (size) {
+                pageNode.width(70).height(90);
             });
         }
 
@@ -329,7 +330,10 @@ define('io.ox/office/preview/view',
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
                 return;
             }
+
+            // store new page index and show overlay status label
             page = newPage;
+            showStatusLabel(self.getPageLabel());
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
@@ -353,7 +357,6 @@ define('io.ox/office/preview/view',
             .always(function () {
                 self.appPaneIdle();
                 app.getController().update();
-                showStatusLabel(self.getPageLabel());
             });
         }
 
