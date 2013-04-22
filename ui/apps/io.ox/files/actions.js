@@ -296,7 +296,7 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name">');
+                var $input = $('<input type="text" name="name" class="span12">');
                 var dialog = null;
 
                 function fnRename() {
@@ -315,8 +315,10 @@ define('io.ox/files/actions',
 
                 $input.val(baton.data.title || baton.data.filename);
                 var $form = $('<form>').append(
-                    $('<label for="name">').append($('<b>').text(gt('Name'))),
-                    $input
+                    $('<div class="row-fluid">').append(
+                        $('<label for="name">').append($('<b>').text(gt('Name'))),
+                        $input
+                    )
                 );
 
                 $form.on('submit', function (e) {
