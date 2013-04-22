@@ -66,15 +66,18 @@ define('plugins/upsell/simple-wizard/register',
             };
         },
 
+        getURLTemplate: function () {
+            return settings.get('url', that.defaultURL);
+        },
+
         getURL: function (options) {
 
             var url, hash = that.getVariables(options);
 
-            url = settings.get('url', that.defaultURL)
-                .replace(/\$(\w+)/g, function (all, key) {
-                    key = String(key).toLowerCase();
-                    return key in hash ? encodeURIComponent(hash[key]) : '$' + key;
-                });
+            url = String(that.getURLTemplate()).replace(/\$(\w+)/g, function (all, key) {
+                key = String(key).toLowerCase();
+                return key in hash ? encodeURIComponent(hash[key]) : '$' + key;
+            });
 
             return url;
         },
@@ -125,7 +128,7 @@ define('plugins/upsell/simple-wizard/register',
                     })
                     .topmost()
                     .on('beforeshow', function () {
-                        ox.trigger('upsell:show-simple-wizard:before', this);
+                        ox.trigger('upsell:simple-wizard:show:before', this);
                     })
                     .on('show', function () {
                         ox.off('upsell:requires-upgrade', that.open);
@@ -133,12 +136,12 @@ define('plugins/upsell/simple-wizard/register',
                         var self = this;
                         setTimeout(function () {
                             self.getContentNode().idle().find('iframe').attr('src', that.getURL(options));
-                            ox.trigger('upsell:show-simple-wizard', self);
+                            ox.trigger('upsell:simple-wizard:show', self);
                         }, 250);
                     })
                     .on('close', function () {
                         ox.on('upsell:requires-upgrade', that.open);
-                        ox.trigger('upsell:close-simple-wizard', this);
+                        ox.trigger('upsell:simple-wizard:close', this);
                         instance = null;
                     });
                 instance.show();
