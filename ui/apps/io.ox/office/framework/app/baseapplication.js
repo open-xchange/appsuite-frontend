@@ -679,9 +679,9 @@ define('io.ox/office/framework/app/baseapplication',
         /**
          * Registers a quit handler function that will be executed before the
          * application will be destroyed. This may happen if the application
-         * has been closed normally, if the user logs out from the entire app
-         * suite, or before the browser window or browser tab will be closed or
-         * refreshed. If the quit handlers return a Deferred object, closing
+         * has been closed normally, if the user logs out from the entire
+         * AppSuite, or before the browser window or browser tab will be closed
+         * or refreshed. If the quit handlers return a Deferred object, closing
          * the application, and logging out will be deferred until the Deferred
          * objects have been resolved or rejected.
          *
@@ -752,7 +752,7 @@ define('io.ox/office/framework/app/baseapplication',
 
         /**
          * Executes all registered quit handlers and returns a Deferred object
-         * that will be resolved or rejected according to the rasults of the
+         * that will be resolved or rejected according to the results of the
          * handlers.
          *
          * @internal
