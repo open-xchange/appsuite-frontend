@@ -441,8 +441,8 @@ define("io.ox/calendar/util",
                 .replace(/</g, "&lt;")
                 .replace(/(https?\:\/\/\S+)/g, function ($1) {
                     // soft-break long words (like long URLs)
-                    $1 = $1.replace(/(\S{20})/g, '$1\u200B');
-                    return '<a href="' + $1 + '" target="_blank">' + $1 + '</a>';
+                    var text = $1.replace(/(\S{20})/g, '$1\u200B');
+                    return '<a href="' + $1 + '" target="_blank">' + text + '</a>';
                 });
         },
 
