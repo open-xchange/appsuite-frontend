@@ -94,7 +94,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             if (heartbeat) {
                 this.leave();
             }
-            rt.off("receive:" + id);
+            rt.off("receive:" + selector);
             delete groups[id];
         };
 
