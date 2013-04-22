@@ -1,3 +1,5 @@
+#!BuildIgnore: post-build-checks
+
 Name:           open-xchange-appsuite
 Version:        7.2.0
 %define         ox_release 0
