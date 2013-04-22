@@ -50,6 +50,62 @@ define('io.ox/office/preview/view',
             ZOOM:    { tooltip: gt('Current zoom factor'), width: 65 }
         };
 
+    // private global functions ===============================================
+
+    /**
+     * Loads the specified page into the passed DOM node, after clearing all
+     * its old contents. Loads either SVG mark-up as text and inserts it into
+     * the passed DOM node, or an <img> element linking to an SVG file on the
+     * server, depending on the current browser.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The target node that will contain the loaded page.
+     *
+     * @param {PreviewModel} model
+     *  The model that actually loads the page from the server.
+     *
+     * @param {Number} page
+     *  The one-based page index.
+     *
+     * @returns {jQuery.Promise}
+     *  The Promise of a Deferred object waiting for the image data. Will be
+     *  resolved with the original size of the page (as object with the
+     *  properties 'width' and 'height', in pixels).
+     */
+    function loadPageIntoNode(node, model, page) {
+
+        var // the Deferred object waiting for the image
+            def = null;
+
+        function resolveSize(childNode) {
+            var size = { width: childNode.width(), height: childNode.height() };
+            Utils.log('page=' + page + ' size=' + JSON.stringify(size));
+            return ((size.width > 0) && (size.height > 0)) ? size : $.Deferred().reject();
+        }
+
+        // set transparence to container node while loading next page
+        node = $(node).css('opacity', 0.5);
+
+        if (_.browser.Chrome) {
+            // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
+            def = model.loadPageAsSvg(page).then(function (svgMarkup) {
+                node[0].innerHTML = svgMarkup;
+                // resolve with original image size
+                return resolveSize(node.children().first());
+            });
+        } else {
+            // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
+            def = model.loadPageAsImage(page).then(function (imgNode) {
+                node.empty().append(imgNode.css({ maxWidth: '', width: '', height: '' }));
+                // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
+                return resolveSize(imgNode);
+            });
+        }
+
+        // restore opacity after loading, clear node on error
+        return def.always(function () { node.css('opacity', ''); }).fail(function () { node.empty(); }).promise();
+    }
+
     // class PreviewGroup =====================================================
 
     var PreviewGroup = Group.extend({ constructor: function (app) {
@@ -63,12 +119,13 @@ define('io.ox/office/preview/view',
 
             var buttonNode = Utils.createButton({ value: page });
 
-            app.getModel().loadPageAsSvg(page).done(function (svgMarkup) {
-                buttonNode[0].innerHTML = svgMarkup;
+            // insert the button node into the DOM before loading the image
+            self.getNode().append(buttonNode);
+
+            // load the image and insert it into the button node
+            loadPageIntoNode(buttonNode, app.getModel(), page).done(function (size) {
                 buttonNode.children().width(buttonNode.width()).height(buttonNode.height());
             });
-
-            return buttonNode;
         }
 
         function updateHandler(page) {
@@ -86,9 +143,7 @@ define('io.ox/office/preview/view',
 
         app.on('docs:import:success', function () {
             self.getNode().empty();
-            _(app.getModel().getPageCount()).times(function (index) {
-                self.getNode().append(createButton(index + 1));
-            });
+            _(app.getModel().getPageCount()).times(function (index) { createButton(index + 1); });
         });
 
     }}); // class PreviewComponent
@@ -270,9 +325,6 @@ define('io.ox/office/preview/view',
          */
         function showPage(newPage, scrollTo) {
 
-            var // the Deferred object waiting for the page contents
-                def = null;
-
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
                 return;
@@ -281,36 +333,26 @@ define('io.ox/office/preview/view',
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
-            pageNode.empty();
 
-            // load the requested page
-            if (_.browser.Chrome) {
-                // as SVG mark-up (Chrome does not show images in linked SVG)
-                def = model.loadPageAsSvg(page).done(function (svgMarkup) {
-                    pageNode[0].innerHTML = svgMarkup;
-                });
-            } else {
-                // preferred: as an image element linking to the SVG file
-                def = model.loadPageAsImage(page).done(function (imgNode) {
-                    pageNode.append(imgNode.css({ maxWidth: '', width: '', height: '' }));
-                    imgNode.data({ width: imgNode.width(), height: imgNode.height() });
-                });
-            }
-
-            // post-processing
-            def.done(function () {
+            // load the requested page, post-processing
+            loadPageIntoNode(pageNode, model, page)
+            .done(function (size) {
+                // store original image size in page node (used in updateZoom() method)
+                pageNode.data('size', size);
                 updateZoom(scrollTo);
             })
             .fail(function () {
-                pageNode.empty();
-                self.showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
+                self.showError(
+                    gt('Load Error'),
+                    //#. %1$d is the current page number
+                    //#, c-format
+                    gt('An error occurred while loading page %1$d.', page),
+                    { closeable: true }
+                );
             })
             .always(function () {
+                self.appPaneIdle();
                 app.getController().update();
-                // do not hide the busy animation if page has not been loaded correctly
-                if ((pageNode.width() > 0) && (pageNode.height() > 0)) {
-                    self.appPaneIdle();
-                }
                 showStatusLabel(self.getPageLabel());
             });
         }
@@ -343,6 +385,8 @@ define('io.ox/office/preview/view',
 
             var // the current zoom factor
                 factor = self.getZoomFactor() / 100,
+                // the original size of the page
+                originalSize = pageNode.data('size'),
                 // the child node of the page representing the SVG contents
                 childNode = pageNode.children().first(),
                 // the vertical/horizontal margin to adjust scroll size
@@ -351,16 +395,12 @@ define('io.ox/office/preview/view',
                 appPaneNode = self.getAppPaneNode();
 
             if (childNode.is('img')) {
-                childNode.css({
-                    width: childNode.data('width') * factor,
-                    height: childNode.data('height') * factor
-                });
+                childNode.width(originalSize.width * factor).height(originalSize.height * factor);
             } else if (childNode.length > 0) {
 
-                // the vertical margin to adjust scroll size
-                vMargin = childNode.height() * (factor - 1) / 2;
-                // the horizontal margin to adjust scroll size
-                hMargin = childNode.width() * (factor - 1) / 2;
+                // the horizontal and vertical margins to adjust scroll size
+                hMargin = originalSize.width * (factor - 1) / 2;
+                vMargin = originalSize.height * (factor - 1) / 2;
 
                 // CSS 'zoom' not supported in all browsers, need to transform with
                 // scale(). But: transformations do not modify the element size, so
@@ -371,7 +411,7 @@ define('io.ox/office/preview/view',
                 // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
                 // if browser zoom is not 100%) regardless of existing SVG, must
                 // set its size explicitly to see anything...
-                pageNode.width(childNode.width() * factor).height(childNode.height() * factor);
+                pageNode.width(originalSize.width * factor).height(originalSize.height * factor);
             }
 
             // refresh view (scroll bars may have appeared or vanished)
@@ -604,7 +644,7 @@ define('io.ox/office/preview/view',
          */
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
-            showPage(Utils.getIntegerOption(point, 'page', 1, 1, app.getModel().getPageCount()), 'top');
+            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
         };
 
     } // class PreviewView
