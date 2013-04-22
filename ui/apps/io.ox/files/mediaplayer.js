@@ -210,17 +210,19 @@ define('io.ox/files/mediaplayer',
                     }
                 ],
                 success: function (me, domObject) {
-                    self.mediaelement = me;
-                    me.addEventListener('ended', function () {
-                        self.select('next');
+                    if (!_.browser.Firefox) {
+                        self.mediaelement = me;
+                        me.addEventListener('ended', function () {
+                            self.select('next');
 
-                    }, false);
+                        }, false);
 
-                    me.addEventListener('canplay', function () {
-                        // Player is ready
+                        me.addEventListener('canplay', function () {
+                            // Player is ready
+                            me.play();
+                        }, false);
                         me.play();
-                    }, false);
-                    me.play();
+                    }
                 }
             });
             this.mediaelement = player[0].player;
