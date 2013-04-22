@@ -32,6 +32,14 @@ define('io.ox/office/framework/view/baseview',
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
      *
+     * Triggers the following events:
+     * - 'refreshlayout': After this view instance has refreshed the layout of
+     *      all registered view panes. This event will be triggered after
+     *      inserting new view panes into this view, or content nodes into the
+     *      application pane, after showing/hiding view panes, while and after
+     *      the browser window is resized, and when the method
+     *      BaseView.refreshPaneLayout() has been called manually.
+     *
      * @constructor
      *
      * @extends Events
@@ -184,6 +192,9 @@ define('io.ox/office/framework/view/baseview',
 
             // update overlay view panes
             _(overlayPanes).each(updatePane);
+
+            // notify listeners
+            self.trigger('refreshlayout');
         }
 
         /**

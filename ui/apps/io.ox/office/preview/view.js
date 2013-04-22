@@ -348,9 +348,9 @@ define('io.ox/office/preview/view',
             .fail(function () {
                 self.showError(
                     gt('Load Error'),
-                    //#. %1$d is the current page number
+                    //#. %1$d is the current page number that caused the error
                     //#, c-format
-                    gt('An error occurred while loading page %1$d.', page),
+                    gt('An error occurred while loading page %1$d.', newPage),
                     { closeable: true }
                 );
             })

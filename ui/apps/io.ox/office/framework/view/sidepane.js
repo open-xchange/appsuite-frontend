@@ -101,10 +101,10 @@ define('io.ox/office/framework/view/sidepane',
             // call insert handler passed to constructor
             Utils.getFunctionOption(options, 'insertHandler', $.noop).call(self);
 
-            // update side pane after controller updates (tool box visibility may have
-            // changed), and after the size of the browser window has been changed
+            // update side pane after controller updates (tool box visibility
+            // may have changed), and after the view has refreshed the panes
             app.getController().on('update', refreshLayout);
-            app.registerWindowResizeHandler(refreshLayout);
+            app.getView().on('refreshlayout', refreshLayout);
         }
 
         /**
