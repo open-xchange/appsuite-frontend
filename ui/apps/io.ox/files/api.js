@@ -516,6 +516,35 @@ define('io.ox/files/api',
         return copymove(list, 'copy', targetFolderId);
     };
 
+    api.checkMediaFile = function (type, filename) {
+        var pattern;
+        if (type === 'video') {
+            if (!Modernizr.video) { return false; }
+            // Disabled for Safari
+            // Not sure yet why it doesn't play any video files, this should be temporary
+            // Direct links to Files that are normally supported also don't work
+            if (_.browser.Safari) { return false; }
+            pattern =                             '\\.(mp4|m4v|mov|wmv|mpe?g|ogv|webm|3gp)';
+            if (_.browser.Chrome) {     pattern = '\\.(mp4|m4v|wmv|mpe?g|ogv|webm)'; }
+            if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
+            if (_.browser.IE) {         pattern = '\\.(mp4|m4v|wmv|mpe?g)'; }
+            if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+        } else {
+            if (!Modernizr.audio) { return false; }
+            pattern =                             '\\.(mp3|m4a|m4b|wma|wav|ogg)';
+            if (_.browser.Safari) {     pattern = '\\.(mp3|m4a|m4b|wav)'; }
+            if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
+            if (_.browser.Firefox) {
+                // Match Round Brackets () and return false due to a Flashplugin Bug in MediaElement.js
+                // Reported issue here: https://github.com/johndyer/mediaelement/issues/846
+                if ((new RegExp('((.*)\\((.*)|(.*)\\)(.*))', 'i')).test(filename)) {
+                    return false;
+                }
+            }
+        }
+        return (new RegExp(pattern, 'i')).test(filename);
+    };
+
     return api;
 
 });

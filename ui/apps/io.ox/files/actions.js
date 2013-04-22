@@ -73,7 +73,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkAudio(e);
+            return e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -88,7 +88,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkVideo(e);
+            return e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -798,30 +798,19 @@ define('io.ox/files/actions',
         }
     });
 
-    function checkAudio(e) {
+    function checkMedia(e, type) {
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
         }
-        return settings.get('audioEnabled') && _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename);
-            }, false);
-    }
-
-    function checkVideo(e) {
-        if (_.isUndefined(e.baton.allIds)) {
-            e.baton.allIds = e.baton.data;
-        }
-        var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
-        if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
-        if (_.browser.IE) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|webm)'; }
-        if (_.browser.Firefox) { pattern = '\\.(m4v|avi|wmv|mpe?g|webm)'; }
-        return settings.get('videoEnabled') && _(e.baton.allIds).reduce(function (memo, obj) {
-            return memo || (new RegExp(pattern, 'i')).test(obj.filename);
+        return settings.get(type + 'Enabled') && _(e.baton.allIds).reduce(function (memo, obj) {
+            return memo || api.checkMediaFile(type, obj.filename);
         }, false);
     }
 
     new Action('io.ox/files/icons/audioplayer', {
-        requires: checkAudio,
+        requires: function (e) {
+            return checkMedia(e, 'audio');
+        },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
@@ -833,7 +822,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/icons/videoplayer', {
-        requires: checkVideo,
+        requires: function (e) {
+            return checkMedia(e, 'video');
+        },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({

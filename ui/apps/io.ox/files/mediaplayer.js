@@ -68,8 +68,8 @@ define('io.ox/files/mediaplayer',
 
         resetPlayer: function (url, mimetype) {
             if (this.mediaelement) {
-                this.mediaelement.pause();
-                this.mediaelement.setSrc('');
+                if (!_.browser.IE) { this.mediaelement.pause(); }
+                if (_.browser.Chrome) { this.mediaelement.setSrc(''); }
                 $(this.mediaelement).remove();
             }
             this.drawPlayer(url, mimetype);
@@ -113,17 +113,8 @@ define('io.ox/files/mediaplayer',
         },
 
         filterMediaList: function (list, videoSupport) {
-            var pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-
-            if (_.browser.Chrome) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)'; }
-            if (_.browser.IE) { pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|webm)'; }
-
             return $.grep(list, function (o) {
-                if (videoSupport) {
-                    return (new RegExp(pattern, 'i')).test(o.filename);
-                } else {
-                    return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
-                }
+                return api.checkMediaFile((videoSupport ? 'video' : 'audio'), o.filename);
             });
         },
 
@@ -160,17 +151,22 @@ define('io.ox/files/mediaplayer',
 
         drawPlayer: function (url, mimetype) {
             var el = '<audio>',
+            // Flash support is pretty bad for video so we only use it for audio
+            plugins = ['flash'],
             self = this;
-            if (this.config.videoSupport) el = '<video>';
+            if (this.config.videoSupport) {
+                el = '<video>';
+                plugins = false;
+            }
             this.player.empty().append(
-                $(el, { src: url, type: mimetype, preload: 'none', controls: 'control', autoplay: 'true' })
+                $(el).attr({ src: url, type: mimetype, preload: 'none', controls: 'controls', autoplay: 'true' })
             );
             this.player.find('video, audio').parent().addClass('noI18n');
-            this.player.find('video, audio').mediaelementplayer({
+            var player = this.player.find('video, audio').mediaelementplayer({
                 // since we cannot resize later on ...
                 audioWidth: $(window).width() <= 400 ? 294 : 480,
                 videoWidth: $(window).width() <= 400 ? 294 : 480,
-                plugins: ['flash', 'silverlight'],
+                plugins: plugins,
                 enableAutosize: false,
                 timerRate: 250,
                 features: this.features,
@@ -213,7 +209,6 @@ define('io.ox/files/mediaplayer',
                         }
                     }
                 ],
-
                 success: function (me, domObject) {
                     self.mediaelement = me;
                     me.addEventListener('ended', function () {
@@ -225,10 +220,10 @@ define('io.ox/files/mediaplayer',
                         // Player is ready
                         me.play();
                     }, false);
-                },
-                error: function () {
+                    me.play();
                 }
             });
+            this.mediaelement = player[0].player;
         },
 
         drawItem: function (file, i) {
@@ -317,7 +312,7 @@ define('io.ox/files/mediaplayer',
             if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
                 if (this.mediaelement) {
                     this.mediaelement.pause();
-                    this.mediaelement.setSrc('');
+                    if (_.browser.Chrome) { this.mediaelement.setSrc(''); }
                     $(this.mediaelement).remove();
                 }
                 this.container.remove();

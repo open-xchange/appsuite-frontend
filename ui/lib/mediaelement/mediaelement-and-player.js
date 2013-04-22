@@ -519,12 +519,7 @@ mejs.PluginMediaElement.prototype = {
 			if (this.pluginType == 'youtube') {
 				this.pluginApi.pauseVideo();
 			} else {
-				try {
-					this.pluginApi.pauseMedia();
-				} catch (e) {
-					// do nothing
-					// fix for Firefox
-				}
+				this.pluginApi.pauseMedia();
 			}
 
 
