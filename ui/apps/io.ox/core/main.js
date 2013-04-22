@@ -189,7 +189,7 @@ define("io.ox/core/main",
         function off() {
             if (count === 0 && timer === null) {
                 if (useSpinner) {
-                    $('#io-ox-refresh-icon').find('i').addClass('icon-spin-paused');
+                    $('#io-ox-refresh-icon').find('i').addClass('icon-spin-paused').removeClass('icon-spin');
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
