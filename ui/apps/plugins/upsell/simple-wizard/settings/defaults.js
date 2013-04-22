@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/upsell/simple-wizard/defaults', function () {
+define('plugins/upsell/simple-wizard/settings/defaults', function () {
 
     'use strict';
 
