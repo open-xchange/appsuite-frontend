@@ -2111,7 +2111,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:127
 #: apps/io.ox/calendar/week/perspective.js:113
 msgid "Series"
-msgstr "Serien"
+msgstr "Serie"
 
 #: apps/io.ox/calendar/actions.js:128
 #: apps/io.ox/calendar/week/perspective.js:114
