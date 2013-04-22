@@ -617,6 +617,10 @@ $(window).load(function () {
             // got session via hash?
             if (_.url.hash('session')) {
 
+                // set session; session.store() might need it now (formlogin)
+                var hash = _.url.hash();
+                ox.session = hash.session;
+
                 // set store cookie?
                 (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
 
@@ -626,9 +630,7 @@ $(window).load(function () {
 
                     configCache = new cache.SimpleCache('manifests', true);
 
-                    // fetch user config (need session now)
-                    var hash = _.url.hash();
-                    ox.session = hash.session;
+                    // fetch user config
                     ox.secretCookie = _.url.hash('secretCookie') === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
