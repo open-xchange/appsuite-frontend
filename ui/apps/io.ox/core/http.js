@@ -385,7 +385,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         }
     };
 
-    // get all columns of a module
+    /**
+     * get all columns of a module
+     * @param  {string} module (name)
+     * @param  {boolean} join  (join array with comma separator)
+     * @return {arrray|string} ids
+     */
     var getAllColumns = function (module, join) {
         // get ids
         var ids = idMapping[module] || {};
@@ -908,8 +913,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         /**
          * Returns the column mapping of a module
          * @param {string} module The module name.
-         * @returns { column: fieldName } A map from numeric column IDs to
-         * the corresponding field names.
+         * @returns {object} A map from numeric column IDs to the corresponding field names.
          */
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
@@ -926,6 +930,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Simplify objects in array for list requests
+         * @param  {array} list
+         * @returns {array} list
          */
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
@@ -950,6 +956,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Fixes order of list requests (temp. fixes backend bug)
+         * @param  {array} ids
+         * @param  {deferred} deferred
+         * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
 
@@ -1057,6 +1066,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             return def;
         },
 
+        /**
+         * returns failed calls
+         * @return {backbone.collection}
+         */
         log: function () {
             return log.collection;
         }
