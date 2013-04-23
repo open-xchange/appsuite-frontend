@@ -1042,7 +1042,15 @@ define('io.ox/mail/write/main',
                 });
 
             _.defer(initAutoSaveAsDraft, this);
-            return def;
+            return def.done(function (result) {
+                var base = _(result.data.split(mailAPI.separator)),
+                    id = base.last(),
+                    folder = base.without(id).join(mailAPI.separator);
+                mailAPI.get({ folder_id: folder, id: id }).then(function (mail) {
+                    view.form.find('.section-item.file').remove();
+                    app.setMail({ data: mail, mode: 'compose', initial: false });
+                });
+            });
         };
 
         /**
