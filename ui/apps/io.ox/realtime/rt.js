@@ -103,6 +103,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.payloads = json.payloads || [];
         this.tracer = json.tracer;
         this.seq = _.isNull(json.seq) ? -1 : Number(json.seq);
+        this.tracer = json.tracer;
         this.log = json.log;
 
         this.get = function (namespace, element) {
