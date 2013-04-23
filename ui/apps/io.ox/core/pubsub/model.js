@@ -21,6 +21,23 @@ define('io.ox/core/pubsub/model',
 
     'use strict';
 
+    function createSyncer(api) {
+        return {
+            create: function (model) {
+                return api.create(model.attributes);
+            },
+            read: function (model) {
+                return api.get({id: model.id, folder: model.get('folder')});
+            },
+            update: function (model) {
+                return api.update(model.attributes);
+            },
+            destroy: function (model) {
+                return api.destroy(model.id);
+            }
+        };
+    }
+
     var Publication = BasicModel.extend({
             ref: 'io.ox/core/pubsub/publication/',
             defaults: {
@@ -31,20 +48,7 @@ define('io.ox/core/pubsub/model',
             url: function () {
                 return this.attributes[this.attributes.target].url;
             },
-            syncer: {
-                create: function (model) {
-                    return api.publications.create(model.attributes);
-                },
-                read: function (model) {
-                    return api.publications.get({id: model.id});
-                },
-                update: function (model) {
-                    return api.publications.update(model.attributes);
-                },
-                destroy: function (model) {
-                    return api.publications.destroy(model.id);
-                }
-            }
+            syncer: createSyncer(api.publications)
         }),
         Subscription = BasicModel.extend({
             ref: 'io.ox/core/pubsub/subscription/',
@@ -79,126 +83,71 @@ define('io.ox/core/pubsub/model',
                     return this._refresh;
                 }
             },
-            syncer: {
-                create: function (model) {
-                    return api.subscriptions.create(model.attributes);
-                },
-                read: function (model) {
-                    return api.subscriptions.get({id: model.id, folder: model.get('folder')});
-                },
-                update: function (model) {
-                    return api.subscriptions.update(model.attributes);
-                },
-                destroy: function (model) {
-                    return api.subscriptions.destroy(model.id);
-                }
-            }
+            syncer: createSyncer(api.subscriptions)
         }),
-        Publications = Backbone.Collection.extend({
-            model: Publication,
-            initialize: function () {
-                var collection = this;
-                api.publications.on('refresh:all', function () {
-                    collection.fetch();
-                });
-                this.on('change:enabled', function (model, value, opt) {
-                    model.collection.sort();
-                });
-            },
-            sync: function (method, collection, options) {
-                if (method !== 'read') return;
-
-                return api.publications.getAll().then(function (res) {
-                    _(res).each(function (obj) {
-                        var pub = new Publication(obj);
-                        pub.fetch().then(function (pub) {
-                            var model = collection.get(pub.id);
-                            if (model) {
-                                //TODO: most likely this can be removed, once backbone is uptodate
-                                //and collection.add triggers the events
-                                model.set(pub);
-                                model.trigger('change', model);
-                            }
-                            return collection.add(pub);
+        PubSubCollection = {
+            factory: function (api) {
+                return Backbone.Collection.extend({
+                    initialize: function () {
+                        var collection = this;
+                        api.on('refresh:all', function () {
+                            collection.fetch();
                         });
-                    });
-                    collection.each(function (model) {
-                        if (_(res).where({id: model.id}).length === 0) {
-                            collection.remove(model);
-                        }
-                    });
-                    return collection;
+                        this.on('change:enabled', function (model, value, opt) {
+                            model.collection.sort();
+                        });
+                    },
+                    sync: function (method, collection, options) {
+                        if (method !== 'read') return;
+                        var self = this;
+
+                        return api.getAll().then(function (res) {
+                            _(res).each(function (obj) {
+                                var my_model = new self.model(obj);
+                                my_model.fetch().then(function (my_model) {
+                                    var model = collection.get(my_model.id);
+                                    if (model) {
+                                        //TODO: most likely this can be removed, once backbone is uptodate
+                                        //and collection.add triggers the events
+                                        model.set(my_model);
+                                        model.trigger('change', model);
+                                    }
+                                    return collection.add(my_model);
+                                });
+                            });
+                            collection.each(function (model) {
+                                if (_(res).where({id: model.id}).length === 0) {
+                                    collection.remove(model);
+                                }
+                            });
+                            return collection;
+                        });
+                    },
+                    /**
+                     * get a list of items for a folder
+                     *
+                     * If no folder is provided, all items will be returned.
+                     *
+                     * Use it like:
+                     * <code>
+                     *   model.collection.forFolder({folder_id: 2342});
+                     * </code>
+                     *
+                     * @param {object} - an object containing a folder_id attribute
+                     * @return [model] - an array containing matching model objects
+                     */
+                    forFolder: filterFolder,
+                    comparator: function (publication) {
+                        return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
+                    }
                 });
-            },
-            /**
-             * get a list of items for a folder
-             *
-             * If no folder is provided, all subscriptions will be returned.
-             *
-             * Use it like:
-             * <code>
-             *   model.collection.forFolder({folder_id: 2342});
-             * </code>
-             *
-             * @param {object} - an object containing a folder_id attribute
-             * @return [model] - an array containing matching model objects
-             */
-            forFolder: filterFolder,
-            comparator: function (publication) {
-                return !publication.get('enabled') + String(publication.get('displayName')).toLowerCase();
             }
+        },
+        Publications = PubSubCollection.factory(api.publications).extend({
+            model: Publication
         }),
-        Subscriptions = Backbone.Collection.extend({
-            model: Subscription,
-            initialize: function () {
-                var collection = this;
-                api.subscriptions.on('refresh:all', function () {
-                    collection.fetch();
-                });
-                this.on('change:enabled', function (model, value, opt) {
-                    model.collection.sort();
-                });
-            },
-            sync: function (method, collection, options) {
-                if (method !== 'read') return;
-
-                return api.subscriptions.getAll().then(function (res) {
-                    _(res).each(function (obj) {
-                        var sub = new Subscription(obj);
-                        sub.fetch().then(function (sub) {
-                            var model = collection.get(sub.id);
-                            if (model) {
-                                model.set(sub);
-                                model.trigger('change', model);
-                            }
-                            return collection.add(sub);
-                        });
-                    });
-                    collection.each(function (model) {
-                        if (_(res).where({id: model.id}).length === 0) {
-                            collection.remove(model);
-                        }
-                    });
-                    return collection;
-                });
-            },
-            /**
-             * get a list of items for a folder
-             *
-             * If no folder is provided, all subscriptions will be returned.
-             *
-             * Use it like:
-             * <code>
-             *   model.collection.forFolder({folder: 2342});
-             * </code>
-             *
-             * @param {object} - an object containing a folder_id attribute
-             * @return [model] - an array containing matching model objects
-             */
-            forFolder: filterFolder,
-            comparator: function (subscription) {
-                return !subscription.get('enabled') + subscription.get('displayName');
-            }
+        Subscriptions = PubSubCollection.factory(api.subscriptions).extend({
+            model: Subscription
         }),
         //singleton instances
         publications, subscriptions;

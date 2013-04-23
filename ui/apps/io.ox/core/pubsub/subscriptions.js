@@ -138,9 +138,7 @@ define('io.ox/core/pubsub/subscriptions',
 
                     if (baton.newFolder) {
 
-                        var service = _.first(_(baton.services).select(function (t) {
-                            return t.id === baton.model.get('source');
-                        }));
+                        var service = findId(baton.services, baton.model.get('source'));
 
                         // add new folders under module's default folder!
                         var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
@@ -152,7 +150,7 @@ define('io.ox/core/pubsub/subscriptions',
                             },
                             silent: true
                         })
-                        .pipe(function (folder) {
+                        .then(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
                             saveModel(true);
                         });
@@ -176,11 +174,16 @@ define('io.ox/core/pubsub/subscriptions',
 
     }
 
+    function findId(list, id) {
+        //FIXME: use _.findWhere, once available, to get rid of the anonymous function
+        return _(list).find(function (t) {
+            return t.id === id;
+        });
+    }
+
     function buildForm(node, baton) {
         node.empty();
-        var service = _.first(_(baton.services).select(function (t) {
-            return t.id === baton.model.get('source');
-        }));
+        var service = findId(baton.services, baton.model.get('source'));
 
         function setSource(id) {
             baton.model.setSource(service, { 'account': parseInt(id, 10) });
@@ -253,7 +256,7 @@ define('io.ox/core/pubsub/subscriptions',
                     node = $('<select>').attr('name', 'service-value').addClass('service-value').on('change', function () {
                         userform.parent().find('.alert-error').remove();
                         userform.parent().find('.error').removeClass('error');
-                        baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
+                        baton.model.setSource(findId(baton.services, node.val()));
                         buildForm(userform, baton);
                     }))));
 
@@ -264,7 +267,7 @@ define('io.ox/core/pubsub/subscriptions',
             });
 
             if (!baton.model.source()) {
-                baton.model.setSource(_.where(baton.services, { id: node.val() })[0]);
+                baton.model.setSource(findId(baton.services, node.val()));
             } else {
                 node.val(baton.model.source().service.id);
             }
