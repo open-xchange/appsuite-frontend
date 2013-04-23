@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings/errorlog/pane',
+define('io.ox/core/settings/errorlog/settings/pane',
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/core/date',

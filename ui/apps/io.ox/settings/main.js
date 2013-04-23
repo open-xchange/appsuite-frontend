@@ -19,7 +19,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
-      'io.ox/core/settings/errorlog/pane',
+      'io.ox/core/settings/errorlog/settings/pane',
       'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
