@@ -329,7 +329,7 @@ define('io.ox/calendar/invitations/register',
             if (imipAttachment) {
                 baton.imip = { attachment: imipAttachment };
                 // change flow
-                baton.disable('io.ox/mail/detail', 'content');
+                //baton.disable('io.ox/mail/detail', 'content');
             }
         }
     });
