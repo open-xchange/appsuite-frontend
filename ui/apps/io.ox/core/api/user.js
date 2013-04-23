@@ -50,7 +50,14 @@ define("io.ox/core/api/user",
         }
     });
 
-    // Update
+    /**
+     * update user attributes
+     * @param  {object} o (o.data contains key/values of changed attributes)
+     * @fires  api#update: + id
+     * @fires  api#update, (id)
+     * @fires  api#urefresh.list
+     * @return {deferred} done returns object with timestamp, data
+     */
     api.update =  function (o) {
         if (_.isEmpty(o.data)) {
             return $.when();
