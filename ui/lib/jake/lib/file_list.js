@@ -17,21 +17,20 @@
 */
 var fs = require('fs')
 , path = require('path')
-, minimatch // Lazy-required
-, glob = {};
+, minimatch = require('minimatch')
+, utils = require('utilities')
+, globSync;
 
-glob.globSync = function (pat) {
-	var dirname = path.dirname(pat)
-    , files = fs.readdirSync(dirname)
-    , filePat = path.basename(pat)
+globSync = function (pat) {
+  var dirname = jake.basedir(pat)
+    , files = jake.readdirR(dirname)
     , matches;
-	matches = minimatch.match(files, filePat, {'null': true});
-  if (matches && matches.length) {
-    for (var i = 0, ii = matches.length; i < ii; i++) {
-      matches[i] = dirname + '/' + matches[i];
-    }
-  }
-  return matches
+  pat = path.normalize(pat);
+  // Hack, Minimatch doesn't support backslashes in the pattern
+  // https://github.com/isaacs/minimatch/issues/7
+  pat = pat.replace(/\\/g, '/');
+  matches = minimatch.match(files, pat, {});
+  return matches;
 };
 
 // Constants
@@ -67,31 +66,9 @@ var ARRAY_METHODS = Object.getOwnPropertyNames(Array.prototype)
       }
     ];
 
-// Utility methods
-// ---------------
-// Escapes special characters in a string to be used in generating
-// a regex
-var regexpEscape = (function() {
-  var specials = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\' ]
-  , sRE = new RegExp('(\\' + specials.join('|\\') + ')', 'g');
-  return function (text) { return text.replace(sRE, '\\$1'); };
-})();
-
-
 var FileList = function () {
   var self = this
     , wrap;
-
-  // Lazy-require minimatch so that require of this file in cli.js won't bomb
-  if (!minimatch) {
-    try {
-      minimatch = require('minimatch');
-    }
-    catch(e) {
-      fail('FileList requires minimatch ' +
-          '(https://github.com/isaacs/minimatch). Try `npm install -g minimatch`.');
-    }
-  }
 
   // List of glob-patterns or specific filenames
   this.pendingAdd = [];
@@ -142,7 +119,7 @@ FileList.prototype = new (function () {
   var globPattern = /[*?\[\{]/;
 
   var _addMatching = function (pat) {
-        var matches = glob.globSync(pat);
+        var matches = globSync(pat);
         this.items = this.items.concat(matches);
       }
 
@@ -166,12 +143,12 @@ FileList.prototype = new (function () {
           if (typeof pat == 'string') {
             // Glob, look up files
             if (/[*?]/.test(pat)) {
-              matches = glob.globSync(pat);
+              matches = globSync(pat);
               excl = excl.concat(matches);
             }
             // String for regex
             else {
-              excl.push(regexpEscape(pat));
+              excl.push(utils.string.escapeRegExpChars(pat));
             }
           }
           // Regex, grab the string-representation
@@ -206,6 +183,7 @@ FileList.prototype = new (function () {
     for (var i = 0, ii = args.length; i < ii; i++) {
       this.pendingAdd.push(args[i]);
     }
+    return this;
   };
 
   /**
@@ -246,6 +224,7 @@ FileList.prototype = new (function () {
     if (!this.pending) {
       _resolveExclude.call(this);
     }
+    return this;
   };
 
   /**
@@ -261,6 +240,7 @@ FileList.prototype = new (function () {
       }
       _resolveExclude.call(this);
     }
+    return this;
   };
 
   /**
@@ -281,6 +261,7 @@ FileList.prototype = new (function () {
     , funcs: []
     , regex: null
     };
+    return this;
   };
 
 })();

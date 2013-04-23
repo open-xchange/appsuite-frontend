@@ -25,7 +25,7 @@ FileBase = new (function () {
       return false;
     }
     // The always-make override
-    else if (jake.opts['always-make']) {
+    else if (jake.program.opts['always-make']) {
       // Run if there actually is an action
       if (typeof this.action == 'function') {
         return true;
@@ -83,16 +83,44 @@ FileBase = new (function () {
   };
 
   this.complete = function () {
-    this.updateModTime();
+    if (!this.dummy) {
+      this.updateModTime();
+    }
+    this._currentPrereqIndex = 0;
     this.done = true;
     this.emit('complete');
   };
 
 })();
 
+/**
+  @name jake
+  @namespace jake
+*/
+/**
+  @name jake.FileTask
+  @constructor
+  @augments EventEmitter
+  @augments jake.Task
+  @description A Jake FileTask
+
+  @param {String} name The name of the Task
+  @param {Array} [prereqs] Prerequisites to be run before this task
+  @param {Function} [action] The action to perform to create this file
+  @param {Object} [opts]
+    @param {Array} [opts.asyc=false] Perform this task asynchronously.
+    If you flag a task with this option, you must call the global
+    `complete` method inside the task's action, for execution to proceed
+    to the next task.
+ */
 FileTask = function (name, prereqs, action, opts) {
   this.modTime = null;
-  this.constructor.prototype.initialize.apply(this, arguments);
+  this.dummy = false;
+  // Do constructor-work only on actual instances, not when used
+  // for inheritance
+  if (arguments.length) {
+    this.init.apply(this, arguments);
+  }
 };
 FileTask.prototype = new Task();
 FileTask.prototype.constructor = FileTask;

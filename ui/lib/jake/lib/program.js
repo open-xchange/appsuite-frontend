@@ -16,7 +16,9 @@
  *
 */
 
-var parseargs = require('../lib/parseargs')
+var fs = require('fs')
+  , parseargs = require('./parseargs')
+  , utils = require('./utils')
   , Program
   , optsReg
   , preempts
@@ -28,6 +30,11 @@ optsReg = [
   , abbr: 'f'
   , preempts: false
   , expectValue: true
+  }
+, { full: 'quiet'
+  , abbr: 'q'
+  , preempts: false
+  , expectValue: false
   }
 , { full: 'directory'
   , abbr: 'C'
@@ -43,6 +50,11 @@ optsReg = [
   , abbr: 'T'
   , preempts: true
   }
+// Alias ls
+, { full: 'tasks'
+  , abbr: 'ls'
+  , preempts: true
+  }
 , { full: 'trace'
   , abbr: 't'
   , preempts: false
@@ -55,6 +67,16 @@ optsReg = [
 , { full: 'version'
   , abbr: 'V'
   , preempts: true
+  }
+  // Alias lowercase v
+, { full: 'version'
+  , abbr: 'v'
+  , preempts: true
+  }
+, { full: 'jakelibdir'
+  , abbr: 'J'
+  , preempts: false
+  , expectValue: true
   }
 ];
 
@@ -75,13 +97,15 @@ usage = ''
     + '{Usage}: jake [options ...] [env variables ...] target\n'
     + '\n'
     + '{Options}:\n'
-    + '  -f, --jakefile FILE            Use FILE as the Jakefile\n'
-    + '  -C, --directory DIRECTORY      Change to DIRECTORY before running tasks.\n'
-    + '  -B, --always-make              Unconditionally make all targets.\n'
-    + '  -T, --tasks                    Display the tasks, with descriptions, then exit.\n'
-    + '  -t, --trace                    Enable full backtrace.\n'
-    + '  -h, --help                     Outputs help information\n'
-    + '  -V, --version                  Outputs Jake version\n'
+    + '  -f,     --jakefile FILE            Use FILE as the Jakefile.\n'
+    + '  -C,     --directory DIRECTORY      Change to DIRECTORY before running tasks.\n'
+    + '  -q,     --quiet                    Do not log messages to standard output.\n'
+    + '  -B,     --always-make              Unconditionally make all targets.\n'
+    + '  -T/ls,  --tasks                 Display the tasks (matching optional PATTERN) with descriptions, then exit.\n'
+    + '  -J,     --jakelibdir JAKELIBDIR    Auto-import any .jake files in JAKELIBDIR. (default is \'jakelib\')\n'
+    + '  -t,     --trace                    Enable full backtrace.\n'
+    + '  -h,     --help                     Display this help message.\n'
+    + '  -V/v,   --version                  Display the Jake version.\n'
     + '';
 
 Program = function () {
@@ -92,20 +116,21 @@ Program = function () {
 };
 
 Program.prototype = new (function () {
+
   this.handleErr = function (err) {
     var msg;
-    console.error('jake aborted.');
+    utils.logger.error('jake aborted.');
     if (this.opts.trace && err.stack) {
-      console.error(err.stack);
+      utils.logger.error(err.stack);
     }
     else {
       if (err.stack) {
         msg = err.stack.split('\n').slice(0, 2).join('\n');
-        console.error(msg);
-        console.error('(See full trace by running task with --trace)');
+        utils.logger.error(msg);
+        utils.logger.error('(See full trace by running task with --trace)');
       }
       else {
-        console.error(err.message);
+        utils.logger.error(err.message);
       }
     }
     process.exit(jake.errorCode || 1);
@@ -113,20 +138,91 @@ Program.prototype = new (function () {
 
   this.parseArgs = function (args) {
     var result = (new parseargs.Parser(optsReg)).parse(args);
-    this.opts = result.opts;
-    this.taskNames = result.taskNames;
-    this.envVars = result.envVars;
+    this.setOpts(result.opts);
+    this.setTaskNames(result.taskNames);
+    this.setEnvVars(result.envVars);
   };
 
-  this.preemptiveOption = function () {
+  this.setOpts = function (options) {
+    var opts = options || {};
+    utils.mixin(this.opts, opts);
+  };
+
+  this.setTaskNames = function (names) {
+    if (names && !Array.isArray(names)) {
+      throw new Error('Task names must be an array');
+    }
+    this.taskNames = (names && names.length) ? names : ['default'];
+  };
+
+  this.setEnvVars = function (vars) {
+    this.envVars = vars || null;
+  };
+
+  this.firstPreemptiveOption = function () {
     var opts = this.opts;
     for (var p in opts) {
       if (preempts[p]) {
-        preempts[p]();
-        return true;
+        return preempts[p];
       }
     }
     return false;
+  };
+
+  this.init = function (configuration) {
+    var self = this
+      , config = configuration || {};
+    if (config.options) {
+      this.setOpts(config.options);
+    }
+    if (config.taskNames) {
+      this.setTaskNames(config.taskNames);
+    }
+    if (config.envVars) {
+      this.setEnvVars(config.envVars);
+    }
+    process.addListener('uncaughtException', function (err) {
+      self.handleErr(err);
+    });
+    if (this.envVars) {
+      utils.mixin(process.env, this.envVars);
+    }
+  };
+
+  this.run = function () {
+    var taskNames
+      , dirname
+      , opts = this.opts;
+
+    // Run with `jake -T`, just show descriptions
+    if (opts.tasks) {
+      return jake.showAllTaskDescriptions(opts.tasks);
+    }
+
+    taskNames = this.taskNames;
+    if (!(Array.isArray(taskNames) && taskNames.length)) {
+      throw new Error('Please pass jake.runTasks an array of task-names');
+    }
+
+    // Set working dir
+    dirname = opts.directory;
+    if (dirname) {
+      if (utils.file.existsSync(dirname) &&
+        fs.statSync(dirname).isDirectory()) {
+        process.chdir(dirname);
+      }
+      else {
+        throw new Error(dirname + ' is not a valid directory path');
+      }
+    }
+
+    task('__root__', taskNames, function () {});
+
+    rootTask = jake.Task['__root__'];
+    rootTask.once('complete', function () {
+      jake.emit('complete');
+    });
+    rootTask.invoke();
   };
 
 })();

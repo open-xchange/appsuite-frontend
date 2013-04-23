@@ -17,18 +17,38 @@
 */
 
 var jake
+  , EventEmitter = require('events').EventEmitter
   , fs = require('fs')
   , path = require('path')
-  , task = require('./task')
-  , Task = task.Task
-  , FileTask = task.FileTask
-  , DirectoryTask = task.DirectoryTask;
+  , taskNs = require('./task')
+  , Task = taskNs.Task
+  , FileTask = taskNs.FileTask
+  , DirectoryTask = taskNs.DirectoryTask
+  , api = require('./api')
+  , utils = require('./utils')
+  , Program = require('./program').Program
+  , Loader = require('./loader').Loader
+  , pkg = JSON.parse(fs.readFileSync(__dirname + '/../package.json').toString());
 
 var Namespace = function (name, parentNamespace) {
   this.name = name;
   this.parentNamespace = parentNamespace;
   this.childNamespaces = {};
   this.tasks = {};
+
+  this.resolve = function(relativeName) {
+    var parts = relativeName.split(':')
+      , name  = parts.pop()
+      , ns    = this
+      , task;
+    for(var i = 0, l = parts.length; ns && i < l; i++) {
+      ns = ns.childNamespaces[parts[i]];
+    }
+
+    return (ns && ns.tasks[name]) ||
+      (this.parentNamespace && this.parentNamespace.resolve(relativeName));
+  }
+
 };
 
 var Invocation = function (taskName, args) {
@@ -36,11 +56,19 @@ var Invocation = function (taskName, args) {
   this.args = args;
 };
 
-/**
- * @namespace
- * The main namespace for Jake
- */
-jake = new function () {
+// And so it begins
+jake = new EventEmitter();
+
+// Globalize jake and top-level API methods (e.g., `task`, `desc`)
+global.jake = jake;
+utils.mixin(global, api);
+
+// Copy utils onto base jake
+utils.mixin(jake, utils);
+// File utils should be aliased directly on base jake as well
+utils.mixin(jake, utils.file);
+
+utils.mixin(jake, new (function () {
 
   this._invocationChain = [];
 
@@ -51,7 +79,11 @@ jake = new function () {
 
   // Public properties
   // =================
+  this.version = pkg.version;
+  // Used when Jake exits with a specific error-code
   this.errorCode = undefined;
+  // Loads Jakefiles/jakelibdirs
+  this.loader = new Loader();
   // Name/value map of all the various tasks defined in a Jakefile.
   // Non-namespaced tasks are placed into 'default.'
   this.defaultNamespace = new Namespace('default', null);
@@ -62,6 +94,39 @@ jake = new function () {
   // Saves the description created by a 'desc' call that prefaces a
   // 'task' call that defines a task.
   this.currentTaskDescription = null;
+  this.program = new Program()
+  this.FileList = require('./file_list').FileList;
+  this.PackageTask = require('./package_task').PackageTask;
+  this.NpmPublishTask = require('./npm_publish_task').NpmPublishTask;
+  this.TestTask = require('./test_task').TestTask;
+  this.Task = Task;
+  this.FileTask = FileTask;
+  this.DirectoryTask = DirectoryTask;
+  this.Namespace = Namespace;
+
+  this.parseAllTasks = function () {
+    var _parseNs = function (name, ns) {
+      var nsTasks = ns.tasks
+        , task
+        , nsNamespaces = ns.childNamespaces
+        , fullName;
+      // Iterate through the tasks in each namespace
+      for (var q in nsTasks) {
+        task = nsTasks[q];
+        // Preface only the namespaced tasks
+        fullName = name == 'default' ? q : name + ':' + q;
+        // Save with 'taskname' or 'namespace:taskname' key
+        task.fullName = fullName;
+        jake.Task[fullName] = task;
+      }
+      for (var p in nsNamespaces) {
+        fullName = name  == 'default' ? p : name + ':' + p;
+        _parseNs(fullName, nsNamespaces[p]);
+      }
+    };
+
+    _parseNs('default', jake.defaultNamespace);
+  };
 
   /**
    * Displays the list of descriptions avaliable for tasks defined in
@@ -105,12 +170,12 @@ jake = new function () {
 
   this.createTask = function () {
     var args = Array.prototype.slice.call(arguments)
-      , constructor
+      , arg
       , task
       , type
       , name
       , action
-      , opts
+      , opts = {}
       , prereqs = [];
 
       type = args.shift()
@@ -122,10 +187,6 @@ jake = new function () {
       if (Array.isArray(args[0])) {
         prereqs = args.shift();
       }
-      if (typeof args[0] == 'function') {
-        action = args.shift();
-        opts =  args.shift() || {};
-      }
     }
     // name:deps, [action]
     // Legacy object-literal syntax, e.g.: {'name': ['depA', 'depB']}
@@ -135,89 +196,85 @@ jake = new function () {
         prereqs = prereqs.concat(obj[p]);
         name = p;
       }
-      action = args.shift();
-      opts =  args.shift() || {};
+    }
+
+    // Optional opts/callback or callback/opts
+    while ((arg = args.shift())) {
+      if (typeof arg == 'function') {
+        action = arg;
+      }
+      else {
+        opts = arg;
+      }
+    }
+
+    task = jake.currentNamespace.resolve(name);
+    if (task && !action) {
+      // Task already exists and no action, just update prereqs, and return it.
+      task.prereqs = task.prereqs.concat(prereqs);
+      return task;
     }
 
     switch (type) {
       case 'directory':
         action = function () {
-          
-          // Recursive mkdir from https://gist.github.com/319051
-          // mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
-          function mkdirsSync(dirname, mode) {
-            if (mode === undefined) mode = 0x1ff ^ process.umask();
-            var pathsCreated = [], pathsFound = [];
-            var fn = dirname;
-            while (true) {
-              try {
-                var stats = fs.statSync(fn);
-                if (stats.isDirectory())
-                  break;
-                throw new Error('Unable to create directory at '+fn);
-              }
-              catch (e) {
-                if (e.code === 'ENOENT') {
-                  pathsFound.push(fn);
-                  fn = path.dirname(fn);
-                }
-                else {
-                  throw e;
-                }
-              }
-            }
-            for (var i=pathsFound.length-1; i>-1; i--) {
-              var fn = pathsFound[i];
-              fs.mkdirSync(fn, mode);
-              pathsCreated.push(fn);
-            }
-            return pathsCreated;
-          };
-          
-          if (!path.existsSync(name)) {
-            mkdirsSync(name, 0755);
-          }
+          jake.mkdirP(name);
         };
-        constructor = DirectoryTask;
+        task = new DirectoryTask(name, prereqs, action, opts);
         break;
       case 'file':
-        constructor = FileTask;
+        task = new FileTask(name, prereqs, action, opts);
         break;
       default:
-        constructor = Task;
+        task = new Task(name, prereqs, action, opts);
     }
-    
-    var fullName = name;
-    for (var ns = jake.currentNamespace; ns; ns = ns.parentNamespace) {
-        if (ns !== jake.defaultNamespace) fullName = ns.name + ':' + fullName;
-    }
-    task = jake.Task[fullName];
-    if (task) {
-      if (task.type != type && type != "task") {
-        throw new Error('Cannot change type of task ' + fullName + ' from ' +
-                        task.type + ' to ' + type);
-      }
-      task.prereqs.push.apply(task.prereqs, prereqs);
-      if (action) task.action = action;
-    } else {
-      task = new constructor(name, prereqs, action, opts);
-      task.type = type;
-      jake.currentNamespace.tasks[name] = task;
-      task.fullName = fullName;
-      jake.Task[fullName] = task;
-    }
-    
+
     if (jake.currentTaskDescription) {
       task.description = jake.currentTaskDescription;
       jake.currentTaskDescription = null;
     }
+    jake.currentNamespace.tasks[name] = task;
+    task.namespace = jake.currentNamespace;
+
+    // FIXME: Should only need to add a new entry for the current
+    // task-definition, not reparse the entire structure
+    jake.parseAllTasks();
+
+    return task;
   };
 
-}();
+  this.init = function () {
+    var self = this;
+    process.addListener('uncaughtException', function (err) {
+      self.program.handleErr(err);
+    });
 
-jake.Task = Task;
-jake.FileTask = FileTask;
-jake.DirectoryTask = DirectoryTask;
-jake.Namespace = Namespace;
+  };
+
+  this.run = function () {
+    var args = Array.prototype.slice.call(arguments)
+      , program = this.program
+      , loader = this.loader
+      , preempt
+      , opts;
+
+    program.parseArgs(args);
+    program.init();
+
+    preempt = program.firstPreemptiveOption();
+    if (preempt) {
+      preempt();
+    }
+    else {
+      opts = program.opts;
+      // Load Jakefile and jakelibdir files
+      loader.loadFile(opts.jakefile);
+      loader.loadDirectory(opts.jakelibdir);
+
+      program.run();
+    }
+  };
+
+})());
 
 module.exports = jake;
