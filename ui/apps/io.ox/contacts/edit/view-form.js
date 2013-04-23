@@ -186,6 +186,8 @@ define('io.ox/contacts/edit/view-form', [
                                     $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                                 }
                             }
+                        }).on('focus', function () {
+                            $input.attr('tabindex', '1');
                         });
 
                         $node.append($('<div>').addClass('span12 contact_attachments_buttons').append($inputWrap));
