@@ -36,6 +36,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var def = $.Deferred();
     var BUFFERING = true;
     var BUFFER_INTERVAL = 1000;
+    var INFINITY = 4;
     var seq = 0;
     var request = null;
     var resendBuffer = {};
@@ -113,6 +114,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             getAll(collector, json, namespace, element);
             return collector;
         };
+
 
 
     }
@@ -318,7 +320,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (_.isUndefined(options.seq)) {
             def.resolve(); // Pretend a message without sequence numbers always arrives
         } else {
-            resendBuffer[options.seq] = options;
+            resendBuffer[options.seq] = {count: 0, msg: options};
             if (resendDeferreds[options.seq]) {
                 def = resendDeferreds[options.seq];
             } else {
@@ -373,7 +375,14 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     setInterval(function () {
         _(resendBuffer).each(function (m) {
-            api.sendWithoutSequence(m);
+            m.count++;
+            if (m.count < INFINITY) {
+                api.sendWithoutSequence(m.msg);
+            } else {
+                delete resendBuffer[m.msg.seq];
+                resendDeferreds[m.msg.seq].reject();
+                delete resendDeferreds[m.msg.seq];
+            }
         });
     }, 5000);
 
