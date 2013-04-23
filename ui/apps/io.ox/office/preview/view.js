@@ -45,9 +45,7 @@ define('io.ox/office/preview/view',
             NEXT:    { icon: 'docs-next-page',     tooltip: gt('Show next page') },
             LAST:    { icon: 'docs-last-page',     tooltip: gt('Show last page') },
             ZOOMOUT: { icon: 'docs-zoom-out',      tooltip: gt('Zoom out') },
-            ZOOMIN:  { icon: 'docs-zoom-in',       tooltip: gt('Zoom in') },
-            PAGE:    { tooltip: gt('Current page and total page count') },
-            ZOOM:    { tooltip: gt('Current zoom factor'), width: 65 }
+            ZOOMIN:  { icon: 'docs-zoom-in',       tooltip: gt('Zoom in') }
         },
 
         // minimum horizontal distance between page thumbnail buttons
@@ -76,12 +74,19 @@ define('io.ox/office/preview/view',
      * @param {Number} page
      *  The one-based page index.
      *
+     * @param {Object} [options]
+     *  A map with options to control the behavior of this method. The
+     *  following options are supported:
+     *  @param {Boolean} [options.fetchSiblings=false]
+     *      If set to true, additional sibling pages will be loaded and
+     *      stored in the internal page cache.
+     *
      * @returns {jQuery.Promise}
      *  The Promise of a Deferred object waiting for the image data. Will be
      *  resolved with the original size of the page (as object with the
      *  properties 'width' and 'height', in pixels).
      */
-    function loadPageIntoNode(node, model, page) {
+    function loadPageIntoNode(node, model, page, options) {
 
         var // the Deferred object waiting for the image
             def = null;
@@ -94,14 +99,14 @@ define('io.ox/office/preview/view',
         node = $(node);
         if (_.browser.Chrome) {
             // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
-            def = model.loadPageAsSvg(page).then(function (svgMarkup) {
+            def = model.loadPageAsSvg(page, options).then(function (svgMarkup) {
                 node[0].innerHTML = svgMarkup;
                 // resolve with original image size
                 return resolveSize(node.children().first());
             });
         } else {
             // preferred: as an image element linking to the SVG file (Safari cannot parse SVG mark-up)
-            def = model.loadPageAsImage(page).then(function (imgNode) {
+            def = model.loadPageAsImage(page, options).then(function (imgNode) {
                 node.empty().append(imgNode.css({ maxWidth: '', width: '', height: '' }));
                 // resolve with original image size (naturalWidth/naturalHeight with SVG does not work in IE10)
                 return resolveSize(imgNode);
@@ -175,13 +180,13 @@ define('io.ox/office/preview/view',
 
     // class PreviewGroup =====================================================
 
-    var PreviewGroup = Group.extend({ constructor: function (app) {
+    var PreviewGroup = Group.extend({ constructor: function (app, scrollableNode) {
 
         var // self reference
             self = this,
 
-            // all buttons currently created, mapped by page index
-            buttons = {};
+            // all button elements currently created, mapped by page index
+            buttonNodes = {};
 
         // base constructor ---------------------------------------------------
 
@@ -190,13 +195,13 @@ define('io.ox/office/preview/view',
         // private methods ----------------------------------------------------
 
         /**
-         * Creates and inserts a button element representing the page with the
-         * passed index.
+         * Creates a new button element representing the page with the passed
+         * index.
          *
          * @returns {jQuery}
          *  The button element created by this method.
          */
-        function createButton(page) {
+        function createPageButton(page) {
 
             var // the dummy node containing the busy animation
                 busyNode = $('<div>').addClass('page'),
@@ -215,12 +220,12 @@ define('io.ox/office/preview/view',
                         width: PREVIEW_BUTTON_WIDTH,
                         height: PREVIEW_BUTTON_HEIGHT
                     }
-                });
+                }).append(busyNode);
 
-            function updatePageSize(node, pageSize) {
+            function updatePageSize(targetNode, pageSize) {
 
                 var // the child node in the page, containing the SVG
-                    childNode = node.children().first(),
+                    childNode = targetNode.children().first(),
                     // the available width and height inside the button node
                     maxWidth = buttonNode.width(),
                     maxHeight = buttonNode.height() - 20,
@@ -230,7 +235,7 @@ define('io.ox/office/preview/view',
                     zoomFactor = Math.min(widthFactor, heightFactor);
 
                 // set the calculated zoom factor
-                setZoomFactor(node, pageSize, zoomFactor);
+                setZoomFactor(targetNode, pageSize, zoomFactor);
 
                 // Firefox has serious performance issues when rendering/scrolling
                 // nodes with many SVG contents, convert SVG pages to inline bitmaps
@@ -239,8 +244,8 @@ define('io.ox/office/preview/view',
                 }
             }
 
-            // insert the button node into the DOM before loading the image
-            self.addChildNodes(buttonNode.append(busyNode));
+            // insert the button node and page node into the DOM before loading the image
+            self.addChildNodes(buttonNode);
             app.getView().insertTemporaryNode(pageNode);
 
             // set default page size (DIN A* Portrait) before loading the page (in case of error)
@@ -276,22 +281,42 @@ define('io.ox/office/preview/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Updates the thumbnail pages currently shown, according to the passed
+         * Updates the thumbnail pages currently shown, according to the
          * visible range in the scrollable area.
-         *
-         * @param {Object} visiblePosition
-         *  Position of the visible area.
          *
          * @returns {PreviewGroup}
          *  A reference to this instance.
          */
-        this.updatePreview = function (visiblePosition) {
+        this.updatePreview = function () {
+
+            var visiblePosition = Utils.getVisibleAreaPosition(scrollableNode);
+
+            // TODO: delete/create pages on demand
             _(app.getModel().getPageCount()).times(function (index) {
                 var page = index + 1;
-                if (!(page in buttons)) {
-                    buttons[page] = createButton(page);
+                if (!(page in buttonNodes)) {
+                    buttonNodes[page] = createPageButton(page);
                 }
             });
+
+            return this;
+        };
+
+        /**
+         * Selects the specified page in the preview, and scrolls the preview
+         * area to make the page visible.
+         * @param {Number} page
+         *  The one-based page index.
+         *
+         * @returns {PreviewGroup}
+         *  A reference to this instance.
+         */
+        this.selectAndShowPage = function (page) {
+            if (page in buttonNodes) {
+                Utils.scrollToChildNode(scrollableNode, buttonNodes[page], { padding: PREVIEW_BUTTON_DISTANCE });
+                this.updatePreview();
+                updateHandler(page);
+            }
             return this;
         };
 
@@ -299,9 +324,13 @@ define('io.ox/office/preview/view',
 
         // initialize total size of the preview area
         app.on('docs:import:success', function () {
+
+            var // number of pages shown in the document
+                pageCount = app.getModel().getPageCount();
+
             self.getNode()
                 .width(2 * PREVIEW_BUTTON_WIDTH + PREVIEW_BUTTON_DISTANCE)
-                .height(Math.floor(app.getModel().getPageCount() / 2) * PREVIEW_BUTTON_HEIGHT + 2 * PREVIEW_BUTTON_DISTANCE);
+                .height(Math.ceil(pageCount / 2) * PREVIEW_BUTTON_HEIGHT + 2 * PREVIEW_BUTTON_DISTANCE);
         });
 
         this.registerUpdateHandler(updateHandler)
@@ -374,15 +403,16 @@ define('io.ox/office/preview/view',
 
             model = app.getModel();
 
-            // create the side pane
-            self.addPane(sidePane = new SidePane(app, { position: 'right' })
+            // create the side pane (first create, then initialize; existing instance is needed for PreviewGroup)
+            self.addPane(sidePane = new SidePane(app, { position: 'right' }));
+            sidePane
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
                     .addRightTab()
                     .addGroup('app/quit', new Button(GroupOptions.QUIT))
                 )
                 .addViewComponent(new Component(app)
-                    .addGroup('pages/current', previewGroup = new PreviewGroup(app))
+                    .addGroup('pages/current', previewGroup = new PreviewGroup(app, sidePane.getScrollableNode()))
                 )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
@@ -392,8 +422,7 @@ define('io.ox/office/preview/view',
                     .addRightTab()
                     .addGroup('zoom/dec', new Button(GroupOptions.ZOOMOUT))
                     .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
-                )
-            );
+                );
 
             // create the top overlay pane
             self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
@@ -428,7 +457,7 @@ define('io.ox/office/preview/view',
             // update preview pages if side pane is toggled
             sidePane.on('refresh:layout', function () {
                 if (sidePane.isVisible()) {
-                    previewGroup.updatePreview(Utils.getVisibleAreaPosition(sidePane.getScrollableNode()));
+                    previewGroup.updatePreview();
                 }
             });
 
@@ -460,6 +489,7 @@ define('io.ox/office/preview/view',
                 app.executeDelayed(function () {
                     if ((scrollPos === 0) && (scrollNode.scrollTop === 0)) {
                         showPage(page - 1, 'bottom');
+                        app.getController().update();
                     }
                 });
                 break;
@@ -470,6 +500,7 @@ define('io.ox/office/preview/view',
                     var bottomPos = Math.max(0, scrollNode.scrollHeight - scrollNode.clientHeight);
                     if ((scrollPos === bottomPos) && (scrollNode.scrollTop === bottomPos)) {
                         showPage(page + 1, 'top');
+                        app.getController().update();
                     }
                 });
                 break;
@@ -508,11 +539,15 @@ define('io.ox/office/preview/view',
                 return;
             }
 
-            // store new page index and show overlay status label
+            // store new page index, update preview, and show overlay status label
             currentId = (uniqueId += 1);
             page = newPage;
-            showStatusLabel(self.getPageLabel());
-            app.getController().update();
+            previewGroup.selectAndShowPage(page);
+            showStatusLabel(
+                //#. %1$s is the current page index in office document preview
+                //#. %2$s is the number of pages in office document preview
+                //#, c-format
+                gt('Page %1$s of %2$s', page, model.getPageCount()));
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
@@ -523,13 +558,12 @@ define('io.ox/office/preview/view',
 
             // load the requested page, post-processing only if the current
             // page has not been changed again in the meantime
-            loadPageIntoNode(newPageNode, model, page)
+            loadPageIntoNode(newPageNode, model, page, { fetchSiblings: true })
             .always(function () {
                 if (currentId === uniqueId) {
                     self.appPaneIdle();
                     pageNode = newPageNode;
                     self.removeAllContentNodes().insertContentNode(pageNode);
-                    app.getController().update();
                 }
             })
             .done(function (size) {
@@ -562,7 +596,10 @@ define('io.ox/office/preview/view',
             if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel()) && (zoom !== newZoom)) {
                 zoom = newZoom;
                 updateZoom();
-                showStatusLabel(self.getZoomLabel());
+                showStatusLabel(
+                    //#. %1$d is the current zoom factor, in percent
+                    //#, c-format
+                    gt('Zoom: %1$d%', self.getZoomFactor()));
             }
         }
 
@@ -585,8 +622,10 @@ define('io.ox/office/preview/view',
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
-            // set the current zoom factor to the page
-            setZoomFactor(pageNode, pageSize, zoomFactor);
+            // set the current zoom factor to the page (prevent zooming on invalid pages)
+            if (_.isObject(pageSize)) {
+                setZoomFactor(pageNode, pageSize, zoomFactor);
+            }
 
             // refresh view (scroll bars may have appeared or vanished)
             self.refreshPaneLayout();
@@ -640,24 +679,6 @@ define('io.ox/office/preview/view',
          */
         this.getPage = function () {
             return page;
-        };
-
-        /**
-         * Returns the one-based index of the page currently shown.
-         *
-         * @returns {Number}
-         *  The one-based index of the current page.
-         */
-        this.getPageLabel = function () {
-            // the gettext comments must be located directly before gt(), but
-            // 'return' cannot be the last token in a line
-            // -> use a temporary variable to store the result
-            var label =
-                //#. %1$s is the current page index in office document preview
-                //#. %2$s is the number of pages in office document preview
-                //#, c-format
-                gt('Page %1$s of %2$s', page, model.getPageCount());
-            return label;
         };
 
         /**
@@ -787,17 +808,6 @@ define('io.ox/office/preview/view',
             return (zoom === 0) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
         };
 
-        this.getZoomLabel = function () {
-            // the gettext comments must be located directly before gt(), but
-            // 'return' cannot be the last token in a line
-            // -> use a temporary variable to store the result
-            var label =
-                //#. %1$d is the current zoom factor, in percent
-                //#, c-format
-                gt('Zoom: %1$d%', this.getZoomFactor());
-            return label;
-        };
-
         /**
          * Returns a save point containing all settings needed to restore the
          * current view settings.
@@ -819,6 +829,7 @@ define('io.ox/office/preview/view',
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
+            app.getController().update();
         };
 
     } // class PreviewView

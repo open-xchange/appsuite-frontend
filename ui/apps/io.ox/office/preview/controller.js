@@ -106,11 +106,6 @@ define('io.ox/office/preview/controller',
                     enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
                     set: function () { view.increaseZoomLevel(); },
                     shortcut: { charCode: '+' }
-                },
-
-                'zoom/current': {
-                    parent: 'document/valid',
-                    get: function () { return view.getZoomLabel(); }
                 }
             };
 

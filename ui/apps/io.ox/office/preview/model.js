@@ -270,15 +270,24 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.fetchSiblings=false]
+         *      If set to true, additional sibling pages will be loaded and
+         *      stored in the internal page cache.
+         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  completed <img> element containing the SVG mark-up of the specified
          *  page (as jQuery object), or rejected on error.
          */
-        this.loadPageAsImage = function (page) {
+        this.loadPageAsImage = function (page, options) {
             return imageCache.getElement(page).then(function (imgNode) {
                 // start fetching sibling pages into the cache
-                fetchSiblingPages(imageCache, page);
+                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
+                    fetchSiblingPages(imageCache, page);
+                }
                 // clone the cached image on every access, wait for the 'load' event of the clone
                 return cloneImageNode(imgNode);
             });
@@ -291,14 +300,23 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.fetchSiblings=false]
+         *      If set to true, additional sibling pages will be loaded and
+         *      stored in the internal page cache.
+         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
-        this.loadPageAsSvg = function (page) {
+        this.loadPageAsSvg = function (page, options) {
             return svgCache.getElement(page).done(function () {
                 // start fetching sibling pages into the cache
-                fetchSiblingPages(svgCache, page);
+                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
+                    fetchSiblingPages(svgCache, page);
+                }
             });
         };
 
