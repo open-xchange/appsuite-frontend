@@ -24,6 +24,11 @@ define('io.ox/core/api/conversion', ['io.ox/core/api/factory', 'io.ox/core/http'
         }
     });
 
+    /**
+     * @param  {object} dataSource
+     * @param  {object} dataHandler
+     * @return {deferred} done returns data object
+     */
     api.convert = function (dataSource, dataHandler) {
         return http.PUT({
             module: 'conversion',
