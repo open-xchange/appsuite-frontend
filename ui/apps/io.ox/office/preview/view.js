@@ -54,7 +54,7 @@ define('io.ox/office/preview/view',
         PREVIEW_BUTTON_DISTANCE = 8,
 
         // fixed total width of a page thumbnail button
-        PREVIEW_BUTTON_WIDTH = Math.ceil((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 3 * PREVIEW_BUTTON_DISTANCE) / 2),
+        PREVIEW_BUTTON_WIDTH = Math.floor((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 3 * PREVIEW_BUTTON_DISTANCE) / 2),
 
         // fixed total height of a page thumbnail button
         PREVIEW_BUTTON_HEIGHT = PREVIEW_BUTTON_WIDTH + 20;
@@ -112,6 +112,67 @@ define('io.ox/office/preview/view',
         return def.fail(function () { node.empty(); }).promise();
     }
 
+    /**
+     * Recalculates the size of the passed page node, according to the original
+     * page size and zoom factor.
+     *
+     * @param {HTMLElement|jQuery} pageNode
+     *  The page node containing the SVG contents.
+     *
+     * @param {Object} pageSize
+     *  The original page size, as pixels, in 'width' and 'height' properties.
+     *
+     * @param {Number} zoomFactor
+     *  The new zoom factor.
+     */
+    function setZoomFactor(pageNode, pageSize, zoomFactor) {
+
+        var // the child node in the page, containing the SVG
+            childNode = $(pageNode).children().first(),
+            // the resulting width/height
+            width = Math.floor(pageSize.width * zoomFactor),
+            height = Math.floor(pageSize.height * zoomFactor);
+
+        if (childNode.is('img')) {
+            // <img> element: resize with CSS width/height
+            childNode.width(width).height(height);
+        } else {
+            // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
+            childNode.css('zoom', zoomFactor);
+        }
+
+        // Chrome bug/problem: sometimes, the page node has width 0 (e.g., if browser zoom is
+        // not 100%) regardless of existing SVG, must set its size explicitly to see anything...
+        $(pageNode).width(width).height(height);
+    }
+
+    /**
+     * Converts the image data of the passed <img> element to an inline bitmap
+     * represented by a data URL.
+     *
+     * @param {HTMLImageElement|jQuery} imgNode
+     *  The <img> element.
+     *
+     * @param {Object} imageSize
+     *  The original image size, as pixels, in 'width' and 'height' properties.
+     */
+    function convertImageToBitmap(imgNode, imageSize) {
+
+        var // the size of the canvas (maximum four times the current image size)
+            bitmapWidth = Math.min($(imgNode).width() * 4, imageSize.width),
+            bitmapHeight = Math.min($(imgNode).height() * 4, imageSize.height),
+            // the <canvas> element for SVG/bitmap conversion
+            canvas = $('<canvas>').attr({ width: bitmapWidth, height: bitmapHeight })[0];
+
+        try {
+            canvas.getContext('2d').drawImage(Utils.getDomNode(imgNode), 0, 0, imageSize.width, imageSize.height, 0, 0, bitmapWidth, bitmapHeight);
+            // currently, canvas.toDataURL() works in Firefox only, even with images from same origin
+            $(imgNode).attr('src', canvas.toDataURL());
+        } catch (ex) {
+            Utils.error('convertImageToBitmap(): exception caucht: ' + ex);
+        }
+    }
+
     // class PreviewGroup =====================================================
 
     var PreviewGroup = Group.extend({ constructor: function (app) {
@@ -119,8 +180,8 @@ define('io.ox/office/preview/view',
         var // self reference
             self = this,
 
-            // page range currently inserted into this group (half-open)
-            range = { begin: 1, end: 1 };
+            // all buttons currently created, mapped by page index
+            buttons = {};
 
         // base constructor ---------------------------------------------------
 
@@ -131,43 +192,45 @@ define('io.ox/office/preview/view',
         /**
          * Creates and inserts a button element representing the page with the
          * passed index.
+         *
+         * @returns {jQuery}
+         *  The button element created by this method.
          */
         function createButton(page) {
 
-            var // the page node containing the page contents
-                pageNode = $('<div>').addClass('page').append($('<div>').addClass('abs').busy()),
+            var // the dummy node containing the busy animation
+                busyNode = $('<div>').addClass('page'),
+                // the page node containing the page contents
+                pageNode = $('<div>').addClass('page'),
+                // zero-based column and row index of the page in the preview area
+                col = (page - 1) % 2,
+                row = Math.floor((page - 1) / 2),
                 // the button node containing the page node and the page number
                 buttonNode = Utils.createButton({
                     value: page,
                     label: String(page),
                     css: {
-                        left: ((page - 1) % 2) * (PREVIEW_BUTTON_WIDTH + PREVIEW_BUTTON_DISTANCE),
-                        top: Math.floor((page - 1) / 2) * PREVIEW_BUTTON_HEIGHT,
+                        left: col * (PREVIEW_BUTTON_WIDTH + PREVIEW_BUTTON_DISTANCE),
+                        top: row * PREVIEW_BUTTON_HEIGHT + PREVIEW_BUTTON_DISTANCE,
                         width: PREVIEW_BUTTON_WIDTH,
                         height: PREVIEW_BUTTON_HEIGHT
                     }
                 });
 
-            function convertImageToBitmap(imgNode, pageSize) {
-
-                var // the <canvas> element for SVG/bitmap conversion
-                    canvas = $('<canvas>').attr({ width: pageSize.width, height: pageSize.height })[0];
-
-                try {
-                    canvas.getContext('2d').drawImage(imgNode[0], 0, 0, pageSize.width, pageSize.height);
-                    // currently, canvas.toDataURL() works in Firefox only, even with images from same origin
-                    imgNode.attr('src', canvas.toDataURL());
-                } catch (ex) {
-                    Utils.error('PreviewGroup.convertImageToBitmap(): exception caucht: ' + ex);
-                }
-            }
-
-            function updatePageSize(pageSize) {
+            function updatePageSize(node, pageSize) {
 
                 var // the child node in the page, containing the SVG
-                    childNode = pageNode.children().first();
+                    childNode = node.children().first(),
+                    // the available width and height inside the button node
+                    maxWidth = buttonNode.width(),
+                    maxHeight = buttonNode.height() - 20,
+                    // the zoom factor according to available size
+                    widthFactor = Math.min(maxWidth / pageSize.width, 1),
+                    heightFactor = Math.min(maxHeight / pageSize.height, 1),
+                    zoomFactor = Math.min(widthFactor, heightFactor);
 
-                pageNode.width(70).height(90);
+                // set the calculated zoom factor
+                setZoomFactor(node, pageSize, zoomFactor);
 
                 // Firefox has serious performance issues when rendering/scrolling
                 // nodes with many SVG contents, convert SVG pages to inline bitmaps
@@ -176,14 +239,31 @@ define('io.ox/office/preview/view',
                 }
             }
 
-            // set default size (DIN A* Portrait) before loading the page
-            updatePageSize({ width: 210, height: 297 });
-
             // insert the button node into the DOM before loading the image
-            self.addChildNodes(buttonNode.append(pageNode));
+            self.addChildNodes(buttonNode.append(busyNode));
+            app.getView().insertTemporaryNode(pageNode);
 
-            // load the image and insert it into the button node
-            loadPageIntoNode(pageNode, app.getModel(), page).done(updatePageSize);
+            // set default page size (DIN A* Portrait) before loading the page (in case of error)
+            updatePageSize(busyNode, { width: 210, height: 297 });
+            busyNode.append($('<div>').addClass('abs').busy());
+
+            // load the image, update page size
+            loadPageIntoNode(pageNode, app.getModel(), page)
+            .done(function (pageSize) {
+                busyNode.remove();
+                buttonNode.append(pageNode);
+                updatePageSize(pageNode, pageSize);
+            })
+            .fail(function () {
+                busyNode.empty().addClass('icon-remove').css({
+                    color: '#f88',
+                    fontSize: '60px',
+                    lineHeight: busyNode.height() + 'px',
+                    textDecoration: 'none' // otherwise, IE underlines when hovering
+                });
+            });
+
+            return buttonNode;
         }
 
         /**
@@ -196,17 +276,23 @@ define('io.ox/office/preview/view',
         // methods ------------------------------------------------------------
 
         /**
-         * Updates the thumbnail pages currently shown, according to the
-         * visible range.
+         * Updates the thumbnail pages currently shown, according to the passed
+         * visible range in the scrollable area.
+         *
+         * @param {Object} visiblePosition
+         *  Position of the visible area.
+         *
+         * @returns {PreviewGroup}
+         *  A reference to this instance.
          */
-        this.updatePreview = function () {
-            if (range.begin === range.end) {
-                range.begin = 1;
-                range.end = app.getModel().getPageCount() + 1;
-                _(range.end - 1).times(function (index) {
-                    createButton(index + 1);
-                });
-            }
+        this.updatePreview = function (visiblePosition) {
+            _(app.getModel().getPageCount()).times(function (index) {
+                var page = index + 1;
+                if (!(page in buttons)) {
+                    buttons[page] = createButton(page);
+                }
+            });
+            return this;
         };
 
         // initialization -----------------------------------------------------
@@ -214,8 +300,8 @@ define('io.ox/office/preview/view',
         // initialize total size of the preview area
         app.on('docs:import:success', function () {
             self.getNode()
-                .width(SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 2 * PREVIEW_BUTTON_DISTANCE)
-                .height(Math.floor(app.getModel().getPageCount() / 2) * PREVIEW_BUTTON_HEIGHT);
+                .width(2 * PREVIEW_BUTTON_WIDTH + PREVIEW_BUTTON_DISTANCE)
+                .height(Math.floor(app.getModel().getPageCount() / 2) * PREVIEW_BUTTON_HEIGHT + 2 * PREVIEW_BUTTON_DISTANCE);
         });
 
         this.registerUpdateHandler(updateHandler)
@@ -342,7 +428,7 @@ define('io.ox/office/preview/view',
             // update preview pages if side pane is toggled
             sidePane.on('refresh:layout', function () {
                 if (sidePane.isVisible()) {
-                    previewGroup.updatePreview();
+                    previewGroup.updatePreview(Utils.getVisibleAreaPosition(sidePane.getScrollableNode()));
                 }
             });
 
@@ -493,35 +579,14 @@ define('io.ox/office/preview/view',
         function updateZoom(scrollTo) {
 
             var // the current zoom factor
-                factor = self.getZoomFactor() / 100,
+                zoomFactor = self.getZoomFactor() / 100,
                 // the original size of the page
-                originalSize = pageNode.data('size'),
-                // the child node of the page representing the SVG contents
-                childNode = pageNode.children().first(),
-                // the vertical/horizontal margin to adjust scroll size
-                vMargin = 0, hMargin = 0,
+                pageSize = pageNode.data('size'),
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
-            if (childNode.is('img')) {
-                childNode.width(originalSize.width * factor).height(originalSize.height * factor);
-            } else if (childNode.length > 0) {
-
-                // the horizontal and vertical margins to adjust scroll size
-                hMargin = originalSize.width * (factor - 1) / 2;
-                vMargin = originalSize.height * (factor - 1) / 2;
-
-                // CSS 'zoom' not supported in all browsers, need to transform with
-                // scale(). But: transformations do not modify the element size, so
-                // we need to modify page margin to get the correct scroll size.
-                Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
-                childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
-
-                // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
-                // if browser zoom is not 100%) regardless of existing SVG, must
-                // set its size explicitly to see anything...
-                pageNode.width(originalSize.width * factor).height(originalSize.height * factor);
-            }
+            // set the current zoom factor to the page
+            setZoomFactor(pageNode, pageSize, zoomFactor);
 
             // refresh view (scroll bars may have appeared or vanished)
             self.refreshPaneLayout();

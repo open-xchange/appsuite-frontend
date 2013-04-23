@@ -931,7 +931,9 @@ define('io.ox/office/framework/app/baseapplication',
                 index = 0;
 
             // check passed data array
-            if (dataArray.length === 0) { return $.when(); }
+            if (dataArray.length === 0) {
+                return _.extend($.when(), { abort: $.noop });
+            }
 
             // start a repeated timer, pass the delay times passed to this method
             timer = self.executeDelayed(function () {
