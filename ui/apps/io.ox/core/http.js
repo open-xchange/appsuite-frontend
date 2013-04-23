@@ -892,9 +892,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 );
             }
 
-            form.attr({
+            form.prop({
                 method: 'post',
                 enctype: 'multipart/form-data',
+                encoding: 'multipart/form-data',
                 action: url + '&' + _.serialize(options.params),
                 target: name
             })

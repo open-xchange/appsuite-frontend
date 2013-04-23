@@ -33,6 +33,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.model.set("image1", '');
                 this.closeBtn.hide();
                 this.setImageURL();
+                this.fileInput.val('');
             },
 
             handleFileSelect: function (e, input) {
@@ -49,6 +50,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                     fileData = input.files[0];
                 }
                 this.model.set("pictureFile", fileData);
+                this.model.unset("image1");
             },
 
             displayImageURL: function (e) {
@@ -98,7 +100,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                         })[hasImage ? 'show' : 'hide']()
                      ),
                     $('<form>').css({position: 'absolute'}).append(
-                        $('<input type="file" name="file" accepts="image/*">').css({opacity: 0}).css({height: '110px', width: '110px', cursor: 'pointer'})
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*">').css({opacity: 0}).css({height: '110px', width: '110px', cursor: 'pointer'})
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })

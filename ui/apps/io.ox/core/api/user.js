@@ -52,7 +52,6 @@ define("io.ox/core/api/user",
 
     // Update
     api.update =  function (o) {
-
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
@@ -90,31 +89,43 @@ define("io.ox/core/api/user",
 
 
     api.editNewImage = function (o, changes, file) {
-        // console.log("EDIT NEW IMAGE ENTERED");
-        var form = new FormData();
-        form.append('file', file);
-        form.append('json', JSON.stringify(changes));
+        var filter = function (data) {
+            $.when(
+                api.caches.get.clear(),
+                api.caches.all.clear(),
+                api.caches.list.clear()
+            ).pipe(function () {
+                api.trigger('refresh.list');
+                api.trigger('update', {
+                    id: o.id
+                });
+            });
 
-        return http.UPLOAD({
+            return data;
+        };
+
+        if ('FormData' in window && file instanceof window.File) {
+            var form = new FormData();
+            form.append('file', file);
+            form.append('json', JSON.stringify(changes));
+
+            return http.UPLOAD({
                 module: 'user',
                 params: { action: 'update', id: o.id, timestamp: o.timestamp || _.now() },
                 data: form,
                 fixPost: true
             })
-            .pipe(function (data) {
-                $.when(
-                    api.caches.get.clear(),
-                    api.caches.all.clear(),
-                    api.caches.list.clear()
-                ).pipe(function () {
-                    api.trigger('refresh.list');
-                    api.trigger('update', {
-                        id: o.id
-                    });
-                });
-
-                return data;
-            });
+            .pipe(filter);
+        } else {
+            return http.FORM({
+                module: 'user',
+                action: 'update',
+                form: file,
+                data: changes,
+                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now()}
+            })
+            .pipe(filter);
+        }
     };
 
     api.getName = function (id) {
