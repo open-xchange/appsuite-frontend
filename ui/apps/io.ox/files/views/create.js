@@ -56,10 +56,16 @@ define('io.ox/files/views/create', [
                             api.propagate('new', data);
                             notifications.yell('success', gt('This file has been added'));
                         }).fail(function (e) {
-                            if (e && e.code && e.code === 'UPL-0005')
+                            if (e && e.code && e.code === 'UPL-0005') {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                            else
+                            }
+                            else if (e && e.code && e.code === 'FLS-0024') {
+                                notifications.yell('error', gt('The allowed quota is reached.'));
+                            }
+                            else {
                                 notifications.yell('error', gt('This file has not been added'));
+                            }
+
                         });
                     }
                 });
