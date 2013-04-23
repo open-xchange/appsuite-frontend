@@ -154,7 +154,7 @@ define('io.ox/core/import/import',
                         return;
                     }
 
-                    api.import_file({
+                    api.importFile({
                         file: file[0].files ? file[0].files[0] : [],
                         form: form,
                         type: type,

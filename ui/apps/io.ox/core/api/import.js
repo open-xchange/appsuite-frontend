@@ -18,7 +18,7 @@ define('io.ox/core/api/import',
 
     var api = {};
 
-    function import_file_call(data) {
+    function importFileCall(data) {
         if ('FormData' in window) {
             var formData = new FormData();
             formData.append('file', data.file);
@@ -51,10 +51,10 @@ define('io.ox/core/api/import',
      *
      * @return - a deferred object, containing the response of the import call
      */
-    api.import_file = function (data) {
+    api.importFile = function (data) {
         var def = $.Deferred();
 
-        import_file_call(data).done(function (res) {
+        importFileCall(data).done(function (res) {
             if (res.data[0] && res.data[0].error) {
                 def.reject(res.data[0]);
             } else {
