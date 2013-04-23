@@ -12,7 +12,8 @@
  */
 
 define('io.ox/core/api/export',
-    ['io.ox/core/http', 'io.ox/core/api/factory'], function (http, apiFactory) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory'], function (http, apiFactory) {
 
     'use strict';
 
@@ -29,10 +30,13 @@ define('io.ox/core/api/export',
     /**
      * requesting server data and generalizes server response
      * @private
-     * @param  {string} folder contains
+     * @param  {string} type (target format)
+     * @param  {string} id of folder whose contents should be exported
+     * @param  {boolean} simulate return only request url (optional)
+     * @param  {string} columns as comma separated list (optional, only if type is 'csv')
      * @return {deferred}
      */
-    var get = function (type, folder, simulate) {
+    var get = function (type, folder, simulate, columns) {
         var def = $.Deferred();
         folder = _.isString(folder) ? folder : folder.id || '';
         http.GET({
@@ -40,7 +44,8 @@ define('io.ox/core/api/export',
             module: 'export',
             params: {
                 action: type,
-                folder: folder
+                folder: folder,
+                columns: columns
             },
             dataType: 'text'
         })
@@ -64,17 +69,18 @@ define('io.ox/core/api/export',
 
     /**
      * done: returns csv string; fail: returns error object
-     * @param  {string} folder contains
+     * @param  {string} id of folder (contacts) whose contents should be exported
      * @param  {boolean} simulate return only request url (optional)
+     * @param  {string} columns as comma separated list (optional)
      * @return {deferred}
      */
-    api.getCSV = function (folder, simulate) {
-        return get('CSV', folder, simulate);
+    api.getCSV = function (folder, simulate, columns) {
+        return get('CSV', folder, simulate, '501');
     };
 
     /**
-     * done: returns csv string; fail: returns error object
-     * @param  {string} folder contains
+     * done: returns ical string; fail: returns error object
+     * @param  {string} id of folder (calendar or tasks) whose contents should be exported
      * @param  {boolean} simulate return only request url (optional)
      * @return {deferred}
      */
@@ -83,8 +89,8 @@ define('io.ox/core/api/export',
     };
 
     /**
-     * done: returns csv string; fail: returns error object
-     * @param  {string} folder contains
+     * done: returns vcard string; fail: returns error object
+     * @param  {string} id of folder (contacts) whose contents should be exported
      * @param  {boolean} simulate return only request url (optional)
      * @return {deferred}
      */
