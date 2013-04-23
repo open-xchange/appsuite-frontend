@@ -33,7 +33,7 @@ define('io.ox/office/framework/view/baseview',
      * top, bottom, and side pane elements.
      *
      * Triggers the following events:
-     * - 'refreshlayout': After this view instance has refreshed the layout of
+     * - 'refresh:layout': After this view instance has refreshed the layout of
      *      all registered view panes. This event will be triggered after
      *      inserting new view panes into this view, or content nodes into the
      *      application pane, after showing/hiding view panes, while and after
@@ -116,7 +116,7 @@ define('io.ox/office/framework/view/baseview',
         /**
          * Adjusts the positions of all view pane nodes.
          */
-        function refreshPaneLayout() {
+        var refreshPaneLayout = app.createDebouncedMethod($.noop, function () {
 
             var // the root node of the application pane
                 appPaneNode = appPane.getNode(),
@@ -194,8 +194,8 @@ define('io.ox/office/framework/view/baseview',
             _(overlayPanes).each(updatePane);
 
             // notify listeners
-            self.trigger('refreshlayout');
-        }
+            self.trigger('refresh:layout');
+        });
 
         /**
          * Updates the view after the application becomes active/visible.
@@ -317,6 +317,18 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
+         * Removes all DOM nodes from the container node of the application
+         * pane.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.removeAllContentNodes = function () {
+            appContainerNode.empty();
+            return this.refreshPaneLayout();
+        };
+
+        /**
          * Inserts new DOM nodes into the private storage container. The nodes
          * will not be visible but will be part of the living DOM, thus it will
          * be possible to access and modify the geometry of the nodes.
@@ -345,20 +357,12 @@ define('io.ox/office/framework/view/baseview',
          */
         this.addPane = function (pane) {
 
-            var // callback to be executed after the pane node is inside the DOM
-                insertHandler = Utils.getFunctionOption(pane.getOptions(), 'insertHandler');
-
             // insert the pane
             (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
             app.getWindowNode().append(pane.getNode());
 
-            // refresh overall layout, call insert handler
-            refreshPaneLayout();
-            if (_.isFunction(insertHandler)) {
-                insertHandler.call(pane);
-            }
-
-            return this;
+            // refresh overall layout
+            return this.refreshPaneLayout();
         };
 
         /**

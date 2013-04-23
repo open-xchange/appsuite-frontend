@@ -48,7 +48,16 @@ define('io.ox/office/preview/view',
             ZOOMIN:  { icon: 'docs-zoom-in',       tooltip: gt('Zoom in') },
             PAGE:    { tooltip: gt('Current page and total page count') },
             ZOOM:    { tooltip: gt('Current zoom factor'), width: 65 }
-        };
+        },
+
+        // minimum horizontal distance between page thumbnail buttons
+        PREVIEW_BUTTON_DISTANCE = 8,
+
+        // fixed total width of a page thumbnail button
+        PREVIEW_BUTTON_WIDTH = Math.ceil((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 3 * PREVIEW_BUTTON_DISTANCE) / 2),
+
+        // fixed total height of a page thumbnail button
+        PREVIEW_BUTTON_HEIGHT = PREVIEW_BUTTON_WIDTH + 20;
 
     // private global functions ===============================================
 
@@ -79,13 +88,10 @@ define('io.ox/office/preview/view',
 
         function resolveSize(childNode) {
             var size = { width: childNode.width(), height: childNode.height() };
-            Utils.log('page=' + page + ' size=' + JSON.stringify(size));
             return ((size.width > 0) && (size.height > 0)) ? size : $.Deferred().reject();
         }
 
-        // set transparency to container node while loading next page
-        node = $(node).addClass('busy');
-
+        node = $(node);
         if (_.browser.Chrome) {
             // as SVG mark-up (Chrome does not show embedded images in <img> elements linked to an SVG file)
             def = model.loadPageAsSvg(page).then(function (svgMarkup) {
@@ -102,8 +108,8 @@ define('io.ox/office/preview/view',
             });
         }
 
-        // restore opacity after loading, clear node on error
-        return def.always(function () { node.removeClass('busy'); }).fail(function () { node.empty(); }).promise();
+        // clear node on error
+        return def.fail(function () { node.empty(); }).promise();
     }
 
     // class PreviewGroup =====================================================
@@ -111,41 +117,109 @@ define('io.ox/office/preview/view',
     var PreviewGroup = Group.extend({ constructor: function (app) {
 
         var // self reference
-            self = this;
+            self = this,
 
-        // private methods ----------------------------------------------------
-
-        function createButton(page) {
-
-            var pageNode = $('<div>').addClass('page'),
-                buttonNode = Utils.createButton({ value: page, label: String(page) });
-
-            // insert the button node into the DOM before loading the image
-            self.getNode().append(buttonNode.append(pageNode));
-
-            // load the image and insert it into the button node
-            loadPageIntoNode(pageNode, app.getModel(), page).done(function (size) {
-                pageNode.width(70).height(90);
-            });
-        }
-
-        function updateHandler(page) {
-            Utils.selectOptionButton(self.getNode().children(), page);
-        }
+            // page range currently inserted into this group (half-open)
+            range = { begin: 1, end: 1 };
 
         // base constructor ---------------------------------------------------
 
         Group.call(this, { classes: 'page-preview' });
 
+        // private methods ----------------------------------------------------
+
+        /**
+         * Creates and inserts a button element representing the page with the
+         * passed index.
+         */
+        function createButton(page) {
+
+            var // the page node containing the page contents
+                pageNode = $('<div>').addClass('page').append($('<div>').addClass('abs').busy()),
+                // the button node containing the page node and the page number
+                buttonNode = Utils.createButton({
+                    value: page,
+                    label: String(page),
+                    css: {
+                        left: ((page - 1) % 2) * (PREVIEW_BUTTON_WIDTH + PREVIEW_BUTTON_DISTANCE),
+                        top: Math.floor((page - 1) / 2) * PREVIEW_BUTTON_HEIGHT,
+                        width: PREVIEW_BUTTON_WIDTH,
+                        height: PREVIEW_BUTTON_HEIGHT
+                    }
+                });
+
+            function convertImageToBitmap(imgNode, pageSize) {
+
+                var // the <canvas> element for SVG/bitmap conversion
+                    canvas = $('<canvas>').attr({ width: pageSize.width, height: pageSize.height })[0];
+
+                try {
+                    canvas.getContext('2d').drawImage(imgNode[0], 0, 0, pageSize.width, pageSize.height);
+                    // currently, canvas.toDataURL() works in Firefox only, even with images from same origin
+                    imgNode.attr('src', canvas.toDataURL());
+                } catch (ex) {
+                    Utils.error('PreviewGroup.convertImageToBitmap(): exception caucht: ' + ex);
+                }
+            }
+
+            function updatePageSize(pageSize) {
+
+                var // the child node in the page, containing the SVG
+                    childNode = pageNode.children().first();
+
+                pageNode.width(70).height(90);
+
+                // Firefox has serious performance issues when rendering/scrolling
+                // nodes with many SVG contents, convert SVG pages to inline bitmaps
+                if (_.browser.Firefox && childNode.is('img')) {
+                    convertImageToBitmap(childNode, pageSize);
+                }
+            }
+
+            // set default size (DIN A* Portrait) before loading the page
+            updatePageSize({ width: 210, height: 297 });
+
+            // insert the button node into the DOM before loading the image
+            self.addChildNodes(buttonNode.append(pageNode));
+
+            // load the image and insert it into the button node
+            loadPageIntoNode(pageNode, app.getModel(), page).done(updatePageSize);
+        }
+
+        /**
+         * Highlights the button representing the page with the passed index.
+         */
+        function updateHandler(page) {
+            Utils.selectOptionButton(self.getNode().children(), page);
+        }
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Updates the thumbnail pages currently shown, according to the
+         * visible range.
+         */
+        this.updatePreview = function () {
+            if (range.begin === range.end) {
+                range.begin = 1;
+                range.end = app.getModel().getPageCount() + 1;
+                _(range.end - 1).times(function (index) {
+                    createButton(index + 1);
+                });
+            }
+        };
+
         // initialization -----------------------------------------------------
+
+        // initialize total size of the preview area
+        app.on('docs:import:success', function () {
+            self.getNode()
+                .width(SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 2 * PREVIEW_BUTTON_DISTANCE)
+                .height(Math.floor(app.getModel().getPageCount() / 2) * PREVIEW_BUTTON_HEIGHT);
+        });
 
         this.registerUpdateHandler(updateHandler)
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR });
-
-        app.on('docs:import:success', function () {
-            self.getNode().empty();
-            _(app.getModel().getPageCount()).times(function (index) { createButton(index + 1); });
-        });
 
     }}); // class PreviewComponent
 
@@ -182,8 +256,14 @@ define('io.ox/office/preview/view',
             // the application status label
             statusLabel = new BaseControls.StatusLabel(app),
 
+            // the page preview control
+            previewGroup = null,
+
             // the root node containing the current page contents
-            pageNode = $('<div>').addClass('page'),
+            pageNode = $(),
+
+            // unique page-change counter to synchronize deferred page loading
+            uniqueId = 0,
 
             // current page index (one-based!)
             page = 0,
@@ -207,17 +287,16 @@ define('io.ox/office/preview/view',
         function initHandler() {
 
             model = app.getModel();
-            self.insertContentNode(pageNode);
 
             // create the side pane
-            self.addPane(sidePane = new SidePane(app, { position: 'right', css: { width: '249px' } })
+            self.addPane(sidePane = new SidePane(app, { position: 'right' })
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
                     .addRightTab()
                     .addGroup('app/quit', new Button(GroupOptions.QUIT))
                 )
                 .addViewComponent(new Component(app)
-                    .addGroup('pages/current', new PreviewGroup(app))
+                    .addGroup('pages/current', previewGroup = new PreviewGroup(app))
                 )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
@@ -259,6 +338,13 @@ define('io.ox/office/preview/view',
 
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);
+
+            // update preview pages if side pane is toggled
+            sidePane.on('refresh:layout', function () {
+                if (sidePane.isVisible()) {
+                    previewGroup.updatePreview();
+                }
+            });
 
             // listen to specific scroll keys to switch to previous/next page
             self.getAppPaneNode().on('keydown', keyHandler);
@@ -326,37 +412,57 @@ define('io.ox/office/preview/view',
          */
         function showPage(newPage, scrollTo) {
 
+            var // the new page node
+                newPageNode = $('<div>').addClass('page'),
+                // unique index for current call of this method
+                currentId = 0;
+
             // check that the page changes inside the allowed page range
             if ((page === newPage) || (newPage < 1) || (newPage > model.getPageCount())) {
                 return;
             }
 
             // store new page index and show overlay status label
+            currentId = (uniqueId += 1);
             page = newPage;
             showStatusLabel(self.getPageLabel());
+            app.getController().update();
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
+            pageNode.addClass('busy');
 
-            // load the requested page, post-processing
-            loadPageIntoNode(pageNode, model, page)
+            // new page node must be part of the DOM for page size calculations
+            self.insertTemporaryNode(newPageNode);
+
+            // load the requested page, post-processing only if the current
+            // page has not been changed again in the meantime
+            loadPageIntoNode(newPageNode, model, page)
+            .always(function () {
+                if (currentId === uniqueId) {
+                    self.appPaneIdle();
+                    pageNode = newPageNode;
+                    self.removeAllContentNodes().insertContentNode(pageNode);
+                    app.getController().update();
+                }
+            })
             .done(function (size) {
-                // store original image size in page node (used in updateZoom() method)
-                pageNode.data('size', size);
-                updateZoom(scrollTo);
+                if (currentId === uniqueId) {
+                    // store original image size in page node (will be used in method updateZoom())
+                    pageNode.data('size', size);
+                    updateZoom(scrollTo);
+                }
             })
             .fail(function () {
-                self.showError(
-                    gt('Load Error'),
-                    //#. %1$d is the current page number that caused the error
-                    //#, c-format
-                    gt('An error occurred while loading page %1$d.', newPage),
-                    { closeable: true }
-                );
-            })
-            .always(function () {
-                self.appPaneIdle();
-                app.getController().update();
+                if (currentId === uniqueId) {
+                    self.showError(
+                        gt('Load Error'),
+                        //#. %1$d is the current page number that caused the error
+                        //#, c-format
+                        gt('An error occurred while loading page %1$d.', newPage),
+                        { closeable: true }
+                    );
+                }
             });
         }
 

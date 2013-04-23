@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/framework/view/pane',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -22,6 +25,8 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      * application window.
      *
      * @constructor
+     *
+     * @extends Events
      *
      * @param {BaseApplication} app
      *  The application containing this pane element.
@@ -50,12 +55,6 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      *      not hover the view component. Has no effect if the pane is not in
      *      transparent overlay mode, or if the current device is a touch
      *      device.
-     *  @param {Function} [options.insertHandler]
-     *      A function that will be called after this view pane has been
-     *      inserted into the application window. Needed if the geometry of the
-     *      pane DOM node needs to be initialized to perform further
-     *      initialization tasks. Will be called in the context of this view
-     *      pane instance.
      *  @param {Function} [options.componentInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      view component into this view pane. The function receives the
@@ -83,6 +82,11 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
 
             // handler called to insert a new component into this view pane
             componentInserter = Utils.getFunctionOption(options, 'componentInserter');
+
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
         // methods ------------------------------------------------------------
 
@@ -198,6 +202,7 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
         };
 
         this.destroy = function () {
+            this.events.destroy();
             _(components).invoke('destroy');
             node = components = null;
         };
