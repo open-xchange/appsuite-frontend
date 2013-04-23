@@ -30,7 +30,11 @@ define('io.ox/core/api/factory',
 
     var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
 
-    // reduce object to id, folder, recurrence_position
+    /**
+     * reduce object to id, folder, recurrence_position
+     * @param  {object|string} obj
+     * @return {object}
+     */
     var reduce = function (obj) {
         return !_.isObject(obj) ? obj : _(GET_IDS).reduce(function (memo, prop) {
             var p = prop.split(':'), source = p[0], target = p[1] || p[0];
@@ -99,6 +103,15 @@ define('io.ox/core/api/factory',
 
             cid: o.cid,
 
+            /**
+             * requests data for all ids
+             * @param  {object} options
+             * @param  {boolean} useCache (default is true)
+             * @param  {object} cache (default is cache.all)
+             * @param  {boolean} processResponse (default is true)
+             * @fires api#update: + id
+             * @return {deferred}
+             */
             getAll: function (options, useCache, cache, processResponse) {
 
                 // merge defaults for "all"
@@ -173,6 +186,13 @@ define('io.ox/core/api/factory',
                     .done(o.done.all || $.noop);
             },
 
+            /**
+             * requests data for multiple ids
+             * @param  {array} ids
+             * @param  {boolean} useCache (default is true)
+             * @param  {object} options
+             * @return {deferred}
+             */
             getList: function (ids, useCache, options) {
                 // be robust
                 ids = ids ? [].concat(ids) : [];
@@ -224,6 +244,13 @@ define('io.ox/core/api/factory',
                 }
             },
 
+            /**
+             * requests data for a single id
+             * @param  {object} options
+             * @param  {boolan} useCache (default is true)
+             * @fires api#refresh.list
+             * @return {deferred} (resolve returns response)
+             */
             get: function (options, useCache) {
                 // merge defaults for get
                 var opt = $.extend({}, o.requests.get, options);
@@ -265,12 +292,27 @@ define('io.ox/core/api/factory',
                     .done(o.done.get || $.noop);
             },
 
+
+            /**
+             * remove elements from list
+             * @param  {array} list (list)
+             * @param  {object} hash (ids of items to be removed)
+             * @param  {function} getKey
+             * @return {array} (cleaned list)
+             */
             localRemove: function (list, hash, getKey) {
                 return _(list).filter(function (o) {
                     return hash[getKey(o)] !== true;
                 });
             },
 
+            /**
+             * update or invalidates all, list and get cache
+             * @param  {array|object} ids
+             * @param  {boolean} silent (do not fire events)
+             * @fires  api#delete: + id
+             * @return {promise} jQueries deferred promise
+             */
             updateCaches: function (ids, silent) {
                 // be robust
                 ids = ids || [];
@@ -320,6 +362,16 @@ define('io.ox/core/api/factory',
                 });
             },
 
+            /**
+             * remove ids from
+             * @param  {array|object} ids
+             * @param  {boolean} local (only locally)
+             * @fires  api#refresh.all
+             * @fires  api#delete (ids)
+             * @fires  api#beforedelete (ids)
+             * @fires  api#refresh:all:local
+             * @return {deferred}
+             */
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
@@ -359,8 +411,14 @@ define('io.ox/core/api/factory',
                 });
             },
 
+            /**
+             * has entries in 'all' cache for specific folder
+             * @param  {string} folder (id)
+             * @param  {string} sort   (column)
+             * @param  {string} order
+             * @return {deferred}      (resolves returns boolean)
+             */
             needsRefresh: function (folder, sort, order) {
-                // has entries in 'all' cache for specific folder
                 return caches.all.keys(folder + DELIM + sort + '.' + order).pipe(function (data) {
                     return data !== null;
                 });
@@ -373,6 +431,12 @@ define('io.ox/core/api/factory',
 
         // add search?
         if (o.requests.search) {
+            /**
+             * search
+             * @param  {string} query   [description]
+             * @param  {object} options
+             * @return {deferred}
+             */
             api.search = function (query, options) {
                 // merge defaults for search
                 var opt = $.extend({}, o.requests.search, options || {}),
@@ -395,7 +459,11 @@ define('io.ox/core/api/factory',
 
         Events.extend(api);
 
-        // bind to global refresh
+        /**
+         * bind to global refresh; clears caches and trigger refresh.all
+         * @fires api#refresh.all
+         * @return {promise}
+         */
         api.refresh = function () {
             if (ox.online) {
                 // clear "all & list" caches
