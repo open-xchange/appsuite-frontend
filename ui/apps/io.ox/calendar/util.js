@@ -126,7 +126,7 @@ define("io.ox/calendar/util",
 // OLD STUFF - looks nice
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
-            return n_dayShort[d.getDay()] + ", " + _.pad(d.getDate(), 2) + "." + _.pad(d.getMonth() + 1, 2) + "." + d.getYear();
+            return d.format(date.DAYOFWEEK_DATE);
         },
 
 // NEW STUFF - not yet done
