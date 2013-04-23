@@ -359,9 +359,9 @@ define('io.ox/core/api/factory',
                 });
             },
 
-            needsRefresh: function (folder, sort, desc) {
+            needsRefresh: function (folder, sort, order) {
                 // has entries in 'all' cache for specific folder
-                return caches.all.keys(folder + DELIM + sort + '.' + desc).pipe(function (data) {
+                return caches.all.keys(folder + DELIM + sort + '.' + order).pipe(function (data) {
                     return data !== null;
                 });
             },
