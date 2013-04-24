@@ -10,10 +10,11 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define('io.ox/tasks/api', ['io.ox/core/http',
-                           'io.ox/core/config',
-                           'io.ox/core/api/factory',
-                           'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
+define('io.ox/tasks/api',
+        ['io.ox/core/http',
+         'io.ox/core/config',
+         'io.ox/core/api/factory',
+         'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
 
     'use strict';
 
@@ -102,6 +103,11 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         }
     }
 
+    /**
+     * create a task
+     * @param  {object} task
+     * @return {deferred} done returns object with id property
+     */
     api.create = function (task) {
         task.participants = repairParticipants(task.participants);
         var attachmentHandlingNeeded = task.tempAttachmentIndicator;
@@ -194,6 +200,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         }
     };
 
+    /**
+     * update single task
+     * @param  {object} task (id, folder_id, 'changed attributes')
+     * @param  {string} newFolder (optional; target folder id)
+     * @fires  api#refresh.all
+     * @return {[type]}
+     */
     api.update = function (task, newFolder) {
         var attachmentHandlingNeeded = task.tempAttachmentIndicator;
         delete task.tempAttachmentIndicator;
@@ -259,6 +272,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
 
     //used by done/undone actions when used with multiple selection
+    /**
+     * update list of taks used by done/undone actions when used with multiple selection
+     * @param  {array}    list of task objects (id, folder_id)
+     * @param  {object}   modifications
+     * @fires  api#refresh.all
+     * @return {deferred}
+     */
     api.updateMultiple = function (list, modifications) {
         http.pause();
         modifications.notification = true;//set always (OX6 does this too)
@@ -291,6 +311,13 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         });
     };
 
+    /**
+     * move task to folder
+     * @param  {object|array} task (or array of tasks)
+     * @param  {string} newFolder (target folder id)
+     * @fires  api#refresh.all
+     * @return {deferred} done returns object with properties folder_id and task id
+     */
     api.move = function (task, newFolder) {
         var folder;
         if (!task.length) {
@@ -333,6 +360,11 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         }
     };
 
+    /**
+     * change confirmation status
+     * @param  {object} options (properties: data, folder_id, id)
+     * @return {promise}
+     */
     api.confirm =  function (options) { //options.id is the id of the task not userId
         var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({
@@ -351,6 +383,9 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         });
     };
 
+    /**
+     * @return {string} default folder for tasks
+     */
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
     };
@@ -360,6 +395,10 @@ define('io.ox/tasks/api', ['io.ox/core/http',
         return api.search({ pattern: '', end: _.now() });
     };
 
+    /**
+     * used for portal plugin
+     * @return {deferred} done returns list of tasks
+     */
     api.getAllMyTasks = (function () {
 
         function delegatedToMe(participants) {
@@ -382,7 +421,12 @@ define('io.ox/tasks/api', ['io.ox/core/http',
 
     }());
 
-    //for notification view
+    /**
+     * get tasks for notification view
+     * @fires api#new-tasks (dueTasks)
+     * @fires api#confirm-tasks (confirmTasks)
+     * @return {deferred} done returns list of tasks
+     */
     api.getTasks = function () {
 
         return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed
@@ -425,11 +469,21 @@ define('io.ox/tasks/api', ['io.ox/core/http',
     };
 
     //add task to the list
+    /**
+     * add task to the list
+     * @param {string} key (task id)
+     * @return {undefined}
+     */
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
 
-    //remove task from the list
+    /**
+     * remove task from the list
+     * @param  {string} key (task id)
+     * @fires  api#update: + key
+     * @return {undefined}
+     */
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];
         //trigger refresh
