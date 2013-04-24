@@ -482,21 +482,23 @@ define("io.ox/calendar/api",
         var result = [], requests = [];
 
         _(list).each(function (obj) {
-            var key = [obj.type, obj.id, options.start, options.end].join('-');
-            // in cache?
-            if (key in api.caches.freebusy && useCache) {
-                result.push(api.caches.freebusy[key]);
-            } else {
-                result.push(key);
-                requests.push({
-                    module: 'calendar',
-                    action: 'freebusy',
-                    id: obj.id,
-                    type: obj.type,
-                    start: options.start,
-                    end: options.end,
-                    timezone: 'UTC'
-                });
+            if (obj.type === 1 || obj.type === 3) {//freebusy only supports internal users and resources
+                var key = [obj.type, obj.id, options.start, options.end].join('-');
+                // in cache?
+                if (key in api.caches.freebusy && useCache) {
+                    result.push(api.caches.freebusy[key]);
+                } else {
+                    result.push(key);
+                    requests.push({
+                        module: 'calendar',
+                        action: 'freebusy',
+                        id: obj.id,
+                        type: obj.type,
+                        start: options.start,
+                        end: options.end,
+                        timezone: 'UTC'
+                    });
+                }
             }
         });
 
