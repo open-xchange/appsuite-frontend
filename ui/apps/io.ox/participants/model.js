@@ -132,7 +132,7 @@ define("io.ox/participants/model",
                         self.id = self.get('id');
                         self.trigger("change");
                     } else {
-                        self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
+                        self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
                     }
                     self.trigger('change', self);
                     df.resolve();
