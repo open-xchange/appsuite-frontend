@@ -320,6 +320,11 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
+// jQuery Imageloader
+
+utils.copy(utils.list("lib", ["jquery.imageloader.js"]),
+    { to: utils.dest("apps/io.ox/core/tk") });
+
 // Mediaelement.js
 
 utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
@@ -474,7 +479,7 @@ utils.merge('manifests/' + pkgName + '.json',
 // themes
 
 if (!envBoolean('skipLess')) {
-    
+
     // own themes
     _.each(utils.list('apps/themes/*/definitions.less'), function(defs) {
         var dir = path.dirname(defs);
@@ -494,7 +499,7 @@ if (!envBoolean('skipLess')) {
                  { filter: less.compile });
         });
     });
-    
+
     // foreign themes
     _.each(utils.list(utils.dest('apps/themes'), '*/definitions.less'),
         function (defs) {

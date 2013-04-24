@@ -22,13 +22,13 @@ define('io.ox/files/icons/perspective',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
      'io.ox/core/tk/selection',
-     'io.ox/core/notifications'
+     'io.ox/core/notifications',
+     'apps/io.ox/core/tk/jquery.imageloader.js'
      ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
 
     var dropZone;
-
     ext.point('io.ox/files/icons/options').extend({
         thumbnailWidth: 128,
         thumbnailHeight: 90,
@@ -88,15 +88,14 @@ define('io.ox/files/icons/perspective',
     }
 
     function iconError(e) {
-        $(this).replaceWith(drawGeneric(e.data.name));
-    }
-
-    function officeIconError(e) {
         $(this).remove();
     }
 
-    function drawImage(src) {
-        return $('<img>', { alt: '', src: src }).addClass('img-polaroid');
+    function drawImage(src, genericIcon) {
+        return $('<img>', { alt: '', 'data-src': src }).addClass('img-polaroid lazy')
+            .on('load', function (event) {
+                genericIcon.remove();
+            });
     }
 
     function getCover(file, options) {
@@ -149,30 +148,24 @@ define('io.ox/files/icons/perspective',
             var file = baton.data,
                 options = baton.options,
                 img,
-                wrap = $('<div class="wrap">'),
-                iElement;
+                genericIcon = drawGeneric(file.filename),
+                wrap = $('<div class="wrap">').append(genericIcon);
+
             this.addClass('file-icon pull-left selectable').attr('data-obj-id', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-                img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, iconError);
+                img = drawImage(getIcon(file, options), genericIcon);
             } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
-                img = drawImage(getCover(file, options)).on('error', { name: file.filename }, iconError);
+                img = drawImage(getCover(file, options), genericIcon);
             } else if (Caps.has('document_preview') &&
                     (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
                     (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
-                iElement = drawGeneric(file.filename);
-                wrap.append(iElement);
-                img = drawImage(getOfficePreview(file, options)).on('error', { name: file.filename }, officeIconError);
-                img.css('visibility', 'hidden');
-                img.on('load', function (event) {
-                    iElement.remove();
-                    img.css('visibility', '');
-                });
-
-            } else {
-                img = drawGeneric(file.filename);
+                img = drawImage(getOfficePreview(file, options), genericIcon);
+            }
+            if (img) {
+                img.on('error', { name: file.filename }, iconError);
             }
             this.append(
-                wrap.append(img),
+                (img ? wrap.append(img) : wrap),
                 $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
                 $('<input type="checkbox" class="reflect-selection" style="display:none">')
             );
@@ -244,6 +237,8 @@ define('io.ox/files/icons/perspective',
                     dropZoneInit(app);
                     app.getWindow().search.close();
                     self.main.closest('.search-open').removeClass('search-open');
+                    allIds = [];
+                    self.selection.clear();
                     drawFirst();
                 });
 
@@ -340,6 +335,12 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
+                _.debounce($('img.img-polaroid').imageloader({
+                    callback: function (elm) {
+                        $(elm).fadeIn();
+                    }
+                }), 300);
+
                 self.selection.update();
             };
 
@@ -372,7 +373,8 @@ define('io.ox/files/icons/perspective',
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
                         baton.allIds = allIds = filterFiles(ids, options);
-
+                        self.selection.clear();
+                        self.selection.resetLastIndex();
                         self.selection.init(allIds);
                         redraw(allIds.slice(start, end));
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
@@ -462,12 +464,8 @@ define('io.ox/files/icons/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search', function () {
-                drawFirst();
-            });
-
-            win.on('cancel-search', function () {
-                // TODO: Abort xhr request if still running
+            win.on('search cancel-search', function () {
+                allIds = [];
                 drawFirst();
             });
 
@@ -577,8 +575,6 @@ define('io.ox/files/icons/perspective',
 
                         });
 
-                        self.selection.remove(deleted);
-
                         _(added).each(function (cid) {
 
                             var data = hash[cid],
@@ -592,14 +588,13 @@ define('io.ox/files/icons/perspective',
                                 }
                                 end = end + 1;
                             }
-                            self.selection.insertAt([data], self.selection.getIndex(prev) + 1);
                         });
-
+                        self.selection.clear();
+                        self.selection.resetLastIndex();
+                        self.selection.init(allIds);
                         recalculateLayout();
                         hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
-                } else {
-                    drawFirst();
                 }
             });
             drawFirst();
