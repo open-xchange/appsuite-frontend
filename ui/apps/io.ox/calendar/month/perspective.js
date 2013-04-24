@@ -245,8 +245,8 @@ define('io.ox/calendar/month/perspective',
             this.tops = {};
             var self = this;
             if (this.pane) {
-                $('.day.first', this.pane).each(function () {
-                    self.tops[($(this).position().top + self.pane.scrollTop()) >> 0] = $(this).data('date');
+                $('.day.first', this.pane).each(function (i, el) {
+                    self.tops[($(el).position().top + self.pane.scrollTop()) >> 0] = $(el);
                 });
             }
         },
@@ -427,19 +427,21 @@ define('io.ox/calendar/month/perspective',
             );
 
             this.pane
-                .on('scrollstop', $.proxy(function (e) {
-                    var month = false;
+            .on('scroll', $.proxy(function (e) {
                     if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
                         this.drawWeeks();
                     }
                     if (this.scrollTop() <= this.scrollOffset) {
                         this.drawWeeks({up: true});
                     }
+                }, this))
+                .on('scrollstop', $.proxy(function (e) {
+                    var month = false;
 
                     // find first visible month on scroll-position
                     for (var y in this.tops) {
                         if (!month || this.scrollTop() + this.scrollOffset >= y) {
-                            month = this.tops[y];
+                            month = this.tops[y].data('date');
                         } else {
                             break;
                         }

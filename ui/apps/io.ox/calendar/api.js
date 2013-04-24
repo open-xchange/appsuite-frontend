@@ -71,7 +71,6 @@ define("io.ox/calendar/api",
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
-
             var key = o.folder + "." + o.start + "." + o.end + "." + o.order,
                 params = {
                     action: "all",
@@ -92,7 +91,7 @@ define("io.ox/calendar/api",
                 params.folder = o.folder;
             }
 
-            if (all_cache[key] === undefined  || !useCache) {
+            if (all_cache[key] === undefined || !useCache) {
                 return http.GET({
                         module: "calendar",
                         params: params

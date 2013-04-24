@@ -52,8 +52,8 @@ define('io.ox/calendar/week/view',
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
-        restoreCache:   null,     // object, which contains data for save and restore functions
-        extPoint:       null,
+        restoreCache:   null,   // object, which contains data for save and restore functions
+        extPoint:       null,   // appointment extension
 
         // define view events
         events: {
@@ -188,7 +188,11 @@ define('io.ox/calendar/week/view',
                 break;
             }
             // set api reference date to the beginning of the month
-            this.apiRefTime = new date.Local(this.startDate.getYear(), this.startDate.getMonth(), 1);
+            var month = this.startDate.getMonth();
+            if (month % 2 === 1) {
+                month--;
+            }
+            this.apiRefTime = new date.Local(this.startDate.getYear(), month, 1);
         },
 
         /**
