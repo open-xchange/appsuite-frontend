@@ -302,7 +302,7 @@ define('io.ox/portal/settings/pane',
             });
 
             collection.on('add', function (model) {
-                model.candidate = true;
+                model.set({ candidate: true }, { silent: true });
                 var view = createView(model).render();
                 list.append(view.el);
                 view.edit();

@@ -165,7 +165,11 @@ define('io.ox/portal/main',
         } else if ('color' in e.changes) {
             setColor(app.getWidgetNode(model), model);
         } else if (this.wasElementDeleted(model)) {
-             //Element was removed, no need to refresh it.
+            // element was removed, no need to refresh it.
+            return;
+        } else if ('unset' in e && 'candidate' in e.changes) {
+            // redraw fresh widget
+            app.refreshWidget(model);
         } else {
             app.drawWidget(model);
         }
@@ -266,9 +270,9 @@ define('io.ox/portal/main',
                 node.find('.content').remove();
                 node.append(
                     $('<div class="content error">').append(
-                        $('<div>').text(gt('An error occurred. The message was:')),
-                        $('<div class="italic">').text(e.error),
-                        '<br />',
+                        $('<div>').text(gt('An error occurred.')),
+                        $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
+                        $('<br>'),
                         $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
                             node.find('.decoration').addClass('pending');
                             loadAndPreview(point, node, baton);
@@ -286,6 +290,8 @@ define('io.ox/portal/main',
 
     app.drawWidget = function (model, index) {
 
+        index = index || 0;
+
         var type = model.get('type'),
             node = app.getWidgetNode(model),
             delay = (index / 2 >> 0) * 1000,
@@ -300,7 +306,6 @@ define('io.ox/portal/main',
         if (!model.drawn) {
 
             model.drawn = true;
-            index = index || 0;
 
             // remember
             model.set('baton', baton);
@@ -326,12 +331,17 @@ define('io.ox/portal/main',
     };
 
     app.refreshWidget = function (model, index) {
+
         if (model.drawn) {
+
+            index = index || 0;
+
             var type = model.get('type'),
                 node = app.getWidgetNode(model),
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
+
             _.defer(function () {
                 _.delay(function () {
                     node.find('.decoration').addClass('pending');

@@ -153,7 +153,7 @@ define('plugins/portal/rss/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.candidate) {
+            if (model.has('candidate')) {
                 view.removeWidget();
             }
         });
@@ -175,11 +175,11 @@ define('plugins/portal/rss/register',
 
             deferred.done(function () {
                 dialog.close();
-                model.candidate = false;
                 model.set({
                     title: description,
                     props: { url: url.split(/\n/), description: description }
                 });
+                model.unset('candidate');
             });
 
             deferred.fail(function () {

@@ -53,7 +53,7 @@ define('io.ox/portal/widgets',
 
         getEnabled: function () {
             return collection.chain().filter(function (model) {
-                return !model.has('enabled') || model.get('enabled') === true;
+                return !model.has('candidate') && (!model.has('enabled') || model.get('enabled') === true);
             });
         },
 
