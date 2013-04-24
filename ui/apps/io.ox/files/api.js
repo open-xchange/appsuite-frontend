@@ -444,11 +444,10 @@ define('io.ox/files/api',
         var url = ox.apiRoot + '/files',
             query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
                 (file.version !== undefined ? '&version=' + file.version : ''),
-            name = ((file.filename && mode !== 'play') ? '/' + encodeURIComponent(file.filename) : '');
+            name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
         switch (mode) {
         case 'open':
         case 'view':
-        case 'play':
             return url + name + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';
@@ -535,6 +534,13 @@ define('io.ox/files/api',
             pattern =                             '\\.(mp3|m4a|m4b|wma|wav|ogg)';
             if (_.browser.Safari) {     pattern = '\\.(mp3|m4a|m4b|wav)'; }
             if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
+            if (_.browser.Firefox) {
+                // Match Round Brackets () and return false due to a Flashplugin Bug in MediaElement.js
+                // Reported issue here: https://github.com/johndyer/mediaelement/issues/846
+                if ((new RegExp('((.*)\\((.*)|(.*)\\)(.*))', 'i')).test(filename)) {
+                    return false;
+                }
+            }
         }
         return (new RegExp(pattern, 'i')).test(filename);
     };
