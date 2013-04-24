@@ -128,7 +128,6 @@ define('io.ox/tasks/api',
         refreshPortal = function () {
             api.trigger('removePopup');
             if (portalModel && portalApp) {
-                console.warn('portal loaded');
                 portalApp.refreshWidget(portalModel, 0);
             } else {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
