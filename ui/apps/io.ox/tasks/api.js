@@ -184,13 +184,15 @@ define('io.ox/tasks/api',
         module: 'tasks',
         keyGenerator: function (obj) {
             var folder = null;
-            if (obj.folder) {
-                folder = obj.folder;
-            } else if (obj.folder_id) {
-                folder = obj.folder_id;
-            } else {
-                console.log('no folderAttribute for cache Keygen found, using default');
-                folder = folderApi.getDefaultFolder('tasks');
+            if (obj) {
+                if (obj.folder) {
+                    folder = obj.folder;
+                } else if (obj.folder_id) {
+                    folder = obj.folder_id;
+                } else {
+                    console.log('no folderAttribute for cache Keygen found, using default');
+                    folder = folderApi.getDefaultFolder('tasks');
+                }
             }
 
             return obj ? folder + '.' + obj.id : '';
