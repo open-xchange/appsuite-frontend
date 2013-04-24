@@ -18,6 +18,7 @@
 
 var fs = require('fs')
   , exec = require('child_process').exec
+  , utils = require('utilities')
   , currDir = process.cwd();
 
 var NpmPublishTask = function (name, packageFiles) {
@@ -29,28 +30,103 @@ var NpmPublishTask = function (name, packageFiles) {
 
 NpmPublishTask.prototype = new (function () {
 
-  var getPackageVersionNumber = function () {
-    var pkg = JSON.parse(fs.readFileSync(process.cwd() + '/package.json').toString())
-      , version = pkg.version;
-    return version;
-  };
+  var _currentBranch = null;
+
+  var getPackage = function () {
+        var pkg = JSON.parse(fs.readFileSync(process.cwd() + '/package.json').toString());
+        return pkg;
+      }
+    , getPackageVersionNumber = function () {
+        return getPackage().version;
+      };
 
   this.define = function () {
     var self = this;
 
     namespace('npm', function () {
-     task('version', function () {
+      task('fetchTags', {async: true}, function () {
+        // Make sure local tags are up to date
         cmds = [
-          'npm version patch --message "Bumped version number."'
-        , 'git push origin master'
-        , 'git push --tags'
+          'git fetch --tags'
         ];
         jake.exec(cmds, function () {
-          var version = getPackageVersionNumber();
-          console.log('Bumped version number to v' + version + '.');
+          console.log('Fetched remote tags.');
           complete();
         });
-      }, {async: true});
+      });
+
+      task('getCurrentBranch', {async: true}, function () {
+        // Figure out what branch to push to
+        exec('git symbolic-ref --short HEAD',
+            function (err, stdout, stderr) {
+          if (err) {
+            fail(err);
+          }
+          if (stderr) {
+            fail(new Error(stderr));
+          }
+          if (!stdout) {
+            fail(new Error('No current Git branch found'));
+          }
+          _currentBranch = utils.string.trim(stdout);
+          console.log('On branch ' + _currentBranch);
+          complete();
+        });
+      });
+
+      task('version', {async: true}, function () {
+        // Only bump, push, and tag if the Git repo is clean
+        exec('git status --porcelain --untracked-files=no',
+            function (err, stdout, stderr) {
+          var cmds
+            , path
+            , pkg
+            , version
+            , arr
+            , patch
+            , message;
+
+          if (err) {
+            fail(err);
+          }
+          if (stderr) {
+            fail(new Error(stderr));
+          }
+          if (stdout.length) {
+            fail(new Error('Git repository is not clean.'));
+          }
+
+          // Grab the current version-string
+          path = process.cwd() + '/package.json';
+          pkg = getPackage();
+          version = pkg.version;
+          // Increment the patch-number for the version
+          arr = version.split('.');
+          patch = parseInt(arr.pop(), 10) + 1;
+          arr.push(patch);
+          version = arr.join('.');
+          // New package-version
+          pkg.version = version;
+          // Commit-message
+          message = 'Version ' + version
+
+          // Update package.json with the new version-info
+          fs.writeFileSync(path, JSON.stringify(pkg, true, 2));
+
+          cmds = [
+            'git commit package.json -m "' + message + '"'
+          , 'git push origin ' + _currentBranch
+          , 'git tag -a v' + version + ' -m "' + message + '"'
+          , 'git push --tags'
+          ];
+
+          jake.exec(cmds, function () {
+            var version = getPackageVersionNumber();
+            console.log('Bumped version number to v' + version + '.');
+            complete();
+          });
+        });
+      });
 
       task('definePackage', function () {
         var version = getPackageVersionNumber()
@@ -61,7 +137,7 @@ NpmPublishTask.prototype = new (function () {
         });
       });
 
-      task('package', function () {
+      task('package', {async: true}, function () {
         var definePack = jake.Task['npm:definePackage']
           , pack = jake.Task['package']
           , version = getPackageVersionNumber();
@@ -75,9 +151,9 @@ NpmPublishTask.prototype = new (function () {
           pack.invoke();
         });
         definePack.invoke();
-      }, {async: true});
+      });
 
-      task('publish', function () {
+      task('publish', {async: true}, function () {
         var version = getPackageVersionNumber();
         console.log('Publishing ' + self.name + ' v' + version);
         cmds = [
@@ -92,7 +168,7 @@ NpmPublishTask.prototype = new (function () {
             complete();
           }, {stdout: true});
         }, 5000);
-      }, {async: true});
+      });
 
       task('cleanup', function () {
         var clobber = jake.Task['clobber'];
@@ -104,8 +180,10 @@ NpmPublishTask.prototype = new (function () {
     });
 
     desc('Bump version-number, package, and publish to NPM.');
-    task('publish', ['npm:version', 'npm:package',
-        'npm:publish', 'npm:cleanup'], function () {});
+    task('publish', ['npm:fetchTags', 'npm:getCurrentBranch', 'npm:version',
+        'npm:package', 'npm:publish', 'npm:cleanup'], function () {});
+
+    jake.Task['npm:definePackage'].invoke();
   };
 
 })();

@@ -1,20 +1,42 @@
-var fs = require('fs')
+var util = require('util') // Native Node util module
+  , fs = require('fs')
   , path = require('path')
+  , existsSync = typeof fs.existsSync == 'function' ?
+      fs.existsSync : path.existsSync
   , EventEmitter = require('events').EventEmitter
   , Task
   , TaskBase
   , utils = require('../utils');
 
 /**
- * @constructor
- * A Jake task
+  @name jake
+  @namespace jake
+*/
+/**
+  @name jake.Task
+  @constructor
+  @augments EventEmitter
+  @description A Jake Task
+
+  @param {String} name The name of the Task
+  @param {Array} [prereqs] Prerequisites to be run before this task
+  @param {Function} [action] The action to perform for this task
+  @param {Object} [opts]
+    @param {Array} [opts.asyc=false] Perform this task asynchronously.
+    If you flag a task with this option, you must call the global
+    `complete` method inside the task's action, for execution to proceed
+    to the next task.
  */
 Task = function () {
-  this.constructor.prototype.initialize.apply(this, arguments);
+  // Do constructor-work only on actual instances, not when used
+  // for inheritance
+  if (arguments.length) {
+    this.init.apply(this, arguments);
+  }
 };
 
-Task.prototype = new EventEmitter();
-Task.prototype.constructor = Task;
+util.inherits(Task, EventEmitter);
+
 TaskBase = new (function () {
 
   // Parse any positional args attached to the task-name
@@ -32,7 +54,12 @@ TaskBase = new (function () {
         };
       };
 
-  this.initialize = function (name, prereqs, action, options) {
+  /**
+    @name jake.Task#event:complete
+    @event
+   */
+
+  this.init = function (name, prereqs, action, options) {
     var opts = options || {};
 
     this._currentPrereqIndex = 0;
@@ -43,8 +70,9 @@ TaskBase = new (function () {
     this.async = false;
     this.done = false;
     this.fullName = null;
-    this.desription = null;
+    this.description = null;
     this.args = [];
+    this.namespace = null;
 
     // Support legacy async-flag -- if not explicitly passed or falsy, will
     // be set to empty-object
@@ -58,14 +86,24 @@ TaskBase = new (function () {
     }
   };
 
-  // Run prereqs, run task
+  /**
+    @name jake.Task#invoke
+    @function
+    @description Runs prerequisites, then this task. If the task has already
+    been run, will not run the task again.
+   */
   this.invoke = function () {
     jake._invocationChain.push(this);
     this.args = Array.prototype.slice.call(arguments);
     this.runPrereqs();
   };
 
-  // Reenable, run task (no prereqs)
+  /**
+    @name jake.Task#reenable
+    @function
+    @description Runs this task, without running any prerequisites. If the task
+    has already been run, it will still run it again.
+   */
   this.execute = function () {
     jake._invocationChain.push(this);
     this.reenable();
@@ -85,25 +123,41 @@ TaskBase = new (function () {
     var self = this
       , index = this._currentPrereqIndex
       , name = this.prereqs[index]
+      , absolute
       , prereq
       , parsed
       , filePath
       , stats;
+
     if (name) {
       parsed = parsePrereqName(name);
-      prereq = jake.Task[parsed.name];
+      absolute = parsed.name[0] === '^';
+
+      if (absolute) {
+        parsed.name = parsed.name.slice(1);
+        prereq = jake.Task[parsed.name];
+      } else {
+        prereq = this.namespace.resolve(parsed.name);
+      }
 
       // Task doesn't exist, may be a static file
       if (!prereq) {
-        filePath = name.split(':')[1] || name;
+        // May be namespaced
+        filePath = name.split(':').pop();
         // Create a dummy FileTask if file actually exists
-        if (path.existsSync(filePath)) {
-          stats = fs.statSync(filePath);
-          prereq = new jake.FileTask(name);
-          prereq.modTime = stats.mtime;
-					// Put this dummy Task in the global Tasks list so
-          // modTime will be eval'd correctly
-					jake.Task[parsed.name] = prereq;
+        if (existsSync(filePath)) {
+          // If there's not already an existing dummy FileTask for it,
+          // create one
+          prereq = jake.Task[filePath];
+          if (!prereq) {
+            stats = fs.statSync(filePath);
+            prereq = new jake.FileTask(filePath);
+            prereq.modTime = stats.mtime;
+            prereq.dummy = true;
+            // Put this dummy Task in the global Tasks list so
+            // modTime will be eval'd correctly
+            jake.Task[filePath] = prereq;
+          }
         }
         // Otherwise it's not a valid task
         else {
@@ -111,14 +165,14 @@ TaskBase = new (function () {
         }
       }
 
-      if (!prereq.done) {
-          // Do when done
-          prereq.once('complete', function () {
-            self.handlePrereqComplete(prereq);
-          });
-          prereq.invoke.apply(prereq, parsed.args);
+      // Do when done
+      if (prereq.done) {
+        self.handlePrereqComplete(prereq);
       } else {
+        prereq.once('complete', function () {
           self.handlePrereqComplete(prereq);
+        });
+        prereq.invoke.apply(prereq, parsed.args);
       }
     }
   };
@@ -127,7 +181,7 @@ TaskBase = new (function () {
     var prereqs
       , prereq;
     this.done = false;
-    if (deep) {
+    if (deep && this.prereqs) {
       prereqs = this.prereqs;
       for (var i = 0, ii = prereqs.length; i < ii; i++) {
         prereq = jake.Task[prereqs[i]];
@@ -161,7 +215,13 @@ TaskBase = new (function () {
   this.run = function () {
     var runAction = this.shouldRunAction();
     if (runAction) {
-      this.action.apply(this, this.args);
+      try {
+        this.action.apply(this, this.args);
+      }
+      catch (e) {
+        this.emit('error', e);
+        return; // Bail out, not complete
+      }
     }
     if (!(runAction && this.async)) {
       complete();
@@ -169,6 +229,7 @@ TaskBase = new (function () {
   };
 
   this.complete = function () {
+    this._currentPrereqIndex = 0;
     this.done = true;
     this.emit('complete');
   };
