@@ -13,8 +13,9 @@
 define('plugins/upsell/simple-wizard/register',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
+     'io.ox/core/config',
      'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, settings, gt) {
+     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, config, settings, gt) {
 
     'use strict';
 
@@ -57,12 +58,15 @@ define('plugins/upsell/simple-wizard/register',
                 context_id: ox.context_id,
                 hostname: location.hostname,
                 id: options.id || '',
+                imap_login: '', // missing
                 language: ox.language,
+                mail: config.get('modules.mail.defaultaddress', ''),
                 missing: options.missing || '',
                 session: ox.session,
                 type: options.type || '',
                 user: ox.user,
-                user_id: ox.user_id
+                user_id: ox.user_id,
+                user_login: '' // missing
             };
         },
 
@@ -88,7 +92,19 @@ define('plugins/upsell/simple-wizard/register',
         },
 
         addControls: function () {
-            this.addButton('cancel', gt('Cancel'));
+            if (settings.get('closeButton', true) === true) {
+                this.addButton('cancel', gt('Close'));
+            }
+        },
+
+        getPopup: function () {
+            return instance;
+        },
+
+        setSrc: function (src) {
+            if (instance) {
+                instance.getContentNode().idle().find('iframe').attr('src', src);
+            }
         },
 
         open: function (e, options) {
@@ -135,7 +151,7 @@ define('plugins/upsell/simple-wizard/register',
                         this.setUnderlayStyle({ opacity: overlayOpacity });
                         var self = this;
                         setTimeout(function () {
-                            self.getContentNode().idle().find('iframe').attr('src', that.getURL(options));
+                            that.setSrc(that.getURL(options));
                             ox.trigger('upsell:simple-wizard:show', self);
                         }, 250);
                     })
