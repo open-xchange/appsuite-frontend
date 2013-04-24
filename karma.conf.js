@@ -14,6 +14,7 @@ frameworks = ['jasmine', 'requirejs'];
 files = [
   'spec/main-test.js',
   {pattern: 'spec/**/*_spec.js', included: false},
+  {pattern: 'spec/shared/**/*.js'},
   {pattern: 'ui/apps/**/*.js', included: false},
   'ui/lib/jquery.min.js',
   'ui/lib/underscore.js',
