@@ -170,6 +170,9 @@ define('io.ox/portal/main',
         } else if ('unset' in e && 'candidate' in e.changes) {
             // redraw fresh widget
             app.refreshWidget(model);
+        } else if ('props' in e.changes && model.drawn) {
+            // redraw existing widget due to config change
+            app.refreshWidget(model);
         } else {
             app.drawWidget(model);
         }
