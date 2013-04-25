@@ -86,346 +86,6 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/model.js:168
-msgid "Publication must have a target."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/model.js:172
-msgid "Publication must have a site."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/model.js:180
-msgid "Model is incomplete."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/model.js:182
-msgid "You have to enter a username and password to subscribe."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:69
-msgid "Only showing items related to folder \"%1$s\""
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:71
-msgid "Show all items"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:147
-msgid "Link"
-msgstr ""
-
-#: apps/io.ox/core/main.js:506 apps/io.ox/core/pubsub/settings/pane.js:191
-msgid "Refresh"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:455
-#: apps/io.ox/calendar/edit/recurrence-view.js:249
-#: apps/io.ox/calendar/edit/recurrence-view.js:851
-#: apps/io.ox/contacts/actions.js:618
-#: apps/io.ox/core/pubsub/settings/pane.js:196
-#: apps/io.ox/core/pubsub/settings/pane.js:197 apps/io.ox/files/actions.js:565
-#: apps/io.ox/mail/actions.js:871
-#: apps/io.ox/mail/settings/signatures/register.js:297
-#: apps/io.ox/portal/settings/pane.js:157
-#: apps/io.ox/settings/accounts/settings/pane.js:34
-#: apps/io.ox/tasks/actions.js:427
-msgid "Edit"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:205
-#: apps/io.ox/core/pubsub/settings/pane.js:206
-#: apps/io.ox/portal/settings/pane.js:162
-msgid "Disable"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:205
-#: apps/io.ox/core/pubsub/settings/pane.js:206
-#: apps/io.ox/portal/settings/pane.js:166
-msgid "Enable"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:280
-msgid "Subscription refresh"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:281
-msgid "A refresh takes some time, so please be patient, while the refresh runs in the background. Only one refresh per subscription and per session is allowed."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:314
-msgid "This feature is deactivated"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:360
-msgid "This folder has publications but you are not allowed to view or edit them"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:362
-msgid "This folder has subscriptions but you are not allowed to view or edit them"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:368
-msgid "This folder has no publications"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:369
-msgid "This folder has no subscriptions"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:372
-msgid "You don't have any publications yet"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:373
-msgid "You don't have any subscriptions yet"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:397
-msgid "Publications"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/settings/pane.js:400
-msgid "Subscriptions"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:91 apps/io.ox/files/actions.js:653
-msgid "Publish"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
-#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
-#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
-#: apps/io.ox/calendar/month/perspective.js:107
-#: apps/io.ox/calendar/week/perspective.js:73
-#: apps/io.ox/calendar/week/perspective.js:116 apps/io.ox/contacts/actions.js:51
-#: apps/io.ox/contacts/actions.js:149 apps/io.ox/contacts/distrib/main.js:162
-#: apps/io.ox/contacts/edit/main.js:152
-#: apps/io.ox/core/commons-folderview.js:403 apps/io.ox/core/export/export.js:71
-#: apps/io.ox/core/import/import.js:115 apps/io.ox/core/main.js:318
-#: apps/io.ox/core/permissions/permissions.js:352
-#: apps/io.ox/core/pubsub/publications.js:92
-#: apps/io.ox/core/pubsub/subscriptions.js:47
-#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/folderviews.js:567
-#: apps/io.ox/core/tk/folderviews.js:596 apps/io.ox/core/tk/folderviews.js:645
-#: apps/io.ox/core/tk/folderviews.js:697 apps/io.ox/core/upsell.js:33
-#: apps/io.ox/editor/main.js:242 apps/io.ox/files/actions.js:249
-#: apps/io.ox/files/actions.js:306 apps/io.ox/files/actions.js:359
-#: apps/io.ox/files/actions.js:402 apps/io.ox/files/actions.js:489
-#: apps/io.ox/files/views/create.js:40 apps/io.ox/mail/accounts/settings.js:215
-#: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
-#: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
-#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/tk/dialogs.js:28
-#: apps/io.ox/portal/settings/pane.js:248
-#: apps/io.ox/settings/accounts/settings/pane.js:51
-#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
-#: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
-#: apps/io.ox/tasks/edit/util.js:145 apps/plugins/portal/flickr/register.js:207
-#: apps/plugins/portal/rss/register.js:143
-#: apps/plugins/portal/tumblr/register.js:177
-#: apps/plugins/portal/userSettings/register.js:61
-msgid "Cancel"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:95
-msgid "Publish folder"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:97
-msgid "Publish item"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:106
-msgid "Publication has been added"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:137
-msgid "Name already taken"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:143
-#: apps/io.ox/core/pubsub/publications.js:183
-msgid "Publications must have a name"
-msgstr ""
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:78
-#: apps/io.ox/contacts/print.js:76 apps/io.ox/core/pubsub/publications.js:178
-#: apps/io.ox/files/actions.js:289
-#: apps/io.ox/mail/settings/signatures/register.js:65
-msgid "Name"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:219
-msgid "Template"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:227
-msgid "No matching templates on this Server"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:246
-msgid "Add cipher code"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:295
-msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:185
-#: apps/io.ox/core/pubsub/publications.js:298
-msgid "Publication"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:327
-#: apps/io.ox/core/pubsub/publications.js:332
-msgid "Share Link by E-mail"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:356
-msgid "Attention"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:358
-msgid "The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:360
-msgid "Privacy Notice"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:362
-msgid "When using this publish feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person's consent. Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/publications.js:367
-msgid "Show legal information"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:46
-#: apps/io.ox/core/pubsub/subscriptions.js:49
-#: apps/io.ox/mail/view-detail.js:1066
-msgid "Subscribe"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:60
-msgid "Checking credentials... This may take a few seconds."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:69
-msgid "Subscription successfully created."
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:76
-#: apps/io.ox/core/pubsub/subscriptions.js:103
-msgid "Error:"
-msgstr ""
-
-#: apps/io.ox/core/notifications.js:327 apps/io.ox/core/print.js:132
-#: apps/io.ox/core/pubsub/subscriptions.js:107 apps/io.ox/editor/main.js:135
-msgid "Error"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:108
-msgid "The subscription could not be created."
-msgstr ""
-
-#: apps/io.ox/core/api/folder.js:404 apps/io.ox/core/pubsub/subscriptions.js:148
-msgid "New Folder"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:216
-msgid "Add new account"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:229
-#: apps/io.ox/mail/view-detail.js:920
-msgid "Account"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:254
-msgid "Source"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:289
-msgid "Add new folder for this subscription"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:308
-#: apps/io.ox/core/pubsub/subscriptions.js:311
-msgid "Approximate Duration for Subscriptions"
-msgstr ""
-
-#: apps/io.ox/core/pubsub/subscriptions.js:310
-msgid "Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster."
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:42
-msgid "Close document"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:43
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:44
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:45
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:46
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:47
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:48
-msgid "Zoom in"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:410
-msgid "Hide side panel"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:430
-msgid "Show side panel"
-msgstr ""
-
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/view.js:550
-msgid "Page %1$s of %2$s"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:297
-#: apps/io.ox/office/preview/view.js:579
-msgid "Load Error"
-msgstr ""
-
-#. %1$d is the current page number that caused the error
-#, c-format
-#: apps/io.ox/office/preview/view.js:582
-msgid "An error occurred while loading page %1$d."
-msgstr ""
-
-#. %1$d is the current zoom factor, in percent
-#, c-format
-#: apps/io.ox/office/preview/view.js:602
-msgid "Zoom: %1$d%"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:268
-msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:298
-msgid "An error occurred while loading the document."
-msgstr ""
-
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -465,6 +125,40 @@ msgstr ""
 #: apps/plugins/portal/rss/register.js:142
 #: apps/plugins/portal/tumblr/register.js:176
 msgid "Save"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
+#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
+#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
+#: apps/io.ox/calendar/month/perspective.js:107
+#: apps/io.ox/calendar/week/perspective.js:73
+#: apps/io.ox/calendar/week/perspective.js:116 apps/io.ox/contacts/actions.js:51
+#: apps/io.ox/contacts/actions.js:149 apps/io.ox/contacts/distrib/main.js:162
+#: apps/io.ox/contacts/edit/main.js:152
+#: apps/io.ox/core/commons-folderview.js:403 apps/io.ox/core/export/export.js:71
+#: apps/io.ox/core/import/import.js:115 apps/io.ox/core/main.js:318
+#: apps/io.ox/core/permissions/permissions.js:352
+#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/pubsub/subscriptions.js:47
+#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/folderviews.js:567
+#: apps/io.ox/core/tk/folderviews.js:596 apps/io.ox/core/tk/folderviews.js:645
+#: apps/io.ox/core/tk/folderviews.js:697 apps/io.ox/core/upsell.js:33
+#: apps/io.ox/editor/main.js:242 apps/io.ox/files/actions.js:249
+#: apps/io.ox/files/actions.js:306 apps/io.ox/files/actions.js:359
+#: apps/io.ox/files/actions.js:402 apps/io.ox/files/actions.js:489
+#: apps/io.ox/files/views/create.js:40 apps/io.ox/mail/accounts/settings.js:215
+#: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
+#: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
+#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/tk/dialogs.js:28
+#: apps/io.ox/portal/settings/pane.js:248
+#: apps/io.ox/settings/accounts/settings/pane.js:51
+#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
+#: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
+#: apps/io.ox/tasks/edit/util.js:145 apps/plugins/portal/flickr/register.js:207
+#: apps/plugins/portal/rss/register.js:143
+#: apps/plugins/portal/tumblr/register.js:177
+#: apps/plugins/portal/userSettings/register.js:61
+msgid "Cancel"
 msgstr ""
 
 #: apps/plugins/portal/rss/register.js:163
@@ -988,6 +682,20 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#: apps/io.ox/calendar/actions.js:455
+#: apps/io.ox/calendar/edit/recurrence-view.js:249
+#: apps/io.ox/calendar/edit/recurrence-view.js:851
+#: apps/io.ox/contacts/actions.js:618
+#: apps/io.ox/core/pubsub/settings/pane.js:196
+#: apps/io.ox/core/pubsub/settings/pane.js:197 apps/io.ox/files/actions.js:565
+#: apps/io.ox/mail/actions.js:871
+#: apps/io.ox/mail/settings/signatures/register.js:297
+#: apps/io.ox/portal/settings/pane.js:157
+#: apps/io.ox/settings/accounts/settings/pane.js:34
+#: apps/io.ox/tasks/actions.js:427
+msgid "Edit"
+msgstr ""
+
 #: apps/io.ox/calendar/actions.js:206 apps/io.ox/calendar/actions.js:487
 #: apps/io.ox/calendar/invitations/register.js:34
 #: apps/io.ox/contacts/actions.js:50 apps/io.ox/contacts/actions.js:626
@@ -1192,6 +900,13 @@ msgstr ""
 msgid "Auto-save Email drafts?"
 msgstr ""
 
+#: apps/io.ox/contacts/distrib/create-dist-view.js:78
+#: apps/io.ox/contacts/print.js:76 apps/io.ox/core/pubsub/publications.js:178
+#: apps/io.ox/files/actions.js:289
+#: apps/io.ox/mail/settings/signatures/register.js:65
+msgid "Name"
+msgstr ""
+
 #: apps/io.ox/mail/settings/signatures/register.js:75
 msgid "Signature insertion:"
 msgstr ""
@@ -1322,6 +1037,11 @@ msgstr[1] ""
 msgid "All recipients"
 msgstr ""
 
+#: apps/io.ox/core/pubsub/subscriptions.js:229
+#: apps/io.ox/mail/view-detail.js:920
+msgid "Account"
+msgstr ""
+
 #: apps/io.ox/mail/view-detail.js:991
 msgctxt "plural"
 msgid "Attachment"
@@ -1347,6 +1067,12 @@ msgstr ""
 
 #: apps/io.ox/mail/view-detail.js:1064
 msgid "Show original publication"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:46
+#: apps/io.ox/core/pubsub/subscriptions.js:49
+#: apps/io.ox/mail/view-detail.js:1066
+msgid "Subscribe"
 msgstr ""
 
 #: apps/io.ox/mail/view-detail.js:1077
@@ -3348,6 +3074,11 @@ msgstr ""
 msgid "No notifications"
 msgstr ""
 
+#: apps/io.ox/core/notifications.js:327 apps/io.ox/core/print.js:132
+#: apps/io.ox/core/pubsub/subscriptions.js:107 apps/io.ox/editor/main.js:135
+msgid "Error"
+msgstr ""
+
 #: apps/io.ox/core/permissions/permissions.js:34
 msgid "Guest"
 msgstr ""
@@ -3659,6 +3390,10 @@ msgstr ""
 msgid "Logout now"
 msgstr ""
 
+#: apps/io.ox/core/main.js:506 apps/io.ox/core/pubsub/settings/pane.js:191
+msgid "Refresh"
+msgstr ""
+
 #: apps/io.ox/core/main.js:517 apps/io.ox/launchpad/main.js:34
 msgid "Settings"
 msgstr ""
@@ -3704,8 +3439,205 @@ msgstr ""
 msgid "Contact: %1$s"
 msgstr ""
 
+#: apps/io.ox/core/api/folder.js:404 apps/io.ox/core/pubsub/subscriptions.js:148
+msgid "New Folder"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/model.js:168
+msgid "Publication must have a target."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/model.js:172
+msgid "Publication must have a site."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/model.js:180
+msgid "Model is incomplete."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/model.js:182
+msgid "You have to enter a username and password to subscribe."
+msgstr ""
+
 #: apps/io.ox/core/pubsub/settings/register.js:22
 msgid "Publications and Subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:69
+msgid "Only showing items related to folder \"%1$s\""
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:71
+msgid "Show all items"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:147
+msgid "Link"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:205
+#: apps/io.ox/core/pubsub/settings/pane.js:206
+#: apps/io.ox/portal/settings/pane.js:162
+msgid "Disable"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:205
+#: apps/io.ox/core/pubsub/settings/pane.js:206
+#: apps/io.ox/portal/settings/pane.js:166
+msgid "Enable"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:280
+msgid "Subscription refresh"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:281
+msgid "A refresh takes some time, so please be patient, while the refresh runs in the background. Only one refresh per subscription and per session is allowed."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:314
+msgid "This feature is deactivated"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:360
+msgid "This folder has publications but you are not allowed to view or edit them"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:362
+msgid "This folder has subscriptions but you are not allowed to view or edit them"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:368
+msgid "This folder has no publications"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:369
+msgid "This folder has no subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:372
+msgid "You don't have any publications yet"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:373
+msgid "You don't have any subscriptions yet"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:397
+msgid "Publications"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:400
+msgid "Subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:91 apps/io.ox/files/actions.js:653
+msgid "Publish"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:95
+msgid "Publish folder"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:97
+msgid "Publish item"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:106
+msgid "Publication has been added"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:137
+msgid "Name already taken"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:143
+#: apps/io.ox/core/pubsub/publications.js:183
+msgid "Publications must have a name"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:219
+msgid "Template"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:227
+msgid "No matching templates on this Server"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:246
+msgid "Add cipher code"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:295
+msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:185
+#: apps/io.ox/core/pubsub/publications.js:298
+msgid "Publication"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:327
+#: apps/io.ox/core/pubsub/publications.js:332
+msgid "Share Link by E-mail"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:356
+msgid "Attention"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:358
+msgid "The published data will be accessible to everyone on the Internet. Please consider, which data you want to publish."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:360
+msgid "Privacy Notice"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:362
+msgid "When using this publish feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). Especially when publishing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person's consent. Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/publications.js:367
+msgid "Show legal information"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:60
+msgid "Checking credentials... This may take a few seconds."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:69
+msgid "Subscription successfully created."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:76
+#: apps/io.ox/core/pubsub/subscriptions.js:103
+msgid "Error:"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:108
+msgid "The subscription could not be created."
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:216
+msgid "Add new account"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:254
+msgid "Source"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:289
+msgid "Add new folder for this subscription"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:308
+#: apps/io.ox/core/pubsub/subscriptions.js:311
+msgid "Approximate Duration for Subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/subscriptions.js:310
+msgid "Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster."
 msgstr ""
 
 #: apps/io.ox/core/print.js:42
@@ -3797,6 +3729,74 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:79
 msgid "Click to open."
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:42
+msgid "Close document"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:43
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:44
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:45
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:46
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:47
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:410
+msgid "Hide side panel"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:430
+msgid "Show side panel"
+msgstr ""
+
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#: apps/io.ox/office/preview/view.js:550
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:579
+msgid "Load Error"
+msgstr ""
+
+#. %1$d is the current page number that caused the error
+#, c-format
+#: apps/io.ox/office/preview/view.js:582
+msgid "An error occurred while loading page %1$d."
+msgstr ""
+
+#. %1$d is the current zoom factor, in percent
+#, c-format
+#: apps/io.ox/office/preview/view.js:602
+msgid "Zoom: %1$d%"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:268
+msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:298
+msgid "An error occurred while loading the document."
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:48
