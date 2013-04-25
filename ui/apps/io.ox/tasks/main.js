@@ -108,7 +108,7 @@ define('io.ox/tasks/main',
             },
             listRequest = function (ids) {
                 return api.getList(ids, false).pipe(function (list) {
-                    var listcopy = _.copy(list, true),
+                    var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                         i = 0;
                     for (; i < listcopy.length; i++) {
                         listcopy[i] = util.interpretTask(listcopy[i]);
