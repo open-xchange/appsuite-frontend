@@ -115,7 +115,7 @@ define('io.ox/mail/write/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
-            title: 'Compose',
+            title: gt('Compose'),
             userContent: true
         });
 
