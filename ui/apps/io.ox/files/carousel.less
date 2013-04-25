@@ -14,74 +14,62 @@
  */
 
 .carousel {
-    position:absolute;
     background-color: #000;
     margin-bottom: 0;
     z-index: 10000;
 
     .carousel-inner {
-        position: absolute;
+
+        .item {
+            height: 100%;
+            -webkit-backface-visibility: hidden; // for ipad!
+            -webkit-transition: 0.6s ease-in-out left;
+            -moz-transition: 0.6s ease-in-out left;
+            -o-transition: 0.6s ease-in-out left;
+            transition: 0.6s ease-in-out left;
+
+            img, i {
+                position: absolute;
+                margin: auto;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            i {
+                width:200px;
+                font-size:200px;
+                height:200px;
+            }
+
+            .carousel-caption {
+
+                h4 { text-align: center; }
+
+                .breadcrumb {
+                    opacity:0.8;
+                    padding:0;
+                    margin:0;
+                    background:transparent;
+                    text-align: center;
+                    li {
+                        text-shadow: none;
+                        word-wrap: break-word;
+                        &.active { display:inline; }
+                        a { color: @linkOnDark; }
+                        span.divider { color: #fff; }
+                    }
+                }
+            }
+        }
     }
+
+    .carousel-control { cursor: pointer; }
 
     .closecarousel {
         position: absolute;
         bottom: 26px;
         right: 13px;
-    }
-
-    .item {
-        height: 100%;
-        -webkit-backface-visibility: hidden; // for ipad!
-        -webkit-transition: 0.6s ease-in-out left;
-        -moz-transition: 0.6s ease-in-out left;
-        -o-transition: 0.6s ease-in-out left;
-        transition: 0.6s ease-in-out left;
-
-        .carousel-caption {
-
-            .breadcrumb {
-                opacity:0.8;
-                padding:0;
-                margin:0;
-                background:transparent;
-                text-align: center;
-                li {
-                    text-shadow: none;
-                    word-wrap: break-word;
-                    a { color: @linkOnDark; }
-                }
-                li.active {
-                    display:inline;
-                }
-                .divider { color: #fff; }
-            }
-
-            h4 { text-align: center; }
-        }
-    }
-
-    .item > img {
-        position: absolute;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    .item > i {
-        position: absolute;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width:200px;
-        font-size:200px;
-        height:200px;
-    }
-
-    .carousel-control {
-        cursor: pointer;
     }
 }
