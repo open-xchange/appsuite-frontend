@@ -67,8 +67,8 @@ define("io.ox/participants/model",
                     this.cid = 'resourcegroup_' + this.get('id');
                     break;
                 case this.TYPE_EXTERNAL_USER:
-                    this.cid = 'external_' + (this.get('id') || this.get('mail'));
-                    this.set('id', this.get('id') || this.get('mail'));
+                    this.cid = 'external_' + this.getEmail();
+                    this.set('id', this.getEmail());
                     break;
                 case this.TYPE_DISTLIST_USER_GROUP:
                     this.cid = 'distlist_' + this.get('id');
