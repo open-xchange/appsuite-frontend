@@ -118,7 +118,13 @@ define('io.ox/calendar/freebusy/controller',
 
             this.getParticipants = function () {
                 return this.participants.map(function (model) {
-                    return { id: model.get('id'), type: model.get('type') };
+                    var tempParticipant = { id: model.get('id'), type: model.get('type') };
+                    if (model.get('type') === 5) {//External participants need more data for an appointment
+                        tempParticipant.id = tempParticipant.mail = model.getEmail();
+                        tempParticipant.display_name = model.getDisplayName();
+                        tempParticipant.image1_url = model.getImage();
+                    }
+                    return tempParticipant;
                 });
             };
 
