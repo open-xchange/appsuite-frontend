@@ -164,8 +164,8 @@ define('io.ox/files/mediaplayer',
             this.player.find('video, audio').parent().addClass('noI18n');
             var player = this.player.find('video, audio').mediaelementplayer({
                 // since we cannot resize later on ...
-                audioWidth: $(window).width() <= 400 ? 294 : 480,
-                videoWidth: $(window).width() <= 400 ? 294 : 480,
+                audioWidth: $(window).width() <= 700 ? 294 : 480,
+                videoWidth: $(window).width() <= 700 ? 294 : 480,
                 plugins: plugins,
                 enableAutosize: false,
                 timerRate: 250,
@@ -284,7 +284,7 @@ define('io.ox/files/mediaplayer',
 
             this.playlist.empty();
             this.drawItems();
-            this.playlist.sortable({ axis: 'y', distance: 30 });
+            if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
         },
 

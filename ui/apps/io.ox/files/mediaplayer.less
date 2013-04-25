@@ -80,7 +80,6 @@
 
         .mediaplayer_player {
 
-            // background: @playerSecondaryColor;
             width: 100%;
             margin-bottom: @playerMargin;
 
@@ -110,14 +109,12 @@
 
                                 background: lighten(@linkColor, 10%);
                             }
-                            .mejs-time-current { }
                         }
                     }
                     .mejs-horizontal-volume-slider {
                         .mejs-horizontal-volume-total {
                             background:@mediaplayerSliderBackground;
                         }
-                        .mejs-horizontal-volume-current { }
                     }
                 }
             }
@@ -202,6 +199,11 @@
         .mediaplayer_playlist {
             top: 219px - 60px;
             width: 290px;
+            li {
+                &:hover {
+                    background-color: @playerSecondaryColor;
+                }
+            }
         }
     }
 }
