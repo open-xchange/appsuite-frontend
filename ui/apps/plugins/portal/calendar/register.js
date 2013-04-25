@@ -129,12 +129,6 @@ define("plugins/portal/calendar/register",
             var popup = this.busy();
             require(['io.ox/calendar/view-detail', 'io.ox/calendar/api'], function (view, api) {
                 var obj = api.reduce(baton.item);
-
-                api.on('delete:' + encodeURIComponent(_.cid(obj)), function (event, elements) {
-                    popup.remove();
-                    api.off('delete:' + encodeURIComponent(_.cid(obj)));
-                });
-
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });

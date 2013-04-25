@@ -89,12 +89,6 @@ define('plugins/portal/mail/register',
             var popup = this.busy();
             require(['io.ox/mail/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
-
-                api.on('delete:' + encodeURIComponent(_.cid(obj)), function (event, elements) {
-                    popup.remove();
-                    api.off('delete:' + encodeURIComponent(_.cid(obj)));
-                });
-
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
                 });

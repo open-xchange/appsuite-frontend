@@ -84,18 +84,11 @@ define("plugins/portal/tasks/register",
         },
 
         draw: function (baton) {
-            var popup = this.busy(),
-                content;
+            var popup = this.busy();
             require(['io.ox/tasks/view-detail', 'io.ox/tasks/api'], function (view, api) {
                 var obj = api.reduce(baton.item);
-
-                api.on('delete:' + encodeURIComponent(_.cid(obj)), function (event, elements) {
-                    popup.remove();
-                    api.off('delete:' + encodeURIComponent(_.cid(obj)));
-                });
-
                 api.get(obj).done(function (data) {
-                    popup.idle().append(content = view.draw(data));
+                    popup.idle().append(view.draw(data));
                 });
             });
         }

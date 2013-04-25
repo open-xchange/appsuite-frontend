@@ -449,7 +449,7 @@ define('io.ox/core/commons',
             }, 10),
 
             remove = function () {
-                if (node) node.remove();
+                if (node) node.trigger('view:remove').remove();
             },
 
             checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links

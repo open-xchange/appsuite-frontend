@@ -60,15 +60,14 @@ define('plugins/portal/files/register',
         },
 
         draw: function (baton) {
+
             var popup = this.busy();
 
             api.on('delete', function (event, elements) {
                 var filename = baton.data.filename;
-
                 if (_(elements).any(function (element) { return element.filename === filename; })) {
                     var widgetCol = portalWidgets.getCollection();
                     widgetCol.remove(baton.model);
-                    popup.remove();
                 }
             });
 
