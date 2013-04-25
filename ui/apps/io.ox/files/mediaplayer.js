@@ -210,13 +210,14 @@ define('io.ox/files/mediaplayer',
                     }
                 ],
                 success: function (me, domObject) {
+
+                    self.mediaelement = me;
+                    me.addEventListener('ended', function () {
+                        self.select('next');
+
+                    }, false);
+
                     if (!_.browser.Firefox) {
-                        self.mediaelement = me;
-                        me.addEventListener('ended', function () {
-                            self.select('next');
-
-                        }, false);
-
                         me.addEventListener('canplay', function () {
                             // Player is ready
                             me.play();
