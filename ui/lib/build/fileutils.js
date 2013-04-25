@@ -14,7 +14,6 @@
 var fs = require("fs");
 var path = require("path");
 var child_process = require("child_process");
-var globSync = require("./glob").globSync;
 var _ = require("../underscore");
 
 /**
@@ -393,8 +392,23 @@ exports.list = function(dir, globs) {
         dir = "";
     }
     if (typeof globs == "string") globs = [globs];
-    var arrays = globs.map(function(s) { return globSync(dir, s); });
-    var retval = Array.prototype.concat.apply([], arrays);
+    globs = _.map(globs, function (s) {
+        return path.join(dir, s.replace(/\/$/, '/**/*'));
+    });
+    var retval = new jake.FileList(globs);
+    retval.exclude(function(name) {
+        try {
+            return fs.statSync(name).isDirectory();
+        } catch (e) {
+            return true;
+        }
+    });
+    try {
+        retval = retval.toArray();
+    } catch (e) {
+        return [];
+    }
+    retval = _.map(retval, function (s) { return path.relative(dir, s); });
     retval.dir = dir;
     return retval;
 };
