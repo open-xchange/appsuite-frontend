@@ -134,16 +134,13 @@ define("io.ox/preview/main",
                 require(['apps/mediaelement/mediaelement-and-player.js',
                         'css!mediaelement/mediaelementplayer.css'], function () {
 
-                    var pw,
-                    wW = $(window).width();
-                    if (wW < 700 && wW > 510) { pw = 480; }
-                    if (wW < 1085 && wW > 900) { pw = 300; }
+                    var pw = $('.io-ox-sidepopup:visible .file-details').width();
 
                     self.find('video, audio').mediaelementplayer({
                         audioWidth: pw,
                         videoWidth: pw,
                         plugins: ['flash', 'silverlight'],
-                        enableAutosize: true,
+                        enableAutosize: false,
                         timerRate: 250,
                         features: ['playpause', 'progress', 'current', 'volume'],
                         enablePluginDebug: true,
