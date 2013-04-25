@@ -2,7 +2,7 @@
 
 if [ ! -d apps ]
 then
-    echo No apps directory found. Are you in the correct directory? >2
+    echo No apps directory found. Are you in the correct directory? >&2
     exit 1
 fi
 
