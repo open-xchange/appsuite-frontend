@@ -978,26 +978,34 @@ define('io.ox/mail/write/main',
                 });
             }
 
-            // ask for empty subject
-            if ($.trim(mail.data.subject) === '') {
-                // show dialog
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Mail has empty subject. Send it anyway?"))
-                        .addPrimaryButton("send", gt('Yes, send without subject'))
-                        .addButton("subject", gt('Add subject'))
-                        .show(function () {
-                            def.notify('empty subject');
-                        })
-                        .done(function (action) {
-                            if (action === 'send') {
-                                cont();
-                            } else {
-                                focus('subject');
-                                def.reject();
-                            }
-                        });
-                });
+            // ask for empty to and/or empty subject
+            if ($.trim(mail.data.subject) === '' || _.isEmpty(mail.data.to)) {
+                if (_.isEmpty(mail.data.to)) {
+                    notifications.yell('error', gt('Mail has no recipient.'));
+                    focus('to');
+                    def.reject();
+                } else if ($.trim(mail.data.subject) === '') {
+                    // show dialog
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Mail has empty subject. Send it anyway?"))
+                            .addPrimaryButton("send", gt('Yes, send without subject'))
+                            .addButton("subject", gt('Add subject'))
+                            .show(function () {
+                                def.notify('empty subject');
+                            })
+                            .done(function (action) {
+                                if (action === 'send') {
+                                    cont();
+                                } else {
+                                    focus('subject');
+                                    def.reject();
+                                }
+                            });
+                    });
+                }
+
+
             } else {
                 cont();
             }
