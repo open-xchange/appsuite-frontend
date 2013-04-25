@@ -295,7 +295,7 @@ define('io.ox/core/api/factory',
 
             /**
              * remove elements from list
-             * @param  {array} list (list)
+             * @param  {array} list
              * @param  {object} hash (ids of items to be removed)
              * @param  {function} getKey
              * @return {array} (cleaned list)
