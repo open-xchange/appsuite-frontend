@@ -1413,7 +1413,7 @@ msgstr "Gelb"
 #: apps/io.ox/mail/view-detail.js:857 apps/io.ox/mail/view-grid-template.js:73
 #: apps/io.ox/mail/write/main.js:590
 msgid "No subject"
-msgstr "Keine Betreff"
+msgstr "Kein Betreff"
 
 #: apps/io.ox/mail/main.js:567 apps/io.ox/mail/print.js:61
 #: apps/io.ox/mail/view-detail.js:892 apps/io.ox/mail/write/view-main.js:384
