@@ -522,10 +522,18 @@ define('io.ox/core/commons-folderview',
             // needs to match min-width!
             minSidePanelWidth = 170;
 
+            function resetWidths() {
+                if ($(window).width() < 700) {
+                    app.getWindow().nodes.body.attr('style', '');
+                    sidepanel.attr('style', '');
+                }
+            }
+
             function getWidths() {
                 windowContainer   = sidepanel.closest('.window-container-center');
                 maxSidePanelWidth = windowContainer.width() / 2;
                 windowHeadWidth   = windowContainer.find('.window-head').width();
+                resetWidths();
             }
 
             function applyWidth(width) {
@@ -537,6 +545,7 @@ define('io.ox/core/commons-folderview',
             restoreWidth = function () {
                 var width = app.settings.get('folderview/width/' + _.display(), 250);
                 applyWidth(width);
+                resetWidths();
             };
 
             resizeBar.off('mousedown').on('mousedown', function (e) {
