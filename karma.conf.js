@@ -20,7 +20,7 @@ files = [
   'ui/lib/underscore.js',
   'ui/lib/modernizr.js',
   'ui/lib/backbone.js',
-  'ui/src/util.js'
+  'ui/tmp/boot.js'
 ];
 
 
