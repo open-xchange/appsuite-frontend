@@ -290,7 +290,7 @@ define("io.ox/calendar/api",
                 data: o
             })
             .pipe(function (obj) {
-                api.checkForNotification(o);
+                checkForNotification(o);
                 var getObj = {};
                 if (!_.isUndefined(obj.conflicts)) {
                     var df = new $.Deferred();
@@ -339,7 +339,7 @@ define("io.ox/calendar/api",
                 api.trigger('delete', resp);
                 api.trigger('delete:' + encodeURIComponent(_.cid(o)), o);
                 //remove Reminders in Notification Area
-                api.checkForNotification(o, true);
+                checkForNotification(o, true);
             });
         },
 
