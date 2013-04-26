@@ -199,7 +199,14 @@ define("io.ox/core/extPatterns/links",
                                 $.txt(gt('More')),
                                 $.txt(_.noI18n(' ...')),
                                 $('<b class="caret">')
-                            ),
+                            ).on('click', function (e) {
+                                var left = $(this).parent().position().left;
+                                if (left < 100) {
+                                    $(this).next().removeClass('dropdown-right').addClass('dropdown-left');
+                                } else {
+                                    $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
+                                }
+                            }),
                             $('<ul class="dropdown-menu dropdown-right">').append(
                                 lo.map(wrapAsListItem)
                             )
