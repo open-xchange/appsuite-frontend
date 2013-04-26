@@ -16,12 +16,14 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 
-var prefix = process.argv[2] || '/var/www/appsuite/';
-if (prefix.slice(-1) !== '/') prefix += '/';
+var prefixes = (process.argv[2] || '/var/www/appsuite/')
+    .split(path.delimiter || ':')
+    .map(function(prefix) { return path.join(prefix, 'apps/'); });
 
 var tzModule = 'io.ox/core/date/tz/zoneinfo/';
 var tzPath = process.argv[3] || '/usr/share/zoneinfo/';
 if (tzPath.slice(-1) !== '/') tzPath += '/';
+tzPath = [tzPath];
 
 var escapes = {
     '\x00': '\\x00', '\x01': '\\x01', '\x02': '\\x02', '\x03': '\\x03',
@@ -71,13 +73,18 @@ http.createServer(function (request, response) {
             continue;
         }
         if (m[2].slice(0, tzModule.length) == tzModule) {
-            var filename = path.join(tzPath, m[2].slice(tzModule.length));
+            var paths = tzPath;
+            var name = m[2].slice(tzModule.length);
         } else {
-            var filename = path.join(prefix, 'apps', m[2]);
+            var paths = prefixes;
+            var name = m[2];
         }
-        var valid = path.existsSync(filename);
-        console.log(filename);
-        if (!valid) {
+        for (var j = 0; j < paths.length; j++) {
+            var filename = path.join(paths[j], name);
+            console.log(filename);
+            if (path.existsSync(filename)) break;
+        }
+        if (j >= paths.length) {
             console.log('Could not read', filename);
             response.write("define('" + escape(list[i]) +
                 "', function () { throw new Error(\"Could not read '" +
