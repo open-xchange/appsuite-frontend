@@ -569,7 +569,9 @@ define('io.ox/mail/write/main',
                 if (editorMode === 'html') {
                     content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                 }
-                app[mail.initial ? 'setBody' : 'setRawBody'](content);
+                if (mail.replaceBody !== 'no') {
+                    app[mail.initial ? 'setBody' : 'setRawBody'](content);
+                }
 
                 // remember this state for dirty check
                 previous = app.getMail();
@@ -1054,7 +1056,7 @@ define('io.ox/mail/write/main',
                     folder = base.without(id).join(mailAPI.separator);
                 mailAPI.get({ folder_id: folder, id: id }).then(function (mail) {
                     view.form.find('.section-item.file').remove();
-                    app.setMail({ data: mail, mode: 'compose', initial: false });
+                    app.setMail({ data: mail, mode: 'compose', initial: false, replaceBody: 'no' });
                 });
             });
         };
