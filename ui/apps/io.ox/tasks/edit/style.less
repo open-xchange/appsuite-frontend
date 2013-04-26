@@ -64,16 +64,9 @@
         overflow: visible;
     }
 
-    .alarm-date-field,
-    .start-date-field,
-    .end-date-field {
-        width: 142px;
-        float: left!important; //fix order of inputfields in combined inputs
-    }
-
-    .progress-field {
+    #task-edit-progress-field {
         width: 61px;
-        float: left!important; //fix order of inputfields in combined inputs
+        float: left; //fix order of inputfields in combined inputs
     }
 
     //fix for gap between input and button in combined inputs
@@ -134,8 +127,8 @@
 
 @media (max-width: 980px) {
     .io-ox-tasks-edit-main {
-        .progress-field { width: 49px!important; }
-        .task-participant-input-field { width: 286px!important; }
+        .progress-field { width: 49px; }
+        .task-participant-input-field { width: 286px; }
     }
 }
 
