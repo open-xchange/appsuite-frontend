@@ -943,7 +943,7 @@ msgstr "Speicherplatz"
 
 #: apps/plugins/halo/mail/register.js:41
 msgid "Recent conversations"
-msgstr "Kürzliche Chats"
+msgstr "Kürzlicher E-Mail-Austausch"
 
 #: apps/plugins/halo/mail/register.js:46
 msgid "Received mails"
