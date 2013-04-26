@@ -1056,6 +1056,9 @@ define('io.ox/mail/write/main',
                     folder = base.without(id).join(mailAPI.separator);
                 mailAPI.get({ folder_id: folder, id: id }).then(function (mail) {
                     view.form.find('.section-item.file').remove();
+                    view.form.find(':input[name][type=file]').filter(function (index, elem) {
+                        return !!$(elem).prop('attachment');
+                    }).remove();
                     app.setMail({ data: mail, mode: 'compose', initial: false, replaceBody: 'no' });
                 });
             });
