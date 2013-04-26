@@ -11,6 +11,24 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+#background_loader.secure {
+    background-color: rgba(255, 255, 255, 0);
+    .transition(background-color 0.5s linear);
+
+    &.block {
+        background-color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+
+        button {
+            display: none;
+            position: relative;
+            top: 52%;
+        }
+
+    }
+
+}
+
 #io-ox-core.wallpaper {
     .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
 }
