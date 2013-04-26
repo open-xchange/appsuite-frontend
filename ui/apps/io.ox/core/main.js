@@ -63,6 +63,14 @@ define("io.ox/core/main",
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    // biggeleben: stupid fix for gt() in boot.js (relogin)
+    // better move this code here with next release
+    gt('Your session is expired');
+    gt('Please sign in again to continue');
+    gt('Relogin');
+    gt('Cancel');
+    gt('Password');
+
     // whatever ...
     gt('Portal');
     gt('Mail');
