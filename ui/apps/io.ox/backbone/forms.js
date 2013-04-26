@@ -736,15 +736,11 @@ define('io.ox/backbone/forms',
             "monthsShort": date.locale.monthsShort
         };
 
-        var hours_typeahead = [];
-        var filldate = new date.Local();
-        filldate.setHours(0);
-        filldate.setMinutes(0);
-        for (var i = 0; i < 24; i++) {
+        var hours_typeahead = [],
+            filldate = new date.Local().setHours(0, 0, 0, 0);
+        for (var i = 0; i < 48; i++) {
             hours_typeahead.push(filldate.format(date.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
-            hours_typeahead.push(filldate.format(date.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
+            filldate.add(date.HOUR / 2);
         }
 
         var comboboxHours = {
