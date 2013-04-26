@@ -94,7 +94,15 @@ define("io.ox/core/api/user",
         }
     };
 
-
+    /**
+     * update user image (and properties)
+     * @param  {object} o (id and folder_id)
+     * @param  {object} changes (target values)
+     * @param  {object} file
+     * @fires  api#refresh.list
+     * @fires  api#update ({id})
+     * @return {deferred} object with timestamp
+     */
     api.editNewImage = function (o, changes, file) {
         var filter = function (data) {
             $.when(
@@ -135,18 +143,33 @@ define("io.ox/core/api/user",
         }
     };
 
+    /**
+     * get user display name (or email if display name undefined)
+     * @param {string} id of a user
+     * @return {deferred} returns name string
+     */
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {
             return _.noI18n(data.display_name || data.email1 || '');
         });
     };
 
+    /**
+     * get greeting ('Hello ...')
+     * @param {string} id of a user
+     * @return {deferred} returns greeting string
+     */
     api.getGreeting = function (id) {
         return api.get({ id: id }).pipe(function (data) {
             return _.noI18n(data.first_name || data.display_name || data.email1 || '');
         });
     };
 
+    /**
+     * get text node which fetches user name asynchronously
+     * @param {string} id of a user
+     * @return {object} text node
+     */
     api.getTextNode = function (id) {
         var node = document.createTextNode(_.noI18n(''));
         api.get({ id: id })
@@ -161,14 +184,19 @@ define("io.ox/core/api/user",
         return node;
     };
 
+    /**
+     * get halo text link
+     * @param {string} id of a user
+     * @param  {string} text [optional]
+     * @return {jquery} textlink node
+     */
     api.getLink = function (id, text) {
         text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
-   /**
+    /**
     * gets deferred.promise for fetching picture url
-    *
     * @param {string} id of a user
     * @param {object} options height, width, scaleType
     * @return {promise}
@@ -188,7 +216,6 @@ define("io.ox/core/api/user",
 
     /**
     * get div node with callbacks managing fetching/updating
-    *
     * @param {string} id of a user
     * @param {object} options height, with, scaleType
     * @return {object} div node with callbacks
@@ -210,7 +237,6 @@ define("io.ox/core/api/user",
 
     /**
      * get a contact model of the currently logged in user
-     *
      * @return {object} a contact model of the current user
      */
     api.getCurrentUser = function () {
