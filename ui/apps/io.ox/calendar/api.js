@@ -198,6 +198,11 @@ define("io.ox/calendar/api",
             return all_cache[folder] !== undefined;
         },
 
+        /**
+         * update appointment
+         * @param  {object} o (id, folder and changed attributes/values)
+         * @return {deferred} returns current appointment object
+         */
         update: function (o) {
             var folder_id = o.folder_id || o.folder,
                 key = folder_id + "." + o.id + "." + (o.recurrence_position || 0),
@@ -250,7 +255,12 @@ define("io.ox/calendar/api",
             }
         },
 
-        //used to cleanup Cache and trigger refresh after attachmentHandling
+        /**
+         * used to cleanup Cache and trigger refresh after attachmentHandling
+         * @param  {object} obj (appointment object)
+         * @fires  api#update (data)
+         * @return {deferred}
+         */
         attachmentCallback: function (obj) {
             all_cache = {};
             var key = obj.folder_id + "." + obj.id + "." + (obj.recurrence_position || 0);
@@ -258,10 +268,16 @@ define("io.ox/calendar/api",
             return api.get(obj)
                 .pipe(function (data) {
                     api.trigger('update', data);
-                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));//to make the detailview remove the busy animation
+                    //to make the detailview remove the busy animation
+                    api.removeFromUploadList(encodeURIComponent(_.cid(data)));
                 });
         },
 
+        /**
+         * create appointment
+         * @param  {object} o
+         * @return {deferred} returns appointment
+         */
         create: function (o) {
             var attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -327,8 +343,13 @@ define("io.ox/calendar/api",
             });
         },
 
-        confirm: function (o) {
 
+        /**
+         * change confirmation status
+         * @param  {object} o (properties: id, folder, data)
+         * @return {deferred}
+         */
+        confirm: function (o) {
             var folder_id = o.folder_id || o.folder,
                 key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
 
@@ -358,6 +379,11 @@ define("io.ox/calendar/api",
 
     Events.extend(api);
 
+    /**
+     * removes recurrence information
+     * @param  {object} obj (appointment object)
+     * @return {object} appointment object
+     */
     api.removeRecurrenceInformation = function (obj) {
         var recAttr = ["change_exceptions", "delete_exceptions", "days",
             "day_in_month", "month", "interval", "until", "occurrences"];
@@ -370,6 +396,10 @@ define("io.ox/calendar/api",
         return obj;
     };
 
+    /**
+     * get invites
+     * @return {deferred} returns sorted array of appointments
+     */
     api.getInvites = function () {
 
         var start = _.now() - 2 * HOUR;
@@ -445,10 +475,22 @@ define("io.ox/calendar/api",
             });
     };
 
+    /**
+     * move appointments to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
     };
 
+    /**
+     * copy appointments to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
     };
@@ -463,8 +505,14 @@ define("io.ox/calendar/api",
         freebusy: {}
     };
 
+    /**
+     * get participants appointments
+     * @param  {array} list  (participants)
+     * @param  {object} options
+     * @param  {boolean} useCache [optional]
+     * @return {deferred} returns a nested array with participants and their appointments
+     */
     api.freebusy = function (list, options, useCache) {
-
         list = [].concat(list);
         useCache = useCache === undefined ? true : !!useCache;
 
@@ -523,18 +571,30 @@ define("io.ox/calendar/api",
         });
     };
 
-    //for busy animation in detail View
-    //ask if this appointment has attachments uploading at the moment
+    /**
+     * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
+     * @param  {string} key (task id)
+     * @return {boolean}
+     */
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
     };
 
-    //add appointment to the list
+    /**
+     * add appointment to the list
+     * @param {string} key (task id)
+     * @return {undefined}
+     */
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
 
-    //remove appointment from the list
+    /**
+     * remove appointment from the list
+     * @param  {string} key (task id)
+     * @fires  api#update: + key
+     * @return {undefined}
+     */
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];
         //trigger refresh
@@ -543,7 +603,11 @@ define("io.ox/calendar/api",
 
     api.reduce = factory.reduce;
 
-    // global refresh
+    /**
+     * bind to global refresh; clears caches and trigger refresh.all
+     * @fires  api#refresh.all
+     * @return {promise}
+     */
     api.refresh = function () {
         api.getInvites().done(function () {
             // clear caches
