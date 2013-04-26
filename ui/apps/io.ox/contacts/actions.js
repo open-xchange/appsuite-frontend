@@ -364,7 +364,7 @@ define('io.ox/contacts/actions',
                     return { type: 1, id: obj.internal_userid || obj.user_id};
                 } else {
                     // external user
-                    return { type: 5, display_name: obj.display_name, mail: obj.email1 || obj.email2 || obj.email3 };
+                    return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
                 }
             }
 
@@ -383,7 +383,7 @@ define('io.ox/contacts/actions',
                 });
                 return cleaned;
             }
-
+            
             api.getList(list).done(function (list) {
                 // set participants
                 var def = $.Deferred(),
@@ -392,9 +392,17 @@ define('io.ox/contacts/actions',
                     participants = _.chain(cleanedList).map(mapContact).flatten(true).filter(filterContact).value();
 
                 distLists = _.union(distLists);
+                //remove external participants without contact or they break the request
+                var externalParticipants = [];
+                _(distLists).each(function (participant) {
+                    if (!participant.id) {
+                        externalParticipants.push(participant);
+                    }
+                });
+                distLists = _.difference(distLists, externalParticipants);
 
                 api.getList(distLists).done(function (obj) {
-                    resolvedContacts = resolvedContacts.concat(obj);
+                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);//put everyone back in
                     def.resolve();
                 });
 
