@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/mail/api",
-    ["io.ox/core/http",
-     "io.ox/core/cache",
-     "io.ox/core/config",
-     "io.ox/core/api/factory",
-     "io.ox/core/api/folder",
-     "io.ox/core/api/account",
-     "io.ox/core/notifications",
+define('io.ox/mail/api',
+    ['io.ox/core/http',
+     'io.ox/core/cache',
+     'io.ox/core/config',
+     'io.ox/core/api/factory',
+     'io.ox/core/api/folder',
+     'io.ox/core/api/account',
+     'io.ox/core/notifications',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings, gt) {
 
@@ -208,43 +208,43 @@ define("io.ox/mail/api",
 
     // generate basic API
     var api = apiFactory({
-        module: "mail",
+        module: 'mail',
         keyGenerator: function (obj) {
             return obj ? (obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.view || api.options.requests.get.view || '') : '';
         },
         requests: {
             all: {
-                folder: "default0/INBOX",
-                columns: "601,600,611", // + flags
+                folder: 'default0/INBOX',
+                columns: '601,600,611', // + flags
                 extendColumns: 'io.ox/mail/api/all',
-                sort: "610", // received_date
-                order: "desc",
+                sort: '610', // received_date
+                order: 'desc',
                 deleted: 'true',
                 cache: false // allow DB cache
             },
             list: {
-                action: "list",
+                action: 'list',
                 columns: '102,600,601,602,603,604,605,607,610,611,614,652',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
-                action: "get",
+                action: 'get',
                 view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'noimg' : 'html') : 'text',
-                embedded: "true"
+                embedded: 'true'
             },
             getUnmodified: {
-                action: "get",
-                unseen: "true",
-                view: "html",
-                embedded: "true"
+                action: 'get',
+                unseen: 'true',
+                view: 'html',
+                embedded: 'true'
             },
             search: {
-                action: "search",
-                folder: "default0/INBOX",
+                action: 'search',
+                folder: 'default0/INBOX',
                 columns: '601,600,611',
                 extendColumns: 'io.ox/mail/api/all',
-                sort: "610",
-                order: "desc",
+                sort: '610',
+                order: 'desc',
                 getData: function (query, options) {
                     var map = { from: 603, to: 604, cc: 605, subject: 607, text: -1 }, composite = [];
                     _(options).each(function (value, key) {
@@ -256,14 +256,14 @@ define("io.ox/mail/api",
                 }
             }
         },
-        // composite key for "all" cache
+        // composite key for 'all' cache
         cid: function (o) {
             return (o.action || 'all') + ':' + o.folder + DELIM + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
         },
 
         fail: {
             get: function (e, params) {
-                if (e.code === "MSG-0032") {
+                if (e.code === 'MSG-0032') {
                     // mail no longer exists, so we remove it locally
                     api.remove([params], true);
                 }
@@ -585,10 +585,10 @@ define("io.ox/mail/api",
         notifications.yell('info', gt('Cleaning up... This may take a few seconds.'));
         // new clear
         return http.PUT({
-            module: "mail",
+            module: 'mail',
             appendColumns: false,
             params: {
-                action: "expunge"
+                action: 'expunge'
             },
             data: [folder_id]
         }).pipe(function (data) {
@@ -826,7 +826,7 @@ define("io.ox/mail/api",
                             .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
                             .contents().each(function () {
                                 if (this.tagName === 'BR') {
-                                    text += "\n";
+                                    text += '\n';
                                 } else {
                                     text += $(this).text();
                                 }
@@ -981,8 +981,8 @@ define("io.ox/mail/api",
 
         function mapArgs(obj) {
             return {
-                "args": [{"com.openexchange.groupware.contact.pairs": [{'folder': obj.folder_id, 'id': obj.id}]}],
-                "identifier": "com.openexchange.contact"
+                'args': [{'com.openexchange.groupware.contact.pairs': [{'folder': obj.folder_id, 'id': obj.id}]}],
+                'identifier': 'com.openexchange.contact'
             };
         }
 
