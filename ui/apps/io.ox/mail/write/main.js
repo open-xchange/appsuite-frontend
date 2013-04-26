@@ -563,7 +563,7 @@ define('io.ox/mail/write/main',
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[mail.format] || []) : (undefined),
                     content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 if (mail.format === 'text') {
-                    content = content.replace(/<br>\n?/g, '\n');
+                    content = content.replace(/<br( \/)?>\n?/g, '\n');
                     // backend sends html entities, these need to be transformed into plain text
                     content = $('<div>').html(content).text();
                 }
