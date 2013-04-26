@@ -1407,6 +1407,89 @@ define("io.ox/core/desktop",
 
     }());
 
+    // wraps require function
+    ox.load = (function () {
+
+        var def,
+            $blocker = $('#background_loader'),
+            buttonTimer,
+            blockerTimer;
+
+        function startTimer() {
+            blockerTimer = setTimeout(function () {
+                // visualize screen blocker
+                ox.busy(true);
+                buttonTimer = setTimeout(function () {
+                    // add button to abort
+                    if (!$blocker[0].firstChild) {
+                        var button = $('<button>').addClass('btn btn-primary').text(gt('Cancel')).fadeIn();
+                        button.on('click', function () {
+                            def.reject(true);
+                            clear();
+                        });
+                        $blocker
+                            .append(button);
+                    }
+                }, 5000);
+            }, 1000);
+        }
+
+        function clear() {
+            clearTimeout(blockerTimer);
+            clearTimeout(buttonTimer);
+            blockerTimer = null;
+            buttonTimer = null;
+            setTimeout(function () {
+                if (blockerTimer === null) {
+                    ox.idle();
+                }
+            }, 0);
+        }
+
+        return function (req) {
+            if (arguments.length > 1) {
+                console.log('ox.load does not support more than one param.');
+            }
+
+            def = $.Deferred();
+
+            // block UI
+            if (!$blocker.hasClass('secure')) {
+                ox.busy();
+            }
+            startTimer();
+
+            require(req).always(clear).then(
+                def.resolve,
+                function fail() {
+                    def.reject(false);
+                    if (_.isArray(req)) {
+                        for (var i = 0; i < req.length; i++) {
+                            requirejs.undef(req[i]);
+                        }
+                    }
+                }
+            );
+
+            return def;
+        };
+    }());
+
+    ox.busy = function (block) {
+        // init screen blocker
+        $('#background_loader')[block ? 'busy' : 'idle']()
+            .show()
+            .addClass('secure' + (block ? ' block' : ''));
+    };
+
+    ox.idle = function () {
+        $('#background_loader')
+            .removeClass('secure block')
+            .hide()
+            .idle()
+            .empty();
+    };
+
     // simple launch
     ox.launch = function (id, data) {
         var def = $.Deferred();
