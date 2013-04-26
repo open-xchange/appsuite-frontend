@@ -74,15 +74,25 @@ define('io.ox/contacts/api',
         }
     });
 
-    // fix backend WAT
+    /**
+     * fix backend WAT
+     * @param  {object} data
+     * @param  {string} id (data object property)
+     * @return {object} data (cleaned)
+     */
     function wat(data, id) {
         if (data[id] === '' || data[id] === undefined) {
             delete data[id];
         }
     }
 
+    /**
+     * create contact
+     * @param  {object} data (contact object)
+     * @param  {object} file (image) [optional]
+     * @return {deferred} returns contact object
+     */
     api.create = function (data, file) {
-
         // TODO: Ask backend for a fix, until that:
         wat(data, 'email1');
         wat(data, 'email2');
@@ -140,6 +150,15 @@ define('io.ox/contacts/api',
             });
     };
 
+    /**
+     * updates contact
+     * @param  {object} o (contact object)
+     * @fires  api#update: + folder + id
+     * @fires  api#update: + cid
+     * @fires  api#update (data)
+     * @fires  api#refresh.all
+     * @return {deferred} returns
+     */
     api.update =  function (o) {
         var attachmentHandlingNeeded = o.data.tempAttachmentIndicator;
         delete o.data.tempAttachmentIndicator;
@@ -191,8 +210,16 @@ define('io.ox/contacts/api',
         }
     };
 
+    /**
+     * update contact image (and properties)
+     * @param  {object} o (id and folder_id)
+     * @param  {object} changes (target values)
+     * @param  {object} file
+     * @fires  api#refresh.list
+     * @fires  api#edit ({id,folder})
+     * @return {deferred} object with timestamp
+     */
     api.editNewImage = function (o, changes, file) {
-
         var filter = function (data) {
             $.when(
                 api.caches.get.clear(),
@@ -233,6 +260,13 @@ define('io.ox/contacts/api',
         }
     };
 
+    /**
+     * delete contacts
+     * @param  {array} list (object)
+     * @fires  api#refresh.all
+     * @fires  api#delete + cid
+     * @return {promise}
+     */
     api.remove =  function (list) {
         // get array
         list = _.isArray(list) ? list : [list];
@@ -267,6 +301,9 @@ define('io.ox/contacts/api',
         api.caches.get.clear();
     });
 
+    /**
+     * TODO: deprecated/unused?
+     */
     api.autocomplete = function (query) {
 
         function process(list, obj, field) {
@@ -343,15 +380,18 @@ define('io.ox/contacts/api',
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching', true);
 
+    /**
+     * clear fetching cache
+     * @return {deferred}
+     */
     api.clearFetchCache = function () {
         return fetchCache.clear();
     };
 
-   /**
+    /**
     * get contact redced/filtered contact data; manages caching
-    *
-    * @param {string} address emailaddress
-    * @return {deferred} deferred returns exactyl one contact object
+    * @param  {string} address (emailaddress)
+    * @return {deferred} returns exactyl one contact object
     */
     api.getByEmailadress = function (address) {
         address = address || '';
@@ -413,7 +453,12 @@ define('io.ox/contacts/api',
         });
     };
 
-    // dirty copy/paste hack until I know hat fetchCache is good for
+    /**
+     * TODO: dirty copy/paste hack until I know hat fetchCache is good for
+     * @param  {object} obj
+     * @param  {object} options
+     * @return {string} url
+     */
     api.getPictureURLSync = function (obj, options) {
 
         var defaultUrl = ox.base + '/apps/themes/default/dummypicture.png';
@@ -431,11 +476,10 @@ define('io.ox/contacts/api',
         }
     };
 
-   /**
+    /**
     * gets deferred for fetching picture url
-    *
-    * @param {string|object} obj emailaddress or data object
-    * @param {object} options height, width, scaleType
+    * @param  {string|object} obj (emailaddress or data object)
+    * @param  {object} options (height, width, scaleType)
     * @return {deferred}
     */
     api.getPictureURL = function (obj, options) {
@@ -510,11 +554,10 @@ define('io.ox/contacts/api',
         return deferred;
     };
 
-   /**
+    /**
     * get div node with callbacks managing fetching/updating
-    *
-    * @param {string|object} obj emailaddress
-    * @param {object} options height, with, scaleType
+    * @param  {string|object} obj (emailaddress)
+    * @param  {object} options (height, with, scaleType)
     * @return {object} div node with callbacks
     */
     api.getPicture = function (obj, options) {
@@ -546,13 +589,12 @@ define('io.ox/contacts/api',
         }
         return node;
     };
-   /**
+
+    /**
     * get div node with callbacks managing fetching/updating
-    *
-    * @param {object} obj with 'display_name' and 'email'
+    * @param  {object} obj ('display_name' and 'email')
     * @return {object} div node with callbacks
     */
-
     api.getDisplayName = function (data) {
         var set, clear, cont,
             node = $('<a href="#" class="halo-link">'),
@@ -594,12 +636,6 @@ define('io.ox/contacts/api',
         return node;
     };
 
-   /**
-    * get contact data
-    *
-    * @private
-    * @return {deferred} returns jqXHR
-    */
     var copymove = function (list, action, targetFolderId) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
@@ -649,14 +685,31 @@ define('io.ox/contacts/api',
             });
     };
 
+    /**
+     * move contact to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
     };
 
+    /**
+     * copy contact to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
     };
 
+    /**
+     * get birthday ordered list of contacts
+     * @param  {object} options
+     * @return {deferred}
+     */
     api.birthdays = function (options) {
         var now = _.now(),
             params = _.extend({
@@ -673,27 +726,48 @@ define('io.ox/contacts/api',
         });
     };
 
-    // duck checks
+    /**
+     * is ressource (duck check)
+     * @param  {object} obj (contact)
+     * @return {boolean}
+     */
     api.looksLikeResource = function (obj) {
         return 'mailaddress' in obj && 'description' in obj;
     };
 
+    /**
+     * is distribution list
+     * @param  {object} obj (contact)
+     * @return {boolean}
+     */
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
     };
 
-    //for busy animation in detail View
-    //ask if this contact has attachments uploading at the moment
+    /**
+     * ask if this contact has attachments uploading at the moment (busy animation in detail View)
+     * @param  {string} key (task id)
+     * @return {boolean}
+     */
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
     };
 
-    //add contact to the list
+    /**
+     * add contact to the list
+     * @param {string} key (task id)
+     * @return {undefined}
+     */
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
     };
 
-    //remove contact from the list
+    /**
+     * remove contact from the list
+     * @param  {string} key (task id)
+     * @fires  api#update: + key
+     * @return {undefined}
+     */
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];
         //trigger refresh
