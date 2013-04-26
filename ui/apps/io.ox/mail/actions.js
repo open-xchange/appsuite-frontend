@@ -106,7 +106,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && !isDraftMail(e.context);
+            return e.collection.has('toplevel', 'one') && util.hasFrom(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {

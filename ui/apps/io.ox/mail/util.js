@@ -192,6 +192,11 @@ define('io.ox/mail/util',
             return display_name || email;
         },
 
+        // takes care of special edge-case: no from address
+        hasFrom: function (data) {
+            return data && _.isArray(data.from) && !!data.from[0][1];
+        },
+
         getFrom: function (data, field) {
             field = field || 'from';
             var list = data[field] || [['', '']],
