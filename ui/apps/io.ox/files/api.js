@@ -294,7 +294,7 @@ define('io.ox/files/api',
      *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
      *         'file' - the file object to upload
-     * @fires  api#create.file
+     * @fires  api#create.version
      * @return {deferred}
      */
     api.uploadNewVersionOldSchool = function (options) {
@@ -354,6 +354,7 @@ define('io.ox/files/api',
      * updates file
      * @param  {object} file
      * @param  {boolean} makeCurrent (special handling for mark as current version) [optional]
+     * @fires  api#create.file (object)
      * @return {deferred}
      */
     api.update = function (file, makeCurrent) {
@@ -516,6 +517,7 @@ define('io.ox/files/api',
     /**
      * removes version
      * @param  {object} version (file version object)
+     * @fires  api#delete.version (version)
      * @return {deferred}
      */
     api.detach = function (version) {

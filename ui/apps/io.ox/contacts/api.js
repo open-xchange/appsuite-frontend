@@ -90,6 +90,8 @@ define('io.ox/contacts/api',
      * create contact
      * @param  {object} data (contact object)
      * @param  {object} file (image) [optional]
+     * @fires  api#create (object)
+     * @fires  api#refresh.all
      * @return {deferred} returns contact object
      */
     api.create = function (data, file) {
@@ -480,6 +482,7 @@ define('io.ox/contacts/api',
     * gets deferred for fetching picture url
     * @param  {string|object} obj (emailaddress or data object)
     * @param  {object} options (height, width, scaleType)
+    * @fires  api#fail
     * @return {deferred}
     */
     api.getPictureURL = function (obj, options) {

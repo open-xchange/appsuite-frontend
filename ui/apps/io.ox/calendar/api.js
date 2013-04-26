@@ -201,6 +201,8 @@ define('io.ox/calendar/api',
         /**
          * update appointment
          * @param  {object} o (id, folder and changed attributes/values)
+         * @fires  api#update (data)
+         * @fires  api#update: + cid
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
@@ -276,6 +278,8 @@ define('io.ox/calendar/api',
         /**
          * create appointment
          * @param  {object} o
+         * @fires  api#create (data)
+         * @fires  api#update: + cid
          * @return {deferred} returns appointment
          */
         create: function (o) {
@@ -347,6 +351,9 @@ define('io.ox/calendar/api',
         /**
          * change confirmation status
          * @param  {object} o (properties: id, folder, data)
+         * @fires  api#confirmation-changed (o)
+         * @fires  api#update (data)
+         * @fires  api#update: + cid
          * @return {deferred}
          */
         confirm: function (o) {
@@ -398,6 +405,7 @@ define('io.ox/calendar/api',
 
     /**
      * get invites
+     * @fires  api#new-invites (invites)
      * @return {deferred} returns sorted array of appointments
      */
     api.getInvites = function () {
