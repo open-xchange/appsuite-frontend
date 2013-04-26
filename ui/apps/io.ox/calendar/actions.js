@@ -345,7 +345,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy',
+        capabilities: 'freebusy !alone',
         requires: function (e) {
             return _.device('!small');
         },

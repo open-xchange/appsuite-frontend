@@ -20,25 +20,7 @@ define('io.ox/core/capabilities', function () {
 
 	'use strict';
 
-	var capabilities = {},
-		disabled = {};
-
-	_(ox.serverConfig.capabilities).each(function (cap) {
-		capabilities[cap.id] = cap;
-	});
-
-	(function () {
-		var hash = _.url.hash('disableFeature');
-		if (hash) {
-			_(hash.split(/\s*[, ]\s*/)).each(function (id) {
-				disabled[id] = true;
-			});
-		}
-	}());
-
-	if (!_.isEmpty(disabled)) {
-		console.info("Disabled features", disabled);
-	}
+	var capabilities = {}, disabled = {};
 
 	var api = {
 
@@ -83,6 +65,19 @@ define('io.ox/core/capabilities', function () {
 			});
 		}
 	};
+
+	api.reset();
+
+	// disable via hash?
+	var hash = _.url.hash('disableFeature');
+	if (hash) {
+		_(hash.split(/\s*[, ]\s*/)).each(function (id) {
+			disabled[id] = true;
+		});
+		if (!_.isEmpty(disabled)) {
+			console.info('Disabled features', disabled);
+		}
+	}
 
 	return api;
 });

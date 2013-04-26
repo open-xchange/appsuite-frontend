@@ -171,7 +171,7 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/sendlink', {
-        capabilities: 'webmail',
+        capabilities: 'webmail !alone',
         requires: 'some',
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {

@@ -330,11 +330,13 @@ define('io.ox/core/commons-folderview',
             id: 'permissions',
             index: 300,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
-                this.append(
-                    $('<li class="divider">'),
-                    $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
-                );
+                if (capabilities.has('!alone')) {
+                    var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
+                    this.append(
+                        $('<li class="divider">'),
+                        $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
+                    );
+                }
             }
         });
 
