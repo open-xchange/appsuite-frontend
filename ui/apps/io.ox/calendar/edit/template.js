@@ -211,7 +211,7 @@ define('io.ox/calendar/edit/template',
         nextTo: 'end-date',
         draw: function () {
             this.append(
-                $('<div class="span4"><label class="find-free-time"></div>')
+                $('<div class="span4"><label class="find-free-time"></label></div>')
             );
         }
     });
