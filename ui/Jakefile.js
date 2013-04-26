@@ -487,12 +487,17 @@ function compileLess() {
     
     var ownLess = utils.list('apps', '**/*.less'), coreLess;
     var ownThemes = utils.list('apps/themes/*/definitions.less');
+    var coreThemes = utils.list(core('apps/themes'), '*/definitions.less');
     
-    if (ownThemes.length &&
+    if ((ownThemes.length || ownLess.length) &&
         !path.existsSync('apps/themes/definitions.less') &&
         !path.existsSync(core('apps/themes/definitions.less')))
     {
-        console.warn('Warning: Themes require either coreDir or skipLess.');
+        if (process.env.coreDir) {
+            console.warn('Warning: Invalid coreDir');
+        } else {
+            console.warn('Warning: Themes require either coreDir or skipLess');
+        }
         return;
     }
     
@@ -525,7 +530,7 @@ function compileLess() {
     });
     
     // core themes
-    _.each(utils.list(core('apps/themes'), '*/definitions.less'),
+    _.each(coreThemes,
         function (defs) {
             if (path.existsSync(path.join('apps/themes', defs))) return;
             var dir = path.join('apps/themes', path.dirname(defs));
