@@ -1447,9 +1447,7 @@ define("io.ox/core/desktop",
         }
 
         return function (req) {
-            if (arguments.length > 1) {
-                console.log('ox.load does not support more than one param.');
-            }
+            assert(arguments.length > 1, 'ox.load does not support more than one param.');
 
             def = $.Deferred();
 
