@@ -131,7 +131,7 @@ define('io.ox/files/api',
                     api.caches.get.merge(obj);
                     api.caches.versions.remove(String(obj.id));
                     // this can be solved smarter once backend send correct
-                    // number_of_version in "all" requests; always zero now
+                    // number_of_version in 'all' requests; always zero now
                 });
                 return data;
             },
@@ -149,7 +149,11 @@ define('io.ox/files/api',
         }
     });
 
-
+    /**
+     * TOOD: deprecated/unused? (31f5a4a, b856ca5)
+     * @param  {object} options
+     * @return {deferred}
+     */
     api.getUpdates = function (options) {
 
         var params = {
@@ -170,15 +174,18 @@ define('io.ox/files/api',
 
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
-    // Upload a file and store it
-    // As options, we expect:
-    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // 'file' - the file object to upload
-    // The method returns a deferred that is resolved once the file has been uploaded
+    /**
+     * upload a new file and store it
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.file
+     * @return {deferred}
+     */
     api.uploadFile = function (options) {
 
-        // Alright, let's simulate a multipart formdata form
+        // alright, let's simulate a multipart formdata form
         options = $.extend({
             folder: config.get('folder.infostore')
         }, options || {});
@@ -236,12 +243,15 @@ define('io.ox/files/api',
         }
     };
 
-    // Upload a file and store it
-    // As options, we expect:
-    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // 'file' - the file object to upload
-    // The method returns a deferred that is resolved once the file has been uploaded
+    /**
+     * upload a new version of a file
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.file
+     * @return {deferred}
+     */
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
@@ -278,6 +288,15 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * upload a new version of a file (IE Version)
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.file
+     * @return {deferred}
+     */
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
@@ -330,16 +349,29 @@ define('io.ox/files/api',
         return deferred;
     };
 
-    api.update = function (file, makeCurrent) { //special handling for mark as current version
+
+    /**
+     * updates file
+     * @param  {object} file
+     * @param  {boolean} makeCurrent (special handling for mark as current version) [optional]
+     * @return {deferred}
+     */
+    api.update = function (file, makeCurrent) {
         var obj = { id: file.id, folder: file.folder_id },
             updateData = file;
 
-        if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
-            updateData = {version: file.version};
+        if (makeCurrent) {
+            //if there is only version, the request works.
+            //if the other fields are present theres a backend error
+            updateData = { version: file.version };
         }
         return http.PUT({
                 module: 'files',
-                params: { action: 'update', id: file.id, timestamp: _.now() },
+                params: {
+                    action: 'update',
+                    id: file.id,
+                    timestamp: _.now()
+                },
                 data: updateData,
                 appendColumns: false
             })
@@ -348,6 +380,9 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * TODO: deprecated/unused?
+     */
     api.create = function (options) {
 
         options = $.extend({
@@ -373,6 +408,16 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * update caches and fire events (if not suppressed)
+     * @param  {string} type ('change', 'new', 'delete')
+     * @param  {file} obj
+     * @param  {boolean} silent (no events will be fired) [optional]
+     * @fires  api#update
+     * @fires  api#update: + cid
+     * @fires  api#refresh.all
+     * @return {promise}
+     */
     api.propagate = function (type, obj, silent) {
 
         var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
@@ -418,6 +463,11 @@ define('io.ox/files/api',
         }
     };
 
+    /**
+     * [versions description]
+     * @param  {[type]} options
+     * @return {[type]}
+     */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
         if (!options.id) {
@@ -440,6 +490,12 @@ define('io.ox/files/api',
         });
     };
 
+    /**
+     * returns url
+     * @param  {object} file
+     * @param  {sting}  mode
+     * @return {string} url
+     */
     api.getUrl = function (file, mode) {
         var url = ox.apiRoot + '/files',
             query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
@@ -457,10 +513,20 @@ define('io.ox/files/api',
         }
     };
 
+    /**
+     * removes version
+     * @param  {object} version (file version object)
+     * @return {deferred}
+     */
     api.detach = function (version) {
         return http.PUT({
             module: 'files',
-            params: { action: 'detach', id: version.id, folder: version.folder_id, timestamp: _.now() },
+            params: {
+                action: 'detach',
+                id: version.id,
+                folder: version.folder_id,
+                timestamp: _.now()
+            },
             data: [version.version],
             appendColumns: false
         })
@@ -509,14 +575,32 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * move files to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
     };
 
+    /**
+     * copy files to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
     };
 
+    /**
+     * file playable in current browser
+     * @param  {string} type ('audio', 'video')
+     * @param  {string} filename
+     * @return {boolean}
+     */
     api.checkMediaFile = function (type, filename) {
         var pattern;
         if (type === 'video') {

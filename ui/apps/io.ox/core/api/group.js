@@ -57,7 +57,7 @@ define('io.ox/core/api/group',
     };
 
     /**
-     * @deprecated/unused?
+     * TODO: @deprecated/unused?
      */
     api.getTextNode = function (id) {
         var node = document.createTextNode('');
