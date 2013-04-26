@@ -124,12 +124,14 @@ define('io.ox/calendar/week/view',
          */
         reset: function (startDate, data) {
             if (startDate === this.apiRefTime.getTime()) {
-                var s = this.startDate.getTime(),
-                    e = s + (this.columns * date.DAY);
+                var ws = this.startDate.getTime(),
+                    we = ws + (this.columns * date.DAY);
                 // reset collection; transform raw dato to proper models
                 data = _(data)
                     .filter(function (obj) {
-                        return (obj.start_date > s && obj.start_date < e) || (obj.end_date > s && obj.end_date < e);
+                        var os = obj.start_date,
+                            oe = obj.end_date;
+                        return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
                     })
                     .map(function (obj) {
                         var model = new Backbone.Model(obj);
@@ -797,7 +799,6 @@ define('io.ox/calendar/week/view',
                         // draw across multiple days
                         while (true && maxCount <= this.columns) {
                             var app = this.renderAppointment(model),
-                                // old solution sel = '[date="' + (startLocal.getTime() - this.startDate.getTime()) / date.DAY + '"]';
                                 sel = '[date="' + (startLocal.getDays() - this.startDate.getDays()) + '"]';
                             maxCount++;
 
@@ -1504,7 +1505,7 @@ define('io.ox/calendar/week/view',
             // return update data
             return {
                 start: this.apiRefTime.getTime(),
-                end: new date.Local(this.apiRefTime).addMonths(2).getTime(),
+                end: new date.Local(this.apiRefTime).add(10 * date.WEEK).getTime(),
                 folder: (this.folderData.type > 1 || this.showAll() === false) ? this.folderData.id : 0
             };
         },
