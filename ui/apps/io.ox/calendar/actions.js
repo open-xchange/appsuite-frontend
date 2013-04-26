@@ -77,7 +77,7 @@ define('io.ox/calendar/actions',
             var def = $.Deferred();
             util.createArrayOfRecipients(baton.data.participants, def);
             def.done(function (arrayOfRecipients) {
-                ox.laod(['io.ox/mail/write/main']).done(function (m) {
+                ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: arrayOfRecipients, subject: baton.data.title});
                     });
@@ -183,7 +183,7 @@ define('io.ox/calendar/actions',
             }
 
             api.get(o).done(function (data) {
-                ox.laod(['io.ox/calendar/model']).done(function (Model) {
+                ox.load(['io.ox/calendar/model']).done(function (Model) {
                     // different warnings especially for events with
                     // external users should handled here
                     var myModel = new Model.Appointment(data);
