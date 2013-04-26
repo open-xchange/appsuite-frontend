@@ -281,7 +281,7 @@ define('io.ox/calendar/month/perspective',
                             firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
                         } else {
-                            self.pane.animate({scrollTop : pos + self.scrollTop() + 2}, param.duration, function () {
+                            self.pane.animate({scrollTop : pos + self.scrollTop() + 1}, param.duration, function () {
                                 self.isScrolling = false;
                             });
                         }
