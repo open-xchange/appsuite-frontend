@@ -77,7 +77,7 @@ define('io.ox/calendar/actions',
             var def = $.Deferred();
             util.createArrayOfRecipients(baton.data.participants, def);
             def.done(function (arrayOfRecipients) {
-                require(['io.ox/mail/write/main'], function (m) {
+                ox.laod(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: arrayOfRecipients, subject: baton.data.title});
                     });
@@ -93,7 +93,7 @@ define('io.ox/calendar/actions',
                 def = $.Deferred();
             util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
             def.done(function (initdata) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
+                ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.create(contactsFolder, initdata);
                     });
@@ -117,9 +117,9 @@ define('io.ox/calendar/actions',
                 o.recurrence_position = params.recurrence_position;
             }
 
-            require(['io.ox/calendar/edit/main'], function (m) {
+            ox.load(['io.ox/calendar/edit/main']).done(function (m) {
                 if (params.recurrence_type > 0 || params.recurrence_position) {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                             .addPrimaryButton('series',
@@ -183,12 +183,12 @@ define('io.ox/calendar/actions',
             }
 
             api.get(o).done(function (data) {
-                require(['io.ox/calendar/model'], function (Model) {
+                ox.laod(['io.ox/calendar/model']).done(function (Model) {
                     // different warnings especially for events with
                     // external users should handled here
                     var myModel = new Model.Appointment(data);
                     if (data.recurrence_type > 0) {
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                                 .addPrimaryButton('appointment', gt('Delete appointment'))
@@ -206,7 +206,7 @@ define('io.ox/calendar/actions',
                                 });
                         });
                     } else {
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
                                 .addPrimaryButton('ok', gt('Delete'))
@@ -242,7 +242,7 @@ define('io.ox/calendar/actions',
             if (obj && obj.start_date) {
                 _.extend(params, obj);
             }
-            require(['io.ox/calendar/edit/main'], function (editmain) {
+            ox.load(['io.ox/calendar/edit/main']).done(function (editmain) {
                 editmain.getApp().launch().done(function () {
                     this.create(params);
                 });
@@ -255,7 +255,7 @@ define('io.ox/calendar/actions',
         requires: 'one modify',
         action: function (baton) {
             // load & call
-            require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
+            ox.load(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
                 acceptdeny(baton.data);
             });
         }
@@ -301,7 +301,7 @@ define('io.ox/calendar/actions',
 
     var copyMove = function (type, apiAction, title) {
         return function (list) {
-            require(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
+            ox.load(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews']).done(function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h4>').text(title))
                     .addPrimaryButton('ok', gt('Move'))
