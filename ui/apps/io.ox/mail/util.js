@@ -83,13 +83,11 @@ define('io.ox/mail/util',
             var recipient = $.trim(s), match, name, email;
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address
-                email = match[3].replace(rMailCleanup, '')
-                    .toLowerCase();
+                email = match[3].replace(rMailCleanup, '').toLowerCase();
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
                 // case 2: assume plain email address
-                email = recipient.replace(rMailCleanup, '')
-                    .toLowerCase();
+                email = recipient.replace(rMailCleanup, '').toLowerCase();
                 name = email.split(/@/)[0];
             }
             return [name, email];
@@ -189,7 +187,7 @@ define('io.ox/mail/util',
             if (!pair) {
                 return '';
             }
-            var name = pair[0], email = pair[1].toLowerCase(),
+            var name = pair[0], email = String(pair[1] || '').toLowerCase(),
                 display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
             return display_name || email;
         },
