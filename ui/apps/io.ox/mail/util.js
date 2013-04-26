@@ -38,9 +38,9 @@ define('io.ox/mail/util',
         },
 
         getDateFormated = function (timestamp, options) {
-            var opt = $.extend({fulldate: true, filtertoday: true}, options || {}),
+            var opt = $.extend({ fulldate: true, filtertoday: true }, options || {}),
                 now = new date.Local(),
-                d = new date.Local(date.Local.utc(timestamp)),
+                d = new date.Local(timestamp),
                 timestr = function () {
                     return d.format(date.TIME);
                 },
