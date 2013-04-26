@@ -40,7 +40,7 @@
     .scrollpane {
 
         position: absolute;
-        top: 67px;
+        top: @calendarToolbarHeight + 26;
         right: 0;
         bottom: 0;
         left: 0;
@@ -176,6 +176,16 @@
         }
 
     }
+
+    /* Mobile */
+    @media all and (max-width: 480px) {
+
+        .scrollpane {
+            top: @calendarToolbarHeight + 26 + 25;
+        }
+
+    }
+
 
     /* Appointment */
     .appointment {
