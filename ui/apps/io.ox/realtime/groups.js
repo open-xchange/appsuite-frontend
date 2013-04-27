@@ -15,7 +15,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     'use strict';
     var counter = 0;
     function RealtimeGroup(id) {
-        var self = this, heartbeat = null, selector = "rt-group-" + counter;
+        var self = this, heartbeat = null, selector = "rt-group-" + counter, destroyed = false;
         counter++;
         rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
@@ -29,7 +29,14 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
 
         this.id = id;
 
+        function checkState() {
+            if (destroyed) {
+                throw new Error("This group has already been destroyed");
+            }
+        }
+
         this.join = function (options) {
+            checkState();
             if (!heartbeat) {
                 heartbeat = setInterval(function () {
                     rt.sendWithoutSequence({
@@ -61,6 +68,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.leave = function (options) {
+            checkState();
             if (!heartbeat) {
                 return;
             }
@@ -81,21 +89,25 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         };
 
         this.sendWithoutSequence = function (message) {
+            checkState();
             message.to = id;
             return rt.sendWithoutSequence(message);
         };
 
         this.send = function (message) {
+            checkState();
             message.to = id;
             return rt.send(message);
         };
 
         this.destroy = function () {
+            checkState();
             if (heartbeat) {
                 this.leave();
             }
             rt.off("receive:" + selector);
             delete groups[id];
+            destroyed = true;
         };
 
         Event.extend(this);
@@ -108,9 +120,10 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     return {
         getGroup: function (id) {
             if (groups[id]) {
+                console.log("Reusing group");
                 return groups[id];
             }
-
+            console.log("fresh group");
             groups[id] = new RealtimeGroup(id);
             return groups[id];
         }

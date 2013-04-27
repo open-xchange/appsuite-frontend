@@ -29,6 +29,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
 
         this.destroy = function () {
             this.group.destroy();
+            delete rooms[roomName];
         };
 
         this.say = function (text) {
@@ -79,7 +80,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.group.on("receive", function (e, m) {
-            if (m.log) {
+            if (false && m.log) {
                 console.log("-------------------------");
                 _(m.log).each(function (entry) {
                     console.log(entry);
@@ -96,6 +97,12 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
                 _(m.getAll("china", "replay")).each(function (m) {
                     console.log(m.data.sender, m.data.message);
                 });
+            }
+            console.log(m.seq);
+            if (m.seq === 0) {
+                console.log("ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM!");
+                console.log("ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM!");
+                console.log("ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM! ALARM!");
             }
         });
 
