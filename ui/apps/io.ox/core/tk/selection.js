@@ -801,7 +801,7 @@ define('io.ox/core/tk/selection',
                 if ($(this).hasClass('expandable')) {
                     clearTimeout(expandTimer);
                     expandTimer = setTimeout(function () {
-                        $(self).find('.folder-arrow').trigger('click');
+                        $(self).find('.folder-arrow').trigger('mousedown');
                     }, 1500);
                 }
 
