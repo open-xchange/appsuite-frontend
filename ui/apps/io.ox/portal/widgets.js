@@ -73,7 +73,7 @@ define('io.ox/portal/widgets',
                 .map(function (obj, id) {
 
                     obj.id = id;
-                    obj.type = id.split('_')[0];
+                    obj.type = id.substr(0, id.lastIndexOf('_'));
                     obj.props = obj.props || {};
                     obj.inverse = _.isUndefined(obj.inverse) ? false : obj.inverse;
                     obj.enabled = _.isUndefined(obj.enabled) ? true : obj.enabled;
