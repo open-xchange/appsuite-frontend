@@ -11,23 +11,23 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/core/api/attachment", ["io.ox/core/http",
-                                     "io.ox/core/event",
+define('io.ox/core/api/attachment', ['io.ox/core/http',
+                                     'io.ox/core/event',
                                      'io.ox/core/config'], function (http, Events, config) {
-    "use strict";
+    'use strict';
 
     var api = {
         //gets all attachments for a specific object, for exsample a task
         getAll: function (options) {
 
             return http.GET({
-                module: "attachment",
+                module: 'attachment',
                 params: {
-                    action: "all",
+                    action: 'all',
                     module: options.module,
                     attached: options.id,
                     folder: options.folder || options.folder_id,
-                    columns: "1,800,801,802,803,804,805"
+                    columns: '1,800,801,802,803,804,805'
                 }
             }).pipe(function (data) {//fix for backend bug folder should not be 0
                 for (var i = 0; i < data.length; i++) {
@@ -41,16 +41,16 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
         remove: function (options, data) {
             var self = this;
             return http.PUT({
-                module: "attachment",
+                module: 'attachment',
                 params: {
-                    action: "detach",
+                    action: 'detach',
                     module: options.module,
                     attached: options.id,
                     folder: options.folder || options.folder_id
                 },
                 data: data
             }).done(function () {
-                self.trigger("detach", {
+                self.trigger('detach', {
                     module: options.module,
                     id: options.id,
                     folder: options.folder || options.folder_id
@@ -60,7 +60,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
 
         create: function (options, data) {
             var self = this;
-            var params = {action: "attach"},
+            var params = {action: 'attach'},
                 json = {module: options.module,
                         attached: options.id,
                         folder: options.folder || options.folder_id},
@@ -69,11 +69,11 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             data = data || [];
             data = _.isArray(data) ? data : [data];
             for (var i = 0; i < data.length; i++) {
-                formData.append("json_" + i, JSON.stringify(json));
-                formData.append("file_" + i, data[i]);
+                formData.append('json_' + i, JSON.stringify(json));
+                formData.append('file_' + i, data[i]);
             }
             return http.UPLOAD({
-                module: "attachment",
+                module: 'attachment',
                 params: params,
                 data: formData,
                 fixPost: true
@@ -117,7 +117,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
                 deferred[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_attach = null;
-                $('#tmp').trigger("attachmentsSaved");
+                $('#tmp').trigger('attachmentsSaved');
             };
 
             $(form).attr({
