@@ -614,24 +614,26 @@ $(window).load(function () {
                 }
             }
 
+            var hash = _.url.hash();
+
             // got session via hash?
-            if (_.url.hash('session')) {
+            if (hash.session) {
 
                 // set session; session.store() might need it now (formlogin)
                 var hash = _.url.hash();
                 ox.session = hash.session;
 
                 // set store cookie?
-                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
+                (hash.store === 'true' ? session.store() : $.when()).always(function () {
 
-                    var ref = _.url.hash('ref');
+                    var ref = hash.ref;
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
                     _.url.redirect(ref ? ref : '#');
 
                     configCache = new cache.SimpleCache('manifests', true);
 
                     // fetch user config
-                    ox.secretCookie = _.url.hash('secretCookie') === 'true';
+                    ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
                         // store login data (cause we have all valid languages now)
@@ -658,6 +660,12 @@ $(window).load(function () {
                         });
                     });
                 });
+
+            } else if (hash.autologin === 'false') {
+
+                // needed for show-stopping errors like broken settings
+                configCache = new cache.SimpleCache('manifests', true);
+                continueWithoutAutoLogin();
 
             } else if (!ox.online) {
 
