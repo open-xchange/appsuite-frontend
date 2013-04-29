@@ -16,7 +16,10 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
     'use strict';
 
     var api = {
-
+        /**
+         * get File quota and current use
+         * @return {deferred} returns object with quota and use properties)
+         */
         getFile: function () {
             return http.GET({
                 module: 'quota',
@@ -24,6 +27,10 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
             });
         },
 
+        /**
+         * get mail quota and current use
+         * @return {deferred} returns object with quota and use properties)
+         */
         getMail: function () {
             return http.GET({
                 module: 'quota',
@@ -31,6 +38,10 @@ define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
             });
         },
 
+        /**
+         * get mail and file quota
+         * @return {deferred} returns quota object
+         */
         get: function () {
             http.pause();
             this.getMail();
