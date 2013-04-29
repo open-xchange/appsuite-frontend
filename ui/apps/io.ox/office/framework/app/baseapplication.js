@@ -527,6 +527,17 @@ define('io.ox/office/framework/app/baseapplication',
             return renamed;
         };
 
+        /**
+         * Checks if application is processing before-quit or quit handlers.
+         *
+         * @returns {Boolean}
+         *  Whether the application is currently processing any before-quit or
+         *  quit handlers.
+         */
+        this.isInQuit = function () {
+            return currentQuitDef !== null;
+        };
+
         // server requests ----------------------------------------------------
 
         /**
@@ -1191,36 +1202,16 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} point
          *  The save point containing the application state, as returned by the
          *      last call of the BaseApplication.failSave() method.
-         *
-         * @returns {jQuery.Promise}
-         *  The promise of a Deferred object that will be resolved when the
-         *  import handler has loaded the document.
          */
         this.failRestore = function (point) {
 
-            var // the result Deferred object (always resolve it, never reject, expected by the core launcher)
-                def = $.Deferred();
-
-            // set and check file descriptor, import the document
+            // set file descriptor from save point
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
+
+            // check existence of file descriptor, import the document
             if (this.hasFileDescriptor()) {
-                importDocument(point).always(function () { def.resolve(); });
-            } else {
-                def.resolve();
+                importDocument(point);
             }
-
-            return def.promise();
-        };
-
-        /**
-         * Checks if application is processing quit handlers
-         *
-         * @returns {Boolean}
-         *  Returns true if the application is processing the before &
-         *  quit handlers.
-         */
-        this.isInQuit = function () {
-            return currentQuitDef !== null;
         };
 
         // initialization -----------------------------------------------------
@@ -1274,15 +1265,17 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             }
 
+            // call initialization listeners before showing the application
+            // window (this is important for fail-restore which will be
+            // triggered before the window show callback will be executed)
+            self.trigger('docs:init');
+
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
                 // show busy indicator, hide after import (regardless of result)
                 win.busy();
                 self.on('docs:import:after', function () { win.idle(); });
-
-                // call initialization listeners
-                self.trigger('docs:init');
 
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled
@@ -1294,8 +1287,6 @@ define('io.ox/office/framework/app/baseapplication',
                     def.resolve();
                 }
             });
-
-            return def.promise();
         });
 
         // call all registered quit handlers
