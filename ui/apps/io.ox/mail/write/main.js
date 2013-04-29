@@ -1050,16 +1050,23 @@ define('io.ox/mail/write/main',
                 });
 
             _.defer(initAutoSaveAsDraft, this);
-            return def.done(function (result) {
+            return def.then(function (result) {
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
-                mailAPI.get({ folder_id: folder, id: id }).then(function (mail) {
+                mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
                     view.form.find('.section-item.file').remove();
                     view.form.find(':input[name][type=file]').filter(function (index, elem) {
                         return !!$(elem).prop('attachment');
                     }).remove();
-                    app.setMail({ data: mail, mode: 'compose', initial: false, replaceBody: 'no' });
+                    if (mail.mode === 'reply') {
+                        draftMail.msgref = mail.data.msgref;
+                        draftMail.sendtype = mailAPI.SENDTYPE.REPLY;
+                    } else if (mail.mode === 'forward') {
+                        draftMail.msgref = mail.data.msgref;
+                        draftMail.sendtype = mailAPI.SENDTYPE.FORWARD;
+                    }
+                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
                 });
             });
         };
