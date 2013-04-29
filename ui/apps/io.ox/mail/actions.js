@@ -367,13 +367,15 @@ define('io.ox/mail/actions',
         }
     });
 
-    new Action('io.ox/mail/actions/markspam', {
-        id: 'markspam',
+    // SPAM
+
+    new Action('io.ox/mail/actions/spam', {
+        capabilities: 'spam',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
+            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
-                        return memo || (data && (data.flags & api.FLAGS.SPAM) === 0);
+                        return memo || (!account.is('spam', data.folder_id) && !util.isSpam(data));
                     }, false);
                 return bool;
             });
@@ -382,6 +384,24 @@ define('io.ox/mail/actions',
             api.markSpam(list);
         }
     });
+
+    new Action('io.ox/mail/actions/nospam', {
+        capabilities: 'spam',
+        requires: function (e) {
+            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+                var bool = e.collection.has('toplevel') &&
+                    _(list).reduce(function (memo, data) {
+                        return memo || account.is('spam', data.folder_id) || util.isSpam(data);
+                    }, false);
+                return bool;
+            });
+        },
+        multiple: function (list) {
+            api.noSpam(list);
+        }
+    });
+
+    // Attachments
 
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
@@ -845,8 +865,10 @@ define('io.ox/mail/actions',
 
     // inline links
 
+    var INDEX = 0;
+
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 100,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'reply',
         label: gt('Reply'),
@@ -854,7 +876,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 200,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
@@ -862,7 +884,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 300,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'forward',
         label: gt('Forward'),
@@ -871,7 +893,7 @@ define('io.ox/mail/actions',
 
     // edit draft
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 400,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'edit',
         label: gt('Edit'),
@@ -879,7 +901,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 500,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'markunread',
         label:
@@ -891,7 +913,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 501,
+        index: INDEX + 1,
         prio: 'hi',
         id: 'markread',
         label:
@@ -908,24 +930,24 @@ define('io.ox/mail/actions',
         multiple: $.noop
     });
 
-//    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-//        index: 600,
-//        prio: 'lo',
-//        id: 'label',
-//        ref: 'io.ox/mail/actions/label',
-//        draw: function (data) {
-//            this.append(
-//                $('<span class="dropdown" class="io-ox-inline-links" data-prio="lo">')
-//                .append(
-//                    // link
-//
-//                )
-//            );
-//        }
-//    }));
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'hi',
+        id: 'spam',
+        label: gt('Mark as spam'),
+        ref: 'io.ox/mail/actions/spam'
+    }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 700,
+        index: INDEX + 1,
+        prio: 'hi',
+        id: 'nospam',
+        label: gt('No spam'),
+        ref: 'io.ox/mail/actions/nospam'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
         prio: 'lo',
         id: 'move',
         label: gt('Move'),
@@ -933,7 +955,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 800,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'copy',
         label: gt('Copy'),
@@ -941,7 +963,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 900,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'source',
         //#. source in terms of source code
@@ -950,7 +972,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1000,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
@@ -958,7 +980,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1050,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'print',
         label: gt('Print'),
@@ -966,7 +988,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1100,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'reminder',
         label: gt("Reminder"),
@@ -974,16 +996,15 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1200,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'add-to-portal',
         label: gt('Add to portal'),
         ref: 'io.ox/mail/actions/add-to-portal'
     }));
 
-
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1300,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'saveEML',
         label: gt('Save as file'),

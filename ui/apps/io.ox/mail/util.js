@@ -289,6 +289,10 @@ define('io.ox/mail/util',
             return (data.flags & 2) === 2;
         },
 
+        isSpam: function (data) {
+            return (data.flags & 128) === 128;
+        },
+
         isAnswered: function () {
             return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;

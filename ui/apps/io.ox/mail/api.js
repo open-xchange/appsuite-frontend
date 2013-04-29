@@ -747,7 +747,20 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markSpam = function (list) {
+        this.trigger('refresh.pending');
         return update(list, { flags: api.FLAGS.SPAM, value: true })
+            .pipe(function () {
+                return $.when(
+                    // clear source folder
+                    api.caches.all.grepRemove(_(list).first().folder_id + DELIM)
+                );
+            })
+            .done(refreshAll);
+    };
+
+    api.noSpam = function (list) {
+        this.trigger('refresh.pending');
+        return update(list, { flags: api.FLAGS.SPAM, value: false })
             .pipe(function () {
                 return $.when(
                     // clear source folder

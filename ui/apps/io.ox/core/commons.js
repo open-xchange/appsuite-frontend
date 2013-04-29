@@ -249,13 +249,18 @@ define('io.ox/core/commons',
                     grid.repaint();
                     grid.selection.retrigger();
                 },
+                pending = function () {
+                    grid.pending();
+                },
                 off = function () {
                     api.off('refresh.all refresh:all:local', refreshAll)
+                        .off('refresh.pending', pending)
                         .off('refresh.list', refreshList);
                 },
                 on = function () {
                     off();
                     api.on('refresh.all refresh:all:local', refreshAll)
+                        .on('refresh.pending', pending)
                         .on('refresh.list', refreshList)
                         .trigger('refresh.all');
                 };

@@ -943,6 +943,12 @@ define('io.ox/core/tk/vgrid',
             return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
         };
 
+        this.pending = function () {
+            responsiveChange = true;
+            this.busy();
+            return this;
+        };
+
         this.getMode = function () {
             return currentMode;
         };
