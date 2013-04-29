@@ -63,6 +63,10 @@ define('io.ox/core/api/apps',
             return obj;
         },
 
+        /**
+         * get number of apps per category/special category
+         * @return {array} object for each category
+         */
         getCategories = function () {
             // loop over apps to figure out numbers per category
             var counts = {};
@@ -113,6 +117,11 @@ define('io.ox/core/api/apps',
                 );
         },
 
+        /**
+         * get by category ('productivity', 'basic', 'dev')
+         * @param  {string} category
+         * @return {array} object for each category
+         */
         getByCategory = function (id) {
             return _(appData.apps)
                 .chain()
@@ -144,6 +153,11 @@ define('io.ox/core/api/apps',
     // public module interface
     api = {
 
+        /**
+         * get app (creates empty one if doesn't exists yet)
+         * @param  {string} id
+         * @return {object} app
+         */
         get: function (id) {
             return bless(appData.apps[id], id);
         },
@@ -152,6 +166,11 @@ define('io.ox/core/api/apps',
 
         getByCategory: getByCategory,
 
+        /**
+         * get installed apps (special category)
+         * @param  {string} [optional]
+         * @return {array} app objects
+         */
         getInstalled: function (mode) {
             // TODO: not this way please!
             if (mode === 'cached' && cachedInstalled !== null) {
@@ -171,14 +190,29 @@ define('io.ox/core/api/apps',
             });
         },
 
+        /**
+         * get favorite apps (special category)
+         * @param  {string} [optional]
+         * @return {array} app objects
+         */
         getFavorites: function () {
             return getSpecial('favorites');
         },
 
+        /**
+         * checks if app is marked as favorite (special category)
+         * @param  {object}  data (app object)
+         * @return {boolean}
+         */
         isFavorite: function (data) {
             return _(appData.favorites).indexOf(data.id) > -1;
         },
 
+        /**
+         * mark as favorites (special category)
+         * @param  {string} id
+         * @return {undefined}
+         */
         markAsFavorite: function (id) {
             if (_(appData.favorites).indexOf(id) === -1) {
                 appData.favorites.push(id);
@@ -186,6 +220,11 @@ define('io.ox/core/api/apps',
             }
         },
 
+        /**
+         * unmark as favorites (special category)
+         * @param  {string} id
+         * @return {undefined}
+         */
         unmarkAsFavorite: function (id) {
             var pos = _(appData.favorites).indexOf(id);
             if (pos !== -1) {

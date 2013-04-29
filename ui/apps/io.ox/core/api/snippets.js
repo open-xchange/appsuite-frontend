@@ -20,12 +20,15 @@
 		misc: { insertion: above } // Object with misc options
 	}
 */
-define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], function (http, Events) {
+define('io.ox/core/api/snippets',
+	['io.ox/core/http',
+	 'io.ox/core/event'], function (http, Events) {
+
 	'use strict';
 
 	var api = {};
-	Events.extend(api);
 
+	Events.extend(api);
 
 	function fnTrigger(event) {
 		return function () {
@@ -33,6 +36,10 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		};
 	}
 
+	/**
+	 * get all snippets
+	 * @return {deferred}
+	 */
 	api.getAll = function (type) {
 		return http.GET({
 			module: 'snippet',
@@ -49,6 +56,11 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		});
 	};
 
+	/**
+	 * create snippet
+	 * @param  {object} snippet
+	 * @return {deferred}
+	 */
 	api.create = function (snippet) {
 		return http.PUT({
 			module: 'snippet',
@@ -59,6 +71,12 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		}).done(fnTrigger('refresh.all'));
 	};
 
+	/**
+	 * update snippet
+	 * @param  {object} snippet
+	 * @fires  api#refresh.all
+	 * @return {deferred}
+	 */
 	api.update = function (snippet) {
 		return http.PUT({
 			module: 'snippet',
@@ -70,6 +88,11 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		}).done(fnTrigger('refresh.all'));
 	};
 
+	/**
+	 * get snippet
+	 * @param  {string} id
+	 * @return {deferred}
+	 */
 	api.get = function (id) {
 		return http.GET({
 			module: 'snippet',
@@ -80,6 +103,11 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 		});
 	};
 
+	/**
+	 * get snippets
+	 * @param  {array} ids
+	 * @return {deferred}
+	 */
 	api.list = function (ids) {
 		return http.PUT({
 			module: 'snippet',
@@ -92,7 +120,12 @@ define('io.ox/core/api/snippets', ['io.ox/core/http', 'io.ox/core/event'], funct
 
 	// TODO: Attachment Handling
 
-
+	/**
+	 * remove snippets
+	 * @param  {string} id
+	 * @fires  api#refresh.all
+	 * @return {deferred}
+	 */
 	api.destroy = function (id) {
 		return http.GET({
 			module: 'snippet',

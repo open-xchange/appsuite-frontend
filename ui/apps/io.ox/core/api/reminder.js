@@ -15,16 +15,26 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
     'use strict';
 
     var api = {
-        deleteReminder: function (reminderId) {
 
+        /**
+         * delete reminde
+         * @param  {string} reminderId
+         * @return {deferred}
+         */
+        deleteReminder: function (reminderId) {
             return http.PUT({
                 module: 'reminder',
                 params: {action: 'delete'},
                 data: {id: reminderId}
             });
-
         },
 
+        /**
+         * remind again
+         * @param  {number} remindDate (unix datetime)
+         * @param  {string} reminderId
+         * @return {deferred}
+         */
         remindMeAgain: function (remindDate, reminderId) {
             return http.PUT({
                 module: 'reminder',
@@ -34,11 +44,17 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                          },
                 data: {alarm: remindDate}
             });
-
         },
 
+        /**
+         * get reminders
+         * @param  {number} range (end of scope)
+         * @param  {number} module
+         * @fires  api#reminder-tasks (reminderTaskId, reminderId)
+         * @fires  api#reminder-calendar (reminderCalId)
+         * @return {deferred}
+         */
         getReminders: function (range, module) {
-
             return http.GET({
                 module: 'reminder',
                 params: {
@@ -46,7 +62,6 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                     end: range || _.now()
                 }
             }).pipe(function (list) {
-
                 if (module === undefined || module === 4) {
                     //seperate task reminders from overall reminders
                     var reminderTaskId = [],
@@ -61,10 +76,12 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                             reminderCalId.push(list[i]);
                         }
                     }
-                    api.trigger('reminder-tasks', reminderTaskId, reminderId);//even if empty array is given it needs to be triggered to remove notifications that does not exist anymore(already handled in ox6 etc)
-                    api.trigger('reminder-calendar', reminderCalId);//same as above
+                    //even if empty array is given it needs to be triggered to remove
+                    //notifications that does not exist anymore(already handled in ox6 etc)
+                    api.trigger('reminder-tasks', reminderTaskId, reminderId);
+                    //same as above
+                    api.trigger('reminder-calendar', reminderCalId);
                 }
-
                 return list;
             });
         }
@@ -72,7 +89,11 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
 
     Events.extend(api);
 
-    // global refresh
+    /**
+     * bind to global refresh; clears caches and trigger refresh.all
+     * @fires  api#refresh.all
+     * @return {promise}
+     */
     api.refresh = function () {
         api.getReminders().done(function () {
             // trigger local refresh

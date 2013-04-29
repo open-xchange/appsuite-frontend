@@ -17,7 +17,11 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
     'use strict';
 
     var api = {
-        //gets all attachments for a specific object, for exsample a task
+        /**
+         * gets all attachments for a specific object, for exsample a task
+         * @param  {object} options
+         * @return {deferred}
+         */
         getAll: function (options) {
 
             return http.GET({
@@ -29,15 +33,22 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
                     folder: options.folder || options.folder_id,
                     columns: '1,800,801,802,803,804,805'
                 }
-            }).pipe(function (data) {//fix for backend bug folder should not be 0
+            }).pipe(function (data) {
+                //fix for backend bug folder should not be 0
                 for (var i = 0; i < data.length; i++) {
                     data[i].folder = options.folder || options.folder_id;
                 }
-                return _(data).reject(function (attachment) { return attachment.rtf_flag; }); // Filter out outlook-special attachments
+                // Filter out outlook-special attachments
+                return _(data).reject(function (attachment) { return attachment.rtf_flag; });
             });
         },
 
-        //removes attachments. data contains attachment ids
+        /**
+         * removes attachments
+         * @param  {object} options
+         * @param  {object} data (id properties)
+         * @return {deferred}
+         */
         remove: function (options, data) {
             var self = this;
             return http.PUT({
@@ -58,6 +69,12 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             });
         },
 
+        /**
+         * create attachment
+         * @param  {object} options
+         * @param  {object} data (attachment)
+         * @return {deferred}
+         */
         create: function (options, data) {
             var self = this;
             var params = {action: 'attach'},
@@ -86,6 +103,12 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             });
         },
 
+        /**
+         * create attachment
+         * @param  {object} options
+         * @param  {object} form
+         * @return {deferred}
+         */
         createOldWay: function (options, form) {
 
             var json = {module: options.module,
@@ -130,7 +153,12 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             return deferred;
         },
 
-        //builds URL to download/preview File
+        /**
+         * builds URL to download/preview File
+         * @param  {object} data
+         * @param  {string} mode
+         * @return {string} url
+         */
         getUrl: function (data, mode) {
 
             var url = ox.apiRoot + '/attachment';
@@ -156,8 +184,15 @@ define('io.ox/core/api/attachment', ['io.ox/core/http',
             }
         },
 
+        /**
+         * save attachment
+         * @param  {object} data
+         * @param  {string} target (folder_id)
+         * @return {deferred}
+         */
         save: function (data, target) {
-            //multiple does not work, because module overides module in params. So we need to do it one by one
+            //multiple does not work, because module overides module
+            //in params. So we need to do it one by one
             // be robust
             target = target || config.get('folder.infostore');
 
