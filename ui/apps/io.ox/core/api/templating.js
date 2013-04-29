@@ -14,7 +14,7 @@
 define('io.ox/core/api/templating', ['io.ox/core/http'], function (http) {
 
     'use strict';
-    
+
     var api = {
             getNames: function () {
                 return http.GET({
@@ -23,6 +23,6 @@ define('io.ox/core/api/templating', ['io.ox/core/http'], function (http) {
                 });
             }
         };
-    
+
     return api;
 });

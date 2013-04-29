@@ -10,16 +10,16 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/core/api/reminder", ["io.ox/core/http",
-                                   "io.ox/core/event"], function (http, Events) {
-    "use strict";
+define('io.ox/core/api/reminder', ['io.ox/core/http',
+                                   'io.ox/core/event'], function (http, Events) {
+    'use strict';
 
     var api = {
         deleteReminder: function (reminderId) {
 
             return http.PUT({
-                module: "reminder",
-                params: {action: "delete"},
+                module: 'reminder',
+                params: {action: 'delete'},
                 data: {id: reminderId}
             });
 
@@ -27,8 +27,8 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
 
         remindMeAgain: function (remindDate, reminderId) {
             return http.PUT({
-                module: "reminder",
-                params: {action: "remindAgain",
+                module: 'reminder',
+                params: {action: 'remindAgain',
                          id: reminderId,
                          timezone: 'UTC'
                          },
@@ -40,13 +40,13 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
         getReminders: function (range, module) {
 
             return http.GET({
-                module: "reminder",
+                module: 'reminder',
                 params: {
-                    action: "range",
+                    action: 'range',
                     end: range || _.now()
                 }
             }).pipe(function (list) {
-                
+
                 if (module === undefined || module === 4) {
                     //seperate task reminders from overall reminders
                     var reminderTaskId = [],
@@ -76,7 +76,7 @@ define("io.ox/core/api/reminder", ["io.ox/core/http",
     api.refresh = function () {
         api.getReminders().done(function () {
             // trigger local refresh
-            api.trigger("refresh.all");
+            api.trigger('refresh.all');
         });
     };
 

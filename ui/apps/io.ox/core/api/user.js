@@ -11,38 +11,38 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/user",
-    ["io.ox/core/http", "io.ox/core/api/factory", "gettext!io.ox/core"], function (http, apiFactory, gt) {
+define('io.ox/core/api/user',
+    ['io.ox/core/http', 'io.ox/core/api/factory', 'gettext!io.ox/core'], function (http, apiFactory, gt) {
 
-    "use strict";
+    'use strict';
 
     // generate basic API
     var api = apiFactory({
-        module: "user",
+        module: 'user',
         keyGenerator: function (obj) {
             return String(obj.id);
         },
         requests: {
             all: {
-                columns: "1,20,500",
+                columns: '1,20,500',
                 extendColumns: 'io.ox/core/api/user/all',
-                sort: "500", // display_name
-                order: "asc"
+                sort: '500', // display_name
+                order: 'asc'
             },
             list: {
-                action: "list",
+                action: 'list',
                 columns: '1,20,500,501,502,505,524,555,606,614',
                 extendColumns: 'io.ox/core/api/user/list'
             },
             get: {
-                action: "get"
+                action: 'get'
             },
             search: {
-                action: "search",
-                columns: "1,20,500,524",
+                action: 'search',
+                columns: '1,20,500,524',
                 extendColumns: 'io.ox/core/api/user/search',
-                sort: "500",
-                order: "asc",
+                sort: '500',
+                order: 'asc',
                 getData: function (query) {
                     return { pattern: query };
                 }
@@ -203,13 +203,13 @@ define("io.ox/core/api/user",
     */
     api.getPictureURL = function (id, options) {
         //get contact object first (userId != contactId)
-        return $.when(api.get({ id: id }), require(["io.ox/contacts/api"])).then(
+        return $.when(api.get({ id: id }), require(['io.ox/contacts/api'])).then(
             function (data, contactsAPI) {
                 //call contactsAPI to share a picture cache
                 return contactsAPI.getPictureURL(data[0] || data, options);
             },
             function () {
-                return ox.base + "/apps/themes/default/dummypicture.png";
+                return ox.base + '/apps/themes/default/dummypicture.png';
             }
         );
     };
@@ -221,7 +221,7 @@ define("io.ox/core/api/user",
     * @return {object} div node with callbacks
     */
     api.getPicture = function (id, options) {
-        var node = $("<div>"),
+        var node = $('<div>'),
             clear = function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit
                     node = clear = null; // don't leak
@@ -229,7 +229,7 @@ define("io.ox/core/api/user",
             };
         api.getPictureURL(id, options)
             .done(function (url) {
-                node.css("backgroundImage", "url(" + url + ")");
+                node.css('backgroundImage', 'url(' + url + ')');
             })
             .always(clear);
         return node;

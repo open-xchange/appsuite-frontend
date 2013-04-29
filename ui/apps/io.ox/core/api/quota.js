@@ -11,23 +11,23 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
+define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
 
-    "use strict";
+    'use strict';
 
     var api = {
 
         getFile: function () {
             return http.GET({
-                module: "quota",
-                params: { action: "filestore" }
+                module: 'quota',
+                params: { action: 'filestore' }
             });
         },
 
         getMail: function () {
             return http.GET({
-                module: "quota",
-                params: { action: "mail" }
+                module: 'quota',
+                params: { action: 'mail' }
             });
         },
 
