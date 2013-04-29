@@ -1558,15 +1558,25 @@ define('io.ox/calendar/week/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
+                conf = 1,
+                confString = _.noI18n('%1$s'),
                 classes = '';
 
             if (a.get('private_flag') && myself !== a.get('created_by')) {
                 classes = 'private disabled';
             } else {
                 classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(util.getConfirmationStatus(a.attributes, myself)) +
+                    ' ' + util.getConfirmationClass(conf = util.getConfirmationStatus(a.attributes, myself)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                if (conf === 3) {
+                    confString =
+                        //#. add confirmation status behind appointment title
+                        //#. %1$s = apppintment title
+                        //#, c-format
+                        gt('%1$s\u00A0(Tentative)');
+                }
             }
+            console.log('confString', confString, ' ----> ', a.get('title'));
 
             this.addClass(classes)
                 .append(
@@ -1574,7 +1584,7 @@ define('io.ox/calendar/week/view',
                     .addClass('appointment-content')
                     .append(
                         $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
-                        $('<div>').addClass('title').text(gt.noI18n(a.get('title'))),
+                        $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title')))),
                         $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''))
                     )
                 )
