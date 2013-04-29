@@ -8,7 +8,7 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
 define('io.ox/office/preview/model',

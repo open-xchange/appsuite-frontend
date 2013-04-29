@@ -778,6 +778,9 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
          *  @param {Number} [options.delay=0]
          *      The time (in milliseconds) the execution of the passed callback
          *      function will be delayed.
@@ -814,6 +817,8 @@ define('io.ox/office/framework/app/baseapplication',
 
             var // the current browser timeout identifier
                 timeout = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
                 // the delay time for the next execution of the callback
                 delay = Utils.getIntegerOption(options, 'delay', 0, 0),
                 // whether to repeat execution of the callback function
@@ -838,7 +843,7 @@ define('io.ox/office/framework/app/baseapplication',
                     unregisterTimeout();
 
                     // execute the callback function, react on its result
-                    $.when(callback())
+                    $.when(callback.call(context))
                     .done(function (result) {
                         if (repeat && (result === true)) {
                             createTimeout();
@@ -897,6 +902,9 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
          *  @param {Number} [options.chunkLength=10]
          *      The number of elements that will be extracted from the passed
          *      data array and will be passed to the callback function.
@@ -925,6 +933,8 @@ define('io.ox/office/framework/app/baseapplication',
                 def = $.Deferred(),
                 // the timer executing the callback function for the array chunks
                 timer = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
                 // the length of a single chunk in the array
                 chunkLength = Utils.getIntegerOption(options, 'chunkLength', 10, 1),
                 // current array index
@@ -942,7 +952,7 @@ define('io.ox/office/framework/app/baseapplication',
                 def.notify(index / dataArray.length);
 
                 // execute the callback, return whether to repeat execution
-                return $.when(callback(dataArray.slice(index, index + chunkLength), index))
+                return $.when(callback.call(context, dataArray.slice(index, index + chunkLength), index))
                     .then(function () {
                         index += chunkLength;
                         // repeat execution, if index has not reached end of array yet
@@ -978,11 +988,13 @@ define('io.ox/office/framework/app/baseapplication',
          *  created by this method. Supports all options also supported by the
          *  method BaseApplication.executeDelayed(). Especially, delayed and
          *  repeated execution of the deferred callback function is supported.
-         *  Note that the delay time will restart after each call of the
-         *  debounced method, causing the execution of the deferred callback to
-         *  be postponed until the debounced method has not been called again
-         *  during the delay (this is the behavior of the _.debounce() method).
-         *  Additionally, supports the following options:
+         *  If a context is specified with the option 'options.context', it
+         *  will be used for both callback functions. Note that the delay time
+         *  will restart after each call of the debounced method, causing the
+         *  execution of the deferred callback to be postponed until the
+         *  debounced method has not been called again during the delay (this
+         *  is the behavior of the _.debounce() method). Additionally, supports
+         *  the following options:
          *  @param {Number} [options.maxDelay]
          *      If specified, a delay time used as a hard limit to execute the
          *      deferred callback after the first call of the debounced method,
@@ -997,7 +1009,9 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // whether to not restart the timer on repeated calls with delay time
+            var // the context for the callback functions
+                context = Utils.getOption(options, 'context'),
+                // whether to not restart the timer on repeated calls with delay time
                 maxDelay = Utils.getIntegerOption(options, 'maxDelay', 0),
                 // the current timer used to execute the callback
                 debounceTimer = null,
@@ -1020,7 +1034,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // execute the callback and return its result (for repeated execution)
                 postponed = false;
-                return deferredCallback();
+                return deferredCallback.call(context);
             }
 
             // aborts and clears all timers
@@ -1064,7 +1078,7 @@ define('io.ox/office/framework/app/baseapplication',
                 if (!postponed) { createTimers(); }
 
                 // call the direct callback with the passed arguments
-                return directCallback.apply(undefined, _.toArray(arguments));
+                return directCallback.apply(context, _.toArray(arguments));
             };
         };
 
