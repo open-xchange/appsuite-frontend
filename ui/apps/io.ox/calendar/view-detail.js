@@ -347,19 +347,15 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0")))
-            )
-            .append(
+                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0"))),
                 $("<span>")
                     .addClass("detail shown_as " + util.getShownAsClass(data))
-                    .text("\u00A0")
-            )
-            .append(
+                    .text(gt.noI18n("\u00A0")),
                 $("<span>")
                     .addClass("detail shown-as")
-                    .append($.txt(gt.noI18n(" ")), $.txt(gt.noI18n(util.getShownAs(data))))
-            )
-            .append($("<br>"));
+                    .append($.txt(gt.noI18n("\u00A0")), $.txt(util.getShownAs(data))),
+                $("<br>")
+            );
         }
     });
 
