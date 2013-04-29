@@ -234,6 +234,7 @@ define('io.ox/tasks/api',
     /**
      * remove from get/list cache
      * @param  {string|array} key
+     * @fires  api#create (task)
      * @return {promise}
      */
     api.removeFromCache = function (key) {

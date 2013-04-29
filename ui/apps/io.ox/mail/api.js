@@ -579,6 +579,7 @@ define('io.ox/mail/api',
     /**
      * cleaning up
      * @param  {string]} folder_id
+     * @fires  api#refresh.all
      * @return {deferred}
      */
     api.expunge = function (folder_id) {
@@ -606,6 +607,7 @@ define('io.ox/mail/api',
     /**
      * deletes all mails from a specific folder
      * @param  {string} folder_id
+     * @fires  api#refresh.all
      * @return {deferred}
      */
     api.clear = function (folder_id) {
@@ -636,6 +638,7 @@ define('io.ox/mail/api',
      * @param  {array|object} list of mail objects
      * @param  {string} label (numeric color id mapped in api.COLORS)
      * @param  {boolean} local
+     * @fires  api#refresh.list
      * @return {promise} done returns list of mails in current folder
      */
     api.changeColor = function (list, label, local) {
@@ -758,7 +761,8 @@ define('io.ox/mail/api',
      * move mails to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @fires api#move (list, targetFolderId)
+     * @fires  api#refresh.all
+     * @fires  api#move (list, targetFolderId)
      * @return {deferred}
      */
     api.move = function (list, targetFolderId) {
@@ -961,6 +965,8 @@ define('io.ox/mail/api',
      * @param  {object} data (mail object)
      * @param  {array} files
      * @param  {jquery} form (for 'oldschool')
+     * @fires  api#refresh.all
+     * @fires  api#refresh.list
      * @return {deferred}
      */
     api.send = function (data, files, form) {
@@ -1316,6 +1322,7 @@ define('io.ox/mail/api',
     /**
      * imports mail as EML
      * @param  {object} options (file: {}, folder: string )
+     * @fires  api#refresh.all
      * @return {deferred} returns array with objects (id, folder_id)
      */
     api.importEML = function (options) {
