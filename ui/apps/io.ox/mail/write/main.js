@@ -563,7 +563,7 @@ define('io.ox/mail/write/main',
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[mail.format] || []) : (undefined),
                     content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 if (mail.format === 'text') {
-                    content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
+                    content = _.isFunction(_.unescapeHTML) ? _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n')) : content;
                 }
                 // image URL fix
                 if (editorMode === 'html') {
