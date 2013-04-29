@@ -766,24 +766,40 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.move = function (list, targetFolderId) {
-        // call updateCaches (part of remove process) to be responsive
-        return api.updateCaches(list).pipe(function () {
-            // trigger visual refresh
-            api.trigger('refresh.all');
-            // start update on server
+        if (list.length >= 100) {
+            notifications.yell('info', gt('Moving mails ... This may take a few seconds.'));
+
             return update(list, { folder_id: targetFolderId })
-                .pipe(function () {
-                    list = _.isArray(list) ? list : [list];
-                    return _(list).map(function (obj) {
-                        return (clearCaches(obj, targetFolderId))();
-                    });
-                })
-                .done(function () {
-                    notifications.yell('success', gt('Mail has been moved'));
-                    api.trigger('move', list, targetFolderId);
-                    folderAPI.reload(targetFolderId, list);
+            .done(function () {
+                notifications.yell('success', gt('Mails have been moved'));
+                api.trigger('move', list, targetFolderId);
+                folderAPI.reload(targetFolderId, list);
+                api.caches.all.clear().done(function () {
+                    api.trigger('refresh.all');
                 });
-        });
+            });
+
+        } else {
+         // call updateCaches (part of remove process) to be responsive
+            return api.updateCaches(list).pipe(function () {
+                // trigger visual refresh
+                api.trigger('refresh.all');
+                // start update on server
+                return update(list, { folder_id: targetFolderId })
+                    .pipe(function () {
+                        list = _.isArray(list) ? list : [list];
+                        return _(list).map(function (obj) {
+                            return (clearCaches(obj, targetFolderId))();
+                        });
+                    })
+                    .done(function () {
+                        notifications.yell('success', gt('Mail has been moved'));
+                        api.trigger('move', list, targetFolderId);
+                        folderAPI.reload(targetFolderId, list);
+                    });
+            });
+        }
+
     };
 
     /**
