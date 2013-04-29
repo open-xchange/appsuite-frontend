@@ -570,7 +570,7 @@ define('io.ox/calendar/week/view',
                 timeLabel.push(
                     $('<div>')
                         .addClass('time')
-                        .append($('<div>').addClass('number').text(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2')))
+                        .append($('<div>').addClass('number').text(gt.noI18n(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2'))))
                 );
             }
             timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
