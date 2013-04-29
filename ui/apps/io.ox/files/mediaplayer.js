@@ -152,7 +152,7 @@ define('io.ox/files/mediaplayer',
         drawPlayer: function (url, mimetype) {
             var el = '<audio>',
             // Flash support is pretty bad for video so we only use it for audio
-            plugins = ['flash'],
+            plugins = ['flash', 'silverlight'],
             self = this;
             if (this.config.videoSupport) {
                 el = '<video>';
