@@ -1576,7 +1576,6 @@ define('io.ox/calendar/week/view',
                         gt('%1$s\u00A0(Tentative)');
                 }
             }
-            console.log('confString', confString, ' ----> ', a.get('title'));
 
             this.addClass(classes)
                 .append(
