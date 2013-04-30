@@ -71,6 +71,20 @@ define('io.ox/office/preview/pagegroup',
             };
         }
 
+        /**
+         * Updates the size of the specified page node, so that it will fit
+         * into the button node.
+         *
+         * @param {jQuery} buttonNode
+         *  The outer button node.
+         *
+         * @param {jQuery} pageNode
+         *  The inner page node.
+         *
+         * @param {Object} pageSize
+         *  The original page size, in pixels, in the properties 'width' and
+         *  'height'.
+         */
         function updatePageSize(buttonNode, pageNode, pageSize) {
 
             var // the child node in the page, containing the SVG
