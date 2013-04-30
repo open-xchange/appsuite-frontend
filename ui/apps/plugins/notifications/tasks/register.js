@@ -130,7 +130,7 @@ define('plugins/notifications/tasks/register',
         index: 350,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasks', NotificationsView);
-            
+
             function add(e, tasks, reset) {
                 var items = [];
                 _(tasks).each(function (taskObj) {
@@ -154,7 +154,7 @@ define('plugins/notifications/tasks/register',
                     notifications.collection.reset(items);
                 }
             }
-            
+
             function remove(e, tasks) {
                 _(tasks).each(function (taskObj) {
                     notifications.collection.remove(notifications.collection._byId[taskObj.id]);
@@ -198,7 +198,7 @@ define('plugins/notifications/tasks/register',
         draw: function (baton) {
             var model = baton.model,
                 selectionBox;
-            
+
             this.attr('data-cid', model.get('cid')).attr('model-cid', model.cid)
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
@@ -208,7 +208,7 @@ define('plugins/notifications/tasks/register',
                     selectionBox = $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
                     $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
                     $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
-                    
+
                 )
             );
             selectionBox.val('15');//set to 15minutes as default
@@ -247,7 +247,7 @@ define('plugins/notifications/tasks/register',
                 dates,
                 model = this.model,
                 key = [model.get('folder_id') + '.' + model.get('id')];
-            
+
             dates = util.computePopupTime(endDate, this.$el.find(".dateselect").val());
             endDate = dates.alarmDate;
             reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
@@ -386,7 +386,7 @@ define('plugins/notifications/tasks/register',
             'click [data-action="change_state"]': 'onChangeState'
             //'dispose': 'close'
         },
-        
+
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-confirmation/item').invoke('draw', this.$el, baton);
