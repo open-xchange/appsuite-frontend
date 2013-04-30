@@ -71,9 +71,31 @@ define('io.ox/office/preview/pagegroup',
             };
         }
 
+        function updatePageSize(buttonNode, pageNode, pageSize) {
+
+            var // the child node in the page, containing the SVG
+                childNode = pageNode.children().first(),
+                // the available width and height inside the button node
+                maxWidth = buttonNode.width(),
+                maxHeight = buttonNode.height() - 20,
+                // the zoom factor according to available size
+                widthFactor = Math.min(maxWidth / pageSize.width, 1),
+                heightFactor = Math.min(maxHeight / pageSize.height, 1),
+                zoomFactor = Math.min(widthFactor, heightFactor);
+
+            // set the calculated zoom factor
+            ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor);
+
+            // Firefox has serious performance issues when rendering/scrolling
+            // nodes with many SVG contents, convert SVG pages to inline bitmaps
+            if (_.browser.Firefox && childNode.is('img')) {
+                ViewUtils.convertImageToBitmap(childNode, pageSize);
+            }
+        }
+
         /**
          * Creates a new button element representing the page with the passed
-         * index.
+         * index, and loads the page contents in a background task.
          *
          * @param {Number} page
          *  The one-based index of the page.
@@ -81,67 +103,73 @@ define('io.ox/office/preview/pagegroup',
          * @returns {jQuery}
          *  The button element created by this method.
          */
-        function createPageButton(page) {
+        var createPageButton = (function () {
 
-            var // the dummy node containing the busy animation
-                busyNode = $('<div>').addClass('page'),
-                // the page node containing the page contents
-                pageNode = $('<div>').addClass('page'),
-                // the button node containing the page node and the page number
-                buttonNode = Utils.createButton({
-                    value: page,
-                    label: String(page),
-                    css: getPageButtonRectangle(page)
-                }).append(busyNode);
+            var // list of pending buttons waiting to load their page contents
+                pendingInfos = [];
 
-            function updatePageSize(targetNode, pageSize) {
+            // direct callback: called every time when createPageButton() has been called
+            function createButtonNode(page) {
 
-                var // the child node in the page, containing the SVG
-                    childNode = targetNode.children().first(),
-                    // the available width and height inside the button node
-                    maxWidth = buttonNode.width(),
-                    maxHeight = buttonNode.height() - 20,
-                    // the zoom factor according to available size
-                    widthFactor = Math.min(maxWidth / pageSize.width, 1),
-                    heightFactor = Math.min(maxHeight / pageSize.height, 1),
-                    zoomFactor = Math.min(widthFactor, heightFactor);
+                var // the dummy node containing the busy animation
+                    busyNode = $('<div>').addClass('page'),
+                    // the page node containing the page contents
+                    pageNode = $('<div>').addClass('page'),
+                    // the button node containing the page node and the page number
+                    buttonNode = Utils.createButton({
+                        value: page,
+                        label: String(page),
+                        css: getPageButtonRectangle(page)
+                    }).append(busyNode);
 
-                // set the calculated zoom factor
-                ViewUtils.setZoomFactor(targetNode, pageSize, zoomFactor);
+                // insert the button node and page node into the DOM before loading the image
+                self.addChildNodes(buttonNode);
+                app.getView().insertTemporaryNode(pageNode);
 
-                // Firefox has serious performance issues when rendering/scrolling
-                // nodes with many SVG contents, convert SVG pages to inline bitmaps
-                if (_.browser.Firefox && childNode.is('img')) {
-                    ViewUtils.convertImageToBitmap(childNode, pageSize);
-                }
+                // set default page size (DIN A* Portrait) before loading the page (in case of error)
+                updatePageSize(buttonNode, busyNode, { width: 210, height: 297 });
+                busyNode.append($('<div>').addClass('abs').busy());
+
+                // register the nodes for the deferred callback loading the page contents
+                pendingInfos.push({ page: page, buttonNode: buttonNode, busyNode: busyNode, pageNode: pageNode });
+
+                return buttonNode;
             }
 
-            // insert the button node and page node into the DOM before loading the image
-            self.addChildNodes(buttonNode);
-            app.getView().insertTemporaryNode(pageNode);
+            // deferred callback: loads the pages into the existing button nodes
+            function loadPages() {
 
-            // set default page size (DIN A* Portrait) before loading the page (in case of error)
-            updatePageSize(busyNode, { width: 210, height: 297 });
-            busyNode.append($('<div>').addClass('abs').busy());
+                var // pending nodes and page number
+                    pendingInfo = null;
 
-            // load the image, update page size
-            ViewUtils.loadPageIntoNode(pageNode, app.getModel(), page)
-            .done(function (pageSize) {
-                busyNode.remove();
-                buttonNode.append(pageNode);
-                updatePageSize(pageNode, pageSize);
-            })
-            .fail(function () {
-                busyNode.empty().addClass('icon-remove').css({
-                    color: '#f88',
-                    fontSize: '60px',
-                    lineHeight: busyNode.height() + 'px',
-                    textDecoration: 'none' // otherwise, IE underlines when hovering
+                // find a pending button that is still in the DOM (buttons may have been removed in the meantime)
+                while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(self.getNode(), pendingInfo.buttonNode)) {}
+                if (!pendingInfo) { return; }
+
+                // load the page into the button node
+                ViewUtils.loadPageIntoNode(pendingInfo.pageNode, app.getModel(), pendingInfo.page)
+                .done(function (pageSize) {
+                    pendingInfo.busyNode.remove();
+                    pendingInfo.buttonNode.append(pendingInfo.pageNode);
+                    updatePageSize(pendingInfo.buttonNode, pendingInfo.pageNode, pageSize);
+                })
+                .fail(function () {
+                    pendingInfo.busyNode.empty().addClass('icon-remove').css({
+                        color: '#f88',
+                        fontSize: '60px',
+                        lineHeight: pendingInfo.busyNode.height() + 'px',
+                        textDecoration: 'none' // otherwise, IE underlines when hovering
+                    });
                 });
-            });
 
-            return buttonNode;
-        }
+                // if more pages are waiting, return true to repeat deferred callback after the delay
+                return pendingInfos.length > 0;
+            }
+
+            // create and return the debounced createPageButton() method
+            return app.createDebouncedMethod(createButtonNode, loadPages, { delay: 25, repeat: true });
+
+        }()); // end of local scope of createPageButton()
 
         /**
          * Updates the position and size of the specified page button. Creates
@@ -186,10 +214,10 @@ define('io.ox/office/preview/pagegroup',
                 pageCount = app.getModel().getPageCount(),
                 // position and size of visible area in scrollable area
                 visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
-                // vertical range used to generate page buttons, in pixels (closed range)
-                top = 0, bottom = 0,
                 // row range visible in the scrollable node (closed range)
-                firstRow = 0, lastRow = 0;
+                firstRow = 0, lastRow = 0,
+                // page range visible in the scrollable node (closed range)
+                firstPage = 0, lastPage = 0;
 
             // calculate number of pages available per row
             columns = Math.floor((visiblePosition.width - DISTANCE) / (BUTTON_WIDTH + DISTANCE));
@@ -199,22 +227,24 @@ define('io.ox/office/preview/pagegroup',
                 .width(columns * BUTTON_WIDTH + (columns - 1) * DISTANCE)
                 .height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT + 2 * DISTANCE);
 
-            // expand visible range to include more pages than are really visible
-            top = Math.max(0, visiblePosition.top - visiblePosition.height);
-            bottom = visiblePosition.top + 2 * visiblePosition.height - 1;
+            // get row range in visible area (add a row above and below)
+            firstRow = Math.floor((visiblePosition.top - DISTANCE) / BUTTON_HEIGHT) - 1;
+            lastRow = Math.floor((visiblePosition.top + visiblePosition.height - DISTANCE) / BUTTON_HEIGHT) + 1;
 
-            // get row range in visible area
-            firstRow = Math.floor((top - DISTANCE) / BUTTON_HEIGHT);
-            lastRow = Math.floor((bottom - DISTANCE) / BUTTON_HEIGHT);
-            if (firstRow > lastRow) { firstRow = [lastRow, lastRow = firstRow][0]; }
-            if (lastRow - firstRow < 2) { firstRow -= 1; lastRow += 1; }
+            // get one-based page range in visible area (restrict range to pages in document)
+            firstPage = Math.max(1, firstRow * columns + 1);
+            lastPage = Math.min(app.getModel().getPageCount(), (lastRow + 1) * columns);
 
-            Utils.log('PageGroup.updatePages(): r1=' + firstRow + ' r2=' + lastRow);
-
-            // TODO: delete/create pages on demand
-            _(app.getModel().getPageCount()).times(function (index) {
-                updatePageButton(index + 1);
+            // remove existing page buttons not shown anymore
+            _(buttonNodes).each(function (buttonNode, page) {
+                if ((page < firstPage) || (page > lastPage)) {
+                    buttonNode.remove();
+                    delete buttonNodes[page];
+                }
             });
+
+            // create missing page buttons, update position of all existing pages
+            Utils.iterateRange(firstPage, lastPage + 1, updatePageButton);
 
             return this;
         };
