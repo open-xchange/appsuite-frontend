@@ -182,6 +182,6 @@ define('plugins/upsell/simple-wizard/register',
 
     // register for event
     that.enable();
-    upsell.demo(true); // useful during development
+    //upsell.demo(true); // useful during development
     return that;
 });
