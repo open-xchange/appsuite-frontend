@@ -184,13 +184,17 @@ define('io.ox/calendar/invitations/register',
                         "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
                     }
                 })
-                .done(function () {
-                    notifications.yell('success', success[action]);
-                    // deleteMailIfNeeded(baton);
-                    // update well
-                    rerender(baton);
-                })
-                .fail(notifications.yell);
+                .then(
+                    function success() {
+                        notifications.yell('success', success[action]);
+                        // deleteMailIfNeeded(baton);
+                        rerender(baton);
+                    },
+                    function fail(e) {
+                        notifications.yell(e);
+                        rerender(baton);
+                    }
+                );
             })
             // disable buttons - don't know why we have an array of appointments but just one set of buttons
             // so, let's use the first one
