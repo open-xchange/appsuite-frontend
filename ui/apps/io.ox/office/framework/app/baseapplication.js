@@ -655,6 +655,62 @@ define('io.ox/office/framework/app/baseapplication',
             return this.getServerModuleUrl(BaseApplication.CONVERTER_MODULE_NAME, options);
         };
 
+        /**
+         * Creates an <img> element, sets the passed URL, and returns a
+         * Deferred object waiting that the image has been loaded. If the
+         * browser does not trigger the appropriate events after the specified
+         * timeout, the Deferred object will be rejected automatically. If the
+         * application has been shut down before the image has been loaded, the
+         * pending Deferred object will neither be resolved nor rejected.
+         *
+         * @param {String} url
+         *  The image URL.
+         *
+         * @param {Number} [timeout=10000]
+         *  The time before the Deferred will be rejected without response from
+         *  the image node.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved with the
+         *  image element (as jQuery object), when the 'load' event has been
+         *  received from the image node; or rejected, if the 'error' event has
+         *  been received from the image, or after the specified timeout delay
+         *  without response.
+         */
+        this.createImageNode = function (url, timeout) {
+
+            var // the result Deferred object
+                def = $.Deferred(),
+                // the image node
+                imgNode = $('<img>', { src: url }),
+                // the timer for the 10 seconds timeout
+                timer = null;
+
+            function loadHandler() {
+                // do not resolve if application is already shutting down
+                if (delayTimeouts) { def.resolve(imgNode); }
+            }
+
+            function errorHandler() {
+                // do not reject if application is already shutting down
+                if (delayTimeouts) { def.reject(); }
+            }
+
+            // wait that the image is loaded
+            imgNode.one({ load: loadHandler, error: errorHandler });
+
+            // timeout if server hangs, or browser fails to send any events because
+            // of internal errors (e.g.: SVG parse errors in Internet Explorer)
+            timer = this.executeDelayed(function () {
+                def.reject();
+            }, { delay: _.isNumber(timeout) ? timeout : 10000 });
+
+            return def.always(function () {
+                timer.abort();
+                imgNode.off({ load: loadHandler, error: errorHandler });
+            }).promise();
+        };
+
         // application setup --------------------------------------------------
 
         /**

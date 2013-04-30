@@ -118,25 +118,6 @@ define('io.ox/office/preview/model',
 
         // private methods ----------------------------------------------------
 
-        function waitForImageNode(imgNode) {
-
-            var // the result Deferred object
-                def = $.Deferred(),
-                // the timer for the 10 seconds timeout
-                timer = null;
-
-            // wait that the image is loaded
-            imgNode.one({
-                load: function () { def.resolve(imgNode); },
-                error: function () { def.reject(); }
-            });
-
-            // timeout if server hangs, or browser fails to parse the SVG (e.g.: IE10 with invalid SVG mark-up)
-            timer = app.executeDelayed(function () { def.reject(); }, { delay: 10000 });
-
-            return def.always(function () { timer.abort(); imgNode.off(); }).promise();
-        }
-
         /**
          * Creates an <img> element containing the SVG mark-up of the specified
          * page.
@@ -149,23 +130,12 @@ define('io.ox/office/preview/model',
          *  <img> element as jQuery object.
          */
         function createImageNode(page) {
-            var srcUrl = app.getPreviewModuleUrl({ convert_format: 'html', convert_action: 'getpage', page_number: page, returntype: 'file' });
-            return waitForImageNode($('<img>', { src: srcUrl }));
-        }
-
-        /**
-         * Creates an <img> element that shows the same image as the passed
-         * image node.
-         *
-         * @param {HTMLElement|jQuery} imgNode
-         *  The original <img> element.
-         *
-         * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved with the
-         *  cloned <img> element as jQuery object.
-         */
-        function cloneImageNode(imgNode) {
-            return waitForImageNode($('<img>', { src: $(imgNode).attr('src') }));
+            return app.createImageNode(app.getPreviewModuleUrl({
+                convert_format: 'html',
+                convert_action: 'getpage',
+                page_number: page,
+                returntype: 'file'
+            }), 15000);
         }
 
         /**
@@ -288,8 +258,8 @@ define('io.ox/office/preview/model',
                 if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
                     fetchSiblingPages(imageCache, page);
                 }
-                // clone the cached image on every access, wait for the 'load' event of the clone
-                return cloneImageNode(imgNode);
+                // clone the cached image on every access
+                return app.createImageNode(imgNode.attr('src'), 15000);
             });
         };
 

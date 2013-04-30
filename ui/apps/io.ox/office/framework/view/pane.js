@@ -146,8 +146,12 @@ define('io.ox/office/framework/view/pane',
          *  A reference to this instance.
          */
         this.toggle = function (state) {
+            var visible = this.isVisible();
             node.toggle(state);
-            app.getView().refreshPaneLayout();
+            if (visible !== this.isVisible()) {
+                app.getView().refreshPaneLayout();
+                this.trigger(this.isVisible() ? 'show' : 'hide');
+            }
             return this;
         };
 

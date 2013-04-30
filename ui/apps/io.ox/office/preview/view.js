@@ -116,6 +116,8 @@ define('io.ox/office/preview/view',
 
             // create the side pane (first create, then initialize; existing instance is needed for PageGroup)
             self.addPane(sidePane = new SidePane(app, { position: 'right' }));
+            pageGroup = new PageGroup(app, sidePane);
+
             sidePane
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
@@ -123,7 +125,7 @@ define('io.ox/office/preview/view',
                     .addGroup('app/quit', new Button(GroupOptions.QUIT))
                 )
                 .addViewComponent(new Component(app)
-                    .addGroup('pages/current', pageGroup = new PageGroup(app, sidePane.getScrollableNode()))
+                    .addGroup('pages/current', pageGroup)
                 )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
@@ -161,13 +163,6 @@ define('io.ox/office/preview/view',
                     .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
                 )
             );
-
-            // update preview pages if side pane is toggled
-            sidePane.on('refresh:layout', function () {
-                if (sidePane.isVisible()) {
-                    pageGroup.updatePages();
-                }
-            });
 
             // initially, hide the side pane, and show the overlay tool bars
             self.toggleSidePane(false);

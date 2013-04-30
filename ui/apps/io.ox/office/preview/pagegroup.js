@@ -24,17 +24,20 @@ define('io.ox/office/preview/pagegroup',
         DISTANCE = 8,
 
         // fixed total width of a page button (two buttons in default side pane width)
-        BUTTON_WIDTH = Math.floor((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 3 * DISTANCE) / 2),
+        BUTTON_WIDTH = Math.floor((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 2 * DISTANCE) / 2),
 
         // fixed total height of a page button
         BUTTON_HEIGHT = BUTTON_WIDTH + 20;
 
     // class PageGroup ========================================================
 
-    function PageGroup(app, scrollableNode) {
+    function PageGroup(app, sidePane) {
 
         var // self reference
             self = this,
+
+            // the scrollable area in the side pane
+            scrollableNode = sidePane.getScrollableNode(),
 
             // all button elements currently created, mapped by page index
             buttonNodes = {},
@@ -64,7 +67,7 @@ define('io.ox/office/preview/pagegroup',
                 row = Math.floor((page - 1) / columns);
 
             return {
-                left: col * (BUTTON_WIDTH + DISTANCE),
+                left: col * BUTTON_WIDTH,
                 top: row * BUTTON_HEIGHT + DISTANCE,
                 width: BUTTON_WIDTH,
                 height: BUTTON_HEIGHT
@@ -234,11 +237,11 @@ define('io.ox/office/preview/pagegroup',
                 firstPage = 0, lastPage = 0;
 
             // calculate number of pages available per row
-            columns = Math.floor((visiblePosition.width - DISTANCE) / (BUTTON_WIDTH + DISTANCE));
+            columns = Math.floor((visiblePosition.width - 2 * DISTANCE) / BUTTON_WIDTH);
 
             // update size of the own group node
             this.getNode()
-                .width(columns * BUTTON_WIDTH + (columns - 1) * DISTANCE)
+                .width(columns * BUTTON_WIDTH)
                 .height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT + 2 * DISTANCE);
 
             // get row range in visible area (add a row above and below)
@@ -278,7 +281,7 @@ define('io.ox/office/preview/pagegroup',
             var // the button node of the specified page (created if necessary)
                 buttonNode = updatePageButton(page);
 
-            Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: DISTANCE });
+            Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 3 * DISTANCE });
             updateHandler(page);
             return this;
         };
@@ -288,10 +291,23 @@ define('io.ox/office/preview/pagegroup',
         this.registerUpdateHandler(updateHandler)
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR });
 
-        // update pages while scrolling
-        $(scrollableNode).on('scroll', app.createDebouncedMethod($.noop, function () {
+        // update pages while scrolling (debounced to skip a few scroll events)
+        scrollableNode.on('scroll', app.createDebouncedMethod($.noop, function () {
             this.updatePages();
         }, { context: this, delay: 50, maxDelay: 200 }));
+
+        // when refreshing the side pane (e.g. due to changed size of browser
+        // window), update the pages shown in the current visible area
+        sidePane.on('refresh:layout', function () {
+            if (sidePane.isVisible()) {
+                self.updatePages();
+            }
+        });
+
+        // when showing the side pane, scroll to current page
+        sidePane.on('show', function () {
+            self.selectAndShowPage(app.getView().getPage());
+        });
 
     } // class PageGroup
 
