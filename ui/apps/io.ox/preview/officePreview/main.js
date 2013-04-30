@@ -11,30 +11,30 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/preview/officePreview/main",
-    ["io.ox/core/tk/keys",
-     "gettext!io.ox/preview/officePreview",
-     "less!io.ox/preview/officePreview/style.less"], function (KeyListener, gt) {
+define('io.ox/preview/officePreview/main',
+    ['io.ox/core/tk/keys',
+     'gettext!io.ox/preview/officePreview',
+     'less!io.ox/preview/officePreview/style.less'], function (KeyListener, gt) {
 
-    "use strict";
+    'use strict';
 
     var BATCH_SIZE = 5;
 
     function documentTypeClasses(file) {
         if (/\.pptx?$/.test(file.name)) {
-            return "io-ox-office-preview-presentation ";
+            return 'io-ox-office-preview-presentation ';
         }
-        return "io-ox-office-preview-page";
+        return 'io-ox-office-preview-page';
     }
 
     function turnFixedPositioningIntoAbsolutePositioning($node) {
-        $node.find("*").each(function (index, $childNode) {
+        $node.find('*').each(function (index, $childNode) {
             $childNode = $($childNode);
             var position;
             // TODO: Respect nestings (if they are even used)
-            position = $childNode.css("position");
+            position = $childNode.css('position');
             if (position && position.toLowerCase() === 'fixed') {
-                $childNode.css({position: "absolute"});
+                $childNode.css({position: 'absolute'});
             }
         });
     }
@@ -49,7 +49,7 @@ define("io.ox/preview/officePreview/main",
             };
         } else {
             _.url.hash('name', file.name);
-            _.url.hash("dataURL", file.dataURL);
+            _.url.hash('dataURL', file.dataURL);
         }
 
         var app, win, container;
@@ -63,21 +63,21 @@ define("io.ox/preview/officePreview/main",
         app.index = 0;
         app.maxPages = -1; // Unknown
 
-        var $pageIndicator = $("<span>").addClass("io-ox-office-preview-page-indicator").text("1");
+        var $pageIndicator = $('<span>').addClass('io-ox-office-preview-page-indicator').text('1');
 
-        var $nextButton = $("<button>").addClass("btn btn-primary disabled")
-            .append("<i class='icon-white icon-chevron-right'>").on("click", function (e) {
+        var $nextButton = $('<button>').addClass('btn btn-primary disabled')
+            .append('<i class='icon-white icon-chevron-right'>').on('click', function (e) {
                 e.preventDefault();
                 app.nextPage();
             });
 
-        var $previousButton = $("<button>").addClass("btn btn-primary disabled")
-            .append("<i class='icon-white icon-chevron-left'>").on("click", function (e) {
+        var $previousButton = $('<button>').addClass('btn btn-primary disabled')
+            .append('<i class="icon-white icon-chevron-left">').on('click', function (e) {
                 e.preventDefault();
                 app.previousPage();
             });
 
-        var container = $("<div>");
+        var container = $('<div>');
 
         function loading() {
             win.busy();
@@ -96,7 +96,7 @@ define("io.ox/preview/officePreview/main",
             }
             loading();
             return $.ajax({
-                url: file.dataURL + "&format=preview_filtered&pages=" + numberOfPages + "&previewForceDiv=true&view=html",
+                url: file.dataURL + '&format=preview_filtered&pages=' + numberOfPages + '&previewForceDiv=true&view=html',
                 dataType: 'json'
             }).pipe(function (response) {
                 stoppedLoading();
@@ -145,7 +145,7 @@ define("io.ox/preview/officePreview/main",
                 $shownContent.addClass(documentTypeClasses(file));
 
 
-                $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: centerOffset, right: centerOffset});
+                $shownContent.addClass('io-ox-office-preview-content').css({position: 'relative', left: centerOffset, right: centerOffset});
 
 
                 app.index = pageNumber;
@@ -153,18 +153,18 @@ define("io.ox/preview/officePreview/main",
                 $pageIndicator.text(pageNumber + 1);
 
                 if (pageNumber === 0) {
-                    if (!$previousButton.hasClass("disabled")) {
-                        $previousButton.addClass("disabled");
+                    if (!$previousButton.hasClass('disabled')) {
+                        $previousButton.addClass('disabled');
                     }
                 } else {
-                    $previousButton.removeClass("disabled");
+                    $previousButton.removeClass('disabled');
                 }
                 if (pageNumber === app.maxPages) {
-                    if (!$nextButton.hasClass("disabled")) {
-                        $nextButton.addClass("disabled");
+                    if (!$nextButton.hasClass('disabled')) {
+                        $nextButton.addClass('disabled');
                     }
                 } else {
-                    $nextButton.removeClass("disabled");
+                    $nextButton.removeClass('disabled');
                 }
             });
         };
@@ -176,70 +176,70 @@ define("io.ox/preview/officePreview/main",
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: file.name,
-                titleWidth: "40%",
+                titleWidth: '40%',
                 toolbar: true,
                 close: true
             });
 
             app.setWindow(win);
 
-            container = $('<div>').addClass('abs').css({ overflow: "auto", zIndex: 2 })
+            container = $('<div>').addClass('abs').css({ overflow: 'auto', zIndex: 2 })
                 .appendTo(win.nodes.main);
 
-            win.nodes.main.addClass("io-ox-office-preview-background").append($pageIndicator);
+            win.nodes.main.addClass('io-ox-office-preview-background').append($pageIndicator);
 
             win.show(function () {
-                
-                win.nodes.body.addClass("full-height-tablet full-height-phone");
-                win.nodes.head.addClass("hidden-tablet hidden-phone");
-                
-                win.nodes.body.on("click", function (evt) {
-                    
+
+                win.nodes.body.addClass('full-height-tablet full-height-phone');
+                win.nodes.head.addClass('hidden-tablet hidden-phone');
+
+                win.nodes.body.on('click', function (evt) {
+
                     // Which half was clicked?
-                    
+
                     if (evt.pageX > $(window).width() / 2) {
                         app.nextPage();
                     } else {
                         app.previousPage();
                     }
-                    
+
                 });
-                
+
                 win.nodes.toolbar.append(
-                    $("<div>").append($previousButton, $.txt(' '), $nextButton)).css({ left: "47%" }
+                    $('<div>').append($previousButton, $.txt(' '), $nextButton)).css({ left: '47%' }
                 );
                 app.showPage(0);
             });
 
-            win.on("idle show", function () {
+            win.on('idle show', function () {
                 keys.include();
             });
 
-            win.on("hide busy", function () {
+            win.on('hide busy', function () {
                 keys.remove();
             });
 
-            keys.on("leftarrow", function () {
+            keys.on('leftarrow', function () {
                 app.previousPage();
             });
 
-            keys.on("uparrow", function () {
+            keys.on('uparrow', function () {
                 app.previousPage();
             });
 
-            keys.on("rightarrow", function () {
+            keys.on('rightarrow', function () {
                 app.nextPage();
             });
 
-            keys.on("downarrow", function () {
+            keys.on('downarrow', function () {
                 app.nextPage();
             });
 
-            keys.on("space", function () {
+            keys.on('space', function () {
                 app.nextPage();
             });
 
-            keys.on("esc", function () {
+            keys.on('esc', function () {
                 app.quit();
             });
         });

@@ -13,12 +13,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/preview/main",
+define('io.ox/preview/main',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
      'gettext!io.ox/preview'], function (ext, capabilities, gt) {
 
-    "use strict";
+    'use strict';
 
     var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
     var dragOutHandler = $.noop;
@@ -32,19 +32,19 @@ define("io.ox/preview/main",
         };
         clickableLink = function (desc, clickHandler) {
             var $a = $('<a>', { draggable: true })
-                .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
+                .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + '&delivery=download');
             if (clickHandler) {
-                $a.on("click", clickHandler);
+                $a.on('click', clickHandler);
             } else {
-                $a.attr({ href: desc.dataURL + "&delivery=view", target: '_blank'});
+                $a.attr({ href: desc.dataURL + '&delivery=view', target: '_blank'});
             }
             return $a;
         };
     } else {
         clickableLink = function (desc, clickHandler) {
-            var link = $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'});
+            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank'});
             if (clickHandler) {
-                link.on("click", clickHandler);
+                link.on('click', clickHandler);
             }
             return link;
         };
@@ -53,11 +53,11 @@ define("io.ox/preview/main",
 
     var Renderer = {
 
-        point: ext.point("io.ox/preview/engine"),
+        point: ext.point('io.ox/preview/engine'),
 
         getByExtension: function (fileExtension) {
             return this.point.chain().find(function (ext) {
-                var tmp = ext.metadata("supports");
+                var tmp = ext.metadata('supports');
                 tmp = _.isArray(tmp) ? tmp : [tmp];
                 return _(tmp).contains(fileExtension);
             }).value();
@@ -76,10 +76,10 @@ define("io.ox/preview/main",
                     if (supportsDragOut) {
                         $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
                     } else {
-                        $node.attr("title", gt("Click to open."));
+                        $node.attr('title', gt('Click to open.'));
                     }
                 } else {
-                    $node = $("<div>");
+                    $node = $('<div>');
                 }
 
                 options.draw.apply($node, arguments);
@@ -92,9 +92,9 @@ define("io.ox/preview/main",
 
     // register image typed renderer
     Renderer.point.extend(new Engine({
-        id: "image",
+        id: 'image',
         index: 10,
-        supports: ["image/png", "png", "image/jpeg", "jpg", "jpeg", "image/gif", "gif", "bmp"],
+        supports: ['image/png', 'png', 'image/jpeg', 'jpg', 'jpeg', 'image/gif', 'gif', 'bmp'],
         draw: function (file, options) {
             var param = {
                 width: options.width || 400,
@@ -106,14 +106,14 @@ define("io.ox/preview/main",
                 delete param.height;
             }
             this.append(
-                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' }));
+                $('<img>', { src: file.dataURL + '&' + $.param(param), alt: 'Preview' }));
         }
     }));
 
     // register audio typed renderer
     if (Modernizr.audio) {
         Renderer.point.extend(new Engine({
-            id: "audio",
+            id: 'audio',
             index: 10,
             supports: (function () {
                 var tmp = [];
@@ -123,7 +123,7 @@ define("io.ox/preview/main",
                 return tmp;
             }()),
             draw: function (file) {
-                var audiofile = $("<audio>").attr({
+                var audiofile = $('<audio>').attr({
                     src: file.dataURL,
                     type: file.mimetype,
                     preload: 'metadata',
@@ -185,7 +185,7 @@ define("io.ox/preview/main",
     // if available register office typed renderer
     if (capabilities.has('document_preview')) {
         Renderer.point.extend(new Engine({
-            id: "office",
+            id: 'office',
             index: 10,
             supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
              'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
@@ -213,8 +213,8 @@ define("io.ox/preview/main",
                     }),
                     width = options.width || '400',
                     $img = $('<img alt="">')
-                        .css({ width: width + "px", maxWidth: '100%', visibility: 'hidden' })
-                        .addClass("io-ox-clickable")
+                        .css({ width: width + 'px', maxWidth: '100%', visibility: 'hidden' })
+                        .addClass('io-ox-clickable')
                         .on({ load: previewLoaded, error: previewFailed });
 
                 this.busy();
@@ -256,7 +256,7 @@ define("io.ox/preview/main",
                     fontSize: '13px',
                     width: '100%',
                     padding: '13px',
-                    border: "1px dotted silver",
+                    border: '1px dotted silver',
                     boxSizing: 'border-box',
                     MozBoxSizing: 'border-box',
                     whiteSpace: 'pre-wrap',
@@ -283,7 +283,7 @@ define("io.ox/preview/main",
         if (this.file.file_mimetype) {
             this.file.mimetype = this.file.file_mimetype;
         } else if (!this.file.mimetype) {
-            this.file.mimetype = "application/octet-stream";
+            this.file.mimetype = 'application/octet-stream';
         }
 
         if (this.file.filename) {
@@ -316,7 +316,7 @@ define("io.ox/preview/main",
 
         appendTo: function (node) {
             if (this.supportsPreview()) {
-                this.renderer.invoke("draw", node, this.file, this.options);
+                this.renderer.invoke('draw', node, this.file, this.options);
             }
         }
     };

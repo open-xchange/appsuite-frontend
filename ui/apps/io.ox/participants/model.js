@@ -11,14 +11,14 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define("io.ox/participants/model",
+define('io.ox/participants/model',
         ['io.ox/core/api/user',
          'io.ox/core/api/group',
          'io.ox/core/api/resource',
          'io.ox/contacts/api',
          'io.ox/contacts/util'], function (userAPI, groupAPI, resourceAPI, contactAPI, util) {
 
-    "use strict";
+    'use strict';
     // TODO: Bulk Loading
 
     var ParticipantModel = Backbone.Model.extend({
@@ -77,8 +77,8 @@ define("io.ox/participants/model",
             }
 
             this.fetch().done(function () {
-                self.trigger("fetch");
-                self.trigger("change");
+                self.trigger('fetch');
+                self.trigger('change');
             });
         },
 
@@ -130,7 +130,7 @@ define("io.ox/participants/model",
                             id: data.internal_userid ? data.internal_userid : self.get('id')
                         });
                         self.id = self.get('id');
-                        self.trigger("change");
+                        self.trigger('change');
                     } else {
                         self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
                     }
@@ -175,7 +175,7 @@ define("io.ox/participants/model",
 
         initialize: function () {
             var self = this;
-            self.on("change", function () {
+            self.on('change', function () {
                 // Deduplication
                 var idMap = {};
                 var duplicates = [];
