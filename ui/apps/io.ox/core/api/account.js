@@ -153,7 +153,7 @@ define('io.ox/core/api/account',
                 diff = _.difference(mailFolders, mailAccounts);
 
                 if (diff.length > 0) {
-                    return def.resolve("default" + diff[0]);
+                    return def.resolve('default' + diff[0]);
                 }
                 return def.resolve(null);
             });

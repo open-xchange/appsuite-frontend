@@ -43,8 +43,8 @@ define('io.ox/core/api/import',
      * import data from file
      *
      * @param data {Object} -
-     * {type: "ICAL",
-     *  folder: "32",
+     * {type: 'ICAL',
+     *  folder: '32',
      *  file: [file object],
      *  form: jQuery object containing the form
      * }

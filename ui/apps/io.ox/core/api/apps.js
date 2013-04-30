@@ -47,7 +47,7 @@ define('io.ox/core/api/apps',
     appData.categories = _(appData.categories).uniq();
 
     // TODO: Make favourites dynamic
-    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (id) {
+    _(['io.ox/portal', 'io.ox/mail', 'io.ox/contacts', 'io.ox/calendar', 'io.ox/files', 'io.ox/tasks']).each(function (id) {
         var app = appData.apps[id];
         if (app && capabilities.has(app.requires)) {
             appData.favorites.push(id);
@@ -57,7 +57,7 @@ define('io.ox/core/api/apps',
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
             obj.id = id;
-            obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, "/apps/$1") + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
+            obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
             obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             obj.visible = obj.visible !== false;
             return obj;
@@ -108,9 +108,9 @@ define('io.ox/core/api/apps',
                     })
                 ).concat(
                     // Add extension point categories
-                    ext.point("io.ox/core/apps/category").map(function (ext) {
+                    ext.point('io.ox/core/apps/category').map(function (ext) {
                         if (ext.category) {
-                            return ext.metadata("category");
+                            return ext.metadata('category');
                         }
                         return ext;
                     }).value()
@@ -139,9 +139,9 @@ define('io.ox/core/api/apps',
                 return bless(appData.apps[id], id);
             }).concat(
                 // Add extension point categories
-                ext.point("io.ox/core/apps/" + prop).map(function (ext) {
+                ext.point('io.ox/core/apps/' + prop).map(function (ext) {
                     if (ext.app) {
-                        return ext.metadata("app");
+                        return ext.metadata('app');
                     }
                     return ext;
                 }).value()
@@ -178,7 +178,7 @@ define('io.ox/core/api/apps',
             }
             var installedLoaded = [];
             installedLoaded.push(new $.Deferred().resolve(getSpecial('installed')));
-            ext.point("io.ox/core/apps/store").each(function (extension) {
+            ext.point('io.ox/core/apps/store').each(function (extension) {
                 if (extension.installed) {
                     installedLoaded.push(extension.installed());
                 }

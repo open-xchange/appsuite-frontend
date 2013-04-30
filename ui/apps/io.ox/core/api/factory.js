@@ -17,7 +17,7 @@ define('io.ox/core/api/factory',
      'io.ox/core/event',
      'io.ox/core/extensions'], function (http, cache, Events, ext) {
 
-    "use strict";
+    'use strict';
 
     var DELIM = '//';
 
@@ -52,14 +52,14 @@ define('io.ox/core/api/factory',
             // for caches
             keyGenerator: null, // ~ use default
             // module
-            module: "",
+            module: '',
             // for all, list, and get
             requests: {
-                all: { action: "all", timezone: 'utc' },
-                list: { action: "list", timezone: 'utc' },
-                get: { action: "get", timezone: 'utc' },
-                search: { action: "search", timezone: 'utc' },
-                remove: { action: "delete" }
+                all: { action: 'all', timezone: 'utc' },
+                list: { action: 'list', timezone: 'utc' },
+                get: { action: 'get', timezone: 'utc' },
+                search: { action: 'search', timezone: 'utc' },
+                remove: { action: 'delete' }
             },
             cid: function (o) {
                 return o.folder + DELIM + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
@@ -83,10 +83,10 @@ define('io.ox/core/api/factory',
 
         // create 3 caches for all, list, and get requests
         var caches = {
-            all: new cache.SimpleCache(o.id + "-all", true),
+            all: new cache.SimpleCache(o.id + '-all', true),
             //no persistant cache for list, because burst-writes block read (stupid queue implementation)
-            list: new cache.ObjectCache(o.id + "-list", false, o.keyGenerator),
-            get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
+            list: new cache.ObjectCache(o.id + '-list', false, o.keyGenerator),
+            get: new cache.ObjectCache(o.id + '-get', true, o.keyGenerator)
         };
 
         // hash to track very first cache hit
@@ -114,7 +114,7 @@ define('io.ox/core/api/factory',
              */
             getAll: function (options, useCache, cache, processResponse) {
 
-                // merge defaults for "all"
+                // merge defaults for 'all'
                 var opt = $.extend({}, o.requests.all, options || {}),
                     cid = o.cid(opt);
 
@@ -218,7 +218,7 @@ define('io.ox/core/api/factory',
                     .pipe(function (data) {
                         // add to cache
                         var method = options.allColumns ? 'add' : 'merge';
-                        // merge with or add to "get" cache
+                        // merge with or add to 'get' cache
                         return $.when(caches.list.add(data), caches.get[method](data)).pipe(function () {
                             return data;
                         });
@@ -466,13 +466,13 @@ define('io.ox/core/api/factory',
          */
         api.refresh = function () {
             if (ox.online) {
-                // clear "all & list" caches
+                // clear 'all & list' caches
                 return $.when(
                     api.caches.all.clear(),
                     api.caches.list.clear()
                 ).done(function () {
                     // trigger local refresh
-                    api.trigger("refresh.all");
+                    api.trigger('refresh.all');
                 });
             } else {
                 return $.when();
