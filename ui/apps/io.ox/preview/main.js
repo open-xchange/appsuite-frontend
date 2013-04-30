@@ -134,7 +134,7 @@ define("io.ox/preview/main",
                 require(['apps/mediaelement/mediaelement-and-player.js',
                         'css!mediaelement/mediaelementplayer.css'], function () {
 
-                    var pw = $('.io-ox-sidepopup:visible .file-details').width();
+                    var pw = self.closest('.file-details').width();
 
                     self.find('video, audio').mediaelementplayer({
                         audioWidth: pw,
