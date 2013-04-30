@@ -108,7 +108,7 @@ define('io.ox/files/mediaplayer',
             $(document).keyup(function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
-                if (e.keyCode === 27 && BigScreen.element === null) self.close();
+                if (e.keyCode === 27 && BigScreen.element === null && !MediaElementPlayer.fullscreen) self.close();
             });
         },
 
@@ -323,6 +323,19 @@ define('io.ox/files/mediaplayer',
                 this.currentFile = null;
             }
         }
+    };
+
+    // track fullscreen
+    var enter = MediaElementPlayer.prototype.enterFullScreen;
+    MediaElementPlayer.prototype.enterFullScreen = function () {
+        MediaElementPlayer.fullscreen = true;
+        enter.apply(this, arguments);
+    };
+
+    var exit = MediaElementPlayer.prototype.exitFullScreen;
+    MediaElementPlayer.prototype.exitFullScreen = function () {
+        MediaElementPlayer.fullscreen = false;
+        exit.apply(this, arguments);
     };
 
     return mediaplayer;

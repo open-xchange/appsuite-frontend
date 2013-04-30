@@ -213,7 +213,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: ['$', '_', 'Modernizr', 'define', 'require', 'requirejs', 'ox', 'assert',
-             'include', 'doT', 'Backbone', 'BigScreen', 'tinyMCE']
+             'include', 'doT', 'Backbone', 'BigScreen', 'MediaElementPlayer', 'tinyMCE']
 };
 
 function hint (data, getSrc) {
@@ -480,15 +480,15 @@ utils.merge('manifests/' + pkgName + '.json',
 
 if (!envBoolean('skipLess')) compileLess();
 function compileLess() {
-    
+
     var coreDir = process.env.coreDir || utils.builddir;
-    
+
     function core(file) { return path.join(coreDir, file); }
-    
+
     var ownLess = utils.list('apps', '**/*.less'), coreLess;
     var ownThemes = utils.list('apps/themes/*/definitions.less');
     var coreThemes = utils.list(core('apps/themes'), '*/definitions.less');
-    
+
     if ((ownThemes.length || ownLess.length) &&
         !path.existsSync('apps/themes/definitions.less') &&
         !path.existsSync(core('apps/themes/definitions.less')))
@@ -500,7 +500,7 @@ function compileLess() {
         }
         return;
     }
-    
+
     // own themes
     _.each(ownThemes, function(defs) {
         if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
@@ -528,7 +528,7 @@ function compileLess() {
                  { filter: less.compile });
         });
     });
-    
+
     // core themes
     _.each(coreThemes,
         function (defs) {
