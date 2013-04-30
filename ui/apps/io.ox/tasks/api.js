@@ -122,11 +122,9 @@ define('io.ox/tasks/api',
         /**
          * refreshs the task portal tile
          * @private
-         * @fires  api#removePopup
          * @return {undefined}
          */
         refreshPortal = function () {
-            api.trigger('removePopup');
             if (portalModel && portalApp) {
                 portalApp.refreshWidget(portalModel, 0);
             } else {
