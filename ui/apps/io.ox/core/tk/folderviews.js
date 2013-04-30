@@ -14,7 +14,6 @@
 define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
      'io.ox/core/api/folder',
-     'io.ox/core/api/account',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
@@ -24,7 +23,7 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/cache',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
+    ], function (Selection, api, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
 
     'use strict';
 

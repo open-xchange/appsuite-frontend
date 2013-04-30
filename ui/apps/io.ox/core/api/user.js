@@ -55,7 +55,7 @@ define('io.ox/core/api/user',
      * @param  {object} o (o.data contains key/values of changed attributes)
      * @fires  api#update: + id
      * @fires  api#update, (id)
-     * @fires  api#urefresh.list
+     * @fires  api#refresh.list
      * @return {deferred} done returns object with timestamp, data
      */
     api.update =  function (o) {
