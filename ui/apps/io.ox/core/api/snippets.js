@@ -30,6 +30,11 @@ define('io.ox/core/api/snippets',
 
     Events.extend(api);
 
+    /**
+     * trigger events
+     * @param  {string} event
+     * @return {undefined}
+     */
     function fnTrigger(event) {
         return function () {
             api.trigger(event);
@@ -38,7 +43,7 @@ define('io.ox/core/api/snippets',
 
     /**
      * get all snippets
-     * @return {deferred}
+     * @return {deferred} array of snippet objects
      */
     api.getAll = function (type) {
         return http.GET({
@@ -49,7 +54,7 @@ define('io.ox/core/api/snippets',
         })
         .pipe(function (data) {
             return _(data).map(function (sig) {
-                // robustness: signature migration
+                // robustness: snippet migration
                 sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
                 return sig;
             });
@@ -59,7 +64,8 @@ define('io.ox/core/api/snippets',
     /**
      * create snippet
      * @param  {object} snippet
-     * @return {deferred}
+     * @fires  api#refresh.all
+     * @return {deferred} returns snippet id
      */
     api.create = function (snippet) {
         return http.PUT({
@@ -75,7 +81,7 @@ define('io.ox/core/api/snippets',
      * update snippet
      * @param  {object} snippet
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return {deferred} returns snippet object
      */
     api.update = function (snippet) {
         return http.PUT({
@@ -124,7 +130,7 @@ define('io.ox/core/api/snippets',
      * remove snippets
      * @param  {string} id
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return {deferred} returns empty object
      */
     api.destroy = function (id) {
         return http.GET({
