@@ -43,6 +43,9 @@ define('io.ox/office/framework/view/pane',
      *  @param {String} [options.position='top']
      *      The border of the application window to attach the view pane to.
      *      Supported values are 'top', 'bottom', 'left', and 'right'.
+     *  @param {String} [options.resizeable=false]
+     *      If set to true, the pane will be resizeable at its inner border.
+     *      Has no effect for transparent overlay panes.
      *  @param {Boolean} [options.overlay=false]
      *      If set to true, the pane will overlay the application pane instead
      *      of reserving and consuming the space needed for its size.
@@ -76,6 +79,9 @@ define('io.ox/office/framework/view/pane',
 
             // transparent overlay pane
             transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
+
+            // draggable node to resize the pane
+            resizeNode = null,
 
             // view components contained in this pane
             components = [],
@@ -221,6 +227,11 @@ define('io.ox/office/framework/view/pane',
             if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
                 node.addClass('hover-effect');
             }
+        }
+
+        // resizeable pane (not if overlay and transparent)
+        if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
+            node.append(resizeNode = $('<div>').addClass('resizer ' + position));
         }
 
     } // class Pane

@@ -115,7 +115,7 @@ define('io.ox/office/preview/view',
             model = app.getModel();
 
             // create the side pane (first create, then initialize; existing instance is needed for PageGroup)
-            self.addPane(sidePane = new SidePane(app, { position: 'right' }));
+            self.addPane(sidePane = new SidePane(app, { position: 'right', resizeable: true }));
             pageGroup = new PageGroup(app, sidePane);
 
             sidePane

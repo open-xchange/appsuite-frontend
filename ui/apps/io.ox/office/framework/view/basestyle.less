@@ -116,6 +116,30 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     background: @pane-fill-color;
     line-height: 0;
 
+    > .resizer {
+        position: absolute;
+        z-index: 10;
+
+        &.top, &.bottom {
+            left: 0;
+            right: 0;
+            height: 12px;
+            cursor: ns-resize;
+        }
+
+        &.left, &.right {
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            cursor: ew-resize;
+        }
+
+        &.top { bottom: 0; }
+        &.bottom { top: 0; }
+        &.left { right: 0; }
+        &.right { left: 0; }
+    }
+
     /* side panes */
     &.side-pane {
         width: auto;
