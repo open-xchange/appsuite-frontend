@@ -199,6 +199,11 @@ define('io.ox/mail/api',
                 } else {
                     return this.isUnseen(cid) && (!(cid in explicitUnseen) || explicitUnseen[cid] < (_.now() - DELAY));
                 }
+            },
+
+            clear: function () {
+                threads = {};
+                threadHash = {};
             }
         };
 
@@ -748,26 +753,26 @@ define('io.ox/mail/api',
      */
     api.markSpam = function (list) {
         this.trigger('refresh.pending');
+        tracker.clear();
         return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .pipe(function () {
-                return $.when(
-                    // clear source folder
-                    api.caches.all.grepRemove(_(list).first().folder_id + DELIM)
-                );
+            .then(function () {
+                return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
             })
-            .done(refreshAll);
+            .done(function () {
+                api.trigger('refresh.all');
+            });
     };
 
     api.noSpam = function (list) {
         this.trigger('refresh.pending');
+        tracker.clear();
         return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .pipe(function () {
-                return $.when(
-                    // clear source folder
-                    api.caches.all.grepRemove(_(list).first().folder_id + DELIM)
-                );
+            .then(function () {
+                return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
             })
-            .done(refreshAll);
+            .done(function () {
+                api.trigger('refresh.all');
+            });
     };
 
     /**
