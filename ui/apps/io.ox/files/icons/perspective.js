@@ -418,10 +418,15 @@ define('io.ox/files/icons/perspective',
                         win.busy(pct + sub / files.length, sub);
                     })
                     .fail(function (e) {
-                        if (e && e.code && e.code === 'UPL-0005')
+                        if (e && e.code && e.code === 'UPL-0005') {
                             notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                        else
+                        }
+                        else if (e && e.code && e.code === 'FLS-0024') {
+                            notifications.yell('error', gt('The allowed quota is reached.'));
+                        }
+                        else {
                             notifications.yell('error', gt('This file has not been added'));
+                        }
                     });
                 },
                 stop: function () {
@@ -447,10 +452,15 @@ define('io.ox/files/icons/perspective',
                             var sub = e.loaded / e.total;
                             win.busy(pct + sub / files.length, sub);
                         }).fail(function (e) {
-                            if (e && e.code && e.code === 'UPL-0005')
+                            if (e && e.code && e.code === 'UPL-0005') {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                            else
+                            }
+                            else if (e && e.code && e.code === 'FLS-0024') {
+                                notifications.yell('error', gt('The allowed quota is reached.'));
+                            }
+                            else {
                                 notifications.yell('error', gt('This file has not been added'));
+                            }
                         });
                 },
                 stop: function () {
