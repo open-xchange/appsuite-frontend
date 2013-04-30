@@ -93,7 +93,7 @@ define('io.ox/files/icons/perspective',
 
     function drawImage(src, genericIcon) {
         return $('<img>', { alt: '', 'data-src': src }).addClass('img-polaroid lazy')
-            .on('load', function (event) {
+            .on('load', function () {
                 genericIcon.remove();
             });
     }

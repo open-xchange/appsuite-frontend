@@ -147,9 +147,13 @@ define('io.ox/mail/view-detail',
             // switch to proper perspective
             ox.ui.Perspective.show(app, 'list').done(function () {
                 // set proper folder
-                app.folder.set(folder).done(function () {
+                if (app.folder.get() === folder) {
                     app.getGrid().selection.set(id);
-                });
+                } else {
+                    app.folder.set(folder).done(function () {
+                        app.getGrid().selection.set(id);
+                    });
+                }
             });
         });
     };
