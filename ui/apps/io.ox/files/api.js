@@ -494,21 +494,29 @@ define('io.ox/files/api',
     /**
      * returns url
      * @param  {object} file
-     * @param  {sting}  mode
+     * @param  {string} mode
      * @return {string} url
      */
-    api.getUrl = function (file, mode) {
+    api.getUrl = function (file, mode, options) {
         var url = ox.apiRoot + '/files',
-            query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
+            query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined ? '&version=' + file.version : ''),
-            name = ((file.filename && mode !== 'play') ? '/' + encodeURIComponent(file.filename) : '');
+            name = '/' + encodeURIComponent(file.filename),
+            thumbnail = (options ? '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '');
         switch (mode) {
         case 'open':
         case 'view':
-        case 'play':
             return url + name + query + '&delivery=view';
+        case 'play':
+            return url + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';
+        case 'thumbnail':
+            return url + query + '&delivery=view' + thumbnail + '&content_type=' + file.file_mimetype;
+        case 'preview':
+            return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
+        case 'cover':
+            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
         default:
             return url + query;
         }

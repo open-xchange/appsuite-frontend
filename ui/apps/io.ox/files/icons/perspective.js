@@ -33,8 +33,7 @@ define('io.ox/files/icons/perspective',
         thumbnailWidth: 128,
         thumbnailHeight: 90,
         fileIconWidth: 158,
-        fileIconHeight: 182,
-        fileFilterRegExp: false //'.*' // was: '^[^.].*$'
+        fileIconHeight: 182
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -76,7 +75,7 @@ define('io.ox/files/icons/perspective',
         }
     });
 
-    function drawGeneric(name) {
+    function drawGenericIcon(name) {
         var node = $('<i>');
         if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
         else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
@@ -91,27 +90,12 @@ define('io.ox/files/icons/perspective',
         $(this).remove();
     }
 
-    function drawImage(src, genericIcon) {
+    function drawImage(file, mode, options, genericIcon) {
+        var src = api.getUrl(file, mode, options);
         return $('<img>', { alt: '', 'data-src': src }).addClass('img-polaroid lazy')
             .on('load', function () {
                 genericIcon.remove();
             });
-    }
-
-    function getCover(file, options) {
-        return 'api/image/file/mp3Cover?folder=' + file.folder_id + '&id=' + file.id +
-            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
-    }
-
-    function getIcon(file, options) {
-        return api.getUrl(file, 'open') +
-            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight +
-            '&content_type=' + file.file_mimetype;
-    }
-
-    function getOfficePreview(file, options) {
-        return 'api/files?action=document&folder=' + file.folder_id + '&id=' + file.id +
-              '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&format=preview_image&delivery=view';
     }
 
     function cut(str, maxLen, cutPos) {
@@ -143,32 +127,45 @@ define('io.ox/files/icons/perspective',
         if (dropZone) dropZone.remove();
     }
 
+    function previewMode(file) {
+        if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
+            return 'thumbnail';
+        } else if ((/^audio\/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(file.file_mimetype)) {
+            return 'cover';
+        } else if (Caps.has('document_preview') &&
+                (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
+                (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
+            return 'preview';
+        }
+        return false;
+    }
+
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
-                options = baton.options,
                 img,
-                genericIcon = drawGeneric(file.filename),
+                mode = previewMode(file),
+                genericIcon = drawGenericIcon(file.filename),
                 wrap = $('<div class="wrap">').append(genericIcon);
 
-            this.addClass('file-icon pull-left selectable').attr('data-obj-id', _.cid(file));
-            if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-                img = drawImage(getIcon(file, options), genericIcon);
-            } else if ((/^audio\/(mpeg|m4a|x-m4a)$/i).test(file.file_mimetype)) {
-                img = drawImage(getCover(file, options), genericIcon);
-            } else if (Caps.has('document_preview') &&
-                    (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
-                    (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
-                img = drawImage(getOfficePreview(file, options), genericIcon);
+            if (mode) {
+                img = $('<img>', { alt: '', 'data-src': api.getUrl(file, mode, baton.options) })
+                    .addClass('img-polaroid lazy')
+                    .one({
+                        load: function () {
+                            genericIcon.remove();
+                        },
+                        error: iconError
+                    });
             }
-            if (img) {
-                img.on('error', { name: file.filename }, iconError);
-            }
-            this.append(
-                (img ? wrap.append(img) : wrap),
-                $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
-                $('<input type="checkbox" class="reflect-selection" style="display:none">')
-            );
+
+            this.addClass('file-icon pull-left selectable')
+                .attr('data-obj-id', _.cid(file))
+                .append(
+                    (img ? wrap.append(img) : wrap),
+                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
+                    $('<input type="checkbox" class="reflect-selection" style="display:none">')
+                );
         }
     });
 
@@ -178,11 +175,6 @@ define('io.ox/files/icons/perspective',
         } else {
             return api.search(app.getWindow().search.query);
         }
-    }
-
-    function filterFiles(files, options) {
-        if (!options.fileFilterRegExp) { return files; }
-        return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
     }
 
     function calculateLayout(el, options) {
@@ -372,7 +364,7 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         if (layout.iconCols <= 3) end = end + 10;
-                        baton.allIds = allIds = filterFiles(ids, options);
+                        baton.allIds = allIds = ids;
                         self.selection.clear();
                         self.selection.resetLastIndex();
                         self.selection.init(allIds);
