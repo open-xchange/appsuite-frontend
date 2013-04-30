@@ -436,7 +436,7 @@ define('io.ox/core/tk/selection',
             // reset index
             observedItemsIndex = {};
             _(observedItems).each(function (item, i) {
-                observedItemsIndex[item.key] = i;
+                observedItemsIndex[item.cid] = i;
             });
         };
 
@@ -496,7 +496,7 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
-        this.lalla = function () {
+        this.getObservedItems = function () {
             return observedItemsIndex;
         };
 
