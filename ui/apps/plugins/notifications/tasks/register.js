@@ -211,7 +211,7 @@ define('plugins/notifications/tasks/register',
                     
                 )
             );
-            util.selectDefaultReminder(selectionBox);
+            selectionBox.val('15');//set to 15minutes as default
         }
     });
 
