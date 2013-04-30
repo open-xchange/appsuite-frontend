@@ -221,7 +221,7 @@ define('plugins/notifications/mail/register',
                 }
             });
 
-            api.on('delete seen', function (e, mails) {
+            api.on('delete update:set-seen', function (e, mails) {
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);
                 }

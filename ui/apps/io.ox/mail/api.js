@@ -732,7 +732,7 @@ define('io.ox/mail/api',
                     api.trigger('refresh.list');
                     update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                         reloadFolders(list);
-                        api.trigger('seen', list);//used by notification area
+                        api.trigger('update:set-seen', list);//used by notification area
                     });
                 });
             });
@@ -742,7 +742,7 @@ define('io.ox/mail/api',
             api.trigger('refresh.list');
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                 reloadFolders(list);
-                api.trigger('seen', list);//used by notification area
+                api.trigger('update:set-seen', list);//used by notification area
             });
         });
     };
