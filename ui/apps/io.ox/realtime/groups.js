@@ -123,7 +123,6 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                 console.log("Reusing group");
                 return groups[id];
             }
-            console.log("fresh group");
             groups[id] = new RealtimeGroup(id);
             return groups[id];
         }

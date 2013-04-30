@@ -370,9 +370,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     setInterval(function () {
         if (!connecting && !disconnected) {
-            subSocket.push("{\"type\": \"ping\"}");
+            subSocket.push("{\"type\": \"ping\", \"commit\": true}");
         }
-    }, 10000);
+    }, 30000);
 
     setInterval(function () {
         _(resendBuffer).each(function (m) {
