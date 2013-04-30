@@ -713,10 +713,41 @@ define("io.ox/core/main",
 
             return autoStart;
         };
+        
+        //checks url which app to launch, needed to handle direct links
+        function appCheck() {
+            if (_.url.hash('m')) {//direkt link
+                
+                switch (_.url.hash('m')) {
+                case 'task':
+                    _.url.hash({app: 'io.ox/tasks'});
+                                
+                    break;
+                case 'calendar':
+                    _.url.hash({app: 'io.ox/calendar',
+                        perspective: 'list'}); //only list perspective can handle ids
+                    break;
+                case 'infostore':
+                    _.url.hash({app: 'io.ox/files',
+                        perspective: 'list'}); //only list perspective can handle ids
+                    break;
+                case 'contact':
+                    _.url.hash({app: 'io.ox/contacts'});
+                    break;
+                }
+                //fill id and folder, then clean up
+                _.url.hash({folder: _.url.hash('f'),
+                            id: _.url.hash('f') + '.' + _.url.hash('i'),
+                            m: null,
+                            f: null,
+                            i: null});
+            }
+            return _.url.hash('app') ? _.url.hash('app').split(/,/) : autoLaunchArray();
+        }
 
         var baton = ext.Baton({
             block: $.Deferred(),
-            autoLaunch: _.url.hash("app") ? _.url.hash("app").split(/,/) : autoLaunchArray()
+            autoLaunch: appCheck()
         });
 
         var getAutoLaunchDetails = function (str) {
