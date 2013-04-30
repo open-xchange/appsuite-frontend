@@ -229,7 +229,7 @@ define('io.ox/contacts/api',
                 fetchCache.clear()
             ).pipe(function () {
                 api.trigger('refresh.list');
-                api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                api.trigger('update:image', { // TODO needs a switch for created by hand or by test
                     id: o.id,
                     folder: o.folder_id
                 });
