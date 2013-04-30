@@ -90,14 +90,6 @@ define('io.ox/files/icons/perspective',
         $(this).remove();
     }
 
-    function drawImage(file, mode, options, genericIcon) {
-        var src = api.getUrl(file, mode, options);
-        return $('<img>', { alt: '', 'data-src': src }).addClass('img-polaroid lazy')
-            .on('load', function () {
-                genericIcon.remove();
-            });
-    }
-
     function cut(str, maxLen, cutPos) {
         if (!cutPos) cutPos = 15;
         if (!maxLen) maxLen = 70;
