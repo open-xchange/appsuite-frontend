@@ -408,7 +408,7 @@ define('io.ox/core/api/account',
     /**
      * create mail account
      * @param  {object} data (attributes)
-     * @fires  api#account_created (data)
+     * @fires  api#create:account (data)
      * @return {deferred}
      */
     api.create = function (data) {
@@ -425,7 +425,7 @@ define('io.ox/core/api/account',
                 return api.all();
             })
             .then(function () {
-                api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
+                api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
                 require(['io.ox/core/api/folder'], function (api) {
                     api.propagate('account:create');
                 });

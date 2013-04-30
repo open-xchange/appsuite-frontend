@@ -1394,7 +1394,7 @@ define('io.ox/mail/api',
     // id + '/' for subfolders or id + DELIM for the top folder
     var reSuffix = ')(?:/|' + _.escapeRegExp(DELIM) + ')';
 
-    accountAPI.on('refresh.all account_created', function () {
+    accountAPI.on('refresh.all create:account', function () {
         folderAPI.getSubFolders().done(function (folders) {
             var ids = [];
             _.chain(folders).pluck('id')
