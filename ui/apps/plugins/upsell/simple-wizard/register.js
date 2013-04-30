@@ -42,16 +42,6 @@ define('plugins/upsell/simple-wizard/register',
 
     var that = {
 
-        defaultURL: 'blank.html?user=$user,user_id=$user_id,context_id=$context_id,' +
-                    'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session',
-
-        getDimensions: function () {
-            return {
-                width: settings.get('width', 750),
-                height: settings.get('height', 390)
-            };
-        },
-
         getVariables: function (options) {
             options = options || {};
             return {
@@ -71,7 +61,8 @@ define('plugins/upsell/simple-wizard/register',
         },
 
         getURLTemplate: function () {
-            return settings.get('url', that.defaultURL);
+            console.warn('Deprecated. Just use "wizard.settings.url" directly');
+            return that.settings.url;
         },
 
         getURL: function (options) {
@@ -92,7 +83,7 @@ define('plugins/upsell/simple-wizard/register',
         },
 
         addControls: function () {
-            if (settings.get('closeButton', true) === true) {
+            if (that.settings.closeButton === true) {
                 this.addButton('cancel', gt('Close'));
             }
         },
@@ -107,25 +98,32 @@ define('plugins/upsell/simple-wizard/register',
             }
         },
 
+        // allows client-side settings during development
+        settings: _.extend({
+            // defaults
+            zeroPadding: true,
+            width: 750,
+            height: 390,
+            overlayOpacity: 0.5,
+            overlayColor: '#000',
+            url: 'blank.html?user=$user,user_id=$user_id,context_id=$context_id,' +
+                'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session'
+        }, settings.get()),
+
         open: function (e, options) {
 
             if (instance) return;
 
-            var zeroPadding = settings.get('zeroPadding', true),
-                dimensions = that.getDimensions(),
-                overlayOpacity = settings.get('overlayOpacity', '0.5'),
-                overlayColor = settings.get('overlayColor', '#000');
-
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                instance = new dialogs.ModalDialog({ easyOut: false, width: dimensions.width })
+                instance = new dialogs.ModalDialog({ easyOut: false, width: that.settings.width })
                     .build(function () {
-                        if (zeroPadding) {
+                        if (that.settings.zeroPadding) {
                             this.getPopup().addClass('zero-padding');
                         }
                         this.getContentNode()
                         .busy()
                         .css({
-                            maxHeight: dimensions.height + 'px',
+                            maxHeight: that.settings.height + 'px',
                             overflow: 'hidden'
                         })
                         .append(
@@ -133,14 +131,14 @@ define('plugins/upsell/simple-wizard/register',
                             that.getIFrame()
                             .css({
                                 width: '100%',
-                                height: dimensions.height + 'px'
+                                height: that.settings.height + 'px'
                             })
                         );
                         that.addControls.call(this);
                     })
                     .setUnderlayStyle({
                         opacity: 0,
-                        backgroundColor: overlayColor
+                        backgroundColor: that.settings.overlayColor
                     })
                     .topmost()
                     .on('beforeshow', function () {
@@ -148,7 +146,7 @@ define('plugins/upsell/simple-wizard/register',
                     })
                     .on('show', function () {
                         ox.off('upsell:requires-upgrade', that.open);
-                        this.setUnderlayStyle({ opacity: overlayOpacity });
+                        this.setUnderlayStyle({ opacity: that.settings.overlayOpacity });
                         var self = this;
                         setTimeout(function () {
                             that.setSrc(that.getURL(options));
@@ -166,11 +164,19 @@ define('plugins/upsell/simple-wizard/register',
 
         close: function () {
             if (instance) instance.close();
+        },
+
+        enable: function () {
+            ox.on('upsell:requires-upgrade', that.open);
+        },
+
+        disable: function () {
+            ox.off('upsell:requires-upgrade', that.open);
         }
     };
 
     // register for event
-    ox.on('upsell:requires-upgrade', that.open);
+    that.enable();
     // upsell.demo(true); // useful during development
     return that;
 });

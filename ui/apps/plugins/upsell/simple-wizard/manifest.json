@@ -1,3 +1,4 @@
 {
-    namespace: "core"
+    namespace: "core",
+    requires: "simple-wizard"
 }
