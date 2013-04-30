@@ -296,8 +296,16 @@ exports.parse = function(data, src) {
 };
 
 exports.compile = function(data) {
-    // TODO: use this.getSrc() in error messages
-    return exports.parse(data, this.task.name).toCSS({ compress: utils.debug });
+    try {
+        return exports.parse(data, this.task.name).toCSS({ compress: utils.debug });
+    } catch (e) {
+        if (e.line) {
+            var src = this.getSrc(e.line);
+            console.error('Less error at ' + src.name + ':' + src.line);
+            console.error(e.extract.join('\n'));
+        }
+        throw e;
+    }
 };
 
 exports.parseFile = function(filename) {
