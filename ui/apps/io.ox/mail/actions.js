@@ -667,8 +667,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
 
             var data = baton.data,
-                collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
-                collectedRecipients = [],
+                collectedRecipients = [].concat(data.to, data.cc, data.from),
                 dev = $.Deferred(),
                 arrayOfMembers = [],
                 currentId = ox.user_id,
@@ -678,32 +677,51 @@ define('io.ox/mail/actions',
                 createDistlist = function (members) {
                     require(['io.ox/contacts/distrib/main'], function (m) {
                         m.getApp().launch().done(function () {
-                            this.create(contactsFolder, {distribution_list: members});
+                            this.create(contactsFolder, { distribution_list: members });
                         });
                     });
                 };
 
-            _(collectedRecipientsArray).each(function (single) {
-                collectedRecipients.push(single[1]);
-            });
+            collectedRecipients = _(collectedRecipients).chain()
+                .map(function (obj) {
+                    return obj[1];
+                })
+                .uniq()
+                .value();
 
+            // get length now to know when done
             lengthValue = collectedRecipients.length;
 
-            _(collectedRecipients).each(function (mail, index) {
-                contactAPI.search(mail).done(function (obj) {
+            _(collectedRecipients).each(function (mail) {
+                contactAPI.search(mail).done(function (results) {
 
-                    var currentObj = (obj[0]) ? {id: obj[0].id, folder_id: obj[0].folder_id, display_name: obj[0].display_name, mail: obj[0].email1, mail_field: 1} : {mail: mail, display_name: mail, mail_field: 0};
+                    var currentObj, result = results[0];
 
-                    if (obj[0]) {
-                        if (obj[0].internal_userid !== currentId) {
+                    if (result) {
+                        // found via search
+                        currentObj = {
+                            id: result.id,
+                            folder_id: result.folder_id,
+                            display_name: result.display_name,
+                            mail: result.email1,
+                            mail_field: 1
+                        };
+                        if (result.internal_userid !== currentId) {
                             arrayOfMembers.push(currentObj);
                         } else {
                             lengthValue = lengthValue - 1;
                         }
                     } else {
+                        // manual add
+                        currentObj = {
+                            display_name: mail,
+                            mail: mail,
+                            mail_field: 0
+                        };
                         arrayOfMembers.push(currentObj);
                     }
 
+                    // done?
                     if (arrayOfMembers.length === lengthValue) {
                         dev.resolve();
                     }
