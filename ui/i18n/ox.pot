@@ -114,35 +114,35 @@ msgstr ""
 msgid "Zoom in"
 msgstr ""
 
-#: apps/io.ox/office/preview/view.js:121
+#: apps/io.ox/office/preview/view.js:123
 msgid "Hide side panel"
 msgstr ""
 
-#: apps/io.ox/office/preview/view.js:141
+#: apps/io.ox/office/preview/view.js:143
 msgid "Show side panel"
 msgstr ""
 
 #. %1$s is the current page index in office document preview
 #. %2$s is the number of pages in office document preview
 #, c-format
-#: apps/io.ox/office/preview/view.js:261
+#: apps/io.ox/office/preview/view.js:256
 msgid "Page %1$s of %2$s"
 msgstr ""
 
 #: apps/io.ox/office/framework/app/baseapplication.js:297
-#: apps/io.ox/office/preview/view.js:290
+#: apps/io.ox/office/preview/view.js:285
 msgid "Load Error"
 msgstr ""
 
 #. %1$d is the current page number that caused the error
 #, c-format
-#: apps/io.ox/office/preview/view.js:293
+#: apps/io.ox/office/preview/view.js:288
 msgid "An error occurred while loading page %1$d."
 msgstr ""
 
 #. %1$d is the current zoom factor, in percent
 #, c-format
-#: apps/io.ox/office/preview/view.js:313
+#: apps/io.ox/office/preview/view.js:308
 msgid "Zoom: %1$d%"
 msgstr ""
 
