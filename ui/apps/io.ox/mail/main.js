@@ -369,6 +369,19 @@ define('io.ox/mail/main',
             unseenHash = {};
         }
 
+        function filterUnread(data) {
+            // return all mails that are either unseen or in unseenHash
+            return _(data).filter(function (obj) {
+                var cid = _.cid(obj);
+                if (cid in unseenHash) return true;
+                if (isUnseen(cid)) {
+                    unseenHash[cid] = true;
+                    return true;
+                }
+                return false;
+            });
+        }
+
         grid.setAllRequest(function () {
 
             var sort = this.prop('sort'),
@@ -382,22 +395,19 @@ define('io.ox/mail/main',
                 };
 
             return api[call](options, 'auto').then(function (response) {
-
                 var data = response.data || response;
+                return unread ? filterUnread(data) : data;
+            });
+        });
 
-                if (unread) {
-                    // return all mails that are either unseen or in unseenHash
-                    data = _(data).filter(function (obj) {
-                        var cid = _.cid(obj);
-                        if (cid in unseenHash) return true;
-                        if (isUnseen(cid)) {
-                            unseenHash[cid] = true;
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-                return data;
+        grid.setAllRequest('search', function () {
+            var options = win.search.getOptions(),
+                unread = grid.prop('unread');
+            options.folder = grid.prop('folder');
+            options.sort = grid.prop('sort');
+            options.order = grid.prop('order');
+            return api.search(win.search.query, options).then(function (data) {
+                return unread ? filterUnread(data) : data;
             });
         });
 
