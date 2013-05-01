@@ -267,10 +267,11 @@ define('io.ox/mail/api',
         },
 
         fail: {
-            get: function (e, params) {
+            get: function (e, ids) {
                 if (e.code === 'MSG-0032') {
-                    // mail no longer exists, so we remove it locally
-                    api.remove([params], true);
+                    // mail no longer exists, so we remove it from caches
+                    // we don't trigger any event here, as it might run into cyclic event chains
+                    api.updateCaches([ids]);
                 }
             }
         },

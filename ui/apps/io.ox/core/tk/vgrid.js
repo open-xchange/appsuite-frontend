@@ -1154,6 +1154,11 @@ define('io.ox/core/tk/vgrid',
                 }
             });
 
+            self.selection.on('clear', function () {
+                var folder = self.prop('folder');
+                delete hash[folder];
+            });
+
             return function () {
                 var folder = self.prop('folder');
                 return (currentMode === 'all' && hash[folder]) || null;

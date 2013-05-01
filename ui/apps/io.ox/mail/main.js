@@ -578,11 +578,15 @@ define('io.ox/mail/main',
             right.idle().empty().append(mail);
         };
 
-        drawFail = function (obj) {
+        drawFail = function (obj, e) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load that email."), function () {
-                    showMail(obj);
-                })
+                // not found?
+                e && e.code === 'MSG-0032' ?
+                    $.fail(gt('The requested email no longer exists')) :
+                    // general error
+                    $.fail(gt('Couldn\'t load that email.'), function () {
+                        showMail(obj);
+                    })
             );
         };
 
