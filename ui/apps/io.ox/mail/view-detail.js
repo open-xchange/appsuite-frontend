@@ -333,6 +333,12 @@ define('io.ox/mail/view-detail',
                             if (w) { node.css({ width: w + 'px' }); }
                             if (h) { node.css({ height: h + 'px'}); }
                         })
+                        .end()
+                        // tables with bgcolor attribute
+                        .find('table[bgcolor]').each(function () {
+                            var node = $(this), bgcolor = node.attr('bgcolor');
+                            node.css('background-color', bgcolor);
+                        })
                         .end();
                         // nested message?
                         if (!('folder_id' in data) && 'filename' in data) {
@@ -1133,13 +1139,26 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function replaceWithUnmodified(e) {
+        e.preventDefault();
+        // be busy
+        var section = e.data.node.parent();
+        section.find('article').busy().empty();
+        // get unmodified mail
+        api.getUnmodified(e.data.data).done(function (unmodifiedData) {
+            // keep outer node due to custom CSS classes (e.g. page)
+            var content = that.draw(unmodifiedData);
+            section.parent().empty().append(content.children());
+            section = content = null;
+        });
+    }
+
     // TODO: remove click handler out of inner closure
     ext.point('io.ox/mail/detail/header').extend({
         index: 195,
         id: 'externalresources-warning',
         draw: function (baton) {
             var data = baton.data;
-            var self = this;
             if (data.modified === 1) {
                 this.append(
                     $('<div class="alert alert-info cursor-pointer">')
@@ -1150,18 +1169,7 @@ define('io.ox/mail/view-detail',
                              $.txt(gt('External images have been blocked to protect you against potential spam!'))
                          )
                      )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/mail/api'], function (api) {
-                            // get unmodified mail
-                            api.getUnmodified(data)
-                                .done(function (unmodifiedData) {
-                                    // keep outer node due to custom CSS classes (e.g. page)
-                                    var content = that.draw(unmodifiedData);
-                                    self.parent().empty().append(content.children());
-                                });
-                        });
-                    })
+                    .on('click', { node: this, data: api.reduce(data) }, replaceWithUnmodified)
                 );
             }
         }
@@ -1197,7 +1205,8 @@ define('io.ox/mail/view-detail',
                     // assuming touch-pad/magic mouse for macos
                     // chrome & safari do a good job; firefox is not smooth
                     // ios means touch devices; that's fine
-                    _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
+                    // biggeleben: DISABLED for 7.2.1 due to too many potential bugs
+                    false && _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
                 )
                 .append(
                     content.content,
