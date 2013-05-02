@@ -248,12 +248,12 @@ define('plugins/notifications/tasks/register',
                 model = this.model,
                 key = [model.get('folder_id') + '.' + model.get('id')];
 
-            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").val());
+            dates = util.computePopupTime(endDate, this.$el.find('.dateselect').val());
             endDate = dates.alarmDate;
             reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
                 return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
             }).done(function () {
-                api.trigger("update:" + key[0]);//update detailview
+                api.trigger('update:' + key[0]);//update detailview
             });
             e.stopPropagation();
             model.collection.remove(model);
@@ -429,16 +429,16 @@ define('plugins/notifications/tasks/register',
                 var popup = editUtil.buildConfirmationPopup(model, dialogs);
                 //go
                 popup.popup.show().done(function (action) {
-                    if (action === "ChangeConfState") {
+                    if (action === 'ChangeConfState') {
                         var state = popup.state.prop('selectedIndex') + 1,
                             message = popup.message.val();
                         api.confirm({id: model.get('id'),
-                                     folder_id: model.get("folder_id"),
+                                     folder_id: model.get('folder_id'),
                                      data: {confirmation: state,
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger("update:" + model.get('folder_id') + '.' + model.get('id'));
+                            api.trigger('update:' + model.get('folder_id') + '.' + model.get('id'));
                             model.collection.remove(model);
                         });
                     }

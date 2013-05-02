@@ -133,7 +133,7 @@ define('plugins/notifications/mail/register',
 
         openApp: function (e) {
             e.preventDefault();
-            require("io.ox/core/notifications").hideList();
+            require('io.ox/core/notifications').hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 // go to inbox
                 this.folder.set(api.getDefaultFolder());
