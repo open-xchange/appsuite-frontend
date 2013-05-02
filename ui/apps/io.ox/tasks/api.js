@@ -31,8 +31,8 @@ define('io.ox/tasks/api',
          * @param  {array} ids (objects with id and folder_id)
          * @param  {object} modifications
          * @fires  api#remove-task-confirmation-notification (ids)
-         * @fires  api#add-overdue-tasks (ids)
-         * @fires  api#remove-overdue-tasks (ids)
+         * @fires  api#mark:overdue (ids)
+         * @fires  api#unmark:overdue (ids)
          * @return {undefined}
          */
         checkForNotifications = function (ids, modifications) {
@@ -87,7 +87,7 @@ define('io.ox/tasks/api',
             }
             //check overdue
             if (modifications.status === 3 || modifications.end_date === null) {
-                api.trigger('remove-overdue-tasks', ids);
+                api.trigger('unmark:overdue', ids);
             } else if (modifications.status || modifications.end_date) {
                 //current values are needed for further checks
                 api.getList(ids, false).done(function (list) {
@@ -101,10 +101,10 @@ define('io.ox/tasks/api',
                         }
                     });
                     if (addArray.length > 0) {
-                        api.trigger('add-overdue-tasks', addArray);
+                        api.trigger('mark:overdue', addArray);
                     }
                     if (removeArray.length > 0) {
-                        api.trigger('remove-overdue-tasks', removeArray);
+                        api.trigger('unmark:overdue', removeArray);
                     }
                 });
             }

@@ -165,11 +165,11 @@ define('plugins/notifications/tasks/register',
             api.on('new-tasks', function (e, tasks) {
                 add(e, tasks, true);
             });
-            api.on('add-overdue-tasks', function (e, tasks) {
+            api.on('mark:overdue', function (e, tasks) {
                 add(e, tasks);
                 notifications.collection.trigger('add');
             });
-            api.on('remove-overdue-tasks', function (e, tasks) {
+            api.on('unmark:overdue', function (e, tasks) {
                 remove(e, tasks);
             });
 
