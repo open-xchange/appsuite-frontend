@@ -26,6 +26,28 @@ define('io.ox/core/api/folder',
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
 
+        //TODO: set undefined to enable server setting (not yet mapped in backend yet)
+        blacklist = {},
+
+        /**
+         * checks if folder is currently blacklisted
+         * @param  {object} folder
+         * @return {boolean} true if not blacklisted
+         */
+        visible = function (folder) {
+            var tmp = {};
+            // init blacklist?
+            if (blacklist === undefined) {
+                if ((tmp = config.get('folder.blacklist', null))) {
+                    blacklist = {};
+                    $.each(tmp, function (i, o) { blacklist[String(o)] = true; });
+                } else {
+                    blacklist = null;
+                }
+            }
+            return folder !== undefined && blacklist[String(folder.data ? folder.data.id : folder.id)] === undefined;
+        },
+
         // magic permission check
         perm = function (bits, offset) {
             return (bits >> offset) & (offset >= 28 ? 1 : 127);
@@ -182,6 +204,8 @@ define('io.ox/core/api/folder',
                             timestamp = _.now(); // force update
                             data = data.data;
                         }
+                        //apply blacklist
+                        data = _.filter(data, visible);
                         // fix order of mail folders (INBOX first)
                         if (opt.folder === '1') {
                             data.sort(function (a, b) {
@@ -306,6 +330,10 @@ define('io.ox/core/api/folder',
                                 makeObject = function (raw) {
                                     return http.makeObject(raw, 'folders');
                                 },
+                                blacklisted = function (folder) {
+                                    // checks if folder is blacklisted
+                                    return visible(folder);
+                                },
                                 canRead = function (obj) {
                                     // read permission?
                                     return api.can('read', obj);
@@ -322,6 +350,7 @@ define('io.ox/core/api/folder',
                             for (id in data) {
                                 folders = _.chain(data[id])
                                     .map(makeObject)
+                                    .filter(blacklisted)
                                     .filter(canRead)
                                     .map(addToCache) // since each doesn't chain
                                     .value();
