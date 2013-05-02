@@ -370,6 +370,11 @@ define('io.ox/mail/api',
         if (useCache === 'auto') {
             useCache = (cacheControl[cid] !== false);
         }
+        // support for from-to
+        options = options || {};
+        if (options.sort === 'from-to') {
+            options.sort = accountAPI.is('sent', options.folder) ? 604 : 603;
+        }
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
         });

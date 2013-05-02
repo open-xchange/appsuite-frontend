@@ -20,12 +20,17 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
         });
-        rt.on("error", function (e) {
-            self.trigger("error");
-        });
-        rt.on("open", function (e) {
-            self.trigger("apiOpen");
-        });
+
+        function relayOfflineEvent(e) {
+            self.trigger("offline");
+        }
+
+        function relayOnlineEvent(e) {
+            self.trigger("online");
+        }
+
+        rt.on("offline", relayOfflineEvent);
+        rt.on("online", relayOnlineEvent);
 
         this.id = id;
 
@@ -106,6 +111,8 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                 this.leave();
             }
             rt.off("receive:" + selector);
+            rt.off("offline", relayOfflineEvent);
+            rt.off("online", relayOnlineEvent);
             delete groups[id];
             destroyed = true;
         };
@@ -120,7 +127,6 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     return {
         getGroup: function (id) {
             if (groups[id]) {
-                console.log("Reusing group");
                 return groups[id];
             }
             groups[id] = new RealtimeGroup(id);

@@ -470,7 +470,14 @@ define('io.ox/core/api/account',
             data: data
         })
         // always successful but either true or false
-        .then(null, function () { $.Deferred().resolve(false); });
+        .then(
+            function success(bool) {
+                return $.Deferred().resolve(bool);
+            },
+            function fail() {
+                return $.Deferred().resolve(false);
+            }
+        );
     };
 
     /**

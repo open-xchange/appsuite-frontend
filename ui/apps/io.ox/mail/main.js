@@ -40,10 +40,11 @@ define('io.ox/mail/main',
         hToolbarOptions = function (e) {
             e.preventDefault();
             var option = $(this).attr('data-option'),
-                grid = e.data.grid;
-            if (/^(603|607|610|102|thread)$/.test(option)) {
+                grid = e.data.grid,
+                folder;
+            if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
-                //sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
+                // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
                 grid.updateSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
@@ -211,11 +212,12 @@ define('io.ox/mail/main',
             else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox && settings.get('sort') === 'thread') {
                 grid.prop('sort', 'thread');
             }
+
             // draw list
             ul.empty().append(
                 isOn ? buildOption('thread', gt('Conversations')) : $(),
                 buildOption(610, gt('Date')),
-                buildOption(603, gt('From')),
+                buildOption('from-to', gt('From')),
                 buildOption(102, gt('Label')),
                 buildOption(607, gt('Subject')),
                 $('<li class="divider">'),
@@ -224,6 +226,7 @@ define('io.ox/mail/main',
                 $('<li class="divider">'),
                 buildOption('unread', gt('Unread only'))
             );
+
             updateGridOptions();
         }
 
@@ -240,6 +243,10 @@ define('io.ox/mail/main',
                     '[data-option="' + (props.unread ? 'unread' : '~unread') + '"]'
                 )
                 .find('i').attr('class', 'icon-ok');
+            // sent folder?
+            list.find('[data-option="from-to"] span').text(
+                account.is('sent', props.folder) ? gt('To') : gt('From')
+            );
             // unread
             dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
             // order
@@ -248,10 +255,12 @@ define('io.ox/mail/main',
                 .find('.icon-arrow-up').css('opacity', opacity[1]).end();
         }
 
-        var option = $('<li><a href="#"><i/></a></li>');
-
         function buildOption(value, text) {
-            return option.clone().find('a').attr('data-option', value).append($.txt(text)).end();
+            return $('<li>').append(
+                $('<a href="#">').attr('data-option', value).append(
+                    $('<i>'), $('<span>').text(text)
+                )
+            );
         }
 
         /**
