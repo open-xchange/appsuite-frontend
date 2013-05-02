@@ -144,6 +144,7 @@ define('io.ox/preview/main',
                         timerRate: 250,
                         features: ['playpause', 'progress', 'current', 'volume'],
                         enablePluginDebug: true,
+                        pauseOtherPlayers: true,
                         keyActions: [{
                             keys: [32, 179], // SPACE
                             action: function (player, media) {

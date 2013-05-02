@@ -249,6 +249,11 @@ define('io.ox/files/icons/perspective',
                             popup.append(viewDetail.draw(file, app));
                         });
                         dialog.on('close', function () {
+                            if (window.mejs) {
+                                _(window.mejs.players).each(function (player) {
+                                    player.pause();
+                                });
+                            }
                             if (dropZone) {
                                 var tmp = app.currentFile;
                                 app.currentFile = null;
