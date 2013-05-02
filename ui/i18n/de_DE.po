@@ -2041,7 +2041,7 @@ msgstr "Kopieren"
 
 #: apps/io.ox/mail/actions.js:335
 msgid "Mails have been copied"
-msgstr "E-Mail wurden kopiert"
+msgstr "E-Mails wurden kopiert"
 
 #: apps/io.ox/mail/actions.js:502
 msgid "Attachments have been saved"
