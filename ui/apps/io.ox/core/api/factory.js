@@ -442,12 +442,14 @@ define('io.ox/core/api/factory',
                 var opt = $.extend({}, o.requests.search, options || {}),
                     getData = opt.getData;
 
-                if (o.requests.search.omitFolder) {
-                    opt = _.omit(opt, ['folder', 'omitFolder']);
+                if (o.requests.search.omitFolder && options.omitFolder !== false) {
+                    delete opt.folder;
                 }
 
-                // remove getData functions
+                // remove omitFolder & getData functions
+                delete opt.omitFolder;
                 delete opt.getData;
+
                 // go!
                 return http.PUT({
                     module: o.module,

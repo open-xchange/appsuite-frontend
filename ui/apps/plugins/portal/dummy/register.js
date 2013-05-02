@@ -71,14 +71,14 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
         );
         return $.Deferred().resolve($node);
     };
-    for (var i = 0; i < 25; i++) {
-        ext.point("io.ox/portal/widget").extend({
-            id: 'dummy' + i,
-            index: 500 + i,
-            title: 'Dummy #' + i,
-            load: load,
-            draw: draw,
-            drawTile: drawTile
-        });
-    }
+    // for (var i = 0; i < 25; i++) {
+    //     ext.point("io.ox/portal/widget").extend({
+    //         id: 'dummy' + i,
+    //         index: 500 + i,
+    //         title: 'Dummy #' + i,
+    //         load: load,
+    //         draw: draw,
+    //         drawTile: drawTile
+    //     });
+    // }
 });

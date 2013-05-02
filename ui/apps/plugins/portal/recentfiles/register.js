@@ -16,9 +16,9 @@ define('plugins/portal/recentfiles/register',
      'io.ox/files/api',
      'io.ox/core/api/user',
      'io.ox/core/date',
-     'io.ox/core/config',
      'gettext!plugins/portal',
-     'less!plugins/portal/recentfiles/style.less'], function (ext, filesApi, userApi, date, config, gt) {
+     'settings!io.ox/core',
+     'less!plugins/portal/recentfiles/style.less'], function (ext, filesApi, userApi, date, gt, settings) {
 
     'use strict';
 
@@ -37,7 +37,8 @@ define('plugins/portal/recentfiles/register',
 
         var searchOptions = { sort: 5, order: 'desc', limit: 10, columns: '1,3,4,5,20,700,701,702,703,704' };
         if (type === 'myfiles') {
-            searchOptions.folder = config.get('folder.infostore');
+            searchOptions.folder = settings.get('folder/infostore');
+            searchOptions.omitFolder = false;
         }
 
         var title = type === 'recentfiles' ? gt('Recently changed files') : gt('My latest files');
@@ -50,8 +51,7 @@ define('plugins/portal/recentfiles/register',
             title: title,
 
             load: function (baton) {
-                return filesApi.search('', searchOptions)
-                .pipe(function (files) {
+                return filesApi.search('', searchOptions).then(function (files) {
                     // update baton
                     baton.data = files;
                     // get user ids
@@ -63,7 +63,7 @@ define('plugins/portal/recentfiles/register',
                                 file.modified_by = _(users).find(function (user) { return user.id === file.modified_by; });
                             });
                         })
-                        .pipe(function () {
+                        .then(function () {
                             return files;
                         });
                 });
@@ -111,6 +111,9 @@ define('plugins/portal/recentfiles/register',
                 });
             }
         });
+
+        // publish
+        ext.point('io.ox/portal/widget').extend({ id: type });
 
         ext.point('io.ox/portal/widget/' + type + '/settings').extend({
             title: title,

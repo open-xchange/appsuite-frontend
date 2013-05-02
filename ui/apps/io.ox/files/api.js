@@ -119,7 +119,7 @@ define('io.ox/files/api',
                 sort: '700',
                 order: 'asc',
                 omitFolder: true,
-                getData: function (query) {
+                getData: function (query, options) {
                     return { pattern: query };
                 }
             }

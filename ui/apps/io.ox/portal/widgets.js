@@ -26,7 +26,6 @@ define('io.ox/portal/widgets',
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
-        allTypes = ext.point('io.ox/portal/widget').chain().pluck('id').value(),
         collection = new Backbone.Collection([]);
 
     collection.comparator = function (a, b) {
@@ -67,6 +66,8 @@ define('io.ox/portal/widgets',
                 prot[id] = obj;
             });
 
+            var allTypes = ext.point('io.ox/portal/widget').pluck('id');
+
             return _(settings.get('widgets/user', {}))
                 .chain()
                 .extend(prot)
@@ -100,6 +101,9 @@ define('io.ox/portal/widgets',
         },
 
         getAllTypes: function () {
+
+            var allTypes = ext.point('io.ox/portal/widget').pluck('id');
+
             return _.chain(api.getAvailablePlugins().concat(allTypes))
                 .map(function (id) {
                     var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1'),
