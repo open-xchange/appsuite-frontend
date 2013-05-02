@@ -52,6 +52,22 @@ define('io.ox/files/list/view-detail',
         ref: 'io.ox/files/links/inline'
     }));
 
+    // Display locked file information
+    ext.point(POINT).extend({
+        index: 210,
+        id: 'filelock',
+        draw: function (baton) {
+            if (ox.user_id !== baton.data.modified_by && baton.data.locked_until !== 0) {
+                this.append(
+                    $('<div>').addClass('alert alert-info')
+                        .text(gt('This File is locked by '))
+                        .append(userAPI.getLink(baton.data.modified_by)
+                )
+                );
+            }
+        }
+    });
+
     // Preview
     (function () {
 

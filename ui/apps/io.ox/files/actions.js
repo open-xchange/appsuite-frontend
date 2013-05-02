@@ -254,7 +254,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/delete', {
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && isUnLocked(e);
+        },
         multiple: function (list) {
             var question = gt.ngettext(
                     'Do you really want to delete this file?',
@@ -300,6 +302,13 @@ define('io.ox/files/actions',
             });
         }
     });
+
+    var isUnLocked = function (e) {
+        var list = _.getArray(e.context);
+        return _(list).reduce(function (memo, obj) {
+            return memo || (obj.modified_by === ox.user_id && obj.locked_until === 0);
+        }, false);
+    };
 
     new Action('io.ox/files/actions/lock', {
         requires: function (e) {
@@ -389,7 +398,9 @@ define('io.ox/files/actions',
 
 
     new Action('io.ox/files/actions/rename', {
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && isUnLocked(e);
+        },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var $input = $('<input type="text" name="name" class="span12">');
@@ -445,7 +456,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/edit-description', {
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && isUnLocked(e);
+        },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
@@ -498,10 +511,12 @@ define('io.ox/files/actions',
     });
 
 
-    function moveAndCopy(type, label, success, requires) {
+    function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             id: type,
-            requires: requires,
+            requires:  function (e) {
+                return e.collection.has('some') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+            },
             multiple: function (list, baton) {
 
                 var vGrid = baton.grid || (baton.app && baton.app.getGrid());
@@ -562,8 +577,8 @@ define('io.ox/files/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Files have been moved'), 'some delete');
-    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'), 'some read');
+    moveAndCopy('move', gt('Move'), gt('Files have been moved'));
+    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'));
 
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
