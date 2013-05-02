@@ -196,7 +196,7 @@ TaskBase = new (function () {
     var self = this;
     this._currentPrereqIndex++;
     if (this._currentPrereqIndex < this.prereqs.length) {
-      setTimeout(function () {
+      (global.setImmediate || setTimeout)(function () {
         self.nextPrereq();
       }, 0);
     }
