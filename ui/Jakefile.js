@@ -515,14 +515,14 @@ function compileLess() {
              path.join(dir, 'style.less')],
             { filter: less.compile });
         _.each(ownLess, function (file) {
-            if (file.slice(0, 7) === 'themes/') return;
+            if (/^themes[\/\\]/.test(file)) return;
             utils.concat(path.join(dir, 'less', file),
                 [core('apps/themes/definitions.less'), defs,
                  path.join('apps', file)],
                  { filter: less.compile });
         });
         _.each(coreLess, function (file) {
-            if (file.slice(0, 7) === 'themes/') return;
+            if (/^themes[\/\\]/.test(file)) return;
             utils.concat(path.join(dir, 'less', file),
                 [core('apps/themes/definitions.less'), defs,
                  path.join(coreDir, 'apps', file)],
@@ -536,7 +536,7 @@ function compileLess() {
             if (path.existsSync(path.join('apps/themes', defs))) return;
             var dir = path.join('apps/themes', path.dirname(defs));
             _.each(ownLess, function (file) {
-                if (file.slice(0, 7) === 'themes/') return;
+                if (/^themes[\/\\]/.test(file)) return;
                 utils.concat(path.join(dir, 'less', file),
                     [core('apps/themes/definitions.less'),
                      path.join(coreDir, 'apps/themes', defs),
