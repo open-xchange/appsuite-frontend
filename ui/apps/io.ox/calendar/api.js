@@ -34,8 +34,8 @@ define('io.ox/calendar/api',
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
                 require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.trigger('remove-calendar-notifications', obj);
-                    api.trigger('remove-calendar-notifications', obj);
+                    reminderApi.trigger('delete:appointment', obj);
+                    api.trigger('delete:appointment', obj);
                 });
             } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
                 require(['io.ox/core/api/reminder'], function (reminderApi) {

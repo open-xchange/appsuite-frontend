@@ -304,7 +304,7 @@ define('plugins/notifications/calendar/register',
 
                 })
                 .on("mark:invite:confirmed", removeInvites)
-                .on('remove-calendar-notifications', removeInvites)
+                .on('delete:appointment', removeInvites)
                 .getInvites();
 
             function removeInvites(e, invites) {
@@ -373,7 +373,7 @@ define('plugins/notifications/calendar/register',
                         });
                     });
                 })
-                .on('remove-calendar-notifications', removeReminders)
+                .on('delete:appointment', removeReminders)
                 .getReminders();
         }
     });
