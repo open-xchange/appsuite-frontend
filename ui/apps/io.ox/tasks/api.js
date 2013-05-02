@@ -30,7 +30,7 @@ define('io.ox/tasks/api',
          * @private
          * @param  {array} ids (objects with id and folder_id)
          * @param  {object} modifications
-         * @fires  api#remove-task-confirmation-notification (ids)
+         * @fires  api#mark:task:confirmed (ids)
          * @fires  api#mark:overdue (ids)
          * @fires  api#unmark:overdue (ids)
          * @return {undefined}
@@ -65,7 +65,7 @@ define('io.ox/tasks/api',
                 if (!triggered) {
                     api.get(ids[0]).done(function (data) {//only occurs if only one task is given
                         if (data.participants.length > 0) {//all participants are removed
-                            api.trigger('remove-task-confirmation-notification', ids);
+                            api.trigger('mark:task:confirmed', ids); //unmark:confirmation
                         } else {
                             _(data.participants).each(function (obj) {
                                 if (obj.id === myId) { //user is in participants so there must already be a notification
@@ -73,7 +73,7 @@ define('io.ox/tasks/api',
                                 }
                             });
                             if (!triggered) { //user is not in participants anymore
-                                api.trigger('remove-task-confirmation-notification', ids);
+                                api.trigger('mark:task:confirmed', ids); //unmark:confirmation
                             }
                         }
                     });

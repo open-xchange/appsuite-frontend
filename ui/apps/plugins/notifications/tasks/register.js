@@ -480,7 +480,7 @@ define('plugins/notifications/tasks/register',
                     );
                 });
                 notifications.collection.reset(items);
-            }).on('remove-task-confirmation-notification', function (e, ids) {
+            }).on('mark:task:confirmed', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });

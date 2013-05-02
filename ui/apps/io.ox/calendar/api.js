@@ -351,7 +351,7 @@ define('io.ox/calendar/api',
         /**
          * change confirmation status
          * @param  {object} o (properties: id, folder, data)
-         * @fires  api#confirmation-changed (o)
+         * @fires  api#mark:invite:confirmed (o)
          * @fires  api#update (data)
          * @fires  api#update: + cid
          * @return {deferred}
@@ -371,7 +371,7 @@ define('io.ox/calendar/api',
             })
             .pipe(function (resp) {
                 get_cache = {};
-                api.trigger('confirmation-changed', o); //redraw detailview to be responsive and remove invites
+                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};
                 delete get_cache[key];
                 return api.get(o)

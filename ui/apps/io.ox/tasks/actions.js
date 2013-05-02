@@ -273,7 +273,7 @@ define('io.ox/tasks/actions',
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + data.folder_id + '.' + data.id);
-                            api.trigger("remove-task-confirmation-notification", [{id: data.id}]);
+                            api.trigger("mark:task:confirmed", [{id: data.id}]);
                         });
                     }
                 });

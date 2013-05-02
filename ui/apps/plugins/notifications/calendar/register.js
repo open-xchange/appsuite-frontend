@@ -303,7 +303,7 @@ define('plugins/notifications/calendar/register',
                     });
 
                 })
-                .on("confirmation-changed", removeInvites)
+                .on("mark:invite:confirmed", removeInvites)
                 .on('remove-calendar-notifications', removeInvites)
                 .getInvites();
 
