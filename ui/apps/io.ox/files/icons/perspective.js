@@ -150,12 +150,13 @@ define('io.ox/files/icons/perspective',
                         error: iconError
                     });
             }
-
             this.addClass('file-icon pull-left selectable')
                 .attr('data-obj-id', _.cid(file))
                 .append(
                     (img ? wrap.append(img) : wrap),
-                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))),
+                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))).prepend(
+                            (file.locked_until ? $('<i class="icon-lock">') : '')
+                        ),
                     $('<input type="checkbox" class="reflect-selection" style="display:none">')
                 );
         }

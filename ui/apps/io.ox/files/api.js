@@ -90,7 +90,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,1,5,700,702,703';
+    var allColumns = '20,1,5,700,702,703,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -106,7 +106,7 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,702,703,704',
+                columns: '20,1,5,700,702,703,704,707',
                 extendColumns: 'io.ox/files/api/list'
             },
             get: {
@@ -495,6 +495,7 @@ define('io.ox/files/api',
      * returns url
      * @param  {object} file
      * @param  {string} mode
+     * @param  {string} options
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
@@ -631,6 +632,58 @@ define('io.ox/files/api',
             if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
         }
         return (new RegExp(pattern, 'i')).test(filename);
+    };
+
+    var lockToggle = function (list, action) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (o) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: action,
+                    id: o.id,
+                    folder: o.folder_id || o.folder
+                },
+                appendColumns: false
+            });
+        });
+        // resume & trigger refresh
+        return http.resume()
+            .pipe(function () {
+                return $.when.apply($,
+                    _(list).map(function (o) {
+                        return $.when(
+                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
+                            api.caches.list.remove({ id: o.id, folder: o.folder_id })
+                        );
+                    })
+                );
+            })
+            .done(function () {
+                api.trigger('refresh.all');
+            });
+    };
+
+    /**
+     * unlocks files
+     * @param  {array} list
+     * @return {deferred}
+     */
+    api.unlock = function (list) {
+        return lockToggle(list, 'unlock');
+    };
+
+    /**
+     * locks files
+     * @param  {array} list
+     * @return {deferred}
+     */
+    api.lock = function (list, targetFolderId) {
+        return lockToggle(list, 'lock');
     };
 
     return api;

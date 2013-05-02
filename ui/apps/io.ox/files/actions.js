@@ -261,7 +261,7 @@ define('io.ox/files/actions',
                     'Do you really want to delete these files?',
                     list.length
             ),
-            responseSuccces = gt.ngettext(
+            responseSuccess = gt.ngettext(
                     'This file has been deleted',
                     'These files have been deleted',
                     list.length
@@ -269,6 +269,11 @@ define('io.ox/files/actions',
             responseFail = gt.ngettext(
                     'This file has not been deleted',
                     'These files have not been deleted',
+                    list.length
+            ),
+            responseFailLocked = gt.ngettext(
+                    'This file has not been deleted, as it is locked by its owner.',
+                    'These files have not been deleted, as they are locked by their owner.',
                     list.length
             );
 
@@ -282,7 +287,54 @@ define('io.ox/files/actions',
                         if (action === 'delete') {
                             api.remove(list).done(function (data) {
                                 api.propagate('delete', list[0]);
-                                notifications.yell('success', responseSuccces);
+                                notifications.yell('success', responseSuccess);
+                            }).fail(function (e) {
+                                if (e && e.code && e.code === 'IFO-0415') {
+                                    notifications.yell('error', responseFailLocked);
+                                } else {
+                                    notifications.yell('error', responseFail);
+                                }
+                            });
+                        }
+                    });
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/lock', {
+        requires: function (e) {
+            var list = _.getArray(e.context);
+            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                return memo || obj.locked_until === 0;
+            }, false);
+        },
+        multiple: function (list) {
+            var question = gt.ngettext(
+                    'Do you really want to lock this file?',
+                    'Do you really want to lock these files?',
+                    list.length
+            ),
+            responseSuccess = gt.ngettext(
+                    'This file has been locked',
+                    'These files have been locked',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been locked',
+                    'These files have not been locked',
+                    list.length
+            );
+
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text(question)
+                    .addPrimaryButton('lock', gt('Lock'))
+                    .addButton('cancel', gt('Cancel'))
+                    .show()
+                    .done(function (action) {
+                        if (action === 'lock') {
+                            api.lock(list).done(function (data) {
+                                notifications.yell('success', responseSuccess);
                             }).fail(function () {
                                 notifications.yell('error', responseFail);
                             });
@@ -291,6 +343,50 @@ define('io.ox/files/actions',
             });
         }
     });
+
+    new Action('io.ox/files/actions/unlock', {
+        requires: function (e) {
+            var list = _.getArray(e.context);
+            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                return memo || obj.locked_until !== 0 && obj.modified_by === ox.user_id;
+            }, false);
+        },
+        multiple: function (list) {
+            var question = gt.ngettext(
+                    'Do you really want to unlock this file?',
+                    'Do you really want to unlock these files?',
+                    list.length
+            ),
+            responseSuccess = gt.ngettext(
+                    'This file has been unlocked',
+                    'These files have been unlocked',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been unlocked',
+                    'These files have not been unlocked',
+                    list.length
+            );
+
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text(question)
+                    .addPrimaryButton('unlock', gt('Unlock'))
+                    .addButton('cancel', gt('Cancel'))
+                    .show()
+                    .done(function (action) {
+                        if (action === 'unlock') {
+                            api.unlock(list).done(function (data) {
+                                notifications.yell('success', responseSuccess);
+                            }).fail(function () {
+                                notifications.yell('error', responseFail);
+                            });
+                        }
+                    });
+            });
+        }
+    });
+
 
     new Action('io.ox/files/actions/rename', {
         requires: 'one',
@@ -668,6 +764,22 @@ define('io.ox/files/actions',
         prio: 'hi',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'lock',
+        index: 820,
+        prio: 'lo',
+        label: gt('Lock'),
+        ref: 'io.ox/files/actions/lock'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'unlock',
+        index: 850,
+        prio: 'hi',
+        label: gt('Unlock'),
+        ref: 'io.ox/files/actions/unlock'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
