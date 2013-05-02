@@ -115,10 +115,18 @@ define('io.ox/office/preview/view',
 
             model = app.getModel();
 
-            // create the side pane (first create, then initialize; existing instance is needed for PageGroup)
-            self.addPane(sidePane = new SidePane(app, { position: 'right', resizeable: true }));
+            // create the side pane
+            self.addPane(sidePane = new SidePane(app, {
+                position: 'right',
+                resizeable: !Modernizr.touch,
+                minSize: SidePane.DEFAULT_WIDTH,
+                maxSize: 1.8 * SidePane.DEFAULT_WIDTH
+            }));
+
+            // create the page preview group
             pageGroup = new PageGroup(app, sidePane);
 
+            // initialize the side pane
             sidePane
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))

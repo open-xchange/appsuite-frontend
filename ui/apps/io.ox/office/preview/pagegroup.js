@@ -247,7 +247,7 @@ define('io.ox/office/preview/pagegroup',
                 firstPage = 0, lastPage = 0;
 
             // calculate number of pages available per row, and effective button width
-            columns = Math.floor(innerWidth / BUTTON_WIDTH + 0.4);
+            columns = Math.max(1, Math.floor(innerWidth / BUTTON_WIDTH + 0.4));
             buttonWidth = Math.floor(innerWidth / columns);
 
             // update size of the own group node
@@ -313,11 +313,9 @@ define('io.ox/office/preview/pagegroup',
             self.updatePages();
         });
 
-        // when showing the side pane, scroll to current page
-        sidePane.on('show', function (event, visible) {
-            if (visible) {
-                self.selectAndShowPage(app.getView().getPage());
-            }
+        // when showing or resizing the side pane, scroll to current page
+        sidePane.on('show resize', function (event) {
+            self.selectAndShowPage(app.getView().getPage());
         });
 
     } // class PageGroup
