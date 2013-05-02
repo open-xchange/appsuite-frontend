@@ -1,0 +1,81 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>9.6.3. Windows Vista 環境での WebDAV のセットアップ</title>
+<link rel="stylesheet" type="text/css" href="book-appsuite.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="index.html" title="OX App Suite">
+<link rel="up" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. WebDAV を使用した、ファイルへのアクセス">
+<link rel="prev" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="9.6.2. Windows XP 環境での WebDAV のセットアップ">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.4. Windows 7 環境での WebDAV のセットアップ">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">9.6.3. Windows Vista 環境での WebDAV のセットアップ</th></tr>
+<tr>
+<td width="20%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.files.webdav.winxp.html">戻る</a> </td>
+<th width="60%" align="center">9.6. WebDAV を使用した、ファイルへのアクセス</th>
+<td width="20%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.files.webdav.win7.html">次へ</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.files.webdav.winvista"></a>9.6.3. Windows Vista 環境での WebDAV のセットアップ</h3></div></div></div>
+<a class="indexterm" name="idm139789840728272"></a><a class="indexterm" name="idm139789840727136"></a><p><a name="ox.appsuite.user.concept.files.webdav.winvista"></a>Windows Vista の環境で WebDAV アクセスをセットアップするには、次のいずれかの方法を使用します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>OX Updater の使用。詳細は、OX Updater のユーザ向けドキュメントを参照してください。</p></li>
+<li class="listitem"><p>はじめに、Microsoft から提供される Web フォルダーの <a class="link" href="ox.appsuite.user.sect.files.webdav.winvista.html#ox.appsuite.user.task.webdav.msupdate" title="WebDAV を対象にした Microsoft のソフトウェア更新プログラムをインストールする">ソフトウェア更新プログラム</a> をインストールします。インストールの完了後に、<a class="link" href="ox.appsuite.user.sect.files.webdav.winvista.html#ox.appsuite.user.task.webdav.winvista" title="Windows Vista 環境で WebDAV アクセスをセットアップする">WebDAV アクセス</a> をセットアップします。</p></li>
+</ul></div>
+<div class="task">
+<a name="ox.appsuite.user.task.webdav.msupdate"></a><p class="title"><b>WebDAV を対象にした Microsoft のソフトウェア更新プログラムをインストールする</b></p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Web ブラウザを起動します。</p></li>
+<li class="step"><p>次のアドレスを入力します。http://support.microsoft.com/kb/907306</p></li>
+<li class="step"><p><span class="guilabel"><strong>詳細</strong></span> を参照し、<span class="guibutton"><strong>パッケージの Web フォルダーのソフトウェア更新プログラムをダウンロードします</strong></span> をクリックします。</p></li>
+<li class="step"><p>ダウンロード ページで <span class="guibutton"><strong>ダウンロード</strong></span> をクリックします。Webfldrs-KB907306-ENU.exe のファイルがダウンロードされます。</p></li>
+<li class="step"><p>ファイルをダブル クリックします。インストールが開始されます。</p></li>
+</ol></div>
+</div>
+<div class="task">
+<a name="ox.appsuite.user.task.webdav.winvista"></a><p class="title"><b>Windows Vista 環境で WebDAV アクセスをセットアップする</b></p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Windows エクスプローラで <span class="guibutton"><strong>コンピュータ</strong></span> を開きます。</p></li>
+<li class="step"><p>エクスプローラの右ペインの空いている領域を右クリックします。ドロップダウン メニューで <span class="guibutton"><strong>ネットワークの場所を追加する</strong></span> を選択します。 	<span class="guilabel"><strong>ネットワークの場所の追加</strong></span> ダイアログ ウィンドウが開きます。<span class="guibutton"><strong>次へ</strong></span> をクリックします。</p></li>
+<li class="step"><p><span class="guibutton"><strong>カスタムのネットワークの場所を選択</strong></span> を選択します。[次へ] をクリックします。</p></li>
+<li class="step"><p><span class="guilabel"><strong>ネットワーク パスの追加</strong></span> ダイアログ ウィンドウで、次のアドレスを入力します。https://&lt;アドレス&gt;/servlet/webdav.infostore &lt;アドレス&gt; は、グループウェア サーバの IP アドレスか URL に置き換える必要があります。</p></li>
+<li class="step"><p>ユーザ名とパスワードを入力します。グループウェア サーバのログイン データを使用します。</p></li>
+<li class="step"><p>次のダイアログ ウィンドウで、リソースに名前を割り当てます。</p></li>
+<li class="step"><p>次のダイアログ ウィンドウで <span class="guibutton"><strong>完了</strong></span> をクリックします。</p></li>
+</ol></div>
+<div class="taskrelated">
+<p class="order.result"><span class="phrase"><strong>結果: </strong></span><span class="guibutton"><strong>コンピューター</strong></span> から <span class="phrase"><span class="guilabel"><strong>ファイル</strong></span></span>    アプリケーションのファイルにアクセスできます。</p>
+        </div>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">
+<a accesskey="p" href="ox.appsuite.user.sect.files.webdav.winxp.html">戻る</a> </td>
+<td width="20%" align="center"><a accesskey="u" href="ox.appsuite.user.sect.files.webdav.html">上に戻る</a></td>
+<td width="40%" align="right"> <a accesskey="n" href="ox.appsuite.user.sect.files.webdav.win7.html">次へ</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">9.6.2. Windows XP 環境での WebDAV のセットアップ </td>
+<td width="20%" align="center">
+<a accesskey="h" href="index.html">ホーム</a> | <a accesskey="t" href="bk01-toc.html">目次</a>
+</td>
+<td width="40%" align="right" valign="top"> 9.6.4. Windows 7 環境での WebDAV のセットアップ</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
