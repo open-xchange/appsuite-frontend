@@ -299,6 +299,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
         request.onError = function (response) {
             if (!disconnected) {
+                disconnected = true;
                 reconnect();
             }
         };
