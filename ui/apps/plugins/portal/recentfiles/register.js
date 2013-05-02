@@ -44,6 +44,9 @@ define('plugins/portal/recentfiles/register',
 
         ext.point('io.ox/portal/widget/' + type).extend({
 
+            // helps at reverse lookup
+            type: 'recentfiles',
+
             title: title,
 
             load: function (baton) {

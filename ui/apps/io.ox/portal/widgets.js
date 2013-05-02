@@ -13,15 +13,16 @@
 define('io.ox/portal/widgets',
        ['io.ox/core/extensions',
        'io.ox/core/manifests',
+       'io.ox/core/upsell',
        'io.ox/core/notifications',
        'settings!io.ox/portal',
        'gettext!io.ox/portal'
-        ], function (ext, manifests, notifications, settings, gt) {
+        ], function (ext, manifests, upsell, notifications, settings, gt) {
 
 	'use strict';
 
 	// use for temporary hacks
-	var DEV_PLUGINS = ['plugins/portal/mail/register', 'plugins/portal/flickr/register'];
+	var DEV_PLUGINS = [];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -101,8 +102,11 @@ define('io.ox/portal/widgets',
         getAllTypes: function () {
             return _.chain(api.getAvailablePlugins().concat(allTypes))
                 .map(function (id) {
-                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
-                    return ext.point('io.ox/portal/widget/' + type + '/settings').options();
+                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1'),
+                        options = ext.point('io.ox/portal/widget/' + type + '/settings').options();
+                    // inject "requires" for upsell
+                    options.requires = manifests.manager.getRequirements(id);
+                    return options;
                 })
                 .filter(function (obj) {
                     return obj.type !== undefined;
@@ -118,12 +122,22 @@ define('io.ox/portal/widgets',
             return _(collection.pluck('type')).uniq().sort();
         },
 
+        containsType: function (type) {
+            return _(this.getUsedTypes()).contains(type);
+        },
+
         getColors: function () {
             return 'black red orange lightgreen green lightblue blue purple pink gray'.split(' ');
         },
 
         getTitle: function (data, fallback) {
             return data.title || (data.props ? (data.props.description || data.props.title) : '') || fallback || '';
+        },
+
+        getPluginByType: function (type) {
+            // look for type
+            var prop = ext.point('io.ox/portal/widget/' + type).prop('type');
+            return 'plugins/portal/' + (prop || type) + '/register';
         },
 
         add: function (type, options) {
@@ -151,14 +165,14 @@ define('io.ox/portal/widgets',
                 inverse: options.inverse,
                 id: id,
                 index: 0, // otherwise not visible
-                plugin: 'plugins/portal/' + options.plugin + '/register',
+                plugin: this.getPluginByType(options.plugin),
                 props: options.props,
                 type: type
             };
 
             settings.set('widgets/user/' + id, widget).save();
 
-            collection.add(widget);
+            collection.unshift(widget);
         },
 
         remove: function (model) {
@@ -230,10 +244,23 @@ define('io.ox/portal/widgets',
                     notifications.yell('error', gt("Could not save settings."));
                 }
             );
+        },
+
+        // convenience function for upsell
+        visible: function (type) {
+            var plugin = this.getPluginByType(type),
+                requires = manifests.manager.getRequirements(plugin);
+            return upsell.has(requires);
         }
     };
 
-    collection.reset(api.getSettings());
+    collection.reset(
+        // fix "candidate=true" bug (maybe just a development issue)
+        _(api.getSettings()).map(function (obj) {
+            delete obj.candidate;
+            return obj;
+        })
+    );
 
     collection.on('change', function () {
         settings.set('widgets/user', api.toJSON()).save()

@@ -20,6 +20,13 @@ define.async('io.ox/core/manifests',
 
     var manifestManager = {
 
+        // convenience function
+        // returns 'requires' of a given app or plugin id
+        // useful for upsell stuff
+        getRequirements: function (id) {
+            return (this.apps[id] || this.plugins[id] || {}).requires || '';
+        },
+
         loadPluginsFor: function (pointName, cb) {
             cb = cb || $.noop;
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {

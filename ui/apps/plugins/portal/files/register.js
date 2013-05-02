@@ -19,8 +19,10 @@ define('plugins/portal/files/register',
 
     'use strict';
 
-
     ext.point('io.ox/portal/widget/stickyfile').extend({
+
+        // helps at reverse lookup
+        type: 'files',
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
