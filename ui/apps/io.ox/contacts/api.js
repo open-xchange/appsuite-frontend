@@ -218,7 +218,7 @@ define('io.ox/contacts/api',
      * @param  {object} changes (target values)
      * @param  {object} file
      * @fires  api#refresh.list
-     * @fires  api#edit ({id,folder})
+     * @fires  api#update:image ({id,folder})
      * @return {deferred} object with timestamp
      */
     api.editNewImage = function (o, changes, file) {

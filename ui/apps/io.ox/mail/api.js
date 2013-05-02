@@ -694,7 +694,7 @@ define('io.ox/mail/api',
      * marks list of mails read
      * @param {array} list
      * @fires api#refresh.list
-     * @fires api#seen (list)
+     * @fires api#update:set-seen (list)
      * @return {deferred}
      */
     api.markRead = function (list) {
