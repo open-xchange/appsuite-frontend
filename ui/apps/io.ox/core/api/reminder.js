@@ -50,8 +50,8 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
          * get reminders
          * @param  {number} range (end of scope)
          * @param  {number} module
-         * @fires  api#reminder-tasks (reminderTaskId, reminderId)
-         * @fires  api#reminder-calendar (reminderCalId)
+         * @fires  api#set:tasks:reminder (reminderTaskId, reminderId)
+         * @fires  api#set:calendar:reminder (reminderCalId)
          * @return {deferred}
          */
         getReminders: function (range, module) {
@@ -78,9 +78,9 @@ define('io.ox/core/api/reminder', ['io.ox/core/http',
                     }
                     //even if empty array is given it needs to be triggered to remove
                     //notifications that does not exist anymore(already handled in ox6 etc)
-                    api.trigger('reminder-tasks', reminderTaskId, reminderId);
+                    api.trigger('set:tasks:reminder', reminderTaskId, reminderId);
                     //same as above
-                    api.trigger('reminder-calendar', reminderCalId);
+                    api.trigger('set:calendar:reminder', reminderCalId);
                 }
                 return list;
             });

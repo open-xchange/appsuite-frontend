@@ -334,7 +334,7 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderApi
-                .on('reminder-calendar', function (e, reminder) {
+                .on('set:calendar:reminder', function (e, reminder) {
                     // just for the moment as reminder view blocks whole screen
                     // will reenable the view later with new design
                     if (_.device('small && touch')) {

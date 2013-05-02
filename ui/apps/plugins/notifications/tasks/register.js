@@ -314,7 +314,7 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
-            reminderApi.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
+            reminderApi.on('set:tasks:reminder', function (e, reminderTaskIds, reminderIds) {
                 api.getAll({}, false).done(function (tasks) {
                     var items = [];
                     _(tasks).each(function (taskObj) {
