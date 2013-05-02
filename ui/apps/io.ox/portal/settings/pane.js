@@ -244,10 +244,16 @@ define('io.ox/portal/settings/pane',
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                 .header($("<h4>").text(gt('Delete widget')))
                 .append($('<span>').text(gt('Do you really want to delete this widget?')))
-                .addPrimaryButton('delete', gt('Delete'))
+                .addPrimaryButton('delete',
+                    //#. Really delete portal widget - in contrast to "just disable"
+                    gt('Delete')
+                )
                 .addButton('cancel', gt('Cancel'));
                 if (this.model.get('enabled')) {
-                    dialog.addAlternativeButton('disable', gt('Just disable widget'));
+                    dialog.addAlternativeButton('disable',
+                        //#. Just disable portal widget - in contrast to delete
+                        gt('Just disable widget')
+                    );
                 }
                 dialog.show().done(function (action) {
                     if (action === 'delete') {
