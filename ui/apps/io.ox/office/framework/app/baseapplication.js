@@ -308,7 +308,7 @@ define('io.ox/office/framework/app/baseapplication',
                     if (cause !== 'timeout') {
                         view.showError(title, message);
                     }
-                    Utils.warn('BaseApplication.launch(): importing document "' + file.filename + '" failed.');
+                    Utils.error('BaseApplication.launch(): importing document "' + file.filename + '" failed.');
                     self.trigger('docs:import:error');
                 });
         }
