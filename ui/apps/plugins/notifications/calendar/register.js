@@ -233,7 +233,6 @@ define('plugins/notifications/calendar/register',
         id: 'io-ox-notifications-calendar-reminder',
 
         initialize: function () {
-            this.collection.on('reset add remove', this.render, this);
             this.collection.hidden = [];
         },
 
@@ -304,8 +303,8 @@ define('plugins/notifications/calendar/register',
                     });
 
                 })
-                .on("confirmation-changed", removeInvites)
-                .on('remove-calendar-notifications', removeInvites)
+                .on('mark:invite:confirmed', removeInvites)
+                .on('delete:appointment', removeInvites)
                 .getInvites();
 
             function removeInvites(e, invites) {
@@ -335,7 +334,7 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderApi
-                .on('reminder-calendar', function (e, reminder) {
+                .on('set:calendar:reminder', function (e, reminder) {
                     // just for the moment as reminder view blocks whole screen
                     // will reenable the view later with new design
                     if (_.device('small && touch')) {
@@ -374,7 +373,7 @@ define('plugins/notifications/calendar/register',
                         });
                     });
                 })
-                .on('remove-calendar-notifications', removeReminders)
+                .on('delete:appointment', removeReminders)
                 .getReminders();
         }
     });

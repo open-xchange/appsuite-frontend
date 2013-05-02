@@ -11,46 +11,57 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/core/api/attachment", ["io.ox/core/http",
-                                     "io.ox/core/event",
+define('io.ox/core/api/attachment', ['io.ox/core/http',
+                                     'io.ox/core/event',
                                      'io.ox/core/config'], function (http, Events, config) {
-    "use strict";
+    'use strict';
 
     var api = {
-        //gets all attachments for a specific object, for exsample a task
+        /**
+         * gets all attachments for a specific object, for exsample a task
+         * @param  {object} options
+         * @return {deferred}
+         */
         getAll: function (options) {
 
             return http.GET({
-                module: "attachment",
+                module: 'attachment',
                 params: {
-                    action: "all",
+                    action: 'all',
                     module: options.module,
                     attached: options.id,
                     folder: options.folder || options.folder_id,
-                    columns: "1,800,801,802,803,804,805"
+                    columns: '1,800,801,802,803,804,805'
                 }
-            }).pipe(function (data) {//fix for backend bug folder should not be 0
+            }).pipe(function (data) {
+                //fix for backend bug folder should not be 0
                 for (var i = 0; i < data.length; i++) {
                     data[i].folder = options.folder || options.folder_id;
                 }
-                return _(data).reject(function (attachment) { return attachment.rtf_flag; }); // Filter out outlook-special attachments
+                // Filter out outlook-special attachments
+                return _(data).reject(function (attachment) { return attachment.rtf_flag; });
             });
         },
 
-        //removes attachments. data contains attachment ids
+        /**
+         * removes attachments
+         * @param  {object} options
+         * @param  {object} data (id properties)
+         * @return {deferred}
+         */
         remove: function (options, data) {
             var self = this;
             return http.PUT({
-                module: "attachment",
+                module: 'attachment',
                 params: {
-                    action: "detach",
+                    action: 'detach',
                     module: options.module,
                     attached: options.id,
                     folder: options.folder || options.folder_id
                 },
                 data: data
             }).done(function () {
-                self.trigger("detach", {
+                self.trigger('detach', {
                     module: options.module,
                     id: options.id,
                     folder: options.folder || options.folder_id
@@ -58,9 +69,15 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             });
         },
 
+        /**
+         * create attachment
+         * @param  {object} options
+         * @param  {object} data (attachment)
+         * @return {deferred}
+         */
         create: function (options, data) {
             var self = this;
-            var params = {action: "attach"},
+            var params = {action: 'attach'},
                 json = {module: options.module,
                         attached: options.id,
                         folder: options.folder || options.folder_id},
@@ -69,11 +86,11 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             data = data || [];
             data = _.isArray(data) ? data : [data];
             for (var i = 0; i < data.length; i++) {
-                formData.append("json_" + i, JSON.stringify(json));
-                formData.append("file_" + i, data[i]);
+                formData.append('json_' + i, JSON.stringify(json));
+                formData.append('file_' + i, data[i]);
             }
             return http.UPLOAD({
-                module: "attachment",
+                module: 'attachment',
                 params: params,
                 data: formData,
                 fixPost: true
@@ -86,6 +103,12 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             });
         },
 
+        /**
+         * create attachment
+         * @param  {object} options
+         * @param  {object} form
+         * @return {deferred}
+         */
         createOldWay: function (options, form) {
 
             var json = {module: options.module,
@@ -117,7 +140,7 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                 });
                 deferred[(response && response.error ? 'reject' : 'resolve')](response);
                 window.callback_attach = null;
-                $('#tmp').trigger("attachmentsSaved");
+                $('#tmp').trigger('attachmentsSaved');
             };
 
             $(form).attr({
@@ -130,7 +153,12 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             return deferred;
         },
 
-        //builds URL to download/preview File
+        /**
+         * builds URL to download/preview File
+         * @param  {object} data
+         * @param  {string} mode
+         * @return {string} url
+         */
         getUrl: function (data, mode) {
 
             var url = ox.apiRoot + '/attachment';
@@ -142,7 +170,8 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
                     folder: data.folder,
                     id: data.id,
                     module: data.module,
-                    attached: data.attached
+                    attached: data.attached,
+                    source: 'task'
                 });
             switch (mode) {
             case 'view':
@@ -155,8 +184,15 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             }
         },
 
+        /**
+         * save attachment
+         * @param  {object} data
+         * @param  {string} target (folder_id)
+         * @return {deferred}
+         */
         save: function (data, target) {
-            //multiple does not work, because module overides module in params. So we need to do it one by one
+            //multiple does not work, because module overides module
+            //in params. So we need to do it one by one
             // be robust
             target = target || config.get('folder.infostore');
 

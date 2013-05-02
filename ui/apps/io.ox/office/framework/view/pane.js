@@ -69,7 +69,7 @@ define('io.ox/office/framework/view/pane',
     function Pane(app, options) {
 
         var // the container element representing the pane
-            node = Utils.createContainerNode('view-pane', options),
+            node = Utils.createContainerNode('view-pane unselectable', options),
 
             // position of the pane in the application window
             position = Utils.getStringOption(options, 'position', 'top'),

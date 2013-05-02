@@ -18,20 +18,25 @@ define('io.ox/tasks/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
-     'io.ox/core/config'], function (ext, util, links, gt, notifications, print, configApi) {
+     'io.ox/core/config',
+     'io.ox/core/capabilities',
+     'io.ox/office/preview/fileActions'], function (ext, util, links, gt, notifications, print, configApi, capabilities, previewfileactions) {
 
     'use strict';
 
     //  actions
     var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink,
+        isPreviewable = function (e) {
+            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+        };
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
             return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
-            require(['io.ox/tasks/edit/main'], function (edit) {
+            ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
                 edit.getApp().launch({ folderid: baton.app.folder.get()});
             });
         }
@@ -42,7 +47,7 @@ define('io.ox/tasks/actions',
             return _.device('!small');
         },
         action: function (baton) {
-            require(['io.ox/tasks/edit/main'], function (m) {
+            ox.load(['io.ox/tasks/edit/main']).done(function (m) {
                 if (m.reuse('edit', baton.data)) return;
                 m.getApp().launch({ taskData: baton.data });
             });
@@ -54,7 +59,7 @@ define('io.ox/tasks/actions',
         action: function (baton) {
             var data = baton.data,
                 numberOfTasks = data.length || 1;
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+            ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                 //build popup
                 var popup = new dialogs.ModalDialog({async: true})
                     .addPrimaryButton('deleteTask', gt('Delete'))
@@ -77,10 +82,15 @@ define('io.ox/tasks/actions',
                                 if (result.code === "TSK-0019") { //task was already deleted somewhere else. everythings fine, just show info
                                     notifications.yell('info', gt('Task was already deleted!'));
                                     popup.close();
-                                } else {
+                                } else if (result.error) {//there is an error message from the backend
+                                    popup.idle();
+                                    popup.getBody().empty().append($.fail(result.error, function () {
+                                        popup.trigger('deleteTask', data);
+                                    })).find('h4').remove();
+                                } else {//show generic error message
                                     //show retrymessage and enable buttons again
                                     popup.idle();
-                                    popup.getBody().append($.fail(gt.ngettext('The task could not be deleted.',
+                                    popup.getBody().empty().append($.fail(gt.ngettext('The task could not be deleted.',
                                                                               'The tasks could not be deleted.', numberOfTasks), function () {
                                         popup.trigger('deleteTask', data);
                                     })).find('h4').remove();
@@ -128,7 +138,7 @@ define('io.ox/tasks/actions',
                           }
                    };
         }
-        require(['io.ox/core/http', 'io.ox/tasks/api'], function (http, api) {
+        require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
                 api.updateMultiple(data, mods.data)
                     .done(function (result) {
@@ -167,8 +177,8 @@ define('io.ox/tasks/actions',
             var task = baton.data,
                 numberOfTasks = task.length || 1,
                 vGrid = baton.grid || (baton.app && baton.app.getGrid());
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'],
-                    function (dialogs, views, api, folderAPI) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'])
+                    .done(function (dialogs, views, api, folderAPI) {
 
                 function commit(target) {
                     if (vGrid) vGrid.busy();
@@ -188,7 +198,7 @@ define('io.ox/tasks/actions',
 
                     //build popup
                     var popup = new dialogs.ModalDialog({ easyOut: true })
-                        .header($('<h3>').text(gt('Move')))
+                        .header($('<h4>').text(gt('Move')))
                         .addPrimaryButton('ok', gt('Move'))
                         .addButton('cancel', gt('Cancel'));
                     popup.getBody().css({ height: '250px' });
@@ -222,8 +232,9 @@ define('io.ox/tasks/actions',
                                 });
                             }
                         }
-                        tree.destroy();
-                        tree = popup = null;
+                        tree.destroy().done(function () {
+                            tree = popup = null;
+                        });
                     });
                 }
             });
@@ -247,7 +258,7 @@ define('io.ox/tasks/actions',
         },
         action: function (baton) {
             var data = baton.data;
-            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api'], function (editUtil, dialogs, api) {
+            ox.load(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api']).done(function (editUtil, dialogs, api) {
                 //build popup
                 var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
                 //go
@@ -262,7 +273,7 @@ define('io.ox/tasks/actions',
                         }).done(function () {
                             //update detailview
                             api.trigger("update:" + data.folder_id + '.' + data.id);
-                            api.trigger("remove-task-confirmation-notification", [{id: data.id}]);
+                            api.trigger("mark:task:confirmed", [{id: data.id}]);
                         });
                     }
                 });
@@ -278,7 +289,7 @@ define('io.ox/tasks/actions',
             print.request('io.ox/tasks/print', list);
         }
     });
-    
+
     new Action('io.ox/tasks/actions/print-disabled', {
         id: 'print',
         requires: function () {
@@ -288,7 +299,7 @@ define('io.ox/tasks/actions',
             if (list.length === 1) {
                 print.open('tasks', list[0], { template: 'infostore://12496', id: list[0].id, folder: list[0].folder_id || list[0].folder }).print();
             } else if (list.length > 1) {
-                require(['io.ox/core/http'], function (http) {
+                ox.load(['io.ox/core/http']).done(function (http) {
                     var win = print.openURL();
                     win.document.title = gt('Print tasks');
                     http.PUT({
@@ -307,11 +318,9 @@ define('io.ox/tasks/actions',
                             body = $('<div>').append(content.find('.print-tasklist'));
                         win.document.write(head.html() + body.html());
                         win.print();
-                    }).fail(function () {
-                        console.log(arguments);
                     });
                 });
-                
+
             }
         }
     });
@@ -334,9 +343,9 @@ define('io.ox/tasks/actions',
                 });
         },
         multiple: function (list, baton) {
-            require(['io.ox/core/tk/dialogs',
+            ox.load(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
-                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
+                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentApi) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data, index) {
@@ -363,9 +372,11 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: function (e) {
+            return !isPreviewable(e);
+        },
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
                 _(list).each(function (data) {
                     var url = attachmentApi.getUrl(data, 'open');
                     window.open(url);
@@ -374,11 +385,30 @@ define('io.ox/tasks/actions',
         }
     });
 
+    new Action('io.ox/tasks/actions/open', {
+        requires: function (e) {
+            return isPreviewable(e);
+        },
+        action: function (o) {
+            var file = {};
+            file.id = o.data.id;
+            file.filename = o.data.filename;
+            file.folder_id = o.data.folder;
+            file.source = 'task';
+            file.module = o.data.module;
+            file.attached = o.data.attached;
+            ox.launch('io.ox/office/preview/main', {
+                action: 'load',
+                file: file
+            });
+        }
+    });
+
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
                 _(list).each(function (data) {
                     var url = attachmentApi.getUrl(data, 'download');
                     window.open(url);
@@ -392,7 +422,7 @@ define('io.ox/tasks/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentApi) {
+            ox.load(['io.ox/core/api/attachment']).done(function (attachmentApi) {
                 //cannot be converted to multiple request because of backend bug (module overides params.module)
                 _(list).each(function (data) {
                     attachmentApi.save(data);
@@ -476,7 +506,7 @@ define('io.ox/tasks/actions',
                     .delegate('li a', 'click', {task: data}, function (e) {
                         e.preventDefault();
                         var finderId = $(this).attr("value");
-                        require(['io.ox/tasks/api'], function (api) {
+                        ox.load(['io.ox/tasks/api']).done(function (api) {
                             var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
                                 modifications = {end_date: endDate.getTime(),
                                                  id: e.data.task.id,
@@ -552,6 +582,13 @@ define('io.ox/tasks/actions',
         index: 100,
         label: gt('Preview'),
         ref: 'io.ox/tasks/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
+        id: 'open1',
+        index: 250,
+        label: gt('Open'),
+        ref: 'io.ox/tasks/actions/open'
     }));
 
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({

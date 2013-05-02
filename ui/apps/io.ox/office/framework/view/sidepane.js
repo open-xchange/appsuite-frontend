@@ -47,6 +47,22 @@ define('io.ox/office/framework/view/sidepane',
      *  all options supported by the base class Pane. The 'options.position'
      *  option will be restricted to the values 'left' and 'right'. The option
      *  'options.componentInserter' is not supported anymore.
+     *  A map of options to control the properties of the side pane. The
+     *  following options are supported:
+     *  @param {String} [options.position='right']
+     *      The position of the side pane, either 'left' or 'right'.
+     *  @param {Function} [options.insertHandler]
+     *      A function that will be called after this side pane has been
+     *      inserted into the application window. Needed if the geometry of the
+     *      pane DOM node needs to be initialized to perform further
+     *      initialization tasks. Will be called in the context of this side
+     *      pane instance.
+     *  @param {Function} [options.refreshHandler]
+     *      A function that will be called when the layout of the side pane
+     *      needs to be refreshed. Will be called when the application
+     *      controller send 'update' events (the visibility of tool boxes may
+     *      have changed), after expanding or collapsing a tool box, or when
+     *      the size of the browser window has been changed.
      */
     function SidePane(app, options) {
 

@@ -36,7 +36,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var def = $.Deferred();
     var BUFFERING = true;
     var BUFFER_INTERVAL = 1000;
+    var INFINITY = 4;
     var seq = 0;
+    var request = null;
+    var resendBuffer = {};
+    var resendDeferreds = {};
+    var serverSequenceThreshhold = 0;
 
     Event.extend(api);
 
@@ -96,6 +101,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.type = json.type;
         this.element = json.element;
         this.payloads = json.payloads || [];
+        this.tracer = json.tracer;
+        this.seq = _.isNull(json.seq) ? -1 : Number(json.seq);
+        this.tracer = json.tracer;
+        this.log = json.log;
 
         this.get = function (namespace, element) {
             return get(json, namespace, element);
@@ -106,6 +115,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             getAll(collector, json, namespace, element);
             return collector;
         };
+
+
 
     }
 
@@ -139,18 +150,50 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     });
     */
 
+    function received(stanza) {
+        if (stanza.get("atmosphere", "received")) {
+            _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
+                delete resendBuffer[Number(receipt.data)];
+                if (resendDeferreds[Number(receipt.data)]) {
+                    resendDeferreds[Number(receipt.data)].resolve();
+                } else {
+                }
+                if (api.debug) {
+                    console.log("Received receipt for " + receipt.data);
+                }
+                delete resendDeferreds[Number(receipt.data)];
+            });
+
+        } else {
+            if (stanza.seq > -1) {
+                if (api.debug) {
+                    console.log("Sending receipt " + stanza.seq);
+                }
+                subSocket.push("{type: 'ack', seq: " + stanza.seq + "}");
+            }
+            if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
+                api.trigger("receive", stanza);
+                api.trigger("receive:" + stanza.selector, stanza);
+                if (stanza.seq !== -1) {
+                    serverSequenceThreshhold = stanza.seq;
+                }
+            }
+        }
+    }
+
+
     function connect() {
         connecting = true;
 
-        var request = {
+        request = {
             url: url + '?session=' + ox.session + "&resource=" + tabId,
             contentType : "application/json",
-            logLevel : 'debug',
+            logLevel : 'shutUp',
             transport : 'long-polling',
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 9999999999999999999999999999999999
+            maxRequest: 60
         };
 
 
@@ -168,14 +211,18 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             }
         };
 
+        var reconnectCount = 0;
+
         request.onReconnect = function (request, response) {
-            //socket.info("Reconnecting");
-            if (request.requestCount > 30) {
+            reconnectCount++;
+            if (reconnectCount > 30) {
                 reconnect();
             }
         };
 
+
         request.onMessage = function (response) {
+            request.requestCount = 0;
             var message = response.responseBody;
             var json = {};
             try {
@@ -191,19 +238,21 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         console.log("<-", stanza);
                     }
                     stanza = new RealtimeStanza(stanza);
-                    api.trigger("receive", stanza);
-                    api.trigger("receive:" + stanza.selector, stanza);
+                    received(stanza);
                 });
             } else if (_.isObject(json)) { // json may be null
                 if (api.debug) {
                     console.log("<-", json);
                 }
                 var stanza = new RealtimeStanza(json);
-                api.trigger("receive", stanza);
-                api.trigger("receive:" + stanza.selector, stanza);
-                if (json.error && /^SES-0203/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1) {
+                received(stanza);
+                if (json.error && /^SES/.test(json.error)) {
+                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
+                    } else {
+                        subSocket.close();
+                        disconnected = true;
+                        ox.relogin();
                     }
                 }
 
@@ -223,7 +272,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         };
 
         request.onError = function (response) {
-            console.error(response);
+            reconnect();
         };
 
         return socket.subscribe(request);
@@ -235,6 +284,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     var subSocket = connect();
+
     disconnected = false;
     ox.on("change:session", function () {
         subSocket = connect();
@@ -248,6 +298,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var reconnectBuffer = [];
 
     function drainBuffer() {
+        request.requestCount = 0;
         subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
             console.log("->", queue.stanzas);
@@ -259,19 +310,34 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     api.send = function (options) {
         options.seq = seq;
         seq++;
-        api.sendWithoutSequence(options);
+        return api.sendWithoutSequence(options);
     };
 
     api.sendWithoutSequence = function (options) {
+        var def = $.Deferred();
+        if (options.trace) {
+            delete options.trace;
+            options.tracer = uuids.randomUUID();
+        }
+        if (_.isUndefined(options.seq)) {
+            def.resolve(); // Pretend a message without sequence numbers always arrives
+        } else {
+            resendBuffer[options.seq] = {count: 0, msg: options};
+            if (resendDeferreds[options.seq]) {
+                def = resendDeferreds[options.seq];
+            } else {
+                resendDeferreds[options.seq] = def;
+            }
+        }
         if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (connecting) {
             // Buffer messages until connect went through
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
@@ -280,11 +346,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 setTimeout(drainBuffer, BUFFER_INTERVAL);
             }
         } else {
+            request.requestCount = 0;
             subSocket.push(JSON.stringify(options));
             if (api.debug) {
                 console.log("->", options);
             }
         }
+        return def;
     };
 
     api.on("open", function () {
@@ -294,14 +362,31 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         reconnectBuffer = [];
     });
 
+    api.inspectStatus = function () {
+        console.log("Resend Buffer", resendBuffer);
+        console.log("Resend Deferreds", resendDeferreds);
+        console.log("Connecting", connecting);
+        console.log("Disconnected", disconnected);
+    };
+
     setInterval(function () {
         if (!connecting && !disconnected) {
-            subSocket.push("{\"type\": \"ping\"}");
+            subSocket.push("{\"type\": \"ping\", \"commit\": true}");
         }
-    }, 20000);
+    }, 30000);
 
-
-
+    setInterval(function () {
+        _(resendBuffer).each(function (m) {
+            m.count++;
+            if (m.count < INFINITY) {
+                api.sendWithoutSequence(m.msg);
+            } else {
+                delete resendBuffer[m.msg.seq];
+                resendDeferreds[m.msg.seq].reject();
+                delete resendDeferreds[m.msg.seq];
+            }
+        });
+    }, 5000);
 
     return def;
 });

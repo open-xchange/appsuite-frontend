@@ -11,6 +11,24 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+#background_loader.secure {
+    background-color: rgba(255, 255, 255, 0);
+    .transition(background-color 0.5s linear);
+
+    &.block {
+        background-color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+
+        button {
+            display: none;
+            position: relative;
+            top: 52%;
+        }
+
+    }
+
+}
+
 #io-ox-core.wallpaper {
     .radial-gradient(@wallpaperColor1, @wallpaperColor2, @wallpaperColor3);
 }
@@ -127,11 +145,14 @@
         white-space: nowrap;
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
+        & > a { color: @topbarLauncherColor; }
+        & > a:hover { text-decoration: none; }
     }
 
     .launcher.hover {
         color: @topbarLauncherColor-hover;
         background-color: @topbarLauncherBackgroundHover;
+        & > a { color: @topbarLauncherColor-hover; }
     }
 
     .launcher.upsell {
@@ -147,6 +168,7 @@
     .launcher.active-app {
         color: @topbarLauncherColorActive;
         background-color: @topbarLauncherBackgroundActive;
+        & > a { color: @topbarLauncherColorActive; }
     }
 
     .launcher.user-content i[class^="icon-"] { margin-right: 8px; color: #ccc; }
@@ -164,6 +186,10 @@
 
     .launcher-dropdown li {
         text-align: left;
+        &.upsell i.icon-lock {
+            color: #AAA;
+            width: 1.25em;
+        }
     }
 
     .launcher-dropdown ul {
@@ -243,11 +269,10 @@
         color: #fff;
     }
 
-    .icon-refresh.icon-spin.icon-spin-paused {
+    .icon-refresh.icon-spin-paused {
         -webkit-animation-play-state: paused;
         -moz-animation-play-state: paused;
         animation-play-state: paused;
-        color: @gray;
     }
 
     .launcher.io-ox-progress i {
@@ -879,6 +904,11 @@ a.button {
     padding-bottom: 1em;
 }
 
+.vgrid-cell.tail * {
+    white-space: normal;
+    line-height: 1.1em;
+}
+
 .io-ox-sidepopup .vgrid-cell {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -1007,8 +1037,13 @@ input[type=search] {
 /* Dialogs */
 .io-ox-dialog-underlay {
     background-color: black;
-    opacity: 0.30;
+    opacity: 0;
     z-index: 65000;
+    .transition(opacity 0.15s linear);
+}
+
+.io-ox-dialog-underlay.in {
+    opacity: 0.30;
 }
 
 .io-ox-dialog-popup {
@@ -1033,6 +1068,16 @@ input[type=search] {
     .modal-body.max-height-250 { max-height: 250px; }
     .modal-body.max-height-300 { max-height: 300px; }
     .modal-body.max-height-350 { max-height: 350px; }
+
+    &.zero-padding {
+        .modal-body {
+            padding: 0;
+            iframe {
+                display: block;
+                .border-radius(5px 5px 0 0);
+            }
+        }
+    }
 
     .content {
         overflow: auto;
@@ -1069,8 +1114,6 @@ input[type=search] {
 .io-ox-dialog-popup.topmost {
     z-index: 65003;
 }
-
-
 
 .io-ox-dialog-pane {
     width: 500px;  /* Shrink to fit would be nicer */
@@ -1170,27 +1213,32 @@ span.hint {
     margin-left: 0;
 }
 
-.io-ox-multi-selection .summary {
-    font-size: 24pt;
-    font-weight: 300;
-    line-height: 1.2em;
-    color: #ccc;
-}
+.io-ox-multi-selection {
 
-.io-ox-multi-selection .summary b {
-    color: #aaa;
-}
+    padding: 0 30px;
 
-.io-ox-multi-selection .io-ox-inline-links {
-    text-align: center;
-}
+    .summary {
+        font-size: 24pt;
+        font-weight: 300;
+        line-height: 1.2em;
+        color: #ccc;
+    }
 
-.io-ox-multi-selection .io-ox-inline-links a {
-    color: @inlineLinkColor;
-}
+    .summary b {
+        color: #aaa;
+    }
 
-.io-ox-multi-selection .io-ox-inline-links.empty {
-    display: none;
+    .io-ox-inline-links {
+        text-align: center;
+    }
+
+    .io-ox-inline-links a {
+        color: @inlineLinkColor;
+    }
+
+    .io-ox-inline-links.empty {
+        display: none;
+    }
 }
 
 .inline-buttons {
@@ -1563,8 +1611,8 @@ input.nice-input {
         top: auto;
         height: 40px - 1;
         line-height: 40px - 1;
-        border-top: 1px solid darken(@foldertreeSidepanelBackground, 3%);
-        background-color: darken(@foldertreeSidepanelBackground, 6%);
+        border-top: 1px solid darken(@foldertreeSidepanelBackground, 10%);
+        background-color: @foldertreeSidepanelBackground;
     }
 
     &.side-shift {

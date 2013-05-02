@@ -112,8 +112,9 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 self.trigger('reset', tree);
             } else {
                 resolve(path, function (tmp, key) {
+                    var previous = tmp[key];
                     tmp[key] = value;
-                    self.trigger('change:' + path, value).trigger('change', path, value);
+                    self.trigger('change:' + path, value).trigger('change', path, value, previous);
                 }, true);
             }
             return this;
@@ -270,12 +271,20 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         }
         return promise.then(function (hash) {
-            return require([path + '/settings/defaults']).then(function (defaults) {
-                if (hash[path] && hash[path].tree) {
-                    hash[path].tree = _.extend(defaults, hash[path].tree || {});
+            return require([path + '/settings/defaults']).then(
+               function defaultsSuccess(defaults) {
+                    if (hash[path] && hash[path].tree) {
+                        hash[path].tree = _.extend(defaults, hash[path].tree || {});
+                    }
+                    return hash[path] || { tree: {}, meta: {} };
+                },
+                function defaultsFail(e) {
+                    console.warn('Could not load defaults for', path);
+                    return $.Deferred().resolve(
+                        hash[path] || { tree: {}, meta: {} }
+                    );
                 }
-                return hash[path] || { tree: {}, meta: {} };
-            });
+            );
         });
     }
 
@@ -287,15 +296,32 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             }
             // bulk load?
             if (_(list).contains(name)) {
-                preload(name).then(function (data) {
-                    var settings = new Settings(name, data.tree, data.meta);
-                    load(settings);
-                }, load.error);
+                preload(name).then(
+                    function preloadSuccess(data) {
+                        var settings = new Settings(name, data.tree, data.meta);
+                        load(settings);
+                    },
+                    function preloadFail() {
+                        // hard fail
+                        alert('Severe error: Failed to load important user settings. Please check your connection and retry.');
+                        location.href = 'signin#autologin=false';
+                    }
+                );
             } else {
                 var settings = new Settings(name);
-                settings.load().done(function () {
-                    load(settings);
-                });
+                settings.load().then(
+                    function loadSuccess() {
+                        load(settings);
+                    },
+                    function loadFaul() {
+                        try {
+                            load.error({});
+                        } catch (e) {
+                            console.error(e.message);
+                        }
+                        requirejs.undef('settings!' + name);
+                    }
+                );
             }
         }
     };

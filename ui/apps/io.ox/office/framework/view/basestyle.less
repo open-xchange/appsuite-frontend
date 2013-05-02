@@ -180,6 +180,11 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
         padding: 0;
         background: @app-pane-fill-color;
 
+        /* prevent dotted focus rectangle around the control */
+        &, &:focus, &:active {
+            outline: none;
+        }
+
         /* the container element for the application contents */
         > .app-container {
             position: absolute;

@@ -158,14 +158,6 @@ define("io.ox/mail/write/view-main",
             return this.createLink(id, label).appendTo(this.scrollpane);
         },
 
-        applyHighPriority: function (flag) {
-            if (flag) {
-                this.priorityOverlay.addClass('high');
-            } else {
-                this.priorityOverlay.removeClass('high');
-            }
-        },
-
         createUpload: (function () {
 
             var change = function (e) {
@@ -584,7 +576,11 @@ define("io.ox/mail/write/view-main",
                     // priority
                     this.priorityOverlay = $('<div>').addClass('priority-overlay')
                         .attr('title', 'Priority')
-                        .text(_.noI18n('\u2605\u2605\u2605'))
+                        .append(
+                            $('<i class="icon-star">'),
+                            $('<i class="icon-star">'),
+                            $('<i class="icon-star">')
+                        )
                         .on('click', $.proxy(togglePriority, this))
                 ),
                 // editor container
@@ -770,16 +766,14 @@ define("io.ox/mail/write/view-main",
     }
 
     function togglePriority() {
-        var high = this.form.find('input[name=priority][value=1]'),
-            normal = this.form.find('input[name=priority][value=3]');
-        if (high.prop('checked')) {
-            high.prop('checked', false);
-            normal.prop('checked', true);
-            this.applyHighPriority(false);
+        var priority = this.app.getPriority();
+        // cycle priorities
+        if (priority === 3) {
+            this.app.setPriority(1);
+        } else if (priority === 1) {
+            this.app.setPriority(5);
         } else {
-            high.prop('checked', true);
-            normal.prop('checked', false);
-            this.applyHighPriority(true);
+            this.app.setPriority(3);
         }
     }
 

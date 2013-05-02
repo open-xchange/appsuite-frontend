@@ -29,10 +29,29 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
 
         this.destroy = function () {
             this.group.destroy();
+            delete rooms[roomName];
         };
 
         this.say = function (text) {
-            this.group.send({
+            return this.group.send({
+                element: "message",
+                payloads: [
+                    {
+                        element: "action",
+                        data: "say"
+                    },
+                    {
+                        element: "message",
+                        namespace: "china",
+                        data: text
+                    }
+                ]
+            });
+        };
+
+        this.sayAndTrace = function (text) {
+            return this.group.send({
+                trace: true,
                 element: "message",
                 payloads: [
                     {
@@ -49,7 +68,7 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.requestLog = function (text) {
-            this.group.send({
+            return this.group.send({
                 element: "message",
                 payloads: [
                     {
@@ -61,6 +80,13 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
         };
 
         this.group.on("receive", function (e, m) {
+            if (false && m.log) {
+                console.log("-------------------------");
+                _(m.log).each(function (entry) {
+                    console.log(entry);
+                });
+                console.log("-------------------------");
+            }
             var message = m.get("china", "message");
 
             if (message) {
@@ -72,6 +98,14 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
                     console.log(m.data.sender, m.data.message);
                 });
             }
+        });
+
+        this.group.on("error", function () {
+            console.log("ERROR!");
+        });
+
+        this.group.on("apiOpen", function () {
+            console.log("apiOpen");
         });
     }
 

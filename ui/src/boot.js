@@ -13,7 +13,7 @@
 
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
-    window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
+    window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop, info: $.noop };
 }
 
 // not document.ready casue we wait for CSS to be loaded
@@ -218,9 +218,13 @@ $(window).load(function () {
                 // show loader
                 $('#background_loader').fadeIn(DURATION, function () {
                     var ref = _.url.hash('ref'),
-                        location = '#?' + enc(_.rot('session=' + ox.session + '&user=' + ox.user +
+                        location = '#?' + enc(_.rot(
+                            'session=' + ox.session +
+                            '&user=' + ox.user +
+                            '&user_id=' + ox.user_id +
+                            '&context_id=' + ox.context_id +
                             '&secretCookie=' + $('#io-ox-login-store-box').prop('checked') +
-                            '&user_id=' + ox.user_id + '&language=' + ox.language + (ref ? '&ref=' + enc(ref) : ''), 1)
+                            '&language=' + ox.language + (ref ? '&ref=' + enc(ref) : ''), 1)
                         );
                     // use redirect servlet for real login request
                     // this even makes chrome and safari asking for storing credentials
@@ -422,7 +426,7 @@ $(window).load(function () {
                 }
                 if (!relogin) {
                     // enqueue last request
-                    queue = [{ request: request, deferred: deferred }];
+                    queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
                     // set flag
                     relogin = true;
                     require(['io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/core', 'settings!io.ox/core'], function (dialogs, notifications, gt, settings) {
@@ -475,7 +479,9 @@ $(window).load(function () {
                     });
                 } else {
                     // enqueue last request
-                    queue.push({ request: request, deferred: deferred });
+                    if (request && deferred) {
+                        queue.push({ request: request, deferred: deferred });
+                    }
                 }
             };
         }());
@@ -608,22 +614,26 @@ $(window).load(function () {
                 }
             }
 
+            var hash = _.url.hash();
+
             // got session via hash?
-            if (_.url.hash('session')) {
+            if (hash.session) {
+
+                // set session; session.store() might need it now (formlogin)
+                var hash = _.url.hash();
+                ox.session = hash.session;
 
                 // set store cookie?
-                (_.url.hash('store') === 'true' ? session.store() : $.when()).always(function () {
+                (hash.store === 'true' ? session.store() : $.when()).always(function () {
 
-                    var ref = _.url.hash('ref');
+                    var ref = hash.ref;
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
                     _.url.redirect(ref ? ref : '#');
 
                     configCache = new cache.SimpleCache('manifests', true);
 
-                    // fetch user config (need session now)
-                    var hash = _.url.hash();
-                    ox.session = hash.session;
-                    ox.secretCookie = _.url.hash('secretCookie') === 'true';
+                    // fetch user config
+                    ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         serverUp();
                         // store login data (cause we have all valid languages now)
@@ -631,7 +641,8 @@ $(window).load(function () {
                             locale: hash.language,
                             session: hash.session,
                             user: hash.user,
-                            user_id: parseInt(hash.user_id || '0', 10)
+                            user_id: parseInt(hash.user_id || '0', 10),
+                            context_id: hash.context_id
                         });
                         // cleanup url
                         _.url.hash({
@@ -639,6 +650,7 @@ $(window).load(function () {
                             session: null,
                             user: null,
                             user_id: null,
+                            context_id: null,
                             secretCookie: null,
                             store: null
                         });
@@ -648,6 +660,12 @@ $(window).load(function () {
                         });
                     });
                 });
+
+            } else if (hash.autologin === 'false') {
+
+                // needed for show-stopping errors like broken settings
+                configCache = new cache.SimpleCache('manifests', true);
+                continueWithoutAutoLogin();
 
             } else if (!ox.online) {
 

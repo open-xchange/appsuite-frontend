@@ -26,6 +26,7 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
+     'less!io.ox/calendar/week/style.less',
      'less!io.ox/calendar/freebusy/style.less'], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
@@ -90,13 +91,16 @@ define('io.ox/calendar/freebusy/controller',
                 } else {
                     this.updateAppointment(data);
                 }
+                
             };
 
             this.postprocess = function () {
                 // hide show all checkbox
                 this.getCalendarView().showAll(false);
                 // pre-fill participants list
-                self.participants.reset(options.participants || []);
+                _(options.participants).each(function (participant) {
+                    resolveParticipants(participant);
+                });
                 // auto focus
                 this.autoCompleteControls.find('.add-participant').focus();
                 // scroll to proper time (resets cell height, too; deferred not to block UI)
@@ -114,7 +118,13 @@ define('io.ox/calendar/freebusy/controller',
 
             this.getParticipants = function () {
                 return this.participants.map(function (model) {
-                    return { id: model.get('id'), type: model.get('type') };
+                    var tempParticipant = { id: model.get('id'), type: model.get('type') };
+                    if (model.get('type') === 5) {//External participants need more data for an appointment
+                        tempParticipant.id = tempParticipant.mail = model.getEmail();
+                        tempParticipant.display_name = model.getDisplayName();
+                        tempParticipant.image1_url = model.getImage();
+                    }
+                    return tempParticipant;
                 });
             };
 
@@ -311,6 +321,38 @@ define('io.ox/calendar/freebusy/controller',
                 var cid = model.cid;
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
             }
+            
+            function resolveParticipants(data) { //resolves groups to it's users and adds them
+                
+                if (_.isArray(data.distribution_list)) {
+                    // resolve distribution lits
+                    _(data.distribution_list).each(function (data) {
+                        data.type = 5;
+                        self.participants.add(data);
+                    });
+                } else if (data.type === 2) {
+                    // fetch users en block first
+                    self.participantsView.css('visibility', 'hidden').parent().busy();
+                    // resolve group
+                    userAPI.getList(data.members, true, { allColumns: true })
+                        .done(function (list) {
+                            // add type and polish display_name
+                            _(list).each(function (obj) {
+                                obj.type = 1;
+                                obj.sort_name = contactsUtil.getSortName(obj);
+                            });
+                            _(list).chain().sortBy('sort_name').each(function (data) {
+                                self.participants.add(data);
+                            });
+                        })
+                        .always(function () {
+                            self.participantsView.css('visibility', '').parent().idle();
+                        });
+                } else {
+                    // single participant
+                    self.participants.add(data);
+                }
+            }
 
             this.participants
                 .on('remove', removeParticipant)
@@ -344,37 +386,7 @@ define('io.ox/calendar/freebusy/controller',
                     resources: true
                 });
 
-            this.autocomplete.on('select', function (data) {
-
-                if (_.isArray(data.distribution_list)) {
-                    // resolve distribution lits
-                    _(data.distribution_list).each(function (data) {
-                        data.type = 5;
-                        self.participants.add(data);
-                    });
-                } else if (data.type === 2) {
-                    // fetch users en block first
-                    self.participantsView.css('visibility', 'hidden').parent().busy();
-                    // resolve group
-                    userAPI.getList(data.members, true, { allColumns: true })
-                        .done(function (list) {
-                            // add type and polish display_name
-                            _(list).each(function (obj) {
-                                obj.type = 1;
-                                obj.sort_name = contactsUtil.getSortName(obj);
-                            });
-                            _(list).chain().sortBy('sort_name').each(function (data) {
-                                self.participants.add(data);
-                            });
-                        })
-                        .always(function () {
-                            self.participantsView.css('visibility', '').parent().idle();
-                        });
-                } else {
-                    // single participant
-                    self.participants.add(data);
-                }
-            });
+            this.autocomplete.on('select', resolveParticipants);
 
             this.changeMode = function (mode) {
                 if (currentMode !== mode) {

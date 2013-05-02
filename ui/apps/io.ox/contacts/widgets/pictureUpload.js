@@ -9,7 +9,10 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/widgets.less'], function () {
+define('io.ox/contacts/widgets/pictureUpload',
+    ['io.ox/core/notifications',
+     'gettext!io.ox/contacts',
+     'less!io.ox/contacts/widgets/widgets.less'], function (notifications, gt) {
 
     "use strict";
 
@@ -29,8 +32,8 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                 e.stopImmediatePropagation();
                 this.model.set("image1", '');
                 this.closeBtn.hide();
-                var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
-                this.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
+                this.setImageURL();
+                this.fileInput.val('');
             },
 
             handleFileSelect: function (e, input) {
@@ -40,18 +43,27 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                     if ($input.val()) {
                         fileData = $input.parent();
                     }
+                    // user information
+                    this.setImageURL();
+                    notifications.yell('success', gt('Your selected picture will be displayed after saving'));
                 } else {
                     fileData = input.files[0];
                 }
                 this.model.set("pictureFile", fileData);
+                this.model.unset("image1");
             },
 
             displayImageURL: function (e) {
-                this.$el.find('.picture-uploader').css('background-image', 'url(' + this.model.get('image1_url') + ')');
+                this.setImageURL(this.model.get('image1_url'));
+            },
+
+            setImageURL: function (url) {
+                this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
             },
 
             displayPictureFile: function () {
                 if (this.oldMode) {
+                    this.setImageURL();
                     return;
                 }
 
@@ -61,7 +73,7 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
 
                 reader.onload = function (e) {
                     self.closeBtn.show();
-                    self.$el.find('.picture-uploader').css('background-image', 'url(' + e.target.result + ')');
+                    self.setImageURL(e.target.result);
                 };
 
                 reader.readAsDataURL(file);
@@ -71,18 +83,15 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                 var self = this,
                     imageUrl = this.model.get('image1_url'),
                     hasImage = false;
-                this.oldMode = _.browser.IE < 10;
+                self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
                     imageUrl = imageUrl.replace(/^\/ajax/, ox.apiRoot);
                     hasImage = true;
-                } else {
-                    imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 }
 
                 this.$el.append(
-                    $('<div class="picture-uploader thumbnail">').css({
-                        backgroundImage: 'url(' + imageUrl + ')',
+                    self.imgCon = $('<div class="picture-uploader thumbnail">').css({
                         cursor: 'pointer',
                         position: 'relative'
                     }).append(
@@ -91,12 +100,14 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                         })[hasImage ? 'show' : 'hide']()
                      ),
                     $('<form>').css({position: 'absolute'}).append(
-                        $('<input type="file" name="file" accepts="image/*">').css({opacity: 0}).css({height: '110px', width: '110px', cursor: 'pointer'})
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*">').css({opacity: 0}).css({height: '110px', width: '110px', cursor: 'pointer'})
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
                     )
                 );
+
+                self.setImageURL(imageUrl);
 
                 if (this.clear) {
                     this.$el.append($('<div>').css({clear: 'both'}));

@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+<title></title>
+<script>
+function close() {
+    // get parent window from within iframe (needs same origin of course)
+    var win = window.opener || window.parent;
+    if (win) {
+        // close wizard
+        win.require(['plugins/upsell/simple-wizard/register'], function (wizard) {
+            wizard.close();
+        });
+    }
+}
+</script>
+</head>
+<body onload="close()">
+</body>
+</html>

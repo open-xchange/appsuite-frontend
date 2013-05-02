@@ -38,6 +38,12 @@ define('io.ox/core/api/autocomplete',
     }
 
     Autocomplete.prototype = {
+
+        /**
+         * search
+         * @param  {string} query
+         * @return {deferred} returns results
+         */
         search: function (query) {
 
             query = typeof query !== 'string' ? '' : $.trim(query).toLowerCase();
@@ -76,6 +82,13 @@ define('io.ox/core/api/autocomplete',
                 });
             }
         },
+
+        /**
+         * process results
+         * @param  {string} type
+         * @param  {array} data (contains results array)
+         * @return {array}
+         */
         processItem: function (type, data) {
             var result = _(data.data).map(function (dataItem) {
                 var obj = {
@@ -86,6 +99,14 @@ define('io.ox/core/api/autocomplete',
             });
             return result;
         },
+
+        /**
+         * process contact results
+         * @param  {string} type
+         * @param  {array}  data (contains results array)
+         * @param  {string} query
+         * @return {array}
+         */
         processContactResults: function (type, data, query) {
             var tmp = [], hash = {}, self = this;
 
@@ -124,6 +145,15 @@ define('io.ox/core/api/autocomplete',
             hash = null;
             return tmp;
         },
+
+        /**
+         * process contact items
+         * @param  {string} type
+         * @param  {array} list
+         * @param  {object} obj
+         * @param  {string} field
+         * @return {undefined}
+         */
         processContactItem: function (type, list, obj, field) {
             if (obj.data[field]) {
                 var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;

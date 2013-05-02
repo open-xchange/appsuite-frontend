@@ -63,6 +63,10 @@ define('io.ox/files/list/perspective',
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        if (app.getWindow().search.active) {
+            grid.setMode('search');
+        }
+
         // The list request is not needed and is too slow
         // ids contains all required information
         grid.setListRequest(function (ids) {
@@ -155,10 +159,15 @@ define('io.ox/files/list/perspective',
                     })
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
-                            if (e && e.code && e.code === 'UPL-0005')
+                            if (e && e.code && e.code === 'UPL-0005') {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                            else
+                            }
+                            else if (e && e.code && e.code === 'FLS-0024') {
+                                notifications.yell('error', gt('The allowed quota is reached.'));
+                            }
+                            else {
                                 notifications.yell('error', gt('This file has not been added'));
+                            }
                         });
                     });
             },
@@ -198,10 +207,15 @@ define('io.ox/files/list/perspective',
                     })
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
-                            if (e && e.code && e.code === 'UPL-0005')
+                            if (e && e.code && e.code === 'UPL-0005') {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                            else
+                            }
+                            else if (e && e.code && e.code === 'FLS-0024') {
+                                notifications.yell('error', gt('The allowed quota is reached.'));
+                            }
+                            else {
                                 notifications.yell('error', gt('This file has not been added'));
+                            }
                         });
                     });
             },

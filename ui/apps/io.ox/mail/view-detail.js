@@ -147,9 +147,13 @@ define('io.ox/mail/view-detail',
             // switch to proper perspective
             ox.ui.Perspective.show(app, 'list').done(function () {
                 // set proper folder
-                app.folder.set(folder).done(function () {
+                if (app.folder.get() === folder) {
                     app.getGrid().selection.set(id);
-                });
+                } else {
+                    app.folder.set(folder).done(function () {
+                        app.getGrid().selection.set(id);
+                    });
+                }
             });
         });
     };
@@ -328,6 +332,12 @@ define('io.ox/mail/view-detail',
                             // just set width; max-width=100% should still apply
                             if (w) { node.css({ width: w + 'px' }); }
                             if (h) { node.css({ height: h + 'px'}); }
+                        })
+                        .end()
+                        // tables with bgcolor attribute
+                        .find('table[bgcolor]').each(function () {
+                            var node = $(this), bgcolor = node.attr('bgcolor');
+                            node.css('background-color', bgcolor);
                         })
                         .end();
                         // nested message?
@@ -621,7 +631,7 @@ define('io.ox/mail/view-detail',
                             );
                         }
                     }
-                    node.get(0).appendChild(frag);
+                    node.empty().get(0).appendChild(frag);
                     // get nodes
                     nodes = node.find('.mail-detail').not('.thread-inline-actions');
                     // set initial scroll position (37px not to see thread's inline links)
@@ -633,7 +643,7 @@ define('io.ox/mail/view-detail',
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
                     console.error('mail.drawThread', e.message, e);
-                    fail(node, baton);
+                    fail(node.empty(), baton);
                 }
             }
 
@@ -646,7 +656,7 @@ define('io.ox/mail/view-detail',
 
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).then(
-                    function (list) {
+                    function sucess(list) {
 
                         var i, $i, pos, numVisible, top, bottom, defs = [];
 
@@ -678,16 +688,16 @@ define('io.ox/mail/view-detail',
                                     next(node, baton, pos, top, bottom, $.makeArray(arguments));
                                 },
                                 function () {
-                                    fail(node, baton);
+                                    fail(node.empty(), baton);
                                 }
                             );
                         } catch (e) {
                             console.error('mail.drawThread', e.message, e);
-                            fail(node, baton);
+                            fail(node.empty(), baton);
                         }
                     },
-                    function () {
-                        fail(node, baton);
+                    function fail() {
+                        fail(node.empty(), baton);
                     }
                 );
             };
@@ -1078,8 +1088,8 @@ define('io.ox/mail/view-detail',
                         var self = this,
                             opt = opt || {};
                         //create folder; create and refresh subscription
-                        require(['io.ox/core/pubsub/api']).done(function (pubsubApi) {
-                            pubsubApi.autoSubscribe(pub.module, pub.name, pub.url).then(
+                        require(['io.ox/core/pubsub/util']).done(function (pubsubUtil) {
+                            pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url).then(
                                 function success(data) {
                                     notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
                                     //refresh folder views
@@ -1129,13 +1139,26 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function replaceWithUnmodified(e) {
+        e.preventDefault();
+        // be busy
+        var section = e.data.node.parent();
+        section.find('article').busy().empty();
+        // get unmodified mail
+        api.getUnmodified(e.data.data).done(function (unmodifiedData) {
+            // keep outer node due to custom CSS classes (e.g. page)
+            var content = that.draw(unmodifiedData);
+            section.parent().empty().append(content.children());
+            section = content = null;
+        });
+    }
+
     // TODO: remove click handler out of inner closure
     ext.point('io.ox/mail/detail/header').extend({
         index: 195,
         id: 'externalresources-warning',
         draw: function (baton) {
             var data = baton.data;
-            var self = this;
             if (data.modified === 1) {
                 this.append(
                     $('<div class="alert alert-info cursor-pointer">')
@@ -1146,18 +1169,7 @@ define('io.ox/mail/view-detail',
                              $.txt(gt('External images have been blocked to protect you against potential spam!'))
                          )
                      )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/mail/api'], function (api) {
-                            // get unmodified mail
-                            api.getUnmodified(data)
-                                .done(function (unmodifiedData) {
-                                    // keep outer node due to custom CSS classes (e.g. page)
-                                    var content = that.draw(unmodifiedData);
-                                    self.parent().empty().append(content.children());
-                                });
-                        });
-                    })
+                    .on('click', { node: this, data: api.reduce(data) }, replaceWithUnmodified)
                 );
             }
         }
@@ -1193,7 +1205,8 @@ define('io.ox/mail/view-detail',
                     // assuming touch-pad/magic mouse for macos
                     // chrome & safari do a good job; firefox is not smooth
                     // ios means touch devices; that's fine
-                    _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
+                    // biggeleben: DISABLED for 7.2.1 due to too many potential bugs
+                    false && _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
                 )
                 .append(
                     content.content,

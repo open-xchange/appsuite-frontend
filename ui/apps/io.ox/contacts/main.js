@@ -240,7 +240,7 @@ define("io.ox/contacts/main",
         commons.wireGridAndRefresh(grid, api, win);
         commons.addGridToolbarFolder(app, grid);
 
-        api.on("edit", function (evt, updated) {
+        api.on('update:image', function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
                 showContact(app.currentContact);
             }

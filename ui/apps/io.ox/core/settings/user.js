@@ -42,11 +42,16 @@ define('io.ox/core/settings/user', [
                 });
 
                 user.on('sync:start', function () {
-                    dialogs.busy($node);
+                    // dont't hide on IE to fix form submit.
+                    if (!_.browser.IE || _.browser.IE > 9) {
+                        dialogs.busy($node);
+                    }
                 });
 
                 user.on('sync:always', function () {
-                    dialogs.idle($node);
+                    if (!_.browser.IE || _.browser.IE > 9) {
+                        dialogs.idle($node);
+                    }
                 });
             });
         },

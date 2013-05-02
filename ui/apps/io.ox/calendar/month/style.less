@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.io-ox-calendar-main .month-view {
+.month-view {
 
     * {
         .box-sizing(border-box);
@@ -20,11 +20,11 @@
     .daylabel {
 
         width: 100%;
-        height: 26px;
+        height: 24px;
         left: 0;
         font-family: @lightFontFamily;
         font-size: 13px;
-        line-height: 25px;
+        line-height: 24px;
         z-index: 3;
         border-bottom: 1px solid #ccc;
 
@@ -40,11 +40,11 @@
     .scrollpane {
 
         position: absolute;
-        top: 67px;
+        top: @calendarToolbarHeight + 27;
         right: 0;
         bottom: 0;
         left: 0;
-        .overflow(auto);
+        .overflow-y(scroll);
         .backface-visibility(hidden);
 
         .week {
@@ -176,6 +176,16 @@
         }
 
     }
+
+    /* Mobile */
+    @media all and (max-width: 480px) {
+
+        .scrollpane {
+            top: @calendarToolbarHeight + 26 + 25;
+        }
+
+    }
+
 
     /* Appointment */
     .appointment {

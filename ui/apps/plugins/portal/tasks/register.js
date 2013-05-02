@@ -25,6 +25,19 @@ define("plugins/portal/tasks/register",
 
         title: gt('Tasks'),
 
+        initialize: function (baton) {
+            taskApi.on('update create delete', function (event, element) {
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         action: function (baton) {
             ox.launch('io.ox/tasks/main');
         },
@@ -37,9 +50,10 @@ define("plugins/portal/tasks/register",
 
         preview: function (baton) {
 
-            var content = $('<div class="content">');
+            var content = $('<div class="content">'),
+                tasks;
 
-            var tasks = _(baton.data).filter(function (task) {
+            tasks = _(baton.data).filter(function (task) {
                 return task.end_date !== null && task.status !== 3;
             });
 
@@ -70,21 +84,11 @@ define("plugins/portal/tasks/register",
         },
 
         draw: function (baton) {
-            var popup = this.busy(),
-                content;
-
+            var popup = this.busy();
             require(['io.ox/tasks/view-detail', 'io.ox/tasks/api'], function (view, api) {
-
-                function contentCheck(e) {
-                    popup.parent().parent().find('button').trigger('click');
-                    popup = null;
-                    api.off('removePopup', contentCheck);
-
-                }
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(content = view.draw(data));
-                    api.on('removePopup', contentCheck);
+                    popup.idle().append(view.draw(data));
                 });
             });
         }

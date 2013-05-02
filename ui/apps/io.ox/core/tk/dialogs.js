@@ -55,7 +55,10 @@ define("io.ox/core/tk/dialogs",
             }, options),
 
             keepFocus = function (e) {
-                if (!nodes.popup.get(0).contains(e.target)) {
+                // we have to consider that two popups might be open
+                // so we cannot just refocus the current popup
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup').length > 0;
+                if (!insidePopup) {
                     e.stopPropagation();
                     nodes.popup.focus();
                 }
@@ -324,7 +327,9 @@ define("io.ox/core/tk/dialogs",
                 });
             }
 
-            nodes.underlay.show();
+            this.trigger('beforeshow');
+
+            nodes.underlay.show().addClass('in');
             nodes.popup.show();
 
             // focus button (if available)
@@ -415,7 +420,7 @@ define("io.ox/core/tk/dialogs",
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<button class="btn btn-small btn-primary" data-action="close" >').text(gt('Close'))
+                    $('<button class="btn btn-small btn-primary" data-action="close" >').text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
@@ -488,7 +493,7 @@ define("io.ox/core/tk/dialogs",
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
                 self.nodes.click.off("click", closeByClick);
-                pane.off('delete');
+                popup.off('view:remove', closeByEvent);
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -563,7 +568,7 @@ define("io.ox/core/tk/dialogs",
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
                 self.nodes.closest.on("scroll", closeByScroll);
-                pane.on("remove", closeByEvent);
+                popup.on('view:remove', closeByEvent);
                 $(document).on("keydown", closeByEscapeKey);
 
 

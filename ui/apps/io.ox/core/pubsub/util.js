@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/api',
+define('io.ox/core/pubsub/util',
     ['io.ox/core/api/pubsub',
      'io.ox/core/config',
      'io.ox/core/api/folder',

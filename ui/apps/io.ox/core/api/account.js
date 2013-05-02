@@ -84,29 +84,89 @@ define('io.ox/core/api/account',
 
     Events.extend(api);
 
+    /**
+     * is unified
+     * @param  {string}  id (folder_id)
+     * @return {boolean}
+     */
     api.isUnified = function (id) {
         // is account? (unified inbox is not a usual account)
         return !api.isAccount(id);
     };
 
+    /**
+     * is unified folder
+     * @param  {string}  id (folder_id)
+     * @return {boolean}
+     */
     api.isUnifiedFolder = function (id) {
         return regUnified.test(id) && api.isUnified(id);
     };
 
+    /**
+     * is account folder
+     * @param  {string}  id (folder_id)
+     * @return {boolean}
+     */
     api.isAccount = function (id) {
+        if (_.isNumber(id)) return id in idHash;
         var match = String(id).match(/^default(\d+)/);
         return match && match[1] in idHash;
     };
 
+    /**
+     * is primary folder
+     * @param  {string}  id (folder_id)
+     * @return {boolean}
+     */
     api.isPrimary = function (id) {
         return (/^default0/).test(id);
     };
 
+    /**
+     * is external folder
+     * @param  {string}  id (folder_id)
+     * @return {boolean}
+     */
     api.isExternal = function (id) {
         return !api.isPrimary(id) && !api.isUnified(id);
     };
 
-    // is drafts, trash, spam etc.
+    /**
+     * get unified mailbox name
+     * @return {deferred} returns array or null
+     */
+    api.getUnifiedMailboxName = function () {
+        var def = $.Deferred();
+        require(['io.ox/core/api/folder'], function (folderAPI) {
+            return $.when(
+                folderAPI.getSubFolders(),
+                api.all()
+            ).then(function (folders, accounts) {
+                var mailFolders, mailAccounts, unified, diff;
+
+                mailFolders = _(folders).chain()
+                    .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })
+                    .map(function (folder) { return parseInt(folder.id.match(/^default(\d+)/)[1], 10); })
+                    .uniq().value();
+                mailAccounts = _(accounts).map(function (account) { return account.id; });
+                diff = _.difference(mailFolders, mailAccounts);
+
+                if (diff.length > 0) {
+                    return def.resolve('default' + diff[0]);
+                }
+                return def.resolve(null);
+            });
+        });
+        return def;
+    };
+
+    /**
+     * check folder type
+     * @param  {string} type (foldertype, example is 'drafts')
+     * @param  {type} id [optional]
+     * @return {boolean}
+     */
     api.is = (function () {
         var unifiedFolders = {
             inbox:  /^default\d+\/INBOX(?:\/|$)/,
@@ -125,12 +185,23 @@ define('io.ox/core/api/account',
         };
     }());
 
+    /**
+     * return folders for accounts
+     * @param  {string} type ('inbox', 'send', 'drafts')
+     * @return {array} folders
+     */
     api.getFoldersByType = function (type) {
         return _(typeHash).chain().map(function (value, key) {
             return value === type ? key : null;
         }).compact().value();
     };
 
+    /**
+     * get account id
+     * @param  {string|number} str (folder_id|account_id)
+     * @param  {boolean} strict
+     * @return {integer} account id
+     */
     api.parseAccountId = function (str, strict) {
         if (typeof str === 'number') {
             // return number
@@ -160,20 +231,42 @@ define('io.ox/core/api/account',
     };
 
     /**
-     * Get the primary address for a given account.
-     *
-     * If no account id is given, the default account will be used.
-     *
-     * @param accountId - the account id for the account, might be null
-     * @return an array containing the personal name (might be empty!) and the primary address
+     * get the primary address for a given account
+     * @param  {string} accountId [optional: default account will be used instead]
+     * @return {deferred} returns array (name, primary adress)
      */
     api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0).then(function (account) {
+        return api.get(accountId || 0)
+        .then(function (account) {
             if (!account) { return $.Deferred().reject(account); }
             return account;
         })
-        .then(addPersonalFallback).then(function (account) {
+        .then(addPersonalFallback)
+        .then(function (account) {
             return getAddressArray(account.personal || '', account.primary_address);
+        });
+    };
+
+    /**
+     * get primary address from folder
+     * @param  {string} folder_id
+     * @return {deferred} object with properties 'displayname' and 'primaryaddress'
+     */
+    api.getPrimaryAddressFromFolder = function (folder_id) {
+        // get account id (strict)
+        var account_id = this.parseAccountId(folder_id, true),
+            isUnified = api.isUnified(account_id);
+        // get primary address
+        return this.getPrimaryAddress(isUnified ? 0 : account_id).then(function (data) {
+            // use user-setting for primary account and unified folders
+            if (account_id === 0 || isUnified) {
+                return require(['settings!io.ox/mail']).then(function (settings) {
+                    var address = settings.get('defaultSendAddress');
+                    return { displayname: data[0], primaryaddress: address || data[1] };
+                });
+            } else {
+                return { displayname: data[0], primaryaddress: data[1] };
+            }
         });
     };
 
@@ -195,6 +288,11 @@ define('io.ox/core/api/account',
         return [name !== address ? name : '', address];
     }
 
+    /**
+     * get sender adress
+     * @param  {object} account
+     * @return {deferred} returns array the personal name and a list of (alias) addresses
+     */
     function getSenderAddress(account) {
         // just for robustness
         if (!account) return [];
@@ -217,17 +315,18 @@ define('io.ox/core/api/account',
     }
 
     /**
-     * Get a list of addresses that can be used when sending mails.
-     *
-     * If no account id is given, the default account will be used.
-     *
-     * @param accountId - the account id of the account wanted
-     * @return - the personal name and a list of (alias) addresses usable for sending
+     * get a list of addresses that can be used when sending mails
+     * @param  {string} accountId [optional: default account will be used instead]
+     * @return {deferred} returns array the personal name and a list of (alias) addresses
      */
     api.getSenderAddresses = function (accountId) {
         return this.get(accountId || 0).then(addPersonalFallback).then(getSenderAddress);
     };
 
+    /**
+     * get all sender addresses
+     * @return {promise} returns array of arrays
+     */
     api.getAllSenderAddresses = function () {
         return api.all().then(function (list) {
             return $.when.apply($, _(list).map(addPersonalFallback)).then(function () {
@@ -246,6 +345,10 @@ define('io.ox/core/api/account',
 
     var accountsAllCache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); });
 
+    /**
+     * get all accounts
+     * @return {deferred} returns array of account object
+     */
     api.all = function () {
 
         var getter = function () {
@@ -287,7 +390,9 @@ define('io.ox/core/api/account',
 
 
     /**
-     * Get mail account
+     * get mail account
+     * @param  {string} id
+     * @return {deferred} returns account object
      */
     api.get = function (id) {
 
@@ -301,7 +406,10 @@ define('io.ox/core/api/account',
     };
 
     /**
-     * Create mail account
+     * create mail account
+     * @param  {object} data (attributes)
+     * @fires  api#create:account (data)
+     * @return {deferred}
      */
     api.create = function (data) {
         return http.PUT({
@@ -317,7 +425,7 @@ define('io.ox/core/api/account',
                 return api.all();
             })
             .then(function () {
-                api.trigger('account_created', { id: data.id, email: data.primary_address, name: data.name });
+                api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
                 require(['io.ox/core/api/folder'], function (api) {
                     api.propagate('account:create');
                 });
@@ -327,7 +435,11 @@ define('io.ox/core/api/account',
     };
 
     /**
-     * Remove mail account
+     * delete mail account
+     * @param  {object} data (attributes)
+     * @fires  api#refresh.all
+     * @fires  api#delete
+     * @return {deferred}
      */
     api.remove = function (data) {
         return http.PUT({
@@ -346,7 +458,9 @@ define('io.ox/core/api/account',
     };
 
     /**
-     * Validate account data
+     * validate account data
+     * @param  {object} data (accont object)
+     * @return {deferred} returns boolean
      */
     api.validate = function (data) {
         return http.PUT({
@@ -360,7 +474,9 @@ define('io.ox/core/api/account',
     };
 
     /**
-     * Update account
+     * update account
+     * @param  {object} data (account)
+     * @return {deferred} returns new account object
      */
     api.update = function (data) {
         // don't send computed data
@@ -405,6 +521,11 @@ define('io.ox/core/api/account',
         });
     };
 
+    /**
+     * get autoconfig for given emailadress
+     * @param  {object} data (email, password)
+     * @return {deferred} returns best available mail server settings (may be incomplete or empty)
+     */
     api.autoconfig = function (data) {
         return http.GET({
             module: 'autoconfig',
@@ -416,7 +537,10 @@ define('io.ox/core/api/account',
         });
     };
 
-    // jslob testapi
+    /**
+     * jslob testapi
+     * @return {deferred}
+     */
     api.configtestAll = function () {
         return http.GET({
             module: 'jslob',
@@ -426,6 +550,10 @@ define('io.ox/core/api/account',
         });
     };
 
+    /**
+     * jslob testapi
+     * @return {deferred}
+     */
     api.configtestList = function (data) {
         return http.PUT({
             module: 'jslob',
@@ -436,6 +564,10 @@ define('io.ox/core/api/account',
         });
     };
 
+    /**
+     * jslob testapi
+     * @return {deferred}
+     */
     api.configtestUpdate = function (data, id) {
         return http.PUT({
             module: 'jslob',
@@ -447,6 +579,10 @@ define('io.ox/core/api/account',
         });
     };
 
+    /**
+     * jslob testapi
+     * @return {deferred}
+     */
     api.configtestSet = function (data, id) {
         return http.PUT({
             module: 'jslob',
@@ -457,6 +593,21 @@ define('io.ox/core/api/account',
             data: data
         });
     };
+
+    /**
+     * bind to global refresh; clears caches and trigger refresh.all
+     * @fires  api#refresh.all
+     * @return {promise}
+     */
+    api.refresh = function () {
+        accountsAllCache.clear().then(function () {
+            api.trigger('refresh.all');
+        });
+    };
+
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
 
     return api;
 });

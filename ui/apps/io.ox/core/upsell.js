@@ -18,6 +18,7 @@ define('io.ox/core/upsell',
     'use strict';
 
     function showUpgradeDialog(e, options) {
+        console.debug('upsell:requires-upgrade', options);
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog({ easyOut: true })
                 .build(function () {
@@ -50,7 +51,7 @@ define('io.ox/core/upsell',
     }
 
     function upgrade(e, options) {
-        console.debug('upgrade', options);
+        console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
         alert('User decided to upgrade! (global event: upsell:upgrade)');
     }
@@ -64,7 +65,7 @@ define('io.ox/core/upsell',
 
         // convenience functions
         trigger: function (options) {
-            ox.trigger('upsell:requires-upgrade', options);
+            ox.trigger('upsell:requires-upgrade', options || {});
         },
 
         // simple click handler
@@ -156,18 +157,22 @@ define('io.ox/core/upsell',
         },
 
         // just for demo purposes
-        demo: function () {
+        // flag helps during development of custom upsell wizard; just diables some capabilites but
+        // neither registers events nor adds portal plugin
+        demo: function (debugCustomWizard) {
             var e = enabled, c = capabilityCache;
             e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = true;
             c.portal = c.webmail = c.contacts = true;
             c.calendar = c.infostore = c.tasks = false;
             console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
-            that.useDefaults();
-            require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.addPlugin('plugins/portal/upsell/register');
-                widgets.add('upsell', { color: 'gray', inverse: true });
-                console.debug('Added upsell widget to portal');
-            });
+            if (!debugCustomWizard) {
+                that.useDefaults();
+                require(['io.ox/portal/widgets'], function (widgets) {
+                    widgets.addPlugin('plugins/portal/upsell/register');
+                    widgets.add('upsell', { color: 'gray', inverse: true });
+                    console.debug('Added upsell widget to portal');
+                });
+            }
         }
     };
 

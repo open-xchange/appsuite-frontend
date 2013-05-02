@@ -74,12 +74,12 @@ define('plugins/portal/twitter/register',
         var cursor = 0;
         _(keySet).each(function (key) {
             var element = offsets[key];
-            bob.append(_.escape(text.substring(cursor, element.indices[0]))).append(element.elem);
+            bob.append(text.substring(cursor, element.indices[0])).append(element.elem);
             cursor = element.indices[1];
         });
 
         if (cursor < text.length) {
-            bob.append(_.escape(text.substr(cursor, text.length)));
+            bob.append(text.substr(cursor, text.length));
         }
 
         return bob;

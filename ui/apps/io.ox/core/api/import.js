@@ -18,7 +18,7 @@ define('io.ox/core/api/import',
 
     var api = {};
 
-    function import_file_call(data) {
+    function importFileCall(data) {
         if ('FormData' in window) {
             var formData = new FormData();
             formData.append('file', data.file);
@@ -34,7 +34,7 @@ define('io.ox/core/api/import',
                 module: 'import',
                 action: data.type,
                 form: data.form,
-                data: data
+                params: { folder: data.folder }
             });
         }
     }
@@ -43,18 +43,18 @@ define('io.ox/core/api/import',
      * import data from file
      *
      * @param data {Object} -
-     * {type: "ICAL",
-     *  folder: "32",
+     * {type: 'ICAL',
+     *  folder: '32',
      *  file: [file object],
      *  form: jQuery object containing the form
      * }
      *
      * @return - a deferred object, containing the response of the import call
      */
-    api.import_file = function (data) {
+    api.importFile = function (data) {
         var def = $.Deferred();
 
-        import_file_call(data).done(function (res) {
+        importFileCall(data).done(function (res) {
             if (res.data[0] && res.data[0].error) {
                 def.reject(res.data[0]);
             } else {

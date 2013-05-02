@@ -39,9 +39,9 @@ define('io.ox/calendar/invitations/register',
     };
 
     var buttonClasses = {
-        'accept': 'btn-success',
+        'accept': 'btn-success accept',
         'accept_and_replace': 'btn-inverse',
-        'accept_and_ignore_conflicts': 'btn-success',
+        'accept_and_ignore_conflicts': 'btn-success ignore',
         'accept_party_crasher': 'btn-inverse',
         'create': 'pull-left btn-inverse',
         'update': 'pull-left btn-inverse',
@@ -72,7 +72,6 @@ define('io.ox/calendar/invitations/register',
     };
 
     var priority = ['update', 'ignore', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
-
 
 
     function discoverIMipAttachment(baton) {
@@ -185,13 +184,17 @@ define('io.ox/calendar/invitations/register',
                         "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
                     }
                 })
-                .done(function () {
-                    notifications.yell('success', success[action]);
-                    // deleteMailIfNeeded(baton);
-                    // update well
-                    rerender(baton);
-                })
-                .fail(notifications.yell);
+                .then(
+                    function success() {
+                        notifications.yell('success', success[action]);
+                        // deleteMailIfNeeded(baton);
+                        rerender(baton);
+                    },
+                    function fail(e) {
+                        notifications.yell(e);
+                        rerender(baton);
+                    }
+                );
             })
             // disable buttons - don't know why we have an array of appointments but just one set of buttons
             // so, let's use the first one
@@ -330,7 +333,7 @@ define('io.ox/calendar/invitations/register',
             if (imipAttachment) {
                 baton.imip = { attachment: imipAttachment };
                 // change flow
-                baton.disable('io.ox/mail/detail', 'content');
+                //baton.disable('io.ox/mail/detail', 'content');
             }
         }
     });
@@ -360,7 +363,7 @@ define('io.ox/calendar/invitations/register',
     }
 
     function drawScaffold(type) {
-        var text = type === 'appointment' ?
+        var text = type !== 'task' ?
             gt('This email contains an appointment') :
             gt('This email contains a task');
         return this.append(
@@ -421,7 +424,7 @@ define('io.ox/calendar/invitations/register',
     }
 
     function getConfirmationSelector(status) {
-        if (status === 1) return 'button.btn-success';
+        if (status === 1) return 'button.btn-success.accept';
         if (status === 2) return 'button.btn-danger';
         if (status === 3) return 'button.btn-warning';
         return '';
@@ -432,7 +435,7 @@ define('io.ox/calendar/invitations/register',
         var status = util.getConfirmationStatus(data),
             message = '', className = '';
 
-        if (data.created_by === ox.user_id) {
+        if (data.organizerId === ox.user_id) {
             message = gt('You are the organizer');
             className = 'organizer';
             return $('<div class="confirmation-status">').addClass(className).text(message);
@@ -441,19 +444,19 @@ define('io.ox/calendar/invitations/register',
         if (status > 0) {
             switch (status) {
             case 1:
-                message = data.type === 'appointment' ?
+                message = data.type !== 'task' ?
                     gt('You have accepted this appointment') :
                     gt('You have accepted this task');
                 className = 'accepted';
                 break;
             case 2:
-                message = data.type === 'appointment' ?
+                message = data.type !== 'task' ?
                     gt('You declined this appointment') :
                     gt('You declined this task');
                 className = 'declined';
                 break;
             case 3:
-                message = data.type === 'appointment' ?
+                message = data.type !== 'task' ?
                     gt('You tentatively accepted this invitation') :
                     gt('You tentatively accepted this task');
                 className = 'tentative';

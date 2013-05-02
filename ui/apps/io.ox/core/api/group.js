@@ -46,12 +46,19 @@ define('io.ox/core/api/group',
         }
     });
 
+    /**
+     * @param  {string} id
+     * @return {deferred} done handler returns name (string)
+     */
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {
             return _.noI18n(data.display_name || data.name || '');
         });
     };
 
+    /**
+     * TODO: @deprecated/unused?
+     */
     api.getTextNode = function (id) {
         var node = document.createTextNode('');
         api.get({ id: id })

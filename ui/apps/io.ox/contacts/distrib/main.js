@@ -162,11 +162,14 @@ define('io.ox/contacts/distrib/main',
                             .addButton("cancel", gt('Cancel'))
                             .show()
                             .done(function (action) {
-                                console.debug("Action", action);
                                 if (action === 'delete') {
                                     model.factory.realm('edit').release();
                                     def.resolve();
                                 } else {
+                                    // biggeleben: maybe we need a better function here
+                                    // actually I just want to reset the current model
+                                    // see https://bugs.open-xchange.com/show_bug.cgi?id=26184
+                                    model.factory.realm('edit').destroy();
                                     def.reject();
                                 }
                             });

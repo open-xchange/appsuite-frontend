@@ -43,9 +43,9 @@ define('plugins/notifications/mail/register',
             )
         );
     }
-    
+
     function showMail(obj, node, model) {
-        
+
         // fetch plain text mail; don't use cache
         api.get(obj, false).done(function (data) {
             //update model
@@ -83,16 +83,11 @@ define('plugins/notifications/mail/register',
             'dispose .item': 'removeNotification' //seems to be unused
         },
 
-        initialize: function () {
-            var self = this;
-            this.collection.on('reset add remove', this.render, this);
-        },
-
         render: function () {
             var i = 0, $i = Math.min(this.collection.size(), 3), baton;
             baton = ext.Baton({ view: this });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
-            
+
             for (; i < $i; i++) {
                 baton = ext.Baton({ model: this.collection.at(i), view: this });
                 ext.point('io.ox/core/notifications/mail/item').invoke('draw', this.$('.notifications'), baton);
@@ -116,7 +111,7 @@ define('plugins/notifications/mail/register',
             if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
             } else {
-                
+
                 // fetch proper mail first
                 api.get(_.cid(cid)).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
@@ -138,7 +133,7 @@ define('plugins/notifications/mail/register',
 
         openApp: function (e) {
             e.preventDefault();
-            require("io.ox/core/notifications").hideList();
+            require('io.ox/core/notifications').hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 // go to inbox
                 this.folder.set(api.getDefaultFolder());
@@ -156,7 +151,7 @@ define('plugins/notifications/mail/register',
             }
         }
     });
-    
+
     //minicache to store mails that are seen already
     //if mails are added to the notification collection after seen is triggered they are never set to seen correctly otherwise
     var seenMails = {};
@@ -225,8 +220,8 @@ define('plugins/notifications/mail/register',
                     removeMails(e, mails);
                 }
             });
-            
-            api.on('delete seen', function (e, mails) {
+
+            api.on('delete update:set-seen', function (e, mails) {
                 if (!_.isArray(mails)) {
                     mails = [].concat(mails);
                 }
@@ -235,7 +230,10 @@ define('plugins/notifications/mail/register',
                 } else {
                     removeMails(e, mails);
                 }
-                
+                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
+                    api.newMailTitle(false);
+                }
+
             });
 
             api.checkInbox();

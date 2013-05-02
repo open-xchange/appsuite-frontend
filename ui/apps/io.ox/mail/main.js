@@ -103,9 +103,9 @@ define('io.ox/mail/main',
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
-            threadView: settings.get('threadView') !== 'off',
+            max: settings.get('threadMax', 500),
             selectFirst: false,
-            max: 500
+            threadView: settings.get('threadView') !== 'off'
         });
 
         // grid
@@ -116,14 +116,13 @@ define('io.ox/mail/main',
         options.minChunkSize = options.minChunkSize || 10;
         options.settings = settings;
 
-        // threadview is based on a 500 mails limit
+        // threadview is based on a 500 (default) mail limit
         // in order to view all mails in a folder we offer a link
         options.tail = function (all) {
             var threadSort = this.prop('sort') === 'thread',
                 inAllMode = this.getMode() === 'all',
                 isUnreadOnly = this.prop('unread'),
-                isUnlimited = this.option('max') === '0',
-                hideTail = !threadSort || !inAllMode || isUnreadOnly || isUnlimited,
+                hideTail = !threadSort || !inAllMode || isUnreadOnly,
                 count = 0;
             // hide?
             if (hideTail) return $();
@@ -134,7 +133,7 @@ define('io.ox/mail/main',
             if (count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#">').text(gt('Load all mails. This might take some time.'))
+                $('<a href="#">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
             );
         };
 
@@ -143,7 +142,7 @@ define('io.ox/mail/main',
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
             e.preventDefault();
-            grid.option('max', '0').refresh(); // unlimited
+            grid.prop('sort', 610).refresh();
         });
 
         // add template
@@ -151,8 +150,6 @@ define('io.ox/mail/main',
 
         // folder change
         grid.on('change:prop:folder', function (e, folder) {
-            // reset max
-            grid.option('max', originalOptions.max);
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
@@ -182,8 +179,12 @@ define('io.ox/mail/main',
 
         // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         // look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) { grid.updateSettings('unread', value); });
-        grid.on('change:prop:order', function (e, value) { grid.updateSettings('order', value); });
+        grid.on('change:prop:unread', function (e, value) {
+            grid.updateSettings('unread', value);
+        });
+        grid.on('change:prop:order', function (e, value) {
+            grid.updateSettings('order', value);
+        });
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
@@ -253,6 +254,53 @@ define('io.ox/mail/main',
             return option.clone().find('a').attr('data-option', value).append($.txt(text)).end();
         }
 
+        /**
+         * @param  {event} e
+         * @param  {string} path     (key)
+         * @param  {string} value    (value t0)
+         * @param  {string} previous (value t-1)
+         * @return {undefined}
+         */
+        function handleSettingsChange(e, path, value, previous) {
+            /**
+             * update grid 'sort' property if necessary
+             * @param  {string} key
+             * @return {undefined}
+             */
+            var sortby = function (key) {
+                var isInbox = account.is('inbox', grid.prop('folder')),
+                    ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
+                                      : (value + previous).replace('inbox', '').replace('off', '') === '';
+
+                if (!ignored) {
+                    grid.prop('sort', key)
+                            .refresh()
+                            .pipe(function () {
+                                //called manually cause call skipped within refresh (sort property doesn't change)
+                                if (grid.prop('sort') === key)
+                                    drawGridOptions(undefined, 'sort');
+                                //sort must not react to the prop change event because autotoggle
+                                //uses this too and would mess up the persistent settings
+                                grid.updateSettings('sort', key);
+                            });
+                }
+            };
+
+            //switch object
+            var switcher = {
+                threadView: {
+                    on: function () { sortby('thread'); },
+                    inbox: function () { sortby('thread'); },
+                    off: function () { sortby('610'); }
+                }
+            };
+
+            //switch
+            if (switcher[path] && switcher[path][value]) {
+                switcher[path][value]();
+            }
+        }
+
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
             index: 100,
@@ -275,6 +323,7 @@ define('io.ox/mail/main',
         });
 
         grid.on('change:prop', drawGridOptions);
+        settings.on('change', handleSettingsChange);
         drawGridOptions();
 
         commons.addGridToolbarFolder(app, grid);
@@ -320,6 +369,19 @@ define('io.ox/mail/main',
             unseenHash = {};
         }
 
+        function filterUnread(data) {
+            // return all mails that are either unseen or in unseenHash
+            return _(data).filter(function (obj) {
+                var cid = _.cid(obj);
+                if (cid in unseenHash) return true;
+                if (isUnseen(cid)) {
+                    unseenHash[cid] = true;
+                    return true;
+                }
+                return false;
+            });
+        }
+
         grid.setAllRequest(function () {
 
             var sort = this.prop('sort'),
@@ -333,22 +395,19 @@ define('io.ox/mail/main',
                 };
 
             return api[call](options, 'auto').then(function (response) {
-
                 var data = response.data || response;
+                return unread ? filterUnread(data) : data;
+            });
+        });
 
-                if (unread) {
-                    // return all mails that are either unseen or in unseenHash
-                    data = _(data).filter(function (obj) {
-                        var cid = _.cid(obj);
-                        if (cid in unseenHash) return true;
-                        if (isUnseen(cid)) {
-                            unseenHash[cid] = true;
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-                return data;
+        grid.setAllRequest('search', function () {
+            var options = win.search.getOptions(),
+                unread = grid.prop('unread');
+            options.folder = grid.prop('folder');
+            options.sort = grid.prop('sort');
+            options.order = grid.prop('order');
+            return api.search(win.search.query, options).then(function (data) {
+                return unread ? filterUnread(data) : data;
             });
         });
 
@@ -458,6 +517,22 @@ define('io.ox/mail/main',
                 }
             });
 
+            // reset on folder change
+            grid.on('change:prop:folder', function () {
+                openThreads = {};
+            });
+
+            // close if deleted
+            api.on('beforedelete', function (e, ids) {
+                var hash = {};
+                _(ids).each(function (obj) {
+                    hash[_.cid(obj)] = true;
+                });
+                _(openThreads).each(function (cid, index) {
+                    if (cid in hash) delete openThreads[index];
+                });
+            });
+
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
                     index = grid.selection.getIndex(cid) + 1;
@@ -501,24 +576,27 @@ define('io.ox/mail/main',
         };
 
         drawThread = function (baton) {
-            viewDetail.drawThread.call(right.idle().empty(), baton.set('options', {
+            viewDetail.drawThread.call(right.idle(), baton.set('options', {
                 failMessage: gt('Couldn\'t load that email.'),
                 retry: drawThread
             }));
         };
 
         drawMail = function (data) {
-            var baton = ext.Baton({ data: data, app: app });
-            right.idle().empty().append(
-                viewDetail.draw(baton)
-            );
+            var baton = ext.Baton({ data: data, app: app }),
+                mail = viewDetail.draw(baton);
+            right.idle().empty().append(mail);
         };
 
-        drawFail = function (obj) {
+        drawFail = function (obj, e) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load that email."), function () {
-                    showMail(obj);
-                })
+                // not found?
+                e && e.code === 'MSG-0032' ?
+                    $.fail(gt('The requested email no longer exists')) :
+                    // general error
+                    $.fail(gt('Couldn\'t load that email.'), function () {
+                        showMail(obj);
+                    })
             );
         };
 

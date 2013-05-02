@@ -46,16 +46,16 @@ $(document).ready(function () {
             }
             // bind to mousedown to intercept the blur event
             this.$menu.on('mousedown', function (e) {
-               var clickX = e.offsetX,
-                   liWidth = self.$li.first().outerWidth(),
-                   ulWidth = self.$ul.outerWidth();
+                var clickX = e.offsetX,
+                    liWidth = self.$li.first().outerWidth(),
+                    ulWidth = self.$ul.outerWidth();
 
-               // lookup if the scrollbar was clicked, if yes, prevent the blur
-               if (clickX >= liWidth && clickX <= ulWidth) {
-                   e.preventDefault();
-               }
+                // lookup if the scrollbar was clicked, if yes, prevent the blur
+                if (clickX >= liWidth && clickX <= ulWidth) {
+                    self.blurring = true;
+                    e.preventDefault();
+                }
             });
-
             this.$menu
                 .on('click', $.proxy(this.click, this))
                 .on('mouseenter', 'li', $.proxy(this.mouseenter, this));

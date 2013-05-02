@@ -2490,6 +2490,26 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
 
+    /**
+     * Writes an error message to the browser output console describing the
+     * passed exception object, if debug mode is enabled in the global
+     * configuration.
+     *
+     * @param {Any} exception
+     *  The exception as caught in a try/catch.
+     */
+    Utils.exception = Config.isDebug() ? function (exception) {
+
+        var // the stacktrace of the exception object
+            stacktrace = _.isObject(exception) && (exception.stack || exception.stacktrace);
+
+        log('Exception caught: ' + exception, 'error');
+        if (stacktrace) {
+            log('Stack trace: ' + stacktrace, 'error');
+        }
+
+    } : $.noop;
+
     // global initialization ==================================================
 
     // deferred initialization of class members according to current language

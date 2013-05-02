@@ -73,7 +73,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 } else if (self.nodes.select.prop('selectedIndex') === 1 && (self.model.get('percent_completed') === 0 || self.model.get('percent_completed') === 100)) {
                     self.model.set('percent_completed', 25);
                 }
-                self.model.set(self.attribute, self.nodes.select.val());
+                
+                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10));
             });
         },
         attribute: 'status',

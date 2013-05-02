@@ -136,8 +136,8 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var CHUNK_SIZE = 100,
-        CHUNK_GRID = 20;
+    var CHUNK_SIZE = 200,
+        CHUNK_GRID = 40;
 
     var ChunkLoader = function (listRequest) {
 
@@ -466,6 +466,7 @@ define('io.ox/core/tk/vgrid',
 
             // calling this via LFO, so that we always get the latest data
             function cont(chunk) {
+
                 // vars
                 var data = chunk.data, offset = chunk.offset,
                     i, $i, shift = 0, j = '', row,
@@ -525,6 +526,11 @@ define('io.ox/core/tk/vgrid',
                 bounds.bottom = offset + chunk.length;
             }
 
+            function fail(offset) {
+                // continue with dummy chunk
+                cont({ data: new Array(numRows), offset: offset, length: numRows });
+            }
+
             return function (offset) {
 
                 if (!initialized) {
@@ -532,7 +538,7 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // keep positive
-                offset = Math.max(offset, 0);
+                offset = Math.max(offset >> 0, 0);
                 if (offset === currentOffset) {
                     return DONE;
                 } else {
@@ -540,22 +546,19 @@ define('io.ox/core/tk/vgrid',
                 }
 
                 // get all items
-                return loader.load(offset, all)
-                    .done(function (chunk) {
-                        if (chunk !== null) cont(chunk);
-                    })
-                    .fail(function () {
-                        // continue with dummy array
-                        cont(new Array(numRows));
-                    });
-
-                // var lfo = _.lfo(cont, offset);
-                // return chunkLoader.load(offset, numRows, { mode: currentMode })
-                //     .done(lfo)
-                //     .fail(function () {
-                //         // continue with dummy array
-                //         lfo(new Array(numRows));
-                //     });
+                return loader.load(offset, all).then(
+                    function (chunk) {
+                        if (chunk && chunk.data) {
+                            cont(chunk);
+                        }
+                        // no fail handling here otherweise we get empty blocks
+                        // just because of scrolling
+                    },
+                    function () {
+                        // real failure
+                        fail(offset);
+                    }
+                );
             };
 
         }());
@@ -766,6 +769,8 @@ define('io.ox/core/tk/vgrid',
             labelHeight = label.getHeight();
             // resize
             resize();
+            currentOffset = null;
+            invalidLabels = true;
             initialized = true;
             // load all IDs
             return loadAll();
@@ -823,10 +828,9 @@ define('io.ox/core/tk/vgrid',
         this.selection
             .on('change', function (e, list) {
                 // prevent to long URLs
-                var MAXSELECTIONSAVE = 50,
-                    id = _(list.slice(0, MAXSELECTIONSAVE)).map(function (obj) {
-                        return self.selection.serialize(obj);
-                    }).join(',');
+                var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
+                    return self.selection.serialize(obj);
+                }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
                 // propagate DOM-based select event?
                 if (list.length >= 1) {
@@ -842,6 +846,15 @@ define('io.ox/core/tk/vgrid',
 
 
         // public methods
+
+        this.setApp = function (app) {
+            this.app = app;
+            return this.app;
+        };
+
+        this.getApp = function () {
+            return this.app;
+        };
 
         this.setAllRequest = function (mode, fn) {
             // parameter shift?
@@ -928,6 +941,12 @@ define('io.ox/core/tk/vgrid',
         this.refresh = function (force) {
             // load all (if painted before)
             return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
+        };
+
+        this.pending = function () {
+            responsiveChange = true;
+            this.busy();
+            return this;
         };
 
         this.getMode = function () {
@@ -1133,6 +1152,11 @@ define('io.ox/core/tk/vgrid',
                 if (previous !== undefined) {
                     hash[previous] = self.selection.get();
                 }
+            });
+
+            self.selection.on('clear', function () {
+                var folder = self.prop('folder');
+                delete hash[folder];
             });
 
             return function () {

@@ -13,31 +13,32 @@
  *
  */
 
-define("io.ox/rss/api",
-    ["io.ox/core/http",
-     "io.ox/core/event",
-     "io.ox/core/config",
-     "io.ox/core/api/user"], function (http, Events, config, userAPI) {
+define('io.ox/rss/api',
+    ['io.ox/core/http',
+     'io.ox/core/event',
+     'io.ox/core/config',
+     'io.ox/core/api/user'], function (http, Events, config, userAPI) {
 
-    "use strict";
+    'use strict';
     var api = {
         get: function (feedUrl) {
             return http.GET({
-                module: "rss",
+                module: 'rss',
                 params: {
                     feedUrl: feedUrl
                 }
             });
         },
         getMany: function (urls, params) {
+            params = params || {};
             var defaults = {
                 sort: 'date',
                 order: 'desc',
-                limit: 30
+                limit: 100 //not supported yet: manually spliced in plugins/portal/rss/register
             };
             return http.PUT({
-                module: "rss",
-                params: $.extend({}, params, defaults),
+                module: 'rss',
+                params: $.extend({}, defaults, params),
                 data: {
                     feedUrl: urls
                 }

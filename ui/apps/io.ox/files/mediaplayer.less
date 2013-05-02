@@ -80,7 +80,6 @@
 
         .mediaplayer_player {
 
-            // background: @playerSecondaryColor;
             width: 100%;
             margin-bottom: @playerMargin;
 
@@ -110,14 +109,12 @@
 
                                 background: lighten(@linkColor, 10%);
                             }
-                            .mejs-time-current { }
                         }
                     }
                     .mejs-horizontal-volume-slider {
                         .mejs-horizontal-volume-total {
                             background:@mediaplayerSliderBackground;
                         }
-                        .mejs-horizontal-volume-current { }
                     }
                 }
             }
@@ -131,7 +128,7 @@
             bottom: 13px;
             width: 480px;
             margin: 0;
-            overflow-y: scroll;
+            overflow-y: auto;
 
             li {
                 list-style: none;
@@ -202,6 +199,11 @@
         .mediaplayer_playlist {
             top: 219px - 60px;
             width: 290px;
+            li {
+                &:hover {
+                    background-color: @playerSecondaryColor;
+                }
+            }
         }
     }
 }

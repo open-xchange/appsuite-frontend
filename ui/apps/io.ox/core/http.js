@@ -385,7 +385,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         }
     };
 
-    // get all columns of a module
+    /**
+     * get all columns of a module
+     * @param  {string} module (name)
+     * @param  {boolean} join  (join array with comma separator)
+     * @return {arrray|string} ids
+     */
     var getAllColumns = function (module, join) {
         // get ids
         var ids = idMapping[module] || {};
@@ -855,6 +860,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             var name = 'formpost_' + _.now(),
                 callback = 'callback_' + options.action,
+                callback_old = 'callback_' + options.module,
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
@@ -865,10 +871,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             );
 
             window[callback] = function (response) {
+                // skip warnings
+                response.data = _(response.data).map(function (o) {
+                    if (o.category !== 13) {
+                        return o;
+                    }
+                });
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
                 $('#' + name).remove();
             };
+            // fallback for some old modules (e.g. import)
+            window[callback_old] = window[callback];
 
             if (form.find('input[name="' + options.field + '"]').length) {
                 form.find('input[name="' + options.field + '"]').val(data);
@@ -878,9 +892,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 );
             }
 
-            form.attr({
+            form.prop({
                 method: 'post',
                 enctype: 'multipart/form-data',
+                encoding: 'multipart/form-data',
                 action: url + '&' + _.serialize(options.params),
                 target: name
             })
@@ -899,8 +914,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         /**
          * Returns the column mapping of a module
          * @param {string} module The module name.
-         * @returns { column: fieldName } A map from numeric column IDs to
-         * the corresponding field names.
+         * @returns {object} A map from numeric column IDs to the corresponding field names.
          */
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
@@ -917,6 +931,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Simplify objects in array for list requests
+         * @param  {array} list
+         * @returns {array} list
          */
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
@@ -941,6 +957,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Fixes order of list requests (temp. fixes backend bug)
+         * @param  {array} ids
+         * @param  {deferred} deferred
+         * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
 
@@ -1048,6 +1067,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             return def;
         },
 
+        /**
+         * returns failed calls
+         * @return {backbone.collection}
+         */
         log: function () {
             return log.collection;
         }

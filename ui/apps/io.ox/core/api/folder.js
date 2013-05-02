@@ -53,7 +53,7 @@ define('io.ox/core/api/folder',
                     cache.add(data.id, data);
                 })
                 .fail(function (error) {
-                    if (error.categories === "PERMISSION_DENIED") {
+                    if (error.categories === 'PERMISSION_DENIED') {
                         notifications.yell(error);
                     } else {
                         console.error('folder.get', id, error);
@@ -82,7 +82,7 @@ define('io.ox/core/api/folder',
             return false;
         }
         // Prevent moving default folders
-        if (this.is("defaultfolder", folder)) {
+        if (this.is('defaultfolder', folder)) {
             return false;
         }
         // Prevent moving private folders to other folders than
@@ -897,12 +897,12 @@ define('io.ox/core/api/folder',
      *     exclude: {Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
      *     leaf: {DOMnode} - An extra node that is appended as last crumb
      *     last: {boolean} - true: last item should have the active class set (default)
-     *                     - no relevance if subfolder option is set to true and element is "clickable" (*)
-     *                     - false: same as true if element is "clickable" (*)
+     *                     - no relevance if subfolder option is set to true and element is 'clickable' (*)
+     *                     - false: same as true if element is 'clickable' (*)
      *                     - false: a link that reacts to the function assigned to the handler option
      *     handler: {function} - a handler function, called with the id of the folder as parameter
-     *     module: {string} - provide a module to limit "clickable" attribute (*) to a specific module
-     *     subfolder: {boolean} - show all subfolders of the folder as a dropdown if element is "clickable" (*)
+     *     module: {string} - provide a module to limit 'clickable' attribute (*) to a specific module
+     *     subfolder: {boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
      *                          - default: true
      * }
      * (*) - element is defined to be clickable, if a few conditions are met:

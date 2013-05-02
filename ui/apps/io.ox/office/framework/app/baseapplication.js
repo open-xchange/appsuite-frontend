@@ -67,11 +67,19 @@ define('io.ox/office/framework/app/baseapplication',
                     appFile = app.getFileDescriptor();
 
                 // TODO: check file version too?
-                return _.isObject(appFile) &&
+                if (file.source) { //mail or task attachment
+                    return _.isObject(appFile) &&
+                    (file.source === appFile.source) &&
+                    (file.id === appFile.id) &&
+                    (file.attached === appFile.attached) &&
+                    (file.folder_id === appFile.folder_id);
+                } else {
+                    return _.isObject(appFile) &&
                     (file.id === appFile.id) &&
                     (file.folder_id === appFile.folder_id);
-            }) : [];
+                }
 
+            }) : [];
         if (runningApps.length > 1) {
             Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
         }
@@ -295,8 +303,11 @@ define('io.ox/office/framework/app/baseapplication',
                 })
                 .fail(function (result) {
                     var title = Utils.getStringOption(result, 'title', gt('Load Error')),
-                        message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.'));
-                    view.showError(title, message);
+                        message = Utils.getStringOption(result, 'message', gt('An error occurred while loading the document.')),
+                        cause = Utils.getStringOption(result, 'cause', 'unknown');
+                    if (cause !== 'timeout') {
+                        view.showError(title, message);
+                    }
                     Utils.warn('BaseApplication.launch(): importing document "' + file.filename + '" failed.');
                     self.trigger('docs:import:error');
                 });
@@ -440,9 +451,9 @@ define('io.ox/office/framework/app/baseapplication',
                 folder_id: file.folder_id,
                 filename: file.filename,
                 version: file.version,
-                mail_folder_id: file.data && file.data.mail ? file.data.mail.folder_id : null,
-                mail_id: file.data && file.data.mail ? file.data.mail.id : null,
-                attachment_id: file.data ? file.data.id : null
+                source: file.source,
+                attached: file.attached,
+                module: file.module
             } : null;
         };
 
@@ -455,7 +466,7 @@ define('io.ox/office/framework/app/baseapplication',
          *  descriptor exists.
          */
         this.getFullFileName = function () {
-            return (file && _.isString(file.filename)) ? file.filename : null;
+            return (file && _.isString(file.filename || file.data.filename)) ? file.filename || file.data.filename : null;
         };
 
         /**
@@ -514,6 +525,17 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.isRenamed = function () {
             return renamed;
+        };
+
+        /**
+         * Checks if application is processing before-quit or quit handlers.
+         *
+         * @returns {Boolean}
+         *  Whether the application is currently processing any before-quit or
+         *  quit handlers.
+         */
+        this.isInQuit = function () {
+            return currentQuitDef !== null;
         };
 
         // server requests ----------------------------------------------------
@@ -1252,25 +1274,16 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} point
          *  The save point containing the application state, as returned by the
          *      last call of the BaseApplication.failSave() method.
-         *
-         * @returns {jQuery.Promise}
-         *  The promise of a Deferred object that will be resolved when the
-         *  import handler has loaded the document.
          */
         this.failRestore = function (point) {
 
-            var // the result Deferred object (always resolve it, never reject, expected by the core launcher)
-                def = $.Deferred();
-
-            // set and check file descriptor, import the document
+            // set file descriptor from save point
             this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            if (this.hasFileDescriptor()) {
-                importDocument(point).always(function () { def.resolve(); });
-            } else {
-                def.resolve();
-            }
 
-            return def.promise();
+            // check existence of file descriptor, import the document
+            if (this.hasFileDescriptor()) {
+                importDocument(point);
+            }
         };
 
         // initialization -----------------------------------------------------
@@ -1324,15 +1337,17 @@ define('io.ox/office/framework/app/baseapplication',
                 });
             }
 
+            // call initialization listeners before showing the application
+            // window (this is important for fail-restore which will be
+            // triggered before the window show callback will be executed)
+            self.trigger('docs:init');
+
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
                 // show busy indicator, hide after import (regardless of result)
                 win.busy();
                 self.on('docs:import:after', function () { win.idle(); });
-
-                // call initialization listeners
-                self.trigger('docs:init');
 
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled
@@ -1344,8 +1359,6 @@ define('io.ox/office/framework/app/baseapplication',
                     def.resolve();
                 }
             });
-
-            return def.promise();
         });
 
         // call all registered quit handlers

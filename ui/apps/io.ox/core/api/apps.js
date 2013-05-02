@@ -47,7 +47,7 @@ define('io.ox/core/api/apps',
     appData.categories = _(appData.categories).uniq();
 
     // TODO: Make favourites dynamic
-    _(["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar", "io.ox/files", "io.ox/tasks"]).each(function (id) {
+    _(['io.ox/portal', 'io.ox/mail', 'io.ox/contacts', 'io.ox/calendar', 'io.ox/files', 'io.ox/tasks']).each(function (id) {
         var app = appData.apps[id];
         if (app && capabilities.has(app.requires)) {
             appData.favorites.push(id);
@@ -57,12 +57,16 @@ define('io.ox/core/api/apps',
     var bless = function (obj, id) {
             obj = _.clone(obj || {});
             obj.id = id;
-            obj.icon = ox.base + ((obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, "/apps/$1") + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
+            obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
             obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             obj.visible = obj.visible !== false;
             return obj;
         },
 
+        /**
+         * get number of apps per category/special category
+         * @return {array} object for each category
+         */
         getCategories = function () {
             // loop over apps to figure out numbers per category
             var counts = {};
@@ -104,15 +108,20 @@ define('io.ox/core/api/apps',
                     })
                 ).concat(
                     // Add extension point categories
-                    ext.point("io.ox/core/apps/category").map(function (ext) {
+                    ext.point('io.ox/core/apps/category').map(function (ext) {
                         if (ext.category) {
-                            return ext.metadata("category");
+                            return ext.metadata('category');
                         }
                         return ext;
                     }).value()
                 );
         },
 
+        /**
+         * get by category ('productivity', 'basic', 'dev')
+         * @param  {string} category
+         * @return {array} object for each category
+         */
         getByCategory = function (id) {
             return _(appData.apps)
                 .chain()
@@ -130,9 +139,9 @@ define('io.ox/core/api/apps',
                 return bless(appData.apps[id], id);
             }).concat(
                 // Add extension point categories
-                ext.point("io.ox/core/apps/" + prop).map(function (ext) {
+                ext.point('io.ox/core/apps/' + prop).map(function (ext) {
                     if (ext.app) {
-                        return ext.metadata("app");
+                        return ext.metadata('app');
                     }
                     return ext;
                 }).value()
@@ -144,6 +153,11 @@ define('io.ox/core/api/apps',
     // public module interface
     api = {
 
+        /**
+         * get app (creates empty one if doesn't exists yet)
+         * @param  {string} id
+         * @return {object} app
+         */
         get: function (id) {
             return bless(appData.apps[id], id);
         },
@@ -152,6 +166,11 @@ define('io.ox/core/api/apps',
 
         getByCategory: getByCategory,
 
+        /**
+         * get installed apps (special category)
+         * @param  {string} [optional]
+         * @return {array} app objects
+         */
         getInstalled: function (mode) {
             // TODO: not this way please!
             if (mode === 'cached' && cachedInstalled !== null) {
@@ -159,7 +178,7 @@ define('io.ox/core/api/apps',
             }
             var installedLoaded = [];
             installedLoaded.push(new $.Deferred().resolve(getSpecial('installed')));
-            ext.point("io.ox/core/apps/store").each(function (extension) {
+            ext.point('io.ox/core/apps/store').each(function (extension) {
                 if (extension.installed) {
                     installedLoaded.push(extension.installed());
                 }
@@ -171,14 +190,29 @@ define('io.ox/core/api/apps',
             });
         },
 
+        /**
+         * get favorite apps (special category)
+         * @param  {string} [optional]
+         * @return {array} app objects
+         */
         getFavorites: function () {
             return getSpecial('favorites');
         },
 
+        /**
+         * checks if app is marked as favorite (special category)
+         * @param  {object}  data (app object)
+         * @return {boolean}
+         */
         isFavorite: function (data) {
             return _(appData.favorites).indexOf(data.id) > -1;
         },
 
+        /**
+         * mark as favorites (special category)
+         * @param  {string} id
+         * @return {undefined}
+         */
         markAsFavorite: function (id) {
             if (_(appData.favorites).indexOf(id) === -1) {
                 appData.favorites.push(id);
@@ -186,6 +220,11 @@ define('io.ox/core/api/apps',
             }
         },
 
+        /**
+         * unmark as favorites (special category)
+         * @param  {string} id
+         * @return {undefined}
+         */
         unmarkAsFavorite: function (id) {
             var pos = _(appData.favorites).indexOf(id);
             if (pos !== -1) {

@@ -280,7 +280,9 @@ define('io.ox/calendar/edit/main',
 
             failSave: function () {
                 if (this.model) {
+                    var title = this.model.get('title');
                     return {
+                        description: gt('Appointment') + (title ? ': ' + title : ''),
                         module: 'io.ox/calendar/edit',
                         point: this.model.attributes
                     };

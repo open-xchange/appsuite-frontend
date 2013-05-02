@@ -125,6 +125,8 @@ define('io.ox/core/commons',
                         grid.selection.retriggerUnlessEmpty();
                     }
                 };
+
+            grid.setApp(win.app);
             // show
             win.on('show idle', on)
                 // hide
@@ -173,7 +175,7 @@ define('io.ox/core/commons',
             function updateFolderCount(id, data) {
                 var total = data.total,
                     node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
-                
+
                 //cannot use .show() .hide() here because in firefox this keeps adding display: block to the span instead of inline
                 if (total > 0) {
                     node.css('display', 'inline');
@@ -247,13 +249,18 @@ define('io.ox/core/commons',
                     grid.repaint();
                     grid.selection.retrigger();
                 },
+                pending = function () {
+                    grid.pending();
+                },
                 off = function () {
                     api.off('refresh.all refresh:all:local', refreshAll)
+                        .off('refresh.pending', pending)
                         .off('refresh.list', refreshList);
                 },
                 on = function () {
                     off();
                     api.on('refresh.all refresh:all:local', refreshAll)
+                        .on('refresh.pending', pending)
                         .on('refresh.list', refreshList)
                         .trigger('refresh.all');
                 };
@@ -435,6 +442,11 @@ define('io.ox/core/commons',
                 }
             },
 
+            move = function (e, targetFolderId) {
+                if (data) data.folder_id = targetFolderId;
+                update();
+            },
+
             // we use redraw directly if we're in multiple mode
             // each redraw handler must get the data on its own
             redraw = _.debounce(function () {
@@ -442,37 +454,45 @@ define('io.ox/core/commons',
             }, 10),
 
             remove = function () {
-                if (node) node.remove();
+                if (node) node.trigger('view:remove').remove();
+            },
+
+            checkFolder = function (e, folder, folderId, folderObj) {//checks if folder permissions etc. have changed, and triggers redraw. Important to update inline links
+                if (folder === e.data.folder.toString() && api) {
+                    api.trigger('update:' + e.data.cid);
+                }
             };
 
         if (_.isArray(data)) {
-            // multiple items
-            _.chain(data).map(_.cid).each(function (cid) {
-                cid = encodeURIComponent(cid);
-                api.on('delete:' + cid, redraw);
-                api.on('update:' + cid, redraw);
-            });
+            // multiple items - just listen to generic events.
+            // otherweise "select all" of some thousands items freezes browser
+            folderAPI.on('update',  redraw);
+            api.on('delete', redraw);
+            api.on('update', redraw);
+            // ignore move case for multiple
         } else {
             // single item
             cid = _.cid(data);
             cid = encodeURIComponent(cid);
+            folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
             api.on('delete:' + cid, remove);
             api.on('update:' + cid, update);
+            api.on('move:' + cid, move);
             api.on('create', update);
         }
 
         return node.one('dispose', function () {
                 if (_.isArray(data)) {
-                    _.chain(data).map(_.cid).each(function (cid) {
-                        cid = encodeURIComponent(cid);
-                        api.off('delete:' + cid, redraw);
-                        api.off('update:' + cid, redraw);
-                    });
+                    folderAPI.off('update', redraw);
+                    api.off('delete', redraw);
+                    api.off('update', redraw);
                 } else {
                     cid = _.cid(data);
                     cid = encodeURIComponent(cid);
+                    folderAPI.off('update', checkFolder);
                     api.off('delete:' + cid, remove);
                     api.off('update:' + cid, update);
+                    api.off('move:' + cid, move);
                     api.off('create', update);
                 }
                 api = update = data = node = getter = null;

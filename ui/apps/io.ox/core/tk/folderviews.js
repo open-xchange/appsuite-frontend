@@ -14,7 +14,6 @@
 define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
      'io.ox/core/api/folder',
-     'io.ox/core/api/account',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
@@ -24,7 +23,7 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/cache',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (Selection, api, account, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
+    ], function (Selection, api, userAPI, ext, Events, config, notifications, http, cache, capabilities, gt) {
 
     'use strict';
 
@@ -501,11 +500,14 @@ define('io.ox/core/tk/folderviews',
         this.repaintNode = $.noop;
 
         this.destroy = function () {
-            this.events.destroy();
-            this.selection.destroy();
-            this.internal.destroy();
-            container.empty();
-            container = this.container = this.selection = this.internal = null;
+            var self = this;
+            return $.when(this.paint.running || $.when()).done(function () {
+                self.events.destroy();
+                self.selection.destroy();
+                self.internal.destroy();
+                container.empty();
+                container = self.container = self.selection = self.internal = null;
+            });
         };
 
         function fnKeyPress(e) {
@@ -703,12 +705,14 @@ define('io.ox/core/tk/folderviews',
                         _(changesArray).each(function (change) {
                             api.update(change, storage);
                         });
-                        tree.destroy();
-                        tree = pane = null;
+                        tree.destroy().done(function () {
+                            tree = pane = null;
+                        });
                     }
                     if (action === 'cancel') {
-                        tree.destroy();
-                        tree = pane = null;
+                        tree.destroy().done(function () {
+                            tree = pane = null;
+                        });
                     }
                 });
 
@@ -851,9 +855,18 @@ define('io.ox/core/tk/folderviews',
             // set title
             label.text(_.noI18n(data.title));
             // set counter (mail only)
-            if (options.type === 'mail' && data.unread && !options.checkbox) {
-                this.addClass('show-counter');
-                counter.find('span').text(gt.noI18n(data.unread || ''));
+            if (options.type === 'mail') {
+                if (!data.unread  || data.unread === 0) {//remove new mail title
+                    document.fixedtitle = false;
+                    document.title = document.temptitle;
+                }
+                if (data.unread && !options.checkbox) {
+                    this.addClass('show-counter');
+                
+                    counter.find('span').text(gt.noI18n(data.unread || ''));
+                } else {
+                    this.removeClass('show-counter');
+                }
             } else {
                 this.removeClass('show-counter');
             }

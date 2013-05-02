@@ -97,7 +97,7 @@ define("io.ox/settings/accounts/email/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.on('account_created', function (e, data) {
+                        api.on('create:account', function (e, data) {
                             if (data) {
                                 dataId = data.id;
                                 me.ready = true;
@@ -172,7 +172,7 @@ define("io.ox/settings/accounts/email/test",
 
                     var loaded = new Done();
 
-                    api.on('account_created', function (e, data) {
+                    api.on('create:account', function (e, data) {
                         if (data) {
                             dataId = data.id;
                         }

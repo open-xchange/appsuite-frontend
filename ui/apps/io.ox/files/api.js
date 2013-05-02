@@ -131,7 +131,7 @@ define('io.ox/files/api',
                     api.caches.get.merge(obj);
                     api.caches.versions.remove(String(obj.id));
                     // this can be solved smarter once backend send correct
-                    // number_of_version in "all" requests; always zero now
+                    // number_of_version in 'all' requests; always zero now
                 });
                 return data;
             },
@@ -149,7 +149,11 @@ define('io.ox/files/api',
         }
     });
 
-
+    /**
+     * TOOD: deprecated/unused? (31f5a4a, b856ca5)
+     * @param  {object} options
+     * @return {deferred}
+     */
     api.getUpdates = function (options) {
 
         var params = {
@@ -170,15 +174,18 @@ define('io.ox/files/api',
 
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
-    // Upload a file and store it
-    // As options, we expect:
-    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // 'file' - the file object to upload
-    // The method returns a deferred that is resolved once the file has been uploaded
+    /**
+     * upload a new file and store it
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.file
+     * @return {deferred}
+     */
     api.uploadFile = function (options) {
 
-        // Alright, let's simulate a multipart formdata form
+        // alright, let's simulate a multipart formdata form
         options = $.extend({
             folder: config.get('folder.infostore')
         }, options || {});
@@ -236,12 +243,15 @@ define('io.ox/files/api',
         }
     };
 
-    // Upload a file and store it
-    // As options, we expect:
-    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // 'file' - the file object to upload
-    // The method returns a deferred that is resolved once the file has been uploaded
+    /**
+     * upload a new version of a file
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.file
+     * @return {deferred}
+     */
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
@@ -278,6 +288,15 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * upload a new version of a file (IE Version)
+     * @param  {object} options
+     *         'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+     *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+     *         'file' - the file object to upload
+     * @fires  api#create.version
+     * @return {deferred}
+     */
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
@@ -330,16 +349,30 @@ define('io.ox/files/api',
         return deferred;
     };
 
-    api.update = function (file, makeCurrent) { //special handling for mark as current version
+
+    /**
+     * updates file
+     * @param  {object} file
+     * @param  {boolean} makeCurrent (special handling for mark as current version) [optional]
+     * @fires  api#create.file (object)
+     * @return {deferred}
+     */
+    api.update = function (file, makeCurrent) {
         var obj = { id: file.id, folder: file.folder_id },
             updateData = file;
 
-        if (makeCurrent) {//if there is only version, the request works. If the other fields are present theres a backend error
-            updateData = {version: file.version};
+        if (makeCurrent) {
+            //if there is only version, the request works.
+            //if the other fields are present theres a backend error
+            updateData = { version: file.version };
         }
         return http.PUT({
                 module: 'files',
-                params: { action: 'update', id: file.id, timestamp: _.now() },
+                params: {
+                    action: 'update',
+                    id: file.id,
+                    timestamp: _.now()
+                },
                 data: updateData,
                 appendColumns: false
             })
@@ -348,6 +381,9 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * TODO: deprecated/unused?
+     */
     api.create = function (options) {
 
         options = $.extend({
@@ -373,6 +409,16 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * update caches and fire events (if not suppressed)
+     * @param  {string} type ('change', 'new', 'delete')
+     * @param  {file} obj
+     * @param  {boolean} silent (no events will be fired) [optional]
+     * @fires  api#update
+     * @fires  api#update: + cid
+     * @fires  api#refresh.all
+     * @return {promise}
+     */
     api.propagate = function (type, obj, silent) {
 
         var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
@@ -418,6 +464,11 @@ define('io.ox/files/api',
         }
     };
 
+    /**
+     * [versions description]
+     * @param  {[type]} options
+     * @return {[type]}
+     */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
         if (!options.id) {
@@ -440,26 +491,52 @@ define('io.ox/files/api',
         });
     };
 
-    api.getUrl = function (file, mode) {
+    /**
+     * returns url
+     * @param  {object} file
+     * @param  {string} mode
+     * @return {string} url
+     */
+    api.getUrl = function (file, mode, options) {
         var url = ox.apiRoot + '/files',
-            query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
+            query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined ? '&version=' + file.version : ''),
-            name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
+            name = '/' + encodeURIComponent(file.filename),
+            thumbnail = (options ? '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '');
         switch (mode) {
         case 'open':
         case 'view':
             return url + name + query + '&delivery=view';
+        case 'play':
+            return url + query + '&delivery=view';
         case 'download':
             return url + name + query + '&delivery=download';
+        case 'thumbnail':
+            return url + query + '&delivery=view' + thumbnail + '&content_type=' + file.file_mimetype;
+        case 'preview':
+            return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
+        case 'cover':
+            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
         default:
             return url + query;
         }
     };
 
+    /**
+     * removes version
+     * @param  {object} version (file version object)
+     * @fires  api#delete.version (version)
+     * @return {deferred}
+     */
     api.detach = function (version) {
         return http.PUT({
             module: 'files',
-            params: { action: 'detach', id: version.id, folder: version.folder_id, timestamp: _.now() },
+            params: {
+                action: 'detach',
+                id: version.id,
+                folder: version.folder_id,
+                timestamp: _.now()
+            },
             data: [version.version],
             appendColumns: false
         })
@@ -508,12 +585,52 @@ define('io.ox/files/api',
             });
     };
 
+    /**
+     * move files to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
     };
 
+    /**
+     * copy files to a folder
+     * @param  {array} list
+     * @param  {string} targetFolderId
+     * @return {deferred}
+     */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
+    };
+
+    /**
+     * file playable in current browser
+     * @param  {string} type ('audio', 'video')
+     * @param  {string} filename
+     * @return {boolean}
+     */
+    api.checkMediaFile = function (type, filename) {
+        var pattern;
+        if (type === 'video') {
+            if (!Modernizr.video) { return false; }
+            // Disabled for Safari
+            // Not sure yet why it doesn't play any video files, this should be temporary
+            // Direct links to Files that are normally supported also don't work
+            if (_.browser.Safari) { return false; }
+            pattern =                             '\\.(mp4|m4v|mov|wmv|mpe?g|ogv|webm|3gp)';
+            if (_.browser.Chrome) {     pattern = '\\.(mp4|m4v|wmv|mpe?g|ogv|webm)'; }
+            if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
+            if (_.browser.IE) {         pattern = '\\.(mp4|m4v|wmv|mpe?g)'; }
+            if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+        } else {
+            if (!Modernizr.audio) { return false; }
+            pattern =                             '\\.(mp3|m4a|m4b|wma|wav|ogg)';
+            if (_.browser.Safari) {     pattern = '\\.(mp3|m4a|m4b|wav)'; }
+            if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
+        }
+        return (new RegExp(pattern, 'i')).test(filename);
     };
 
     return api;

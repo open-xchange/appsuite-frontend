@@ -2,11 +2,14 @@
 
 if [ ! -d apps ]
 then
-    echo No apps directory found. Are you in the correct directory? >2
+    echo No apps directory found. Are you in the correct directory? >&2
     exit 1
 fi
 
-if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
+if [ -z $NODEJS ]
+then
+    if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
+fi
 
 export BASEDIR="$(dirname "$(dirname "$(readlink "$0" || echo "$0")")")"
 

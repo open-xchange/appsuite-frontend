@@ -18,8 +18,9 @@ define('io.ox/contacts/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/core/print',
+     'io.ox/portal/util',
      'gettext!io.ox/contacts',
-     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, gt, settings) {
+     'settings!io.ox/contacts'], function (ext, links, api, config, notifications, print, portalUtil, gt, settings) {
 
     'use strict';
 
@@ -144,7 +145,7 @@ define('io.ox/contacts/actions',
                         commit(baton.target);
                     } else {
                         var dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h3>').text(label))
+                            .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });
@@ -172,8 +173,9 @@ define('io.ox/contacts/actions',
                                     commit(target);
                                 }
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     }
                 });
@@ -362,7 +364,7 @@ define('io.ox/contacts/actions',
                     return { type: 1, id: obj.internal_userid || obj.user_id};
                 } else {
                     // external user
-                    return { type: 5, display_name: obj.display_name, mail: obj.email1 || obj.email2 || obj.email3 };
+                    return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
                 }
             }
 
@@ -381,7 +383,7 @@ define('io.ox/contacts/actions',
                 });
                 return cleaned;
             }
-
+            
             api.getList(list).done(function (list) {
                 // set participants
                 var def = $.Deferred(),
@@ -390,9 +392,17 @@ define('io.ox/contacts/actions',
                     participants = _.chain(cleanedList).map(mapContact).flatten(true).filter(filterContact).value();
 
                 distLists = _.union(distLists);
+                //remove external participants without contact or they break the request
+                var externalParticipants = [];
+                _(distLists).each(function (participant) {
+                    if (!participant.id) {
+                        externalParticipants.push(participant);
+                    }
+                });
+                distLists = _.difference(distLists, externalParticipants);
 
                 api.getList(distLists).done(function (obj) {
-                    resolvedContacts = resolvedContacts.concat(obj);
+                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);//put everyone back in
                     def.resolve();
                 });
 
@@ -416,10 +426,17 @@ define('io.ox/contacts/actions',
         }
     });
 
+    function addedToPortal(data) {
+        var cid = _.cid(data);
+        return _(portalUtil.getWidgetsByType('stickycontact')).any(function (widget) {
+            return _.cid(widget.props) === cid;
+        });
+    }
+
     new Action('io.ox/contacts/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return e.collection.has('one') && !!e.context.mark_as_distributionlist;
+            return e.collection.has('one') && !!e.context.mark_as_distributionlist && !addedToPortal(e.context);
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
@@ -431,6 +448,8 @@ define('io.ox/contacts/actions',
                         title: baton.data.display_name
                     }
                 });
+                // trigger update event to get redraw of detail views
+                api.trigger('update:' + encodeURIComponent(_.cid(baton.data)), baton.data);
                 notifications.yell('success', gt('This distribution list has been added to the portal'));
             });
         }

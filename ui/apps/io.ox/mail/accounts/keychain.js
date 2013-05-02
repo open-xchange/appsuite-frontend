@@ -64,7 +64,7 @@ define.async("io.ox/mail/accounts/keychain",
             });
             if (evt) {
                 evt = evt.namespace ? evt.type + "." + evt.namespace : evt.type;
-                if (evt === 'account_created') {
+                if (evt === 'create:account') {
                     extension.trigger('create');
                     extension.trigger('refresh.all');
                     return;
@@ -78,7 +78,7 @@ define.async("io.ox/mail/accounts/keychain",
     init().done(function () {
         moduleDeferred.resolve({message: 'Loaded mail keychain'});
     });
-    accountAPI.on("account_created refresh.all refresh.list", init);
+    accountAPI.on("create:account refresh.all refresh.list", init);
 
     function trigger(evt) {
         return function () {

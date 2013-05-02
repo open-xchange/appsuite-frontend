@@ -71,6 +71,36 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/audioplayer', {
+        requires: function (e) {
+            return e.collection.has('multiple') && checkMedia(e, 'audio');
+        },
+        action: function (baton) {
+            baton.app = baton.grid.getApp();
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/videoplayer', {
+        requires: function (e) {
+            return e.collection.has('multiple') && checkMedia(e, 'audio');
+        },
+        action: function (baton) {
+            baton.app = baton.grid.getApp();
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: true
+                });
+            });
+        }
+    });
+
     // editor
     new Action('io.ox/files/actions/editor', {
         requires: function (e) {
@@ -141,9 +171,8 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/sendlink', {
-        requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail');
-        },
+        capabilities: 'webmail !alone',
+        requires: 'some',
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
@@ -151,7 +180,7 @@ define('io.ox/files/actions',
                         //generate text and html content
                         var html = [], text = [];
                         _(list).each(function (file) {
-                            var url = location.protocol + '//' + location.host + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
+                            var url = ox.abs + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
                             var label = gt('File: %1$s', file.title || file.filename);
                             html.push(label + '\n' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
                             text.push(label + '\n' + gt('Direct link: %1$s', url));
@@ -164,8 +193,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/send', {
+        capabilities: 'webmail',
         requires: function (e) {
-            return e.collection.has('some') && capabilities.has('webmail') && ox.uploadsEnabled;
+            return e.collection.has('some') && ox.uploadsEnabled;
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -198,10 +228,10 @@ define('io.ox/files/actions',
                             this.getContentNode().addClass('user-select-text max-height-200').append(
 
                                 _(list).map(function (file) {
-                                    var url = location.protocol + '//' + location.host + ox.root +
+                                    var url = ox.abs + ox.root +
                                         '/#app=io.ox/files&perspective=list' +
-                                        '&folder=' +  encodeURIComponent(file.folder_id) +
-                                        '&id=' + encodeURIComponent(file.id);
+                                        '&folder=' + encodeURIComponent(file.folder_id) +
+                                        '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
                                     return $('<p>').append(
                                         $('<div>').text(file.title || file.filename || ''),
@@ -266,7 +296,7 @@ define('io.ox/files/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var $input = $('<input type="text" name="name">');
+                var $input = $('<input type="text" name="name" class="span12">');
                 var dialog = null;
 
                 function fnRename() {
@@ -283,11 +313,12 @@ define('io.ox/files/actions',
                     return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
-
                 $input.val(baton.data.title || baton.data.filename);
                 var $form = $('<form>').append(
-                    $('<label for="name">').append($('<b>').text(gt('Name'))),
-                    $input
+                    $('<div class="row-fluid">').append(
+                        $('<label for="name">').append($('<b>').text(gt('Name'))),
+                        $input
+                    )
                 );
 
                 $form.on('submit', function (e) {
@@ -306,7 +337,7 @@ define('io.ox/files/actions',
                 .addButton('cancel', gt('Cancel'));
 
                 dialog.show(function () {
-                    $input.select();
+                    $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
                 })
                 .done(function (action) {
                     if (action === 'rename') {
@@ -397,7 +428,7 @@ define('io.ox/files/actions',
                         commit(baton.target);
                     } else {
                         var dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h3>').text(label))
+                            .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });
@@ -425,8 +456,9 @@ define('io.ox/files/actions',
                                     commit(target);
                                 }
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     }
                 });
@@ -438,9 +470,8 @@ define('io.ox/files/actions',
     moveAndCopy('copy', gt('Copy'), gt('Files have been copied'), 'some read');
 
     new Action('io.ox/files/actions/add-to-portal', {
-        require: function (e) {
-            return e.collection.has('one') && capabilities.has('!disablePortal');
-        },
+        capabilities: 'portal',
+        require: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.add('stickyfile', {
@@ -653,6 +684,20 @@ define('io.ox/files/actions',
         label: gt('Publish'),
         ref: 'io.ox/files/actions/publish'
     }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: 1100,
+        id: 'mediaplayer-audio',
+        label: gt('Play audio files'),
+        ref: 'io.ox/files/actions/audioplayer'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        index: 1200,
+        id: 'mediaplayer-video',
+        label: gt('Play video files'),
+        ref: 'io.ox/files/actions/videoplayer'
+    }));
     // version links
 
 
@@ -755,11 +800,18 @@ define('io.ox/files/actions',
         }
     });
 
+    function checkMedia(e, type) {
+        if (_.isUndefined(e.baton.allIds)) {
+            e.baton.allIds = e.baton.data;
+        }
+        return settings.get(type + 'Enabled') && _(e.baton.allIds).reduce(function (memo, obj) {
+            return memo || api.checkMediaFile(type, obj.filename);
+        }, false);
+    }
+
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename) && settings.get('audioEnabled');
-            }, false);
+            return checkMedia(e, 'audio');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -773,11 +825,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
-            var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
-            if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (new RegExp(pattern, 'i')).test(obj.filename) && settings.get('videoEnabled');
-            }, false);
+            return checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {

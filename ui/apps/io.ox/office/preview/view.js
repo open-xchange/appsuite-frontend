@@ -101,6 +101,7 @@ define('io.ox/office/preview/view',
 
         BaseView.call(this, app, {
             initHandler: initHandler,
+            grabFocusHandler: grabFocusHandler,
             scrollable: true,
             margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px'
         });
@@ -169,6 +170,18 @@ define('io.ox/office/preview/view',
 
             // listen to specific scroll keys to switch to previous/next page
             self.getAppPaneNode().on('keydown', keyHandler);
+
+            // set focus to application pane after import
+            app.on('docs:import:after', function () { self.grabFocus(); });
+        }
+
+        /**
+         * Moves the browser focus to the application pane.
+         */
+        function grabFocusHandler() {
+            self.getAppPaneNode().focus();
+            // Bug 25924: sometimes, Firefox selects the entire page
+            window.getSelection().removeAllRanges();
         }
 
         /**

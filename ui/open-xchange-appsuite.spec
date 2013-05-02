@@ -12,7 +12,7 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
-BuildRequires:  nodejs >= 0.4.0
+BuildRequires:  nodejs >= 0.6.0
 
 %if 0%{?suse_version}
 Requires:       apache2
@@ -45,7 +45,7 @@ This package contains the manifest for installation on the backend.
 %package        dev
 Group:          Development/Libraries
 Summary:        SDK for the OX App Suite HTML5 client
-Requires:       nodejs >= 0.4.0
+Requires:       nodejs >= 0.6.0
 
 %description    dev
 SDK for the OX App Suite HTML5 client

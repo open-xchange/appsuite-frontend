@@ -627,7 +627,7 @@ define('io.ox/office/framework/view/baseview',
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container node
-        appPane = new Pane(app, { classes: 'app-pane' });
+        appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
