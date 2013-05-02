@@ -106,10 +106,13 @@ define('io.ox/portal/widgets',
 
             return _.chain(api.getAvailablePlugins().concat(allTypes))
                 .map(function (id) {
-                    var type = id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1'),
-                        options = ext.point('io.ox/portal/widget/' + type + '/settings').options();
+                    return id.replace(/^plugins\/portal\/(\w+)\/register$/, '$1');
+                })
+                .uniq()
+                .map(function (type) {
+                    var options = ext.point('io.ox/portal/widget/' + type + '/settings').options();
                     // inject "requires" for upsell
-                    options.requires = manifests.manager.getRequirements(id);
+                    options.requires = api.requires(type);
                     return options;
                 })
                 .filter(function (obj) {
@@ -250,10 +253,14 @@ define('io.ox/portal/widgets',
             );
         },
 
+        requires: function (type) {
+            var plugin = this.getPluginByType(type);
+            return manifests.manager.getRequirements(plugin);
+        },
+
         // convenience function for upsell
         visible: function (type) {
-            var plugin = this.getPluginByType(type),
-                requires = manifests.manager.getRequirements(plugin);
+            var requires = this.requires(type);
             return upsell.has(requires);
         }
     };
