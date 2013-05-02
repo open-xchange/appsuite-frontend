@@ -449,7 +449,7 @@ define('io.ox/tasks/api',
     /**
      * get tasks for notification view
      * @fires api#new-tasks (dueTasks)
-     * @fires api#confirm-tasks (confirmTasks)
+     * @fires api#set:tasks:to-be-confirmed (confirmTasks)
      * @return {deferred} done returns list of tasks
      */
     api.getTasks = function () {
@@ -484,7 +484,7 @@ define('io.ox/tasks/api',
             //even if empty array is given it needs to be triggered to remove
             //notifications that does not exist anymore (already handled in ox6 etc)
             api.trigger('new-tasks', dueTasks);
-            api.trigger('confirm-tasks', confirmTasks);//same here
+            api.trigger('set:tasks:to-be-confirmed', confirmTasks);//same here
             return list;
         });
     };

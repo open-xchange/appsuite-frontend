@@ -472,7 +472,7 @@ define('plugins/notifications/tasks/register',
         index: 400,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksconfirmation', NotificationsConfirmationView);
-            api.on('confirm-tasks', function (e, confirmationTasks) {
+            api.on('set:tasks:to-be-confirmed', function (e, confirmationTasks) {
                 var items = [];
                 _(confirmationTasks).each(function (task) {
                     items.push(
