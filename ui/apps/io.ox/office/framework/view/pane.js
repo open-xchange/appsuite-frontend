@@ -84,7 +84,15 @@ define('io.ox/office/framework/view/pane',
             components = [],
 
             // handler called to insert a new component into this view pane
-            componentInserter = Utils.getFunctionOption(options, 'componentInserter');
+            componentInserter = Utils.getFunctionOption(options, 'componentInserter'),
+
+            // all data for mouse tracking
+            trackingData = {
+                EVENT_MAP: null,
+                vertical: false,
+                originalSize: 0,
+                startOffset: 0
+            };
 
         // base constructor ---------------------------------------------------
 
@@ -93,31 +101,37 @@ define('io.ox/office/framework/view/pane',
 
         // private methods ----------------------------------------------------
 
+        function logEvent(event) {
+            if (event) Utils.log('Pane: type=' + event.type + ' pagex=' + event.pageX + ' pagey=' + event.pageY);
+        }
+
+        function startTracking(event) {
+            logEvent(event);
+            trackingData.vertical = Utils.isVerticalPosition(position);
+            trackingData.originalSize = node[trackingData.vertical ? 'height' : 'width']();
+            trackingData.startOffset = trackingData.vertical ? event.pageY : event.pageX;
+            $(window).on(trackingData.EVENT_MAP);
+        }
+
+        function trackingHandler(event) {
+            var offset = trackingData.vertical ? event.pageY : event.pageX;
+            logEvent(event);
+        }
+
+        function stopTracking(event) {
+            logEvent(event);
+            $(window).off(trackingData.EVENT_MAP);
+        }
+
         function initResizeableMode() {
 
             var // draggable node to resize the pane
-                resizeNode = $('<div>').addClass('resizer ' + position),
-                // event map for mouse tracking
-                eventMap = {
-                    mousemove: trackingHandler,
-                    mouseup: stopTracking
-                };
+                resizeNode = $('<div>').addClass('resizer ' + position).appendTo(node);
 
-            function trackingHandler(event) {
-                Utils.log('Pane.trackingHandler(): pagex=' + event.pageX + ' pagey=' + event.pageY);
-            }
-
-            function startTracking() {
-                Utils.log('Pane.startTracking()');
-                $(window).on(eventMap);
-            }
-
-            function stopTracking() {
-                Utils.log('Pane.stopTracking()');
-                $(window).off(eventMap);
-            }
-
-            node.append(resizeNode);
+            trackingData.EVENT_MAP = {
+                mousemove: trackingHandler,
+                mouseup: stopTracking
+            };
 
             // start mouse tracking on mouse click
             resizeNode.on('mousedown', startTracking);
@@ -146,7 +160,7 @@ define('io.ox/office/framework/view/pane',
          *  Whether the view pane is currently visible.
          */
         this.isVisible = function () {
-            return node.css('display') !== 'none';
+            return (node.css('display') !== 'none') && Utils.containsNode(document, node);
         };
 
         /**
@@ -182,6 +196,7 @@ define('io.ox/office/framework/view/pane',
          */
         this.toggle = function (state) {
             var visible = this.isVisible();
+            stopTracking();
             node.toggle(state);
             if (visible !== this.isVisible()) {
                 app.getView().refreshPaneLayout();
@@ -242,6 +257,7 @@ define('io.ox/office/framework/view/pane',
 
         this.destroy = function () {
             this.events.destroy();
+            stopTracking();
             _(components).invoke('destroy');
             node = components = null;
         };

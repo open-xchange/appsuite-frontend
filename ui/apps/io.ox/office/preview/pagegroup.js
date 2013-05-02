@@ -237,7 +237,7 @@ define('io.ox/office/preview/pagegroup',
                 pageCount = app.getModel().getPageCount(),
                 // position and size of visible area in scrollable area
                 visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
-                // inner width avaiable for button nodes
+                // inner width available for button nodes
                 innerWidth = visiblePosition.width - 2 * HOR_MARGIN,
                 // top margin of group node, used as offset in position calculations
                 topMargin = Utils.convertCssLength(this.getNode().css('margin-top'), 'px', 0),
@@ -288,10 +288,12 @@ define('io.ox/office/preview/pagegroup',
         this.selectAndShowPage = function (page) {
 
             var // the button node of the specified page (created if necessary)
-                buttonNode = updatePageButton(page);
+                buttonNode = sidePane.isVisible() ? updatePageButton(page) : null;
 
-            Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
-            updateHandler(page);
+            if (buttonNode) {
+                Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
+                updateHandler(page);
+            }
             return this;
         };
 
@@ -308,9 +310,7 @@ define('io.ox/office/preview/pagegroup',
         // when refreshing the side pane (e.g. due to changed size of browser
         // window), update the pages shown in the current visible area
         sidePane.on('refresh:layout', function () {
-            if (sidePane.isVisible()) {
-                self.updatePages();
-            }
+            self.updatePages();
         });
 
         // when showing the side pane, scroll to current page
