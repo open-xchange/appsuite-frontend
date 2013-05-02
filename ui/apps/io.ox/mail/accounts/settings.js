@@ -65,7 +65,7 @@ define('io.ox/mail/accounts/settings',
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
                 $('<div>')
-                .addClass('alert alert-block fade in')
+                .addClass('alert alert-error alert-block')
                 .append(
                     $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
                     .addClass('close')
@@ -129,7 +129,7 @@ define('io.ox/mail/accounts/settings',
                         });
                     }
                 },
-                function fail() {
+                function fail(e) {
                     var message = gt('Failed to connect.');
                     drawAlert(alertPlaceholder, message);
                     autoconfigDialogbox.idle();
@@ -197,10 +197,10 @@ define('io.ox/mail/accounts/settings',
                     $('<h4>').text(gt('Add mail account'))
                 )
                 .append(
-                        labelMail.append(inputFieldMail)
+                    labelMail.append(inputFieldMail)
                 )
                 .append(
-                        labelPassword.append(inputFieldPassword)
+                    labelPassword.append(inputFieldPassword)
                 )
                 .append(
                     alertPlaceholder

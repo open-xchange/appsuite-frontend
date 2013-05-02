@@ -509,7 +509,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
     var processResponse = function (deferred, response, o) {
         // server error?
-        if (response && response.error !== undefined && !response.data) {
+        if (response && response.error !== undefined && !('data' in response)) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
@@ -522,12 +522,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 deferred.reject(response);
             }
         } else {
-            // handle warnings
-            var passThrough = false;
-            if (response && response.error !== undefined) {
-                console.warn("Request to server resulted in error", response);
-                passThrough = true;
-            }
             // success
             if (o.dataType === "json" && o.processResponse === true) {
                 // variables
@@ -554,7 +548,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                                     data.push({ data: tmp, timestamp: timestamp });
                                     // handle warnings within multiple
                                     if (response[i].error !== undefined) {
-                                        console.warn("TODO: warning");
+                                        console.warn('http.js: warning inside multiple');
                                     }
                                 } else {
                                     // error
@@ -567,9 +561,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
                         data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
-                        if (passThrough) {
-                            passThrough = false;
-                        }
                         deferred.resolve(data, timestamp);
                     }
                 } else {
@@ -577,7 +568,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 }
             } else {
                 // e.g. plain text
-                deferred.resolve(response || "");
+                deferred.resolve(response || '');
             }
         }
     };
@@ -646,25 +637,25 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         return response;
                     }
                 })
-                .done(function (data) {
+                .done(function (response) {
                     // trigger event first since HTTP layer finishes work
                     that.trigger("stop done", r.xhr);
                     // process response
                     if (r.o.processData) {
-                        processResponse(r.def, data, r.o, r.o.type);
-                    } else if (r.xhr.dataType === 'json' && data.error !== undefined) {
-                    // error handling if JSON (e.g. for UPLOAD)
-                        r.def.reject(data);
-                    } else if (_.isArray(data.data)) {
-                    // Skip Warnings (category: 13)
-                        data.data = _(data.data).map(function (o) {
+                        processResponse(r.def, response, r.o, r.o.type);
+                    } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                        // error handling if JSON (e.g. for UPLOAD)
+                        r.def.reject(response);
+                    } else if (_.isArray(response.data)) {
+                        // Skip Warnings (category: 13)
+                        response.data = _(response.data).map(function (o) {
                             if (o.category !== 13) {
                                 return o;
                             }
                         });
-                        r.def.resolve(data);
+                        r.def.resolve(response);
                     } else {
-                        r.def.resolve(data);
+                        r.def.resolve(response);
                     }
                     r = null;
                 })

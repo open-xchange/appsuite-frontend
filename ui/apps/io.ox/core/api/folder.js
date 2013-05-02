@@ -803,8 +803,9 @@ define('io.ox/core/api/folder',
                     _.chain(arguments)
                         .flatten()
                         .map(function (arg) {
-                            return _.isString(arg) ? arg : arg.folder_id;
+                            return _.isString(arg) ? arg : (arg ? arg.folder_id : null);
                         })
+                        .compact()
                         .uniq()
                         .each(function (id) {
                             if (!(id in pending)) {
