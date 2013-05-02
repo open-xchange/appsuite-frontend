@@ -12,12 +12,14 @@ frameworks = ['jasmine', 'requirejs'];
 
 // list of files / patterns to load in the browser
 files = [
+  'ui/lib/underscore.js',
+  'ui/lib/require.js',
   'spec/main-test.js',
+  'ui/lib/jquery.min.js',
+  'ui/lib/require-fix.js',
   {pattern: 'spec/**/*_spec.js', included: false},
   {pattern: 'spec/shared/**/*.js'},
   {pattern: 'ui/apps/**/*.js', included: false},
-  'ui/lib/jquery.min.js',
-  'ui/lib/underscore.js',
   'ui/lib/modernizr.js',
   'ui/lib/backbone.js',
   'ui/tmp/boot.js'
