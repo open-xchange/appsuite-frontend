@@ -42,6 +42,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var resendBuffer = {};
     var resendDeferreds = {};
     var serverSequenceThreshhold = 0;
+    var pingNumber = 0;
+    var pendingPing = false;
 
     Event.extend(api);
 
@@ -163,7 +165,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 delete resendDeferreds[Number(receipt.data)];
             });
-
+        } else if (stanza.get("atmosphere", "pong")) {
+            _(stanza.getAll("atmosphere", "pong")).each(function (pong) {
+                if (pong.data === pingNumber - 1) {
+                    pendingPing = false;
+                }
+            });
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
@@ -202,20 +209,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         var triggering = false;
         request.onOpen = function (response) {
             connecting = false;
-            disconnected = false;
             def.resolve(api);
             if (!triggering) {
                 triggering = true;
                 api.trigger("open");
+                if (disconnected) {
+                    api.trigger("online");
+                }
                 triggering = false;
             }
+            disconnected = false;
         };
 
         var reconnectCount = 0;
 
         request.onReconnect = function (request, response) {
             reconnectCount++;
-            if (reconnectCount > 30) {
+            if (reconnectCount > 30 && !disconnected) {
                 reconnect();
             }
         };
@@ -223,13 +233,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
         request.onMessage = function (response) {
             request.requestCount = 0;
+            if (response.status !== 200) {
+                if (!disconnected) {
+                    api.trigger("offline");
+                    subSocket.close();
+                    disconnected = true;
+                }
+                return;
+            }
             var message = response.responseBody;
             var json = {};
             try {
                 json = $.parseJSON(message);
             } catch (e) {
+                console.log(response);
                 console.log('This doesn\'t look like valid JSON: ', message);
-                console.error(e, e.stack);
+                console.error(e, e.stack, response);
                 throw e;
             }
             if (_.isArray(json)) {
@@ -251,7 +270,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         reconnect();
                     } else {
                         subSocket.close();
+                        if (!disconnected) {
+                            api.trigger("offline");
+                        }
                         disconnected = true;
+
                         ox.relogin();
                     }
                 }
@@ -267,12 +290,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 shouldReconnect = false;
                 subSocket = connect();
             } else {
+                if (!disconnected) {
+                    api.trigger("offline");
+                }
                 disconnected = true;
             }
         };
 
         request.onError = function (response) {
-            reconnect();
+            if (!disconnected) {
+                reconnect();
+            }
         };
 
         return socket.subscribe(request);
@@ -370,8 +398,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     setInterval(function () {
-        if (!connecting && !disconnected) {
-            subSocket.push("{\"type\": \"ping\", \"commit\": true}");
+        if (!connecting) {
+            if (disconnected) {
+                reconnect();
+            } else {
+                if (pendingPing) {
+                    api.trigger("offline");
+                }
+                subSocket.push("{\"type\": \"ping\", \"commit\": true, \"id\" : " + pingNumber + " }");
+                pingNumber++;
+                pendingPing = true;
+            }
         }
     }, 30000);
 
