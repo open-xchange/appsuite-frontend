@@ -76,6 +76,9 @@ captureTimeout = 60000;
 // if true, it capture browsers, run tests and exit
 singleRun = false;
 
+proxies =  {
+    '/api/apps/load/': 'http://localhost:8337/apps/load/'
+}
 
 // plugins to load
 plugins = [
