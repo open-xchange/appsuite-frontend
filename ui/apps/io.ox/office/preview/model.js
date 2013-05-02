@@ -130,6 +130,7 @@ define('io.ox/office/preview/model',
          *  <img> element as jQuery object.
          */
         function createImageNode(page) {
+            Utils.log('PreviewModel.createImageNode(): fetching page ' + page);
             return app.createImageNode(app.getPreviewModuleUrl({
                 convert_format: 'html',
                 convert_action: 'getpage',
@@ -150,6 +151,7 @@ define('io.ox/office/preview/model',
          */
         function loadSvgMarkup(page) {
 
+            Utils.log('PreviewModel.loadSvgMarkup(): fetching page ' + page);
             return app.sendPreviewRequest({
                 params: {
                     convert_format: 'html',

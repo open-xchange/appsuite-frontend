@@ -114,13 +114,6 @@ define('io.ox/office/framework/view/baseview',
         // private methods ----------------------------------------------------
 
         /**
-         * Triggers a debounced 'refresh:layout' event.
-         */
-        var triggerRefreshLayout = app.createDebouncedMethod($.noop, function () {
-            self.trigger('refresh:layout');
-        });
-
-        /**
          * Adjusts the positions of all view pane nodes.
          */
         function refreshPaneLayout() {
@@ -201,7 +194,7 @@ define('io.ox/office/framework/view/baseview',
             _(overlayPanes).each(updatePane);
 
             // notify listeners
-            triggerRefreshLayout();
+            self.trigger('refresh:layout');
         }
 
         /**

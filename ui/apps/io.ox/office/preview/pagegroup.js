@@ -20,14 +20,14 @@ define('io.ox/office/preview/pagegroup',
 
     'use strict';
 
-    var // minimum horizontal distance between page buttons
-        DISTANCE = 8,
+    var // horizontal margin between group and scroll pane
+        HOR_MARGIN = 13,
 
         // fixed total width of a page button (two buttons in default side pane width)
-        BUTTON_WIDTH = Math.floor((SidePane.DEFAULT_WIDTH - Utils.SCROLLBAR_WIDTH - 2 * DISTANCE) / 2),
+        BUTTON_WIDTH = 100,
 
         // fixed total height of a page button
-        BUTTON_HEIGHT = BUTTON_WIDTH + 20;
+        BUTTON_HEIGHT = 130;
 
     // class PageGroup ========================================================
 
@@ -43,7 +43,10 @@ define('io.ox/office/preview/pagegroup',
             buttonNodes = {},
 
             // number of pages per row
-            columns = 0;
+            columns = 0,
+
+            // current button width, in pixels
+            buttonWidth = 0;
 
         // base constructor ---------------------------------------------------
 
@@ -67,9 +70,9 @@ define('io.ox/office/preview/pagegroup',
                 row = Math.floor((page - 1) / columns);
 
             return {
-                left: col * BUTTON_WIDTH,
-                top: row * BUTTON_HEIGHT + DISTANCE,
-                width: BUTTON_WIDTH,
+                left: col * buttonWidth,
+                top: row * BUTTON_HEIGHT,
+                width: buttonWidth,
                 height: BUTTON_HEIGHT
             };
         }
@@ -138,6 +141,9 @@ define('io.ox/office/preview/pagegroup',
                         label: String(page),
                         css: getPageButtonRectangle(page)
                     }).append(busyNode);
+
+                // select button of active page
+                Utils.toggleButtons(buttonNode, page === app.getView().getPage());
 
                 // insert the button node and page node into the DOM before loading the image
                 self.addChildNodes(buttonNode);
@@ -231,22 +237,25 @@ define('io.ox/office/preview/pagegroup',
                 pageCount = app.getModel().getPageCount(),
                 // position and size of visible area in scrollable area
                 visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
+                // inner width avaiable for button nodes
+                innerWidth = visiblePosition.width - 2 * HOR_MARGIN,
+                // top margin of group node, used as offset in position calculations
+                topMargin = Utils.convertCssLength(this.getNode().css('margin-top'), 'px', 0),
                 // row range visible in the scrollable node (closed range)
                 firstRow = 0, lastRow = 0,
                 // page range visible in the scrollable node (closed range)
                 firstPage = 0, lastPage = 0;
 
-            // calculate number of pages available per row
-            columns = Math.floor((visiblePosition.width - 2 * DISTANCE) / BUTTON_WIDTH);
+            // calculate number of pages available per row, and effective button width
+            columns = Math.floor(innerWidth / BUTTON_WIDTH + 0.4);
+            buttonWidth = Math.floor(innerWidth / columns);
 
             // update size of the own group node
-            this.getNode()
-                .width(columns * BUTTON_WIDTH)
-                .height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT + 2 * DISTANCE);
+            this.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
 
             // get row range in visible area (add a row above and below)
-            firstRow = Math.floor((visiblePosition.top - DISTANCE) / BUTTON_HEIGHT) - 1;
-            lastRow = Math.floor((visiblePosition.top + visiblePosition.height - DISTANCE) / BUTTON_HEIGHT) + 1;
+            firstRow = Math.floor((visiblePosition.top - topMargin) / BUTTON_HEIGHT) - 1;
+            lastRow = Math.floor((visiblePosition.top + visiblePosition.height - topMargin) / BUTTON_HEIGHT) + 1;
 
             // get one-based page range in visible area (restrict range to pages in document)
             firstPage = Math.max(1, firstRow * columns + 1);
@@ -281,7 +290,7 @@ define('io.ox/office/preview/pagegroup',
             var // the button node of the specified page (created if necessary)
                 buttonNode = updatePageButton(page);
 
-            Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 3 * DISTANCE });
+            Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
             updateHandler(page);
             return this;
         };
@@ -305,8 +314,10 @@ define('io.ox/office/preview/pagegroup',
         });
 
         // when showing the side pane, scroll to current page
-        sidePane.on('show', function () {
-            self.selectAndShowPage(app.getView().getPage());
+        sidePane.on('show', function (event, visible) {
+            if (visible) {
+                self.selectAndShowPage(app.getView().getPage());
+            }
         });
 
     } // class PageGroup

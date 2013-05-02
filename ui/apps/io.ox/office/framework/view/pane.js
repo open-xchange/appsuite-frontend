@@ -80,9 +80,6 @@ define('io.ox/office/framework/view/pane',
             // transparent overlay pane
             transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
 
-            // draggable node to resize the pane
-            resizeNode = null,
-
             // view components contained in this pane
             components = [],
 
@@ -93,6 +90,38 @@ define('io.ox/office/framework/view/pane',
 
         // add event hub
         Events.extend(this);
+
+        // private methods ----------------------------------------------------
+
+        function initResizeableMode() {
+
+            var // draggable node to resize the pane
+                resizeNode = $('<div>').addClass('resizer ' + position),
+                // event map for mouse tracking
+                eventMap = {
+                    mousemove: trackingHandler,
+                    mouseup: stopTracking
+                };
+
+            function trackingHandler(event) {
+                Utils.log('Pane.trackingHandler(): pagex=' + event.pageX + ' pagey=' + event.pageY);
+            }
+
+            function startTracking() {
+                Utils.log('Pane.startTracking()');
+                $(window).on(eventMap);
+            }
+
+            function stopTracking() {
+                Utils.log('Pane.stopTracking()');
+                $(window).off(eventMap);
+            }
+
+            node.append(resizeNode);
+
+            // start mouse tracking on mouse click
+            resizeNode.on('mousedown', startTracking);
+        }
 
         // methods ------------------------------------------------------------
 
@@ -156,7 +185,7 @@ define('io.ox/office/framework/view/pane',
             node.toggle(state);
             if (visible !== this.isVisible()) {
                 app.getView().refreshPaneLayout();
-                this.trigger(this.isVisible() ? 'show' : 'hide');
+                this.trigger('show', this.isVisible());
             }
             return this;
         };
@@ -231,7 +260,7 @@ define('io.ox/office/framework/view/pane',
 
         // resizeable pane (not if overlay and transparent)
         if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
-            node.append(resizeNode = $('<div>').addClass('resizer ' + position));
+            initResizeableMode();
         }
 
     } // class Pane
