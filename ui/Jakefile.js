@@ -27,6 +27,7 @@ var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var less = require('./lib/build/less');
 
+console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
 
 var pkgName = process.env['package'];
