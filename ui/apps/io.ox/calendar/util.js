@@ -448,20 +448,22 @@ define("io.ox/calendar/util",
 
         getConfirmations: function (data) {
             var hash = {};
-            // internal users
-            _(data.users).each(function (obj) {
-                hash[String(obj.id)] = {
-                    status: obj.confirmation || 0,
-                    comment: obj.confirmmessage || ""
-                };
-            });
-            // external users
-            _(data.confirmations).each(function (obj) {
-                hash[obj.mail] = {
-                    status: obj.status || 0,
-                    comment: obj.confirmmessage || ""
-                };
-            });
+            if (data) {
+                // internal users
+                _(data.users).each(function (obj) {
+                    hash[String(obj.id)] = {
+                        status: obj.confirmation || 0,
+                        comment: obj.confirmmessage || ""
+                    };
+                });
+                // external users
+                _(data.confirmations).each(function (obj) {
+                    hash[obj.mail] = {
+                        status: obj.status || 0,
+                        comment: obj.confirmmessage || ""
+                    };
+                });
+            }
             return hash;
         },
 
