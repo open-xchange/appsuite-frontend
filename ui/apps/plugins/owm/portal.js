@@ -1,8 +1,6 @@
 define("plugins/owm/portal", ["io.ox/core/extensions"], function (ext) {
 	"use strict";
 
-    console.log("LOAD!");
-
     ext.point("io.ox/portal/widget").extend({id: 'owm1'});
 
 	ext.point("io.ox/portal/widget/owm1").extend({
@@ -15,7 +13,7 @@ define("plugins/owm/portal", ["io.ox/core/extensions"], function (ext) {
             this.append($('<div class="content pointer">').append('Hello World'));
         }
     });
-    
+
     ext.point('io.ox/portal/widget/owm1/settings').extend({
         title: "Greetings from OWM",
         type: 'owm1',

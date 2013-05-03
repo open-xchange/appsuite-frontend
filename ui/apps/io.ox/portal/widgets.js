@@ -100,6 +100,10 @@ define('io.ox/portal/widgets',
             });
         },
 
+        getOptions: function (type) {
+            return ext.point('io.ox/portal/widget/' + type + '/settings').options();
+        },
+
         getAllTypes: function () {
 
             var allTypes = ext.point('io.ox/portal/widget').pluck('id');
@@ -110,7 +114,7 @@ define('io.ox/portal/widgets',
                 })
                 .uniq()
                 .map(function (type) {
-                    var options = ext.point('io.ox/portal/widget/' + type + '/settings').options();
+                    var options = api.getOptions(type);
                     // inject "requires" for upsell
                     options.requires = api.requires(type);
                     return options;
@@ -262,6 +266,25 @@ define('io.ox/portal/widgets',
         visible: function (type) {
             var requires = this.requires(type);
             return upsell.has(requires);
+        },
+
+        // get model by widget id, e.g. mail_0
+        getModel: function (id) {
+            return collection.get(id);
+        },
+
+        // open settings by widget id
+        // returns true if edit dialog can be opened, false otherwise
+        edit: function (id) {
+            var model = this.getModel(id), options;
+            if (model) {
+                options = this.getOptions(model.get('type'));
+                if (_.isFunction(options.edit)) {
+                    options.edit(model);
+                    return true;
+                }
+            }
+            return false;
         }
     };
 
