@@ -52,6 +52,10 @@ define('shared/examples/for/api', [], function () {
                 it('should define a trigger method', function () {
                     expect(api.trigger).toBeDefined();
                 });
+
+                it('should define an on method', function () {
+                    expect(api.on).toBeDefined();
+                });
             });
         });
     };
