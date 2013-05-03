@@ -15,9 +15,8 @@
 define("io.ox/core/extPatterns/links",
     ["io.ox/core/extensions",
      "io.ox/core/collection",
-     "io.ox/core/upsell",
      "io.ox/core/extPatterns/actions",
-     "gettext!io.ox/core"], function (ext, Collection, upsell, actions, gt) {
+     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
 
     "use strict";
 

@@ -442,18 +442,29 @@ define('io.ox/office/framework/app/baseapplication',
          * Returns an object with attributes describing the file currently
          * opened by this application.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.encodeUrl=false]
+         *      If set to true, special characters not allowed in URLs will be
+         *      encoded.
+         *
          * @returns {Object|Null}
          *  An object with file attributes, if existing; otherwise null.
          */
-        this.getFileParameters = function () {
+        this.getFileParameters = function (options) {
+
+            var // function to encode a string to be URI conforming if specified
+                encodeString = Utils.getBooleanOption(options, 'encodeUrl', false) ? encodeURIComponent : _.identity;
+
             return file ? {
-                id: file.id,
-                folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version,
-                source: file.source,
-                attached: file.attached,
-                module: file.module
+                id: encodeString(file.id),
+                folder_id: encodeString(file.folder_id),
+                filename: encodeString(file.filename),
+                version: encodeString(file.version),
+                source: encodeString(file.source),
+                attached: encodeString(file.attached),
+                module: encodeString(file.module)
             } : null;
         };
 
@@ -639,7 +650,11 @@ define('io.ox/office/framework/app/baseapplication',
             }
 
             // build a default options map, and add the passed options
-            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, this.getFileParameters(), options);
+            options = Utils.extendOptions(
+                { session: ox.session, uid: this.get('uniqueID') },
+                this.getFileParameters({ encodeUrl: true }),
+                options
+            );
 
             // build and return the resulting URL
             return ox.apiRoot + '/' + module + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
@@ -1229,6 +1244,72 @@ define('io.ox/office/framework/app/baseapplication',
 
             // update application title
             return def.always(updateTitle).promise();
+        };
+
+        /**
+         * Downloads a file from the server, specified by the passed URL. If
+         * the passed object is a Deferred object, the method waits for it to
+         * resolve to the file URL, but immediately opens a pop-up window in
+         * the background to prevent that the browser pop-up blocker will be
+         * triggered.
+         *
+         * @param {String|jQuery.Deferred|jQuery.Promise} fileUrl
+         *  The URL of the document. If this parameter is a Deferred object or
+         *  a Promise, waits for it to be resolved with the file URL.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the file
+         *  has been downloaded successfully, or rejected otherwise (e.g. when
+         *  a pop-up blocker prevents the download).
+         */
+        this.downloadFile = function (fileUrl) {
+
+            var // the pop-up window used to download the file
+                popupWindow = null,
+                // the result Deferred object
+                def = $.Deferred();
+
+            // synchronous mode: open the file directly in a new window
+            if (_.isString(fileUrl)) {
+                // browser plug-ins may prevent opening pop-up windows, TODO: show warning?
+                return window.open(fileUrl) ? def.resolve(fileUrl) : def.reject();
+            }
+
+            // passed Deferred already rejected: do not open pop-up window
+            if (fileUrl.state() === 'rejected') {
+                // TODO: show warning?
+                return def.reject();
+            }
+
+            // open pop-up window early to prevent browser pop-up blockers
+            popupWindow = window.open('about:blank', '_blank');
+            window.focus();
+
+            // browser plug-ins may still prevent opening pop-up windows, TODO: show warning?
+            if (!popupWindow) {
+                return def.reject();
+            }
+
+            // block application window while waiting for the file URL
+            view.enterBusy();
+
+            // wait for the result of the Deferred object
+            fileUrl
+            .always(function () {
+                view.leaveBusy();
+            })
+            .done(function (url) {
+                popupWindow.location = url;
+                popupWindow.focus();
+                def.resolve(url);
+            })
+            .fail(function () {
+                popupWindow.close();
+                view.grabFocus();
+                def.reject();
+            });
+
+            return def.promise();
         };
 
         /**

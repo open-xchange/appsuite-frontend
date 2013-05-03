@@ -185,7 +185,7 @@ define('io.ox/calendar/invitations/register',
                     }
                 })
                 .then(
-                    function success() {
+                    function done() {
                         notifications.yell('success', success[action]);
                         // deleteMailIfNeeded(baton);
                         rerender(baton);

@@ -21,35 +21,40 @@ define('io.ox/mail/autoforward/settings/model',
     'use strict';
 
     function providePreparedData(attributes) {
-        var preparedData = {
-                "rulename": "autoforward",
+        if (!attributes.forwardmail) {
+            return {};
+        } else {
+            var preparedData = {
+                    "rulename": "autoforward",
 
-                "test": {
-                    "id": "header",
-                    "comparison": "contains",
-                    "values": [attributes.userMainEmail],
-                    "headers": ["To"]
-                },
-                "actioncmds": [
-                    {
-                        "id": "redirect",
-                        "to": attributes.forwardmail
+                    "test": {
+                        "id": "header",
+                        "comparison": "contains",
+                        "values": [attributes.userMainEmail],
+                        "headers": ["To"]
                     },
-                    {
-                        "id": "keep"
-                    },
-                    {
-                        "id": "stop"
-                    }
-                ],
-                "flags": ["autoforward"],
-                "active": attributes.active ? true : false
-            };
-        if (attributes.id) {
-            preparedData.id = attributes.id;
+                    "actioncmds": [
+                        {
+                            "id": "redirect",
+                            "to": attributes.forwardmail
+                        },
+                        {
+                            "id": "keep"
+                        },
+                        {
+                            "id": "stop"
+                        }
+                    ],
+                    "flags": ["autoforward"],
+                    "active": attributes.active ? true : false
+                };
+            if (attributes.id) {
+                preparedData.id = attributes.id;
+            }
+
+            return preparedData;
         }
 
-        return preparedData;
     }
 
     function buildFactory(ref, api) {

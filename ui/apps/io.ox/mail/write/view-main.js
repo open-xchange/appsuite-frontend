@@ -677,11 +677,19 @@ define("io.ox/mail/write/view-main",
     }
 
     handleFileSelect = function (e, view) {
-
         // look for linked attachments or dropped files
         var target = $(e.currentTarget),
             item = target.prop('attachment') || target.prop('file') || target.prop('nested'),
             list = item ? [item] : e.target.files;
+
+        // IE fallback
+        if (!list) {
+            var name = target.val();
+            list = [{
+                filename: name.split(/(\\|\/)/g).pop(),
+                size: 0
+            }];
+        }
 
         if (list.length) {
             // loop over all attachments

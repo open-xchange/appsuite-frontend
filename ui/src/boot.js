@@ -27,8 +27,6 @@ $(window).load(function () {
 
     // animations
     var DURATION = 250,
-        // flags
-        relogin = false,
         // functions
         boot,
         appCache = $.Deferred(),
@@ -303,7 +301,7 @@ $(window).load(function () {
                     // restore form
                     restore();
                     // reset focus
-                    $('#io-ox-login-' + (_.isString(focus) ? focus : (relogin ? 'password' : 'username'))).focus().select();
+                    $('#io-ox-login-' + (_.isString(focus) ? focus : 'username')).focus().select();
                 },
                 // get user name / password
                 username = $('#io-ox-login-username').val(),
@@ -406,85 +404,6 @@ $(window).load(function () {
             }
             return changeLanguage(lang);
         };
-
-        /**
-         * Relogin
-         */
-        (function () {
-
-            var queue = [];
-
-            function fnKeyPress(e) {
-                if (e.which === 13) {
-                    e.data.popup.invoke(e.data.action);
-                }
-            }
-
-            ox.relogin = function (request, deferred) {
-                if (!ox.online) {
-                    return;
-                }
-                if (!relogin) {
-                    // enqueue last request
-                    queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
-                    // set flag
-                    relogin = true;
-                    require(['io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/core', 'settings!io.ox/core'], function (dialogs, notifications, gt, settings) {
-                        new dialogs.ModalDialog({ easyOut: false, async: true, width: 400 })
-                            .build(function () {
-                                this.getHeader().append(
-                                    $('<h4>').text(gt('Your session is expired')),
-                                    $('<div>').text(gt('Please sign in again to continue'))
-                                );
-                                this.getContentNode().append(
-                                    $('<label>').text(gt('Password')),
-                                    $('<input type="password" name"relogin-password" class="input-xlarge">')
-                                    .on('keypress', { popup: this, action: 'relogin' }, fnKeyPress)
-                                );
-                            })
-                            .addPrimaryButton('relogin', gt('Relogin'))
-                            .addAlternativeButton('cancel', gt('Cancel'))
-                            .on('cancel', function () {
-                                var location = settings.get('customLocations/logout');
-                                _.url.redirect(location || ox.logoutLocation);
-                            })
-                            .on('relogin', function () {
-                                var self = this.busy();
-                                // relogin
-                                session.login(ox.user, this.getContentNode().find('input').val(), ox.secretCookie).then(
-                                    function success() {
-                                        notifications.yell('close');
-                                        self.getContentNode().find('input').val('');
-                                        self.close();
-                                        // process queue
-                                        var i = 0, item, http = require('io.ox/core/http');
-                                        for (; (item = queue[i]); i++) {
-                                            http.retry(item.request)
-                                                .done(item.deferred.resolve)
-                                                .fail(item.deferred.fail);
-                                        }
-                                        // set flag
-                                        relogin = false;
-                                    },
-                                    function fail(error) {
-                                        notifications.yell(error);
-                                        self.idle();
-                                        self.getContentNode().find('input').focus().select();
-                                    }
-                                );
-                            })
-                            .show(function () {
-                                this.find('input').focus();
-                            });
-                    });
-                } else {
-                    // enqueue last request
-                    if (request && deferred) {
-                        queue.push({ request: request, deferred: deferred });
-                    }
-                }
-            };
-        }());
 
         function updateServerConfig(data) {
             ox.serverConfig = data || {};

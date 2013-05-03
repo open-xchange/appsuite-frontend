@@ -215,11 +215,20 @@ define('io.ox/portal/main',
     }
 
     app.drawScaffold = function (model) {
+
         var baton = ext.Baton({ model: model, app: app }),
             decoration = $('<div>').addClass('decoration'),
             node = $('<li>').append(decoration);
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
+
+        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
+        }
+
         if (model.get('enabled') === false) node.hide();
+
         appBaton.$.widgets.append(node);
     };
 
@@ -297,11 +306,17 @@ define('io.ox/portal/main',
 
         var type = model.get('type'),
             node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 1000,
+            delay = (index / 2 >> 0) * 500,
             baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
             point = ext.point(baton.point),
             requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
             title;
+
+        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
+        }
 
         // set/update title
         title = node.find('h2.title').text(getTitle(model.toJSON(), point.prop('title')));

@@ -41,6 +41,11 @@ define('io.ox/office/tk/control/textfield',
      *  details). Additionally, the following options are supported:
      *  @param {Boolean} [options.readOnly=false]
      *      If set to true, the text in the text field cannot be edited.
+     *  @param {Boolean} [options.select=false]
+     *      If set to true, the entire text will be selected after the text
+     *      field has been clicked. Note that the text will always be selected
+     *      independent from this option, if the text field gets focus via
+     *      keyboard navigation.
      *  @param {TextField.Validator} [options.validator]
      *      A text validator that will be used to convert the values from
      *      'update' events to the text representation used in this text field,
@@ -59,6 +64,9 @@ define('io.ox/office/tk/control/textfield',
 
             // read-only mode
             readOnly = null,
+
+            // whether to select the entire text on click
+            select = Utils.getBooleanOption(options, 'select', false),
 
             // the validator used to convert and validate values
             validator = Utils.getObjectOption(options, 'validator', defaultValidator),
@@ -89,7 +97,7 @@ define('io.ox/office/tk/control/textfield',
          */
         function restoreFieldState(state) {
             textField.val(state.value);
-            Utils.setTextFieldSelection(textField, state);
+            Utils.setTextFieldSelection(textField, state.start, state.end);
         }
 
         /**
@@ -121,11 +129,13 @@ define('io.ox/office/tk/control/textfield',
                 if (!_.isString(initialText)) {
                     initialText = textField.val();
                 }
+                // select entire text on mouse click when specified via option
+                if (select) { textField.select().one('mouseup', false); }
                 validationFieldState = getFieldState();
                 break;
             case 'focus:key':
-                // select entire text when reaching the field with keyboard
-                Utils.setTextFieldSelection(textField, true);
+                // always select entire text when reaching the field with keyboard
+                textField.select().off('mouseup');
                 validationFieldState = getFieldState();
                 break;
             case 'blur:key':
@@ -135,6 +145,7 @@ define('io.ox/office/tk/control/textfield',
                 }
                 break;
             case 'blur':
+                textField.off('mouseup');
                 // restore saved value
                 if (_.isString(initialText)) {
                     textField.val(initialText);

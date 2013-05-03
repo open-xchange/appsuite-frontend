@@ -14,12 +14,13 @@
 define('io.ox/portal/settings/pane',
       ['io.ox/core/extensions',
        'io.ox/core/manifests',
+       'io.ox/core/upsell',
        'io.ox/core/tk/dialogs',
        'io.ox/portal/widgets',
        'settings!io.ox/portal',
        'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js',
-       'less!io.ox/portal/style.less'], function (ext, manifests, dialogs, widgets, settings, gt) {
+       'less!io.ox/portal/style.less'], function (ext, manifests, upsell, dialogs, widgets, settings, gt) {
 
     'use strict';
 
@@ -45,16 +46,31 @@ define('io.ox/portal/settings/pane',
         id: "header",
         draw: function () {
             this.addClass('io-ox-portal-settings').append(
-                $('<h1>').text(gt('Portal settings'))
+                $('<h1 class="no-margin">').text(gt('Portal settings'))
             );
         }
     });
 
     function addWidget(e) {
+
         e.preventDefault();
-        var type = $(this).attr('data-type');
-        widgets.add(type);
-        repopulateAddButton();
+
+        var type = $(this).attr('data-type'),
+            requires = manifests.manager.getRequirements('plugins/portal/' + type + '/register');
+
+        // upsell check
+        if (!upsell.any(requires)) {
+            // trigger global upsell event
+            upsell.trigger({
+                type: 'portal-widget',
+                id: type,
+                missing: upsell.missing(requires)
+            });
+        } else {
+            // add widget
+            widgets.add(type);
+            repopulateAddButton();
+        }
     }
 
     function drawAddButton() {
@@ -74,15 +90,19 @@ define('io.ox/portal/settings/pane',
 
     function repopulateAddButton() {
 
-        var used = widgets.getUsedTypes(),
-            allTypes = widgets.getAllTypes();
-
         $('div.controls ul.dropdown-menu').empty().append(
-            _(allTypes).map(function (options) {
-                if (options.unique && _(used).contains(options.type)) {
-                    return '';
+            _(widgets.getAllTypes()).map(function (options) {
+
+                var isUnique = options.unique && widgets.containsType(options.type),
+                    isVisible = upsell.visible(options.requires);
+
+                if (isUnique || !isVisible) {
+                    return $();
                 } else {
-                    return $('<li>').append(
+                    return $('<li>')
+                    // add disabld class if requires upsell
+                    .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
+                    .append(
                         $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
                     );
                 }
@@ -226,9 +246,26 @@ define('io.ox/portal/settings/pane',
         },
 
         onToggle: function (e) {
+
             e.preventDefault();
-            this.model.set('enabled', !this.model.get('enabled'));
-            this.render();
+
+            var enabled = this.model.get('enabled'),
+                type = this.model.get('type'),
+                requires = manifests.manager.getRequirements('plugins/portal/' + type + '/register');
+
+            // upsell check
+            if (!enabled && !upsell.any(requires)) {
+                // trigger global upsell event
+                upsell.trigger({
+                    type: 'portal-widget',
+                    id: type,
+                    missing: upsell.missing(requires)
+                });
+            } else {
+                // toggle widget
+                this.model.set('enabled', !enabled);
+                this.render();
+            }
         },
 
         removeWidget: function () {
@@ -310,7 +347,7 @@ define('io.ox/portal/settings/pane',
             collection.on('add', function (model) {
                 model.set({ candidate: true }, { silent: true });
                 var view = createView(model).render();
-                list.append(view.el);
+                list.prepend(view.el);
                 view.edit();
             });
 

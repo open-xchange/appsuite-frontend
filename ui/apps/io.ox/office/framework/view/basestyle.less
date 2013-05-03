@@ -321,6 +321,8 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     a.button {
         text-align: left;
+        // prevent system pop-up when tapping and holding button on iPad/iPhone
+        -webkit-touch-callout: none;
 
         &.dropdown-button {
             padding-right: 7px + @control-padding;

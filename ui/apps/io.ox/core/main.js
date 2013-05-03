@@ -24,6 +24,7 @@ define("io.ox/core/main",
      'io.ox/core/upsell',
      "settings!io.ox/core",
      "gettext!io.ox/core",
+     'io.ox/core/relogin',
      "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
 
     "use strict";
@@ -62,14 +63,6 @@ define("io.ox/core/main",
     var topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
-
-    // biggeleben: stupid fix for gt() in boot.js (relogin)
-    // better move this code here with next release
-    gt('Your session is expired');
-    gt('Please sign in again to continue');
-    gt('Relogin');
-    gt('Cancel');
-    gt('Password');
 
     // whatever ...
     gt('Portal');
@@ -713,15 +706,15 @@ define("io.ox/core/main",
 
             return autoStart;
         };
-        
+
         //checks url which app to launch, needed to handle direct links
         function appCheck() {
             if (_.url.hash('m')) {//direkt link
-                
+
                 switch (_.url.hash('m')) {
                 case 'task':
                     _.url.hash({app: 'io.ox/tasks'});
-                                
+
                     break;
                 case 'calendar':
                     _.url.hash({app: 'io.ox/calendar',

@@ -75,8 +75,10 @@ define('io.ox/core/upsell',
         },
 
         // find one set of capabilities that matches
+        // returns true or false
         any: function (array) {
-            return _(array).reduce(function (memo, c) {
+            if (!array) return true;
+            return _([].concat(array)).reduce(function (memo, c) {
                 return memo || c === undefined || that.has(c);
             }, false);
         },
@@ -168,9 +170,11 @@ define('io.ox/core/upsell',
             if (!debugCustomWizard) {
                 that.useDefaults();
                 require(['io.ox/portal/widgets'], function (widgets) {
-                    widgets.addPlugin('plugins/portal/upsell/register');
-                    widgets.add('upsell', { color: 'gray', inverse: true });
-                    console.debug('Added upsell widget to portal');
+                    if (!widgets.containsType('upsell')) {
+                        widgets.addPlugin('plugins/portal/upsell/register');
+                        widgets.add('upsell', { color: 'gray', inverse: true });
+                        console.debug('Added upsell widget to portal');
+                    }
                 });
             }
         }

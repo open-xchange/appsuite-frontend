@@ -62,7 +62,6 @@ define("plugins/portal/calendar/register",
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
-
                     if (portalModel) {
                         portalApp.refreshWidget(portalModel, 0);
                     }

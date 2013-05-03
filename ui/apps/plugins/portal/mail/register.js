@@ -105,6 +105,9 @@ define('plugins/portal/mail/register',
 
     ext.point('io.ox/portal/widget/stickymail').extend({
 
+        // helps at reverse lookup
+        type: 'mail',
+
         // called right after initialize. Should return a deferred object when done
         load: function (baton) {
             var props = baton.model.get('props') || {};
