@@ -318,12 +318,7 @@ define('io.ox/files/actions',
             }, false);
         },
         multiple: function (list) {
-            var question = gt.ngettext(
-                    'Do you really want to lock this file?',
-                    'Do you really want to lock these files?',
-                    list.length
-            ),
-            responseSuccess = gt.ngettext(
+            var responseSuccess = gt.ngettext(
                     'This file has been locked',
                     'These files have been locked',
                     list.length
@@ -334,21 +329,10 @@ define('io.ox/files/actions',
                     list.length
             );
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('lock', gt('Lock'))
-                    .addButton('cancel', gt('Cancel'))
-                    .show()
-                    .done(function (action) {
-                        if (action === 'lock') {
-                            api.lock(list).done(function (data) {
-                                notifications.yell('success', responseSuccess);
-                            }).fail(function () {
-                                notifications.yell('error', responseFail);
-                            });
-                        }
-                    });
+            api.lock(list).done(function (data) {
+                notifications.yell('success', responseSuccess);
+            }).fail(function () {
+                notifications.yell('error', responseFail);
             });
         }
     });
@@ -361,12 +345,7 @@ define('io.ox/files/actions',
             }, false);
         },
         multiple: function (list) {
-            var question = gt.ngettext(
-                    'Do you really want to unlock this file?',
-                    'Do you really want to unlock these files?',
-                    list.length
-            ),
-            responseSuccess = gt.ngettext(
+            var responseSuccess = gt.ngettext(
                     'This file has been unlocked',
                     'These files have been unlocked',
                     list.length
@@ -377,21 +356,10 @@ define('io.ox/files/actions',
                     list.length
             );
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('unlock', gt('Unlock'))
-                    .addButton('cancel', gt('Cancel'))
-                    .show()
-                    .done(function (action) {
-                        if (action === 'unlock') {
-                            api.unlock(list).done(function (data) {
-                                notifications.yell('success', responseSuccess);
-                            }).fail(function () {
-                                notifications.yell('error', responseFail);
-                            });
-                        }
-                    });
+            api.unlock(list).done(function (data) {
+                notifications.yell('success', responseSuccess);
+            }).fail(function () {
+                notifications.yell('error', responseFail);
             });
         }
     });

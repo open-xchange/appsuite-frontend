@@ -18,10 +18,104 @@ define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/core/config',
-     'io.ox/core/cache'
-    ], function (http, apiFactory, config, cache) {
+     'io.ox/core/cache',
+     'io.ox/core/date'
+    ], function (http, apiFactory, config, cache, date) {
 
     'use strict';
+
+
+    var DELAY = 1000 * 3; // 3 seconds
+
+    var tracker = (function () {
+
+        var fileLocks = {},
+        explicitFileLocks = {},
+        fileLockTimers = {};
+
+        var getCID = function (param) {
+            return _.isString(param) ? param : _.cid(param);
+        };
+
+        var self = {
+
+            // check if file is locked
+            isLocked: function (obj) {
+                var cid = getCID(obj);
+                return !!fileLocks[cid];
+            },
+
+            // check if file is explicitly locked by other user (modified_by + locked_until)
+            isExplicitLocked: function (obj) {
+                var cid = getCID(obj);
+                return this.isLocked(cid) && (!(cid in explicitFileLocks) || explicitFileLocks[cid] < (_.now() - DELAY));
+            },
+
+            getLockTime: function (obj) {
+                var cid = getCID(obj);
+                return new date.Local(obj.locked_until).format(date.DATE_TIME);
+            },
+
+            update: function (obj) {
+                var cid = getCID(obj);
+                if (this.isLocked(cid) && obj.locked_until === 0) {
+                    this.removeFile(cid);
+                } else {
+                    this.addFile(obj);
+                }
+            },
+
+            refresh: function (obj) {
+                // do something useful
+            },
+
+            // add file to tracker
+            addFile: function (obj) {
+                if (obj.locked_until === 0) return;
+                var cid = getCID(obj);
+                fileLocks[cid] = obj.locked_until;
+                if (obj.modified_by !== ox.user_id) {
+                    explicitFileLocks[cid] = obj.locked_until;
+                }
+                // Only setup timers for locks that expire up to the next day
+                if (obj.locked_until < _.now() + date.DAY) {
+                    clearTimeout(fileLockTimers[cid]);
+                    fileLockTimers[cid] = setTimeout(function () {
+                        self.refresh();
+                    }, obj.locked_until - _.now());
+                }
+            },
+
+            // remove file from tracker
+            removeFile: function (obj) {
+                var cid = getCID(obj);
+                delete fileLocks[cid];
+                if (cid in explicitFileLocks) {
+                    delete explicitFileLocks[cid];
+                }
+            },
+
+            // clear tracker and clear timeouts
+            clear: function (obj) {
+                for (var t in fileLockTimers) {
+                    clearTimeout(fileLockTimers[t]);
+                }
+                fileLocks = {};
+                fileLockTimers = {};
+            },
+
+            debug: function () {
+                console.debug(
+                    'fileLocks:', fileLocks,
+                    'explicitFileLocks:', explicitFileLocks,
+                    'fileLockTimers:', fileLockTimers);
+
+            }
+        };
+
+        return self;
+
+    }());
 
     var mime_types = {
         // images
@@ -130,24 +224,36 @@ define('io.ox/files/api',
                     fixContentType(obj);
                     api.caches.get.merge(obj);
                     api.caches.versions.remove(String(obj.id));
+                    api.tracker.addFile(obj);
                     // this can be solved smarter once backend send correct
                     // number_of_version in 'all' requests; always zero now
                 });
+                api.tracker.debug();
                 return data;
             },
             list: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                    api.tracker.addFile(obj);
+                });
                 return data;
             },
             get: function (data) {
+                api.tracker.addFile(data);
                 return fixContentType(data);
             },
             search: function (data) {
-                _(data).each(fixContentType);
+                _(data).each(function (obj) {
+                    fixContentType(obj);
+                    api.tracker.addFile(obj);
+                });
                 return data;
             }
         }
     });
+
+    // publish tracker
+    api.tracker = tracker;
 
     /**
      * TOOD: deprecated/unused? (31f5a4a, b856ca5)
@@ -646,7 +752,8 @@ define('io.ox/files/api',
                 params: {
                     action: action,
                     id: o.id,
-                    folder: o.folder_id || o.folder
+                    folder: o.folder_id || o.folder,
+                    timezone: 'UTC'
                 },
                 appendColumns: false
             });
