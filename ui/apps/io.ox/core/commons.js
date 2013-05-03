@@ -164,11 +164,6 @@ define('io.ox/core/commons',
                 app.showFolderView();
             }
 
-            function fnCancel(e) {
-                e.preventDefault();
-                app.getWindow().search.stop();
-            }
-
             // right now, only mail folders support "total"
             var supportsTotal = app.get('name') === 'io.ox/mail';
 
@@ -203,13 +198,6 @@ define('io.ox/core/commons',
                     node = grid.getToolbar().find('.grid-info').empty();
                 if (mode === 'all') {
                     node.append(drawFolderName(folder_id));
-                } else if (mode === 'search') {
-                    node.append(
-                        $('<a href="#" data-action="cancel-search">')
-                        .addClass('btn btn-danger')
-                        .text(gt('Cancel search'))
-                        .on('click', fnCancel)
-                    );
                 }
             });
 
