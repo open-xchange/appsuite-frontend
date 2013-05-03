@@ -1160,6 +1160,72 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Downloads a file from the server, specified by the passed URL. If
+         * the passed object is a Deferred object, the method waits for it to
+         * resolve to the file URL, but immediately opens a pop-up window in
+         * the background to prevent that the browser pop-up blocker will be
+         * triggered.
+         *
+         * @param {String|jQuery.Deferred|jQuery.Promise} fileUrl
+         *  The URL of the document. If this parameter is a Deferred object or
+         *  a Promise, waits for it to be resolved with the file URL.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the file
+         *  has been downloaded successfully, or rejected otherwise (e.g. when
+         *  a pop-up blocker prevents the download).
+         */
+        this.downloadFile = function (fileUrl) {
+
+            var // the pop-up window used to download the file
+                popupWindow = null,
+                // the result Deferred object
+                def = $.Deferred();
+
+            // synchronous mode: open the file directly in a new window
+            if (_.isString(fileUrl)) {
+                // browser plug-ins may prevent opening pop-up windows, TODO: show warning?
+                return window.open(fileUrl) ? def.resolve(fileUrl) : def.reject();
+            }
+
+            // passed Deferred already rejected: do not open pop-up window
+            if (fileUrl.state() === 'rejected') {
+                // TODO: show warning?
+                return def.reject();
+            }
+
+            // open pop-up window early to prevent browser pop-up blockers
+            popupWindow = window.open('about:blank', '_blank');
+            window.focus();
+
+            // browser plug-ins may still prevent opening pop-up windows, TODO: show warning?
+            if (!popupWindow) {
+                return def.reject();
+            }
+
+            // block application window while waiting for the file URL
+            view.enterBusy();
+
+            // wait for the result of the Deferred object
+            fileUrl
+            .always(function () {
+                view.leaveBusy();
+            })
+            .done(function (url) {
+                popupWindow.location = url;
+                popupWindow.focus();
+                def.resolve(url);
+            })
+            .fail(function () {
+                popupWindow.close();
+                view.grabFocus();
+                def.reject();
+            });
+
+            return def.promise();
+        };
+
+        /**
          * Will be called automatically from the OX core framework to create
          * and return a save point containing the current state of the
          * application.
