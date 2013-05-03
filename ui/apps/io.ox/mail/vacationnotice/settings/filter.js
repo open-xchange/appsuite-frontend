@@ -104,6 +104,19 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     }
                 });
 
+                ext.point('io.ox/core/vacationnotice/model').extend({
+                    id: 'io.ox/core/vacationnotice/model/text',
+                    triggerChange: function () {
+                        var that = this,
+                            textarea = $(this.el).find('textarea');
+                        textarea.on('keyup keydown', function () {
+                            textarea.trigger('change');
+                        });
+                    }
+                });
+
+                ext.point('io.ox/core/vacationnotice/model').invoke('triggerChange', vacationNotice, vacationNotice);
+
                 deferred.resolve(vacationNotice.model);
 
             }).fail(function (error) {
