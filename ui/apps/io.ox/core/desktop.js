@@ -1331,7 +1331,15 @@ define("io.ox/core/desktop",
                         ),
                         $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
                         .on('click', searchHandler.change)
-                    )
+                    ),
+                    //abort button
+                    $('<a href="#" data-action="remove">×</a>')
+                        .addClass('close')
+                        .addClass('close-big')
+                        .on('click', function fnCancel(e) {
+                                e.preventDefault();
+                                win.search.stop();
+                            })
                 )
                 .on('change', 'input', function () { win.search.previous = ''; })
                 .on('submit', false)

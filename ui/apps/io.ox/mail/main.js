@@ -655,7 +655,7 @@ define('io.ox/mail/main',
                 ids = 'from to cc subject text'.split(' '),
                 state = { from: true, cc: true, subject: true };
 
-            win.nodes.search.find('form').append(
+            win.nodes.search.find('.input-append').append(
                 _(ids).map(function (name) {
                     return $('<label class="checkbox margin-right">').append(
                         $('<input type="checkbox" value="on">').attr({ name: name, checked: state[name] ? 'checked' : null }),
