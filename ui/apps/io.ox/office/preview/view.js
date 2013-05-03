@@ -214,7 +214,7 @@ define('io.ox/office/preview/view',
             case KeyCodes.UP_ARROW:
             case KeyCodes.PAGE_UP:
                 app.executeDelayed(function () {
-                    if ((scrollPos === 0) && (scrollNode.scrollTop === 0)) {
+                    if ((scrollPos === 0) && (scrollNode.scrollTop === 0) && !pageNode.hasClass('busy')) {
                         showPage(page - 1, 'bottom');
                         app.getController().update();
                     }
@@ -225,7 +225,7 @@ define('io.ox/office/preview/view',
             case KeyCodes.PAGE_DOWN:
                 app.executeDelayed(function () {
                     var bottomPos = Math.max(0, scrollNode.scrollHeight - scrollNode.clientHeight);
-                    if ((scrollPos === bottomPos) && (scrollNode.scrollTop === bottomPos)) {
+                    if ((scrollPos === bottomPos) && (scrollNode.scrollTop === bottomPos) && !pageNode.hasClass('busy')) {
                         showPage(page + 1, 'top');
                         app.getController().update();
                     }
