@@ -14,10 +14,11 @@ define('io.ox/core/api/folder',
     ['io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/config',
+     'settings!io.ox/core',
      'io.ox/core/api/account',
      'io.ox/core/event',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, cache, config, account, Events, notifications, gt) {
+     'gettext!io.ox/core'], function (http, cache, config, settings, account, Events, notifications, gt) {
 
     'use strict';
 
@@ -26,25 +27,13 @@ define('io.ox/core/api/folder',
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
 
-        //TODO: set undefined to enable server setting (not yet mapped in backend yet)
-        blacklist = {},
-
         /**
          * checks if folder is currently blacklisted
          * @param  {object} folder
          * @return {boolean} true if not blacklisted
          */
         visible = function (folder) {
-            var tmp = {};
-            // init blacklist?
-            if (blacklist === undefined) {
-                if ((tmp = config.get('folder.blacklist', null))) {
-                    blacklist = {};
-                    $.each(tmp, function (i, o) { blacklist[String(o)] = true; });
-                } else {
-                    blacklist = null;
-                }
-            }
+            var blacklist = settings.get('folder/blacklist') || {};
             return folder !== undefined && blacklist[String(folder.data ? folder.data.id : folder.id)] === undefined;
         },
 
