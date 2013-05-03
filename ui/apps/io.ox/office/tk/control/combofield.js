@@ -123,7 +123,7 @@ define('io.ox/office/tk/control/combofield',
                 // call the update handler to update the text field and list selection
                 self.update(Utils.getControlValue(buttons.eq(index)));
                 // select entire text field
-                Utils.setTextFieldSelection(self.getTextFieldNode(), true);
+                self.getTextFieldNode().select();
             }
 
             switch (event.keyCode) {
@@ -205,7 +205,7 @@ define('io.ox/office/tk/control/combofield',
                     (selection.start === fieldText.length) && (oldFieldState.start < selection.start) &&
                     (oldFieldState.value.substr(0, oldFieldState.start) === fieldText.substr(0, oldFieldState.start))) {
                 textField.val(buttonValueText);
-                Utils.setTextFieldSelection(textField, { start: fieldText.length, end: buttonValueText.length });
+                Utils.setTextFieldSelection(textField, fieldText.length, buttonValueText.length);
                 fieldText = buttonValueText;
             }
 

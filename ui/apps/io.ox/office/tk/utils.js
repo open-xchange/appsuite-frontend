@@ -2259,22 +2259,18 @@ define.async('io.ox/office/tk/utils',
      * @param {jQuery} textField
      *  A jQuery object containing a text field element.
      *
-     * @param {Object|Boolean} selection
-     *  An object with the attributes 'start' and 'end' containing the start
-     *  and end character offset of the new selection in the text field, or a
-     *  boolean value specifying whether to select the entire text (true), or
-     *  to place the cursor behind the text (false).
+     * @param {Number} start
+     *  The start character offset of the new selection in the text field.
+     *
+     * @param {Number} [end=start]
+     *  The end character offset of the new selection in the text field. If
+     *  omitted, sets a text cursor according to the passed start position.
      */
-    Utils.setTextFieldSelection = function (textField, selection) {
+    Utils.setTextFieldSelection = function (textField, start, end) {
         var input = textField.get(0);
         if (input) {
-            if (_.isObject(selection)) {
-                input.selectionStart = selection.start;
-                input.selectionEnd = selection.end;
-            } else if (_.isBoolean(selection)) {
-                input.selectionStart = selection ? 0 : textField.val().length;
-                input.selectionEnd = textField.val().length;
-            }
+            input.selectionStart = start;
+            input.selectionEnd = _.isNumber(end) ? end : start;
         }
     };
 
