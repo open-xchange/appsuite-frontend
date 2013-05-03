@@ -275,7 +275,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         }
                         disconnected = true;
 
-                        ox.relogin();
+                        ox.trigger('relogin:required');
                     }
                 }
 

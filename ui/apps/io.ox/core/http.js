@@ -528,7 +528,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
                 ox.session = '';
-                ox.relogin(o, deferred);
+                ox.trigger('relogin:required', o, deferred);
                 return;
             } else {
                 // genereal error
@@ -739,7 +739,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
                     });
                 if (!found) {
-                    ox.relogin(o, def);
+                    ox.trigger('relogin:required', o, def);
                     return def;
                 }
             }
