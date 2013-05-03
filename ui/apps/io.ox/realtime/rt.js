@@ -214,6 +214,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 triggering = true;
                 api.trigger("open");
                 if (disconnected) {
+                    disconnected = false;
                     api.trigger("online");
                 }
                 triggering = false;
