@@ -15,6 +15,10 @@ define('shared/examples/for/api', [], function () {
             markedPending: {}
         }, options);
 
+        afterEach(function () {
+            this.handleExpectedFail(options.markedPending);
+        });
+
         describe('a basic API class', function () {
             describe('has some get methods', function () {
                 it('should define a getAll method', function () {
