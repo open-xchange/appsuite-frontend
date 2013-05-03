@@ -134,7 +134,7 @@ define('plugins/portal/flickr/register',
                     );
                     if (flickrUrl) {
                         img.wrap(
-                            $('<a>', { href: flickrUrl + photo.id, target: '_blank' })
+                            $('<a>', { href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/', target: '_blank' })
                         );
                     }
                     if (photo.title) {
@@ -152,10 +152,8 @@ define('plugins/portal/flickr/register',
                     flickrUrl = '';
 
                 if (baton.model.get('props').method === 'flickr.photos.search') {
-                    flickrUrl = 'http://www.flickr.com/photos/' + baton.model.get('props').query + '/';
+                    flickrUrl = 'http://www.flickr.com/photos';
                 }
-
-                console.log('FLICKR.data', data, flickrUrl);
 
                 node.append($('<h1>').text(baton.model.get('props').query));
 
