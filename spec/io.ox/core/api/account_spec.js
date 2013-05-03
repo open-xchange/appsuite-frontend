@@ -17,7 +17,9 @@ define(['shared/examples/for/api',
         var options = {
             markedPending: {
                 'account API a basic API class has some get methods should define a getAll method.': true,
-                'account API a basic API class has some get methods should define a getList method.': true
+                'account API a basic API class has some get methods should define a getList method.': true,
+                'account API a basic API class has some get methods should return a deferred object for getAll.': true,
+                'account API a basic API class has some get methods should return a deferred object for getList.': true
             }
         }
         sharedExamplesFor(api, options);

@@ -25,13 +25,27 @@ define('shared/examples/for/api', [], function () {
                     expect(api.getAll).toBeDefined();
                 });
 
+                it('should return a deferred object for getAll', function () {
+                    expect(api.getAll()).toBeDeferred();
+                });
+
                 it('should define a getList method', function () {
                     expect(api.getList).toBeDefined();
+                });
+
+                it('should return a deferred object for getList', function () {
+                    expect(api.getList({})).toBeDeferred();
                 });
 
                 it('should define a get method', function () {
                     expect(api.get).toBeDefined();
                 });
+
+                it('should return a deferred object for get', function () {
+                    var result = api.get({});
+                    expect(result).toBeDeferred();
+                });
+
             });
 
             describe('implements an event system', function () {
