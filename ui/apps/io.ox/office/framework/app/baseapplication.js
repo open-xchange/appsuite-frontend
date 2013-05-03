@@ -442,18 +442,29 @@ define('io.ox/office/framework/app/baseapplication',
          * Returns an object with attributes describing the file currently
          * opened by this application.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.encodeUrl=false]
+         *      If set to true, special characters not allowed in URLs will be
+         *      encoded.
+         *
          * @returns {Object|Null}
          *  An object with file attributes, if existing; otherwise null.
          */
-        this.getFileParameters = function () {
+        this.getFileParameters = function (options) {
+
+            var // function to encode a string to be URI conforming if specified
+                encodeString = Utils.getBooleanOption(options, 'encodeUrl', false) ? encodeURIComponent : _.identity;
+
             return file ? {
-                id: file.id,
-                folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version,
-                source: file.source,
-                attached: file.attached,
-                module: file.module
+                id: encodeString(file.id),
+                folder_id: encodeString(file.folder_id),
+                filename: encodeString(file.filename),
+                version: encodeString(file.version),
+                source: encodeString(file.source),
+                attached: encodeString(file.attached),
+                module: encodeString(file.module)
             } : null;
         };
 
@@ -639,7 +650,11 @@ define('io.ox/office/framework/app/baseapplication',
             }
 
             // build a default options map, and add the passed options
-            options = Utils.extendOptions({ session: ox.session, uid: this.get('uniqueID') }, this.getFileParameters(), options);
+            options = Utils.extendOptions(
+                { session: ox.session, uid: this.get('uniqueID') },
+                this.getFileParameters({ encodeUrl: true }),
+                options
+            );
 
             // build and return the resulting URL
             return ox.apiRoot + '/' + module + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
