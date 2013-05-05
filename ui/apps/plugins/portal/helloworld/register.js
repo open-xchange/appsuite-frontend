@@ -21,6 +21,8 @@ define('plugins/portal/helloworld/register',
     // register it manually in io.ox/portal/main.js by adding it to the
     // DEV_PLUGINS array.
 
+    console.info('Loaded portal plugin: plugins/portal/helloworld/register');
+
     ext.point('io.ox/portal/widget/helloworld').extend({
 
         // widget title (fills <h2> title node)
