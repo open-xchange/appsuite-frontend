@@ -22,6 +22,7 @@ files = [
   {pattern: 'apps/**/*.js', included: false},
   'lib/modernizr.js',
   'lib/backbone.js',
+  'lib/node_modules/sinon/pkg/sinon.js',
   'tmp/boot.js'
 ];
 
