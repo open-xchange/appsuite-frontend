@@ -362,7 +362,9 @@ define('io.ox/mail/api',
     // undefined -> first fetch
     // true -> has been fetched in this session
     // false -> caused by refresh
-    var cacheControl = {}, getAll = api.getAll;
+    var cacheControl = {},
+        getAll = api.getAll,
+        search = api.search;
 
     api.getAll = function (options, useCache) {
         // use cache?
@@ -378,6 +380,13 @@ define('io.ox/mail/api',
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
         });
+    };
+
+    api.search = function (query, options) {
+        if (options.sort === 'from-to') {
+            options.sort = accountAPI.is('sent', options.folder) ? 604 : 603;
+        }
+        return search.call(this, query, options);
     };
 
     /**
