@@ -528,7 +528,10 @@ define('io.ox/mail/view-detail',
                 console.error('mail.draw', e.message, e, baton);
             }
 
-            return container.append(node);
+            container.append(node);
+            node.closest('.scrollable').scrollTop(0);
+
+            return container;
         },
 
         autoResolveThreads: (function () {
