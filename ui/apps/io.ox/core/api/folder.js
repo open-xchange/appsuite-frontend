@@ -208,8 +208,8 @@ define('io.ox/core/api/folder',
                             return data;
                         });
                     })
-                    .fail(function (error) {
-                        console.error('folder.getSubFolders', opt.folder, error);
+                    .fail(function (e) {
+                        console.error('folder.getSubFolders', opt.folder, e.error, e);
                     });
                 };
 

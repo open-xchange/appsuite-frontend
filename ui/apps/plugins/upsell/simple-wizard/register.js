@@ -65,11 +65,13 @@ define('plugins/upsell/simple-wizard/register',
             return that.settings.url;
         },
 
-        getURL: function (options) {
+        // url is temporary. used when working with local copy of settings
+        // see upsell:simple-wizard:init
+        getURL: function (options, url) {
 
             var url, hash = that.getVariables(options);
 
-            url = String(that.settings.url).replace(/\$(\w+)/g, function (all, key) {
+            url = String(url || that.settings.url).replace(/\$(\w+)/g, function (all, key) {
                 key = String(key).toLowerCase();
                 return key in hash ? encodeURIComponent(hash[key]) : '$' + key;
             });
@@ -154,7 +156,7 @@ define('plugins/upsell/simple-wizard/register',
                         this.setUnderlayStyle({ opacity: settings.overlayOpacity });
                         var self = this;
                         setTimeout(function () {
-                            that.setSrc(that.getURL(options));
+                            that.setSrc(that.getURL(options, settings.url));
                             ox.trigger('upsell:simple-wizard:show', self);
                         }, 250);
                     })
