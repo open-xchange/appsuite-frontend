@@ -235,8 +235,6 @@ define('io.ox/office/preview/view',
                 factor = self.getZoomFactor() / 100,
                 // the child node of the page representing the SVG contents
                 childNode = pageNode.children().first(),
-                // the vertical/horizontal margin to adjust scroll size
-                vMargin = 0, hMargin = 0,
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
@@ -246,17 +244,8 @@ define('io.ox/office/preview/view',
                     height: childNode.data('height') * factor
                 });
             } else if (childNode.length > 0) {
-
-                // the vertical margin to adjust scroll size
-                vMargin = childNode.height() * (factor - 1) / 2;
-                // the horizontal margin to adjust scroll size
-                hMargin = childNode.width() * (factor - 1) / 2;
-
-                // CSS 'zoom' not supported in all browsers, need to transform with
-                // scale(). But: transformations do not modify the element size, so
-                // we need to modify page margin to get the correct scroll size.
-                Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
-                childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
+                // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
+                childNode.css('zoom', factor);
 
                 // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
                 // if browser zoom is not 100%) regardless of existing SVG, must
