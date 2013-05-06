@@ -635,6 +635,9 @@ define('io.ox/office/framework/app/basecontroller',
         // register keyboard event listener for shortcuts
         app.getView().getAppPaneNode().on('keydown keypress', keyHandler);
 
+        // update once after import (successful and failed)
+        app.on('docs:import:after', function () { self.update(); });
+
     } // class BaseController
 
     // exports ================================================================

@@ -254,10 +254,7 @@ define('io.ox/office/framework/app/baseapplication',
             delayTimeouts = [],
 
             // whether the document is completely imported
-            imported = false,
-
-            // has the document been renamed
-            renamed = false;
+            imported = false;
 
         // private methods ----------------------------------------------------
 
@@ -523,16 +520,6 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.isImportFinished = function () {
             return imported;
-        };
-
-        /**
-         * Return whether the document has been renamed.
-         *
-         * @returns {Boolean}
-         *  Whether the document has been renamed.
-         */
-        this.isRenamed = function () {
-            return renamed;
         };
 
         /**
@@ -1090,54 +1077,6 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         // application runtime ------------------------------------------------
-
-        /**
-         * Renames the current file and updates the GUI accordingly.
-         *
-         * @param {String} shortName
-         *  The new short file name (without extension).
-         *
-         * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved when the
-         *  file has been renamed successfully; or that will be rejected, if
-         *  renaming the file has failed.
-         */
-        this.rename = function (shortName) {
-
-            var // the result Deferred object
-                def = null;
-
-            // trim NPCs and spaces at beginning and end, replace embedded NPCs
-            shortName = shortName.replace(/^[\x00-\x1f\s]+(.*?)[\x00-\x1f\s]+$/, '$1').replace(/[\x00-\x1f]/g, ' ');
-
-            if (shortName.length === 0) {
-                // empty name (after trimming)
-                def = $.Deferred().reject();
-            } else if (shortName === this.getShortFileName()) {
-                // name does not change
-                def = $.when();
-            } else {
-                def = this.sendFilterRequest({
-                    params: {
-                        action: 'renamedocument',
-                        filename: shortName + '.' + this.getFileExtension()
-                    },
-                    resultFilter: function (data) {
-                        // returning undefined (also for empty file name) rejects the entire request
-                        return Utils.getStringOption(data, 'filename', undefined, true);
-                    }
-                })
-                .then(function (fileName) {
-                    file.filename = fileName;
-                    renamed = true;
-                    // TODO: what if filter request succeeds, but Files API fails?
-                    return FilesAPI.propagate('change', file);
-                });
-            }
-
-            // update application title
-            return def.always(updateTitle).promise();
-        };
 
         /**
          * Downloads a file from the server, specified by the passed URL. If
