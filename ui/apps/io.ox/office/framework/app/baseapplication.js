@@ -408,11 +408,14 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Returns the file descriptor of the document edited by this
-         * application.
+         * Returns a clone of the file descriptor of the document edited by
+         * this application.
+         *
+         * @returns {Object}
+         *  A clone of the current file descriptor.
          */
         this.getFileDescriptor = function () {
-            return file;
+            return _.clone(file);
         };
 
         /**
@@ -424,11 +427,10 @@ define('io.ox/office/framework/app/baseapplication',
          *  A reference to this application instance.
          */
         this.setFileDescriptor = function (newFile) {
-            // only set new file descriptor, do not change it
-            if (_.isNull(file) && _.isObject(newFile)) {
-                file = newFile;
-            }
+            var hasFile = this.hasFileDescriptor();
+            file = newFile;
             updateTitle();
+            FilesAPI.propagate(hasFile ? 'change' : 'new', file);
             return this;
         };
 
@@ -1258,12 +1260,12 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @param {Object} point
          *  The save point containing the application state, as returned by the
-         *      last call of the BaseApplication.failSave() method.
+         *  last call of the BaseApplication.failSave() method.
          */
         this.failRestore = function (point) {
 
             // set file descriptor from save point
-            this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
+            file = Utils.getObjectOption(point, 'file', null);
 
             // check existence of file descriptor, import the document
             if (this.hasFileDescriptor()) {
