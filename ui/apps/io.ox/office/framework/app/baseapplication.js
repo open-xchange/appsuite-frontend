@@ -1179,7 +1179,13 @@ define('io.ox/office/framework/app/baseapplication',
             var // the result Deferred object
                 def = null;
 
-            if (shortName === this.getShortFileName()) {
+            // trim NPCs and spaces at beginning and end, replace embedded NPCs
+            shortName = shortName.replace(/^[\x00-\x1f\s]+(.*?)[\x00-\x1f\s]+$/, '$1').replace(/[\x00-\x1f]/g, ' ');
+
+            if (shortName.length === 0) {
+                // empty name (after trimming)
+                def = $.Deferred().reject();
+            } else if (shortName === this.getShortFileName()) {
                 // name does not change
                 def = $.when();
             } else {
