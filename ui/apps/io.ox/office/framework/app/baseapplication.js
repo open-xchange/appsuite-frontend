@@ -250,14 +250,11 @@ define('io.ox/office/framework/app/baseapplication',
             // the controller instance as single connection point between model and view
             controller = null,
 
-            // whether the document is completely imported
-            imported = false,
-
             // browser timeouts for delayed callbacks
             delayTimeouts = [],
 
-            // Deferred object used to lock execution of debounced methods
-            debouncedLock = null,
+            // whether the document is completely imported
+            imported = false,
 
             // has the document been renamed
             renamed = false;
@@ -1039,22 +1036,11 @@ define('io.ox/office/framework/app/baseapplication',
                 // timer used for the maxDelay option
                 maxTimer = null,
                 // first call in this stack frame
-                firstCall = true,
-                // whether execution of the deferred callback function has been postponed already
-                postponed = false;
+                firstCall = true;
 
             // callback for a delay timer, executing the deferred callback
             function timerCallback() {
-
-                // postpone execution if debounced methods are currently locked
-                if (debouncedLock) {
-                    postponed = true;
-                    debouncedLock.done(createTimers);
-                    return;
-                }
-
                 // execute the callback and return its result (for repeated execution)
-                postponed = false;
                 return deferredCallback();
             }
 
@@ -1096,38 +1082,11 @@ define('io.ox/office/framework/app/baseapplication',
             return function () {
 
                 // create a new timeout executing the callback function
-                if (!postponed) { createTimers(); }
+                createTimers();
 
                 // call the direct callback with the passed arguments
                 return directCallback.apply(undefined, _.toArray(arguments));
             };
-        };
-
-        /**
-         * Prevents deferred execution of debounced methods, until the method
-         * BaseApplication.unlockDebouncedMethods() has been called.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.lockDebouncedMethods = function () {
-            debouncedLock = debouncedLock || $.Deferred();
-            return this;
-        };
-
-        /**
-         * Unlocks deferred execution of debounced methods. All pending
-         * debounced methods will be executed.
-         *
-         * @returns {BaseApplication}
-         *  A reference to this application instance.
-         */
-        this.unlockDebouncedMethods = function (options) {
-            if (debouncedLock) {
-                debouncedLock.resolve();
-                debouncedLock = null;
-            }
-            return this;
         };
 
         // application runtime ------------------------------------------------
