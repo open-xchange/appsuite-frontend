@@ -302,7 +302,7 @@ define('io.ox/office/framework/app/baseapplication',
                     if (cause !== 'timeout') {
                         view.showError(title, message);
                     }
-                    Utils.warn('BaseApplication.launch(): Importing document "' + file.filename + '" failed. Error code: "' + cause + '".');
+                    Utils.error('BaseApplication.launch(): Importing document "' + self.getFullFileName() + '" failed. Error code: "' + cause + '".');
                     self.trigger('docs:import:error', cause);
                 });
         }
@@ -419,18 +419,44 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Sets the file descriptor of the document edited by this application.
-         * Must not be called if the application already contains a valid file
-         * descriptor.
+         * Registers the file descriptor of the new document created by this
+         * application. Must not be called if the application already contains
+         * a valid file descriptor.
+         *
+         * @param {Object} newFile
+         *  The file descriptor of the new file created by the caller of this
+         *  method.
          *
          * @returns {BaseApplication}
-         *  A reference to this application instance.
+         *  A reference to this instance.
          */
-        this.setFileDescriptor = function (newFile) {
-            var hasFile = this.hasFileDescriptor();
-            file = newFile;
-            updateTitle();
-            FilesAPI.propagate(hasFile ? 'change' : 'new', file);
+        this.registerFileDescriptor = function (newFile) {
+            if (_.isObject(file)) {
+                Utils.error('BaseApplication.registerFileDescriptor(): file descriptor exists already');
+            } else {
+                file = newFile;
+                FilesAPI.propagate('new', file);
+                updateTitle();
+            }
+            return this;
+        };
+
+        /**
+         * Updates the current file descriptor of the document edited by this
+         * application.
+         *
+         * @param {Object} fileOptions
+         *  A map with some file descriptor properties to be updated.
+         *
+         * @returns {BaseApplication}
+         *  A reference to this instance.
+         */
+        this.updateFileDescriptor = function (fileOptions) {
+            if (_.isObject(file)) {
+                _.extend(file, fileOptions);
+                FilesAPI.propagate('change', file);
+                updateTitle();
+            }
             return this;
         };
 
@@ -473,7 +499,7 @@ define('io.ox/office/framework/app/baseapplication',
          *  descriptor exists.
          */
         this.getFullFileName = function () {
-            return (file && _.isString(file.filename || file.data.filename)) ? file.filename || file.data.filename : null;
+            return (file && _.isString(file.filename)) ? file.filename : null;
         };
 
         /**
