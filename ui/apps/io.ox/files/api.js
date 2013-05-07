@@ -237,7 +237,6 @@ define('io.ox/files/api',
                     // this can be solved smarter once backend send correct
                     // number_of_version in 'all' requests; always zero now
                 });
-                api.tracker.debug();
                 return data;
             },
             list: function (data) {
