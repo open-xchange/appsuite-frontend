@@ -86,6 +86,19 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/office/framework/app/baseapplication.js:270
+msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:299
+#: apps/io.ox/office/preview/view.js:306
+msgid "Load Error"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:300
+msgid "An error occurred while loading the document."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:93 apps/io.ox/core/about.js:40
 #: apps/io.ox/core/commons-folderview.js:392
 #: apps/io.ox/core/permissions/permissions.js:400
@@ -3858,11 +3871,6 @@ msgstr ""
 msgid "Page %1$s of %2$s"
 msgstr ""
 
-#: apps/io.ox/office/framework/app/baseapplication.js:305
-#: apps/io.ox/office/preview/view.js:306
-msgid "Load Error"
-msgstr ""
-
 #. %1$d is the current page number that caused the error
 #, c-format
 #: apps/io.ox/office/preview/view.js:309
@@ -3873,14 +3881,6 @@ msgstr ""
 #, c-format
 #: apps/io.ox/office/preview/view.js:329
 msgid "Zoom: %1$d%"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:276
-msgid "Unnamed"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:306
-msgid "An error occurred while loading the document."
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:49
