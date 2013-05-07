@@ -191,7 +191,7 @@ define('io.ox/calendar/list/perspective',
                     //if recurrence_position is missing we look for the oldest appearing one.
                     if (findRecurrence) {
                         
-                        var foundRecurrence,
+                        var foundRecurrence = false,
                             searchItem = _.url.hash('id').split('.');
                         
                         _(data).each(function (obj) {
@@ -208,7 +208,7 @@ define('io.ox/calendar/list/perspective',
                         });
                         
                         //found valid recurrence, append it
-                        if (foundRecurrence) {
+                        if (foundRecurrence !== false) {
                             _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
                         }
                         
