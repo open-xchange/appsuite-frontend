@@ -38,8 +38,8 @@ define('io.ox/calendar/list/perspective',
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
         }
-        
-        
+
+
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
@@ -184,34 +184,34 @@ define('io.ox/calendar/list/perspective',
                     _.map(data, function (obj) {
                         // show pending appointments under today label
                         if (obj.start_date < now) {
-                            obj.start_date = now;
+                            obj.fixed_start_date = now;
                         }
                         return obj;
                     });
                     //if recurrence_position is missing we look for the oldest appearing one.
                     if (findRecurrence) {
-                        
+
                         var foundRecurrence = false,
                             searchItem = _.url.hash('id').split('.');
-                        
+
                         _(data).each(function (obj) {
                             if (obj.id.toString() === searchItem[1] && obj.folder_id.toString() === searchItem[0]) {
                                 if (foundRecurrence) {
                                     if (foundRecurrence > obj.recurrence_position) {
                                         foundRecurrence = obj.recurrence_position;
                                     }
-                                    
+
                                 } else {
                                     foundRecurrence = obj.recurrence_position || 0;
                                 }
                             }
                         });
-                        
+
                         //found valid recurrence, append it
                         if (foundRecurrence !== false) {
                             _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
                         }
-                        
+
                         findRecurrence = false;//only search once
                     }
                     return data;

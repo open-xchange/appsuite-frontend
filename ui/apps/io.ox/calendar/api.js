@@ -410,7 +410,7 @@ define('io.ox/calendar/api',
      */
     api.getInvites = function () {
 
-        var start = _.now() - 2 * HOUR;
+        var now = _.now(), start = now - 2 * HOUR;
 
         return getUpdates({
             folder: 'all',
@@ -421,8 +421,17 @@ define('io.ox/calendar/api',
         })
         .pipe(function (list) {
             // sort by start_date & look for unconfirmed appointments
+            // exclude appointments that already ended
             var invites = _.chain(list)
                 .filter(function (item) {
+
+                    var isOver = item.end_date < now,
+                        isRecurring = !!item.recurrence_type;
+
+                    if (!isRecurring && isOver) {
+                        return false;
+                    }
+
                     return _(item.users).any(function (user) {
                         return user.id === ox.user_id && user.confirmation === 0;
                     });
