@@ -27,8 +27,8 @@
     }
 
     function insert(name, css, selector, node) {
-        if (node) return node.text(relativeCSS(dirname(name), css));
-        return $('<style type="text/css">' + relativeCSS(dirname(name), css) + '</style>')
+        if (node) return node.text(css);
+        return $('<style type="text/css">' + css + '</style>')
             .attr("data-require-src", name)
             .insertAfter(selector);
     }
@@ -86,7 +86,8 @@
     define("css", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).done(function (css) {
-                load(insert(config.baseUrl + name, css, "#css"));
+                var path = config.baseUrl + name; 
+                load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
         }
     });
