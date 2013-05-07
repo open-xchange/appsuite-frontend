@@ -12,68 +12,89 @@
  */
 
 define("plugins/halo/mail/register",
-    ["io.ox/core/extensions", "gettext!plugins/halo"], function (ext, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/mail/api',
+     'gettext!plugins/halo'], function (ext, api, gt) {
 
     "use strict";
 
+    function trackUpdates(obj, node, baton) {
+
+        function redraw() {
+            require(['plugins/halo/view-detail'], function (view) {
+                view.redraw(baton);
+            });
+        }
+
+        var cid = encodeURIComponent(_.cid(obj));
+        api.on('update:' + cid, redraw);
+        node.on('dispose', function () {
+            api.off('update:' + cid, redraw);
+        });
+    }
+
     ext.point("io.ox/halo/contact:renderer").extend({
+
         id: "mail",
+
         handles: function (type) {
             return type === "com.openexchange.halo.mail";
         },
-        draw: function  ($node, providerName, mail) {
-            var deferred = $.Deferred();
 
-            if (mail.length === 0) {
-                deferred.resolve();
-                return deferred;
-            }
+        draw: function  (baton) {
 
-            var sent = [], received = [];
+            if (baton.data.length === 0) return $.when();
 
-            _.each(mail, function (elem) {
+            var sent = [], received = [], deferred = $.Deferred(), node = this;
+
+            _.each(baton.data, function (elem) {
                 if (elem.folder_id.match(/INBOX$/i)) {
                     received.push(elem);
                 } else {
                     sent.push(elem);
                 }
+                // register for all update events
+                trackUpdates(elem, node, baton);
             });
-            $node.append($("<div>").addClass("widget-title clear-title").text(gt("Recent conversations")));
-            require(
-                ["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template", "io.ox/mail/api"],
-                function (dialogs, viewGrid, api) {
-                    var left = $("<div>").addClass("io-ox-left-column");
-                    left.append($("<p>").text(gt("Received mails")).addClass("io-ox-subheader"));
-                    if (received.length === 0) {
-                        left.append($("<div>").text(gt("Cannot find any messages this contact sent to you.")));
-                    } else {
-                        left.append(viewGrid.drawSimpleGrid(received));
-                    }
-                    $node.append(left);
 
-                    var right = $("<div>").addClass("io-ox-right-column");
-                    right.append($("<p>").text(gt("Sent mails")).addClass("io-ox-subheader"));
-                    if (sent.length === 0) {
-                        right.append($("<div>").text(gt("Cannot find any messages you sent to this contact.")));
-                    } else {
-                        right.append(viewGrid.drawSimpleGrid(sent));
-                    }
-                    $node.append(right);
-                    $node.append($("<div>").css("clear", "both"));
+            this.append(
+                $('<div class="widget-title clear-title">').text(gt("Recent conversations"))
+            );
 
-                    new dialogs.SidePopup()
-                        .delegate($node, ".vgrid-cell", function (pane, e, target) {
-                            var msg = target.data("objectData");
-                            api.get({ folder: msg.folder_id, id: msg.id }).done(function (data) {
-                                require(["io.ox/mail/view-detail"], function (view) {
-                                    pane.append(view.draw(data));
-                                    data = null;
-                                });
-                            });
-                        });
-                    deferred.resolve();
-                }
+            require(["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template"], function (dialogs, viewGrid) {
+
+                node.append(
+                    // left column
+                    $('<div class="io-ox-left-column">').append(
+                        $('<p class="io-ox-subheader">').text(gt('Received mails')),
+                        received.length === 0 ?
+                            $("<div>").text(gt("Cannot find any messages this contact sent to you.")) :
+                            viewGrid.drawSimpleGrid(received)
+                    ),
+                    // right column
+                    $('<div class="io-ox-right-column">').append(
+                        $('<p class="io-ox-subheader">').text(gt("Sent mails")),
+                        sent.length === 0 ?
+                            $("<div>").text(gt("Cannot find any messages you sent to this contact.")) :
+                            viewGrid.drawSimpleGrid(sent)
+                    ),
+                    // clear float
+                    $('<div>').css("clear", "both")
                 );
+
+                new dialogs.SidePopup().delegate(node, ".vgrid-cell", function (pane, e, target) {
+                    var msg = target.data("objectData");
+                    api.get({ folder: msg.folder_id, id: msg.id }).done(function (data) {
+                        require(["io.ox/mail/view-detail"], function (view) {
+                            pane.append(view.draw(data));
+                            data = null;
+                        });
+                    });
+                });
+
+                deferred.resolve();
+            });
+
             return deferred;
         }
     });

@@ -33,33 +33,38 @@ define.async('plugins/halo/api',
                 return providers;
             }
         };
+
         var requestEnhancementPoint = ext.point('io.ox/halo/contact:requestEnhancement');
 
         // Investigate a contact
         // This will trigger a backend halo call for every active provider
         // extensions in point 'io.ox/halo/contact:requestEnhancement' will have a chance to modify the call
         // returns an Object mapping a provider to a deferred that will eventually provide the data
-        this.investigate = function (contact) {
+        // "provider" is optional and reduces lookup to this provider name
+        this.investigate = function (contact, provider) {
+
             var investigationMap = {};
+
             // Send a request for every active provider
-            var myProviders = providerFilter.filterProviders(activeProviders);
-            _(myProviders).each(function (providerName) {
+            var providers = provider ? [provider] : providerFilter.filterProviders(activeProviders);
+
+            _(providers).each(function (name) {
                 // Construct the basic request
                 var request = {
                     module: 'halo/contact',
                     params: {
                         action: 'investigate',
-                        provider: providerName
+                        provider: name
                     },
                     appendColumns: false,
                     contact: contact
                 };
                 // Let extensions enhance the request with additional parameters
                 requestEnhancementPoint.each(function (ext) {
-                    if (!ext.enhances(providerName)) {
+                    if (!ext.enhances(name)) {
                         return;
                     }
-                    var updatedRequest = ext.enhance(request, providerName);
+                    var updatedRequest = ext.enhance(request, name);
                     if (updatedRequest) {
                         request = updatedRequest;
                     }
@@ -67,46 +72,40 @@ define.async('plugins/halo/api',
                 // Read back the contact in case it was modified by an extension point
                 contact = request.contact;
                 delete request.contact;
-
                 request.data = contact;
-
                 // have the http module handle the request and put the deferred into the map
-                investigationMap[providerName] = http.PUT(request);
+                investigationMap[name] = http.PUT(request);
             });
-            return investigationMap;
+
+            return provider ? investigationMap[provider] : investigationMap;
         };
     }
 
     function HaloView() {
 
-        var rendererPoint = ext.point('io.ox/halo/contact:renderer');
+        var point = ext.point('io.ox/halo/contact:renderer');
 
         this.filterProviders = function (providers) {
             var filtered = [];
-
             _(providers).each(function (providerName) {
-                rendererPoint.each(function (ext) {
+                point.each(function (ext) {
                     if (ext.handles(providerName)) {
                         filtered.push(providerName);
                     }
                 });
             });
-
             return filtered;
         };
 
-        this.draw = function ($node, providerName, data) {
-            $node = $($node);
-            var deferreds = [];
-            rendererPoint.each(function (ext) {
-                if (ext.handles(providerName)) {
-                    var deferred = ext.draw($node, providerName, data);
-                    if (deferred) {
-                        deferreds.push(deferred);
+        this.draw = function (baton) {
+            var defs = point.map(function (ext) {
+                    if (ext.handles(baton.provider)) {
+                        return ext.draw.call(baton.ray, baton);
                     }
-                }
-            });
-            return $.when.apply($, deferreds);
+                })
+                .compact()
+                .value();
+            return $.when.apply($, defs);
         };
     }
 

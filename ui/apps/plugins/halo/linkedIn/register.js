@@ -16,20 +16,24 @@ define("plugins/halo/linkedIn/register", ["io.ox/core/extensions"], function (ex
     "use strict";
 
     ext.point("io.ox/halo/contact:renderer").extend({
+
         id: "linkedin",
+
         handles: function (type) {
-            return type === "com.openexchange.halo.linkedIn.fullProfile";
+            return type === 'com.openexchange.halo.linkedIn.fullProfile';
         },
-        draw: function ($node, providerName, liResponse) {
-            var deferred = new $.Deferred();
+
+        draw: function (baton) {
+
+            var node = this, def = $.Deferred();
+
             require(["plugins/halo/linkedIn/view-halo", "less!io.ox/linkedIn/style.less"], function (base) {
-                if (liResponse.values) {
-                    liResponse = liResponse.values[0];
-                }
-                $node.append(base.draw(liResponse));
-                deferred.resolve();
+                var data = baton.data.values ? baton.data.values[0] : baton.data;
+                node.append(base.draw(data));
+                def.resolve();
             });
-            return deferred;
+
+            return def;
         }
     });
 });
