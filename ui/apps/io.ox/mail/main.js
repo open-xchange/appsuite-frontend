@@ -647,6 +647,12 @@ define('io.ox/mail/main',
         // drop zone
         var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
         win.on("show", dropZone.include).on('hide', dropZone.remove);
+        
+        
+        //if viewSetting ins changed redraw detailviews and grid
+        api.on('viewChanged', function () {
+            grid.selection.retrigger(true);//to refresh detailviews and grid
+        });
 
         // search
         (function () {

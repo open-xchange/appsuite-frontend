@@ -234,7 +234,7 @@ define('io.ox/mail/api',
             },
             get: {
                 action: 'get',
-                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'noimg' : 'html') : 'text',
+                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text',
                 embedded: 'true'
             },
             getUnmodified: {
@@ -319,6 +319,14 @@ define('io.ox/mail/api',
             }
         }
     });
+    
+    /**
+     * updates the view used for get requests, used on mail settings save to be responsive
+     */
+    api.updateViewSettings = function () {
+        api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
+        api.trigger('viewChanged');//special event to redraw current detailview
+    };
 
     // publish tracker
     api.tracker = tracker;

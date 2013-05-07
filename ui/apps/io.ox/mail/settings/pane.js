@@ -47,7 +47,7 @@ define('io.ox/mail/settings/pane',
             AUTO_SAVE: gt('Auto-save Email drafts'),
             TITLE_DISPLAY: gt('Display'),
             ALLOW_HTML: gt('Allow html formatted E-Mails'),
-            BLOCK_PRE: gt('Block pre-loading of externally linked images'),
+            ALLOW_PRE: gt('Allow pre-loading of externally linked images'),
             DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text E-Mails'),
             COLOR_QUOTED: gt('Color quoted lines'),
 
@@ -112,7 +112,12 @@ define('io.ox/mail/settings/pane',
         },
 
         save: function () {
-            mailViewSettings.model.save().fail(function () {
+            mailViewSettings.model.save().done(function () {
+                //update mailapi
+                require(['io.ox/mail/api'], function (mailApi) {
+                    mailApi.updateViewSettings();
+                });
+            }).fail(function () {
                 notifications.yell('error', gt('Could not save settings'));
             });
         }
