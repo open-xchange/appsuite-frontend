@@ -51,9 +51,18 @@ define('io.ox/files/api',
                 return this.isLocked(cid) && (!(cid in explicitFileLocks) || explicitFileLocks[cid] < (_.now() - DELAY));
             },
 
+            /**
+             * returns local date time string of lock expiry if expiry is sometime in the next week
+             * @param  {object} file
+             * @return {string|false}
+             */
             getLockTime: function (obj) {
                 var cid = getCID(obj);
-                return new date.Local(obj.locked_until).format(date.DATE_TIME);
+                if (obj.locked_until < _.now() + date.WEEK) {
+                    return new date.Local(obj.locked_until).format(date.DATE_TIME);
+                } else {
+                    return false;
+                }
             },
 
             update: function (obj) {
