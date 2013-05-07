@@ -279,6 +279,12 @@ define('io.ox/preview/main',
         this.file = _.copy(file, true); // work with a copy
         this.options = options || {};
 
+        //ensure integer (if numeric) for valid url params
+        if (this.options.width && _.isNumber(this.options.width))
+            this.options.width = Math.floor(this.options.width);
+        if (this.options.height && _.isNumber(this.options.height))
+            this.options.height = Math.floor(this.options.height);
+
         this.renderer = null;
 
         if (this.file.file_mimetype) {
