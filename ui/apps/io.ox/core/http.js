@@ -877,11 +877,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             window[callback] = function (response) {
                 // skip warnings
-                response.data = _(response.data).map(function (o) {
-                    if (o.category !== 13) {
-                        return o;
+                for (var key in response.data) {
+                    if (key === 'category' && response.data[key] === 13) {
+                        delete response.data[key];
                     }
-                });
+                }
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
                 $('#' + name).remove();
