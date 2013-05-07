@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'gettext!io.ox/mail', 'settings!io.ox/mail'], function (ext, gt, settings) {
+define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'gettext!io.ox/mail', 'settings!io.ox/mail', 'less!io.ox/mail/settings/signatures/style.less'], function (ext, gt, settings) {
     'use strict';
 
     function fnMigrateClassicSignatures() {
@@ -50,9 +50,18 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
             };
         }
 
+        function validateField(field, target) {
+            if (field.val() === '') {
+                field.addClass('error');
+                target.text(gt('Please enter a valid name'));
+            } else {
+                field.removeClass('error');
+                target.empty();
+            }
+        }
 
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            var $name, $signature, $insertion, popup;
+            var $name, $signature, $insertion, popup, $error;
 
             popup = new dialogs.SidePopup({
                 modal: true
@@ -64,6 +73,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     $('<div class="row-fluid">').append(
                         $name = $('<input type="text" class="span12">').attr('placeholder', gt("Name"))
                     ),
+                    $error = $('<div>').addClass('help-block error'),
                     $('<div class="row-fluid">').append(
                         $signature = $('<textarea class="span12" rows="10">').on('keydown', function (e) {
                             if (e.which === 38 || e.which === 40) {//if arrowkey up and down are pressed the settingsmenu would move to the next item for exsample mails
@@ -107,45 +117,55 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                     dialogs.idle($entirePopup);
                 }
 
+                $name.on('change', function () {
+                    validateField($name, $error);
+                });
+
                 $buttonDiv.append(
                     $('<button class="btn">').text(gt('Discard')).on('click', function () {
                         popup.close();
                         return false;
                     }),
                     $('<button class="btn btn-primary">').text(gt('Save')).on('click', function () {
-                        busy();
+                        if ($name.val() !== '') {
+                            busy();
 
-                        if (signature.id && _.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+                            if (signature.id && _.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-                        var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
+                            var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
 
-                        if ($signature.val() !== signature.content) {
-                            update.content = $signature.val();
-                        }
-
-                        if ($name.val() !== signature.displayname) {
-                            update.displayname = $name.val();
-                        }
-
-
-                        update.misc = { insertion: $insertion.val() };
-
-                        update.id = signature.id;
-
-                        require(["io.ox/core/api/snippets"], function (snippets) {
-                            var def = null;
-                            if (signature.id) {
-                                def = snippets.update(update);
-                            } else {
-                                def = snippets.create(update);
+                            if ($signature.val() !== signature.content) {
+                                update.content = $signature.val();
                             }
-                            def.done(function (resp) {
-                                idle();
-                                popup.close();
-                            }).fail(require("io.ox/core/notifications").yell);
-                        });
 
-                        return false;
+                            if ($name.val() !== signature.displayname) {
+                                update.displayname = $name.val();
+                            }
+
+
+                            update.misc = { insertion: $insertion.val() };
+
+                            update.id = signature.id;
+
+                            require(["io.ox/core/api/snippets"], function (snippets) {
+                                var def = null;
+                                if (signature.id) {
+                                    def = snippets.update(update);
+                                } else {
+                                    def = snippets.create(update);
+                                }
+                                def.done(function (resp) {
+                                    idle();
+                                    popup.close();
+                                }).fail(require("io.ox/core/notifications").yell);
+                            });
+
+                            return false;
+                        } else {
+                            validateField($name, $error);
+                        }
+
+
                     })
                 );
             });
@@ -157,7 +177,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
     function fnImportSignatures(evt, signatures) {
 
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/api/snippets', 'less!io.ox/mail/settings/signatures/style.less'], function (dialogs, snippets) {
+        require(['io.ox/core/tk/dialogs', 'io.ox/core/api/snippets'], function (dialogs, snippets) {
 
             var popup = new dialogs.SidePopup({
                 modal: true
