@@ -748,9 +748,16 @@ define("io.ox/core/main",
             return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
         };
 
-        baton.autoLaunchApps = _(baton.autoLaunch).map(function (m) {
+        baton.autoLaunchApps = _(baton.autoLaunch)
+        .chain()
+        .map(function (m) {
             return getAutoLaunchDetails(m).app;
-        });
+        })
+        .filter(function (m) {
+            return !!ox.manifests.apps[m];
+        })
+        .compact()
+        .value();
 
         var drawDesktop = function () {
             ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
@@ -904,6 +911,11 @@ define("io.ox/core/main",
                     _(baton.autoLaunch).each(function (id) {
                         // split app/call
                         var details = getAutoLaunchDetails(id), launch, method;
+
+                        if (!ox.manifests.apps[details.app]) {
+                            ox.launch(settings.get('autoStart'));
+                            return;
+                        }
                         launch = require(details.app).getApp().launch();
                         method = details.method;
                         // explicit call?
