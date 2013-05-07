@@ -281,7 +281,13 @@
             function update() {
                 // update hash
                 var hashStr = _.serialize(hashData, '&', function (v) {
-                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
+                    // need strict encoding for Japanese characters, for example
+                    // safari throws URIError otherwise (Bug 26411)
+                    // keep slashes and colons for readability
+                    return encodeURIComponent(v)
+                        .replace(/%2F/g, '/')
+                        .replace(/%3A/g, ':');
+                    //return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
                 });
                 // be persistent
                 document.location.hash = hashStr;

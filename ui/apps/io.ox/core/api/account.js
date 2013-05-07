@@ -271,7 +271,7 @@ define('io.ox/core/api/account',
     };
 
     function addPersonalFallback(account) {
-        if (!account.personal) {
+        if (account && !account.personal) {
             return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
                 return userAPI.getCurrentUser().then(function (user) {
                     account.personal = contactsUtil.getMailFullName(user.toJSON());
