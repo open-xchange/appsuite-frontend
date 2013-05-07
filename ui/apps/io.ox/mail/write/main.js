@@ -90,6 +90,7 @@ define('io.ox/mail/write/main',
             editorMode,
             messageFormat = settings.get('messageFormat', 'html'),
             composeMode,
+            prioActive = false,
             view,
             model,
             previous;
@@ -471,6 +472,12 @@ define('io.ox/mail/write/main',
                 view.priorityOverlay.attr('class', 'priority-overlay high');
             } else if (prio === 3) {
                 view.priorityOverlay.attr('class', 'priority-overlay');
+                if (prioActive) {
+                    prioActive = false;
+                    view.priorityOverlay.addClass('normal');
+                } else {
+                    prioActive = true;
+                }
             } else if (prio === 5) {
                 view.priorityOverlay.attr('class', 'priority-overlay low');
             }
