@@ -762,19 +762,34 @@ define('io.ox/mail/write/main',
             app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
             data.msgref = data.folder_id + '/' + data.id;
 
+            function getMail(data) {
+                // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
+                if (messageFormat === 'text' && settings.get('allowHtmlMessages', true) === true) {
+                    var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
+                    return mailAPI.get(options);
+                } else {
+                    return $.Deferred().resolve(data);
+                }
+            }
+
             win.busy().show(function () {
-                app.setMail({ data: data, mode: 'compose', initial: false })
-                .done(function () {
-                    app.setFrom(data || {});
-                    win.idle();
-                    app.getEditor().focus();
-                    def.resolve();
-                })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
-                    app.dirty(false).quit();
-                    def.reject();
-                });
+                // get fresh plain textt mail
+                getMail(data).then(
+                    function success(data) {
+                        app.setMail({ data: data, mode: 'compose', initial: false })
+                        .done(function () {
+                            app.setFrom(data || {});
+                            win.idle();
+                            app.getEditor().focus();
+                            def.resolve();
+                        });
+                    },
+                    function fail() {
+                        notifications.yell('error', gt('An error occured. Please try again.'));
+                        app.dirty(false).quit();
+                        def.reject();
+                    }
+                );
             });
 
             return def;
@@ -824,6 +839,8 @@ define('io.ox/mail/write/main',
                 content = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
+                        // .replace(/</g, '&lt;') // escape <
+                        // .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
 
@@ -1065,6 +1082,13 @@ define('io.ox/mail/write/main',
                     view.form.find(':input[name][type=file]').filter(function (index, elem) {
                         return !!$(elem).prop('attachment') || $(elem).val() !== "";
                     }).remove();
+                    if (mail.mode === 'reply') {
+                        draftMail.msgref = mail.data.msgref;
+                        draftMail.sendtype = mailAPI.SENDTYPE.REPLY;
+                    } else if (mail.mode === 'forward') {
+                        draftMail.msgref = mail.data.msgref;
+                        draftMail.sendtype = mailAPI.SENDTYPE.FORWARD;
+                    }
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
                 });
             });
