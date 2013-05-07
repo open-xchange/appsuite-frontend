@@ -822,9 +822,8 @@ define('io.ox/mail/write/main',
                 };
             } else {
                 content = {
-                    content: (app.getEditor() ? app.getEditor().getContent() : '')
-                        .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, '<br>\n') // escape line-breaks
+                    content: (app.getEditor() ? app.getEditor().getContent() : ''),
+                    raw: true
                 };
             }
 
@@ -962,7 +961,7 @@ define('io.ox/mail/write/main',
                                 id = base.last();
                                 return { folder_id: folder, id: id };
                             });
-                            //update cache
+                            // update cache
                             mailAPI.getList(ids).pipe(function (data) {
                                 // update answered/forwarded flag
                                 if (isReply || isForward) {
