@@ -1066,13 +1066,6 @@ define('io.ox/mail/write/main',
                     view.form.find(':input[name][type=file]').filter(function (index, elem) {
                         return !!$(elem).prop('attachment') || $(elem).val() !== "";
                     }).remove();
-                    if (mail.mode === 'reply') {
-                        draftMail.msgref = mail.data.msgref;
-                        draftMail.sendtype = mailAPI.SENDTYPE.REPLY;
-                    } else if (mail.mode === 'forward') {
-                        draftMail.msgref = mail.data.msgref;
-                        draftMail.sendtype = mailAPI.SENDTYPE.FORWARD;
-                    }
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
                 });
             });
