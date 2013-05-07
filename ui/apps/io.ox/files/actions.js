@@ -326,6 +326,8 @@ define('io.ox/files/actions',
                     dialog.busy();
                     fnRename().done(function () {
                         dialog.close();
+                    }).fail(function () {
+                        dialog.idle();
                     });
                 });
 
