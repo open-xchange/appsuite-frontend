@@ -463,7 +463,7 @@ define("io.ox/core/main",
         ox.ui.apps.on('change:title', function (model, value) {
             var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
             addUserContent(model, node);
-            launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
+            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
             tabManager();
         });
 
