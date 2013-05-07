@@ -206,6 +206,12 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
+// prevent system pop-up when tapping and holding button on iPad/iPhone
+// (also for buttons outside .group elements)
+a.button {
+    -webkit-touch-callout: none;
+}
+
 .group {
     /* horizontal padding in control elements */
     @control-padding: 8px;
@@ -297,8 +303,6 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     a.button {
         text-align: left;
-        // prevent system pop-up when tapping and holding button on iPad/iPhone
-        -webkit-touch-callout: none;
 
         &.dropdown-button {
             padding-right: 7px + @control-padding;
