@@ -4,6 +4,12 @@ define(function () {
             namespace: 'core',
             path: 'plugins/upsell/bubbles/register'
         },
+
+        {
+            namespace: ['io.ox/settings/main'],
+            path: 'io.ox/mail/mailfilter/settings/register',
+            requires: 'mailfilter'
+        },
         // {
         //     namespace: ['io.ox/settings/main'],
         //     path: 'io.ox/mail/vacationnotice/settings/register'
