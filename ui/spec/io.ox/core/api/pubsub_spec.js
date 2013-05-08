@@ -14,11 +14,17 @@ define(
      'shared/examples/for/api'
     ], function (api, sharedExamplesFor) {
 
+    var testData = {
+        create: {
+            "entity": {"folder":"14657"}
+        }
+    };
+
     describe('publication API', function () {
-        sharedExamplesFor(api.publications);
+        sharedExamplesFor(api.publications, {testData: testData});
     });
 
     describe('subscription API', function () {
-        sharedExamplesFor(api.subscriptions);
+        sharedExamplesFor(api.subscriptions, {testData: testData});
     });
 });
