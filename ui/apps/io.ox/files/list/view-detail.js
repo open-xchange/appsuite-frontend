@@ -57,20 +57,18 @@ define('io.ox/files/list/view-detail',
         index: 210,
         id: 'filelock',
         draw: function (baton) {
-            if (ox.user_id !== baton.data.modified_by && baton.data.locked_until !== 0) {
-                var div, lockInfo,
-                lockTime = filesAPI.tracker.getLockTime(baton.data);
+            if (filesAPI.tracker.isLocked(baton.data)) {
+                var div, lockInfo;
                 this.append(
                     div = $('<div>').addClass('alert alert-info')
                 );
-                if (lockTime) {
-                    lockInfo = gt('This File is locked by %1$s until %2$s');
+                if (!filesAPI.tracker.isExplicitLocked(baton.data)) {
+                    lockInfo = gt('This file is locked by you');
                 } else {
-                    lockInfo = gt('This File is locked by %1$s');
+                    lockInfo = gt('This file is locked by %1$s');
                 }
-                lockInfo.replace(/(%1\$s)|(%2\$s)|([^%]+)/g, function (a, link, time, text) {
+                lockInfo.replace(/(%1\$s)|([^%]+)/g, function (a, link, text) {
                     if (link) div.append(userAPI.getLink(baton.data.modified_by));
-                    else if (time) div.append(lockTime);
                     else div.append($.txt(text));
                 });
             }

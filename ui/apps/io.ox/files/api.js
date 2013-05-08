@@ -773,14 +773,11 @@ define('io.ox/files/api',
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.grepRemove(o.folder_id + api.DELIM),
-                            api.caches.list.remove({ id: o.id, folder: o.folder_id })
+                            api.tracker.removeFile(o),
+                            api.propagate('change', o)
                         );
                     })
                 );
-            })
-            .done(function () {
-                api.trigger('refresh.all');
             });
     };
 
