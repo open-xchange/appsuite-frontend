@@ -12,11 +12,17 @@
 define('shared/examples/for/api', [], function () {
     return function (api, options) {
         options = _.extend({
-            markedPending: {}
+            markedPending: {},
+            testData: {}
         }, options);
 
         afterEach(function () {
+            this.server.restore();
             this.handleExpectedFail(options.markedPending);
+        });
+
+        beforeEach(function () {
+            this.server = sinon.fakeServer.create();
         });
 
         describe('a basic API class', function () {
@@ -55,6 +61,30 @@ define('shared/examples/for/api', [], function () {
 
                 it('should define an on method', function () {
                     expect(api.on).toBeDefined();
+                });
+                xdescribe('with default events', function () {
+                    beforeEach(function () {
+                        this.server.respondWith("PUT", /.*action=new&/, function (xhr) {
+                            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data": 1337}');
+                        });
+                    });
+
+                    it('should trigger refresh:all after create', function () {
+                        var data = options.testData['create'] || {};
+
+                        expect(api).toTrigger('refresh:all');
+                        api.create(data);
+                        this.server.respond();
+                    });
+
+                    it('should trigger refresh:list after create', function () {
+                        var data = options.testData['create'] || {};
+
+                        expect(api).toTrigger('refresh:list');
+
+                        api.create(data);
+                        this.server.respond();
+                    });
                 });
             });
         });
