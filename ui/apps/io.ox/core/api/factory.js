@@ -442,6 +442,8 @@ define('io.ox/core/api/factory',
                 var opt = $.extend({}, o.requests.search, options || {}),
                     getData = opt.getData;
 
+                options = options || {};
+
                 if (o.requests.search.omitFolder && options.omitFolder !== false) {
                     delete opt.folder;
                 }
