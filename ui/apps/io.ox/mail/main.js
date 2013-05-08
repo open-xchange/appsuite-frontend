@@ -107,7 +107,11 @@ define('io.ox/mail/main',
             max: settings.get('threadMax', 500),
             selectFirst: false,
             threadView: settings.get('threadView') !== 'off',
-            secondToolbar: true
+            secondToolbar: true,
+            //adjust for custom default sort
+            sort: settings.get('sort', 'thread'),
+            unread: settings.get('unread', false),
+            order: settings.get('order', 'desc')
         });
 
         // grid
@@ -162,13 +166,14 @@ define('io.ox/mail/main',
             }
         });
 
-        //get sorting settings
+        //get sorting settings with fallback for extpoint
         var sortSettings = {};
-        sortSettings.sort = settings.get('sort', 'thread');
-        sortSettings.unread = settings.get('unread', false);
-        sortSettings.order = settings.get('order', 'desc');
+        sortSettings.sort = options.sort || settings.get('sort', 'thread');
+        sortSettings.unread = options.unread || settings.get('unread', false);
+        sortSettings.order = options.desc || settings.get('order', 'desc');
 
-        if (sortSettings.sort === 'thread' && options.threadView === false) { //check if folder actually supports threadview
+        //check if folder actually supports threadview
+        if (sortSettings.sort === 'thread' && options.threadView === false) {
             sortSettings.sort = '610';
         }
 
@@ -277,13 +282,15 @@ define('io.ox/mail/main',
              * @param  {string} key
              * @return {undefined}
              */
-            var sortby = function (key) {
-                var isInbox = account.is('inbox', grid.prop('folder')),
-                    ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
-                                      : (value + previous).replace('inbox', '').replace('off', '') === '';
+            var opt = options,
 
-                if (!ignored) {
-                    grid.prop('sort', key)
+                sortby = function (key) {
+                    var isInbox = account.is('inbox', grid.prop('folder')),
+                        ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
+                                           : (value + previous).replace('inbox', '').replace('off', '') === '';
+
+                    if (!ignored) {
+                        grid.prop('sort', key)
                             .refresh()
                             .pipe(function () {
                                 //called manually cause call skipped within refresh (sort property doesn't change)
@@ -293,17 +300,17 @@ define('io.ox/mail/main',
                                 //uses this too and would mess up the persistent settings
                                 grid.updateSettings('sort', key);
                             });
-                }
-            };
+                    }
+                },
 
-            //switch object
-            var switcher = {
-                threadView: {
-                    on: function () { sortby('thread'); },
-                    inbox: function () { sortby('thread'); },
-                    off: function () { sortby('610'); }
-                }
-            };
+                //switch object
+                switcher = {
+                    threadView: {
+                        on: function () { sortby('thread'); },
+                        inbox: function () { sortby('thread'); },
+                        off: function () { sortby(opt.sort || '610'); }
+                    }
+                };
 
             //switch
             if (switcher[path] && switcher[path][value]) {
@@ -648,8 +655,8 @@ define('io.ox/mail/main',
         // drop zone
         var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
         win.on("show", dropZone.include).on('hide', dropZone.remove);
-        
-        
+
+
         //if viewSetting ins changed redraw detailviews and grid
         api.on('viewChanged', function () {
             grid.selection.retrigger(true);//to refresh detailviews and grid
