@@ -190,7 +190,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,1,5,700,702,703,707,3';
+    var allColumns = '20,1,5,700,702,703,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -228,7 +228,8 @@ define('io.ox/files/api',
             all: function (data) {
                 _(data).each(function (obj) {
                     fixContentType(obj);
-                    api.caches.get.merge(obj);
+                    // remove from cache if get cache is outdated
+                    api.caches.get.dedust(obj, 'last_modified');
                     api.caches.versions.remove(String(obj.id));
                     api.tracker.addFile(obj);
                     // this can be solved smarter once backend send correct
@@ -610,11 +611,13 @@ define('io.ox/files/api',
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
+        options = options = {};
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
-                (file.version !== undefined ? '&version=' + file.version : ''),
+                (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
             name = '/' + encodeURIComponent(file.filename),
-            thumbnail = (options ? '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '');
+            thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
+                '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
         switch (mode) {
         case 'open':
         case 'view':

@@ -190,6 +190,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
 
     function connect() {
+        if (connecting) {
+            return;
+        }
         connecting = true;
 
         request = {
@@ -206,18 +209,16 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
         //------------------------------------------------------------------------------
         //request callbacks
-        var triggering = false;
         request.onOpen = function (response) {
             connecting = false;
             def.resolve(api);
-            if (!triggering) {
-                triggering = true;
+            if (disconnected) {
+                disconnected = false;
                 api.trigger("open");
-                if (disconnected) {
-                    disconnected = false;
-                    api.trigger("online");
+                if (api.debug) {
+                    console.log("Triggering Online because #onOpen was called");
                 }
-                triggering = false;
+                api.trigger("online");
             }
             disconnected = false;
         };
@@ -234,11 +235,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
         request.onMessage = function (response) {
             request.requestCount = 0;
-            if (response.status !== 200) {
+            if (response.status !== 200 && response.status !== 408) { // 200 = OK, 208 == TIMEOUT, which is expected
                 if (!disconnected) {
-                    api.trigger("offline");
+                    if (api.debug) {
+                        console.log("Triggering offline, because request failed with status: ", response.status);
+                    }
+                    goOffline();
                     subSocket.close();
-                    disconnected = true;
                 }
                 return;
             }
@@ -272,7 +275,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     } else {
                         subSocket.close();
                         if (!disconnected) {
-                            api.trigger("offline");
+                            if (api.debug) {
+                                console.log("Triggering offline, because I got a session expired error");
+                            }
+                            goOffline();
                         }
                         disconnected = true;
 
@@ -292,7 +298,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 subSocket = connect();
             } else {
                 if (!disconnected) {
-                    api.trigger("offline");
+                    if (api.debug) {
+                        console.log("Triggering offline because #onClose was called");
+                    }
+                    goOffline();
                 }
                 disconnected = true;
             }
@@ -308,8 +317,19 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         return socket.subscribe(request);
     }
 
+    function goOffline() {
+        if (!disconnected) {
+            disconnected = true;
+            api.trigger("offline");
+        }
+    }
+
     function reconnect() {
+        if (connecting) {
+            return;
+        }
         shouldReconnect = true;
+        disconnected = true;
         subSocket.close();
     }
 
@@ -405,7 +425,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 reconnect();
             } else {
                 if (pendingPing) {
-                    api.trigger("offline");
+                    if (api.debug) {
+                        console.log("Triggering offline, because I found a pending ping");
+                    }
+                    goOffline();
                 }
                 subSocket.push("{\"type\": \"ping\", \"commit\": true, \"id\" : " + pingNumber + " }");
                 pingNumber++;

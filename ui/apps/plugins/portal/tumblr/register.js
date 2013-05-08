@@ -91,11 +91,14 @@ define('plugins/portal/tumblr/register',
                     // use text
                     var body = [];
                     // remove external links (breaks https)
-                    post.body = post.body.replace(/src=/g, 'nosrc=');
+                    if (post.body) { // is sometimes undefined / replace throws error
+                        post.body = post.body.replace(/src=/g, 'nosrc=');
+                    }
                     $('<div>').html(post.body).contents().each(function () {
                         var text = _.escape($.trim($(this).text()));
                         if (text !== '') { body.push(text); }
                     });
+
                     this.append(
                         $('<div class="content pointer">').html(body.join(' <span class="accent">&bull;</span> '))
                         .addClass('decoration')

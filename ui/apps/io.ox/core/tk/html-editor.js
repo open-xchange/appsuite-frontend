@@ -412,7 +412,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
             theme_advanced_buttons1:
                 'bold,italic,underline,strikethrough,|,' +
-                'bullist,numlist,indent,outdent,|,' +
+                'bullist,numlist,outdent,indent,|,' +
                 'justifyleft,justifycenter,justifyright,|,' +
                 'forecolor,backcolor,|,formatselect,|,' +
                 'undo,redo,',

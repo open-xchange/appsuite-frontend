@@ -48,6 +48,13 @@ define('plugins/portal/files/register',
                 this.addClass('photo-stream');
                 content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
+            } else if ((/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(baton.data.filename)) {
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                options = { thumbnailWidth: 300, thumbnailHeight: 300 };
+                url = api.getUrl(data, 'cover', options);
+                this.addClass('photo-stream');
+                content.addClass('decoration');
+                content.css('backgroundImage', 'url(' + url + ')');
             } else {
                 // try images url via preview engines
                 baton.data.url = api.getUrl(baton.data, 'bare');

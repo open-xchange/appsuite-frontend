@@ -342,7 +342,8 @@ define('plugins/notifications/calendar/register',
                     }
 
                     var tmp = [],
-                        counter = reminder.length;
+                        counter = reminder.length,
+                        now = _.now();
 
                     _(reminder).each(function (remObj, index) {
                         var obj = {
@@ -351,6 +352,7 @@ define('plugins/notifications/calendar/register',
                             recurrence_position: remObj.recurrence_position
                         };
                         calApi.get(obj).done(function (data) {
+
                             var inObj = {
                                 cid: _.cid(remObj),
                                 title: data.title,
@@ -361,13 +363,20 @@ define('plugins/notifications/calendar/register',
                                 caldata: data
                             };
 
-                            // do not add user suppressed ('remind me later') reminders
-                            if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
-                                tmp.push(inObj);
+                            // ignore appointments that are over
+                            var isOver = data.end_date < now;
+
+                            if (!isOver) {
+                                // do not add user suppressed ('remind me later') reminders
+                                if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
+                                    tmp.push(inObj);
+                                }
                             }
+
                             counter--;
 
-                            if (counter === 0) {//all data processed. Update Collection
+                            if (counter === 0) {
+                                //all data processed. Update Collection
                                 ReminderNotifications.collection.reset(tmp);
                             }
                         });

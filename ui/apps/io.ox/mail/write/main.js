@@ -90,6 +90,7 @@ define('io.ox/mail/write/main',
             editorMode,
             messageFormat = settings.get('messageFormat', 'html'),
             composeMode,
+            prioActive = false,
             view,
             model,
             previous;
@@ -471,6 +472,12 @@ define('io.ox/mail/write/main',
                 view.priorityOverlay.attr('class', 'priority-overlay high');
             } else if (prio === 3) {
                 view.priorityOverlay.attr('class', 'priority-overlay');
+                if (prioActive) {
+                    prioActive = false;
+                    view.priorityOverlay.addClass('normal');
+                } else {
+                    prioActive = true;
+                }
             } else if (prio === 5) {
                 view.priorityOverlay.attr('class', 'priority-overlay low');
             }
@@ -755,19 +762,34 @@ define('io.ox/mail/write/main',
             app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
             data.msgref = data.folder_id + '/' + data.id;
 
+            function getMail(data) {
+                // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
+                if (messageFormat === 'text' && settings.get('allowHtmlMessages', true) === true) {
+                    var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
+                    return mailAPI.get(options);
+                } else {
+                    return $.Deferred().resolve(data);
+                }
+            }
+
             win.busy().show(function () {
-                app.setMail({ data: data, mode: 'compose', initial: false })
-                .done(function () {
-                    app.setFrom(data || {});
-                    win.idle();
-                    app.getEditor().focus();
-                    def.resolve();
-                })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
-                    app.dirty(false).quit();
-                    def.reject();
-                });
+                // get fresh plain textt mail
+                getMail(data).then(
+                    function success(data) {
+                        app.setMail({ data: data, mode: 'compose', initial: false })
+                        .done(function () {
+                            app.setFrom(data || {});
+                            win.idle();
+                            app.getEditor().focus();
+                            def.resolve();
+                        });
+                    },
+                    function fail() {
+                        notifications.yell('error', gt('An error occured. Please try again.'));
+                        app.dirty(false).quit();
+                        def.reject();
+                    }
+                );
             });
 
             return def;
@@ -815,9 +837,10 @@ define('io.ox/mail/write/main',
                 };
             } else {
                 content = {
-                    content: (app.getEditor() ? app.getEditor().getContent() : '')
-                        .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, '<br>\n') // escape line-breaks
+                    content: (app.getEditor() ? app.getEditor().getContent() : ''),
+                    raw: true
+                        // .replace(/</g, '&lt;') // escape <
+                        // .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
 
@@ -955,7 +978,7 @@ define('io.ox/mail/write/main',
                                 id = base.last();
                                 return { folder_id: folder, id: id };
                             });
-                            //update cache
+                            // update cache
                             mailAPI.getList(ids).pipe(function (data) {
                                 // update answered/forwarded flag
                                 if (isReply || isForward) {

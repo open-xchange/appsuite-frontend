@@ -856,7 +856,7 @@ define('io.ox/core/tk/folderviews',
             label.text(_.noI18n(data.title));
             // set counter (mail only)
             if (options.type === 'mail') {
-                if (!data.unread  || data.unread === 0) {//remove new mail title
+                if (data.id === "default0/INBOX" && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
                     document.fixedtitle = false;
                     document.title = document.temptitle;
                 }

@@ -499,7 +499,7 @@ define("io.ox/mail/write/view-main",
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('vcard', gt('Attach vCard')))
+                .append(createCheckbox('vcard', gt('Attach my vCard')))
             );
 
             this.addLink('options', gt('More'));

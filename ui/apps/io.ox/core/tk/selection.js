@@ -654,10 +654,18 @@ define('io.ox/core/tk/selection',
 
         this.selectAll = function () {
             if (bHasIndex && observedItems.length) {
-                _(observedItems).each(function (item) {
-                    select(item.data, true);
-                });
-                changed();
+                // _(observedItems).each(function (item) {
+                var item, i;
+                for (i = 0; i < observedItems.length; i++) {
+                    item = observedItems[i];
+                    if (i === 0 || i === observedItems.length - 1) {
+                        select(item.data);
+                    } else {
+                        // fast & simple
+                        selectedItems[item.cid] = item.data;
+                    }
+                }
+                this.update();
             }
         };
 

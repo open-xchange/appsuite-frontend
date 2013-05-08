@@ -399,7 +399,7 @@ define('io.ox/files/list/view-detail',
         id: 'creation_date',
         index: 30,
         draw: function (baton) {
-            var d = new date.Local(date.Local.utc(baton.data.creation_date));
+            var d = new date.Local(baton.data.creation_date);
             this.find('td:last').append($('<span class="pull-right creationdate">').text(gt.noI18n(d.format(date.DATE_TIME))));
         }
     });

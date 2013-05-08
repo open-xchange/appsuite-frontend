@@ -29,6 +29,7 @@ define('io.ox/files/icons/perspective',
     'use strict';
 
     var dropZone;
+
     ext.point('io.ox/files/icons/options').extend({
         thumbnailWidth: 128,
         thumbnailHeight: 90,
@@ -138,17 +139,21 @@ define('io.ox/files/icons/perspective',
                 img,
                 mode = previewMode(file),
                 genericIcon = drawGenericIcon(file.filename),
-                wrap = $('<div class="wrap">').append(genericIcon);
+                wrap = $('<div class="wrap">').append(genericIcon),
+                options = _.extend({ version: false }, baton.options);
 
             if (mode) {
-                img = $('<img>', { alt: '', 'data-src': api.getUrl(file, mode, baton.options) })
-                    .addClass('img-polaroid lazy')
-                    .one({
-                        load: function () {
-                            genericIcon.remove();
-                        },
-                        error: iconError
-                    });
+                img = $('<img>', {
+                    alt: '',
+                    'data-src': api.getUrl(file, mode, options)
+                })
+                .addClass('img-polaroid lazy')
+                .one({
+                    load: function () {
+                        genericIcon.remove();
+                    },
+                    error: iconError
+                });
             }
             this.addClass('file-icon pull-left selectable')
                 .attr('data-obj-id', _.cid(file))

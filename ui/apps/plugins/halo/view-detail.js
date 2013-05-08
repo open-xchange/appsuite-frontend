@@ -13,11 +13,24 @@
  */
 
 define('plugins/halo/view-detail',
-    ['plugins/halo/api', 'less!plugins/halo/style.less'], function (api) {
+    ['plugins/halo/api',
+     'io.ox/core/extensions',
+     'less!plugins/halo/style.less'], function (api, ext) {
 
     'use strict';
 
     return {
+
+        redraw: function (baton) {
+            api.halo.investigate(baton.contact, baton.provider).done(function (response) {
+                baton.data = response;
+                baton.ray.empty().triggerHandler('dispose');
+                api.viewer.draw(baton);
+            })
+            .always(function () {
+                baton = null;
+            });
+        },
 
         draw: function (data) {
 
@@ -25,12 +38,15 @@ define('plugins/halo/view-detail',
 
             _(api.halo.investigate(data)).each(function (promise, providerName) {
 
-                var node = $('<div>')
+                var node = $('<div class="ray">')
                     .css('minHeight', '100px')
-                    .addClass('ray').busy().appendTo(container);
+                    .attr('data-prodiver', providerName)
+                    .busy()
+                    .appendTo(container);
 
                 promise.done(function (response) {
-                    api.viewer.draw(node, providerName, response);
+                    var baton = new ext.Baton({ contact: data, data: response, provider: providerName, ray: node });
+                    api.viewer.draw(baton);
                 })
                 .always(function () {
                     node.idle().css('minHeight', '');

@@ -99,7 +99,7 @@
         themeStyle = { name: 'style.css', selector: '#custom' },
         // List of LessCSS files to update for theme changes.
         lessFiles = [themeCommon, themeStyle];
-    
+
     if (!ox.signin) {
         lessFiles.push({
             path: ox.base + '/io.ox/core/bootstrap/css/bootstrap.less',
@@ -107,14 +107,14 @@
             selector: '#bootstrap'
         });
     }
-    
+
     function insertLess(file) {
         return require(['text!themes/' + theme + '/less/' + file.name])
             .done(function (css) {
                 file.node = insert(file.path, css, file.selector, file.node);
             });
     }
-    
+
     define("less", {
         load: function (name, parentRequire, load, config) {
             var file = {
@@ -130,7 +130,7 @@
             }
         }
     });
-    
+
     // themes module
     define("themes", {
         /**
@@ -152,9 +152,13 @@
                 $('head #' + i).attr({ href: path + icons[i] })
                                .detach().appendTo('head');
             }
-            themeCommon.path = path + 'common.css';
-            themeStyle.path = path + 'style.css';
-            return $.when.apply($, _.map(lessFiles, insertLess));
+            if (name !== 'login') {
+                themeCommon.path = path + 'common.css';
+                themeStyle.path = path + 'style.css';
+                return $.when.apply($, _.map(lessFiles, insertLess));
+            } else {
+                return $.when();
+            }
         },
 
         getDefinitions: function () {

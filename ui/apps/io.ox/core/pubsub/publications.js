@@ -293,12 +293,13 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     //predefined data for mail
                     var url = baton.model.url(),
                         text = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), '<a href="' + url + '">' + url + '</a>'),
+                        textplain = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), url),
                         data = {
                             folder_id: 'default0/INBOX',
                             subject: gt('Publication'),
                             attachments: {
                                 html: [{ content: text }],
-                                text: [{ content: text }]
+                                text: [{ content: textplain }]
                             },
                             module: baton.model.attributes.entityModule,
                             target: baton.model.attributes.target,

@@ -24,36 +24,30 @@ define("plugins/halo/appointments/register",
         handles: function (type) {
             return type === "com.openexchange.halo.appointments";
         },
-        draw: function  ($node, providerName, appointments) {
+        draw: function (baton) {
 
-            var deferred = new $.Deferred();
+            if (baton.data.length === 0) return;
 
-            if (appointments.length === 0) {
-                deferred.resolve();
-                return deferred;
-            }
+            var node = this, def = $.Deferred();
 
             // TODO: unify with portal code (copy/paste right now)
-            require(
-                ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
-                function (dialogs, viewGrid) {
-                    $node.append($("<div/>").addClass("widget-title clear-title").text(gt("Shared Appointments")));
-                    viewGrid.drawSimpleGrid(appointments).appendTo($node);
+            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"], function (dialogs, viewGrid) {
 
-                    new dialogs.SidePopup()
-                        .delegate($node, ".vgrid-cell", function (popup, e, target) {
-                            var data = target.data("appointment");
-                            require(["io.ox/calendar/view-detail"], function (view) {
-                                popup.append(view.draw(data));
-                                data = null;
-                            });
-                        });
+                node.append($("<div>").addClass("widget-title clear-title").text(gt("Shared Appointments")));
+                viewGrid.drawSimpleGrid(baton.data).appendTo(node);
 
-                    deferred.resolve();
-                }
-            );
+                new dialogs.SidePopup().delegate(node, ".vgrid-cell", function (popup, e, target) {
+                    var data = target.data("appointment");
+                    require(["io.ox/calendar/view-detail"], function (view) {
+                        popup.append(view.draw(data));
+                        data = null;
+                    });
+                });
 
-            return deferred;
+                def.resolve();
+            });
+
+            return def;
         }
     });
 

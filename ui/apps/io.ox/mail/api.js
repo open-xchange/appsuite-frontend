@@ -234,7 +234,7 @@ define('io.ox/mail/api',
             },
             get: {
                 action: 'get',
-                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'noimg' : 'html') : 'text',
+                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text',
                 embedded: 'true'
             },
             getUnmodified: {
@@ -319,6 +319,14 @@ define('io.ox/mail/api',
             }
         }
     });
+    
+    /**
+     * updates the view used for get requests, used on mail settings save to be responsive
+     */
+    api.updateViewSettings = function () {
+        api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
+        api.trigger('viewChanged');//special event to redraw current detailview
+    };
 
     // publish tracker
     api.tracker = tracker;
@@ -362,7 +370,9 @@ define('io.ox/mail/api',
     // undefined -> first fetch
     // true -> has been fetched in this session
     // false -> caused by refresh
-    var cacheControl = {}, getAll = api.getAll;
+    var cacheControl = {},
+        getAll = api.getAll,
+        search = api.search;
 
     api.getAll = function (options, useCache) {
         // use cache?
@@ -378,6 +388,13 @@ define('io.ox/mail/api',
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
         });
+    };
+
+    api.search = function (query, options) {
+        if (options.sort === 'from-to') {
+            options.sort = accountAPI.is('sent', options.folder) ? 604 : 603;
+        }
+        return search.call(this, query, options);
     };
 
     /**

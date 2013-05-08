@@ -184,18 +184,16 @@ define("io.ox/calendar/util",
         },
 
         getDateInterval: function (data) {
-            var length = (data.end_date - data.start_date) / DAY >> 0,
-                startDate = data.start_date,
+            var startDate = data.start_date,
                 endDate = data.end_date;
             if (data.full_time) {
                 startDate = date.Local.utc(startDate);
                 endDate = date.Local.utc(endDate);
             }
-
-            if (length > 1) {
-                return this.getDate(startDate) + " \u2013 " + this.getDate(endDate - 1);
-            } else {
+            if (this.onSameDay(startDate, endDate)) {
                 return this.getDate(startDate);
+            } else {
+                return this.getDate(startDate) + " \u2013 " + this.getDate(endDate);
             }
         },
 
@@ -257,8 +255,7 @@ define("io.ox/calendar/util",
         },
 
         onSameDay: function (t1, t2) {
-            // don't change this to date.Local; this is just a simple comparison
-            return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
+            return new date.Local(t1).getDays() === new date.Local(t2).getDays();
         },
 
         getTimeInterval: function (data, D) {

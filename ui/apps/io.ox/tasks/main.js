@@ -158,6 +158,7 @@ define('io.ox/tasks/main',
         showTask = function (obj) {
             // be busy
             right.busy(true);
+            obj = {folder: obj.folder || obj.folder_id, id: obj.id};//remove unnecessary information
             api.get(obj)
                 .done(_.lfo(drawTask))
                 .fail(_.lfo(drawFail, obj));
