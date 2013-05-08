@@ -325,7 +325,7 @@ define("io.ox/core/desktop",
 
         launch: function (options) {
 
-            var deferred = $.when(), self = this, isRegistered = !!ox.manifests.apps[this.getName() + '/main'];
+            var deferred = $.when(), self = this;
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
@@ -337,23 +337,11 @@ define("io.ox/core/desktop",
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
-                if (isRegistered) {
-                    deferred = this.get('launch').call(this, options || {}) || $.when();
-                } else {
-                    deferred = $.Deferred().reject({
-                        error: gt('This application is not registered.')
-                    });
-                }
-                deferred
+                (deferred = this.get('launch').call(this, options || {}) || $.when())
                 .done(function () {
                     ox.ui.apps.add(self);
                     self.set('state', 'running');
                     self.trigger('launch', self);
-                })
-                .fail(function (result) {
-                    if (result.error) {
-                        notifications.yell('error', result.error);
-                    }
                 });
             } else if (this.has('window')) {
                 // toggle app window
