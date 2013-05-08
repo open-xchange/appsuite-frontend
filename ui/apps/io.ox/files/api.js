@@ -42,13 +42,18 @@ define('io.ox/files/api',
             // check if file is locked
             isLocked: function (obj) {
                 var cid = getCID(obj);
-                return !!fileLocks[cid];
+                return fileLocks[cid] > _.now();
             },
 
             // check if file is explicitly locked by other user (modified_by + locked_until)
-            isExplicitLocked: function (obj) {
+            isLockedByOthers: function (obj) {
                 var cid = getCID(obj);
-                return !!explicitFileLocks[cid];
+                return explicitFileLocks[cid] > _.now();
+            },
+
+            isLockedByMe: function (obj) {
+                var cid = getCID(obj);
+                return this.isLocked(cid) && !this.isLockedByOthers(cid);
             },
 
             /**
@@ -65,36 +70,13 @@ define('io.ox/files/api',
                 }
             },
 
-            update: function (obj) {
-                var cid = getCID(obj);
-                if (this.isLocked(cid) && obj.locked_until === 0) {
-                    this.removeFile(cid);
-                } else {
-                    this.addFile(obj);
-                }
-            },
-
-            refresh: function (obj) {
-                // propagate change to refresh file
-                api.propagate('change', obj);
-            },
-
             // add file to tracker
             addFile: function (obj) {
                 if (obj.locked_until === 0) return;
                 var cid = getCID(obj);
-                fileLocks[cid] = obj;
+                fileLocks[cid] = obj.locked_until;
                 if (obj.modified_by !== ox.user_id) {
-                    explicitFileLocks[cid] = obj;
-                }
-                // console.debug('Added file', cid, 'should expire on', new date.Local(obj.locked_until).format(date.DATE_TIME));
-                // Only setup timers for locks that expire up to the next day
-                if (obj.locked_until < _.now() + date.DAY) {
-                    clearTimeout(fileLockTimers[cid]);
-                    fileLockTimers[cid] = setTimeout(function () {
-                        self.refresh(fileLocks[cid]);
-                        // console.debug('Refreshing file', cid, 'timer has expired on', new date.Local(_.now()).format(date.DATE_TIME));
-                    }, obj.locked_until + DELAY - _.now());
+                    explicitFileLocks[cid] = obj.locked_until;
                 }
             },
 
@@ -105,17 +87,12 @@ define('io.ox/files/api',
                 if (cid in fileLocks) {
                     delete explicitFileLocks[cid];
                 }
-                delete fileLockTimers[cid];
             },
 
             // clear tracker and clear timeouts
             clear: function (obj) {
-                for (var t in fileLockTimers) {
-                    clearTimeout(fileLockTimers[t]);
-                }
                 fileLocks = {};
                 explicitFileLocks = {};
-                fileLockTimers = {};
             }
         };
 
@@ -231,9 +208,14 @@ define('io.ox/files/api',
                     // remove from cache if get cache is outdated
                     api.caches.get.dedust(obj, 'last_modified');
                     api.caches.versions.remove(String(obj.id));
-                    api.tracker.addFile(obj);
                     // this can be solved smarter once backend send correct
                     // number_of_version in 'all' requests; always zero now
+                });
+                return data;
+            },
+            allPost: function (data) {
+                _(data).each(function (obj) {
+                    api.tracker.addFile(obj);
                 });
                 return data;
             },

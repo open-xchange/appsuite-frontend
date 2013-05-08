@@ -62,7 +62,7 @@ define('io.ox/files/list/view-detail',
                 this.append(
                     div = $('<div>').addClass('alert alert-info')
                 );
-                if (!filesAPI.tracker.isExplicitLocked(baton.data)) {
+                if (filesAPI.tracker.isLockedByMe(baton.data)) {
                     lockInfo = gt('This file is locked by you');
                 } else {
                     lockInfo = gt('This file is locked by %1$s');

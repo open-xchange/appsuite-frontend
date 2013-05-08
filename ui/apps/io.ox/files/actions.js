@@ -306,7 +306,7 @@ define('io.ox/files/actions',
     var isUnLocked = function (e) {
         var list = _.getArray(e.context);
         return _(list).reduce(function (memo, obj) {
-            return memo || !api.tracker.isExplicitLocked(obj);
+            return memo || !api.tracker.isLockedByOthers(obj);
         }, false);
     };
 
@@ -341,7 +341,7 @@ define('io.ox/files/actions',
         requires: function (e) {
             var list = _.getArray(e.context);
             return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                return memo || api.tracker.isLocked(obj) && !api.tracker.isExplicitLocked(obj);
+                return memo || api.tracker.isLockedByMe(obj);
             }, false);
         },
         multiple: function (list) {
