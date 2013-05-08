@@ -511,10 +511,13 @@ define('io.ox/files/api',
      * @param  {string} type ('change', 'new', 'delete')
      * @param  {file} obj
      * @param  {boolean} silent (no events will be fired) [optional]
+     * @param  {boolean} noRefreshAll (refresh.all will not be triggered) [optional]
      * @fires  api#update
      * @fires  api#update: + cid
      * @fires  api#refresh.all
      * @return {promise}
+     *
+     * TODO: api.propagate should be changed to be able to process arrays
      */
     api.propagate = function (type, obj, silent, noRefreshAll) {
 
