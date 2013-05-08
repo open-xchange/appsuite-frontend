@@ -503,6 +503,7 @@ function compileLess() {
     }
 
     function compile(dest, defs, defsInCore, src, srcInCore) {
+        dest = core(dest);
         utils.file(dest,
             [core('apps/themes/definitions.less'),
              defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
