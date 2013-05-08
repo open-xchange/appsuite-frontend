@@ -306,7 +306,7 @@ define('io.ox/files/actions',
     var isUnLocked = function (e) {
         var list = _.getArray(e.context);
         return _(list).reduce(function (memo, obj) {
-            return memo || (obj.modified_by === ox.user_id && obj.locked_until === 0);
+            return memo || !api.tracker.isExplicitLocked(obj);
         }, false);
     };
 

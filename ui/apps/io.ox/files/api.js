@@ -48,7 +48,7 @@ define('io.ox/files/api',
             // check if file is explicitly locked by other user (modified_by + locked_until)
             isExplicitLocked: function (obj) {
                 var cid = getCID(obj);
-                return this.isLocked(cid) && (!(cid in explicitFileLocks) || explicitFileLocks[cid] < (_.now() - DELAY));
+                return !!explicitFileLocks[cid];
             },
 
             /**
@@ -75,23 +75,26 @@ define('io.ox/files/api',
             },
 
             refresh: function (obj) {
-                // do something useful
+                // propagate change to refresh file
+                api.propagate('change', obj);
             },
 
             // add file to tracker
             addFile: function (obj) {
                 if (obj.locked_until === 0) return;
                 var cid = getCID(obj);
-                fileLocks[cid] = obj.locked_until;
+                fileLocks[cid] = obj;
                 if (obj.modified_by !== ox.user_id) {
-                    explicitFileLocks[cid] = obj.locked_until;
+                    explicitFileLocks[cid] = obj;
                 }
+                // console.debug('Added file', cid, 'should expire on', new date.Local(obj.locked_until).format(date.DATE_TIME));
                 // Only setup timers for locks that expire up to the next day
                 if (obj.locked_until < _.now() + date.DAY) {
                     clearTimeout(fileLockTimers[cid]);
                     fileLockTimers[cid] = setTimeout(function () {
-                        self.refresh();
-                    }, obj.locked_until - _.now());
+                        self.refresh(fileLocks[cid]);
+                        // console.debug('Refreshing file', cid, 'timer has expired on', new date.Local(_.now()).format(date.DATE_TIME));
+                    }, obj.locked_until + DELAY - _.now());
                 }
             },
 
@@ -99,9 +102,10 @@ define('io.ox/files/api',
             removeFile: function (obj) {
                 var cid = getCID(obj);
                 delete fileLocks[cid];
-                if (cid in explicitFileLocks) {
+                if (cid in fileLocks) {
                     delete explicitFileLocks[cid];
                 }
+                delete fileLockTimers[cid];
             },
 
             // clear tracker and clear timeouts
@@ -110,15 +114,8 @@ define('io.ox/files/api',
                     clearTimeout(fileLockTimers[t]);
                 }
                 fileLocks = {};
+                explicitFileLocks = {};
                 fileLockTimers = {};
-            },
-
-            debug: function () {
-                console.debug(
-                    'fileLocks:', fileLocks,
-                    'explicitFileLocks:', explicitFileLocks,
-                    'fileLockTimers:', fileLockTimers);
-
             }
         };
 
@@ -762,6 +759,7 @@ define('io.ox/files/api',
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     timezone: 'UTC'
+                    // diff: 10000 // Use 10s diff for debugging purposes
                 },
                 appendColumns: false
             });
