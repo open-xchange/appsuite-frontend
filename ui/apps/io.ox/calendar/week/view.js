@@ -846,6 +846,14 @@ define('io.ox/calendar/week/view',
             if (this.showFulltime) {
                 ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
                 this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
+                this.fulltimeCon.resizable({
+                    handles: "s",
+                    minHeight: this.fulltimeHeight,
+                    maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
+                    resize: function (event, ui) {
+                        self.pane.css({ top: ui.size.height + 'px' });
+                    }
+                });
             }
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
