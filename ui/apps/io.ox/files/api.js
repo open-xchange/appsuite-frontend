@@ -84,9 +84,7 @@ define('io.ox/files/api',
             removeFile: function (obj) {
                 var cid = getCID(obj);
                 delete fileLocks[cid];
-                if (cid in fileLocks) {
-                    delete explicitFileLocks[cid];
-                }
+                delete explicitFileLocks[cid];
             },
 
             // clear tracker and clear timeouts
@@ -183,7 +181,7 @@ define('io.ox/files/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,5,700,702,703,704,707',
+                columns: '20,1,5,700,702,703,704,707,3',
                 extendColumns: 'io.ox/files/api/list'
             },
             get: {
@@ -222,6 +220,11 @@ define('io.ox/files/api',
             list: function (data) {
                 _(data).each(function (obj) {
                     fixContentType(obj);
+                });
+                return data;
+            },
+            listPost: function (data) {
+                _(data).each(function (obj) {
                     api.tracker.addFile(obj);
                 });
                 return data;
@@ -513,7 +516,7 @@ define('io.ox/files/api',
      * @fires  api#refresh.all
      * @return {promise}
      */
-    api.propagate = function (type, obj, silent) {
+    api.propagate = function (type, obj, silent, noRefreshAll) {
 
         var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
 
@@ -545,10 +548,10 @@ define('io.ox/files/api',
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
                             api.trigger('update update:' + encodeURIComponent(_.cid(data)), data);
-                            api.trigger('refresh.all');
+                            if (!noRefreshAll) api.trigger('refresh.all');
                         });
                     } else {
-                        api.trigger('refresh.all');
+                        if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
                 return ready;
@@ -749,18 +752,29 @@ define('io.ox/files/api',
                 appendColumns: false
             });
         });
+
         // resume & trigger refresh
-        return http.resume()
-            .pipe(function () {
-                return $.when.apply($,
-                    _(list).map(function (o) {
-                        return $.when(
-                            api.tracker.removeFile(o),
-                            api.propagate('change', o)
-                        );
-                    })
-                );
-            });
+        return http.resume().then(function () {
+            if (action === 'lock') {
+                // lock
+                return api.getList(list, false).then(function (list) {
+                    return _(list).map(function (obj, index) {
+                        // addFile is done by getList
+                        var isNotLast = index < list.length - 1;
+                        // last one triggers refresh.all
+                        return api.propagate('change', obj, false, isNotLast);
+                    });
+                });
+            } else {
+                // unlock
+                return _(list).map(function (obj, index) {
+                    api.tracker.removeFile(obj);
+                    var isNotLast = index < list.length - 1;
+                    // last one triggers refresh.all
+                    return api.propagate('change', obj, false, isNotLast);
+                });
+            }
+        });
     };
 
     /**

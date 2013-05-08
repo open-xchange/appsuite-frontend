@@ -116,7 +116,7 @@ define('io.ox/files/list/perspective',
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right, api);
 
         grid.selection.on('empty', function () {
             app.currentFile = null;
