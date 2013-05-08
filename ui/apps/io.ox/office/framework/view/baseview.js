@@ -100,6 +100,9 @@ define('io.ox/office/framework/view/baseview',
             // inner shadows for application pane
             shadowNodes = {},
 
+            // whether refreshing the pane layout is currently locked
+            layoutLocks = 0,
+
             // alert banner currently shown
             currentAlert = null,
 
@@ -159,6 +162,9 @@ define('io.ox/office/framework/view/baseview',
                     paneNode.css(sizeAttr, 0);
                 }
             }
+
+            // do nothing if refreshing is currently locked
+            if (layoutLocks > 0) { return; }
 
             // update fixed view panes
             _(fixedPanes).each(updatePane);
@@ -366,9 +372,37 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Adjusts the positions of all view pane nodes.
+         * Adjusts the positions of all view pane nodes, and the current alert
+         * banner.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
          */
         this.refreshPaneLayout = function () {
+            refreshPaneLayout();
+            return this;
+        };
+
+        /**
+         * Prevents refreshing the pane layout while the specified callback
+         * function is running. After the callback function has finished, the
+         * pane layout will be adjusted once by calling the method
+         * BaseApplication.refreshPaneLayout().
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed synchronously while
+         *  refreshing the pane layout is locked.
+         *
+         * @param {Object} [context]
+         *  The context bound to the callback function.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.lockPaneLayout = function (callback, context) {
+            layoutLocks += 1;
+            callback.call(context);
+            layoutLocks -= 1;
             refreshPaneLayout();
             return this;
         };
@@ -643,12 +677,16 @@ define('io.ox/office/framework/view/baseview',
 
         // after construction, call initialization handler
         app.on('docs:init', function () {
-            Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+            self.lockPaneLayout(function () {
+                Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+            });
         });
 
         // after import, call deferred initialization handler, and update view and controller
         app.on('docs:import:after', function () {
-            Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            self.lockPaneLayout(function () {
+                Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            });
             windowShowHandler();
         });
 
