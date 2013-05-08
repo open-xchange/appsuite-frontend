@@ -744,72 +744,89 @@ a.button {
 /* vGrid */
 
 .vgrid {
+
     .user-select(none);
-}
-
-.vgrid .vgrid-scrollpane {
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    -webkit-tap-highlight-color: transparent;
-    z-index: 1;
-}
-
-.vgrid, .vgrid:focus {
     outline: none;
-}
 
-.vgrid-toolbar {
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    line-height: 40px - 1;
-    padding: 0px 13px 0px 13px;
-    background-color: #f5f5f5;
-    z-index: 2;
-}
-
-.vgrid-toolbar a {
-    i { color: black; }
-    text-decoration: none;
-}
-
-.vgrid-toolbar .grid-info {
-    text-align: center;
-    margin: 0 30px;
-    .ellipsis;
-    .folder-count {
-        font-size: 13px;
-        color: #888;
+    .vgrid-scrollpane {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        -webkit-tap-highlight-color: transparent;
+        z-index: 1;
     }
+
+    &:focus {
+        outline: none;
+    }
+
+    .vgrid-toolbar {
+
+        position: absolute;
+        display: none;
+        right: 0;
+        left: 0;
+        line-height: 40px - 1;
+        padding: 0px 13px 0px 13px;
+        background-color: #f5f5f5;
+        z-index: 2;
+
+        a {
+            i { color: black; }
+            text-decoration: none;
+        }
+
+        &.top {
+            top: 0;
+            border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+        }
+
+        &.bottom {
+            bottom: 0;
+            border-top: 1px solid mix(@textColor, @background, 200%/15);
+        }
+
+        .grid-info {
+            text-align: center;
+            margin: 0 30px;
+            .ellipsis;
+            .folder-count {
+                font-size: 13px;
+                color: #888;
+            }
+        }
+
+    }
+
+    &.top-toolbar .vgrid-toolbar.top, &.bottom-toolbar .vgrid-toolbar.bottom {
+        display: block;
+    }
+
+    &.top-toolbar .vgrid-scrollpane {
+        top: 40px;
+    }
+
+    &.bottom-toolbar .vgrid-scrollpane {
+        bottom: 39px;
+    }
+
+    .vgrid-toolbar.top .dropdown-menu {
+        top: 110%;
+        bottom: auto;
+        right: 0;
+        left: auto;
+    }
+
+    .vgrid-toolbar.bottom .dropdown-menu {
+        top: auto;
+        bottom: 110%;
+        right: 0;
+        left: auto;
+    }
+
 }
 
-.vgrid.top-toolbar .vgrid-toolbar {
-    top: 0;
-    border-bottom: 1px solid mix(@textColor, @background, 200%/15);
-}
 
-.vgrid.bottom-toolbar .vgrid-toolbar {
-    bottom: 0;
-    border-top: 1px solid mix(@textColor, @background, 200%/15);
-}
-
-.vgrid.top-toolbar .vgrid-scrollpane {
-    top: 40px;
-}
-
-.vgrid.bottom-toolbar .vgrid-scrollpane {
-    bottom: 39px;
-}
-
-.vgrid.bottom-toolbar .dropdown-menu {
-    top: auto; bottom: 110%; right: 0; left: auto;
-}
-
-.vgrid.top-toolbar .dropdown-menu {
-    top: 110%; bottom: auto; right: 0; left: auto;
-}
 
 .vgrid-cell {
     position: absolute;

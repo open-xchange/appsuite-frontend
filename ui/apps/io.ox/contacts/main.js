@@ -74,7 +74,10 @@ define("io.ox/contacts/main",
         commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         // grid
-        grid = new VGrid(gridContainer, {settings: settings});
+        grid = new VGrid(gridContainer, {
+            settings: settings,
+            secondToolbar: true
+        });
 
         // add template
         grid.addTemplate({

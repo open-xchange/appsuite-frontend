@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/tk/vgrid',
-    ['io.ox/core/tk/selection',
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/selection',
      'io.ox/core/event',
      'gettext!io.ox/core'
-    ], function (Selection, Events, gt) {
+    ], function (ext, Selection, Events, gt) {
 
     'use strict';
 
@@ -190,7 +191,9 @@ define('io.ox/core/tk/vgrid',
             multiple: true,
             draggable: true,
             dragType: '',
-            selectFirst: true
+            selectFirst: true,
+            toolbarPlacement: 'bottom',
+            secondToolbar: false
         }, options || {});
 
         if (options.settings) {
@@ -222,22 +225,10 @@ define('io.ox/core/tk/vgrid',
                     var grid = e.data.grid;
                     grid.setEditable(!grid.getEditable());
                 },
-            fnShowAll = function (e) {
-                    var grid = e.data.grid;
-                    if ($(this).prop('checked')) {
-                        grid.selection.selectAll();
-                    } else {
-                        grid.selection.selectFirst();
-                    }
-                },
-            toolbar = $('<div>').addClass('vgrid-toolbar')
+            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
+                .prependTo(node),
+            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
                 .append(
-                    // select all
-                    options.showSelectAll === true ?
-                        $('<input type="checkbox">')
-                        .css({ 'float': 'left', 'margin-right': '13px' })
-                        .on('change', { grid: this }, fnShowAll) :
-                        $(),
                     // show toggle
                     options.showToggle === false ?
                         $() :
@@ -313,18 +304,6 @@ define('io.ox/core/tk/vgrid',
                 return load.call(self, subset);
             });
 
-            // __chunkLoader = new ChunkedLoader({
-            //     all: function () {
-            //         return all;
-            //     },
-            //     fetch: function (subset, options) {
-            //         var load = loadData[options.mode] || loadData.all;
-            //         return load.call(self, subset);
-            //     },
-            //     MAX_CHUNK: options.maxChunkSize || 200,
-            //     MIN_CHUNK: options.minChunkSize || 50
-            // });
-
         // add label class
         template.node.addClass('selectable');
         label.node.addClass('vgrid-label');
@@ -339,6 +318,45 @@ define('io.ox/core/tk/vgrid',
 
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
+
+        // second toolbar
+        if (_.device('!small')) {
+            // create extension point for second toolbar
+            ext.point('io.ox/core/vgrid/secondToolbar').extend({
+                index: 100,
+                id: "secondToolbar",
+                draw: function (baton) {
+                    // select all/none
+                    var link,
+                        sel = baton.grid.selection,
+                        fnShowAll = function (e) {
+                            var checked = link.prop('checked');
+                            sel[checked ? 'clear' : 'selectAll']();
+                            setLink(!checked);
+                        },
+                        setLink = function (all) {
+                            all = all || false;
+                            link.prop('checked', all).text(all ? gt('Select none') : gt('Select all'));
+                        };
+
+                    // fix link if selection is empty
+                    sel.on('empty', function (a) {
+                        setLink(false);
+                    });
+
+                    // draw link
+                    this.append(
+                        $('<div>').addClass('grid-info').append(
+                            link = $('<a href="#">').on('click', fnShowAll)
+                        )
+                    );
+                    setLink(false);
+                }
+            });
+        }
+
+        // draw second toolbar
+        ext.point('io.ox/core/vgrid/secondToolbar').invoke("draw", topbar, new ext.Baton({ grid: self, options: options }));
 
         // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {
@@ -1009,6 +1027,10 @@ define('io.ox/core/tk/vgrid',
             return toolbar;
         };
 
+        this.getTopbar = function () {
+            return topbar;
+        };
+
         this.getEditable = function () {
             return this.prop('editable');
         };
@@ -1122,6 +1144,9 @@ define('io.ox/core/tk/vgrid',
 
         if (options.toolbarPlacement !== 'none') {
             node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+            if (options.secondToolbar && _.device('!small')) {
+                node.addClass(options.toolbarPlacement === 'top' ? 'bottom-toolbar' : 'top-toolbar');
+            }
         }
 
         this.on('change:prop:folder', function (e, value, previous) {

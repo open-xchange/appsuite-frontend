@@ -106,7 +106,8 @@ define('io.ox/mail/main',
         ext.point('io.ox/mail/vgrid/options').extend({
             max: settings.get('threadMax', 500),
             selectFirst: false,
-            threadView: settings.get('threadView') !== 'off'
+            threadView: settings.get('threadView') !== 'off',
+            secondToolbar: true
         });
 
         // grid
