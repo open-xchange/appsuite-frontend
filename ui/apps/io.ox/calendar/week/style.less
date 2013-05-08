@@ -75,18 +75,18 @@
 
         .fulltime-container {
 
-            position: relative;
-            width: 100%;
+            position: absolute;
             height: @weekviewFooterHeight;
             overflow-y: scroll;
             overflow-x: hidden;
+            border-bottom: 1px solid #ccc;
+            left: @weekviewTimeWith;
+            right: 0px;
 
             .fulltime {
 
                 position: relative;
                 height: 100%;
-                border-bottom: 1px solid #ccc;
-                margin-left: @weekviewTimeWith;
 
                 .note {
                     position: absolute;

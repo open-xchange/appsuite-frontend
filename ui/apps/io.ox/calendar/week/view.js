@@ -853,8 +853,11 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
 
             // fix for hidden scrollbars on small DIVs (esp. Firefox Win)
-            if (this.fulltimeCon[0].clientWidth !== this.pane[0].clientWidth) {
-                this.fulltimePane.css({ marginRight: this.fulltimeCon[0].clientWidth - this.pane[0].clientWidth + 'px' });
+            var fullConWitdth = this.fulltimeCon[0].clientWidth + this.fulltimeCon[0].offsetLeft;
+            if (fullConWitdth !== this.pane[0].clientWidth) {
+                this.fulltimePane.css({ marginRight: fullConWitdth - this.pane[0].clientWidth + 'px' });
+            } else {
+                this.fulltimePane.css({ marginRight: 0 });
             }
 
             // loop over all single days
