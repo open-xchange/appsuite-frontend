@@ -340,7 +340,9 @@ define("io.ox/core/desktop",
                 if (isRegistered) {
                     deferred = this.get('launch').call(this, options || {}) || $.when();
                 } else {
-                    deferred = $.Deferred().reject();
+                    deferred = $.Deferred().reject({
+                        error: gt('This application is not registered.')
+                    });
                 }
                 deferred
                 .done(function () {
@@ -348,10 +350,10 @@ define("io.ox/core/desktop",
                     self.set('state', 'running');
                     self.trigger('launch', self);
                 })
-                .fail(function () {
-                    ox.launch(
-                        require('settings!io.ox/core').get('autoStart')
-                    );
+                .fail(function (result) {
+                    if (result.error) {
+                        notifications.yell('error', result.error);
+                    }
                 });
             } else if (this.has('window')) {
                 // toggle app window
