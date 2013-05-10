@@ -33,7 +33,7 @@ define('io.ox/office/framework/view/pane',
         var // self reference
             self = this,
 
-            // the map of all events to be bound to the window while tracking
+            // the map of all events to be bound to the document while tracking
             EVENT_MAP = null,
 
             // the options map of the view pane
@@ -103,7 +103,7 @@ define('io.ox/office/framework/view/pane',
             originalSize = getPaneSize();
             startOffset = getOffset(event);
             tracking = true;
-            $(window).on(EVENT_MAP);
+            $(document).on(EVENT_MAP);
         }
 
         /**
@@ -129,7 +129,7 @@ define('io.ox/office/framework/view/pane',
          */
         function stopTracking() {
             if (tracking) {
-                $(window).off(EVENT_MAP);
+                $(document).off(EVENT_MAP);
                 tracking = false;
             }
         }

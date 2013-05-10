@@ -16,6 +16,7 @@ define('io.ox/office/framework/view/baseview',
      'io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
      'gettext!io.ox/office/main',
+     'io.ox/office/framework/view/nodetracking',
      'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
     ], function (Events, Utils, Pane, gt) {
