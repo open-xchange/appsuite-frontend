@@ -89,20 +89,24 @@ define('io.ox/calendar/invitations/register',
     }
 
     function analyzeAttachment(baton) {
-        return http.PUT({
-            module: 'calendar/itip',
-            params: {
-                action: 'analyze',
-                dataSource: 'com.openexchange.mail.ical',
-                descriptionFormat: 'html',
-                timezone: "UTC"
-            },
-            data: {
-                "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                "com.openexchange.mail.conversion.mailid": baton.data.id,
-                "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
-            }
-        });
+        if (baton.data.folder_id && baton.data.id && baton.imip.attachment.id) {
+            return http.PUT({
+                module: 'calendar/itip',
+                params: {
+                    action: 'analyze',
+                    dataSource: 'com.openexchange.mail.ical',
+                    descriptionFormat: 'html',
+                    timezone: "UTC"
+                },
+                data: {
+                    "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
+                    "com.openexchange.mail.conversion.mailid": baton.data.id,
+                    "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                }
+            });
+        } else {
+            return $.Deferred().resolve({});
+        }
     }
 
     function renderAnalysis($node, baton) {
@@ -573,7 +577,6 @@ define('io.ox/calendar/invitations/register',
         before: 'content',
         id: 'accept-decline',
         draw: function (baton) {
-
             var $well, module, reminder = baton.data.headers['X-OX-Reminder'], address;
 
             if (reminder) {
