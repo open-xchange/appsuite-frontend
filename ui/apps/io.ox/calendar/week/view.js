@@ -851,7 +851,7 @@ define('io.ox/calendar/week/view',
                     minHeight: this.fulltimeHeight,
                     maxHeight: fulltimeColPos.length * (this.fulltimeHeight + 1),
                     resize: function (event, ui) {
-                        self.pane.css({ top: ui.size.height + 'px' });
+                        self.pane.css({ top: self.fulltimeCon.outerHeight() });
                     }
                 });
             }
