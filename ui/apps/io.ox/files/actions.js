@@ -195,14 +195,20 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
-            return e.collection.has('some') && ox.uploadsEnabled;
+            var list = _.getArray(e.context);
+            return e.collection.has('some') && ox.uploadsEnabled && _(list).reduce(function (memo, obj) {
+                return memo || obj.file_size > 0;
+            }, false);
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
-                    m.getApp().launch().done(function () {
-                        this.compose({ infostore_ids: list });
-                    });
+                    var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
+                    if (filtered_list.length > 0) {
+                        m.getApp().launch().done(function () {
+                            this.compose({ infostore_ids: filtered_list });
+                        });
+                    }
                 });
             });
         }
