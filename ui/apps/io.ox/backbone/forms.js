@@ -659,7 +659,7 @@ define('io.ox/backbone/forms',
             },
 
             _toDate: function (value, attribute, model) {
-                if (value === undefined || value === null) {//dont use !value or 0 will result in false
+                if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
                 }
                 if (!_.isNumber(value)) {
@@ -674,7 +674,7 @@ define('io.ox/backbone/forms',
             },
 
             _toTime: function (value, attribute) {
-                if (value === undefined || value === null) {//dont use !value or 0 will result in false
+                if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
                 }
                 var myTime = new date.Local(parseInt(value, 10));
