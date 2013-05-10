@@ -44,6 +44,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var serverSequenceThreshhold = 0;
     var pingNumber = 0;
     var pendingPing = false;
+    var initialReset = true;
 
     Event.extend(api);
 
@@ -171,6 +172,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     pendingPing = false;
                 }
             });
+        } else if (stanza.get("atmosphere", "nextSequence")) {
+            if (!initialReset) {
+                api.trigger("reset");
+                seq = stanza.get("atmosphere", "nextSequence").data;
+                serverSequenceThreshhold = 0;
+                if (api.debug) {
+                    console.log("Got reset command, nextSequence is ", seq);
+                }
+            } else {
+                initialReset = false;
+            }
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
