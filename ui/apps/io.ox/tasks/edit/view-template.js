@@ -17,11 +17,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                                           'io.ox/core/notifications',
                                           'io.ox/backbone/forms',
                                           'io.ox/calendar/util',
+                                          'io.ox/calendar/edit/recurrence-view',
                                           'io.ox/participants/views',
                                           'io.ox/core/tk/attachments',
                                           'io.ox/tasks/api',
                                           'io.ox/core/extensions'],
-                                          function (gt, views, date, notifications, forms, util, pViews, attachments, api, ext) {
+                                          function (gt, views, date, notifications, forms, util, RecurrenceView, pViews, attachments, api, ext) {
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -548,6 +549,13 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
+    
+    // recurrence
+    point.extend(new RecurrenceView({
+        id: 'recurrence',
+        className: 'span12',
+        index: 2100
+    }));
 
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',

@@ -12,12 +12,13 @@
  */
 
 define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
+                                   'io.ox/calendar/util',
                                    'gettext!io.ox/tasks',
                                    'io.ox/core/extensions',
                                    'io.ox/core/extPatterns/links',
                                    'io.ox/tasks/api',
                                    'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.less' ], function (util, gt, ext, links, api) {
+                                   'less!io.ox/tasks/style.less' ], function (util, calendarUtil, gt, ext, links, api) {
     'use strict';
 
     var taskDetailView = {
@@ -143,6 +144,11 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
 
             var $details = $('<div class="task-details">'), hasDetails = false;
 
+            //add recurrence sentence, use calendarfunction to avoid code duplicates
+            if (task.recurrence_type) {
+                $details.append($('<label class="detail-label">').text(gt('This task recurs')),
+                                $('<div class="detail-value">').text(calendarUtil.getRecurrenceString(data)));
+            }
             _(fields).each(function (label, key) {
                 if (task[key]) {
                     $details.append(

@@ -485,7 +485,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         until: CalendarWidgets.datePicker,
                         model: self.model,
                         initial: function () {
-                            return self.model.get('start_date') + (4 * dateAPI.WEEK);
+                            return (self.model.get('start_date') || _.now()) + (4 * dateAPI.WEEK); //tasks may not have a start date at this point
                         }
                     }).on("change:ending", this.endingChanged, this).on("change", this.updateModel, this),
                     after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
