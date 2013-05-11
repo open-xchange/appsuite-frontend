@@ -18,158 +18,6 @@ define('io.ox/office/framework/view/pane',
 
     'use strict';
 
-    var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
-
-    // class PaneSizeTracking =================================================
-
-    /**
-     * Implementation helper for resizeable view panes. Inserts a draggable DOM
-     * element at the inner border of the view pane, and implements mouse event
-     * handling.
-     */
-    function PaneSizeTracking(app, pane) {
-
-        var // self reference
-            self = this,
-
-            // the map of all events to be bound to the document while tracking
-            EVENT_MAP = null,
-
-            // the options map of the view pane
-            options = pane.getOptions(),
-
-            // minimum size of the view pane
-            minSize = Utils.getIntegerOption(options, 'minSize', 1, 1),
-
-            // maximum size of the view pane
-            maxSize = Utils.getIntegerOption(options, 'maxSize', 0x7FFFFFFF, minSize),
-
-            // the position of the view pane
-            position = pane.getPosition(),
-
-            // whether the view pane is oriented vertically
-            vertical = Utils.isVerticalPosition(position),
-
-            // correction factor for trailing view panes (enlarge when offset becomes smaller)
-            factor = Utils.isLeadingPosition(position) ? 1 : -1,
-
-            // the method to get or set the pane size
-            paneSizeFunc = _.bind(pane.getNode()[vertical ? 'height' : 'width'], pane.getNode()),
-
-            // whether tracking is currently active
-            tracking = false,
-
-            // the original size of the view pane when tracking has been started
-            originalSize = 0,
-
-            // the start mouse offset when tracking has been started
-            startOffset = 0;
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Returns the current size of the pane (width for left/right panes, or
-         * height for top/bottom panes).
-         */
-        function getPaneSize() {
-            return paneSizeFunc();
-        }
-
-        /**
-         * Changes the size of the pane (width for left/right panes, or height
-         * for top/bottom panes), and updates the entire view.
-         */
-        function setPaneSize(size) {
-            if (getPaneSize() !== size) {
-                paneSizeFunc(size);
-                app.getView().refreshPaneLayout();
-                pane.trigger('resize', size);
-            }
-        }
-
-        /**
-         * Returns the screen offset from the passed mouse event (x-offset for
-         * left/right panes, or y-offset for top/bottom panes).
-         */
-        function getOffset(event) {
-            return vertical ? event.pageY : event.pageX;
-        }
-
-        /**
-         * Starts mouse tracking to change the view pane size.
-         */
-        function startTracking(event) {
-            originalSize = getPaneSize();
-            startOffset = getOffset(event);
-            tracking = true;
-            $(document).on(EVENT_MAP);
-        }
-
-        /**
-         * Handles tracking events and changes the view pane size.
-         */
-        function trackingHandler(event) {
-            var size = originalSize + (getOffset(event) - startOffset) * factor;
-            setPaneSize(Utils.minMax(size, minSize, maxSize));
-        }
-
-        /**
-         * Handles global keyboard events (e.g. cancel tracking with Escape
-         * button).
-         */
-        function keyHandler(event) {
-            if (event.keyCode === KeyCodes.ESCAPE) {
-                self.cancelTracking();
-            }
-        }
-
-        /**
-         * Stops mouse tracking and removes all global event listeners.
-         */
-        function stopTracking() {
-            if (tracking) {
-                $(document).off(EVENT_MAP);
-                tracking = false;
-            }
-        }
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Cancels mouse tracking and restores the original view pane size.
-         */
-        this.cancelTracking = function () {
-            if (tracking) {
-                stopTracking();
-                setPaneSize(originalSize);
-            }
-        };
-
-        this.destroy = function () {
-            this.cancelTracking();
-        };
-
-        // initialization -----------------------------------------------------
-
-        // no size tracking for transparent view panes
-        if (!pane.isTransparent() && Utils.getBooleanOption(options, 'resizeable', false)) {
-
-            // initialize tracking event map
-            EVENT_MAP = {
-                mousemove: trackingHandler,
-                keydown: keyHandler,
-                mouseup: stopTracking
-            };
-
-            // create draggable node to resize the pane, start mouse tracking on mouse click
-            $('<div>').addClass('resizer ' + position)
-                .appendTo(pane.getNode())
-                .on('mousedown', startTracking);
-        }
-
-    } // class PaneSizeTracking
-
     // class Pane =============================================================
 
     /**
@@ -220,7 +68,10 @@ define('io.ox/office/framework/view/pane',
      */
     function Pane(app, options) {
 
-        var // the container element representing the pane
+        var // self reference
+            self = this,
+
+            // the container element representing the pane
             node = Utils.createContainerNode('view-pane unselectable', options),
 
             // position of the pane in the application window
@@ -232,19 +83,75 @@ define('io.ox/office/framework/view/pane',
             // transparent overlay pane
             transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
 
+            // minimum size of the view pane (for resizeable panes)
+            minSize = Utils.getIntegerOption(options, 'minSize', 1, 1),
+
+            // maximum size of the view pane (for resizeable panes)
+            maxSize = Utils.getIntegerOption(options, 'maxSize', 0x7FFFFFFF, minSize),
+
             // view components contained in this pane
             components = [],
 
             // handler called to insert a new component into this view pane
             componentInserter = Utils.getFunctionOption(options, 'componentInserter'),
 
-            // mouse tracker for resizeable panes
-            sizeTracking = null;
+            // whether the view pane is oriented vertically
+            vertical = Utils.isVerticalPosition(position),
+
+            // the method to get or set the pane size, according to pane position
+            paneSizeFunc = _.bind(node[vertical ? 'height' : 'width'], node),
+
+            // correction factor for trailing view panes (enlarge when position becomes smaller)
+            resizeFactor = Utils.isLeadingPosition(position) ? 1 : -1,
+
+            // the original size of the view pane when tracking has been started
+            originalSize = 0;
 
         // base constructor ---------------------------------------------------
 
         // add event hub
         Events.extend(this);
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Returns the current size of the pane (width for left/right panes, or
+         * height for top/bottom panes).
+         */
+        function getPaneSize() {
+            return paneSizeFunc();
+        }
+
+        /**
+         * Changes the size of the pane (width for left/right panes, or height
+         * for top/bottom panes), and updates the entire view.
+         */
+        function setPaneSize(size) {
+            if (getPaneSize() !== size) {
+                paneSizeFunc(size);
+                app.getView().refreshPaneLayout();
+                self.trigger('resize', size);
+            }
+        }
+
+        /**
+         * Handles all tracking events to resize this view pane.
+         */
+        function trackingHandler(event) {
+            switch (event.type) {
+            case 'tracking:start':
+                originalSize = getPaneSize();
+                break;
+            case 'tracking:move':
+            case 'tracking:end':
+                var size = originalSize + resizeFactor * (vertical ? event.offsetY : event.offsetX);
+                setPaneSize(Utils.minMax(size, minSize, maxSize));
+                break;
+            case 'tracking:cancel':
+                setPaneSize(originalSize);
+                break;
+            }
+        }
 
         // methods ------------------------------------------------------------
 
@@ -305,7 +212,7 @@ define('io.ox/office/framework/view/pane',
          */
         this.toggle = function (state) {
             var visible = this.isVisible();
-            sizeTracking.cancelTracking();
+            $.cancelTracking();
             node.toggle(state);
             if (visible !== this.isVisible()) {
                 app.getView().refreshPaneLayout();
@@ -366,15 +273,19 @@ define('io.ox/office/framework/view/pane',
 
         this.destroy = function () {
             this.events.destroy();
-            sizeTracking.destroy();
             _(components).invoke('destroy');
-            node = components = sizeTracking = null;
+            node = components = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // mouse tracking for resizeable panes
-        sizeTracking = new PaneSizeTracking(app, this);
+        // no size tracking for transparent view panes
+        if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
+            $('<div>').addClass('resizer ' + position)
+                .enableTracking()
+                .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                .appendTo(node);
+        }
 
         // overlay mode
         node.toggleClass('overlay', overlay);
