@@ -514,8 +514,8 @@ function compileLess() {
                     syncImport: true,
                     relativeUrls: true
                 }).parse('@import "apps/themes/definitions.less";\n' +
-                         '@import "' + defs + '";\n' +
-                         '@import "' + src + '";\n',
+                         '@import "' + defs.replace(/\\/g, '/') + '";\n' +
+                         '@import "' + src.replace(/\\/g, '/') + '";\n',
                 function (e, tree) {
                     if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
                 });
