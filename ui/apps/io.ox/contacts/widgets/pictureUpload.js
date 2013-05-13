@@ -80,9 +80,12 @@ define('io.ox/contacts/widgets/pictureUpload',
             },
 
             render: function () {
+
                 var self = this,
+                    dataUrl,
                     imageUrl = this.model.get('image1_url'),
                     hasImage = false;
+
                 self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
@@ -100,14 +103,20 @@ define('io.ox/contacts/widgets/pictureUpload',
                         })[hasImage ? 'show' : 'hide']()
                      ),
                     $('<form>').css({position: 'absolute'}).append(
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*">').css({opacity: 0}).css({height: '110px', width: '110px', cursor: 'pointer'})
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*">')
+                            .css({ height: '110px', width: '110px', cursor: 'pointer', opacity: 0 })
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
                     )
                 );
 
-                self.setImageURL(imageUrl);
+                // temporary support for data-url images
+                if (this.model.get('image1') && this.model.get('image1_content_type')) {
+                    dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
+                }
+
+                self.setImageURL(dataUrl || imageUrl);
 
                 if (this.clear) {
                     this.$el.append($('<div>').css({clear: 'both'}));
