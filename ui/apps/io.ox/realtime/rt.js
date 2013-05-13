@@ -223,6 +223,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         //request callbacks
         request.onOpen = function (response) {
             connecting = false;
+            pendingPing = false;
             def.resolve(api);
             if (disconnected) {
                 disconnected = false;
