@@ -41,15 +41,17 @@ define('io.ox/calendar/week/perspective',
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
-            api.get(obj).done(function (data) {
-                self.dialog
-                    .show(e, function (popup) {
+            api.get(obj).then(
+                function success(data) {
+                    self.dialog.show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
-            }).fail(function () {
-                notifications.yell('error', gt('An error occured. Please try again.'));
-                $('.appointment', self.main).removeClass('opac current');
-            });
+                },
+                function fail(e) {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    $('.appointment', self.main).removeClass('opac current');
+                }
+            );
         },
 
         /**
@@ -253,12 +255,23 @@ define('io.ox/calendar/week/perspective',
             this.refresh();
         },
 
+        // perspective week:week catches deep links
+        // id must be set in URL
+        followDeepLink: function () {
+            var cid = _.url.hash('id'), e;
+            if (cid) {
+                e = $.Event('click', { target: this.main });
+                this.showAppointment(e, _.cid(cid), { arrow: false });
+            }
+        },
+
         /**
          * initial rendering of the view
          * @param  {Object} app current application
          * @param  {Object} opt perspective options
          */
         render: function (app, opt) {
+
             var self = this;
 
             // init perspective
@@ -298,6 +311,8 @@ define('io.ox/calendar/week/perspective',
                     self.view.unbindKeys();
                     self.dialog.close();
                 });
+
+            this.followDeepLink();
         }
     });
 

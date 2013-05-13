@@ -35,11 +35,10 @@ define('io.ox/calendar/list/perspective',
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable(),
             grid = new VGrid(left, {settings: settings}),
             findRecurrence = false;
+
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
         }
-
-
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
