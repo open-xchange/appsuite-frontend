@@ -615,7 +615,7 @@ define('io.ox/files/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="icon-plus accent-color">').attr('aria-label', gt('Upload new file'));
         }
     });
 
@@ -632,7 +632,7 @@ define('io.ox/files/actions',
         id: 'view',
         index: 400,
         icon: function () {
-            return $('<i class="icon-eye-open">');
+            return $('<i class="icon-eye-open">').attr('aria-label', gt('Change view'));
         }
     });
 

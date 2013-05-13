@@ -763,7 +763,7 @@ define('io.ox/core/commons-folderview',
             id: 'folder',
             index: 200,
             icon: function () {
-                return $('<i class="icon-folder-close">');
+                return $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
             }
         });
 

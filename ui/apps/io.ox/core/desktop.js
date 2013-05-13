@@ -880,7 +880,7 @@ define("io.ox/core/desktop",
                             if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
                                 document.title = document.temptitle;
                             }
-                            
+
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -1034,7 +1034,7 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            
+
                             document.temptitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
@@ -1334,8 +1334,7 @@ define("io.ox/core/desktop",
                     ),
                     //abort button
                     $('<a href="#" data-action="remove">×</a>')
-                        .addClass('close')
-                        .addClass('close-big')
+                        .addClass('close close-big')
                         .on('click', function fnCancel(e) {
                                 e.preventDefault();
                                 win.search.stop();
@@ -1377,7 +1376,7 @@ define("io.ox/core/desktop",
                         id: 'search',
                         index: 300,
                         icon: function () {
-                            return $('<i class="icon-search">');
+                            return $('<i class="icon-search">').attr('aria-label', gt('Search'));
                         }
                     });
                 }

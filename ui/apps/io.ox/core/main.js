@@ -504,11 +504,11 @@ define("io.ox/core/main",
             index: 2000,
             draw: function () {
                 this.append(
-                    addLauncher("right", $('<i class="icon-refresh">'), function () {
+                    addLauncher('right', $('<i class="icon-refresh">').attr('aria-label', 'Refresh'), function () {
                         refresh();
                         return $.when();
                     })
-                    .attr("id", "io-ox-refresh-icon")
+                    .attr('id', 'io-ox-refresh-icon')
                 );
             }
         });
@@ -610,7 +610,7 @@ define("io.ox/core/main",
                 this.append(
                     div = $('<div class="launcher right dropdown">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                            $('<i class="icon-cog icon-white">')
+                            $('<i class="icon-cog icon-white">').attr('aria-label', gt('Settings'))
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
                     )
