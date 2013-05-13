@@ -2133,11 +2133,14 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // create the DOM anchor element representing the button (href="#" is essential for tab traveling)
-            button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
+        var // create the DOM anchor element representing the button (href='#' is essential for tab traveling)
+            // Bug 26284: IE9 resizes <a> buttons when clicking very close to it, or on drop-down elements inside
+            // the button etc. Prevent that by using <button> elements in IE. But: Do NOT use <button> elements in
+            // Firefox, as this browser has problems with text clipping and correct padding of the <button> contents.
+            button = _.browser.IE ? Utils.createControl('button', undefined, options) : Utils.createControl('a', { href: '#', tabindex: 0 }, options);
 
         Utils.setControlCaption(button, options);
-        return button;
+        return button.addClass('button');
     };
 
     /**
