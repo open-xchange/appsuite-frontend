@@ -19,13 +19,38 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/mail',
     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
-    'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, gt, listboxtmpl, tmpl) {
+    'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
+    'io.ox/mail/mailfilter/settings/filter/view-form'
+], function (ext, api, mailfilterModel, ViewForm, dialogs, gt, listboxtmpl, tmpl, AccountDetailView) {
 
     'use strict';
 
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
+
+
+    function renderDetailView(evt, data) {
+        var myView, myModel, myViewNode;
+
+        myViewNode = $("<div>").addClass("accountDetail");
+        myModel = data;
+        myView = new AccountDetailView({model: myModel, node: myViewNode});
+        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
+            pane.append(myView.render().el);
+        });
+//        myView.succes = successDialog;
+//        myView.collection = collection;
+        return myView.node;
+    }
+
+    ext.point("io.ox/settings/mailfilter/filter/settings/detail").extend({
+        index: 200,
+        id: "emailaccountssettings",
+        draw: function (evt) {
+            renderDetailView(evt, evt.data.obj);
+        }
+    });
+
 
     return {
         editMailfilter: function ($node) {
@@ -36,13 +61,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 BUTTON_ADD: gt('Add'),
                 BUTTON_EDIT: gt('Edit'),
                 BUTTON_DELETE: gt('Delete'),
-                TITLE: gt('Mailfilter')
+                TITLE: gt('Mail Filter')
             },
             createExtpointForSelectedAccount = function (args) {
-                console.log(args);
-//                if (args.data.id !== undefined) {
-//                    ext.point('io.ox/settings/accounts/' + args.data.accountType + '/settings/detail').invoke('draw', args.data.node, args);
-//                }
+                if (args.data.id !== undefined) {
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
+                }
             };
 
             api.getRules().done(function (data) {
@@ -63,17 +87,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 } else {
                     console.log('these are the rules');
-                    console.log(data);
                     var mailFilter = {},
                         MailfilterEdit,
-                        collection = factory.createCollection();
+                        collection = factory.createCollection(data);
 
-
-                    _.each(data, function (singleFilter) {
-                        collection.push(singleFilter);
-                    });
-
-                    console.log(collection);
 //                        autoForward;
 //
 //                    mailfilterData.id = data[0].id;
@@ -184,9 +201,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         },
 
                         onEdit: function (args) {
+                            console.log(this.collection);
                             var selected = this.$el.find('[selected]');
                             args.data = {};
                             args.data.id = selected.data('id');
+                            args.data.obj = this.collection.get(args.data.id);
+
 //                            args.data.accountType = selected.data('accounttype');
                             args.data.node = this.el;
                             createExtpointForSelectedAccount(args);
@@ -215,12 +235,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     });
 
 
-
-
-
-
 //
-                    mailFilter = new MailfilterEdit({model: {}});
+                    mailFilter = new MailfilterEdit();
 //
 //                    if (data[0].active === true) {
 //                       // set active state
