@@ -117,6 +117,10 @@ define("io.ox/core/gettext", [], function () {
             return gettext.npgettext("", singular, plural, n);
         };
 
+        gettext.getDictionary = function () {
+            return po.dictionary;
+        };
+
         function get(key) {
             if (key in custom['*']) return custom['*'][key];
             if (id in custom && key in custom[id]) return custom[id][key];
@@ -156,7 +160,13 @@ define("io.ox/core/gettext", [], function () {
     // add custom translation
     gt.addTranslation = function (dictionary, key, value) {
         if (!custom[dictionary]) custom[dictionary] = {};
-        custom[dictionary][key] = value;
+        if (_.isString(key)) {
+            custom[dictionary][key] = value;
+        } else {
+            _(key).each(function (value, key) {
+                custom[dictionary][key] = value;
+            });
+        }
     };
 
     return gt;
