@@ -265,12 +265,6 @@ define('plugins/notifications/calendar/register',
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
 
-                    // just for the moment as reminder view blocks whole screen
-                    // will reenable the view later with new design
-                    if (_.device('small && touch')) {
-                        return;
-                    }
-
                     $.when.apply($,
                         _(invites).map(function (invite) {
                             var inObj = {
@@ -335,11 +329,6 @@ define('plugins/notifications/calendar/register',
 
             reminderApi
                 .on('set:calendar:reminder', function (e, reminder) {
-                    // just for the moment as reminder view blocks whole screen
-                    // will reenable the view later with new design
-                    if (_.device('small && touch')) {
-                        return;
-                    }
 
                     var tmp = [],
                         counter = reminder.length,
