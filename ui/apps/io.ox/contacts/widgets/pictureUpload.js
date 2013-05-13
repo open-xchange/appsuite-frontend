@@ -91,6 +91,13 @@ define('io.ox/contacts/widgets/pictureUpload',
                 if (imageUrl) {
                     imageUrl = imageUrl.replace(/^\/ajax/, ox.apiRoot);
                     hasImage = true;
+                } else {
+                    // temporary support for data-url images
+                    if (this.model.get('image1') && this.model.get('image1_content_type')) {
+                        dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
+                        this.model.set('image1_url', dataUrl, { silent: true });
+                        hasImage = true;
+                    }
                 }
 
                 this.$el.append(
@@ -98,9 +105,9 @@ define('io.ox/contacts/widgets/pictureUpload',
                         cursor: 'pointer',
                         position: 'relative'
                     }).append(
-                        this.closeBtn = $('<div class="close">').css({zIndex: 2}).html('&times;').on('click', function (e) {
-                            self.resetImage(e);
-                        })[hasImage ? 'show' : 'hide']()
+                        this.closeBtn = $('<div class="close">').css({ zIndex: 2 })
+                            .html('&times;')
+                            .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide']()
                      ),
                     $('<form>').css({position: 'absolute'}).append(
                         self.fileInput = $('<input type="file" name="file" accepts="image/*">')
@@ -111,15 +118,10 @@ define('io.ox/contacts/widgets/pictureUpload',
                     )
                 );
 
-                // temporary support for data-url images
-                if (this.model.get('image1') && this.model.get('image1_content_type')) {
-                    dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
-                }
-
                 self.setImageURL(dataUrl || imageUrl);
 
                 if (this.clear) {
-                    this.$el.append($('<div>').css({clear: 'both'}));
+                    this.$el.append($('<div>').css({ clear: 'both' }));
                 }
             }
         }, options);
