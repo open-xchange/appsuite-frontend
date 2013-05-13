@@ -20,7 +20,7 @@ window.ox = {
     base: '',
     context_id: 0,
     debug: true,
-    language: 'en_US',
+    language: 'de_DE',
     logoutLocation: 'signin',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     revision: '1',
