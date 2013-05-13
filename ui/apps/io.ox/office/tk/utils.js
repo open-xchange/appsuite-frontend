@@ -87,7 +87,7 @@ define.async('io.ox/office/tk/utils',
      *
      * @constant
      */
-    Utils.BUTTON_SELECTOR = 'a.button';
+    Utils.BUTTON_SELECTOR = '.button';
 
     /**
      * CSS class for disabled controls.
