@@ -22,7 +22,10 @@ define('io.ox/office/tk/dropdown/dropdown',
         KeyCodes = Utils.KeyCodes,
 
         // marker CSS class for groups with opened drop-down menu
-        OPEN_CLASS = 'dropdown-open';
+        OPEN_CLASS = 'dropdown-open',
+
+        // whether the IE9 is running
+        IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
 
     // class DropDown =========================================================
 
@@ -316,7 +319,10 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // set size of menu node to 'auto' to be able to obtain the effective size
             menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
+            // Bug 26537: IE9 does not get the correct width, have to set children to inline-block mode...
+            if (IE9) { menuNode.children().css('display', 'inline-block'); }
             menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
+            if (IE9) { menuNode.children().css('display', ''); }
 
             // restore min-width and min-height of the menu node, and other CSS properties
             menuNode.css(menuMinSize);
