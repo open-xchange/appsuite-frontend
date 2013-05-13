@@ -232,7 +232,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
 // prevent system pop-up when tapping and holding button on iPad/iPhone
 // (also for buttons outside .group elements)
-a.button {
+.button {
     -webkit-touch-callout: none;
 }
 
@@ -258,7 +258,7 @@ a.button {
 
     /* common control settings --------------------------------------------- */
 
-    label, a.button, input {
+    label, .button, input {
         display: inline-block;
         position: relative;
         .box-sizing(border-box);
@@ -284,7 +284,7 @@ a.button {
     }
 
     /* control caption elements (always span elements as children) */
-    label, a.button {
+    label, .button {
         padding-left: @control-padding;
         padding-right: @control-padding;
 
@@ -305,7 +305,7 @@ a.button {
     }
 
     /* fade out caption for buttons and labels in disabled groups */
-    &.disabled label, &.disabled a.button, label.disabled, a.button.disabled {
+    &.disabled label, &.disabled .button, label.disabled, .button.disabled {
         > .caption, > span {
             .opacity(50);
         }
@@ -325,7 +325,7 @@ a.button {
 
     /* buttons ------------------------------------------------------------- */
 
-    a.button {
+    .button {
         text-align: left;
 
         &.dropdown-button {
@@ -438,17 +438,17 @@ a.button {
                 }
             }
 
-            label, a.button, input {
+            label, .button, input {
                 height: @control-height;
                 border: 1px solid #181818;
                 color: white;
 
-                + label, + a.button, + input {
+                + label, + .button, + input {
                     margin-left: -1px;
                 }
             }
 
-            label, a.button {
+            label, .button {
                 line-height: @control-height - 2px;
 
                 /* adjustments for icons */
@@ -464,7 +464,7 @@ a.button {
             }
 
             /* selected toggle/radio buttons */
-            a.button.selected {
+            .button.selected {
                 background: fade(@selectedBackground, 50%);
             }
 
@@ -486,14 +486,14 @@ a.button {
             &:not(.disabled) {
 
                 /* raise hovered/focused control to make all borders visible */
-                a.button, input {
+                .button, input {
                     &:not(.disabled) {
                         &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
                         &:focus { z-index: 4; }
                     }
                 }
 
-                a.button:not(.disabled) {
+                .button:not(.disabled) {
                     .box-shadow(@button-shadow-effect);
 
                     &:hover { background: fade(white, 5%); }
@@ -544,7 +544,7 @@ a.button {
                 &.combo-field.focused {
                     .box-shadow(@focus-glow-effect);
 
-                    > input, > a.button.dropdown-button {
+                    > input, > .button.dropdown-button {
                         &, &:hover, &:focus, &:active {
                             background: white;
                             border-color: @selectedBackground;
@@ -559,7 +559,7 @@ a.button {
                         }
                     }
 
-                    > a.button.dropdown-button {
+                    > .button.dropdown-button {
                         &, &:hover, &:focus, &:active {
                             border-left-color: transparent;
                         }
@@ -581,7 +581,7 @@ a.button {
                 .box-shadow(5px 20px 20px -20px fade(white, 10%) inset);
                 .border-radius(0);
 
-                a.button {
+                .button {
                     width: 100%;
                     height: @heading-height;
                     .border-radius(0);
@@ -593,7 +593,7 @@ a.button {
                 }
 
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
-                &.disabled a.button, a.button.disabled {
+                &.disabled .button, .button.disabled {
                     > .caption, > span {
                         .opacity(100);
                     }
@@ -716,7 +716,7 @@ a.button {
             &:last-child { margin-bottom: 5px; }
         }
 
-        a.button {
+        .button {
             display: block;
             width: 100%;
             text-align: left;
@@ -747,7 +747,7 @@ a.button {
             /* standard height of controls */
             @item-height: 30px;
 
-            a.button {
+            .button {
                 height: @item-height;
                 border: 1px solid transparent;
                 line-height: @item-height - 2px;
@@ -757,7 +757,7 @@ a.button {
                 }
             }
 
-            &:not(.disabled) a.button:not(.disabled) {
+            &:not(.disabled) .button:not(.disabled) {
 
                 &:hover { background: fade(black, 5%); }
                 &:active { background: fade(black, 10%); }
@@ -782,7 +782,7 @@ a.button {
             /* border width of buttons in framed design mode */
             @item-border-width: 3px;
 
-            a.button {
+            .button {
                 height: @item-height;
                 padding-left: 12px;
                 padding-right: 12px;
@@ -796,7 +796,7 @@ a.button {
                 }
             }
 
-            &:not(.disabled) a.button:not(.disabled) {
+            &:not(.disabled) .button:not(.disabled) {
 
                 &:hover:not(:focus) { border-color: fade(black, 10%); }
                 &:active:not(:focus) { border-color: fade(black, 10%); }
