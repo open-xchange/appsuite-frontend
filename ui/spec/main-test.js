@@ -37,6 +37,10 @@ window.ox = {
     windowState: 'foreground'
 };
 
+require(['io.ox/core/gettext'], function (gettext) {
+    gettext.setLanguage(ox.language);
+});
+
 if (jasmine) {
     /**
      * Hack pending specs/expected fails
