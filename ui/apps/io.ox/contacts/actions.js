@@ -87,7 +87,7 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/create', {
         index: 100,
         id: 'create',
-		requires:  function (e) {
+        requires:  function (e) {
             return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
@@ -105,7 +105,7 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/distrib', {
         index: 100,
         id: 'create-dist',
-		requires: function (e) {
+        requires: function (e) {
             return e.collection.has('create') && _.device('!small');
         },
         action: function (baton) {
@@ -151,7 +151,7 @@ define('io.ox/contacts/actions',
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
-                            tree = new views.FolderTree(dialog.getBody(), {
+                            tree = new views.FolderList(dialog.getBody(), {
                                 type: 'contacts',
                                 open: settings.get('folderpopup/open', []),
                                 toggle: function (open) {

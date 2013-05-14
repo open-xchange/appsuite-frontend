@@ -255,6 +255,11 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             }
         },
         showList: function () {
+            // just for the moment as reminder view blocks whole screen
+            // will reenable the view later with new design
+            if (_.device('small')) {
+                return;
+            }
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             $(document).on('keydown.notification', $.proxy(function (e) {

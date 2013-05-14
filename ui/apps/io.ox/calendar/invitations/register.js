@@ -89,20 +89,24 @@ define('io.ox/calendar/invitations/register',
     }
 
     function analyzeAttachment(baton) {
-        return http.PUT({
-            module: 'calendar/itip',
-            params: {
-                action: 'analyze',
-                dataSource: 'com.openexchange.mail.ical',
-                descriptionFormat: 'html',
-                timezone: "UTC"
-            },
-            data: {
-                "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                "com.openexchange.mail.conversion.mailid": baton.data.id,
-                "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
-            }
-        });
+        if (baton.data.folder_id && baton.data.id && baton.imip.attachment.id) {
+            return http.PUT({
+                module: 'calendar/itip',
+                params: {
+                    action: 'analyze',
+                    dataSource: 'com.openexchange.mail.ical',
+                    descriptionFormat: 'html',
+                    timezone: "UTC"
+                },
+                data: {
+                    "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
+                    "com.openexchange.mail.conversion.mailid": baton.data.id,
+                    "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                }
+            });
+        } else {
+            return $.Deferred().resolve({});
+        }
     }
 
     function renderAnalysis($node, baton) {
@@ -382,19 +386,21 @@ define('io.ox/calendar/invitations/register',
                     appointment.type = 'appointment';
                     baton.appointment = appointment;
                     drawDetails(baton, api, settings);
-                },
-                function fail(e) {
-                    // bad luck or most probably the appointment is deleted
-                    baton.$.well
-                        .addClass('auto-height')
-                        .find('.appointmentInfo').text(
-                            gt('Failed to load detailed appointment data; most probably the appointment has been deleted.')
-                        )
-                        .end()
-                        .find('.itip-action-container').remove()
-                        .end()
-                        .show();
                 }
+                /* see Bug 26489 for more information */
+                // ,
+                // function fail(e) {
+                //     // bad luck or most probably the appointment is deleted
+                //     baton.$.well
+                //         .addClass('auto-height')
+                //         .find('.appointmentInfo').text(
+                //             gt('Failed to load detailed appointment data; most probably the appointment has been deleted.')
+                //         )
+                //         .end()
+                //         .find('.itip-action-container').remove()
+                //         .end()
+                //         .show();
+                // }
             );
         });
     }
@@ -406,19 +412,21 @@ define('io.ox/calendar/invitations/register',
                     task.type = 'task';
                     baton.task = task;
                     drawDetails(baton, api, settings);
-                },
-                function fail(e) {
-                    // bad luck or most probably the appointment is deleted
-                    baton.$.well
-                        .addClass('auto-height')
-                        .find('.appointmentInfo').text(
-                            gt('Failed to load detailed task data; most probably the task has been deleted.')
-                        )
-                        .end()
-                        .find('.itip-action-container').remove()
-                        .end()
-                        .show();
                 }
+                /* see Bug 26489 for more information */
+                // ,
+                // function fail(e) {
+                //     // bad luck or most probably the appointment is deleted
+                //     baton.$.well
+                //         .addClass('auto-height')
+                //         .find('.appointmentInfo').text(
+                //             gt('Failed to load detailed task data; most probably the task has been deleted.')
+                //         )
+                //         .end()
+                //         .find('.itip-action-container').remove()
+                //         .end()
+                //         .show();
+                // }
             );
         });
     }
@@ -493,7 +501,6 @@ define('io.ox/calendar/invitations/register',
         baton.$.well.find('.appointmentInfo').append(
             drawSummary(data)
         );
-
         if (accepted) {
 
             baton.$.well.find('.itip-action-container').remove();
@@ -573,7 +580,6 @@ define('io.ox/calendar/invitations/register',
         before: 'content',
         id: 'accept-decline',
         draw: function (baton) {
-
             var $well, module, reminder = baton.data.headers['X-OX-Reminder'], address;
 
             if (reminder) {
