@@ -753,6 +753,13 @@ $(window).load(function () {
                     $('#io-ox-login-form').on('submit', fnSubmit);
                     $('#io-ox-login-username').removeAttr('disabled').focus().select();
                     $('#background_loader').idle().fadeOut(DURATION, cont);
+
+                    if (_.device('ios')) {
+                        //load on ios to safe transfered data
+                        require(['plugins/mobile/addToHomescreen/register']);
+                    }
+
+
                 });
         };
 
