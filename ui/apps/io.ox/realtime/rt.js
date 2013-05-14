@@ -310,6 +310,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 shouldReconnect = false;
                 subSocket = connect();
             } else {
+                if (!disconnected) {
+                    if (api.debug) {
+                        console.log("Triggering offline because #onClose was called");
+                    }
+                    goOffline();
+                }
                 disconnected = true;
             }
         };
