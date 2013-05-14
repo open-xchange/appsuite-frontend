@@ -539,7 +539,6 @@ $(window).load(function () {
             if (hash.session) {
 
                 // set session; session.store() might need it now (formlogin)
-                var hash = _.url.hash();
                 ox.session = hash.session;
 
                 // set store cookie?
