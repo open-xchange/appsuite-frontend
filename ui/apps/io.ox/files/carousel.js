@@ -94,6 +94,9 @@ define('io.ox/files/carousel',
             }
             this.inner.get(0).appendChild(frag);
 
+            // Prevent default on click behaviour of Bootstraps carousel
+            this.inner.on('click', function (e) { return false; });
+
             this.show();
             this.eventHandler();
         },
@@ -238,6 +241,7 @@ define('io.ox/files/carousel',
 
         prevItem: function () {
             if (this.prevControl.is(':visible')) {
+                console.log('prevItem');
                 if (!this.pos.sliding && this.pos.cur > 0) {
                     this.container.carousel('prev');
                 }
@@ -246,6 +250,7 @@ define('io.ox/files/carousel',
 
         nextItem: function () {
             if (this.nextControl.is(':visible')) {
+                console.log('nextItem');
                 if (!this.pos.sliding && this.pos.cur < (this.list.length - 1)) {
                     this.container.carousel('next');
                 }

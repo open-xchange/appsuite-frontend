@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-04-29 23:19+0200\n"
+"PO-Revision-Date: 2013-05-08 22:03+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com >\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: nl\n"
@@ -45,7 +45,7 @@ msgstr ""
 
 #: html/core_body.html:92
 msgid "Please enter your credentials."
-msgstr "Voer alstublieft uw aanmeldgegevens in."
+msgstr "Voer alstublieft uw inloggegevens in."
 
 #: html/core_body.html:93
 msgid "Please enter your password."
@@ -53,11 +53,11 @@ msgstr "Voer alstublieft uw wachtwoord in."
 
 #: html/core_body.html:94
 msgid "Your browser version is not supported!"
-msgstr "Uw browserversie wordt niet ondersteunt."
+msgstr "Uw browserversie wordt niet ondersteund!"
 
 #: html/core_body.html:95
 msgid "Your browser is not supported!"
-msgstr "Uw browser wordt niet ondersteunt."
+msgstr "Uw browser wordt niet ondersteund!"
 
 #: html/core_body.html:96
 msgid "You need to use Android %n or higher."
@@ -69,7 +69,7 @@ msgstr "U moet minimaal iOS %n of hoger gebruiken."
 
 #: html/core_body.html:98
 msgid "Your operating system is not supported."
-msgstr "Uw besturingssysteem wordt niet ondersteunt."
+msgstr "Uw besturingssysteem wordt niet ondersteund."
 
 #: html/core_body.html:99
 msgid "Please update your browser."
@@ -93,7 +93,7 @@ msgid ""
 "until general release later this year"
 msgstr ""
 "Niet ondersteund voorbeeld - Sommige functionaliteiten zijn uitgeschakeld of "
-"mogelijk instabiel tot de volgende algemene oplevering later in het jaar."
+"mogelijk instabiel tot de volgende algemene oplevering later dit jaar."
 
 #: html/core_body.html:112
 msgid "Languages"
@@ -178,15 +178,15 @@ msgstr "Deze functie is uitgeschakeld"
 msgid ""
 "This folder has publications but you are not allowed to view or edit them"
 msgstr ""
-"Deze map heeft publicaties maar u heeft geen toestemming deze te zien of te "
-"bewerken"
+"Deze map heeft publicaties maar u heeft geen toestemming om deze te zien of "
+"te bewerken"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:362
 msgid ""
 "This folder has subscriptions but you are not allowed to view or edit them"
 msgstr ""
-"Deze map heeft abonnementen maar u heeft geen toestemming deze te zien of te "
-"bewerken"
+"Deze map heeft abonnementen maar u heeft geen toestemming om deze te zien of "
+"te bewerken"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:368
 msgid "This folder has no publications"
@@ -362,7 +362,7 @@ msgstr "Toon juridische informatie"
 #: apps/io.ox/core/pubsub/subscriptions.js:49
 #: apps/io.ox/mail/view-detail.js:1066
 msgid "Subscribe"
-msgstr "Inschrijven"
+msgstr "Abonneren"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:60
 msgid "Checking credentials... This may take a few seconds."
@@ -542,11 +542,11 @@ msgstr "Voer een feed URL in."
 
 #: apps/plugins/portal/tumblr/register.js:125
 msgid "Read article on tumblr.com"
-msgstr "Lees een artikel op tumblr.com"
+msgstr "Lees artikel op tumblr.com"
 
 #: apps/plugins/portal/tumblr/register.js:166
 msgid "Edit Tumblr feed"
-msgstr "Een Tumblr feed bewerken"
+msgstr "Tumblr feed bewerken"
 
 #: apps/plugins/portal/tumblr/register.js:169
 msgid "Feed URL"
@@ -554,7 +554,7 @@ msgstr "Feed URL"
 
 #: apps/plugins/portal/tumblr/register.js:204
 msgid "Please enter an blog url."
-msgstr "Voer een blog URL in."
+msgstr "Voer een blog-URL in."
 
 #: apps/plugins/portal/tumblr/register.js:207
 msgid "Please enter a description."
@@ -563,7 +563,7 @@ msgstr "Voer een omschrijving in."
 #: apps/plugins/portal/tumblr/register.js:220
 #: apps/plugins/portal/tumblr/register.js:225
 msgid "Unknown error while checking tumblr-blog."
-msgstr "Onbekende fout bij het controleren van tumblr blog."
+msgstr "Onbekende fout bij het controleren van Tumblr blog."
 
 #: apps/plugins/portal/tumblr/register.js:250
 msgid "Tumblr"
@@ -641,7 +641,7 @@ msgstr "Er zijn geen verjaardagen in de komende %1$d weken"
 
 #: apps/plugins/portal/birthdays/register.js:104
 msgid "Buy a gift"
-msgstr "Koop een kado"
+msgstr "Koop een cadeau"
 
 #: apps/io.ox/calendar/month/perspective.js:406
 #: apps/io.ox/calendar/util.js:172 apps/io.ox/calendar/week/view.js:626
@@ -694,11 +694,11 @@ msgstr "Geretweet"
 
 #: apps/plugins/portal/twitter/register.js:209
 msgid "Could not load new tweets."
-msgstr "Kan tweets te laden."
+msgstr "Kan geen nieuwe tweets laden."
 
 #: apps/plugins/portal/twitter/register.js:217
 msgid "No tweets yet."
-msgstr "Nog geen tweets beschikbaar."
+msgstr "Nog geen tweets."
 
 #: apps/plugins/portal/twitter/register.js:222
 msgid "Twitter reported the following errors:"
@@ -777,7 +777,7 @@ msgstr "Toon commentaar"
 
 #: apps/plugins/portal/facebook/register.js:79
 msgid "No wall posts yet."
-msgstr "Geen "
+msgstr "Nog geen wall-posts."
 
 #: apps/plugins/portal/facebook/register.js:106
 msgid "Facebook reported an error:"
@@ -821,7 +821,7 @@ msgstr "Wachtwoord wijzigen"
 
 #: apps/plugins/portal/userSettings/register.js:75
 msgid "Your passward has been changed"
-msgstr "Uw wachtwoord is veranderd"
+msgstr "Uw wachtwoord is gewijzigd"
 
 #: apps/plugins/portal/userSettings/register.js:95
 #: apps/plugins/portal/userSettings/register.js:120
@@ -855,7 +855,7 @@ msgstr "U heeft geen nieuwe berichten"
 
 #: apps/plugins/portal/linkedIn/register.js:190
 msgid "LinkedIn Network Updates"
-msgstr "LinkedIn Network Updates"
+msgstr "LinkedIn Netwerk-updates"
 
 #: apps/plugins/portal/linkedIn/register.js:195
 msgid "Your messages"
@@ -895,9 +895,10 @@ msgid ""
 "the Connector for Microsoft Outlook and the Notifier. You can download the "
 "updates from within the updater."
 msgstr ""
-"De updater bied een eenvoudige installatie-wizard aan. Volg de instructies "
-"om de toepassing te installeren. De updater zal u op de hoogte van alle "
-"updates voorde Connector voor Microsoft Outlook en de Notifier. U kunt de "
+"De updater biedt een eenvoudige installatie-wizard aan. Volg de instructies "
+"om de toepassing te installeren. De updater zal u op de hoogte brengen van "
+"alle "
+"updates voor de Connector voor Microsoft Outlook en de Notifier. U kunt de "
 "updates vanuit de updater downloaden."
 
 #: apps/io.ox/contacts/actions.js:676 apps/io.ox/core/tk/attachments.js:269
@@ -921,7 +922,7 @@ msgstr "E-mailquota"
 
 #: apps/plugins/portal/quota/register.js:48
 msgid "Mail count quota"
-msgstr "E-mailaantal quota"
+msgstr "Quotum aantal e-mails"
 
 #: apps/plugins/portal/quota/register.js:113
 msgid "unlimited"
@@ -958,11 +959,11 @@ msgstr "Geen berichten van dit contact aan u gevonden."
 
 #: apps/plugins/halo/mail/register.js:55
 msgid "Sent mails"
-msgstr "Verzenden e-mails"
+msgstr "Verzonden e-mails"
 
 #: apps/plugins/halo/mail/register.js:57
 msgid "Cannot find any messages you sent to this contact."
-msgstr "Geen berichten aan dit contact van u gevonden."
+msgstr "Geen berichten van u aan dit contact gevonden."
 
 #: apps/plugins/halo/appointments/register.js:40
 msgid "Shared Appointments"
@@ -1094,11 +1095,11 @@ msgstr "Mail en Sociale Accounts"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:49
 msgid "Do you really want to delete this account?"
-msgstr "Weet u zeker dat u dit account wilt wissen?"
+msgstr "Weet u zeker dat u dit account wilt verwijderen?"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 msgid "Delete account"
-msgstr "Account wissen"
+msgstr "Account verwijderen"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:210
 msgid "Your primary mail account can not be deleted."
@@ -1128,7 +1129,7 @@ msgstr "Algemeen"
 
 #: apps/io.ox/mail/settings/pane.js:30
 msgid "Permanently remove deleted E-Mails"
-msgstr "Gewiste e-mailberichten permanent verwijderen"
+msgstr "Verwijderde e-mailberichten permanent verwijderen"
 
 #: apps/io.ox/mail/settings/pane.js:31
 msgid ""
@@ -1148,7 +1149,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/old_pane.js:49 apps/io.ox/mail/settings/pane.js:33
 msgid "Use fixed-width font for text mails"
-msgstr "Gebruik lettertype met vaste breedte voor tekst berichten"
+msgstr "Gebruik lettertype met vaste breedte voor tekst-berichten"
 
 #: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:34
 msgid "Compose"
@@ -1232,12 +1233,12 @@ msgstr "Vooraf laden van externe afbeeldingen blokkeren"
 #: apps/io.ox/mail/settings/old_pane.js:163
 #: apps/io.ox/mail/settings/pane.js:51
 msgid "Display emoticons as graphics in text E-Mails"
-msgstr "Emoticons als plaatjes weergeven in e-mailberichten"
+msgstr "Emoticons als plaatjes weergeven in platte tekst e-mailberichten"
 
 #: apps/io.ox/mail/settings/old_pane.js:164
 #: apps/io.ox/mail/settings/pane.js:52
 msgid "Color quoted lines"
-msgstr "Kleur van de regels met aanhalingstekens"
+msgstr "Gequote regels kleuren"
 
 #: apps/io.ox/mail/settings/pane.js:54
 msgid "Thread view"
@@ -1250,7 +1251,7 @@ msgstr "Alleen ingeschakeld voor inbox"
 # (Reinout) Portal = portaal, niet portable
 #: apps/io.ox/mail/settings/pane.js:56
 msgid "Enabled for all mail folders"
-msgstr "Inschakelen voor alle e-mailmappen"
+msgstr "Ingeschakeld voor alle e-mailmappen"
 
 #: apps/io.ox/mail/settings/pane.js:57
 msgid "Disabled"
@@ -1284,7 +1285,7 @@ msgstr "Kan instellingen niet opslaan"
 
 #: apps/io.ox/mail/settings/old_pane.js:46
 msgid "Permanently remove deleted E-Mails?"
-msgstr "Gewiste e-mails permanent verwijderen?"
+msgstr "Verwijderde e-mails permanent verwijderen?"
 
 #: apps/io.ox/mail/settings/old_pane.js:47
 msgid ""
@@ -1400,7 +1401,7 @@ msgstr "Paars"
 
 #: apps/io.ox/mail/view-detail.js:800 apps/io.ox/portal/settings/pane.js:106
 msgid "Light green"
-msgstr "Licht groen"
+msgstr "Licht-groen"
 
 #: apps/io.ox/mail/view-detail.js:801 apps/io.ox/portal/settings/pane.js:105
 msgid "Orange"
@@ -1412,7 +1413,7 @@ msgstr "Roze"
 
 #: apps/io.ox/mail/view-detail.js:803 apps/io.ox/portal/settings/pane.js:108
 msgid "Light blue"
-msgstr "Licht blauw"
+msgstr "Licht-blauw"
 
 #: apps/io.ox/mail/view-detail.js:804
 msgid "Yellow"
@@ -1520,12 +1521,12 @@ msgstr "Dit is geen geldig e-mailadres"
 
 #: apps/io.ox/mail/accounts/settings.js:88
 msgid "Trying to auto-configure your mail account"
-msgstr "Het systeem probeert nu uw e-mailaccount automatisch te configureren"
+msgstr "Proberen uw e-mailaccount automatisch te configureren"
 
 #: apps/io.ox/mail/accounts/settings.js:118
 msgid "There was no suitable server found for this mail/password combination"
 msgstr ""
-"Er is geen geschikte server gevonden voor deze e-mail/Wachtwoord combinatie"
+"Er is geen geschikte server gevonden voor deze e-mail/wachtwoord-combinatie"
 
 #: apps/io.ox/mail/accounts/settings.js:139
 msgid "Failed to connect."
@@ -1666,7 +1667,7 @@ msgstr "Aanmeldnaam kan niet leeg zijn"
 #: apps/io.ox/mail/accounts/view-form.js:158
 #, c-format
 msgid "Please enter the following data: %1$s"
-msgstr "Voer de volgende gegevens in: %1$s"
+msgstr "Voer alstublieft de volgende gegevens in: %1$s"
 
 #: apps/io.ox/mail/accounts/view-form.js:173
 msgid "Select folder"
@@ -1674,12 +1675,12 @@ msgstr "Selecteer map"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:103
 msgid "vacation notice"
-msgstr "vakantiemelding"
+msgstr "afwezigheidsmelding"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:126
 #: apps/io.ox/mail/vacationnotice/settings/register.js:38
 msgid "Vacation Notice"
-msgstr "Vakantiemelding"
+msgstr "Afwezigheidsmelding"
 
 #: apps/io.ox/calendar/edit/template.js:169 apps/io.ox/mail/actions.js:773
 #: apps/io.ox/mail/main.js:219 apps/io.ox/mail/main.js:567
@@ -1696,7 +1697,7 @@ msgstr "Tekst"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:129
 msgid "Number of days between vacation notices to the same sender"
-msgstr "Aantal dagen tussen vakantiemeldingen naar dezelfde afzender"
+msgstr "Aantal dagen tussen afwezigheidsmeldingen naar dezelfde afzender"
 
 # (Reinout) Portal = portaal, niet portable
 #: apps/io.ox/mail/vacationnotice/settings/model.js:130
@@ -2162,7 +2163,7 @@ msgstr "Sleep hiernaartoe om deze e-mail te importeren"
 #: apps/io.ox/core/tk/folderviews.js:691
 #: apps/io.ox/mail/folderview-extensions.js:51
 msgid "Subscribe IMAP folders"
-msgstr "Inschrijven op IMAP mappen"
+msgstr "Abonneren op IMAP mappen"
 
 #: apps/io.ox/mail/folderview-extensions.js:73
 msgid "Mark all mails as read"
@@ -2418,19 +2419,19 @@ msgstr "6 dagen"
 
 #: apps/io.ox/calendar/settings/pane.js:92
 msgid "1 week"
-msgstr "1 Week"
+msgstr "1 week"
 
 #: apps/io.ox/calendar/settings/pane.js:93
 msgid "2 weeks"
-msgstr "2 Weken"
+msgstr "2 weken"
 
 #: apps/io.ox/calendar/settings/pane.js:94
 msgid "3 weeks"
-msgstr "3 Weken"
+msgstr "3 weken"
 
 #: apps/io.ox/calendar/settings/pane.js:95
 msgid "4 weeks"
-msgstr "4 Weken"
+msgstr "4 weken"
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
@@ -2458,7 +2459,7 @@ msgstr "Nee"
 
 #: apps/io.ox/calendar/list/perspective.js:90
 msgid "Couldn't load appointment data."
-msgstr "Kan afspraak gegevens niet laden"
+msgstr "Kan afspraak-gegevens niet laden."
 
 #: apps/io.ox/calendar/list/perspective.js:137
 #: apps/io.ox/calendar/month/perspective.js:380
@@ -2561,7 +2562,7 @@ msgstr "Zoek hier"
 #: apps/io.ox/calendar/edit/recurrence-view.js:295
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] "Elke %1$d dag"
+msgstr[0] "elke %1$d dag"
 msgstr[1] "elke %1$d dagen"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:235
@@ -2616,7 +2617,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:287
 msgid "every day"
-msgstr "Elke dag"
+msgstr "elke dag"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:301
 msgid ""
@@ -2627,7 +2628,7 @@ msgid ""
 msgstr ""
 "De afspraak wordt <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">elke <span class=\"number-control\">2</span> weken</a> op <a "
-"href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">Maandag</a> "
+"href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">maandag</a> "
 "herhaald."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:308
@@ -2733,56 +2734,56 @@ msgid ""
 "\"options\" data-attribute=\"month\">october</a>. "
 msgstr ""
 "De afspraak wordt elk jaar op <a href=\"#\"  data-widget=\"custom\" data-"
-"attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget=\"options\" "
+"attribute=\"dayInMonth\">10</a> <a href=\"#\" data-widget=\"options\" "
 "data-attribute=\"month\">oktober</a>  herhaald."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:397
 msgid "January"
-msgstr "Januari"
+msgstr "januari"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:398
 msgid "February"
-msgstr "Februari"
+msgstr "februari"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:399
 msgid "March"
-msgstr "Maart"
+msgstr "maart"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:400
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:401
 msgid "May"
-msgstr "Mei"
+msgstr "mei"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:402
 msgid "June"
-msgstr "Juni"
+msgstr "juni"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:403
 msgid "July"
-msgstr "Juli"
+msgstr "juli"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:404
 msgid "August"
-msgstr "Augustus"
+msgstr "augustus"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:405
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:406
 msgid "October"
-msgstr "Oktober"
+msgstr "oktober"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:407
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:408
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:413
 msgid ""
@@ -2877,7 +2878,7 @@ msgid ""
 msgstr ""
 "De reeks <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">eindigt</a> op <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-"\">03/11/2013</a>."
+"\">03-11-2013</a>."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:491
 msgid ""
@@ -2900,7 +2901,7 @@ msgstr "Klik op de linkjes om de waarden aan te passen."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:580
 msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Klik op een zin om de interval periode aan te passen."
+msgstr "Klik op een zin om de interval-periode aan te passen."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:826
 msgid "Please choose a sentence below."
@@ -2989,8 +2990,8 @@ msgstr "Alle deelnemers informeren via E-mail."
 #: apps/io.ox/calendar/edit/template.js:477
 msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 msgstr ""
-"Sleep de <b class='dndignore'>nieuwe bijlage</b> naar hier om deze te "
-"uploaden"
+"Sleep bestand hiernaartoe om als <b class='dndignore'>nieuwe bijlage</b> toe "
+"te voegen"
 
 #: apps/io.ox/calendar/edit/template.js:514
 #: apps/io.ox/calendar/freebusy/templates.js:29
@@ -3008,7 +3009,7 @@ msgstr "Wijzig overzicht"
 
 #: apps/io.ox/calendar/freebusy/templates.js:86
 msgid "Add participant"
-msgstr "Toevoegen deelnemer"
+msgstr "Deelnemer toevoegen"
 
 #: apps/io.ox/calendar/freebusy/templates.js:93
 msgid ""
@@ -3025,8 +3026,8 @@ msgid ""
 "You will automatically return to the appointment dialog. The selected start "
 "and end time as well as the current participant list will be applied."
 msgstr ""
-"U zal automatisch terug gaan naar het afspraak scherm. De geselecteerde "
-"start en eindtijd als de huidige deelnemers worden ingevuld."
+"U zult automatisch terug gaan naar het afspraak scherm. De geselecteerde "
+"start- en eindtijd en de huidige deelnemers worden ingevuld."
 
 #: apps/io.ox/calendar/freebusy/templates.js:99
 msgid "How does this work?"
@@ -3193,7 +3194,7 @@ msgid ""
 "You are about to change your confirmation status. Please leave a comment for "
 "other participants."
 msgstr ""
-"Je gaat uw bevestigingsstatus wijzigen. Laat alstublieft een reactie achter "
+"U gaat uw bevestigingsstatus wijzigen. Laat alstublieft een reactie achter "
 "voor andere deelnemers."
 
 #: apps/io.ox/calendar/acceptdeny.js:58
@@ -3344,11 +3345,12 @@ msgstr "U heeft deze afspraak voorlopig geaccepteerd"
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
-msgstr "Wilt u de hele reeks of slechts enkele afspraken van de reeks wissen?"
+msgstr ""
+"Wilt u de hele reeks of slechts enkele afspraken van de reeks verwijderen?"
 
 #: apps/io.ox/calendar/actions.js:188
 msgid "Delete appointment"
-msgstr "Afspraak wissen"
+msgstr "Afspraak verwijderen"
 
 #: apps/io.ox/calendar/actions.js:189
 msgid "Delete whole series"
@@ -3356,7 +3358,7 @@ msgstr "De gehele reeks verwijderen"
 
 #: apps/io.ox/calendar/actions.js:205
 msgid "Do you want to delete this appointment?"
-msgstr "Weet u zeker dat u deze afspraak wilt wissen?"
+msgstr "Weet u zeker dat u deze afspraak wilt verwijderen?"
 
 #: apps/io.ox/calendar/actions.js:320
 msgid "Appointment has been moved"
@@ -3387,7 +3389,7 @@ msgid ""
 "The setting has been saved and will become active when you enter the "
 "application the next time."
 msgstr ""
-"De instellingen zijn opgeslagen en worden geactiveerd als u de applicatie "
+"De instellingen zijn opgeslagen en worden geactiveerd zodra u de applicatie "
 "opnieuw start."
 
 #: apps/io.ox/core/settings/pane.js:60
@@ -3507,11 +3509,11 @@ msgstr "Toevoegen map"
 
 #: apps/io.ox/core/tk/folderviews.js:594
 msgid "Do you really want to delete folder \"%s\"?"
-msgstr "Weet u zeker dat u de map \"%s\" wilt wissen?"
+msgstr "Weet u zeker dat u de map \"%s\" wilt verwijderen?"
 
 #: apps/io.ox/core/tk/folderviews.js:621
 msgid "This is a standard folder, which can't be renamed."
-msgstr "Dit is een standaard map, deze kan niet hernoemd worden."
+msgstr "Dit is een standaard-map, deze kan niet hernoemd worden."
 
 #: apps/io.ox/core/tk/folderviews.js:630
 msgid "Rename folder"
@@ -3690,12 +3692,12 @@ msgstr "Eigenaar"
 #: apps/io.ox/core/permissions/permissions.js:235
 #: apps/io.ox/core/permissions/permissions.js:313
 msgid "Folder permissions"
-msgstr "Map rechten"
+msgstr "Map-rechten"
 
 #: apps/io.ox/core/permissions/permissions.js:221
 #: apps/io.ox/core/permissions/permissions.js:238
 msgid "Object permissions"
-msgstr "Object rechten"
+msgstr "Object-rechten"
 
 #: apps/io.ox/core/permissions/permissions.js:226
 #: apps/io.ox/core/permissions/permissions.js:243
@@ -3955,7 +3957,7 @@ msgid ""
 "you don't want it to be restored."
 msgstr ""
 "De volgende applicaties kunnen worden hersteld. Verwijder het herstelpunt "
-"als u dit niet wil."
+"als u dit niet wilt."
 
 #: apps/io.ox/core/main.js:805
 msgid "Continue"
@@ -4143,7 +4145,7 @@ msgstr "Standaard overzicht"
 
 #: apps/io.ox/files/settings/pane.js:26
 msgid "Icon view"
-msgstr "Pictogram weergave"
+msgstr "Pictogram-weergave"
 
 #: apps/io.ox/files/settings/pane.js:27
 msgid "List view"
@@ -4189,7 +4191,7 @@ msgstr "Versie geschiedenis"
 
 #: apps/io.ox/files/list/perspective.js:109
 msgid "Couldn't load file data."
-msgstr "Kan bestand gegevens niet laden"
+msgstr "Kan bestand-gegevens niet laden."
 
 #: apps/io.ox/files/views/create.js:36
 msgid "Add new file"
@@ -4220,7 +4222,7 @@ msgstr "Directe link: %1$s"
 #: apps/io.ox/files/actions.js:229 apps/io.ox/files/actions.js:480
 msgid "Do you really want to delete this file?"
 msgid_plural "Do you really want to delete these files?"
-msgstr[0] "Weet u zeker dat u dit bestand wilt wissen?"
+msgstr[0] "Weet u zeker dat u dit bestand wilt verwijderen?"
 msgstr[1] "Weet u zeker dat u deze bestanden wilt verwijderen?"
 
 #: apps/io.ox/files/actions.js:234
@@ -4257,7 +4259,7 @@ msgstr "Pictogrammen"
 
 #: apps/io.ox/files/actions.js:588
 msgid "Send as link"
-msgstr "Als een link verzenden"
+msgstr "Als link verzenden"
 
 #: apps/io.ox/files/actions.js:595
 msgid "Send by mail"
@@ -4273,7 +4275,7 @@ msgstr "Omschrijving bewerken"
 
 #: apps/io.ox/files/actions.js:676
 msgid "Make this the current version"
-msgstr "Maak deze de huidige versie"
+msgstr "Maak dit de huidige versie"
 
 #: apps/io.ox/files/actions.js:683
 msgid "Delete version"
@@ -4282,20 +4284,21 @@ msgstr "Versie verwijderen"
 #: apps/io.ox/files/actions.js:693
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
-"Sleep het <b class='dndignore'>nieuwe bestand</b> naar hier om deze te "
-"uploaden"
+"Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe bestand</b> "
+"toe te voegen"
 
 #: apps/io.ox/files/actions.js:707
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
-"Sleep de <b class='dndignore'>nieuwe versie</b> van \"%1$s\" naar hier om "
-"deze te uploaden"
+"Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe versie</b> van "
+"\"%1$s\" toe te voegen"
 
 #: apps/io.ox/files/actions.js:713
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
-"Sleep de <b class='dndignore'>nieuwe versie</b> naar hier om deze te uploaden"
+"Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe versie</b> toe "
+"te voegen"
 
 #: apps/io.ox/files/actions.js:802
 msgid "View Slideshow"
@@ -4311,7 +4314,7 @@ msgstr "Afspelen video-bestand"
 
 #: apps/io.ox/help/center.js:128
 msgid "Click here to quit the help center"
-msgstr "Klik hier om de Hulp te sluiten"
+msgstr "Klik hier om Hulp te sluiten"
 
 #: apps/io.ox/launchpad/main.js:35
 msgid "Documents"
@@ -4319,7 +4322,7 @@ msgstr "Documenten"
 
 #: apps/io.ox/launchpad/main.js:160
 msgid "Running applications"
-msgstr "Starten applicaties"
+msgstr "Applicaties starten"
 
 #: apps/io.ox/launchpad/main.js:162
 msgid "Your applications"
@@ -4499,11 +4502,11 @@ msgstr "Mobiele telefoon"
 
 #: apps/io.ox/contacts/model.js:265
 msgid "Cell phone alt"
-msgstr "Mobieltelefoon alt."
+msgstr "Mobiele telefoon alt."
 
 #: apps/io.ox/contacts/model.js:266
 msgid "Phone (other)"
-msgstr "Telefoon (andere)"
+msgstr "Telefoon (overig)"
 
 #: apps/io.ox/contacts/model.js:267
 msgid "Fax (alt)"
@@ -4671,7 +4674,7 @@ msgstr "Adres Zaak"
 
 #: apps/io.ox/contacts/model.js:311
 msgid "Address Other"
-msgstr "Adres Anders"
+msgstr "Adres Overig"
 
 #: apps/io.ox/contacts/settings/pane.js:24
 msgid "Show contacts from administrator group"
@@ -4818,7 +4821,7 @@ msgstr "Zakenadres"
 
 #: apps/io.ox/contacts/edit/view-form.js:91
 msgid "Other address"
-msgstr "Andere adressen"
+msgstr "Overige adressen"
 
 #: apps/io.ox/contacts/edit/view-form.js:92
 msgid "Job description"
@@ -4837,8 +4840,8 @@ msgstr "Overig"
 #: apps/io.ox/tasks/edit/view-template.js:554
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
-"Sleep de <b class='dndignore'>nieuwe bijlage</b> naar hier om deze te "
-"uploaden"
+"Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe bijlage</b> "
+"toe te voegen"
 
 #. Name with title
 #. %1$s is the first name
@@ -4873,7 +4876,7 @@ msgstr "Bewerken om een naam in te voeren."
 
 #: apps/io.ox/contacts/main.js:172
 msgid "Couldn't load contact data."
-msgstr "Kan contact gegevens niet laden"
+msgstr "Kan contact-gegevens niet laden"
 
 #: apps/io.ox/contacts/print.js:75
 msgid "Phone list"
@@ -4899,7 +4902,7 @@ msgstr "Deze notitie zal niet worden afgedrukt."
 
 #: apps/io.ox/contacts/actions.js:40
 msgid "Do you really want to delete these items?"
-msgstr "Weet u zeker dat u de elementen wilt wissen?"
+msgstr "Weet u zeker dat u de elementen wilt verwijderen?"
 
 #: apps/io.ox/contacts/actions.js:42
 msgid "Do you really want to delete this distribution list?"
@@ -4907,7 +4910,7 @@ msgstr "Weet u zeker dat u de geselecteerde distributielijst wilt verwijderen?"
 
 #: apps/io.ox/contacts/actions.js:44
 msgid "Do you really want to delete this contact?"
-msgstr "Weet u zeker dat u dit contact wilt wissen?"
+msgstr "Weet u zeker dat u dit contact wilt verwijderen?"
 
 #: apps/io.ox/contacts/actions.js:184
 msgid "Contacts have been moved"
@@ -4953,7 +4956,7 @@ msgstr "Geef hier de titel van het document"
 
 #: apps/io.ox/editor/main.js:88
 msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr "U kan uw wijzigingen snel opslaan met Ctrl+Enter"
+msgstr "U kunt uw wijzigingen snel opslaan met Ctrl+Enter"
 
 #: apps/io.ox/editor/main.js:147
 msgid "Document saved in folder \"%1$s\"."
@@ -5030,15 +5033,15 @@ msgstr "over één uur"
 
 #: apps/io.ox/tasks/settings/pane.js:40 apps/io.ox/tasks/util.js:25
 msgid "this morning"
-msgstr "Deze morgen"
+msgstr "vanmorgen"
 
 #: apps/io.ox/tasks/settings/pane.js:41 apps/io.ox/tasks/util.js:26
 msgid "by noon"
-msgstr "Voor de middag"
+msgstr "voor de middag"
 
 #: apps/io.ox/tasks/settings/pane.js:42 apps/io.ox/tasks/util.js:27
 msgid "this afternoon"
-msgstr "deze middag"
+msgstr "vanmiddag"
 
 #: apps/io.ox/tasks/settings/pane.js:43 apps/io.ox/tasks/util.js:28
 msgid "tonight"
@@ -5226,7 +5229,7 @@ msgstr "Is bezig"
 #: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/print.js:28
 #: apps/io.ox/tasks/util.js:269
 msgid "Waiting"
-msgstr "Bezig te wachten"
+msgstr "Wachten"
 
 #: apps/io.ox/tasks/edit/view-template.js:85 apps/io.ox/tasks/print.js:28
 #: apps/io.ox/tasks/util.js:273
@@ -5308,11 +5311,11 @@ msgstr "Onvolledig"
 
 #: apps/io.ox/tasks/actions.js:154 apps/io.ox/tasks/actions.js:221
 msgid "A severe error occured!"
-msgstr "Er is geen ernstige fout opgetreden!"
+msgstr "Er is een ernstige fout opgetreden!"
 
 #: apps/io.ox/tasks/actions.js:156
 msgid "Task was modified before, please reload"
-msgstr "De taak was reeds aangepast, ververs alstublieft"
+msgstr "De taak is reeds aangepast, ververs alstublieft"
 
 #: apps/io.ox/tasks/actions.js:177
 msgid "Tasks have been moved"
@@ -5330,7 +5333,7 @@ msgstr "Taken afdrukken"
 
 #: apps/io.ox/tasks/actions.js:418
 msgid "Create new task"
-msgstr "Taak aanmaken"
+msgstr "Nieuwe taak aanmaken"
 
 #: apps/io.ox/tasks/actions.js:471
 msgid "Change due date"

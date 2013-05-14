@@ -15,6 +15,9 @@ define("io.ox/core/gettext", [], function () {
 
     "use strict";
 
+    // custom dictionary
+    var custom = { '*': {} };
+
     if (_.url.hash('debug-i18n')) {
         try {
             $(document).on('DOMAttrModified', debugAttr)
@@ -65,6 +68,7 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function gt(id, po) {
+
         po.plural = new Function("n", "return " + po.plural + ";");
 
         function gettext(text) {
@@ -113,15 +117,24 @@ define("io.ox/core/gettext", [], function () {
             return gettext.npgettext("", singular, plural, n);
         };
 
+        gettext.getDictionary = function () {
+            return po.dictionary;
+        };
+
+        function get(key) {
+            if (key in custom['*']) return custom['*'][key];
+            if (id in custom && key in custom[id]) return custom[id][key];
+            return po.dictionary[key];
+        }
+
         function pgettext(context, text) {
             var key = context ? context + "\x00" + text : text;
-            return po.dictionary[key] || text;
+            return get(key) || text;
         }
 
         function npgettext(context, singular, plural, n) {
-            var key = (context ? context + "\x00" : "") +
-                    singular + "\x01" + plural,
-                translation = po.dictionary[key];
+            var key = (context ? context + "\x00" : "") + singular + "\x01" + plural,
+                translation = get(key);
             return translation ?
                 translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
@@ -143,6 +156,18 @@ define("io.ox/core/gettext", [], function () {
     };
 
     gt.language = lang.promise();
+
+    // add custom translation
+    gt.addTranslation = function (dictionary, key, value) {
+        if (!custom[dictionary]) custom[dictionary] = {};
+        if (_.isString(key)) {
+            custom[dictionary][key] = value;
+        } else {
+            _(key).each(function (value, key) {
+                custom[dictionary][key] = value;
+            });
+        }
+    };
 
     return gt;
 });

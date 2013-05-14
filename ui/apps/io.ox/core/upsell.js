@@ -177,6 +177,11 @@ define('io.ox/core/upsell',
                     }
                 });
             }
+        },
+
+        // for development & debugging
+        setEnabled: function (capability) {
+            enabled[capability] = true;
         }
     };
 

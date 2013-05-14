@@ -201,6 +201,7 @@ define('io.ox/settings/main',
             if (!showSettingsEnabled) return;
 
             baton = ext.Baton.ensure(baton);
+            baton.grid = grid;
 
             var data = baton.data,
                 settingsPath = (data.ref || data.id) + '/settings/pane',

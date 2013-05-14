@@ -34,7 +34,7 @@ define('io.ox/mail/vacationnotice/settings/register',
     };
 
     ext.point("io.ox/settings/pane").extend({
-        id: 'vacation',
+        id: 'io.ox/vacation',
         title: gt("Vacation Notice"),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
