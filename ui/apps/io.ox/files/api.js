@@ -499,7 +499,7 @@ define('io.ox/files/api',
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = options = {};
+        options = options || {};
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
