@@ -30,18 +30,17 @@ define('io.ox/calendar/edit/main',
         controller = _.extend(app, {
 
             start: function () {
-
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
-                    app.dropZone = new dnd.UploadZone({
+                    this.dropZone = new dnd.UploadZone({
                         ref: "io.ox/calendar/edit/dnd/actions"
-                    }, app);
+                    }, this);
                 }
 
-                var state = app.getState();
+                var state = this.getState();
 
                 if ('folder' in state && 'id' in state) {
-                    api.get({ folder: state.folder, id: state.id }).done(function (data) {
-                        app.edit(data);
+                    return api.get({ folder: state.folder, id: state.id }).done(function (data) {
+                        this.edit(data);
                     });
                 }
             },
@@ -204,51 +203,62 @@ define('io.ox/calendar/edit/main',
             considerSaved: false,
 
             create: function (data) {
+                var self = this,
+                    data = data || {};
 
-                var self = this;
+                function cont(data) {
+                    app.model = self.model = appointmentModel.factory.create(data);
+                    appointmentModel.applyAutoLengthMagic(self.model);
+                    appointmentModel.fullTimeChangeBindings(self.model);
+                    appointmentModel.setDefaultParticipants(self.model, { create: true }).done(function () {
 
-                app.model = self.model = appointmentModel.factory.create(data);
-                appointmentModel.applyAutoLengthMagic(self.model);
-                appointmentModel.fullTimeChangeBindings(self.model);
-                appointmentModel.setDefaultParticipants(self.model, { create: true }).done(function () {
+                        var baton = { model: self.model, app: self, callbacks: {} };
+                        baton.callbacks.extendDescription = app.extendDescription;
+                        app.view = self.view = new MainView(baton);
 
-                    var baton = { model: self.model, app: self, callbacks: {} };
-                    baton.callbacks.extendDescription = app.extendDescription;
-                    app.view = self.view = new MainView(baton);
+                        self.setTitle(gt('Create appointment'));
 
-                    self.setTitle(gt('Create appointment'));
-
-                    // create app window
-                    var win = ox.ui.createWindow({
-                        name: 'io.ox/calendar/edit',
-                        title: 'Create Appointment',
-                        chromeless: true
-                    });
-
-                    self.setWindow(win);
-
-                    if (app.dropZone) {
-                        win.on('show', function () {
-                            app.dropZone.include();
+                        // create app window
+                        var win = ox.ui.createWindow({
+                            name: 'io.ox/calendar/edit',
+                            title: 'Create Appointment',
+                            chromeless: true
                         });
 
-                        win.on('hide', function () {
-                            app.dropZone.remove();
+                        self.setWindow(win);
+
+                        if (app.dropZone) {
+                            win.on('show', function () {
+                                app.dropZone.include();
+                            });
+
+                            win.on('hide', function () {
+                                app.dropZone.remove();
+                            });
+                        }
+
+                        self.model.set('alarm', settings.get('defaultReminder', 15));
+                        if (self.model.get('full_time') === true) {
+                            self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
+                        }
+                        self.considerSaved = true;
+                        self.model.on('change', function () {
+                            self.considerSaved = false;
                         });
-                    }
 
-                    self.model.set('alarm', settings.get('defaultReminder', 15));
-                    if (self.model.get('full_time') === true) {
-                        self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
-                    }
-                    self.considerSaved = true;
-                    self.model.on('change', function () {
-                        self.considerSaved = false;
+                        $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                        self.getWindow().show(_.bind(self.onShowWindow, self));
                     });
+                }
 
-                    $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                    self.getWindow().show(_.bind(self.onShowWindow, self));
-                });
+                if (!data.folder_id) {
+                    require(['io.ox/core/api/folder']).done(function (api) {
+                        data.folder_id = api.getDefaultFolder('calendar');
+                        cont(data);
+                    });
+                } else {
+                    cont(data);
+                }
             },
 
             getDirtyStatus : function () {
@@ -287,7 +297,7 @@ define('io.ox/calendar/edit/main',
                         point: this.model.attributes
                     };
                 }
-                return {module: 'io.ox/calendar/edit'};
+                return false;
             },
 
             failRestore: function (point) {
