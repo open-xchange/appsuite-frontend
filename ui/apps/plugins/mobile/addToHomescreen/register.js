@@ -78,13 +78,15 @@ define('plugins/mobile/addToHomescreen/register',
         OSVersion = _.browser.ios;
         isStandalone = nav.standalone || false;
         // test for cookie presence
-        if (c) {
-            if ((Date.now() - meta.d) > (24 * 60 * 60 * 1000) || meta.n < options.numberOfTimesDimissed) {
+        if (!isStandalone) {
+            if (c) {
+                if ((Date.now() - meta.d) > (24 * 60 * 60 * 1000) || meta.n < options.numberOfTimesDimissed) {
+                    loaded();
+                }
+            } else {
+                // no cookie, first run
                 loaded();
             }
-        } else {
-            // no cookie, first run
-            loaded();
         }
 
     }
