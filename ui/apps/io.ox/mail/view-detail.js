@@ -1064,22 +1064,34 @@ define('io.ox/mail/view-detail',
                 pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
-                //hide mail content if invitaion
-                //dom
-                var $actions, $appointmentInfo, $box;
-                $('<div class="well">').append(
-                    $('<span class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
-                    $("<br>"),
-                    $appointmentInfo = $('<div class="appointmentInfo">'),
-                    $actions = $('<div class="subscription-actions">')
-                ).appendTo(this);
-                $actions.append(
-                    $('<button class="btn" data-action="show">').text(gt('Show original publication')),
-                    "&nbsp;",
-                    $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
-                );
+
+                // published folder have much more data, single file just has a name and a URL.
+                var isSingleFilePublication = !pub.type;
+
+                if (isSingleFilePublication) {
+                    this.append(
+                        $('<div class="well">').append(
+                            $('<div class="invitation">').text(gt('Someone shared a file with you')),
+                            $('<div class="subscription-actions">').append(
+                                $('<button class="btn" data-action="show">').text(gt('Show file'))
+                            )
+                        )
+                    );
+                } else {
+                    this.append(
+                        $('<div class="well">').append(
+                            $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
+                            $('<div class="subscription-actions">').append(
+                                $('<button class="btn" data-action="show">').text(gt('Show original publication')),
+                                "&nbsp;",
+                                $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
+                            )
+                        )
+                    );
+                }
+
                 //actions
-                $actions.on('click', 'button', function (e) {
+                this.on('click', '.subscription-actions .btn', function (e) {
                     var button = $(e.target),
                         notifications = require('io.ox/core/notifications');
                     //disble button
@@ -1105,7 +1117,6 @@ define('io.ox/mail/view-detail',
                         });
                     }
                 });
-                this.append($box);
             }
         }
     });
