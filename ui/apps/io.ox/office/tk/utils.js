@@ -2387,7 +2387,9 @@ define.async('io.ox/office/tk/utils',
         F12:            123,
 
         NUM_LOCK:       144,
-        SCROLL_LOCK:    145
+        SCROLL_LOCK:    145,
+
+        IME_INPUT:      229     // indicates an IME input session
 
 /* enable when needed
         MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
