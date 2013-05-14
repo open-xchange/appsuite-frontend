@@ -636,43 +636,51 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'publish',
+        index: 500,
+        prio: 'lo',
+        label: gt('Publish'),
+        ref: 'io.ox/files/actions/publish'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'showlink',
-        index: 400,
+        index: 600,
         label: gt('Show link'),
         ref: 'io.ox/files/actions/showlink'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
-        index: 500,
+        index: 700,
         label: gt('Rename'),
         ref: 'io.ox/files/actions/rename'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'edit-description',
-        index: 550,
+        index: 800,
         label: gt('Edit description'),
         ref: 'io.ox/files/actions/edit-description'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
-        index: 600,
+        index: 900,
         label: gt('Move'),
         ref: 'io.ox/files/actions/move'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'copy',
-        index: 700,
+        index: 1000,
         label: gt('Copy'),
         ref: 'io.ox/files/actions/copy'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 800,
+        index: 1100,
         prio: 'hi',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
@@ -680,28 +688,21 @@ define('io.ox/files/actions',
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'add-to-portal',
-        index: 900,
+        index: 1200,
         prio: 'lo',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'publish',
-        index: 1000,
-        label: gt('Publish'),
-        ref: 'io.ox/files/actions/publish'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 1100,
+        index: 2000,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),
         ref: 'io.ox/files/actions/audioplayer'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: 1200,
+        index: 2100,
         id: 'mediaplayer-video',
         label: gt('Play video files'),
         ref: 'io.ox/files/actions/videoplayer'
