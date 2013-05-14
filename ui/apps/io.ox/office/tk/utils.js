@@ -969,6 +969,11 @@ define.async('io.ox/office/tk/utils',
             }
         }
 
+        // Internet Explorer has no 'contains' at svg elements (26172)
+        if (! _.isFunction(outerNode.contains)) {
+            return $(innerNode).closest(outerNode).length > 0;
+        }
+
         // use the native Node.contains() method
         return outerNode.contains(innerNode);
     };
