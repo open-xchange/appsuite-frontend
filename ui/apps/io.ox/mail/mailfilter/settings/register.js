@@ -13,7 +13,7 @@
 
 define('io.ox/mail/mailfilter/settings/register',
         ['io.ox/core/extensions', 'io.ox/core/notifications',
-         'io.ox/core/api/user', 'gettext!io.ox/mail'], function (ext, notifications, userAPI, gt) {
+         'io.ox/core/api/user', 'gettext!io.ox/mail', 'less!io.ox/mail/mailfilter/settings/style.less'], function (ext, notifications, userAPI, gt) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/mail/mailfilter/settings/register',
         index: 100,
         draw: function () {
             var $node = this,
-                $container = $('<div>');
+                $container = $('<div>').addClass('io-ox-mailfilter-settings');
 
             $node.append($container);
 

@@ -117,39 +117,28 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onFolderSelect: function (e) {
-//                var self = this;
-//                if (self.model.get('id') !== 0) {
-//                    var property = $(e.currentTarget).prev().attr('data-property'),
-//                        id = self.model.get(property),
-//                        accountName = self.model.get('name');
-//                    require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
-//
-//                        var label = gt('Select folder'),
-//                            dialog = new dialogs.ModalDialog({ easyOut: true })
-//                            .header($('<h4>').text(label))
-//                            .addPrimaryButton("select", label)
-//                            .addButton("cancel", gt("Cancel"));
-//                        dialog.getBody().css({ height: '250px' });
-//                        var tree = new views.FolderTree(dialog.getBody(), {
-//                                type: 'mail',
-//                                rootFolderId: 'default' + self.model.get('id')
-//                            });
-//                        dialog.show(function () {
-//                            tree.paint().done(function () {
-//                                tree.select(id);
-//                            });
-//                        })
-//                        .done(function (action) {
-//                            if (action === 'select') {
-//                                var target = _(tree.selection.get()).first();
-//                                self.model.set(property, target);
-//                            }
-//                            tree.destroy().done(function () {
-//                                tree = dialog = null;
-//                            });
-//                        });
-//                    });
-//                }
+                var self = this;
+                if (self.model.get('id') !== 0) {
+                    console.log($(e.currentTarget).parent().attr('data-property'));
+                    var property = $(e.currentTarget).prev().attr('data-property'),
+                        id = self.model.get(property),
+                        accountName = self.model.get('name');
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+
+                        var label = gt('Select folder'),
+                            dialog = new dialogs.ModalDialog({ easyOut: true })
+                            .header($('<h4>').text(label))
+                            .addPrimaryButton("select", label)
+                            .addButton("cancel", gt("Cancel"));
+                        dialog.getBody().append($('<div>').text('hier')).css({ height: '250px' });
+
+                        dialog.show(function () {
+                        })
+                        .done(function (action) {
+
+                        });
+                    });
+                }
             }
         });
 
@@ -159,6 +148,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         draw: function (baton) {
 
             console.log(baton);
+
+//            var testbutton = $('<a>').addClass('btn btn-small folderselect').text('testbutton');
 
             var listTests = $('<ol class="widget-list">').text('tests'),
                 listActions = $('<ol class="widget-list">').text('actions');
@@ -170,7 +161,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             });
 
             _(baton.model.get('actioncmds')).each(function (action) {
-                listActions.append($('<li>').text(action.id));
+                listActions.append($('<li>').attr('data-property', action.id).text(action.id).append($('<a>').addClass('btn btn-small folderselect').text('testbutton')));
             });
 
             this.append(listTests, listActions);
