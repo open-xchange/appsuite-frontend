@@ -3,6 +3,6 @@
     company: "Open-Xchange",
     icon: "calendar.png",
     category: "Productivity",
-    settings: true,
+    settings: false,
     requires: "calendar"
 }
