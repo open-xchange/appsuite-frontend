@@ -92,15 +92,17 @@
     height: 40px;
     bottom: auto;
     z-index: 2;
-
     .vertical-gradient(@topbarBackgroundAlt, @topbarBackground);
+
+    .launchers {
+        overflow: hidden;
+        float: left;
+        height: 100%;
+        margin: 0;
+    }
+
 }
 
-#io-ox-topbar .launchers {
-    overflow: hidden;
-    float: left;
-    height: 100%;
-}
 
 #io-ox-top-logo-small {
     width: 60px;
@@ -138,84 +140,150 @@
 #io-ox-topbar {
 
     .launcher-dropdown, .launcher {
+
         font-size: @topbarFontSize;
         color: @topbarLauncherColor;
-        padding: 0px 12px 0px 12px;
         line-height: 40px;
         white-space: nowrap;
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
-        & > a { color: @topbarLauncherColor; }
-        & > a:hover { text-decoration: none; }
-    }
 
-    .launcher.hover {
-        color: @topbarLauncherColor-hover;
-        background-color: @topbarLauncherBackgroundHover;
-        & > a { color: @topbarLauncherColor-hover; }
-    }
+        .badge {
 
-    .launcher.upsell {
-        color: darken(@topbarLauncherColor, 20%);
-        i.icon-lock {
-            color: inherit;
-            font-size: 14px;
-            position: static;
-            margin-right: 0.5em;
+            background-color: @badgeBackground;
+            padding: 2px 9px;
+            margin: 0 9px;
+
+            &.badge-info {
+                background-color: @linkColor;
+            }
+
         }
-    }
 
-    .launcher.active-app {
-        color: @topbarLauncherColorActive;
-        background-color: @topbarLauncherBackgroundActive;
-        & > a { color: @topbarLauncherColorActive; }
-    }
-
-    .launcher.user-content i[class^="icon-"] { margin-right: 8px; color: #ccc; }
-    .launcher.active-app.user-content i[class^="icon-"] { color: @linkOnDark; }
-
-    .launcher.left-corner {
-        width: 26px;
-        text-align: center;
-    }
-
-    .launcher-dropdown {
-        float: left;
-        display: none;
-    }
-
-    .launcher-dropdown li {
-        text-align: left;
-        &.upsell i.icon-lock {
-            color: #AAA;
-            width: 1.25em;
+        & > a {
+            color: @topbarLauncherColor;
+            padding: 12px;
         }
-        a {
-            max-width: 10em;
-            overflow:hidden;
-            text-overflow:ellipsis;
+
+        & > a:hover {
+            text-decoration: none;
         }
-    }
 
-    .launcher-dropdown ul {
-        left: 13px;
-    }
-
-    .launcher-dropdown a.dropdown-toggle {
-        color: white;
-        text-decoration: none;
-        outline: none;
-    }
-
-    .launcher-dropdown li.active-app a {
-        font-weight: bold;
     }
 
     .launcher {
+
         max-width: 10em;
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
+
+        &.hover {
+            color: @topbarLauncherColor-hover;
+            background-color: @topbarLauncherBackgroundHover;
+            & > a { color: @topbarLauncherColor-hover; }
+        }
+
+        &.upsell {
+
+            color: darken(@topbarLauncherColor, 20%);
+
+            i.icon-lock {
+                color: inherit;
+                font-size: 14px;
+                position: static;
+                margin-right: 0.5em;
+            }
+        }
+
+        &.active-app {
+            color: @topbarLauncherColorActive;
+            background-color: @topbarLauncherBackgroundActive;
+            & > a { color: @topbarLauncherColorActive; }
+        }
+
+        &.user-content i[class^="icon-"] {
+            margin-right: 4px;
+            color: #ccc;
+        }
+
+        &.active-app.user-content i[class^="icon-"] {
+            color: @linkOnDark;
+        }
+
+        &.left-corner {
+            text-align: center;
+        }
+
+        &.right {
+
+            float: right;
+            overflow: visible;
+            height: 40px;
+
+            .dropdown-menu {
+                left: auto; right: 0; text-align: left;
+            }
+
+            .dropdown-toggle {
+                width: 3em;
+                text-align: center;
+                outline: 0;
+                border: 0px none;
+            }
+
+            a {
+            }
+
+        }
+
+        &.io-ox-progress i {
+            -moz-animation-direction: alternate;
+            -moz-animation-duration: 0.75s;
+            -moz-animation-iteration-count: infinite;
+            -moz-animation-name: launcherColours;
+            -moz-animation-timing-function: ease-in-out;
+            -webkit-animation-direction: alternate;
+            -webkit-animation-duration: 0.75s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-name: launcherColours;
+            -webkit-animation-timing-function: ease-in-out;
+        }
+
+    }
+
+    .launcher-dropdown {
+
+        float: left;
+        display: none;
+
+        li {
+            text-align: left;
+            &.upsell i.icon-lock {
+                color: #AAA;
+                width: 1.25em;
+            }
+            a {
+                max-width: 10em;
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
+        }
+
+        ul {
+            left: 13px;
+        }
+
+        a.dropdown-toggle {
+            color: white;
+            text-decoration: none;
+            outline: none;
+        }
+
+        li.active-app a {
+            font-weight: bold;
+        }
+
     }
 
     i[class^="icon-"] {
@@ -225,26 +293,6 @@
         line-height: 1em;
         position: relative;
         top: 4px;
-    }
-
-    .launcher.right {
-        float: right;
-        display: inline-block !important;
-        overflow: visible;
-        height: 40px;
-    }
-
-    .launcher.right .dropdown-menu {
-        left: auto; right: 0; text-align: left;
-    }
-
-    .launcher.right .dropdown-toggle {
-        margin: 0 -12px 0 -12px;
-        display: inline-block;
-        width: 3em;
-        text-align: center;
-        outline: 0;
-        border: 0px none;
     }
 
     @-webkit-keyframes launcherColours {
@@ -257,41 +305,23 @@
           to { color: #555; }
     }
 
-    .badge {
-        background-color: @badgeBackground;
-    }
-
-    .badge.badge-info {
-        background-color: @linkColor;
-    }
-
     .icon-refresh {
+
         color: @gray;
         .transition(color 0.2s linear);
+
+        &.icon-spin {
+            color: #fff;
+        }
+
+        &.icon-spin-paused {
+            -webkit-animation-play-state: paused;
+            -moz-animation-play-state: paused;
+            animation-play-state: paused;
+        }
+
     }
 
-    .icon-refresh.icon-spin {
-        color: #fff;
-    }
-
-    .icon-refresh.icon-spin-paused {
-        -webkit-animation-play-state: paused;
-        -moz-animation-play-state: paused;
-        animation-play-state: paused;
-    }
-
-    .launcher.io-ox-progress i {
-        -moz-animation-direction: alternate;
-        -moz-animation-duration: 0.75s;
-        -moz-animation-iteration-count: infinite;
-        -moz-animation-name: launcherColours;
-        -moz-animation-timing-function: ease-in-out;
-        -webkit-animation-direction: alternate;
-        -webkit-animation-duration: 0.75s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: launcherColours;
-        -webkit-animation-timing-function: ease-in-out;
-    }
 }
 
 /* empty desktop */

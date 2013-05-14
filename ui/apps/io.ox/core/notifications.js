@@ -17,7 +17,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
     'use strict';
 
     var BadgeView = Backbone.View.extend({
-        tagName: 'span',
+        tagName: 'a',
         className: 'badge',
         initialize: function (options) {
             this.model.on('change', _.bind(this.onChange, this));
@@ -130,10 +130,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
         attach: function (el, addLauncher) {
             //view
-            var self = this;
-            var badgeView = new BadgeView({ el: el, model: new Backbone.Model({ count: 0})});
+            var self = this,
+                badgeView = new BadgeView({ el: el, model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            addLauncher('wrap right', badgeView.render().$el.show(), $.proxy(this.toggleList, this));
+            addLauncher('right', badgeView.render().$el.show(), $.proxy(this.toggleList, this));
             $('#io-ox-core').prepend(
                 $('<div id="io-ox-notifications" class="scrollable">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {

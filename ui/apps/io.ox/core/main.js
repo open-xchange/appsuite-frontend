@@ -130,18 +130,13 @@ define("io.ox/core/main",
 
     // add launcher
     var addLauncher = function (side, label, fn) {
-        var node = $('<div class="launcher">'),
-            sideTags = side.split(' '),
-            wrap = false;
-
-        if (sideTags.length > 1) {//only wrap uses 2 tags
-            wrap = true;
-            if (sideTags[0] === 'wrap') {//to make order unimportant
-                side = sideTags[1];
-            } else {
-                side = sideTags[0];
-            }
+        var node;
+        if (side === 'left') {
+            node = $('<li class="launcher">');
+        } else {
+            node = $('<div class="launcher">').addClass('right');
         }
+
         node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
@@ -159,25 +154,18 @@ define("io.ox/core/main",
                 });
             });
 
-        if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
-            node.addClass(side);
-            //add wrapper
-            label.wrap(node);
-        } else {
-            //construct
-            node.append(
-                _.isString(label) ? $('<a href="#">').text(gt(label)) :  label
-            );
-        }
-        // just add if not wrapped
-        if (!wrap) {
-            if (side === 'left') {
-                node.appendTo(launchers);
+        //construct
+        node.append(function () {
+            if (_.isString(label)) {
+                return $('<a href="#">').text(gt(label));
+            } else if (label[0].tagName === 'I') {
+                return $('<a href="#">').append(label);
             } else {
-                node.addClass('right').appendTo(topbar);
+                return label;
             }
-        }
-        return node;
+        });
+
+        return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
     function initRefreshAnimation() {
@@ -392,8 +380,10 @@ define("io.ox/core/main",
 
         function add(node, container, model) {
             var placeholder;
-            node.attr('data-app-name', model.get('name') || model.id)
-                .attr('data-app-guid', model.guid);
+            node.attr({
+                'data-app-name': model.get('name') || model.id,
+                'data-app-guid': model.guid
+            });
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
@@ -415,7 +405,7 @@ define("io.ox/core/main",
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || 'icon-pencil';
-                launcher.addClass('user-content').addClass(cls).prepend($('<span>').append($('<i class="' + icon + '">')));
+                launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append($('<i class="' + icon + '"/>')));
             }
         }
 
@@ -461,7 +451,8 @@ define("io.ox/core/main",
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
-            var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+            var node = $('[data-app-guid="' + model.guid + '"]', launchers);
+            $('a', node).text(value);
             addUserContent(model, node);
             launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
             tabManager();
@@ -486,7 +477,7 @@ define("io.ox/core/main",
             id: 'notifications',
             index: 10000,
             draw: function () {
-                var el = $('<span class="badge">').hide();
+                var el = $('<a href="#" class="badge">').hide();
                 this.append(el);
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
