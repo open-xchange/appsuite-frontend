@@ -76,7 +76,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
 
             // the icon for the drop-down caret
-            caretIcon = Utils.createIcon('icon-caret-down'),
+            caretIcon = Utils.createIcon('docs-caret down'),
 
             // the drop-down caret
             caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),

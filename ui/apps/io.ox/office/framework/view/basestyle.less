@@ -96,9 +96,8 @@ i[class^="icon-"], i[class^=" icon-"] {
     text-align: center;
 }
 
-i[class^="icon-caret-"], i[class^=" icon-caret-"] {
-    min-width: 0;
-    font-size: 12px;
+i.docs-caret {
+    width: 9px;
 }
 
 /* ========================================================================= */
@@ -526,6 +525,12 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                             border-color: @selectedBackground;
                             .box-shadow(none);
                             color: @textColor;
+
+                            /* black drop-down caret */
+                            i[class^="docs-"] {
+                                background-image: url(docs-icons-desktop-black.png);
+                                &.retina { background-image: url(docs-icons-retina-black.png); }
+                            }
                         }
                     }
 
