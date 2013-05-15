@@ -387,11 +387,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (_.isUndefined(options.seq)) {
             def.resolve(); // Pretend a message without sequence numbers always arrives
         } else {
-            resendBuffer[options.seq] = {count: 0, msg: options};
-            if (resendDeferreds[options.seq]) {
-                def = resendDeferreds[options.seq];
+            resendBuffer[Number(options.seq)] = {count: 0, msg: options};
+            if (resendDeferreds[Number(options.seq)]) {
+                def = resendDeferreds[Number(options.seq)];
             } else {
-                resendDeferreds[options.seq] = def;
+                resendDeferreds[Number(options.seq)] = def;
             }
         }
         if (disconnected) {
@@ -458,9 +458,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             if (m.count < INFINITY) {
                 api.sendWithoutSequence(m.msg);
             } else {
-                delete resendBuffer[m.msg.seq];
-                resendDeferreds[m.msg.seq].reject();
-                delete resendDeferreds[m.msg.seq];
+                delete resendBuffer[Number(m.msg.seq)];
+                resendDeferreds[Number(m.msg.seq)].reject();
+                delete resendDeferreds[Number(m.msg.seq)];
             }
         });
     }, 5000);
