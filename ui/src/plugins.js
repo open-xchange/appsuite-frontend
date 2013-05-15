@@ -51,6 +51,8 @@
                     return oldload.apply(this, arguments);
                 }
                 url = url.slice(prefix.length);
+            } else if (modulename.indexOf('/base/spec/') === 0) {
+                return oldload.apply(this, arguments);
             }
             req.nextTick(null, loaded);
             var next = deps[modulename];
