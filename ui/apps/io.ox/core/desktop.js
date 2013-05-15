@@ -402,18 +402,22 @@ define("io.ox/core/desktop",
                         ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
                         data.id = uniqueID;
-                        if (pos > -1) {
-                            // replace
-                            list.splice(pos, 1, data);
-                        } else {
-                            // add
-                            list.push(data);
+                        if (data) {
+                            if (pos > -1) {
+                                // replace
+                                list.splice(pos, 1, data);
+                            } else {
+                                // add
+                                list.push(data);
+                            }
                         }
                     } catch (e) {
                         // looks broken, so remove from list
                         if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
-                    appCache.add('savepoints', list);
+                    if (list.length > 0) {
+                        appCache.add('savepoints', list);
+                    }
                 });
             }
         },
@@ -459,7 +463,7 @@ define("io.ox/core/desktop",
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
-                        return require([obj.module + '/main']).pipe(function (m) {
+                        return ox.load([obj.module + '/main']).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');

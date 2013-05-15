@@ -350,9 +350,10 @@
                 .value();
         },
 
-        setCookie: function (key, value) {
+        setCookie: function (key, value, lifetime) {
             // yep, works this way:
-            document.cookie = key + "=" + encodeURIComponent(value);
+            var c = key + "=" + encodeURIComponent(value) + (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() + '; path=/' : '');
+            document.cookie = c;
         },
 
         /**

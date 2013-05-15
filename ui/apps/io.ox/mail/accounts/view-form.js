@@ -128,6 +128,10 @@ define('io.ox/mail/accounts/view-form',
                     self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
                     self.$el.find('button.btn.folderselect').hide();
                 }
+                //disable folderselect if no account is defined
+                if (self.model.get('id') === undefined) {
+                    self.$el.find('button.btn.folderselect').hide();
+                }
 
                 return self;
             },

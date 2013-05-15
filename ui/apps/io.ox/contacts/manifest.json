@@ -6,6 +6,7 @@
 	    category: "Basic",
 	    settings: false,
 	    requires: "contacts",
+	    refreshable: true,
 	    index: 700
 	},
 	{

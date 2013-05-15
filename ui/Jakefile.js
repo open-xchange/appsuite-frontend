@@ -317,7 +317,6 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
 // jQuery UI
-
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
@@ -344,6 +343,7 @@ if (path.existsSync('help')) {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
+    utils.copy(['help/help.css'], { to: helpDir });
 }
 
 // postinst utilities
@@ -522,7 +522,7 @@ function compileLess() {
                 fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
             });
     }
-    
+
     // own themes
     _.each(ownThemes, function(defs) {
         if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
