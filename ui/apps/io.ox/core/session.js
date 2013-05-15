@@ -142,7 +142,6 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 action: 'login',
                                 name: username,
                                 password: password,
-                                language: language,
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,

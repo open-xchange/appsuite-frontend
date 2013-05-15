@@ -322,7 +322,7 @@ $(window).load(function () {
                 username,
                 password,
                 $('#io-ox-login-store-box').prop('checked'),
-                forcedLanguage || ox.language || 'en_US'
+                forcedLanguage
             )
             .done(function () {
                 // success
