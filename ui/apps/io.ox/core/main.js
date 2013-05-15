@@ -11,25 +11,25 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/main",
-    ["io.ox/core/desktop",
-     "io.ox/core/session",
-     "io.ox/core/http",
-     "io.ox/core/api/apps",
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/stage",
-     "io.ox/core/date",
+define('io.ox/core/main',
+    ['io.ox/core/desktop',
+     'io.ox/core/session',
+     'io.ox/core/http',
+     'io.ox/core/api/apps',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/stage',
+     'io.ox/core/date',
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      'io.ox/core/upsell',
-     "settings!io.ox/core",
-     "gettext!io.ox/core",
+     'settings!io.ox/core',
+     'gettext!io.ox/core',
      'io.ox/core/relogin',
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
 
     "use strict";
 
-    var PATH = ox.base + "/apps/io.ox/core",
+    var PATH = ox.base + '/apps/io.ox/core',
         DURATION = 250;
 
     var logout = function (opt) {
@@ -82,18 +82,14 @@ define("io.ox/core/main",
 
         var items = launchers.children('.launcher'),
         itemsVisible = launchers.children('.launcher:visible'),
-        itemsRight = topbar.children('.pull-right'),
+        itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
         itemsLeftWidth = 0,
-        itemsRightWidth = $('#io-ox-top-logo-small', topbar).outerWidth(true),
         viewPortWidth = $(document).width(),
         launcherDropDownIcon = $('.launcher-dropdown', topbar),
         launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
         launcherDropDownIcon.hide();
 
-        itemsRight.each(function () {
-            itemsRightWidth += $(this).outerWidth(true);
-        });
         itemsVisible.each(function () {
             itemsLeftWidth += $(this).outerWidth(true);
         });
