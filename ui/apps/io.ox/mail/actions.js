@@ -870,7 +870,7 @@ define('io.ox/mail/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-pencil accent-color">').attr('aria-label', gt('Compose new mail'));
+            return $('<i class="icon-pencil accent-color">');
         }
     });
 

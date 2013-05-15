@@ -944,7 +944,7 @@ define('io.ox/core/api/folder',
                             ),
                             $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
                                 _(list).map(function (folder) {
-                                    return $('<li>').append(
+                                    return $('<li role="menuitem">').append(
                                         $('<a href="#">')
                                         .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                     );

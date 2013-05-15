@@ -383,7 +383,7 @@ define('io.ox/contacts/actions',
                 });
                 return cleaned;
             }
-
+            
             api.getList(list).done(function (list) {
                 // set participants
                 var def = $.Deferred(),
@@ -577,7 +577,7 @@ define('io.ox/contacts/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">').attr('aria-label', gt('Add contact'));
+            return $('<i class="icon-plus accent-color">');
         }
     });
 

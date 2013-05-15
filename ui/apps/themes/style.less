@@ -101,6 +101,11 @@
         margin: 0;
     }
 
+    .launchers-secondary {
+        float:right;
+        position:relative;
+    }
+
 }
 
 
@@ -152,7 +157,6 @@
 
             background-color: @badgeBackground;
             padding: 2px 9px;
-            margin: 0 9px;
 
             &.badge-info {
                 background-color: @linkColor;
@@ -181,7 +185,10 @@
         &.hover {
             color: @topbarLauncherColor-hover;
             background-color: @topbarLauncherBackgroundHover;
-            & > a { color: @topbarLauncherColor-hover; }
+            & > a { color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover; }
+        }
+        a:focus {
+            color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover;
         }
 
         &.upsell {
@@ -592,6 +599,12 @@
         height: 52px;
         display: inline-block;
         outline: 0;
+
+        &:focus {
+            background: @topbarLauncherBackgroundHover;
+            i { color: darken(@linkOnDark, 30%); text-decoration: none; }
+            i.accent-color { color: @linkAccentColorHover; }
+        }
     }
 
     & > a i { color: @linkOnDark; }
@@ -728,6 +741,13 @@ a.button {
         left: 0;
         right: @windowHeadWidth;
     }
+}
+
+.window-body > .window-search {
+    display: none;
+}
+.window-body.search-open > .window-search {
+    display: block;
 }
 
 .window-search {

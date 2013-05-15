@@ -17,7 +17,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
     'use strict';
 
     var BadgeView = Backbone.View.extend({
-        tagName: 'a',
+        tagName: 'span',
         className: 'badge',
         initialize: function (options) {
             this.model.on('change', _.bind(this.onChange, this));
@@ -27,14 +27,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             return this;
         },
         onChange: function () {
-            this.$el.addClass('badge-info');
             this.$el.text(_.noI18n(this.model.get('count')));
         },
         setNotifier: function (b) {
             if (b) {
-                this.$el.addClass('badge-info');
+                this.$el.addClass('badge-info').attr('aria-disabled', false);
             } else {
-                this.$el.removeClass('badge-info');
+                this.$el.removeClass('badge-info').attr('aria-disabled', true);
             }
         },
         setCount: function (count, newMails) {
@@ -52,25 +51,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         }
     });
 
-    var FaviconBadge = Backbone.Model.extend({
-        initialize: function (options) {
-            this.on('change', _.bind(this.onChange, this));
-        },
-        onChange: function () {
-            window.Tinycon.setBubble(this.get('count'));
-        },
-        setNotifier: function (b) {
-            if (b && this.get('count')) {
-                window.Tinycon.setBubble(this.get('count'));
-            } else {
-                window.Tinycon.setBubble(0);
-            }
-        },
-        setCount: function (count) {
-            this.set('count', count);
-        }
-    });
-
     var NotificationsView = Backbone.View.extend({
         tagName: 'div',
         id: 'io-ox-notifications-display',
@@ -80,7 +60,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         },
         render: function (notifications) {
             var self = this,
-                empty = true;//check if notification area is empty
+                empty = true; //check if notification area is empty
             self.$el.empty();
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
@@ -106,20 +86,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         }
     });
 
-
-    var NotificationModel = Backbone.Model.extend({
-        defaults: {
-            'thumbnail': '',
-            'title': '',
-            'content': ''
-        }
-    });
-    var NotificationCollection = Backbone.Collection.extend({
-        model: NotificationModel,
-        initialize: function (options) {
-        }
-    });
-
     var NotificationController = function () {
         this.notifications = {};
         this.oldMailCount = 0;//special variable needed to check for autoopen on new mail
@@ -128,12 +94,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
     NotificationController.prototype = {
 
-        attach: function (el, addLauncher) {
+        attach: function (addLauncher) {
             //view
             var self = this,
-                badgeView = new BadgeView({ el: el, model: new Backbone.Model({ count: 0})});
+                badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            addLauncher('right', badgeView.render().$el.show(), $.proxy(this.toggleList, this));
+
             $('#io-ox-core').prepend(
                 $('<div id="io-ox-notifications" class="scrollable">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
@@ -145,9 +111,10 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             //auto open on new notification
             this.badges.push(badgeView);
-            var set = settings.get('autoOpenNotification', 'noEmail');
 
             function changeAutoOpen(value) {
+                value = value || settings.get('autoOpenNotification', 'noEmail');
+
                 badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
 
                 if (value === 'always') {
@@ -161,7 +128,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 }
             }
 
-            changeAutoOpen(set);
+            changeAutoOpen();
             settings.on('change:autoOpenNotification', function (e, value) {
                 changeAutoOpen(value);
             });
@@ -181,23 +148,18 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
             });
 
-            // now register default notification handler
-            /*require(['io.ox/mail/notifications',
-                     'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
-                mailNotifications.register();
-                calNotifications.register();
-            });*/
+            return addLauncher('right', $('<a>').append(badgeView.render().$el.show()), $.proxy(this.toggleList, this)).attr('id', 'io-ox-notifications-icon');
+
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
-                module.collection = new NotificationCollection([]);
                 module.ListView = listview;
-                module.collection.on('add', _.bind(this.onAddNotification, this));
-                module.collection.on('remove', _.bind(this.onRemoveNotification, this));
-                module.collection.on('reset', _.bind(this.onResetNotifications, this));
+                module.collection = new Backbone.Collection();
+                module.collection
+                    .on('add reset', _.bind(this.updateNotification, this))
+                    .on('remove', _.bind(this.update, this));
                 this.notifications[key] = module;
-                //$('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
             return this.notifications[key];
         },
@@ -205,16 +167,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             $('#io-ox-notifications-overlay').off("mail-detail-closed");
             this.hideList();
         },
-        onAddNotification: function () {
-            _.each(this.badges, function (badgeView) {
-                badgeView.setNotifier(true);
-            });
-            this.update();
-        },
-        onRemoveNotification: function () {
-            this.update();
-        },
-        onResetNotifications: function () {
+        updateNotification: function () {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(true);
             });
@@ -257,13 +210,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         showList: function () {
             // just for the moment as reminder view blocks whole screen
             // will reenable the view later with new design
-            if (_.device('small')) {
-                return;
-            }
+            if (_.device('small')) return;
+
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27) {
+                if (e.which === 27) { // escapekey
                     $(document).off('keydown.notification');
                     this.hideList();
                 }
@@ -341,7 +293,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 // add message
                 if (validType.test(o.type)) {
                     // put at end of stack not to run into opening click
-                    setTimeout(function () {
+                    _.defer(function () {
                         container.empty().append(
                             $('<div class="alert alert-' + o.type + ' alert-block user-select-text">')
                             .append(
@@ -356,7 +308,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         active = true;
                         clear();
                         timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
-                    }, 0);
+                    });
                 }
             };
         }())

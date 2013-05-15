@@ -1324,13 +1324,16 @@ define("io.ox/core/desktop",
                                 autocomplete: 'off',
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
-                                id: searchId
+                                id: searchId,
+                                'aria-label': gt('Search')
                             })
                             .on(searchHandler)
                             .placeholder()
                         ),
-                        $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
-                        .on('click', searchHandler.change)
+                        $('<button type="submit" data-action="search" class="btn margin-right" aria-hidden="true">')
+                            .on('click', searchHandler.change)
+                            .append('<i class="icon-search">')
+
                     ),
                     //abort button
                     $('<a href="#" data-action="remove">×</a>')
