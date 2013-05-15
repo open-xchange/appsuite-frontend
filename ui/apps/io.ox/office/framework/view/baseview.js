@@ -96,7 +96,10 @@ define('io.ox/office/framework/view/baseview',
             currentAlert = null,
 
             // the temporary container for all nodes while application is hidden
-            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode);
+            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
+
+            // whether the application is hidden explicitly
+            viewHidden = false;
 
         // base constructor ---------------------------------------------------
 
@@ -152,6 +155,9 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
+            // do nothing if the window is hidden
+            if (!app.getWindow().state.visible) { return; }
+
             // update fixed view panes
             _(fixedPanes).each(updatePane);
 
@@ -190,8 +196,14 @@ define('io.ox/office/framework/view/baseview',
          * Updates the view after the application becomes active/visible.
          */
         function windowShowHandler() {
+
+            // do not show the window contents if view is still hidden explicitly
+            if (viewHidden) { return; }
+
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
+            refreshPaneLayout();
+
             // do not update GUI and grab focus while document is still being imported
             if (app.isImportFinished()) {
                 app.getController().update();
@@ -205,7 +217,6 @@ define('io.ox/office/framework/view/baseview',
         function windowHideHandler() {
             // move all application nodes from view to temporary storage
             tempNode.append(app.getWindowNode().children());
-            refreshPaneLayout();
         }
 
         // methods ------------------------------------------------------------
@@ -223,6 +234,33 @@ define('io.ox/office/framework/view/baseview',
             } else {
                 this.getAppPaneNode().focus();
             }
+            return this;
+        };
+
+        /**
+         * Hides all contents of the application window and moves them to the
+         * internal temporary DOM storage node.
+         *
+         * @return {BaseView}
+         *  A reference to this instance.
+         */
+        this.hide = function () {
+            viewHidden = true;
+            windowHideHandler();
+            return this;
+        };
+
+        /**
+         * Shows all contents of the application window, if the application
+         * itself is currently active. Otherwise, the contents will be shown
+         * when the application becomes visible.
+         *
+         * @return {BaseView}
+         *  A reference to this instance.
+         */
+        this.show = function () {
+            viewHidden = false;
+            windowShowHandler();
             return this;
         };
 

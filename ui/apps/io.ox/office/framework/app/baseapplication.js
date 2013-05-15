@@ -1286,9 +1286,15 @@ define('io.ox/office/framework/app/baseapplication',
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
-                // show busy indicator, hide after import (regardless of result)
+                // move the entire view into the internal hidden storage node, show busy indicator
+                view.hide();
                 win.busy();
-                self.on('docs:import:after', function () { win.idle(); });
+
+                // after import (regardless of result), restore the view
+                self.on('docs:import:after', function () {
+                    view.show();
+                    win.idle();
+                });
 
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled
