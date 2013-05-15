@@ -77,13 +77,13 @@ define('io.ox/core/permissions/permissions',
                     type    = link.attr('data-type'),
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
-                this.model.set('bits', newbits);
+                this.model.set('bits', newbits, {validate: true});
                 this.updateRole();
             },
 
             applyRole: function (e) {
                 var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10));
+                this.model.set('bits', parseInt(bits, 10), {validate: true});
                 this.render();
             },
 

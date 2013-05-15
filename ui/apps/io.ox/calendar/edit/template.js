@@ -135,7 +135,7 @@ define('io.ox/calendar/edit/template',
                                 .text(gt('Ignore conflicts'))
                                 .on('click', function (e) {
                                     e.preventDefault();
-                                    self.model.set('ignore_conflicts', true);
+                                    self.model.set('ignore_conflicts', true, {validate: true});
                                     saveButton.click();
                                 })
                         )

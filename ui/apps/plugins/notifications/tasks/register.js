@@ -96,7 +96,7 @@ define('plugins/notifications/tasks/register',
                 .done(function (result) {
                     api.trigger('update:' + encodeURIComponent(cid), result);
                 });
-            model = this.collection.getByCid(item.attr('model-cid'));
+            model = this.collection.get(item.attr('model-cid'));
             this.collection.remove(model);
         },
 

@@ -109,7 +109,7 @@ define('io.ox/core/pubsub/model',
                                     if (model) {
                                         //TODO: most likely this can be removed, once backbone is uptodate
                                         //and collection.add triggers the events
-                                        model.set(my_model);
+                                        model.set(my_model, {validate: true});
                                         model.trigger('change', model);
                                     }
                                     return collection.add(my_model);

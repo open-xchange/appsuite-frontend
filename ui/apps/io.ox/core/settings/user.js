@@ -37,7 +37,7 @@ define('io.ox/core/settings/user', [
                 $node.append(new UserEdit({model: user}).render().$el);
 
                 user.on('change:first_name change:last_name', function () {
-                    user.set('display_name', util.getFullName(user.toJSON()));
+                    user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
                     //app.setTitle(util.getFullName(contact.toJSON()));
                 });
 

@@ -49,7 +49,7 @@ define('io.ox/participants/views',
             }
 
             this.model.on('change', function (model, e) {
-                if (e && e.changes) {
+                if (model && model.changed) {
                     self.$el.empty();
                     self.render();
                 }
@@ -160,7 +160,7 @@ define('io.ox/participants/views',
             // get cid from parent node
             var cid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
             // remove from collection by cid
-            this.model.collection.remove(this.model.collection.getByCid(cid));
+            this.model.collection.remove(this.model.collection.get(cid));
         }
     });
 

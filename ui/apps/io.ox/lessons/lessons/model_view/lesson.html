@@ -38,7 +38,7 @@ print("Description: ", recipe.get("description"));
 print("=====");
 print("Servings: ", recipe.get("servings"));
 
-recipe.set("title", "A glass of water á la niçoise");
+recipe.set("title", "A glass of water á la niçoise", {validate: true});
 
 print("============================");
 print(recipe.toJSON());
@@ -57,7 +57,7 @@ var Recipe = Backbone.Model.extend({
     },
 
     removeIngredient: function (ingredient) {
-        this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+        this.set('ingredients', _(this.get('ingredients')).without(ingredient), {validate: true});
     }
 });
 
@@ -98,7 +98,7 @@ define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/les
             },
 
             removeIngredient: function (ingredient) {
-                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient), {validate: true});
             }
         }
     });
@@ -139,7 +139,7 @@ define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/les
             },
 
             removeIngredient: function (ingredient) {
-                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient), {validate: true});
             }
         }
     });
@@ -169,11 +169,11 @@ require(['io.ox/lessons/recipes/model'], function (model) {
             print(loadedRecipe);
 
             // Modify the recipe
-            loadedRecipe.set("title", "Crypted Eggs");
+            loadedRecipe.set("title", "Crypted Eggs", {validate: true});
             loadedRecipe.removeIngredient('Substitution table');
             loadedRecipe.addIngredient('Salt');
             loadedRecipe.addIngredient('A secret');
-            loadedRecipe.set("description", "Encrypt the egg using the secret and salt ");
+            loadedRecipe.set("description", "Encrypt the egg using the secret and salt ", {validate: true});
             // Update the recipe
             loadedRecipe.save().done(function () {
                 // Load it a final time
@@ -210,7 +210,7 @@ recipe.on("change:ingredients", function () {
     print("====");
 });
 
-recipe.set("title", "Encrypted Eggs");
+recipe.set("title", "Encrypted Eggs", {validate: true});
 recipe.removeIngredient('Substitution table');
 recipe.addIngredient('Salt');
 recipe.addIngredient('A secret');
@@ -310,7 +310,7 @@ this.append("&lt;br&gt;", "&lt;br&gt;",
     $('&lt;form class="form-inline"&gt;').append(
         nodes.titleInput = $('&lt;input type="text"&gt;'),
         $('&lt;button class="btn"&gt;').text("Set title").on("click", function () {
-            recipe.set("title", nodes.titleInput.val());
+            recipe.set("title", nodes.titleInput.val(), {validate: true});
             nodes.titleInput.val('');
             return false;
         })
@@ -576,7 +576,7 @@ var RecipeEdit = Backbone.View.extend({
         this.nodes.titleInput.val(this.model.get('title'));
     },
     updateTitle: function () {
-        this.model.set("title", this.nodes.titleInput.val());
+        this.model.set("title", this.nodes.titleInput.val(), {validate: true});
     },
     onIngredientsChange: function () {
         var self = this;
@@ -591,13 +591,13 @@ var RecipeEdit = Backbone.View.extend({
         this.nodes.descriptionInput.val(this.model.get('description'));
     },
     updateDescription: function () {
-        this.model.set("description", this.nodes.descriptionInput.val());
+        this.model.set("description", this.nodes.descriptionInput.val(), {validate: true});
     },
     onServingsChange: function () {
         this.nodes.servingsInput.val(this.model.get('servings'));
     },
     updateServings: function () {
-        this.model.set("servings", this.nodes.servingsInput.val());
+        this.model.set("servings", this.nodes.servingsInput.val(), {validate: true});
     }
 });
 
@@ -741,7 +741,7 @@ var RecipeEdit = Backbone.View.extend({
         this.nodes.titleInput.val(this.model.get('title'));
     },
     updateTitle: function () {
-        this.model.set("title", this.nodes.titleInput.val());
+        this.model.set("title", this.nodes.titleInput.val(), {validate: true});
     },
     titleError: function (msgs) {
         var self = this;
@@ -774,13 +774,13 @@ var RecipeEdit = Backbone.View.extend({
         this.nodes.descriptionInput.closest('.control-group').addClass("error");
     },
     updateDescription: function () {
-        this.model.set("description", this.nodes.descriptionInput.val());
+        this.model.set("description", this.nodes.descriptionInput.val(), {validate: true});
     },
     onServingsChange: function () {
         this.nodes.servingsInput.val(this.model.get('servings'));
     },
     updateServings: function () {
-        this.model.set("servings", this.nodes.servingsInput.val());
+        this.model.set("servings", this.nodes.servingsInput.val(), {validate: true});
     },
     servingsError: function (msgs) {
         var self = this;

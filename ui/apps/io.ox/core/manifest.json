@@ -1,4 +1,5 @@
 {
 	namespace: "io.ox/dev/testing/main",
-	path: "io.ox/core/test"
+	path: "io.ox/core/test",
+	requires: "false"
 }

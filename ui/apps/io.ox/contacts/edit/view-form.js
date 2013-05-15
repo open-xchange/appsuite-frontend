@@ -359,7 +359,7 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '');
+                baton.model.set("image1", '', {validate: true});
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }

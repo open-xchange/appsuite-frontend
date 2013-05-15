@@ -145,7 +145,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     // Now change the model
 
-                    recipe.set("title", "A glass of water á la niçoise");
+                    recipe.set("title", "A glass of water á la niçoise", {validate: true});
                     j.expect($el.find(".control-group .controls input[type=text]").val()).toEqual("A glass of water á la niçoise");
 
 
@@ -244,7 +244,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
                         label: 'Title',
                         control: '<input type="text">',
                         setValueInModel: function () {
-                            this.model.set("title", this.nodes.element.val().toLowerCase());
+                            this.model.set("title", this.nodes.element.val().toLowerCase(), {validate: true});
                         },
                         setValueInElement: function () {
                             this.nodes.element.val(this.model.get("title").toUpperCase());
@@ -274,7 +274,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect(recipe.get("title")).toEqual("a cold glass of water");
 
-                    recipe.set("title", "a warm glass of water");
+                    recipe.set("title", "a warm glass of water", {validate: true});
 
                     j.expect($input.val()).toEqual("A WARM GLASS OF WATER");
                 });
@@ -307,7 +307,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($el.find(".control-group").css("display")).toEqual("none");
 
-                    recipe.set("title", "A glass of water");
+                    recipe.set("title", "A glass of water", {validate: true});
                     // Now since the value is set in the model, the control group should turn visible
 
                     j.expect($el.find(".control-group").css("display")).not.toEqual("none");
@@ -346,7 +346,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     // Now change the model
 
-                    recipe.set("title", "A glass of water á la niçoise");
+                    recipe.set("title", "A glass of water á la niçoise", {validate: true});
                     j.expect($input.val()).toEqual("A glass of water á la niçoise");
 
                     // And now the input field
@@ -429,7 +429,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     // Now change the model
 
-                    recipe.set("favorite", false);
+                    recipe.set("favorite", false, {validate: true});
                     j.expect($input.is(":checked")).toEqual(false);
 
                     // And now the input field
@@ -528,7 +528,7 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     // Now change the model
 
-                    recipe.set("difficulty", 2);
+                    recipe.set("difficulty", 2, {validate: true});
                     j.expect($input.find("option[value=1]").is(":selected")).toEqual(false);
                     j.expect($input.find("option[value=2]").is(":selected")).toEqual(true);
 

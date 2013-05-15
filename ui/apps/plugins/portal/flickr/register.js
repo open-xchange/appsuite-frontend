@@ -260,7 +260,7 @@ define('plugins/portal/flickr/register',
                 } else {
                     props = { method: method, query: q, description: description };
                     if (nsid) { props.nsid = nsid; }
-                    model.set({ title: description, props: props });
+                    model.set({ title: description, props: props }, {validate: true});
                     model.unset('candidate');
                     dialog.close();
                 }

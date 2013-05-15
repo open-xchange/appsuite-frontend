@@ -46,7 +46,7 @@ define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less
             },
 
             updateZipInModel: function () {
-                this.model.set(this.zipAttribute, this.nodes.zipElement.val());
+                this.model.set(this.zipAttribute, this.nodes.zipElement.val(), {validate: true});
             },
 
             updateZipInElement: function (valueFromModel) {

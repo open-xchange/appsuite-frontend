@@ -25,7 +25,7 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'i
             },
 
             removeIngredient: function (ingredient) {
-                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient), {validate: true});
             }
         }
     });
