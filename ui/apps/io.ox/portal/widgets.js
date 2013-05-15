@@ -217,7 +217,7 @@ define('io.ox/portal/widgets',
             collection.each(function (model) {
                 var id = model.get('id');
                 if (id in obj) {
-                    model.set(obj[id], { silent: true });
+                    model.set(obj[id], { silent: true, validate: true });
                 }
             });
         },

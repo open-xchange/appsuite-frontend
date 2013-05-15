@@ -138,7 +138,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         var change = function (model, e) {
             _(model.changed).each(function (changed, path) {
                 if (changed) {
-                    self.set(path, model.get(path));
+                    self.set(path, model.get(path), {validate: true});
                 }
             });
         };

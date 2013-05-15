@@ -61,7 +61,7 @@ define('io.ox/core/settings/pane',
         selectOptions: ox.serverConfig.languages || {},
         updateModel: function () {
             var value = this.nodes.element.val();
-            this.model.set(this.attribute, value);
+            this.model.set(this.attribute, value, {validate: true});
             _.setCookie('language', value);
         }
     }));

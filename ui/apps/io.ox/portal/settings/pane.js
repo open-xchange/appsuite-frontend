@@ -212,10 +212,10 @@ define('io.ox/portal/settings/pane',
             this.$el.attr('data-widget-id', this.model.get('id'));
             // get explicit state
             var enabled = this.model.get('enabled');
-            this.model.set('enabled', !!(enabled === undefined || enabled === true));
+            this.model.set('enabled', !!(enabled === undefined || enabled === true), {validate: true});
             // get default color
             var color = this.model.get('color');
-            this.model.set('color', color === undefined || color === 'default' ? 'black' : color);
+            this.model.set('color', color === undefined || color === 'default' ? 'black' : color, {validate: true});
             // get widget options
             this.options = ext.point('io.ox/portal/widget/' + this.model.get('type') + '/settings').options();
         },
@@ -263,7 +263,7 @@ define('io.ox/portal/settings/pane',
                 });
             } else {
                 // toggle widget
-                this.model.set('enabled', !enabled);
+                this.model.set('enabled', !enabled, {validate: true});
                 this.render();
             }
         },
@@ -345,7 +345,7 @@ define('io.ox/portal/settings/pane',
             });
 
             collection.on('add', function (model) {
-                model.set({ candidate: true }, { silent: true });
+                model.set({ candidate: true }, { silent: true, validate: true });
                 var view = createView(model).render();
                 list.prepend(view.el);
                 view.edit();

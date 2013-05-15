@@ -42,13 +42,13 @@ define('io.ox/tasks/edit/view',
                 if (value) {
                     if (!(model.get('start_date')) && model.get('start_date') !== 0) {
                         if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
-                            model.set('start_date',  model.get('end_date') - date.DAY);
+                            model.set('start_date',  model.get('end_date') - date.DAY, {validate: true});
                         } else {
-                            model.set('start_date', _.now());
+                            model.set('start_date', _.now(), {validate: true});
                         }
                     }
                     if (!(model.get('end_date')) && model.get('end_date') !== 0) {
-                        model.set('end_date', model.get('start_date') + date.DAY);
+                        model.set('end_date', model.get('start_date') + date.DAY, {validate: true});
                     }
                 }
             });
@@ -258,11 +258,11 @@ define('io.ox/tasks/edit/view',
                 .text(''), reminderUtil.buildDropdownMenu())
                 .on('change', function (e) {
                     if (self.fields.reminderDropdown.prop('selectedIndex') === 0) {
-                        self.model.set('alarm', null);
+                        self.model.set('alarm', null, {validate: true});
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
                                 self.fields.reminderDropdown.val());
-                        self.model.set('alarm', dates.alarmDate.getTime());
+                        self.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
                     }
                 });
 
@@ -273,17 +273,17 @@ define('io.ox/tasks/edit/view',
                 if (value !== 'NaN' && value >= 0 && value <= 100) {
                     if (self.fields.progress.val() === '') {
                         self.fields.progress.val(0);
-                        self.model.set('status', 1);
+                        self.model.set('status', 1, {validate: true});
                     } else if (self.fields.progress.val() === '0' && self.model.get('status') === 2) {
-                        self.model.set('status', 1);
+                        self.model.set('status', 1, {validate: true});
                     } else if (self.fields.progress.val() === '100' && self.model.get('status') !== 3) {
-                        self.model.set('status', 3);
+                        self.model.set('status', 3, {validate: true});
                     } else if (self.model.get('status') === 3) {
-                        self.model.set('status', 2);
+                        self.model.set('status', 2, {validate: true});
                     } else if (self.model.get('status') === 1) {
-                        self.model.set('status', 2);
+                        self.model.set('status', 2, {validate: true});
                     }
-                    self.model.set('percent_completed', value);
+                    self.model.set('percent_completed', value, {validate: true});
                 } else {
                     setTimeout(function () {notifications.yell('error', gt('Please enter value between 0 and 100.')); }, 300);
                     self.model.trigger('change:percent_completed');

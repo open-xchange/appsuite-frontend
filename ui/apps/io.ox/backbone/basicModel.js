@@ -46,12 +46,6 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 self.id = self.get("id");
             });
 
-            this.on("change", function (m) {
-                if (m.changed.attributes) {
-                    throw new Error("DON'T CREATE F##N RECURSIONS!");
-                }
-            });
-
             if (this.init) {
                 this.init();
             }
@@ -69,9 +63,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 errors = new ValidationErrors();
 
             attributes = attributes || this.toJSON();
-
             this.point("validation").invoke("validate", errors, attributes, errors, this);
-
             if (options.isSave) {
                 this.point("validation/save").invoke("validate", errors, attributes, errors, this);
             }
@@ -166,6 +158,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             });
         },
         isValid: function () {
+            this.validate(this.toJSON());
             return this._valid;
         },
         hasValidAttributes: function () {

@@ -136,7 +136,7 @@ define('io.ox/portal/main',
         // clean up
         if (model.has('baton')) {
             delete model.get('baton').model;
-            model.set('baton', null);
+            model.set('baton', null, {validate: true});
             model.isDeleted = true;
         }
     });
@@ -326,7 +326,7 @@ define('io.ox/portal/main',
             model.drawn = true;
 
             // remember
-            model.set('baton', baton);
+            model.set('baton', baton, {validate: true});
 
             // setup?
             if (requiresSetUp) {

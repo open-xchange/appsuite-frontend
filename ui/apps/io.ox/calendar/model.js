@@ -75,7 +75,7 @@ define('io.ox/calendar/model',
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.toJSON());
+                    self.set('participants', participants.toJSON(), {validate: true});
                     resetListUpdate = false;
                 }
 
@@ -211,10 +211,10 @@ define('io.ox/calendar/model',
                         model.getParticipants().addUniquely({id: userID, type: 1});
 
                         // use a new, custom and unused property in his model to specify that he can't be removed
-                        model.getParticipants().get(userID).set('ui_removable', false);
+                        model.getParticipants().get(userID).set('ui_removable', false, {validate: true});
                     } else {
                         if (model.get('organizerId') === userID) {
-                            model.getParticipants().get(userID).set('ui_removable', false);
+                            model.getParticipants().get(userID).set('ui_removable', false, {validate: true});
                         }
                     }
                 } else if (folderAPI.is('public', folder)) {
@@ -240,7 +240,7 @@ define('io.ox/calendar/model',
                 }
                 updatingEnd = true;
                 if (model.get('start_date') && _.isNumber(length)) {
-                    model.set('end_date', model.get('start_date') + length);
+                    model.set('end_date', model.get('start_date') + length, {validate: true});
                 }
                 updatingEnd = false;
             });
@@ -253,7 +253,7 @@ define('io.ox/calendar/model',
                 if (tmpLength < 0) {
                     updatingStart = true;
                     if (model.get('end_date') && _.isNumber(length)) {
-                        model.set('start_date', model.get('end_date') - length);
+                        model.set('start_date', model.get('end_date') - length, {validate: true});
                     }
                     updatingStart = false;
                 } else {
@@ -277,20 +277,20 @@ define('io.ox/calendar/model',
                     endDate.setHours(0, 0, 0, 0);
                     endDate.setDate(endDate.getDate() + 1);
                     // convert to UTC
-                    model.set('start_date', date.Local.localTime(startDate.getTime()));
-                    model.set('end_date', date.Local.localTime(endDate.getTime()));
+                    model.set('start_date', date.Local.localTime(startDate.getTime()), {validate: true});
+                    model.set('end_date', date.Local.localTime(endDate.getTime()), {validate: true});
 
                     // handle shown as
                     if (mark) {
-                        model.set('shown_as', 4);
+                        model.set('shown_as', 4, {validate: true});
                     }
                 } else {
                     if (mark) {
-                        model.set('shown_as', 1);
+                        model.set('shown_as', 1, {validate: true});
                     }
 
-                    model.set('start_date', _start);
-                    model.set('end_date', _end);
+                    model.set('start_date', _start, {validate: true});
+                    model.set('end_date', _end, {validate: true});
                 }
             });
         },

@@ -28,7 +28,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
             },
 
             removeIngredient: function (ingredient) {
-                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient), {validate: true});
             }
         }
     });
@@ -122,7 +122,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.spyOn(api, 'update').andCallThrough();
 
                     factory.get({id: testId, folder: 12}).done(function (loaded) {
-                        loaded.set('title', 'New Title');
+                        loaded.set('title', 'New Title', {validate: true});
                         loaded.save().done(updated.yep);
                     });
 
@@ -153,7 +153,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     factory.get({id: testId, folder: 12}).done(function (loaded) {
                         recipe = loaded;
                         originalTitle = loaded.get("title");
-                        loaded.set('title', 'Supercalifragilisticexpialidocious');
+                        loaded.set('title', 'Supercalifragilisticexpialidocious', {validate: true});
                         loaded.fetch().done(updated.yep);
                     });
                     j.waitsFor(updated, 'updated', 5000);
@@ -207,7 +207,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         j.expect(recipe1).toBeDefined();
                         j.expect(recipe2).toBeDefined();
 
-                        recipe1.set('title', 'new title');
+                        recipe1.set('title', 'new title', {validate: true});
 
                         j.expect(recipe2.get('title')).not.toEqual('new title');
 
@@ -236,7 +236,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         j.expect(recipe1).toBeDefined();
                         j.expect(recipe2).toBeDefined();
 
-                        recipe1.set('title', 'new title').save().done(function () {
+                        recipe1.set('title', 'new title', {validate: true}).save().done(function () {
 
                             j.expect(recipe2.get('title')).toEqual('new title');
                             checked.yep();
@@ -303,11 +303,12 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
             j.describe("ModelFactory validation", function () {
 
                 j.it("should run an extension for each attribute", function () {
-
+                    console.log("TEST START");
                     // Create an extension that forces servings to be even
                     ext.point(ref + '/validation/servings').extend({
                         id: 'servings-must-be-even',
                         validate: function (value) {
+                            console.log("VALIDATE", value);
                             if (!_.isNumber(value)) {
                                 value = parseInt(value, 10);
                             }
@@ -318,8 +319,10 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
 
                     // violate the rule
-                    j.expect(factory.create().set("servings", 1).isValid()).toEqual(false);
-                    j.expect(factory.create().set("servings", 2).get("servings")).toEqual(2);
+                    console.log("SETTING VALUES");
+                    j.expect(factory.create().set("servings", 1, {validate: true}).isValid()).toEqual(false);
+                    j.expect(factory.create().set("servings", 2, {validate: true}).get("servings")).toEqual(2);
+                    console.log("TEST DONE");
                 });
 
                 j.it("should trigger 'invalid' and 'invalid:attribute' events", function () {
@@ -334,7 +337,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         invalidServingsTriggered = true;
                     });
 
-                    model.set("servings", 1);
+                    model.set("servings", 1, {validate: true});
 
                     j.expect(invalidTriggered).toEqual(true);
                     j.expect(invalidServingsTriggered).toEqual(true);
@@ -365,7 +368,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         }
                     });
 
-                    factory.create().set('servings', 2);
+                    factory.create().set('servings', 2, {validate: true});
 
                     j.expect(validations).toEqual(['servings-must-be-even', 'general']);
                 });
@@ -385,9 +388,9 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                         validServingsTriggered = true;
                     });
 
-                    model.set("servings", 2);
-                    model.set("servings", 1);
-                    model.set("servings", 2);
+                    model.set("servings", 2, {validate: true});
+                    model.set("servings", 1, {validate: true});
+                    model.set("servings", 2, {validate: true});
 
                     j.expect(model.get("servings")).toEqual(2);
                     j.expect(invalidTriggered).toEqual(true);
@@ -416,9 +419,9 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     var model = factory.create();
 
-                    model.set('servings', 2); // Valid
+                    model.set('servings', 2, {validate: true}); // Valid
                     j.expect(model.set('servings', 1).isValid()).toEqual(false); // Invalid
-                    model.set('title', 'The great pancakes of yesteryear'); // Now servings of 1 are valid also
+                    model.set('title', 'The great pancakes of yesteryear', {validate: true}); // Now servings of 1 are valid also
 
                     j.expect(model.get('servings')).toEqual(1);
                     j.expect(model.get('title')).toEqual('The great pancakes of yesteryear');
@@ -436,7 +439,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     }));
 
                     j.runs(function () {
-                        recipe.set({title: 'Hello', servings: 2});
+                        recipe.set({title: 'Hello', servings: 2}, {validate: true});
                         j.expect(recipe.isDirty()).toEqual(true);
                         j.expect(recipe.changedSinceLoading()).toEqual({title: 'Hello', servings: 2});
                     });

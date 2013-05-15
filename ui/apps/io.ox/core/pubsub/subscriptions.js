@@ -86,7 +86,7 @@ define('io.ox/core/pubsub/subscriptions',
                                 //update the model-(collection)
                                 //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "subscriptions.update(model)" call
                                 if (self.model.collection) {
-                                    self.model.set(model);
+                                    self.model.set(model, {validate: true});
                                 } else {
                                     subscriptions.add(model);
                                 }

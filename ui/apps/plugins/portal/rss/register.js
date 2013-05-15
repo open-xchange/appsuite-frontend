@@ -178,7 +178,7 @@ define('plugins/portal/rss/register',
                 model.set({
                     title: description,
                     props: { url: url.split(/\n/), description: description }
-                });
+                }, {validate: true});
                 model.unset('candidate');
             });
 

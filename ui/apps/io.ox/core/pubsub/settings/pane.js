@@ -260,8 +260,8 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled')).save().fail(function (res) {
-                model.set('enabled', !model.get('enabled'));
+            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function (res) {
+                model.set('enabled', !model.get('enabled'), {validate: true});
             });
             this.render();
         },
