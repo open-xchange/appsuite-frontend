@@ -303,12 +303,10 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
             j.describe("ModelFactory validation", function () {
 
                 j.it("should run an extension for each attribute", function () {
-                    console.log("TEST START");
                     // Create an extension that forces servings to be even
                     ext.point(ref + '/validation/servings').extend({
                         id: 'servings-must-be-even',
                         validate: function (value) {
-                            console.log("VALIDATE", value);
                             if (!_.isNumber(value)) {
                                 value = parseInt(value, 10);
                             }
@@ -319,10 +317,8 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
 
                     // violate the rule
-                    console.log("SETTING VALUES");
                     j.expect(factory.create().set("servings", 1, {validate: true}).isValid()).toEqual(false);
                     j.expect(factory.create().set("servings", 2, {validate: true}).get("servings")).toEqual(2);
-                    console.log("TEST DONE");
                 });
 
                 j.it("should trigger 'invalid' and 'invalid:attribute' events", function () {
