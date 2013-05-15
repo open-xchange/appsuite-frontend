@@ -34,7 +34,6 @@ define.async('io.ox/core/manifests',
                 return $.when();
             }
             var requirements = _(this.pluginPoints[pointName]).pluck("path");
-            console.log('loadPluginsFor', pointName, requirements);
             return require(requirements, cb);
         },
 
