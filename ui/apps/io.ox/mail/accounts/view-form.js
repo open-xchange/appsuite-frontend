@@ -170,6 +170,7 @@ define('io.ox/mail/accounts/view-form',
                     } else {
                         notifications.yell('error', _.noI18n(data.error));
                     }
+                    self.dialog.idle();
                 });
             },
 
