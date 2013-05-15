@@ -127,7 +127,7 @@ define('io.ox/core/main',
     // add launcher
     var addLauncher = function (side, label, fn) {
 
-        var node = $('<div class="launcher">');
+        var node = $('<li class="launcher">');
 
         node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
