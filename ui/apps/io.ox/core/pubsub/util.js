@@ -101,17 +101,17 @@ define('io.ox/core/pubsub/util',
                 folder = '';
             //create folder
             return folderApi.create({
-                            folder: parent,
-                            data: {
-                                title: name || gt('New folder'),
-                                module: module
-                            }
-                        })
-                        .pipe(function (data) {
-                            //create and refresh subscription
-                            folder = data.id;
-                            return util.initSubscription(module, folder, url, options);
-                        });
+                folder: parent,
+                data: {
+                    title: name || gt('New folder'),
+                    module: module
+                }
+            })
+            .pipe(function (data) {
+                //create and refresh subscription
+                folder = data.id;
+                return util.initSubscription(module, folder, url, options);
+            });
         }
     };
     return util;

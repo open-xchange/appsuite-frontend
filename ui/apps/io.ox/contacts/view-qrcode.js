@@ -1355,9 +1355,9 @@ define("io.ox/contacts/view-qrcode", [], function () {
                     return "";
                 }
             };
-            var address = function (type, street, code, city, country) {
+            var address = function (type, street, code, city, country, state) {
                 if (street || city) {
-                    return t("ADR;TYPE=intl," + type.toLowerCase() + ",postal:" + ["", "", street, city, "", code, country || "Deutschland"].join(";"));
+                    return t("ADR;TYPE=intl," + type.toLowerCase() + ",postal:" + ["", "", street, city, "", code, country || "Deutschland", state || ""].join(";"));
                 } else {
                     return "";
                 }
@@ -1393,8 +1393,8 @@ define("io.ox/contacts/view-qrcode", [], function () {
                 str += "EMAIL;TYPE=INTERNET:" + data.email3 + CRLF;
             }
             // address/phone
-            str += add(address("work", data.street_business, data.postal_code_business, data.city_business, data.country_business));
-            str += add(address("home", data.street_home, data.postal_code_home, data.city_home, data.country_home));
+            str += add(address("work", data.street_business, data.postal_code_business, data.city_business, data.country_business, data.state_business));
+            str += add(address("home", data.street_home, data.postal_code_home, data.city_home, data.country_home, data.state_home));
             str += add(phone("cell", data.cellular_telephone1));
             str += add(phone("cell", data.cellular_telephone2));
             str += add(phone("work", data.telephone_business1));

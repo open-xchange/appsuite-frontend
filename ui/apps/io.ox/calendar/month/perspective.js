@@ -333,7 +333,7 @@ define('io.ox/calendar/month/perspective',
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 self = this;
             print.open('printCalendar', null, {
-                template: 'cp_appsuite_monthview_table.tmpl',
+                template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
             });
