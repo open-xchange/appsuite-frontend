@@ -342,6 +342,7 @@ $(window).load(function () {
                 // "except for some of the error ones on IE (since it triggers success callbacks on scripts that load 404s)
                 // (see https://github.com/jrburke/requirejs/wiki/Requirejs-2.0-draft)
                 if (gt !== undefined) {
+                    gettext.enable();
                     // get all nodes
                     $('[data-i18n]').each(function () {
                         var node = $(this),
@@ -504,8 +505,12 @@ $(window).load(function () {
                 // Set user's language (as opposed to the browser's language)
                 // Load core plugins
                 gettext.setLanguage(ox.language);
-                if (!ox.online) return $.when();
-                return manifests.manager.loadPluginsFor('core');
+                if (!ox.online) {
+                    gettext.enable();
+                    return $.when();
+                }
+                return manifests.manager.loadPluginsFor('core')
+                    .done(gettext.enable);
             }
 
             function gotoSignin() {
