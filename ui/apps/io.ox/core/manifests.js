@@ -34,6 +34,7 @@ define.async('io.ox/core/manifests',
                 return $.when();
             }
             var requirements = _(this.pluginPoints[pointName]).pluck("path");
+            console.log('loadPluginsFor', pointName, requirements);
             return require(requirements, cb);
         },
 
@@ -137,7 +138,7 @@ define.async('io.ox/core/manifests',
 
     _(ox.serverConfig.manifests).each(process);
 
-    var ts = _.now();
+    var ts = _.now(), custom = [];
 
     var self = {
         manager: manifestManager,
@@ -149,24 +150,23 @@ define.async('io.ox/core/manifests',
             _(ox.serverConfig.manifests).each(process);
 
             if (_.url.hash('customManifests')) {
-                require([ox.base + '/src/manifests.js?t=' + ts], function (list) {
-                    console.info('Loading custom manifests', _(list).pluck('path'), list);
-                    _(list).each(process);
-                });
+                _(custom).each(process);
             }
         }
     };
 
+    var def = $.Deferred();
+
     if (_.url.hash('customManifests')) {
-        var def = $.Deferred();
-        require([ox.base + "/src/manifests.js?t=" + ts], function (m) {
-            _(m).each(process);
+        require([ox.base + "/src/manifests.js?t=" + ts], function (list) {
+            custom = list;
+            console.info('Loading custom manifests', _(list).pluck('path'), list);
+            _(list).each(process);
             def.resolve(self);
         });
-        return def;
     } else {
-        return $.Deferred().resolve(self);
+        def.resolve(self);
     }
 
-    return $.Deferred().resolve(self);
+    return def;
 });
