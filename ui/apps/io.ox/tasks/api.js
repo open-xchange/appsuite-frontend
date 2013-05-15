@@ -12,9 +12,8 @@
  */
 define('io.ox/tasks/api',
         ['io.ox/core/http',
-         'io.ox/core/config',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
+         'io.ox/core/api/folder'], function (http, apiFactory, folderApi) {
 
     'use strict';
 
@@ -53,7 +52,7 @@ define('io.ox/tasks/api',
             }
 
             if (modifications.participants) {
-                var myId = configApi.get('identifier'),
+                var myId = ox.user_id,
                     triggered = false;
                 _(modifications.participants).each(function (obj) { //user is added to a task
                     if (obj.id === myId) {
@@ -466,7 +465,7 @@ define('io.ox/tasks/api',
         }).pipe(function (list) {
             // sorted by end_date filter over due Tasks
             var now = new Date(),
-                userId = configApi.get('identifier'),
+                userId = ox.user_id,
                 dueTasks = [],
                 confirmTasks = [];
             for (var i = 1; i < list.length; i++) {
