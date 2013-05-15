@@ -155,22 +155,22 @@ define('io.ox/portal/main',
     };
 
     collection.on('change', function (model, e) {
-        if ('enabled' in e.changes) {
+        if ('enabled' in model.changed) {
             if (model.get('enabled')) {
                 app.getWidgetNode(model).show();
                 app.drawWidget(model);
             } else {
                 app.getWidgetNode(model).hide();
             }
-        } else if ('color' in e.changes) {
+        } else if ('color' in model.changed) {
             setColor(app.getWidgetNode(model), model);
         } else if (this.wasElementDeleted(model)) {
             // element was removed, no need to refresh it.
             return;
-        } else if ('unset' in e && 'candidate' in e.changes) {
+        } else if ('unset' in e && 'candidate' in model.changed) {
             // redraw fresh widget
             app.refreshWidget(model);
-        } else if ('props' in e.changes && model.drawn) {
+        } else if ('props' in model.changed && model.drawn) {
             // redraw existing widget due to config change
             app.refreshWidget(model);
         } else {
@@ -203,7 +203,7 @@ define('io.ox/portal/main',
             // get widget cid
             cid = node.attr('data-widget-cid'),
             // get model
-            model = collection.getByCid(cid), baton;
+            model = collection.get(cid), baton;
         if (model) {
             baton = model.get('baton');
             baton.item = target.data('item');

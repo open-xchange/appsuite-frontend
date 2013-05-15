@@ -46,10 +46,16 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 self.id = self.get("id");
             });
 
+            this.on("change", function (m) {
+                if (m.changed.attributes) {
+                    throw new Error("DON'T CREATE F##N RECURSIONS!");
+                }
+            });
+
             if (this.init) {
                 this.init();
             }
-
+            this.url = "invalidURL";
         },
         point: function (subpath) {
             if (/^\//.test(subpath)) {
@@ -103,6 +109,9 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                     this.trigger('valid');
                 }
             }
+        },
+        parse: function (model, resp) {
+            return {};
         },
         sync: function (action, model, callbacks) {
 
