@@ -322,6 +322,9 @@ $(window).load(function () {
                 username,
                 password,
                 $('#io-ox-login-store-box').prop('checked'),
+                // temporary language for error messages
+                forcedLanguage || ox.language || 'en_US',
+                // permanent language change!?
                 forcedLanguage
             )
             .done(function () {

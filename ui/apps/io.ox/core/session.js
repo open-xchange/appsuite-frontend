@@ -108,7 +108,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
             var pending = null;
 
-            return function (username, password, store, language) {
+            return function (username, password, store, language, forceLanguage) {
 
                 var def = $.Deferred(), multiple = [];
 
@@ -123,13 +123,14 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
-                        if (language) {
+                        if (forceLanguage) {
                             multiple.push({
                                 module: 'jslob',
                                 action: 'update',
                                 id: 'io.ox/core',
                                 data: {
-                                    language: language
+                                    // permanent language change
+                                    language: forceLanguage
                                 }
                             });
                         }
@@ -142,6 +143,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 action: 'login',
                                 name: username,
                                 password: password,
+                                // current browser language; required for proper error messages
+                                language: language || 'en_US',
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
