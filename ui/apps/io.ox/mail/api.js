@@ -1187,6 +1187,9 @@ define('io.ox/mail/api',
                 attachment: _(data).pluck('id').join(','),
                 session: ox.session // required here!
             });
+        } else if (mode === 'eml:reference') {
+            //if eml stored as reference use parent object
+            return this.getUrl(_([].concat(data)).first().parent, 'eml');
         } else if (mode === 'eml') {
             data = [].concat(data);
             first = _(data).first();

@@ -239,6 +239,34 @@ define('io.ox/preview/main',
             require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
+                //preview during compose (forward mail as attachment)
+                if (!data.parent && data.msgref) {
+                    /**
+                     * removes first element of string list (separator '.')
+                     * @example '2.3.2' becomes '3.2'
+                     * @param  {string} id
+                     * @return {string}
+                     */
+                    //TODO: there must be a better solution
+                    var adjust = function (id) {
+                        var list = id.split('.');
+                        if (list.length > 1)
+                            return list.splice(1, list.length).join('.');
+                        else
+                            return id;
+                    };
+                    //get folder and id via msgref
+                    var ids = data.msgref.split('/'),
+                        id = ids.pop(),
+                        folder = ids.join('/');
+                    //set parent
+                    data.parent = {
+                        id: id,
+                        folder: folder,
+                        folder_id: folder,
+                        adjustid: adjust
+                    };
+                }
                 self.append(view.draw(data).css('padding', 0));
             });
         },
