@@ -319,7 +319,7 @@ define('io.ox/mail/api',
             }
         }
     });
-    
+
     /**
      * updates the view used for get requests, used on mail settings save to be responsive
      */
