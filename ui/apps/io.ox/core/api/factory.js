@@ -386,6 +386,8 @@ define('io.ox/core/api/factory',
                 api.trigger('beforedelete', ids);
                 // remove from caches first
                 return api.updateCaches(ids).pipe(function () {
+                    // trigger visual refresh
+                    api.trigger('refresh:all:local');
                     // delete on server?
                     if (local !== true) {
                         return http.PUT({
@@ -404,8 +406,6 @@ define('io.ox/core/api/factory',
                         })
                         .done(done);
                     } else {
-                        // trigger visual refresh
-                        api.trigger('refresh:all:local');
                         return done();
                     }
                 });
