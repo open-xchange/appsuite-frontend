@@ -226,6 +226,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             pendingPing = false;
             def.resolve(api);
             if (disconnected) {
+
                 disconnected = false;
                 api.trigger("open");
                 if (api.debug) {
@@ -286,13 +287,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
                     } else {
-                        subSocket.close();
-                        if (!disconnected) {
-                            if (api.debug) {
-                                console.log("Triggering offline, because I got a session expired error");
-                            }
-                            goOffline();
+                        if (api.debug) {
+                            console.log("Closing socket, because I got a session expired error");
                         }
+
+                        subSocket.close();
                         disconnected = true;
 
                         ox.trigger('relogin:required');
@@ -343,6 +342,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
         shouldReconnect = true;
         disconnected = true;
+        if (api.debug) {
+            console.log("Closing for reconnect");
+        }
         subSocket.close();
     }
 
