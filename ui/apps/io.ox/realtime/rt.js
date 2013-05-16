@@ -248,6 +248,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
 
         request.onMessage = function (response) {
+            if (api.debug) {
+                console.log("On message called: ", response);
+            }
             request.requestCount = 0;
             if (response.status !== 200 && response.status !== 408) { // 200 = OK, 208 == TIMEOUT, which is expected
                 if (!disconnected) {
