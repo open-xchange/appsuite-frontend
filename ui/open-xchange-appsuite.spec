@@ -114,7 +114,7 @@ fi
 
 %postun manifest
 if [ "$1" = 0 ]; then
-    rm -r /opt/open-xchange/appsuite/apps/themes/*/less || true
+    rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
     UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
     [ -x $UPDATE ] && $UPDATE
