@@ -46,7 +46,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
             api.getRules('vacation').done(function (data) {
                 var defaultNotice = {
                     days: "7",
-                    internal_id: gt('vacation'),
+                    internal_id: 'vacation',
                     subject: "",
                     text: ""
                 },
