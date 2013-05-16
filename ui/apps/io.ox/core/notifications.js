@@ -356,7 +356,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         active = true;
                         clear();
                         timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
-                    }, 0);
+                    }, 100);
                 }
             };
         }())

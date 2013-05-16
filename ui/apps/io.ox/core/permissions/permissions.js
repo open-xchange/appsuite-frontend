@@ -213,6 +213,7 @@ define('io.ox/core/permissions/permissions',
             );
             if (baton.admin) {
                 node.append(
+                    addRemoveButton(baton.model.get('entity')),
                     $('<div class="readwrite">').append(
                         // folder rights
                         gt('Folder permissions'), $.txt(_.noI18n(': ')),
@@ -225,8 +226,7 @@ define('io.ox/core/permissions/permissions',
                         // admin
                         gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
                             addDropdown('admin', baton), $.txt(_.noI18n('. '))
-                    ),
-                    addRemoveButton(baton.model.get('entity'))
+                    )
                 );
             } else {
                 node.append(
@@ -306,9 +306,7 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-                    var dialog = new dialogs.ModalDialog({
-                        width: 800
-                    })
+                    var dialog = new dialogs.ModalDialog()
                     .header(
                         api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
