@@ -153,7 +153,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            set(data, language);
+                            // we pass forceLanguage (might be undefined); fallback is data.locale
+                            set(data, forceLanguage);
                             if (store) {
                                 that.store().done(function () { def.resolve(data); });
                             } else {
