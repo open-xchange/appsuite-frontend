@@ -260,9 +260,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     goOffline();
                     subSocket.close();
                 }
+                if (api.debug) {
+                    console.log("Got an error status, discarding message", response.status);
+                }
                 return;
             }
             var message = response.responseBody;
+            if (api.debug) {
+                console.log("Message received", response.responseBody);
+            }
             var json = {};
             try {
                 json = $.parseJSON(message);
