@@ -145,7 +145,7 @@ define('io.ox/files/icons/perspective',
             if (mode) {
                 img = $('<img>', {
                     alt: '',
-                    'data-src': api.getUrl(file, mode, options)
+                    'data-src': api.getUrl(file, mode, options) + (file.last_modified ? '&' + file.last_modified : '')
                 })
                 .addClass('img-polaroid lazy')
                 .one({
