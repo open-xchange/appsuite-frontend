@@ -216,6 +216,13 @@ define('io.ox/calendar/edit/main',
                         baton.callbacks.extendDescription = app.extendDescription;
                         app.view = self.view = new MainView(baton);
 
+                        //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
+                        if (_.browser.IE === undefined || _.browser.IE > 9) {
+                            self.model.on('create:start update:start', function () {
+                                self.getWindow().busy();
+                            });
+                        }
+
                         self.setTitle(gt('Create appointment'));
 
                         // create app window
