@@ -75,8 +75,7 @@ define("io.ox/contacts/main",
 
         // grid
         grid = new VGrid(gridContainer, {
-            settings: settings,
-            secondToolbar: true
+            settings: settings
         });
 
         // add template

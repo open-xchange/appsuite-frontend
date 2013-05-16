@@ -107,7 +107,6 @@ define('io.ox/mail/main',
             max: settings.get('threadMax', 500),
             selectFirst: false,
             threadView: settings.get('threadView') !== 'off',
-            secondToolbar: true,
             //adjust for custom default sort
             sort: settings.get('sort', 'thread'),
             unread: settings.get('unread', false),
