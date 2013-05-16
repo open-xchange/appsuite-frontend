@@ -412,7 +412,6 @@ $(window).load(function () {
         function updateServerConfig(data) {
             ox.serverConfig = data || {};
             capabilities.reset();
-            manifests.reset();
         }
 
         function setFallbackConfig() {
