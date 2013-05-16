@@ -175,7 +175,10 @@ define('io.ox/mail/accounts/view-form',
             },
 
             onFolderSelect: function (e) {
+
                 var self = this;
+                self.dialog.getPopup().hide();
+
                 if (self.model.get('id') !== 0) {
                     var property = $(e.currentTarget).prev().attr('data-property'),
                         id = self.model.get(property),
@@ -205,6 +208,7 @@ define('io.ox/mail/accounts/view-form',
                             tree.destroy().done(function () {
                                 tree = dialog = null;
                             });
+                            self.dialog.getPopup().show();
                         });
                     });
                 }
