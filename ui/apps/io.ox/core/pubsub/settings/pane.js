@@ -260,8 +260,8 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled')).save().fail(function (res) {
-                model.set('enabled', !model.get('enabled'));
+            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function (res) {
+                model.set('enabled', !model.get('enabled'), {validate: true});
             });
             this.render();
         },
@@ -335,7 +335,7 @@ define('io.ox/core/pubsub/settings/pane',
             if (filteredIndex === 0) {
                 node.prepend(item);
             } else {
-                node.children('li:nth-child(' + options.index + ')').after(item);
+                node.children('li:nth-child(' + collection.indexOf(model) + ')').after(item);
             }
         });
 

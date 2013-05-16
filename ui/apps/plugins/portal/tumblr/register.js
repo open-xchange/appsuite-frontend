@@ -248,7 +248,7 @@ define('plugins/portal/tumblr/register',
                 model.set({
                     title: description,
                     props: { url: url, description: description }
-                });
+                }, {validate: true});
                 model.unset('candidate');
             });
 

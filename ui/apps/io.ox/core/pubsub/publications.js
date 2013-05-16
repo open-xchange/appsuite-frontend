@@ -111,12 +111,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     self.model.fetch().done(function (model, collection) {
                         var publications = pubsub.publications();
                         //update the model-(collection)
-                        //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "publications.update(model)" call
-                        if (self.model.collection) {
-                            self.model.set(model);
-                        } else {
-                            publications.add(model);
-                        }
+                        publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection

@@ -84,12 +84,7 @@ define('io.ox/core/pubsub/subscriptions',
                             }).then(function (model, collection) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
-                                //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "subscriptions.update(model)" call
-                                if (self.model.collection) {
-                                    self.model.set(model);
-                                } else {
-                                    subscriptions.add(model);
-                                }
+                                subscriptions.add(model, {merge: true});
                             }).then(function () {
                                 return app.folderView.idle().repaint();
                             }).done(function () {

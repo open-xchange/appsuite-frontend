@@ -49,7 +49,7 @@ define('plugins/notifications/mail/register',
         // fetch plain text mail; don't use cache
         api.get(obj, false).done(function (data) {
             //update model
-            model.set(data);
+            model.set(data, {validate: true});
             //draw
             drawItem(node, data);
         }).fail(function () {
@@ -136,7 +136,7 @@ define('plugins/notifications/mail/register',
             require('io.ox/core/notifications').hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 // go to inbox
-                this.folder.set(api.getDefaultFolder());
+                this.folder.set(api.getDefaultFolder(), {validate: true});
             });
         },
 

@@ -45,9 +45,9 @@ define('io.ox/tasks/settings/pane',
         render: function () {
             var self = this;
             //change attributetypes to string otherwise settings would be empty...
-            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString());
-            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString());
-            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString());
+            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString(), {validate: true});
+            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString(), {validate: true});
+            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString(), {validate: true});
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
@@ -77,9 +77,9 @@ define('io.ox/tasks/settings/pane',
             //change to correct attributetypes before saving
             function makeBool(attribute) {
                 if (tasksViewSettings.model.get(attribute) === "true" || tasksViewSettings.model.get(attribute) === true) {
-                    tasksViewSettings.model.set(attribute, true);
+                    tasksViewSettings.model.set(attribute, true, {validate: true});
                 } else {
-                    tasksViewSettings.model.set(attribute, false);
+                    tasksViewSettings.model.set(attribute, false, {validate: true});
                 }
             }
             makeBool('notifyAcceptedDeclinedAsCreator');

@@ -2515,6 +2515,29 @@ define.async('io.ox/office/tk/utils',
 
     } : $.noop;
 
+    /**
+     * Executes the passed callback function and writes a message to the
+     * browser console containing the execution time of the callback.
+     *
+     * @param {String} message
+     *  The message that will be printed to the browser console. The execution
+     *  time will be appended to that message.
+     *
+     * @param {Function} callback
+     *  The callback function to be executed.
+     *
+     * @param {Object} [context]
+     *  The context to be bound to the callback function.
+     */
+    Utils.takeTime = function (message, callback, context) {
+        var t0 = new Date().getTime();
+        try {
+            return callback.call(context);
+        } finally {
+            Utils.log(message + ' (' + (new Date().getTime() - t0) + 'ms)');
+        }
+    };
+
     // global initialization ==================================================
 
     // deferred initialization of class members according to current language

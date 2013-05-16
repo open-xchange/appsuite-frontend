@@ -509,13 +509,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.controls.checkbox.on("change", function () {
                     if (self.controls.checkbox.is(":checked")) {
                         if (self.lastConfiguration) {
-                            self.model.set(self.lastConfiguration);
+                            self.model.set(self.lastConfiguration, {validate: true});
                         } else {
                             self.model.set({
                                 recurrence_type: RECURRENCE_TYPES.WEEKLY,
                                 interval: self.sentences.weekly.interval,
                                 days: self.sentences.weekly.days
-                            });
+                            }, {validate: true});
                         }
                         self.showMore();
                     } else {
@@ -710,14 +710,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             recurrence_type: RECURRENCE_TYPES.DAILY,
                             interval: this.sentences.daily.interval
                         };
-                        this.model.set(daily);
+                        this.model.set(daily, {validate: true});
                     } else if (this.controls.typeRadios.weekly.is(":checked")) {
                         var weekly =  {
                             recurrence_type: RECURRENCE_TYPES.WEEKLY,
                             interval: this.sentences.weekly.interval,
                             days: this.sentences.weekly.days
                         };
-                        this.model.set(weekly);
+                        this.model.set(weekly, {validate: true});
                     } else if (this.controls.typeRadios.monthly.is(":checked")) {
                         var monthly =  {
                             recurrence_type: RECURRENCE_TYPES.MONTHLY
@@ -736,7 +736,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                 interval: this.choice.interval
                             });
                         }
-                        this.model.set(monthly);
+                        this.model.set(monthly, {validate: true});
                     } else if (this.controls.typeRadios.yearly.is(":checked")) {
 
                         var yearly =  {
@@ -758,7 +758,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             });
                         }
 
-                        this.model.set(yearly);
+                        this.model.set(yearly, {validate: true});
                     }
                     if (this.endsChoice) {
                         switch (this.endsChoice.id) {
@@ -766,13 +766,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             // remove this when backend bug 24870 is fixed
                             this.model.set({
                                 until: null
-                            });
+                            }, {validate: true});
                             // ----
                             break;
                         case "date":
                             this.model.set({
                                 until: this.endsChoice.until
-                            });
+                            }, {validate: true});
                             break;
                         case "after":
                             if (this.endsChoice.occurrences <= 0) {
@@ -780,13 +780,13 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             }
                             this.model.set({
                                 occurrences: this.endsChoice.occurrences
-                            });
+                            }, {validate: true});
                             break;
                         }
                     }
                 } else {
                     // No Recurrence
-                    this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE});
+                    this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE}, {validate: true});
                 }
 
                 this.updatingModel = false;

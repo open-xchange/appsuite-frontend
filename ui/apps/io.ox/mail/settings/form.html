@@ -1,136 +1,136 @@
 <part id='io.ox/mail/settings'>
-	<extension id='title'>
-		<div>
-			<div class="clear-title">{{=it.strings.TITLE_MAIL}}</div>
-			<div class="settings sectiondelimiter"></div>
-		</div>
-	</extension>
-	<extension id='common'>
-		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_COMMON}}</legend>
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox expertmode">{{=it.strings.PERMANENT_REMOVE_MAILS}}
-					<input type="checkbox" data-property="removeDeletedPermanently">
-				</label>
-				<label class="checkbox expertmode">{{=it.strings.COLLECT_CONTACTS_SENDING}}
-					<input type="checkbox" data-property="contactCollectOnMailTransport">
-				</label>
-				<label class="checkbox expertmode" >{{=it.strings.COLLECT_CONTACTS_READING}}
-					<input type="checkbox" data-property="contactCollectOnMailAccess">
-				</label>
-				<label class="checkbox expertmode" >{{=it.strings.USE_FIXED_WIDTH_FONT}}
-					<input type="checkbox" data-property="useFixedWidthFont">
-				</label>
-			</div>
-		</div>
-	</extension>
-	<extension id='compose'>
-		<div class="settings sectiondelimiter expertmode"></div>
-		<div class="form-horizontal">
-			<div class="control-group">
-				<label class="control-label">{{=it.strings.TITLE_COMPOSE}}</label>
-				<div class="controls">
-					<label class="checkbox">{{=it.strings.APPEND_VCARD}}
-						<input type="checkbox" data-property="appendVcard">
-					</label>
-					<label class="checkbox expertmode">{{=it.strings.INSERT_ORG_TO_REPLY}}
-						<input type="checkbox" data-property="appendMailTextOnReply">
-					</label>
-				</div>
-			</div>
-			<div class="settings sectiondelimiter"></div>
-			<div class="control-group">
-				<label class="control-label">{{=it.strings.TITLE_THREADVIEW}}</label>
-				<div class="controls">
-					<label class="radio">{{=it.strings.THREADVIEW_INBOX}}
-						<input type="radio" name="threadView" data-property="threadView" value="inbox">
-					</label>
-					<label class="radio">{{=it.strings.THREADVIEW_ON}}
-						<input type="radio" name="threadView" data-property="threadView" value="on">
-					</label>
-					<label class="radio">{{=it.strings.THREADVIEW_OFF}}
-						<input type="radio" name="threadView" data-property="threadView" value="off">
-					</label>
-				</div>
-			</div>
-			<div class="settings sectiondelimiter expertmode"></div>
-			<div class="control-group expertmode">
-				<label class="control-label">{{=it.strings.FORWARD_EMAIL_AS}}</label>
-				<div class="controls">
-					<label class="radio">{{=it.strings.INLINE}}
-						<input type="radio" name="forwardMessageAs" data-property="forwardMessageAs" value="Inline">
-					</label>
-					<label class="radio">{{=it.strings.ATTACHEMENT}}
-						<input type="radio" name="forwardMessageAs" data-property="forwardMessageAs" value="Attachment">
-					</label>
-				</div>
-			</div>
-			<div class="settings sectiondelimiter"></div>
-			<div class="control-group">
-				<label class="control-label">{{=it.strings.FORMAT_AS}}</label>
-				<div class="controls">
-					<label class="radio">{{=it.strings.HTML}}
-						<input type="radio" name="messageFormat" data-property="messageFormat" value="html">
-					</label>
-					<label class="radio">{{=it.strings.PLAIN}}
-						<input type="radio" name="messageFormat" data-property="messageFormat" value="text">
-					</label>
-					<label class="radio">{{=it.strings.HTML_AND_PLAIN}}
-						<input type="radio" name="messageFormat" data-property="messageFormat" value="alternative">
-					</label>
-				</div>
-			</div>
-			<div class="settings sectiondelimiter"></div>
-			<div class="control-group form-inline expertmode">
-				<div class="controls">
-					<span class="text">{{=it.strings.LINEWRAP}} </span>
-					<input type="text" data-property="lineWrapAfter" class="span1">
-					<span class="text"> {{=it.strings.CHARACTERS}}</span>
-				</div>
-			</div>
-			<div class="control-group">
-				<label for="label_455" class="control-label">{{=it.strings.DEFAULT_SENDER}}</label>
-				<div class="controls">
-					<label class="select">
-						<select data-property="defaultSendAddress" id="label_455" class="input-xlarge">
-							{{~it.optionsAllAccounts :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
-						</select>
-					</label>
-				</div>
-			</div>
-			<div class="control-group expertmode">
-				<label for="label_456" class="control-label">{{=it.strings.AUTO_SAVE}}</label>
-				<div class="controls">
-					<label class="select">
-						<select data-property="autoSaveDraftsAfter" id="label_456" class="input-xlarge">
-							{{~it.optionsAutoSaveMinutes :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
-						</select>
-					</label>
-				</div>
-			</div>
-			<div class="settings sectiondelimiter"></div>
-		</div>
-	</extension>
-	<extension id='display'>
-		<legend class="sectiontitle expertmode">{{=it.strings.TITLE_DISPLAY}}</legend>
-		<div class="control-group expertmode" style="">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">{{=it.strings.ALLOW_HTML}}
-					<input type="checkbox" data-property="allowHtmlMessages">
-				</label>
-				<label class="checkbox">{{=it.strings.ALLOW_PRE}}
-					<input type="checkbox" data-property="allowHtmlImages">
-				</label>
-				<label class="checkbox">{{=it.strings.DISPLAY_EMOTICONS}}
-					<input type="checkbox" data-property="displayEmoticons">
-				</label>
-				<label class="checkbox">{{=it.strings.COLOR_QUOTED}}
-					<input type="checkbox" data-property="isColorQuoted">
-				</label>
-			</div>
-		</div>
-		<div class="settings sectiondelimiter expertmode"></div>
-	</extension>
+    <extension id='title'>
+        <div>
+            <div class="clear-title">{{=it.strings.TITLE_MAIL}}</div>
+            <div class="settings sectiondelimiter"></div>
+        </div>
+    </extension>
+    <extension id='common'>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_COMMON}}</legend>
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox expertmode">{{=it.strings.PERMANENT_REMOVE_MAILS}}
+                    <input type="checkbox" data-property="removeDeletedPermanently">
+                </label>
+                <label class="checkbox expertmode">{{=it.strings.COLLECT_CONTACTS_SENDING}}
+                    <input type="checkbox" data-property="contactCollectOnMailTransport">
+                </label>
+                <label class="checkbox expertmode" >{{=it.strings.COLLECT_CONTACTS_READING}}
+                    <input type="checkbox" data-property="contactCollectOnMailAccess">
+                </label>
+                <label class="checkbox expertmode" >{{=it.strings.USE_FIXED_WIDTH_FONT}}
+                    <input type="checkbox" data-property="useFixedWidthFont">
+                </label>
+            </div>
+        </div>
+    </extension>
+    <extension id='compose'>
+        <div class="settings sectiondelimiter expertmode"></div>
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">{{=it.strings.TITLE_COMPOSE}}</label>
+                <div class="controls">
+                    <label class="checkbox">{{=it.strings.APPEND_VCARD}}
+                        <input type="checkbox" data-property="appendVcard">
+                    </label>
+                    <label class="checkbox expertmode">{{=it.strings.INSERT_ORG_TO_REPLY}}
+                        <input type="checkbox" data-property="appendMailTextOnReply">
+                    </label>
+                </div>
+            </div>
+            <div class="settings sectiondelimiter"></div>
+            <div class="control-group">
+                <label class="control-label">{{=it.strings.TITLE_THREADVIEW}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.strings.THREADVIEW_INBOX}}
+                        <input type="radio" name="threadView" data-property="threadView" value="inbox">
+                    </label>
+                    <label class="radio">{{=it.strings.THREADVIEW_ON}}
+                        <input type="radio" name="threadView" data-property="threadView" value="on">
+                    </label>
+                    <label class="radio">{{=it.strings.THREADVIEW_OFF}}
+                        <input type="radio" name="threadView" data-property="threadView" value="off">
+                    </label>
+                </div>
+            </div>
+            <div class="settings sectiondelimiter expertmode"></div>
+            <div class="control-group expertmode">
+                <label class="control-label">{{=it.strings.FORWARD_EMAIL_AS}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.strings.INLINE}}
+                        <input type="radio" name="forwardMessageAs" data-property="forwardMessageAs" value="Inline">
+                    </label>
+                    <label class="radio">{{=it.strings.ATTACHEMENT}}
+                        <input type="radio" name="forwardMessageAs" data-property="forwardMessageAs" value="Attachment">
+                    </label>
+                </div>
+            </div>
+            <div class="settings sectiondelimiter"></div>
+            <div class="control-group">
+                <label class="control-label">{{=it.strings.FORMAT_AS}}</label>
+                <div class="controls">
+                    <label class="radio">{{=it.strings.HTML}}
+                        <input type="radio" name="messageFormat" data-property="messageFormat" value="html">
+                    </label>
+                    <label class="radio">{{=it.strings.PLAIN}}
+                        <input type="radio" name="messageFormat" data-property="messageFormat" value="text">
+                    </label>
+                    <label class="radio">{{=it.strings.HTML_AND_PLAIN}}
+                        <input type="radio" name="messageFormat" data-property="messageFormat" value="alternative">
+                    </label>
+                </div>
+            </div>
+            <div class="settings sectiondelimiter"></div>
+            <div class="control-group form-inline expertmode">
+                <div class="controls">
+                    <span class="text">{{=it.strings.LINEWRAP}} </span>
+                    <input type="text" data-property="lineWrapAfter" class="span1">
+                    <span class="text"> {{=it.strings.CHARACTERS}}</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="label_455" class="control-label">{{=it.strings.DEFAULT_SENDER}}</label>
+                <div class="controls">
+                    <label class="select">
+                        <select data-property="defaultSendAddress" id="label_455" class="input-xlarge">
+                            {{~it.optionsAllAccounts :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="control-group expertmode">
+                <label for="label_456" class="control-label">{{=it.strings.AUTO_SAVE}}</label>
+                <div class="controls">
+                    <label class="select">
+                        <select data-property="autoSaveDraftsAfter" id="label_456" class="input-xlarge">
+                            {{~it.optionsAutoSaveMinutes :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="settings sectiondelimiter"></div>
+        </div>
+    </extension>
+    <extension id='display'>
+        <legend class="sectiontitle expertmode">{{=it.strings.TITLE_DISPLAY}}</legend>
+        <div class="control-group expertmode" style="">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">{{=it.strings.ALLOW_HTML}}
+                    <input type="checkbox" data-property="allowHtmlMessages">
+                </label>
+                <label class="checkbox">{{=it.strings.ALLOW_PRE}}
+                    <input type="checkbox" data-property="allowHtmlImages">
+                </label>
+                <label class="checkbox">{{=it.strings.DISPLAY_EMOTICONS}}
+                    <input type="checkbox" data-property="displayEmoticons">
+                </label>
+                <label class="checkbox">{{=it.strings.COLOR_QUOTED}}
+                    <input type="checkbox" data-property="isColorQuoted">
+                </label>
+            </div>
+        </div>
+        <div class="settings sectiondelimiter expertmode"></div>
+    </extension>
 </part>

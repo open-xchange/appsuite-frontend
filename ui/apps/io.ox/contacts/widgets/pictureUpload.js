@@ -30,7 +30,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             resetImage: function (e) {
                 e.stopImmediatePropagation();
-                this.model.set("image1", '');
+                this.model.set("image1", '', {validate: true});
                 this.closeBtn.hide();
                 this.setImageURL();
                 this.fileInput.val('');
@@ -49,7 +49,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 } else {
                     fileData = input.files[0];
                 }
-                this.model.set("pictureFile", fileData);
+                this.model.set("pictureFile", fileData, {validate: true});
                 this.model.unset("image1");
             },
 
@@ -95,7 +95,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                     // temporary support for data-url images
                     if (this.model.get('image1') && this.model.get('image1_content_type')) {
                         dataUrl = 'data:' + this.model.get('image1_content_type') + ';base64,' + this.model.get('image1');
-                        this.model.set('image1_url', dataUrl, { silent: true });
+                        this.model.set('image1_url', dataUrl, { silent: true, validate: true });
                         hasImage = true;
                     }
                 }

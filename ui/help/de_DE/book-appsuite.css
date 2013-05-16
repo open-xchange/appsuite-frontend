@@ -9,7 +9,6 @@ div {border: solid 1px #f00;}
 */
 
 /* Colors adapted analogue to OX App Suite UI. H.Petry 2013-04-17 */
-/* Changed link color, nav colors, header colors A.Faber 2013-04-19 */
 
 /*================================================== tag redefinitionen ============================================*/
 
@@ -56,8 +55,7 @@ div {
 h1, h2, h3, h4, h5 {
 	font-weight: bold;
 	/*color	:	#323A9E;*/
-        /*color: #888888;*/
-	color: #2e2e2e
+        color: #888888;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	padding:0px;
 }
@@ -95,8 +93,7 @@ a:link, a:hover, a:visited, a:active, a:focus {
 	/*text-decoration: underline;*/
 	/*color: #e87300;*/
         /*color: #777777;*/
-        /*color:color: #111111;*/
-	color: #39a9e1;
+        color: #111111;
 
 }
 
@@ -162,15 +159,13 @@ p {
 
 .navheader {
   /*background-color: #E1E4EB;*/
-  /*background-color: #888888;*/
-  background-color: #2e2e2e;
+  background-color: #888888;
 }
 
 .navfooter {
   /*background-color: #E1E4EB;*/
   /*background-color: #333333;*/
-  /*background-color: #888888;*/
-  background-color: #b5aeae;
+  background-color: #888888;
 }
 
 .book,.chapter {
@@ -217,7 +212,7 @@ div.navheader th {
 /* Table data within navfooter */
 div.navfooter td {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-        /*color: #DDDDDD;*/
+        color: #DDDDDD;
 }
 
 .figure {

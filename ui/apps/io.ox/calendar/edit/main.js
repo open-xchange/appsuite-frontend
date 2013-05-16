@@ -156,7 +156,7 @@ define('io.ox/calendar/edit/main',
                         if (options.action === 'appointment') {
                             // ensure to create a change exception
                             self.model.touch('recurrence_position');
-                            self.model.set('recurrence_type', 0);
+                            self.model.set('recurrence_type', 0, {validate: true});
                         }
 
                         if (options.action === 'series') {
@@ -181,7 +181,7 @@ define('io.ox/calendar/edit/main',
                         }
                         // init alarm
                         if (!self.model.get('alarm')) {
-                            self.model.set('alarm', -1, {silent: true});
+                            self.model.set('alarm', -1, {silent: true, validate: true});
                         }
 
                         self.considerSaved = true;
@@ -216,6 +216,13 @@ define('io.ox/calendar/edit/main',
                         baton.callbacks.extendDescription = app.extendDescription;
                         app.view = self.view = new MainView(baton);
 
+                        //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
+                        if (_.browser.IE === undefined || _.browser.IE > 9) {
+                            self.model.on('create:start update:start', function () {
+                                self.getWindow().busy();
+                            });
+                        }
+
                         self.setTitle(gt('Create appointment'));
 
                         // create app window
@@ -237,9 +244,9 @@ define('io.ox/calendar/edit/main',
                             });
                         }
 
-                        self.model.set('alarm', settings.get('defaultReminder', 15));
+                        self.model.set('alarm', settings.get('defaultReminder', 15), {validate: true});
                         if (self.model.get('full_time') === true) {
-                            self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1);
+                            self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1, {validate: true});
                         }
                         self.considerSaved = true;
                         self.model.on('change', function () {

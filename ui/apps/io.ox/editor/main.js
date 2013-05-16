@@ -177,8 +177,8 @@ define("io.ox/editor/main",
                 filename += '.txt';
             }
             // make filename visible to user
-            model.set('filename', filename);
-            model.set('title', filename);
+            model.set('filename', filename, {validate: true});
+            model.set('title', filename, {validate: true});
             container.find('.title').val(filename);
             // get all model attributes
             json = model.get();
