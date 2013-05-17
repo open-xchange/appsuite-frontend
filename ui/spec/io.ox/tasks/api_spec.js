@@ -15,8 +15,37 @@ define(['shared/examples/for/api',
 
     describe('tasks API', function () {
         var options = {
-            markedPending: {}
+            markedPending: {},
+            testData: {
+                "status": 1,
+                "priority": 2,
+                "percent_completed": 0,
+                "folder_id": 29,
+                "recurrence_type": 0,
+                "private_flag": false,
+                "notification": true,
+                "title": "Test Title"
+            }
         }
         sharedExamplesFor(api, options);
+
+        describe('creating a task', function () {
+            beforeEach(function () {
+                this.server = sinon.fakeServer.create();
+                this.server.respondWith('PUT', /api\/tasks\?action=new/, function (xhr) {
+                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"timestamp":1368791630910,"data":{"id":45}}');
+                });
+            });
+            afterEach(function () {
+                this.server.restore();
+            });
+            it('should add a new task', function () {
+                var result = api.create(options.testData);
+                expect(result).toBeDeferred();
+                expect(result.state()).toEqual('pending');
+                this.server.respond();
+                expect(result.state()).toEqual('resolved');
+            });
+        });
     });
 });
