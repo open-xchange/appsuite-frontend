@@ -247,6 +247,9 @@ define('io.ox/tasks/api',
         task.participants = repairParticipants(task.participants);
         var attachmentHandlingNeeded = task.tempAttachmentIndicator;
         delete task.tempAttachmentIndicator;
+        if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
+            delete task.alarm;    //leaving it in would throw a backend error
+        }
         return http.PUT({
             module: 'tasks',
             params: { action: 'new', timezone: 'UTC' },
