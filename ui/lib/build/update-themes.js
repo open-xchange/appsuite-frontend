@@ -11,8 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-var defs1 = readFile('apps/themes/definitions.less');
-var style1 = readFile('apps/themes/style.less');
+var defs1 = '@import "apps/themes/definitions.less";\n';
+var style1 = '@import "apps/themes/style.less";\n';
 
 var themes = new java.io.File('apps/themes').listFiles();
 for (var i = 0; i < themes.length; i++) {
@@ -22,9 +22,9 @@ for (var i = 0; i < themes.length; i++) {
     defs2 = subDir('definitions.less');
     if (!defs2.exists()) continue;
     print('Processing', dir);
-    var defs = defs1 + readFile(defs2, 'UTF-8');
+    var defs = defs1 + '@import "' + defs2 + '";\n';
     compileLess(defs + style1, subDir('less/common.css'));
-    compileLess(defs + readFile(subDir('style.less'), 'UTF-8'),
+    compileLess(defs + '@import "' + subDir('style.less') + '";\n',
                 subDir('less/style.css'));
     recurse(defs, subDir, new java.io.File('apps'));
 }
@@ -38,14 +38,14 @@ function recurse(defs, subDir, parent) {
         } else {
             if (name.slice(-5) !== '.less') continue;
             if (name.slice(0, 12) === 'apps/themes/') continue;
-            compileLess(defs + readFile(file, 'UTF-8'),
+            compileLess(defs + '@import "' + file + '";\n',
                         subDir('less' + name.slice(4)));
         }
     }
 }
 
 function compileLess(input, outputFile) {
-    new less.Parser().parse(input, function (e, css) {
+    new less.Parser({ relativeUrls: true }).parse(input, function (e, css) {
         if (e) return error(e);
         outputFile.getParentFile().mkdirs();
         writeFile(outputFile, css.toCSS({ compress: true }));
@@ -62,17 +62,16 @@ function writeFile(filename, content) {
 // The rest is adapted from rhino.js of LessCSS
 
 function loadStyleSheet(sheet, callback, reload, remaining) {
-    var endOfPath = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')),
-        sheetName = name.slice(0, endOfPath + 1) + sheet.href,
-        contents = sheet.contents || {},
-        input = readFile(sheetName);
+    var sheetName = sheet.href,
+        dir = sheetName.replace(/[\w\.-]+$/, ''),
+        input = readFile(sheetName, 'UTF-8');
+
+    if (!sheet.contents) sheet.contents = {};
+    sheet.contents[sheetName] = input;
+    sheet.paths = [dir].concat(sheet.paths);
+    if (sheet.relativeUrls) sheet.rootpath += dir;
         
-    contents[sheetName] = input;
-        
-    var parser = new less.Parser({
-        paths: [sheet.href.replace(/[\w\.-]+$/, '')],
-        contents: contents
-    });
+    var parser = new less.Parser(sheet);
     parser.parse(input, function (e, root) {
         if (e) {
             return error(e, sheetName);
