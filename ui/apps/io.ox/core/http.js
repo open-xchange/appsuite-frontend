@@ -624,11 +624,15 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 };
             }
 
-            var ajax = $.ajax(ajaxOptions);
+            var t0, ajax;
+
+            t0 = _.now();
+            ajax = $.ajax(ajaxOptions);
 
             // add an 'abort()' method to the Deferred and all Promises it creates
             var abortFunc = function () { ajax.abort(); },
                 promiseFunc = _.bind(r.def.promise, r.def);
+
             _.extend(r.def, {
                 abort: abortFunc,
                 promise: function () {
@@ -652,6 +656,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     }
                 })
                 .done(function (response) {
+                    // slow?
+                    var took = _.now() - t0;
+                    if (took > 1000) {
+                        log.add({ error: 'Long request: ' + (Math.round(took / 100) / 10) + 's', took: took }, r.o);
+                    }
                     // trigger event first since HTTP layer finishes work
                     that.trigger("stop done", r.xhr);
                     // process response
