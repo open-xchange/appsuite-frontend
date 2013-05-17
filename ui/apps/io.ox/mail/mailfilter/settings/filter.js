@@ -72,38 +72,26 @@ define('io.ox/mail/mailfilter/settings/filter', [
             api.getRules().done(function (data) {
 
                 if (_.isEmpty(data)) {
-                    console.log('no rules available');
-//                    var autoForwardData = {},
-//                        ForwardEdit,
-//                        autoForward;
-//                    autoForwardData.userMainEmail = userMainEmail;
-//                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
-//
-//                    autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
-//
-//                    $node.append(autoForward.render().$el);
-//
-//                    deferred.resolve(autoForward.model);
+
+//                    no filters
 
                 } else {
-                    console.log('these are the rules');
                     var mailFilter = {},
                         MailfilterEdit,
-                        collection = factory.createCollection(data);
 
-//                        autoForward;
-//
-//                    mailfilterData.id = data[0].id;
-//                    autoForwardData.active = data[0].active;
-//
-//                    _(data[0].actioncmds).each(function (value) {
-//                        if (value.id === 'redirect') {
-//                            autoForwardData.forwardmail = value.to;
-//                        }
-//                    });
-//                    autoForwardData.userMainEmail = userMainEmail;
-//                    MailfilterEdit = ViewForm.protectedMethods.createMailfilterEdit('io.ox/core/mailfilter');
+                        collection = _.reject(data, function (filter) {
+                            if (_.isEmpty(filter.flags)) {
+                                return false;
+                            }
+                            var test = _.reject(filter.flags, function (flag) {
+                                return flag === 'vacation' || 'autoforward';
+                            });
 
+                            return _.isEmpty(test);
+
+                        });
+
+                    collection = factory.createCollection(collection);
 
                     var AccountSelectView = Backbone.View.extend({
 
@@ -125,12 +113,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             return self;
                         },
                         events: {
-                            'click .close': 'onClose',
                             'click .deletable-item': 'onSelect'
                         },
-                        onClose: function () {
-//                            removeSelectedItem({ id: this.model.get('id'), accountType: this.model.get('accountType')});
-                        },
+
                         onSelect: function () {
                             this.$el.parent().find('div[selected="selected"]').attr('selected', null);
                             this.$el.find('.deletable-item').attr('selected', 'selected');
@@ -160,90 +145,36 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 );
                             });
 
-                            // Enhance Add... options
-                            $dropDown = this.$el.find('.dropdown-menu');
-
-                            _(api.submodules).chain()
-                            .select(function (submodule) {
-                                return !submodule.canAdd || submodule.canAdd.apply(this);
-                            })
-                            .each(function (submodule) {
-                                $dropDown.append(
-                                    $('<li>').append(
-                                        $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
-                                        .text(submodule.displayName)
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            // looks like oauth?
-                                            if ('reauthorize' in submodule) {
-                                                var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-                                                submodule.createInteractively(win);
-                                            } else {
-                                                submodule.createInteractively(e);
-                                            }
-                                        })
-                                    )
-                                );
-                            }).value();
-
                             return this;
                         },
 
                         events: {
                             'click [data-action="edit"]': 'onEdit',
-                            'click [data-action="delete"]': 'onDelete'
+                            'click [data-action="delete"]': 'onDelete',
+                            'click [data-action="add"]': 'onAdd'
                         },
 
                         onAdd: function (args) {
-                            require(["io.ox/settings/accounts/settings/createAccountDialog"], function (accountDialog) {
-                                accountDialog.createAccountInteractively(args);
-                            });
+                            console.log('add');
                         },
 
                         onEdit: function (args) {
-                            console.log(this.collection);
                             var selected = this.$el.find('[selected]');
                             args.data = {};
                             args.data.id = selected.data('id');
                             args.data.obj = this.collection.get(args.data.id);
 
-//                            args.data.accountType = selected.data('accounttype');
                             args.data.node = this.el;
                             createExtpointForSelectedAccount(args);
                         },
                         onDelete: function () {
-                            var $selected = this.$el.find('[selected]'),
-                                id = $selected.data('id'),
-                                account = {
-                                    id: id,
-                                    accountType: $selected.data('accounttype')
-                                };
-
-                            if (id !== 0) {
-//                                removeSelectedItem(account);
-                            } else {
-                                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                                    new dialogs.ModalDialog()
-                                        .text(gt('Your primary mail account can not be deleted.'))
-                                        .addPrimaryButton('ok', gt('Ok'))
-                                        .show();
-                                });
-                            }
-
+                            console.log('delete');
                         }
 
                     });
 
-
-//
                     mailFilter = new MailfilterEdit();
-//
-//                    if (data[0].active === true) {
-//                       // set active state
-//                    }
                     $node.append(mailFilter.render().$el);
-//
-//                    deferred.resolve(autoForward.model);
 
                 }
 

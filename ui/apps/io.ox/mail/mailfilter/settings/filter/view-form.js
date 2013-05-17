@@ -24,49 +24,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
 
     var staticStrings =  {
-            TITLE_ACCOUNT_SETTINGS: gt('Account Settings'),
-            ACCOUNT_NAME: gt('Account Name:'),
-            PERSONAL: gt('Your name:'),
-            EMAIL_ADDRESS: gt('E-Mail Address:'),
-            UNIFIED_MAIL: gt('Use Unified Mail for this account'),
-            SERVER_SETTINGS: gt('Server Settings'),
-            SERVER_TYPE: gt('Server Type:'),
-            SERVER_SSL: gt('Use SSL connection'),
-            SERVER_NAME: gt('Server Name:'),
-            SERVER_PORT: gt('Server Port:'),
-            LOGIN: gt('Login'),
-            PASSWORD: gt('Password'),
-            POP_3_REFRESH: gt('Refresh rate in minutes:'),
-            LEAVE_MESSAGES: gt('Leave messages on server'),
-            DELETING_ON_LOCAL: gt('Deleting messages on local storage also deletes them on server'),
-            TITLE_SERVER_OUT: gt('Outgoing Server Settings (SMTP)'),
-            SERVER_OUT_SSL: gt('Use SSL connection'),
-            SERVER_OUT_NAME: gt('Server Name:'),
-            SERVER_OUT_PORT: gt('Server Port:'),
-            LOGIN_AND_PASS: gt('Use Login and Password'),
-            LOGIN_OUT: gt('Login'),
-            PASSWORD_OUT: gt('Password'),
-            TITLE_FOLDER_SETTINGS: gt('Folder Settings'),
-            FOLDER_SEND: gt('Send folder'),
-            FOLDER_TRASH: gt('Trash folder'),
-            FOLDER_DRAFTS: gt('Drafts folder'),
-            FOLDER_SPAM: gt('Spam folder'),
-            SPAN_SELECT_FOLDER: gt('Select')
-        },
+
+    },
 
         POINT = 'io.ox/mailfilter/settings/filter/detail',
 
-        optionsServerType = _(['imap', 'pop3']).map(gt.noI18n),
-
-        optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
-
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
+            className: "io-ox-mailfilter-edit",
             _modelBinder: undefined,
             initialize: function (options) {
-
-                //check if login and mailaddress are synced
-                this.inSync = false;
 
                 Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
@@ -79,89 +46,80 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
             events: {
                 'save': 'onSave',
-                'click .folderselect': 'onFolderSelect'
+                'click [data-action="change-value"]': 'onChangeValue',
+                'change [data-action="change-text"]': 'onChangeText'
             },
             onSave: function () {
                 console.log('der SAVE');
-//                var self = this;
-//
-//                if (!self.model.isNew()) {
-//                    // updating account, since we save on close of the dialog,
-//                    // dialog is already gone, tell the user that something is happening
-//                    notifications.yell('info', gt('Updating account data. This might take a few seconds.'));
-//                }
-//                this.model.save()
-//                .done(function (data) {
-//                    self.dialog.close();
-//                    if (self.collection) {
-//                        self.collection.add([data]);
-//                    }
-//                    if (self.model.isNew()) {
-//                        self.succes();
-//                    } else {
-//                        notifications.yell('success', gt('Account updated'));
-//                    }
-//                })
-//                .fail(function (data) {
-//                    if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-//                        notifications.yell('error', gt('Login must not be empty.'));
-//                    } else if (data.code === "SVL-0002") {
-//                        notifications.yell('error',
-//                                           //#. %1$s the missing request parameter
-//                                           //#, c-format
-//                                           gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
-//                    } else {
-//                        notifications.yell('error', _.noI18n(data.error));
-//                    }
-//                });
             },
 
-            onFolderSelect: function (e) {
-                var self = this;
-                if (self.model.get('id') !== 0) {
-                    console.log($(e.currentTarget).parent().attr('data-property'));
-                    var property = $(e.currentTarget).prev().attr('data-property'),
-                        id = self.model.get(property),
-                        accountName = self.model.get('name');
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+            onChangeValue: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    value = node.attr('data-value') ? node.attr('data-value') : node.parent().attr('data-value');
+                console.log(value);
+            },
 
-                        var label = gt('Select folder'),
-                            dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton("select", label)
-                            .addButton("cancel", gt("Cancel"));
-                        dialog.getBody().append($('<div>').text('hier')).css({ height: '250px' });
-
-                        dialog.show(function () {
-                        })
-                        .done(function (action) {
-
-                        });
-                    });
-                }
+            onChangeText: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    value = node.val();
+                console.log(value);
             }
         });
+
+    var drawOptions = (function () {
+
+        var sizeValues = {
+            over: 'over',
+            under: 'under'
+        };
+
+        return function (activeValue, type) {
+            return $('<div class="action dropdown value">').append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(activeValue),
+                $('<ul class="dropdown-menu">').append(
+                    _(sizeValues).map(function (name, value) {
+                        return $('<li>').append(
+                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value }).append(
+                                $.txt(name)
+                            )
+                        );
+                    })
+                )
+            );
+        };
+    }());
+
+    var drawInputfield = (function () {
+        return function (activeValue) {
+            return $('<input>').attr({ type: 'text', 'data-action': 'change-text' }).val(activeValue);
+        };
+    }());
 
     ext.point(POINT + '/view').extend({
         index: 150,
         id: 'tests',
         draw: function (baton) {
 
-            console.log(baton);
-
-//            var testbutton = $('<a>').addClass('btn btn-small folderselect').text('testbutton');
-
-            var listTests = $('<ol class="widget-list">').text('tests'),
+            var listTests = $('<ol class="widget-list">'),
                 listActions = $('<ol class="widget-list">').text('actions');
 
             var appliedTest = baton.model.get('test').tests;
 
             _(appliedTest).each(function (test) {
-                listTests.append($('<li>').text(test.id));
+                if (test.id === 'size') {
+                    listTests.append($('<li>').addClass('filter-settings-view').text(test.id).append(drawOptions(test.comparison), drawInputfield(test.size)));
+                } else {
+                    listTests.append($('<li>').addClass('filter-settings-view').text(test.id));
+                }
+
             });
 
             _(baton.model.get('actioncmds')).each(function (action) {
-                listActions.append($('<li>').attr('data-property', action.id).text(action.id).append($('<a>').addClass('btn btn-small folderselect').text('testbutton')));
+                if (action.id !== 'stop') {
+                    listActions.append($('<li>').attr('data-property', action.id).text(action.id));
+                }
             });
 
             this.append(listTests, listActions);
@@ -197,17 +155,44 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         attribute: 'rulename'
     }));
 
-    views.point(POINT + '/view').extend(new forms.CheckBoxField({
-        id: 'active',
-        index: 350,
-        label: 'active',
-        attribute: 'active',
-        customizeNode: function () {
-            this.$el.css({
-                width: '300px'
-            });
+    function updateChoice() {
+        this.nodes.select.val(this.model.get(this.attributeStack)[this.attribute]);
+    }
+
+    function render() {
+        var self = this;
+        this.nodes = {};
+        this.nodes.select = $('<select>');
+        if (this.multiple) {
+            this.nodes.select.attr('multiple', 'multiple');
         }
+        _(this.selectOptions).each(function (label, value) {
+            self.nodes.select.append(
+                $("<option>", {value: value}).text(label)
+            );
+        });
+        this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+        this.updateChoice();
+        this.nodes.select.on('change', function () {
+            var completeData = self.model.get(self.attributeStack);
+            completeData.id = self.nodes.select.val();
+            self.model.set(self.attributeStack, completeData, {validate: true});
+        });
+    }
+
+    views.point(POINT + '/view').extend(new forms.SelectBoxField({
+        id: 'appliesTo',
+        index: 100,
+        fluid: true,
+        label: 'applies to',
+        attributeStack: 'test',
+        attribute: 'id',
+        selectOptions: {allof: 'allof', anyof: 'anyof'},
+        render: render,
+        updateChoice: updateChoice
+
     }));
+
 
 
     return AccountDetailView;
