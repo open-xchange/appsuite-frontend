@@ -486,7 +486,7 @@ define('io.ox/core/main',
             index: 300,
             draw: function () {
                 this.append(
-                    $('<li role="presentation">').append(
+                    $('<li>').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
@@ -503,7 +503,7 @@ define('io.ox/core/main',
             draw: function () {
                 var helpLink = 'help/' + ox.language + '/index.html';
                 this.append(
-                    $('<li role="presentation">').append(
+                    $('<li>').append(
                         $('<a>', { href: helpLink, target: '_blank',  role: 'menuitem', tabindex: 1 }).text(gt('Help'))
                     )
                 );
@@ -540,7 +540,7 @@ define('io.ox/core/main',
             index: 300,
             draw: function () {
                 this.append(
-                    $('<li role="presentation">').append(
+                    $('<li>').append(
                         $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
                     )
                     .on('click', function (e) {
@@ -558,7 +558,7 @@ define('io.ox/core/main',
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true"></li>'),
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li>').append(
                         $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
                     )
