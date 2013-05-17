@@ -534,16 +534,15 @@ define('io.ox/mail/actions',
         }
     });
 
-
     new Action('io.ox/mail/actions/vcard', {
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
             var context = e.context,
-                hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
-                isVCardType = context.content_type && !!context.content_type.match(/^text\/vcard/i),
-                isDirctoryType = context.content_type && !!context.content_type.match(/^text\/directory/i);
-            return  (hasRightSuffix && isDirctoryType) || isVCardType;
+                hasRightSuffix = (/\.vcf$/i).test(context.filename),
+                isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
+                isDirectoryType = (/^text\/directory/i).test(context.content_type);
+            return  (hasRightSuffix && isDirectoryType) || isVCardType;
         },
         action: function (baton) {
             var attachment = baton.data;

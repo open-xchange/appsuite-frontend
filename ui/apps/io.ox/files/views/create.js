@@ -50,7 +50,7 @@ define('io.ox/files/views/create', [
                     notifications.yell('success', gt('This file has been added'));
                     dialog.close();
                 }).fail(function (e) {
-                    if (e && e.code && e.code === 'UPL-0005') {
+                    if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                         notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                     }
                     else if (e && e.code && e.code === 'FLS-0024') {
