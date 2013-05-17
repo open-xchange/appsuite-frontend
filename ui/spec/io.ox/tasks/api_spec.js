@@ -42,9 +42,9 @@ define(['shared/examples/for/api',
             it('should add a new task', function () {
                 var result = api.create(options.testData);
                 expect(result).toBeDeferred();
-                expect(result.state()).toEqual('pending');
+                expect(result.state()).toBe('pending');
                 this.server.respond();
-                expect(result.state()).toEqual('resolved');
+                expect(result.state()).toBe('resolved');
             });
         });
     });
