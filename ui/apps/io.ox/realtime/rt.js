@@ -27,6 +27,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var connecting = false;
     var shouldReconnect = false;
     var disconnected = true;
+    var tentativeConnect = false;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -42,9 +43,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var resendBuffer = {};
     var resendDeferreds = {};
     var serverSequenceThreshhold = 0;
-    var pingNumber = 0;
-    var pendingPing = false;
     var initialReset = true;
+    var silenceCount = 0;
+    var loadDetectionTimer = null;
+    var closeCount = 0;
 
     Event.extend(api);
 
@@ -118,40 +120,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             getAll(collector, json, namespace, element);
             return collector;
         };
-
-
-
     }
-
-    /*
-    TODO: Transport Negotiation
-    var transports = [];
-    transports[0] = "websocket";
-    transports[1] = "sse";
-    transports[2] = "jsonp";
-    transports[3] = "long-polling";
-    transports[4] = "streaming";
-    transports[5] = "ajax";
-
-    $.each(transports, function (index, transport) {
-        var req = new $.atmosphere.AtmosphereRequest();
-
-        req.url = url;
-        req.contentType = "application/json";
-        req.transport = transport;
-        req.headers = { "negotiating" : "true", session: session };
-
-        req.onOpen = function(response) {
-            // SO?
-        };
-
-        req.onReconnect = function(request) {
-          request.close();
-        };
-
-        socket.subscribe(req);
-    });
-    */
 
     function received(stanza) {
         if (stanza.get("atmosphere", "received")) {
@@ -168,9 +137,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             });
         } else if (stanza.get("atmosphere", "pong")) {
             _(stanza.getAll("atmosphere", "pong")).each(function (pong) {
-                if (pong.data === pingNumber - 1) {
-                    pendingPing = false;
-                }
+                // Discard
             });
         } else if (stanza.get("atmosphere", "nextSequence")) {
             if (!initialReset) {
@@ -223,17 +190,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         //request callbacks
         request.onOpen = function (response) {
             connecting = false;
-            pendingPing = false;
             def.resolve(api);
             if (disconnected) {
                 disconnected = false;
-                api.trigger("open");
-                if (api.debug) {
-                    console.log("Triggering Online because #onOpen was called");
+                tentativeConnect = true;
+                if (subSocket) {
+                    subSocket.push("{\"type\": \"ping\", \"commit\": true }");
                 }
-                api.trigger("online");
+                api.trigger("open");
             }
-            disconnected = false;
         };
 
         var reconnectCount = 0;
@@ -247,7 +212,21 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
 
         request.onMessage = function (response) {
+            if (api.debug) {
+                console.log("On message called: ", response);
+            }
+            console.log(response);
+            if (tentativeConnect) {
+                if (api.debug) {
+                    console.log("Triggering Online because #onOpen was called");
+                }
+                api.trigger("online");
+                tentativeConnect = false;
+            }
+
+            silenceCount = 0;
             request.requestCount = 0;
+            closeCount = 0;
             if (response.status !== 200 && response.status !== 408) { // 200 = OK, 208 == TIMEOUT, which is expected
                 if (!disconnected) {
                     if (api.debug) {
@@ -256,9 +235,15 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     goOffline();
                     subSocket.close();
                 }
+                if (api.debug) {
+                    console.log("Got an error status, discarding message", response.status);
+                }
                 return;
             }
             var message = response.responseBody;
+            if (api.debug) {
+                console.log("Message received", response.responseBody);
+            }
             var json = {};
             try {
                 json = $.parseJSON(message);
@@ -286,13 +271,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
                     } else {
-                        subSocket.close();
-                        if (!disconnected) {
-                            if (api.debug) {
-                                console.log("Triggering offline, because I got a session expired error");
-                            }
-                            goOffline();
+                        if (api.debug) {
+                            console.log("Closing socket, because I got a session expired error");
                         }
+
+                        subSocket.close();
                         disconnected = true;
 
                         ox.trigger('relogin:required');
@@ -310,13 +293,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 shouldReconnect = false;
                 subSocket = connect();
             } else {
-                if (!disconnected) {
-                    if (api.debug) {
-                        console.log("Triggering offline because #onClose was called");
-                    }
+                if (closeCount > 5) {
                     goOffline();
                 }
-                disconnected = true;
+                closeCount++;
             }
         };
 
@@ -343,6 +323,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
         shouldReconnect = true;
         disconnected = true;
+        if (api.debug) {
+            console.log("Closing for reconnect");
+        }
         subSocket.close();
     }
 
@@ -368,6 +351,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
         queue.stanzas = [];
         queue.timer = false;
+        if (api.interrupt) {
+            alert("INTERRUPT!");
+            api.interrupt = false;
+        }
     }
 
     api.send = function (options) {
@@ -385,11 +372,11 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (_.isUndefined(options.seq)) {
             def.resolve(); // Pretend a message without sequence numbers always arrives
         } else {
-            resendBuffer[options.seq] = {count: 0, msg: options};
-            if (resendDeferreds[options.seq]) {
-                def = resendDeferreds[options.seq];
+            resendBuffer[Number(options.seq)] = {count: 0, msg: options};
+            if (resendDeferreds[Number(options.seq)]) {
+                def = resendDeferreds[Number(options.seq)];
             } else {
-                resendDeferreds[options.seq] = def;
+                resendDeferreds[Number(options.seq)] = def;
             }
         }
         if (disconnected) {
@@ -430,37 +417,45 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         console.log("Resend Deferreds", resendDeferreds);
         console.log("Connecting", connecting);
         console.log("Disconnected", disconnected);
+        console.log("silenceCount", silenceCount);
     };
 
     setInterval(function () {
         if (!connecting) {
-            if (disconnected) {
-                reconnect();
-            } else {
-                if (pendingPing) {
-                    if (api.debug) {
-                        console.log("Triggering offline, because I found a pending ping");
-                    }
-                    goOffline();
-                }
-                subSocket.push("{\"type\": \"ping\", \"commit\": true, \"id\" : " + pingNumber + " }");
-                pingNumber++;
-                pendingPing = true;
+            if (!disconnected) {
+                subSocket.push("{\"type\": \"ping\", \"commit\": true }");
             }
         }
     }, 30000);
 
     setInterval(function () {
-        _(resendBuffer).each(function (m) {
-            m.count++;
-            if (m.count < INFINITY) {
-                api.sendWithoutSequence(m.msg);
-            } else {
-                delete resendBuffer[m.msg.seq];
-                resendDeferreds[m.msg.seq].reject();
-                delete resendDeferreds[m.msg.seq];
-            }
-        });
+        if (silenceCount < 7 && !disconnected) {
+            _(resendBuffer).each(function (m) {
+                m.count++;
+                if (m.count < INFINITY) {
+                    api.sendWithoutSequence(m.msg);
+                } else {
+                    delete resendBuffer[Number(m.msg.seq)];
+                    resendDeferreds[Number(m.msg.seq)].reject();
+                    delete resendDeferreds[Number(m.msg.seq)];
+                }
+            });
+        }
+        if (silenceCount === 10 && !disconnected) {
+            api.trigger("highLoad");
+            console.warn("High Load detected");
+        }
+        if (silenceCount === 12) {
+            silenceCount = 0;
+            reconnect();
+        }
+        silenceCount++;
+        if (loadDetectionTimer && (new Date().getTime() - loadDetectionTimer > 15000)) {
+            api.trigger("highLoad");
+            console.warn("High Load detected");
+        }
+        loadDetectionTimer = new Date().getTime();
+
     }, 5000);
 
     return def;

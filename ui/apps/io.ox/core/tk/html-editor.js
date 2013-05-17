@@ -462,6 +462,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
         });
 
+        function trimEnd(str) {
+            return String(str || '').replace(/[\s\xA0]+$/g, '');
+        }
+
         var resizeEditor = _.debounce(function () {
                 var p = textarea.parent(), w = p.width(), h = p.height(),
                     iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
@@ -470,11 +474,11 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }, 100),
 
             trimIn = function (str) {
-                return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/);
+                return trimEnd(str);
             },
 
             trimOut = function (str) {
-                return $.trim((str + '').replace(/[\r\n]+/g, ''));
+                return trimEnd(str).replace(/[\r\n]+/g, '');
             },
 
             quote = function (str) {
@@ -566,17 +570,18 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             }
             // split & loop
             _(str.split('\n').concat('')).each(function (line, i) {
-                line = $.trim(line);
-                if (line === '' || (quote && line.substr(0, 1) !== '>')) {
+                var trimmed = $.trim(line);
+                if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
                     lTag = quote ? '<blockquote><p>' : '<p>';
                     rTag = quote ? '</blockquote></p>' : '</p>';
                     text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
                     tmp = '';
                     quote = false;
-                } else if (line.substr(0, 1) === '>') {
-                    tmp += line.substr(2).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
+                } else if (trimmed.substr(0, 1) === '>') {
+                    tmp += trimmed.substr(2).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
                     quote = true;
                 } else {
+                    // use untrimmed "line" here!
                     tmp += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
                 }
             });
