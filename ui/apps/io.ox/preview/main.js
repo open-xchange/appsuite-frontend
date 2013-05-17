@@ -247,7 +247,7 @@ define('io.ox/preview/main',
                      * @param  {string} id
                      * @return {string}
                      */
-                    //TODO: there must be a better solution
+                    //TODO: (frank) there must be a better solution
                     var adjust = function (id) {
                         var list = id.split('.');
                         if (list.length > 1)
