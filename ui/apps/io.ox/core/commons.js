@@ -118,7 +118,7 @@ define('io.ox/core/commons',
          */
         wireGridAndWindow: function (grid, win) {
             var top = 0, on = function () {
-                    grid.selection.keyboard(true);
+                    grid.keyboard(true);
                     if (grid.selection.get().length) {
                         // only retrigger if selection is not empty; hash gets broken if caches are empty
                         // TODO: figure out why this was important
@@ -131,7 +131,7 @@ define('io.ox/core/commons',
             win.on('show idle', on)
                 // hide
                 .on('hide busy', function () {
-                    grid.selection.keyboard(false);
+                    grid.keyboard(false);
                 })
                 .on('beforeshow', function () {
                     if (top !== null) { grid.scrollTop(top); }
@@ -182,6 +182,7 @@ define('io.ox/core/commons',
 
             function drawFolderName(folder_id) {
                 var link = $('<a href="#" data-action="open-folderview">')
+                    .attr({ tabindex: 1 })
                     .append(folderAPI.getTextNode(folder_id))
                     .on('click', fnOpen);
                 if (supportsTotal) {

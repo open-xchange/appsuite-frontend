@@ -720,9 +720,9 @@ define('io.ox/core/tk/selection',
         /**
          * Keyboard support
          */
-        this.keyboard = function (flag) {
+        this.keyboard = function (con, flag) {
             // keyboard support (use keydown! IE does not react on keypress with cursor keys)
-            $(document)[flag ? 'on' : 'off']('keydown', fnKey);
+            $(con)[flag ? 'on' : 'off']('keydown', fnKey);
             return this;
         };
 

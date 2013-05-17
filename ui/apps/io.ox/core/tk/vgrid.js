@@ -218,7 +218,7 @@ define('io.ox/core/tk/vgrid',
             firstRun = true,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
-            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane).attr('tabindex', 1),
             // bottom toolbar
             fnToggleEditable = function (e) {
                     e.preventDefault();
@@ -232,7 +232,7 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         $() :
-                        $('<a>', { href: '#' })
+                        $('<a>', { href: '#', tabindex: -1 })
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
@@ -428,7 +428,7 @@ define('io.ox/core/tk/vgrid',
                     this.prepend(
                         fields.div = $('<div class="vgrid-cell-checkbox">').append(
                             fields.label = $('<label>').append(
-                                fields.input = $('<input type="checkbox" class="reflect-selection">')
+                                fields.input = $('<input type="checkbox" class="reflect-selection" aria-hidden="true">').attr('tabindex', -1)
                             )
                         )
                     );
@@ -1020,7 +1020,7 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.keyboard = function (flag) {
-            this.selection.keyboard(flag);
+            this.selection.keyboard(container, flag);
         };
 
         this.getToolbar = function () {
@@ -1165,6 +1165,10 @@ define('io.ox/core/tk/vgrid',
             this.scrollTop(0);
             self.selection.clear();
             self.selection.resetLastIndex();
+        });
+
+        container.on('focus', function () {
+            self.selection.selectSmart();
         });
 
         // default implementation if hash cannot be mapped

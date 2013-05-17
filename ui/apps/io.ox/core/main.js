@@ -149,9 +149,9 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" tabindex="0">').text(gt(label));
+                return $('<a href="#" tabindex="1">').text(gt(label));
             } else if (label[0].tagName === 'I') {
-                return $('<a href="#" tabindex="0">').append(label);
+                return $('<a href="#" tabindex="1">').append(label);
             } else {
                 return label;
             }
@@ -414,7 +414,8 @@ define('io.ox/core/main',
                 $('<a>', {
                     href: '#',
                     'data-app-name': model.get('name') || model.id,
-                    'data-app-guid': model.guid
+                    'data-app-guid': model.guid,
+                    tabindex: 1
                 })
                 .text(gt(title))
             );
@@ -486,7 +487,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="0">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -576,7 +577,7 @@ define('io.ox/core/main',
                 var div, a, ul;
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true">').append(
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
                             $('<i class="icon-cog icon-white" aria-hidden="true">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu">')
@@ -806,7 +807,6 @@ define('io.ox/core/main',
             id: 'restore-confirm',
             index: 400,
             run: function (baton) {
-
                 if (baton.canRestore) {
 
                     var dialog,

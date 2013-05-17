@@ -41,7 +41,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (baton) {
             baton = ext.Baton.ensure(baton);
             this.append(
-                $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
+                $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
                     'data-prio': self.prio || 'lo',
@@ -73,7 +73,7 @@ define("io.ox/core/extPatterns/links",
                 baton = ext.Baton.ensure(baton);
                 this.append(
                     $('<li>').attr('role', 'menuitem').append(
-                        $('<a href="#">').attr('data-action', extension.ref).text(extension.label)
+                        $('<a href="#" tabindex="1">').attr('data-action', extension.ref).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -312,7 +312,7 @@ define("io.ox/core/extPatterns/links",
             var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
                 div = $('<div class="toolbar-button dropdown">').append(
-                    a = $('<a href="#" data-toggle="dropdown" title="">')
+                    a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
@@ -349,10 +349,13 @@ define("io.ox/core/extPatterns/links",
                     ul.remove();
                     if (links.length === 1) {
                         // directly link actions
-                        a.attr('title', links[0].label || '')
-                         .attr('aria-label', links[0].label || '')
-                         .attr('role', 'menuitem')
-                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        a.attr({
+                            title: links[0].label || '',
+                            'aria-label': links[0].label || '',
+                            role: 'menuitem',
+                            tabindex: 1
+                        })
+                        .on('click', { baton: baton, extension: links[0] }, actionClick);
                     } else {
                         a.addClass('disabled').on('click', preventDefault);
                     }

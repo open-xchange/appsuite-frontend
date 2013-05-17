@@ -44,14 +44,14 @@ define('io.ox/core/commons-folderview',
         // draw container
         ext.point(POINT + '/sidepanel').extend({
             draw: function (baton) {
-                this.append(
+                this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
                     .css({ right: 'auto', zIndex: 3 })
                     .hide()
                     .append(
                         // container
-                        baton.$.container = $('<div class="abs foldertree-container">'),
+                        baton.$.container = $('<div class="abs foldertree-container" tabindex="1">'),
                         // toolbar
                         baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
                     )
@@ -67,9 +67,17 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                        $('<a href="#" class="dropdown-toggle"  >')
+                            .attr({
+                                'data-toggle': 'dropdown',
+                                tabindex: 1,
+                                role: 'menuitem',
+                                'aria-haspopup': true,
+                                title: gt('Add folder menu'),
+                                'aria-label': gt('Add folder menu')
+                            })
                             .append($('<i class="icon-plus">')),
-                        ul = $('<ul class="dropdown-menu">')
+                        ul = $('<ul class="dropdown-menu" role="menu" aria-hidden="true">')
                     )
                 );
                 ext.point(POINT + '/sidepanel/toolbar/add').invoke('draw', ul, baton);
@@ -83,7 +91,15 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                        $('<a href="#" class="dropdown-toggle">')
+                            .attr({
+                                'data-toggle': 'dropdown',
+                                tabindex: 1,
+                                role: 'menuitem',
+                                title: gt('Folder actions'),
+                                'aria-label': gt('Folder actions'),
+                                'aria-haspopup': true
+                            })
                             .append($('<i class="icon-cog accent-color">')),
                         ul = $('<ul class="dropdown-menu">').append(
                             $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
@@ -104,7 +120,13 @@ define('io.ox/core/commons-folderview',
             index: 900,
             draw: function (baton) {
                 this.append(
-                    $('<a href="#" class="toolbar-action pull-right" data-action="close">')
+                    $('<a href="#" class="toolbar-action pull-right">')
+                        .attr({
+                            'data-action': 'close',
+                            tabindex: 1,
+                            title: gt('Close Foldertree'),
+                            'aria-label': gt('Close Foldertree')
+                        })
                         .append($('<i class="icon-remove">'))
                         .on('click', { app: baton.app }, fnClose)
                 );
