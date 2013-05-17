@@ -72,13 +72,41 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
-        function showAppointment(obj) {
+        var directAppointment;//directly linked appointments are stored here
+        
+        //function to check for a selection change to prevent refresh from overiding direct links
+        function checkDirectlink(e, list) {
+            if (list.length > 1 || (list.length === 1 && list[0].id !== directAppointment.id)) {
+                grid.prop('directlink', false);
+                grid.selection.off('change', checkDirectlink);
+            }
+        }
+        function showAppointment(obj, directlink) {
             // be busy
             right.busy(true);
-            // get appointment
-            api.get(obj)
-                .done(_.lfo(drawAppointment))
-                .fail(_.lfo(drawFail, obj));
+            
+            //direct links are preferred
+            if (directlink) {
+                grid.prop('directlink', true);
+                directAppointment = obj;
+                grid.selection.on('change', checkDirectlink);
+                // get appointment
+                api.get(obj)
+                    .done(drawAppointment)
+                    .fail(drawFail, obj);
+            } else if (grid.prop('directlink') && directAppointment) {
+                api.get(directAppointment)
+                .done(drawAppointment)
+                .fail(drawFail, directAppointment);
+            } else {
+                directAppointment = undefined;
+                // get appointment
+                if (!(grid.prop('directlink'))) {
+                    api.get(obj)
+                        .done(_.lfo(drawAppointment))
+                        .fail(_.lfo(drawFail, obj));
+                }
+            }
         }
 
         showAppointment.cancel = function () {
@@ -209,6 +237,8 @@ define('io.ox/calendar/list/perspective',
                         //found valid recurrence, append it
                         if (foundRecurrence !== false) {
                             _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
+                        } else {//ok its not in the list lets show it directly
+                            app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
                         }
 
                         findRecurrence = false;//only search once
@@ -236,6 +266,8 @@ define('io.ox/calendar/list/perspective',
             updateGridOptions();
             grid.refresh(true);
         });
+        //to show an appointment without it being in the grid, needed for direct links
+        app.on('show:appointment', showAppointment);
         grid.paint();
     };
 
