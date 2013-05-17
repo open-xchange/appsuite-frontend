@@ -67,7 +67,7 @@ define('io.ox/core/commons-folderview',
                 var ul;
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
-                        $('<a href="#" class="dropdown-toggle"  >')
+                        $('<a href="#" class="dropdown-toggle">')
                             .attr({
                                 'data-toggle': 'dropdown',
                                 tabindex: 1,
@@ -101,8 +101,8 @@ define('io.ox/core/commons-folderview',
                                 'aria-haspopup': true
                             })
                             .append($('<i class="icon-cog accent-color">')),
-                        ul = $('<ul class="dropdown-menu">').append(
-                            $('<li class="dropdown-header">').text(_.noI18n(baton.data.title))
+                        ul = $('<ul class="dropdown-menu" role="menu" aria-hidden="true">').append(
+                            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(_.noI18n(baton.data.title))
                         )
                     )
                 );
@@ -127,7 +127,7 @@ define('io.ox/core/commons-folderview',
                             title: gt('Close Foldertree'),
                             'aria-label': gt('Close Foldertree')
                         })
-                        .append($('<i class="icon-remove">'))
+                        .append($('<i class="icon-remove" aria-hidden="true">'))
                         .on('click', { app: baton.app }, fnClose)
                 );
             }
@@ -155,8 +155,8 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (baton.options.type === 'mail') {
                     // only show for mail
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="add-toplevel-folder">').text(gt('Add new folder'))
+                    this.append($('<li role="menuitem">').append(
+                        $('<a href="#" data-action="add-toplevel-folder" tabindex="1">').text(gt('Add new folder'))
                         .on('click', { app: baton.app }, addTopLevelFolder)
                     ));
                 }
@@ -169,13 +169,13 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 // only mail and infostore show hierarchies
                 var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('Add private folder') : gt('Add subfolder'),
-                    link = $('<a href="#" data-action="add-subfolder">').text(label);
+                    link = $('<a href="#" data-action="add-subfolder" tabindex="1">').text(label);
                 if (api.can('create', baton.data)) {
                     link.on('click', { app: baton.app, type: baton.options.type }, addSubFolder);
                 } else {
                     link.addClass('disabled');
                 }
-                this.append($('<li>').append(link));
+                this.append($('<li role="menuitem">').append(link));
             }
         });
 
@@ -190,7 +190,7 @@ define('io.ox/core/commons-folderview',
             index: 200,
             draw: function (baton) {
                 var type = baton.options.type,
-                    link = $('<a href="#" data-action="add-public-folder">').text(gt('Add public folder'));
+                    link = $('<a href="#" data-action="add-public-folder" tabindex="1">').text(gt('Add public folder'));
                 if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
                 api.get({folder: 2}).then(function (public_folder) {
@@ -200,7 +200,7 @@ define('io.ox/core/commons-folderview',
                         link.addClass('disabled');
                     }
                 });
-                this.append($('<li>').append(link));
+                this.append($('<li role="menuitem">').append(link));
             }
         });
 
@@ -215,8 +215,8 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications">').text(gt('Publication'));
-                this.append($('<li class="divider">'), $('<li>').append(link));
+                var link = $('<a href="#" data-action="publications" tabindex="1">').text(gt('Publication'));
+                this.append($('<li class="divider" aria-hidden="true">'), $('<li role="menuitem">').append(link));
                 if (capabilities.has('publication') &&
                     (baton.data.module === 'contacts' || baton.data.module === 'infostore')
                 ) {
@@ -238,9 +238,9 @@ define('io.ox/core/commons-folderview',
             id: 'subscribe',
             index: 600,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="subscriptions">').text(gt('Subscription'));
+                var link = $('<a href="#" data-action="subscriptions" tabindex="1">').text(gt('Subscription'));
                 this.append(
-                    $('<li>').append(link)
+                    $('<li role="menuitem">').append(link)
                 );
                 if (api.can('write', baton.data) && capabilities.has('subscription') &&
                     (baton.data.module === 'contacts' || baton.data.module === 'infostore' || baton.data.module === 'calendar')
@@ -261,8 +261,8 @@ define('io.ox/core/commons-folderview',
             id: 'rename',
             index: 100,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="rename">').text(gt('Rename'));
-                this.append($('<li>').append(link));
+                var link = $('<a href="#" data-action="rename" tabindex="1">').text(gt('Rename'));
+                this.append($('<li role="menuitem">').append(link));
                 if (api.can('rename', baton.data)) {
                     link.on('click', { app: baton.app }, renameFolder);
                 } else {
@@ -280,10 +280,10 @@ define('io.ox/core/commons-folderview',
             id: 'delete',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="delete">').text(gt('Delete'));
+                var link = $('<a href="#" data-action="delete" tabindex="1">').text(gt('Delete'));
                 this.append(
-                    (baton.options.type === 'mail' ? '' : $('<li class="divider">')),
-                    $('<li>').append(link)
+                    (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
+                    $('<li role="menuitem">').append(link)
                 );
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { app: baton.app }, deleteFolder);
@@ -305,9 +305,9 @@ define('io.ox/core/commons-folderview',
             id: 'export',
             index: 250,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="export">').text(gt('Export'));
+                var link = $('<a href="#" data-action="export" tabindex="1">').text(gt('Export'));
                 this.append(
-                    $('<li>').append(link)
+                    $('<li role="menuitem">').append(link)
                 );
                 if (api.can('export', baton.data)) {
                     link.on('click', { baton: baton }, exportData);
@@ -328,9 +328,9 @@ define('io.ox/core/commons-folderview',
             id: 'import',
             index: 245,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="import">').text(gt('Import'));
+                var link = $('<a href="#" data-action="import" tabindex="1">').text(gt('Import'));
                 this.append(
-                    $('<li>').append(link)
+                    $('<li role="menuitem">').append(link)
                 );
                 if (api.can('import', baton.data)) {
                     link.on('click', { baton: baton }, importData);
@@ -353,10 +353,10 @@ define('io.ox/core/commons-folderview',
             index: 300,
             draw: function (baton) {
                 if (capabilities.has('!alone')) {
-                    var link = $('<a href="#" data-action="permissions">').text(gt('Permissions'));
+                    var link = $('<a href="#" data-action="permissions" tabindex="1">').text(gt('Permissions'));
                     this.append(
-                        $('<li class="divider">'),
-                        $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
+                        $('<li class="divider" aria-hidden="true" role="presentation">'),
+                        $('<li role="menuitem">').append(link.on('click', { app: baton.app }, setFolderPermissions))
                     );
                 }
             }
@@ -421,8 +421,8 @@ define('io.ox/core/commons-folderview',
             id: 'properties',
             index: 400,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="properties">').text(gt('Properties'));
-                this.append($('<li>').append(link));
+                var link = $('<a href="#" data-action="properties" tabindex="1">').text(gt('Properties'));
+                this.append($('<li role="menuitem">').append(link));
                 link.on('click', { baton: baton }, showFolderProperties);
             }
         });
@@ -478,8 +478,8 @@ define('io.ox/core/commons-folderview',
             id: 'move',
             index: 200,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="delete">').text(gt('Move'));
-                this.append($('<li>').append(link));
+                var link = $('<a href="#" data-action="delete" tabindex="1">').text(gt('Move'));
+                this.append($('<li role="menuitem">').append(link));
                 if (api.can('deleteFolder', baton.data)) {
                     link.on('click', { baton: baton }, moveFolder);
                 } else {
@@ -780,6 +780,12 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.body, baton);
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
+
+        container.on('focus', function (e) {
+            baton.tree.selection.keyboard(container, true);
+        }).on('blur', function (e) {
+            baton.tree.selection.keyboard(container, false);
+        });
 
         new links.ActionGroup(TOGGLE, {
             id: 'folder',
