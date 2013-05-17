@@ -136,6 +136,11 @@ define('io.ox/mail/write/main',
             return obj;
         });
 
+        function trimSignature(text) {
+            // remove white-space and evil \r
+            return $.trim(text).replace(/\r\n/g, '\n');
+        }
+
         app.setSignature = function (e) {
 
             var index = e.data.index,
@@ -162,7 +167,7 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = $.trim(signature.content);
+                text = trimSignature(signature.content);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
                 if (isHTML) {
@@ -344,13 +349,21 @@ define('io.ox/mail/write/main',
             });
         };
 
+        // this is different to $.trim, as it preserves white-space in the first line
+        function trimContent(str) {
+            // remove white-space at beginning except in first-line
+            str = String(str || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+            // remove white-space at end
+            return str.replace(/[\s\uFEFF\xA0]+$/, '');
+        }
+
         app.setBody = function (str) {
             // get default signature
             var ds = _(view.signatures)
                     .find(function (o) {
                         return o.id === settings.get('defaultSignature');
                     }),
-                content = $.trim(str);
+                content = trimContent(str);
 
             // set signature?
             if (ds) {
