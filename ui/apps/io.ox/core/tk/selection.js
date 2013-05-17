@@ -709,6 +709,7 @@ define('io.ox/core/tk/selection',
         this.contains = function (ids) {
             var list = [].concat(ids);
             return !!list.length && _(list).inject(function (memo, id) {
+                id = _.isObject(id) ? self.serialize(id) : id;
                 return memo && id in observedItemsIndex;
             }, true);
         };
