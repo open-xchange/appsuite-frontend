@@ -719,7 +719,7 @@ define('io.ox/core/tk/vgrid',
                     else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
-                        if (self.selection.contains(i)) self.selection.set(i);
+                        if (!i.length || self.selection.contains(i)) self.selection.set(i);
                     }
                     else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
@@ -1182,10 +1182,10 @@ define('io.ox/core/tk/vgrid',
 
             self.selection.on('change', function (e, list) {
                 var folder = self.prop('folder');
-                if (options.settings && list.length === 1) {
+                if (options.settings && list.length <= 1) {
                     options.settings.set(['vgrid', 'previous', folder], _.cid(list[0])).save();
                     // always store in fluent hash
-                    hash[folder] = self.selection.get();
+                    hash[folder] = list;
                 }
             });
 
