@@ -152,7 +152,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
                 else if (t < 300) i = 3;
                 else if (t < 500) i = 4;
                 else if (t < 1000) i = 5;
-                else i = 5;
+                else i = 6;
                 data[i]++;
             });
 
