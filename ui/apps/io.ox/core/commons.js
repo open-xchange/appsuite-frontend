@@ -228,9 +228,6 @@ define('io.ox/core/commons',
          */
         wireGridAndRefresh: function (grid, api, win) {
             var refreshAll = function (e) {
-                    if (e.type === 'refresh:all:local') {
-                        grid.invalidateLabels();
-                    }
                     grid.refresh(true);
                 },
                 refreshList = function () {

@@ -285,7 +285,6 @@ define('io.ox/core/tk/vgrid',
             hScrollToLabel,
             paintLabels,
             processLabels,
-            invalidLabels = false,
             cloneRow,
             currentOffset = null,
             paint,
@@ -415,7 +414,6 @@ define('io.ox/core/tk/vgrid',
                     cumulatedLabelHeight += tail.outerHeight(true);
                 }
                 node = clone = defs = null;
-                invalidLabels = false;
                 return cumulatedLabelHeight;
             });
         };
@@ -482,7 +480,6 @@ define('io.ox/core/tk/vgrid',
 
         paint = (function () {
 
-            // calling this via LFO, so that we always get the latest data
             function cont(chunk) {
 
                 // vars
@@ -619,16 +616,15 @@ define('io.ox/core/tk/vgrid',
         }
 
         function apply(list, quiet) {
-            // changed?
-            if (invalidLabels || list.length !== all.length || !_.isEqual(all, list)) {
-                // store
-                all = list;
-                currentOffset = null;
-                // initialize selection
-                self.selection.init(all);
-                // labels
-                initLabels();
-            }
+
+            // store
+            all = list;
+            currentOffset = null;
+            // initialize selection
+            self.selection.init(all);
+            // labels
+            initLabels();
+
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
@@ -637,19 +633,18 @@ define('io.ox/core/tk/vgrid',
                     $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
                 );
             }
+
             // trigger event
             if (!quiet) {
                 self.trigger('change:ids', all);
             }
+
             // get proper offset
             var top, index, offset;
-            if (currentOffset !== null) {
-                offset = currentOffset;
-            } else {
-                top = scrollpane.scrollTop();
-                index = getIndex(top);
-                offset = index - (numVisible >> 1);
-            }
+            top = scrollpane.scrollTop();
+            index = getIndex(top);
+            offset = index - (numVisible >> 1);
+
             return paint(offset);
         }
 
@@ -764,8 +759,8 @@ define('io.ox/core/tk/vgrid',
                             self.idle();
                         })
                         .done(function () {
-                            var changed = !_.isEqual(all, list);
-                            updateSelection(list.length !== all.length || changed);
+                            var hasChanged = !_.isEqual(all, list);
+                            updateSelection(hasChanged);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -788,7 +783,6 @@ define('io.ox/core/tk/vgrid',
             // resize
             resize();
             currentOffset = null;
-            invalidLabels = true;
             initialized = true;
             // load all IDs
             return loadAll();
@@ -934,11 +928,6 @@ define('io.ox/core/tk/vgrid',
 
         this.repaintLabels = function () {
             return initLabels();
-        };
-
-        this.invalidateLabels = function () {
-            // use case: delete items; esp. mail thread summary
-            invalidLabels = true;
         };
 
         this.repaint = _.debounce(function () {
