@@ -90,6 +90,106 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:24
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:304
+msgid "Error log"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:64
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:289
+msgid "Show request body"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:66
+msgid "Hide request body"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:99
+#: apps/io.ox/mail/main.js:224 apps/io.ox/tasks/edit/view-template.js:494
+msgid "Date"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:100
+msgid "Host"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:101
+msgid "UI version"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:102
+msgid "Server version"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:103
+msgid "Browser"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:113
+msgid "Total: %1$s requests"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:114
+msgid "Average time: %1$s ms"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:115
+msgid "Loss: %1$s %"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:116
+msgid "Uptime: %1$s minutes"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:119
+msgid "Reload statistics"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:136
+msgid "The graph shows performance frequencies in percent. Grey line shows ideal performance, blue line is measured performance."
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:192
+msgid "Errors"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:193
+msgid "Slow requests"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:194
+msgid "Loss"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:199
+msgid "No errors"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:201
+msgid "No slow requests"
+msgstr ""
+
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:203
+msgid "No lost requests"
+msgstr ""
+
+#: apps/io.ox/core/tk/vgrid.js:339
+msgid "Select none"
+msgstr ""
+
+#: apps/io.ox/core/tk/vgrid.js:339
+#: apps/io.ox/mail/settings/signatures/register.js:232
+msgid "Select all"
+msgstr ""
+
+#: apps/io.ox/core/tk/vgrid.js:637
+msgid "Empty"
+msgstr ""
+
+#: apps/io.ox/core/tk/autocomplete.js:212 apps/io.ox/core/tk/vgrid.js:745
+msgid "Could not load this list"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:93 apps/io.ox/core/about.js:40
 #: apps/io.ox/core/commons-folderview.js:392
 #: apps/io.ox/core/permissions/permissions.js:398
@@ -1000,11 +1100,6 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:339
-#: apps/io.ox/mail/settings/signatures/register.js:232
-msgid "Select all"
-msgstr ""
-
 #: apps/io.ox/mail/settings/signatures/register.js:243
 #: apps/io.ox/mail/settings/signatures/register.js:344
 msgid "Import signatures"
@@ -1498,12 +1593,6 @@ msgstr ""
 #: apps/io.ox/core/main.js:75 apps/io.ox/launchpad/main.js:34
 #: apps/io.ox/mail/main.js:223 apps/io.ox/mail/main.js:224
 msgid "Conversations"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:54
-#: apps/io.ox/mail/main.js:224 apps/io.ox/mail/main.js:225
-#: apps/io.ox/tasks/edit/view-template.js:494
-msgid "Date"
 msgstr ""
 
 #: apps/io.ox/mail/main.js:226
@@ -2990,31 +3079,6 @@ msgstr ""
 msgid "Send mail to all participants"
 msgstr ""
 
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:23
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:108
-msgid "Error log"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:44
-msgid "No errors to report"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:55
-msgid "Host"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:56
-msgid "UI version"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:57
-msgid "Server version"
-msgstr ""
-
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:58
-msgid "Browser"
-msgstr ""
-
 #: apps/io.ox/core/settings/pane.js:44
 msgid "The setting has been saved."
 msgstr ""
@@ -3084,18 +3148,6 @@ msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] ""
 msgstr[1] ""
-
-#: apps/io.ox/core/tk/vgrid.js:339
-msgid "Select none"
-msgstr ""
-
-#: apps/io.ox/core/tk/vgrid.js:637
-msgid "Empty"
-msgstr ""
-
-#: apps/io.ox/core/tk/autocomplete.js:212 apps/io.ox/core/tk/vgrid.js:745
-msgid "Could not load this list"
-msgstr ""
 
 #: apps/io.ox/core/tk/folderviews.js:102
 msgid "Couldn't load subfolders."
