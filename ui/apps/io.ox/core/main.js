@@ -577,7 +577,7 @@ define("io.ox/core/main",
                     )
                     .on('click', function (e) {
                         e.preventDefault();
-                        require(['io.ox/core/about'], function (about) {
+                        require(['io.ox/core/about/about'], function (about) {
                             about.show();
                         });
                     })
