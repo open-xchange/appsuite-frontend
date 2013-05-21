@@ -841,7 +841,7 @@ define("io.ox/core/desktop",
                     draw: function () {
                         return this.body.append(
                             // default perspective
-                            this.main = $('<div class="abs window-content">'),
+                            this.main = $('<div class="abs window-content">').attr({ tabindex: 1 }),
                             // search area
                             this.search = $('<div class="window-search">')
                         );
@@ -1141,7 +1141,7 @@ define("io.ox/core/desktop",
                 this.addPerspective = function (pers) {
                     var id = pers.name;
                     if (this.nodes[id] === undefined) {
-                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
+                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body).attr({ tabindex: 1 });
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
                     } else {

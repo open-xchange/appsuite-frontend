@@ -326,7 +326,7 @@ define('io.ox/mail/main',
                     .append(
                         $('<a>', {
                             href: '#',
-                            tabindex: 10,
+                            tabindex: 1,
                             'data-toggle': 'dropdown',
                             role: 'menuitem',
                             'aria-haspopup': true,
