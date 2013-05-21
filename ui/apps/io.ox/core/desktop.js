@@ -502,6 +502,14 @@ define("io.ox/core/desktop",
                 return true;
             }
             return false;
+        },
+
+        getCurrentApp: function () {
+            return currentWindow !== null ? currentWindow.app : null;
+        },
+
+        getCurrentWindow: function () {
+            return currentWindow;
         }
     });
 
