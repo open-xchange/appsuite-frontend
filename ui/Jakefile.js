@@ -338,6 +338,7 @@ utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 if (path.existsSync('help')) {
     var helpDir = process.env.helpDir || utils.builddir;
     _.each(fs.readdirSync('help'), function (Lang) {
+        if (!fs.statSync(path.join('help', Lang)).isDirectory()) return;
         var lang = Lang.toLowerCase().replace(/_/g, '-');
         utils.copy(utils.list(path.join('help', Lang + '/')), {
             to: helpDir.replace(/@lang@/g, lang)
