@@ -160,7 +160,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 //     return OP(cache.put({ key: key, data: data }));
                 // });
                 // go back to work
-                return $.when();
+                return $.Deferred().resolve(key);
             },
 
             remove: function (key) {
