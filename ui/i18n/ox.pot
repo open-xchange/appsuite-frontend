@@ -173,21 +173,34 @@ msgstr ""
 msgid "No lost requests"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:339
+#: apps/io.ox/core/tk/vgrid.js:338
 msgid "Select none"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:339
+#: apps/io.ox/core/tk/vgrid.js:338
 #: apps/io.ox/mail/settings/signatures/register.js:232
 msgid "Select all"
 msgstr ""
 
-#: apps/io.ox/core/tk/vgrid.js:637
+#: apps/io.ox/core/tk/vgrid.js:633
 msgid "Empty"
 msgstr ""
 
-#: apps/io.ox/core/tk/autocomplete.js:212 apps/io.ox/core/tk/vgrid.js:745
+#: apps/io.ox/core/tk/autocomplete.js:212 apps/io.ox/core/tk/vgrid.js:740
+#: apps/io.ox/core/tk/vgrid.js:745
 msgid "Could not load this list"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:49
+msgid "<b>%1$d</b> elements selected"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:380
+msgid "Back"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:500 apps/io.ox/core/tk/autocomplete.js:215
+msgid "Retry"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:93 apps/io.ox/core/about.js:40
@@ -3230,10 +3243,6 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
-#: apps/io.ox/core/commons.js:503 apps/io.ox/core/tk/autocomplete.js:215
-msgid "Retry"
-msgstr ""
-
 #: apps/io.ox/core/export/export.js:49 apps/io.ox/core/import/import.js:46
 msgid "Format"
 msgstr ""
@@ -3546,14 +3555,6 @@ msgstr ""
 
 #: apps/io.ox/core/export/export.js:183
 msgid "folder does not contain any data"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:49
-msgid "<b>%1$d</b> elements selected"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:383
-msgid "Back"
 msgstr ""
 
 #: apps/io.ox/core/main.js:68 apps/io.ox/launchpad/main.js:28
