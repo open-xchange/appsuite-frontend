@@ -46,6 +46,11 @@ define(['shared/examples/for/api',
                 this.server.respond();
                 expect(result.state()).toBe('resolved');
             });
+            it('should trigger a create event', function () {
+                expect(api).toTrigger('create');
+                var result = api.create(options.testData);
+                this.server.respond();
+            });
         });
     });
 });
