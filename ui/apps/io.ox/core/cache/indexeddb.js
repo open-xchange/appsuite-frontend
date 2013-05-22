@@ -53,8 +53,13 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
         function operation(fn, readwrite) {
             return dbOpened.then(function (db) {
-                var tx = db.transaction('cache', readwrite ? 'readwrite' : 'readonly');
-                return fn(tx.objectStore('cache'));
+                try {
+                    var tx = db.transaction('cache', readwrite ? 'readwrite' : 'readonly');
+                    return fn(tx.objectStore('cache'));
+                } catch (e) {
+                    console.error('IndexedDB.operation()', e.message, e);
+                    return $.Deferred().reject(e);
+                }
             });
         }
 

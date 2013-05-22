@@ -12,6 +12,7 @@
  */
 
 #background_loader.secure {
+
     background-color: rgba(255, 255, 255, 0);
     .transition(background-color 0.5s linear);
 
@@ -24,9 +25,7 @@
             position: relative;
             top: 52%;
         }
-
     }
-
 }
 
 #io-ox-core.wallpaper {
@@ -719,6 +718,31 @@ a.button {
 
     .margin-right {
         margin-right: 2em;
+    }
+}
+
+.search-query-container {
+
+    position: relative;
+
+    input {
+        padding-right: 30px;
+        width: 220px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .clear-query {
+        position: absolute;
+        top: 6px;
+        right: 10px;
+        z-index: 2;
+        font-size: 18px;
+        color: #CCC;
+    }
+
+    .clear-query:hover {
+        color: #aaa;
     }
 }
 

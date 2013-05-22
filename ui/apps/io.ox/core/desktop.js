@@ -884,7 +884,7 @@ define("io.ox/core/desktop",
                             if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
                                 document.title = document.temptitle;
                             }
-                            
+
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -1038,7 +1038,7 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            
+
                             document.temptitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
@@ -1083,6 +1083,14 @@ define("io.ox/core/desktop",
                             this.query = this.previous = '';
                         }
                         return this;
+                    },
+
+                    clear: function () {
+                        if (this.active) {
+                            self.trigger('search:clear');
+                            self.nodes.searchField.val('');
+                            this.query = this.previous = '';
+                        }
                     },
 
                     toggle: function () {
@@ -1298,14 +1306,20 @@ define("io.ox/core/desktop",
                 var searchId = 'search_' + _.now(); // acccessibility
 
                 var searchHandler = {
+
                     keydown: function (e) {
                         e.stopPropagation();
                         if (e.which === 27) {
                             win.search.close();
                         } else if (e.which === 13 && $(this).val() === '') {
-                            win.search.close();
+                            win.search.clear();
                         }
                     },
+
+                    clear: function (e) {
+                        win.search.clear();
+                    },
+
                     change: function (e) {
                         e.stopPropagation();
                         win.search.query = win.search.getQuery();
@@ -1314,15 +1328,16 @@ define("io.ox/core/desktop",
                             triggerSearch(win.search.previous = win.search.query);
                         }
                         else if (win.search.query === '') {
-                            win.search.close();
+                            win.search.clear();
                         }
                     }
                 };
 
                 $('<form class="form-search form-inline">').append(
                     $('<div class="input-append">').append(
-                        $('<label>', { 'for': searchId }).append(
-                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query">')
+                        $('<label>', { 'for': searchId }).addClass('search-query-container').append(
+                            // search field
+                            win.nodes.searchField = $('<input type="text" class="search-query">')
                             .attr({
                                 name: 'query',
                                 autocomplete: 'off',
@@ -1331,7 +1346,10 @@ define("io.ox/core/desktop",
                                 id: searchId
                             })
                             .on(searchHandler)
-                            .placeholder()
+                            .placeholder(),
+                            // 'clear' X
+                            $('<i class="icon-remove clear-query">')
+                            .on('click', searchHandler.clear)
                         ),
                         $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
                         .on('click', searchHandler.change)

@@ -295,7 +295,7 @@ define('io.ox/core/commons',
                 grid.setMode('search');
             });
             // on cancel search
-            win.on('cancel-search', function () {
+            win.on('search:clear cancel-search', function () {
                 grid.setMode('all');
             });
         },
