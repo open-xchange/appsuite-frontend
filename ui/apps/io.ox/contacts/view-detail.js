@@ -416,32 +416,32 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail").extend({
-        index: 10000,
-        id: 'qr',
-        draw: function (baton) {
-            var data = baton.data;
-            if (Modernizr.canvas && !data.mark_as_distributionlist) {
-                addField("\u00A0", true, this, function (node) {
-                    node.append(
-                        $('<i class="icon-qrcode">'), $.txt(' '),
-                        $("<a>", { href: '#' })
-                        .text(gt('Show QR code'))
-                        .on("click", function (e) {
-                            e.preventDefault();
-                            node.empty().busy();
-                            require(["io.ox/contacts/view-qrcode"], function (qr) {
-                                var vc = qr.getVCard(data);
-                                node.idle().qrcode(vc);
-                                vc = node = qr = null;
-                            });
-                        })
-                    );
-                });
-                addField("", "\u00A0", this);
-            }
-        }
-    });
+    // ext.point("io.ox/contacts/detail").extend({
+    //     index: 10000,
+    //     id: 'qr',
+    //     draw: function (baton) {
+    //         var data = baton.data;
+    //         if (Modernizr.canvas && !data.mark_as_distributionlist) {
+    //             addField("\u00A0", true, this, function (node) {
+    //                 node.append(
+    //                     $('<i class="icon-qrcode">'), $.txt(' '),
+    //                     $("<a>", { href: '#' })
+    //                     .text(gt('Show QR code'))
+    //                     .on("click", function (e) {
+    //                         e.preventDefault();
+    //                         node.empty().busy();
+    //                         require(["io.ox/contacts/view-qrcode"], function (qr) {
+    //                             var vc = qr.getVCard(data);
+    //                             node.idle().qrcode(vc);
+    //                             vc = node = qr = null;
+    //                         });
+    //                     })
+    //                 );
+    //             });
+    //             addField("", "\u00A0", this);
+    //         }
+    //     }
+    // });
 
     ext.point("io.ox/contacts/detail").extend({
         index: 20000,
