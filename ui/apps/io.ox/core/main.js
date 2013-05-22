@@ -22,10 +22,11 @@ define("io.ox/core/main",
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      'io.ox/core/upsell',
+     'io.ox/core/capabilities',
      "settings!io.ox/core",
      "gettext!io.ox/core",
      'io.ox/core/relogin',
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, settings, gt) {
 
     "use strict";
 
@@ -420,18 +421,28 @@ define("io.ox/core/main",
         }
 
         ox.ui.apps.on('add', function (model, collection, e) {
-            if (model.get('title') === undefined) { return; }
+
+            if (model.get('title') === undefined) return;
+
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
-                title = model.get('title');
+                title = model.get('title'),
+                name;
+
             add(node, launchers, model);
+
+            // call extensions to customize
+            name = model.get('name') || model.id;
+            ext.point('io.ox/core/topbar/launcher').invoke('draw', node, ext.Baton({ model: model, name: name }));
+
             // is user-content?
             addUserContent(model, node);
+
             // add list item
             node = $('<li>').append(
                 $('<a>', {
                     href: '#',
-                    'data-app-name': model.get('name') || model.id,
+                    'data-app-name': name,
                     'data-app-guid': model.guid
                 })
                 .text(gt(title))
@@ -627,20 +638,22 @@ define("io.ox/core/main",
         });
 
         // launchpad
-        ext.point('io.ox/core/topbar/launchpad').extend({
-            id: 'default',
-            draw: function () {
-                addLauncher("left", $('<i class="icon-th icon-white">'), function () {
-                    return require(["io.ox/launchpad/main"], function (m) {
-                        launchers.children().removeClass('active-app');
-                        launcherDropdown.children().removeClass('active-app');
-                        launchers.children().first().addClass('active-app');
-                        m.show();
-                    });
-                })
-                .addClass('left-corner'); // to match dimensions of side navigation
-            }
-        });
+        if (capabilities.has('launchpad')) {
+            ext.point('io.ox/core/topbar/launchpad').extend({
+                id: 'default',
+                draw: function () {
+                    addLauncher("left", $('<i class="icon-th icon-white">'), function () {
+                        return require(["io.ox/launchpad/main"], function (m) {
+                            launchers.children().removeClass('active-app');
+                            launcherDropdown.children().removeClass('active-app');
+                            launchers.children().first().addClass('active-app');
+                            m.show();
+                        });
+                    })
+                    .addClass('left-corner'); // to match dimensions of side navigation
+                }
+            });
+        }
 
         // favorites
         ext.point('io.ox/core/topbar/favorites').extend({
