@@ -65,15 +65,20 @@ define("io.ox/core/main",
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    require('io.ox/core/gettext')
+        .addTranslation('*', 'app\x00Mail', 'Mega MAIL')
+        .addTranslation('*', 'app\x00Calendar', 'Geilo 3000')
+        .addTranslation('*', 'app\x00Portal', 'Win a cake');
+
     // whatever ...
-    gt('Portal');
-    gt('Mail');
-    gt('Address Book');
-    gt('Calendar');
-    gt('Scheduling');
-    gt('Tasks');
-    gt('Files');
-    gt('Conversations');
+    gt.pgettext('app', 'Portal');
+    gt.pgettext('app', 'Mail');
+    gt.pgettext('app', 'Address Book');
+    gt.pgettext('app', 'Calendar');
+    gt.pgettext('app', 'Scheduling');
+    gt.pgettext('app', 'Tasks');
+    gt.pgettext('app', 'Files');
+    gt.pgettext('app', 'Conversations');
 
     function tabManager() {
         // Reset first
@@ -165,9 +170,9 @@ define("io.ox/core/main",
             //add wrapper
             label.wrap(node);
         } else {
-            //construct
+            // construct
             node.append(
-                _.isString(label) ? $('<a href="#">').text(gt(label)) :  label
+                _.isString(label) ? $('<a href="#">').text(gt.pgettext('app', label)) :  label
             );
         }
         // just add if not wrapped
@@ -445,7 +450,7 @@ define("io.ox/core/main",
                     'data-app-name': name,
                     'data-app-guid': model.guid
                 })
-                .text(gt(title))
+                .text(gt.pgettext('app', title))
             );
             launcherDropdown.append(
                 node.on('click', function (e) {
@@ -641,7 +646,7 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar/launchpad').extend({
             id: 'default',
             draw: function () {
-                if (capabilities.has('launchpad')) {
+                if (true || capabilities.has('launchpad')) {
                     addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                         return require(["io.ox/launchpad/main"], function (m) {
                             launchers.children().removeClass('active-app');

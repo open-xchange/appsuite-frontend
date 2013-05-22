@@ -25,7 +25,7 @@ define('io.ox/mail/settings/pane',
     var mailSettings =  settings.createModel(mailSettingsModel),
 
         staticStrings =  {
-            TITLE_MAIL: gt('Mail'),
+            TITLE_MAIL: gt.pgettext('app', 'Mail'),
             TITLE_COMMON: gt('Common'),
             PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails'),
             COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending'),

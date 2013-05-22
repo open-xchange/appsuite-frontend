@@ -14,13 +14,13 @@
 define('io.ox/files/settings/pane',
        ['settings!io.ox/files', 'io.ox/files/settings/model',
         'dot!io.ox/files/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/files/files'], function (settings, filesSettingsModel, tmpl, ext, gt) {
+        'gettext!io.ox/files'], function (settings, filesSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
-            TITLE_FILES: gt('Files'),
+            TITLE_FILES: gt.pgettext('app', 'Files'),
             DEFAULT_VIEW: gt('Default view')
         },
         optionsView = [{label: gt('Icon view'), value: 'icons'},
