@@ -30,10 +30,17 @@ define('io.ox/files/list/view-detail',
 
     var POINT = 'io.ox/files/details';
 
+    // Inline Actions
+    ext.point(POINT).extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/files/links/inline'
+    }));
+
     // Title
     ext.point(POINT).extend({
         id: 'title',
-        index: 100,
+        index: 200,
         draw: function (baton) {
             this.append(
                 $('<div>').addClass('title clear-title')
@@ -44,13 +51,6 @@ define('io.ox/files/list/view-detail',
             );
         }
     });
-
-    // Inline Actions
-    ext.point(POINT).extend(new links.InlineLinks({
-        index: 200,
-        id: 'inline-links',
-        ref: 'io.ox/files/links/inline'
-    }));
 
     // Display locked file information
     ext.point(POINT).extend({
@@ -164,6 +164,7 @@ define('io.ox/files/list/view-detail',
                     prefix: gt('Saved in'),
                     subfolder: false
                 })
+                .addClass('chromeless')
             );
         }
     });
