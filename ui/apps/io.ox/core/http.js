@@ -352,6 +352,15 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         }
     };
 
+    //columns ids mapped by keywords
+    var keywordMapping = {
+        contacts: {
+            email: ['555', '556', '557'],
+            telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
+            fax: ['544', '550', '554']
+        }
+    };
+
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
@@ -985,6 +994,28 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
+        },
+
+        /**
+         * columns ids or names specified by keyword (example: 'email' fields from 'contacts' )
+         * @param  {string} module]
+         * @param  {string} keyword
+         * @param  {string} format ('ids', 'names')
+         * @return {array} list of columnids or names
+         */
+        getKeywordMapping: function (module, keyword, format) {
+            //columns ids or names
+            format = format || 'ids';
+            //get ids
+            var columns = _.clone(keywordMapping[module][keyword] || []), mapping;
+            //parse
+            if (format === 'names') {
+                mapping = that.getColumnMapping(module);
+                columns = _.map(columns, function (id) {
+                    return mapping[id];
+                });
+            }
+            return columns;
         },
 
         /**
