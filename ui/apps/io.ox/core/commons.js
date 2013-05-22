@@ -165,7 +165,8 @@ define('io.ox/core/commons',
             }
 
             // right now, only mail folders support "total"
-            var supportsTotal = app.get('name') === 'io.ox/mail';
+            var supportsTotal = app.get('name') === 'io.ox/mail',
+                searchAcrossFolders = app.get('name') === 'io.ox/files';
 
             function updateFolderCount(id, data) {
                 var total = data.total,
@@ -197,7 +198,26 @@ define('io.ox/core/commons',
                 var folder_id = grid.prop('folder'), mode = grid.getMode(),
                     node = grid.getToolbar().find('.grid-info').empty();
                 if (mode === 'all') {
-                    node.append(drawFolderName(folder_id));
+                    // non-search; show foldername
+                    node.append(
+                        drawFolderName(folder_id)
+                    );
+                } else if (mode === 'search') {
+                    // search across all folders
+                    if (searchAcrossFolders) {
+                        node.append(
+                            $.txt(gt('Searched in all folders'))
+                        );
+                    } else {
+                        node.append(
+                            $.txt(
+                                //#. Searched in: <folder name>
+                                gt('Searched in')
+                            ),
+                            $.txt(': '),
+                            folderAPI.getTextNode(folder_id)
+                        );
+                    }
                 }
             });
 
