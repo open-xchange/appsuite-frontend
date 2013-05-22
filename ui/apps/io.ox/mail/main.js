@@ -464,7 +464,7 @@ define('io.ox/mail/main',
 
         (function () {
 
-            var openThreads = {};
+            var openThreads = tmpl.openThreads = {};
 
             // add label template
             grid.addLabelTemplate(tmpl.thread);
@@ -478,11 +478,19 @@ define('io.ox/mail/main',
                 });
             }
 
+            function icon(cid, type) {
+                grid.getContainer()
+                    .find('.vgrid-cell[data-obj-id="' + cid + '"]')
+                    .find('.thread-size i')
+                    .attr('class', 'icon-caret-' + type);
+            }
+
             function open(index, cid) {
                 if (openThreads[index] === undefined) {
                     var thread = api.getThread(cid);
                     if (thread.length > 1) {
                         openThreads[index] = cid;
+                        icon(cid, 'down');
                         api.getList(thread).done(function (list) {
                             refresh(list, index);
                         });
@@ -494,6 +502,7 @@ define('io.ox/mail/main',
                 if (openThreads[index] !== undefined) {
                     var thread = api.getThread(cid);
                     delete openThreads[index];
+                    icon(cid, 'right');
                     api.getList(thread).done(function (list) {
                         grid.selection.remove(list.slice(1));
                         refresh();
@@ -535,7 +544,7 @@ define('io.ox/mail/main',
 
             // reset on folder change
             grid.on('change:prop:folder', function () {
-                openThreads = {};
+                openThreads = tmpl.openThreads = {};
             });
 
             // close if deleted

@@ -25,17 +25,26 @@ define('io.ox/mail/view-grid-template',
 
         // main grid template
         main: {
+
+            // will be replaced with proper object from mail/main.js
+            openThreads: {},
+
             unified: false,
+
             build: function () {
-                var from, date, priority, subject, attachment, threadSize, flag,
-                    answered, forwarded, unread, account = null;
+                var from, date, priority, subject, attachment, threadSize, threadSizeCount, threadSizeIcon,
+                    flag, answered, forwarded, unread, account = null;
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span class="date">'),
                         from = $('<div class="from">')
                     ),
                     $('<div>').append(
-                        threadSize = $('<div class="thread-size">'),
+                        threadSize = $('<div class="thread-size">').append(
+                            threadSizeCount = $('<span class="number">'),
+                            $.txt(' '),
+                            threadSizeIcon = $('<i class="icon-caret-right">')
+                        ),
                         flag = $('<div class="flag">').text(_.noI18n('\u00A0')),
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
@@ -58,6 +67,8 @@ define('io.ox/mail/view-grid-template',
                     subject: subject,
                     attachment: attachment,
                     threadSize: threadSize,
+                    threadSizeCount: threadSizeCount,
+                    threadSizeIcon: threadSizeIcon,
                     flag: flag,
                     answered: answered,
                     forwarded: forwarded,
@@ -73,9 +84,12 @@ define('io.ox/mail/view-grid-template',
                     fields.subject.addClass('empty').text(gt('No subject'));
                 }
                 if (!data.threadSize || data.threadSize <= 1) {
-                    fields.threadSize.text(_.noI18n('')).css('display', 'none');
+                    fields.threadSize.css('display', 'none');
+                    fields.threadSizeCount.text(_.noI18n(''));
                 } else {
-                    fields.threadSize.text(_.noI18n(data.threadSize)).css('display', '');
+                    fields.threadSize.css('display', '');
+                    fields.threadSizeCount.text(_.noI18n(data.threadSize));
+                    fields.threadSizeIcon.attr('class', (index + 1) in that.openThreads ? 'icon-caret-down' : 'icon-caret-right');
                 }
                 fields.from.empty().append(
                     util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent', data.folder_id) ? 'to' : 'from')
