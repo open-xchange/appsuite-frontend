@@ -638,10 +638,10 @@ define("io.ox/core/main",
         });
 
         // launchpad
-        if (capabilities.has('launchpad')) {
-            ext.point('io.ox/core/topbar/launchpad').extend({
-                id: 'default',
-                draw: function () {
+        ext.point('io.ox/core/topbar/launchpad').extend({
+            id: 'default',
+            draw: function () {
+                if (capabilities.has('launchpad')) {
                     addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                         return require(["io.ox/launchpad/main"], function (m) {
                             launchers.children().removeClass('active-app');
@@ -651,9 +651,12 @@ define("io.ox/core/main",
                         });
                     })
                     .addClass('left-corner'); // to match dimensions of side navigation
+                } else {
+                    // add placeholder
+                    addLauncher('left', $('<span>&nbsp;</span>')).addClass('left-corner');
                 }
-            });
-        }
+            }
+        });
 
         // favorites
         ext.point('io.ox/core/topbar/favorites').extend({
