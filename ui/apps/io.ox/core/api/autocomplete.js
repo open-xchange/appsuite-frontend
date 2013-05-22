@@ -151,36 +151,39 @@ define('io.ox/core/api/autocomplete',
          * @param  {string} type
          * @param  {array} list
          * @param  {object} obj
-         * @param  {string} field
+         * @param  {string|array} fields
          * @return {undefined}
          */
-        processContactItem: function (type, list, obj, field) {
-            if (obj.data[field]) {
-                var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;
-                if (a && b) {
-                    // use last_name & first_name
-                    name = a + ', ' + b;
-                } else if (c) {
-                    // use display name
-                    name = c + '';
-                } else {
-                    // use last_name & first_name
-                    name = [];
-                    if (a) { name.push(a); }
-                    if (b) { name.push(b); }
-                    name = name.join(', ');
+        processContactItem: function (type, list, obj, fields) {
+            //ensure array
+            var fields = [].concat(fields);
+            //process each field
+            _.each(fields, function (field) {
+                if (obj.data[field]) {
+                    var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;
+                    if (a && b) {
+                        // use last_name & first_name
+                        name = a + ', ' + b;
+                    } else if (c) {
+                        // use display name
+                        name = c + '';
+                    } else {
+                        // use last_name & first_name
+                        name = [];
+                        if (a) { name.push(a); }
+                        if (b) { name.push(b); }
+                        name = name.join(', ');
+                    }
+
+                    if (obj.data.folder_id !== 6 && type === 'user') return;
+                    list.push({
+                        type: obj.type,
+                        display_name: name,
+                        email: obj.data[field].toLowerCase(),
+                        data: _(obj.data).clone()
+                    });
                 }
-
-                if (obj.data.folder_id !== 6 && type === 'user') return;
-
-                list.push({
-                    type: obj.type,
-                    display_name: name,
-                    email: obj.data[field].toLowerCase(),
-                    data: _(obj.data).clone()
-                });
-
-            }
+            });
         }
     };
 
