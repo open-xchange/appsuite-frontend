@@ -31,11 +31,13 @@
     background-color: rgb(165, 165, 255);
     z-index: 100000;
 
+    @size: 16px;
+
     .inner {
 
         font-family: C64;
-        font-size: 16px;
-        line-height: 18px;
+        font-size: @size;
+        line-height: @size + 2;
         color: rgb(165, 165, 255);
         background-color: rgb(66, 66, 231);
 
@@ -57,10 +59,27 @@
 
     .cursor {
         position: absolute;
-        top: 24 * 18px;
-        width: 16px;
-        height: 16px;
+        top: 24 * (@size + 2);
+        width: @size;
+        height: @size;
         background-color: rgb(165, 165, 255);
         -webkit-animation: blink 1.25s linear 0s infinite;
+    }
+}
+
+@media (min-width: 1024px) {
+    .c64 {
+        @size: 20px;
+        .inner {
+            font-size: @size;
+            line-height: @size + 2;
+            width: 800px;
+            margin-left: -400px,
+        }
+        .cursor {
+            top: 24 * (@size + 2);
+            width: @size;
+            height: @size;
+        }
     }
 }

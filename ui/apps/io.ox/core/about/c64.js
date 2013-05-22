@@ -27,43 +27,68 @@ define('io.ox/core/about/c64',
         $(this).find('.cursor').remove();
     };
 
-    return function () {
+    function cursor() {
+        $('.c64 .inner').prepend(
+            $('<div class="cursor">')
+        );
+    }
 
-        $('body').append(
-            $('<div class="c64">').append(
-                $('<div class="inner" tabindex="-1">').append(
-                    $('<div class="cursor">'),
-                    $.txt(
-                        '\n' +
-                        '    **** COMMODORE 64 BASIC V2 ****\n' +
-                        '\n' +
-                        ' 64K RAM SYSTEM  57462 BASIC BYTES FREE\n' +
-                        '\n' +
-                        'READY.\n' +
-                        'LIST\n' +
-                        '\n' +
-                        '100 REM   UI Team' + '\n' +
-                        '110 REM -----------------------' + '\n' +
-                        '110 REM   Matthias Biggeleben' + '\n' +
-                        '120 REM   Francisco Laguna' + '\n' +
-                        '130 REM   Christoph Kopp' + '\n' +
-                        '140 REM   Tobias Prinz' + '\n' +
-                        '150 REM   Christoph Hellweg' + '\n' +
-                        '160 REM   Alexander Quast' + '\n' +
-                        '170 REM   Frank Paczynski' + '\n' +
-                        '180 REM   Julian Baeume' + '\n' +
-                        '190 REM   David Bauer' + '\n' +
-                        '200 REM   Daniel Dickhaus' + '\n' +
-                        '210 REM   Viktor Pracht' + '\n' +
-                        '220 REM -----------------------' + '\n' +
-                        '\n' +
-                        'READY.\n'
-                    )
-                )
-                .on('focus', focus)
+    function list() {
+        $('.c64 .inner').append(
+            $.txt(
+                '100 REM   UI Team' + '\n' +
+                '110 REM -----------------------' + '\n' +
+                '110 REM   Matthias Biggeleben' + '\n' +
+                '120 REM   Francisco Laguna' + '\n' +
+                '130 REM   Christoph Kopp' + '\n' +
+                '140 REM   Tobias Prinz' + '\n' +
+                '150 REM   Christoph Hellweg' + '\n' +
+                '160 REM   Alexander Quast' + '\n' +
+                '170 REM   Frank Paczynski' + '\n' +
+                '180 REM   Julian Baeume' + '\n' +
+                '190 REM   David Bauer' + '\n' +
+                '200 REM   Daniel Dickhaus' + '\n' +
+                '210 REM   Viktor Pracht' + '\n' +
+                '220 REM -----------------------' + '\n' +
+                '\n' +
+                'READY.\n'
             )
         );
+    }
 
-        $(document).on('keydown', keydown);
+    function content() {
+        $('.c64 .inner').append(
+            $.txt(
+                '\n' +
+                '    **** COMMODORE 64 BASIC V2 ****\n' +
+                '\n' +
+                ' 64K RAM SYSTEM  57462 BASIC BYTES FREE\n' +
+                '\n' +
+                'READY.\n' +
+                'LIST\n\n'
+            )
+        );
+    }
+
+    function inner() {
+        $('.c64').append($('<div class="inner" tabindex="-1">'));
+    }
+
+    return function () {
+
+        $('body').append($('<div class="c64">'));
+
+        _.wait(1000).done(function () {
+            inner();
+            _.wait(500).done(function () {
+                content();
+                _.wait(1000).done(function () {
+                    list();
+                    cursor();
+                    $('.c64 .inner').on('focus', focus);
+                    $(document).on('keydown', keydown);
+                });
+            });
+        });
     };
 });
