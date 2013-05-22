@@ -38,6 +38,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             under: gt('Is smaller than')
         },
 
+        flagValues = {
+            '\\deleted': gt('deleted'),
+            '\\seen': gt('seen')
+        },
+
         containsValues = {
             regex: gt('Matches regex'),
             is: gt('Is exactly'),
@@ -73,10 +78,54 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             discard: gt('Discard'),
             redirect: gt('Redirect to'),
             move: gt('Move to folder'),
-            reject: gt('Reject with reason')
-//            gt('Mark mail as'),
+            reject: gt('Reject with reason'),
+            markmail: gt('Mark mail as'),
+            tag: gt('Tag mail with'),
+            flag: gt('Flag mail with')
 //            gt('Tag mail with'),
-//            gt('Flag mail with')
+//
+        },
+
+
+        colorNames = {
+            NONE:       gt('None'),
+            RED:        gt('Red'),
+            BLUE:       gt('Blue'),
+            GREEN:      gt('Green'),
+            GRAY:       gt('Gray'),
+            PURPLE:     gt('Purple'),
+            LIGHTGREEN: gt('Light green'),
+            ORANGE:     gt('Orange'),
+            PINK:       gt('Pink'),
+            LIGHTBLUE:  gt('Light blue'),
+            YELLOW:     gt('Yellow')
+        },
+
+        COLORS = {
+            NONE:        0,
+            RED:         1,
+            ORANGE:      7,
+            YELLOW:     10,
+            LIGHTGREEN:  6,
+            GREEN:       3,
+            LIGHTBLUE:   9,
+            BLUE:        2,
+            PURPLE:      5,
+            PINK:        8,
+            GRAY:        4
+        },
+
+        colorFlags = {
+            '$cl_1': '1',
+            '$cl_2': '2',
+            '$cl_3': '3',
+            '$cl_4': '4',
+            '$cl_5': '5',
+            '$cl_6': '6',
+            '$cl_7': '7',
+            '$cl_8': '8',
+            '$cl_9': '9',
+            '$cl_10': '10'
         },
 
         AccountDetailView = Backbone.View.extend({
@@ -91,16 +140,49 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
+                console.log('neu gerendert');
                 return this;
 
             },
             events: {
                 'save': 'onSave',
                 'click [data-action="change-value"]': 'onChangeValue',
+                'click [data-action="change-value-actions"]': 'onChangeValueAction',
                 'change [data-action="change-text-test"]': 'onChangeTextTest',
                 'change [data-action="change-text-action"]': 'onChangeTextAction',
-                'click .folderselect': 'onFolderSelect'
+                'click .folderselect': 'onFolderSelect',
+                'click [data-action="change-color"]': 'onChangeColor',
+                'click [data-action="remove"]': 'onDelete'
             },
+
+            onDelete: function (e) {
+
+                e.preventDefault();
+                var node = $(e.target),
+                    list = node.closest('li'),
+                    testID = list.attr('data-test-id'),
+                    testArray =  this.model.get('test'),
+                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+
+                if (checkForMultipleTests.length > 2) {
+                    testArray.tests.splice(testID, 1);
+                } else {
+
+                    if (testArray.tests) {
+                        testArray.tests.splice(testID, 1);
+                        testArray = testArray.tests[0];
+                    } else {
+                        testArray = { id: 'true' };
+                    }
+
+                }
+
+                this.model.set('test', testArray);
+                this.render();
+                console.log(this.model);
+
+            },
+
             onSave: function () {
                 console.log('der SAVE');
             },
@@ -115,14 +197,40 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
                     testArray =  this.model.get('test'),
-                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
+                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value],
+                    checkForMultipleTests = $(this.el).find('[data-test-id]');
 
                 link.text(translatedValue);
 
-                testArray.tests[testID].comparison = value;
-                this.model.set('test', testArray);
 
+                if (checkForMultipleTests.length > 0) {
+                    testArray.tests[testID].comparison = value;
+                } else {
+                    testArray.comparison = value;
+                }
+
+                this.model.set('test', testArray);
                 console.log(this.model.get('test'));
+            },
+
+            onChangeValueAction: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    value = node.attr('data-value') ? node.attr('data-value') : node.parent().attr('data-value'),
+                    link = node.closest('.action').find('a.dropdown-toggle'),
+
+                    list = link.closest('li'),
+                    type = list.attr('data-type'),
+                    actionID = list.attr('data-action-id'),
+                    actionsArray =  this.model.get('actioncmds'),
+                    translatedValue = flagValues[value];
+
+                link.text(translatedValue);
+
+                actionsArray[actionID].flags = [value];
+                this.model.set('actioncmds', actionsArray);
+
+                console.log(this.model.get('actioncmds'));
             },
 
             onChangeTextTest: function (e) {
@@ -132,9 +240,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = node.closest('li'),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
-                    testArray =  this.model.get('test');
+                    testArray =  this.model.get('test'),
+                    checkForMultipleTests = $(this.el).find('[data-test-id]');
 
-                testArray.tests[testID][type] = type === 'size' ? value : [value];
+                if (checkForMultipleTests.length > 1) {
+                    testArray.tests[testID][type] = type === 'size' ? value : [value];
+                } else {
+                    testArray[type] = type === 'size' ? value : [value];
+                }
+
                 this.model.set('test', testArray);
 
                 console.log(this.model.get('test'));
@@ -193,6 +307,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         });
                     });
                 });
+            },
+
+            onChangeColor: function (e) {
+                var self = this,
+                list = $(e.currentTarget).closest('li[data-action-id]'),
+                type = list.attr('data-type'),
+                actionID = list.attr('data-action-id'),
+                colorValue = list.find('div.flag').attr('data-color-value'),
+                actionArray =  this.model.get('actioncmds');
+
+                actionArray[actionID].flags[0] = '$cl_' + colorValue;
+                this.model.set('actioncmds', actionArray);
+
+                console.log(this.model.get('actioncmds'));
+
             }
 
         });
@@ -206,6 +335,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 _(values).map(function (name, value) {
                     return $('<li>').append(
                         $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value}).append(
+                            $.txt(name)
+                        )
+                    );
+                })
+            )
+        );
+    };
+
+
+    var drawOptionsActions = function (activeValue, values) {
+
+        var active = values[activeValue];
+        return $('<div class="action dropdown value">').append(
+            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
+            $('<ul class="dropdown-menu">').append(
+                _(values).map(function (name, value) {
+                    return $('<li>').append(
+                        $('<a>', { href: '#', 'data-action': 'change-value-actions', 'data-value': value}).append(
                             $.txt(name)
                         )
                     );
@@ -230,21 +377,69 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         return $('<button>').addClass('btn folderselect').attr('type', 'button').text('select Folder');
     };
 
+    var drawDeleteButton = function () {
+//        return $('<button>').addClass('btn delete').attr('type', 'button').text('delete Rule');
+
+        return $('<a href="#" class="close" data-action="remove">').html('&times;');
+    };
+
+    function changeLabel(e) {
+        e.preventDefault();
+        $(this).closest('.flag-dropdown').attr('data-color-value', e.data.color).removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
+    }
+
+
+    var drawColorDropdown = function (activeColor) {
+//        var data = baton.data,
+        var flagclass = 'flag_' + colorFlags[activeColor];
+        return $('<div class="dropdown flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
+        .addClass(flagclass)
+        .append(
+            // box
+            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
+            // drop down
+            $('<ul class="dropdown-menu">')
+            .append(
+                _(COLORS).map(function (index, color) {
+                    return $('<li>').append(
+                        $('<a href="#">').attr({'data-action': 'change-color'}).append(
+                            index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
+                            $.txt(colorNames[color])
+                        )
+                        .on('click', { color: index, flagclass: flagclass }, changeLabel)
+//                        .addClass(data.color_label === index ? 'active-label' : undefined)
+                    );
+                })
+            )
+        );
+    };
+
     ext.point(POINT + '/view').extend({
         index: 150,
         id: 'tests',
         draw: function (baton) {
-
+            console.log('neu im draw');
             var listTests = $('<ol class="widget-list">'),
                 listActions = $('<ol class="widget-list">').text('actions');
 
-            var appliedTest = baton.model.get('test').tests;
+            var appliedTest = baton.model.get('test');
 
-//            console.log(appliedTest);
+            if (appliedTest.tests) {
+                appliedTest = appliedTest.tests;
+            } else {
+                appliedTest = [appliedTest];
+            }
+
+            console.log(appliedTest);
 
             _(appliedTest).each(function (test, num) {
                 if (test.id === 'size') {
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(sizeTitles[test.id]).append(drawOptions(test.comparison, sizeValues), drawInputfieldTest(test.size)));
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(sizeTitles[test.id]).append(
+                            drawOptions(test.comparison, sizeValues),
+                            drawInputfieldTest(test.size),
+                            drawDeleteButton()
+                        )
+                    );
                 } else if (test.id === 'header') {
                     var name;
                     if (test.headers[3]) {
@@ -255,7 +450,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         name = test.headers[0] === '' ? headerTranslation.cleanHeader : headerTranslation[test.headers[0]];
                     }
 
-                    listTests.append($('<li>').addClass('filter-settings-view').attr('data-test-id', num).text(name).append(drawOptions(test.comparison, containsValues), drawInputfieldTest(test.values[0])));
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values'}).text(name).append(
+                            drawOptions(test.comparison, containsValues),
+                            drawInputfieldTest(test.values[0]),
+                            drawDeleteButton()
+                        )
+                    );
+                } else if (appliedTest.length !== 1 && test.id === 'true') {
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text('ein Fall von Alle').append(
+                            drawDeleteButton()
+                    ));
                 }
 
             });
@@ -266,7 +470,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 if (action.id !== 'stop') {
 
                     if (action.id === 'redirect') {
-                        listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'to'}).text(actionsTranslations[action.id]).append(drawInputfieldAction(action.to)));
+                        listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'to'}).text(actionsTranslations[action.id]).append(
+                                drawInputfieldAction(action.to)
+                            )
+                        );
                     }
 
                     else if (action.id === 'move') {
@@ -279,7 +486,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations[action.id]).append(
                             drawInputfieldAction(action.text)
                         ));
-                    } else {
+                    }
+                    else if (action.id === 'addflags') {
+                        if (/delete|seen/.test(action.flags[0])) {
+                            listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.markmail).append(
+                                    drawOptionsActions(action.flags[0], flagValues)
+                              ));
+                        } else if (/^\$cl/.test(action.flags[0])) {
+                            listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.flag).append(
+                                    drawColorDropdown(action.flags[0])
+                            ));
+                        } else {
+                            listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.tag).append(
+                                  drawInputfieldAction(action.text)
+                          ));
+                        }
+
+                    }
+                    else {
                         listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]));
                     }
 
@@ -339,8 +563,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         this.updateChoice();
         this.nodes.select.on('change', function () {
             var completeData = self.model.get(self.attributeStack);
-            completeData.id = self.nodes.select.val();
-            self.model.set(self.attributeStack, completeData, {validate: true});
+            if (completeData.tests) { // check if there are multiple tests
+                completeData.id = self.nodes.select.val();
+                self.model.set(self.attributeStack, completeData, {validate: true});
+            }
+
         });
     }
 

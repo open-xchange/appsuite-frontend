@@ -34,4 +34,48 @@
     input[data-action="change-text-test"], input[data-action="change-text-action"] {
         margin-bottom: 0;
     }
+    
+    .flag-dropdown {
+        width: 30px;
+        height: 24px;
+        margin: 0;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        border-radius: 5px;
+        float: right;
+    }
+
+    .flag-dropdown ul {
+        font: 14px/20 @normalFontFamily;
+        /* right: -22px; */
+        right: 165px;
+        left: auto;
+        top: 125%;
+        width: 200px;
+    }
+
+    .flag-dropdown a {
+        line-height: 24px;
+    }
+    
+    .flag_1  { background-color: @red; } /* red */
+    .flag_7  { background-color: @orange; } /* orange */
+    .flag_10 { background-color: @yellow; } /* yellow */
+    .flag_6  { background-color: @greenLight; } /* light green */
+    .flag_3  { background-color: @green; } /* green */
+    .flag_9  { background-color: @blueLight; } /* light blue */
+    .flag_2  { background-color: @blue; } /* blue */
+    .flag_5  { background-color: @purple; } /* purple (former brown) */
+    .flag_8  { background-color: @pink; } /* pink */
+    .flag_4  { background-color: @grayLight; } /* dark gray */
+    
+    .flag-example {
+        display: inline-block;
+        float: right;
+        width: 28px;
+        height: 22px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        .border-radius(5px);
+    }
+    
 }
