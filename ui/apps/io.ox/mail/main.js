@@ -673,14 +673,20 @@ define('io.ox/mail/main',
         // search
         (function () {
 
+            ext.point('io.ox/mail/search/defaults').extend({
+                from: true,
+                cc: true,
+                subject: true
+            });
+
             var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 ids = 'from to cc subject text'.split(' '),
-                state = { from: true, cc: true, subject: true };
+                defaults = ext.point('io.ox/mail/search/defaults').options();
 
             win.nodes.search.find('.input-append').append(
                 _(ids).map(function (name) {
                     return $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: state[name] ? 'checked' : null }),
+                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
                         $.txt(translations[name])
                     );
                 })

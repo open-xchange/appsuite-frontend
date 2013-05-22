@@ -121,7 +121,9 @@ define('io.ox/portal/main',
                 .append(
                     $('<h2>').append(
                         // add remove icon
-                        baton.model.get('protectedWidget') ? [] : $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                        baton.model.get('protectedWidget') ? [] :
+                            $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
+                            .attr('title', gt('Disable widget')),
                         // title span
                         $('<span class="title">').text('\u00A0')
                     )
