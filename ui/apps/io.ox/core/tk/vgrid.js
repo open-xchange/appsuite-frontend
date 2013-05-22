@@ -219,19 +219,48 @@ define('io.ox/core/tk/vgrid',
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+
             // bottom toolbar
+            ignoreCheckbox = false,
+
+            fnToggleCheckbox = function (e) {
+                if (ignoreCheckbox) return;
+                var grid = e.data.grid, checked = $(this).prop('checked');
+                if (checked) {
+                    grid.selection.selectAll();
+                } else {
+                    grid.selection.clear();
+                }
+            },
+
+            uncheckSelectAll = function (list) {
+                if (list.length <= 1) {
+                    ignoreCheckbox = true;
+                    node.find('.select-all input').prop('checked', false);
+                    ignoreCheckbox = false;
+                }
+            },
+
             fnToggleEditable = function (e) {
-                    e.preventDefault();
-                    var grid = e.data.grid;
-                    grid.setEditable(!grid.getEditable());
-                },
+                e.preventDefault();
+                var grid = e.data.grid;
+                grid.setEditable(!grid.getEditable());
+            },
+
             topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
                 .prependTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
                 .append(
+                    // show checkbox
+                    options.showCheckbox === false ?
+                        [] :
+                        $('<label class="select-all">').append(
+                            $('<input type="checkbox" value="true">').attr('title', gt('Select all'))
+                        )
+                        .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
-                        $() :
+                        [] :
                         $('<a>', { href: '#' })
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
@@ -317,6 +346,10 @@ define('io.ox/core/tk/vgrid',
 
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
+
+        this.selection.on('change', function () {
+
+        });
 
         // second toolbar
         if (_.device('!small')) {
@@ -839,6 +872,8 @@ define('io.ox/core/tk/vgrid',
         // selection events
         this.selection
             .on('change', function (e, list) {
+                // reset select-all checkbox
+                uncheckSelectAll(list);
                 // prevent to long URLs
                 var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
                     return self.selection.serialize(obj);

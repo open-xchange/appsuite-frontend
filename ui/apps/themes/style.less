@@ -819,7 +819,17 @@ a.button {
                 color: #888;
             }
         }
+    }
 
+    .select-all {
+        float: left;
+        margin-top: 5px;
+        width: 30px;
+        display: none;
+    }
+
+    &.editable .select-all {
+        display: inline-block;
     }
 
     &.top-toolbar .vgrid-toolbar.top, &.bottom-toolbar .vgrid-toolbar.bottom {
@@ -847,10 +857,7 @@ a.button {
         right: 0;
         left: auto;
     }
-
 }
-
-
 
 .vgrid-cell {
     position: absolute;

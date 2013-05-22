@@ -65,11 +65,6 @@ define("io.ox/core/main",
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
-    require('io.ox/core/gettext')
-        .addTranslation('*', 'app\x00Mail', 'Mega MAIL')
-        .addTranslation('*', 'app\x00Calendar', 'Geilo 3000')
-        .addTranslation('*', 'app\x00Portal', 'Win a cake');
-
     // whatever ...
     gt.pgettext('app', 'Portal');
     gt.pgettext('app', 'Mail');
