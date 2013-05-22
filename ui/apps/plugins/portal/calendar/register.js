@@ -98,12 +98,10 @@ define("plugins/portal/calendar/register",
 
                     var declined = util.getConfirmationStatus(nextApp) === 2,
                         start = new date.Local(nextApp.start_date),
-                        timespan;
+                        timespan = util.getSmartDate(nextApp, true);
 
-                    if (nextApp.full_time) {
-                        timespan = util.getSmartDate(date.Local.utc(nextApp.start_date), true);
-                    } else {
-                        timespan = util.getSmartDate(nextApp.start_date, true) + ' ' + start.format(date.TIME);
+                    if (!nextApp.full_time) {
+                        timespan += ' ' + start.format(date.TIME);
                     }
 
                     if (showDeclined || !declined) {

@@ -202,20 +202,11 @@ define('io.ox/calendar/list/perspective',
                     folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                     order: prop.order
                 }).pipe(function (data) {
-                    var now = _.now();
                     if (!settings.get('showDeclinedAppointments', false)) {
                         data = _.filter(data, function (obj) {
                             return util.getConfirmationStatus(obj) !== 2;
                         });
                     }
-                    _.map(data, function (obj) {
-                        // show pending appointments under today label
-                        if (obj.start_date < now) {
-                            obj.fixed_start_date = now;
-                        }
-                        return obj;
-                    });
-                    //if recurrence_position is missing we look for the oldest appearing one.
                     if (findRecurrence) {
 
                         var foundRecurrence = false,
