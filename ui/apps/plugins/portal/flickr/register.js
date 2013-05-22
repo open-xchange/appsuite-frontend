@@ -78,7 +78,7 @@ define('plugins/portal/flickr/register',
             var photo, size = '', url;
 
             // set title
-            this.find('h2').text(baton.model.get('props').query || 'Flickr');
+            this.find('h2 .title').text(baton.model.get('props').query || 'Flickr');
 
             if (baton.data.error) {
                 this.append(

@@ -68,7 +68,7 @@ define('plugins/portal/tumblr/register',
                 post = _(data.posts).first();
 
             if (title) {
-                this.find('h2').text(title);
+                this.find('h2 .title').text(title);
             }
 
             if (post) {
