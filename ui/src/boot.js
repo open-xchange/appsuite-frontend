@@ -25,6 +25,11 @@ $(window).load(function () {
         ox.base = ox.base + _.now();
     }
 
+    // enable special logging to investigate why boot fails
+    var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
+
+    debug('boot.js: Go!');
+
     // animations
     var DURATION = 250,
         // functions
@@ -210,6 +215,8 @@ $(window).load(function () {
     _.extend(require, req);
 
     function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+
+        debug('boot.js: require > loadSuccess');
 
         gotoCore = function (viaAutoLogin) {
             if (ox.signin === true) {
@@ -500,6 +507,8 @@ $(window).load(function () {
          */
         autoLogin = function () {
 
+            debug('boot.js: autoLogin ...');
+
             function loadCoreFiles() {
                 // Set user's language (as opposed to the browser's language)
                 // Load core plugins
@@ -519,10 +528,12 @@ $(window).load(function () {
 
             function continueWithoutAutoLogin() {
                 if (ox.signin) {
+                    debug('boot.js: fetchGeneralServerConfig ...');
                     fetchGeneralServerConfig().then(
                         function success() {
                             // now we're sure the server is up
                             serverUp();
+                            debug('boot.js: fetchGeneralServerConfig > success');
                             // set page title now
                             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                             themes.set(ox.serverConfig.signinTheme || 'login');
@@ -532,6 +543,7 @@ $(window).load(function () {
                         function fail() {
                             // nope, had some stuff in the caches but server is down
                             serverDown();
+                            debug('boot.js: fetchGeneralServerConfig > fail');
                         }
                     );
                 } else {
@@ -544,6 +556,8 @@ $(window).load(function () {
 
             // got session via hash?
             if (hash.session) {
+
+                debug('boot.js: autoLogin > hash.session', hash.session);
 
                 // set session; session.store() might need it now (formlogin)
                 ox.session = hash.session;
@@ -595,9 +609,12 @@ $(window).load(function () {
             } else if (!ox.online) {
 
                 // not online - no auto-login possible
+                debug('boot.js: autoLogin > Offline');
                 gotoSignin();
 
             } else {
+
+                debug('boot.js: autoLogin > session.autoLogin()');
 
                 // try auto login!?
                 session.autoLogin()
@@ -609,6 +626,7 @@ $(window).load(function () {
                     function loginSuccess(data) {
                         // now we're sure the server is up
                         serverUp();
+                        debug('boot.js: autoLogin > loginSuccess');
                         // are we on login page?
                         if (ox.signin) {
                             gotoCore(true)
@@ -624,6 +642,7 @@ $(window).load(function () {
                         }
                     },
                     function loginFailed() {
+                        debug('boot.js: autoLogin > loginSuccess');
                         continueWithoutAutoLogin();
                     }
                 );
@@ -634,6 +653,7 @@ $(window).load(function () {
          * Initialize login screen
          */
         initialize = function () {
+
             // shortcut
             var sc = ox.serverConfig,
                 lang = sc.languages,
@@ -644,8 +664,14 @@ $(window).load(function () {
                 i = 0,
                 cl = $('#io-ox-current-language').parent(),
                 maxLang = 20;
+
+            debug('boot.js: initialize ...');
+
             // show languages
             if (!_.isEmpty(lang)) {
+
+                debug('boot.js: List languages', lang);
+
                 var langCount = _.size(lang);
                 node = $('#io-ox-language-list');
                 // Display native select box for languages if there are up to "maxLang" languages
@@ -681,9 +707,11 @@ $(window).load(function () {
             } else {
                 $("#io-ox-languages").remove();
             }
+
             // update header
             $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ');
             $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0');
+
             // update footer
             footer = sc.copyright ? sc.copyright + ' ' : '';
             footer += sc.version ? 'Version: ' + sc.version + ' ' : '';
@@ -691,16 +719,19 @@ $(window).load(function () {
             footer += revision !== '' ? revision + ' ' : '';
             footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
             $('#io-ox-copyright').text(footer);
+
             // hide checkbox?
             if (!capabilities.has("autologin")) {
                 $('#io-ox-login-store').remove();
             }
+
             // hide forgot password?
             if (sc.forgotPassword === false) {
                 $('#io-ox-forgot-password').remove();
             } else {
                 $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
             }
+
             // disable password?
             if (!ox.online) {
                 $('#io-ox-login-password').attr('disabled', 'disabled');
@@ -708,66 +739,73 @@ $(window).load(function () {
             } else {
                 $('#io-ox-login-password').removeAttr('disabled');
             }
+
             // set username input type to text in IE
             if (_.device('IE > 9')) {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
+
+            debug('boot.js: Load "signin" plugins & set default language');
+
             return $.when(
-                    // load extensions
-                    manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
-                    // use browser language
-                    setDefaultLanguage()
-                )
-                .always(function () {
+                // load extensions
+                manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
+                // use browser language
+                setDefaultLanguage()
+            )
+            .always(function () {
 
-                    // autologout message
-                    if (_.url.hash("autologout")) {
-                        feedback('info', gt('autologout'));
-                    }
+                // autologout message
+                if (_.url.hash("autologout")) {
+                    feedback('info', gt('autologout'));
+                }
 
-                    // supported browser?
-                    if (!isBrowserSupported()) {
+                debug('boot.js: Check browser support');
 
-                        if (_.device('android')) {
-                            // special info for not supported android
-                            feedback('info', _.printf(gt('os-android'), _.browserSupport.Android));
-                        } else if (_.device('ios')) {
-                            // special info for not supported iOS
-                            feedback('info', _.printf(gt('os-ios'), _.browserSupport.iOS));
-                        } else {
-                            // general warning about browser
-                            feedback('info', $(
-                                _.browser.Chrome ?
-                                '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
-                                '<b>' + gt('browser') + '</b>&nbsp;' + gt('please-use') + '<div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
-                            ));
-                        }
+                // supported browser?
+                if (!isBrowserSupported()) {
 
-                    } else if (_.browser.IE <= 8) {
-                        // recommend chrome frame?
-                        var link = 'http://www.google.com/chromeframe/?user=true';
+                    if (_.device('android')) {
+                        // special info for not supported android
+                        feedback('info', _.printf(gt('os-android'), _.browserSupport.Android));
+                    } else if (_.device('ios')) {
+                        // special info for not supported iOS
+                        feedback('info', _.printf(gt('os-ios'), _.browserSupport.iOS));
+                    } else {
+                        // general warning about browser
                         feedback('info', $(
-                            '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
+                            _.browser.Chrome ?
+                            '<b>' + gt('browser-version') + '</b> <div>' + gt('please-update') + '</div>' :
+                            '<b>' + gt('browser') + '</b>&nbsp;' + gt('please-use') + '<div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
                         ));
-                    } else if (_.device('android || (ios && small)')) {
-                        // TODO remove after 7.4
-                        // inform about preview mode for 7.2
-                        feedback('info', gt('mobile-preview'));
-                    }
-                    // show login dialog
-                    $('#io-ox-login-blocker').on('mousedown', false);
-                    $('#io-ox-login-form').on('submit', fnSubmit);
-                    $('#io-ox-login-username').removeAttr('disabled').focus().select();
-                    $('#background_loader').idle().fadeOut(DURATION, cont);
-
-                    if (_.device('ios')) {
-                        //load on ios to safe transfered data
-                        require(['plugins/mobile/addToHomescreen/register']);
                     }
 
+                } else if (_.browser.IE <= 8) {
+                    // recommend chrome frame?
+                    var link = 'http://www.google.com/chromeframe/?user=true';
+                    feedback('info', $(
+                        '<b>' + gt('slow') + '</b> <div><a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>.</div>'
+                    ));
+                } else if (_.device('android || (ios && small)')) {
+                    // TODO remove after 7.4
+                    // inform about preview mode for 7.2
+                    feedback('info', gt('mobile-preview'));
+                }
 
-                });
+                // show login dialog
+                $('#io-ox-login-blocker').on('mousedown', false);
+                $('#io-ox-login-form').on('submit', fnSubmit);
+                $('#io-ox-login-username').removeAttr('disabled').focus().select();
+
+                debug('boot.js: Fade in ...');
+                $('#background_loader').idle().fadeOut(DURATION, cont);
+
+                if (_.device('ios')) {
+                    //load on ios to safe transfered data
+                    require(['plugins/mobile/addToHomescreen/register']);
+                }
+            });
         };
 
         appCache.done(function () {
@@ -777,9 +815,12 @@ $(window).load(function () {
     }
 
     function loadFail(e) {
+        debug('boot.js: require > loadFail');
         console.error('Server down', e.message, e);
         serverDown();
     }
+
+    debug('boot.js: require([...], loadSuccess, loadFail);');
 
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
@@ -813,6 +854,7 @@ $(window).load(function () {
 
             cont = function (e) {
                 clear();
+                debug('boot.js: applicationcache > resolve');
                 appCache.resolve();
             };
 
