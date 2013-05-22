@@ -504,30 +504,25 @@ define("io.ox/mail/write/view-main",
 
             this.addLink('options', gt('More'));
 
-            var fnChangeFormat = function (e) {
-                e.preventDefault();
-                $(this).addClass('active').siblings().removeClass('active');
-                app.setFormat(e.data.format).done(function () {
-                    app.getEditor().focus();
-                });
-            };
-
             if (!Modernizr.touch) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', gt('Text format'), true, false)
-                    .append(
-                        $('<div>').addClass('change-format').append(
-                            $('<a>', { href: '#' })
-                                .text(gt('Text'))
-                                .addClass(format === 'text' ? 'active' : '')
-                                .on('click', { format: 'text' }, fnChangeFormat),
-                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
-                            $('<a>', { href: '#' })
-                                .text(gt('HTML'))
-                                .addClass(format === 'html' || format === 'alternative' ? 'active' : '')
-                                .on('click', { format: 'html' }, fnChangeFormat)
-                        )
-                    );
+                this.addSection('format', gt('Text format'), true, false).append(
+
+                    $('<div class="section-item">').append(
+                        createRadio('format', 'text', gt('Text')),
+                        createRadio('format', 'html', gt('HTML'), true)
+                    )
+                    .css({
+                        paddingTop: '1em',
+                        paddingBottom: '1em'
+                    })
+                    .on('change', 'input', function () {
+                        var radio = $(this), format = radio.val();
+                        app.setFormat(format).done(function () {
+                            app.getEditor().focus();
+                        });
+                    })
+                );
             }
 
             /*
