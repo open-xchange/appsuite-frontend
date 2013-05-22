@@ -22,8 +22,6 @@ define('io.ox/calendar/week/view',
 
     'use strict';
 
-    var myself = null;
-
     var View = Backbone.View.extend({
 
         className:      'week',
@@ -43,17 +41,23 @@ define('io.ox/calendar/week/view',
         mode:           0,      // view mode {1: day, 2: workweek, 3: week}
         workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
         showDeclined:   false,  // show declined appointments
-        showFulltime:   true,   // show area for fulltime appointments
 
         startDate:      null,   // start of day/week as local date (use as reference point)
         apiRefTime:     null,   // current reference time for api calls
         clickTimer:     null,   // timer to separate single and double click
-        todayClass:     null,   // CSS classname for today column
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
+
+        // startup options
+        options:        {
+            todayClass: 'today',
+            showFulltime: true,
+            keyboard: true,
+            allowLasso: true
+        },
 
         // define view events
         events: {
@@ -66,27 +70,26 @@ define('io.ox/calendar/week/view',
             'dblclick .week-container>.day,.fulltime>.day' : 'onCreateAppointment',
             'swipeleft .timeslot' : 'onControlView',
             'swiperight .timeslot' : 'onControlView',
-            'tap .control.next,.control.prev,.control.today': 'onControlView',
+            'click .control.next,.control.prev,.control.today': 'onControlView',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
         // init values from prespective
         initialize: function (opt) {
-            myself = myself || ox.user_id;
+            // init options
+            this.options = _.extend(this.options, opt);
 
-            this.pane = $('<div>').addClass('scrollpane');
-            this.fulltimePane = $('<div>').addClass('fulltime');
-            this.fulltimeCon = $('<div>').addClass('fulltime-container');
-            this.fulltimeNote = $('<div>').addClass('note');
-            this.timeline = $('<div>').addClass('timeline');
-            this.dayLabel = $('<div>').addClass('footer');
-            this.kwInfo = $('<div>').addClass('info');
-            this.showAllCheck = $('<input/>').attr('type', 'checkbox');
-            this.showAllCon = $('<div>').addClass('showall');
+            // initialize main objects
+            this.pane           = $('<div>').addClass('scrollpane').attr({ tabindex: 1 });
+            this.fulltimePane   = $('<div>').addClass('fulltime');
+            this.fulltimeCon    = $('<div>').addClass('fulltime-container');
+            this.fulltimeNote   = $('<div>').addClass('note');
+            this.timeline       = $('<div>').addClass('timeline');
+            this.dayLabel       = $('<div>').addClass('footer');
+            this.kwInfo         = $('<div>').addClass('info');
+            this.showAllCon     = $('<div>').addClass('showall');
+            this.showAllCheck   = $('<input/>').attr('type', 'checkbox').attr({ tabindex: 1 });
 
-            this.showFulltime = opt.showFulltime === false ? false : true;
-            this.todayClass = 'todayClass' in opt ? opt.todayClass : 'today';
-            this.allowLasso = 'allowLasso' in opt ? opt.allowLasso : true;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || new date.Local();
@@ -109,9 +112,7 @@ define('io.ox/calendar/week/view',
 
             this.collection
                 .on('change', this.redrawAppointment, this);
-            if (!opt.keyboard || opt.keyboard === true) {
-                this.bindKeys();
-            }
+
             this.setStartDate(this.refDate);
             this.initSettings();
         },
@@ -241,10 +242,8 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e Clickevent
          */
         onControlView: function (e) {
-            e.preventDefault();
             var cT = $(e.currentTarget),
                 t = $(e.target);
-
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
                 this.setStartDate('next');
             }
@@ -264,41 +263,30 @@ define('io.ox/calendar/week/view',
          * handler for key events in view
          * @param  {KeyEvent} e Keyboard event
          */
-        onKey: function (e) {
-            e.preventDefault();
-            if (document.activeElement.tagName === 'BODY') {
-                switch (e.which) {
-                case 37: // left
-                    this.setStartDate('prev');
-                    this.trigger('onRefresh');
-                    break;
-                case 39: // right
-                    this.setStartDate('next');
-                    this.trigger('onRefresh');
-                    break;
-                default:
-                    break;
-                }
+        fnKey: function (e) {
+            if (!this.options.keyboard) {
+                return false;
+            }
+            switch (e.which) {
+            case 27: // ESC
+                this.cleanUpLasso();
+                break;
+            case 37: // left
+                this.setStartDate('prev');
+                this.trigger('onRefresh');
+                break;
+            case 39: // right
+                this.setStartDate('next');
+                this.trigger('onRefresh');
+                break;
+            default:
+                break;
             }
         },
 
         /**
-         * unbind onKey handler on keyup event from document
-         */
-        unbindKeys: function () {
-            $(document).off('keyup', this.onKey);
-        },
-
-        /**
-         * bin onKey handler on keyup event to document
-         */
-        bindKeys: function () {
-            $(document).on('keyup', $.proxy(this.onKey, this));
-        },
-
-        /**
          * handler for single- and double-click events on appointments
-         * @param  {KeyEvent} e Keyboard event
+         * @param  {Event} e Mouse event
          */
         onClickAppointment: function (e) {
             var cT = $(e.currentTarget);
@@ -368,21 +356,12 @@ define('io.ox/calendar/week/view',
             }
         },
 
-        onLassoESC: function (e) {
-            e.preventDefault();
-            if (e.which === 27) {
-                this.cleanUpLasso();
-                $(document).off('keyup', $.proxy(this.onLassoESC, this));
-            }
-        },
-
         /**
          * handler for lasso function in grid
          * @param  {MouseEvent} e mouseevents on day container
          */
         onLasso: function (e) {
-            e.preventDefault();
-            if (this.allowLasso === false || !folderAPI.can('create', this.folder())) {
+            if (this.options.allowLasso === false || !folderAPI.can('create', this.folder())) {
                 return;
             }
 
@@ -391,12 +370,11 @@ define('io.ox/calendar/week/view',
             case 'mousedown':
                 if (this.lasso === false && $(e.target).hasClass('timeslot')) {
                     this.lasso = true;
-                    $(document).on('keyup', $.proxy(this.onLassoESC, this));
                 }
                 break;
 
             case 'mousemove':
-
+                e.preventDefault();
                 var cT = $(e.currentTarget),
                     curDay = parseInt(cT.attr('date'), 10),
                     mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
@@ -503,6 +481,7 @@ define('io.ox/calendar/week/view',
                 break;
 
             case 'mouseup':
+                e.preventDefault();
                 if (_.isObject(this.lasso) && e.which === 1) {
                     var l = this.lasso.data();
 
@@ -582,7 +561,7 @@ define('io.ox/calendar/week/view',
             if (!Modernizr.touch) {
                 this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
             }
-            this.fulltimePane.css({ height: (this.showFulltime ? 21 : 1) + 'px'});
+            this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px'});
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);
@@ -631,14 +610,14 @@ define('io.ox/calendar/week/view',
                                     .append(
                                         $('<li>')
                                             .append(
-                                                $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                                                $('<a href="#" tabindex="1"/>').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
                                             ),
                                         $('<li>').append(
-                                            $('<a href="#">').addClass('control today').text(gt('Today'))
+                                            $('<a href="#" tabindex="1"/>').addClass('control today').text(gt('Today'))
                                         ),
                                         $('<li>')
                                             .append(
-                                                    $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
+                                                    $('<a href="#" tabindex="1"/>').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
                                             )
                                     )
                             )
@@ -655,7 +634,7 @@ define('io.ox/calendar/week/view',
             );
 
             this.renderDayLabel();
-
+            this.pane.focus();
             return this;
         },
 
@@ -715,7 +694,7 @@ define('io.ox/calendar/week/view',
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
-                    $('.day[date="' + d + '"]', this.pane).addClass(this.todayClass);
+                    $('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
                     day.addClass('today');
                     this.timeline.show();
                 }
@@ -742,8 +721,8 @@ define('io.ox/calendar/week/view',
 
             // clear all first
             $('.appointment', this.$el).remove();
-            if (this.todayClass) {
-                $('.day.' + this.todayClass, this.$el).removeClass(this.todayClass);
+            if (this.options.todayClass) {
+                $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
             var self = this,
@@ -757,9 +736,9 @@ define('io.ox/calendar/week/view',
             this.collection.each(function (model) {
 
                 // is declined?
-                if (util.getConfirmationStatus(model.attributes, myself) !== 2 || this.showDeclined) {
+                if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
-                    if (model.get('full_time') && this.showFulltime) {
+                    if (model.get('full_time') && this.options.showFulltime) {
                         fulltimeCount++;
                         var app = this.renderAppointment(model),
                             fulltimePos = (model.get('start_date') - this.startDate.getDays() * date.DAY) / date.DAY,
@@ -843,7 +822,7 @@ define('io.ox/calendar/week/view',
 
             // calculate full-time appointment container height
             var ftHeight = 1;
-            if (this.showFulltime) {
+            if (this.options.showFulltime) {
                 ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1);
                 this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
                 this.fulltimeCon.resizable({
@@ -1573,11 +1552,11 @@ define('io.ox/calendar/week/view',
                 confString = _.noI18n('%1$s'),
                 classes = '';
 
-            if (a.get('private_flag') && myself !== a.get('created_by')) {
+            if (a.get('private_flag') && ox.user_id !== a.get('created_by')) {
                 classes = 'private disabled';
             } else {
                 classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf = util.getConfirmationStatus(a.attributes, myself)) +
+                    ' ' + util.getConfirmationClass(conf = util.getConfirmationStatus(a.attributes, ox.user_id)) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {
                     confString =

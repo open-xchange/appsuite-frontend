@@ -251,6 +251,8 @@ define('io.ox/calendar/week/perspective',
                 this.view.$el.show();
             }
 
+            this.view.pane.focus();
+
             // renew data
             this.refresh();
         },
@@ -301,15 +303,19 @@ define('io.ox/calendar/week/perspective',
                 });
 
             // watch for folder change
-            this.app.on('folder:change', refresh)
-                .on('folder:delete', reload)
-                .getWindow()
+            this.app
+                .on('folder:change', refresh)
+                .on('folder:delete', reload);
+            this.app.getWindow()
                 .on('beforehide', $.proxy(this.save, this))
                 .on('show', $.proxy(this.restore, this))
                 .on('show', refresh)
                 .on('change:perspective', function () {
-                    self.view.unbindKeys();
                     self.dialog.close();
+                });
+            this.main
+                .on('keydown', function (e) {
+                    self.view.fnKey(e);
                 });
 
             this.followDeepLink();
