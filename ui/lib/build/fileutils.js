@@ -391,25 +391,22 @@ exports.list = function(dir, globs) {
         globs = dir;
         dir = "";
     }
-    var retval;
-    if (dir && !path.existsSync(dir)) {
-        retval = [];
-    } else {
-        if (typeof globs == "string") globs = [globs];
-        globs = _.map(globs, function (s) {
-            return path.join(dir, s.replace(/\/$/, '/**/*'));
-        });
-        retval = new jake.FileList(globs);
-        retval.exclude(function(name) {
-            try {
-                return fs.statSync(name).isDirectory();
-            } catch (e) {
-                return true;
-            }
-        });
-        retval = retval.toArray();
-        retval = _.map(retval, function (s) { return path.relative(dir, s); });
-    }
+    if (typeof globs == "string") globs = [globs];
+    globs = _.chain(globs).map(function (s) {
+        return path.join(dir, s.replace(/\/$/, '/**/*'));
+    }).filter(function (s) {
+        return path.existsSync(jake.basedir(s));
+    }).value();
+    var retval = new jake.FileList(globs);
+    retval.exclude(function(name) {
+        try {
+            return fs.statSync(name).isDirectory();
+        } catch (e) {
+            return true;
+        }
+    });
+    retval = retval.toArray();
+    retval = _.map(retval, function (s) { return path.relative(dir, s); });
     retval.dir = dir;
     return retval;
 };
