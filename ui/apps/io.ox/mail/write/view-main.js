@@ -739,10 +739,10 @@ define("io.ox/mail/write/view-main",
                             $.txt('\u00A0')
                         ),
                         // remove
-                        $('<a>', { href: '#', tabindex: '6' })
-                        .addClass('remove')
+                        $('<a href="#" class="remove" tabindex="6">')
+                        .attr('title', gt('Remove attachment'))
                         .append(
-                            $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // 00D7 = &times;
+                            $('<i class="icon-trash">')
                         )
                         .on('click', function (e) {
                             e.preventDefault();
@@ -861,10 +861,10 @@ define("io.ox/mail/write/view-main",
             // email address
             $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
             // remove
-            $('<a>', { href: '#' })
-                .addClass('remove')
+            $('<a href="#" class="remove">')
+                .attr('title', gt('Remove from recipient list'))
                 .append(
-                    $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // &times;
+                    $('<i class="icon-trash">')
                 )
                 .on('click', { id: id }, function (e) {
                     e.preventDefault();
