@@ -127,14 +127,23 @@ define('io.ox/calendar/list/perspective',
                 this.prepend(
                     $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
                         .append(
-                            $('<a>', { href: '#' })
+                            $('<a>', {
+                                    href: '#',
+                                    tabindex: 1,
+                                    'data-toggle': 'dropdown',
+                                    role: 'menuitem',
+                                    'aria-haspopup': true,
+                                    'aria-label': gt('Sort options')
+                                })
                                 .attr('data-toggle', 'dropdown')
                                 .append(
                                     $('<i class="icon-arrow-down">'),
                                     $('<i class="icon-arrow-up">')
                                 )
                                 .dropdown(),
-                            $('<ul>').addClass("dropdown-menu")
+                            $('<ul>').addClass("dropdown-menu").attr({
+                                    role: 'menu'
+                                })
                                 .append(
                                     buildOption('desc', gt('Ascending')),
                                     buildOption('asc', gt('Descending')),
