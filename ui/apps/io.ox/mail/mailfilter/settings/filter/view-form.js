@@ -152,10 +152,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 'change [data-action="change-text-action"]': 'onChangeTextAction',
                 'click .folderselect': 'onFolderSelect',
                 'click [data-action="change-color"]': 'onChangeColor',
-                'click [data-action="remove"]': 'onDelete'
+                'click [data-action="remove-test"]': 'onRemoveTest',
+                'click [data-action="remove-action"]': 'onRemoveAction'
             },
 
-            onDelete: function (e) {
+            onRemoveTest: function (e) {
 
                 e.preventDefault();
                 var node = $(e.target),
@@ -178,6 +179,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
 
                 this.model.set('test', testArray);
+                this.render();
+                console.log(this.model);
+
+            },
+
+            onRemoveAction: function (e) {
+
+                e.preventDefault();
+                var node = $(e.target),
+                    list = node.closest('li'),
+                    actionID = list.attr('data-action-id'),
+                    actionArray =  this.model.get('actioncmds');
+
+                actionArray.splice(actionID, 1);
+                this.model.set('actioncmds', actionArray);
                 this.render();
                 console.log(this.model);
 
@@ -377,10 +393,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         return $('<button>').addClass('btn folderselect').attr('type', 'button').text('select Folder');
     };
 
-    var drawDeleteButton = function () {
-//        return $('<button>').addClass('btn delete').attr('type', 'button').text('delete Rule');
-
-        return $('<a href="#" class="close" data-action="remove">').html('&times;');
+    var drawDeleteButton = function (type) {
+        return $('<a href="#" class="close" data-action="remove-' + type + '">').html('&times;');
     };
 
     function changeLabel(e) {
@@ -437,7 +451,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(sizeTitles[test.id]).append(
                             drawOptions(test.comparison, sizeValues),
                             drawInputfieldTest(test.size),
-                            drawDeleteButton()
+                            drawDeleteButton('test')
                         )
                     );
                 } else if (test.id === 'header') {
@@ -453,12 +467,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values'}).text(name).append(
                             drawOptions(test.comparison, containsValues),
                             drawInputfieldTest(test.values[0]),
-                            drawDeleteButton()
+                            drawDeleteButton('test')
                         )
                     );
                 } else if (appliedTest.length !== 1 && test.id === 'true') {
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text('ein Fall von Alle').append(
-                            drawDeleteButton()
+                            drawDeleteButton('test')
                     ));
                 }
 
@@ -471,7 +485,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     if (action.id === 'redirect') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'to'}).text(actionsTranslations[action.id]).append(
-                                drawInputfieldAction(action.to)
+                                drawInputfieldAction(action.to),
+                                drawDeleteButton('action')
                             )
                         );
                     }
@@ -479,32 +494,39 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     else if (action.id === 'move') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'into'}).text(actionsTranslations[action.id]).append(
                             drawDisabledInputfield(action.into),
-                            drawFolderSelect()
+                            drawFolderSelect(),
+                            drawDeleteButton('action')
                         ));
                     }
                     else if (action.id === 'reject') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations[action.id]).append(
-                            drawInputfieldAction(action.text)
+                            drawInputfieldAction(action.text),
+                            drawDeleteButton('action')
                         ));
                     }
                     else if (action.id === 'addflags') {
                         if (/delete|seen/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.markmail).append(
-                                    drawOptionsActions(action.flags[0], flagValues)
+                                    drawOptionsActions(action.flags[0], flagValues),
+                                    drawDeleteButton('action')
                               ));
                         } else if (/^\$cl/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.flag).append(
-                                    drawColorDropdown(action.flags[0])
+                                    drawColorDropdown(action.flags[0]),
+                                    drawDeleteButton('action')
                             ));
                         } else {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.tag).append(
-                                  drawInputfieldAction(action.text)
+                                  drawInputfieldAction(action.text),
+                                  drawDeleteButton('action')
                           ));
                         }
 
                     }
                     else {
-                        listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]));
+                        listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]).append(
+                                drawDeleteButton('action')
+                        ));
                     }
 
                 }
