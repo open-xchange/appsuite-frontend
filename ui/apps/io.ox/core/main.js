@@ -641,7 +641,7 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar/launchpad').extend({
             id: 'default',
             draw: function () {
-                if (true || capabilities.has('launchpad')) {
+                if (capabilities.has('launchpad')) {
                     addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                         return require(["io.ox/launchpad/main"], function (m) {
                             launchers.children().removeClass('active-app');
