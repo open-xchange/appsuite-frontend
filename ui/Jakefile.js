@@ -574,8 +574,6 @@ function docFile(file, title) {
 docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
 docFile("extensions", "Extension Points");
-docFile("extensionpoints_contact", "Extension Points / Contact App");
-docFile("extensionpoints_mail", "Extension Points / Mail App");
 docFile("libs", "External Libs");
 docFile("development_guide", "UI Development Style Guide");
 docFile("buildsystem", "Build System");
