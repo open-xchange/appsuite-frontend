@@ -439,7 +439,7 @@ define('io.ox/core/api/factory',
              */
             api.search = function (query, options) {
                 // merge defaults for search
-                var opt = $.extend({}, o.requests.search, options || {}),
+                var opt = $.extend({}, o.requests.search, options || {}), list,
                     getData = opt.getData;
 
                 options = options || {};
@@ -451,6 +451,15 @@ define('io.ox/core/api/factory',
                 // remove omitFolder & getData functions
                 delete opt.omitFolder;
                 delete opt.getData;
+
+                //add extra fields via keywords defined in extra property
+                if (options.extra && options.extra.length) {
+                    list = [].concat(o.requests.search.columns);
+                    _.each(options.extra, function (id) {
+                        list = list.concat(http.getKeywordMapping(o.module, id));
+                    });
+                    o.requests.search.columns = list.join(',');
+                }
 
                 // go!
                 return http.PUT({

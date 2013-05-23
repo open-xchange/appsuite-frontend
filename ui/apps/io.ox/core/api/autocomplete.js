@@ -13,9 +13,10 @@
 
 define('io.ox/core/api/autocomplete',
       ['io.ox/core/http',
+       'io.ox/core/config',
        'io.ox/contacts/api',
        'io.ox/core/api/resource',
-       'io.ox/core/api/group'], function (http, contactsAPI, resourceAPI, groupAPI) {
+       'io.ox/core/api/group'], function (http, config, contactsAPI, resourceAPI, groupAPI) {
 
     'use strict';
 
@@ -48,7 +49,16 @@ define('io.ox/core/api/autocomplete',
 
             query = typeof query !== 'string' ? '' : $.trim(query).toLowerCase();
 
-            var self = this;
+            var self = this,
+                options = {
+                    emailAutoComplete: false
+                };
+
+            //TODO: remove
+            //config.set('msisdn', true);
+
+            //msisdn support: request also telephone and fax columns
+            options = config.get('msisdn') ? $.extend(options, { extra: ['telephone', 'fax'] }) : options;
 
             if (query in this.cache) {
                 // cache hit
@@ -57,9 +67,7 @@ define('io.ox/core/api/autocomplete',
                 // cache miss
                 http.pause();
                 _(self.apis).each(function (apiModule) {
-                    /*  boolean parameter seems to be a hack to set
-                        option 'emailAutoComplete: false' only in contacts api */
-                    apiModule.api.search(query, true);
+                    apiModule.api.search(query, options);
                 });
                 return http.resume().pipe(function (data) {
                     //unify and process
@@ -69,7 +77,7 @@ define('io.ox/core/api/autocomplete',
                         switch (type) {
                         case 'user':
                         case 'contact':
-                            retData = self.processContactResults(type, retData.concat(self.processItem(type, data[index])), query);
+                            retData = self.processContactResults(type, retData.concat(self.processItem(type, data[index])), query, options);
                             break;
                         case 'resource':
                         case 'group':
@@ -105,10 +113,11 @@ define('io.ox/core/api/autocomplete',
          * @param  {string} type
          * @param  {array}  data (contains results array)
          * @param  {string} query
+         * @param  {object} options (request options)
          * @return {array}
          */
-        processContactResults: function (type, data, query) {
-            var tmp = [], hash = {}, self = this;
+        processContactResults: function (type, data, query, options) {
+            var tmp = [], hash = {}, self = this, list = [];
 
             // improve response
             // 1/2: resolve email addresses
@@ -122,10 +131,16 @@ define('io.ox/core/api/autocomplete',
                         data: obj.data
                     });
                 } else {
-                    // email
-                    self.processContactItem(type, tmp, obj, 'email1');
-                    self.processContactItem(type, tmp, obj, 'email2');
-                    self.processContactItem(type, tmp, obj, 'email3');
+                    // create separate objects for each email value
+                    self.processContactItem(type, tmp, obj, http.getKeywordMapping('contacts', 'email', 'names'));
+
+                    //msisdn support: create separate objects for each phone number
+                    if (config.get('msisdn') &&  options.extra && options.extra.length) {
+                        //get requested extra columns and process
+                        _.each(options.extra, function (id) {
+                            self.processContactItem(type, tmp, obj, http.getKeywordMapping('contacts', id, 'names'));
+                        });
+                    }
                 }
             });
             // 2/2: filter distribution lists & remove email duplicates

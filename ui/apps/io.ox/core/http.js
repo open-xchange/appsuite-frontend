@@ -1005,7 +1005,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          */
         getKeywordMapping: function (module, keyword, format) {
             //columns ids or names
-            format = format || 'ids';
+            format = format || 'ids';
             //get ids
             var columns = _.clone(keywordMapping[module][keyword] || []), mapping;
             //parse
