@@ -16,9 +16,23 @@
     window.tinymce.create('tinymce.plugins.EmojiPlugin', {
         init : function (ed, url) {
             ed.addCommand('mceInsertEmoji', function (ui, baton) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                require(['io.ox/core/tk/dialogs',
+                        'moxiecode/tiny_mce/plugins/emoji/main'], function (dialogs, emoji) {
                     var popup = new dialogs.SidePopup();
                     popup.show(baton.event, function (pane) {
+                        _(emoji.icons).each(function (icon) {
+                            pane.append(
+                                $('<a href="#" class="emoji">')
+                                .attr('title', icon.desc)
+                                .addClass(icon.css)
+                                .click(function (evt) {
+                                    var ed = baton.editor;
+                                    evt.preventDefault();
+
+                                    ed.execCommand('mceInsertContent', false, icon.unicode);
+                                })
+                            );
+                        });
                     });
                 });
             });
@@ -28,7 +42,7 @@
                 title: 'Insert Emoji',
                 image: url + '/img/smile.gif',
                 onclick: function (e) {
-                    ed.execCommand('mceInsertEmoji', true, {event: e});
+                    ed.execCommand('mceInsertEmoji', true, {event: e, editor: ed});
                 }
             });
         },
