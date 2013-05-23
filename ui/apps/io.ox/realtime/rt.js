@@ -215,7 +215,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             if (api.debug) {
                 console.log("On message called: ", response);
             }
-            console.log(response);
             if (tentativeConnect) {
                 if (api.debug) {
                     console.log("Triggering Online because #onOpen was called");

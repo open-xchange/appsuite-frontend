@@ -11,13 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups) {
+define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event'], function (groups, Events) {
     'use strict';
 
     function ChineseRoom(roomName) {
         var self = this;
         this.group = groups.getGroup("synthetic.china://" + roomName);
         this.collection = new Backbone.Collection();
+        Events.extend(this);
 
         this.join = function () {
             this.group.join();
@@ -91,6 +92,8 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups'], function (groups
 
             if (message) {
                 console.log(m.from, message.data);
+                self.trigger("received", {from: m.from, message: message.data});
+
             }
 
             if (m.get("china", "replay")) {
