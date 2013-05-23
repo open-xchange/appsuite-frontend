@@ -13,9 +13,8 @@
 
 define('io.ox/office/framework/app/toolbaractions',
     ['io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils',
-     'gettext!io.ox/office/framework'
-    ], function (links, Utils, gt) {
+     'io.ox/office/tk/utils'
+    ], function (links, Utils) {
 
     'use strict';
 
