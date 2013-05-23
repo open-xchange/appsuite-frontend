@@ -287,7 +287,7 @@ define("io.ox/calendar/util",
 
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span class="label pointer" tabindex="0">').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     html: true,
