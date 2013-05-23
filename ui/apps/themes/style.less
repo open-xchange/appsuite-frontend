@@ -803,6 +803,7 @@ a.button {
     outline: none;
 
     .vgrid-scrollpane {
+        outline: none;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -880,9 +881,9 @@ a.button {
 
 }
 
-
-
 .vgrid-cell {
+
+    overflow: hidden;
     position: absolute;
     right: 0;
     left: 0;
@@ -891,43 +892,49 @@ a.button {
     border-bottom: 1px solid mix(@textColor, @background, 200%/15);
     color: @textColor;
     background-color: @background; /* resolves hw accel anti-aliasing */
-}
 
-.vgrid-cell.selectable, .vgrid-cell.hover { cursor: pointer; }
+    * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &.selectable, &.hover {
+        cursor: pointer;
+    }
+
+    &.hover:hover {
+        background-color: mix(@textColor, @background, 1000%/255);
+    }
+
+
+}
 
 .vgrid-cell-padding {
     padding: 8px 13px 8px 13px; /* for consistent elements */
 }
 
-.vgrid-cell.hover:hover {
-    background-color: mix(@textColor, @background, 1000%/255);
-}
-
-.vgrid-cell * {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .vgrid-cell-checkbox {
+
     position: absolute;
-    top: 0;
-    bottom: 0;
 	left: 0;
 	width: 30px;
+    height: 100% !important;
     display: none;
     cursor: pointer;
-    padding: 12px 0 6px 14px;
+    padding: 5px 0 6px 13px;
+
+    label {
+        display: inline;
+        margin-bottom: 0px; /* reset bootstrap */
+    }
+
+    input {
+        border: 0px none;
+    }
+
 }
 
-.vgrid-cell-checkbox label {
-    display: inline;
-    margin-bottom: 0px; /* reset bootstrap */
-}
-
-.vgrid-cell-checkbox input {
-    border: 0px none;
-}
 
 .vgrid.editable .vgrid-cell-checkbox {
     display: block;
@@ -961,7 +968,7 @@ a.button {
     border-bottom-color: rgba(0, 0, 0, 0.20);
 }
 
-.vgrid-scrollpane > div:focus .vgrid-cell.selected {
+.vgrid-scrollpane:focus .vgrid-cell.selected {
     background-color: @selectedBackground;
 }
 

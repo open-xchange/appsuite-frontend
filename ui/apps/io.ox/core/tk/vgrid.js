@@ -217,8 +217,8 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             // inner container
-            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
-            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane).attr('tabindex', 1),
+            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node).attr('tabindex', 1),
+            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // bottom toolbar
             fnToggleEditable = function (e) {
                     e.preventDefault();
@@ -1020,7 +1020,7 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.keyboard = function (flag) {
-            this.selection.keyboard(container, flag);
+            this.selection.keyboard(scrollpane, flag);
         };
 
         this.getToolbar = function () {
