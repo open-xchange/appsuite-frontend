@@ -679,16 +679,25 @@ define('io.ox/mail/main',
                 subject: true
             });
 
+            ext.point('io.ox/mail/search/checkboxes').extend({
+                from: true,
+                to: true,
+                cc: true,
+                subject: true,
+                text: true
+            });
+
             var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
-                ids = 'from to cc subject text'.split(' '),
                 defaults = ext.point('io.ox/mail/search/defaults').options();
 
             win.nodes.search.find('.input-append').append(
-                _(ids).map(function (name) {
-                    return $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
-                        $.txt(translations[name])
-                    );
+                _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
+                    return flag === true ?
+                        $('<label class="checkbox margin-right">').append(
+                            $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                            $.txt(translations[name])
+                        ) :
+                        $();
                 })
             );
 

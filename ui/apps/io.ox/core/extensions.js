@@ -360,6 +360,7 @@ define("io.ox/core/extensions",
                 options = _.extend(options, obj);
             });
             // remove extension stuff
+            delete options.id;
             delete options.index;
             delete options.invoke;
             delete options.metadata;
