@@ -222,7 +222,7 @@ define('io.ox/tasks/api',
                 order: 'asc',
                 timezone: 'UTC',
                 getData: function (query) {
-                    return { folder: query.folder, pattern: query.pattern, end: query.end, start: query.start };
+                    return { pattern: query.pattern, end: query.end, start: query.start };
                 }
             }
         }

@@ -167,7 +167,7 @@ define('io.ox/core/commons',
             // right now, only mail folders support "total"
             var name = app.get('name'),
                 supportsTotal = name === 'io.ox/mail',
-                searchAcrossFolders = name === 'io.ox/files' || name === 'io.ox/contacts';
+                searchAcrossFolders = name !== 'io.ox/mail';
 
             function updateFolderCount(id, data) {
                 var total = data.total,
