@@ -13,9 +13,9 @@
  *
  */
 
-define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
+define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], function (Events, ext) {
 
-    "use strict";
+    'use strict';
 
     // default columns for each module
     var idMapping = {
@@ -360,6 +360,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             fax: ['544', '550', '554']
         }
     };
+    //use telephone numbers for msisdn
+    keywordMapping.contacts.msisdn =  keywordMapping.contacts.telephone;
+    //customize mappings
+    ext.point('io.ox/core/http/mappings').invoke('customize', keywordMapping, keywordMapping);
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -1007,7 +1011,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             //columns ids or names
             format = format || 'ids';
             //get ids
-            var columns = _.clone(keywordMapping[module][keyword] || []), mapping;
+            var mapping,
+                columns = [].concat(_.clone(keywordMapping[module][keyword] || []));
             //parse
             if (format === 'names') {
                 mapping = that.getColumnMapping(module);

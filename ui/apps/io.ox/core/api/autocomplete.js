@@ -54,11 +54,8 @@ define('io.ox/core/api/autocomplete',
                     emailAutoComplete: false
                 };
 
-            //TODO: remove
-            //config.set('msisdn', true);
-
-            //msisdn support: request also telephone and fax columns
-            options = config.get('msisdn') ? $.extend(options, { extra: ['telephone', 'fax'] }) : options;
+            //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
+            options = config.get('msisdn') ? $.extend(options, { extra: ['msisdn'] }) : options;
 
             if (query in this.cache) {
                 // cache hit
