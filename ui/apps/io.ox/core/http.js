@@ -1011,13 +1011,14 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             //columns ids or names
             format = format || 'ids';
             //get ids
-            var mapping,
-                columns = [].concat(_.clone(keywordMapping[module][keyword] || []));
+            var names,
+                mappings = (keywordMapping[module] || [])[keyword] || [],
+                columns = [].concat(_.clone(mappings));
             //parse
             if (format === 'names') {
-                mapping = that.getColumnMapping(module);
+                names = that.getColumnMapping(module);
                 columns = _.map(columns, function (id) {
-                    return mapping[id];
+                    return names[id];
                 });
             }
             return columns;

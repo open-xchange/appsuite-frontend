@@ -453,13 +453,14 @@ define('io.ox/core/api/factory',
                 delete opt.getData;
 
                 //add extra fields via keywords defined in extra property
-                if (options.extra && options.extra.length) {
-                    list = [].concat(o.requests.search.columns);
-                    _.each(options.extra, function (id) {
+                if (opt.extra && opt.extra.length) {
+                    list = [].concat(opt.columns);
+                    _.each(opt.extra, function (id) {
                         list = list.concat(http.getKeywordMapping(o.module, id));
                     });
-                    o.requests.search.columns = list.join(',');
+                    opt.columns = list.join(',');
                 }
+                delete opt.extra;
 
                 // go!
                 return http.PUT({

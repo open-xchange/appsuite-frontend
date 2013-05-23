@@ -129,8 +129,7 @@ define('io.ox/core/api/autocomplete',
                     });
                 } else {
                     // create separate objects for each email value
-                    self.processContactItem(type, tmp, obj, http.getKeywordMapping('contacts', 'email', 'names'));
-
+                    self.processContactItem(type, tmp, obj, ['email1', 'email2', 'email3']);
                     //msisdn support: create separate objects for each phone number
                     if (config.get('msisdn') &&  options.extra && options.extra.length) {
                         //get requested extra columns and process
