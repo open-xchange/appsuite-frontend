@@ -45,6 +45,7 @@
                     ed.execCommand('mceInsertEmoji', true, {event: e, editor: ed});
                 }
             });
+            ed.contentCSS.push(url + '/font/androidemoji.less');
         },
         getInfo: function () {
             return {

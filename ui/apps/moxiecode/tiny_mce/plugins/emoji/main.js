@@ -11,7 +11,8 @@
  */
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
-       'css!emoji/emoji.css'], function (emoji) {
+       'css!emoji/emoji.css',
+       'less!moxiecode/tiny_mce/plugins/emoji/font/androidemoji.less'], function (emoji) {
 
     "use strict";
 
