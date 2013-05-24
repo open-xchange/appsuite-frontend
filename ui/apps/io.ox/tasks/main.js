@@ -141,7 +141,7 @@ define('io.ox/tasks/main',
                 } else {
                     column = 202;
                 }
-                return api.getAll({folder: this.prop('folder'), sort: column, order: order}, false).pipe(function (data) {
+                return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
                     if (sort !== 'state') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -157,7 +157,7 @@ define('io.ox/tasks/main',
                 });
             },
             listRequest = function (ids) {
-                return api.getList(ids, false).pipe(function (list) {
+                return api.getList(ids).pipe(function (list) {
                     var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                         i = 0;
                     for (; i < listcopy.length; i++) {
