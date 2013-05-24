@@ -319,14 +319,23 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        update = function () {
+        update = function (updateIndex) {
+
+            updateIndex = updateIndex || false;
+            if (updateIndex) {
+                self.clearIndex();
+            }
             // get nodes
-            var nodes = $('.selectable', container),
+            var nodes = $('.selectable:visible', container),
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = nodes.eq(i);
                 // is selected?
-                if (isSelected(node.attr('data-obj-id'))) {
+                var objID = node.attr('data-obj-id');
+                if (updateIndex) {
+                    self.addToIndex(objID);
+                }
+                if (isSelected(objID)) {
                     $('input.reflect-selection', node).attr('checked', 'checked');
                     node.addClass(self.classSelected);
                 } else {
@@ -445,6 +454,11 @@ define('io.ox/core/tk/selection',
          */
         this.update = function () {
             update();
+            return this;
+        };
+
+        this.updateIndex = function () {
+            update(true);
             return this;
         };
 
@@ -942,12 +956,12 @@ define('io.ox/core/tk/selection',
                 $(document)
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
-                // prevent text selection
-                e.preventDefault();
+                // prevent text selection and kills the focus
+                // e.preventDefault();
             }
 
             // drag & drop
-            if (!Modernizr.touch) {
+            if (_.device('!touch')) {
                 // draggable?
                 if (options.draggable) {
                     container.on('mousedown.dnd', '.selectable', start);
