@@ -919,7 +919,7 @@ a.button {
     position: absolute;
 	left: 0;
 	width: 30px;
-    height: 100% !important;
+    height: 100%;
     display: none;
     cursor: pointer;
     padding: 5px 0 6px 13px;
@@ -1510,6 +1510,7 @@ input.nice-input {
     }
 
     .folder {
+
         line-height: 34px;
         padding: 0 13px 0 0;
         overflow: visible;
@@ -1517,28 +1518,38 @@ input.nice-input {
         width: 100%;
         .box-sizing(border-box);
         display: table;
+
+        &.selectable, &.expandable {
+            cursor: pointer;
+        }
+
+        &.selectable.dnd-over, &.selectable:hover {
+            background-color: #efefef;
+        }
+
+        &.selected {
+
+            background-color: desaturate(@selectedBackground, 50%) !important;
+
+            * {
+                color: white !important;
+            }
+
+        }
+
+        &.disabled {
+            color: #bbb;
+            font-style: italic;
+        }
+
+    }
+
+    &:focus .folder.selected {
+        background-color: @selectedBackground !important;
     }
 
     .folder-row {
         display: table-row;
-    }
-
-    .folder.selectable, .folder.expandable { cursor: pointer; }
-
-    .folder.selectable.dnd-over,
-    .folder.selectable:hover { background-color: #efefef; }
-
-    .folder.selected {
-        background-color: @selectedBackground !important;
-    }
-
-    .folder.selected * {
-        color: white !important;
-    }
-
-    .folder.disabled {
-        color: #bbb;
-        font-style: italic;
     }
 
     .subfolders.io-ox-busy {
@@ -1555,22 +1566,34 @@ input.nice-input {
     }
 
     .folder-label {
+
         display: table-cell;
         margin: 0 1em 0 0;
-        i { color: @foldertreePassiveLabelColor; }
+
+        i {
+            color: @foldertreePassiveLabelColor;
+        }
+
     }
 
     .folder-pubsub {
+
         margin-left: 0.7em;
         color: @foldertreeBadgeBackground;
         font-size: 20px;
         line-height: 18px;
         position: relative;
         top: 3px;
-        &:hover { color: @linkOnDark; }
+
+        &:hover {
+            color: @linkOnDark;
+        }
+
     }
 
-    .folder.selected .folder-pubsub:hover { color: @linkOnDark !important; }
+    .folder.selected .folder-pubsub:hover {
+        color: @linkOnDark !important;
+    }
 
     .folder-counter {
         display: table-cell;
@@ -1664,13 +1687,26 @@ input.nice-input {
 
         &.io-ox-foldertree {
 
-            .section .section-title { color: @foldertreeSectionTitleColor; }
-            .folder.selectable .folder-label { color: @foldertreeActiveLabelColor; }
-            .folder.unreadable .folder-label { color: @foldertreePassiveLabelColor; }
-            .folder-icon { display: none; }
+            .section .section-title {
+                color: @foldertreeSectionTitleColor;
+            }
+
+            .folder.selectable .folder-label {
+                color: @foldertreeActiveLabelColor;
+            }
+
+            .folder.unreadable .folder-label {
+                color: @foldertreePassiveLabelColor;
+            }
+
+            .folder-icon {
+                display: none;
+            }
 
             .folder.selectable.dnd-over,
-            .folder.selectable:hover { background-color: @foldertreeHoverBackground; }
+            .folder.selectable:hover {
+                background-color: @foldertreeHoverBackground;
+            }
 
             .io-ox-fail {
                 background-color: #2a2a2a;
@@ -1679,20 +1715,37 @@ input.nice-input {
 
             .folder.selected {
                 background-image: none !important;
-                background-color: @foldertreeSelectedBackground !important;
                 font-weight: bold;
             }
 
-            .folder-counter-badge { background-color: @foldertreeBadgeBackground; color: @foldertreeBadgeColor; }
+            .folder-counter-badge {
+                background-color: @foldertreeBadgeBackground;
+                color: @foldertreeBadgeColor;
+            }
 
             .folder.show-counter {
                 .folder-label { color: @linkOnDark !important; }
             }
 
-            .folder-arrow, a { font-size: 13px; color: lighten(@linkColor, 20%); }
+            .folder-arrow, a {
+                font-size: 13px;
+                color: lighten(@linkColor, 20%);
+            }
 
-            .folder .shared-by { padding-left: 0; font-size: 12px; }
+            .folder .shared-by {
+                padding-left: 0;
+                font-size: 12px;
+            }
+
         }
+
+        &:focus.io-ox-foldertree {
+
+            .folder.selected {
+            }
+
+        }
+
     }
 
     .foldertree-toolbar {
