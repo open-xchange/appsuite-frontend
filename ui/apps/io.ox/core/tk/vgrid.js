@@ -193,7 +193,9 @@ define('io.ox/core/tk/vgrid',
             dragType: '',
             selectFirst: true,
             toolbarPlacement: 'bottom',
-            secondToolbar: false
+            secondToolbar: false,
+            swipeLeftHandler: false,
+            swipeRightHandler: false
         }, options || {});
 
         if (options.settings) {
@@ -390,6 +392,28 @@ define('io.ox/core/tk/vgrid',
         // draw second toolbar
         ext.point('io.ox/core/vgrid/secondToolbar').invoke("draw", topbar, new ext.Baton({ grid: self, options: options }));
 
+        // swipe delegate
+        if (_.device('touch')) {
+            if (options.swipeLeftHandler) {
+                $(target).on('swipeleft', '.selectable', function (e) {
+                    if (currentMode !== 'search') {
+                        var node = $(this),
+                            key = node.attr('data-obj-id');
+
+                        options.swipeLeftHandler(e, key, node);
+                    }
+                });
+            }
+            if (options.swipeRightHandler) {
+                $(target).on('swiperight', '.selectable', function (e) {
+                    if (currentMode !== 'search') {
+                        var node = $(this),
+                            key = node.attr('data-obj-id');
+                        options.swipeRightHandler(e, key, node);
+                    }
+                });
+            }
+        }
         // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {
             var obj = labels.list[index];

@@ -16,6 +16,13 @@
 .vgrid-cell.contact {
     height: 40px;
     padding: 0.75em 13px 0.75em 13px;
+
+    /* swipe delete button */
+    .swipeDelete {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+    }
 }
 
 .vgrid-cell.contact .private_flag {
@@ -240,4 +247,11 @@ input#image1 {
     background-clip: content-box;
 }
 
-
+@media (max-width: 480px) {
+    .abs.contact-grid-container {
+        left: 0px;
+    }
+    .contact-grid-index {
+        width: 0;
+    }
+}

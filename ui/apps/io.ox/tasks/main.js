@@ -21,8 +21,9 @@ define('io.ox/tasks/main',
      'io.ox/core/commons',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
-     'settings!io.ox/tasks'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings) {
+     'settings!io.ox/tasks',
+     'io.ox/core/api/folder'
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI) {
 
     'use strict';
 
@@ -51,7 +52,8 @@ define('io.ox/tasks/main',
 
     // launcher
     app.setLauncher(function (options) {
-
+        var showSwipeButton = false,
+            hasDeletePermission;
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
@@ -71,8 +73,56 @@ define('io.ox/tasks/main',
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('default-content-padding').scrollable();
 
+        var removeButton = function () {
+            if (showSwipeButton) {
+                var g = grid.getContainer();
+                $('.swipeDelete', g).remove();
+                showSwipeButton = false;
+            }
+        };
+
+        ext.point('io.ox/tasks/swipeDelete').extend({
+            index: 666,
+            id: 'deleteButton',
+            draw: function (baton) {
+                // remove old buttons first
+                removeButton();
+
+                this.append(
+                    $('<div class="btn btn-danger swipeDelete fadein">')
+                        .text(gt('Delete'))
+                        .on('mousedown', function (e) {
+                            // we have to use mousedown as the selection listens to this, too
+                            // otherwise we are to late to get the event
+                            e.preventDefault();
+                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
+                            removeButton();
+                        })
+                );
+                showSwipeButton = true;
+            }
+        });
+
+        // swipe handler
+        var swipeRightHandler = function (e, id, cell) {
+            var obj = _.cid(id);
+            if (hasDeletePermission === undefined) {
+                folderAPI.get({folder: obj.folder_id}).done(function (data) {
+                    if (folderAPI.can('delete', data)) {
+                        hasDeletePermission = true;
+                        ext.point('io.ox/tasks/swipeDelete').invoke('draw', cell, obj);
+                    }
+                });
+            } else if (hasDeletePermission) {
+                ext.point('io.ox/tasks/swipeDelete').invoke('draw', cell, obj);
+            }
+        };
+
         // grid
-        grid = new VGrid(left, {settings: settings});
+        grid = new VGrid(left, {
+            settings: settings,
+            swipeRightHandler: swipeRightHandler
+        });
 
         grid.addTemplate(template.main);
 
@@ -216,8 +266,15 @@ define('io.ox/tasks/main',
                     .find('.icon-arrow-down').css('opacity', 0.4);
             }
         }
+        grid.selection.on('change', function () {
+            removeButton();
+        });
 
-        grid.on('change:prop', updateGridOptions);
+        grid.on('change:prop', function () {
+            updateGridOptions();
+            removeButton();
+            hasDeletePermission = undefined;
+        });
         updateGridOptions();
 
         commons.addGridToolbarFolder(app, grid);
