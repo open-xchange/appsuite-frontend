@@ -17,6 +17,9 @@ define("io.ox/core/gettext", [], function () {
 
     // custom dictionary
     var custom = { '*': {} };
+    // To allow custom dictionaries, core plugins may not call gettext functions
+    // during initialization.
+    var enabled = false;
 
     if (_.url.hash('debug-i18n')) {
         try {
@@ -122,6 +125,9 @@ define("io.ox/core/gettext", [], function () {
         };
 
         function get(key) {
+            if (!enabled) {
+                console.error('Early gettext call:', JSON.stringify(key));
+            }
             if (key in custom['*']) return custom['*'][key];
             if (id in custom && key in custom[id]) return custom[id][key];
             return po.dictionary[key];
@@ -167,7 +173,10 @@ define("io.ox/core/gettext", [], function () {
                 custom[dictionary][key] = value;
             });
         }
+        return this;
     };
+
+    gt.enable = function () { enabled = true; };
 
     return gt;
 });

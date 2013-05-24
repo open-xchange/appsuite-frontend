@@ -14,60 +14,31 @@
 define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox/realtime/rt'], function (rooms, rt) {
 	'use strict';
 
-	function Executor(steps, options) {
-		var options = options || {};
-
-		var step = 0;
-		function e() {
-			if (step >= steps.length) {
-				step = 0;
-			}
-			steps[step]();
-			step++;
-		}
-
-		var interval = null;
-
-		this.start = function () {
-			if (interval) {
-				return;
-			}
-			interval = setInterval(e, options.interval);
-		};
-
-		this.stop = function () {
-			if (!interval) {
-				return;
-			}
-			clearInterval(interval);
-		};
-
-	}
-
 	console.log("Setting up experiment");
 	window.rooms = rooms;
 	window.r = rooms.getRoom("a");
 	window.rt = rt;
 
-	window.experiments = {
-		continousOpenAndClose: function (options) {
-			var room = null;
-			var steps = [
-				function () {
-					room = rooms.getRoom("continousOpenAndClose");
-					room.join({trace: false});
-					room.say("1");
-				},
-				function () {
-					room.leave({trace: false});
-				},
-				function () {
-					room.destroy();
-				}
+	window.rtExperiments = {
+		run: function () {
+			var interval, checkInterval;
+			var i = 0;
+			var log = {};
 
-			];
+			interval = setInterval(function () {
+				window.r.sayAndTrace(i);
+				log[i] = 0;
+			}, 500);
 
-			return new Executor(steps, options);
+			checkInterval = setInterval(function () {
+				_(log).each(function (count, key) {
+					if (count > 4) {
+						console.log("MISSING MESSAGE: ", key);
+						clearInterval(interval);
+						clearInterval(checkInterval);
+					}
+				});
+			});
 		}
 	};
 

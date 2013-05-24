@@ -68,7 +68,7 @@
     }
 
     h1:first-child, h1.pane-headline:first-child {
-        margin: 0 0 2em 0;
+        margin: 0 0 1.5em 0;
     }
 
     h1.no-margin, h2.no-margin {
@@ -203,16 +203,11 @@
     }
 
     .error-log {
-        margin: 0;
-        list-style-type: none;
-        li {
+
+        section {
             margin-bottom: 26px;
         }
-        li:last-child {
-            border-bottom: 0px none;
-        }
-        .message {
-        }
+
         .error-id {
             color: #555;
         }
@@ -225,10 +220,32 @@
         .stack-trace {
             clear: both;
         }
-        .summary {
-            font-size: 13px;
-            line-height: 16px;
+        .datetime {
+            float: right;
             color: #888;
+        }
+        .toggle-request-body {
+            display: inline-block;
+            margin-right: 1em;
+        }
+        .request-body, .stack-trace {
+            color: #555;
+            white-space: pre;
+            word-break: break-all;
+            overflow: hidden;
+            padding: 0.5em 0;
+        }
+        .chart-description {
+            font-style: italic;
+            color: #888;
+        }
+        .tab-content {
+            min-height: 150px;
+        }
+        .empty {
+            font-style: italic;
+            color: #888;
+            padding: 0 13px;
         }
     }
 }

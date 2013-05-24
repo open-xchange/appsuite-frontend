@@ -215,11 +215,11 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication'));
+                var link = $('<a href="#" data-action="publications" role="menuitem">').text(gt('Publication')),
+                    contacts = baton.data.module === 'contacts',
+                    files = baton.data.module === 'infostore';
                 this.append($('<li class="divider" aria-hidden="true" role="presentation">'), $('<li>').append(link));
-                if (capabilities.has('publication') &&
-                    (baton.data.module === 'contacts' || baton.data.module === 'infostore')
-                ) {
+                if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
                     link.attr('tabindex', 1).on('click', { baton: baton }, publish);
                 } else {
                     link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);

@@ -30,10 +30,12 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
         var relayOfflineEvent = relayEvent("offline");
         var relayOnlineEvent = relayEvent("online");
         var relayResetEvent = relayEvent("reset");
+        var relayHighLoadEvent = relayEvent("highLoad");
 
         rt.on("offline", relayOfflineEvent);
         rt.on("online", relayOnlineEvent);
         rt.on("reset", relayResetEvent);
+        rt.on("highLoad", relayHighLoadEvent);
 
         this.id = id;
 
@@ -117,6 +119,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             rt.off("offline", relayOfflineEvent);
             rt.off("online", relayOnlineEvent);
             rt.off("reset", relayResetEvent);
+            rt.off("highLoad", relayHighLoadEvent);
             delete groups[id];
             destroyed = true;
         };

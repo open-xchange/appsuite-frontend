@@ -14,16 +14,13 @@
 define('io.ox/tasks/settings/pane',
        ['settings!io.ox/tasks', 'io.ox/tasks/settings/model',
         'dot!io.ox/tasks/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/tasks/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+        'gettext!io.ox/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
-
-
-
     var tasksSettings =  settings.createModel(tasksSettingsModel),
         staticStrings =  {
-        TITLE_TASKS: gt('Tasks'),
+        TITLE_TASKS: gt.pgettext('app', 'Tasks'),
         TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
         TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
         NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
@@ -55,7 +52,7 @@ define('io.ox/tasks/settings/pane',
             }));
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             self._modelBinder.bind(self.model, self.el, defaultBindings);
-            
+
             return self;
 
         }

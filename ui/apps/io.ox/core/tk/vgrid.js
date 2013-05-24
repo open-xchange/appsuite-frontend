@@ -219,19 +219,48 @@ define('io.ox/core/tk/vgrid',
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node).attr('tabindex', 1),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+
             // bottom toolbar
+            ignoreCheckbox = false,
+
+            fnToggleCheckbox = function (e) {
+                if (ignoreCheckbox) return;
+                var grid = e.data.grid, checked = $(this).prop('checked');
+                if (checked) {
+                    grid.selection.selectAll();
+                } else {
+                    grid.selection.clear();
+                }
+            },
+
+            uncheckSelectAll = function (list) {
+                if (list.length <= 1) {
+                    ignoreCheckbox = true;
+                    node.find('.select-all input').prop('checked', false);
+                    ignoreCheckbox = false;
+                }
+            },
+
             fnToggleEditable = function (e) {
-                    e.preventDefault();
-                    var grid = e.data.grid;
-                    grid.setEditable(!grid.getEditable());
-                },
+                e.preventDefault();
+                var grid = e.data.grid;
+                grid.setEditable(!grid.getEditable());
+            },
+
             topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
                 .prependTo(node),
             toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
                 .append(
+                    // show checkbox
+                    options.showCheckbox === false ?
+                        [] :
+                        $('<label class="select-all">').append(
+                            $('<input type="checkbox" value="true">').attr('title', gt('Select all'))
+                        )
+                        .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
-                        $() :
+                        [] :
                         $('<a>', { href: '#', tabindex: -1 })
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
@@ -285,7 +314,6 @@ define('io.ox/core/tk/vgrid',
             hScrollToLabel,
             paintLabels,
             processLabels,
-            invalidLabels = false,
             cloneRow,
             currentOffset = null,
             paint,
@@ -318,6 +346,10 @@ define('io.ox/core/tk/vgrid',
 
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
+
+        this.selection.on('change', function () {
+
+        });
 
         // second toolbar
         if (_.device('!small')) {
@@ -415,7 +447,6 @@ define('io.ox/core/tk/vgrid',
                     cumulatedLabelHeight += tail.outerHeight(true);
                 }
                 node = clone = defs = null;
-                invalidLabels = false;
                 return cumulatedLabelHeight;
             });
         };
@@ -482,7 +513,6 @@ define('io.ox/core/tk/vgrid',
 
         paint = (function () {
 
-            // calling this via LFO, so that we always get the latest data
             function cont(chunk) {
 
                 // vars
@@ -619,16 +649,15 @@ define('io.ox/core/tk/vgrid',
         }
 
         function apply(list, quiet) {
-            // changed?
-            if (invalidLabels || list.length !== all.length || !_.isEqual(all, list)) {
-                // store
-                all = list;
-                currentOffset = null;
-                // initialize selection
-                self.selection.init(all);
-                // labels
-                initLabels();
-            }
+
+            // store
+            all = list;
+            currentOffset = null;
+            // initialize selection
+            self.selection.init(all);
+            // labels
+            initLabels();
+
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
@@ -637,19 +666,18 @@ define('io.ox/core/tk/vgrid',
                     $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
                 );
             }
+
             // trigger event
             if (!quiet) {
                 self.trigger('change:ids', all);
             }
+
             // get proper offset
             var top, index, offset;
-            if (currentOffset !== null) {
-                offset = currentOffset;
-            } else {
-                top = scrollpane.scrollTop();
-                index = getIndex(top);
-                offset = index - (numVisible >> 1);
-            }
+            top = scrollpane.scrollTop();
+            index = getIndex(top);
+            offset = index - (numVisible >> 1);
+
             return paint(offset);
         }
 
@@ -719,7 +747,7 @@ define('io.ox/core/tk/vgrid',
                     else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
-                        self.selection.set(i);
+                        if (!i.length || self.selection.contains(i)) self.selection.set(i);
                     }
                     else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
@@ -764,8 +792,8 @@ define('io.ox/core/tk/vgrid',
                             self.idle();
                         })
                         .done(function () {
-                            var changed = !_.isEqual(all, list);
-                            updateSelection(list.length !== all.length || changed);
+                            var hasChanged = !_.isEqual(all, list);
+                            updateSelection(hasChanged);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -788,7 +816,6 @@ define('io.ox/core/tk/vgrid',
             // resize
             resize();
             currentOffset = null;
-            invalidLabels = true;
             initialized = true;
             // load all IDs
             return loadAll();
@@ -845,6 +872,8 @@ define('io.ox/core/tk/vgrid',
         // selection events
         this.selection
             .on('change', function (e, list) {
+                // reset select-all checkbox
+                uncheckSelectAll(list);
                 // prevent to long URLs
                 var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
                     return self.selection.serialize(obj);
@@ -934,11 +963,6 @@ define('io.ox/core/tk/vgrid',
 
         this.repaintLabels = function () {
             return initLabels();
-        };
-
-        this.invalidateLabels = function () {
-            // use case: delete items; esp. mail thread summary
-            invalidLabels = true;
         };
 
         this.repaint = _.debounce(function () {
@@ -1176,6 +1200,22 @@ define('io.ox/core/tk/vgrid',
         this.select = (function () {
 
             var hash = {};
+
+            // restore persistent settings
+            if (options.settings) {
+                _(options.settings.get('vgrid/previous', {})).each(function (cid, folder) {
+                    hash[folder] = [_.cid(cid)];
+                });
+            }
+
+            self.selection.on('change', function (e, list) {
+                var folder = self.prop('folder');
+                if (options.settings && list.length <= 1) {
+                    options.settings.set(['vgrid', 'previous', folder], _.cid(list[0])).save();
+                    // always store in fluent hash
+                    hash[folder] = list;
+                }
+            });
 
             self.on('beforechange:prop:folder', function (e, value, previous) {
                 if (previous !== undefined) {

@@ -10,19 +10,19 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/modelFactory",
-    ["io.ox/backbone/basicModel",
-     "io.ox/core/extensions",
+define('io.ox/backbone/modelFactory',
+    ['io.ox/backbone/basicModel',
+     'io.ox/core/extensions',
      'gettext!io.ox/core'], function (BasicModel, ext, gt) {
 
-    "use strict";
+    'use strict';
 
     var OXModel = BasicModel.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
             BasicModel.prototype.initialize.apply(this, $.makeArray(arguments));
 
-            this.realm = this.get('_realm') || this.factory.realm("default");
+            this.realm = this.get('_realm') || this.factory.realm('default');
             delete this.attributes._realm;
 
             this.syncer = this.factory.internal;
@@ -239,7 +239,8 @@ define("io.ox/backbone/modelFactory",
 
         this.release = function () {
             refCount--;
-            if (refCount === 0) {
+            if (refCount <= 0) {
+                refCount = 0;
                 this.destroy();
             }
         };
@@ -268,7 +269,7 @@ define("io.ox/backbone/modelFactory",
         this.collection = Backbone.Collection.extend({
             model: this.model,
             sync: function () {
-                return self.point("collection/sync").invoke("sync", this, $.makeArray(arguments));
+                return self.point('collection/sync').invoke('sync', this, $.makeArray(arguments));
             }
         });
 
@@ -348,7 +349,7 @@ define("io.ox/backbone/modelFactory",
         };
 
         if (!/\/$/.test(this.ref)) {
-            this.ref = this.ref + "/";
+            this.ref = this.ref + '/';
         }
         this.point = this.point || function (subpath) {
             if (/^\//.test(subpath)) {
@@ -422,7 +423,7 @@ define("io.ox/backbone/modelFactory",
         // Register the extension that calls subextensions under the namespace + attribute name
         // For example to check the display_name attribute in the model registered in the extension namespace 'io.ox/contacts/model'
         // It would invoke 'validate' on 'io.ox/contacts/model/validation/display_name'
-        this.point("validation").extend({
+        this.point('validation').extend({
             id: 'generic',
             validate: function (attributes, errors) {
                 _(attributes).each(function (value, key) {

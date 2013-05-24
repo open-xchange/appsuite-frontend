@@ -77,6 +77,10 @@ define('io.ox/mail/view-detail',
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
+        regTask = /^(\s*)(http[^#]+#m=task&i=(\d+)&f=(\d+))(\s*)$/i,
+        regTaskAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/tasks?&id=\d+.(\d+)&folder=([\d\.]+))(\s*)$/i,
+        regAppointment = /^(\s*)(http[^#]+#m=calendar&i=(\d+)&f=(\d+))(\s*)$/i,
+        regAppointmentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/calendar(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
         regMailReplace = /([^\s<;\(\)\[\]\|]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
@@ -139,6 +143,20 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
+    
+    var openTaskLink = function (e) {
+        e.preventDefault();
+        ox.launch('io.ox/tasks/main', { folder: e.data.folder}).done(function () {
+            var app = this, folder = e.data.folder, id = e.data.id;
+            if (app.folder.get() === folder) {
+                app.getGrid().selection.set(id);
+            } else {
+                app.folder.set(folder).done(function () {
+                    app.getGrid().selection.set(id);
+                });
+            }
+        });
+    };
 
     var openDocumentLink = function (e) {
         e.preventDefault();
@@ -152,6 +170,24 @@ define('io.ox/mail/view-detail',
                 } else {
                     app.folder.set(folder).done(function () {
                         app.getGrid().selection.set(id);
+                    });
+                }
+            });
+        });
+    };
+    
+    var openAppointmentLink = function (e) {
+        e.preventDefault();
+        ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
+            var app = this, folder = e.data.folder, id = e.data.id;
+            // switch to proper perspective
+            ox.ui.Perspective.show(app, 'list').done(function (perspective) {
+                // set proper folder
+                if (app.folder.get() === folder) {
+                    app.trigger('show:appointment', {id: id, folder_id: folder, recurrence_position: 0}, true);
+                } else {
+                    app.folder.set(folder).done(function () {
+                        app.trigger('show:appointment', {id: id, folder_id: folder, recurrence_position: 0}, true);
                     });
                 }
             });
@@ -182,6 +218,50 @@ define('io.ox/mail/view-detail',
             // yep, internal
             href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
             link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
+        } else {
+            // nope, external
+            link.attr({ href: matches[0], target: '_blank' });
+        }
+        return link;
+    };
+    
+    var drawAppointmentLink = function (matches, title) {
+        var link, href, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[4];
+        id = matches[3];
+        // internal document?
+        if (isValidHost(href)) {
+            // yep, internal
+            href = '#app=io.ox/calendar&perspective=list&folder=' + folder + '&id=' + folder + '.' + id;
+            link.on('click', { hash: href, folder: folder, id: id }, openAppointmentLink);
+        } else {
+            // nope, external
+            link.attr({ href: matches[0], target: '_blank' });
+        }
+        return link;
+    };
+    
+    var drawTaskLink = function (matches, title) {
+        var link, href, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[4];
+        id = matches[3];
+        // internal document?
+        if (isValidHost(href)) {
+            // yep, internal
+            href = '#app=io.ox/tasks&folder=' + folder + '&id=' + folder + '.' + id;
+            link.on('click', { hash: href, folder: folder, id: folder + '.' + id }, openTaskLink);
         } else {
             // nope, external
             link.attr({ href: matches[0], target: '_blank' });
@@ -389,6 +469,16 @@ define('io.ox/mail/view-detail',
                                 node.replaceWith(
                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
+                            } else if ((m = text.match(regTask) || text.match(regTaskAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawTaskLink(m, gt('Task')))
+                                );
+                            } else if ((m = text.match(regAppointment) || text.match(regAppointmentAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawAppointmentLink(m, gt('Appointment')))
+                                );
                             } else if ((n = text.match(regLink)) && n.length && node.closest('a').length === 0) {
                                 if ((m = n[2].match(regDocument)) && m.length) {
                                     // link to document
@@ -404,6 +494,16 @@ define('io.ox/mail/view-detail',
                                     // link to folder
                                     node.replaceWith(
                                         $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    );
+                                } else if ((m = n[2].match(regTask) || n[2].match(regTaskAlt)) && m.length) {
+                                    // link to folder
+                                    node.replaceWith(
+                                        $($.txt(m[1])).add(drawTaskLink(m, gt('Task')))
+                                    );
+                                } else if ((m = n[2].match(regAppointment) || n[2].match(regAppointmentAlt)) && m.length) {
+                                    // link to folder
+                                    node.replaceWith(
+                                        $($.txt(m[1])).add(drawAppointmentLink(m, gt('Appointment')))
                                     );
                                 } else {
                                     m = n;

@@ -24,21 +24,23 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
     var taskDetailView = {
 
         draw: function (data) {
-            if (!data) {
-                return $('<div>');
-            }
 
-            var task = util.interpretTask(data, true),
-                // outer node
-                self = this;
+            if (!data) return $('<div>');
+
+            var task = util.interpretTask(data, true), self = this;
+
             var node = $.createViewContainer(data, api)
-                    .on('redraw', function (e, tmp) {
-                        node.replaceWith(self.draw(tmp));
-                    })
-                    .addClass('tasks-detailview'),
+                .on('redraw', function (e, tmp) {
+                    node.replaceWith(self.draw(tmp));
+                })
+                .addClass('tasks-detailview');
 
+            // inline links
+            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, data);
 
-                infoPanel = $('<div>').addClass('info-panel');
+            var header = $('<header>');
+
+            var infoPanel = $('<div>').addClass('info-panel');
 
             if (task.end_date) {
                 infoPanel.append(
@@ -103,13 +105,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             if (firstBr.is(infoPanel.find('*:first'))) {
                 firstBr.remove();
             }
-            infoPanel.appendTo(node);
 
-            if (data.private_flag) {
-                $('<i>').addClass('icon-lock private-flag').appendTo(node);
-            }
-
-            $('<div>').text(gt.noI18n(task.title)).addClass('title clear-title').appendTo(node);
+            node.append(
+                header.append(
+                    infoPanel,
+                    data.private_flag ? $('<i class="icon-lock private-flag">') : [],
+                    $('<div class="title clear-title">').text(gt.noI18n(task.title))
+                )
+            );
 
             if (api.uploadInProgress(encodeURIComponent(_.cid(data)))) {
                 $('<div>').addClass('attachments-container')
@@ -121,8 +124,6 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', node, task);
             }
 
-            var inlineLinks = $('<div>').addClass('tasks-inline-links').appendTo(node);
-            ext.point('io.ox/tasks/detail-inline').invoke('draw', inlineLinks, data);
             node.append(
                 $('<div class="note">').html(
                     gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))

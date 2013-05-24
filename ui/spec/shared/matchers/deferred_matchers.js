@@ -15,7 +15,7 @@ if (jasmine) {
             toBeDeferred: function () {
                 var def = this.actual;
 
-                expect(def.state()).toEqual('pending');
+                expect(def.state).toBeDefined();
                 expect(def.done).toBeDefined();
                 expect(def.fail).toBeDefined();
                 expect(def.then).toBeDefined();

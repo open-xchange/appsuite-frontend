@@ -11,7 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/session', ['io.ox/core/http'], function (http) {
+define('io.ox/core/session', ['io.ox/core/http', 'io.ox/core/manifests'],
+function (http, manifests) {
 
     'use strict';
 
@@ -37,6 +38,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);
         // should not hide store() request here; made debugging hard
         ox.trigger("change:session", ox.session);
@@ -108,7 +110,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
             var pending = null;
 
-            return function (username, password, store, language) {
+            return function (username, password, store, language, forceLanguage) {
 
                 var def = $.Deferred(), multiple = [];
 
@@ -123,13 +125,14 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             pending = null;
                         });
                         // POST request
-                        if (language) {
+                        if (forceLanguage) {
                             multiple.push({
                                 module: 'jslob',
                                 action: 'update',
                                 id: 'io.ox/core',
                                 data: {
-                                    language: language
+                                    // permanent language change
+                                    language: forceLanguage
                                 }
                             });
                         }
@@ -142,7 +145,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                                 action: 'login',
                                 name: username,
                                 password: password,
-                                language: language,
+                                // current browser language; required for proper error messages
+                                language: language || 'en_US',
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
@@ -151,7 +155,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            set(data, language);
+                            // we pass forceLanguage (might be undefined); fallback is data.locale
+                            set(data, forceLanguage);
                             if (store) {
                                 that.store().done(function () { def.resolve(data); });
                             } else {

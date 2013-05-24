@@ -669,17 +669,18 @@ define('io.ox/core/tk/selection',
         this.selectAll = function () {
             if (bHasIndex && observedItems.length) {
                 // _(observedItems).each(function (item) {
-                var item, i;
-                for (i = 0; i < observedItems.length; i++) {
+                var i = 0, $i = observedItems.length, item;
+                for (; i < $i; i++) {
                     item = observedItems[i];
-                    if (i === 0 || i === observedItems.length - 1) {
-                        select(item.data);
+                    if (i === 0 || i === ($i - 1)) {
+                        select(item.data, true);
                     } else {
                         // fast & simple
                         selectedItems[item.cid] = item.data;
                     }
                 }
                 this.update();
+                changed();
             }
         };
 
@@ -723,6 +724,7 @@ define('io.ox/core/tk/selection',
         this.contains = function (ids) {
             var list = [].concat(ids);
             return !!list.length && _(list).inject(function (memo, id) {
+                id = _.isObject(id) ? self.serialize(id) : id;
                 return memo && id in observedItemsIndex;
             }, true);
         };

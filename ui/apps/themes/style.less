@@ -16,6 +16,7 @@
 };
 
 #background_loader.secure {
+
     background-color: rgba(255, 255, 255, 0);
     .transition(background-color 0.5s linear);
 
@@ -28,9 +29,7 @@
             position: relative;
             top: 52%;
         }
-
     }
-
 }
 
 #io-ox-core.wallpaper {
@@ -298,7 +297,7 @@
     }
 
     i[class^="icon-"] {
-        color: white;
+        color: @topbarIconColor;
         font-size: 20px;
         text-decoration: none;
         line-height: 1em;
@@ -776,6 +775,31 @@ a.button {
     }
 }
 
+.search-query-container {
+
+    position: relative;
+
+    input {
+        padding-right: 30px;
+        width: 220px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .clear-query {
+        position: absolute;
+        top: 6px;
+        right: 10px;
+        z-index: 2;
+        font-size: 18px;
+        color: #CCC;
+    }
+
+    .clear-query:hover {
+        color: #aaa;
+    }
+}
+
 .window-content {
     top: 0px;
     z-index: 2;
@@ -850,7 +874,17 @@ a.button {
                 color: #888;
             }
         }
+    }
 
+    .select-all {
+        float: left;
+        margin-top: 5px;
+        width: 30px;
+        display: none;
+    }
+
+    &.editable .select-all {
+        display: inline-block;
     }
 
     &.top-toolbar .vgrid-toolbar.top, &.bottom-toolbar .vgrid-toolbar.bottom {
@@ -878,7 +912,6 @@ a.button {
         right: 0;
         left: auto;
     }
-
 }
 
 .vgrid-cell {
@@ -1887,6 +1920,11 @@ a.toolbar-action, .toolbar-action > a {
 
 .breadcrumb > li.prefix {
     white-space: nowrap;
+}
+
+.breadcrumb.chromeless {
+    padding-left: 0;
+    background-color: transparent;
 }
 
 .dropdown {

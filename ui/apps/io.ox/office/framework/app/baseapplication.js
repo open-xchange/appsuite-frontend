@@ -262,6 +262,23 @@ define('io.ox/office/framework/app/baseapplication',
         }
 
         /**
+         * Moves the entire view into the internal hidden storage node, and
+         * shows the busy indicator.
+         */
+        function beforeImport() {
+            view.hide();
+            self.getWindow().busy();
+        }
+
+        /**
+         * Hides the busy indicator, and restores the entire view into.
+         */
+        function afterImport() {
+            view.show();
+            self.getWindow().idle();
+        }
+
+        /**
          * Imports the document described by the current file descriptor, by
          * calling the import handler passed to the constructor.
          *
@@ -280,6 +297,7 @@ define('io.ox/office/framework/app/baseapplication',
             // call the import handler
             return importHandler.call(self, point)
                 .always(function () {
+                    afterImport();
                     self.trigger('docs:import:after');
                 })
                 .done(function () {
@@ -1346,15 +1364,8 @@ define('io.ox/office/framework/app/baseapplication',
             // in order to get the 'open' event of the window at all, it must be shown (also without file)
             win.show(function () {
 
-                // move the entire view into the internal hidden storage node, show busy indicator
-                view.hide();
-                win.busy();
-
-                // after import (regardless of result), restore the view
-                self.on('docs:import:after', function () {
-                    view.show();
-                    win.idle();
-                });
+                // prepare for importing
+                beforeImport();
 
                 // Import the document, if launch options have been passed. No launch
                 // options are available in fail-restore, this situation will be handled

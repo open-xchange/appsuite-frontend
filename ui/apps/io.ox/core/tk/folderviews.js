@@ -840,18 +840,22 @@ define('io.ox/core/tk/folderviews',
         }
 
         this.select = function (data) {
-            // unpack array; pluck 'id'
-            data = _.isArray(data) ? data[0] : data;
-            data = _.isString(data) ? data : String(data.id);
-            // get path
-            return api.getPath({ folder: data }).pipe(function (list) {
-                var def = $.Deferred();
-                deferredEach.call(self, _(list).pluck('id'), function () {
-                    self.selection.set(data);
-                    def.resolve();
+            if (data) {
+                // unpack array; pluck 'id'
+                data = _.isArray(data) ? data[0] : data;
+                data = _.isString(data) ? data : String(data.id);
+                // get path
+                return api.getPath({ folder: data }).pipe(function (list) {
+                    var def = $.Deferred();
+                    deferredEach.call(self, _(list).pluck('id'), function () {
+                        self.selection.set(data);
+                        def.resolve();
+                    });
+                    return def;
                 });
-                return def;
-            });
+            } else {
+                return $.when();
+            }
         };
     }
 
@@ -899,7 +903,7 @@ define('io.ox/core/tk/folderviews',
                 }
                 if (data.unread && !options.checkbox) {
                     this.addClass('show-counter');
-                
+
                     counter.find('span').text(gt.noI18n(data.unread || ''));
                 } else {
                     this.removeClass('show-counter');

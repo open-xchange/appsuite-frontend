@@ -107,7 +107,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
 
         this.set = function (path, value) {
             // overwrite entire tree?
-            if (arguments.length === 1 && !_.isString(path)) {
+            if (arguments.length === 1 && _.isObject(path)) {
                 tree = path;
                 self.trigger('reset', tree);
             } else {

@@ -35,12 +35,25 @@ define('io.ox/core/tk/text-editor', [], function () {
 
         var def = $.when(),
 
+            trimEnd = function (str) {
+                // ensure we have a string
+                str = String(str || '');
+                // remove white-space at end
+                return str.replace(/[\s\xA0]+$/, '');
+            },
+
             trim = function (str) {
-                return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/, '');
+                str = trimEnd(str);
+                // reduce leading line-feeds
+                str = str.replace(/^\n{2,}/, '\n\n');
+                // ignore valid white-space pattern at beginning (see Bug 26316)
+                if (/^\n{0,2}[ \t\xA0]*\S/.test(str)) return str;
+                // remove white-space
+                return str.replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
             },
 
             set = function (str) {
-                val.call(textarea, String(str ||  ''));
+                val.call(textarea, trimEnd(str));
             },
 
             clear = function () {

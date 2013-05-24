@@ -15,7 +15,7 @@ define('io.ox/files/views/create', [
         'io.ox/core/tk/dialogs',
         'io.ox/core/extensions',
         'io.ox/files/api',
-        'gettext!io.ox/files/files',
+        'gettext!io.ox/files',
         'io.ox/core/tk/attachments',
         'io.ox/core/notifications'
     ], function (dialogs, ext, api, gt, attachments, notifications) {

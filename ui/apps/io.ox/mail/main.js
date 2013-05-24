@@ -472,7 +472,7 @@ define('io.ox/mail/main',
 
         (function () {
 
-            var openThreads = {};
+            var openThreads = tmpl.openThreads = {};
 
             // add label template
             grid.addLabelTemplate(tmpl.thread);
@@ -486,11 +486,19 @@ define('io.ox/mail/main',
                 });
             }
 
+            function icon(cid, type) {
+                grid.getContainer()
+                    .find('.vgrid-cell[data-obj-id="' + cid + '"]')
+                    .find('.thread-size i')
+                    .attr('class', 'icon-caret-' + type);
+            }
+
             function open(index, cid) {
                 if (openThreads[index] === undefined) {
                     var thread = api.getThread(cid);
                     if (thread.length > 1) {
                         openThreads[index] = cid;
+                        icon(cid, 'down');
                         api.getList(thread).done(function (list) {
                             refresh(list, index);
                         });
@@ -502,6 +510,7 @@ define('io.ox/mail/main',
                 if (openThreads[index] !== undefined) {
                     var thread = api.getThread(cid);
                     delete openThreads[index];
+                    icon(cid, 'right');
                     api.getList(thread).done(function (list) {
                         grid.selection.remove(list.slice(1));
                         refresh();
@@ -542,7 +551,7 @@ define('io.ox/mail/main',
 
             // reset on folder change
             grid.on('change:prop:folder', function () {
-                openThreads = {};
+                openThreads = tmpl.openThreads = {};
             });
 
             // close if deleted
@@ -671,16 +680,31 @@ define('io.ox/mail/main',
         // search
         (function () {
 
+            ext.point('io.ox/mail/search/defaults').extend({
+                from: true,
+                cc: true,
+                subject: true
+            });
+
+            ext.point('io.ox/mail/search/checkboxes').extend({
+                from: true,
+                to: true,
+                cc: true,
+                subject: true,
+                text: true
+            });
+
             var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
-                ids = 'from to cc subject text'.split(' '),
-                state = { from: true, cc: true, subject: true };
+                defaults = ext.point('io.ox/mail/search/defaults').options();
 
             win.nodes.search.find('.input-append').append(
-                _(ids).map(function (name) {
-                    return $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: state[name] ? 'checked' : null }),
-                        $.txt(translations[name])
-                    );
+                _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
+                    return flag === true ?
+                        $('<label class="checkbox margin-right">').append(
+                            $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                            $.txt(translations[name])
+                        ) :
+                        $();
                 })
             );
 

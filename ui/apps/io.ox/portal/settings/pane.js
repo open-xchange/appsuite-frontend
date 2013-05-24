@@ -150,25 +150,61 @@ define('io.ox/portal/settings/pane',
     }());
 
     ext.point(POINT + '/view').extend({
+        id: 'state',
+        index: 200,
         draw: function (baton) {
-
             var data = baton.model.toJSON();
-
             this[data.enabled ? 'removeClass' : 'addClass']('disabled');
+        }
+    });
 
+    ext.point(POINT + '/view').extend({
+        id: 'drag-handle',
+        index: 200,
+        draw: function (baton) {
+            this
+            .addClass('draggable')
+            .attr('title', gt('Drag to reorder widget'))
+            .append(
+                $('<div class="drag-handle"><i class="icon-reorder"/></div>')
+            );
+        }
+    });
+
+    ext.point(POINT + '/view').extend({
+        id: 'title',
+        index: 300,
+        draw: function (baton) {
+            var data = baton.model.toJSON();
             this.append(
                 // widget title
                 $('<div>')
                 .addClass('widget-title pull-left widget-color-' + (data.color || 'black') + ' widget-' + data.type)
                 .text(widgets.getTitle(data, baton.view.options.title))
             );
+        }
+    });
 
+    ext.point(POINT + '/view').extend({
+        id: 'remove',
+        index: 400,
+        draw: function (baton) {
+            var data = baton.model.toJSON();
             if (!data.protectedWidget) {
                 this.append(
                     // close (has float: right)
-                    $('<a href="#" class="close" data-action="remove">').html('&times;')
+                    $('<a href="#" class="close" data-action="remove"><i class="icon-trash"/></a>')
                 );
             }
+        }
+    });
+
+    ext.point(POINT + '/view').extend({
+        id: 'controls',
+        index: 500,
+        draw: function (baton) {
+
+            var data = baton.model.toJSON();
 
             if (data.enabled && !data.protectedWidget) {
                 // editable?
@@ -187,10 +223,6 @@ define('io.ox/portal/settings/pane',
                 );
             } else {
                 this.append("&nbsp;");
-            }
-
-            if (data.protectedWidget) {
-                // TODO
             }
         }
     });
@@ -328,10 +360,11 @@ define('io.ox/portal/settings/pane',
 
             // make sortable
             list.sortable({
-                containment: this,
                 axis: 'y',
-                scroll: true,
+                containment: this,
                 delay: 150,
+                handle: '.drag-handle',
+                scroll: true,
                 stop: function (e, ui) {
                     widgets.save(list);
                 }

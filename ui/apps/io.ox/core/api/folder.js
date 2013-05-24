@@ -760,6 +760,9 @@ define('io.ox/core/api/folder',
             case 'viewproperties':
                 // view properties
                 return !isMail && !this.is('account', data) && (data.capabilities & 1);
+            case 'publish':
+                // can publish (rough, currently only used for files)
+                return this.can('create', data) && rights !== 1 && rights !== 4;
             case 'subscribe':
                 // can subscribe
                 return isMail && Boolean(data.capabilities & Math.pow(2, 4));

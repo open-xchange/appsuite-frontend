@@ -25,15 +25,16 @@ define('io.ox/launchpad/main',
     'use strict';
 
     // same stupid solution like in core/main until we get translated apps from backend
-    gt('Portal');
-    gt('Mail');
-    gt('Address Book');
-    gt('Calendar');
-    gt('Tasks');
-    gt('Files');
-    gt('Conversations');
-    gt('Settings');
-    gt('Documents');
+    gt.pgettext('app', 'Portal');
+    gt.pgettext('app', 'Mail');
+    gt.pgettext('app', 'Address Book');
+    gt.pgettext('app', 'Calendar');
+    gt.pgettext('app', 'Scheduling');
+    gt.pgettext('app', 'Tasks');
+    gt.pgettext('app', 'Files');
+    gt.pgettext('app', 'Conversations');
+    gt.pgettext('app', 'Settings');
+    gt.pgettext('app', 'Documents');
 
     var FADE_DURATION = 1000,
 
@@ -147,7 +148,7 @@ define('io.ox/launchpad/main',
         },
 
         drawApp = function (data) {
-            data.title = gt(data.title);
+            data.title = gt.pgettext('app', data.title);
             return $(appTmpl(data));
         },
 

@@ -22,10 +22,11 @@ define('io.ox/core/main',
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      'io.ox/core/upsell',
+     'io.ox/core/capabilities',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, settings, gt) {
 
     "use strict";
 
@@ -65,14 +66,14 @@ define('io.ox/core/main',
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     // whatever ...
-    gt('Portal');
-    gt('Mail');
-    gt('Address Book');
-    gt('Calendar');
-    gt('Scheduling');
-    gt('Tasks');
-    gt('Files');
-    gt('Conversations');
+    gt.pgettext('app', 'Portal');
+    gt.pgettext('app', 'Mail');
+    gt.pgettext('app', 'Address Book');
+    gt.pgettext('app', 'Calendar');
+    gt.pgettext('app', 'Scheduling');
+    gt.pgettext('app', 'Tasks');
+    gt.pgettext('app', 'Files');
+    gt.pgettext('app', 'Conversations');
 
     function tabManager() {
         // Reset first
@@ -126,10 +127,10 @@ define('io.ox/core/main',
 
     // add launcher
     var addLauncher = function (side, label, fn) {
-
         var node = $('<li class="launcher">');
 
-        node.hover(
+        if (fn) {
+            node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
@@ -145,11 +146,12 @@ define('io.ox/core/main',
                     self.idle().empty().append(content).css('width', '');
                 });
             });
+        }
 
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" tabindex="1">').text(gt(label));
+                return $('<a href="#" tabindex="1">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return $('<a href="#" tabindex="1">').append(label);
             } else {
@@ -402,22 +404,32 @@ define('io.ox/core/main',
         }
 
         ox.ui.apps.on('add', function (model, collection, e) {
-            if (model.get('title') === undefined) { return; }
+
+            if (model.get('title') === undefined) return;
+
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
-                title = model.get('title');
+                title = model.get('title'),
+                name;
+
             add(node, launchers, model);
+
+            // call extensions to customize
+            name = model.get('name') || model.id;
+            ext.point('io.ox/core/topbar/launcher').invoke('draw', node, ext.Baton({ model: model, name: name }));
+
             // is user-content?
             addUserContent(model, node);
+
             // add list item
             node = $('<li>').append(
                 $('<a>', {
                     href: '#',
-                    'data-app-name': model.get('name') || model.id,
+                    'data-app-name': name,
                     'data-app-guid': model.guid,
                     tabindex: 1
                 })
-                .text(gt(title))
+                .text(gt.pgettext('app', title))
             );
             launcherDropdown.append(
                 node.on('click', function (e) {
@@ -545,7 +557,7 @@ define('io.ox/core/main',
                     )
                     .on('click', function (e) {
                         e.preventDefault();
-                        require(['io.ox/core/about'], function (about) {
+                        require(['io.ox/core/about/about'], function (about) {
                             about.show();
                         });
                     })
@@ -610,15 +622,20 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/launchpad').extend({
             id: 'default',
             draw: function () {
-                addLauncher("left", $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
-                    return require(["io.ox/launchpad/main"], function (m) {
-                        launchers.children().removeClass('active-app');
-                        launcherDropdown.children().removeClass('active-app');
-                        launchers.children().first().addClass('active-app');
-                        m.show();
-                    });
-                })
-                .addClass('left-corner'); // to match dimensions of side navigation
+                if (capabilities.has('launchpad')) {
+                    addLauncher("left", $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
+                        return require(["io.ox/launchpad/main"], function (m) {
+                            launchers.children().removeClass('active-app');
+                            launcherDropdown.children().removeClass('active-app');
+                            launchers.children().first().addClass('active-app');
+                            m.show();
+                        });
+                    })
+                    .addClass('left-corner'); // to match dimensions of side navigation
+                } else {
+                    // add placeholder
+                    addLauncher('left', $('<span>&nbsp;</span>')).addClass('left-corner');
+                }
             }
         });
 

@@ -29,9 +29,27 @@ define('io.ox/mail/accounts/settings',
         myViewNode = $("<div>").addClass("accountDetail");
         myModel = new AccountModel(data);
         myView = new AccountDetailView({model: myModel, node: myViewNode});
-        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
-            pane.append(myView.render().el);
+
+        myView.dialog = new dialogs.ModalDialog({
+            width: 600,
+            async: true
         });
+
+        myView.dialog.append(
+            myView.render().el
+        )
+        .addPrimaryButton("save", gt('Save'))
+        .addButton("cancel", gt('Cancel'))
+        .show();
+
+        myView.dialog.on('save', function () {
+            if (myModel.isValid()) {
+                myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
+            } else {
+                myView.dialog.idle();
+            }
+        });
+
         myView.succes = successDialog;
         myView.collection = collection;
         return myView.node;

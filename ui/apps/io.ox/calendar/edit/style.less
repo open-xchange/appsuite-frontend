@@ -230,7 +230,8 @@ div.io-ox-calendar-edit {
 
 .typeahead.calendaredit {
     height: 200px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     min-width: 70px;
     max-width: 70px;
 }
@@ -325,6 +326,12 @@ div.edit-appointment-participant div {
 
     .inset {
         padding-left: 18px;
+    }
+    /* Mobile */
+    @media all and (max-width: 480px) {
+    	.inset {
+    		width: 94% //to keep everything inside the box 
+    	}
     }
 }
 
