@@ -20,9 +20,10 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
         this.collection = new Backbone.Collection();
         Events.extend(this);
 
-        this.join = function () {
-            this.group.join();
+        this.join = function (options) {
+            return this.group.join(options);
         };
+
 
         this.leave = function () {
             this.group.leave();

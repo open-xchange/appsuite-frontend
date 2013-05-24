@@ -376,6 +376,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     }
 
+    api.query = function (options) {
+        if (options.trace) {
+            delete options.trace;
+            options.tracer = uuids.randomUUID();
+        }
+        return http.PUT({
+            module: 'rt',
+            params: {
+                action: 'query',
+                resource: tabId
+            },
+            data: options
+        }).then(function (responseStanza) {
+            return new RealtimeStanza(responseStanza);
+        });
+    };
+
     api.send = function (options) {
         options.seq = seq;
         seq++;

@@ -63,7 +63,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                 }, 60000);
             }
             options = options || {};
-            this.send({
+            var stanza = {
                 element: "message",
                 trace: options.trace,
                 selector: selector,
@@ -74,7 +74,13 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                         data: "join"
                     }
                 ]
-            });
+            };
+
+            if (options.expectWelcomeMessage) {
+                return this.query(stanza);
+            } else {
+                this.send(stanza);
+            }
         };
 
         this.leave = function (options) {
@@ -108,6 +114,12 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             checkState();
             message.to = id;
             return rt.send(message);
+        };
+
+        this.query = function (message) {
+            checkState();
+            message.to = id;
+            return rt.query(message);
         };
 
         this.destroy = function () {
