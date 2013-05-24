@@ -12,7 +12,7 @@
  */
 
 *:focus {
-    border: 2px solid red;
+    outline: #08c auto 5px !important;
 };
 
 #background_loader.secure {
@@ -135,13 +135,35 @@
 /* ------------------------------------- */
 /* ipad: better fat finger support */
 
-.touch #io-ox-topbar { height: 40px; }
-.touch #io-ox-topbar .launcher { font-size: @topbarFontSize + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
-.touch #io-ox-screens { top: 40px; }
-.touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
-.touch body { font-size: @touchFontSize; }
+.touch {
 
-.touch .scrollable .scrollable-pane { -webkit-transform: translate3d(0, 0, 0); }
+    #io-ox-topbar {
+        height: 40px;
+    }
+
+    #io-ox-topbar .launcher {
+        font-size: @topbarFontSize + 1;
+        line-height: 35px;
+        padding: 2px 15px 5px 15px;
+    }
+
+    #io-ox-screens {
+        top: 40px;
+    }
+
+    #io-ox-windowmanager .window-container-center {
+        width: 100% !important;
+    }
+
+    body {
+        font-size: @touchFontSize;
+    }
+
+    .scrollable .scrollable-pane {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+
+}
 
 /* ------------------------------------- */
 
@@ -342,7 +364,6 @@
 }
 
 /* window manager */
-
 #io-ox-screens {
     top: 40px;
     overflow: hidden;
@@ -385,98 +406,106 @@
     right: 0px;
     display: block;
 }
-#io-ox-notifications-display {
-    padding: 0 13px 0 13px;
-}
+
 #io-ox-windowmanager {
     overflow: hidden;
 
 }
 
-#io-ox-notifications-display .section-title {
-    color: #EEE;
-    border: none;
-    font-size: 24px;
-    font-family: @lightFontFamily;
-    margin: 0 0 4px 13px;
-    line-height: 46px;
-}
+#io-ox-notifications-display {
 
-#io-ox-notifications-display .item {
-    color: #fff;
-    background-color: #333;
-    padding: 13px;
-    margin-bottom: 1px;
-    cursor: pointer;
-}
+    padding: 0 13px 0 13px;
 
-#io-ox-notifications-display .item:hover {
-    background-color: #444;
-}
+    .section-title {
+        color: #EEE;
+        border: none;
+        font-size: 24px;
+        font-family: @lightFontFamily;
+        margin: 0 0 4px 13px;
+        line-height: 46px;
+    }
 
-#io-ox-notifications-display .item .title {
-    pointer-events: none;
-    font-weight: bold;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
+    .item {
 
-#io-ox-notifications-display .item .subject {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    pointer-events: none;
-}
+        color: #fff;
+        background-color: #333;
+        padding: 13px;
+        margin-bottom: 1px;
+        cursor: pointer;
 
-#io-ox-notifications-display .item .content {
-    color: #aaa;
-    line-height: 16px;
-    max-height: 5 * 16px; /* 5 rows */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 3px;
-}
+        &:hover {
+            background-color: #444;
+        }
 
-#io-ox-notifications-display .item .time {
-    float: right;
-    display: inline-block;
-}
+        .title {
+            pointer-events: none;
+            font-weight: bold;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
 
-#io-ox-notifications-display .item .date {
-}
+        .subject {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            pointer-events: none;
+        }
 
-#io-ox-notifications-display .item .location {
-    color: #AAA;
-}
+        .content {
+            color: #aaa;
+            line-height: 16px;
+            max-height: 5 * 16px; /* 5 rows */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 3px;
+        }
 
-#io-ox-notifications-display .item .actions {
-    text-align: right;
-    margin: 5px 0 5px 0;
-}
+        .time {
+            float: right;
+            display: inline-block;
+        }
 
-#io-ox-notifications-display .item .blue,
-#io-ox-notifications-display a {
-    color: #17B2FF;
-}
+        .date {
+        }
 
-#io-ox-notifications-display .open-app {
-    text-align: left;
-    padding: 0 13px 0;
+        .location {
+            color: #AAA;
+        }
+
+        .actions {
+            text-align: right;
+            margin: 5px 0 5px 0;
+        }
+
+    }
+
+    .item .blue, a {
+        color: #17B2FF;
+    }
+
+    .open-app {
+        text-align: left;
+        padding: 0 13px 0;
+    }
+
 }
 
 #io-ox-notifications-popups {
+
     position: absolute;
     top: 48px;
     width: 400px;
     right: 10px;
     z-index: 65201; /* above modal dialog; above relogin screen */
+
+    .alert {
+        margin-bottom: 0.5em;
+        .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
+    }
+
 }
 
-#io-ox-notifications-popups .alert {
-    margin-bottom: 0.5em;
-    .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
-}
 
 #io-ox-windowmanager-pane {
     left: 0%;

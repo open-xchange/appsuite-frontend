@@ -226,10 +226,10 @@ define('io.ox/calendar/week/view',
                     el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
                 switch (e.type) {
                 case 'mouseenter':
-                    el.addClass('hover');
+                    el.addClass('hover').zIndex('+=999');
                     break;
                 case 'mouseleave':
-                    el.removeClass('hover');
+                    el.removeClass('hover').zIndex('-=999');
                     break;
                 default:
                     break;
