@@ -56,31 +56,31 @@
                     <div class="row-fluid control-group">
                         <div class="span6">
                             <label class="no-margin"><input type="email" id="io-ox-login-username" name="username" tabindex="1"
-                                class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                placeholder="User name" data-i18n="User name" data-i18n-attr='placeholder'></label>
+                                class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="User name"
+                                placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder,aria-label"></label>
                         </div>
                         <div class="span3">
-                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="2"
-                                class="span12" maxlength="100" autocorrect="off" autocapitalize="off"
-                                placeholder="Password" data-i18n="Password" data-i18n-attr='placeholder'></label>
+                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="1"
+                                class="span12" maxlength="100" autocorrect="off" autocapitalize="off" aria-label="Password"
+                                placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder,aria-label"></label>
                         </div>
                         <div class="span3">
-                            <input type="submit" tabindex="3" name="signin"
-                                id="login-button" class="span12 btn btn-primary"
-                                value="Sign in" data-i18n="Sign in" data-i18n-attr='value'>
+                            <input type="submit" tabindex="1" name="signin"
+                                id="login-button" class="span12 btn btn-primary" aria-label="Sign in"
+                                value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label">
                         </div>
                     </div>
 
                     <div class="row-fluid control-group">
                         <div class="span6" id="io-ox-login-store">
-                            <label for="io-ox-login-store-box" class="checkbox"
-                                data-i18n="Stay signed in" data-i18n-attr="label"
-                                ><input type="checkbox" tabindex="4" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                            <label for="io-ox-login-store-box" class="checkbox" aria-label="Stay signed in"
+                                data-i18n="Stay signed in" data-i18n-attr="label,aria-label"
+                                ><input type="checkbox" tabindex="1" id="io-ox-login-store-box" checked="checked" name="store" value="1">
                                 Stay signed in
                             </label>
                         </div>
                         <div class="span6" id="io-ox-forgot-password">
-                            <a href="#" target="_blank" tabindex="5" data-i18n="Forgot your password?">Forgot your password?</a>
+                            <a href="#" target="_blank" tabindex="1" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
 
@@ -111,7 +111,7 @@
 
             <div class="css-table-row">
             <div class="css-table-cell" id="io-ox-login-footer">
-                <div id="io-ox-languages"><i data-i18n="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
+                <div id="io-ox-languages"><i data-i18n="Languages" data-i18n-attr="text,aria-label" aria-label="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
                 <div id="io-ox-copyright"></div>
             </div>
             </div>
