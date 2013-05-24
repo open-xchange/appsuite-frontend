@@ -166,6 +166,14 @@ define('io.ox/core/tk/folderviews',
                 tree.toggle();
             },
 
+            toggleNode = function () {
+                if (!open) {
+                    openNode();
+                } else {
+                    closeNode();
+                }
+            },
+
             // open/close tree node
             toggleState = function (e) {
                 // not valid click?
@@ -178,7 +186,7 @@ define('io.ox/core/tk/folderviews',
                     if (isArrow || (isLabel && isUnselectable)) {
                         // avoid selection; allow for unreadable
                         e.preventDefault();
-                        if (!open) { openNode(); } else { closeNode(); }
+                        toggleNode();
                     }
                 }
             };
@@ -192,6 +200,7 @@ define('io.ox/core/tk/folderviews',
         // open & close
         this.open = openNode;
         this.close = closeNode;
+        this.toggle = toggleNode;
 
         this.isOpen = function () {
             return hasChildren() && (open === true || (tree.options.skipRoot && tree.options.rootFolderId === id));
@@ -348,7 +357,7 @@ define('io.ox/core/tk/folderviews',
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
 
-            nodes.folder = tmplFolder.clone().on('dblclick mousedown', '.folder-arrow, .folder-label', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
                 nodes.folder.css('paddingLeft', (0 + level * SUBFOLDERPADDING) + 'px');
@@ -457,7 +466,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = this.internal.paint.call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('paint');
                     p.running = null;
                 });
@@ -474,7 +483,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = (this.internal.repaint || this.internal.paint).call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('repaint');
                     p.running = null;
                 });
@@ -977,7 +986,7 @@ define('io.ox/core/tk/folderviews',
                 }
             })
             .done(function () {
-                self.selection.update();
+                self.selection.updateIndex();
             })
             .fail(function (error) {
                 self.container.append(
