@@ -143,7 +143,8 @@ define("io.ox/core/main",
                 side = sideTags[0];
             }
         }
-        node.hover(
+        if (fn) {
+            node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
                 function () { if (!Modernizr.touch) { $(this).removeClass('hover'); } }
             )
@@ -159,6 +160,7 @@ define("io.ox/core/main",
                     self.idle().empty().append(content).css('width', '');
                 });
             });
+        }
 
         if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
             node.addClass(side);

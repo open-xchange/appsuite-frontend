@@ -34,7 +34,8 @@ define('io.ox/core/settings/errorlog/settings/pane',
         events: {
             'click .nav a': 'onClickTab',
             'click .reload-statistics': 'onUpdateStatistics',
-            'click .request-body .toggle': 'onToggleRequestBody'
+            'click .toggle-request-body': 'onToggleRequestBody',
+            'click .toggle-stack-trace': 'onToggleStackTrace'
         },
 
         initialize: function () {
@@ -64,6 +65,16 @@ define('io.ox/core/settings/errorlog/settings/pane',
                 node.data('visible', false).text(gt('Show request body')).next().hide();
             } else {
                 node.data('visible', true).text(gt('Hide request body')).next().show();
+            }
+        },
+
+        onToggleStackTrace: function (e) {
+            e.preventDefault();
+            var node = $(e.target);
+            if (node.data('visible')) {
+                node.data('visible', false).text(gt('Show strack trace')).next().hide();
+            } else {
+                node.data('visible', true).text(gt('Hide strack trace')).next().show();
             }
         },
 
@@ -222,7 +233,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
         getStrackTrace: function (model) {
             var stack = model.get('error_stack');
-            return _.isArray(stack) ? stack[0] : '';
+            return _.isArray(stack) ? stack.join('\n') : '';
         },
 
         getRequestBody: function (model) {
@@ -270,7 +281,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
         renderError: function (model) {
 
-            var id = this.getTabId(model);
+            var id = this.getTabId(model), self = this;
 
             this.$el.find(id)
             .find('.empty').remove().end()
@@ -283,12 +294,18 @@ define('io.ox/core/settings/errorlog/settings/pane',
                         $.txt(' '),
                         $('<span class="datetime">').text(this.getTime(model))
                     ),
-                    $('<div class="stack-trace">').text(this.getStrackTrace(model)),
                     $('<div class="url">').text(this.getUrl(model)),
-                    $('<div class="request-body">').append(
-                        $('<a href="#" class="toggle" data-visible="false">').text(gt('Show request body')),
-                        $('<div class="body">').hide().text(this.getRequestBody(model))
+                    $('<div>').append(
+                        $('<a href="#" class="toggle-request-body" data-visible="false">').text(gt('Show request body')),
+                        $('<div class="request-body">').hide().text(this.getRequestBody(model))
                     )
+                    .append(function () {
+                        var trace = self.getStrackTrace(model);
+                        return trace ? [
+                            $('<a href="#" class="toggle-stack-trace" data-visible="false">').text(gt('Show stack trace')),
+                            $('<div class="stack-trace">').hide().text(trace)
+                        ] : [];
+                    })
                 )
             );
 
