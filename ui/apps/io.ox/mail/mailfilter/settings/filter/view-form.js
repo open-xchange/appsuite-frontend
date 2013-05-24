@@ -29,10 +29,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
         POINT = 'io.ox/mailfilter/settings/filter/detail',
 
-        sizeTitles = {
-            size: gt('Size (bytes)')
-        },
-
         sizeValues = {
             over: gt('Is bigger than'),
             under: gt('Is smaller than')
@@ -49,6 +45,104 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             contains: gt('Contains'),
             matches: gt('Matches (wildcards allowed)')
         },
+
+        defaultTests = {
+            'From': {
+                'comparison': "matches",
+                'headers': ["From"],
+                'id': "header",
+                'values': ['']
+            },
+            'any': {
+                'comparison': "matches",
+                'headers': ["To", "Cc"],
+                'id': "header",
+                'values': ['']
+            },
+            'Subject': {
+                'comparison': "matches",
+                'headers': ["Subject"],
+                'id': "header",
+                'values': ['']
+            },
+            'mailingList': {
+                'comparison': "matches",
+                'headers': ["List-Id", "X-BeenThere", "X-Mailinglist", "X-Mailing-List"],
+                'id': "header",
+                'values': ['']
+            },
+            'To': {
+                'comparison': "matches",
+                'headers': ["To"],
+                'id': "header",
+                'values': ['']
+            },
+            'Cc': {
+                'comparison': "matches",
+                'headers': ["Cc"],
+                'id': "header",
+                'values': ['']
+            },
+            'cleanHeader': {
+                'comparison': "matches",
+                'headers': [""],
+                'id': "header",
+                'values': [""]
+            },
+            'envelope': {
+                'comparison': "matches",
+                'headers': ["To"],
+                'id': "envelope",
+                'values': [""]
+            },
+            'true': {
+                'id': 'true'
+            },
+            'size': {
+                'comparison': 'over',
+                'id': 'size',
+                'size': ''
+            }
+        },
+
+        defaultActions = {
+            'keep': {
+                'id': "keep"
+            },
+            'discard': {
+                'id': "discard"
+            },
+            'redirect': {
+                'id': "redirect",
+                'to': ""
+            },
+            'move': {
+                'id': "move",
+                'into': ""
+            },
+            'reject': {
+                'id': "reject",
+                'text': ""
+
+            },
+            'markmail': {
+                'flags': ["\\seen"],
+                'id': "addflags"
+            },
+            'tag': {
+                'flags': ["$"],
+                'id': "addflags"
+
+            },
+            'flag': {
+                'flags': ["$cl_1"],
+                'id': "addflags"
+            }
+        },
+
+
+
+
 
 //        headerTranslation = {
 //            'From': 'Sender/From',
@@ -70,7 +164,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'mailingList': gt('Mailing list'),
             'To': gt('To'),
             'Cc': gt('CC'),
-            'cleanHeader': gt('Header')
+            'cleanHeader': gt('Header'),
+            'envelope': gt('Envelope'),
+            'true': gt('All messages'),
+            'size': gt('Size (bytes)')
         },
 
         actionsTranslations = {
@@ -149,11 +246,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 'click [data-action="change-value"]': 'onChangeValue',
                 'click [data-action="change-value-actions"]': 'onChangeValueAction',
                 'change [data-action="change-text-test"]': 'onChangeTextTest',
+                'change [data-action="change-text-test-second"]': 'onChangeTextTestSecond',
+
                 'change [data-action="change-text-action"]': 'onChangeTextAction',
                 'click .folderselect': 'onFolderSelect',
                 'click [data-action="change-color"]': 'onChangeColor',
                 'click [data-action="remove-test"]': 'onRemoveTest',
-                'click [data-action="remove-action"]': 'onRemoveAction'
+                'click [data-action="remove-action"]': 'onRemoveAction',
+                'click .newcondition': 'onCreateNewCondition',
+                'click .newaction': 'onCreateNewAction'
             },
 
             onRemoveTest: function (e) {
@@ -212,21 +313,69 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = link.closest('li'),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
+                    testAction = list.attr('data-action'),
+
                     testArray =  this.model.get('test'),
+                    actionArray = this.model.get('actioncmds'),
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value],
                     checkForMultipleTests = $(this.el).find('[data-test-id]');
 
-                link.text(translatedValue);
+                console.log(testAction + ' ' + value);
+                if (testAction === 'create-test') {
+                    list.remove();
+
+                    console.log(value);
+                    console.log(checkForMultipleTests.length);
+                    if (checkForMultipleTests.length > 1) {
+
+                        testArray.tests.push(defaultTests[value]);
+
+                    } else if (checkForMultipleTests.length === 1) {
+                        var createdArray = [testArray];
+                        createdArray.push(defaultTests[value]);
+                        testArray = { id: 'allof'};
+                        testArray.tests = createdArray;
+                    } else {
+
+                        testArray = defaultTests[value];
+                    }
+
+                    this.model.set('test', testArray);
+                    console.log(this.model);
+
+                    this.render();
 
 
-                if (checkForMultipleTests.length > 0) {
-                    testArray.tests[testID].comparison = value;
+                } else if (testAction === 'create-action') {
+                    list.remove();
+
+                    console.log(value);
+
+                    actionArray.push(defaultActions[value]);
+
+
+                    this.model.set('actioncmds', actionArray);
+                    console.log(this.model);
+
+                    this.render();
+
+
                 } else {
-                    testArray.comparison = value;
+                    link.text(translatedValue);
+
+
+                    if (checkForMultipleTests.length > 0) {
+                        testArray.tests[testID].comparison = value;
+                    } else {
+                        testArray.comparison = value;
+                    }
+
+                    this.model.set('test', testArray);
+                    console.log(this.model.get('test'));
                 }
 
-                this.model.set('test', testArray);
-                console.log(this.model.get('test'));
+
+
             },
 
             onChangeValueAction: function (e) {
@@ -255,6 +404,28 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     value = node.val(),
                     list = node.closest('li'),
                     type = list.attr('data-type'),
+                    testID = list.attr('data-test-id'),
+                    testArray =  this.model.get('test'),
+                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+
+                if (checkForMultipleTests.length > 1) {
+                    testArray.tests[testID][type] = type === 'size' ? value : [value];
+                } else {
+                    testArray[type] = type === 'size' ? value : [value];
+                }
+
+                this.model.set('test', testArray);
+
+                console.log(this.model.get('test'));
+            },
+
+
+            onChangeTextTestSecond: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    value = node.val(),
+                    list = node.closest('li'),
+                    type = list.attr('data-type-second'),
                     testID = list.attr('data-test-id'),
                     testArray =  this.model.get('test'),
                     checkForMultipleTests = $(this.el).find('[data-test-id]');
@@ -338,6 +509,26 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 console.log(this.model.get('actioncmds'));
 
+            },
+
+            onCreateNewCondition: function () {
+                var list = $(this.el).find('ol.widget-list.tests');
+                console.log(list);
+                list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-test'}).text(gt('select new condition type')).append(
+                        drawOptions('true', headerTranslation)
+                    )
+                );
+
+            },
+
+            onCreateNewAction: function () {
+                var list = $(this.el).find('ol.widget-list.actions');
+                console.log(list);
+                list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-action'}).text(gt('select new action type')).append(
+                        drawOptions('keep', actionsTranslations)
+                    )
+                );
+
             }
 
         });
@@ -381,6 +572,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test'}).val(activeValue);
     };
 
+    var drawInputfieldTestSecond = function (activeValue) {
+        return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second'}).val(activeValue);
+    };
+
     var drawInputfieldAction = function (activeValue) {
         return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action'}).val(activeValue);
     };
@@ -394,7 +589,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
     };
 
     var drawDeleteButton = function (type) {
-        return $('<a href="#" class="close" data-action="remove-' + type + '">').html('&times;');
+        return $('<a href="#" class="close" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
+    };
+
+    var drawCreateNewTestButton = function () {
+        return $('<button>').addClass('btn newcondition').attr('type', 'button').text(gt('Add condition'));
+    };
+
+    var drawCreateNewActionButton = function () {
+        return $('<button>').addClass('btn newaction').attr('type', 'button').text(gt('Add action'));
     };
 
     function changeLabel(e) {
@@ -432,9 +635,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         index: 150,
         id: 'tests',
         draw: function (baton) {
-            console.log('neu im draw');
-            var listTests = $('<ol class="widget-list">'),
-                listActions = $('<ol class="widget-list">').text('actions');
+
+            var listTests = $('<ol class="widget-list tests">'),
+                listActions = $('<ol class="widget-list actions">');
 
             var appliedTest = baton.model.get('test');
 
@@ -448,7 +651,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             _(appliedTest).each(function (test, num) {
                 if (test.id === 'size') {
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(sizeTitles[test.id]).append(
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(headerTranslation[test.id]).append(
                             drawOptions(test.comparison, sizeValues),
                             drawInputfieldTest(test.size),
                             drawDeleteButton('test')
@@ -464,16 +667,36 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         name = test.headers[0] === '' ? headerTranslation.cleanHeader : headerTranslation[test.headers[0]];
                     }
 
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values'}).text(name).append(
+                    if (test.headers[0] === '') {
+                        listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).text(name).append(
+                                drawInputfieldTestSecond(test.headers[0]),
+                                drawOptions(test.comparison, containsValues),
+                                drawInputfieldTest(test.values[0]),
+                                drawDeleteButton('test')
+                            )
+                        );
+                    } else {
+                        listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values'}).text(name).append(
+                                drawOptions(test.comparison, containsValues),
+                                drawInputfieldTest(test.values[0]),
+                                drawDeleteButton('test')
+                            )
+                        );
+                    }
+
+                } else if (appliedTest.length !== 1 && test.id === 'true') {
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text('ein Fall von Alle').append(
+                            drawDeleteButton('test')
+                    ));
+                } else if (test.id === 'envelope') {
+
+                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'values', 'data-test-id': num}).text(headerTranslation[test.id]).append(
                             drawOptions(test.comparison, containsValues),
                             drawInputfieldTest(test.values[0]),
                             drawDeleteButton('test')
                         )
                     );
-                } else if (appliedTest.length !== 1 && test.id === 'true') {
-                    listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text('ein Fall von Alle').append(
-                            drawDeleteButton('test')
-                    ));
+
                 }
 
             });
@@ -514,6 +737,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.flag).append(
                                     drawColorDropdown(action.flags[0]),
                                     drawDeleteButton('action')
+
                             ));
                         } else {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.tag).append(
@@ -532,7 +756,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
 
-            this.append(listTests, listActions);
+
+            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Tests'));
+            var headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
+
+            this.append(headlineTest, listTests, drawCreateNewTestButton(), headlineActions, listActions, drawCreateNewActionButton());
 
 //            listTests.sortable({
 //                containment: this,
