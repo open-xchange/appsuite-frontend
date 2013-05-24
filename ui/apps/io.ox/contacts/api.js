@@ -22,12 +22,23 @@ define('io.ox/contacts/api',
 
     'use strict';
 
-    // object to store contacts, that have attachments uploading atm
-    var uploadInProgress = {};
+    var // object to store contacts, that have attachments uploading atm
+        uploadInProgress = {},
+        //columns ids mapped by keywords
+        mapping = {
+            email: ['555', '556', '557'],
+            telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
+            cellular: ['551', '552'],
+            fax: ['544', '550', '554']
+        };
+
+    //mapped ids for msisdn
+    mapping.msisdn =  settings.get('msisdn', mapping.cellular);
 
     // generate basic API
     var api = apiFactory({
         module: 'contacts',
+        mapping: mapping,
         requests: {
             all: {
                 action: 'all',
