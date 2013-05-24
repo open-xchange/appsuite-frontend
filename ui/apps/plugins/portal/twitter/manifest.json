@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "oauth twitter"
+    namespace: "portal",
+    requires: "oauth twitter"
 }

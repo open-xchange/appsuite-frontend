@@ -19,10 +19,10 @@ define('io.ox/portal/widgets',
        'gettext!io.ox/portal'
         ], function (ext, manifests, upsell, notifications, settings, gt) {
 
-	'use strict';
+    'use strict';
 
-	// use for temporary hacks
-	var DEV_PLUGINS = []; // ['plugins/portal/helloworld/register'];
+    // use for temporary hacks
+    var DEV_PLUGINS = []; // ['plugins/portal/helloworld/register'];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),

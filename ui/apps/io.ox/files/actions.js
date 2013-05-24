@@ -29,7 +29,7 @@ define('io.ox/files/actions',
 
     // actions
 
-	new Action('io.ox/files/actions/switch-to-list-view', {
+    new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'list');

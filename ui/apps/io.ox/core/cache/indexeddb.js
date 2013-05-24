@@ -12,7 +12,7 @@
 
 define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (ext) {
 
-	'use strict';
+    'use strict';
 
     var SCHEMA = 1,
         QUEUE_DELAY = 5000,

@@ -18,66 +18,66 @@
 
 define('io.ox/core/capabilities', function () {
 
-	'use strict';
+    'use strict';
 
-	var capabilities = {}, disabled = {};
+    var capabilities = {}, disabled = {};
 
-	var api = {
+    var api = {
 
-		get: function (id) {
-			if (arguments.length === 0) {
-				return capabilities;
-			}
-			id = String(id).toLowerCase();
-			return capabilities[id];
-		},
+        get: function (id) {
+            if (arguments.length === 0) {
+                return capabilities;
+            }
+            id = String(id).toLowerCase();
+            return capabilities[id];
+        },
 
-		isDisabled: function (id) {
-			return id in disabled;
-		},
+        isDisabled: function (id) {
+            return id in disabled;
+        },
 
-		has: function () {
+        has: function () {
 
-			var list = _(_(arguments).flatten()).map(function (def) {
-				if (!def) {
-					return '';
-				}
-				return def.split(/\s*[, ]\s*/);
-			});
+            var list = _(_(arguments).flatten()).map(function (def) {
+                if (!def) {
+                    return '';
+                }
+                return def.split(/\s*[, ]\s*/);
+            });
 
-			list = _(list).flatten();
+            list = _(list).flatten();
 
-			return _(list).all(function (id) {
-				var inverse = false, result;
-				if (id[0] === '!') {
-					id = id.substr(1);
-					inverse = true;
-				}
-				result = api.isDisabled(id) ? false : (id in capabilities);
-				return inverse ? !result : result;
-			});
-		},
+            return _(list).all(function (id) {
+                var inverse = false, result;
+                if (id[0] === '!') {
+                    id = id.substr(1);
+                    inverse = true;
+                }
+                result = api.isDisabled(id) ? false : (id in capabilities);
+                return inverse ? !result : result;
+            });
+        },
 
-		reset: function () {
-			capabilities = {};
-			_(ox.serverConfig.capabilities).each(function (cap) {
-				capabilities[cap.id] = cap;
-			});
-		}
-	};
+        reset: function () {
+            capabilities = {};
+            _(ox.serverConfig.capabilities).each(function (cap) {
+                capabilities[cap.id] = cap;
+            });
+        }
+    };
 
-	api.reset();
+    api.reset();
 
-	// disable via hash?
-	var hash = _.url.hash('disableFeature');
-	if (hash) {
-		_(hash.split(/\s*[, ]\s*/)).each(function (id) {
-			disabled[id] = true;
-		});
-		if (!_.isEmpty(disabled)) {
-			console.info('Disabled features', disabled);
-		}
-	}
+    // disable via hash?
+    var hash = _.url.hash('disableFeature');
+    if (hash) {
+        _(hash.split(/\s*[, ]\s*/)).each(function (id) {
+            disabled[id] = true;
+        });
+        if (!_.isEmpty(disabled)) {
+            console.info('Disabled features', disabled);
+        }
+    }
 
-	return api;
+    return api;
 });

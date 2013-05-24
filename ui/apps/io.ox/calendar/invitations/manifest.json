@@ -1,4 +1,4 @@
 {
-	namespace: "io.ox/mail/view-detail",
-	requires: "calendar"
+    namespace: "io.ox/mail/view-detail",
+    requires: "calendar"
 }
