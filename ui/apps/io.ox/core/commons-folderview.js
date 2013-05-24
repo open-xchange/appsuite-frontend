@@ -669,35 +669,7 @@ define('io.ox/core/commons-folderview',
             });
 
             baton.tree.selection
-                .keyboard(container, true)
-                .on('keyboard', function (event, origEvent, key) {
-                    var selection = this,
-                        treeNode = baton.tree.treeNodes[selection.get()];
-                    switch (key) {
-                    case 39:
-                        origEvent.preventDefault();
-                        // cursor right
-                        if (treeNode && !treeNode.isOpen()) {
-                            treeNode.open();
-                            baton.tree.repaint();
-                        }
-                        return false;
-                    case 37:
-                        // cursor left
-                        origEvent.preventDefault();
-                        if (treeNode && treeNode.isOpen()) {
-                            treeNode.close();
-                            baton.tree.repaint();
-                        }
-                        return false;
-                    case 32:
-                    case 13:
-                        // enter
-                        treeNode.toggle();
-                        baton.tree.repaint();
-                        return false;
-                    }
-                });
+                .keyboard(container, true);
 
             sidepanel.on('webkitAnimationEnd', function (e) {
                 fnAnimationEnd(e);

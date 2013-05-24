@@ -798,6 +798,34 @@ define('io.ox/core/tk/folderviews',
         this.selection.on('change', function (e, selection) {
             var id = _(selection).first();
             if (id) { self.options.select(id); }
+        })
+        .on('keyboard', function (event, origEvent, key) {
+            var id = this.get(),
+                treeNode = self.getNode(id);
+            switch (key) {
+            case 39:
+                origEvent.preventDefault();
+                // cursor right
+                if (treeNode && !treeNode.isOpen()) {
+                    treeNode.open();
+                    self.repaint();
+                }
+                return false;
+            case 37:
+                // cursor left
+                origEvent.preventDefault();
+                if (treeNode && treeNode.isOpen()) {
+                    treeNode.close();
+                    self.repaint();
+                }
+                return false;
+            case 32:
+            case 13:
+                // enter
+                treeNode.toggle();
+                self.repaint();
+                return false;
+            }
         });
 
         function deferredEach(list, done) {
