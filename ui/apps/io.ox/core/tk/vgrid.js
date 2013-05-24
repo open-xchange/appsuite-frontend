@@ -1167,7 +1167,7 @@ define('io.ox/core/tk/vgrid',
             self.selection.resetLastIndex();
         });
 
-        container.on('focus', function () {
+        scrollpane.on('focus', function () {
             self.selection.selectSmart();
         });
 
