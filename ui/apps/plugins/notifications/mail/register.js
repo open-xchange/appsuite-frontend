@@ -210,6 +210,9 @@ define('plugins/notifications/mail/register',
                     mails = [].concat(mails);
                 }
                 addMails(e, mails, unseenMails);
+                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
+                    api.newMailTitle(false);
+                }
                 notifications.collection.trigger('reset');
             });
             api.on('move', function (e, mails, newFolder) {
