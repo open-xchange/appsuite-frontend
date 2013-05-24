@@ -50,9 +50,9 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
             });
         };
 
-        this.sayAndTrace = function (text) {
+        this.sayAndTrace = function (text, tracer) {
             return this.group.send({
-                trace: true,
+                tracer: tracer,
                 element: "message",
                 payloads: [
                     {

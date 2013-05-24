@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/realtime/atmosphere"], function (ext, Event, caps, uuids) {
+define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/core/http", "io.ox/realtime/atmosphere"], function (ext, Event, caps, uuids, http) {
     'use strict';
 
     if (!caps.has("rt")) {
@@ -122,18 +122,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         };
     }
 
+    function receivedAcknowledgement(sequenceNumber) {
+        delete resendBuffer[sequenceNumber];
+        if (resendDeferreds[sequenceNumber]) {
+            resendDeferreds[sequenceNumber].resolve();
+        } else {
+        }
+        if (api.debug) {
+            console.log("Received receipt for " + sequenceNumber);
+        }
+        delete resendDeferreds[sequenceNumber];
+    }
+
     function received(stanza) {
         if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
-                delete resendBuffer[Number(receipt.data)];
-                if (resendDeferreds[Number(receipt.data)]) {
-                    resendDeferreds[Number(receipt.data)].resolve();
-                } else {
-                }
-                if (api.debug) {
-                    console.log("Received receipt for " + receipt.data);
-                }
-                delete resendDeferreds[Number(receipt.data)];
+                var sequenceNumber = Number(receipt.data);
+                receivedAcknowledgement(sequenceNumber);
             });
         } else if (stanza.get("atmosphere", "pong")) {
             _(stanza.getAll("atmosphere", "pong")).each(function (pong) {
@@ -344,7 +349,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     function drainBuffer() {
         request.requestCount = 0;
-        subSocket.push(JSON.stringify(queue.stanzas));
+        // Send queue.stanzas
+        http.PUT({
+            module: 'rt',
+            params: {
+                action: 'send',
+                resource: tabId
+            },
+            data: queue.stanzas
+        }).done(function (resp) {
+            if (resp.acknowledgements) {
+                _(resp.acknowledgements).each(function (sequenceNumber) {
+                    receivedAcknowledgement(sequenceNumber);
+                });
+            }
+        });
+
         if (api.debug) {
             console.log("->", queue.stanzas);
         }
