@@ -26,10 +26,11 @@
                                 .attr('title', icon.desc)
                                 .addClass(icon.css)
                                 .click(function (evt) {
-                                    var ed = baton.editor;
+                                    var ed = baton.editor,
+                                        node = $('<span class="emojifont">').text(icon.unicode);
                                     evt.preventDefault();
 
-                                    ed.execCommand('mceInsertContent', false, icon.unicode);
+                                    ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
                                 })
                             );
                         });
