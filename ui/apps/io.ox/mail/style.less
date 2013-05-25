@@ -14,7 +14,7 @@
 /* VGrid elements */
 
 .vgrid-cell.mail {
-    padding: 6px 13px 6px 13px;
+    padding: 10px 13px 13px 13px;
     line-height: 1.5em;
 }
 
@@ -257,7 +257,7 @@
         .mail-detail  {
             background-color: white;
             padding: 20px;
-            .box-shadow(0px 2px 30px 0px #CCC);
+            .box-shadow(0px 8px 20px -8px #333); // alt: 0px 2px 30px -5px #aaa
         }
     }
 }
@@ -271,7 +271,7 @@
     width: 100%;
     .box-sizing(border-box);
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
     }
 
@@ -664,8 +664,7 @@ h4.mail-attachment-preview {
 
 .mail-detail {
 
-    .io-ox-inline-links {
-        text-align: left;
+    .io-ox-inline-links:first-child {
         z-index: 12006;
     }
 
