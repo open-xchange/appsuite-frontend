@@ -297,7 +297,7 @@ define('io.ox/core/commons',
             });
             // on cancel search
             win.on('search:clear cancel-search', function () {
-                grid.setMode('all');
+                if (grid.getMode() !== 'all') grid.setMode('all');
             });
         },
 

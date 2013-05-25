@@ -200,7 +200,8 @@
     &.calendar {
 
         height: 60px; /* = 3 rows */
-        padding: 0.75em 13px 0.75em 13px;
+        padding-top: 13px;
+        padding-bottom: 13px;
 
         .title {
             font-weight: bold;
@@ -251,11 +252,18 @@
     }
 
     &.vgrid-label.calendar-label {
-        font-size: 9pt;
-        font-weight: normal;
-        line-height: 1.2em;
-        height: 1.2em;
-        color: #555;
+
+        text-align: left;
+        font-weight: 200;
+        font-size: 20px;
+        line-height: 20px;
+        color: @linkColor;
+        padding-top: 32px;
+        padding-bottom: 14px;
+        background-image: none;
+        background-color: #fff;
+        border-top: 0px none;
+        border-bottom: 0px none;
     }
 
     .shown_as {
@@ -304,9 +312,8 @@
 /* Detail view */
 .calendar-detail {
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     .appointment-date {

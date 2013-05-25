@@ -653,9 +653,6 @@ define("io.ox/core/main",
                         });
                     })
                     .addClass('left-corner'); // to match dimensions of side navigation
-                } else {
-                    // add placeholder
-                    addLauncher('left', $('<span>&nbsp;</span>')).addClass('left-corner');
                 }
             }
         });
