@@ -63,7 +63,7 @@ define("plugins/portal/linkedIn/register",
             .on("click", person, fnClick);
     }
 
-    ext.point("portal/linkedIn/updates/renderer").extend({
+    ext.point("io.ox/plugins/portal/linkedIn/updates/renderer").extend({
         id: "CONN",
         draw: function (activity) {
 
@@ -216,7 +216,7 @@ define("plugins/portal/linkedIn/register",
                         $('<h2 class="linkedin-activities-header">').text(gt("Recent activities"))
                     );
                     _(activities.values).each(function (activity) {
-                        ext.point("portal/linkedIn/updates/renderer").invoke("draw", node, activity);
+                        ext.point("io.ox/plugins/portal/linkedIn/updates/renderer").invoke("draw", node, activity);
                     });
                 }
             });
