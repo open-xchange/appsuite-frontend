@@ -916,7 +916,7 @@ define("io.ox/mail/write/view-main",
     function serialize(obj) {
         // display_name might be null!
         return obj.display_name ?
-             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + obj.phone || '' + '>' : '<' + obj.email + obj.phone || '' + '>';
+             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + (obj.phone || '') + '>' : '<' + obj.email + (obj.phone || '') + '>';
     }
 
     // function clickRadio(e) {
