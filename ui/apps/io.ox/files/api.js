@@ -603,7 +603,7 @@ define('io.ox/files/api',
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
-            name = '/' + encodeURIComponent(file.filename),
+            name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
                 '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
         switch (mode) {
