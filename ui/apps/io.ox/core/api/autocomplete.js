@@ -119,6 +119,11 @@ define('io.ox/core/api/autocomplete',
         processContactResults: function (type, data, query, options) {
             var tmp = [], hash = {}, self = this, list = [];
 
+            //distinguish email and phone objects
+            function getTarget(obj) {
+                return obj.email !== '' ? obj.email : obj.phone;
+            }
+
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
@@ -145,7 +150,7 @@ define('io.ox/core/api/autocomplete',
             // 2/2: filter distribution lists & remove email duplicates
             tmp = _(tmp).filter(function (obj) {
                 var isDistributionList = obj.data.mark_as_distributionlist === true,
-                    isDuplicate = obj.email in hash;
+                    isDuplicate = hash[getTarget(obj)];
 
                 if (isDistributionList) {
                     if (self.options.distributionlists === false) {
@@ -153,7 +158,7 @@ define('io.ox/core/api/autocomplete',
                     }
                     return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
                 } else {
-                    return isDuplicate ? false : (hash[obj.email] = true);
+                    return isDuplicate ? false : (hash[getTarget(obj)] = true);
                 }
             });
             hash = null;

@@ -203,7 +203,7 @@ define("io.ox/mail/write/view-main",
                                 hash[rcpt] = true;
                             });
                             list = _(data).filter(function (o) {
-                                return hash[o.email] === undefined;
+                                return o.email !== '' ? hash[o.email] === undefined : hash[mailUtil.cleanup(o.phone)] === undefined;
                             });
 
                             //return number of query hits and the filtered list
@@ -336,14 +336,15 @@ define("io.ox/mail/write/view-main",
                 });
                 // ignore doublets and draw remaining
                 list = _(list).filter(function (recipient) {
-                    if (hash[recipient.email] === undefined) {
+                    if (hash[recipient.email] === undefined && hash[mailUtil.cleanup(recipient.phone)] === undefined) {
                         //draw recipient
-                        var node = $('<div>');
+                        var node = $('<div>'), value;
                         drawContact(id, node, recipient);
                         // add to proper section (to, CC, ...)
                         this.sections[id + 'List'].append(node);
                         // if list itself contains doublets
-                        return hash[recipient.email] = true;
+                        value = recipient.email !== '' ? recipient.email : mailUtil.cleanup(recipient.phone);
+                        return hash[value] = true;
                     }
                 }, this);
                 this.sections[id + 'List'].show().trigger('show');
@@ -915,7 +916,7 @@ define("io.ox/mail/write/view-main",
     function serialize(obj) {
         // display_name might be null!
         return obj.display_name ?
-             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + obj.phone || '' + '>' : '<' + obj.email + obj.phone || '' + '>';
+             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + obj.phone || '' + '>' : '<' + obj.email + obj.phone || '' + '>';
     }
 
     // function clickRadio(e) {
