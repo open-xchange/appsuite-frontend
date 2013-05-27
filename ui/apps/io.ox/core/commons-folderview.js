@@ -302,8 +302,10 @@ define('io.ox/core/commons-folderview',
 
         function setFolderPermissions(e) {
             e.preventDefault();
+            var app = e.data.app,
+                folder = String(app.folder.get());
             require(['io.ox/core/permissions/permissions'], function (permissions) {
-                permissions.show(String(e.data.app.folderView.selection.get()));
+                permissions.show(folder);
             });
         }
 
@@ -322,9 +324,12 @@ define('io.ox/core/commons-folderview',
         });
 
         function showFolderProperties(e) {
+
             e.preventDefault();
-            var baton = e.data.baton,
-                id = _(baton.app.folderView.selection.get()).first();
+
+            // get current folder id
+            var baton = e.data.baton, id = baton.app.folder.get();
+
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
                     var title = gt('Properties'),
@@ -387,9 +392,12 @@ define('io.ox/core/commons-folderview',
         });
 
         function moveFolder(e) {
+
             e.preventDefault();
-            var baton = e.data.baton,
-                id = _(baton.app.folderView.selection.get()).first();
+
+            // get current folder id
+            var baton = e.data.baton, id = baton.app.folder.get();
+
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
                     var title = gt('Move folder'),
@@ -459,7 +467,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, initResize, restoreWidth, makeResizable, fnAnimationEnd,
+            fnHide, fnShow, initResize, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -607,10 +615,6 @@ define('io.ox/core/commons-folderview',
                 }
             });
 
-            sidepanel.on('webkitAnimationEnd', function (e) {
-                fnAnimationEnd(e);
-            });
-
             // paint now
             return tree.paint().pipe(function () {
 
@@ -705,6 +709,10 @@ define('io.ox/core/commons-folderview',
         app.hideFolderView = $.noop;
         app.toggleFolderView = loadTree;
         app.folderView = null;
+
+        app.folderViewIsVisible = function () {
+            return visible;
+        };
 
         initExtensions(POINT, app);
 

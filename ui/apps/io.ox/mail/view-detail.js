@@ -143,7 +143,7 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
-    
+
     var openTaskLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/tasks/main', { folder: e.data.folder}).done(function () {
@@ -175,7 +175,7 @@ define('io.ox/mail/view-detail',
             });
         });
     };
-    
+
     var openAppointmentLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
@@ -224,7 +224,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawAppointmentLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -246,7 +246,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawTaskLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -1345,6 +1345,215 @@ define('io.ox/mail/view-detail',
             }, 0);
         }
     });
+
+    // EMPTY
+
+    var INDEX = 100;
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'foldername',
+        index: INDEX += 100,
+        draw: function (baton) {
+            this.append(
+                $('<h1 class="folder-name">').text(baton.data.title)
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-summary',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var data = baton.data,
+                total = data.total,
+                text,
+                link = $();
+
+            if (total === 0) {
+                text = gt('No mails');
+            } else {
+                if (data.unread === 0) {
+                    text = gt.format(
+                        gt.ngettext('%1$s mail', '%1$s mails', data.total),
+                        data.total
+                    );
+                } else {
+                    text = gt.format(
+                        gt.ngettext('%1$s mail, %2$s unread', '%1$s mails, %2$s unread', data.total),
+                        data.total, data.unread
+                    );
+                }
+            }
+
+            if (!baton.app.folderViewIsVisible()) {
+                link = $('<a href="#">').text(gt('Change folder')).click(function (e) {
+                    e.preventDefault();
+                    baton.app.showFolderView();
+                });
+            }
+
+            this.append(
+                $('<section class="folder-summary">').append(
+                    $('<span>').text(text),
+                    $.txt('\u00A0\u00A0 '),
+                    link
+                )
+            );
+        }
+    });
+
+    function compose(e) {
+        require(['io.ox/core/extPatterns/actions'], function (actions) {
+            actions.invoke('io.ox/mail/actions/compose', null, e.data.baton);
+        });
+    }
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'primary-actions',
+        index: INDEX += 100,
+        draw: function (baton) {
+            this.append(
+                $('<section class="primary-actions">').append(
+                    $('<a href="#" class="btn btn-primary">')
+                    .text(gt('Compose new mail'))
+                    .on('click', { baton: baton }, compose)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-actions',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var ul;
+
+            this.append(
+                $('<h2 class="folder-actions">').text(gt('Folder actions')),
+                ul = $('<ul class="inline-links">')
+            );
+
+            ext.point('io.ox/mail/folderview/sidepanel/toolbar/options').invoke('draw', ul, baton);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-actions',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var ul;
+
+            this.append(
+                $('<h2 class="folder-actions">').text(gt('Folder actions')),
+                ul = $('<ul class="inline-links">')
+            );
+
+            ext.point('io.ox/mail/folderview/sidepanel/toolbar/options').invoke('draw', ul, baton);
+        }
+    });
+
+    // AD
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'ad',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            $('head').append(
+                $('<link href="http://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet" type="text/css">')
+            );
+
+            var node = $('<section>')
+                .css({
+                    fontFamily: '"Rokkitt", cursive',
+                    fontSize: '36px',
+                    lineHeight: '36px',
+                    padding: '20px',
+                    color: '#fff',
+                    backgroundColor: '#B4B2A5',
+                    borderRadius: '10px',
+                    textShadow: '2px 2px 5px #000'
+                })
+                .text('Buy premium. Now. Don\'t\u00A0ask!');
+
+            this.append(node);
+        }
+    });
+
+    // Help
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-statistic-help',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var topics = {
+                'Die Bestandteile von Mail': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html',
+                'E-Mails organisieren': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html',
+                'E-Mails im Team': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.share.html',
+                'Externe E-Mail-Accounts': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html',
+                'E-Mail-Einstellungen': 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html'
+            };
+
+            this.append(
+                $('<h2>').text('Help'),
+                $('<section>').append(
+                    _(topics).map(function (link, text) {
+                        return $('<div>').append(
+                            $('<a>', { href: link, target: 'help' }).text(text)
+                        );
+                    })
+                )
+            );
+        }
+    });
+
+    // Statistics
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-statistic-from',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var node = $('<section>').busy();
+            this.append(node);
+
+            require(['io.ox/mail/statistics'], function (statistics) {
+                statistics.sender(node, { folder: baton.folder });
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/detail/empty').extend({
+        id: 'folder-statistic-weekday',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var node = $('<section>').busy();
+            this.append(node);
+
+            require(['io.ox/mail/statistics'], function (statistics) {
+                statistics.weekday(node, { folder: baton.folder });
+            });
+        }
+    });
+
+    // ext.point('io.ox/mail/detail/empty').extend({
+    //     id: 'folder-statistic-hour',
+    //     index: INDEX += 100,
+    //     draw: function (baton) {
+
+    //         var node = $('<section>').busy();
+    //         this.append(node);
+
+    //         require(['io.ox/mail/statistics'], function (statistics) {
+    //             statistics.hour(node, { folder: baton.folder });
+    //         });
+    //     }
+    // });
 
     return that;
 });

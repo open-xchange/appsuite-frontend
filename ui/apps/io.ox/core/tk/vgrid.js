@@ -754,7 +754,7 @@ define('io.ox/core/tk/vgrid',
                         restoreHashSelection(ids, changed);
                         return;
                     } else {
-                        self.selection.clear();
+                        _.url.hash('id', null);
                     }
                 }
 
@@ -776,6 +776,9 @@ define('io.ox/core/tk/vgrid',
                     else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
                         self.selection.selectFirst();
+                    }
+                    else {
+                        self.selection.clear();
                     }
                 }
             };

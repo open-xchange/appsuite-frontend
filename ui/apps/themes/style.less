@@ -582,7 +582,7 @@
 
     font-size: 22px;
     line-height: 52px;
-    margin-bottom: 10px;
+    margin: 4px 0 8px 0;
 
     & > a {
         width: 50px;
@@ -592,11 +592,33 @@
         outline: 0;
     }
 
-    & > a i { color: @toolbarButtonColor; }
-    & > a i.accent-color { color: @toolbarButtonAccent; }
-    &:hover > a i { color: darken(@toolbarButtonColor, 20%); text-decoration: none; }
-    &:hover > a i.accent-color { color: darken(@toolbarButtonAccent, 20%); }
-    & > a.disabled i { color: #eee; cursor: default; }
+    & > a i {
+        color: @toolbarButtonColor;
+    }
+
+    &:hover > a i {
+        color: darken(@toolbarButtonColor, 20%);
+        text-decoration: none;
+    }
+
+    & > a i.accent-color {
+        background-color: @toolbarButtonAccent;
+        color: #FFF;
+        border: 2px solid @toolbarButtonAccent;
+        width: 25px;
+        border-radius: 5px;
+        padding-top: 2px;
+    }
+
+    &:hover > a i.accent-color {
+        background-color: darken(@toolbarButtonAccent, 10%);
+        border-color: darken(@toolbarButtonAccent, 10%);
+    }
+
+    & > a.disabled i {
+        color: #eee;
+        cursor: default;
+    }
 
     ul { font-size: 14px; line-height: 20px; }
 }
@@ -911,12 +933,13 @@ a.button {
 
 .vgrid-cell-checkbox {
     position: absolute;
-	left: 0;
+    top: 0;
+	bottom: 0;
+    left: 0;
 	width: 30px;
-    height: 100% !important;
     display: none;
     cursor: pointer;
-    padding: 5px 0 6px 13px;
+    padding: 7px 0 0 13px;
 }
 
 .vgrid-cell-checkbox label {
@@ -1248,11 +1271,17 @@ span.hint {
 
 /* inline links */
 .io-ox-inline-links {
-    position:r elative;
+    position: relative;
     font-size: @inlineLinkFontSize;
     margin: @inlineLinksMargin;
     clear: both;
+    z-index: 3;
     .user-select(none);
+}
+
+nav.io-ox-inline-links + header {
+    position: relative;
+    z-index: 2;
 }
 
 .io-ox-inline-links.embedded {
@@ -1747,6 +1776,63 @@ a.toolbar-action, .toolbar-action > a {
 .toolbar-action.pull-right { margin-left: 1px; }
 .toolbar-action ul { text-align: left; }
 
+/* Empty detail view */
+
+.empty {
+
+    @distance: 40px;
+
+    h1.folder-name {
+        font-size: 36px;
+        font-weight: 200;
+        text-transform: uppercase;
+        color: #ccc;
+        margin: 0 0 0 0;
+    }
+
+    section {
+        margin: 0 0 @distance 0;
+    }
+
+    .folder-summary {
+        color: #aaa;
+        margin-top: 0;
+    }
+
+    h2 {
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: 200;
+        text-transform: uppercase;
+        margin: @distance 0 5px 0;
+    }
+
+    ul {
+        margin: 0 0 @distance 0;
+    }
+
+    ul li {
+        display: inline-block;
+        list-style-type: none;
+
+        a {
+            display: inline-block;
+            margin-right: 14px;
+        }
+
+        a.disabled {
+            display: none;
+        }
+    }
+
+    li.divider {
+        display: none;
+    }
+
+    canvas {
+        margin-bottom: 10px;
+    }
+}
 
 /* --- */
 
@@ -1834,6 +1920,29 @@ a.toolbar-action, .toolbar-action > a {
     border-top: 1px solid #ddd;
     margin-top: 6px;
 }
+
+/** Simplify BOOTSTRAP buttons */
+
+.btn-custom(@color) {
+    background-color: @color;
+    &:hover { background-color: darken(@color, 10%); }
+    border: 0px none;
+    color: white;
+}
+
+.btn {
+
+    background-image: none;
+    text-shadow: none;
+    .btn-custom(#ddd);
+    color: #555;
+}
+
+.btn-primary { .btn-custom(#08c); }
+.btn-inverse { .btn-custom(#222); }
+.btn-success { .btn-custom(#51a351); }
+.btn-warning { .btn-custom(#f89406); }
+.btn-danger  { .btn-custom(#bd362f); }
 
 /** BOOTSTRAP FIXES **/
 

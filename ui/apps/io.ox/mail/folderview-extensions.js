@@ -56,7 +56,7 @@ define('io.ox/mail/folderview-extensions',
 
     function markMailFolderRead(e) {
         e.preventDefault();
-        var item = {folder: e.data.app.folder.get()};
+        var item = { folder: e.data.app.folder.get() };
 
         mailAPI.markRead(item).done(function () {
             // TODO: unify events?
@@ -69,17 +69,21 @@ define('io.ox/mail/folderview-extensions',
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
-            this.append($('<li>').append(
-                $('<a href="#" data-action="markfolderread">').text(gt('Mark all mails as read'))
-                .on('click', { app: baton.app }, markMailFolderRead)
-            ));
+            this.append(
+                $('<li>').append(
+                    $('<a href="#" data-action="markfolderread">')
+                    .text(gt('Mark all mails as read'))
+                    .on('click', { app: baton.app }, markMailFolderRead)
+                    .addClass(baton.data.unread === 0 ? 'disabled' : undefined)
+                )
+            );
         }
     });
 
     function expungeFolder(e) {
         e.preventDefault();
-        var baton = e.data.baton,
-        id = _(baton.app.folderView.selection.get()).first();
+        // get current folder id
+        var baton = e.data.baton, id = baton.app.folder.get();
         mailAPI.expunge(id);
     }
 
@@ -99,8 +103,8 @@ define('io.ox/mail/folderview-extensions',
 
     function clearFolder(e) {
         e.preventDefault();
-        var baton = e.data.baton,
-        id = _(baton.app.folderView.selection.get()).first();
+        // get current folder id
+        var baton = e.data.baton, id = baton.app.folder.get();
         mailAPI.clear(id);
     }
 
@@ -117,6 +121,5 @@ define('io.ox/mail/folderview-extensions',
             }
         }
     });
-
 
 });
