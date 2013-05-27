@@ -36,6 +36,9 @@ define('io.ox/core/api/autocomplete',
         if (options.groups) {
             this.apis.push({type: 'group', api: groupAPI});
         }
+        if (options.msisdn && (capabilities.has('msisdn'))) {
+            this.options.calloptions = $.extend(this.options.calloptions || {}, { extra: ['msisdn'] });
+        }
     }
 
     Autocomplete.prototype = {
@@ -55,7 +58,7 @@ define('io.ox/core/api/autocomplete',
                 };
 
             //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
-            options = capabilities.has('msisdn') ? $.extend(options, { extra: ['msisdn'] }) : options;
+            options = $.extend(options, this.options.calloptions || {});
 
             if (query in this.cache) {
                 // cache hit
@@ -131,7 +134,7 @@ define('io.ox/core/api/autocomplete',
                     // create separate objects for each email value
                     self.processContactItem(type, tmp, obj, ['email1', 'email2', 'email3']);
                     //msisdn support: create separate objects for each phone number
-                    if (capabilities.has('msisdn') &&  options.extra && options.extra.length) {
+                    if (options.extra && options.extra.length) {
                         //get requested extra columns and process
                         _.each(options.extra, function (id) {
                             self.processContactItem(type, tmp, obj, contactsAPI.getMapping(id, 'names'));
