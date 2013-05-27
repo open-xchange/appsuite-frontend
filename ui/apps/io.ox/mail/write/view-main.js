@@ -817,11 +817,21 @@ define("io.ox/mail/write/view-main",
     * @return {array} array with contact object
     */
     function getNormalized(list) {
-        var elem;
+        var elem, custom;
         return list.map(function (elem) {
+            //if unknown email/phone is used
+            if (_.isArray(elem)) {
+                custom = {
+                    display_name: elem[0]
+                };
+                //email or phone property?
+                custom[mailUtil.getChannel(elem[1])] = elem[1];
+                elem = custom;
+            }
+
             var obj = {
-                display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
-                email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
+                display_name: elem.display_name.replace(/^('|")|('|")$/g, '') || '',
+                email: elem.email || '',
                 phone: elem.phone || '',
                 field: elem.field || '',
                 image1_url: elem.image1_url || '',
