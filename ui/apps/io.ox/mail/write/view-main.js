@@ -822,6 +822,8 @@ define("io.ox/mail/write/view-main",
             var obj = {
                 display_name: (_.isArray(elem) ? elem[0] || '' : elem.display_name || '').replace(/^('|")|('|")$/g, ''),
                 email: _.isArray(elem) ? elem[1] : elem.email || elem.mail || '',
+                phone: elem.phone || '',
+                field: elem.field || '',
                 image1_url: elem.image1_url || '',
                 folder_id: elem.folder_id || '',
                 id: elem.id || ''
@@ -832,12 +834,12 @@ define("io.ox/mail/write/view-main",
     }
 
     function drawAutoCompleteItem(node, data, query) {
-        var url = contactsUtil.getImage(data.data, contactPictureOptions);
+        var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
 
         node.addClass('io-ox-mail-write-contact').append(
             $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
             $('<div class="person-link ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
-            $('<div class="ellipsis">').text(_.noI18n(data.email))
+            $('<div class="ellipsis">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
         );
     }
 
@@ -854,7 +856,7 @@ define("io.ox/mail/write/view-main",
             // display name
             $('<div>').append(contactsAPI.getDisplayName(data)),
             // email address
-            $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
+            $('<div>').text(_.noI18n(String(data.email || '' + data.phone || '').toLowerCase())),
             // remove
             $('<a href="#" class="remove">')
                 .attr('title', gt('Remove from recipient list'))
@@ -878,7 +880,7 @@ define("io.ox/mail/write/view-main",
     function serialize(obj) {
         // display_name might be null!
         return obj.display_name ?
-             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
+             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + obj.phone || '' + '>' : '<' + obj.email + obj.phone || '' + '>';
     }
 
     // function clickRadio(e) {

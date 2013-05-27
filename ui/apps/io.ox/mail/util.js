@@ -64,6 +64,8 @@ define('io.ox/mail/util',
         rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^\>]+\>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
+        // regex: remove special characters from telephone number
+        rTelephoneCleanup = /[^0-9+]/g,
         // regex: clean up display name
         rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
@@ -79,18 +81,39 @@ define('io.ox/mail/util',
 
     that = {
 
+        /**
+         * identify channel (email or phone)
+         * @param  {string} value
+         * @return {string} channel
+         */
+        getChannel: function (value) {
+            return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'mail';
+        },
+
+        cleanup: function (phone) {
+            return phone.replace(rTelephoneCleanup, '');
+        },
+
         parseRecipient: function (s) {
-            var recipient = $.trim(s), match, name, email;
+            var recipient = $.trim(s), match, name, target;
             if ((match = recipient.match(rRecipient)) !== null) {
-                // case 1: display name plus email address
-                email = match[3].replace(rMailCleanup, '').toLowerCase();
+                // case 1: display name plus email address / telephone number
+                if (match[3].indexOf('@') > -1) {
+                    target = match[3].replace(rMailCleanup, '').toLowerCase();
+                } else {
+                    target = match[3].replace(rTelephoneCleanup, '');
+                }
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
-                // case 2: assume plain email address
-                email = recipient.replace(rMailCleanup, '').toLowerCase();
-                name = email.split(/@/)[0];
+                // case 2: assume plain email address / telephone number
+                if (recipient.indexOf('@') > -1) {
+                    target = recipient.replace(rMailCleanup, '').toLowerCase();
+                    name = target.split(/@/)[0];
+                } else {
+                    name = target = recipient.replace(rTelephoneCleanup, '');
+                }
             }
-            return [name, email];
+            return [name, target];
         },
 
         /**
@@ -108,7 +131,7 @@ define('io.ox/mail/util',
                 //look Bug 23983
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (msExchange || recipient[1].indexOf('@') > -1) {
+                if (msExchange || recipient[1].indexOf('@') > -1 || recipient[1].replace(rTelephoneCleanup, '').length > 8) {
                     list.push(recipient);
                 }
             }

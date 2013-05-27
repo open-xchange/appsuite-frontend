@@ -132,12 +132,12 @@ define('io.ox/core/api/autocomplete',
                     });
                 } else {
                     // create separate objects for each email value
-                    self.processContactItem(type, tmp, obj, ['email1', 'email2', 'email3']);
+                    self.processContactItem(type, tmp, obj, 'email', ['email1', 'email2', 'email3']);
                     //msisdn support: create separate objects for each phone number
                     if (options.extra && options.extra.length) {
                         //get requested extra columns and process
                         _.each(options.extra, function (id) {
-                            self.processContactItem(type, tmp, obj, contactsAPI.getMapping(id, 'names'));
+                            self.processContactItem(type, tmp, obj, 'phone', contactsAPI.getMapping(id, 'names'));
                         });
                     }
                 }
@@ -165,12 +165,13 @@ define('io.ox/core/api/autocomplete',
          * @param  {string} type
          * @param  {array} list
          * @param  {object} obj
+         * @param  {string} target (target property)
          * @param  {string|array} fields
          * @return {undefined}
          */
-        processContactItem: function (type, list, obj, fields) {
+        processContactItem: function (type, list, obj, target, fields) {
             //ensure array
-            var fields = [].concat(fields);
+            var fields = [].concat(fields), ids;
             //process each field
             _.each(fields, function (field) {
                 if (obj.data[field]) {
@@ -190,12 +191,21 @@ define('io.ox/core/api/autocomplete',
                     }
 
                     if (obj.data.folder_id !== 6 && type === 'user') return;
-                    list.push({
-                        type: obj.type,
-                        display_name: name,
-                        email: obj.data[field].toLowerCase(),
-                        data: _(obj.data).clone()
-                    });
+
+                    //store target value
+                    ids = {};
+                    ids[target] = obj.data[field].toLowerCase();
+
+                    list.push(
+                        $.extend({
+                            type: obj.type,
+                            display_name: name,
+                            data: _(obj.data).clone(),
+                            field: field,
+                            email: '',
+                            phone: ''
+                        }, ids)
+                    );
                 }
             });
         }
