@@ -27,6 +27,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var connecting = false;
     var shouldReconnect = false;
     var disconnected = true;
+    var tentativeConnect = false;
     var socket = $.atmosphere;
     var splits = document.location.toString().split('/');
     var proto = splits[0];
@@ -36,7 +37,16 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var def = $.Deferred();
     var BUFFERING = true;
     var BUFFER_INTERVAL = 1000;
+    var INFINITY = 4;
     var seq = 0;
+    var request = null;
+    var resendBuffer = {};
+    var resendDeferreds = {};
+    var serverSequenceThreshhold = 0;
+    var initialReset = true;
+    var silenceCount = 0;
+    var loadDetectionTimer = null;
+    var closeCount = 0;
 
     Event.extend(api);
 
@@ -96,6 +106,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.type = json.type;
         this.element = json.element;
         this.payloads = json.payloads || [];
+        this.tracer = json.tracer;
+        this.seq = _.isNull(json.seq) ? -1 : Number(json.seq);
+        this.tracer = json.tracer;
+        this.log = json.log;
 
         this.get = function (namespace, element) {
             return get(json, namespace, element);
@@ -106,83 +120,136 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             getAll(collector, json, namespace, element);
             return collector;
         };
-
     }
 
-    /*
-    TODO: Transport Negotiation
-    var transports = [];
-    transports[0] = "websocket";
-    transports[1] = "sse";
-    transports[2] = "jsonp";
-    transports[3] = "long-polling";
-    transports[4] = "streaming";
-    transports[5] = "ajax";
+    function received(stanza) {
+        if (stanza.get("atmosphere", "received")) {
+            _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
+                delete resendBuffer[Number(receipt.data)];
+                if (resendDeferreds[Number(receipt.data)]) {
+                    resendDeferreds[Number(receipt.data)].resolve();
+                } else {
+                }
+                if (api.debug) {
+                    console.log("Received receipt for " + receipt.data);
+                }
+                delete resendDeferreds[Number(receipt.data)];
+            });
+        } else if (stanza.get("atmosphere", "pong")) {
+            _(stanza.getAll("atmosphere", "pong")).each(function (pong) {
+                // Discard
+            });
+        } else if (stanza.get("atmosphere", "nextSequence")) {
+            if (!initialReset) {
+                api.trigger("reset");
+                seq = stanza.get("atmosphere", "nextSequence").data;
+                serverSequenceThreshhold = 0;
+                if (api.debug) {
+                    console.log("Got reset command, nextSequence is ", seq);
+                }
+            } else {
+                initialReset = false;
+            }
+        } else {
+            if (stanza.seq > -1) {
+                if (api.debug) {
+                    console.log("Sending receipt " + stanza.seq);
+                }
+                subSocket.push("{type: 'ack', seq: " + stanza.seq + "}");
+            }
+            if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
+                api.trigger("receive", stanza);
+                api.trigger("receive:" + stanza.selector, stanza);
+                if (stanza.seq !== -1) {
+                    serverSequenceThreshhold = stanza.seq;
+                }
+            }
+        }
+    }
 
-    $.each(transports, function (index, transport) {
-        var req = new $.atmosphere.AtmosphereRequest();
-
-        req.url = url;
-        req.contentType = "application/json";
-        req.transport = transport;
-        req.headers = { "negotiating" : "true", session: session };
-
-        req.onOpen = function(response) {
-            // SO?
-        };
-
-        req.onReconnect = function(request) {
-          request.close();
-        };
-
-        socket.subscribe(req);
-    });
-    */
 
     function connect() {
+        if (connecting) {
+            return;
+        }
         connecting = true;
 
-        var request = {
+        request = {
             url: url + '?session=' + ox.session + "&resource=" + tabId,
             contentType : "application/json",
-            logLevel : 'debug',
+            logLevel : 'shutUp',
             transport : 'long-polling',
             fallbackTransport: 'long-polling',
             timeout: 60000,
             messageDelimiter: null,
-            maxRequest: 9999999999999999999999999999999999
+            maxRequest: 60
         };
 
 
         //------------------------------------------------------------------------------
         //request callbacks
-        var triggering = false;
         request.onOpen = function (response) {
             connecting = false;
-            disconnected = false;
             def.resolve(api);
-            if (!triggering) {
-                triggering = true;
+            if (disconnected) {
+                disconnected = false;
+                tentativeConnect = true;
+                if (subSocket) {
+                    subSocket.push("{\"type\": \"ping\", \"commit\": true }");
+                }
                 api.trigger("open");
-                triggering = false;
             }
         };
 
+        var reconnectCount = 0;
+
         request.onReconnect = function (request, response) {
-            //socket.info("Reconnecting");
-            if (request.requestCount > 30) {
+            reconnectCount++;
+            if (reconnectCount > 30 && !disconnected) {
                 reconnect();
             }
         };
 
+
         request.onMessage = function (response) {
+            if (api.debug) {
+                console.log("On message called: ", response);
+            }
+            if (tentativeConnect) {
+                if (api.debug) {
+                    console.log("Triggering Online because #onOpen was called");
+                }
+                api.trigger("online");
+                tentativeConnect = false;
+            }
+
+            silenceCount = 0;
+            request.requestCount = 0;
+            closeCount = 0;
+            if (response.status !== 200 && response.status !== 408) { // 200 = OK, 208 == TIMEOUT, which is expected
+                if (!disconnected) {
+                    if (api.debug) {
+                        console.log("Triggering offline, because request failed with status: ", response.status);
+                    }
+                    goOffline();
+                    subSocket.close();
+                }
+                if (api.debug) {
+                    console.log("Got an error status, discarding message", response.status);
+                }
+                return;
+            }
             var message = response.responseBody;
+            if (api.debug) {
+                console.log("Message received", response.responseBody);
+            }
             var json = {};
             try {
                 json = $.parseJSON(message);
             } catch (e) {
+                console.log(response);
                 console.log('This doesn\'t look like valid JSON: ', message);
-                console.error(e, e.stack);
+                console.error(e, e.stack, response);
                 throw e;
             }
             if (_.isArray(json)) {
@@ -191,19 +258,26 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         console.log("<-", stanza);
                     }
                     stanza = new RealtimeStanza(stanza);
-                    api.trigger("receive", stanza);
-                    api.trigger("receive:" + stanza.selector, stanza);
+                    received(stanza);
                 });
             } else if (_.isObject(json)) { // json may be null
                 if (api.debug) {
                     console.log("<-", json);
                 }
                 var stanza = new RealtimeStanza(json);
-                api.trigger("receive", stanza);
-                api.trigger("receive:" + stanza.selector, stanza);
-                if (json.error && /^SES-0203/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1) {
+                received(stanza);
+                if (json.error && /^SES/.test(json.error)) {
+                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
                         reconnect();
+                    } else {
+                        if (api.debug) {
+                            console.log("Closing socket, because I got a session expired error");
+                        }
+
+                        subSocket.close();
+                        disconnected = true;
+
+                        ox.trigger('relogin:required');
                     }
                 }
 
@@ -218,23 +292,44 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 shouldReconnect = false;
                 subSocket = connect();
             } else {
-                disconnected = true;
+                if (closeCount > 5) {
+                    goOffline();
+                }
+                closeCount++;
             }
         };
 
         request.onError = function (response) {
-            console.error(response);
+            if (!disconnected) {
+                disconnected = true;
+                reconnect();
+            }
         };
 
         return socket.subscribe(request);
     }
 
+    function goOffline() {
+        if (!disconnected) {
+            disconnected = true;
+            api.trigger("offline");
+        }
+    }
+
     function reconnect() {
+        if (connecting) {
+            return;
+        }
         shouldReconnect = true;
+        disconnected = true;
+        if (api.debug) {
+            console.log("Closing for reconnect");
+        }
         subSocket.close();
     }
 
     var subSocket = connect();
+
     disconnected = false;
     ox.on("change:session", function () {
         subSocket = connect();
@@ -248,30 +343,50 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var reconnectBuffer = [];
 
     function drainBuffer() {
+        request.requestCount = 0;
         subSocket.push(JSON.stringify(queue.stanzas));
         if (api.debug) {
             console.log("->", queue.stanzas);
         }
         queue.stanzas = [];
         queue.timer = false;
+        if (api.interrupt) {
+            alert("INTERRUPT!");
+            api.interrupt = false;
+        }
     }
 
     api.send = function (options) {
         options.seq = seq;
         seq++;
-        api.sendWithoutSequence(options);
+        return api.sendWithoutSequence(options);
     };
 
     api.sendWithoutSequence = function (options) {
+        var def = $.Deferred();
+        if (options.trace) {
+            delete options.trace;
+            options.tracer = uuids.randomUUID();
+        }
+        if (_.isUndefined(options.seq)) {
+            def.resolve(); // Pretend a message without sequence numbers always arrives
+        } else {
+            resendBuffer[Number(options.seq)] = {count: 0, msg: options};
+            if (resendDeferreds[Number(options.seq)]) {
+                def = resendDeferreds[Number(options.seq)];
+            } else {
+                resendDeferreds[Number(options.seq)] = def;
+            }
+        }
         if (disconnected) {
             subSocket = connect();
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (connecting) {
             // Buffer messages until connect went through
             reconnectBuffer.push(options);
-            return;
+            return def;
         }
         if (BUFFERING) {
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
@@ -280,11 +395,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 setTimeout(drainBuffer, BUFFER_INTERVAL);
             }
         } else {
+            request.requestCount = 0;
             subSocket.push(JSON.stringify(options));
             if (api.debug) {
                 console.log("->", options);
             }
         }
+        return def;
     };
 
     api.on("open", function () {
@@ -294,14 +411,51 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         reconnectBuffer = [];
     });
 
+    api.inspectStatus = function () {
+        console.log("Resend Buffer", resendBuffer);
+        console.log("Resend Deferreds", resendDeferreds);
+        console.log("Connecting", connecting);
+        console.log("Disconnected", disconnected);
+        console.log("silenceCount", silenceCount);
+    };
+
     setInterval(function () {
-        if (!connecting && !disconnected) {
-            subSocket.push("{\"type\": \"ping\"}");
+        if (!connecting) {
+            if (!disconnected) {
+                subSocket.push("{\"type\": \"ping\", \"commit\": true }");
+            }
         }
-    }, 20000);
+    }, 30000);
 
+    setInterval(function () {
+        if (silenceCount < 7 && !disconnected) {
+            _(resendBuffer).each(function (m) {
+                m.count++;
+                if (m.count < INFINITY) {
+                    api.sendWithoutSequence(m.msg);
+                } else {
+                    delete resendBuffer[Number(m.msg.seq)];
+                    resendDeferreds[Number(m.msg.seq)].reject();
+                    delete resendDeferreds[Number(m.msg.seq)];
+                }
+            });
+        }
+        if (silenceCount === 10 && !disconnected) {
+            api.trigger("highLoad");
+            console.warn("High Load detected");
+        }
+        if (silenceCount === 12) {
+            silenceCount = 0;
+            reconnect();
+        }
+        silenceCount++;
+        if (loadDetectionTimer && (new Date().getTime() - loadDetectionTimer > 15000)) {
+            api.trigger("highLoad");
+            console.warn("High Load detected");
+        }
+        loadDetectionTimer = new Date().getTime();
 
-
+    }, 5000);
 
     return def;
 });

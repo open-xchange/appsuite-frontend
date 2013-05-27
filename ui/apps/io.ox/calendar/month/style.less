@@ -9,189 +9,187 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-.window-content.month-view * {
-    .box-sizing(border-box);
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
 
-.window-content.month-view {
+.month-view {
 
-    @weekview-toolbar-height: 41px;
-
-    .toolbar {
-        background-color: #fff;
-        height: @weekview-toolbar-height;
-        text-align: center;
-        padding: 3px;
-    }
-
-    .toolbar .info {
-        position: absolute;
-        left: 10px;
-        float: left;
-        line-height: 32px;
-        font-family: @lightFontFamily;
-        font-size: 20px;
-    }
-
-    .toolbar .showall {
-        position: absolute;
-        width: 120px;
-        right: 30px;
-        top: 10px;
-    }
-
-    .toolbar .pagination {
-        margin: 0px;
-    }
-
-    .toolbar .pagination a {
-        line-height: 26px;
-        height: 34px;
+    * {
+        .box-sizing(border-box);
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
     .daylabel {
+
         width: 100%;
-        height: 26px;
-        top: @weekview-toolbar-height;
+        height: 24px;
         left: 0;
         font-family: @lightFontFamily;
         font-size: 13px;
-        line-height: 25px;
+        line-height: 24px;
         z-index: 3;
-        background-color: white;
         border-bottom: 1px solid #ccc;
-    }
 
-    .daylabel .weekday {
-        width: 100/8%;
-        display: inline-block;
-        text-align: center;
-        .ellipsis();
+        .weekday {
+            width: 100/8%;
+            display: inline-block;
+            text-align: center;
+            .ellipsis;
+        }
+
     }
 
     .scrollpane {
+
         position: absolute;
-        top: 67px;
+        top: @calendarToolbarHeight + 27;
         right: 0;
         bottom: 0;
         left: 0;
-        .overflow(auto);
+        .overflow-y(scroll);
         .backface-visibility(hidden);
+
+        .week {
+
+            height: 100/6%; /* might be 6 weeks in a month */
+            .backface-visibility(hidden);
+
+            .week-info {
+
+                font-family: @lightFontFamily;
+                font-size: 22px;
+                line-height: 1.0em;
+                color: #555;
+                position: absolute;
+                right: 0px;
+                width: 100/8%; /* fix for different round functions */
+                height: 100/6%;
+                padding: 13px 13px 13px 1px;
+                text-align: right;
+                .ellipsis;
+
+                .cw {
+                    position: absolute;
+                    right: 13px;
+                    bottom: 5px;
+                    z-index: 1;
+                    text-align: right;
+                    font-size: 11px;
+                    line-height: 1em;
+                    font-family: Arial, Helvetica, sans-serif;
+                }
+
+            }
+
+            .day {
+
+                position: relative;
+                display: inline-block;
+                width: 100/8%;
+                height: 100%;
+                border-right: 1px solid #ccc;
+                border-top: 1px solid #ccc;
+                background-color: #fff;
+                .transition(background-color 0.2s linear);
+                .backface-visibility(hidden);
+                .box-sizing(content-box);
+
+                &.bordertop {}
+
+                &.borderbottom {}
+
+                &.borderleft {}
+
+                .number {
+                    position: absolute;
+                    color: #aaa;
+                    text-align: right;
+                    right: 0px;
+                    bottom: 0px;
+                    padding: 5px 7px;
+                    z-index: 1;
+                    font-size: 11px;
+                    line-height: 1em;
+                    background-color: #fff;
+                    .transition(background-color 0.2s linear);
+                    .user-select(none);
+                    cursor: default;
+                }
+
+                &.today {
+
+                    background-color: @monthviewToday;
+
+                    .number {
+                        color: darken(#08c, 10%);
+                        background-color: @monthviewToday;
+                        .transition(background-color 0.2s linear);
+                    }
+
+                }
+
+                &.weekend .number {
+                    color: #a00;
+                }
+
+                .list {
+                    margin: 4px;
+                    .overflow-y(auto);
+                }
+
+                &.out {
+
+                    background-color: #eee;
+                    .transition(background-color 0.2s linear);
+                    .backface-visibility(hidden);
+
+                    &.today {
+
+                        background-color: #f0f0f0;
+
+                        .number {
+                            color: darken(#08c, 10%);
+                            background-color: #f0f0f0;
+                            .transition(background-color 0.2s linear);
+                        }
+
+                    }
+
+                    .number {
+                        color: #aaa;
+                        background-color: #eee;
+                        .transition(background-color 0.2s linear);
+                    }
+
+                    .appointment {
+
+                        background-color: @monthviewAppointmentOut;
+
+                        &.hover {
+                            background-color: darken(@monthviewAppointmentOut, @appointmentHoverPct);
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
-    .week {
-        height: 100/6%; /* might be 6 weeks in a month */
-        .backface-visibility(hidden);
+    /* Mobile */
+    @media all and (max-width: 480px) {
+
+        .scrollpane {
+            top: @calendarToolbarHeight + 26 + 25;
+        }
+
     }
 
-    .week-info {
-        font-family: @lightFontFamily;
-        font-size: 22px;
-        line-height: 1.0em;
-        color: #555;
-        position: absolute;
-        right: 0px;
-        width: 100/8%; /* fix for different round functions */
-        height: 100/6%;
-        padding: 13px 13px 13px 1px;
-        text-align: right;
-        .ellipsis();
-    }
 
-    .week-info .cw {
-        position: absolute;
-        right: 13px;
-        bottom: 5px;
-        z-index: 1;
-        text-align: right;
-        font-size: 11px;
-        line-height: 1em;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .day {
-        position: relative;
-        display: inline-block;
-        width: 100/8%;
-        height: 100%;
-        border-right: 1px solid #ccc;
-        border-top: 1px solid #ccc;
-        background-color: #fff;
-        .transition(background-color 0.2s linear);
-        .backface-visibility(hidden);
-        .box-sizing(content-box);
-    }
-
-    .day.bordertop, .week-info.bordertop {
-    }
-
-    .day.borderbottom {
-    }
-
-    .day.borderleft {
-    }
-
-    .day .number {
-        position: absolute;
-        color: #aaa;
-        text-align: right;
-        right: 0px;
-        bottom: 0px;
-        padding: 5px 7px;
-        z-index: 1;
-        font-size: 11px;
-        line-height: 1em;
-        background-color: #fff;
-        .transition(background-color 0.2s linear);
-        .user-select(none);
-        cursor: default;
-    }
-
-    .day.today .number {
-        color: darken(#08c, 10%);
-        background-color: #daefff;
-        .transition(background-color 0.2s linear);
-    }
-
-    .day.weekend .number {
-        color: #a00;
-    }
-
-    .day.today {
-        background-color: #daefff;
-    }
-
-    .day .list {
-        margin: 4px;
-        .overflow-y(auto);
-    }
-
-    /* day out */
-    .day.out {
-        background-color: #eee;
-        .transition(background-color 0.2s linear);
-        .backface-visibility(hidden);
-    }
-
-    .day.out.today {
-        background-color: #f0f0f0;
-    }
-
-    .day.out .number {
-        color: #aaa;
-        background-color: #eee;
-        .transition(background-color 0.2s linear);
-    }
-
-    .day.out.today .number {
-        color: darken(#08c, 10%);
-        background-color: #f0f0f0;
-        .transition(background-color 0.2s linear);
-    }
-
-    /* appointments */
+    /* Appointment */
     .appointment {
+
         line-height: 14px;
         margin-bottom: 1px;
         white-space: nowrap;
@@ -200,143 +198,26 @@
         opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
+
+        .appointment-content {
+            height: 100%;
+            width: 100%;
+            font-size: 12px;
+            color: white;
+            padding: 2px 0px;
+            .ellipsis;
+        }
+
+        .appointment-content > * {
+            padding-left: 5px;
+            display: inline;
+        }
+
+        .private-flag {
+            float: left;
+            font-size: 15px;
+        }
+
     }
 
-    .appointment .location {
-        color: #ccc;
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    .appointment.opac {
-        opacity: 0.5;
-        .transition(opacity 0.2s);
-    }
-
-    .appointment-content {
-        height: 100%;
-        width: 100%;
-        font-size: 12px;
-        color: white;
-        padding: 2px 0px;
-        .ellipsis();
-    }
-
-    .appointment-content > * {
-        padding-left: 5px;
-        display: inline;
-    }
-
-    @appointment-out: #aaa; /* light gray */
-
-    /* out */
-    .day.out .appointment {
-        background-color: @appointment-out;
-    }
-
-    .day.out .appointment.hover {
-        background-color: darken(@appointment-out, @appointment-hover-pct);
-    }
-
-    /* shown_as colors */
-    @appointment-reserved: #08c; /* blue */
-    @appointment-temporary: #FFBB00; /* yellow */
-    @appointment-absent: #913F3F; /* red */
-    @appointment-free: #8EB360; /* green */
-    @appointment-private: #555; /* dark gray */
-
-    @appointment-unconfirmed-alpha: 0.4;
-    @appointment-declined-alpha: 0.3;
-    @appointment-declined-font: #888;
-    @appointment-hover-pct: 15%;
-
-    /* appointment status styles */
-    .appointment .private-flag {
-        float: left;
-        font-size: 15px;
-    }
-
-    .appointment.reserved {
-        background-color: @appointment-reserved;
-    }
-
-    .appointment.temporary {
-        background-color: @appointment-temporary;
-    }
-
-    .appointment.absent {
-        background-color: @appointment-absent;
-    }
-
-    .appointment.free {
-        background-color: @appointment-free;
-    }
-
-    .appointment.declined .appointment-content * {
-        text-decoration: line-through;
-        color: @appointment-declined-font;
-    }
-
-    .appointment.private {
-        background-color: @appointment-private;
-    }
-
-    .appointment.private.disabled {
-        cursor: normal;
-    }
-
-
-    /* hover */
-    .appointment.reserved.hover {
-        background-color: darken(@appointment-reserved, @appointment-hover-pct);
-    }
-
-    .appointment.temporary.hover {
-        background-color: darken(@appointment-temporary, @appointment-hover-pct);
-    }
-
-    .appointment.absent.hover {
-        background-color: darken(@appointment-absent, @appointment-hover-pct);
-    }
-
-    .appointment.free.hover {
-        background-color: darken(@appointment-free, @appointment-hover-pct);
-    }
-
-   .appointment.private.hover {
-        background-color: darken(@appointment-private, @appointment-hover-pct);
-    }
-
-    /* unconfirmed */
-    .appointment.reserved.unconfirmed {
-        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.temporary.unconfirmed {
-        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.absent.unconfirmed {
-        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
-    }
-
-    .appointment.free.unconfirmed {
-        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
-    }
-
-    /* declined */
-    .appointment.reserved.declined {
-        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-declined-alpha);
-    }
-
-    .appointment.temporary.declined {
-        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-declined-alpha);
-    }
-
-    .appointment.absent.declined {
-        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-declined-alpha);
-    }
-
-    .appointment.free.declined {
-        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-declined-alpha);
-    }
 }

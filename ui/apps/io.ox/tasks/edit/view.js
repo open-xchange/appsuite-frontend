@@ -30,7 +30,7 @@ define('io.ox/tasks/edit/view',
     var point = views.point('io.ox/tasks/edit/view'),
         TaskEditView = point.createView({
         tagName: 'div',
-        className: 'io-ox-tasks-edit  task-edit-wrapper container-fluid',
+        className: 'io-ox-tasks-edit task-edit-wrapper container-fluid default-content-padding',
         init: function () {
             //needed to do it this way, otherwise data stays for next instance of view and causes errors
             this.fields = {};
@@ -40,9 +40,7 @@ define('io.ox/tasks/edit/view',
         render: function (app) {
             var self = this;
             //row0 headlinetext cancel and savebutton
-            self.$el.append($('<div>').addClass('task-edit-headline').append(this.getRow(0, app)));
-            self.$el.children().css({'margin-bottom': '2em',
-                                     'font-size': '24px'});
+            self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
 
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
@@ -211,7 +209,7 @@ define('io.ox/tasks/edit/view',
                 headlineText = gt('Edit task');
             }
             //row 0
-            this.fields.headline = $('<h1>').addClass('title').text(headlineText);
+            this.fields.headline = $('<h1>').addClass('clear-title title').text(headlineText);
             this.fields.cancel = $('<button>').attr('data-action', 'discard').addClass('btn cancel').text(gt('Discard'))
                         .on('click', function () {
                             app.quit();

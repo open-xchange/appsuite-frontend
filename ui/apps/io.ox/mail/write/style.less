@@ -34,10 +34,22 @@
     color: #eee;
     z-index: 1;
     cursor: pointer;
+    .user-select(none);
 }
 
 .io-ox-mail-write .priority-overlay.high {
     color: @mailPriority;
+}
+
+.io-ox-mail-write .priority-overlay.normal {
+    i:first-child { color: mix(@mailPriority, #888) }
+    i:nth-child(2) { color: mix(@mailPriority, #888) }
+    color: #ccc;
+}
+
+.io-ox-mail-write .priority-overlay.low {
+    i:first-child { color: #888; }
+    color: #ccc;
 }
 
 .io-ox-mail-write .sendbutton-wrapper {

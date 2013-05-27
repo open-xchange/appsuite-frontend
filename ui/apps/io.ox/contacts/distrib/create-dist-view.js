@@ -22,7 +22,7 @@ define('io.ox/contacts/distrib/create-dist-view',
      'io.ox/core/extensions'
     ], function (views, forms, gt, autocomplete, api, AutocompleteAPI, util, ext) {
 
-    "use strict";
+    'use strict';
 
     var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false });
 
@@ -40,13 +40,13 @@ define('io.ox/contacts/distrib/create-dist-view',
         control: '<input type="text" class="input-xlarge">',
         buildControls: function () {
             var self = this,
-                buttonText = (_.isEmpty(self.model.get('distribution_list'))) ?  gt("Create list") : gt("Save");
+                buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
                 // element
                 this.buildElement(),
                 // save/create button
-                $('<button class="btn btn-primary" data-action="save">').text(buttonText).on("click", function () {
+                $('<button class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -63,7 +63,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         }
 
     }));
-
 
     point.extend({
         id: 'add-members',
@@ -122,11 +121,11 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             );
 
-            if (_.isEmpty(this.model.get("distribution_list"))) {
+            if (_.isEmpty(this.model.get('distribution_list'))) {
                 self.drawEmptyItem(self.$el.find('.item-list'));
 
             } else {
-                _(this.model.get("distribution_list")).each(function (member) {
+                _(this.model.get('distribution_list')).each(function (member) {
 
                     self.$el.find('.item-list').append(
                             self.drawListetItem(member)
@@ -141,8 +140,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                 message = gt('The email address ' + newMember.mail + ' is not valid'),
                 result = (regEmail.test(newMember.mail) || newMember.mail === '') ? true : self.drawAlert(message, self.$el);
         },
-
-
 
        /**
         * check for uniqueness (emailadress, name-only entries) and displays error message
@@ -302,9 +299,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         onDistributionListChange: function () {
             var self = this;
             this.$el.find('.item-list').empty();
-
-            _(this.model.get("distribution_list")).each(function (member) {
-
+            _(this.model.get('distribution_list')).each(function (member) {
                 self.$el.find('.item-list').append(
                         self.drawListetItem(member)
                 );
@@ -317,7 +312,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             $('.error-alerts').empty();
             $('.error-alerts').append(
                 $.fail(gt("Couldn't load all contact images."), function () {
-                    self.model.trigger("change:distribution_list");
+                    self.model.trigger('change:distribution_list');
                 })
             );
         },

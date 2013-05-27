@@ -192,10 +192,15 @@ define('io.ox/files/list/view-detail',
 
             var uploadFailed = function (e) {
                 require(['io.ox/core/notifications']).pipe(function (notifications) {
-                    if (e && e.code && e.code === 'UPL-0005') //uploadsize to big
+                    if (e && e.code && e.code === 'UPL-0005') {
                         notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                    else
+                    }
+                    else if (e && e.code && e.code === 'FLS-0024') {
+                        notifications.yell('error', gt('The allowed quota is reached.'));
+                    }
+                    else {
                         notifications.yell('error', gt('This file has not been added'));
+                    }
                 });
                 resetCommentArea();
             };
@@ -369,7 +374,7 @@ define('io.ox/files/list/view-detail',
         id: 'creation_date',
         index: 30,
         draw: function (baton) {
-            var d = new date.Local(date.Local.utc(baton.data.creation_date));
+            var d = new date.Local(baton.data.creation_date);
             this.find('td:last').append($('<span class="pull-right creationdate">').text(gt.noI18n(d.format(date.DATE_TIME))));
         }
     });

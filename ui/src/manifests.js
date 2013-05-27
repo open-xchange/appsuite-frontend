@@ -1,17 +1,24 @@
 define(function () {
     return [
         {
+            namespace: ['core'],
+            path: 'plugins/upsell/simple-wizard/register'
+        },
+        // {
+        //     namespace: ['io.ox/settings/main'],
+        //     path: 'io.ox/mail/vacationnotice/settings/register'
+        // },
+        // {
+        //     namespace: ['io.ox/settings/main'],
+        //     path: 'io.ox/mail/autoforward/settings/register'
+        // },
+        // {
+        //     namespace: ['io.ox/settings/main'],
+        //     path: 'io.ox/core/pubsub/settings/register'
+        // },
+        {
             namespace: ['io.ox/portal/widgets'],
             path: 'plugins/owm/portal'
-        },
-        {
-            namespace: ['io.ox/settings/main'],
-            path: 'io.ox/mail/vacationnotice/settings/register'
-        },
-        {
-            namespace: ['io.ox/settings/main'],
-            path: 'io.ox/mail/autoforward/settings/register'
-
         },
         {
             path: 'io.ox/mail/main',
@@ -72,11 +79,6 @@ define(function () {
             settings: true,
             requires: "!deniedPortal",
             index: 100
-        },
-        {
-            namespace: ['io.ox/settings/main'],
-            path: 'io.ox/core/pubsub/settings/register'
         }
-
     ];
 });

@@ -20,7 +20,7 @@ define('io.ox/mail/autoforward/settings/register',
     var filterModel;
 
     ext.point("io.ox/settings/pane").extend({
-        id: 'autoforward',
+        id: 'io.ox/autoforward',
         title: gt("Auto Forward"),
         ref: 'io.ox/autoforward',
         loadSettingPane: false,

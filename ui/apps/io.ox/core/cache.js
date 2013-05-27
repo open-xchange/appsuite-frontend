@@ -436,6 +436,20 @@ define('io.ox/core/cache',
 
             return def;
         };
+
+        this.dedust = function (data, prop) {
+
+            // get cid
+            var cid = String(this.keyGenerator(data));
+
+            return get(cid).then(function (co) {
+                if (co !== null && co[prop] !== data[prop]) {
+                    return remove(cid);
+                } else {
+                    return $.when();
+                }
+            });
+        };
     };
 
     // debug!

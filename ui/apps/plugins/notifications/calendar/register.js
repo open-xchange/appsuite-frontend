@@ -233,7 +233,6 @@ define('plugins/notifications/calendar/register',
         id: 'io-ox-notifications-calendar-reminder',
 
         initialize: function () {
-            this.collection.on('reset add remove', this.render, this);
             this.collection.hidden = [];
         },
 
@@ -265,12 +264,6 @@ define('plugins/notifications/calendar/register',
             calApi
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
-
-                    // just for the moment as reminder view blocks whole screen
-                    // will reenable the view later with new design
-                    if (_.device('small && touch')) {
-                        return;
-                    }
 
                     $.when.apply($,
                         _(invites).map(function (invite) {
@@ -304,8 +297,8 @@ define('plugins/notifications/calendar/register',
                     });
 
                 })
-                .on("confirmation-changed", removeInvites)
-                .on('remove-calendar-notifications', removeInvites)
+                .on('mark:invite:confirmed', removeInvites)
+                .on('delete:appointment', removeInvites)
                 .getInvites();
 
             function removeInvites(e, invites) {
@@ -335,15 +328,11 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderApi
-                .on('reminder-calendar', function (e, reminder) {
-                    // just for the moment as reminder view blocks whole screen
-                    // will reenable the view later with new design
-                    if (_.device('small && touch')) {
-                        return;
-                    }
+                .on('set:calendar:reminder', function (e, reminder) {
 
                     var tmp = [],
-                        counter = reminder.length;
+                        counter = reminder.length,
+                        now = _.now();
 
                     _(reminder).each(function (remObj, index) {
                         var obj = {
@@ -352,6 +341,7 @@ define('plugins/notifications/calendar/register',
                             recurrence_position: remObj.recurrence_position
                         };
                         calApi.get(obj).done(function (data) {
+
                             var inObj = {
                                 cid: _.cid(remObj),
                                 title: data.title,
@@ -362,19 +352,26 @@ define('plugins/notifications/calendar/register',
                                 caldata: data
                             };
 
-                            // do not add user suppressed ('remind me later') reminders
-                            if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
-                                tmp.push(inObj);
+                            // ignore appointments that are over
+                            var isOver = data.end_date < now;
+
+                            if (!isOver) {
+                                // do not add user suppressed ('remind me later') reminders
+                                if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
+                                    tmp.push(inObj);
+                                }
                             }
+
                             counter--;
 
-                            if (counter === 0) {//all data processed. Update Collection
+                            if (counter === 0) {
+                                //all data processed. Update Collection
                                 ReminderNotifications.collection.reset(tmp);
                             }
                         });
                     });
                 })
-                .on('remove-calendar-notifications', removeReminders)
+                .on('delete:appointment', removeReminders)
                 .getReminders();
         }
     });

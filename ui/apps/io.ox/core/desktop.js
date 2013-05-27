@@ -139,7 +139,7 @@ define("io.ox/core/desktop",
 
                     set: function (id) {
                         var def = $.Deferred();
-                        if (id !== undefined && id !== null) {
+                        if (id !== undefined && id !== null && String(id) !== folder) {
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
@@ -870,13 +870,17 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.title = gt.format(
+                            document.temptitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
                                 _.noI18n(ox.serverConfig.pageTitle),
                                 self.getTitle());
+                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                document.title = document.temptitle;
+                            }
+                            
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -906,7 +910,10 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = _.noI18n(ox.serverConfig.pageTitle);
+                        document.temptitle = _.noI18n(ox.serverConfig.pageTitle);
+                        if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                            document.title = document.temptitle;
+                        }
                     }
                     return this;
                 };
@@ -1027,13 +1034,17 @@ define("io.ox/core/desktop",
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            document.title = gt.format(
+                            
+                            document.temptitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
                                 _.noI18n(ox.serverConfig.pageTitle),
                                 title);
+                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                document.title = document.temptitle;
+                            }
                         }
                         this.trigger('change:title');
                     } else {
@@ -1395,6 +1406,87 @@ define("io.ox/core/desktop",
         };
 
     }());
+
+    // wraps require function
+    ox.load = (function () {
+
+        var def,
+            $blocker = $('#background_loader'),
+            buttonTimer,
+            blockerTimer;
+
+        function startTimer() {
+            blockerTimer = setTimeout(function () {
+                // visualize screen blocker
+                ox.busy(true);
+                buttonTimer = setTimeout(function () {
+                    // add button to abort
+                    if (!$blocker[0].firstChild) {
+                        var button = $('<button>').addClass('btn btn-primary').text(gt('Cancel')).fadeIn();
+                        button.on('click', function () {
+                            def.reject(true);
+                            clear();
+                        });
+                        $blocker
+                            .append(button);
+                    }
+                }, 5000);
+            }, 1000);
+        }
+
+        function clear() {
+            clearTimeout(blockerTimer);
+            clearTimeout(buttonTimer);
+            blockerTimer = null;
+            buttonTimer = null;
+            setTimeout(function () {
+                if (blockerTimer === null) {
+                    ox.idle();
+                }
+            }, 0);
+        }
+
+        return function (req) {
+            assert(arguments.length <= 1, 'ox.load does not support more than one param.');
+
+            def = $.Deferred();
+
+            // block UI
+            if (!$blocker.hasClass('secure')) {
+                ox.busy();
+            }
+            startTimer();
+
+            require(req).always(clear).then(
+                def.resolve,
+                function fail() {
+                    def.reject(false);
+                    if (_.isArray(req)) {
+                        for (var i = 0; i < req.length; i++) {
+                            requirejs.undef(req[i]);
+                        }
+                    }
+                }
+            );
+
+            return def;
+        };
+    }());
+
+    ox.busy = function (block) {
+        // init screen blocker
+        $('#background_loader')[block ? 'busy' : 'idle']()
+            .show()
+            .addClass('secure' + (block ? ' block' : ''));
+    };
+
+    ox.idle = function () {
+        $('#background_loader')
+            .removeClass('secure block')
+            .hide()
+            .idle()
+            .empty();
+    };
 
     // simple launch
     ox.launch = function (id, data) {

@@ -385,7 +385,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         }
     };
 
-    // get all columns of a module
+    /**
+     * get all columns of a module
+     * @param  {string} module (name)
+     * @param  {boolean} join  (join array with comma separator)
+     * @return {arrray|string} ids
+     */
     var getAllColumns = function (module, join) {
         // get ids
         var ids = idMapping[module] || {};
@@ -503,8 +508,19 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
     };
 
     var processResponse = function (deferred, response, o) {
+
+        // no response?
+        if (!response) {
+            deferred.reject(response);
+            return;
+        }
+
         // server error?
-        if (response && response.error !== undefined && !response.data) {
+        var hasData = 'data' in response,
+            isWarning = response.category === 13 && hasData,
+            isError = 'error' in response && !isWarning;
+
+        if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
@@ -512,68 +528,62 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             if (isSessionError && !isAutoLogin && !isServerConfig) {
                 // login dialog
                 ox.session = '';
-                ox.relogin(o, deferred);
+                ox.trigger('relogin:required', o, deferred);
+                return;
             } else {
+                // genereal error
                 deferred.reject(response);
+                return;
             }
-        } else {
-            // handle warnings
-            var passThrough = false;
-            if (response && response.error !== undefined) {
-                console.warn("Request to server resulted in error", response);
-                passThrough = true;
-            }
-            // success
-            if (o.dataType === "json" && o.processResponse === true) {
-                // variables
-                var data = [], timestamp;
-                // response? (logout e.g. hasn't any)
-                if (response) {
-                    // multiple?
-                    if (o.module === "multiple") {
-                        var i = 0, $l = response.length, tmp;
-                        for (; i < $l; i++) {
-                            if (response[i]) { // to bypass temp. [null] bug
-                                // time
-                                timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
-                                // data/error
-                                if (response[i].data !== undefined) {
-                                    // data
-                                    var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
-                                    // handling for GET requests
-                                    if (typeof o.data === "string") {
-                                        o.data = JSON.parse(o.data);
-                                        module = o.data[i].module;
-                                    }
-                                    tmp = sanitize(response[i].data, module, o.data[i].columns);
-                                    data.push({ data: tmp, timestamp: timestamp });
-                                    // handle warnings within multiple
-                                    if (response[i].error !== undefined) {
-                                        console.warn("TODO: warning");
-                                    }
-                                } else {
-                                    // error
-                                    data.push({ error: response[i], timestamp: timestamp });
+        }
+
+        // success
+        if (o.dataType === "json" && o.processResponse === true) {
+            // variables
+            var data = [], timestamp;
+            // response? (logout e.g. hasn't any)
+            if (response) {
+                // multiple?
+                if (o.module === "multiple") {
+                    var i = 0, $l = response.length, tmp;
+                    for (; i < $l; i++) {
+                        if (response[i]) { // to bypass temp. [null] bug
+                            // time
+                            timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
+                            // data/error
+                            if (response[i].data !== undefined) {
+                                // data
+                                var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
+                                // handling for GET requests
+                                if (typeof o.data === "string") {
+                                    o.data = JSON.parse(o.data);
+                                    module = o.data[i].module;
                                 }
+                                tmp = sanitize(response[i].data, module, o.data[i].columns);
+                                data.push({ data: tmp, timestamp: timestamp });
+                                // handle warnings within multiple
+                                if (response[i].error !== undefined) {
+                                    console.warn('http.js: warning inside multiple');
+                                }
+                            } else {
+                                // error
+                                data.push({ error: response[i], timestamp: timestamp });
                             }
                         }
-                        deferred.resolve(data);
-                    } else {
-                        var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
-                        data = sanitize(response.data, o.columnModule, columns);
-                        timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
-                        if (passThrough) {
-                            passThrough = false;
-                        }
-                        deferred.resolve(data, timestamp);
                     }
+                    deferred.resolve(data);
                 } else {
-                    deferred.resolve({}, _.now());
+                    var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
+                    data = sanitize(response.data, o.columnModule, columns);
+                    timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
+                    deferred.resolve(data, timestamp);
                 }
             } else {
-                // e.g. plain text
-                deferred.resolve(response || "");
+                deferred.resolve({}, _.now());
             }
+        } else {
+            // e.g. plain text
+            deferred.resolve(response || '');
         }
     };
 
@@ -641,25 +651,25 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         return response;
                     }
                 })
-                .done(function (data) {
+                .done(function (response) {
                     // trigger event first since HTTP layer finishes work
                     that.trigger("stop done", r.xhr);
                     // process response
                     if (r.o.processData) {
-                        processResponse(r.def, data, r.o, r.o.type);
-                    } else if (r.xhr.dataType === 'json' && data.error !== undefined) {
-                    // error handling if JSON (e.g. for UPLOAD)
-                        r.def.reject(data);
-                    } else if (_.isArray(data.data)) {
-                    // Skip Warnings (category: 13)
-                        data.data = _(data.data).map(function (o) {
+                        processResponse(r.def, response, r.o, r.o.type);
+                    } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
+                        // error handling if JSON (e.g. for UPLOAD)
+                        r.def.reject(response);
+                    } else if (_.isArray(response.data)) {
+                        // Skip Warnings (category: 13)
+                        response.data = _(response.data).map(function (o) {
                             if (o.category !== 13) {
                                 return o;
                             }
                         });
-                        r.def.resolve(data);
+                        r.def.resolve(response);
                     } else {
-                        r.def.resolve(data);
+                        r.def.resolve(response);
                     }
                     r = null;
                 })
@@ -729,7 +739,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
                     });
                 if (!found) {
-                    ox.relogin(o, def);
+                    ox.trigger('relogin:required', o, def);
                     return def;
                 }
             }
@@ -855,6 +865,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
             var name = 'formpost_' + _.now(),
                 callback = 'callback_' + options.action,
+                callback_old = 'callback_' + options.module,
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
@@ -865,10 +876,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             );
 
             window[callback] = function (response) {
+                // skip warnings
+                for (var key in response.data) {
+                    if (key === 'category' && response.data[key] === 13) {
+                        delete response.data[key];
+                    }
+                }
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
                 $('#' + name).remove();
             };
+            // fallback for some old modules (e.g. import)
+            window[callback_old] = window[callback];
 
             if (form.find('input[name="' + options.field + '"]').length) {
                 form.find('input[name="' + options.field + '"]').val(data);
@@ -878,9 +897,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                 );
             }
 
-            form.attr({
+            form.prop({
                 method: 'post',
                 enctype: 'multipart/form-data',
+                encoding: 'multipart/form-data',
                 action: url + '&' + _.serialize(options.params),
                 target: name
             })
@@ -899,8 +919,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         /**
          * Returns the column mapping of a module
          * @param {string} module The module name.
-         * @returns { column: fieldName } A map from numeric column IDs to
-         * the corresponding field names.
+         * @returns {object} A map from numeric column IDs to the corresponding field names.
          */
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
@@ -917,6 +936,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Simplify objects in array for list requests
+         * @param  {array} list
+         * @returns {array} list
          */
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
@@ -941,6 +962,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
         /**
          * Fixes order of list requests (temp. fixes backend bug)
+         * @param  {array} ids
+         * @param  {deferred} deferred
+         * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
 
@@ -1048,6 +1072,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             return def;
         },
 
+        /**
+         * returns failed calls
+         * @return {backbone.collection}
+         */
         log: function () {
             return log.collection;
         }

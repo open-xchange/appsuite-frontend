@@ -1,3 +1,12 @@
+* 2013-05-16 - marcus.klein@open-xchange.com
+
+ - Fix for bug 26276: Added dependencies including versions to upgrade packages in the correct order after moving files between packages.
+
+* 2013-04-12 - stefan.preuss@open-xchange.com
+
+  - Fixed bug #25878 : Dev: Unable to move position of inline links initially set with prio 'lo'
+  - Fixed bug #25879 : Closing the folder move dialog before the tree has been completely loaded throws an JS error
+
 * 2013-04-10 - viktor.pracht@open-xchange.com
 
  - Fixed bug 25813: Updating does not update themes

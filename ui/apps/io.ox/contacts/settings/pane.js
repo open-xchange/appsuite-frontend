@@ -12,36 +12,23 @@
  */
 
 define('io.ox/contacts/settings/pane',
-       ['settings!io.ox/contacts', 'io.ox/contacts/settings/model',
-        'dot!io.ox/contacts/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/contacts/contacts'], function (settings, contactsSettingsModel, tmpl, ext, gt) {
+       ['settings!io.ox/contacts',
+        'io.ox/contacts/settings/model',
+        'io.ox/core/extensions',
+        'gettext!io.ox/contacts/contacts'], function (settings, contactsSettingsModel, ext, gt) {
 
     'use strict';
 
     var contactsSettings =  settings.createModel(contactsSettingsModel),
-        staticStrings =  {
-            TITLE_CONTACTS: gt('Address Book'),
-            SHOW_ADMIN_CONTACTS: gt('Show contacts from administrator group')
-        },
         contactsSettingsView;
 
     var ContactsSettingsView = Backbone.View.extend({
         tagName: "div",
-        _modelBinder: undefined,
-        initialize: function (options) {
-            // create template
-            this._modelBinder = new Backbone.ModelBinder();
-        },
         render: function () {
-            var self = this;
-            self.$el.empty().append(tmpl.render('io.ox/contacts/settings', {
-                strings: staticStrings
-            }));
-
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-            return self;
+            this.$el.append(
+                $('<div class="clear-title">').text(gt('Address Book'))
+            );
+            return this;
         }
     });
 
@@ -53,12 +40,12 @@ define('io.ox/contacts/settings/pane',
             contactsSettingsView = new ContactsSettingsView({model: contactsSettings});
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(
-                contactsSettingsView.render().el)
-            );
+                contactsSettingsView.render().el
+            ));
         },
 
         save: function () {
-            contactsSettingsView.model.save();
+            contactsSettings.save();
         }
     });
 

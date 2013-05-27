@@ -21,8 +21,9 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/folder",
      "io.ox/core/tk/attachments",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/calendar",
-     "less!io.ox/calendar/style.less"
+     'gettext!io.ox/calendar',
+     'io.ox/calendar/actions',
+     'less!io.ox/calendar/style.less'
     ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, gt) {
 
     "use strict";
@@ -108,9 +109,11 @@ define("io.ox/calendar/view-detail",
         index: 300,
         id: "location",
         draw: function (data) {
-            this.append(
-                $("<div>").addClass("location").text(gt.noI18n(data.location || "\u00A0"))
-            );
+            if (data.location) {
+                this.append(
+                    $('<div class="location">').text(gt.noI18n(data.location))
+                );
+            }
         }
     });
 
@@ -344,19 +347,15 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0")))
-            )
-            .append(
+                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0"))),
                 $("<span>")
                     .addClass("detail shown_as " + util.getShownAsClass(data))
-                    .text("\u00A0")
-            )
-            .append(
+                    .text(gt.noI18n("\u00A0")),
                 $("<span>")
                     .addClass("detail shown-as")
-                    .append($.txt(gt.noI18n(" ")), $.txt(gt.noI18n(util.getShownAs(data))))
-            )
-            .append($("<br>"));
+                    .append($.txt(gt.noI18n("\u00A0")), $.txt(util.getShownAs(data))),
+                $("<br>")
+            );
         }
     });
 
@@ -367,13 +366,12 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             if (data.folder_id) {
                 this.append(
-                    $("<span>")
-                        .addClass("detail-label")
+                    $('<span class="detail-label">')
                         .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
-                    $("<span>")
-                        .addClass("detail folder")
-                        .text(gt.noI18n(folderAPI.getTextNode(data.folder_id).data)),
-                    $("<br>")
+                    $('<span class="detail folder">')
+                        .attr('data-folder', data.folder_id)
+                        .append(folderAPI.getTextNode(data.folder_id)),
+                    $('<br>')
                 );
             }
         }

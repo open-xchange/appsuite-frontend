@@ -20,16 +20,18 @@ define("plugins/halo/contacts/register", ["io.ox/core/extensions"], function (ex
         handles: function (type) {
             return type === "com.openexchange.halo.contacts";
         },
-        draw: function  ($node, providerName, contacts) {
-            if (contacts.length === 0) {
-                return;
-            }
-            var deferred = new $.Deferred();
-            require(["io.ox/contacts/view-detail", "less!io.ox/contacts/style.less"], function (view) {
-                $node.append(view.draw(contacts[0]));
-                deferred.resolve();
+        draw: function (baton) {
+
+            if (baton.data.length === 0) return;
+
+            var self = this, def = $.Deferred();
+
+            require(['io.ox/contacts/view-detail', 'less!io.ox/contacts/style.less'], function (view) {
+                self.append(view.draw(baton.data[0]));
+                def.resolve();
             });
-            return deferred;
+
+            return def;
         }
     });
 

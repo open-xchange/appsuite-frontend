@@ -923,6 +923,11 @@ define.async('io.ox/office/tk/utils',
             }
         }
 
+        // Internet Explorer has no 'contains' at svg elements (26172)
+        if (! _.isFunction(outerNode.contains)) {
+            return $(innerNode).closest(outerNode).length > 0;
+        }
+
         // use the native Node.contains() method
         return outerNode.contains(innerNode);
     };
@@ -1977,17 +1982,11 @@ define.async('io.ox/office/tk/utils',
      * @param {String} icon
      *  The CSS class name of the icon. Will be set at the created element.
      *
-     * @param {Boolean} [white]
-     *  If set to true, the icon will be shown in white color instead in black
-     *  color.
-     *
      * @returns {jQuery}
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeIconClasses)
-            .toggleClass('icon-white', white === true)
-            .toggleClass('retina', _.device('retina'));
+        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', _.device('retina'));
     };
 
     /**
@@ -2047,8 +2046,7 @@ define.async('io.ox/office/tk/utils',
             caption.append($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-                .append(Utils.createIcon(icon, control.closest('.group').hasClass('white-icons')))
+                .append(Utils.createIcon(icon))
             );
         }
 
@@ -2140,7 +2138,9 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.createButton = function (options) {
 
-        var // create the DOM anchor element representing the button (href="#" is essential for tab traveling)
+        var // Create the DOM anchor element representing the button (href='#' is
+            // essential for tab traveling). Do NOT use <button> elements, Firefox has
+            // problems with text clipping and correct padding of the <button> contents.
             button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
@@ -2266,22 +2266,18 @@ define.async('io.ox/office/tk/utils',
      * @param {jQuery} textField
      *  A jQuery object containing a text field element.
      *
-     * @param {Object|Boolean} selection
-     *  An object with the attributes 'start' and 'end' containing the start
-     *  and end character offset of the new selection in the text field, or a
-     *  boolean value specifying whether to select the entire text (true), or
-     *  to place the cursor behind the text (false).
+     * @param {Number} start
+     *  The start character offset of the new selection in the text field.
+     *
+     * @param {Number} [end=start]
+     *  The end character offset of the new selection in the text field. If
+     *  omitted, sets a text cursor according to the passed start position.
      */
-    Utils.setTextFieldSelection = function (textField, selection) {
+    Utils.setTextFieldSelection = function (textField, start, end) {
         var input = textField.get(0);
         if (input) {
-            if (_.isObject(selection)) {
-                input.selectionStart = selection.start;
-                input.selectionEnd = selection.end;
-            } else if (_.isBoolean(selection)) {
-                input.selectionStart = selection ? 0 : textField.val().length;
-                input.selectionEnd = textField.val().length;
-            }
+            input.selectionStart = start;
+            input.selectionEnd = _.isNumber(end) ? end : start;
         }
     };
 
@@ -2391,7 +2387,9 @@ define.async('io.ox/office/tk/utils',
         F12:            123,
 
         NUM_LOCK:       144,
-        SCROLL_LOCK:    145
+        SCROLL_LOCK:    145,
+
+        IME_INPUT:      229     // indicates an IME input session
 
 /* enable when needed
         MOZ_HASH:       163,    // Hash sign in Firefox, German keyboard (otherwise: 191 SLASH)
@@ -2450,6 +2448,26 @@ define.async('io.ox/office/tk/utils',
      *  The message text to be written to the console.
      */
     Utils.error = Config.isDebug() ? function (message) { log(message, 'error'); } : $.noop;
+
+    /**
+     * Writes an error message to the browser output console describing the
+     * passed exception object, if debug mode is enabled in the global
+     * configuration.
+     *
+     * @param {Any} exception
+     *  The exception as caught in a try/catch.
+     */
+    Utils.exception = Config.isDebug() ? function (exception) {
+
+        var // the stacktrace of the exception object
+            stacktrace = _.isObject(exception) && (exception.stack || exception.stacktrace);
+
+        log('Exception caught: ' + exception, 'error');
+        if (stacktrace) {
+            log('Stack trace: ' + stacktrace, 'error');
+        }
+
+    } : $.noop;
 
     // global initialization ==================================================
 

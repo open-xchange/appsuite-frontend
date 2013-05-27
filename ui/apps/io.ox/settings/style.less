@@ -71,6 +71,10 @@
         margin: 0 0 2em 0;
     }
 
+    h1.no-margin, h2.no-margin {
+        margin: 0 0 0 0;
+    }
+
     h2, h2.pane-headline {
         font-size: 20px;
         line-height: 24px;
@@ -143,7 +147,7 @@
                 lighten(@selectedBackground, 20%) 0%,
                 darken(@selectedBackground, 5%) 100%
             );
-            filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)", endColorstr="darken(@selectedBackground, 5%)~")";
+            filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selectedBackground, 20%)~", endColorstr="darken(@selectedBackground, 5%)~")";
             border-bottom-color: black;
             color: #fff;
         }
@@ -216,7 +220,7 @@
             font-style: italic;
             color: #888;
             clear: both;
-            .ellipsis();
+            .ellipsis;
         }
         .stack-trace {
             clear: both;

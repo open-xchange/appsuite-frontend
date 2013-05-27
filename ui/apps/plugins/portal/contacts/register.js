@@ -19,6 +19,9 @@ define('plugins/portal/contacts/register',
 
     ext.point('io.ox/portal/widget/stickycontact').extend({
 
+        // helps at reverse lookup
+        type: 'contacts',
+
         load: function (baton) {
             var props = baton.model.get('props') || {};
             return api.get({ folder: props.folder_id, id: props.id }).done(function (data) {

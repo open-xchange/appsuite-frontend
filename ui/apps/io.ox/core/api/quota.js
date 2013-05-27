@@ -11,26 +11,37 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
+define('io.ox/core/api/quota', ['io.ox/core/http'], function (http) {
 
-    "use strict";
+    'use strict';
 
     var api = {
-
+        /**
+         * get File quota and current use
+         * @return {deferred} returns object with quota and use properties)
+         */
         getFile: function () {
             return http.GET({
-                module: "quota",
-                params: { action: "filestore" }
+                module: 'quota',
+                params: { action: 'filestore' }
             });
         },
 
+        /**
+         * get mail quota and current use
+         * @return {deferred} returns object with quota and use properties)
+         */
         getMail: function () {
             return http.GET({
-                module: "quota",
-                params: { action: "mail" }
+                module: 'quota',
+                params: { action: 'mail' }
             });
         },
 
+        /**
+         * get mail and file quota
+         * @return {deferred} returns quota object
+         */
         get: function () {
             http.pause();
             this.getMail();

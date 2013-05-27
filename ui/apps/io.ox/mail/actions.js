@@ -106,7 +106,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && !isDraftMail(e.context);
+            return e.collection.has('toplevel', 'one') && util.hasFrom(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -294,7 +294,7 @@ define('io.ox/mail/actions',
                         commit(baton.target);
                     } else {
                         var dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h3>').text(label))
+                            .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });
@@ -322,8 +322,9 @@ define('io.ox/mail/actions',
                                     commit(target);
                                 }
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
                         });
                     }
                 });
@@ -366,13 +367,15 @@ define('io.ox/mail/actions',
         }
     });
 
-    new Action('io.ox/mail/actions/markspam', {
-        id: 'markspam',
+    // SPAM
+
+    new Action('io.ox/mail/actions/spam', {
+        capabilities: 'spam',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
+            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
                 var bool = e.collection.has('toplevel') &&
                     _(list).reduce(function (memo, data) {
-                        return memo || (data && (data.flags & api.FLAGS.SPAM) === 0);
+                        return memo || (!account.is('spam', data.folder_id) && !util.isSpam(data));
                     }, false);
                 return bool;
             });
@@ -381,6 +384,24 @@ define('io.ox/mail/actions',
             api.markSpam(list);
         }
     });
+
+    new Action('io.ox/mail/actions/nospam', {
+        capabilities: 'spam',
+        requires: function (e) {
+            return !e.collection.isLarge() && api.getList(e.context).pipe(function (list) {
+                var bool = e.collection.has('toplevel') &&
+                    _(list).reduce(function (memo, data) {
+                        return memo || account.is('spam', data.folder_id) || util.isSpam(data);
+                    }, false);
+                return bool;
+            });
+        },
+        multiple: function (list) {
+            api.noSpam(list);
+        }
+    });
+
+    // Attachments
 
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
@@ -431,8 +452,13 @@ define('io.ox/mail/actions',
         },
         action: function (o) {
             var file = o;
-            if (o.mail) {
-                file.data = {mail: o.mail, id: o.id};
+            if (o.data.mail) {
+                file.source = 'mail';
+                file.folder_id = o.data.mail.folder_id;
+                file.attached = o.data.id;
+                file.id = o.data.mail.id;
+                file.filename = o.data.filename;
+                file.source = 'mail';
             }
             ox.launch('io.ox/office/preview/main', { action: 'load', file: file });
         }
@@ -602,7 +628,7 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/add-to-portal', {
-        capabilities: 'portal', // was: !disablePortal
+        capabilities: 'portal',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
@@ -641,8 +667,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
 
             var data = baton.data,
-                collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
-                collectedRecipients = [],
+                collectedRecipients = [].concat(data.to, data.cc, data.from),
                 dev = $.Deferred(),
                 arrayOfMembers = [],
                 currentId = ox.user_id,
@@ -652,32 +677,51 @@ define('io.ox/mail/actions',
                 createDistlist = function (members) {
                     require(['io.ox/contacts/distrib/main'], function (m) {
                         m.getApp().launch().done(function () {
-                            this.create(contactsFolder, {distribution_list: members});
+                            this.create(contactsFolder, { distribution_list: members });
                         });
                     });
                 };
 
-            _(collectedRecipientsArray).each(function (single) {
-                collectedRecipients.push(single[1]);
-            });
+            collectedRecipients = _(collectedRecipients).chain()
+                .map(function (obj) {
+                    return obj[1];
+                })
+                .uniq()
+                .value();
 
+            // get length now to know when done
             lengthValue = collectedRecipients.length;
 
-            _(collectedRecipients).each(function (mail, index) {
-                contactAPI.search(mail).done(function (obj) {
+            _(collectedRecipients).each(function (mail) {
+                contactAPI.search(mail).done(function (results) {
 
-                    var currentObj = (obj[0]) ? {id: obj[0].id, folder_id: obj[0].folder_id, display_name: obj[0].display_name, mail: obj[0].email1, mail_field: 1} : {mail: mail, display_name: mail, mail_field: 0};
+                    var currentObj, result = results[0];
 
-                    if (obj[0]) {
-                        if (obj[0].internal_userid !== currentId) {
+                    if (result) {
+                        // found via search
+                        currentObj = {
+                            id: result.id,
+                            folder_id: result.folder_id,
+                            display_name: result.display_name,
+                            mail: result.email1,
+                            mail_field: 1
+                        };
+                        if (result.internal_userid !== currentId) {
                             arrayOfMembers.push(currentObj);
                         } else {
                             lengthValue = lengthValue - 1;
                         }
                     } else {
+                        // manual add
+                        currentObj = {
+                            display_name: mail,
+                            mail: mail,
+                            mail_field: 0
+                        };
                         arrayOfMembers.push(currentObj);
                     }
 
+                    // done?
                     if (arrayOfMembers.length === lengthValue) {
                         dev.resolve();
                     }
@@ -839,8 +883,10 @@ define('io.ox/mail/actions',
 
     // inline links
 
+    var INDEX = 0;
+
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 100,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'reply',
         label: gt('Reply'),
@@ -848,7 +894,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 200,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
@@ -856,7 +902,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 300,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'forward',
         label: gt('Forward'),
@@ -865,7 +911,7 @@ define('io.ox/mail/actions',
 
     // edit draft
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 400,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'edit',
         label: gt('Edit'),
@@ -873,7 +919,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 500,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'markunread',
         label:
@@ -885,7 +931,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 501,
+        index: INDEX + 1,
         prio: 'hi',
         id: 'markread',
         label:
@@ -902,24 +948,24 @@ define('io.ox/mail/actions',
         multiple: $.noop
     });
 
-//    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-//        index: 600,
-//        prio: 'lo',
-//        id: 'label',
-//        ref: 'io.ox/mail/actions/label',
-//        draw: function (data) {
-//            this.append(
-//                $('<span class="dropdown" class="io-ox-inline-links" data-prio="lo">')
-//                .append(
-//                    // link
-//
-//                )
-//            );
-//        }
-//    }));
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'hi',
+        id: 'spam',
+        label: gt('Mark as spam'),
+        ref: 'io.ox/mail/actions/spam'
+    }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 700,
+        index: INDEX + 1,
+        prio: 'hi',
+        id: 'nospam',
+        label: gt('No spam'),
+        ref: 'io.ox/mail/actions/nospam'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
         prio: 'lo',
         id: 'move',
         label: gt('Move'),
@@ -927,7 +973,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 800,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'copy',
         label: gt('Copy'),
@@ -935,7 +981,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 900,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'source',
         //#. source in terms of source code
@@ -944,7 +990,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1000,
+        index: INDEX += 100,
         prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
@@ -952,7 +998,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1050,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'print',
         label: gt('Print'),
@@ -960,7 +1006,7 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1100,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'reminder',
         label: gt("Reminder"),
@@ -968,16 +1014,15 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1200,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'add-to-portal',
         label: gt('Add to portal'),
         ref: 'io.ox/mail/actions/add-to-portal'
     }));
 
-
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 1300,
+        index: INDEX += 100,
         prio: 'lo',
         id: 'saveEML',
         label: gt('Save as file'),

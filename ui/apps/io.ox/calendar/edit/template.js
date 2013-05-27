@@ -50,7 +50,7 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'title',
         draw: function (baton) {
-            this.append($('<h1>').addClass('title').text(gt(baton.mode === 'edit' ? 'Edit appointment' : 'Create appointment')));
+            this.append($('<h1>').addClass('clear-title title').text(gt(baton.mode === 'edit' ? 'Edit appointment' : 'Create appointment')));
         }
     });
 
@@ -211,7 +211,7 @@ define('io.ox/calendar/edit/template',
         nextTo: 'end-date',
         draw: function () {
             this.append(
-                $('<div class="span4"><label class="find-free-time"></div>')
+                $('<div class="span4"><label class="find-free-time"></label></div>')
             );
         }
     });
@@ -509,11 +509,13 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            var selector = 'label.find-free-time, .find-free-time legend';
-            this.parent().find(selector).append(
-                $('<a href="#" class="pull-right">').text(gt('Find a free time'))
-                    .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
-            );
+            if (capabilities.has('freebusy !alone')) {
+                var selector = 'label.find-free-time, .find-free-time legend';
+                this.parent().find(selector).append(
+                    $('<a href="#" class="pull-right">').text(gt('Find a free time'))
+                        .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
+                );
+            }
         }
     });
 

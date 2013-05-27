@@ -45,21 +45,32 @@ define('plugins/portal/flickr/register',
 
         initialize: function (baton) {
 
-            var props = baton.model.get('props');
+            function initFeed() {
 
-            baton.feed = new Feed({
-                url: apiUrl[props.method] + props.query + '&jsoncallback='
-            });
+                var props = baton.model.get('props'), url;
 
-            baton.feed.process = function (data) {
-                return data && data.stat === "ok" ? data.photos : {};
-            };
+                if (props.method) {
+                    url = '' + (apiUrl[props.method] || '') + encodeURIComponent(props.query) + '&jsoncallback=';
+                    baton.feed = new Feed({ url: url });
+                    baton.feed.process = function (data) {
+                        return data && data.stat === "ok" ? data.photos : { error: gt('Could not load data') };
+                    };
+                }
+            }
+
+            baton.model.on('change:props', initFeed);
+            initFeed();
         },
 
         load: function (baton) {
-            return baton.feed.load().done(function (data) {
-                baton.data = data;
-            });
+            if (baton.feed) {
+                return baton.feed.load().done(function (data) {
+                    baton.data = data;
+                });
+            } else {
+                baton.data = [];
+                return $.when();
+            }
         },
 
         preview: function (baton) {
@@ -69,26 +80,35 @@ define('plugins/portal/flickr/register',
             // set title
             this.find('h2').text(baton.model.get('props').query || 'Flickr');
 
-            // get a photo
-            if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {
-                // try to pick a random photo
-                photo = photo[Math.min(photo.length - 1, Math.random() * 10 >> 0)];
-            }
-
-            if (photo) {
-                // find proper image size
-                _(sizes).each(function (s) {
-                    if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
-                        if (photo['url_' + s]) {
-                            size = s;
-                            url = photo['url_' + s];
-                        }
-                    }
-                });
-                // use size
-                this.addClass('photo-stream').append(
-                    $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+            if (baton.data.error) {
+                this.append(
+                    $('<div class="content">').text(baton.data.error)
                 );
+            } else {
+
+                // get a photo
+                if (_.isArray((photo = baton.data.photo)) && photo.length > 0) {
+                    // try to pick a random photo
+                    photo = photo[Math.min(photo.length - 1, Math.random() * 10 >> 0)];
+                }
+
+                if (photo) {
+                    // find proper image size
+                    _(sizes).each(function (s) {
+                        if (size === '' || (photo['width_' + s] > 250 && photo['width_' + s] < 1000)) {
+                            if (photo['url_' + s]) {
+                                size = s;
+                                url = photo['url_' + s];
+                            }
+                        }
+                    });
+                    // use size
+                    this.addClass('photo-stream').append(
+                        $('<div class="content pointer">')
+                        .css('backgroundImage', 'url(' + url + ')')
+                        .addClass('decoration')
+                    );
+                }
             }
         },
 
@@ -114,7 +134,7 @@ define('plugins/portal/flickr/register',
                     );
                     if (flickrUrl) {
                         img.wrap(
-                            $('<a>', { href: flickrUrl + photo.id, target: '_blank' })
+                            $('<a>', { href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/', target: '_blank' })
                         );
                     }
                     if (photo.title) {
@@ -132,10 +152,8 @@ define('plugins/portal/flickr/register',
                     flickrUrl = '';
 
                 if (baton.model.get('props').method === 'flickr.photos.search') {
-                    flickrUrl = 'http://www.flickr.com/photos/' + baton.model.get('props').query + '/';
+                    flickrUrl = 'http://www.flickr.com/photos';
                 }
-
-                console.log('FLICKR.data', data, flickrUrl);
 
                 node.append($('<h1>').text(baton.model.get('props').query));
 
@@ -210,7 +228,7 @@ define('plugins/portal/flickr/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.candidate) {
+            if (model.has('candidate')) {
                 view.removeWidget();
             }
         });
@@ -242,8 +260,8 @@ define('plugins/portal/flickr/register',
                 } else {
                     props = { method: method, query: q, description: description };
                     if (nsid) { props.nsid = nsid; }
-                    model.candidate = false;
                     model.set({ title: description, props: props });
+                    model.unset('candidate');
                     dialog.close();
                 }
             });

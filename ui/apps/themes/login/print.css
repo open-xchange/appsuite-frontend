@@ -15,7 +15,7 @@ html {
 }
 
 body {
-    padding: 30px;
+    padding: 1.5cm;
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 13px;
     line-height: 18px;
@@ -117,6 +117,18 @@ img {
     max-width: 100%;
     margin-bottom: 2em;
     border: 0;
+}
+
+@media print {
+
+    body { padding: 0; }
+    thead { display: table-header-group; }
+    tbody.no-break, header { page-break-inside: avoid; }
+    a, a:visited { color: #000; text-decoration: underline; }
+
+    @page {
+        margin: 2cm;
+    }
 }
 
 /* Phone list */

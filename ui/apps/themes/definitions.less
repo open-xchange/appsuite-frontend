@@ -249,7 +249,19 @@
 
 @windowHeadTop: #252525;
 @windowHeadBottom: #202020;
+
+@badgeColor: @white;
+@badgeBackground: #555;
+
+// Foldertree
 @foldertreeSidepanelBackground: #333;
+@foldertreeSectionTitleColor: #888;
+@foldertreeActiveLabelColor: #ccc;
+@foldertreePassiveLabelColor: #888;
+@foldertreeHoverBackground: #555;
+@foldertreeSelectedBackground: #2A2A2A;
+@foldertreeBadgeBackground: @badgeBackground;
+@foldertreeBadgeColor: @badgeColor;
 
 @windowTitleColor: #fff;
 @toolbarLinkColor: lighten(@toolbar, 20%);
@@ -262,6 +274,7 @@
 @topbarLauncherColorActive: #fff;
 @topbarLauncherBackgroundHover: #111;
 @topbarLauncherBackgroundActive: #222;
+@topbarIconColor: #fff;
 
 @inlineLinkBorderColor: #eee;
 
@@ -271,13 +284,35 @@
 
 @list-highlight: #ffc;
 
-// Dimensions
+// Calendar
+/* Appintment colors */
+@appointmentReserved: #08c;         /* blue */
+@appointmentTemporary: #ffbb00;     /* yellow */
+@appointmentAbsent: #913f3f;        /* red */
+@appointmentFree: #8eb360;          /* green */
+@appointmentPrivate: #555;          /* gray */
+@appointmentDeclinedFont: #888;     /* dark gray */
+@appointmentUnconfirmedAlpha: 0.4;
+@appointmentDeclinedAlpha: 0.3;
+@appointmentHoverPct: 15%;
 
+@weekviewAppointmentLasso: #aeaeff; /* light blue */
+@weekviewDayIn: #fff;               /* white */
+@weekviewDayOut: #e0e0e0;           /* grey */
+@weekviewTimeline: #f00;            /* red */
+
+@monthviewAppointmentOut: #aaa;     /* light gray */
+@monthviewToday: #daefff;           /* light blue */
+
+@calendarToolbarHeight: 41px;
+@weekviewTimeWith: 58px;
+
+// Dimensions
 @windowHeadWidth: 50px;
 @windowContentShift: 250px;
 @small-folderTreeShift: 100%;
-// Mixins
 
+// Mixins
 .box-sizing(@boxmodel: content-box) {
     -webkit-box-sizing: @boxmodel;
     -moz-box-sizing: @boxmodel;

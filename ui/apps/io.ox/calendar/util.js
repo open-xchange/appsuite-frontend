@@ -126,7 +126,7 @@ define("io.ox/calendar/util",
 // OLD STUFF - looks nice
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
-            return n_dayShort[d.getDay()] + ", " + _.pad(d.getDate(), 2) + "." + _.pad(d.getMonth() + 1, 2) + "." + d.getYear();
+            return d.format(date.DAYOFWEEK_DATE);
         },
 
 // NEW STUFF - not yet done
@@ -184,18 +184,20 @@ define("io.ox/calendar/util",
         },
 
         getDateInterval: function (data) {
-            var length = (data.end_date - data.start_date) / DAY >> 0,
-                startDate = data.start_date,
+            var startDate = data.start_date,
                 endDate = data.end_date;
-            if (data.full_time) {
-                startDate = date.Local.utc(startDate);
-                endDate = date.Local.utc(endDate);
-            }
-
-            if (length > 1) {
-                return this.getDate(startDate) + " \u2013 " + this.getDate(endDate - 1);
+            if (startDate && endDate) {
+                if (data.full_time) {
+                    startDate = date.Local.utc(startDate);
+                    endDate = date.Local.utc(endDate);
+                }
+                if (this.onSameDay(startDate, endDate)) {
+                    return this.getDate(startDate);
+                } else {
+                    return this.getDate(startDate) + " \u2013 " + this.getDate(endDate);
+                }
             } else {
-                return this.getDate(startDate);
+                return "";
             }
         },
 
@@ -257,8 +259,7 @@ define("io.ox/calendar/util",
         },
 
         onSameDay: function (t1, t2) {
-            // don't change this to date.Local; this is just a simple comparison
-            return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
+            return new date.Local(t1).getDays() === new date.Local(t2).getDays();
         },
 
         getTimeInterval: function (data, D) {
@@ -441,27 +442,29 @@ define("io.ox/calendar/util",
                 .replace(/</g, "&lt;")
                 .replace(/(https?\:\/\/\S+)/g, function ($1) {
                     // soft-break long words (like long URLs)
-                    $1 = $1.replace(/(\S{20})/g, '$1\u200B');
-                    return '<a href="' + $1 + '" target="_blank">' + $1 + '</a>';
+                    var text = $1.replace(/(\S{20})/g, '$1\u200B');
+                    return '<a href="' + $1 + '" target="_blank">' + text + '</a>';
                 });
         },
 
         getConfirmations: function (data) {
             var hash = {};
-            // internal users
-            _(data.users).each(function (obj) {
-                hash[String(obj.id)] = {
-                    status: obj.confirmation || 0,
-                    comment: obj.confirmmessage || ""
-                };
-            });
-            // external users
-            _(data.confirmations).each(function (obj) {
-                hash[obj.mail] = {
-                    status: obj.status || 0,
-                    comment: obj.confirmmessage || ""
-                };
-            });
+            if (data) {
+                // internal users
+                _(data.users).each(function (obj) {
+                    hash[String(obj.id)] = {
+                        status: obj.confirmation || 0,
+                        comment: obj.confirmmessage || ""
+                    };
+                });
+                // external users
+                _(data.confirmations).each(function (obj) {
+                    hash[obj.mail] = {
+                        status: obj.status || 0,
+                        comment: obj.confirmmessage || ""
+                    };
+                });
+            }
             return hash;
         },
 

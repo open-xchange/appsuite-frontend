@@ -57,6 +57,19 @@ define("plugins/portal/calendar/register",
 
         title: gt('Appointments'),
 
+        initialize: function (baton) {
+            api.on('update create delete', function (event, element) {
+                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+
+            });
+        },
+
         action: function (baton) {
             ox.launch('io.ox/calendar/main', { perspective: 'list' });
         },
@@ -85,7 +98,13 @@ define("plugins/portal/calendar/register",
 
                     var declined = util.getConfirmationStatus(nextApp) === 2,
                         start = new date.Local(nextApp.start_date),
-                        timespan = util.getSmartDate(nextApp.start_date, true) + (nextApp.full_time ? '' : ' ' + start.format(date.TIME));
+                        timespan;
+
+                    if (nextApp.full_time) {
+                        timespan = util.getSmartDate(date.Local.utc(nextApp.start_date), true);
+                    } else {
+                        timespan = util.getSmartDate(nextApp.start_date, true) + ' ' + start.format(date.TIME);
+                    }
 
                     if (showDeclined || !declined) {
                         $content.append(
@@ -93,8 +112,8 @@ define("plugins/portal/calendar/register",
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
-                                $('<span class="normal accent">').text(timespan), $.txt(' '),
-                                $('<span class="bold">').text(nextApp.title || ''), $.txt(' '),
+                                $('<span class="normal accent">').text(timespan), $.txt(gt.noI18n('\u00A0')),
+                                $('<span class="bold">').text(nextApp.title || ''), $.txt(gt.noI18n('\u00A0')),
                                 $('<span class="gray">').text(nextApp.location || '')
                             )
                         );

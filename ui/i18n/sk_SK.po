@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-03-22 01:18+0200\n"
+"PO-Revision-Date: 2013-04-24 12:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -13,31 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "5"
-msgstr "5"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "10"
-msgstr "10"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "15"
-msgstr "15"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "20"
-msgstr "20"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "30"
-msgstr "30"
-
-#: apps/io.ox/tasks/settings/pane.js:36
-msgid "60"
-msgstr "60"
 
 #: html/core_body.html:60
 msgid "User name"
@@ -123,6 +98,393 @@ msgstr ""
 msgid "Languages"
 msgstr "Jazyky"
 
+#: apps/io.ox/core/pubsub/model.js:168
+msgid "Publication must have a target."
+msgstr "Publikácia musí mať cieľ."
+
+#: apps/io.ox/core/pubsub/model.js:172
+msgid "Publication must have a site."
+msgstr "Publikácia musí mať lokalitu."
+
+#: apps/io.ox/core/pubsub/model.js:180
+msgid "Model is incomplete."
+msgstr "Model je neúplný."
+
+#: apps/io.ox/core/pubsub/model.js:182
+msgid "You have to enter a username and password to subscribe."
+msgstr ""
+"Aby ste sa prihlásili na odber, musíte zadať používateľské meno a heslo."
+
+#: apps/io.ox/core/pubsub/settings/pane.js:69
+msgid "Only showing items related to folder \"%1$s\""
+msgstr "Zobrazujú sa len položky súvisiace s priečinkom „%1$s“"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:71
+msgid "Show all items"
+msgstr "Zobraziť všetky položky"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:147
+msgid "Link"
+msgstr "Odkaz"
+
+#: apps/io.ox/core/main.js:506 apps/io.ox/core/pubsub/settings/pane.js:191
+msgid "Refresh"
+msgstr "Obnoviť"
+
+#: apps/io.ox/calendar/actions.js:455
+#: apps/io.ox/calendar/edit/recurrence-view.js:249
+#: apps/io.ox/calendar/edit/recurrence-view.js:851
+#: apps/io.ox/contacts/actions.js:618
+#: apps/io.ox/core/pubsub/settings/pane.js:196
+#: apps/io.ox/core/pubsub/settings/pane.js:197 apps/io.ox/files/actions.js:565
+#: apps/io.ox/mail/actions.js:871
+#: apps/io.ox/mail/settings/signatures/register.js:297
+#: apps/io.ox/portal/settings/pane.js:157
+#: apps/io.ox/settings/accounts/settings/pane.js:34
+#: apps/io.ox/tasks/actions.js:427
+msgid "Edit"
+msgstr "Upraviť"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:205
+#: apps/io.ox/core/pubsub/settings/pane.js:206
+#: apps/io.ox/portal/settings/pane.js:162
+msgid "Disable"
+msgstr "Vypnúť"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:205
+#: apps/io.ox/core/pubsub/settings/pane.js:206
+#: apps/io.ox/portal/settings/pane.js:166
+msgid "Enable"
+msgstr "Zapnúť"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:280
+msgid "Subscription refresh"
+msgstr "Obnovenie odberu"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:281
+msgid ""
+"A refresh takes some time, so please be patient, while the refresh runs in "
+"the background. Only one refresh per subscription and per session is allowed."
+msgstr ""
+"Obnovenie nejakú dobu trvá, preto buďte prosím trpezliví, pokým obnovenie "
+"beží na pozadí. Je povolené iba jedno obnovenie na odber a na reláciu."
+
+#: apps/io.ox/core/pubsub/settings/pane.js:314
+msgid "This feature is deactivated"
+msgstr "Táto funkcia je deaktivovaná"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:360
+msgid ""
+"This folder has publications but you are not allowed to view or edit them"
+msgstr ""
+"Tento priečinok má publikácie, ale nemôžete ich zobraziť alebo upravovať"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:362
+msgid ""
+"This folder has subscriptions but you are not allowed to view or edit them"
+msgstr "Tento priečinok má odbery, ale nemôžete ich zobraziť alebo upravovať"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:368
+msgid "This folder has no publications"
+msgstr "Tento priečinok nemá žiadne publikácie"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:369
+msgid "This folder has no subscriptions"
+msgstr "Tento priečinok nemá žiadne odbery"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:372
+msgid "You don't have any publications yet"
+msgstr "Zatiaľ nemáte žiadne publikácie"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:373
+msgid "You don't have any subscriptions yet"
+msgstr "Zatiaľ nemáte žiadne odbery"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:397
+msgid "Publications"
+msgstr "Publikácie"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:400
+msgid "Subscriptions"
+msgstr "Odbery"
+
+#: apps/io.ox/core/pubsub/publications.js:91 apps/io.ox/files/actions.js:653
+msgid "Publish"
+msgstr "Publikovať"
+
+#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
+#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
+#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
+#: apps/io.ox/calendar/month/perspective.js:107
+#: apps/io.ox/calendar/week/perspective.js:73
+#: apps/io.ox/calendar/week/perspective.js:116
+#: apps/io.ox/contacts/actions.js:51 apps/io.ox/contacts/actions.js:149
+#: apps/io.ox/contacts/distrib/main.js:162
+#: apps/io.ox/contacts/edit/main.js:152
+#: apps/io.ox/core/commons-folderview.js:403
+#: apps/io.ox/core/export/export.js:71 apps/io.ox/core/import/import.js:115
+#: apps/io.ox/core/main.js:318 apps/io.ox/core/permissions/permissions.js:352
+#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/pubsub/subscriptions.js:47
+#: apps/io.ox/core/tk/attachments.js:306 apps/io.ox/core/tk/folderviews.js:567
+#: apps/io.ox/core/tk/folderviews.js:596 apps/io.ox/core/tk/folderviews.js:645
+#: apps/io.ox/core/tk/folderviews.js:697 apps/io.ox/core/upsell.js:33
+#: apps/io.ox/editor/main.js:242 apps/io.ox/files/actions.js:249
+#: apps/io.ox/files/actions.js:306 apps/io.ox/files/actions.js:359
+#: apps/io.ox/files/actions.js:402 apps/io.ox/files/actions.js:489
+#: apps/io.ox/files/views/create.js:40
+#: apps/io.ox/mail/accounts/settings.js:215
+#: apps/io.ox/mail/accounts/view-form.js:177 apps/io.ox/mail/actions.js:75
+#: apps/io.ox/mail/actions.js:299 apps/io.ox/mail/actions.js:763
+#: apps/io.ox/mail/write/main.js:1089 apps/io.ox/office/tk/dialogs.js:28
+#: apps/io.ox/portal/settings/pane.js:248
+#: apps/io.ox/settings/accounts/settings/pane.js:51
+#: apps/io.ox/tasks/actions.js:61 apps/io.ox/tasks/actions.js:193
+#: apps/io.ox/tasks/actions.js:489 apps/io.ox/tasks/edit/main.js:150
+#: apps/io.ox/tasks/edit/util.js:145
+#: apps/plugins/portal/flickr/register.js:207
+#: apps/plugins/portal/rss/register.js:143
+#: apps/plugins/portal/tumblr/register.js:177
+#: apps/plugins/portal/userSettings/register.js:61
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: apps/io.ox/core/pubsub/publications.js:95
+msgid "Publish folder"
+msgstr "Publikovať priečinok"
+
+#: apps/io.ox/core/pubsub/publications.js:97
+msgid "Publish item"
+msgstr "Publikovať položku"
+
+#: apps/io.ox/core/pubsub/publications.js:106
+msgid "Publication has been added"
+msgstr "Publikácia bola pridaná"
+
+#: apps/io.ox/core/pubsub/publications.js:137
+msgid "Name already taken"
+msgstr "Názov je už použitý"
+
+#: apps/io.ox/core/pubsub/publications.js:143
+#: apps/io.ox/core/pubsub/publications.js:183
+msgid "Publications must have a name"
+msgstr "Publikácie musia mať názov"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:78
+#: apps/io.ox/contacts/print.js:76 apps/io.ox/core/pubsub/publications.js:178
+#: apps/io.ox/files/actions.js:289
+#: apps/io.ox/mail/settings/signatures/register.js:65
+msgid "Name"
+msgstr "Meno"
+
+#: apps/io.ox/core/pubsub/publications.js:219
+msgid "Template"
+msgstr "Šablóna"
+
+#: apps/io.ox/core/pubsub/publications.js:227
+msgid "No matching templates on this Server"
+msgstr "Žiadne zodpovedajúce šablóny na tomto serveri"
+
+#: apps/io.ox/core/pubsub/publications.js:246
+msgid "Add cipher code"
+msgstr "Pridať kód šifry"
+
+#: apps/io.ox/core/pubsub/publications.js:295
+msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
+msgstr "Ahoj!<br><br>%1$s s vami zdieľa publikáciu:<br>%2$s"
+
+#: apps/io.ox/core/commons-folderview.js:185
+#: apps/io.ox/core/pubsub/publications.js:298
+msgid "Publication"
+msgstr "Publikácia"
+
+#: apps/io.ox/core/pubsub/publications.js:327
+#: apps/io.ox/core/pubsub/publications.js:332
+msgid "Share Link by E-mail"
+msgstr "Zdieľať odkaz emailom"
+
+#: apps/io.ox/core/pubsub/publications.js:356
+msgid "Attention"
+msgstr "Upozornenie"
+
+#: apps/io.ox/core/pubsub/publications.js:358
+msgid ""
+"The published data will be accessible to everyone on the Internet. Please "
+"consider, which data you want to publish."
+msgstr ""
+"Publikované dáta budú prístupné pre kohokoľvek na internete. Prosím, zvážte, "
+"ktoré dáta chcete zverejniť."
+
+#: apps/io.ox/core/pubsub/publications.js:360
+msgid "Privacy Notice"
+msgstr "Ochrana súkromia"
+
+#: apps/io.ox/core/pubsub/publications.js:362
+msgid ""
+"When using this publish feature, you as the current owner of the data are "
+"responsible for being careful with privacy rules and for complying with "
+"legal obligations (Copyright, Privacy Laws). Especially when publishing "
+"personal data you are the responsible party according to the Federal Data "
+"Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
+"According to European and other national regulations you as the responsible "
+"party are in charge of data economy, and must not publish or forward "
+"personal data without the person's consent. Beyond legal obligations, we "
+"would like to encourage extreme care when dealing with personal data. Please "
+"consider carefully where you store and to whom you forward personal data. "
+"Please ensure appropriate access protection, e.g. by proper password "
+"protection."
+msgstr ""
+"Pri používaní tejto funkcie publikovania ste ako aktuálny vlastník údajov "
+"zodpovedný za opatrnosť ohľadne pravidiel súkromia a dodržiavania právnych "
+"povinností (autorský zákon, zákony ochrany súkromia). Obzvlášť pri "
+"zverejňovaní osobných údajov ste zodpovednou stranou podľa Federal Data "
+"Protection Act (BDSG, Nemecko) alebo iných zákonov na ochranu súkromia vo "
+"vašej krajine. Podľa európskych a iných národných regulácií ste zodpovedná "
+"strana za zaobchádzanie s údajmi a nesmiete zverejniť alebo preposlať osobné "
+"údaje bez súhlasu osoby. Okrem právnych povinností by sme radi odporučili "
+"extrémnu opatrnosť pri práci s osobnými údajmi. Prosím, starostlivo zvážte, "
+"kde ukladáte a komu preposielate osobné údaje. Prosím, zabezpečte vhodnú "
+"ochranu prístupu napr. pomocou ochrany heslom."
+
+#: apps/io.ox/core/pubsub/publications.js:367
+msgid "Show legal information"
+msgstr "Zobraziť právne informácie"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:46
+#: apps/io.ox/core/pubsub/subscriptions.js:49
+#: apps/io.ox/mail/view-detail.js:1066
+msgid "Subscribe"
+msgstr "Odberať"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:60
+msgid "Checking credentials... This may take a few seconds."
+msgstr "Kontroluje sa poverenia... To môže trvať niekoľko sekúnd."
+
+#: apps/io.ox/core/pubsub/subscriptions.js:69
+msgid "Subscription successfully created."
+msgstr "Odbery boli úspešne vytvorené."
+
+#: apps/io.ox/core/pubsub/subscriptions.js:76
+#: apps/io.ox/core/pubsub/subscriptions.js:103
+msgid "Error:"
+msgstr "Chyba:"
+
+#: apps/io.ox/core/notifications.js:327 apps/io.ox/core/print.js:132
+#: apps/io.ox/core/pubsub/subscriptions.js:107 apps/io.ox/editor/main.js:135
+msgid "Error"
+msgstr "Chyba"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:108
+msgid "The subscription could not be created."
+msgstr "Prihlásenie na odber sa nepodarilo vytvoriť."
+
+#: apps/io.ox/core/api/folder.js:404
+#: apps/io.ox/core/pubsub/subscriptions.js:148
+msgid "New Folder"
+msgstr "Nový priečinok"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:216
+msgid "Add new account"
+msgstr "Pridať nový účet"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:229
+#: apps/io.ox/mail/view-detail.js:920
+msgid "Account"
+msgstr "Účet"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:254
+msgid "Source"
+msgstr "Zdroj"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:289
+msgid "Add new folder for this subscription"
+msgstr "Pridať nový priečinok pre tento odber"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:308
+#: apps/io.ox/core/pubsub/subscriptions.js:311
+msgid "Approximate Duration for Subscriptions"
+msgstr "Približné trvanie odberov"
+
+#: apps/io.ox/core/pubsub/subscriptions.js:310
+msgid ""
+"Subscribing to items that are not delivered by another Open-Xchange Server "
+"(i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing "
+"takes about 5 minutes. We are continually improving this functionality. "
+"Future releases will work significantly faster."
+msgstr ""
+"Odber položiek, ktoré nedoručuje iný Open-Xchange Server (t.j. OXMF) môže "
+"určitú dobu trvať. Príklad: Importovanie 100 kontaktov zo Xing trvá "
+"napríklad asi 5 minút. Túto funkcionalitu priebežne vylepšujeme. Budúce "
+"vydania budú fungovať výrazne rýchlejšie."
+
+#: apps/io.ox/office/preview/view.js:42
+msgid "Close document"
+msgstr "Zatvoriť dokument"
+
+#: apps/io.ox/office/preview/view.js:43
+msgid "Show first page"
+msgstr "Zobraziť prvú stránku"
+
+#: apps/io.ox/office/preview/view.js:44
+msgid "Show previous page"
+msgstr "Zobraziť predošlú stránku"
+
+#: apps/io.ox/office/preview/view.js:45
+msgid "Show next page"
+msgstr "Zobraziť ďalšiu stránku"
+
+#: apps/io.ox/office/preview/view.js:46
+msgid "Show last page"
+msgstr "Zobraziť poslednú stránku"
+
+#: apps/io.ox/office/preview/view.js:47
+msgid "Zoom out"
+msgstr "Oddialiť"
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Zoom in"
+msgstr "Priblížiť"
+
+#: apps/io.ox/office/preview/view.js:410
+msgid "Hide side panel"
+msgstr "Skryť bočný panel"
+
+#: apps/io.ox/office/preview/view.js:430
+msgid "Show side panel"
+msgstr "Zobraziť bočný panel"
+
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#: apps/io.ox/office/preview/view.js:550
+#, c-format
+msgid "Page %1$s of %2$s"
+msgstr "Strana %1$s z %2$s"
+
+#: apps/io.ox/office/framework/app/baseapplication.js:297
+#: apps/io.ox/office/preview/view.js:579
+msgid "Load Error"
+msgstr "Chyba načítavania"
+
+#. %1$d is the current page number that caused the error
+#: apps/io.ox/office/preview/view.js:582
+#, c-format
+msgid "An error occurred while loading page %1$d."
+msgstr "Vyskytla sa chyba pri načítaní stránky %1$d."
+
+#. %1$d is the current zoom factor, in percent
+#: apps/io.ox/office/preview/view.js:602
+#, c-format
+msgid "Zoom: %1$d%"
+msgstr "Priblíženie: %1$d%"
+
+#: apps/io.ox/office/framework/app/baseapplication.js:268
+msgid "Unnamed"
+msgstr "Bez názvu"
+
+#: apps/io.ox/office/framework/app/baseapplication.js:298
+msgid "An error occurred while loading the document."
+msgstr "Vyskytla sa chyba pri načítaní dokumentu."
+
 #: apps/plugins/portal/rss/register.js:54
 #: apps/plugins/portal/rss/register.js:186
 msgid "RSS Feed"
@@ -136,12 +498,13 @@ msgstr "Neboli nájdené žiadne kanály RSS."
 msgid "RSS Feeds"
 msgstr "Kanály RSS"
 
-#: apps/io.ox/contacts/model.js:268 apps/plugins/portal/rss/register.js:135
+#: apps/io.ox/contacts/model.js:271 apps/plugins/portal/rss/register.js:135
 msgid "URL"
 msgstr "URL"
 
-#: apps/io.ox/calendar/edit/template.js:226
-#: apps/io.ox/contacts/view-detail.js:323 apps/io.ox/files/actions.js:325
+#: apps/io.ox/calendar/edit/template.js:244
+#: apps/io.ox/contacts/view-detail.js:311 apps/io.ox/files/actions.js:327
+#: apps/io.ox/files/views/create.js:100
 #: apps/io.ox/tasks/edit/view-template.js:48
 #: apps/plugins/portal/flickr/register.js:201
 #: apps/plugins/portal/rss/register.js:137
@@ -149,12 +512,12 @@ msgstr "URL"
 msgid "Description"
 msgstr "Popis"
 
-#: apps/io.ox/calendar/edit/template.js:64
+#: apps/io.ox/calendar/edit/template.js:65
 #: apps/io.ox/contacts/distrib/create-dist-view.js:43
-#: apps/io.ox/contacts/edit/view-form.js:325
-#: apps/io.ox/core/permissions/permissions.js:342
-#: apps/io.ox/core/tk/folderviews.js:700 apps/io.ox/editor/main.js:79
-#: apps/io.ox/files/actions.js:356 apps/io.ox/files/views/create.js:39
+#: apps/io.ox/contacts/edit/view-form.js:309
+#: apps/io.ox/core/permissions/permissions.js:352
+#: apps/io.ox/core/tk/folderviews.js:696 apps/io.ox/editor/main.js:79
+#: apps/io.ox/files/actions.js:358 apps/io.ox/files/views/create.js:39
 #: apps/io.ox/mail/settings/signatures/register.js:115
 #: apps/io.ox/mail/write/view-main.js:54 apps/io.ox/tasks/edit/view.js:210
 #: apps/plugins/portal/flickr/register.js:206
@@ -162,41 +525,6 @@ msgstr "Popis"
 #: apps/plugins/portal/tumblr/register.js:176
 msgid "Save"
 msgstr "Uložiť"
-
-#: apps/io.ox/calendar/acceptdeny.js:69 apps/io.ox/calendar/actions.js:129
-#: apps/io.ox/calendar/actions.js:190 apps/io.ox/calendar/actions.js:207
-#: apps/io.ox/calendar/actions.js:302 apps/io.ox/calendar/edit/main.js:59
-#: apps/io.ox/calendar/edit/template.js:123
-#: apps/io.ox/calendar/month/perspective.js:87
-#: apps/io.ox/calendar/week/perspective.js:72
-#: apps/io.ox/calendar/week/perspective.js:115
-#: apps/io.ox/contacts/actions.js:51 apps/io.ox/contacts/actions.js:149
-#: apps/io.ox/contacts/distrib/main.js:162
-#: apps/io.ox/contacts/edit/main.js:152
-#: apps/io.ox/core/commons-folderview.js:375
-#: apps/io.ox/core/export/export.js:71 apps/io.ox/core/import/import.js:115
-#: apps/io.ox/core/main.js:285 apps/io.ox/core/permissions/permissions.js:342
-#: apps/io.ox/core/pubsub/publications.js:92
-#: apps/io.ox/core/pubsub/subscriptions.js:46
-#: apps/io.ox/core/tk/folderviews.js:566 apps/io.ox/core/tk/folderviews.js:595
-#: apps/io.ox/core/tk/folderviews.js:642 apps/io.ox/core/tk/folderviews.js:699
-#: apps/io.ox/core/upsell.js:33 apps/io.ox/editor/main.js:242
-#: apps/io.ox/files/actions.js:218 apps/io.ox/files/actions.js:248
-#: apps/io.ox/files/actions.js:304 apps/io.ox/files/actions.js:357
-#: apps/io.ox/files/actions.js:400 apps/io.ox/files/actions.js:484
-#: apps/io.ox/files/views/create.js:40
-#: apps/io.ox/mail/accounts/settings.js:215 apps/io.ox/mail/actions.js:71
-#: apps/io.ox/mail/actions.js:295 apps/io.ox/mail/actions.js:740
-#: apps/io.ox/mail/write/main.js:1026 apps/io.ox/office/tk/dialogs.js:28
-#: apps/io.ox/portal/settings/pane.js:248 apps/io.ox/tasks/actions.js:61
-#: apps/io.ox/tasks/actions.js:193 apps/io.ox/tasks/actions.js:459
-#: apps/io.ox/tasks/edit/main.js:150 apps/io.ox/tasks/edit/util.js:145
-#: apps/plugins/portal/flickr/register.js:207
-#: apps/plugins/portal/rss/register.js:143
-#: apps/plugins/portal/tumblr/register.js:177
-#: apps/plugins/portal/userSettings/register.js:61
-msgid "Cancel"
-msgstr "Zrušiť"
 
 #: apps/plugins/portal/rss/register.js:163
 msgid "Please enter a feed URL."
@@ -240,20 +568,20 @@ msgid "Click here for free trial."
 msgstr "Kliknutím sem získate bezplatnú skúšobnú verziu."
 
 #: apps/plugins/portal/mail/register.js:28
-#: apps/plugins/portal/mail/register.js:75
+#: apps/plugins/portal/mail/register.js:82
 msgid "Inbox"
 msgstr "Prijaté"
 
-#: apps/plugins/portal/mail/register.js:58
-msgid "No mails at all!"
-msgstr "Vôbec žiadne poštové správy!"
+#: apps/plugins/portal/mail/register.js:65
+msgid "No mails in your inbox"
+msgstr "Žiadne poštové správy v priečinku Prijaté"
 
-#: apps/plugins/portal/calendar/register.js:57
-#: apps/plugins/portal/calendar/register.js:121
+#: apps/plugins/portal/calendar/register.js:58
+#: apps/plugins/portal/calendar/register.js:129
 msgid "Appointments"
 msgstr "Schôdzky"
 
-#: apps/plugins/portal/calendar/register.js:93
+#: apps/plugins/portal/calendar/register.js:81
 msgid "You don't have any appointments in the near future."
 msgstr "V blízkej budúcnosti nemáte žiadne schôdzky."
 
@@ -274,7 +602,7 @@ msgstr "flickr.people.getPublicPhotos"
 msgid "Edit Flickr photo stream"
 msgstr "Upraviť tok fotiek Flickr"
 
-#: apps/io.ox/core/desktop.js:1263 apps/plugins/portal/flickr/register.js:197
+#: apps/io.ox/core/desktop.js:1315 apps/plugins/portal/flickr/register.js:197
 msgid "Search"
 msgstr "Hľadať"
 
@@ -290,33 +618,33 @@ msgstr "Prosím, zadajte popis"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: apps/plugins/portal/birthdays/register.js:44
-#: apps/plugins/portal/birthdays/register.js:60
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:45
+#: apps/plugins/portal/birthdays/register.js:91
+#: apps/plugins/portal/birthdays/register.js:157
 msgid "Next birthdays"
 msgstr "Najbližšie narodeniny"
 
-#: apps/plugins/portal/birthdays/register.js:65
-#: apps/plugins/portal/birthdays/register.js:130
+#: apps/plugins/portal/birthdays/register.js:64
+#: apps/plugins/portal/birthdays/register.js:96
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Žiadne narodeniny v najbližších  %1$d týždňoch"
 
-#: apps/plugins/portal/birthdays/register.js:72
+#: apps/plugins/portal/birthdays/register.js:104
 msgid "Buy a gift"
 msgstr "Kúpiť darček"
 
-#: apps/io.ox/calendar/month/perspective.js:353
-#: apps/io.ox/calendar/util.js:172 apps/io.ox/calendar/week/view.js:619
-#: apps/plugins/portal/birthdays/register.js:92
+#: apps/io.ox/calendar/month/perspective.js:406
+#: apps/io.ox/calendar/util.js:172 apps/io.ox/calendar/week/view.js:626
+#: apps/plugins/portal/birthdays/register.js:124
 msgid "Today"
 msgstr "Dnes"
 
 #: apps/io.ox/calendar/util.js:174
-#: apps/plugins/portal/birthdays/register.js:92
+#: apps/plugins/portal/birthdays/register.js:124
 msgid "Tomorrow"
 msgstr "Zajtra"
 
-#: apps/plugins/portal/birthdays/register.js:92
+#: apps/plugins/portal/birthdays/register.js:124
 msgid "In %1$d days"
 msgstr "O %1$d dní"
 
@@ -333,7 +661,7 @@ msgstr "Komentáre"
 msgid "Retweeted by %s"
 msgstr "Retweetoval %s"
 
-#: apps/io.ox/mail/actions.js:831 apps/io.ox/mail/write/main.js:482
+#: apps/io.ox/mail/actions.js:846 apps/io.ox/mail/write/main.js:509
 #: apps/plugins/portal/twitter/register.js:175
 msgid "Reply"
 msgstr "Odpovedať"
@@ -367,18 +695,18 @@ msgid "Twitter reported the following errors:"
 msgstr "Twitter ohlásil nasledovné chyby:"
 
 #: apps/plugins/portal/facebook/register.js:97
-#: apps/plugins/portal/linkedIn/register.js:108
+#: apps/plugins/portal/linkedIn/register.js:109
 #: apps/plugins/portal/twitter/register.js:246
 msgid "Click to authorize your account again"
 msgstr "Kliknutím sem znova autorizujete svoj účet"
 
-#: apps/plugins/portal/linkedIn/register.js:110
+#: apps/plugins/portal/linkedIn/register.js:111
 #: apps/plugins/portal/twitter/register.js:248
 msgid "You have reauthorized this %s account."
 msgstr "Znova ste autorizovali svoj účet %s."
 
 #: apps/plugins/portal/facebook/register.js:101
-#: apps/plugins/portal/linkedIn/register.js:112
+#: apps/plugins/portal/linkedIn/register.js:113
 #: apps/plugins/portal/twitter/register.js:250
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Pri opätovnej autorizácii účtu %s sa niečo pokazilo."
@@ -391,19 +719,26 @@ msgstr "Kliknutím to skúsite znova neskôr."
 msgid "Click to retry"
 msgstr "Kliknutím to skúsite znova"
 
+#: apps/plugins/portal/twitter/register.js:262
+#: apps/plugins/portal/twitter/register.js:393
+#: apps/plugins/portal/twitter/register.js:404
+msgid "Twitter"
+msgstr "Twitter"
+
 #: apps/plugins/portal/twitter/register.js:338
 msgid "Tweet"
 msgstr "Tweet"
 
 #: apps/plugins/portal/facebook/register.js:245
-#: apps/plugins/portal/linkedIn/register.js:231
+#: apps/plugins/portal/linkedIn/register.js:232
 #: apps/plugins/portal/twitter/register.js:383
 msgid "Add your account"
 msgstr "Pridať váš účet"
 
-#: apps/plugins/portal/twitter/register.js:390
-msgid "Twitter"
-msgstr "Twitter"
+#: apps/io.ox/portal/main.js:229 apps/plugins/portal/facebook/register.js:257
+#: apps/plugins/portal/twitter/register.js:394
+msgid "Click here to add your account"
+msgstr "Kliknutím sem pridáte váš účet"
 
 #: apps/plugins/portal/recentfiles/register.js:43
 msgid "Recently changed files"
@@ -438,13 +773,15 @@ msgstr "Zatiaľ žiadne príspevky na nástenke."
 msgid "Facebook reported an error:"
 msgstr "Facebook ohlásil chybu:"
 
-#: apps/plugins/portal/facebook/register.js:366
-msgid "Liked a link: %s"
-msgstr "Páčil sa odkaz: %s"
-
-#: apps/plugins/portal/facebook/register.js:482
+#: apps/plugins/portal/facebook/register.js:118
+#: apps/plugins/portal/facebook/register.js:256
+#: apps/plugins/portal/facebook/register.js:496
 msgid "Facebook"
 msgstr "Facebook"
+
+#: apps/plugins/portal/facebook/register.js:380
+msgid "Liked a link: %s"
+msgstr "Páčil sa odkaz: %s"
 
 #: apps/io.ox/core/settings/register.js:33
 #: apps/plugins/portal/userSettings/register.js:27
@@ -490,11 +827,11 @@ msgstr "Moje kontaktné údaje"
 msgid "My password"
 msgstr "Moje heslo"
 
-#: apps/plugins/portal/linkedIn/register.js:102
+#: apps/plugins/portal/linkedIn/register.js:103
 msgid "LinkedIn reported an error:"
 msgstr "LinkedIn ohlásil chybu:"
 
-#: apps/plugins/portal/linkedIn/register.js:119
+#: apps/plugins/portal/linkedIn/register.js:120
 msgid ""
 "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 "LinkedIn with the permission to do read messages."
@@ -502,31 +839,31 @@ msgstr ""
 "Ľutujeme, ale nemôžeme vám tu pomôcť. Poskytovateľ potrebuje získať kľúč od "
 "LinkedIn s povolením na čítanie správ."
 
-#: apps/plugins/portal/linkedIn/register.js:177
+#: apps/plugins/portal/linkedIn/register.js:178
 msgid "You have no new messages"
 msgstr "Nemáte nové správy"
 
-#: apps/plugins/portal/linkedIn/register.js:189
+#: apps/plugins/portal/linkedIn/register.js:190
 msgid "LinkedIn Network Updates"
 msgstr "Aktualizácie zo siete LinkedIn"
 
-#: apps/plugins/portal/linkedIn/register.js:194
+#: apps/plugins/portal/linkedIn/register.js:195
 msgid "Your messages"
 msgstr "Vaše správy"
 
-#: apps/plugins/portal/linkedIn/register.js:215
+#: apps/plugins/portal/linkedIn/register.js:216
 msgid "Recent activities"
 msgstr "Nedávne aktivity"
 
-#: apps/plugins/portal/linkedIn/register.js:238
+#: apps/plugins/portal/linkedIn/register.js:239
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: apps/io.ox/core/main.js:68 apps/io.ox/launchpad/main.js:31
+#: apps/io.ox/core/main.js:72 apps/io.ox/launchpad/main.js:31
 #: apps/io.ox/tasks/settings/pane.js:26
-#: apps/plugins/notifications/tasks/register.js:199
+#: apps/plugins/notifications/tasks/register.js:196
 #: apps/plugins/portal/tasks/register.js:26
-#: apps/plugins/portal/tasks/register.js:92
+#: apps/plugins/portal/tasks/register.js:94
 msgid "Tasks"
 msgstr "Úlohy"
 
@@ -536,7 +873,7 @@ msgstr ""
 "Nemáte žiadne úlohy, ktorých termín sa blíži alebo ktoré sú po termíne."
 
 #. Due on date
-#: apps/plugins/portal/tasks/register.js:60
+#: apps/plugins/portal/tasks/register.js:61
 msgid "Due on %1$s"
 msgstr "Termín %1$s"
 
@@ -552,9 +889,9 @@ msgstr ""
 "aktualizáciách aplikácií Connector pre Microsoft Outlook a Notifier. "
 "Aktualizácie si môžete stiahnuť priamo z aktualizátora."
 
-#: apps/io.ox/contacts/actions.js:649 apps/io.ox/core/tk/attachments.js:269
-#: apps/io.ox/files/actions.js:577 apps/io.ox/files/actions.js:665
-#: apps/io.ox/mail/actions.js:996 apps/io.ox/tasks/actions.js:537
+#: apps/io.ox/contacts/actions.js:676 apps/io.ox/core/tk/attachments.js:269
+#: apps/io.ox/files/actions.js:581 apps/io.ox/files/actions.js:669
+#: apps/io.ox/mail/actions.js:1034 apps/io.ox/tasks/actions.js:567
 #: apps/plugins/portal/updater/register.js:35
 msgid "Download"
 msgstr "Stiahnuť"
@@ -575,27 +912,24 @@ msgstr "Kvóta emailu"
 msgid "Mail count quota"
 msgstr "Kvóta počtu správ emailu"
 
-#: apps/plugins/portal/quota/register.js:115
+#: apps/plugins/portal/quota/register.js:113
 msgid "unlimited"
 msgstr "neobmedzené"
 
 #. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the storagespace in use
-#. %2$s is the max storagespace
+#. %1$s is the number of mails in use
+#. %2$s is the max number of mails
 #. #-#-#-#-#-#-#-#-#-#
 #. %1$s is the storagespace in use
 #. %2$s is the max storagespace
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#: apps/io.ox/office/preview/controller.js:87
-#: apps/plugins/portal/quota/register.js:122
+#: apps/plugins/portal/quota/register.js:121
+#: apps/plugins/portal/quota/register.js:128
 #, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s z %2$s"
 
-#: apps/plugins/portal/quota/register.js:139
-#: apps/plugins/portal/quota/register.js:152
+#: apps/plugins/portal/quota/register.js:146
+#: apps/plugins/portal/quota/register.js:159
 msgid "Quota"
 msgstr "Kvóta"
 
@@ -631,16 +965,21 @@ msgstr "Nové emaily"
 msgid "Show Inbox"
 msgstr "Zobraziť Prijaté"
 
+#: apps/io.ox/mail/main.js:505 apps/io.ox/mail/main.js:519
+#: apps/plugins/notifications/mail/register.js:57
+msgid "Couldn't load that email."
+msgstr "Nepodarilo sa načítať tento email."
+
 #: apps/plugins/notifications/calendar/register.js:29
 msgid "Invitations"
 msgstr "Pozvánky"
 
 #: apps/io.ox/calendar/acceptdeny.js:48
-#: apps/io.ox/calendar/edit/template.js:245
-#: apps/io.ox/calendar/invitations/register.js:423
-#: apps/io.ox/mail/actions.js:935
+#: apps/io.ox/calendar/edit/template.js:263
+#: apps/io.ox/calendar/invitations/register.js:503
+#: apps/io.ox/mail/actions.js:966
 #: apps/plugins/notifications/calendar/register.js:38
-#: apps/plugins/notifications/tasks/register.js:198
+#: apps/plugins/notifications/tasks/register.js:195
 msgid "Reminder"
 msgstr "Pripomenutie"
 
@@ -649,7 +988,7 @@ msgid "Accept / Decline"
 msgstr "Prijať/zamietnuť"
 
 #: apps/plugins/notifications/calendar/register.js:70
-#: apps/plugins/notifications/tasks/register.js:215
+#: apps/plugins/notifications/tasks/register.js:214
 msgid "Remind me again"
 msgstr "Znova pripomenúť"
 
@@ -670,7 +1009,7 @@ msgstr[2] "%d minút"
 
 #: apps/io.ox/office/tk/dialogs.js:29
 #: apps/plugins/notifications/calendar/register.js:84
-#: apps/plugins/notifications/tasks/register.js:216
+#: apps/plugins/notifications/tasks/register.js:215
 msgid "OK"
 msgstr "OK"
 
@@ -678,9 +1017,9 @@ msgstr "OK"
 msgid "Overdue Tasks"
 msgstr "Úlohy po termíne"
 
-#: apps/io.ox/tasks/actions.js:124 apps/io.ox/tasks/actions.js:413
+#: apps/io.ox/tasks/actions.js:124 apps/io.ox/tasks/actions.js:443
 #: apps/io.ox/tasks/edit/view-template.js:83 apps/io.ox/tasks/print.js:28
-#: apps/io.ox/tasks/util.js:208
+#: apps/io.ox/tasks/util.js:249
 #: apps/plugins/notifications/tasks/register.js:50
 msgid "Done"
 msgstr "Hotovo"
@@ -693,79 +1032,82 @@ msgstr "Pozvania úloh"
 msgid "Accept/Decline"
 msgstr "Prijať/zamietnuť"
 
-#: apps/io.ox/participants/views.js:90
+#: apps/io.ox/calendar/view-detail.js:436 apps/io.ox/participants/views.js:92
 msgid "Organizer"
 msgstr "Organizátor"
 
-#: apps/io.ox/participants/views.js:129
+#: apps/io.ox/participants/views.js:131
 msgid "Group"
 msgstr "Skupina"
 
-#: apps/io.ox/contacts/view-detail.js:161 apps/io.ox/participants/views.js:132
+#: apps/io.ox/contacts/view-detail.js:159 apps/io.ox/participants/views.js:134
 msgid "Resource"
 msgstr "Zdroj"
 
-#: apps/io.ox/participants/views.js:140
+#: apps/io.ox/participants/views.js:142
 msgid "Resource group"
 msgstr "Skupina zdrojov"
 
-#: apps/io.ox/participants/views.js:144
+#: apps/io.ox/participants/views.js:146
 msgid "External contact"
 msgstr "Externý kontakt"
 
-#: apps/io.ox/contacts/main.js:98 apps/io.ox/contacts/model.js:302
-#: apps/io.ox/contacts/view-detail.js:158 apps/io.ox/participants/views.js:150
+#: apps/io.ox/contacts/main.js:98 apps/io.ox/contacts/model.js:305
+#: apps/io.ox/contacts/view-detail.js:156 apps/io.ox/participants/views.js:152
 msgid "Distribution list"
 msgstr "Poštová konferencia"
 
-#: apps/io.ox/mail/accounts/settings.js:216
+#: apps/io.ox/mail/accounts/settings.js:214
 #: apps/io.ox/mail/settings/signatures/register.js:296
 #: apps/io.ox/settings/accounts/settings/pane.js:33
 msgid "Add"
 msgstr "Pridať"
 
-#: apps/io.ox/calendar/actions.js:457
-#: apps/io.ox/calendar/edit/recurrence-view.js:241
-#: apps/io.ox/calendar/edit/recurrence-view.js:836
-#: apps/io.ox/contacts/actions.js:591
-#: apps/io.ox/core/pubsub/settings/pane.js:192 apps/io.ox/files/actions.js:561
-#: apps/io.ox/mail/actions.js:848
-#: apps/io.ox/mail/settings/signatures/register.js:297
-#: apps/io.ox/portal/settings/pane.js:157
-#: apps/io.ox/settings/accounts/settings/pane.js:34
-#: apps/io.ox/tasks/actions.js:397
-msgid "Edit"
-msgstr "Upraviť"
-
-#: apps/io.ox/calendar/actions.js:206 apps/io.ox/calendar/actions.js:489
+#: apps/io.ox/calendar/actions.js:206 apps/io.ox/calendar/actions.js:487
 #: apps/io.ox/calendar/invitations/register.js:34
-#: apps/io.ox/contacts/actions.js:50 apps/io.ox/contacts/actions.js:599
-#: apps/io.ox/core/commons-folderview.js:217
-#: apps/io.ox/core/tk/folderviews.js:594 apps/io.ox/files/actions.js:247
-#: apps/io.ox/files/actions.js:483 apps/io.ox/files/actions.js:634
-#: apps/io.ox/mail/actions.js:70 apps/io.ox/mail/actions.js:919
+#: apps/io.ox/contacts/actions.js:50 apps/io.ox/contacts/actions.js:626
+#: apps/io.ox/core/commons-folderview.js:246
+#: apps/io.ox/core/tk/folderviews.js:595 apps/io.ox/files/actions.js:248
+#: apps/io.ox/files/actions.js:488 apps/io.ox/files/actions.js:638
+#: apps/io.ox/mail/actions.js:74 apps/io.ox/mail/actions.js:950
 #: apps/io.ox/mail/settings/signatures/register.js:301
 #: apps/io.ox/portal/settings/pane.js:247
 #: apps/io.ox/settings/accounts/settings/pane.js:35
-#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:405
+#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:435
 msgid "Delete"
 msgstr "Zmazať"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:36
-#: apps/io.ox/settings/main.js:179
+#: apps/io.ox/settings/main.js:180
 msgid "Mail and Social Accounts"
 msgstr "Emailové a sociálne účty"
 
-#: apps/io.ox/settings/main.js:121
+#: apps/io.ox/settings/accounts/settings/pane.js:49
+msgid "Do you really want to delete this account?"
+msgstr "Ste si istý, že chcete tento účet zmazať?"
+
+#: apps/io.ox/settings/accounts/settings/pane.js:50
+msgid "Delete account"
+msgstr "Zmazať účet"
+
+#: apps/io.ox/settings/accounts/settings/pane.js:210
+msgid "Your primary mail account can not be deleted."
+msgstr "Váš primárny poštový účet nie je možné zmazať."
+
+#: apps/io.ox/settings/accounts/settings/pane.js:211
+msgid "Ok"
+msgstr "OK"
+
+#: apps/io.ox/settings/main.js:126
 msgid "Expert mode"
 msgstr "Expertný režim"
 
-#: apps/io.ox/core/settings/pane.js:49 apps/io.ox/settings/main.js:167
+#: apps/io.ox/core/settings/pane.js:50 apps/io.ox/settings/main.js:168
 msgid "Basic settings"
 msgstr "Základné nastavenia"
 
-#: apps/io.ox/core/main.js:65 apps/io.ox/launchpad/main.js:28
-#: apps/io.ox/mail/settings/pane.js:28 apps/io.ox/mail/write/main.js:563
+#: apps/io.ox/core/main.js:68 apps/io.ox/launchpad/main.js:28
+#: apps/io.ox/mail/settings/pane.js:28 apps/io.ox/mail/write/main.js:590
 msgid "Mail"
 msgstr "Pošta"
 
@@ -774,11 +1116,163 @@ msgstr "Pošta"
 msgid "Common"
 msgstr "Bežné"
 
-#: apps/io.ox/mail/settings/old_pane.js:46 apps/io.ox/mail/settings/pane.js:30
+#: apps/io.ox/mail/settings/pane.js:30
+msgid "Permanently remove deleted E-Mails"
+msgstr "Trvale odstrániť zmazané poštové správy?"
+
+#: apps/io.ox/mail/settings/pane.js:31
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"sending"
+msgstr ""
+"Automaticky zbierať kontakty v priečinku „Zozbierané adresy“ počas "
+"odosielania"
+
+#: apps/io.ox/mail/settings/pane.js:32
+msgid ""
+"Automatically collect contacts in the folder \"Collected addresses\" while "
+"reading"
+msgstr ""
+"Automaticky zbierať kontakty v priečinku „Zozbierané adresy“ počas čítania"
+
+#: apps/io.ox/mail/settings/old_pane.js:49 apps/io.ox/mail/settings/pane.js:33
+msgid "Use fixed-width font for text mails"
+msgstr "Používať proporcionálne písmo pre text emailov"
+
+#: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:34
+msgid "Compose"
+msgstr "Napísať správu"
+
+#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:35
+msgid "Append vcard"
+msgstr "Pripojiť vCard"
+
+#: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:36
+msgid "Insert the original E-Mail text to a reply"
+msgstr "Vložiť pôvodný text emailu do odpovede"
+
+#: apps/io.ox/mail/settings/old_pane.js:93 apps/io.ox/mail/settings/pane.js:37
+msgid "Forward E-Mails as:"
+msgstr "Preposlať email ako:"
+
+#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:38
+msgid "Inline"
+msgstr "V tele"
+
+#: apps/io.ox/mail/settings/old_pane.js:96 apps/io.ox/mail/settings/pane.js:39
+msgid "Attachment"
+msgstr "Príloha"
+
+#: apps/io.ox/mail/settings/old_pane.js:105
+#: apps/io.ox/mail/settings/pane.js:40
+msgid "Format E-Mails as:"
+msgstr "Formátovať email ako:"
+
+#: apps/io.ox/mail/settings/old_pane.js:107
+#: apps/io.ox/mail/settings/pane.js:41 apps/io.ox/mail/write/view-main.js:534
+msgid "HTML"
+msgstr "HTML"
+
+#: apps/io.ox/mail/settings/old_pane.js:108
+#: apps/io.ox/mail/settings/pane.js:42
+msgid "Plain text"
+msgstr "Čistý text"
+
+#: apps/io.ox/mail/settings/old_pane.js:109
+#: apps/io.ox/mail/settings/pane.js:43
+msgid "HTML and plain text"
+msgstr "HTML a čistý text"
+
+#: apps/io.ox/mail/settings/old_pane.js:118
+#: apps/io.ox/mail/settings/pane.js:44
+msgid "Line wrap when sending text mails after: "
+msgstr "Zalamovanie riadkov pri posielaní emailu po:"
+
+#: apps/io.ox/mail/settings/pane.js:45
+msgid " characters"
+msgstr " znakov"
+
+#: apps/io.ox/mail/settings/old_pane.js:125
+#: apps/io.ox/mail/settings/pane.js:46
+msgid "Default sender address:"
+msgstr "Predvolená adresa odosielateľa:"
+
+#: apps/io.ox/mail/settings/pane.js:47
+msgid "Auto-save Email drafts"
+msgstr "Automaticky ukladať rozpísané správy"
+
+#: apps/io.ox/mail/settings/old_pane.js:157
+#: apps/io.ox/mail/settings/pane.js:48
+msgid "Display"
+msgstr "Zobraziť"
+
+#: apps/io.ox/mail/settings/old_pane.js:161
+#: apps/io.ox/mail/settings/pane.js:49
+msgid "Allow html formatted E-Mails"
+msgstr "Povoliť emaily vo formáte HTML"
+
+#: apps/io.ox/mail/settings/old_pane.js:162
+#: apps/io.ox/mail/settings/pane.js:50
+msgid "Block pre-loading of externally linked images"
+msgstr "Blokovať automatické načítanie externých obrázkov"
+
+#: apps/io.ox/mail/settings/old_pane.js:163
+#: apps/io.ox/mail/settings/pane.js:51
+msgid "Display emoticons as graphics in text E-Mails"
+msgstr "Zobraziť emotikony ako grafiku v textových emailoch"
+
+#: apps/io.ox/mail/settings/old_pane.js:164
+#: apps/io.ox/mail/settings/pane.js:52
+msgid "Color quoted lines"
+msgstr "Zafarbiť citované riadky"
+
+#: apps/io.ox/mail/settings/pane.js:54
+msgid "Thread view"
+msgstr "Zobrazenie vlákien"
+
+#: apps/io.ox/mail/settings/pane.js:55
+msgid "Enabled for inbox only"
+msgstr "Zapnuté len pre priečinok Prijaté"
+
+#: apps/io.ox/mail/settings/pane.js:56
+msgid "Enabled for all mail folders"
+msgstr "Zapnuté pre všetky poštové priečinky"
+
+#: apps/io.ox/mail/settings/pane.js:57
+msgid "Disabled"
+msgstr "Vypnuté"
+
+#: apps/io.ox/mail/settings/pane.js:60
+msgid "disabled"
+msgstr "vypnuté"
+
+#: apps/io.ox/mail/settings/pane.js:61
+msgid "1 minute"
+msgstr "1 minúta"
+
+#: apps/io.ox/mail/settings/pane.js:62
+msgid "3 minutes"
+msgstr "3 minúty"
+
+#: apps/io.ox/core/settings/pane.js:129 apps/io.ox/core/settings/pane.js:191
+#: apps/io.ox/mail/settings/pane.js:63
+msgid "5 minutes"
+msgstr "5 minút"
+
+#: apps/io.ox/core/settings/pane.js:130 apps/io.ox/core/settings/pane.js:192
+#: apps/io.ox/mail/settings/pane.js:64
+msgid "10 minutes"
+msgstr "10 minút"
+
+#: apps/io.ox/mail/settings/pane.js:116
+msgid "Could not save settings"
+msgstr "Nepodarilo sa uložiť nastavenia"
+
+#: apps/io.ox/mail/settings/old_pane.js:46
 msgid "Permanently remove deleted E-Mails?"
 msgstr "Trvale odstrániť zmazané emaily?"
 
-#: apps/io.ox/mail/settings/old_pane.js:47 apps/io.ox/mail/settings/pane.js:31
+#: apps/io.ox/mail/settings/old_pane.js:47
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending?"
@@ -786,157 +1280,16 @@ msgstr ""
 "Automaticky zbierať kontakty v priečinku „Zozbierané adresy“ počas "
 "odosielania?"
 
-#: apps/io.ox/mail/settings/old_pane.js:48 apps/io.ox/mail/settings/pane.js:32
+#: apps/io.ox/mail/settings/old_pane.js:48
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading?"
 msgstr ""
 "Automaticky zbierať kontakty v priečinku „Zozbierané adresy“ počas čítania?"
 
-#: apps/io.ox/mail/settings/pane.js:33
-msgid "Automatically select first E-Mail"
-msgstr "Automaticky vybrať prvý email"
-
-#: apps/io.ox/mail/settings/old_pane.js:49 apps/io.ox/mail/settings/pane.js:34
-msgid "Use fixed-width font for text mails"
-msgstr "Používať proporcionálne písmo pre text emailov"
-
-#: apps/io.ox/mail/settings/old_pane.js:79 apps/io.ox/mail/settings/pane.js:35
-msgid "Compose"
-msgstr "Napísať správu"
-
-#: apps/io.ox/mail/settings/old_pane.js:81 apps/io.ox/mail/settings/pane.js:36
-msgid "Append vcard"
-msgstr "Pripojiť vCard"
-
-#: apps/io.ox/mail/settings/old_pane.js:82 apps/io.ox/mail/settings/pane.js:37
-msgid "Insert the original E-Mail text to a reply"
-msgstr "Vložiť pôvodný text emailu do odpovede"
-
-#: apps/io.ox/mail/settings/old_pane.js:93 apps/io.ox/mail/settings/pane.js:38
-msgid "Forward E-Mails as:"
-msgstr "Preposlať email ako:"
-
-#: apps/io.ox/mail/settings/old_pane.js:95 apps/io.ox/mail/settings/pane.js:39
-msgid "Inline"
-msgstr "V tele"
-
-#: apps/io.ox/mail/settings/old_pane.js:96 apps/io.ox/mail/settings/pane.js:40
-msgid "Attachment"
-msgstr "Príloha"
-
-#: apps/io.ox/mail/settings/old_pane.js:105
-#: apps/io.ox/mail/settings/pane.js:41
-msgid "Format E-Mails as:"
-msgstr "Formátovať email ako:"
-
-#: apps/io.ox/mail/settings/old_pane.js:107
-#: apps/io.ox/mail/settings/pane.js:42 apps/io.ox/mail/write/view-main.js:530
-msgid "HTML"
-msgstr "HTML"
-
-#: apps/io.ox/mail/settings/old_pane.js:108
-#: apps/io.ox/mail/settings/pane.js:43
-msgid "Plain text"
-msgstr "Čistý text"
-
-#: apps/io.ox/mail/settings/old_pane.js:109
-#: apps/io.ox/mail/settings/pane.js:44
-msgid "HTML and plain text"
-msgstr "HTML a čistý text"
-
-#: apps/io.ox/mail/settings/old_pane.js:118
-#: apps/io.ox/mail/settings/pane.js:45
-msgid "Line wrap when sending text mails after: "
-msgstr "Zalamovanie riadkov pri posielaní emailu po:"
-
-#: apps/io.ox/mail/settings/pane.js:46
-msgid " characters"
-msgstr " znakov"
-
-#: apps/io.ox/mail/settings/old_pane.js:125
-#: apps/io.ox/mail/settings/pane.js:47
-msgid "Default sender address:"
-msgstr "Predvolená adresa odosielateľa:"
-
 #: apps/io.ox/mail/settings/old_pane.js:131
-#: apps/io.ox/mail/settings/pane.js:48
 msgid "Auto-save Email drafts?"
 msgstr "Automaticky ukladať rozpísané správy?"
-
-#: apps/io.ox/mail/settings/old_pane.js:157
-#: apps/io.ox/mail/settings/pane.js:49
-msgid "Display"
-msgstr "Zobraziť"
-
-#: apps/io.ox/mail/settings/old_pane.js:161
-#: apps/io.ox/mail/settings/pane.js:50
-msgid "Allow html formatted E-Mails"
-msgstr "Povoliť emaily vo formáte HTML"
-
-#: apps/io.ox/mail/settings/old_pane.js:162
-#: apps/io.ox/mail/settings/pane.js:51
-msgid "Block pre-loading of externally linked images"
-msgstr "Blokovať automatické načítanie externých obrázkov"
-
-#: apps/io.ox/mail/settings/old_pane.js:163
-#: apps/io.ox/mail/settings/pane.js:52
-msgid "Display emoticons as graphics in text E-Mails"
-msgstr "Zobraziť emotikony ako grafiku v textových emailoch"
-
-#: apps/io.ox/mail/settings/old_pane.js:164
-#: apps/io.ox/mail/settings/pane.js:53
-msgid "Color quoted lines"
-msgstr "Zafarbiť citované riadky"
-
-#: apps/io.ox/mail/settings/pane.js:55
-msgid "Thread view"
-msgstr "Zobrazenie vlákien"
-
-#: apps/io.ox/mail/settings/pane.js:56
-msgid "Enabled for inbox only"
-msgstr "Zapnuté len pre priečinok Prijaté"
-
-#: apps/io.ox/mail/settings/pane.js:57
-msgid "Enabled for all mail folders"
-msgstr "Zapnuté pre všetky poštové priečinky"
-
-#: apps/io.ox/mail/settings/pane.js:58
-msgid "Disabled"
-msgstr "Vypnuté"
-
-#: apps/io.ox/mail/settings/pane.js:61
-msgid "disabled"
-msgstr "vypnuté"
-
-#: apps/io.ox/mail/settings/pane.js:62
-msgid "1 minute"
-msgstr "1 minúta"
-
-#: apps/io.ox/mail/settings/pane.js:63
-msgid "3 minutes"
-msgstr "3 minúty"
-
-#: apps/io.ox/core/settings/pane.js:129 apps/io.ox/core/settings/pane.js:203
-#: apps/io.ox/mail/settings/pane.js:64
-msgid "5 minutes"
-msgstr "5 minút"
-
-#: apps/io.ox/core/settings/pane.js:130 apps/io.ox/core/settings/pane.js:204
-#: apps/io.ox/mail/settings/pane.js:65
-msgid "10 minutes"
-msgstr "10 minút"
-
-#: apps/io.ox/mail/settings/pane.js:109
-msgid "Could not save settings"
-msgstr "Nepodarilo sa uložiť nastavenia"
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js:79
-#: apps/io.ox/contacts/print.js:76 apps/io.ox/core/pubsub/publications.js:175
-#: apps/io.ox/files/actions.js:287
-#: apps/io.ox/mail/settings/signatures/register.js:65
-msgid "Name"
-msgstr "Meno"
 
 #: apps/io.ox/mail/settings/signatures/register.js:75
 msgid "Signature insertion:"
@@ -950,14 +1303,14 @@ msgstr "Nad textom"
 msgid "Below content"
 msgstr "Pod textom"
 
-#: apps/io.ox/calendar/edit/main.js:58 apps/io.ox/calendar/edit/template.js:75
+#: apps/io.ox/calendar/edit/main.js:58 apps/io.ox/calendar/edit/template.js:78
 #: apps/io.ox/contacts/distrib/create-dist-view.js:58
 #: apps/io.ox/contacts/distrib/main.js:161
 #: apps/io.ox/contacts/edit/main.js:151
-#: apps/io.ox/contacts/edit/view-form.js:313 apps/io.ox/editor/main.js:81
+#: apps/io.ox/contacts/edit/view-form.js:298 apps/io.ox/editor/main.js:81
 #: apps/io.ox/editor/main.js:241
 #: apps/io.ox/mail/settings/signatures/register.js:111
-#: apps/io.ox/mail/write/main.js:1024 apps/io.ox/mail/write/view-main.js:62
+#: apps/io.ox/mail/write/main.js:1087 apps/io.ox/mail/write/view-main.js:62
 #: apps/io.ox/tasks/edit/view.js:215
 msgid "Discard"
 msgstr "Zahodiť"
@@ -977,8 +1330,8 @@ msgid "(Default)"
 msgstr "(Predvolené)"
 
 #: apps/io.ox/mail/settings/signatures/register.js:277
-#: apps/io.ox/mail/write/view-main.js:414
-#: apps/io.ox/mail/write/view-main.js:457
+#: apps/io.ox/mail/write/view-main.js:418
+#: apps/io.ox/mail/write/view-main.js:461
 msgid "Signatures"
 msgstr "Podpisy"
 
@@ -986,76 +1339,81 @@ msgstr "Podpisy"
 msgid "Set as default"
 msgstr "Nastaviť ako predvolené"
 
-#: apps/io.ox/mail/view-detail.js:271
+#: apps/io.ox/mail/view-detail.js:286
 msgid "This mail has no content"
 msgstr "Tento email nemá žiadny obsah"
 
-#: apps/io.ox/mail/view-detail.js:355 apps/io.ox/mail/view-detail.js:360
-#: apps/io.ox/mail/view-detail.js:371 apps/io.ox/mail/view-detail.js:376
+#: apps/io.ox/mail/view-detail.js:370 apps/io.ox/mail/view-detail.js:375
+#: apps/io.ox/mail/view-detail.js:386 apps/io.ox/mail/view-detail.js:391
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/calendar/view-detail.js:373
-#: apps/io.ox/contacts/view-detail.js:463 apps/io.ox/mail/view-detail.js:365
-#: apps/io.ox/mail/view-detail.js:381
+#: apps/io.ox/calendar/view-detail.js:372
+#: apps/io.ox/contacts/view-detail.js:451 apps/io.ox/mail/view-detail.js:380
+#: apps/io.ox/mail/view-detail.js:396
 msgid "Folder"
 msgstr "Priečiok"
 
-#: apps/io.ox/backbone/forms.js:531 apps/io.ox/mail/view-detail.js:435
+#: apps/io.ox/backbone/forms.js:539 apps/io.ox/mail/view-detail.js:450
 msgid "Show more"
 msgstr "Zobraziť ďalšie"
 
 #: apps/io.ox/core/settings/pane.js:154 apps/io.ox/core/tk/attachments.js:243
-#: apps/io.ox/mail/view-detail.js:772
+#: apps/io.ox/mail/view-detail.js:794
 msgid "None"
 msgstr "Žiadne"
 
-#: apps/io.ox/mail/view-detail.js:773 apps/io.ox/portal/settings/pane.js:104
+#: apps/io.ox/mail/view-detail.js:795 apps/io.ox/portal/settings/pane.js:104
 msgid "Red"
 msgstr "Červená"
 
-#: apps/io.ox/mail/view-detail.js:774 apps/io.ox/portal/settings/pane.js:109
+#: apps/io.ox/mail/view-detail.js:796 apps/io.ox/portal/settings/pane.js:109
 msgid "Blue"
 msgstr "Modrá"
 
-#: apps/io.ox/mail/view-detail.js:775 apps/io.ox/portal/settings/pane.js:107
+#: apps/io.ox/mail/view-detail.js:797 apps/io.ox/portal/settings/pane.js:107
 msgid "Green"
 msgstr "Zelená"
 
-#: apps/io.ox/mail/view-detail.js:776
-msgid "Grey"
+#: apps/io.ox/mail/view-detail.js:798 apps/io.ox/portal/settings/pane.js:103
+msgid "Gray"
 msgstr "Šedá"
 
-#: apps/io.ox/mail/view-detail.js:777 apps/io.ox/portal/settings/pane.js:110
+#: apps/io.ox/mail/view-detail.js:799 apps/io.ox/portal/settings/pane.js:110
 msgid "Purple"
 msgstr "Fialová"
 
-#: apps/io.ox/mail/view-detail.js:778 apps/io.ox/portal/settings/pane.js:106
+#: apps/io.ox/mail/view-detail.js:800 apps/io.ox/portal/settings/pane.js:106
 msgid "Light green"
 msgstr "Svetlozelená"
 
-#: apps/io.ox/mail/view-detail.js:779 apps/io.ox/portal/settings/pane.js:105
+#: apps/io.ox/mail/view-detail.js:801 apps/io.ox/portal/settings/pane.js:105
 msgid "Orange"
 msgstr "Oranžová"
 
-#: apps/io.ox/mail/view-detail.js:780 apps/io.ox/portal/settings/pane.js:111
+#: apps/io.ox/mail/view-detail.js:802 apps/io.ox/portal/settings/pane.js:111
 msgid "Pink"
 msgstr "Ružová"
 
-#: apps/io.ox/mail/view-detail.js:781 apps/io.ox/portal/settings/pane.js:108
+#: apps/io.ox/mail/view-detail.js:803 apps/io.ox/portal/settings/pane.js:108
 msgid "Light blue"
 msgstr "Svetlomodrá"
 
-#: apps/io.ox/mail/view-detail.js:782
+#: apps/io.ox/mail/view-detail.js:804
 msgid "Yellow"
 msgstr "Žltá"
 
-#: apps/io.ox/mail/main.js:492 apps/io.ox/mail/print.js:60
-#: apps/io.ox/mail/view-detail.js:878 apps/io.ox/mail/write/view-main.js:380
+#: apps/io.ox/mail/view-detail.js:857 apps/io.ox/mail/view-grid-template.js:73
+#: apps/io.ox/mail/write/main.js:590
+msgid "No subject"
+msgstr "Bez predmetu"
+
+#: apps/io.ox/mail/main.js:567 apps/io.ox/mail/print.js:61
+#: apps/io.ox/mail/view-detail.js:892 apps/io.ox/mail/write/view-main.js:384
 msgid "To"
 msgstr "Komu:"
 
-#: apps/io.ox/mail/print.js:61 apps/io.ox/mail/view-detail.js:885
+#: apps/io.ox/mail/print.js:62 apps/io.ox/mail/view-detail.js:899
 msgctxt "CC"
 msgid "Copy"
 msgid_plural "Copy"
@@ -1063,11 +1421,11 @@ msgstr[0] "Kópia"
 msgstr[1] "Kópie"
 msgstr[2] "Kópie"
 
-#: apps/io.ox/mail/view-detail.js:892
+#: apps/io.ox/mail/view-detail.js:906
 msgid "All recipients"
 msgstr "Všetci príjemcovia"
 
-#: apps/io.ox/mail/view-detail.js:957
+#: apps/io.ox/mail/view-detail.js:991
 msgctxt "plural"
 msgid "Attachment"
 msgid_plural "Attachments"
@@ -1075,40 +1433,33 @@ msgstr[0] "Príloha"
 msgstr[1] "Prílohy"
 msgstr[2] "Prílohy"
 
-#: apps/io.ox/mail/view-detail.js:982
+#: apps/io.ox/mail/view-detail.js:1016
 msgid "more"
 msgstr "viac"
 
-#: apps/io.ox/mail/view-detail.js:988
+#: apps/io.ox/mail/view-detail.js:1022
 msgid "All attachments"
 msgstr "Všetky prílohy"
 
-#: apps/io.ox/mail/view-detail.js:1045
+#: apps/io.ox/mail/view-detail.js:1053
 msgid "files"
 msgstr "súbory"
 
-#: apps/io.ox/mail/view-detail.js:1051
+#: apps/io.ox/mail/view-detail.js:1058
 msgid ""
 "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 msgstr ""
 "Niekto s vami zdieľa priečinok. Chcete sa prihlásiť na odber týchto %1$s?"
 
-#: apps/io.ox/mail/view-detail.js:1057
+#: apps/io.ox/mail/view-detail.js:1064
 msgid "Show original publication"
 msgstr "Zobraziť pôvodnú publikáciu"
 
-#: apps/io.ox/core/commons-folderview.js:174
-#: apps/io.ox/core/pubsub/subscriptions.js:45
-#: apps/io.ox/core/pubsub/subscriptions.js:48
-#: apps/io.ox/mail/view-detail.js:1059
-msgid "Subscribe"
-msgstr "Odberať"
-
-#: apps/io.ox/mail/view-detail.js:1070
+#: apps/io.ox/mail/view-detail.js:1077
 msgid "Adding subscription. This may take some seconds..."
 msgstr "Prebieha prihlasovanie k odberu. Môže to trvať niekoľko sekúnd..."
 
-#: apps/io.ox/mail/view-detail.js:1076
+#: apps/io.ox/mail/view-detail.js:1084
 msgid ""
 "Created private folder '%1$s' in %2$s and subscribed succesfully to shared "
 "folder"
@@ -1116,35 +1467,49 @@ msgstr ""
 "Vytvorený súkromný priečinok „%1$s“ v %2$s a prihlásenie odoberania "
 "zdieľaného priečinka prebehlo úspešne"
 
-#: apps/io.ox/core/export/export.js:259 apps/io.ox/core/import/import.js:175
-#: apps/io.ox/mail/view-detail.js:1081
+#: apps/io.ox/core/export/export.js:259 apps/io.ox/core/import/import.js:177
+#: apps/io.ox/mail/view-detail.js:1089
 msgid "An unknown error occurred"
 msgstr "Vyskytla sa neznáma chyba"
 
-#: apps/io.ox/mail/view-detail.js:1099
+#: apps/io.ox/mail/view-detail.js:1102
 msgid "Entire thread"
 msgstr "Celé vlákno"
 
-#: apps/io.ox/mail/view-detail.js:1119
+#: apps/io.ox/mail/view-detail.js:1122
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Upozornenie: Táto správa môže byť podvodný email!"
 
-#: apps/io.ox/mail/view-detail.js:1140
+#: apps/io.ox/mail/view-detail.js:1143
 msgid "Show images"
 msgstr "Zobraziť obrázky"
 
-#: apps/io.ox/mail/view-detail.js:1143
+#: apps/io.ox/mail/view-detail.js:1146
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
 "Načítanie externých obrázkov bolo zablokované z dôvodu ochrany proti "
 "potenciálnemu spamu!"
 
-#: apps/io.ox/mail/accounts/settings.js:89
+#: apps/io.ox/mail/accounts/model.js:32
+msgid "The account must be named"
+msgstr "Účet musí byť pomenovaný"
+
+#: apps/io.ox/mail/accounts/model.js:40 apps/io.ox/mail/accounts/model.js:44
+#: apps/io.ox/mail/accounts/model.js:48 apps/io.ox/mail/accounts/model.js:52
+#: apps/io.ox/mail/accounts/model.js:56
+msgid "This field has to be filled"
+msgstr "Toto pole musí byť vyplnené"
+
+#: apps/io.ox/mail/accounts/model.js:73
+msgid "This is not a valid email address"
+msgstr "Toto nie je platná emailová adresa"
+
+#: apps/io.ox/mail/accounts/settings.js:88
 msgid "Trying to auto-configure your mail account"
 msgstr "Prebieha pokus o auto-nastavenie poštového účtu"
 
-#: apps/io.ox/mail/accounts/settings.js:119
+#: apps/io.ox/mail/accounts/settings.js:118
 msgid "There was no suitable server found for this mail/password combination"
 msgstr "Nenašiel sa žiaden vhodný server pre túto kombináciu emailu a hesla"
 
@@ -1152,35 +1517,38 @@ msgstr "Nenašiel sa žiaden vhodný server pre túto kombináciu emailu a hesla
 msgid "Failed to connect."
 msgstr "Nepodarilo sa pripojiť sa."
 
-#: apps/io.ox/mail/accounts/settings.js:184
+#: apps/io.ox/mail/accounts/settings.js:183
 msgid "Your mail address"
 msgstr "Vaša emailová adresa"
 
-#: apps/io.ox/mail/accounts/settings.js:185
+#: apps/io.ox/mail/accounts/settings.js:184
 msgid "Your password"
 msgstr "Vaše heslo"
 
-#: apps/io.ox/mail/accounts/settings.js:204
+#: apps/io.ox/mail/accounts/settings.js:203
 #: apps/io.ox/mail/folderview-extensions.js:36
 msgid "Add mail account"
 msgstr "Pridať poštový účet"
+
+#: apps/io.ox/mail/accounts/settings.js:216
+msgid "Manual"
+msgstr "Ručne"
 
 #: apps/io.ox/mail/accounts/settings.js:229
 msgid "This is not a valid mail address"
 msgstr "Toto nie je platná emailová adresa"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:93 apps/io.ox/core/about.js:40
-#: apps/io.ox/core/commons-folderview.js:347
-#: apps/io.ox/core/permissions/permissions.js:387
-#: apps/io.ox/core/tk/dialogs.js:414 apps/io.ox/files/carousel.js:46
-#: apps/io.ox/files/mediaplayer.js:220
-#: apps/io.ox/mail/accounts/settings.js:255
-#: apps/io.ox/mail/accounts/settings.js:279 apps/io.ox/mail/actions.js:153
-#: apps/io.ox/publications/wizard.js:57
+#: apps/io.ox/core/commons-folderview.js:375
+#: apps/io.ox/core/permissions/permissions.js:400
+#: apps/io.ox/core/tk/dialogs.js:418 apps/io.ox/files/actions.js:219
+#: apps/io.ox/files/carousel.js:46 apps/io.ox/files/mediaplayer.js:199
+#: apps/io.ox/mail/accounts/settings.js:263
+#: apps/io.ox/mail/accounts/settings.js:287 apps/io.ox/mail/actions.js:157
 msgid "Close"
 msgstr "Zatvoriť"
 
-#: apps/io.ox/mail/accounts/settings.js:258
+#: apps/io.ox/mail/accounts/settings.js:266
 msgid "Account added successfully"
 msgstr "Účet úspešne pridaný"
 
@@ -1252,223 +1620,263 @@ msgstr "Nastavenia odosielajúceho servera (SMTP)"
 msgid "Use Login and Password"
 msgstr "Použiť používateľské meno a heslo"
 
-#: apps/io.ox/mail/accounts/view-form.js:139
+#: apps/io.ox/mail/accounts/view-form.js:47
+msgid "Folder Settings"
+msgstr "Nastavenie priečinkov"
+
+#: apps/io.ox/mail/accounts/view-form.js:48
+msgid "Send folder"
+msgstr "Poslať priečinok"
+
+#: apps/io.ox/mail/accounts/view-form.js:49
+msgid "Trash folder"
+msgstr "Priečinok Kôš"
+
+#: apps/io.ox/mail/accounts/view-form.js:50
+msgid "Drafts folder"
+msgstr "Priečinok Rozpísané"
+
+#: apps/io.ox/mail/accounts/view-form.js:51
+msgid "Spam folder"
+msgstr "Priečinok Spam"
+
+#: apps/io.ox/mail/accounts/view-form.js:52
+msgid "Select"
+msgstr "Vybrať"
+
+#: apps/io.ox/mail/accounts/view-form.js:153
 msgid "Login must not be empty."
 msgstr "Prihlasovacie meno nemôže byť prázdne."
 
 #. %1$s the missing request parameter
-#: apps/io.ox/mail/accounts/view-form.js:144
+#: apps/io.ox/mail/accounts/view-form.js:158
 #, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Prosím, zadajte nasledovné dáta: %1$s"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:112
+#: apps/io.ox/mail/accounts/view-form.js:173
+msgid "Select folder"
+msgstr "Vybrať priečinok"
+
+#: apps/io.ox/mail/vacationnotice/settings/model.js:103
+msgid "vacation notice"
+msgstr "oznámenie o dovolenke"
+
+#: apps/io.ox/mail/vacationnotice/settings/model.js:126
 #: apps/io.ox/mail/vacationnotice/settings/register.js:38
 msgid "Vacation Notice"
 msgstr "Oznámenie o dovolenke"
 
-#: apps/io.ox/calendar/edit/template.js:162 apps/io.ox/mail/actions.js:750
-#: apps/io.ox/mail/main.js:185 apps/io.ox/mail/main.js:492
-#: apps/io.ox/mail/vacationnotice/settings/model.js:113
-#: apps/io.ox/mail/write/view-main.js:561
-#: apps/io.ox/tasks/edit/view-template.js:37 apps/io.ox/tasks/main.js:245
+#: apps/io.ox/calendar/edit/template.js:169 apps/io.ox/mail/actions.js:773
+#: apps/io.ox/mail/main.js:219 apps/io.ox/mail/main.js:567
+#: apps/io.ox/mail/vacationnotice/settings/model.js:127
+#: apps/io.ox/mail/write/view-main.js:565
+#: apps/io.ox/tasks/edit/view-template.js:37 apps/io.ox/tasks/main.js:250
 msgid "Subject"
 msgstr "Predmet"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:114
-#: apps/io.ox/mail/write/view-main.js:525
+#: apps/io.ox/mail/vacationnotice/settings/model.js:128
+#: apps/io.ox/mail/write/view-main.js:529
 msgid "Text"
 msgstr "Text"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:115
+#: apps/io.ox/mail/vacationnotice/settings/model.js:129
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Počet dní medzi oznámeniami o dovolenke rovnakému odosielateľovi"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:116
+#: apps/io.ox/mail/vacationnotice/settings/model.js:130
 msgid "Enabled for the following addresses"
 msgstr "Zapnuté pre nasledovné adresy"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:117
+#: apps/io.ox/mail/vacationnotice/settings/model.js:131
 msgid "E-mail addresses"
 msgstr "Emailové adresy"
 
-#: apps/io.ox/mail/actions.js:759 apps/io.ox/mail/main.js:183
-#: apps/io.ox/mail/main.js:492
-#: apps/io.ox/mail/vacationnotice/settings/model.js:118
-#: apps/io.ox/mail/write/view-main.js:261
+#: apps/io.ox/mail/actions.js:782 apps/io.ox/mail/main.js:217
+#: apps/io.ox/mail/main.js:567
+#: apps/io.ox/mail/vacationnotice/settings/model.js:132
+#: apps/io.ox/mail/write/view-main.js:260
 msgid "From"
 msgstr "Od"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:119
+#: apps/io.ox/mail/vacationnotice/settings/model.js:133
 msgid "End"
 msgstr "Koniec"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:120
+#: apps/io.ox/mail/vacationnotice/settings/model.js:134
 msgid "Send vacation notice during this time only"
 msgstr "Posielať oznámenie o dovolenke len v tomto čase"
 
-#: apps/io.ox/calendar/model.js:125 apps/io.ox/calendar/model.js:126
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:81
-#: apps/io.ox/mail/vacationnotice/settings/filter.js:82
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:49
+msgid "vacation"
+msgstr "dovolenka"
+
+#: apps/io.ox/calendar/model.js:124 apps/io.ox/calendar/model.js:125
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:101
+#: apps/io.ox/mail/vacationnotice/settings/filter.js:102
 #: apps/io.ox/tasks/model.js:98 apps/io.ox/tasks/model.js:99
 msgid "The start date must be before the end date."
 msgstr "Dátum začiatku musí byť pred dátumom konca."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:62
+#: apps/io.ox/mail/vacationnotice/settings/register.js:64
+#: apps/io.ox/mail/vacationnotice/settings/register.js:87
 msgid "Your vacation notice has been saved"
 msgstr "Vaše oznámenie o dovolenke bolo uložené"
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:66
+#: apps/io.ox/mail/autoforward/settings/register.js:51
+#: apps/io.ox/mail/vacationnotice/settings/register.js:69
+msgid "Unable to contact mailfilter backend."
+msgstr "Nepodarilo sa kontaktovať backend mailfilter."
+
+#: apps/io.ox/mail/vacationnotice/settings/register.js:72
 msgid "Couldn't load your vacation notice."
 msgstr "Nepodarilo sa načítať vaše oznámenie o dovolenke."
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js:81
+#: apps/io.ox/mail/vacationnotice/settings/register.js:90
 msgid "Could not save vacation notice"
 msgstr "Nepodarilo sa uložiť vaše oznámenie o dovolenke"
 
 #: apps/io.ox/mail/vacationnotice/settings/view-form.js:44
 #: apps/io.ox/mail/vacationnotice/settings/view-form.js:79
-#: apps/io.ox/tasks/edit/view-template.js:404
-#: apps/io.ox/tasks/edit/view-template.js:439
 msgid "Please enter a valid date."
 msgstr "Prosím, zadajte platný dátum."
 
 #. (From) email1 on behalf of email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js:145
+#: apps/io.ox/mail/util.js:149
 msgid "on behalf of"
 msgstr "v mene"
 
-#: apps/io.ox/mail/autoforward/settings/model.js:83
+#: apps/io.ox/mail/util.js:235
+msgid "Primary account"
+msgstr "Primárny účet"
+
+#: apps/io.ox/mail/autoforward/settings/model.js:82
 #: apps/io.ox/mail/autoforward/settings/register.js:24
 msgid "Auto Forward"
 msgstr "Automatické preposielanie"
 
-#: apps/io.ox/mail/autoforward/settings/model.js:84
+#: apps/io.ox/mail/autoforward/settings/model.js:83
 msgid "Forward all incoming emails to this address"
 msgstr "Preposielať všetky prichádzajúce emaily na túto adresu"
 
-#: apps/io.ox/mail/autoforward/settings/model.js:85
+#: apps/io.ox/mail/autoforward/settings/model.js:84
 msgid "Enabled"
 msgstr "Zapnuté"
 
-#: apps/io.ox/mail/autoforward/settings/register.js:43
+#: apps/io.ox/mail/autoforward/settings/register.js:46
 msgid "Your auto forward has been saved"
 msgstr "Vaše automatické preposielanie bolo uložené"
 
-#: apps/io.ox/mail/autoforward/settings/register.js:47
+#: apps/io.ox/mail/autoforward/settings/register.js:54
 msgid "Couldn't load your auto forward."
 msgstr "Nepodarilo sa načítať vaše automatické preposielanie."
 
-#: apps/io.ox/mail/autoforward/settings/register.js:61
+#: apps/io.ox/mail/autoforward/settings/register.js:68
 msgid "Could not save auto forward"
 msgstr "Nepodarilo sa uložiť automatické preposielanie"
 
-#: apps/io.ox/core/main.js:70 apps/io.ox/launchpad/main.js:33
-#: apps/io.ox/mail/main.js:181
+#: apps/io.ox/mail/main.js:137
+msgid "Load all mails. This might take some time."
+msgstr "Načítať všetky správy. To môže nejakú dobu trvať."
+
+#: apps/io.ox/core/main.js:74 apps/io.ox/launchpad/main.js:33
+#: apps/io.ox/mail/main.js:215
 msgid "Conversations"
 msgstr "Konverzácie"
 
-#: apps/io.ox/mail/main.js:182 apps/io.ox/tasks/edit/view-template.js:492
+#: apps/io.ox/core/settings/pane.js:252 apps/io.ox/mail/main.js:216
+#: apps/io.ox/tasks/edit/view-template.js:492
 msgid "Date"
 msgstr "Dátum"
 
-#: apps/io.ox/mail/main.js:184
+#: apps/io.ox/mail/main.js:218
 msgid "Label"
 msgstr "Označenie"
 
-#: apps/io.ox/calendar/list/perspective.js:129 apps/io.ox/mail/main.js:187
-#: apps/io.ox/tasks/main.js:248
+#: apps/io.ox/calendar/list/perspective.js:134 apps/io.ox/mail/main.js:221
+#: apps/io.ox/tasks/main.js:253
 msgid "Ascending"
 msgstr "vzostupne"
 
-#: apps/io.ox/calendar/list/perspective.js:130 apps/io.ox/mail/main.js:188
-#: apps/io.ox/tasks/main.js:249
+#: apps/io.ox/calendar/list/perspective.js:135 apps/io.ox/mail/main.js:222
+#: apps/io.ox/tasks/main.js:254
 msgid "Descending"
 msgstr "zostupne"
 
-#: apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/main.js:224
 msgid "Unread only"
 msgstr "Iba neprečítané"
 
-#: apps/io.ox/mail/main.js:261
+#: apps/io.ox/mail/main.js:287
 msgid "%1$d mail"
 msgid_plural "%1$d mails"
 msgstr[0] "%1$d email"
 msgstr[1] "%1$d emaily"
 msgstr[2] "%1$d emailov"
 
-#: apps/io.ox/mail/main.js:430 apps/io.ox/mail/main.js:444
-msgid "Couldn't load that email."
-msgstr "Nepodarilo sa načítať tento email."
-
-#: apps/io.ox/mail/main.js:457
+#: apps/io.ox/mail/main.js:532
 msgid "No mails found for \"%s\""
 msgstr "Pre „%s“ neboli nájdené žiadne emaily"
 
-#: apps/io.ox/mail/main.js:458
+#: apps/io.ox/mail/main.js:533
 msgid "No mails in this folder"
 msgstr "Žiadne emaily v tomto priečinku"
 
-#: apps/io.ox/mail/main.js:475
+#: apps/io.ox/mail/main.js:550
 msgid "Mail has been imported"
 msgstr "Pošta bola importovaná"
 
-#: apps/io.ox/mail/main.js:492
+#: apps/io.ox/mail/main.js:567
 msgid "CC"
 msgstr "Kópia"
 
-#: apps/io.ox/mail/main.js:492
+#: apps/io.ox/mail/main.js:567
 msgid "Mail text"
 msgstr "Text správy"
 
-#: apps/io.ox/mail/actions.js:813 apps/io.ox/mail/write/main.js:480
+#: apps/io.ox/mail/actions.js:836 apps/io.ox/mail/write/main.js:507
 msgid "Compose new mail"
 msgstr "Napísať novú správu"
 
-#: apps/io.ox/mail/write/main.js:481
+#: apps/io.ox/mail/write/main.js:508
 msgid "Reply all"
 msgstr "Odpovedať všetkým"
 
-#: apps/io.ox/mail/actions.js:839 apps/io.ox/mail/write/main.js:483
+#: apps/io.ox/mail/actions.js:862 apps/io.ox/mail/write/main.js:510
 msgid "Forward"
 msgstr "Preposlať"
 
-#: apps/io.ox/mail/write/main.js:563
-msgid "No subject"
-msgstr "Bez predmetu"
-
-#: apps/io.ox/calendar/week/perspective.js:49
-#: apps/io.ox/calendar/week/perspective.js:182
-#: apps/io.ox/mail/write/main.js:635 apps/io.ox/mail/write/main.js:672
-#: apps/io.ox/mail/write/main.js:716 apps/io.ox/mail/write/main.js:743
+#: apps/io.ox/calendar/week/perspective.js:50
+#: apps/io.ox/calendar/week/perspective.js:177
+#: apps/io.ox/mail/write/main.js:771
 msgid "An error occured. Please try again."
 msgstr "Vyskytla sa chyba. Prosím, skúste to znova neskôr."
 
-#: apps/io.ox/mail/write/main.js:901
+#: apps/io.ox/mail/write/main.js:937
 msgid "Mail has been sent"
 msgstr "Pošta bola odoslaná"
 
-#: apps/io.ox/mail/write/main.js:932
+#: apps/io.ox/mail/write/main.js:990
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Predmet emailu bol prázdny . Poslať napriek tomu?"
 
-#: apps/io.ox/mail/write/main.js:933
+#: apps/io.ox/mail/write/main.js:991
 msgid "Yes, send without subject"
 msgstr "Áno, poslať bez predmetu"
 
-#: apps/io.ox/mail/write/main.js:934
+#: apps/io.ox/mail/write/main.js:992
 msgid "Add subject"
 msgstr "Pridať predmet"
 
-#: apps/io.ox/mail/write/main.js:985
+#: apps/io.ox/mail/write/main.js:1043
 msgid "Mail saved as draft"
 msgstr "Správa bola uložená ako rozpísaná"
 
-#: apps/io.ox/mail/write/main.js:1023
+#: apps/io.ox/mail/write/main.js:1086
 msgid "Do you really want to discard this mail?"
 msgstr "Skutočne chcete zahodiť tento email?"
 
-#: apps/io.ox/mail/write/main.js:1025
+#: apps/io.ox/mail/write/main.js:1088
 msgid "Save as draft"
 msgstr "Uložiť ako rozpísané"
 
@@ -1480,288 +1888,323 @@ msgstr "Poslať"
 msgid "Hide"
 msgstr "Skryť"
 
-#: apps/io.ox/mail/write/view-main.js:284
+#: apps/io.ox/mail/write/view-main.js:288
 msgid "Reply to"
 msgstr "Odpovedať-na"
 
-#: apps/io.ox/mail/write/view-main.js:384
+#: apps/io.ox/mail/write/view-main.js:388
 msgid "Copy to"
 msgstr "Kópia"
 
-#: apps/io.ox/mail/write/view-main.js:387
+#: apps/io.ox/mail/write/view-main.js:391
 msgid "Copy (CC) to"
 msgstr "Kópia (CC)"
 
-#: apps/io.ox/mail/write/view-main.js:390
+#: apps/io.ox/mail/write/view-main.js:394
 msgid "Blind copy to"
 msgstr "Skrytá kópia"
 
-#: apps/io.ox/mail/write/view-main.js:393
+#: apps/io.ox/mail/write/view-main.js:397
 msgid "Blind copy (BCC) to"
 msgstr "Skrytá kópia (BCC)"
 
-#: apps/io.ox/calendar/edit/template.js:402
-#: apps/io.ox/calendar/view-detail.js:436
-#: apps/io.ox/calendar/view-detail.js:441
+#: apps/io.ox/calendar/edit/template.js:420
+#: apps/io.ox/calendar/view-detail.js:456
+#: apps/io.ox/calendar/view-detail.js:461
 #: apps/io.ox/contacts/edit/view-form.js:97
-#: apps/io.ox/mail/write/view-main.js:398
-#: apps/io.ox/mail/write/view-main.js:401
+#: apps/io.ox/mail/write/view-main.js:402
+#: apps/io.ox/mail/write/view-main.js:405
 msgid "Attachments"
 msgstr "Prílohy"
 
-#: apps/io.ox/mail/write/view-main.js:468
-#: apps/io.ox/mail/write/view-main.js:469
+#: apps/io.ox/mail/write/view-main.js:472
+#: apps/io.ox/mail/write/view-main.js:473
 msgid "Sender"
 msgstr "Odosielateľ"
 
-#: apps/io.ox/mail/write/view-main.js:485
+#: apps/io.ox/mail/write/view-main.js:489
 msgid "Options"
 msgstr "Možnosti"
 
-#: apps/io.ox/mail/write/view-main.js:490
-#: apps/io.ox/tasks/edit/view-template.js:117 apps/io.ox/tasks/main.js:246
+#: apps/io.ox/mail/write/view-main.js:494
+#: apps/io.ox/tasks/edit/view-template.js:117 apps/io.ox/tasks/main.js:251
 msgid "Priority"
 msgstr "Priorita"
 
-#: apps/io.ox/mail/write/view-main.js:492
+#: apps/io.ox/mail/write/view-main.js:496
 #: apps/io.ox/tasks/edit/view-template.js:115
 msgid "High"
 msgstr "Vysoká"
 
-#: apps/io.ox/mail/write/view-main.js:493
+#: apps/io.ox/mail/write/view-main.js:497
 msgid "Normal"
 msgstr "Normálna"
 
-#: apps/io.ox/mail/write/view-main.js:494
+#: apps/io.ox/mail/write/view-main.js:498
 #: apps/io.ox/tasks/edit/view-template.js:113
 msgid "Low"
 msgstr "Nízka"
 
-#: apps/io.ox/mail/write/view-main.js:506
+#: apps/io.ox/mail/write/view-main.js:510
 msgid "Attach vCard"
 msgstr "Priložiť vCard"
 
 #: apps/io.ox/core/extPatterns/links.js:199
-#: apps/io.ox/mail/write/view-main.js:509
+#: apps/io.ox/mail/write/view-main.js:513
 msgid "More"
 msgstr "Ďalšie"
 
-#: apps/io.ox/mail/write/view-main.js:521
+#: apps/io.ox/mail/write/view-main.js:525
 msgid "Text format"
 msgstr "Formát textu"
 
-#: apps/io.ox/mail/write/view-main.js:607
+#: apps/io.ox/mail/write/view-main.js:612
 msgid "No signature"
 msgstr "Bez podpisu"
 
-#: apps/io.ox/contacts/actions.js:635 apps/io.ox/mail/actions.js:982
-#: apps/io.ox/mail/write/view-main.js:668 apps/io.ox/tasks/actions.js:523
+#: apps/io.ox/contacts/actions.js:662 apps/io.ox/mail/actions.js:1013
+#: apps/io.ox/mail/write/view-main.js:673 apps/io.ox/tasks/actions.js:553
 msgid "Preview"
 msgstr "Náhľad"
 
-#: apps/io.ox/mail/actions.js:62
+#: apps/io.ox/mail/api.js:562
+msgid "Cleaning up... This may take a few seconds."
+msgstr "Prebieha čistenie... To môže niekoľko sekúnd trvať."
+
+#: apps/io.ox/mail/api.js:578
+msgid "The folder has been cleaned up."
+msgstr "Priečinok bol vyčistený."
+
+#: apps/io.ox/mail/api.js:584
+msgid "Emptying folder... This may take a few seconds."
+msgstr "Vyprázdňuje sa priečinok... To môže niekoľko sekúnd trvať."
+
+#: apps/io.ox/mail/api.js:601
+msgid "The folder has been emptied."
+msgstr "Priečinok bol vyprázdnený."
+
+#: apps/io.ox/mail/api.js:718
+msgid "Mail has been moved"
+msgstr "Poštové správy boli presunuté"
+
+#: apps/io.ox/mail/api.js:730
+msgid "Mail has been copied"
+msgstr "Poštové správy boli skopírované"
+
+#: apps/io.ox/mail/actions.js:66
 msgid "Do you really want to permanently delete this mail?"
 msgid_plural "Do you really want to permanently delete these mails?"
 msgstr[0] "Ste si istý, že chcete tento email trvale zmazať?"
 msgstr[1] "Ste si istý, že chcete tieto emaily trvale zmazať?"
 msgstr[2] "Ste si istý, že chcete tieto emaily trvale zmazať?"
 
-#: apps/io.ox/mail/actions.js:155
+#: apps/io.ox/mail/actions.js:159
 msgid "Mail source"
 msgstr "Zdroj pošty"
 
-#: apps/io.ox/calendar/actions.js:442 apps/io.ox/calendar/actions.js:481
-#: apps/io.ox/contacts/actions.js:298 apps/io.ox/contacts/actions.js:575
-#: apps/io.ox/mail/actions.js:206 apps/io.ox/mail/actions.js:927
-#: apps/io.ox/tasks/actions.js:515
+#: apps/io.ox/calendar/actions.js:440 apps/io.ox/calendar/actions.js:479
+#: apps/io.ox/contacts/actions.js:287 apps/io.ox/contacts/actions.js:602
+#: apps/io.ox/mail/actions.js:210 apps/io.ox/mail/actions.js:958
+#: apps/io.ox/tasks/actions.js:545
 msgid "Print"
 msgstr "Tlačiť"
 
 #: apps/io.ox/calendar/actions.js:301 apps/io.ox/calendar/actions.js:337
-#: apps/io.ox/calendar/actions.js:473 apps/io.ox/contacts/actions.js:184
-#: apps/io.ox/contacts/actions.js:613
-#: apps/io.ox/core/commons-folderview.js:413 apps/io.ox/files/actions.js:435
-#: apps/io.ox/files/actions.js:619 apps/io.ox/mail/actions.js:330
-#: apps/io.ox/mail/actions.js:894 apps/io.ox/tasks/actions.js:191
-#: apps/io.ox/tasks/actions.js:192 apps/io.ox/tasks/actions.js:499
+#: apps/io.ox/calendar/actions.js:471 apps/io.ox/contacts/actions.js:184
+#: apps/io.ox/contacts/actions.js:640
+#: apps/io.ox/core/commons-folderview.js:441 apps/io.ox/files/actions.js:437
+#: apps/io.ox/files/actions.js:623 apps/io.ox/mail/actions.js:334
+#: apps/io.ox/mail/actions.js:925 apps/io.ox/tasks/actions.js:191
+#: apps/io.ox/tasks/actions.js:192 apps/io.ox/tasks/actions.js:529
 msgid "Move"
 msgstr "Presunúť"
 
-#: apps/io.ox/mail/actions.js:330
+#: apps/io.ox/mail/actions.js:334
 msgid "Mails have been moved"
 msgstr "Emaily boli presunuté"
 
-#: apps/io.ox/contacts/actions.js:185 apps/io.ox/contacts/actions.js:620
-#: apps/io.ox/files/actions.js:436 apps/io.ox/files/actions.js:626
-#: apps/io.ox/mail/actions.js:331 apps/io.ox/mail/actions.js:902
+#: apps/io.ox/contacts/actions.js:185 apps/io.ox/contacts/actions.js:647
+#: apps/io.ox/files/actions.js:438 apps/io.ox/files/actions.js:630
+#: apps/io.ox/mail/actions.js:335 apps/io.ox/mail/actions.js:933
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: apps/io.ox/mail/actions.js:331
+#: apps/io.ox/mail/actions.js:335
 msgid "Mails have been copied"
 msgstr "Poštové správy boli skopírované"
 
-#: apps/io.ox/mail/actions.js:488
+#: apps/io.ox/mail/actions.js:502
 msgid "Attachments have been saved"
 msgstr "Prílohy boli boli uložené"
 
-#: apps/io.ox/mail/actions.js:563
+#: apps/io.ox/mail/actions.js:582
 msgid "The appointment has been added to your calendar"
 msgstr "Táto schôdzka bola pridaná do vášho kalendára"
 
-#: apps/io.ox/mail/actions.js:594
+#: apps/io.ox/mail/actions.js:617
 msgid "This mail has been added to the portal"
 msgstr "Tento email bol pridaný do portálu"
 
-#: apps/io.ox/mail/actions.js:739
+#: apps/io.ox/mail/actions.js:762
 msgid "Create reminder"
 msgstr "Vytvoriť pripomienku"
 
-#: apps/io.ox/mail/actions.js:745 apps/io.ox/mail/actions.js:766
+#: apps/io.ox/mail/actions.js:768 apps/io.ox/mail/actions.js:789
 #: apps/io.ox/tasks/edit/view.js:168
 msgid "Remind me"
 msgstr "Pripomenúť mi"
 
-#: apps/io.ox/mail/actions.js:751
+#: apps/io.ox/mail/actions.js:774
 msgid "Mail reminder"
 msgstr "Pripomienka pošty"
 
-#: apps/io.ox/calendar/freebusy/templates.js:111
-#: apps/io.ox/mail/actions.js:757
+#: apps/io.ox/calendar/freebusy/templates.js:127
+#: apps/io.ox/mail/actions.js:780
 msgid "Note"
 msgstr "Poznámka"
 
-#: apps/io.ox/mail/actions.js:758
+#: apps/io.ox/mail/actions.js:781
 msgid "Mail reminder for"
 msgstr "Pripomienka pošty pre"
 
-#: apps/io.ox/mail/actions.js:792
+#: apps/io.ox/mail/actions.js:815
 msgid "Reminder has been created"
 msgstr "Pripomienka bola vytvorená"
 
-#: apps/io.ox/mail/actions.js:823
+#: apps/io.ox/mail/actions.js:854
 msgid "Reply All"
 msgstr "Odpovedať všetkým"
 
-#: apps/io.ox/mail/actions.js:856
-msgid "Mark Unread"
-msgstr "Označiť ako neprečítané"
+#. Translation should be as short a possible
+#. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
+#. German, for example, should be "Ungelesen"
+#: apps/io.ox/mail/actions.js:883
+msgid "Unread"
+msgstr "Neprečítané"
 
-#: apps/io.ox/mail/actions.js:864
+#. Translation should be as short a possible
+#. Instead of "Mark as read" it's just "Mark read"
+#. German, for example, should be "Gelesen"
+#: apps/io.ox/mail/actions.js:895
 msgid "Mark read"
 msgstr "Označiť ako prečítané"
 
-#: apps/io.ox/mail/actions.js:911
+#: apps/io.ox/mail/actions.js:942
 msgid "View source"
 msgstr "Zobraziť zdroj"
 
-#: apps/io.ox/contacts/actions.js:606 apps/io.ox/files/actions.js:642
-#: apps/io.ox/mail/actions.js:943
+#: apps/io.ox/contacts/actions.js:633 apps/io.ox/files/actions.js:646
+#: apps/io.ox/mail/actions.js:974
 msgid "Add to portal"
 msgstr "Pridať do portálu"
 
-#: apps/io.ox/mail/actions.js:952
+#: apps/io.ox/mail/actions.js:983
 msgid "Save as file"
 msgstr "Uložiť ako súbor"
 
-#: apps/io.ox/contacts/actions.js:627 apps/io.ox/mail/actions.js:961
+#: apps/io.ox/contacts/actions.js:654 apps/io.ox/mail/actions.js:992
 msgid "Add to address book"
 msgstr "Pridať do adresára"
 
-#: apps/io.ox/mail/actions.js:968
+#: apps/io.ox/mail/actions.js:999
 msgid "Add to calendar"
 msgstr "Pridať do kalendára"
 
-#: apps/io.ox/mail/actions.js:975
+#: apps/io.ox/mail/actions.js:1006
 msgid "Slideshow"
 msgstr "Prezetácia"
 
-#: apps/io.ox/contacts/actions.js:642 apps/io.ox/core/tk/attachments.js:262
-#: apps/io.ox/mail/actions.js:989 apps/io.ox/tasks/actions.js:530
+#: apps/io.ox/files/actions.js:573 apps/io.ox/files/actions.js:662
+#: apps/io.ox/mail/actions.js:1020
+msgid "Open"
+msgstr "Otvoriť"
+
+#: apps/io.ox/contacts/actions.js:669 apps/io.ox/core/tk/attachments.js:262
+#: apps/io.ox/mail/actions.js:1027 apps/io.ox/tasks/actions.js:560
 msgid "Open in new tab"
 msgstr "Otvoriť na novej karte"
 
-#: apps/io.ox/contacts/actions.js:656 apps/io.ox/mail/actions.js:1003
-#: apps/io.ox/tasks/actions.js:544
+#: apps/io.ox/contacts/actions.js:683 apps/io.ox/mail/actions.js:1041
+#: apps/io.ox/tasks/actions.js:574
 msgid "Save in file store"
 msgstr "Uložiť v úložisku súborov"
 
-#: apps/io.ox/mail/actions.js:1010
+#: apps/io.ox/mail/actions.js:1048
 msgid "Send new mail"
 msgstr "Poslať nový email"
 
-#: apps/io.ox/calendar/actions.js:512 apps/io.ox/mail/actions.js:1017
+#: apps/io.ox/calendar/actions.js:510 apps/io.ox/mail/actions.js:1055
 msgid "Save as distribution list"
 msgstr "Uložiť ako poštovú konferenciu"
 
-#: apps/io.ox/contacts/actions.js:583 apps/io.ox/mail/actions.js:1024
+#: apps/io.ox/contacts/actions.js:610 apps/io.ox/mail/actions.js:1062
 msgid "Invite to appointment"
 msgstr "Pozvať na schôdzku"
 
-#: apps/io.ox/mail/actions.js:1033
+#: apps/io.ox/mail/actions.js:1071
 msgid "Drop here to import this mail"
 msgstr "Poštu importujete pretiahnutím sem"
 
-#: apps/io.ox/core/tk/folderviews.js:692
-#: apps/io.ox/mail/folderview-extensions.js:50
+#: apps/io.ox/core/tk/folderviews.js:691
+#: apps/io.ox/mail/folderview-extensions.js:51
 msgid "Subscribe IMAP folders"
 msgstr "Odberať priečinky IMAP"
 
-#: apps/io.ox/mail/folderview-extensions.js:72
+#: apps/io.ox/mail/folderview-extensions.js:73
 msgid "Mark all mails as read"
 msgstr "Označiť všetku poštu ako prečítanú"
 
-#: apps/io.ox/mail/folderview-extensions.js:89
+#: apps/io.ox/mail/folderview-extensions.js:90
 msgid "Clean up"
 msgstr "Vyčistiť"
 
-#: apps/io.ox/mail/folderview-extensions.js:110
+#: apps/io.ox/mail/folderview-extensions.js:111
 msgid "Empty folder"
 msgstr "Prázdny priečinok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:358
-#: apps/io.ox/calendar/edit/recurrence-view.js:420
-#: apps/io.ox/calendar/model.js:164 apps/io.ox/calendar/util.js:365
+#: apps/io.ox/calendar/edit/recurrence-view.js:369
+#: apps/io.ox/calendar/edit/recurrence-view.js:431
+#: apps/io.ox/calendar/model.js:163 apps/io.ox/calendar/util.js:372
 msgid "Sunday"
 msgstr "Nedeľa"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:359
-#: apps/io.ox/calendar/edit/recurrence-view.js:421
-#: apps/io.ox/calendar/model.js:165 apps/io.ox/calendar/util.js:368
+#: apps/io.ox/calendar/edit/recurrence-view.js:370
+#: apps/io.ox/calendar/edit/recurrence-view.js:432
+#: apps/io.ox/calendar/model.js:164 apps/io.ox/calendar/util.js:375
 msgid "Monday"
 msgstr "Pondelok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:360
-#: apps/io.ox/calendar/edit/recurrence-view.js:422
-#: apps/io.ox/calendar/model.js:166 apps/io.ox/calendar/util.js:371
+#: apps/io.ox/calendar/edit/recurrence-view.js:371
+#: apps/io.ox/calendar/edit/recurrence-view.js:433
+#: apps/io.ox/calendar/model.js:165 apps/io.ox/calendar/util.js:378
 msgid "Tuesday"
 msgstr "Utorok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:361
-#: apps/io.ox/calendar/edit/recurrence-view.js:423
-#: apps/io.ox/calendar/model.js:167 apps/io.ox/calendar/util.js:374
+#: apps/io.ox/calendar/edit/recurrence-view.js:372
+#: apps/io.ox/calendar/edit/recurrence-view.js:434
+#: apps/io.ox/calendar/model.js:166 apps/io.ox/calendar/util.js:381
 msgid "Wednesday"
 msgstr "Streda"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:362
-#: apps/io.ox/calendar/edit/recurrence-view.js:424
-#: apps/io.ox/calendar/model.js:168 apps/io.ox/calendar/util.js:377
+#: apps/io.ox/calendar/edit/recurrence-view.js:373
+#: apps/io.ox/calendar/edit/recurrence-view.js:435
+#: apps/io.ox/calendar/model.js:167 apps/io.ox/calendar/util.js:384
 msgid "Thursday"
 msgstr "Štvrtok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:363
-#: apps/io.ox/calendar/edit/recurrence-view.js:425
-#: apps/io.ox/calendar/model.js:169 apps/io.ox/calendar/util.js:380
+#: apps/io.ox/calendar/edit/recurrence-view.js:374
+#: apps/io.ox/calendar/edit/recurrence-view.js:436
+#: apps/io.ox/calendar/model.js:168 apps/io.ox/calendar/util.js:387
 msgid "Friday"
 msgstr "Piatok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:364
-#: apps/io.ox/calendar/edit/recurrence-view.js:426
-#: apps/io.ox/calendar/model.js:170 apps/io.ox/calendar/util.js:383
+#: apps/io.ox/calendar/edit/recurrence-view.js:375
+#: apps/io.ox/calendar/edit/recurrence-view.js:437
+#: apps/io.ox/calendar/model.js:169 apps/io.ox/calendar/util.js:390
 msgid "Saturday"
 msgstr "Sobota"
 
-#: apps/io.ox/calendar/settings/pane.js:27 apps/io.ox/core/main.js:67
+#: apps/io.ox/calendar/settings/pane.js:27 apps/io.ox/core/main.js:70
 #: apps/io.ox/launchpad/main.js:30
 msgid "Calendar"
 msgstr "Kalendár"
@@ -1786,7 +2229,7 @@ msgstr "Koniec pracovnej doby"
 msgid "Default calendar view"
 msgstr "Predvolené zobrazenie kalendára"
 
-#: apps/io.ox/calendar/settings/pane.js:33 apps/io.ox/files/actions.js:517
+#: apps/io.ox/calendar/settings/pane.js:33
 msgid "View"
 msgstr "Zobrazenie"
 
@@ -1807,6 +2250,7 @@ msgid "New appointment"
 msgstr "Nová schôdzka"
 
 #: apps/io.ox/calendar/settings/pane.js:38
+#: apps/io.ox/tasks/settings/pane.js:28
 msgid "Default time for reminder"
 msgstr "Predvolený čas pripomenutia"
 
@@ -1847,124 +2291,128 @@ msgstr ""
 msgid "Incoming Notification Mails"
 msgstr "Oznámenie o prichádzajúcej pošte"
 
+#: apps/io.ox/calendar/settings/pane.js:47
+msgid "Mark all day appointments as free"
+msgstr "Označiť celodenné schôdzky ako voľný"
+
 #: apps/io.ox/calendar/actions.js:382
-#: apps/io.ox/calendar/freebusy/templates.js:57
-#: apps/io.ox/calendar/settings/pane.js:62
-#: apps/io.ox/calendar/settings/pane.js:68 apps/io.ox/calendar/util.js:361
+#: apps/io.ox/calendar/freebusy/templates.js:73
+#: apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/settings/pane.js:69 apps/io.ox/calendar/util.js:368
 msgid "Day"
 msgstr "Deň"
 
 #: apps/io.ox/calendar/actions.js:389
-#: apps/io.ox/calendar/freebusy/templates.js:58
-#: apps/io.ox/calendar/settings/pane.js:63
-#: apps/io.ox/calendar/settings/pane.js:69
+#: apps/io.ox/calendar/freebusy/templates.js:74
+#: apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:70
 msgid "Workweek"
 msgstr "Pracovný týždeň"
 
 #: apps/io.ox/calendar/actions.js:396
-#: apps/io.ox/calendar/freebusy/templates.js:59
-#: apps/io.ox/calendar/settings/pane.js:64
-#: apps/io.ox/calendar/settings/pane.js:71
+#: apps/io.ox/calendar/freebusy/templates.js:75
+#: apps/io.ox/calendar/settings/pane.js:65
+#: apps/io.ox/calendar/settings/pane.js:72
 msgid "Week"
 msgstr "Týždeň"
 
-#: apps/io.ox/calendar/actions.js:403 apps/io.ox/calendar/settings/pane.js:65
-#: apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/calendar/actions.js:403 apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/settings/pane.js:71
 msgid "Month"
 msgstr "Mesiac"
 
-#: apps/io.ox/calendar/actions.js:410 apps/io.ox/calendar/settings/pane.js:66
-#: apps/io.ox/files/actions.js:533
+#: apps/io.ox/calendar/actions.js:410 apps/io.ox/calendar/settings/pane.js:67
+#: apps/io.ox/files/actions.js:537
 msgid "List"
 msgstr "Zoznam"
 
-#: apps/io.ox/calendar/settings/pane.js:72
+#: apps/io.ox/calendar/settings/pane.js:73
 msgid "Custom"
 msgstr "Vlastné"
 
-#: apps/io.ox/calendar/settings/pane.js:74 apps/io.ox/calendar/util.js:236
+#: apps/io.ox/calendar/settings/pane.js:75 apps/io.ox/calendar/util.js:236
 msgid "No reminder"
 msgstr "Bez pripomenutia"
 
-#: apps/io.ox/calendar/settings/pane.js:75
+#: apps/io.ox/calendar/settings/pane.js:76
 msgid "0 minutes"
 msgstr "0 minút"
 
-#: apps/io.ox/calendar/settings/pane.js:76
-#: apps/io.ox/core/settings/pane.js:131 apps/io.ox/core/settings/pane.js:205
+#: apps/io.ox/calendar/settings/pane.js:77
+#: apps/io.ox/core/settings/pane.js:131 apps/io.ox/core/settings/pane.js:193
 msgid "15 minutes"
 msgstr "15 minút"
 
-#: apps/io.ox/calendar/settings/pane.js:77
-#: apps/io.ox/core/settings/pane.js:132 apps/io.ox/core/settings/pane.js:206
+#: apps/io.ox/calendar/settings/pane.js:78
+#: apps/io.ox/core/settings/pane.js:132 apps/io.ox/core/settings/pane.js:194
 msgid "30 minutes"
 msgstr "30 minút"
 
-#: apps/io.ox/calendar/settings/pane.js:78
+#: apps/io.ox/calendar/settings/pane.js:79
 msgid "45 minutes"
 msgstr "45 minút"
 
-#: apps/io.ox/calendar/settings/pane.js:79
+#: apps/io.ox/calendar/settings/pane.js:80
 msgid "1 hour"
 msgstr "1 hodina"
 
-#: apps/io.ox/calendar/settings/pane.js:80
+#: apps/io.ox/calendar/settings/pane.js:81
 msgid "2 hour"
 msgstr "2 hodiny"
 
-#: apps/io.ox/calendar/settings/pane.js:81
+#: apps/io.ox/calendar/settings/pane.js:82
 msgid "4 hour"
 msgstr "4 hodiny"
 
-#: apps/io.ox/calendar/settings/pane.js:82
+#: apps/io.ox/calendar/settings/pane.js:83
 msgid "6 hour"
 msgstr "6 hodín"
 
-#: apps/io.ox/calendar/settings/pane.js:83
+#: apps/io.ox/calendar/settings/pane.js:84
 msgid "8 hour"
 msgstr "8 hodín"
 
-#: apps/io.ox/calendar/settings/pane.js:84
+#: apps/io.ox/calendar/settings/pane.js:85
 msgid "12 hour"
 msgstr "12 hodín"
 
-#: apps/io.ox/calendar/settings/pane.js:85
+#: apps/io.ox/calendar/settings/pane.js:86
 msgid "1 day"
 msgstr "1 deň"
 
-#: apps/io.ox/calendar/settings/pane.js:86
+#: apps/io.ox/calendar/settings/pane.js:87
 msgid "2 days"
 msgstr "2 dni"
 
-#: apps/io.ox/calendar/settings/pane.js:87
+#: apps/io.ox/calendar/settings/pane.js:88
 msgid "3 days"
 msgstr "3 dni"
 
-#: apps/io.ox/calendar/settings/pane.js:88
+#: apps/io.ox/calendar/settings/pane.js:89
 msgid "4 days"
 msgstr "4 dni"
 
-#: apps/io.ox/calendar/settings/pane.js:89
+#: apps/io.ox/calendar/settings/pane.js:90
 msgid "5 days"
 msgstr "5 dní"
 
-#: apps/io.ox/calendar/settings/pane.js:90
+#: apps/io.ox/calendar/settings/pane.js:91
 msgid "6 days"
 msgstr "6 dní"
 
-#: apps/io.ox/calendar/settings/pane.js:91
+#: apps/io.ox/calendar/settings/pane.js:92
 msgid "1 week"
 msgstr "1 týždeň"
 
-#: apps/io.ox/calendar/settings/pane.js:92
+#: apps/io.ox/calendar/settings/pane.js:93
 msgid "2 weeks"
 msgstr "2 týždne"
 
-#: apps/io.ox/calendar/settings/pane.js:93
+#: apps/io.ox/calendar/settings/pane.js:94
 msgid "3 weeks"
 msgstr "3 týždne"
 
-#: apps/io.ox/calendar/settings/pane.js:94
+#: apps/io.ox/calendar/settings/pane.js:95
 msgid "4 weeks"
 msgstr "4 týždne"
 
@@ -1972,11 +2420,11 @@ msgstr "4 týždne"
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js:106
-#: apps/io.ox/calendar/settings/pane.js:96
-#: apps/io.ox/calendar/week/perspective.js:107
-#: apps/io.ox/core/permissions/permissions.js:147
-#: apps/io.ox/office/tk/dialogs.js:140 apps/io.ox/tasks/settings/pane.js:34
+#: apps/io.ox/calendar/month/perspective.js:126
+#: apps/io.ox/calendar/settings/pane.js:97
+#: apps/io.ox/calendar/week/perspective.js:108
+#: apps/io.ox/core/permissions/permissions.js:149
+#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:34
 msgid "Yes"
 msgstr "Áno"
 
@@ -1984,36 +2432,36 @@ msgstr "Áno"
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js:107
-#: apps/io.ox/calendar/settings/pane.js:97
-#: apps/io.ox/calendar/week/perspective.js:108
-#: apps/io.ox/core/permissions/permissions.js:145
-#: apps/io.ox/office/tk/dialogs.js:140 apps/io.ox/tasks/settings/pane.js:35
+#: apps/io.ox/calendar/month/perspective.js:127
+#: apps/io.ox/calendar/settings/pane.js:98
+#: apps/io.ox/calendar/week/perspective.js:109
+#: apps/io.ox/core/permissions/permissions.js:147
+#: apps/io.ox/office/tk/dialogs.js:144 apps/io.ox/tasks/settings/pane.js:35
 msgid "No"
 msgstr "Nie"
 
-#: apps/io.ox/calendar/list/perspective.js:85
+#: apps/io.ox/calendar/list/perspective.js:90
 msgid "Couldn't load appointment data."
 msgstr "Nepodarilo sa načítať dáta schôdzky."
 
-#: apps/io.ox/calendar/list/perspective.js:132
-#: apps/io.ox/calendar/month/perspective.js:327
-#: apps/io.ox/calendar/week/view.js:603
+#: apps/io.ox/calendar/list/perspective.js:137
+#: apps/io.ox/calendar/month/perspective.js:380
+#: apps/io.ox/calendar/week/view.js:610
 msgid "show all"
 msgstr "zobraziť všetky"
 
-#: apps/io.ox/calendar/week/view.js:564
+#: apps/io.ox/calendar/week/view.js:572
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "Dvojitým kliknutím v tomto riadku zobrazíte celodennú schôdzku"
 
-#: apps/io.ox/calendar/edit/template.js:110
-#: apps/io.ox/calendar/month/perspective.js:86
-#: apps/io.ox/calendar/week/perspective.js:71
+#: apps/io.ox/calendar/edit/template.js:135
+#: apps/io.ox/calendar/month/perspective.js:106
+#: apps/io.ox/calendar/week/perspective.js:72
 msgid "Ignore conflicts"
 msgstr "Ignorovať konflikty"
 
-#: apps/io.ox/calendar/month/perspective.js:105
-#: apps/io.ox/calendar/week/perspective.js:106
+#: apps/io.ox/calendar/month/perspective.js:125
+#: apps/io.ox/calendar/week/perspective.js:107
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
@@ -2022,7 +2470,7 @@ msgstr ""
 "pokračovať?"
 
 #: apps/io.ox/calendar/actions.js:124
-#: apps/io.ox/calendar/week/perspective.js:111
+#: apps/io.ox/calendar/week/perspective.js:112
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -2033,113 +2481,117 @@ msgstr "Skutočne chcete upraviť celú sériu alebo jedinú sériu schôdzok?"
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
 #: apps/io.ox/calendar/actions.js:127
-#: apps/io.ox/calendar/week/perspective.js:113
+#: apps/io.ox/calendar/week/perspective.js:114
 msgid "Series"
 msgstr "Séria"
 
 #: apps/io.ox/calendar/actions.js:128
-#: apps/io.ox/calendar/week/perspective.js:114
+#: apps/io.ox/calendar/week/perspective.js:115
 msgid "Appointment"
 msgstr "Schôdzka"
 
-#: apps/io.ox/calendar/edit/template.js:287
-#: apps/io.ox/calendar/view-detail.js:231 apps/io.ox/tasks/edit/view.js:75
-#: apps/io.ox/tasks/view-detail.js:224
+#: apps/io.ox/calendar/edit/template.js:305
+#: apps/io.ox/calendar/view-detail.js:230 apps/io.ox/tasks/edit/view.js:75
+#: apps/io.ox/tasks/view-detail.js:221
 msgid "Participants"
 msgstr "Účastníci"
 
-#: apps/io.ox/calendar/view-detail.js:250 apps/io.ox/tasks/view-detail.js:231
+#: apps/io.ox/calendar/view-detail.js:249 apps/io.ox/tasks/view-detail.js:228
 msgid "External participants"
 msgstr "Externí účastníci"
 
-#: apps/io.ox/calendar/view-detail.js:289
+#: apps/io.ox/calendar/view-detail.js:288
 msgid "Resources"
 msgstr "Zdroje"
 
-#: apps/io.ox/calendar/view-detail.js:334 apps/io.ox/tasks/edit/view.js:79
+#: apps/io.ox/calendar/view-detail.js:333 apps/io.ox/tasks/edit/view.js:79
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: apps/io.ox/calendar/view-detail.js:348
+#: apps/io.ox/calendar/view-detail.js:347
 msgid "Show as"
 msgstr "Zobraziť ako"
 
-#: apps/io.ox/calendar/view-detail.js:391
+#: apps/io.ox/calendar/view-detail.js:390
 msgid "Created"
 msgstr "Vytvorené"
 
-#: apps/io.ox/calendar/view-detail.js:414
+#: apps/io.ox/calendar/view-detail.js:413
 msgid "Modified"
 msgstr "Zmenené"
 
-#: apps/io.ox/calendar/conflicts/conflictList.js:23
+#: apps/io.ox/calendar/conflicts/conflictList.js:24
 msgid "Conflicts detected"
 msgstr "Zistené konflikty"
 
-#: apps/io.ox/calendar/edit/template.js:276
+#: apps/io.ox/calendar/edit/template.js:294
 #: apps/io.ox/calendar/view-grid-template.js:63
-#: apps/io.ox/contacts/model.js:309 apps/io.ox/core/tk/folderviews.js:908
+#: apps/io.ox/contacts/model.js:312 apps/io.ox/core/tk/folderviews.js:902
 #: apps/io.ox/tasks/edit/view-template.js:126
 msgid "Private"
 msgstr "Súkromné"
 
-#: apps/io.ox/calendar/view-grid-template.js:81
+#: apps/io.ox/calendar/view-grid-template.js:79
 msgid "Conflicts:"
 msgstr "Konflikty:"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:226
-#: apps/io.ox/calendar/edit/recurrence-view.js:284
-#: apps/io.ox/calendar/edit/recurrence-view.js:287
+#: apps/io.ox/calendar/edit/view-addparticipants.js:177
+msgid "Search here"
+msgstr "Hľadať tu"
+
+#: apps/io.ox/calendar/edit/recurrence-view.js:234
+#: apps/io.ox/calendar/edit/recurrence-view.js:292
+#: apps/io.ox/calendar/edit/recurrence-view.js:295
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "každý %1$d deň"
 msgstr[1] "každé %1$d dni"
 msgstr[2] "každých %1$d dní"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:227
-#: apps/io.ox/calendar/edit/recurrence-view.js:304
-#: apps/io.ox/calendar/edit/recurrence-view.js:307
+#: apps/io.ox/calendar/edit/recurrence-view.js:235
+#: apps/io.ox/calendar/edit/recurrence-view.js:312
+#: apps/io.ox/calendar/edit/recurrence-view.js:315
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "každý %1$d týždeň"
 msgstr[1] "každé %1$d týždne"
 msgstr[2] "každých %1$d týždňov"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:228
-#: apps/io.ox/calendar/edit/recurrence-view.js:326
-#: apps/io.ox/calendar/edit/recurrence-view.js:328
-#: apps/io.ox/calendar/edit/recurrence-view.js:375
+#: apps/io.ox/calendar/edit/recurrence-view.js:236
+#: apps/io.ox/calendar/edit/recurrence-view.js:334
+#: apps/io.ox/calendar/edit/recurrence-view.js:336
+#: apps/io.ox/calendar/edit/recurrence-view.js:386
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "každý %1$d mesiac"
 msgstr[1] "každé %1$d mesiace"
 msgstr[2] "každých %1$d mesiacov"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:229
-#: apps/io.ox/calendar/edit/recurrence-view.js:481
+#: apps/io.ox/calendar/edit/recurrence-view.js:237
+#: apps/io.ox/calendar/edit/recurrence-view.js:496
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "po %1$d schôdzke"
 msgstr[1] "po %1$d schôdzkach"
 msgstr[2] "po %1$d schôdzkach"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:260
+#: apps/io.ox/calendar/edit/recurrence-view.js:268
 msgid "Daily"
 msgstr "Denne"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:261
+#: apps/io.ox/calendar/edit/recurrence-view.js:269
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:262
+#: apps/io.ox/calendar/edit/recurrence-view.js:270
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:263
+#: apps/io.ox/calendar/edit/recurrence-view.js:271
 msgid "Yearly"
 msgstr "Ročne"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:273
+#: apps/io.ox/calendar/edit/recurrence-view.js:281
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
@@ -2148,11 +2600,11 @@ msgstr ""
 "Schôdzka sa opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">každé <span class=\"number-control\">2</span> dni</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:279
+#: apps/io.ox/calendar/edit/recurrence-view.js:287
 msgid "every day"
 msgstr "každý deň"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:293
+#: apps/io.ox/calendar/edit/recurrence-view.js:301
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
@@ -2163,11 +2615,11 @@ msgstr ""
 "\"interval\">každé <span class=\"number-control\">2</span> týždne</a> v <a "
 "href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">pondelok</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:300
+#: apps/io.ox/calendar/edit/recurrence-view.js:308
 msgid "every week"
 msgstr "každý týždeň"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:315
+#: apps/io.ox/calendar/edit/recurrence-view.js:323
 msgid ""
 "The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" "
 "data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
@@ -2179,12 +2631,12 @@ msgstr ""
 "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
 "mesiace</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:322
-#: apps/io.ox/calendar/edit/recurrence-view.js:373
+#: apps/io.ox/calendar/edit/recurrence-view.js:330
+#: apps/io.ox/calendar/edit/recurrence-view.js:384
 msgid "every month"
 msgstr "každý mesiac"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:336
+#: apps/io.ox/calendar/edit/recurrence-view.js:344
 msgid ""
 "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
@@ -2198,11 +2650,22 @@ msgstr ""
 "\"interval\">každé <span class=\"number-control\">2</span> mesiace</a>. "
 
 #. #-#-#-#-#-#-#-#-#-#
+#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. #-#-#-#-#-#-#-#-#-#
+#. as in: last week or last Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js:349
+#: apps/io.ox/calendar/edit/recurrence-view.js:364
+#: apps/io.ox/calendar/edit/recurrence-view.js:426
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/calendar/util.js:30
+msgid "last"
+msgstr "posledný"
+
+#. #-#-#-#-#-#-#-#-#-#
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:341
-#: apps/io.ox/calendar/edit/recurrence-view.js:407
+#: apps/io.ox/calendar/edit/recurrence-view.js:352
+#: apps/io.ox/calendar/edit/recurrence-view.js:418
 #: apps/io.ox/calendar/util.js:29
 msgid "first"
 msgstr "prvý"
@@ -2211,8 +2674,8 @@ msgstr "prvý"
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:344
-#: apps/io.ox/calendar/edit/recurrence-view.js:409
+#: apps/io.ox/calendar/edit/recurrence-view.js:355
+#: apps/io.ox/calendar/edit/recurrence-view.js:420
 #: apps/io.ox/calendar/util.js:29
 msgid "second"
 msgstr "druhý"
@@ -2221,8 +2684,8 @@ msgstr "druhý"
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:347
-#: apps/io.ox/calendar/edit/recurrence-view.js:411
+#: apps/io.ox/calendar/edit/recurrence-view.js:358
+#: apps/io.ox/calendar/edit/recurrence-view.js:422
 #: apps/io.ox/calendar/util.js:30
 msgid "third"
 msgstr "tretí"
@@ -2231,33 +2694,23 @@ msgstr "tretí"
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:350
-#: apps/io.ox/calendar/edit/recurrence-view.js:413
+#: apps/io.ox/calendar/edit/recurrence-view.js:361
+#: apps/io.ox/calendar/edit/recurrence-view.js:424
 #: apps/io.ox/calendar/util.js:30
 msgid "fourth"
 msgstr "štvrtý"
 
-#. #-#-#-#-#-#-#-#-#-#
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. #-#-#-#-#-#-#-#-#-#
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:353
-#: apps/io.ox/calendar/edit/recurrence-view.js:415
-#: apps/io.ox/calendar/util.js:29 apps/io.ox/calendar/util.js:30
-msgid "last"
-msgstr "posledný"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js:365
-#: apps/io.ox/calendar/edit/recurrence-view.js:427
+#: apps/io.ox/calendar/edit/recurrence-view.js:376
+#: apps/io.ox/calendar/edit/recurrence-view.js:438
 msgid "day of the week"
 msgstr "deň v týždni"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:366
-#: apps/io.ox/calendar/edit/recurrence-view.js:428
+#: apps/io.ox/calendar/edit/recurrence-view.js:377
+#: apps/io.ox/calendar/edit/recurrence-view.js:439
 msgid "day of the weekend"
 msgstr "deň víkendu"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:381
+#: apps/io.ox/calendar/edit/recurrence-view.js:392
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\"  data-widget="
 "\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
@@ -2267,55 +2720,55 @@ msgstr ""
 "data-attribute=\"dayInMonth\">10</a>. <a href=\"#\" data-widget=\"options\" "
 "data-attribute=\"month\">Októbra</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:386
+#: apps/io.ox/calendar/edit/recurrence-view.js:397
 msgid "January"
 msgstr "Január"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:387
+#: apps/io.ox/calendar/edit/recurrence-view.js:398
 msgid "February"
 msgstr "Február"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:388
+#: apps/io.ox/calendar/edit/recurrence-view.js:399
 msgid "March"
 msgstr "Marec"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:389
+#: apps/io.ox/calendar/edit/recurrence-view.js:400
 msgid "April"
 msgstr "Apríl"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:390
+#: apps/io.ox/calendar/edit/recurrence-view.js:401
 msgid "May"
 msgstr "Máj"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:391
+#: apps/io.ox/calendar/edit/recurrence-view.js:402
 msgid "June"
 msgstr "Jún"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:392
+#: apps/io.ox/calendar/edit/recurrence-view.js:403
 msgid "July"
 msgstr "Júl"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:393
+#: apps/io.ox/calendar/edit/recurrence-view.js:404
 msgid "August"
 msgstr "August"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:394
+#: apps/io.ox/calendar/edit/recurrence-view.js:405
 msgid "September"
 msgstr "September"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:395
+#: apps/io.ox/calendar/edit/recurrence-view.js:406
 msgid "October"
 msgstr "Október"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:396
+#: apps/io.ox/calendar/edit/recurrence-view.js:407
 msgid "November"
 msgstr "November"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:397
+#: apps/io.ox/calendar/edit/recurrence-view.js:408
 msgid "December"
 msgstr "December"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:402
+#: apps/io.ox/calendar/edit/recurrence-view.js:413
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
@@ -2327,72 +2780,72 @@ msgstr ""
 "attribute=\"day\">stredu</a> v <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"month\">Októbri</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:434
+#: apps/io.ox/calendar/edit/recurrence-view.js:445
 msgid "january"
 msgstr "Január"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:435
+#: apps/io.ox/calendar/edit/recurrence-view.js:446
 msgid "february"
 msgstr "Február"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:436
+#: apps/io.ox/calendar/edit/recurrence-view.js:447
 msgid "march"
 msgstr "Marec"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:437
+#: apps/io.ox/calendar/edit/recurrence-view.js:448
 msgid "april"
 msgstr "Apríl"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:438
+#: apps/io.ox/calendar/edit/recurrence-view.js:449
 msgid "may"
 msgstr "Máj"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:439
+#: apps/io.ox/calendar/edit/recurrence-view.js:450
 msgid "june"
 msgstr "Jún"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:440
+#: apps/io.ox/calendar/edit/recurrence-view.js:451
 msgid "july"
 msgstr "Júl"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:441
+#: apps/io.ox/calendar/edit/recurrence-view.js:452
 msgid "august"
 msgstr "August"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:442
+#: apps/io.ox/calendar/edit/recurrence-view.js:453
 msgid "september"
 msgstr "September"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:443
+#: apps/io.ox/calendar/edit/recurrence-view.js:454
 msgid "october"
 msgstr "Október"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:444
+#: apps/io.ox/calendar/edit/recurrence-view.js:455
 msgid "november"
 msgstr "November"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:445
+#: apps/io.ox/calendar/edit/recurrence-view.js:456
 msgid "december"
 msgstr "December"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:454
-#: apps/io.ox/calendar/edit/recurrence-view.js:467
+#: apps/io.ox/calendar/edit/recurrence-view.js:465
+#: apps/io.ox/calendar/edit/recurrence-view.js:478
 msgid "never ends"
 msgstr "nikdy nekončí"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:455
+#: apps/io.ox/calendar/edit/recurrence-view.js:466
 msgid "ends on a specific date"
 msgstr "končí konkrétnym dátumom"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:456
+#: apps/io.ox/calendar/edit/recurrence-view.js:467
 msgid "ends after a certain number of appointments"
 msgstr "končí po istom počte schôdzok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:459
+#: apps/io.ox/calendar/edit/recurrence-view.js:470
 msgid "ends"
 msgstr "končí"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:463
+#: apps/io.ox/calendar/edit/recurrence-view.js:474
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">never ends</a>."
@@ -2400,7 +2853,7 @@ msgstr ""
 "Séria <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nikdy "
 "nekončí</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:471
+#: apps/io.ox/calendar/edit/recurrence-view.js:482
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
@@ -2410,7 +2863,7 @@ msgstr ""
 "a> dňa <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
 "\">11/03/2013</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:476
+#: apps/io.ox/calendar/edit/recurrence-view.js:491
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
@@ -2420,20 +2873,20 @@ msgstr ""
 "a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">po "
 "<span class=\"number-control\">2</span> schôdzkach</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:550
+#: apps/io.ox/calendar/edit/recurrence-view.js:565
 #: apps/io.ox/tasks/edit/view.js:282
 msgid "Repeat"
 msgstr "opakovať"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:564
+#: apps/io.ox/calendar/edit/recurrence-view.js:579
 msgid "Click on the links to change the values."
 msgstr "Kliknutím na odkazy zmeníte hodnoty."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:565
+#: apps/io.ox/calendar/edit/recurrence-view.js:580
 msgid "Click on a sentence to choose when to repeat the appointment."
 msgstr "Kliknutím na vetu zmeníte kedy opakovať schôdzku."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:811
+#: apps/io.ox/calendar/edit/recurrence-view.js:826
 msgid "Please choose a sentence below."
 msgstr "Prosím, vyberte vetu nižšie."
 
@@ -2447,93 +2900,99 @@ msgstr "Skutočne chcete zahodiť vaše úpravy?"
 msgid "Description has been copied"
 msgstr "Popis bol skopírovaný"
 
-#: apps/io.ox/calendar/edit/main.js:140
+#: apps/io.ox/calendar/edit/main.js:139
 msgid "Edit appointment"
 msgstr "Upraviť schôdzku"
 
-#: apps/io.ox/calendar/edit/main.js:227
+#: apps/io.ox/calendar/edit/main.js:219
 msgid "Create appointment"
 msgstr "Vytvoriť schôdzku"
 
-#: apps/io.ox/calendar/edit/template.js:64 apps/io.ox/tasks/edit/view.js:206
+#: apps/io.ox/calendar/edit/template.js:65 apps/io.ox/tasks/edit/view.js:206
 msgid "Create"
 msgstr "Vytvoriť"
 
-#: apps/io.ox/calendar/edit/template.js:174
+#: apps/io.ox/calendar/edit/template.js:117
+msgid "Conflicts with resources cannot be ignored"
+msgstr "Konflikty zdrojov nie je možné ignorovať"
+
+#: apps/io.ox/calendar/edit/template.js:124
+msgid "Hide conflicts"
+msgstr "Skryť konflikty"
+
+#: apps/io.ox/calendar/edit/template.js:181
 msgid "Location"
 msgstr "Umiestnenie"
 
-#: apps/io.ox/calendar/edit/template.js:185
+#: apps/io.ox/calendar/edit/template.js:192
 #: apps/io.ox/tasks/edit/view-template.js:458
 msgid "Starts on"
 msgstr "začína"
 
-#: apps/io.ox/calendar/edit/template.js:196
+#: apps/io.ox/calendar/edit/template.js:203
 msgid "Ends on"
 msgstr "končí"
 
-#: apps/io.ox/calendar/edit/template.js:206
+#: apps/io.ox/calendar/edit/template.js:224
 msgid "All day"
 msgstr "Celý deň"
 
 #. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-#: apps/io.ox/calendar/edit/template.js:257
+#: apps/io.ox/calendar/edit/template.js:275
 msgid "Shown as"
 msgstr "Zobraziť ako"
 
-#: apps/io.ox/calendar/edit/template.js:260 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:278 apps/io.ox/calendar/util.js:33
 msgid "Reserved"
 msgstr "Vyhradené"
 
-#: apps/io.ox/calendar/edit/template.js:261 apps/io.ox/calendar/util.js:33
+#: apps/io.ox/calendar/edit/template.js:279 apps/io.ox/calendar/util.js:33
 msgid "Temporary"
 msgstr "Dočasné"
 
-#: apps/io.ox/calendar/edit/template.js:262 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:280 apps/io.ox/calendar/util.js:34
 msgid "Absent"
 msgstr "Neprítomný"
 
-#: apps/io.ox/calendar/edit/template.js:263 apps/io.ox/calendar/util.js:34
+#: apps/io.ox/calendar/edit/template.js:281 apps/io.ox/calendar/util.js:34
 msgid "Free"
 msgstr "Zadarmo"
 
-#: apps/io.ox/calendar/edit/template.js:275
+#: apps/io.ox/calendar/edit/template.js:293
 msgid "Type"
 msgstr "Typ"
 
-#: apps/io.ox/calendar/edit/template.js:312
+#: apps/io.ox/calendar/edit/template.js:330
 msgid "Add participant/resource"
 msgstr "Pridať účastníkov/zdroje"
 
-#: apps/io.ox/calendar/edit/template.js:386
+#: apps/io.ox/calendar/edit/template.js:404
 msgid "Notify all participants by E-mail."
 msgstr "Oznámiť všetkým účastníkom emailom."
 
-#: apps/io.ox/calendar/edit/template.js:459
-#: apps/io.ox/contacts/edit/view-form.js:336
-#: apps/io.ox/tasks/edit/view-template.js:554
-msgid "Drop here to upload a <b>new attachment</b>"
-msgstr "Pretiahnutím súboru sem nahráte <b>novú prílohu</b>"
+#: apps/io.ox/calendar/edit/template.js:477
+msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
+msgstr "Pretiahnutím súboru sem nahráte <b class='dndignore'>novú prílohu</b>"
 
-#: apps/io.ox/calendar/edit/template.js:496
-#: apps/io.ox/calendar/freebusy/templates.js:27
+#: apps/io.ox/calendar/edit/template.js:514
+#: apps/io.ox/calendar/freebusy/templates.js:29
 msgid "Find a free time"
 msgstr "Nájsť voľný čas"
 
 #: apps/io.ox/calendar/actions.js:425
-#: apps/io.ox/calendar/freebusy/templates.js:27
+#: apps/io.ox/calendar/freebusy/templates.js:29 apps/io.ox/core/main.js:71
 msgid "Scheduling"
 msgstr "Plánovanie"
 
-#: apps/io.ox/calendar/freebusy/templates.js:54
+#: apps/io.ox/calendar/freebusy/templates.js:70
 msgid "Change view"
 msgstr "Zmeniť zobrazenie"
 
-#: apps/io.ox/calendar/freebusy/templates.js:70
+#: apps/io.ox/calendar/freebusy/templates.js:86
 msgid "Add participant"
 msgstr "Pridať účastníka"
 
-#: apps/io.ox/calendar/freebusy/templates.js:77
+#: apps/io.ox/calendar/freebusy/templates.js:93
 msgid ""
 "If you spot a free time, just select this area. To do this, move the cursor "
 "to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
@@ -2543,7 +3002,7 @@ msgstr ""
 "kurzor na čas začiatku, podržíte tlačidlo myši a <b>potiahnete myš</b> na "
 "čas konca."
 
-#: apps/io.ox/calendar/freebusy/templates.js:79
+#: apps/io.ox/calendar/freebusy/templates.js:95
 msgid ""
 "You will automatically return to the appointment dialog. The selected start "
 "and end time as well as the current participant list will be applied."
@@ -2551,27 +3010,27 @@ msgstr ""
 "Dostanete sa automaticky naspäť do dialógového okna schôdzky. Použije sa "
 "vybraný čas začiatku a čas konca, ako aj aktuálny zoznam účastníkov."
 
-#: apps/io.ox/calendar/freebusy/templates.js:83
+#: apps/io.ox/calendar/freebusy/templates.js:99
 msgid "How does this work?"
 msgstr "Ako to funguje?"
 
-#: apps/io.ox/calendar/freebusy/templates.js:89 apps/io.ox/core/main.js:487
+#: apps/io.ox/calendar/freebusy/templates.js:105 apps/io.ox/core/main.js:535
 #: apps/io.ox/help/center.js:104
 msgid "Help"
 msgstr "Pomocník"
 
-#: apps/io.ox/calendar/freebusy/templates.js:96
+#: apps/io.ox/calendar/freebusy/templates.js:112
 msgid "Back to appointment"
 msgstr "Späť na schôdzku"
 
-#: apps/io.ox/calendar/freebusy/templates.js:103
+#: apps/io.ox/calendar/freebusy/templates.js:119
 msgid "Quit"
 msgstr "Ukončiť"
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
 #. %2$s is the folder owner
-#: apps/io.ox/calendar/freebusy/templates.js:117
+#: apps/io.ox/calendar/freebusy/templates.js:133
 msgid ""
 "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
 "Appointments will therefore be created in your private calendar."
@@ -2581,7 +3040,7 @@ msgstr ""
 
 #. Warning dialog
 #. %1$s is a folder/calendar name
-#: apps/io.ox/calendar/freebusy/templates.js:121
+#: apps/io.ox/calendar/freebusy/templates.js:137
 msgid ""
 "You are not allowed to create appointments in \"%1$s\". Appointments will "
 "therefore be created in your private calendar."
@@ -2647,47 +3106,47 @@ msgstr[0] "%d deň"
 msgstr[1] "%d dni"
 msgstr[2] "%d dní"
 
-#: apps/io.ox/calendar/util.js:355
+#: apps/io.ox/calendar/util.js:362
 msgid "Work Day"
 msgstr "Pracovný deň"
 
-#: apps/io.ox/calendar/util.js:358
+#: apps/io.ox/calendar/util.js:365
 msgid "Weekend Day"
 msgstr "Deň víkendu"
 
-#: apps/io.ox/calendar/util.js:401
+#: apps/io.ox/calendar/util.js:408
 msgid "Each %s Day"
 msgstr "Každý %s deň"
 
-#: apps/io.ox/calendar/util.js:405
+#: apps/io.ox/calendar/util.js:412
 msgid "Weekly on %s"
 msgstr "Týždenne v %s"
 
-#: apps/io.ox/calendar/util.js:406
+#: apps/io.ox/calendar/util.js:413
 msgid "Each %s weeks on %s"
 msgstr "Každých %s týždňov v %s"
 
-#: apps/io.ox/calendar/util.js:411
+#: apps/io.ox/calendar/util.js:418
 msgid "On %s. day every month"
 msgstr "%s. deň každého mesiaca"
 
-#: apps/io.ox/calendar/util.js:412
+#: apps/io.ox/calendar/util.js:419
 msgid "On %s. day every %s. month"
 msgstr "%s. deň každého %s. mesiaca"
 
-#: apps/io.ox/calendar/util.js:415
+#: apps/io.ox/calendar/util.js:422
 msgid "On %s %s every month"
 msgstr "V %s %s každého mesiaca"
 
-#: apps/io.ox/calendar/util.js:416
+#: apps/io.ox/calendar/util.js:423
 msgid "On %s %s each %s. months"
 msgstr "V %s %s každých %s mesiacov"
 
-#: apps/io.ox/calendar/util.js:421
+#: apps/io.ox/calendar/util.js:428
 msgid "Each %s. %s"
 msgstr "Každý %s. %s"
 
-#: apps/io.ox/calendar/util.js:423
+#: apps/io.ox/calendar/util.js:430
 msgid "On %s %s in %s"
 msgstr "%s %s v %s"
 
@@ -2696,7 +3155,7 @@ msgid "Accepted"
 msgstr "Prijaté"
 
 #: apps/io.ox/calendar/print.js:192 apps/io.ox/tasks/print.js:66
-#: apps/io.ox/tasks/view-detail.js:170
+#: apps/io.ox/tasks/view-detail.js:166
 msgid "Declined"
 msgstr "Zamietnuté"
 
@@ -2708,7 +3167,7 @@ msgstr "Nezáväzne prijaté"
 msgid "Unconfirmed"
 msgstr "Nepotvrdené"
 
-#: apps/io.ox/calendar/acceptdeny.js:53 apps/io.ox/tasks/actions.js:507
+#: apps/io.ox/calendar/acceptdeny.js:53 apps/io.ox/tasks/actions.js:537
 msgid "Change confirmation status"
 msgstr "Zmeniť stav potvrdenia"
 
@@ -2721,22 +3180,21 @@ msgstr ""
 "ostatných účastníkov."
 
 #: apps/io.ox/calendar/acceptdeny.js:58
-#: apps/io.ox/contacts/edit/view-form.js:93 apps/io.ox/contacts/model.js:229
-#: apps/io.ox/files/views/create.js:99
+#: apps/io.ox/contacts/edit/view-form.js:93 apps/io.ox/contacts/model.js:232
 msgid "Comment"
 msgstr "Komentár"
 
 #: apps/io.ox/calendar/acceptdeny.js:70
 #: apps/io.ox/calendar/invitations/register.js:37
-#: apps/io.ox/calendar/invitations/register.js:438
+#: apps/io.ox/calendar/invitations/register.js:518
 #: apps/io.ox/tasks/edit/util.js:165
 msgid "Decline"
 msgstr "Zamietnuť"
 
 #: apps/io.ox/calendar/acceptdeny.js:71
 #: apps/io.ox/calendar/invitations/register.js:36
-#: apps/io.ox/calendar/invitations/register.js:440
-#: apps/io.ox/tasks/edit/util.js:166 apps/io.ox/tasks/view-detail.js:171
+#: apps/io.ox/calendar/invitations/register.js:520
+#: apps/io.ox/tasks/edit/util.js:166 apps/io.ox/tasks/view-detail.js:167
 msgid "Tentative"
 msgstr "Nezáväzne"
 
@@ -2744,7 +3202,7 @@ msgstr "Nezáväzne"
 #: apps/io.ox/calendar/invitations/register.js:28
 #: apps/io.ox/calendar/invitations/register.js:30
 #: apps/io.ox/calendar/invitations/register.js:32
-#: apps/io.ox/calendar/invitations/register.js:442
+#: apps/io.ox/calendar/invitations/register.js:522
 msgid "Accept"
 msgstr "Prijať"
 
@@ -2802,31 +3260,66 @@ msgstr "Schôdzku ste nezáväzne prijali"
 msgid "You have declined the appointment"
 msgstr "Odmietli ste schôdzku"
 
-#: apps/io.ox/calendar/invitations/register.js:290
+#: apps/io.ox/calendar/invitations/register.js:292
 msgid "You already have %1$d appointment in this timeframe."
 msgid_plural "You already have %1$d appointments in this timeframe."
 msgstr[0] "V tomto časovom rámci máte už %1$d schôdzku."
 msgstr[1] "V tomto časovom rámci máte už %1$d schôdzky."
 msgstr[2] "V tomto časovom rámci máte už %1$d schôdzok."
 
-#: apps/io.ox/calendar/invitations/register.js:293
-msgid " Show"
-msgstr " Zobraziť"
+#: apps/io.ox/calendar/invitations/register.js:299
+msgid "Show conflicts"
+msgstr "Zobraziť konflikty"
 
-#: apps/io.ox/calendar/invitations/register.js:349
+#: apps/io.ox/calendar/invitations/register.js:364
 msgid "This email contains an appointment"
 msgstr "Tento e-mail obsahuje schôdzku"
 
-#: apps/io.ox/calendar/invitations/register.js:394
-msgid "You already accepted this invitation"
-msgstr "Toto pozvanie už ste prijali"
+#: apps/io.ox/calendar/invitations/register.js:365
+msgid "This email contains a task"
+msgstr "Tento email obsahuje úlohu"
 
-#: apps/io.ox/calendar/invitations/register.js:399
-msgid "You declined this invitation"
-msgstr "Toto pozvanie ste odmietli"
+#: apps/io.ox/calendar/invitations/register.js:388
+msgid ""
+"Failed to load detailed appointment data; most probably the appointment has "
+"been deleted."
+msgstr ""
+"Nepodarilo sa načítať podrobné dáta schôdzky; s najväčšou pravdepodobnosťou "
+"bola schôdzka zmazaná."
 
-#: apps/io.ox/calendar/invitations/register.js:404
+#: apps/io.ox/calendar/invitations/register.js:412
+msgid ""
+"Failed to load detailed task data; most probably the task has been deleted."
+msgstr ""
+"Nepodarilo sa načítať podrobné dáta úlohy; s najväčšou pravdepodobnosťou "
+"bola úloha zmazaná."
+
+#: apps/io.ox/calendar/invitations/register.js:436
+msgid "You are the organizer"
+msgstr "Ste organizátorom"
+
+#: apps/io.ox/calendar/invitations/register.js:445
+msgid "You have accepted this appointment"
+msgstr "Prijali ste túto schôdzku"
+
+#: apps/io.ox/calendar/invitations/register.js:446
+msgid "You have accepted this task"
+msgstr "Prijali ste túto úlohu"
+
+#: apps/io.ox/calendar/invitations/register.js:451
+msgid "You declined this appointment"
+msgstr "Odmietli ste túto schôdzku"
+
+#: apps/io.ox/calendar/invitations/register.js:452
+msgid "You declined this task"
+msgstr "Odmietli ste túto úlohu"
+
+#: apps/io.ox/calendar/invitations/register.js:457
 msgid "You tentatively accepted this invitation"
+msgstr "Toto pozvanie ste nezáväzne prijali"
+
+#: apps/io.ox/calendar/invitations/register.js:458
+msgid "You tentatively accepted this task"
 msgstr "Toto pozvanie ste nezáväzne prijali"
 
 #: apps/io.ox/calendar/actions.js:187
@@ -2861,19 +3354,19 @@ msgstr[0] "Narodeninová schôdzka bola skopírovaná"
 msgstr[1] "Schôdzky boli skopírované"
 msgstr[2] "Schôdzky boli skopírované"
 
-#: apps/io.ox/calendar/actions.js:465
+#: apps/io.ox/calendar/actions.js:463
 msgid "Change status"
 msgstr "Zmeniť stav"
 
-#: apps/io.ox/calendar/actions.js:503
+#: apps/io.ox/calendar/actions.js:501
 msgid "Send mail to all participants"
 msgstr "Poslať email všetkým účastníkom"
 
-#: apps/io.ox/core/settings/pane.js:43
+#: apps/io.ox/core/settings/pane.js:44
 msgid "The setting has been saved."
 msgstr "Nastavenie bolo uložené."
 
-#: apps/io.ox/core/settings/pane.js:45
+#: apps/io.ox/core/settings/pane.js:46
 msgid ""
 "The setting has been saved and will become active when you enter the "
 "application the next time."
@@ -2903,23 +3396,55 @@ msgstr "Interval obnovenia"
 msgid "Default App after login?"
 msgstr "Predvolená aplikácia po prihlásení?"
 
-#: apps/io.ox/core/settings/pane.js:172
-msgid "Automatic opening of notification area on new notifications."
-msgstr "Automatické otvorenie oblasti oznámení pri príchode nového oznámenia."
+#: apps/io.ox/core/settings/pane.js:169
+msgid "Never"
+msgstr "Nikdy"
 
-#: apps/io.ox/core/settings/pane.js:202
+#: apps/io.ox/core/settings/pane.js:170
+msgid "On new notifications except mails"
+msgstr "Pri nových oznámeniach s výnimkou pošty"
+
+#: apps/io.ox/core/settings/pane.js:171
+msgid "On every new notification"
+msgstr "Pri každom novom oznámení"
+
+#: apps/io.ox/core/settings/pane.js:178
+msgid "Automatic opening of notification area"
+msgstr "Automatické otvorenie oblasti oznámení"
+
+#: apps/io.ox/core/settings/pane.js:190
 msgid "Off"
 msgstr "Vypnuté"
 
-#: apps/io.ox/core/settings/pane.js:212
+#: apps/io.ox/core/settings/pane.js:200
 msgid "Auto Logout"
 msgstr "Automatické odhlásenie"
 
-#: apps/io.ox/core/settings/pane.js:228
-msgid "Clear cache"
-msgstr "Vyčistiť vyrovnávaciu pamäť"
+#: apps/io.ox/core/settings/pane.js:242
+msgid "No errors to report"
+msgstr "Hlásenie neobsahuje žiadne chyby"
 
-#: apps/io.ox/core/tk/dialogs.js:544
+#: apps/io.ox/core/settings/pane.js:253
+msgid "Host"
+msgstr "Hostiteľ"
+
+#: apps/io.ox/core/settings/pane.js:254
+msgid "UI version"
+msgstr "Verzia používateľského rozhrania"
+
+#: apps/io.ox/core/settings/pane.js:255
+msgid "Server version"
+msgstr "Verzia servera"
+
+#: apps/io.ox/core/settings/pane.js:256
+msgid "Browser"
+msgstr "Prehliadač"
+
+#: apps/io.ox/core/settings/pane.js:308
+msgid "Error log"
+msgstr "Záznam chýb"
+
+#: apps/io.ox/core/tk/dialogs.js:558
 msgid "Close all"
 msgstr "Zatvoriť všetko"
 
@@ -2930,69 +3455,79 @@ msgstr[0] "1 položka"
 msgstr[1] "%1$d položky"
 msgstr[2] "%1$d položiek"
 
-#: apps/io.ox/core/tk/vgrid.js:626
+#: apps/io.ox/core/tk/vgrid.js:616
 msgid "Empty"
 msgstr "Prázdne"
 
-#: apps/io.ox/core/tk/folderviews.js:91
+#: apps/io.ox/core/tk/autocomplete.js:212 apps/io.ox/core/tk/vgrid.js:724
+msgid "Could not load this list"
+msgstr "Nepodarilo sa načítať tento zoznam."
+
+#: apps/io.ox/core/tk/folderviews.js:103
 msgid "Couldn't load subfolders."
 msgstr "Nepodarilo sa načítať podpriečinky."
 
-#: apps/io.ox/core/pubsub/api.js:110 apps/io.ox/core/tk/folderviews.js:526
+#: apps/io.ox/core/pubsub/api.js:106 apps/io.ox/core/tk/folderviews.js:530
 msgid "New folder"
 msgstr "Nový priečinok"
+
+#: apps/io.ox/core/commons-folderview.js:128
+#: apps/io.ox/core/tk/folderviews.js:553
+msgid "Add new folder"
+msgstr "Pridať nový priečinok"
 
 #: apps/io.ox/core/tk/folderviews.js:553
 msgid "Add new subfolder"
 msgstr "Pridať nový podpriečinok"
 
-#: apps/io.ox/core/tk/folderviews.js:560 apps/io.ox/core/tk/folderviews.js:636
+#: apps/io.ox/core/tk/folderviews.js:560 apps/io.ox/core/tk/folderviews.js:638
 msgid "Folder name"
 msgstr "Názov priečinka"
 
-#: apps/io.ox/core/tk/folderviews.js:567
+#: apps/io.ox/core/tk/folderviews.js:566
 msgid "Add folder"
 msgstr "Pridať priečinok"
 
-#: apps/io.ox/core/tk/folderviews.js:593
+#: apps/io.ox/core/tk/folderviews.js:594
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Ste si istý, že chcete priečinok „%s“ zmazať?"
 
-#: apps/io.ox/core/tk/folderviews.js:620
+#: apps/io.ox/core/tk/folderviews.js:621
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Jedná sa o štandardný priečinok, ktorý nemôže byť premenovaný."
 
-#: apps/io.ox/core/tk/folderviews.js:628
+#: apps/io.ox/core/tk/folderviews.js:630
 msgid "Rename folder"
 msgstr "Premenovať priečinok"
 
-#: apps/io.ox/core/commons-folderview.js:198
-#: apps/io.ox/core/tk/folderviews.js:643 apps/io.ox/files/actions.js:303
-#: apps/io.ox/files/actions.js:605
+#: apps/io.ox/core/commons-folderview.js:227
+#: apps/io.ox/core/tk/folderviews.js:644 apps/io.ox/files/actions.js:305
+#: apps/io.ox/files/actions.js:609
 msgid "Rename"
 msgstr "Premenovať"
 
-#: apps/io.ox/core/tk/folderviews.js:882
+#: apps/io.ox/core/tk/folderviews.js:876
 msgid "This folder has publications and/or subscriptions"
 msgstr "Tento priečinok má publikácie a/alebo odbery"
 
-#: apps/io.ox/core/tk/folderviews.js:901
+#: apps/io.ox/core/tk/folderviews.js:895
 msgid "You share this folder with other users"
 msgstr "Tento priečinok zdieľate s inými používateľmi"
 
-#: apps/io.ox/core/tk/folderviews.js:908
+#: apps/io.ox/core/tk/folderviews.js:902
 msgid "Public"
 msgstr "Verejné"
 
-#: apps/io.ox/core/tk/folderviews.js:908
+#: apps/io.ox/core/tk/folderviews.js:902
 msgid "Shared"
 msgstr "Zdieľané"
 
-#: apps/io.ox/core/tk/folderviews.js:977
+#: apps/io.ox/core/tk/folderviews.js:971
 msgid "Couldn't load folders."
 msgstr "Nepodarilo sa načítať priečinky."
 
 #: apps/io.ox/core/tk/attachments.js:293
+#: apps/io.ox/files/list/view-detail.js:286
 msgid "File"
 msgstr "Súbor"
 
@@ -3004,19 +3539,12 @@ msgstr "Vyberte súbor"
 msgid "Change"
 msgstr "Zmeniť"
 
-#: apps/io.ox/core/tk/attachments.js:306
-msgid "Remove"
-msgstr "Odstrániť"
-
 #: apps/io.ox/core/tk/attachments.js:307
+#: apps/io.ox/files/list/view-detail.js:171
 msgid "Upload file"
 msgstr "Nahrať nový súbor"
 
-#: apps/io.ox/core/tk/autocomplete.js:213
-msgid "Could not load this list. "
-msgstr "Nepodarilo sa načítať tento zoznam."
-
-#: apps/io.ox/core/tk/autocomplete.js:217
+#: apps/io.ox/core/commons.js:495 apps/io.ox/core/tk/autocomplete.js:215
 msgid "Retry"
 msgstr "Skúsiť znova"
 
@@ -3036,8 +3564,8 @@ msgstr "CSV"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/core/commons-folderview.js:265
-#: apps/io.ox/core/import/import.js:116
+#: apps/io.ox/core/commons-folderview.js:294
+#: apps/io.ox/core/import/import.js:114
 msgid "Import"
 msgstr "Importovať"
 
@@ -3045,124 +3573,123 @@ msgstr "Importovať"
 msgid "Import into"
 msgstr "Importovať do"
 
-#: apps/io.ox/core/import/import.js:172
+#: apps/io.ox/core/import/import.js:152
+msgid "Please select a file to import"
+msgstr "Prosím, vyberte súbor, ktorý chcete importovať"
+
+#: apps/io.ox/core/import/import.js:173
 msgid "Data imported successfully"
 msgstr "Údaje boli naimportované úspešne"
 
-#: apps/io.ox/core/notifications.js:88
+#: apps/io.ox/core/notifications.js:102
 msgid "No notifications"
 msgstr "Žiadne oznámenia"
 
-#: apps/io.ox/core/notifications.js:297 apps/io.ox/core/print.js:130
-#: apps/io.ox/editor/main.js:135
-msgid "Error"
-msgstr "Chyba"
-
-#: apps/io.ox/core/permissions/permissions.js:32
+#: apps/io.ox/core/permissions/permissions.js:34
 msgid "Guest"
 msgstr "Hosť"
 
-#: apps/io.ox/core/permissions/permissions.js:33
+#: apps/io.ox/core/permissions/permissions.js:35
 msgid "Author"
 msgstr "Autor"
 
-#: apps/io.ox/core/permissions/permissions.js:34
+#: apps/io.ox/core/permissions/permissions.js:36
 msgid "Administrator"
 msgstr "Správca"
 
-#: apps/io.ox/core/permissions/permissions.js:89
+#: apps/io.ox/core/permissions/permissions.js:91
 msgid "Apply role"
 msgstr "Aplikovať rolu"
 
 #. folder permissions
-#: apps/io.ox/core/permissions/permissions.js:105
+#: apps/io.ox/core/permissions/permissions.js:107
 msgid "view the folder"
 msgstr "Zobraziť priečinok"
 
 #. folder permissions
-#: apps/io.ox/core/permissions/permissions.js:107
+#: apps/io.ox/core/permissions/permissions.js:109
 msgid "create objects"
 msgstr "vytvoriť objekty"
 
 #. folder permissions
-#: apps/io.ox/core/permissions/permissions.js:109
 #: apps/io.ox/core/permissions/permissions.js:111
+#: apps/io.ox/core/permissions/permissions.js:113
 msgid "create objects and subfolders"
 msgstr "vytvoriť objekty a podpriečinky"
 
 #. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js:115
+#: apps/io.ox/core/permissions/permissions.js:117
 msgid "no read permissions"
 msgstr "bez oprávnení na čítanie"
 
 #. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js:117
+#: apps/io.ox/core/permissions/permissions.js:119
 msgid "read own objects"
 msgstr "čítať vlastné objekty"
 
 #. object permissions - read
-#: apps/io.ox/core/permissions/permissions.js:119
 #: apps/io.ox/core/permissions/permissions.js:121
+#: apps/io.ox/core/permissions/permissions.js:123
 msgid "read all objects"
 msgstr "čítať všetky objekty"
 
 #. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js:125
+#: apps/io.ox/core/permissions/permissions.js:127
 msgid "no edit permissions"
 msgstr "bez oprávnení na upravovanie"
 
 #. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js:127
+#: apps/io.ox/core/permissions/permissions.js:129
 msgid "edit own objects"
 msgstr "upravovať vlastné objekty"
 
 #. object permissions - edit/modify
-#: apps/io.ox/core/permissions/permissions.js:129
 #: apps/io.ox/core/permissions/permissions.js:131
+#: apps/io.ox/core/permissions/permissions.js:133
 msgid "edit all objects"
 msgstr "upravovať všetky objekty"
 
 #. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js:135
+#: apps/io.ox/core/permissions/permissions.js:137
 msgid "no delete permissions"
 msgstr "bez oprávnení na zmazanie"
 
 #. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js:137
+#: apps/io.ox/core/permissions/permissions.js:139
 msgid "delete only own objects"
 msgstr "mazať iba vlastné objekty"
 
 #. object permissions - delete
-#: apps/io.ox/core/permissions/permissions.js:139
 #: apps/io.ox/core/permissions/permissions.js:141
+#: apps/io.ox/core/permissions/permissions.js:143
 msgid "delete all objects"
 msgstr "mazať všetky objekty"
 
-#: apps/io.ox/core/permissions/permissions.js:211
+#: apps/io.ox/core/permissions/permissions.js:208
 msgid "Owner"
 msgstr "Vlastník"
 
-#: apps/io.ox/core/permissions/permissions.js:221
-#: apps/io.ox/core/permissions/permissions.js:238
-#: apps/io.ox/core/permissions/permissions.js:316
+#: apps/io.ox/core/permissions/permissions.js:218
+#: apps/io.ox/core/permissions/permissions.js:235
+#: apps/io.ox/core/permissions/permissions.js:313
 msgid "Folder permissions"
 msgstr "Oprávnenia priečinka"
 
-#: apps/io.ox/core/permissions/permissions.js:224
-#: apps/io.ox/core/permissions/permissions.js:241
+#: apps/io.ox/core/permissions/permissions.js:221
+#: apps/io.ox/core/permissions/permissions.js:238
 msgid "Object permissions"
 msgstr "Oprávnenia objektu"
 
-#: apps/io.ox/core/permissions/permissions.js:229
-#: apps/io.ox/core/permissions/permissions.js:246
+#: apps/io.ox/core/permissions/permissions.js:226
+#: apps/io.ox/core/permissions/permissions.js:243
 msgid "The user has administrative rights"
 msgstr "Používateľ má práva správcu"
 
-#: apps/io.ox/core/permissions/permissions.js:376
+#: apps/io.ox/core/permissions/permissions.js:389
 msgid " is not a valid user or group."
 msgstr " nie je platný používateľ alebo skupina."
 
-#: apps/io.ox/core/permissions/permissions.js:376
+#: apps/io.ox/core/permissions/permissions.js:389
 msgid "This is not a valid user or group."
 msgstr "Toto nie je platný používateľ alebo skupina."
 
@@ -3214,7 +3741,7 @@ msgstr "YB"
 #. File size
 #. %1$d is the number
 #. %2$s is the unit (B, KB, MB etc.)
-#: apps/io.ox/core/strings.js:62
+#: apps/io.ox/core/strings.js:66
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
@@ -3327,7 +3854,7 @@ msgstr[0] "%d minúta"
 msgstr[1] "%d minúty"
 msgstr[2] "%d minút"
 
-#: apps/io.ox/core/commons-folderview.js:242
+#: apps/io.ox/core/commons-folderview.js:271
 #: apps/io.ox/core/export/export.js:72
 msgid "Export"
 msgstr "Exportovať"
@@ -3344,81 +3871,77 @@ msgstr "priečinok neobsahuje žiadne údaje"
 msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> prvkov vybraných"
 
-#: apps/io.ox/core/commons.js:197
+#: apps/io.ox/core/commons.js:208
 msgid "Cancel search"
 msgstr "Zrušiť hľadanie"
 
-#: apps/io.ox/core/commons.js:374
+#: apps/io.ox/core/commons.js:388
 msgid "Back"
 msgstr "Späť"
 
-#: apps/io.ox/core/main.js:64 apps/io.ox/launchpad/main.js:27
+#: apps/io.ox/core/main.js:67 apps/io.ox/launchpad/main.js:27
 msgid "Portal"
 msgstr "Portál"
 
-#: apps/io.ox/contacts/settings/pane.js:23 apps/io.ox/core/main.js:66
+#: apps/io.ox/contacts/settings/pane.js:23 apps/io.ox/core/main.js:69
 #: apps/io.ox/launchpad/main.js:29
 msgid "Address Book"
 msgstr "Adresár"
 
-#: apps/io.ox/core/main.js:69 apps/io.ox/files/settings/pane.js:23
+#: apps/io.ox/core/main.js:73 apps/io.ox/files/settings/pane.js:23
 #: apps/io.ox/launchpad/main.js:32
 msgid "Files"
 msgstr "Súbory"
 
-#: apps/io.ox/core/main.js:269
+#: apps/io.ox/core/main.js:302
 msgid "You will be automatically logged out in %1$d Second"
 msgid_plural "You will be automatically logged out in %1$d Seconds"
 msgstr[0] "Budete automaticky odhlásení o %1$d sekundu."
 msgstr[1] "Budete automaticky odhlásení o %1$d sekundy."
 msgstr[2] "Budete automaticky odhlásení o %1$d sekúnd."
 
-#: apps/io.ox/core/main.js:282
+#: apps/io.ox/core/main.js:315
 msgid "Automatic logout"
 msgstr "Automatické odhlásenie"
 
-#: apps/io.ox/core/main.js:286
+#: apps/io.ox/core/main.js:319
 msgid "Logout now"
 msgstr "Odhlásiť sa teraz"
 
-#: apps/io.ox/core/main.js:469 apps/io.ox/launchpad/main.js:34
+#: apps/io.ox/core/main.js:517 apps/io.ox/launchpad/main.js:34
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: apps/io.ox/core/main.js:500
+#: apps/io.ox/core/main.js:556
 msgid "Exit Fullscreen"
 msgstr "Ukončiť celoobrazovkový režim"
 
-#: apps/io.ox/core/main.js:503 apps/io.ox/core/main.js:507
-#: apps/io.ox/files/actions.js:807
+#: apps/io.ox/core/main.js:559 apps/io.ox/core/main.js:563
+#: apps/io.ox/files/actions.js:811
 msgid "Fullscreen"
 msgstr "Celoobrazovkový režim"
 
-#: apps/io.ox/core/about.js:37 apps/io.ox/core/main.js:524
+#: apps/io.ox/core/about.js:37 apps/io.ox/core/main.js:580
 msgid "About"
 msgstr "O aplikácii"
 
-#: apps/io.ox/core/main.js:543
+#: apps/io.ox/core/main.js:599
 msgid "Sign out"
 msgstr "Odhlásiť sa"
 
-#: apps/io.ox/core/main.js:618 apps/io.ox/core/pubsub/settings/pane.js:186
-msgid "Refresh"
-msgstr "Obnoviť"
-
-#: apps/io.ox/core/main.js:633
+#: apps/io.ox/core/main.js:683
 msgid "Your session is expired"
 msgstr "Vaša relácia vypršala"
 
-#: apps/io.ox/core/main.js:634
+#: apps/io.ox/core/main.js:684
 msgid "Please sign in again to continue"
 msgstr "Prosím, znova sa prihláste, aby ste mohli pokračovať"
 
-#: apps/io.ox/core/main.js:746
+#: apps/io.ox/core/main.js:799
 msgid "Restore applications"
 msgstr "Obnoviť aplikácie"
 
-#: apps/io.ox/core/main.js:748
+#: apps/io.ox/core/main.js:801
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -3426,7 +3949,7 @@ msgstr ""
 "Nasledovné aplikácie je možné obnoviť. Stačí odstrániť bod obnovenia, ak "
 "nechcete, aby boli obnovené."
 
-#: apps/io.ox/core/main.js:752
+#: apps/io.ox/core/main.js:805
 msgid "Continue"
 msgstr "Pokračovať"
 
@@ -3434,265 +3957,38 @@ msgstr "Pokračovať"
 msgid "Contact: %1$s"
 msgstr "Kontakt: %1$s"
 
-#: apps/io.ox/core/api/folder.js:385
-#: apps/io.ox/core/pubsub/subscriptions.js:108
-msgid "New Folder"
-msgstr "Nový priečinok"
-
-#: apps/io.ox/core/pubsub/model.js:195
-msgid "Publication must have a target."
-msgstr "Publikácia musí mať cieľ."
-
-#: apps/io.ox/core/pubsub/model.js:199
-msgid "Publication must have a site."
-msgstr "Publikácia musí mať lokalitu."
-
-#: apps/io.ox/core/pubsub/model.js:207
-msgid "Model is incomplete."
-msgstr "Model je neúplný."
-
-#: apps/io.ox/core/pubsub/model.js:209
-msgid "You have to enter a username and password to subscribe."
-msgstr ""
-"Aby ste sa prihlásili na odber, musíte zadať používateľské meno a heslo."
-
 #: apps/io.ox/core/pubsub/settings/register.js:22
 msgid "Publications and Subscriptions"
 msgstr "Publikácie a odbery"
 
-#: apps/io.ox/core/pubsub/settings/pane.js:64
-msgid "Only showing items related to folder \"%1$s\""
-msgstr "Zobrazujú sa len položky súvisiace s priečinkom „%1$s“"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:66
-msgid "Show all items"
-msgstr "Zobraziť všetky položky"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:142
-msgid "Link"
-msgstr "Odkaz"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:201
-#: apps/io.ox/portal/settings/pane.js:162
-msgid "Disable"
-msgstr "Vypnúť"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:201
-#: apps/io.ox/portal/settings/pane.js:166
-msgid "Enable"
-msgstr "Zapnúť"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:270
-msgid "Subscription refresh"
-msgstr "Obnovenie odberu"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:271
-msgid ""
-"A refresh takes some time, so please be patient, while the refresh runs in "
-"the background. Only one refresh per subscription and per session is allowed."
-msgstr ""
-"Obnovenie nejakú dobu trvá, preto buďte prosím trpezliví, pokým obnovenie "
-"beží na pozadí. Je povolené iba jedno obnovenie na odber a na reláciu."
-
-#: apps/io.ox/core/pubsub/settings/pane.js:337
-msgid ""
-"This folder has publications but you are not allowed to view or edit them"
-msgstr ""
-"Tento priečinok má publikácie, ale nemôžete ich zobraziť alebo upravovať"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:339
-msgid ""
-"This folder has subscriptions but you are not allowed to view or edit them"
-msgstr "Tento priečinok má odbery, ale nemôžete ich zobraziť alebo upravovať"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:345
-msgid "This folder has no publications"
-msgstr "Tento priečinok nemá žiadne publikácie"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:346
-msgid "This folder has no subscriptions"
-msgstr "Tento priečinok nemá žiadne odbery"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:349
-msgid "You don't have any publications yet"
-msgstr "Zatiaľ nemáte žiadne publikácie"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:350
-msgid "You don't have any subscriptions yet"
-msgstr "Zatiaľ nemáte žiadne odbery"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:370
-msgid "Publications"
-msgstr "Publikácie"
-
-#: apps/io.ox/core/pubsub/settings/pane.js:373
-msgid "Subscriptions"
-msgstr "Odbery"
-
-#: apps/io.ox/core/commons-folderview.js:151
-#: apps/io.ox/core/pubsub/publications.js:91 apps/io.ox/files/actions.js:649
-msgid "Publish"
-msgstr "Publikovať"
-
-#: apps/io.ox/core/pubsub/publications.js:95
-msgid "Publish folder"
-msgstr "Publikovať priečinok"
-
-#: apps/io.ox/core/pubsub/publications.js:97
-msgid "Publish item"
-msgstr "Publikovať položku"
-
-#: apps/io.ox/core/pubsub/publications.js:106
-msgid "Publication has been added"
-msgstr "Publikácia bola pridaná"
-
-#: apps/io.ox/core/pubsub/publications.js:134
-msgid "Name already taken"
-msgstr "Názov je už použitý"
-
-#: apps/io.ox/core/pubsub/publications.js:140
-#: apps/io.ox/core/pubsub/publications.js:180
-msgid "Publications must have a name"
-msgstr "Publikácie musia mať názov"
-
-#: apps/io.ox/core/pubsub/publications.js:216
-msgid "Template"
-msgstr "Šablóna"
-
-#: apps/io.ox/core/pubsub/publications.js:224
-msgid "No matching templates on this Server"
-msgstr "Žiadne zodpovedajúce šablóny na tomto serveri"
-
-#: apps/io.ox/core/pubsub/publications.js:243
-msgid "Add cipher code"
-msgstr "Pridať kód šifry"
-
-#: apps/io.ox/core/pubsub/publications.js:293
-msgid "Publication"
-msgstr "Publikácia"
-
-#: apps/io.ox/core/pubsub/publications.js:324
-#: apps/io.ox/core/pubsub/publications.js:329
-msgid "Share Link by E-mail"
-msgstr "Zdieľať odkaz emailom"
-
-#: apps/io.ox/core/pubsub/publications.js:353
-msgid "Attention"
-msgstr "Upozornenie"
-
-#: apps/io.ox/core/pubsub/publications.js:355
-msgid ""
-"The published data will be accessible to everyone on the Internet. Please "
-"consider, which data you want to publish."
-msgstr ""
-"Publikované dáta budú prístupné pre kohokoľvek na internete. Prosím, zvážte, "
-"ktoré dáta chcete zverejniť."
-
-#: apps/io.ox/core/pubsub/publications.js:357
-msgid "Privacy Notice"
-msgstr "Ochrana súkromia"
-
-#: apps/io.ox/core/pubsub/publications.js:359
-msgid ""
-"When using this publish feature, you as the current owner of the data are "
-"responsible for being careful with privacy rules and for complying with "
-"legal obligations (Copyright, Privacy Laws). Especially when publishing "
-"personal data you are the responsible party according to the Federal Data "
-"Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
-"According to European and other national regulations you as the responsible "
-"party are in charge of data economy, and must not publish or forward "
-"personal data without the person's consent. Beyond legal obligations, we "
-"would like to encourage extreme care when dealing with personal data. Please "
-"consider carefully where you store and to whom you forward personal data. "
-"Please ensure appropriate access protection, e.g. by proper password "
-"protection."
-msgstr ""
-"Pri používaní tejto funkcie publikovania ste ako aktuálny vlastník údajov "
-"zodpovedný za opatrnosť ohľadne pravidiel súkromia a dodržiavania právnych "
-"povinností (autorský zákon, zákony ochrany súkromia). Obzvlášť pri "
-"zverejňovaní osobných údajov ste zodpovednou stranou podľa Federal Data "
-"Protection Act (BDSG, Nemecko) alebo iných zákonov na ochranu súkromia vo "
-"vašej krajine. Podľa európskych a iných národných regulácií ste zodpovedná "
-"strana za zaobchádzanie s údajmi a nesmiete zverejniť alebo preposlať osobné "
-"údaje bez súhlasu osoby. Okrem právnych povinností by sme radi odporučili "
-"extrémnu opatrnosť pri práci s osobnými údajmi. Prosím, starostlivo zvážte, "
-"kde ukladáte a komu preposielate osobné údaje. Prosím, zabezpečte vhodnú "
-"ochranu prístupu napr. pomocou ochrany heslom."
-
-#: apps/io.ox/core/pubsub/publications.js:364
-msgid "Show legal information"
-msgstr "Zobraziť právne informácie"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:55
-msgid "Checking credentials... This may take a few seconds."
-msgstr "Kontroluje sa poverenia... To môže trvať niekoľko sekúnd."
-
-#: apps/io.ox/core/pubsub/subscriptions.js:59
-msgid "Subscription successfully created."
-msgstr "Odbery boli úspešne vytvorené."
-
-#: apps/io.ox/core/pubsub/subscriptions.js:67
-#: apps/io.ox/core/pubsub/subscriptions.js:74
-msgid "Error:"
-msgstr "Chyba:"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:171
-msgid "Add new account"
-msgstr "Pridať nový účet"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:184
-msgid "Account"
-msgstr "Účet"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:209
-msgid "Source"
-msgstr "Zdroj"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:242
-msgid "Add new folder for this subscription"
-msgstr "Pridať nový priečinok pre tento odber"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:261
-#: apps/io.ox/core/pubsub/subscriptions.js:264
-msgid "Approximate Duration for Subscriptions"
-msgstr "Približné trvanie odberov"
-
-#: apps/io.ox/core/pubsub/subscriptions.js:263
-msgid ""
-"Subscribing to items that are not delivered by another Open-Xchange Server "
-"(i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing "
-"takes about 5 minutes. We are continually improving this functionality. "
-"Future releases will work significantly faster."
-msgstr ""
-"Odber položiek, ktoré nedoručuje iný Open-Xchange Server (t.j. OXMF) môže "
-"určitú dobu trvať. Príklad: Importovanie 100 kontaktov zo Xing trvá "
-"napríklad asi 5 minút. Túto funkcionalitu priebežne vylepšujeme. Budúce "
-"vydania budú fungovať výrazne rýchlejšie."
-
-#: apps/io.ox/core/print.js:40
+#: apps/io.ox/core/print.js:42
 msgid "Printout"
 msgstr "Výtlačok"
 
-#: apps/io.ox/core/print.js:131
+#: apps/io.ox/core/print.js:133
 msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] "Nie je možné vytlačiť túto položku"
 msgstr[1] "Nie je možné vytlačiť tieto položky"
 msgstr[2] "Nie je možné vytlačiť tieto položky"
 
-#: apps/io.ox/core/desktop.js:489
+#: apps/io.ox/core/desktop.js:517
 msgid "There are unsaved changes."
 msgstr "Existujú neuložené zmeny."
 
-#: apps/io.ox/core/desktop.js:836 apps/io.ox/core/desktop.js:986
+#. Title of the browser window
+#. %1$s is the name of the page, e.g. OX App Suite
+#. %2$s is the title of the active app, e.g. Calendar
+#: apps/io.ox/core/desktop.js:877 apps/io.ox/core/desktop.js:1034
+msgctxt "window title"
 msgid "%1$s %2$s"
-msgstr "%1$s %2$s"
+msgstr "%2$s %1$s"
 
-#: apps/io.ox/core/desktop.js:1301
+#: apps/io.ox/core/desktop.js:1353
 msgid "Toggle search"
 msgstr "Prepnúť vyhľadávanie"
 
-#: apps/io.ox/core/desktop.js:1358
+#: apps/io.ox/core/desktop.js:1410
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3720,121 +4016,62 @@ msgstr "Prvých 90 dní je zadarmo."
 msgid "Get free upgrade"
 msgstr "Získajte aktualizáciu zadarmo"
 
-#: apps/io.ox/core/commons-folderview.js:114
+#: apps/io.ox/core/commons-folderview.js:139
 msgid "Add subfolder"
 msgstr "Pridať podpriečinok"
 
-#: apps/io.ox/core/commons-folderview.js:134
+#: apps/io.ox/core/commons-folderview.js:160
 msgid "Add public folder"
 msgstr "Pridať verejný priečinok"
 
-#: apps/io.ox/core/commons-folderview.js:290
+#: apps/io.ox/core/commons-folderview.js:206
+msgid "Subscription"
+msgstr "Odber"
+
+#: apps/io.ox/core/commons-folderview.js:318
 msgid "Permissions"
 msgstr "Oprávnenia"
 
-#: apps/io.ox/core/commons-folderview.js:304
-#: apps/io.ox/core/commons-folderview.js:357
+#: apps/io.ox/core/commons-folderview.js:332
+#: apps/io.ox/core/commons-folderview.js:385
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: apps/io.ox/core/commons-folderview.js:320
+#: apps/io.ox/core/commons-folderview.js:348
 msgid "Folder type"
 msgstr "Typ priečinka"
 
-#: apps/io.ox/core/commons-folderview.js:333
+#: apps/io.ox/core/commons-folderview.js:361
 msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
-#: apps/io.ox/core/commons-folderview.js:369
+#: apps/io.ox/core/commons-folderview.js:397
 msgid "Move folder"
 msgstr "Presunúť priečinok"
 
-#: apps/io.ox/core/commons-folderview.js:685
+#: apps/io.ox/core/commons-folderview.js:752
 msgid "Toggle folder"
 msgstr "Prepnúť priečinok"
 
-#: apps/io.ox/preview/main.js:75
+#: apps/io.ox/preview/main.js:77
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Kliknutím otvoríte. Stiahnuť môžete pretiahnutím na plochu."
 
-#: apps/io.ox/preview/main.js:77
+#: apps/io.ox/preview/main.js:79
 msgid "Click to open."
 msgstr "Kliknutím otvoríte."
 
-#: apps/io.ox/office/preview/view.js:122
-msgid "Close document"
-msgstr "Zatvoriť dokument"
-
-#: apps/io.ox/office/preview/view.js:126
-msgid "Show first page"
-msgstr "Zobraziť prvú stránku"
-
-#: apps/io.ox/office/preview/view.js:127
-msgid "Show previous page"
-msgstr "Zobraziť predošlú stránku"
-
-#: apps/io.ox/office/preview/view.js:128
-msgid "Current page and total page count"
-msgstr "Aktuálna stránka a celkový počet strán"
-
-#: apps/io.ox/office/preview/view.js:129
-msgid "Show next page"
-msgstr "Zobraziť ďalšiu stránku"
-
-#: apps/io.ox/office/preview/view.js:130
-msgid "Show last page"
-msgstr "Zobraziť poslednú stránku"
-
-#: apps/io.ox/office/preview/view.js:133
-msgid "Zoom out"
-msgstr "Oddialiť"
-
-#: apps/io.ox/office/preview/view.js:134
-msgid "Current zoom factor"
-msgstr "Aktuálne priblíženie"
-
-#: apps/io.ox/office/preview/view.js:135
-msgid "Zoom in"
-msgstr "Priblížiť"
-
-#: apps/io.ox/office/framework/app/baseapplication.js:307
-#: apps/io.ox/office/preview/view.js:179
-msgid "Load Error"
-msgstr "Chyba načítavania"
-
-#: apps/io.ox/office/preview/view.js:179
-msgid "An error occurred while loading the page."
-msgstr "Vyskytla sa chyba pri načítaní dokumentu."
-
-#. %1$d is the current zoom factor, in percent
-#: apps/io.ox/office/preview/controller.js:113
-#, c-format
-msgid "%1$d%"
-msgstr "%1$d%"
-
-#: apps/io.ox/office/framework/app/baseapplication.js:308
-msgid "An error occurred while loading the document."
-msgstr "Vyskytla sa chyba pri načítaní dokumentu."
-
-#: apps/io.ox/office/framework/app/baseapplication.js:513
-msgid "Unnamed"
-msgstr "Bez názvu"
-
-#: apps/io.ox/portal/settings/pane.js:49
+#: apps/io.ox/portal/settings/pane.js:48
 msgid "Portal settings"
 msgstr "Nastavenia portálu"
 
-#: apps/io.ox/portal/settings/pane.js:66
+#: apps/io.ox/portal/settings/pane.js:65
 msgid "Add widget"
 msgstr "Pridanie miniaplikáciu"
 
 #: apps/io.ox/portal/settings/pane.js:102
 msgid "Black"
 msgstr "Čierna"
-
-#: apps/io.ox/portal/settings/pane.js:103
-msgid "Gray"
-msgstr "Šedá"
 
 #: apps/io.ox/portal/settings/pane.js:116
 msgid "Color"
@@ -3869,31 +4106,27 @@ msgid "Customize this page"
 msgstr "Prispôsobiť túto stránku"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:79
+#: apps/io.ox/portal/main.js:84
 msgid "Signed in as %1$s"
 msgstr "Prihlásený ako %1$s"
 
-#: apps/io.ox/portal/main.js:224
-msgid "Click here to add your account"
-msgstr "Kliknutím sem pridáte váš účet"
-
-#: apps/io.ox/portal/main.js:252
+#: apps/io.ox/portal/main.js:264
 msgid "An error occurred. The message was:"
 msgstr "Vyskytla sa chyba. Správa bola:"
 
-#: apps/io.ox/portal/main.js:255
+#: apps/io.ox/portal/main.js:267
 msgid "Click to try again."
 msgstr "Kliknutím to skúsite znova neskôr."
 
-#: apps/io.ox/portal/widgets.js:219
+#: apps/io.ox/portal/widgets.js:223
 msgid "Settings saved."
 msgstr "Nastavenia uložené."
 
-#: apps/io.ox/portal/widgets.js:226 apps/io.ox/portal/widgets.js:239
+#: apps/io.ox/portal/widgets.js:230 apps/io.ox/portal/widgets.js:243
 msgid "Could not save settings."
 msgstr "Nepodarilo sa uložiť nastavenia."
 
-#: apps/io.ox/files/mediaplayer.js:219
+#: apps/io.ox/files/mediaplayer.js:198
 msgid "Minimize"
 msgstr "Minimalizovať"
 
@@ -3901,204 +4134,175 @@ msgstr "Minimalizovať"
 msgid "Default view"
 msgstr "Predvolené zobrazenie"
 
-#: apps/io.ox/files/settings/pane.js:25
-msgid "Mediaplayer"
-msgstr "Prehrávať multimédií"
-
 #: apps/io.ox/files/settings/pane.js:26
-msgid "Audio enabled"
-msgstr "Zvuk zapnutý"
-
-#: apps/io.ox/files/settings/pane.js:27
-msgid "Video enabled"
-msgstr "Video zapnuté"
-
-#: apps/io.ox/files/settings/pane.js:29
 msgid "Icon view"
 msgstr "Zobrazenie ikon"
 
-#: apps/io.ox/files/settings/pane.js:30
+#: apps/io.ox/files/settings/pane.js:27
 msgid "List view"
 msgstr "Zobrazenie zoznamu"
 
-#: apps/io.ox/files/list/view-detail.js:140
+#: apps/io.ox/files/list/view-detail.js:141
+msgid "Saved in"
+msgstr "Uložené v"
+
+#: apps/io.ox/files/list/view-detail.js:163
 msgid "Upload a new version"
 msgstr "Nahrať novú verziu"
 
-#: apps/io.ox/files/list/view-detail.js:146
+#: apps/io.ox/files/list/view-detail.js:174
 msgid "Version Comment"
 msgstr "Komentár k verzii"
 
-#: apps/io.ox/files/list/view-detail.js:149
-msgid "Upload"
-msgstr "Nahrať"
-
-#: apps/io.ox/files/list/view-detail.js:168
+#: apps/io.ox/files/list/view-detail.js:183
 msgid "Upload new version"
 msgstr "Nahrať novú verziu"
 
-#: apps/io.ox/files/list/view-detail.js:175
+#: apps/io.ox/files/icons/perspective.js:423
+#: apps/io.ox/files/icons/perspective.js:452
+#: apps/io.ox/files/list/perspective.js:161
+#: apps/io.ox/files/list/perspective.js:204
+#: apps/io.ox/files/list/view-detail.js:198
+#: apps/io.ox/files/views/create.js:62
+msgid "This file has not been added"
+msgstr "Tento súbor nebol pridaný"
+
+#: apps/io.ox/files/list/view-detail.js:205
 msgid "Uploading..."
 msgstr "Nahráva sa..."
 
-#: apps/io.ox/files/list/view-detail.js:259
-msgid "File versions"
-msgstr "Verzie súborov"
+#: apps/io.ox/files/list/view-detail.js:299
+msgid "Show version history"
+msgstr "Zobraziť históriu verzií"
 
-#: apps/io.ox/files/list/perspective.js:86
+#: apps/io.ox/files/list/view-detail.js:304
+msgid "Version history"
+msgstr "História verzií"
+
+#: apps/io.ox/files/list/perspective.js:109
 msgid "Couldn't load file data."
 msgstr "Nepodarilo sa načítať údaje súboru."
-
-#: apps/io.ox/files/icons/perspective.js:354
-#: apps/io.ox/files/icons/perspective.js:382
-#: apps/io.ox/files/list/perspective.js:130
-#: apps/io.ox/files/list/perspective.js:160
-msgid "This file has not been added"
-msgstr "Tento súbor nebol pridaný"
 
 #: apps/io.ox/files/views/create.js:36
 msgid "Add new file"
 msgstr "Pridať nový súbor"
 
-#: apps/io.ox/files/views/create.js:56
+#: apps/io.ox/files/views/create.js:57
 msgid "This file has been added"
 msgstr "Tento súbor bol pridaný"
 
-#: apps/io.ox/files/views/create.js:61
-msgid "!!!This file has not been added"
-msgstr "!!!Tento súbor nebol pridaný"
-
-#: apps/io.ox/files/views/create.js:80
-msgctxt "description"
+#: apps/io.ox/files/views/create.js:81
+msgctxt "title"
 msgid "Title"
-msgstr "Nadpis"
+msgstr "Názov"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/icons/perspective.js:61
 msgid "Searched for: %1$s"
 msgstr "Hľadané: %1$s"
 
-#: apps/io.ox/files/actions.js:155 apps/io.ox/files/actions.js:191
+#: apps/io.ox/files/actions.js:155
 msgid "File: %1$s"
 msgstr "Súbor: %1$s"
 
 #: apps/io.ox/files/actions.js:156 apps/io.ox/files/actions.js:157
-#: apps/io.ox/files/actions.js:191
 msgid "Direct link: %1$s"
 msgstr "Priamy odkaz: %1$s"
 
-#: apps/io.ox/files/actions.js:197
-msgid "copy to clipboard"
-msgstr "skopírovať do schránky"
-
-#: apps/io.ox/files/actions.js:228 apps/io.ox/files/actions.js:475
+#: apps/io.ox/files/actions.js:229 apps/io.ox/files/actions.js:480
 msgid "Do you really want to delete this file?"
 msgid_plural "Do you really want to delete these files?"
 msgstr[0] "Ste si istý, že chcete tento súbor zmazať?"
 msgstr[1] "Ste si istý, že chcete tieto súbory zmazať?"
 msgstr[2] "Ste si istý, že chcete tieto súbory zmazať?"
 
-#: apps/io.ox/files/actions.js:233
+#: apps/io.ox/files/actions.js:234
 msgid "This file has been deleted"
 msgid_plural "These files have been deleted"
 msgstr[0] "Tento súbor bol zmazaný"
 msgstr[1] "Tieto súbory boli zmazané"
 msgstr[2] "Tieto súbory boli zmazané"
 
-#: apps/io.ox/files/actions.js:238
+#: apps/io.ox/files/actions.js:239
 msgid "This file has not been deleted"
 msgid_plural "These files have not been deleted"
 msgstr[0] "Tento súbor nebol zmazaný"
 msgstr[1] "Tieto súbory neboli zmazané"
 msgstr[2] "Tieto súbory neboli zmazané"
 
-#: apps/io.ox/files/actions.js:435
+#: apps/io.ox/files/actions.js:437
 msgid "Files have been moved"
 msgstr "Súbory boli presunuté"
 
-#: apps/io.ox/files/actions.js:436
+#: apps/io.ox/files/actions.js:438
 msgid "Files have been copied"
 msgstr "Súbory boli skopírované"
 
-#: apps/io.ox/files/actions.js:449
+#: apps/io.ox/files/actions.js:454
 msgid "This file has been added to the portal"
 msgstr "Tento súbor bol pridaný do portálu"
 
-#: apps/io.ox/files/actions.js:508
+#: apps/io.ox/files/actions.js:513
 msgid "Upload new file"
 msgstr "Nahrať nový súbor"
 
-#: apps/io.ox/files/actions.js:526
+#: apps/io.ox/files/actions.js:530
 msgid "Icons"
 msgstr "Ikony"
 
-#: apps/io.ox/files/actions.js:569 apps/io.ox/files/actions.js:658
-msgid "Open"
-msgstr "Otvoriť"
-
-#: apps/io.ox/files/actions.js:584
+#: apps/io.ox/files/actions.js:588
 msgid "Send as link"
 msgstr "Poslať ako odkaz"
 
-#: apps/io.ox/files/actions.js:591
+#: apps/io.ox/files/actions.js:595
 msgid "Send by mail"
 msgstr "Poslať emailom"
 
-#: apps/io.ox/files/actions.js:598
+#: apps/io.ox/files/actions.js:602
 msgid "Show link"
 msgstr "Zobraziť odkaz"
 
-#: apps/io.ox/files/actions.js:612
+#: apps/io.ox/files/actions.js:616
 msgid "Edit description"
 msgstr "Upraviť popis"
 
-#: apps/io.ox/files/actions.js:672
+#: apps/io.ox/files/actions.js:676
 msgid "Make this the current version"
 msgstr "Označiť túto verziu ako aktuálnu"
 
-#: apps/io.ox/files/actions.js:679
+#: apps/io.ox/files/actions.js:683
 msgid "Delete version"
 msgstr "Zmazať verziu"
 
-#: apps/io.ox/files/actions.js:689
-msgid "Drop here to upload a <b>new file</b>"
-msgstr "Pretiahnutím súboru sem nahráte <b>nový súbor</b>"
+#: apps/io.ox/files/actions.js:693
+msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
+msgstr "Pretiahnutím súboru sem nahráte <b class=\"dndignore\">nový súbor</b>"
 
-#: apps/io.ox/files/actions.js:703
-msgid "Drop here to upload a <b>new version</b> of \"%1$s\""
-msgstr "Pretiahnutím súboru sem nahráte <b>novú verziu</b> „%1$s“"
+#: apps/io.ox/files/actions.js:707
+msgid ""
+"Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgstr ""
+"Pretiahnutím súboru sem nahráte <b class=\"dndignore\">novú verziu</b> „%1$s“"
 
-#: apps/io.ox/files/actions.js:709
-msgid "Drop here to upload a <b>new version</b>"
-msgstr "Pretiahnutím súboru sem nahráte <b>novú verziu</b>"
+#: apps/io.ox/files/actions.js:713
+msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
+msgstr "Pretiahnutím súboru sem nahráte <b class=\"dndignore\">novú verziu</b>"
 
-#: apps/io.ox/files/actions.js:798
+#: apps/io.ox/files/actions.js:802
 msgid "View Slideshow"
 msgstr "Zobraziť prezentáciu"
 
-#: apps/io.ox/files/actions.js:815
+#: apps/io.ox/files/actions.js:819
 msgid "Play audio files"
 msgstr "Prehrať zvukové súbory"
 
-#: apps/io.ox/files/actions.js:822
+#: apps/io.ox/files/actions.js:826
 msgid "Play video files"
 msgstr "Prehrať video súbory"
 
 #: apps/io.ox/help/center.js:128
 msgid "Click here to quit the help center"
 msgstr "Kliknutím sem ukončíte centrum pomoci"
-
-#: apps/io.ox/publications/wizard.js:22
-msgid "New publication"
-msgstr "Nová publikácia"
-
-#: apps/io.ox/publications/wizard.js:50
-msgid "Publication created"
-msgstr "Publikácie vytvorená"
-
-#: apps/io.ox/publications/wizard.js:59
-msgid "Send email"
-msgstr "Poslať email"
 
 #: apps/io.ox/launchpad/main.js:35
 msgid "Documents"
@@ -4116,346 +4320,346 @@ msgstr "Vaše aplikácie"
 msgid "Manage applications"
 msgstr "Spravovanie aplikácií"
 
-#: apps/io.ox/contacts/model.js:211
+#: apps/io.ox/contacts/model.js:214
 msgid "Display name"
 msgstr "Zobrazené meno"
 
-#: apps/io.ox/contacts/model.js:212
+#: apps/io.ox/contacts/model.js:215
 msgid "First name"
 msgstr "Krstné meno"
 
-#: apps/io.ox/contacts/model.js:213
+#: apps/io.ox/contacts/model.js:216
 msgid "Last name"
 msgstr "Priezvisko"
 
-#: apps/io.ox/contacts/model.js:214
+#: apps/io.ox/contacts/model.js:217
 msgid "Middle name"
 msgstr "Stredné meno"
 
-#: apps/io.ox/contacts/model.js:215
+#: apps/io.ox/contacts/model.js:218
 msgid "Suffix"
 msgstr "Prípona"
 
-#: apps/io.ox/contacts/model.js:216
+#: apps/io.ox/contacts/model.js:219
 msgctxt "salutation"
 msgid "Title"
 msgstr "Nadpis"
 
-#: apps/io.ox/contacts/model.js:217 apps/io.ox/contacts/model.js:234
-#: apps/io.ox/contacts/model.js:248
+#: apps/io.ox/contacts/model.js:220 apps/io.ox/contacts/model.js:237
+#: apps/io.ox/contacts/model.js:251
 msgid "Street"
 msgstr "Ulica"
 
-#: apps/io.ox/contacts/model.js:218 apps/io.ox/contacts/model.js:235
-#: apps/io.ox/contacts/model.js:250
+#: apps/io.ox/contacts/model.js:221 apps/io.ox/contacts/model.js:238
+#: apps/io.ox/contacts/model.js:253
 msgid "Postcode"
 msgstr "PSČ"
 
-#: apps/io.ox/contacts/model.js:219 apps/io.ox/contacts/model.js:236
-#: apps/io.ox/contacts/model.js:249
+#: apps/io.ox/contacts/model.js:222 apps/io.ox/contacts/model.js:239
+#: apps/io.ox/contacts/model.js:252
 msgid "Town"
 msgstr "Mesto"
 
-#: apps/io.ox/contacts/model.js:220 apps/io.ox/contacts/model.js:237
-#: apps/io.ox/contacts/model.js:303
+#: apps/io.ox/contacts/model.js:223 apps/io.ox/contacts/model.js:240
+#: apps/io.ox/contacts/model.js:306
 msgid "State"
 msgstr "Štát"
 
-#: apps/io.ox/contacts/model.js:221 apps/io.ox/contacts/model.js:238
-#: apps/io.ox/contacts/model.js:251
+#: apps/io.ox/contacts/model.js:224 apps/io.ox/contacts/model.js:241
+#: apps/io.ox/contacts/model.js:254
 msgid "Country"
 msgstr "Krajina"
 
-#: apps/io.ox/contacts/model.js:222
+#: apps/io.ox/contacts/model.js:225
 msgid "Date of birth"
 msgstr "Dátum narodenia"
 
-#: apps/io.ox/contacts/model.js:223
+#: apps/io.ox/contacts/model.js:226
 msgid "Marital status"
 msgstr "Rodinný stav"
 
-#: apps/io.ox/contacts/model.js:224
+#: apps/io.ox/contacts/model.js:227
 msgid "Children"
 msgstr "Deti"
 
-#: apps/io.ox/contacts/model.js:225 apps/io.ox/contacts/view-detail.js:346
+#: apps/io.ox/contacts/model.js:228 apps/io.ox/contacts/view-detail.js:334
 msgid "Profession"
 msgstr "Povolanie"
 
-#: apps/io.ox/contacts/model.js:226
+#: apps/io.ox/contacts/model.js:229
 msgid "Nickname"
 msgstr "Prezývka"
 
-#: apps/io.ox/contacts/model.js:227
+#: apps/io.ox/contacts/model.js:230
 msgid "Spouse's name"
 msgstr "Názov partnera"
 
-#: apps/io.ox/contacts/model.js:228
+#: apps/io.ox/contacts/model.js:231
 msgid "Anniversary"
 msgstr "Výročie"
 
-#: apps/io.ox/contacts/model.js:230 apps/io.ox/contacts/print.js:76
-#: apps/io.ox/contacts/view-detail.js:344
+#: apps/io.ox/contacts/model.js:233 apps/io.ox/contacts/print.js:76
+#: apps/io.ox/contacts/view-detail.js:332
 msgid "Department"
 msgstr "Oddelenie"
 
-#: apps/io.ox/contacts/model.js:231 apps/io.ox/contacts/view-detail.js:345
+#: apps/io.ox/contacts/model.js:234 apps/io.ox/contacts/view-detail.js:333
 msgid "Position"
 msgstr "Pozícia"
 
-#: apps/io.ox/contacts/model.js:232
+#: apps/io.ox/contacts/model.js:235
 msgid "Employee type"
 msgstr "Typ zamestnanca"
 
-#: apps/io.ox/contacts/model.js:233
+#: apps/io.ox/contacts/model.js:236
 msgid "Room number"
 msgstr "Číslo izby"
 
-#: apps/io.ox/contacts/model.js:239
+#: apps/io.ox/contacts/model.js:242
 msgid "Employee ID"
 msgstr "ID zamestnanca"
 
-#: apps/io.ox/contacts/model.js:240
+#: apps/io.ox/contacts/model.js:243
 msgid "Sales Volume"
 msgstr "Objem predaja"
 
-#: apps/io.ox/contacts/model.js:241
+#: apps/io.ox/contacts/model.js:244
 msgid "TAX ID"
 msgstr "Daňový ID"
 
-#: apps/io.ox/contacts/model.js:242
+#: apps/io.ox/contacts/model.js:245
 msgid "Commercial Register"
 msgstr "Obchodný register"
 
-#: apps/io.ox/contacts/model.js:243
+#: apps/io.ox/contacts/model.js:246
 msgid "Branches"
 msgstr "Vetvy"
 
-#: apps/io.ox/contacts/model.js:244
+#: apps/io.ox/contacts/model.js:247
 msgid "Business category"
 msgstr "Kategória spoločnosti"
 
-#: apps/io.ox/contacts/model.js:245
+#: apps/io.ox/contacts/model.js:248
 msgid "Info"
 msgstr "Info"
 
-#: apps/io.ox/contacts/model.js:246
+#: apps/io.ox/contacts/model.js:249
 msgid "Manager"
 msgstr "Nadriadený"
 
-#: apps/io.ox/contacts/model.js:247
+#: apps/io.ox/contacts/model.js:250
 msgid "Assistant"
 msgstr "Asistent"
 
-#: apps/io.ox/contacts/model.js:252 apps/io.ox/contacts/print.js:77
+#: apps/io.ox/contacts/model.js:255 apps/io.ox/contacts/print.js:77
 msgid "Phone"
 msgstr "Telefón"
 
-#: apps/io.ox/contacts/model.js:253
+#: apps/io.ox/contacts/model.js:256
 msgid "Phone alt"
 msgstr "Alt. telefón"
 
-#: apps/io.ox/contacts/model.js:254 apps/io.ox/contacts/model.js:260
+#: apps/io.ox/contacts/model.js:257 apps/io.ox/contacts/model.js:263
 msgid "Fax"
 msgstr "Fax"
 
-#: apps/io.ox/contacts/model.js:255
+#: apps/io.ox/contacts/model.js:258
 msgid "Telephone callback"
 msgstr "Zavolanie naspäť telefónom"
 
-#: apps/io.ox/contacts/model.js:256
+#: apps/io.ox/contacts/model.js:259
 msgid "Phone (car)"
 msgstr "Telefón (auto)"
 
-#: apps/io.ox/contacts/model.js:257
+#: apps/io.ox/contacts/model.js:260
 msgid "Phone (company)"
 msgstr "Telefón (spoločnosť)"
 
-#: apps/io.ox/contacts/model.js:258
+#: apps/io.ox/contacts/model.js:261
 msgid "Phone (Home)"
 msgstr "Telefón (domov)"
 
-#: apps/io.ox/contacts/model.js:259
+#: apps/io.ox/contacts/model.js:262
 msgid "Phone (Home alt)"
 msgstr "Telefón (alt. domov)"
 
-#: apps/io.ox/contacts/model.js:261 apps/io.ox/contacts/print.js:78
+#: apps/io.ox/contacts/model.js:264 apps/io.ox/contacts/print.js:78
 msgid "Cell phone"
 msgstr "Mobil"
 
-#: apps/io.ox/contacts/model.js:262
+#: apps/io.ox/contacts/model.js:265
 msgid "Cell phone alt"
 msgstr "Alt. mobil"
 
-#: apps/io.ox/contacts/model.js:263
+#: apps/io.ox/contacts/model.js:266
 msgid "Phone (other)"
 msgstr "Telefón (iný)"
 
-#: apps/io.ox/contacts/model.js:264
+#: apps/io.ox/contacts/model.js:267
 msgid "Fax (alt)"
 msgstr "Fax (alt.)"
 
-#: apps/io.ox/contacts/model.js:265
+#: apps/io.ox/contacts/model.js:268
 msgid "Email 1"
 msgstr "Email 1"
 
-#: apps/io.ox/contacts/model.js:266
+#: apps/io.ox/contacts/model.js:269
 msgid "Email 2"
 msgstr "Email 2"
 
-#: apps/io.ox/contacts/model.js:267
+#: apps/io.ox/contacts/model.js:270
 msgid "Email 3"
 msgstr "Email 3"
 
-#: apps/io.ox/contacts/model.js:269
+#: apps/io.ox/contacts/model.js:272
 msgid "Telephone (ISDN)"
 msgstr "Telefón (ISDN)"
 
-#: apps/io.ox/contacts/model.js:270
+#: apps/io.ox/contacts/model.js:273
 msgid "Pager"
 msgstr "Pager"
 
-#: apps/io.ox/contacts/model.js:271
+#: apps/io.ox/contacts/model.js:274
 msgid "Telephone primary"
 msgstr "Primárny telefón"
 
-#: apps/io.ox/contacts/model.js:272
+#: apps/io.ox/contacts/model.js:275
 msgid "Telephone radio"
 msgstr "Rádiotelefón"
 
-#: apps/io.ox/contacts/model.js:273
+#: apps/io.ox/contacts/model.js:276
 msgid "Telex"
 msgstr "Telex"
 
-#: apps/io.ox/contacts/model.js:274
+#: apps/io.ox/contacts/model.js:277
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
 
-#: apps/io.ox/contacts/model.js:275
+#: apps/io.ox/contacts/model.js:278
 msgid "Instant Messenger 1"
 msgstr "Rýchle správy (IM) 1"
 
-#: apps/io.ox/contacts/model.js:276
+#: apps/io.ox/contacts/model.js:279
 msgid "Instant Messenger 2"
 msgstr "Rýchle správy (IM) 2"
 
-#: apps/io.ox/contacts/model.js:277
+#: apps/io.ox/contacts/model.js:280
 msgid "IP phone"
 msgstr "IP telefón"
 
-#: apps/io.ox/contacts/model.js:278
+#: apps/io.ox/contacts/model.js:281
 msgid "Phone (assistant)"
 msgstr "Telefón (asistent)"
 
-#: apps/io.ox/contacts/model.js:279 apps/io.ox/tasks/view-detail.js:144
+#: apps/io.ox/contacts/model.js:282 apps/io.ox/tasks/view-detail.js:140
 msgid "Company"
 msgstr "Spoločnosť"
 
-#: apps/io.ox/contacts/model.js:280
+#: apps/io.ox/contacts/model.js:283
 msgid "Image 1"
 msgstr "Obrázok 1"
 
-#: apps/io.ox/contacts/model.js:281
+#: apps/io.ox/contacts/model.js:284
 msgid "Optional 01"
 msgstr "Voliteľné 01"
 
-#: apps/io.ox/contacts/model.js:282
+#: apps/io.ox/contacts/model.js:285
 msgid "Optional 02"
 msgstr "Voliteľné 02"
 
-#: apps/io.ox/contacts/model.js:283
+#: apps/io.ox/contacts/model.js:286
 msgid "Optional 03"
 msgstr "Voliteľné 03"
 
-#: apps/io.ox/contacts/model.js:284
+#: apps/io.ox/contacts/model.js:287
 msgid "Optional 04"
 msgstr "Voliteľné 04"
 
-#: apps/io.ox/contacts/model.js:285
+#: apps/io.ox/contacts/model.js:288
 msgid "Optional 05"
 msgstr "Voliteľné 05"
 
-#: apps/io.ox/contacts/model.js:286
+#: apps/io.ox/contacts/model.js:289
 msgid "Optional 06"
 msgstr "Voliteľné 06"
 
-#: apps/io.ox/contacts/model.js:287
+#: apps/io.ox/contacts/model.js:290
 msgid "Optional 07"
 msgstr "Voliteľné 07"
 
-#: apps/io.ox/contacts/model.js:288
+#: apps/io.ox/contacts/model.js:291
 msgid "Optional 08"
 msgstr "Voliteľné 08"
 
-#: apps/io.ox/contacts/model.js:289
+#: apps/io.ox/contacts/model.js:292
 msgid "Optional 09"
 msgstr "Voliteľné 09"
 
-#: apps/io.ox/contacts/model.js:290
+#: apps/io.ox/contacts/model.js:293
 msgid "Optional 10"
 msgstr "Voliteľné 10"
 
-#: apps/io.ox/contacts/model.js:291
+#: apps/io.ox/contacts/model.js:294
 msgid "Optional 11"
 msgstr "Voliteľné 11"
 
-#: apps/io.ox/contacts/model.js:292
+#: apps/io.ox/contacts/model.js:295
 msgid "Optional 12"
 msgstr "Voliteľné 12"
 
-#: apps/io.ox/contacts/model.js:293
+#: apps/io.ox/contacts/model.js:296
 msgid "Optional 13"
 msgstr "Voliteľné 13"
 
-#: apps/io.ox/contacts/model.js:294
+#: apps/io.ox/contacts/model.js:297
 msgid "Optional 14"
 msgstr "Voliteľné 14"
 
-#: apps/io.ox/contacts/model.js:295
+#: apps/io.ox/contacts/model.js:298
 msgid "Optional 15"
 msgstr "Voliteľné 15"
 
-#: apps/io.ox/contacts/model.js:296
+#: apps/io.ox/contacts/model.js:299
 msgid "Optional 16"
 msgstr "Voliteľné 16"
 
-#: apps/io.ox/contacts/model.js:297
+#: apps/io.ox/contacts/model.js:300
 msgid "Optional 17"
 msgstr "Voliteľné 17"
 
-#: apps/io.ox/contacts/model.js:298
+#: apps/io.ox/contacts/model.js:301
 msgid "Optional 18"
 msgstr "Voliteľné 18"
 
-#: apps/io.ox/contacts/model.js:299
+#: apps/io.ox/contacts/model.js:302
 msgid "Optional 19"
 msgstr "Voliteľné 19"
 
-#: apps/io.ox/contacts/model.js:300
+#: apps/io.ox/contacts/model.js:303
 msgid "Optional 20"
 msgstr "Voliteľné 20"
 
-#: apps/io.ox/contacts/model.js:301
+#: apps/io.ox/contacts/model.js:304
 msgid "Links"
 msgstr "Odkazy"
 
-#: apps/io.ox/contacts/model.js:304
+#: apps/io.ox/contacts/model.js:307
 msgid "Mark as distributionlist"
 msgstr "Označiť ako distribučný zoznam"
 
-#: apps/io.ox/contacts/model.js:305
+#: apps/io.ox/contacts/model.js:308
 msgid "Default address"
 msgstr "Predvolená adresa"
 
-#: apps/io.ox/contacts/model.js:306
+#: apps/io.ox/contacts/model.js:309
 msgid "Address Home"
 msgstr "Adresa domov"
 
-#: apps/io.ox/contacts/model.js:307
+#: apps/io.ox/contacts/model.js:310
 msgid "Address Business"
 msgstr "Adresa do práce"
 
-#: apps/io.ox/contacts/model.js:308
+#: apps/io.ox/contacts/model.js:311
 msgid "Address Other"
 msgstr "Iná adresa"
 
@@ -4471,22 +4675,22 @@ msgstr "Názov zoznamu"
 msgid "Create list"
 msgstr "Vytvoriť zoznam"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:75
-#: apps/io.ox/contacts/view-detail.js:388
-#: apps/io.ox/contacts/view-detail.js:392
+#: apps/io.ox/contacts/distrib/create-dist-view.js:74
+#: apps/io.ox/contacts/view-detail.js:376
+#: apps/io.ox/contacts/view-detail.js:380
 msgid "Members"
 msgstr "Členovia"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:80
+#: apps/io.ox/contacts/distrib/create-dist-view.js:79
 msgid "Email address"
 msgstr "Emailová adresa"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:199
-#: apps/io.ox/contacts/view-detail.js:388
+#: apps/io.ox/contacts/distrib/create-dist-view.js:196
+#: apps/io.ox/contacts/view-detail.js:376
 msgid "This list has no members yet"
 msgstr "Táto skupina zatiaľ nemá členov"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:319
+#: apps/io.ox/contacts/distrib/create-dist-view.js:314
 msgid "Couldn't load all contact images."
 msgstr "Nepodarilo sa načítať všetky obrázky kontaktov."
 
@@ -4500,8 +4704,8 @@ msgstr "Vytvoriť distribučný zoznam"
 #. %3$s is the city
 #. %4$s is the state
 #. %5$s is the country
-#: apps/io.ox/contacts/edit/view-form.js:212
-#: apps/io.ox/contacts/view-detail.js:126
+#: apps/io.ox/contacts/edit/view-form.js:211
+#: apps/io.ox/contacts/view-detail.js:124
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
@@ -4513,64 +4717,63 @@ msgstr ""
 "%4$s\n"
 "%5$s"
 
-#: apps/io.ox/contacts/view-detail.js:260
-#: apps/io.ox/contacts/view-detail.js:266
-#: apps/io.ox/contacts/view-detail.js:282 apps/io.ox/tasks/view-detail.js:120
-#: apps/io.ox/tasks/view-detail.js:262
+#: apps/io.ox/contacts/view-detail.js:255
+#: apps/io.ox/contacts/view-detail.js:270 apps/io.ox/tasks/view-detail.js:116
+#: apps/io.ox/tasks/view-detail.js:259
 msgid "Attachments   "
 msgstr "Prílohy"
 
-#: apps/io.ox/contacts/view-detail.js:291 apps/io.ox/tasks/view-detail.js:270
+#: apps/io.ox/contacts/view-detail.js:279 apps/io.ox/tasks/view-detail.js:267
 msgid "all"
 msgstr "všetky"
 
-#: apps/io.ox/contacts/view-detail.js:303
+#: apps/io.ox/contacts/view-detail.js:291
 msgid "Could not load attachments for this contact."
 msgstr "Nepodarilo sa načítať prílohy tohto kontaktu."
 
-#: apps/io.ox/contacts/view-detail.js:329
+#: apps/io.ox/contacts/view-detail.js:317
 msgid "Copy to description"
 msgstr "Skopírovať do popisu"
 
-#: apps/io.ox/contacts/view-detail.js:356
+#: apps/io.ox/contacts/view-detail.js:344
 msgctxt "address"
 msgid "Work"
 msgstr "Práca"
 
-#: apps/io.ox/contacts/view-detail.js:357
+#: apps/io.ox/contacts/view-detail.js:345
 msgctxt "address"
 msgid "Home"
 msgstr "Domov"
 
-#: apps/io.ox/contacts/view-detail.js:367
-#: apps/io.ox/contacts/view-detail.js:368
+#: apps/io.ox/contacts/view-detail.js:355
+#: apps/io.ox/contacts/view-detail.js:356
 msgid "Phone (business)"
 msgstr "Telefón (obchodný)"
 
-#: apps/io.ox/contacts/view-detail.js:369
-#: apps/io.ox/contacts/view-detail.js:370
+#: apps/io.ox/contacts/view-detail.js:357
+#: apps/io.ox/contacts/view-detail.js:358
 msgid "Phone (private)"
 msgstr "Telefón (súkromný)"
 
-#: apps/io.ox/contacts/view-detail.js:371
-#: apps/io.ox/contacts/view-detail.js:372
+#: apps/io.ox/contacts/view-detail.js:359
+#: apps/io.ox/contacts/view-detail.js:360
 msgid "Mobile"
 msgstr "Mobil"
 
-#: apps/io.ox/contacts/view-detail.js:400
+#: apps/io.ox/contacts/view-detail.js:388
 msgid "Primary Email"
 msgstr "Primárny email"
 
-#: apps/io.ox/contacts/view-detail.js:403
-#: apps/io.ox/contacts/view-detail.js:407
+#: apps/io.ox/contacts/view-detail.js:391
+#: apps/io.ox/contacts/view-detail.js:395
 msgid "Alternative Email"
 msgstr "Alternatívny email"
 
-#: apps/io.ox/contacts/view-detail.js:422
+#: apps/io.ox/contacts/view-detail.js:410
 msgid "Birthday"
 msgstr "Narodeniny"
 
-#: apps/io.ox/contacts/view-detail.js:441
+#: apps/io.ox/contacts/view-detail.js:429
 msgid "Show QR code"
 msgstr "Zobraziť kód QR"
 
@@ -4619,6 +4822,12 @@ msgstr "Používateľom definované"
 msgid "Miscellaneous"
 msgstr "Rozličné"
 
+#: apps/io.ox/contacts/edit/view-form.js:320
+#: apps/io.ox/tasks/edit/view-template.js:554
+msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
+msgstr ""
+"Pretiahnutím súboru sem nahráte <b class=\"dndignore\">novú prílohu</b>"
+
 #. Name with title
 #. %1$s is the first name
 #. %2$s is the last name
@@ -4634,6 +4843,14 @@ msgstr "%3$s %2$s, %1$s"
 msgid "%2$s, %1$s"
 msgstr "%2$s, %1$s"
 
+#. Name in mail addresses
+#. %1$s is the first name
+#. %2$s is the last name
+#: apps/io.ox/contacts/util.js:141
+msgctxt "mail address"
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
 #: apps/io.ox/contacts/main.js:109
 msgid "Empty name and description found."
 msgstr "Nájdený prázdny názov a popis."
@@ -4642,7 +4859,7 @@ msgstr "Nájdený prázdny názov a popis."
 msgid "Edit to set a name."
 msgstr "Upravením nastavíte meno."
 
-#: apps/io.ox/contacts/main.js:166
+#: apps/io.ox/contacts/main.js:172
 msgid "Couldn't load contact data."
 msgstr "Nepodarilo sa načítať dáta kontaktu."
 
@@ -4653,6 +4870,21 @@ msgstr "Telefónny zoznam"
 #: apps/io.ox/contacts/print.js:76
 msgid "City"
 msgstr "Mesto"
+
+#: apps/io.ox/contacts/print.js:80
+msgid "Note: One contact is not shown due to missing phone numbers"
+msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
+msgstr[0] ""
+"Poznámka: Jeden kontakt sa nezobrazuje z dôvodu chýbajúcich telefónnych čísel"
+msgstr[1] ""
+"Poznámka: %1$d kontakty sa nezobrazujú z dôvodu chýbajúcich telefónnych čísel"
+msgstr[2] ""
+"Poznámka: %1$d kontaktov sa nezobrazuje z dôvodu chýbajúcich telefónnych "
+"čísel"
+
+#: apps/io.ox/contacts/print.js:86
+msgid "This note will not be printed"
+msgstr "Táto poznámka sa nevypíše"
 
 #: apps/io.ox/contacts/actions.js:40
 msgid "Do you really want to delete these items?"
@@ -4674,31 +4906,31 @@ msgstr "Kontakty boli presunuté"
 msgid "Contacts have been copied"
 msgstr "Kontakty boli skopírované"
 
-#: apps/io.ox/contacts/actions.js:407
+#: apps/io.ox/contacts/actions.js:434
 msgid "This distribution list has been added to the portal"
 msgstr "Tento distribučný zoznam bol pridaný na portál"
 
-#: apps/io.ox/contacts/actions.js:472 apps/io.ox/tasks/actions.js:327
+#: apps/io.ox/contacts/actions.js:499 apps/io.ox/tasks/actions.js:357
 msgid "No preview available"
 msgstr "Žiaden náhľad nie je dostupný"
 
-#: apps/io.ox/contacts/actions.js:515 apps/io.ox/tasks/actions.js:370
+#: apps/io.ox/contacts/actions.js:542 apps/io.ox/tasks/actions.js:400
 msgid "Attachments have been saved!"
 msgstr "Prílohy boli boli uložené!"
 
-#: apps/io.ox/contacts/actions.js:541
+#: apps/io.ox/contacts/actions.js:568
 msgid "Add contact"
 msgstr "Pridať kontakt"
 
-#: apps/io.ox/contacts/actions.js:548
+#: apps/io.ox/contacts/actions.js:575
 msgid "Add distribution list"
 msgstr "Pridať distribučný zoznam"
 
-#: apps/io.ox/contacts/actions.js:560
+#: apps/io.ox/contacts/actions.js:587
 msgid "Send mail"
 msgstr "Poslať email"
 
-#: apps/io.ox/contacts/actions.js:568
+#: apps/io.ox/contacts/actions.js:595
 msgid "Send vCard"
 msgstr "Poslať vCard"
 
@@ -4722,7 +4954,8 @@ msgstr "Ukladajú sa najnovšie zmeny..."
 msgid "Invalid data"
 msgstr "Neplatné dáta"
 
-#: apps/io.ox/backbone/validation.js:46 apps/io.ox/backbone/validation.js:53
+#: apps/io.ox/backbone/forms.js:859 apps/io.ox/backbone/validation.js:46
+#: apps/io.ox/backbone/validation.js:53
 msgid "Please enter a valid date"
 msgstr "Prosím, zadajte platný dátum"
 
@@ -4738,25 +4971,21 @@ msgstr "Prosím, zadajte platnú e-mailovú adresu"
 msgid "Please enter a value"
 msgstr "Prosím, zadajte hodnotu"
 
-#: apps/io.ox/backbone/forms.js:54
+#: apps/io.ox/backbone/forms.js:55
 msgid "An error occurred"
 msgstr "Vyskytla sa chyba"
 
-#: apps/io.ox/backbone/forms.js:57
+#: apps/io.ox/backbone/forms.js:58
 msgid "An error occurred. Please try again later"
 msgstr "Vyskytla sa chyba. Prosím, skúste to znova neskôr"
 
-#: apps/io.ox/backbone/forms.js:478
+#: apps/io.ox/backbone/forms.js:486
 msgid "Show less"
 msgstr "Skryť podrobnosti"
 
 #: apps/io.ox/tasks/model.js:108
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "Priebeh musí byť platné číslo medzi 0 a 100"
-
-#: apps/io.ox/tasks/settings/pane.js:28
-msgid "Interval of the reminder in minutes"
-msgstr "Interval času pripomenutia v minútach"
 
 #: apps/io.ox/tasks/settings/pane.js:29
 msgid "E-Mail notification for task"
@@ -4770,80 +4999,152 @@ msgstr "Upozornenie emailom pre tvorcu úlohy?"
 msgid "E-Mail notification for task participant?"
 msgstr "Upozornenie emailom pre účastníka úlohy?"
 
+#: apps/io.ox/tasks/settings/pane.js:36 apps/io.ox/tasks/util.js:185
+msgid "in 5 minutes"
+msgstr "o 5 minút"
+
+#: apps/io.ox/tasks/settings/pane.js:37 apps/io.ox/tasks/util.js:186
+msgid "in 15 minutes"
+msgstr "o 15 minút"
+
+#: apps/io.ox/tasks/settings/pane.js:38 apps/io.ox/tasks/util.js:187
+msgid "in 30 minutes"
+msgstr "o 30 minút"
+
+#: apps/io.ox/tasks/settings/pane.js:39 apps/io.ox/tasks/util.js:188
+msgid "in one hour"
+msgstr "o hodinu"
+
+#: apps/io.ox/tasks/settings/pane.js:40 apps/io.ox/tasks/util.js:25
+msgid "this morning"
+msgstr "dnes ráno"
+
+#: apps/io.ox/tasks/settings/pane.js:41 apps/io.ox/tasks/util.js:26
+msgid "by noon"
+msgstr "do poludnia"
+
+#: apps/io.ox/tasks/settings/pane.js:42 apps/io.ox/tasks/util.js:27
+msgid "this afternoon"
+msgstr "toto odpoludnie"
+
+#: apps/io.ox/tasks/settings/pane.js:43 apps/io.ox/tasks/util.js:28
+msgid "tonight"
+msgstr "dnes večer"
+
+#: apps/io.ox/tasks/settings/pane.js:44 apps/io.ox/tasks/util.js:29
+msgid "late in the evening"
+msgstr "neskoro večer"
+
+#: apps/io.ox/tasks/settings/pane.js:45 apps/io.ox/tasks/util.js:218
+msgid "tomorrow"
+msgstr "zajtra"
+
+#: apps/io.ox/tasks/settings/pane.js:46 apps/io.ox/tasks/util.js:31
+msgid "next Sunday"
+msgstr "ďalšiu nedeľu"
+
+#: apps/io.ox/tasks/settings/pane.js:47 apps/io.ox/tasks/util.js:32
+msgid "next Monday"
+msgstr "ďalší pondelok"
+
+#: apps/io.ox/tasks/settings/pane.js:48 apps/io.ox/tasks/util.js:33
+msgid "next Tuesday"
+msgstr "ďalší utorok"
+
+#: apps/io.ox/tasks/settings/pane.js:49 apps/io.ox/tasks/util.js:34
+msgid "next Wednesday"
+msgstr "ďalšiu stredu"
+
+#: apps/io.ox/tasks/settings/pane.js:50 apps/io.ox/tasks/util.js:35
+msgid "next Thursday"
+msgstr "ďalší štvrtok"
+
+#: apps/io.ox/tasks/settings/pane.js:51 apps/io.ox/tasks/util.js:36
+msgid "next Friday"
+msgstr "ďalší piatok"
+
+#: apps/io.ox/tasks/settings/pane.js:52 apps/io.ox/tasks/util.js:37
+msgid "next Saturday"
+msgstr "ďalšiu sobotu"
+
+#: apps/io.ox/tasks/settings/pane.js:53 apps/io.ox/tasks/util.js:230
+msgid "in one week"
+msgstr "o týždeň"
+
 #. %1$s due date of a task
-#: apps/io.ox/tasks/view-detail.js:52
+#: apps/io.ox/tasks/view-detail.js:48
 #, c-format
 msgid "Due %1$s"
 msgstr "Termín  %1$s"
 
 #. %1$s reminder date of a task
-#: apps/io.ox/tasks/view-detail.js:63
+#: apps/io.ox/tasks/view-detail.js:59
 #, c-format
 msgid "Remind date %1$s"
 msgstr "Pripomenúť  %1$s"
 
 #. %1$s how much of a task is completed in percent, values from 0-100
-#: apps/io.ox/tasks/view-detail.js:73
+#: apps/io.ox/tasks/view-detail.js:69
 #, c-format
 msgid "Progress %1$s %"
 msgstr "Priebeh %1$s %"
 
-#: apps/io.ox/tasks/view-detail.js:136
+#: apps/io.ox/tasks/view-detail.js:132
 msgid "Start date"
 msgstr "Dátum začiatku"
 
 #: apps/io.ox/tasks/edit/view-template.js:138
-#: apps/io.ox/tasks/view-detail.js:137
+#: apps/io.ox/tasks/view-detail.js:133
 msgid "Estimated duration in minutes"
 msgstr "Odhadované trvanie v minútach"
 
 #: apps/io.ox/tasks/edit/view-template.js:161
-#: apps/io.ox/tasks/view-detail.js:138
+#: apps/io.ox/tasks/view-detail.js:134
 msgid "Actual duration in minutes"
 msgstr "Skutočné trvanie v minútach"
 
 #: apps/io.ox/tasks/edit/view-template.js:184
-#: apps/io.ox/tasks/view-detail.js:139
+#: apps/io.ox/tasks/view-detail.js:135
 msgid "Estimated costs"
 msgstr "Odhadované náklady"
 
 #: apps/io.ox/tasks/edit/view-template.js:207
-#: apps/io.ox/tasks/view-detail.js:140
+#: apps/io.ox/tasks/view-detail.js:136
 msgid "Actual costs"
 msgstr "Skutčné náklady"
 
 #: apps/io.ox/tasks/edit/view-template.js:258
-#: apps/io.ox/tasks/view-detail.js:141
+#: apps/io.ox/tasks/view-detail.js:137
 msgid "Currency"
 msgstr "Mena"
 
 #: apps/io.ox/tasks/edit/view-template.js:269
-#: apps/io.ox/tasks/view-detail.js:142
+#: apps/io.ox/tasks/view-detail.js:138
 msgid "Distance"
 msgstr "Vzdialenosť"
 
 #: apps/io.ox/tasks/edit/view-template.js:280
-#: apps/io.ox/tasks/view-detail.js:143
+#: apps/io.ox/tasks/view-detail.js:139
 msgid "Billing information"
 msgstr "Účtovacie informácie"
 
-#: apps/io.ox/tasks/view-detail.js:145
+#: apps/io.ox/tasks/view-detail.js:141
 msgid "Date completed"
 msgstr "Dátum dokončenia"
 
-#: apps/io.ox/tasks/view-detail.js:168
+#: apps/io.ox/tasks/view-detail.js:164
 msgid "Not yet confirmed"
 msgstr "Zatiaľ nepotvrdené"
 
-#: apps/io.ox/tasks/view-detail.js:169
+#: apps/io.ox/tasks/view-detail.js:165
 msgid "Confirmed"
 msgstr "Potvrdené"
 
-#: apps/io.ox/tasks/view-detail.js:205
+#: apps/io.ox/tasks/view-detail.js:202
 msgid "Could not load all participants for this task."
 msgstr "Nepodarilo sa načítať všetkých účastníkov tejto úlohy."
 
-#: apps/io.ox/tasks/view-detail.js:286
+#: apps/io.ox/tasks/view-detail.js:279
 msgid "Could not load attachments for this task."
 msgstr "Nepodarilo sa načítať prílohy tejto úlohy."
 
@@ -4900,26 +5201,26 @@ msgid "Discard changes"
 msgstr "Zahodiť zmeny"
 
 #: apps/io.ox/tasks/edit/view-template.js:81 apps/io.ox/tasks/print.js:28
-#: apps/io.ox/tasks/util.js:220
+#: apps/io.ox/tasks/util.js:261
 msgid "Not started"
 msgstr "Nezačaté"
 
 #: apps/io.ox/tasks/edit/view-template.js:82 apps/io.ox/tasks/print.js:28
-#: apps/io.ox/tasks/util.js:224
+#: apps/io.ox/tasks/util.js:265
 msgid "In progress"
 msgstr "Prebieha"
 
 #: apps/io.ox/tasks/edit/view-template.js:84 apps/io.ox/tasks/print.js:28
-#: apps/io.ox/tasks/util.js:228
+#: apps/io.ox/tasks/util.js:269
 msgid "Waiting"
 msgstr "Čaká sa"
 
 #: apps/io.ox/tasks/edit/view-template.js:85 apps/io.ox/tasks/print.js:28
-#: apps/io.ox/tasks/util.js:232
+#: apps/io.ox/tasks/util.js:273
 msgid "Deferred"
 msgstr "Odložené"
 
-#: apps/io.ox/tasks/edit/view-template.js:87 apps/io.ox/tasks/main.js:243
+#: apps/io.ox/tasks/edit/view-template.js:87 apps/io.ox/tasks/main.js:248
 msgid "Status"
 msgstr "Stav"
 
@@ -4938,91 +5239,19 @@ msgstr "Prosím, zadajte správne číslo."
 msgid "Companies"
 msgstr "Spoločnosti"
 
-#: apps/io.ox/tasks/edit/view-template.js:475 apps/io.ox/tasks/main.js:244
+#: apps/io.ox/tasks/edit/view-template.js:475 apps/io.ox/tasks/main.js:249
 msgid "Due date"
 msgstr "Termín"
 
-#: apps/io.ox/tasks/util.js:24
-msgid "this morning"
-msgstr "dnes ráno"
-
-#: apps/io.ox/tasks/util.js:25
-msgid "by noon"
-msgstr "do poludnia"
-
-#: apps/io.ox/tasks/util.js:26
-msgid "this afternoon"
-msgstr "toto odpoludnie"
-
-#: apps/io.ox/tasks/util.js:27
-msgid "tonight"
-msgstr "dnes večer"
-
-#: apps/io.ox/tasks/util.js:28
-msgid "late in the evening"
-msgstr "neskoro večer"
-
-#: apps/io.ox/tasks/util.js:30
-msgid "next Sunday"
-msgstr "ďalšiu nedeľu"
-
-#: apps/io.ox/tasks/util.js:31
-msgid "next Monday"
-msgstr "ďalší pondelok"
-
-#: apps/io.ox/tasks/util.js:32
-msgid "next Tuesday"
-msgstr "ďalší utorok"
-
-#: apps/io.ox/tasks/util.js:33
-msgid "next Wednesday"
-msgstr "ďalšiu stredu"
-
-#: apps/io.ox/tasks/util.js:34
-msgid "next Thursday"
-msgstr "ďalší štvrtok"
-
-#: apps/io.ox/tasks/util.js:35
-msgid "next Friday"
-msgstr "ďalší piatok"
-
-#: apps/io.ox/tasks/util.js:36
-msgid "next Saturday"
-msgstr "ďalšiu sobotu"
-
-#: apps/io.ox/tasks/util.js:144
-msgid "in 5 minutes"
-msgstr "o 5 minút"
-
-#: apps/io.ox/tasks/util.js:145
-msgid "in 15 minutes"
-msgstr "o 15 minút"
-
-#: apps/io.ox/tasks/util.js:146
-msgid "in 30 minutes"
-msgstr "o 30 minút"
-
-#: apps/io.ox/tasks/util.js:147
-msgid "in one hour"
-msgstr "o hodinu"
-
-#: apps/io.ox/tasks/util.js:177
-msgid "tomorrow"
-msgstr "zajtra"
-
-#: apps/io.ox/tasks/util.js:189
-msgid "in one week"
-msgstr "o týždeň"
-
-#: apps/io.ox/tasks/util.js:215
+#: apps/io.ox/tasks/util.js:256
 msgid "Over due"
 msgstr "Po termíne"
 
-#: apps/io.ox/tasks/main.js:172
+#: apps/io.ox/tasks/main.js:177
 msgid "Couldn't load that task."
 msgstr "Nepodarilo sa načítať túto úlohu."
 
-#: apps/io.ox/tasks/main.js:251
+#: apps/io.ox/tasks/main.js:256
 msgid "Show done tasks"
 msgstr "Zobraziť hotové úlohy"
 
@@ -5063,7 +5292,7 @@ msgstr[0] "Ľutujeme, nepodarilo sa zmazať úlohu."
 msgstr[1] "Ľutujeme, nepodarilo sa zmazať úlohy."
 msgstr[2] "Ľutujeme, nepodarilo sa zmazať úlohy."
 
-#: apps/io.ox/tasks/actions.js:117 apps/io.ox/tasks/actions.js:421
+#: apps/io.ox/tasks/actions.js:117 apps/io.ox/tasks/actions.js:451
 msgid "Undone"
 msgstr "Vrátené späť"
 
@@ -5086,33 +5315,37 @@ msgstr[0] "Úloha bola presunutá."
 msgstr[1] "Úlohy boli presunuté."
 msgstr[2] "Úlohy boli presunuté."
 
-#: apps/io.ox/tasks/actions.js:388
+#: apps/io.ox/tasks/actions.js:293
+msgid "Print tasks"
+msgstr "Tlačové úlohy"
+
+#: apps/io.ox/tasks/actions.js:418
 msgid "Create new task"
 msgstr "Vytvoriť novú úlohu"
 
-#: apps/io.ox/tasks/actions.js:441
+#: apps/io.ox/tasks/actions.js:471
 msgid "Change due date"
 msgstr "Zmeniť termín"
 
-#: apps/io.ox/tasks/actions.js:460
+#: apps/io.ox/tasks/actions.js:490
 msgid "Adjust start date"
 msgstr "Zmeniť dátum začiatku"
 
-#: apps/io.ox/tasks/actions.js:463
+#: apps/io.ox/tasks/actions.js:493
 msgid "Inconsistent dates"
 msgstr "Nekonzistentné dátumy"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
-#: apps/io.ox/tasks/actions.js:467
+#: apps/io.ox/tasks/actions.js:497
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "Termín nemôže byť pred dátumom začiatku. Zmeniť dátum začiatku?"
 
-#: apps/io.ox/tasks/actions.js:472
+#: apps/io.ox/tasks/actions.js:502
 msgid "Canceled"
 msgstr "Zrušené"
 
-#: apps/io.ox/tasks/actions.js:477 apps/io.ox/tasks/actions.js:485
+#: apps/io.ox/tasks/actions.js:507 apps/io.ox/tasks/actions.js:515
 msgid "Changed due date"
 msgstr "Zmenený termín"
 
@@ -5127,6 +5360,90 @@ msgstr "Dobré ráno"
 #: apps/io.ox/lessons/lessons/basic_requirejs/register.js:18
 msgid "Good evening"
 msgstr "Dobrý večer"
+
+#~ msgid "isMailAddress"
+#~ msgstr "jePoštováAdresa"
+
+#~ msgid "Current page and total page count"
+#~ msgstr "Aktuálna stránka a celkový počet strán"
+
+#~ msgid "Current zoom factor"
+#~ msgstr "Aktuálne priblíženie"
+
+#~ msgid "!!!This file has not been added"
+#~ msgstr "!!!Tento súbor nebol pridaný"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "10"
+#~ msgstr "10"
+
+#~ msgid "15"
+#~ msgstr "15"
+
+#~ msgid "20"
+#~ msgstr "20"
+
+#~ msgid "30"
+#~ msgstr "30"
+
+#~ msgid "60"
+#~ msgstr "60"
+
+#~ msgid "No mails at all!"
+#~ msgstr "Vôbec žiadne poštové správy!"
+
+#~ msgid "Automatically select first E-Mail"
+#~ msgstr "Automaticky vybrať prvý email"
+
+#~ msgid "Grey"
+#~ msgstr "Šedá"
+
+#~ msgid "Mark Unread"
+#~ msgstr "Označiť ako neprečítané"
+
+#~ msgid " Show"
+#~ msgstr " Zobraziť"
+
+#~ msgid "You already accepted this invitation"
+#~ msgstr "Toto pozvanie už ste prijali"
+
+#~ msgid "Clear cache"
+#~ msgstr "Vyčistiť vyrovnávaciu pamäť"
+
+#~ msgid "Remove"
+#~ msgstr "Odstrániť"
+
+#~ msgid "Mediaplayer"
+#~ msgstr "Prehrávať multimédií"
+
+#~ msgid "Audio enabled"
+#~ msgstr "Zvuk zapnutý"
+
+#~ msgid "Video enabled"
+#~ msgstr "Video zapnuté"
+
+#~ msgid "Upload"
+#~ msgstr "Nahrať"
+
+#~ msgid "File versions"
+#~ msgstr "Verzie súborov"
+
+#~ msgid "copy to clipboard"
+#~ msgstr "skopírovať do schránky"
+
+#~ msgid "New publication"
+#~ msgstr "Nová publikácia"
+
+#~ msgid "Publication created"
+#~ msgstr "Publikácie vytvorená"
+
+#~ msgid "Send email"
+#~ msgstr "Poslať email"
+
+#~ msgid "Interval of the reminder in minutes"
+#~ msgstr "Interval času pripomenutia v minútach"
 
 #~ msgid "Comment:"
 #~ msgstr "Komentár:"
@@ -5326,9 +5643,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Current version"
 #~ msgstr "Aktuálna verzia"
-
-#~ msgid "Versions"
-#~ msgstr "Verzie"
 
 #~ msgid "File name:"
 #~ msgstr "Názov súboru:"
@@ -6413,9 +6727,6 @@ msgstr "Dobrý večer"
 #~ msgid "Cocos (Keeling) Islands"
 #~ msgstr "Kokosové ostrovy"
 
-#~ msgid "Collapse sidepanel"
-#~ msgstr "Zbaliť bočný panel"
-
 #~ msgid "Collect while reading E-Mails?"
 #~ msgstr "Zbierať počas čítania emailov?"
 
@@ -6641,12 +6952,6 @@ msgstr "Dobrý večer"
 #~ msgid "Delete Task"
 #~ msgstr "Zmazať úlohu"
 
-#~ msgid "Delete account"
-#~ msgid_plural "Delete accounts"
-#~ msgstr[0] "Zmazať účet"
-#~ msgstr[1] "Zmazať účty"
-#~ msgstr[2] "Zmazať účty"
-
 #~ msgid "Delete contact"
 #~ msgid_plural "Delete contacts"
 #~ msgstr[0] "Zmazať kontakt"
@@ -6777,9 +7082,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Download Updater"
 #~ msgstr "Stiahnuť aktualizátor"
-
-#~ msgid "Drafts folder"
-#~ msgstr "Priečinok Rozpísané"
 
 #~ msgid "Dropdown"
 #~ msgstr "Roletové menu"
@@ -7749,9 +8051,6 @@ msgstr "Dobrý večer"
 #~ msgid "Netherlands Antilles"
 #~ msgstr "Holandské Antily"
 
-#~ msgid "Never"
-#~ msgstr "Nikdy"
-
 #~ msgid "New Appointment"
 #~ msgstr "Nová schôdzka"
 
@@ -7826,9 +8125,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "No accounts available"
 #~ msgstr "Žiadne účty nie sú dostupné"
-
-#~ msgid "No accounts created"
-#~ msgstr "Žiadne účty nie sú vytvorené"
 
 #~ msgid "No addresses available"
 #~ msgstr "Žiadne adresy nie sú dostupné"
@@ -7971,9 +8267,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Open attachment"
 #~ msgstr "Otvoriť prílohu"
-
-#~ msgid "Open error report"
-#~ msgstr "Otvoriť hlásenie o chybe"
 
 #~ msgid "Open-Xchange Server"
 #~ msgstr "Open-Xchange Server"
@@ -8166,9 +8459,6 @@ msgstr "Dobrý večer"
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Prosím, vyberte krajinu počiatočnej adresy"
 
-#~ msgid "Please select a file to import"
-#~ msgstr "Prosím, vyberte súbor, ktorý chcete importovať"
-
 #~ msgid "Please select at least one E-Mail address."
 #~ msgstr "Prosím, vyberte aspoň jednu emailovú adresu."
 
@@ -8233,9 +8523,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Private folders"
 #~ msgstr "Súkromné priečinky"
-
-#~ msgid "Private tasks"
-#~ msgstr "Súkromné úlohy"
 
 #~ msgid "Private:"
 #~ msgstr "Súkromné:"
@@ -8450,9 +8737,6 @@ msgstr "Dobrý večer"
 #~ msgid "Save configuration before every logout?"
 #~ msgstr "Uložiť konfiguráciu pred každým odhlásením?"
 
-#~ msgid "Save version"
-#~ msgstr "Uložiť verziu"
-
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Naplánovať celodennú udalosť"
 
@@ -8603,9 +8887,6 @@ msgstr "Dobrý večer"
 #~ msgid "Show confirmation popup for new appointments?"
 #~ msgstr "Zobraziť potvrdzovacie okno pri nových schôdzkach?"
 
-#~ msgid "Show contacts"
-#~ msgstr "Zobraziť kontakty"
-
 #~ msgid "Show in Calendar"
 #~ msgstr "Zobraziť v kalendári"
 
@@ -8666,9 +8947,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Spam"
 #~ msgstr "Spam"
-
-#~ msgid "Spam folder"
-#~ msgstr "Priečinok Spam"
 
 #~ msgid "Spouse's name:"
 #~ msgstr "Názov partnera:"
@@ -8994,9 +9272,6 @@ msgstr "Dobrý večer"
 #~ msgid "This Team name already exists"
 #~ msgstr "Tento názov tímu už existuje"
 
-#~ msgid "This feature is not available"
-#~ msgstr "Táto funkcia nie je dostupná"
-
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Táto správa obsahuje URL k publikácii."
 
@@ -9009,9 +9284,6 @@ msgstr "Dobrý večer"
 #~ msgstr[0] "Táto relácia sa ukončí o %d sekundu."
 #~ msgstr[1] "Táto relácia sa ukončí o %d sekundy."
 #~ msgstr[2] "Táto relácia sa ukončí o %d sekúnd."
-
-#~ msgid "This session will be terminated."
-#~ msgstr "Táto relácia sa ukončí."
 
 #~ msgid "Thu"
 #~ msgstr "Štv"
@@ -9054,9 +9326,6 @@ msgstr "Dobrý večer"
 
 #~ msgid "Too short"
 #~ msgstr "Príliš krátke"
-
-#~ msgid "Trash folder"
-#~ msgstr "Priečinok Kôš"
 
 #~ msgid "Trinidad and Tobago"
 #~ msgstr "Trinidad a Tobago"
@@ -9411,9 +9680,6 @@ msgstr "Dobrý večer"
 #~ msgstr ""
 #~ "Vaše heslo je bezpečnejšie, ak obsahuje aj veľké písmená, číslice a "
 #~ "špeciálne znaky ako %1$s."
-
-#~ msgid "Your personal data cannot be saved!"
-#~ msgstr "Vaše osobné údaje nie je možné uložiť!"
 
 #~ msgid ""
 #~ "Your scheduled appointment conflicts with one or more previously "

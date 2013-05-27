@@ -11,19 +11,19 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/rss/register",
-    ["io.ox/core/extensions",
-    "io.ox/core/strings",
-    "io.ox/messaging/accounts/api",
-    "io.ox/messaging/services/api",
-    "io.ox/messaging/messages/api",
+define('plugins/portal/rss/register',
+    ['io.ox/core/extensions',
+    'io.ox/core/strings',
+    'io.ox/messaging/accounts/api',
+    'io.ox/messaging/services/api',
+    'io.ox/messaging/messages/api',
     'io.ox/keychain/api',
     'io.ox/rss/api',
     'io.ox/core/date',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/portal'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, dialogs, gt) {
 
-    "use strict";
+    'use strict';
 
     var migrate = function (settings) {
 
@@ -56,9 +56,11 @@ define("plugins/portal/rss/register",
         load: function (baton) {
             return migrate().pipe(function () {
                 var urls = baton.model.get('props').url || [];
-                return rss.getMany(urls, 'date').done(function (data) {
+                return rss.getMany(urls).done(function (data) {
+                    //limit data manually till api call can be limited
+                    data = data.slice(0, 100);
                     baton.data = { items: data, title: '', link: '' };
-                    // get title & link
+                    // get title & link of the first found feed
                     _(data).find(function (item) {
                         baton.data.title = item.feedTitle || '';
                         baton.data.link = item.feedLink || '';
@@ -91,11 +93,16 @@ define("plugins/portal/rss/register",
         draw: (function () {
 
             function drawItem(item) {
-                var publishedDate = new date.Local(item.date).format(date.DATE);
+                var publishedDate = new date.Local(item.date).format(date.DATE),
+                    $body = $(item.body);
+
+                //replace img tags with empty src
+                $body.find('img[src=""]').replaceWith(gt('show image'));
+
                 this.append(
                     $('<div class="text">').append(
                         $('<h2>').text(item.subject),
-                        $('<div class="text-body">').html(item.body),
+                        $('<div class="text-body">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(item.feedTitle + ' - ' + publishedDate)
                         )
@@ -129,7 +136,7 @@ define("plugins/portal/rss/register",
             props = model.get('props') || {},
             that = this;
 
-        dialog.header($("<h4>").text(gt('RSS Feeds')))
+        dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('URL')),
@@ -146,7 +153,7 @@ define("plugins/portal/rss/register",
             });
 
         dialog.on('cancel', function () {
-            if (model.candidate) {
+            if (model.has('candidate')) {
                 view.removeWidget();
             }
         });
@@ -168,11 +175,11 @@ define("plugins/portal/rss/register",
 
             deferred.done(function () {
                 dialog.close();
-                model.candidate = false;
                 model.set({
                     title: description,
                     props: { url: url.split(/\n/), description: description }
                 });
+                model.unset('candidate');
             });
 
             deferred.fail(function () {

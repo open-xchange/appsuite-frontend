@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/resource",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
-    
-    "use strict";
-    
+define('io.ox/core/api/resource',
+    ['io.ox/core/http', 'io.ox/core/api/factory'], function (http, apiFactory) {
+
+    'use strict';
+
     // generate basic API
     var api = apiFactory({
-        module: "resource",
+        module: 'resource',
         keyGenerator: function (obj) {
             return String(obj.id);
         },
@@ -30,13 +30,13 @@ define("io.ox/core/api/resource",
             get: {
             },
             search: {
-                action: "search",
+                action: 'search',
                 getData: function (query) {
                     return { pattern: query };
                 }
             }
         }
     });
-    
+
     return api;
 });

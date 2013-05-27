@@ -104,16 +104,18 @@ define('io.ox/portal/main',
     // widget scaffold
     ext.point('io.ox/portal/widget-scaffold').extend({
         draw: function (baton) {
-            var data = baton.model.toJSON();
+            var data = baton.model.toJSON(),
+                decoration = this.find('.decoration').length ? this.find('.decoration') : this;
             this.attr({
                 'data-widget-cid': baton.model.cid,
                 'data-widget-id': baton.model.get('id'),
                 'data-widget-type': baton.model.get('type')
             })
-            .addClass('widget pending' + (baton.model.get('inverse') ? ' inverse' : ''))
-            .append(
-                $('<h2 class="title">').text('\u00A0')
-            );
+            .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
+            //border decoration
+            decoration
+            .addClass('pending')
+            .append($('<h2 class="title">').text('\u00A0'));
             setColor(this, baton.model);
         }
     });
@@ -163,7 +165,14 @@ define('io.ox/portal/main',
         } else if ('color' in e.changes) {
             setColor(app.getWidgetNode(model), model);
         } else if (this.wasElementDeleted(model)) {
-             //Element was removed, no need to refresh it.
+            // element was removed, no need to refresh it.
+            return;
+        } else if ('unset' in e && 'candidate' in e.changes) {
+            // redraw fresh widget
+            app.refreshWidget(model);
+        } else if ('props' in e.changes && model.drawn) {
+            // redraw existing widget due to config change
+            app.refreshWidget(model);
         } else {
             app.drawWidget(model);
         }
@@ -206,10 +215,20 @@ define('io.ox/portal/main',
     }
 
     app.drawScaffold = function (model) {
-        var node = $('<li>'),
-            baton = ext.Baton({ model: model, app: app });
+
+        var baton = ext.Baton({ model: model, app: app }),
+            decoration = $('<div>').addClass('decoration'),
+            node = $('<li>').append(decoration);
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
+
+        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
+        }
+
         if (model.get('enabled') === false) node.hide();
+
         appBaton.$.widgets.append(node);
     };
 
@@ -244,11 +263,13 @@ define('io.ox/portal/main',
     }
 
     function loadAndPreview(point, node, baton) {
-        var defs = point.invoke('load', node, baton).map(ensureDeferreds).value();
+        var defs = point.invoke('load', node, baton).map(ensureDeferreds).value(),
+            decoration = node.find('.decoration');
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
                 point.invoke('preview', node, baton);
-                node.removeClass('pending error-occurred');
+                node.removeClass('error-occurred');
+                decoration.removeClass('pending error-occurred');
             })
             .fail(function (e) {
                 // special return value?
@@ -261,17 +282,17 @@ define('io.ox/portal/main',
                 node.find('.content').remove();
                 node.append(
                     $('<div class="content error">').append(
-                        $('<div>').text(gt('An error occurred. The message was:')),
-                        $('<div class="italic">').text(e.error),
-                        '<br />',
+                        $('<div>').text(gt('An error occurred.')),
+                        $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
+                        $('<br>'),
                         $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                            node.addClass('pending');
+                            node.find('.decoration').addClass('pending');
                             loadAndPreview(point, node, baton);
                         })
                     )
                 );
                 point.invoke('error', node, e, baton);
-                node.removeClass('pending');
+                decoration.removeClass('pending');
             });
     }
 
@@ -281,13 +302,21 @@ define('io.ox/portal/main',
 
     app.drawWidget = function (model, index) {
 
+        index = index || 0;
+
         var type = model.get('type'),
             node = app.getWidgetNode(model),
-            delay = (index / 2 >> 0) * 1000,
+            delay = (index / 2 >> 0) * 500,
             baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + type }),
             point = ext.point(baton.point),
             requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
             title;
+
+        if (model.get('enabled') === true && !widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
+        }
 
         // set/update title
         title = node.find('h2.title').text(getTitle(model.toJSON(), point.prop('title')));
@@ -295,14 +324,13 @@ define('io.ox/portal/main',
         if (!model.drawn) {
 
             model.drawn = true;
-            index = index || 0;
 
             // remember
             model.set('baton', baton);
 
             // setup?
             if (requiresSetUp) {
-                node.removeClass('pending');
+                node.find('.decoration').removeClass('pending');
                 app.drawDefaultSetup(baton, node);
             } else {
                 // add link?
@@ -321,15 +349,20 @@ define('io.ox/portal/main',
     };
 
     app.refreshWidget = function (model, index) {
+
         if (model.drawn) {
+
+            index = index || 0;
+
             var type = model.get('type'),
                 node = app.getWidgetNode(model),
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
+
             _.defer(function () {
                 _.delay(function () {
-                    node.addClass('pending');
+                    node.find('.decoration').addClass('pending');
                     _.delay(function () {
                         loadAndPreview(point, node, baton);
                         node = baton = point = null;

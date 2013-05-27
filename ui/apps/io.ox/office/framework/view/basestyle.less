@@ -86,9 +86,7 @@ i[class^="docs-"] {
     vertical-align: middle;
 
     background-image: url(docs-icons-desktop-black.png);
-    &.icon-white { background-image: url(docs-icons-desktop-white.png); }
     &.retina { background-image: url(docs-icons-retina-black.png); }
-    &.icon-white.retina { background-image: url(docs-icons-retina-white.png); }
 }
 
 /* give standard Bootstrap icons a minimum width */
@@ -98,9 +96,8 @@ i[class^="icon-"], i[class^=" icon-"] {
     text-align: center;
 }
 
-i[class^="icon-caret-"], i[class^=" icon-caret-"] {
-    min-width: 0;
-    font-size: 12px;
+i.docs-caret {
+    width: 9px;
 }
 
 /* ========================================================================= */
@@ -118,12 +115,50 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     background: @pane-fill-color;
     line-height: 0;
 
+    /* side panes */
+    &.side-pane {
+        width: auto;
+
+        > .fixed-toolboxes {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: auto;
+            overflow: hidden;
+    
+            &.top { top: 0; }
+            &.bottom { bottom: 0; }
+        }
+
+        > .scrollable-toolboxes {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+
+            &.scrollable {
+                border-top-color: #181818;
+                border-bottom-color: #181818;
+            }
+        }
+    }
+
     /* the application pane in the middle between all view panes */
     &.app-pane {
         .box-sizing(content-box);
         margin: 0;
         padding: 0;
         background: @app-pane-fill-color;
+
+        /* prevent dotted focus rectangle around the control */
+        &, &:focus, &:active {
+            outline: none;
+        }
 
         /* the container element for the application contents */
         > .app-container {
@@ -170,6 +205,12 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 /* glow effect for focused controls, use as argument for shadow mix-in classes */
 @focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
 
+// prevent system pop-up when tapping and holding button on iPad/iPhone
+// (also for buttons outside .group elements)
+.button {
+    -webkit-touch-callout: none;
+}
+
 .group {
     /* horizontal padding in control elements */
     @control-padding: 8px;
@@ -192,7 +233,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     /* common control settings --------------------------------------------- */
 
-    label, a.button, input {
+    label, .button, input {
         display: inline-block;
         position: relative;
         .box-sizing(border-box);
@@ -218,7 +259,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     }
 
     /* control caption elements (always span elements as children) */
-    label, a.button {
+    label, .button {
         padding-left: @control-padding;
         padding-right: @control-padding;
 
@@ -239,7 +280,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     }
 
     /* fade out caption for buttons and labels in disabled groups */
-    &.disabled label, &.disabled a.button, label.disabled, a.button.disabled {
+    &.disabled label, &.disabled .button, label.disabled, .button.disabled {
         > .caption, > span {
             .opacity(50);
         }
@@ -259,7 +300,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
 
     /* buttons ------------------------------------------------------------- */
 
-    a.button {
+    .button {
         text-align: left;
 
         &.dropdown-button {
@@ -372,29 +413,33 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
             }
 
-            label, a.button, input {
+            label, .button, input {
                 height: @control-height;
                 border: 1px solid #181818;
                 color: white;
 
-                + label, + a.button, + input {
+                + label, + .button, + input {
                     margin-left: -1px;
                 }
             }
 
-            label, a.button {
+            label, .button {
                 line-height: @control-height - 2px;
 
-                /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
+                /* adjustments for icons */
                 span > i[class^="docs-"] {
+                    /* vertical-align:middle for icons does not work well in all browsers, stick to top, and place manually */
                     position: relative;
                     top: 8px;
                     vertical-align: top;
+                    /* white icons */
+                    background-image: url(docs-icons-desktop-white.png);
+                    &.retina { background-image: url(docs-icons-retina-white.png); }
                 }
             }
 
             /* selected toggle/radio buttons */
-            a.button.selected {
+            .button.selected {
                 background: fade(@selectedBackground, 50%);
             }
 
@@ -416,14 +461,14 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             &:not(.disabled) {
 
                 /* raise hovered/focused control to make all borders visible */
-                a.button, input {
+                .button, input {
                     &:not(.disabled) {
                         &:hover:not(:focus), &:active:not(:focus) { z-index: 2; }
                         &:focus { z-index: 4; }
                     }
                 }
 
-                a.button:not(.disabled) {
+                .button:not(.disabled) {
                     .box-shadow(@button-shadow-effect);
 
                     &:hover { background: fade(white, 5%); }
@@ -474,12 +519,18 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 &.combo-field.focused {
                     .box-shadow(@focus-glow-effect);
 
-                    > input, > a.button.dropdown-button {
+                    > input, > .button.dropdown-button {
                         &, &:hover, &:focus, &:active {
                             background: white;
                             border-color: @selectedBackground;
                             .box-shadow(none);
                             color: @textColor;
+
+                            /* black drop-down caret */
+                            i[class^="docs-"] {
+                                background-image: url(docs-icons-desktop-black.png);
+                                &.retina { background-image: url(docs-icons-retina-black.png); }
+                            }
                         }
                     }
 
@@ -489,7 +540,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                         }
                     }
 
-                    > a.button.dropdown-button {
+                    > .button.dropdown-button {
                         &, &:hover, &:focus, &:active {
                             border-left-color: transparent;
                         }
@@ -511,7 +562,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 .box-shadow(5px 20px 20px -20px fade(white, 10%) inset);
                 .border-radius(0);
 
-                a.button {
+                .button {
                     width: 100%;
                     height: @heading-height;
                     .border-radius(0);
@@ -523,7 +574,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
 
                 /* do not fade out disabled headings (but stick to default mouse pointer) */
-                &.disabled a.button, a.button.disabled {
+                &.disabled .button, .button.disabled {
                     > .caption, > span {
                         .opacity(100);
                     }
@@ -615,7 +666,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             &:last-child { margin-bottom: 5px; }
         }
 
-        a.button {
+        .button {
             display: block;
             width: 100%;
             text-align: left;
@@ -646,7 +697,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             /* standard height of controls */
             @item-height: 30px;
 
-            a.button {
+            .button {
                 height: @item-height;
                 border: 1px solid transparent;
                 line-height: @item-height - 2px;
@@ -656,7 +707,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
             }
 
-            &:not(.disabled) a.button:not(.disabled) {
+            &:not(.disabled) .button:not(.disabled) {
 
                 &:hover { background: fade(black, 5%); }
                 &:active { background: fade(black, 10%); }
@@ -681,7 +732,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
             /* border width of buttons in framed design mode */
             @item-border-width: 3px;
 
-            a.button {
+            .button {
                 height: @item-height;
                 padding-left: 12px;
                 padding-right: 12px;
@@ -695,7 +746,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 }
             }
 
-            &:not(.disabled) a.button:not(.disabled) {
+            &:not(.disabled) .button:not(.disabled) {
 
                 &:hover:not(:focus) { border-color: fade(black, 10%); }
                 &:active:not(:focus) { border-color: fade(black, 10%); }
@@ -721,6 +772,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
     z-index: 2000;
     padding: 8px 14px;
     .alert-shadow();
+    cursor: default;
 
     h4 { margin-bottom: 8px; }
     p { margin: 0; }
@@ -763,6 +815,7 @@ i[class^="icon-caret-"], i[class^=" icon-caret-"] {
                 margin: 0 auto;
                 padding: 0;
                 .alert-shadow();
+                cursor: default;
 
                 > div {
                     margin: 8px 13px;

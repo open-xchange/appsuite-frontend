@@ -11,31 +11,35 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
+define('io.ox/core/tk/upload',
+    ['io.ox/core/event',
+     'io.ox/core/notifications',
+     'gettext!io.ox/core'
+    ], function (Events, notifications, gt) {
 
-    "use strict";
+    'use strict';
 
-    function hasLeftViewport(evt) {
-        evt = evt.originalEvent || evt;
+    function hasLeftViewport(e) {
+        e = e.originalEvent || e;
         if (_.browser.Firefox || _.browser.Safari) return true;
-        return (evt.clientX === 0 && evt.clientY === 0);
+        return (e.clientX === 0 && e.clientY === 0);
     }
 
-    function isFileDND(evt) {
+    function isFileDND(e) {
         // Learned from: http://stackoverflow.com/questions/6848043/how-do-i-detect-a-file-is-being-dragged-rather-than-a-draggable-element-on-my-pa
-        return evt.originalEvent && evt.originalEvent.dataTransfer && (_(evt.originalEvent.dataTransfer.types).contains("Files") || _(evt.originalEvent.dataTransfer.types).contains("application/x-moz-file"));
+        return e.originalEvent && e.originalEvent.dataTransfer && (_(e.originalEvent.dataTransfer.types).contains('Files') || _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'));
     }
 
     /**
      * is node flaged as 'ignore'
-     * @param  {event} evt
+     * @param  {event} e
      * @return {boolean}
      */
-    function ignored(evt) {
+    function ignored(e) {
         //TODO: parent node should stay hovered when entering a ignored child
         //dragleave: reset hover in parent node when re-enter
         //removeOverlay: safari removes all hover nodes
-        return (evt.target && $(evt.target).hasClass('dndignore')) || false;
+        return (e.target && $(e.target).hasClass('dndignore')) || false;
     }
 
     // We provide a few events:
@@ -47,19 +51,19 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
     //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
     // ]}
     function MultiDropZone(options) {
-        require(["less!io.ox/core/tk/upload.less"]);
+        require(['less!io.ox/core/tk/upload.less']);
         var self = this, $overlay, nodes = [], nodeGenerator, currentRow, height, showOverlay, highlightedAction, removeOverlay;
         Events.extend(this);
 
-        $overlay = $("<div>").addClass("abs io-ox-dropzone-multiple-overlay");
+        $overlay = $('<div>').addClass('abs io-ox-dropzone-multiple-overlay');
 
         showOverlay = function (e) {
             if (!isFileDND(e)) {
                 return;
             }
-            $overlay.appendTo("body").css({height: "100%"});
+            $overlay.appendTo('body').css({height: '100%'});
             height = 100 / nodes.length;
-            height = height + "%";
+            height = height + '%';
 
             _(nodes).each(function ($actionNode) {
                 $actionNode.css({height: height});
@@ -67,8 +71,8 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             return false;
         };
 
-        removeOverlay = function (event) {
-            if (!isFileDND(event) || ignored(event)) {
+        removeOverlay = function (e) {
+            if (!isFileDND(e) || ignored(e)) {
                 return;
             }
             $overlay.detach();
@@ -76,18 +80,18 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         };
         if (options.actions && options.actions.length === 1) {
             nodeGenerator = function () {
-                var $actionNode = $("<div>").addClass("row-fluid io-ox-dropzone-action").appendTo($overlay);
+                var $actionNode = $('<div>').addClass('row-fluid io-ox-dropzone-action').appendTo($overlay);
                 nodes.push($actionNode);
                 return $actionNode;
             };
         } else {
             nodeGenerator = function () {
-                var $actionTile = $("<div>").appendTo($overlay).addClass("span6 io-ox-dropzone-action").css({height: "100%"});
+                var $actionTile = $('<div>').appendTo($overlay).addClass('span6 io-ox-dropzone-action').css({height: '100%'});
                 if (currentRow) {
                     currentRow.append($actionTile);
                     currentRow = null;
                 } else {
-                    currentRow = $("<div>").addClass("row-fluid").appendTo($overlay);
+                    currentRow = $('<div>').addClass('row-fluid').appendTo($overlay);
 
                     nodes.push(currentRow);
                     currentRow.append($actionTile);
@@ -97,24 +101,24 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             };
         }
 
-        
+
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
-            $actionNode.append($("<div>").html(action.label).center()).on({
+            $actionNode.append($('<div>').html(action.label).center()).on({
                 dragenter: function (e) {
                     if (!isFileDND(e)) {
                         return;
                     }
 
-                    self.trigger("dragenter", action.id, action);
+                    self.trigger('dragenter', action.id, action);
                     // make sure it's file oriented
                     e = e.originalEvent || e;
 
                     //TODO: get date about dragged object
                     if (highlightedAction) {
-                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                        highlightedAction.removeClass('io-ox-dropzone-hover');
                     }
-                    $actionNode.addClass("io-ox-dropzone-hover");
+                    $actionNode.addClass('io-ox-dropzone-hover');
                     highlightedAction = $actionNode;
                     return false; // Prevent regular event handling
                 },
@@ -122,16 +126,16 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     if (!isFileDND(e)) {
                         return;
                     }
-                    self.trigger("dragover", action.id, action);
+                    self.trigger('dragover', action.id, action);
                     return false; // Prevent regular event handling
                 },
                 dragend: function (e) {
                     if (!isFileDND(e)) {
                         return;
                     }
-                    self.trigger("dragend", action.id, action);
+                    self.trigger('dragend', action.id, action);
                     if (highlightedAction) {
-                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                        highlightedAction.removeClass('io-ox-dropzone-hover');
                     }
                     return false; // Prevent regular event handling
 
@@ -140,32 +144,46 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     if (!isFileDND(e) || ignored(e)) {
                         return;
                     }
-                    self.trigger("dragleave", action.id, action);
-                    $actionNode.removeClass("io-ox-dropzone-hover");
+                    self.trigger('dragleave', action.id, action);
+                    $actionNode.removeClass('io-ox-dropzone-hover');
                     return true; // Prevent regular event handling
 
                 },
-                drop: function (event) {
-                    if (!isFileDND(event)) {
+                drop: function (e) {
+                    if (!isFileDND(e)) {
                         return;
                     }
-                    event = event.originalEvent || event;
-                    var files = event.dataTransfer.files;
+
+                    e = e.originalEvent || e;
+                    var files = e.dataTransfer.files;
+
                     // And the pass them on
                     if (highlightedAction) {
-                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                        highlightedAction.removeClass('io-ox-dropzone-hover');
                     }
+
                     $overlay.detach();
-                    for (var i = 0, l = files.length; i < l; i++) {
-                        self.trigger("drop", action.id, files[i], action);
+
+                    // Fix for Bug 26235
+                    if (_.browser.Chrome && _.browser.Chrome > 21) {
+                        var items = e.dataTransfer.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var entry = items[i].webkitGetAsEntry();
+                            if (entry.isDirectory) {
+                                notifications.yell('error', gt('Uploading folders is not supported.'));
+                                return false;
+                            }
+                        }
                     }
-                    self.trigger("drop-multiple", action, $.makeArray(files)); // cause it's instanceOf FileList
+
+                    for (var i = 0, l = files.length; i < l; i++) {
+                        self.trigger('drop', action.id, files[i], action);
+                    }
+                    self.trigger('drop-multiple', action, $.makeArray(files)); // cause it's instanceOf FileList
                     return false; // Prevent regular event handling
                 }
             });
         });
-
-
 
         var included = false;
         this.remove = function () {
@@ -173,15 +191,15 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 return;
             }
             included = false;
-            $("body").off("dragenter", showOverlay);
-            $("body").off("drop", removeOverlay);
+            $('body').off('dragenter', showOverlay);
+            $('body').off('drop', removeOverlay);
         };
         this.include = function () {
             if (included) {
                 return;
             }
             included = true;
-            $("body").on("dragenter", showOverlay);
+            $('body').on('dragenter', showOverlay);
             $overlay.on({
                 dragenter: function () {
                     return false; // Prevent regular event handling
@@ -194,16 +212,16 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return false; // Prevent regular event handling
 
                 },
-                dragleave: function (evt) {
-                    if (hasLeftViewport(evt)) {
-                        removeOverlay(evt);
+                dragleave: function (e) {
+                    if (hasLeftViewport(e)) {
+                        removeOverlay(e);
                     }
                     return false; // Prevent regular event handling
 
                 },
-                drop: function (evt) {
-                    evt.preventDefault();
-                    removeOverlay(evt);
+                drop: function (e) {
+                    e.preventDefault();
+                    removeOverlay(e);
                     return false;
                 }
             });
@@ -225,7 +243,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             if (!isFileDND(e)) {
                 return;
             }
-            $node.appendTo("body");
+            $node.appendTo('body');
             return false;
         };
 
@@ -233,17 +251,17 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             $node = $($node);
         } else {
             globalMode = true;
-            $node = $("<div/>")
-                .addClass("abs")
+            $node = $('<div/>')
+                .addClass('abs')
                 .css({
-                    backgroundColor: "#000",
-                    color: "white",
-                    textAlign: "center",
-                    paddingTop: "25%",
-                    fontSize: "42pt",
-                    opacity: "0.75",
+                    backgroundColor: '#000',
+                    color: 'white',
+                    textAlign: 'center',
+                    paddingTop: '25%',
+                    fontSize: '42pt',
+                    opacity: '0.75',
                     zIndex: 65000
-                }).text("Just drop the file anywhere...");
+                }).text('Just drop the file anywhere...');
         }
         this.enabled = true;
         Events.extend(this);
@@ -255,7 +273,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return;
                 }
                 // We'll just hand this over. A few layers of indirection are always fun
-                self.trigger("dragenter");
+                self.trigger('dragenter');
                 return false; // Prevent regular event handling
             },
             dragover: function (e) {
@@ -263,7 +281,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return;
                 }
                 // We'll just hand this over. A few layers of indirection are always fun
-                self.trigger("dragover");
+                self.trigger('dragover');
                 return false; // Prevent regular event handling
             },
             dragend: function (e) {
@@ -271,7 +289,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return;
                 }
                 // We'll just hand this over. A few layers of indirection are always fun
-                self.trigger("dragend");
+                self.trigger('dragend');
                 return false; // Prevent regular event handling
 
             },
@@ -283,12 +301,12 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 if (globalMode) {
                     $node.detach();
                 }
-                self.trigger("dragleave");
+                self.trigger('dragleave');
                 return false; // Prevent regular event handling
 
             },
-            drop: function (event) {
-                if (!isFileDND(event)) {
+            drop: function (e) {
+                if (!isFileDND(e)) {
                     return;
                 }
                 if (globalMode) {
@@ -296,11 +314,11 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 }
                 // Finally something useful to do. Let's extract the file objects from the event
                 // grab the original event
-                event = event.originalEvent || event;
-                var files = event.dataTransfer.files;
+                e = e.originalEvent || e;
+                var files = e.dataTransfer.files;
                 // And the pass them on
                 for (var i = 0, l = files.length; i < l; i++) {
-                    self.trigger("drop", files[i]);
+                    self.trigger('drop', files[i]);
                 }
                 return false; // Prevent regular event handling
             }
@@ -313,14 +331,14 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return;
                 }
                 included = false;
-                $("body").off("dragenter", appendOverlay);
+                $('body').off('dragenter', appendOverlay);
             };
             this.include = function () {
                 if (included) {
                     return;
                 }
                 included = true;
-                $("body").on("dragenter", appendOverlay);
+                $('body').on('dragenter', appendOverlay);
             };
         } else {
             this.remove = $.noop;
@@ -353,9 +371,9 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
     function FileProcessingQueue(delegate) {
 
         if (!delegate) {
-            console.warn("No delegate supplied to file processing queue.");
+            console.warn('No delegate supplied to file processing queue.');
         } else if (!delegate.progress) {
-            console.warn("The delegate to a queue should implement a 'progress' method!");
+            console.warn('The delegate to a queue should implement a "progress" method!');
         }
 
         delegate = _.extend({
@@ -423,6 +441,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         this.stop = function () {
             delegate.stop(files[position], position, files);
             this.trigger('stop', files[position], position, files);
+            files = [];
             position = 0;
             processing = false;
         };

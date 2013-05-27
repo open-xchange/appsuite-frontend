@@ -128,6 +128,10 @@ define('io.ox/mail/accounts/view-form',
                     self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
                     self.$el.find('button.btn.folderselect').hide();
                 }
+                //disable folderselect if no account is defined
+                if (self.model.get('id') === undefined) {
+                    self.$el.find('button.btn.folderselect').hide();
+                }
 
                 return self;
             },
@@ -138,6 +142,11 @@ define('io.ox/mail/accounts/view-form',
             onSave: function () {
                 var self = this;
 
+                if (!self.model.isNew()) {
+                    // updating account, since we save on close of the dialog,
+                    // dialog is already gone, tell the user that something is happening
+                    notifications.yell('info', gt('Updating account data. This might take a few seconds.'));
+                }
                 this.model.save()
                 .done(function (data) {
                     self.dialog.close();
@@ -146,6 +155,8 @@ define('io.ox/mail/accounts/view-form',
                     }
                     if (self.model.isNew()) {
                         self.succes();
+                    } else {
+                        notifications.yell('success', gt('Account updated'));
                     }
                 })
                 .fail(function (data) {
@@ -159,11 +170,15 @@ define('io.ox/mail/accounts/view-form',
                     } else {
                         notifications.yell('error', _.noI18n(data.error));
                     }
+                    self.dialog.idle();
                 });
             },
 
             onFolderSelect: function (e) {
+
                 var self = this;
+                self.dialog.getPopup().hide();
+
                 if (self.model.get('id') !== 0) {
                     var property = $(e.currentTarget).prev().attr('data-property'),
                         id = self.model.get(property),
@@ -172,7 +187,7 @@ define('io.ox/mail/accounts/view-form',
 
                         var label = gt('Select folder'),
                             dialog = new dialogs.ModalDialog({ easyOut: true })
-                            .header($('<h3>').text(label))
+                            .header($('<h4>').text(label))
                             .addPrimaryButton("select", label)
                             .addButton("cancel", gt("Cancel"));
                         dialog.getBody().css({ height: '250px' });
@@ -190,8 +205,10 @@ define('io.ox/mail/accounts/view-form',
                                 var target = _(tree.selection.get()).first();
                                 self.model.set(property, target);
                             }
-                            tree.destroy();
-                            tree = dialog = null;
+                            tree.destroy().done(function () {
+                                tree = dialog = null;
+                            });
+                            self.dialog.getPopup().show();
                         });
                     });
                 }

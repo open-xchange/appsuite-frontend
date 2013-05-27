@@ -15,14 +15,38 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
     'use strict';
     var counter = 0;
     function RealtimeGroup(id) {
-        var self = this, heartbeat = null, selector = "rt-group-" + counter;
+        var self = this, heartbeat = null, selector = "rt-group-" + counter, destroyed = false;
         counter++;
         rt.on("receive:" + selector, function (e, m) {
             self.trigger("receive", m);
         });
+
+        function relayEvent(name) {
+            return function () {
+                self.trigger(name);
+            };
+        }
+
+        var relayOfflineEvent = relayEvent("offline");
+        var relayOnlineEvent = relayEvent("online");
+        var relayResetEvent = relayEvent("reset");
+        var relayHighLoadEvent = relayEvent("highLoad");
+
+        rt.on("offline", relayOfflineEvent);
+        rt.on("online", relayOnlineEvent);
+        rt.on("reset", relayResetEvent);
+        rt.on("highLoad", relayHighLoadEvent);
+
         this.id = id;
 
-        this.join = function () {
+        function checkState() {
+            if (destroyed) {
+                throw new Error("This group has already been destroyed");
+            }
+        }
+
+        this.join = function (options) {
+            checkState();
             if (!heartbeat) {
                 heartbeat = setInterval(function () {
                     rt.sendWithoutSequence({
@@ -38,8 +62,10 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                     });
                 }, 60000);
             }
+            options = options || {};
             this.send({
                 element: "message",
+                trace: options.trace,
                 selector: selector,
                 payloads: [
                     {
@@ -51,14 +77,17 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             });
         };
 
-        this.leave = function () {
+        this.leave = function (options) {
+            checkState();
             if (!heartbeat) {
                 return;
             }
+            options = options || {};
             clearInterval(heartbeat);
             heartbeat = null;
             this.send({
                 element: "message",
+                trace: options.trace,
                 payloads: [
                     {
                         element: "command",
@@ -69,17 +98,30 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             });
         };
 
-        this.send = function (message) {
+        this.sendWithoutSequence = function (message) {
+            checkState();
             message.to = id;
-            rt.send(message);
+            return rt.sendWithoutSequence(message);
+        };
+
+        this.send = function (message) {
+            checkState();
+            message.to = id;
+            return rt.send(message);
         };
 
         this.destroy = function () {
+            checkState();
             if (heartbeat) {
                 this.leave();
             }
-            rt.off("receive:" + id);
+            rt.off("receive:" + selector);
+            rt.off("offline", relayOfflineEvent);
+            rt.off("online", relayOnlineEvent);
+            rt.off("reset", relayResetEvent);
+            rt.off("highLoad", relayHighLoadEvent);
             delete groups[id];
+            destroyed = true;
         };
 
         Event.extend(this);
@@ -94,7 +136,6 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             if (groups[id]) {
                 return groups[id];
             }
-
             groups[id] = new RealtimeGroup(id);
             return groups[id];
         }

@@ -15,9 +15,8 @@
 define("io.ox/core/extPatterns/links",
     ["io.ox/core/extensions",
      "io.ox/core/collection",
-     "io.ox/core/upsell",
      "io.ox/core/extPatterns/actions",
-     "gettext!io.ox/core"], function (ext, Collection, upsell, actions, gt) {
+     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
 
     "use strict";
 
@@ -45,7 +44,7 @@ define("io.ox/core/extPatterns/links",
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
-                    'data-prio': options.prio || 'lo',
+                    'data-prio': self.prio || 'lo',
                     'data-ref': self.ref
                 })
                 .data({ ref: self.ref, baton: baton })
@@ -199,7 +198,14 @@ define("io.ox/core/extPatterns/links",
                                 $.txt(gt('More')),
                                 $.txt(_.noI18n(' ...')),
                                 $('<b class="caret">')
-                            ),
+                            ).on('click', function (e) {
+                                var left = $(this).parent().position().left;
+                                if (left < 100) {
+                                    $(this).next().removeClass('dropdown-right').addClass('dropdown-left');
+                                } else {
+                                    $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
+                                }
+                            }),
                             $('<ul class="dropdown-menu dropdown-right">').append(
                                 lo.map(wrapAsListItem)
                             )

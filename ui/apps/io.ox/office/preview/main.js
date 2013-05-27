@@ -53,7 +53,7 @@ define('io.ox/office/preview/main',
          * descriptor.
          *
          * @param {Object} [point]
-         *  The save point if called from fail-restore.
+         *  The save point, if called from fail-restore.
          *
          * @returns {jQuery.Promise}
          *  The promise of a Deferred object that will be resolved when the
@@ -64,6 +64,22 @@ define('io.ox/office/preview/main',
 
             // disable drop events
             self.getWindowNode().on('drop dragstart dragover', false);
+
+            // insert own content into the busy blocker element
+            self.getView().enterBusy(function (header, footer) {
+
+                // add file name to header area
+                header.append($('<div>').addClass('filename clear-title').text(self.getFullFileName()));
+
+                // show Cancel button after a short delay
+                self.executeDelayed(function () {
+                    footer.append($('<div>').append(
+                        $.button({ label: gt('Cancel') })
+                            .addClass('btn-warning')
+                            .on('click', function () { self.quit(); })
+                    ));
+                }, { delay: 3000 });
+            });
 
             // load the file
             return self.sendConverterRequest({

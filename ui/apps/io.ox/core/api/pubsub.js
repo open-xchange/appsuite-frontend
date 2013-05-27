@@ -19,7 +19,6 @@ define('io.ox/core/api/pubsub',
 
     'use strict';
 
-
     /**
      * clears cache
      * @private
@@ -156,7 +155,6 @@ define('io.ox/core/api/pubsub',
         }
     });
 
-
     ox.on('refresh^', function () {
         _([publications, subscriptions]).each(function (api) {
             api.caches.get.clear();
@@ -166,7 +164,10 @@ define('io.ox/core/api/pubsub',
         });
     });
 
-
+    /**
+     * @link: https://intranet.open-xchange.com/wiki/development:misc:subscription.api.proposal
+     * @link: https://intranet.open-xchange.com/wiki/development:misc:publication.api.proposal
+     */
     return {
         publications: publications,
         publicationTargets: api({
@@ -180,7 +181,12 @@ define('io.ox/core/api/pubsub',
         }),
         subscriptions: subscriptions,
         sources: apiFactory({
-            module: 'subscriptionSources'
+            module: 'subscriptionSources',
+            requests: {
+                all: {
+                    columns: 'id,displayName,icon,module,formDescription'
+                }
+            }
         })
     };
 

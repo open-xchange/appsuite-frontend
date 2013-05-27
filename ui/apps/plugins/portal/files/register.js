@@ -19,8 +19,10 @@ define('plugins/portal/files/register',
 
     'use strict';
 
-
     ext.point('io.ox/portal/widget/stickyfile').extend({
+
+        // helps at reverse lookup
+        type: 'files',
 
         load: function (baton) {
             var props = baton.model.get('props') || {};
@@ -44,12 +46,21 @@ define('plugins/portal/files/register',
                 options = { width: 300, height: 300, scaleType: 'cover' };
                 url = api.getUrl(data, 'view') + '&' + $.param(options);
                 this.addClass('photo-stream');
+                content.addClass('decoration');
+                content.css('backgroundImage', 'url(' + url + ')');
+            } else if ((/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(baton.data.filename)) {
+                data = { folder_id: baton.data.folder_id, id: baton.data.id };
+                options = { thumbnailWidth: 300, thumbnailHeight: 300 };
+                url = api.getUrl(data, 'cover', options);
+                this.addClass('photo-stream');
+                content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
             } else {
                 // try images url via preview engines
                 baton.data.url = api.getUrl(baton.data, 'bare');
                 if ((url = preview.getPreviewImage(baton.data))) {
                     this.addClass('preview');
+                    content.addClass('decoration');
                     content.css('backgroundImage', 'url(' + url + ')');
                 }
             }
@@ -58,15 +69,14 @@ define('plugins/portal/files/register',
         },
 
         draw: function (baton) {
+
             var popup = this.busy();
 
             api.on('delete', function (event, elements) {
                 var filename = baton.data.filename;
-
                 if (_(elements).any(function (element) { return element.filename === filename; })) {
                     var widgetCol = portalWidgets.getCollection();
                     widgetCol.remove(baton.model);
-                    popup.remove();
                 }
             });
 

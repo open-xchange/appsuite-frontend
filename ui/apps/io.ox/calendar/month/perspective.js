@@ -150,14 +150,14 @@ define('io.ox/calendar/month/perspective',
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
             return api.getAll(obj, useCache).done(function (list) {
-                if (list.length > 0) {
-                    // update single week view collections
-                    var start = obj.start;
-                    for (var i = 1; i <= obj.weeks; i++) {
-                        var end = start + date.WEEK,
-                            collection = self.collections[start];
-                        if (collection) {
-                            var retList = [];
+                // update single week view collections
+                var start = obj.start;
+                for (var i = 1; i <= obj.weeks; i++) {
+                    var end = start + date.WEEK,
+                        collection = self.collections[start];
+                    if (collection) {
+                        var retList = [];
+                        if (list.length > 0) {
                             for (var j = 0; j < list.length; j++) {
                                 var mod = list[j];
                                 if ((mod.start_date > start && mod.start_date < end) || (mod.end_date > start && mod.end_date < end) || (mod.start_date < start && mod.end_date > end)) {
@@ -166,11 +166,11 @@ define('io.ox/calendar/month/perspective',
                                     retList.push(m);
                                 }
                             }
-                            collection.reset(retList);
                         }
-                        start += date.WEEK;
-                        collection = null;
+                        collection.reset(retList);
                     }
+                    start += date.WEEK;
+                    collection = null;
                 }
             });
         },
@@ -212,7 +212,8 @@ define('io.ox/calendar/month/perspective',
             }
             // update first positions
             self.getFirsts();
-            return this.updateWeeks({start: start, weeks: weeks});
+            this.updateWeeks({start: start, weeks: weeks});
+            return $.when();
         },
 
         /**
@@ -244,8 +245,8 @@ define('io.ox/calendar/month/perspective',
             this.tops = {};
             var self = this;
             if (this.pane) {
-                $('.day.first', this.pane).each(function () {
-                    self.tops[($(this).position().top + self.pane.scrollTop()) >> 0] = $(this).data('date');
+                $('.day.first', this.pane).each(function (i, el) {
+                    self.tops[($(el).position().top + self.pane.scrollTop()) >> 0] = $(el);
                 });
             }
         },
@@ -277,22 +278,22 @@ define('io.ox/calendar/month/perspective',
                     scrollToDate = function (pos) {
                         // scroll to position
                         if (param.duration === 0) {
-                            self.scrollTop(pos);
+                            firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
                         } else {
-                            self.pane.animate({scrollTop : pos}, param.duration, function () {
+                            self.pane.animate({scrollTop : pos + self.scrollTop() + 1}, param.duration, function () {
                                 self.isScrolling = false;
                             });
                         }
                     };
 
                 if (firstDay.length > 0) {
-                    scrollToDate(firstDay.position().top  + this.scrollTop() + 2);
+                    scrollToDate(firstDay.position().top);
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
                         this.drawWeeks({up: true}).done(function () {
                             firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
-                            scrollToDate(firstDay.position().top  + self.scrollTop() + 2);
+                            scrollToDate(firstDay.position().top);
                         });
                     } else {
                         self.isScrolling = false;
@@ -332,7 +333,7 @@ define('io.ox/calendar/month/perspective',
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 self = this;
             print.open('printCalendar', null, {
-                template: 'cp_monthview_table.tmpl',
+                template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
             });
@@ -397,7 +398,7 @@ define('io.ox/calendar/month/perspective',
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({
-                                                    duration: 400,
+                                                    duration: _.device('desktop') ? 400 : 0,
                                                     date: 'prev'
                                                 });
                                             }, this)),
@@ -406,7 +407,7 @@ define('io.ox/calendar/month/perspective',
                                         ).on('click', $.proxy(function (e) {
                                             e.preventDefault();
                                             this.gotoMonth({
-                                                duration: 800,
+                                                duration: _.device('desktop') ? 800 : 0,
                                                 date: 'today'
                                             });
                                         }, this)),
@@ -416,7 +417,7 @@ define('io.ox/calendar/month/perspective',
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({
-                                                    duration: 400,
+                                                    duration: _.device('desktop') ? 400 : 0,
                                                     date: 'next'
                                                 });
                                             }, this))
@@ -426,22 +427,21 @@ define('io.ox/calendar/month/perspective',
             );
 
             this.pane
-                .on('scrollstop', $.proxy(function (e) {
-                    var top = this.scrollTop(),
-                        month = false;
-
-                    // check position for infinite scroll
-                    if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - this.scrollOffset) {
+            .on('scroll', $.proxy(function (e) {
+                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
                         this.drawWeeks();
                     }
-                    if (top <= this.scrollOffset) {
+                    if (this.scrollTop() <= this.scrollOffset) {
                         this.drawWeeks({up: true});
                     }
+                }, this))
+                .on('scrollstop', $.proxy(function (e) {
+                    var month = false;
 
                     // find first visible month on scroll-position
                     for (var y in this.tops) {
-                        if (!month || top + this.scrollOffset >= y) {
-                            month = this.tops[y];
+                        if (!month || this.scrollTop() + this.scrollOffset >= y) {
+                            month = this.tops[y].data('date');
                         } else {
                             break;
                         }

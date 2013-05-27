@@ -77,6 +77,10 @@ define('io.ox/mail/view-detail',
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=(\d+))(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=(\d+)&i=(\d+))(\s*)$/i,
         regDocumentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/files(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
+        regTask = /^(\s*)(http[^#]+#m=task&i=(\d+)&f=(\d+))(\s*)$/i,
+        regTaskAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/tasks?&id=\d+.(\d+)&folder=([\d\.]+))(\s*)$/i,
+        regAppointment = /^(\s*)(http[^#]+#m=calendar&i=(\d+)&f=(\d+))(\s*)$/i,
+        regAppointmentAlt = /^(\s*)(http[^#]+#!&?app=io\.ox\/calendar(?:&perspective=list)?&folder=(\d+)&id=([\d\.]+))(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
         regMailReplace = /([^\s<;\(\)\[\]\|]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
@@ -139,6 +143,20 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
+    
+    var openTaskLink = function (e) {
+        e.preventDefault();
+        ox.launch('io.ox/tasks/main', { folder: e.data.folder}).done(function () {
+            var app = this, folder = e.data.folder, id = e.data.id;
+            if (app.folder.get() === folder) {
+                app.getGrid().selection.set(id);
+            } else {
+                app.folder.set(folder).done(function () {
+                    app.getGrid().selection.set(id);
+                });
+            }
+        });
+    };
 
     var openDocumentLink = function (e) {
         e.preventDefault();
@@ -147,9 +165,31 @@ define('io.ox/mail/view-detail',
             // switch to proper perspective
             ox.ui.Perspective.show(app, 'list').done(function () {
                 // set proper folder
-                app.folder.set(folder).done(function () {
+                if (app.folder.get() === folder) {
                     app.getGrid().selection.set(id);
-                });
+                } else {
+                    app.folder.set(folder).done(function () {
+                        app.getGrid().selection.set(id);
+                    });
+                }
+            });
+        });
+    };
+    
+    var openAppointmentLink = function (e) {
+        e.preventDefault();
+        ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
+            var app = this, folder = e.data.folder, id = e.data.id;
+            // switch to proper perspective
+            ox.ui.Perspective.show(app, 'list').done(function (perspective) {
+                // set proper folder
+                if (app.folder.get() === folder) {
+                    app.trigger('show:appointment', {id: id, folder_id: folder, recurrence_position: 0}, true);
+                } else {
+                    app.folder.set(folder).done(function () {
+                        app.trigger('show:appointment', {id: id, folder_id: folder, recurrence_position: 0}, true);
+                    });
+                }
             });
         });
     };
@@ -178,6 +218,50 @@ define('io.ox/mail/view-detail',
             // yep, internal
             href = '#app=io.ox/files&perspective=list&folder=' + folder + '&id=' + id;
             link.on('click', { hash: href, folder: folder, id: id }, openDocumentLink);
+        } else {
+            // nope, external
+            link.attr({ href: matches[0], target: '_blank' });
+        }
+        return link;
+    };
+    
+    var drawAppointmentLink = function (matches, title) {
+        var link, href, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[4];
+        id = matches[3];
+        // internal document?
+        if (isValidHost(href)) {
+            // yep, internal
+            href = '#app=io.ox/calendar&perspective=list&folder=' + folder + '&id=' + folder + '.' + id;
+            link.on('click', { hash: href, folder: folder, id: id }, openAppointmentLink);
+        } else {
+            // nope, external
+            link.attr({ href: matches[0], target: '_blank' });
+        }
+        return link;
+    };
+    
+    var drawTaskLink = function (matches, title) {
+        var link, href, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+        // get values
+        href = matches[2];
+        folder = matches[4];
+        id = matches[3];
+        // internal document?
+        if (isValidHost(href)) {
+            // yep, internal
+            href = '#app=io.ox/tasks&folder=' + folder + '&id=' + folder + '.' + id;
+            link.on('click', { hash: href, folder: folder, id: folder + '.' + id }, openTaskLink);
         } else {
             // nope, external
             link.attr({ href: matches[0], target: '_blank' });
@@ -329,6 +413,12 @@ define('io.ox/mail/view-detail',
                             if (w) { node.css({ width: w + 'px' }); }
                             if (h) { node.css({ height: h + 'px'}); }
                         })
+                        .end()
+                        // tables with bgcolor attribute
+                        .find('table[bgcolor]').each(function () {
+                            var node = $(this), bgcolor = node.attr('bgcolor');
+                            node.css('background-color', bgcolor);
+                        })
                         .end();
                         // nested message?
                         if (!('folder_id' in data) && 'filename' in data) {
@@ -379,6 +469,16 @@ define('io.ox/mail/view-detail',
                                 node.replaceWith(
                                     $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
                                 );
+                            } else if ((m = text.match(regTask) || text.match(regTaskAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawTaskLink(m, gt('Task')))
+                                );
+                            } else if ((m = text.match(regAppointment) || text.match(regAppointmentAlt)) && m.length) {
+                                // link to folder
+                                node.replaceWith(
+                                    $($.txt(m[1])).add(drawAppointmentLink(m, gt('Appointment')))
+                                );
                             } else if ((n = text.match(regLink)) && n.length && node.closest('a').length === 0) {
                                 if ((m = n[2].match(regDocument)) && m.length) {
                                     // link to document
@@ -394,6 +494,16 @@ define('io.ox/mail/view-detail',
                                     // link to folder
                                     node.replaceWith(
                                         $($.txt(m[1])).add(drawDocumentLink(m, gt('Folder'))).add($.txt(m[4]))
+                                    );
+                                } else if ((m = n[2].match(regTask) || n[2].match(regTaskAlt)) && m.length) {
+                                    // link to folder
+                                    node.replaceWith(
+                                        $($.txt(m[1])).add(drawTaskLink(m, gt('Task')))
+                                    );
+                                } else if ((m = n[2].match(regAppointment) || n[2].match(regAppointmentAlt)) && m.length) {
+                                    // link to folder
+                                    node.replaceWith(
+                                        $($.txt(m[1])).add(drawAppointmentLink(m, gt('Appointment')))
                                     );
                                 } else {
                                     m = n;
@@ -518,7 +628,10 @@ define('io.ox/mail/view-detail',
                 console.error('mail.draw', e.message, e, baton);
             }
 
-            return container.append(node);
+            container.append(node);
+            node.closest('.scrollable').scrollTop(0);
+
+            return container;
         },
 
         autoResolveThreads: (function () {
@@ -621,7 +734,7 @@ define('io.ox/mail/view-detail',
                             );
                         }
                     }
-                    node.get(0).appendChild(frag);
+                    node.empty().get(0).appendChild(frag);
                     // get nodes
                     nodes = node.find('.mail-detail').not('.thread-inline-actions');
                     // set initial scroll position (37px not to see thread's inline links)
@@ -633,7 +746,7 @@ define('io.ox/mail/view-detail',
                     nodes = frag = node = scrollpane = list = mail = mails = null;
                 } catch (e) {
                     console.error('mail.drawThread', e.message, e);
-                    fail(node, baton);
+                    fail(node.empty(), baton);
                 }
             }
 
@@ -646,7 +759,7 @@ define('io.ox/mail/view-detail',
 
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
                 api.getList(list).then(
-                    function (list) {
+                    function sucess(list) {
 
                         var i, $i, pos, numVisible, top, bottom, defs = [];
 
@@ -678,16 +791,16 @@ define('io.ox/mail/view-detail',
                                     next(node, baton, pos, top, bottom, $.makeArray(arguments));
                                 },
                                 function () {
-                                    fail(node, baton);
+                                    fail(node.empty(), baton);
                                 }
                             );
                         } catch (e) {
                             console.error('mail.drawThread', e.message, e);
-                            fail(node, baton);
+                            fail(node.empty(), baton);
                         }
                     },
-                    function () {
-                        fail(node, baton);
+                    function fail() {
+                        fail(node.empty(), baton);
                     }
                 );
             };
@@ -1051,22 +1164,34 @@ define('io.ox/mail/view-detail',
                 pub.parent = require('io.ox/core/config').get('folder.' + pub.module);
                 pub.folder = '';
                 label = pub.module === 'infostore' ? gt('files') : gt(pub.module);
-                //hide mail content if invitaion
-                //dom
-                var $actions, $appointmentInfo, $box;
-                $('<div class="well">').append(
-                    $('<span class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
-                    $("<br>"),
-                    $appointmentInfo = $('<div class="appointmentInfo">'),
-                    $actions = $('<div class="subscription-actions">')
-                ).appendTo(this);
-                $actions.append(
-                    $('<button class="btn" data-action="show">').text(gt('Show original publication')),
-                    "&nbsp;",
-                    $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
-                );
+
+                // published folder have much more data, single file just has a name and a URL.
+                var isSingleFilePublication = !pub.type;
+
+                if (isSingleFilePublication) {
+                    this.append(
+                        $('<div class="well">').append(
+                            $('<div class="invitation">').text(gt('Someone shared a file with you')),
+                            $('<div class="subscription-actions">').append(
+                                $('<button class="btn" data-action="show">').text(gt('Show file'))
+                            )
+                        )
+                    );
+                } else {
+                    this.append(
+                        $('<div class="well">').append(
+                            $('<div class="invitation">').text(gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)),
+                            $('<div class="subscription-actions">').append(
+                                $('<button class="btn" data-action="show">').text(gt('Show original publication')),
+                                "&nbsp;",
+                                $('<button class="btn btn-primary" data-action="subscribe">').text(gt('Subscribe'))
+                            )
+                        )
+                    );
+                }
+
                 //actions
-                $actions.on('click', 'button', function (e) {
+                this.on('click', '.subscription-actions .btn', function (e) {
                     var button = $(e.target),
                         notifications = require('io.ox/core/notifications');
                     //disble button
@@ -1078,8 +1203,8 @@ define('io.ox/mail/view-detail',
                         var self = this,
                             opt = opt || {};
                         //create folder; create and refresh subscription
-                        require(['io.ox/core/pubsub/api']).done(function (pubsubApi) {
-                            pubsubApi.autoSubscribe(pub.module, pub.name, pub.url).then(
+                        require(['io.ox/core/pubsub/util']).done(function (pubsubUtil) {
+                            pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url).then(
                                 function success(data) {
                                     notifications.yell('success', gt("Created private folder '%1$s' in %2$s and subscribed succesfully to shared folder", pub.name, pub.module));
                                     //refresh folder views
@@ -1092,7 +1217,6 @@ define('io.ox/mail/view-detail',
                         });
                     }
                 });
-                this.append($box);
             }
         }
     });
@@ -1129,13 +1253,26 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function replaceWithUnmodified(e) {
+        e.preventDefault();
+        // be busy
+        var section = e.data.node.parent();
+        section.find('article').busy().empty();
+        // get unmodified mail
+        api.getUnmodified(e.data.data).done(function (unmodifiedData) {
+            // keep outer node due to custom CSS classes (e.g. page)
+            var content = that.draw(unmodifiedData);
+            section.parent().empty().append(content.children());
+            section = content = null;
+        });
+    }
+
     // TODO: remove click handler out of inner closure
     ext.point('io.ox/mail/detail/header').extend({
         index: 195,
         id: 'externalresources-warning',
         draw: function (baton) {
             var data = baton.data;
-            var self = this;
             if (data.modified === 1) {
                 this.append(
                     $('<div class="alert alert-info cursor-pointer">')
@@ -1146,18 +1283,7 @@ define('io.ox/mail/view-detail',
                              $.txt(gt('External images have been blocked to protect you against potential spam!'))
                          )
                      )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/mail/api'], function (api) {
-                            // get unmodified mail
-                            api.getUnmodified(data)
-                                .done(function (unmodifiedData) {
-                                    // keep outer node due to custom CSS classes (e.g. page)
-                                    var content = that.draw(unmodifiedData);
-                                    self.parent().empty().append(content.children());
-                                });
-                        });
-                    })
+                    .on('click', { node: this, data: api.reduce(data) }, replaceWithUnmodified)
                 );
             }
         }
@@ -1193,7 +1319,8 @@ define('io.ox/mail/view-detail',
                     // assuming touch-pad/magic mouse for macos
                     // chrome & safari do a good job; firefox is not smooth
                     // ios means touch devices; that's fine
-                    _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
+                    // biggeleben: DISABLED for 7.2.1 due to too many potential bugs
+                    false && _.device('(macos && (chrome|| safari)) || ios') ? 'horizontal-scrolling' : ''
                 )
                 .append(
                     content.content,

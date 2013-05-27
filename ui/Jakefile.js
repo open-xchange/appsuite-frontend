@@ -25,7 +25,7 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require('./lib/build/less');
+var less = require('./lib/less.js/lib/less/index.js');
 
 console.info("Build path: " + utils.builddir);
 
@@ -150,7 +150,7 @@ function jsFilter (data) {
                 if (dep.slice(0, 5) !== 'less!') return;
                 dep = dep.slice(5);
                 if (!path.existsSync(path.join('apps', dep))) {
-                    console.warn('Missing LessCSS file ' + dep +
+                    console.warn('Warning: Missing LessCSS file ' + dep +
                                  ' required by ' + mod);
                 }
             });
@@ -213,7 +213,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: ['$', '_', 'Modernizr', 'define', 'require', 'requirejs', 'ox', 'assert',
-             'include', 'doT', 'Backbone', 'BigScreen', 'tinyMCE']
+             'include', 'doT', 'Backbone', 'BigScreen', 'MediaElementPlayer', 'tinyMCE']
 };
 
 function hint (data, getSrc) {
@@ -318,6 +318,11 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 // jQuery UI
 
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
+    { to: utils.dest("apps/io.ox/core/tk") });
+
+// jQuery Imageloader
+
+utils.copy(utils.list("lib", ["jquery.imageloader.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 // Mediaelement.js
@@ -473,47 +478,86 @@ utils.merge('manifests/' + pkgName + '.json',
 
 // themes
 
-if (!envBoolean('skipLess')) {
+if (!envBoolean('skipLess')) compileLess();
+function compileLess() {
+
+    var coreDir = process.env.coreDir || utils.builddir;
+
+    function core(file) { return path.join(coreDir, file); }
+
+    var ownLess = utils.list('apps', '**/*.less'), coreLess;
+    var ownThemes = utils.list('apps/themes/*/definitions.less');
+    var coreThemes = utils.list(core('apps/themes'), '*/definitions.less');
+
+    if ((ownThemes.length || ownLess.length) &&
+        !path.existsSync('apps/themes/definitions.less') &&
+        !path.existsSync(core('apps/themes/definitions.less')))
+    {
+        if (process.env.coreDir) {
+            console.warn('Warning: Invalid coreDir');
+        } else {
+            console.warn('Warning: Themes require either coreDir or skipLess');
+        }
+        return;
+    }
+
+    function compile(dest, defs, defsInCore, src, srcInCore) {
+        utils.file(dest,
+            [core('apps/themes/definitions.less'),
+             defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
+            function () {
+                var ast;
+                new less.Parser({
+                    paths: [coreDir],
+                    syncImport: true,
+                    relativeUrls: true
+                }).parse('@import "apps/themes/definitions.less";\n' +
+                         '@import "' + defs + '";\n' +
+                         '@import "' + src + '";\n',
+                function (e, tree) {
+                    if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
+                });
+                fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
+            });
+    }
     
     // own themes
-    _.each(utils.list('apps/themes/*/definitions.less'), function(defs) {
+    _.each(ownThemes, function(defs) {
+        if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
         var dir = path.dirname(defs);
-        utils.concat(path.join(dir, 'less/common.css'),
-            [utils.dest('apps/themes/definitions.less'), defs,
-             utils.dest('apps/themes/style.less')],
-            { filter: less.compile });
-        utils.concat(path.join(dir, 'less/style.css'),
-            [utils.dest('apps/themes/definitions.less'), defs,
-             path.join(dir, 'style.less')],
-            { filter: less.compile });
-        _.each(utils.list('apps', '**/*.less'), function (file) {
-            if (file.slice(0, 7) === 'themes/') return;
-            utils.concat(path.join(dir, 'less', file),
-                [utils.dest('apps/themes/definitions.less'), defs,
-                 path.join('apps', file)],
-                 { filter: less.compile });
+        compile(path.join(dir, 'less/common.css'), defs, false,
+                'apps/themes/style.less', true);
+        compile(path.join(dir, 'less/style.css'), defs, false,
+                path.join(dir, 'style.less'), false);
+        _.each(ownLess, function (file) {
+            if (/^themes[\/\\]/.test(file)) return;
+            compile(path.join(dir, 'less', file), defs, false,
+                    path.join('apps', file), false);
+        });
+        _.each(coreLess, function (file) {
+            if (/^themes[\/\\]/.test(file)) return;
+            compile(path.join(dir, 'less', file), defs, false,
+                    path.join('apps', file), true);
         });
     });
-    
-    // foreign themes
-    _.each(utils.list(utils.dest('apps/themes'), '*/definitions.less'),
+
+    // core themes
+    _.each(coreThemes,
         function (defs) {
             if (path.existsSync(path.join('apps/themes', defs))) return;
             var dir = path.join('apps/themes', path.dirname(defs));
-            _.each(utils.list('apps', '**/*.less'), function (file) {
-                if (file.slice(0, 7) === 'themes/') return;
-                utils.concat(path.join(dir, 'less', file),
-                    [utils.dest('apps/themes/definitions.less'),
-                     utils.dest(path.join('apps/themes', defs)),
-                     path.join('apps', file)],
-                     { filter: less.compile });
+            _.each(ownLess, function (file) {
+                if (/^themes[\/\\]/.test(file)) return;
+                compile(path.join(dir, 'less', file),
+                        path.join('apps/themes', defs), true,
+                        path.join('apps', file), false);
             });
         });
 }
 
 // docs task
 
-desc("Generates developer documentation");
+// desc("Generates developer documentation");
 utils.topLevelTask("docs", [], utils.summary("docs"));
 
 var titles = [];
@@ -787,11 +831,13 @@ task("dist", [distDest], function () {
                    { cwd: distDest }, done);
     }
     function done(code) {
-        if (code) {
-            console.warn('dpkg-source exited with code ' + code);
-            console.warn('Debian package is probably not available.');
+        if (!code) return complete();
+        if (envBoolean('forceDeb')) {
+            fail('dpkg-source exited with code ' + code);
+        } else {
+            console.warn('Warning: dpkg-source exited with code ' + code);
+            console.warn('Warning: Debian package is probably not available.');
         }
-        complete();
     }
 }, { async: true });
 
@@ -883,7 +929,7 @@ function verifyDoc(data) {
 }
 function warn(message, src) {
     console.warn(
-        ["WARNING: ", message, "\n  at ", src.name, ":", src.line].join(""));
+        ["Warning: ", message, "\n  at ", src.name, ":", src.line].join(""));
 }
 var extWalker = _.memoize(function (apiName) {
     return ast(apiName + '.point').asCall().walker();
@@ -898,7 +944,7 @@ function checkExtensions(name, deps, f) {
         if (scope.refs[apiName] !== fScope) return;
         var args = this[2];
         if (args.length !== 1) {
-            console.warn('extension.point should have 1 parameter');
+            console.warn('Warning: extension.point should have 1 parameter');
             return;
         }
         if (!pro.when_constant(args[0], checkPoint)) {

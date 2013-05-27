@@ -90,6 +90,7 @@ define('io.ox/mail/write/main',
             editorMode,
             messageFormat = settings.get('messageFormat', 'html'),
             composeMode,
+            prioActive = false,
             view,
             model,
             previous;
@@ -115,7 +116,7 @@ define('io.ox/mail/write/main',
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
-            title: 'Compose',
+            title: gt('Compose'),
             userContent: true
         });
 
@@ -134,6 +135,11 @@ define('io.ox/mail/write/main',
             obj.signature_name = _.noI18n(obj.signature_name);
             return obj;
         });
+
+        function trimSignature(text) {
+            // remove white-space and evil \r
+            return $.trim(text).replace(/\r\n/g, '\n');
+        }
 
         app.setSignature = function (e) {
 
@@ -161,7 +167,7 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = $.trim(signature.content);
+                text = trimSignature(signature.content);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
                 if (isHTML) {
@@ -327,29 +333,14 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
-        app.getPrimaryAddressFromFolder = function (data) {
-
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                accountID = data.account_id || mailAPI.getAccountIDFromFolder(folder_id);
-
-            return accountAPI.getPrimaryAddress(accountID).then(function (data) {
-                var primary;
-                if (accountID === '0') {
-                    // primary address is not the default send address for the
-                    // internal mail account (with id 0) - This is odd
-                    primary = settings.get('defaultSendAddress');
-                }
-                return {displayname: data[0], primaryaddress: primary || data[1]};
-            });
-        };
-
         app.getFrom = function () {
             var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
             return [from_field.data('displayname'), from_field.data('primaryaddress')];
         };
 
         app.setFrom = function (data) {
-            return this.getPrimaryAddressFromFolder(data).done(function (from) {
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX';
+            return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
                 if (data.from && data.from.length === 2) {
                     // from is already set in the mail, prefer this
                     from = { displayname: data.from[0], primaryaddress: data.from[1] };
@@ -358,13 +349,21 @@ define('io.ox/mail/write/main',
             });
         };
 
+        // this is different to $.trim, as it preserves white-space in the first line
+        function trimContent(str) {
+            // remove white-space at beginning except in first-line
+            str = String(str || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+            // remove white-space at end
+            return str.replace(/[\s\uFEFF\xA0]+$/, '');
+        }
+
         app.setBody = function (str) {
             // get default signature
             var ds = _(view.signatures)
                     .find(function (o) {
                         return o.id === settings.get('defaultSignature');
                     }),
-                content = $.trim(str);
+                content = trimContent(str);
 
             // set signature?
             if (ds) {
@@ -466,17 +465,34 @@ define('io.ox/mail/write/main',
             }
         };
 
+        app.getPriority = function () {
+            var high = view.form.find('input[name=priority][value=1]'),
+                low = view.form.find('input[name=priority][value=5]');
+            if (high.prop('checked')) return 1;
+            if (low.prop('checked')) return 5;
+            return 3;
+        };
+
         app.setPriority = function (prio) {
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
             prio = prio > 3 ? 5 : prio;
             // set
-            view.form.find('input[name=priority][value=' + prio + ']')
-                .prop('checked', true);
-            // high priority?
+            view.form.find('input[name=priority][value=' + prio + ']').prop('checked', true);
+            // high or low priority?
             if (prio === 1) {
-                view.priorityOverlay.addClass('high');
+                view.priorityOverlay.attr('class', 'priority-overlay high');
+            } else if (prio === 3) {
+                view.priorityOverlay.attr('class', 'priority-overlay');
+                if (prioActive) {
+                    prioActive = false;
+                    view.priorityOverlay.addClass('normal');
+                } else {
+                    prioActive = true;
+                }
+            } else if (prio === 5) {
+                view.priorityOverlay.attr('class', 'priority-overlay low');
             }
         };
 
@@ -567,15 +583,15 @@ define('io.ox/mail/write/main',
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[mail.format] || []) : (undefined),
                     content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 if (mail.format === 'text') {
-                    content = content.replace(/<br>\n?/g, '\n');
-                    // backend sends html entities, these need to be transformed into plain text
-                    content = $('<div>').html(content).text();
+                    content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
                 }
                 // image URL fix
                 if (editorMode === 'html') {
                     content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                 }
-                app[mail.initial ? 'setBody' : 'setRawBody'](content);
+                if (mail.replaceBody !== 'no') {
+                    app[mail.initial ? 'setBody' : 'setRawBody'](content);
+                }
 
                 // remember this state for dirty check
                 previous = app.getMail();
@@ -759,19 +775,34 @@ define('io.ox/mail/write/main',
             app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
             data.msgref = data.folder_id + '/' + data.id;
 
+            function getMail(data) {
+                // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
+                if (messageFormat === 'text' && settings.get('allowHtmlMessages', true) === true) {
+                    var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
+                    return mailAPI.get(options);
+                } else {
+                    return $.Deferred().resolve(data);
+                }
+            }
+
             win.busy().show(function () {
-                app.setMail({ data: data, mode: 'compose', initial: false })
-                .done(function () {
-                    app.setFrom(data || {});
-                    win.idle();
-                    app.getEditor().focus();
-                    def.resolve();
-                })
-                .fail(function () {
-                    notifications.yell('error', gt('An error occured. Please try again.'));
-                    app.dirty(false).quit();
-                    def.reject();
-                });
+                // get fresh plain textt mail
+                getMail(data).then(
+                    function success(data) {
+                        app.setMail({ data: data, mode: 'compose', initial: false })
+                        .done(function () {
+                            app.setFrom(data || {});
+                            win.idle();
+                            app.getEditor().focus();
+                            def.resolve();
+                        });
+                    },
+                    function fail() {
+                        notifications.yell('error', gt('An error occured. Please try again.'));
+                        app.dirty(false).quit();
+                        def.reject();
+                    }
+                );
             });
 
             return def;
@@ -819,9 +850,10 @@ define('io.ox/mail/write/main',
                 };
             } else {
                 content = {
-                    content: (app.getEditor() ? app.getEditor().getContent() : '')
-                        .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, '<br>\n') // escape line-breaks
+                    content: (app.getEditor() ? app.getEditor().getContent() : ''),
+                    raw: true
+                        // .replace(/</g, '&lt;') // escape <
+                        // .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
 
@@ -959,7 +991,7 @@ define('io.ox/mail/write/main',
                                 id = base.last();
                                 return { folder_id: folder, id: id };
                             });
-                            //update cache
+                            // update cache
                             mailAPI.getList(ids).pipe(function (data) {
                                 // update answered/forwarded flag
                                 if (isReply || isForward) {
@@ -982,26 +1014,34 @@ define('io.ox/mail/write/main',
                 });
             }
 
-            // ask for empty subject
-            if ($.trim(mail.data.subject) === '') {
-                // show dialog
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Mail has empty subject. Send it anyway?"))
-                        .addPrimaryButton("send", gt('Yes, send without subject'))
-                        .addButton("subject", gt('Add subject'))
-                        .show(function () {
-                            def.notify('empty subject');
-                        })
-                        .done(function (action) {
-                            if (action === 'send') {
-                                cont();
-                            } else {
-                                focus('subject');
-                                def.reject();
-                            }
-                        });
-                });
+            // ask for empty to and/or empty subject
+            if ($.trim(mail.data.subject) === '' || _.isEmpty(mail.data.to)) {
+                if (_.isEmpty(mail.data.to)) {
+                    notifications.yell('error', gt('Mail has no recipient.'));
+                    focus('to');
+                    def.reject();
+                } else if ($.trim(mail.data.subject) === '') {
+                    // show dialog
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Mail has empty subject. Send it anyway?"))
+                            .addPrimaryButton("send", gt('Yes, send without subject'))
+                            .addButton("subject", gt('Add subject'))
+                            .show(function () {
+                                def.notify('empty subject');
+                            })
+                            .done(function (action) {
+                                if (action === 'send') {
+                                    cont();
+                                } else {
+                                    focus('subject');
+                                    def.reject();
+                                }
+                            });
+                    });
+                }
+
+
             } else {
                 cont();
             }
@@ -1032,7 +1072,7 @@ define('io.ox/mail/write/main',
                 mail.data.flags += mailAPI.FLAGS.DRAFT;
             }
 
-            mailAPI.send(mail.data, mail.files)
+            mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
@@ -1046,7 +1086,16 @@ define('io.ox/mail/write/main',
                 });
 
             _.defer(initAutoSaveAsDraft, this);
-            return def;
+            return def.then(function (result) {
+                var base = _(result.data.split(mailAPI.separator)),
+                    id = base.last(),
+                    folder = base.without(id).join(mailAPI.separator);
+                mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
+                    view.form.find('.section-item.file').remove();
+                    $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
+                });
+            });
         };
 
         /**

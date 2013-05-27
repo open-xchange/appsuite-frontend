@@ -164,7 +164,7 @@ define('io.ox/contacts/edit/view-form', [
                     index: options.index,
                     render: function (baton) {
                         var baton = this.baton,
-                            $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm').addClass('span12'),
+                            $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
                             $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
                             $input = $inputWrap.find('input[type="file"]')
                                 .on('change', function (e) {
@@ -186,9 +186,11 @@ define('io.ox/contacts/edit/view-form', [
                                     $input = $('<input>', { type: 'file' }).appendTo($input.parent());
                                 }
                             }
+                        }).on('focus', function () {
+                            $input.attr('tabindex', '1');
                         });
 
-                        $node.append($('<div>').addClass('span12 contact_attachments_buttons').append($inputWrap));
+                        $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
                     }
                 }, {
                     hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
@@ -247,7 +249,7 @@ define('io.ox/contacts/edit/view-form', [
         point.extend(new views.AttributeView({
             id: ref + '/edit/view/display_name_header',
             index: 150,
-            tagName: 'span',
+            tagName: 'div',
             className: 'clear-title',
             attribute: 'display_name'
         }));

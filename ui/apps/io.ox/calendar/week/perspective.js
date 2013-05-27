@@ -18,7 +18,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/view-detail',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
-     'gettext!io.ox/calendar'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+     'gettext!io.ox/calendar',
+     'less!io.ox/calendar/week/style.less'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -40,15 +41,17 @@ define('io.ox/calendar/week/perspective',
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
-            api.get(obj).done(function (data) {
-                self.dialog
-                    .show(e, function (popup) {
+            api.get(obj).then(
+                function success(data) {
+                    self.dialog.show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
-            }).fail(function () {
-                notifications.yell('error', gt('An error occured. Please try again.'));
-                $('.appointment', self.main).removeClass('opac current');
-            });
+                },
+                function fail(e) {
+                    notifications.yell('error', gt('An error occured. Please try again.'));
+                    $('.appointment', self.main).removeClass('opac current');
+                }
+            );
         },
 
         /**
@@ -252,17 +255,28 @@ define('io.ox/calendar/week/perspective',
             this.refresh();
         },
 
+        // perspective week:week catches deep links
+        // id must be set in URL
+        followDeepLink: function () {
+            var cid = _.url.hash('id'), e;
+            if (cid) {
+                e = $.Event('click', { target: this.main });
+                this.showAppointment(e, _.cid(cid), { arrow: false });
+            }
+        },
+
         /**
          * initial rendering of the view
          * @param  {Object} app current application
          * @param  {Object} opt perspective options
          */
         render: function (app, opt) {
+
             var self = this;
 
             // init perspective
             this.app = app;
-            this.main.addClass('calendar-week-view').empty();
+            this.main.addClass('week-view').empty();
             this.collection = new Backbone.Collection([]);
 
             var refresh = function () { self.refresh(true); },
@@ -282,7 +296,7 @@ define('io.ox/calendar/week/perspective',
                 })
                 .on('create update', function (e, obj) {
                     if (obj.recurrence_type === 0) {
-                        self.view.setStartDate(obj.start_date);
+                        self.view.setStartDate(obj.start_date, obj.full_time);
                     }
                 });
 
@@ -297,6 +311,8 @@ define('io.ox/calendar/week/perspective',
                     self.view.unbindKeys();
                     self.dialog.close();
                 });
+
+            this.followDeepLink();
         }
     });
 

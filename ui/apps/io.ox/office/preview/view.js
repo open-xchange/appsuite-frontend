@@ -55,7 +55,7 @@ define('io.ox/office/preview/view',
             model = null,
 
             // the root node containing the current page contents
-            pageNode = $('<div>').addClass('page'),
+            pageNode = $('<div>').addClass('page unselectable'),
 
             // current page index (one-based!)
             page = 0,
@@ -65,9 +65,60 @@ define('io.ox/office/preview/view',
 
         // base constructor ---------------------------------------------------
 
-        BaseView.call(this, app, { scrollable: true, margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px' });
+        BaseView.call(this, app, {
+            initHandler: initHandler,
+            grabFocusHandler: grabFocusHandler,
+            scrollable: true,
+            margin: '52px 30px ' + (52 + Utils.SCROLLBAR_HEIGHT) + 'px'
+        });
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Initialization after construction.
+         */
+        function initHandler() {
+
+            model = app.getModel();
+            self.insertContentNode(pageNode);
+
+            //self.addPane(new Pane(app, { position: 'right' }));
+
+            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
+                )
+            );
+
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+                .addViewComponent(new ToolBox(app)
+                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
+                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
+                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
+                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
+                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
+                    .addGap()
+                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
+                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
+                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
+                )
+            );
+
+            // listen to specific scroll keys to switch to previous/next page
+            self.getAppPaneNode().on('keydown', keyHandler);
+
+            // set focus to application pane after import
+            app.on('docs:import:after', function () { self.grabFocus(); });
+        }
+
+        /**
+         * Moves the browser focus to the application pane.
+         */
+        function grabFocusHandler() {
+            self.getAppPaneNode().focus();
+            // Bug 25924: sometimes, Firefox selects the entire page
+            window.getSelection().removeAllRanges();
+        }
 
         /**
          * Handles 'keydown' events and show the previous/next page, if the
@@ -110,41 +161,6 @@ define('io.ox/office/preview/view',
         }
 
         /**
-         * Initialization after construction. Will be called once after
-         * construction of the application is finished.
-         */
-        function initHandler() {
-
-            model = app.getModel();
-
-            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('app/quit', new Button({ icon: 'icon-remove', tooltip: gt('Close document') }))
-                )
-            );
-
-            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('pages/first',    new Button({ icon: 'docs-first-page',    tooltip: gt('Show first page') }))
-                    .addGroup('pages/previous', new Button({ icon: 'docs-previous-page', tooltip: gt('Show previous page') }))
-                    .addGroup('pages/current',  new Label({                              tooltip: gt('Current page and total page count') }))
-                    .addGroup('pages/next',     new Button({ icon: 'docs-next-page',     tooltip: gt('Show next page') }))
-                    .addGroup('pages/last',     new Button({ icon: 'docs-last-page',     tooltip: gt('Show last page') }))
-                    .addGap()
-                    .addGroup('zoom/dec',     new Button({ icon: 'docs-zoom-out', tooltip: gt('Zoom out') }))
-                    .addGroup('zoom/current', new Label({                         tooltip: gt('Current zoom factor') }))
-                    .addGroup('zoom/inc',     new Button({ icon: 'docs-zoom-in',  tooltip: gt('Zoom in') }))
-                )
-            );
-
-            // insert the page node into the application pane
-            self.insertContentNode(pageNode);
-
-            // listen to specific scroll keys to switch to previous/next page
-            self.getAppPaneNode().on('keydown', keyHandler);
-        }
-
-        /**
          * Fetches the specified page from the preview model and shows it with
          * the current zoom level in the page node.
          *
@@ -159,9 +175,7 @@ define('io.ox/office/preview/view',
          */
         function showPage(newPage, scrollTo) {
 
-            var // a timeout for the window busy call
-                busyTimer = null,
-                // the Promise that loads the page
+            var // the Deferred object waiting for the page contents
                 def = null;
 
             // check that the page changes inside the allowed page range
@@ -170,19 +184,21 @@ define('io.ox/office/preview/view',
             }
             page = newPage;
 
-            // switch window to busy state after a short delay
-            busyTimer = app.executeDelayed(function () { app.getWindow().busy(); }, { delay: 500 });
+            // switch application pane to busy state (this keeps the Close button active)
+            self.appPaneBusy();
+            pageNode.empty();
 
             // load the requested page
             if (_.browser.Chrome) {
-                // Chrome: as SVG mark-up (Chrome does not show images in linked SVG)
+                // as SVG mark-up (Chrome does not show images in linked SVG)
                 def = model.loadPageAsSvg(page).done(function (svgMarkup) {
                     pageNode[0].innerHTML = svgMarkup;
                 });
             } else {
                 // preferred: as an image element linking to the SVG file
                 def = model.loadPageAsImage(page).done(function (imgNode) {
-                    pageNode.empty().append(imgNode);
+                    pageNode.append(imgNode.css({ maxWidth: '', width: '', height: '' }));
+                    imgNode.data({ width: imgNode.width(), height: imgNode.height() });
                 });
             }
 
@@ -191,12 +207,15 @@ define('io.ox/office/preview/view',
                 updateZoom(scrollTo);
             })
             .fail(function () {
+                pageNode.empty();
                 self.showError(gt('Load Error'), gt('An error occurred while loading the page.'), { closeable: true });
             })
             .always(function () {
                 app.getController().update();
-                busyTimer.abort();
-                app.getWindow().idle();
+                // do not hide the busy animation if page has not been loaded correctly
+                if ((pageNode.width() > 0) && (pageNode.height() > 0)) {
+                    self.appPaneIdle();
+                }
             });
         }
 
@@ -216,25 +235,23 @@ define('io.ox/office/preview/view',
                 factor = self.getZoomFactor() / 100,
                 // the child node of the page representing the SVG contents
                 childNode = pageNode.children().first(),
-                // the vertical margin to adjust scroll size
-                vMargin = childNode.height() * (factor - 1) / 2,
-                // the horizontal margin to adjust scroll size
-                hMargin = childNode.width() * (factor - 1) / 2,
                 // the application pane node
                 appPaneNode = self.getAppPaneNode();
 
-            // CSS 'zoom' not supported in all browsers, need to transform with
-            // scale(). But: transformations do not modify the element size, so
-            // we need to modify page margin to get the correct scroll size.
-            // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
-            // if browser zoom is not 100%) regardless of existing SVG, must
-            // set its size explicitly to see anything...
-            Utils.setCssAttributeWithPrefixes(childNode, 'transform', 'scale(' + factor + ')');
-            childNode.css('margin', vMargin + 'px ' + hMargin + 'px');
-            pageNode.css({
-                width: childNode.width() * factor,
-                height: childNode.height() * factor
-            });
+            if (childNode.is('img')) {
+                childNode.css({
+                    width: childNode.data('width') * factor,
+                    height: childNode.data('height') * factor
+                });
+            } else if (childNode.length > 0) {
+                // <svg> element (Chrome): scale with CSS zoom (supported in WebKit)
+                childNode.css('zoom', factor);
+
+                // Chrome bug/problem: sometimes, the page node has width 0 (e.g.,
+                // if browser zoom is not 100%) regardless of existing SVG, must
+                // set its size explicitly to see anything...
+                pageNode.width(childNode.width() * factor).height(childNode.height() * factor);
+            }
 
             // refresh view (scroll bars may have appeared or vanished)
             self.refreshPaneLayout();
@@ -400,13 +417,8 @@ define('io.ox/office/preview/view',
          */
         this.restoreFromSavePoint = function (point) {
             zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
-            showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
+            showPage(Utils.getIntegerOption(point, 'page', 1, 1, app.getModel().getPageCount()), 'top');
         };
-
-        // initialization -----------------------------------------------------
-
-        // initialization after construction
-        app.registerInitHandler(initHandler);
 
     } // class PreviewView
 

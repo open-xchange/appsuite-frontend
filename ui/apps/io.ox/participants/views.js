@@ -9,11 +9,11 @@
  *
  */
 
-define("io.ox/participants/views",
+define('io.ox/participants/views',
     ['gettext!io.ox/calendar/edit/main',
      'less!io.ox/participants/participants.less'], function (gt) {
 
-    "use strict";
+    'use strict';
 
     var ParticipantEntryView = Backbone.View.extend({
 

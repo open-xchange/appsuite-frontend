@@ -38,16 +38,26 @@ define('plugins/portal/tumblr/register',
         },
 
         initialize: function (baton) {
-            var url = baton.model.get('props').url;
-            baton.feed = new Feed({
-                url: apiUrl.join(url) + "&jsonp="
-            });
+
+            function initFeed() {
+                var url = baton.model.get('props').url;
+                baton.feed = new Feed({
+                    url: '' + apiUrl.join(url) + "&jsonp="
+                });
+            }
+
+            baton.model.on('change:props', initFeed);
+            initFeed();
         },
 
         load: function (baton) {
-            return baton.feed.load().done(function (data) {
-                baton.data = data.response;
-            });
+            if (baton.feed) {
+                return baton.feed.load().done(function (data) {
+                    baton.data = data.response;
+                });
+            } else {
+                return $.when();
+            }
         },
 
         preview: function (baton) {
@@ -74,19 +84,24 @@ define('plugins/portal/tumblr/register',
                     });
                     this.addClass('photo-stream').append(
                         $('<div class="content pointer">').css('backgroundImage', 'url(' + url + ')')
+                        .addClass('decoration')
                     );
 
                 } else {
                     // use text
                     var body = [];
                     // remove external links (breaks https)
-                    post.body = post.body.replace(/src=/g, 'nosrc=');
+                    if (post.body) { // is sometimes undefined / replace throws error
+                        post.body = post.body.replace(/src=/g, 'nosrc=');
+                    }
                     $('<div>').html(post.body).contents().each(function () {
                         var text = _.escape($.trim($(this).text()));
                         if (text !== '') { body.push(text); }
                     });
+
                     this.append(
                         $('<div class="content pointer">').html(body.join(' <span class="accent">&bull;</span> '))
+                        .addClass('decoration')
                     );
                 }
             }
@@ -180,7 +195,7 @@ define('plugins/portal/tumblr/register',
             });
 
         dialog.on('cancel', function () {
-            if (model.candidate) {
+            if (model.has('candidate')) {
                 view.removeWidget();
             }
         });
@@ -230,11 +245,11 @@ define('plugins/portal/tumblr/register',
 
             deferred.done(function () {
                 dialog.close();
-                model.candidate = false;
                 model.set({
                     title: description,
                     props: { url: url, description: description }
                 });
+                model.unset('candidate');
             });
 
             deferred.fail(function () {

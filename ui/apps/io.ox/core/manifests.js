@@ -20,6 +20,13 @@ define.async('io.ox/core/manifests',
 
     var manifestManager = {
 
+        // convenience function
+        // returns 'requires' of a given app or plugin id
+        // useful for upsell stuff
+        getRequirements: function (id) {
+            return (this.apps[id] || this.plugins[id] || {}).requires || '';
+        },
+
         loadPluginsFor: function (pointName, cb) {
             cb = cb || $.noop;
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
@@ -90,36 +97,47 @@ define.async('io.ox/core/manifests',
     ox.manifests = manifestManager;
 
     function process(manifest) {
-        if (manifest.namespace) {
-            if (manifest.requires) {
-                if (!capabilities.has(manifest.requires)) {
-                    return;
-                }
-            }
-            if (manifest.device && !_.device(manifest.device)) return;
-            var namespaces = manifest.namespace;
-            if (!_.isArray(namespaces)) {
-                namespaces = [manifest.namespace];
-            }
-            _(namespaces).each(function (namespace) {
-                _(namespace.split(/\s+,?/)).each(function (namespace) {
-                    // Looks like a plugin
-                    if (!manifestManager.pluginPoints[namespace]) {
-                        manifestManager.pluginPoints[namespace] = [];
-                    }
-                    manifestManager.pluginPoints[namespace].push(manifest);
-                    manifestManager.plugins[manifest.path] = manifest;
-                });
-            });
-        } else {
+
+        // apps don't have a namespace
+        if (!manifest.namespace) {
             // Looks like an app
             manifestManager.apps[manifest.path] = manifest;
+            return;
         }
+
+        // take care of plugins:
+
+        // lacks path?
+        if (!manifest.path) {
+            console.warn('Cannot process plugin manifest without a path', manifest);
+            return;
+        }
+
+        // check capabilities. skip this if upsell=true.
+        // Such plugins take care of missing capabilities own their own
+        if (manifest.requires && manifest.upsell !== true) {
+            if (!capabilities.has(manifest.requires)) return;
+        }
+
+        // check devie. this check cannot be bypassed by upsell=true
+        if (manifest.device && !_.device(manifest.device)) return;
+
+        // loop over namespaces (might be multiple)
+        // supports: 'one', ['array'] or 'one two three'
+        _([].concat(manifest.namespace)).each(function (namespace) {
+            _(namespace.split(/\s+,?/)).each(function (namespace) {
+                // Looks like a plugin
+                var p = manifestManager.pluginPoints;
+                // add to queue
+                (p[namespace] = p[namespace] || []).push(manifest);
+                manifestManager.plugins[manifest.path] = manifest;
+            });
+        });
     }
 
     _(ox.serverConfig.manifests).each(process);
 
-    var ts = _.now();
+    var ts = _.now(), custom = [];
 
     var self = {
         manager: manifestManager,
@@ -129,26 +147,25 @@ define.async('io.ox/core/manifests',
             manifestManager.apps = {};
 
             _(ox.serverConfig.manifests).each(process);
+
             if (_.url.hash('customManifests')) {
-                console.info("Loading custom manifests");
-                _(require(ox.base + "/src/manifests.js?t=" + ts)).each(function (m) {
-                    console.info("Custom manifest", m);
-                    process(m);
-                });
+                _(custom).each(process);
             }
         }
     };
 
+    var def = $.Deferred();
+
     if (_.url.hash('customManifests')) {
-        var def = $.Deferred();
-        require([ox.base + "/src/manifests.js?t=" + ts], function (m) {
-            _(m).each(process);
+        require([ox.base + "/src/manifests.js?t=" + ts], function (list) {
+            custom = list;
+            console.info('Loading custom manifests', _(list).pluck('path'), list);
+            _(list).each(process);
             def.resolve(self);
         });
-        return def;
     } else {
-        return $.Deferred().resolve(self);
+        def.resolve(self);
     }
 
-    return $.Deferred().resolve(self);
+    return def;
 });

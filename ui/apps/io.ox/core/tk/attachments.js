@@ -86,7 +86,7 @@ define('io.ox/core/tk/attachments',
                     $el.append(
                         $('<table width="100%">').append(
                             $('<tr>').append(
-                                $('<td class="attachment-icon">').append($('<img src="' + ox.base + '/apps/themes/default/attachment.png">')),
+                                $('<td class="attachment-icon">').append($('<i>').addClass('icon-paper-clip')),
                                 $('<td class="details">').append(
                                     $('<table>').append(
                                         $('<tr>').append(

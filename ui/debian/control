@@ -2,7 +2,7 @@ Source: open-xchange-appsuite
 Section: non-free/web
 Priority: optional
 Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
-Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
+Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.6.0)
 Standards-Version: 3.9.2
 Homepage: http://open-xchange.com
 Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
@@ -15,13 +15,14 @@ Description: OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-manifest
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-core, open-xchange-halo,
-         open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Depends: ${misc:Depends}, open-xchange-core, open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Replaces: open-xchange-documents-ui (<< 7.2.1-0)
+Conflicts: open-xchange-documents-ui (<< 7.2.1-0)
 Description: Manifest and apps included in the OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-dev
 Architecture: all
-Depends: ${misc:Depends}, nodejs (>= 0.4.0)
+Depends: ${misc:Depends}, nodejs (>= 0.6.0)
 Description: SDK for the OX App Suite HTML5 client
 
 ## help ##

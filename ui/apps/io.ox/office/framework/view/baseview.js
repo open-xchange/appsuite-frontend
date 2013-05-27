@@ -42,6 +42,12 @@ define('io.ox/office/framework/view/baseview',
      * @param {Object} [options]
      *  Additional options to control the appearance of the view. The following
      *  options are supported:
+     *  @param {Function} [options.initHandler]
+     *      A callback handler function called to initialize the contents of
+     *      this view instance after construction.
+     *  @param {Function} [options.deferredInitHandler]
+     *      A callback handler function called to initialize more contents of
+     *      this view instance, after the document has been imported.
      *  @param {Function} [options.grabFocusHandler]
      *      A function that has to implement moving the browser focus somewhere
      *      into the application pane. Used in the method BaseView.grabFocus()
@@ -74,6 +80,9 @@ define('io.ox/office/framework/view/baseview',
             // root application container node
             appContainerNode = $('<div>').addClass('app-container'),
 
+            // busy node for the application pane
+            appBusyNode = $('<div>').addClass('abs'),
+
             // all fixed view panes, in insertion order
             fixedPanes = [],
 
@@ -87,7 +96,10 @@ define('io.ox/office/framework/view/baseview',
             currentAlert = null,
 
             // the temporary container for all nodes while application is hidden
-            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode);
+            tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
+
+            // whether the application is hidden explicitly
+            viewHidden = false;
 
         // base constructor ---------------------------------------------------
 
@@ -143,6 +155,9 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
+            // do nothing if the window is hidden
+            if (!app.getWindow().state.visible) { return; }
+
             // update fixed view panes
             _(fixedPanes).each(updatePane);
 
@@ -181,8 +196,14 @@ define('io.ox/office/framework/view/baseview',
          * Updates the view after the application becomes active/visible.
          */
         function windowShowHandler() {
+
+            // do not show the window contents if view is still hidden explicitly
+            if (viewHidden) { return; }
+
             // move all application nodes from temporary storage into view
             app.getWindowNode().append(tempNode.children());
+            refreshPaneLayout();
+
             // do not update GUI and grab focus while document is still being imported
             if (app.isImportFinished()) {
                 app.getController().update();
@@ -196,7 +217,6 @@ define('io.ox/office/framework/view/baseview',
         function windowHideHandler() {
             // move all application nodes from view to temporary storage
             tempNode.append(app.getWindowNode().children());
-            refreshPaneLayout();
         }
 
         // methods ------------------------------------------------------------
@@ -218,6 +238,33 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
+         * Hides all contents of the application window and moves them to the
+         * internal temporary DOM storage node.
+         *
+         * @return {BaseView}
+         *  A reference to this instance.
+         */
+        this.hide = function () {
+            viewHidden = true;
+            windowHideHandler();
+            return this;
+        };
+
+        /**
+         * Shows all contents of the application window, if the application
+         * itself is currently active. Otherwise, the contents will be shown
+         * when the application becomes visible.
+         *
+         * @return {BaseView}
+         *  A reference to this instance.
+         */
+        this.show = function () {
+            viewHidden = false;
+            windowShowHandler();
+            return this;
+        };
+
+        /**
          * Returns the DOM node of the application pane (the complete inner
          * area between all existing view panes). Note that this is NOT the
          * container node where applications insert their own contents. The
@@ -229,6 +276,32 @@ define('io.ox/office/framework/view/baseview',
          */
         this.getAppPaneNode = function () {
             return appPane.getNode();
+        };
+
+        /**
+         * Sets the application into the busy state by displaying a window
+         * blocker element covering the application pane. All other view panes
+         * (also the overlay panes covering the blocked application pane)
+         * remain available.
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.appPaneBusy = function () {
+            appBusyNode.show().busy();
+            return this;
+        };
+
+        /**
+         * Leaves the busy state from the application pane that has been
+         * entered by the method BaseView.appPaneBusy().
+         *
+         * @returns {BaseView}
+         *  A reference to this instance.
+         */
+        this.appPaneIdle = function () {
+            appBusyNode.idle().hide();
+            return this;
         };
 
         /**
@@ -249,7 +322,7 @@ define('io.ox/office/framework/view/baseview',
          *  A reference to this instance.
          */
         this.attachAppPane = function () {
-            this.getAppPaneNode().append(appContainerNode);
+            this.getAppPaneNode().prepend(appContainerNode);
             return this;
         };
 
@@ -455,10 +528,15 @@ define('io.ox/office/framework/view/baseview',
             if (Utils.getBooleanOption(options, 'closeable', false)) {
                 // add closer symbol
                 alert.prepend($('<a>', { href: '#' }).text('\xd7').addClass('close'))
+                    .css('cursor', 'pointer')
                     // alert can be closed by clicking anywhere in the banner
-                    .on('click', closeAlert);
-                // initialize auto-close
-                alert.delay(delay).fadeOut(function () { currentAlert = null; alert.remove(); });
+                    .on('click', closeAlert)
+                    // initialize auto-close
+                    .delay(delay)
+                    .fadeOut(function () {
+                        currentAlert = null;
+                        alert.remove();
+                    });
             }
 
             // return focus to application pane when alert has been clicked (also if not closeable)
@@ -565,11 +643,11 @@ define('io.ox/office/framework/view/baseview',
         // initialization -----------------------------------------------------
 
         // create the application pane, and insert the container node
-        appPane = new Pane(app, { classes: 'app-pane' });
+        appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')));
+            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')), appBusyNode.hide());
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
@@ -586,16 +664,19 @@ define('io.ox/office/framework/view/baseview',
         // may want to access element geometry in background tasks
         app.getWindow().on({ show: windowShowHandler, hide: windowHideHandler });
 
-        // after import, update all view components
-        app.on('docs:import:after', windowShowHandler);
+        // after construction, call initialization handler
+        app.on('docs:init', function () {
+            Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
+        });
+
+        // after import, call deferred initialization handler, and update view and controller
+        app.on('docs:import:after', function () {
+            Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
+            windowShowHandler();
+        });
 
         // remove hidden container node when application has been closed
         app.on('quit', function () { tempNode.remove(); });
-
-        // #TODO: remove black/white icon hack, when icons are fonts instead of bitmaps
-        app.on('docs:init:after', function () {
-            app.getWindowNode().find('.toolbox .group a.button i').addClass('icon-white').closest('.group').addClass('white-icons');
-        });
 
     } // class BaseView
 

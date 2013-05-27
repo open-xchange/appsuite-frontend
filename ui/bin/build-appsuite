@@ -1,13 +1,18 @@
 #!/bin/sh
 
-if [ -d apps ]
+if [ ! -d apps ]
 then
-    if [ ! -n "$OX_APPSUITE_DEV" ]
-    then
-        OX_APPSUITE_DEV="$(dirname $(dirname $0))"
-    fi
-    sh "$OX_APPSUITE_DEV/bin/build.sh" "$@"
-else
-    echo No apps directory found. Are you in the correct directory?
+    echo No apps directory found. Are you in the correct directory? >&2
     exit 1
 fi
+
+if [ -z $NODEJS ]
+then
+    if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
+fi
+
+export BASEDIR="$(dirname "$(dirname "$(readlink "$0" || echo "$0")")")"
+
+[ -f local.conf ] && . ./local.conf
+
+$NODEJS $nodeopts "$BASEDIR/lib/jake/bin/cli.js" -f "$BASEDIR/Jakefile" "$@"

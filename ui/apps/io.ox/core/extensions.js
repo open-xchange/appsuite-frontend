@@ -43,10 +43,8 @@ define("io.ox/core/extensions",
         // for debugging purposes
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
-        },
+        };
 
-        // function wrappers
-        wrappers = {};
 
     // never leak
     $(window).on("unload", function () {
@@ -144,21 +142,7 @@ define("io.ox/core/extensions",
                 var args = $.makeArray(arguments).slice(2),
                     fn = ext[name];
                 if (fn) {
-                    // wrap
-                    if (wrappers[name]) {
-                        return wrappers[name].call(context, {
-                            args: args,
-                            extension: ext,
-                            original: function () {
-                                return fn.apply(context, args);
-                            },
-                            id: point.id + "/" + ext.id,
-                            module: that,
-                            point: point
-                        });
-                    } else {
-                        return fn.apply(context, args);
-                    }
+                    return fn.apply(context, args);
                 }
             };
         }
@@ -235,7 +219,7 @@ define("io.ox/core/extensions",
         };
 
         this.clear = function () {
-            extensions = [];
+            extensions = replacements = [];
         };
 
         this.all = function () {
@@ -279,11 +263,11 @@ define("io.ox/core/extensions",
             return list().map(cb);
         };
 
-        this.select = function (cb) {
+        this.filter = this.select = function (cb) {
             return list().select(cb).value();
         };
 
-        this.inject = function (cb, memo) {
+        this.reduce = this.inject = function (cb, memo) {
             return list().inject(cb, memo).value();
         };
 
@@ -474,11 +458,6 @@ define("io.ox/core/extensions",
             });
         },
 
-        // add wrapper
-        addWrapper: function (name, fn) {
-            wrappers[name] = fn;
-        },
-
         Baton: Baton,
 
         indexSorter: indexSorter
@@ -491,45 +470,6 @@ define("io.ox/core/extensions",
 
 Examples
 --------
-
-// Disable participants
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").disable("participants");
-
-// Disable date
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").disable("date");
-
-// Extend "draw" function (to introduce "customize")
-var ext = require("io.ox/core/extensions");
-ext.addWrapper("draw", function (e) {
-    e.original();
-    ext.point(e.id).invoke("customize", this, e.args);
-});
-
-// use new "customize" function
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail/date/time").extend({
-    customize: function () {
-        this.css("background", "#fc0");
-    }
-});
-
-// Replace existing extension
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").replace({
-    id: "title",
-    draw: function () {
-        this.append(
-            $("<div>").addClass("title").text("Hello World!")
-        );
-    }
-});
-
-// Shuffle extension order
-var ext = require("io.ox/core/extensions");
-ext.point("io.ox/calendar/detail").each(function (e) {
-    e.index = Math.random() * 1000 >> 0;
-}).sort();
+for examples please hava a look at: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_improvements
 
 */

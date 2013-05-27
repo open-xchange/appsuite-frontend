@@ -46,9 +46,9 @@ define('io.ox/settings/accounts/settings/pane',
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text('Do you really want to delete this account?')
-                    .addPrimaryButton('delete', 'Delete account')
-                    .addButton('cancel', 'Cancel')
+                    .text(gt('Do you really want to delete this account?'))
+                    .addPrimaryButton('delete', gt('Delete account'))
+                    .addButton('cancel', gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -207,8 +207,8 @@ define('io.ox/settings/accounts/settings/pane',
                         } else {
                             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                                 new dialogs.ModalDialog()
-                                    .text('Your primary mail account can not be deleted.')
-                                    .addPrimaryButton('ok', 'Ok')
+                                    .text(gt('Your primary mail account can not be deleted.'))
+                                    .addPrimaryButton('ok', gt('Ok'))
                                     .show();
                             });
                         }
@@ -225,7 +225,7 @@ define('io.ox/settings/accounts/settings/pane',
             redraw();
 
             api.on("refresh.all refresh.list", redraw);
-            that.on("dispose", function () {
+            data.grid.selection.on("change", function (a, b) {
                 api.off("refresh.all refresh.list", redraw);
             });
         },

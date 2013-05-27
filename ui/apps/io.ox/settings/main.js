@@ -10,6 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
+
 define('io.ox/settings/main',
      ['io.ox/core/tk/vgrid',
       'io.ox/core/api/apps',
@@ -18,6 +19,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
+      'io.ox/core/settings/errorlog/settings/pane',
       'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
@@ -150,56 +152,45 @@ define('io.ox/settings/main',
 
         //grid.requiresLabel = tmpl.requiresLabel;
 
-        var getAllSettingsPanes = function () {
-
-            return appsApi.getInstalled().pipe(function (installed) {
-
-                var apps = _.filter(installed, function (item) {
-                    return item.settings;
-                });
-
-                apps.unshift({
-                    category: 'Basic',
-                    company: 'Open-Xchange',
-                    description: 'Basic Settings',
-                    icon: '',
-                    id: 'io.ox/core',
-                    settings: true,
-                    title: gt('Basic settings'),
-                    index: 100
-                });
-
-                // TODO: Move this to a plugin
-                apps.push({
-                    category: 'Basic',
-                    company: 'Open-Xchange',
-                    description: 'Manage Accounts',
-                    icon: '',
-                    id: 'io.ox/settings/accounts',
-                    settings: true,
-                    title: gt('Mail and Social Accounts'),
-                    index: 600
-                });
-
-                // Extend the above list by custom plugins
-                ext.point("io.ox/settings/pane").each(function (ext) {
-                    apps.push({
-                        description: ext.title,
-                        id: ext.ref,
-                        settings: true,
-                        title: ext.title,
-                        loadSettingPane: ext.loadSettingPane,
-                        index: ext.index,
-                        lazySaveSettings: ext.lazySaveSettings || false
-                    });
-                });
-
-                apps.sort(function (a, b) {
-                    return ext.indexSorter(a, b);
-                });
-
-                return apps;
+        // Create extensions for the apps
+        var appsInitialized = appsApi.getInstalled().done(function (installed) {
+            var apps = _.filter(installed, function (item) {
+                return item.settings;
             });
+            var index = 200;
+
+            _(apps).each(function (app) {
+                ext.point("io.ox/settings/pane").extend(_.extend({}, {
+                    title: app.description,
+                    ref: app.id,
+                    index: index
+                }, app));
+                index += 100;
+
+            });
+        });
+
+        ext.point("io.ox/settings/pane").extend({
+            title: gt('Basic settings'),
+            index: 50,
+            id: 'io.ox/core'
+        });
+
+        ext.point("io.ox/settings/pane").extend({
+            title: gt('Mail and Social Accounts'),
+            index: 600,
+            id: 'io.ox/settings/accounts'
+        });
+
+        var getAllSettingsPanes = function () {
+            var def = $.Deferred();
+            appsInitialized.done(function () {
+                def.resolve(ext.point("io.ox/settings/pane").list());
+            });
+
+            appsInitialized.fail(def.reject);
+
+            return def;
         };
 
         grid.setAllRequest(getAllSettingsPanes);
@@ -210,13 +201,13 @@ define('io.ox/settings/main',
             if (!showSettingsEnabled) return;
 
             baton = ext.Baton.ensure(baton);
+            baton.grid = grid;
 
             var data = baton.data,
-                settingsPath = data.id + '/settings/pane',
-                extPointPart = data.id + '/settings';
+                settingsPath = (data.ref || data.id) + '/settings/pane',
+                extPointPart = (data.ref || data.id) + '/settings';
 
             right.empty().busy();
-
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function (m) {
                     right.empty().idle(); // again, since require makes this async
