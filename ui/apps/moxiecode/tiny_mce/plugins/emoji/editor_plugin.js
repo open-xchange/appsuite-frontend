@@ -19,7 +19,7 @@
                 require(['io.ox/core/tk/dialogs',
                         'moxiecode/tiny_mce/plugins/emoji/main'], function (dialogs, emoji) {
                     var popup = new dialogs.SidePopup();
-                    popup.show(baton.event, function (pane) {
+                    var p = popup.show(baton.event, function (pane) {
                         var node = $('<div class="emoji_selector">');
                         _(emoji.icons).each(function (icon) {
                             node.append(
@@ -38,6 +38,10 @@
                             );
                         });
                         pane.append(node);
+                    });
+                    //steal focus back
+                    p.on('close', function () {
+                        baton.editor.focus();
                     });
                 });
             });
