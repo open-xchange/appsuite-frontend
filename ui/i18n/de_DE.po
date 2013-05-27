@@ -4189,7 +4189,7 @@ msgstr "Diese Datei wurde hinzugefügt"
 #: apps/io.ox/files/views/create.js:81
 msgctxt "title"
 msgid "Title"
-msgstr "Beschreibung"
+msgstr "Titel"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/icons/perspective.js:61
