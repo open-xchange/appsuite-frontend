@@ -242,11 +242,8 @@ define('io.ox/files/actions',
                                     return $('<p>').append(
                                         $('<div>').text(file.title || file.filename || ''),
                                         $('<div>').append(
-                                            $('<a>', { href: url, target: '_blank' })
-                                            .text(
-                                                // soft-break long words (like long URLs)
-                                                url.replace(/(\S{30})/g, '$1\u200B')
-                                            )
+                                            $('<a class="direct-link">', { href: url, target: '_blank' })
+                                            .text(url)
                                         )
                                     );
                                 })
