@@ -280,7 +280,7 @@ define('io.ox/preview/main',
             var node = this;
             $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                 // plain text preview
-                node.addClass('plaintext').text(text);
+                node.addClass('plaintext').text(_.noI18n(text));
             });
         },
         omitClick: true
