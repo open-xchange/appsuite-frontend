@@ -110,9 +110,9 @@ define("plugins/portal/calendar/register",
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
-                                $('<span class="normal accent">').text(timespan), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="bold">').text(nextApp.title || ''), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="gray">').text(nextApp.location || '')
+                                $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                                $('<span class="bold">').text(_.noI18n(nextApp.title || '')), $.txt(gt.noI18n('\u00A0')),
+                                $('<span class="gray">').text(_.noI18n(nextApp.location || ''))
                             )
                         );
                     }

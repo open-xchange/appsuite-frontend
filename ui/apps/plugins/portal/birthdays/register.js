@@ -72,7 +72,7 @@ define('plugins/portal/birthdays/register',
                         $list.append(
                             $('<div class="line">').append(
                                 $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(birthday)
+                                $('<span class="accent">').text(_.noI18n(birthday))
                             )
                         );
                         markDuplicate(name, hash);
