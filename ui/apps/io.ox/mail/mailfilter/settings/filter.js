@@ -35,9 +35,26 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myViewNode = $("<div>").addClass("accountDetail");
         myModel = data;
         myView = new AccountDetailView({model: myModel, node: myViewNode});
-        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
-            pane.append(myView.render().el);
+
+//        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
+//            pane.append(myView.render().el);
+//        });
+
+
+
+        myView.dialog = new dialogs.ModalDialog({
+            width: 685
+//            async: true
         });
+
+
+        myView.dialog.append(
+            myView.render().el
+        )
+        .addPrimaryButton("save", gt('Save'))
+        .addButton("cancel", gt('Cancel'));
+
+        myView.dialog.show();
 //        myView.succes = successDialog;
 //        myView.collection = collection;
         return myView.node;

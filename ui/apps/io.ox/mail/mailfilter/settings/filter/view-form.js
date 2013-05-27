@@ -40,10 +40,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         containsValues = {
-            regex: gt('Matches regex'),
-            is: gt('Is exactly'),
             contains: gt('Contains'),
-            matches: gt('Matches (wildcards allowed)')
+            is: gt('Is exactly'),
+            matches: gt('Matches'),
+            regex: gt('Regex') //needs no different translation
         },
 
         defaultTests = {
@@ -464,6 +464,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     inputField = list.find('input'),
                     currentFolder =  self.model.get('actioncmds')[actionID].into,
                     actionArray =  this.model.get('actioncmds');
+
+                self.dialog.getPopup().hide();
+
                 require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
 
                     var label = gt('Select folder'),
@@ -492,6 +495,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         tree.destroy().done(function () {
                             tree = dialog = null;
                         });
+                        self.dialog.getPopup().show();
                     });
                 });
             },
@@ -593,11 +597,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
     };
 
     var drawCreateNewTestButton = function () {
-        return $('<button>').addClass('btn newcondition').attr('type', 'button').text(gt('Add condition'));
+        return $('<a>').addClass('newcondition').attr('type', 'button').text(gt('Add condition'));
     };
 
     var drawCreateNewActionButton = function () {
-        return $('<button>').addClass('btn newaction').attr('type', 'button').text(gt('Add action'));
+        return $('<a>').addClass('newaction').attr('type', 'button').text(gt('Add action'));
     };
 
     function changeLabel(e) {
@@ -757,7 +761,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             });
 
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Tests'));
+            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions'));
             var headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
 
             this.append(headlineTest, listTests, drawCreateNewTestButton(), headlineActions, listActions, drawCreateNewActionButton());
@@ -828,7 +832,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         label: 'applies to',
         attributeStack: 'test',
         attribute: 'id',
-        selectOptions: {allof: 'allof', anyof: 'anyof'},
+        selectOptions: {allof: gt('all'), anyof: gt('any')},
         render: render,
         updateChoice: updateChoice
 
