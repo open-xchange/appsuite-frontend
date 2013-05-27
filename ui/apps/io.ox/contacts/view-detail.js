@@ -104,7 +104,7 @@ define("io.ox/contacts/view-detail",
             .addClass("tel")
             .append(
                 $('<a href="#">')
-                .attr({ href: 'callto:' + value }).text(_.noI18n(value))
+                .attr({ href: (_.device('smartphone') ? 'tel:' : 'callto:') + value }).text(_.noI18n(value))
             );
         });
     }
