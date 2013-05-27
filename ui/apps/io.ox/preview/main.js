@@ -280,21 +280,7 @@ define('io.ox/preview/main',
             var node = this;
             $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                 // plain text preview
-                node.css({
-                    fontFamily: 'monospace',
-                    fontSize: '13px',
-                    width: '100%',
-                    padding: '13px',
-                    border: '1px dotted silver',
-                    boxSizing: 'border-box',
-                    MozBoxSizing: 'border-box',
-                    whiteSpace: 'pre-wrap',
-                    MozUserSelect: 'text',
-                    webkitUserSelect: 'text',
-                    userSelect: 'text',
-                    cursor: 'auto'
-                })
-                .text(text);
+                node.addClass('plaintext').text(text);
             });
         },
         omitClick: true
