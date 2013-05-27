@@ -101,7 +101,7 @@ define('io.ox/mail/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('mail-detail-pane').scrollable();
+        right = vsplit.right.addClass('mail-detail-pane').attr('tabindex', 1).scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
             max: settings.get('threadMax', 500),

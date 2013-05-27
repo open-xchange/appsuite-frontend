@@ -60,7 +60,7 @@ define("io.ox/contacts/main",
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left;
-        right = vsplit.right.addClass('default-content-padding').scrollable();
+        right = vsplit.right.addClass('default-content-padding').attr('tabindex', 1).scrollable();
 
         // left panel
         left.append(

@@ -69,7 +69,7 @@ define('io.ox/tasks/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('default-content-padding').scrollable();
+        right = vsplit.right.addClass('default-content-padding').attr('tabindex', 1).scrollable();
 
         // grid
         grid = new VGrid(left, {settings: settings});
