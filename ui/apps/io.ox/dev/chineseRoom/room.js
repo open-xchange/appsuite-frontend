@@ -25,8 +25,8 @@ define('io.ox/dev/chineseRoom/room', ['io.ox/realtime/groups', 'io.ox/core/event
         };
 
 
-        this.leave = function () {
-            this.group.leave();
+        this.leave = function (options) {
+            return this.group.leave(options);
         };
 
         this.destroy = function () {

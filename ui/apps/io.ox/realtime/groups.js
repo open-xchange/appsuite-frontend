@@ -91,7 +91,7 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             options = options || {};
             clearInterval(heartbeat);
             heartbeat = null;
-            this.send({
+            var stanza = {
                 element: "message",
                 trace: options.trace,
                 payloads: [
@@ -101,7 +101,12 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
                         data: "leave"
                     }
                 ]
-            });
+            };
+            if (options.expectSignOffMessage) {
+                return this.query(stanza);
+            } else {
+                this.send(stanza);
+            }
         };
 
         this.sendWithoutSequence = function (message) {
