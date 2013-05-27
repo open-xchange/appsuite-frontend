@@ -28,7 +28,9 @@
                                 .addClass(icon.css)
                                 .click(function (evt) {
                                     var ed = baton.editor,
-                                        node = $('<span class="emojifont">').text(icon.unicode);
+                                        node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
+                                        .addClass(icon.css)
+                                        .prop('text', icon.unicode);
                                     evt.preventDefault();
 
                                     ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
