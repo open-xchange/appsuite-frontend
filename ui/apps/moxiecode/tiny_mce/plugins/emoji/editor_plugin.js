@@ -30,7 +30,7 @@
                                     var ed = baton.editor,
                                         node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
                                         .addClass(icon.css)
-                                        .prop('text', icon.unicode);
+                                        .attr('data-emoji-unicode', icon.unicode);
                                     evt.preventDefault();
 
                                     ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
