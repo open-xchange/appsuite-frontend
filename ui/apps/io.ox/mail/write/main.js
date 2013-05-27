@@ -848,6 +848,12 @@ define('io.ox/mail/write/main',
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
+                //don’t send emoji images, but unicode characters
+                content.content = $(content.content);
+                content.content.find('.emoji').each(function (index, node) {
+                    $(node).replaceWith($(node).attr('data-emoji-unicode'));
+                });
+                content.content = content.content.html();
             } else {
                 content = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
