@@ -833,8 +833,33 @@ define("io.ox/mail/write/view-main",
         });
     }
 
+    /**
+     * mapping for getFieldLabel()
+     * @type {object}
+     */
+    var mapping = {
+        telephone_business1: gt('Phone (business)'),
+        telephone_business2: gt('Phone (business)'),
+        telephone_home1: gt('Phone (private)'),
+        telephone_home2: gt('Phone (private)'),
+        cellular_telephone1: gt('Mobile'),
+        cellular_telephone2: gt('Mobile')
+    };
+
+    /**
+     * fieldname to fieldlabel
+     * @param  {string} field
+     * @return {string} label
+     */
+    function getFieldLabel(field) {
+        return mapping[field] || '';
+    }
+
     function drawAutoCompleteItem(node, data, query) {
         var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
+        //source field label
+        if (getFieldLabel(data.field) !== '')
+            labelnode = ' <span style="color: #888;">(' + getFieldLabel(data.field) + ')</span>';
 
         node.addClass('io-ox-mail-write-contact').append(
             $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
