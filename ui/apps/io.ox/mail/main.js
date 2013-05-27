@@ -138,7 +138,7 @@ define('io.ox/mail/main',
             if (count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
+                $('<a href="#" tabindex="-1">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
             );
         };
 

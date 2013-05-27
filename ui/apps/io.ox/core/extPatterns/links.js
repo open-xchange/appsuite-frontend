@@ -194,7 +194,7 @@ define("io.ox/core/extPatterns/links",
                 if (!multiple && all.length > 5 && lo.length > 1) {
                     nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more">').append(
+                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">').append(
                                 $.txt(gt('More')),
                                 $.txt(_.noI18n(' ...')),
                                 $('<b class="caret">')
@@ -229,7 +229,7 @@ define("io.ox/core/extPatterns/links",
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
-            $toggle = $('<a href="#" data-toggle="dropdown">')
+            $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
                 .text(options.label || baton.label || '###')
                 .append(
