@@ -20,8 +20,9 @@
                         'moxiecode/tiny_mce/plugins/emoji/main'], function (dialogs, emoji) {
                     var popup = new dialogs.SidePopup();
                     popup.show(baton.event, function (pane) {
+                        var node = $('<div class="emoji_selector">');
                         _(emoji.icons).each(function (icon) {
-                            pane.append(
+                            node.append(
                                 $('<a href="#" class="emoji">')
                                 .attr('title', icon.desc)
                                 .addClass(icon.css)
@@ -34,6 +35,7 @@
                                 })
                             );
                         });
+                        pane.append(node);
                     });
                 });
             });
