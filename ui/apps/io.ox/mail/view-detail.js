@@ -1455,10 +1455,10 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    // AD
+    // Upsell
 
     ext.point('io.ox/mail/detail/empty').extend({
-        id: 'ad',
+        id: 'upsell',
         index: INDEX += 100,
         draw: function (baton) {
 

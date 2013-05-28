@@ -771,7 +771,11 @@ define('io.ox/core/tk/vgrid',
                     else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
-                        if (!i.length || self.selection.contains(i)) self.selection.set(i);
+                        if (self.selection.contains(i)) {
+                            self.selection.set(i);
+                        } else {
+                            self.selection.clear();
+                        }
                     }
                     else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);

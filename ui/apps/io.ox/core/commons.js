@@ -99,13 +99,17 @@ define('io.ox/core/commons',
 
             app.getGrid().selection.on('empty', function () {
                 // call extensions
-                var id = app.get('name'), empty = $('<div class="empty default-content-padding">'), folder = app.folder.get();
-                node.parent().scrollTop(0);
-                node.empty().append(empty);
-                app.folder.getData().done(function (data) {
-                    var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
-                    ext.point(id + '/detail/empty').invoke('draw', empty, baton);
-                });
+                var id = app.get('name'), empty, folder = app.folder.get();
+                // check node first
+                if (node.children('.empty[data-folder="' + folder + '"]').length === 0) {
+                    empty = $('<div class="empty default-content-padding">').attr('data-folder', folder);
+                    node.parent().scrollTop(0);
+                    node.empty().append(empty);
+                    app.folder.getData().done(function (data) {
+                        var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
+                        ext.point(id + '/detail/empty').invoke('draw', empty, baton);
+                    });
+                }
             });
         },
 

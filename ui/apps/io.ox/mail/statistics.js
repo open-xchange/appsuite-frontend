@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -17,6 +17,8 @@ define('io.ox/mail/statistics',
      'apps/io.ox/core/tk/charts.js'], function (api, accountAPI, gt) {
 
     'use strict';
+
+    var COLUMNS = '603,604,610';
 
     return {
 
@@ -32,7 +34,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: '603,604,610' }).done(function (data) {
+            api.getAll({ folder: options.folder, columns: COLUMNS }, false).done(function (data) {
 
                 var who = {}, attr = isSent ? 'to' : 'from';
 
@@ -87,7 +89,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: '603,604,610' }).done(function (data) {
+            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var days = [0, 0, 0, 0, 0, 0, 0];
 
@@ -129,7 +131,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: '603,604,610' }).done(function (data) {
+            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var hours = _.times(24, function () { return 0; });
 
