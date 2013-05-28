@@ -87,7 +87,7 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value) {
-            return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'mail';
+            return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
         },
 
         cleanup: function (phone) {
