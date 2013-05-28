@@ -7,4 +7,4 @@
 /debian/open-xchange-appsuite*.substvars
 /local.conf
 /apps/themes/*/less
-/plugins/playground
+/apps/plugins/playground
