@@ -182,13 +182,39 @@
     h2 {
         position: relative;
         font-size: 20px;
-        margin: @widget-padding;
+        padding: @widget-padding;
+        margin: 0;
         font-weight: bold;
         line-height: 26px;
         height: 26px;
         z-index: 2;
         .transition(color 0.3s linear);
         .ellipsis;
+    }
+
+    h2 .disable-widget {
+
+        float: right;
+        width: 52px;
+        padding: 14px 0;
+        text-align: center;
+        margin: -13px -13px 0 0;
+        text-decoration: none;
+        cursor: pointer;
+
+        .icon-remove {
+            color: rgba(0, 0, 0, 0.15);
+        }
+
+        &:hover .icon-remove {
+            color: rgba(0, 0, 0, 0.50);
+        }
+    }
+
+    .photo-stream h2 .disable-widget {
+
+        .icon-remove { color: rgba(0, 0, 0, 0.50); }
+        &:hover .icon-remove { color: rgba(0, 0, 0, 0.80); }
     }
 
     .widget > h2 {
@@ -413,7 +439,34 @@
         padding: 13px;
         margin: 0 0 7px 0;
         text-align: right;
-        cursor: pointer;
+        position: relative;
+
+        &.draggable {
+            padding-left: 60px;
+        }
+
+        .drag-handle {
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            cursor: pointer;
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -7px 0 0 -9px;
+                color: #aaa;
+            }
+        }
+
+        .drag-handle:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            i { color: #888; }
+        }
 
         .widget-title {
             font-weight: bold;

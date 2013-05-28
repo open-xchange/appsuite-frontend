@@ -1,174 +1,174 @@
 <div class="settings-detail-pane">
-	<legend class="sectiontitle">{{=it.strings.TITLE_ACCOUNT_SETTINGS}}</legend>
-	<div class="form-horizontal">
-		<div class="control-group">
-			<label for="label_14" class="control-label">{{=it.strings.ACCOUNT_NAME}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="name" id="label_14" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
+    <legend class="sectiontitle">{{=it.strings.TITLE_ACCOUNT_SETTINGS}}</legend>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label for="label_14" class="control-label">{{=it.strings.ACCOUNT_NAME}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="name" id="label_14" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
             <label for="personal" class="control-label">{{=it.strings.PERSONAL}}</label>
             <div class="controls">
                 <label class="text">
                     <input type="text" data-property="personal" id="personal" />
                 </label>
             </div>
-		</div>
-		<div class="control-group">
-			<label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
-			<div class="controls">
-				<label class="text">
-				<input type="text" data-property="primary_address" id="label_15" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="unified_inbox_enabled" />
-					{{=it.strings.UNIFIED_MAIL}}
-				</label>
-			</div>
-		</div>
-	</div>
-	<legend class="sectiontitle">{{=it.strings.SERVER_SETTINGS}}</legend>
-	<div class="form-horizontal">
-		<div class="control-group">
-			<label for="label_16" class="control-label">{{=it.strings.SERVER_TYPE}}</label>
-			<div class="controls">
-				<label class="select"> 
-					<select data-property="mail_protocol">
-						{{~it.optionsServer :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
-					</select>
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="mail_secure" />
-					{{=it.strings.SERVER_SSL}}
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_17" class="control-label">{{=it.strings.SERVER_NAME}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="mail_server" id="label_17" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_18" class="control-label">{{=it.strings.SERVER_PORT}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="mail_port" id="label_18" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_19" class="control-label">{{=it.strings.LOGIN}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="login" id="label_19" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_20" class="control-label">{{=it.strings.PASSWORD}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="password" data-property="password" id="label_20" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group pop3">
-			<label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
-			<div class="controls">
-				<label class="select">
-					<select data-property="pop3_refresh_rate">
-						{{~it.optionsRefreshRate :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
-					</select>
-				</label>
-			</div>
-		</div>
-		<div class="control-group pop3">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="pop3_expunge_on_quit" />
-					{{=it.strings.LEAVE_MESSAGES}}
-				</label>
-			</div>
-		</div>
-		<div class="control-group pop3">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="pop3_delete_write_through">
-					{{=it.strings.DELETING_ON_LOCAL}}
-				</label>
-			</div>
-		</div>
-	</div>
-	<legend class="sectiontitle">{{=it.strings.TITLE_SERVER_OUT}}</legend>
-	<div class="form-horizontal">
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="transport_secure" />
-					{{=it.strings.SERVER_OUT_SSL}}
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_22" class="control-label">{{=it.strings.SERVER_OUT_NAME}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="transport_server" id="label_22" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_23" class="control-label">{{=it.strings.SERVER_OUT_PORT}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="transport_port" id="label_23" /> 
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox" data-property="mail-common-selectfirst" />
-					{{=it.strings.LOGIN_AND_PASS}}
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_24" class="control-label">{{=it.strings.LOGIN_OUT}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="text" data-property="transport_login" id="label_24" />
-				</label>
-			</div>
-		</div>
-		<div class="control-group">
-			<label for="label_25" class="control-label">{{=it.strings.PASSWORD_OUT}}</label>
-			<div class="controls">
-				<label class="text">
-					<input type="password" data-property="transport_password" id="label_25"></label>
-			</div>
-		</div>
-	</div>
-	<legend class="sectiontitle">{{=it.strings.TITLE_FOLDER_SETTINGS}}</legend>
+        </div>
+        <div class="control-group">
+            <label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
+            <div class="controls">
+                <label class="text">
+                <input type="text" data-property="primary_address" id="label_15" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="unified_inbox_enabled" />
+                    {{=it.strings.UNIFIED_MAIL}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <legend class="sectiontitle">{{=it.strings.SERVER_SETTINGS}}</legend>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label for="label_16" class="control-label">{{=it.strings.SERVER_TYPE}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="mail_protocol">
+                        {{~it.optionsServer :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="mail_secure" />
+                    {{=it.strings.SERVER_SSL}}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_17" class="control-label">{{=it.strings.SERVER_NAME}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="mail_server" id="label_17" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_18" class="control-label">{{=it.strings.SERVER_PORT}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="mail_port" id="label_18" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_19" class="control-label">{{=it.strings.LOGIN}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="login" id="label_19" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_20" class="control-label">{{=it.strings.PASSWORD}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="password" data-property="password" id="label_20" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group pop3">
+            <label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="pop3_refresh_rate">
+                        {{~it.optionsRefreshRate :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="control-group pop3">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="pop3_expunge_on_quit" />
+                    {{=it.strings.LEAVE_MESSAGES}}
+                </label>
+            </div>
+        </div>
+        <div class="control-group pop3">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="pop3_delete_write_through">
+                    {{=it.strings.DELETING_ON_LOCAL}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <legend class="sectiontitle">{{=it.strings.TITLE_SERVER_OUT}}</legend>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="transport_secure" />
+                    {{=it.strings.SERVER_OUT_SSL}}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_22" class="control-label">{{=it.strings.SERVER_OUT_NAME}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="transport_server" id="label_22" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_23" class="control-label">{{=it.strings.SERVER_OUT_PORT}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="transport_port" id="label_23" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-property="mail-common-selectfirst" />
+                    {{=it.strings.LOGIN_AND_PASS}}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_24" class="control-label">{{=it.strings.LOGIN_OUT}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="text" data-property="transport_login" id="label_24" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="label_25" class="control-label">{{=it.strings.PASSWORD_OUT}}</label>
+            <div class="controls">
+                <label class="text">
+                    <input type="password" data-property="transport_password" id="label_25"></label>
+            </div>
+        </div>
+    </div>
+    <legend class="sectiontitle">{{=it.strings.TITLE_FOLDER_SETTINGS}}</legend>
     <div class="form-horizontal">
         <div class="control-group">
             <label for="label_26" class="control-label">{{=it.strings.FOLDER_SEND}}</label>
@@ -181,8 +181,8 @@
             <label for="label_29" class="control-label">{{=it.strings.FOLDER_TRASH}}</label>
             <div class="controls">
                 <label class="text">
-	                    <input type="text" data-property="trash_fullname" disabled="disabled" id="label_29" />
-	                    <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
+                        <input type="text" data-property="trash_fullname" disabled="disabled" id="label_29" />
+                        <button class="btn folderselect" type="button">{{=it.strings.SPAN_SELECT_FOLDER}}</button>
                 </label>
             </div>
             <label for="label_27" class="control-label">{{=it.strings.FOLDER_DRAFTS}}</label>

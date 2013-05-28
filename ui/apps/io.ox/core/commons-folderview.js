@@ -193,11 +193,11 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="publications">').text(gt('Publication'));
+                var link = $('<a href="#" data-action="publications">').text(gt('Publication')),
+                    contacts = baton.data.module === 'contacts',
+                    files = baton.data.module === 'infostore';
                 this.append($('<li class="divider">'), $('<li>').append(link));
-                if (capabilities.has('publication') &&
-                    (baton.data.module === 'contacts' || baton.data.module === 'infostore')
-                ) {
+                if (capabilities.has('publication') &&  (contacts || (files && api.can('publish', baton.data)))) {
                     link.on('click', { baton: baton }, publish);
                 } else {
                     link.addClass('disabled').on('click', $.preventDefault);

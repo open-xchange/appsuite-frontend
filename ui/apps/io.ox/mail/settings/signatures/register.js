@@ -308,21 +308,22 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
                     $list.on('click', '.selectable', function (e) {
                         $list.find('div[selected="selected"]').attr('selected', null);
-                        $(e.target).attr('selected', 'selected');
+                        $(this).attr('selected', 'selected');
+                        $('.sectioncontent button', $node).prop('disabled', false);
                     });
 
                     // Buttons
                     $('<div class="sectioncontent">').append(
                         $('<button class="btn btn-primary">').text(gt('Add')).on('click', fnEditSignature).css({marginRight: '15px'}),
-                        $('<button class="btn">').text(gt('Edit')).on('click', function (evt) {
+                        $('<button class="btn" disabled>').text(gt('Edit')).on('click', function (evt) {
                             var id = $list.find('div[selected="selected"]').first().attr('data-id');
                             fnEditSignature(evt, signatures[id]);
                         }).css({marginRight: '15px'}),
-                        $('<button class="btn">').text(gt('Delete')).on('click', function (evt) {
+                        $('<button class="btn" disabled>').text(gt('Delete')).on('click', function (evt) {
                             var id = $list.find('div[selected="selected"]').first().attr('data-id');
                             snippets.destroy(id).fail(require("io.ox/core/notifications").yell);
                         }).css({marginRight: '15px'}),
-                        $('<button class="btn">').text(gt('Set as default')).on('click', function (evt) {
+                        $('<button class="btn" disabled>').text(gt('Set as default')).on('click', function (evt) {
                             var selected = $list.find('div[selected="selected"]'),
                             current = $list.find('span[data-default="default"]');
                             if (current.parent().attr('data-id') === selected.attr('data-id')) {

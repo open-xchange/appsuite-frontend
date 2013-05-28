@@ -15,7 +15,7 @@ define('io.ox/contacts/settings/pane',
        ['settings!io.ox/contacts',
         'io.ox/contacts/settings/model',
         'io.ox/core/extensions',
-        'gettext!io.ox/contacts/contacts'], function (settings, contactsSettingsModel, ext, gt) {
+        'gettext!io.ox/contacts'], function (settings, contactsSettingsModel, ext, gt) {
 
     'use strict';
 
@@ -26,7 +26,7 @@ define('io.ox/contacts/settings/pane',
         tagName: "div",
         render: function () {
             this.$el.append(
-                $('<div class="clear-title">').text(gt('Address Book'))
+                $('<div class="clear-title">').text(gt.pgettext('app', 'Address Book'))
             );
             return this;
         }

@@ -17,11 +17,10 @@ define('io.ox/core/settings/pane',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
          'io.ox/core/http',
-         'io.ox/core/date',
          'io.ox/core/api/apps',
          'settings!io.ox/core',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, date, appAPI, settings, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
 
     'use strict';
 
@@ -37,10 +36,10 @@ define('io.ox/core/settings/pane',
             model.on('change', function (model, e) {
                 settings.save();
                 var showNotice = _(reloadMe).any(function (attr) {
-                    return e.changes[attr];
+                    return model.changed[attr];
                 });
 
-                if (e.changes.autoOpenNotification) {//AutonOpenNotification updates directly
+                if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved."));
                 } else if (showNotice) {
                     require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
@@ -61,7 +60,7 @@ define('io.ox/core/settings/pane',
         selectOptions: ox.serverConfig.languages || {},
         updateModel: function () {
             var value = this.nodes.element.val();
-            this.model.set(this.attribute, value);
+            this.model.set(this.attribute, value, {validate: true});
             _.setCookie('language', value);
         }
     }));
@@ -74,23 +73,33 @@ define('io.ox/core/settings/pane',
         }
     }).done(function (settingOptions) {
         // Timezones
-        var available = settingOptions.tree.availableTimeZones;
+        var available = settingOptions.tree.availableTimeZones,
+            technicalNames = _(available).keys(),
+            userTZ = settings.get('timezone', 'UTC'),
+            sorted = {};
 
-        // Sort the technical names by the alphabetic position of their
-        // values
-
-        var technicalNames = _(available).keys();
+        // Sort the technical names by the alphabetic position of their values
         technicalNames.sort(function (a, b) {
-            var va = available[a];
-            var vb = available[b];
+            var va = available[a],
+                vb = available[b];
             return va === vb ? 0 : va < vb ? -1 : 1;
         });
 
-        var sorted = {};
-        _(technicalNames).each(function (key) {
-            sorted[key] = available[key];
-        });
-
+        // filter double entries and sum up results in 'sorted' array
+        for (var i = 0; i < technicalNames.length; i++) {
+            var key = technicalNames[i],
+                key2 = technicalNames[i + 1];
+            if (key2 && available[key] === available[key2]) {
+                if (key2 === userTZ) {
+                    sorted[key2] = available[key2];
+                } else {
+                    sorted[key] = available[key];
+                }
+                i++;
+            } else {
+                sorted[key] = available[key];
+            }
+        }
 
         point.extend(new forms.SelectControlGroup({
             id: 'timezones',

@@ -111,12 +111,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     self.model.fetch().done(function (model, collection) {
                         var publications = pubsub.publications();
                         //update the model-(collection)
-                        //TODO: once we switched to backbone >= 0.9.10, this can be replaced with an "publications.update(model)" call
-                        if (self.model.collection) {
-                            self.model.set(model);
-                        } else {
-                            publications.add(model);
-                        }
+                        publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
                             //TODO: handle url domain missmatch
                             //TODO: user collection
@@ -288,7 +283,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
     });
 
     function sendInvitation(baton) {
-        return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).pipe(function (m, util, userAPI) {
+        return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
                     var url = baton.model.url(),
@@ -310,7 +305,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             }
                         } || {};
                     // use default email dialog
-                    return m.getApp().launch().pipe(function () {
+                    return m.getApp().launch().then(function () {
                         return this.compose(data);
                     });
                 });

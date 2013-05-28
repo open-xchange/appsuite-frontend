@@ -30,10 +30,17 @@ define('io.ox/files/list/view-detail',
 
     var POINT = 'io.ox/files/details';
 
+    // Inline Actions
+    ext.point(POINT).extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/files/links/inline'
+    }));
+
     // Title
     ext.point(POINT).extend({
         id: 'title',
-        index: 100,
+        index: 200,
         draw: function (baton) {
             this.append(
                 $('<div>').addClass('title clear-title')
@@ -45,12 +52,28 @@ define('io.ox/files/list/view-detail',
         }
     });
 
-    // Inline Actions
-    ext.point(POINT).extend(new links.InlineLinks({
-        index: 200,
-        id: 'inline-links',
-        ref: 'io.ox/files/links/inline'
-    }));
+    // Display locked file information
+    ext.point(POINT).extend({
+        index: 210,
+        id: 'filelock',
+        draw: function (baton) {
+            if (filesAPI.tracker.isLocked(baton.data)) {
+                var div, lockInfo;
+                this.append(
+                    div = $('<div>').addClass('alert alert-info')
+                );
+                if (filesAPI.tracker.isLockedByMe(baton.data)) {
+                    lockInfo = gt('This file is locked by you');
+                } else {
+                    lockInfo = gt('This file is locked by %1$s');
+                }
+                lockInfo.replace(/(%1\$s)|([^%]+)/g, function (a, link, text) {
+                    if (link) div.append(userAPI.getLink(baton.data.modified_by));
+                    else div.append($.txt(text));
+                });
+            }
+        }
+    });
 
     // Preview
     (function () {
@@ -141,6 +164,7 @@ define('io.ox/files/list/view-detail',
                     prefix: gt('Saved in'),
                     subfolder: false
                 })
+                .addClass('chromeless')
             );
         }
     });
@@ -192,7 +216,7 @@ define('io.ox/files/list/view-detail',
 
             var uploadFailed = function (e) {
                 require(['io.ox/core/notifications']).pipe(function (notifications) {
-                    if (e && e.code && e.code === 'UPL-0005') {
+                    if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                         notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                     }
                     else if (e && e.code && e.code === 'FLS-0024') {
@@ -287,7 +311,7 @@ define('io.ox/files/list/view-detail',
                 $content = $('<table class="versiontable table table-striped table-hover table-bordered">').append(
                     $('<thead>').append(
                         $('<tr>').append(
-                            $('<th>').text('#'),
+                            $('<th>').text(_.noI18n('#')),
                             $('<th>').text(gt('File'))
                         )
                     )
@@ -302,7 +326,7 @@ define('io.ox/files/list/view-detail',
                 }
 
                 var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
-                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).text($historyDefaultLabel)
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).addClass('noI18n').text($historyDefaultLabel)
                         .on('click', function (e) {
                         e.preventDefault();
                         if ($content.is(':hidden')) {
@@ -332,7 +356,7 @@ define('io.ox/files/list/view-detail',
     ext.point(POINT + '/version').extend({ index: 10,
         id: 'filename',
         draw: function (baton) {
-            baton.label = baton.data.filename;
+            baton.label = _.noI18n(baton.data.filename);
             var row;
 
             this.append(

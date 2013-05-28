@@ -319,7 +319,7 @@ define('io.ox/mail/api',
             }
         }
     });
-    
+
     /**
      * updates the view used for get requests, used on mail settings save to be responsive
      */
@@ -1029,8 +1029,10 @@ define('io.ox/mail/api',
     api.send = function (data, files, form) {
         var deferred,
             flatten = function (recipient) {
-                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''), address = recipient[1];
-                return name === '' ? address : '"' + name + '" <' + address + '>';
+                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
+                    address = recipient[1],
+                    typesuffix = recipient[2] || '';
+                return name === '' ? address : '"' + name + '" <' + address + typesuffix + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -1187,6 +1189,9 @@ define('io.ox/mail/api',
                 attachment: _(data).pluck('id').join(','),
                 session: ox.session // required here!
             });
+        } else if (mode === 'eml:reference') {
+            //if eml stored as reference use parent object
+            return this.getUrl(_([].concat(data)).first().parent, 'eml');
         } else if (mode === 'eml') {
             data = [].concat(data);
             first = _(data).first();

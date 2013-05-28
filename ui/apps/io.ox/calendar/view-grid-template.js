@@ -128,15 +128,17 @@ define("io.ox/calendar/view-grid-template",
                 this.addClass("calendar-label");
             },
             set: function (data, fields, index) {
-                var d = util.getSmartDate(data.start_date);
+                var d = util.getSmartDate(data);
                 this.text(gt.noI18n(d));
             }
         },
 
         // detect new labels
         requiresLabel: function (i, data, current) {
-            if (!data) { return false; }
-            var d = util.getSmartDate(data.fixed_start_date || data.start_date);
+            if (!data) {
+                return false;
+            }
+            var d = util.getSmartDate(data);
             return (i === 0 || d !== current) ? d : false;
         },
 

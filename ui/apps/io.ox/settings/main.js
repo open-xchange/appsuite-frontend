@@ -35,7 +35,10 @@ define('io.ox/settings/main',
                 return { title: title };
             },
             set: function (data, fields, index) {
-                fields.title.text(gt(data.title));
+                var title = gt.pgettext('app', data.title);
+                fields.title.text(
+                    title === data.title ? gt(data.title) : title
+                );
             }
         },
         label: {

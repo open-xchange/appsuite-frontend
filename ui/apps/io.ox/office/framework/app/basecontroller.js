@@ -78,8 +78,16 @@ define('io.ox/office/framework/app/basecontroller',
      *
      * @param {BaseApplication} app
      *  The application that has created this controller instance.
+     *
+     * @param {Object} [options]
+     *  A map with options controlling the behavior of this controller. The
+     *  following options are supported:
+     *  @param {Number} [options.updateDelay=100]
+     *      The delay for the debounced Controller.update() method.
+     *  @param {Number} [options.updateMaxDelay=1000]
+     *      The maximum delay for the debounced Controller.update() method.
      */
-    function BaseController(app) {
+    function BaseController(app, options) {
 
         var // self reference
             self = this,
@@ -584,7 +592,10 @@ define('io.ox/office/framework/app/basecontroller',
             }
 
             // create and return the debounced BaseController.update() method
-            return app.createDebouncedMethod(registerKey, triggerUpdate, { delay: 100, maxDelay: 1000 });
+            return app.createDebouncedMethod(registerKey, triggerUpdate, {
+                delay: Utils.getIntegerOption(options, 'updateDelay', 100, 0),
+                maxDelay: Utils.getIntegerOption(options, 'updateMaxDelay', 1000, 0)
+            });
 
         }()); // BaseController.update()
 

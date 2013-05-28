@@ -99,14 +99,52 @@ define('io.ox/mail/main',
 //            audio.get(0).play();
 //        });
 
-        var vsplit = commons.vsplit(win.nodes.main, app);
+        var vsplit = commons.vsplit(win.nodes.main, app),
+            showSwipeButton = false,
+            canDeletePermission;
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
-            max: settings.get('threadMax', 500),
+            max: _.device('smartphone') ? 50: settings.get('threadMax', 500),
             selectFirst: false,
-            threadView: settings.get('threadView') !== 'off'
+            threadView: settings.get('threadView') !== 'off',
+            //adjust for custom default sort
+            sort: settings.get('sort', 'thread'),
+            unread: settings.get('unread', false),
+            order: settings.get('order', 'desc')
+        });
+        // helper
+        var removeButton = function () {
+            if (showSwipeButton) {
+                var g = grid.getContainer();
+                $('.swipeDelete', g).remove();
+                showSwipeButton = false;
+            }
+        };
+
+        ext.point('io.ox/mail/swipeDelete').extend({
+            index: 666,
+            id: 'deleteButton',
+            draw: function (baton) {
+                // remove old buttons first
+                if (showSwipeButton) {
+                    removeButton();
+                }
+                this.append(
+                    $('<div class="btn btn-danger mail swipeDelete fadein">')
+                        .text(gt('Delete'))
+                        .on('mousedown', function (e) {
+                            // we have to use mousedown as the selection listens to this, too
+                            // otherwise we are to late to get the event
+                            e.preventDefault();
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
+                            removeButton();
+                            showSwipeButton = false;
+                        })
+                );
+                showSwipeButton = true;
+            }
         });
 
         // grid
@@ -116,6 +154,27 @@ define('io.ox/mail/main',
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
         options.settings = settings;
+
+        options.swipeRightHandler = function (e, id, cell) {
+            var obj = _.cid(id);
+            // check folder permission only once and cache the result
+            // until there is a folder change
+            if (canDeletePermission === undefined) {
+                api.getList([obj]).done(function (list) {
+                    folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
+                        if (folderAPI.can('delete', data)) {
+                            // cache permission for this folder
+                            canDeletePermission = true;
+                            ext.point('io.ox/mail/swipeDelete').invoke('draw', cell, list[0]);
+
+                        }
+                    });
+                });
+            } else if (canDeletePermission) {
+                ext.point('io.ox/mail/swipeDelete').invoke('draw', cell, obj);
+            }
+
+        };
 
         // threadview is based on a 500 (default) mail limit
         // in order to view all mails in a folder we offer a link
@@ -151,6 +210,10 @@ define('io.ox/mail/main',
 
         // folder change
         grid.on('change:prop:folder', function (e, folder) {
+            // reset delete permission
+            canDeletePermission = undefined;
+            // remove delete button
+            removeButton();
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
@@ -161,13 +224,14 @@ define('io.ox/mail/main',
             }
         });
 
-        //get sorting settings
+        //get sorting settings with fallback for extpoint
         var sortSettings = {};
-        sortSettings.sort = settings.get('sort', 'thread');
-        sortSettings.unread = settings.get('unread', false);
-        sortSettings.order = settings.get('order', 'desc');
+        sortSettings.sort = options.sort || settings.get('sort', 'thread');
+        sortSettings.unread = options.unread || settings.get('unread', false);
+        sortSettings.order = options.desc || settings.get('order', 'desc');
 
-        if (sortSettings.sort === 'thread' && options.threadView === false) { //check if folder actually supports threadview
+        //check if folder actually supports threadview
+        if (sortSettings.sort === 'thread' && options.threadView === false) {
             sortSettings.sort = '610';
         }
 
@@ -186,6 +250,9 @@ define('io.ox/mail/main',
         grid.on('change:prop:order', function (e, value) {
             grid.updateSettings('order', value);
         });
+
+        // remove delete button if needed
+        grid.selection.on('change', removeButton);
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
@@ -276,13 +343,15 @@ define('io.ox/mail/main',
              * @param  {string} key
              * @return {undefined}
              */
-            var sortby = function (key) {
-                var isInbox = account.is('inbox', grid.prop('folder')),
-                    ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
-                                      : (value + previous).replace('inbox', '').replace('off', '') === '';
+            var opt = options,
 
-                if (!ignored) {
-                    grid.prop('sort', key)
+                sortby = function (key) {
+                    var isInbox = account.is('inbox', grid.prop('folder')),
+                        ignored =  isInbox ? (value + previous).replace('inbox', '').replace('on', '') === ''
+                                           : (value + previous).replace('inbox', '').replace('off', '') === '';
+
+                    if (!ignored) {
+                        grid.prop('sort', key)
                             .refresh()
                             .pipe(function () {
                                 //called manually cause call skipped within refresh (sort property doesn't change)
@@ -292,17 +361,17 @@ define('io.ox/mail/main',
                                 //uses this too and would mess up the persistent settings
                                 grid.updateSettings('sort', key);
                             });
-                }
-            };
+                    }
+                },
 
-            //switch object
-            var switcher = {
-                threadView: {
-                    on: function () { sortby('thread'); },
-                    inbox: function () { sortby('thread'); },
-                    off: function () { sortby('610'); }
-                }
-            };
+                //switch object
+                switcher = {
+                    threadView: {
+                        on: function () { sortby('thread'); },
+                        inbox: function () { sortby('thread'); },
+                        off: function () { sortby(opt.sort || '610'); }
+                    }
+                };
 
             //switch
             if (switcher[path] && switcher[path][value]) {
@@ -457,7 +526,7 @@ define('io.ox/mail/main',
 
         (function () {
 
-            var openThreads = {};
+            var openThreads = tmpl.openThreads = {};
 
             // add label template
             grid.addLabelTemplate(tmpl.thread);
@@ -471,11 +540,19 @@ define('io.ox/mail/main',
                 });
             }
 
+            function icon(cid, type) {
+                grid.getContainer()
+                    .find('.vgrid-cell[data-obj-id="' + cid + '"]')
+                    .find('.thread-size i')
+                    .attr('class', 'icon-caret-' + type);
+            }
+
             function open(index, cid) {
                 if (openThreads[index] === undefined) {
                     var thread = api.getThread(cid);
                     if (thread.length > 1) {
                         openThreads[index] = cid;
+                        icon(cid, 'down');
                         api.getList(thread).done(function (list) {
                             refresh(list, index);
                         });
@@ -487,6 +564,7 @@ define('io.ox/mail/main',
                 if (openThreads[index] !== undefined) {
                     var thread = api.getThread(cid);
                     delete openThreads[index];
+                    icon(cid, 'right');
                     api.getList(thread).done(function (list) {
                         grid.selection.remove(list.slice(1));
                         refresh();
@@ -528,7 +606,7 @@ define('io.ox/mail/main',
 
             // reset on folder change
             grid.on('change:prop:folder', function () {
-                openThreads = {};
+                openThreads = tmpl.openThreads = {};
             });
 
             // close if deleted
@@ -647,8 +725,8 @@ define('io.ox/mail/main',
         // drop zone
         var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
         win.on("show", dropZone.include).on('hide', dropZone.remove);
-        
-        
+
+
         //if viewSetting ins changed redraw detailviews and grid
         api.on('viewChanged', function () {
             grid.selection.retrigger(true);//to refresh detailviews and grid
@@ -657,16 +735,31 @@ define('io.ox/mail/main',
         // search
         (function () {
 
-            var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
-                ids = 'from to cc subject text'.split(' '),
-                state = { from: true, cc: true, subject: true };
+            ext.point('io.ox/mail/search/defaults').extend({
+                from: true,
+                cc: true,
+                subject: true
+            });
 
-            win.nodes.search.find('form').append(
-                _(ids).map(function (name) {
-                    return $('<label class="checkbox margin-right">').append(
-                        $('<input type="checkbox" value="on">').attr({ name: name, checked: state[name] ? 'checked' : null }),
-                        $.txt(translations[name])
-                    );
+            ext.point('io.ox/mail/search/checkboxes').extend({
+                from: true,
+                to: true,
+                cc: true,
+                subject: true,
+                text: true
+            });
+
+            var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
+                defaults = ext.point('io.ox/mail/search/defaults').options();
+
+            win.nodes.search.find('.input-append').append(
+                _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
+                    return flag === true ?
+                        $('<label class="checkbox margin-right">').append(
+                            $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                            $.txt(translations[name])
+                        ) :
+                        $();
                 })
             );
 

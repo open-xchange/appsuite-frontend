@@ -201,10 +201,10 @@ define('plugins/portal/facebook/register',
                     ));
 
                 //use extension mechanism to enable rendering of different contents
-                var extPoints = ext.point('plugins/portal/facebook/renderer'),
+                var extPoints = ext.point('io.ox/plugins/portal/facebook/renderer'),
                     sortedExtPoints = _(extPoints).sortBy(function (elem) {return elem.index; });
 
-                ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
+                ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
                         //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
@@ -249,23 +249,25 @@ define('plugins/portal/facebook/register',
         },
 
         error: function (error) {
-            if (error.code !== "OAUTH-0006")
-                return; //let the default handling do the job
+
+            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
 
             $(this).empty().append(
-                $('<h2>').text(gt('Facebook')),
+                $('<h2>').append(
+                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                    $('<span class="title">').text(gt('Facebook'))
+                ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
                     ext.point('io.ox/portal/widget/facebook').invoke('performSetUp');
                 })
             );
-            console.log("DEBUG", error);
         }
     });
 
 
     /* index >= 128 for all plugins with a clearly defined purpose (meaning: I exactly know what I'm doing) */
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'photo',
         index: 128,
         accepts: function (post) {
@@ -283,7 +285,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'status',
         index: 128,
         accepts: function (post) {
@@ -294,7 +296,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'friends',
         index: 128,
         accepts: function (post) {
@@ -305,7 +307,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'tagged-in-photo',
         index: 128,
         accepts: function (post) {
@@ -317,7 +319,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'reply-on-wallpost',
         index: 128,
         accepts: function (post) {
@@ -328,7 +330,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'location',
         index: 128,
         accepts: function (post) {
@@ -339,7 +341,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'like',
         index: 128,
         accepts: function (post) {
@@ -356,7 +358,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'photo-comment',
         index: 128,
         accepts: function (post) {
@@ -368,7 +370,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'link-like',
         index: 128,
         accepts: function (post) {
@@ -383,7 +385,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'photo-share',
         index: 128,
         accepts: function (post) {
@@ -404,7 +406,7 @@ define('plugins/portal/facebook/register',
 
     /* index >= 196 for plugins handling generic stuff (like the common comment) */
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'link',
         index: 196,
         accepts: function (post) {
@@ -424,7 +426,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'video',
         index: 196,
         accepts: function (post) {
@@ -443,7 +445,7 @@ define('plugins/portal/facebook/register',
     });
 
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'app-story',
         index: 196,
         accepts: function (post) {
@@ -462,7 +464,7 @@ define('plugins/portal/facebook/register',
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'new-cover-photo',
         index: 196,
         accepts: function (post) {
@@ -480,7 +482,7 @@ define('plugins/portal/facebook/register',
     });
 
     /* index >224 for fallback solutions */
-    ext.point('plugins/portal/facebook/renderer').extend({
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
         accepts: function (post) {

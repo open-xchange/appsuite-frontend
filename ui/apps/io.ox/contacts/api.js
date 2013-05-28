@@ -22,12 +22,23 @@ define('io.ox/contacts/api',
 
     'use strict';
 
-    // object to store contacts, that have attachments uploading atm
-    var uploadInProgress = {};
+    var // object to store contacts, that have attachments uploading atm
+        uploadInProgress = {},
+        //columns ids mapped by keywords
+        mapping = {
+            email: ['555', '556', '557'],
+            telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
+            cellular: ['551', '552'],
+            fax: ['544', '550', '554']
+        };
+
+    //mapped ids for msisdn
+    mapping.msisdn =  settings.get('msisdn', mapping.cellular);
 
     // generate basic API
     var api = apiFactory({
         module: 'contacts',
+        mapping: mapping,
         requests: {
             all: {
                 action: 'all',
@@ -468,9 +479,9 @@ define('io.ox/contacts/api',
 
         // duck checks
         if (api.looksLikeResource(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_resource.png';
         } else if (api.looksLikeDistributionList(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_group.png';
         } else if (obj.image1_url) {
             return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
         } else {
@@ -510,9 +521,9 @@ define('io.ox/contacts/api',
         if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.png';
             } else if (api.looksLikeDistributionList(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.png';
             }
             // also look for contact_id to support user objects directly
             var id = obj.contact_id || obj.id,

@@ -1,10 +1,10 @@
 [
-	{
-		namespace: "io.ox/dev/testing/main",
-		path: "io.ox/files/tests/interface/test"
-	},
-	{
-		namespace: "io.ox/dev/testing/main",
-		path: "io.ox/files/tests/unit/test"
-	}
+    {
+        namespace: "io.ox/dev/testing/main",
+        path: "io.ox/files/tests/interface/test"
+    },
+    {
+        namespace: "io.ox/dev/testing/main",
+        path: "io.ox/files/tests/unit/test"
+    }
 ]

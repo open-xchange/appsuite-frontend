@@ -14,9 +14,9 @@
  */
 
 define("io.ox/mail/write/textile", function () {
-        
+
     "use strict";
-    
+
     // vars
     var rParagraph = /^p(&lt;|>|=)?(\{([^}]*)\})?\. (.+)/,
         rHeadline = /^h(\d)(&lt;|>|=)?\. (.+)/,
@@ -25,9 +25,9 @@ define("io.ox/mail/write/textile", function () {
         rUL = /^(\*+) (.+)$/,
         rOL = /^(\#+) (.+)$/,
         rImage = /^!(&lt;|>|=)?(.+)!$/,
-        
+
         editorFiles = {},
-        
+
         textile = function (str) {
             // double dash?
             str = str.replace(/(^|[^\-])--([^\-]|$)/g, "$1&mdash;$2");
@@ -43,30 +43,30 @@ define("io.ox/mail/write/textile", function () {
                 }
             });
         },
-        
+
         isList = function (line, regex, level) {
             var match = line.match(regex);
             return match && match[1].length === level;
         },
-        
+
         appendNewLine = function (node) {
             node.append($("<br/>"));
         },
-        
+
         removeDandlingNewLine = function (node) {
             var last = node.children().last();
             if (last.is("br")) {
                 last.remove();
             }
         },
-        
+
         fnToggleQuote = function (e) {
             $(this).css({ height: e.data.open ? "2.1em" : "auto" })
                 .find(".textile-quote-arrow").css("display", e.data.open ? "" : "none");
             e.data.open = !e.data.open;
             return false;
         },
-        
+
         applyAlignment = function (align, node) {
             if (align === "&lt;") {
                 // left
@@ -79,18 +79,18 @@ define("io.ox/mail/write/textile", function () {
                 node.css("textAlign", "center");
             }
         },
-        
+
         lookAhead = function (lines, start, mode, parent, level) {
-            
+
             // loop
             var i = start, $i = lines.length, line, match, node, para;
             for (; i < $i; i++) {
-                
+
                 // get line and trim right
                 line = lines[i].replace(/\s+$/, "");
                 // simplify debugging
                 node = para = null;
-                
+
                 switch (mode) {
                 case "":
                     if (line === "") {
@@ -176,7 +176,7 @@ define("io.ox/mail/write/textile", function () {
                         removeDandlingNewLine(node);
                     }
                     break;
-                    
+
                 case "p":
                     if (rParagraph.test(line) || rHeadline.test(line) || rImage.test(line) || rUL.test(line) || rOL.test(line)) {
                         return i - 1;
@@ -197,7 +197,7 @@ define("io.ox/mail/write/textile", function () {
                         return i;
                     }
                     break;
-                    
+
                 case ">":
                     // still a quote?
                     if (rQuote.test(line)) {
@@ -207,7 +207,7 @@ define("io.ox/mail/write/textile", function () {
                         return i - 1;
                     }
                     break;
-                    
+
                 case "ul":
                     if (isList(line, rUL, level + 1)) {
                         // unordered list
@@ -226,7 +226,7 @@ define("io.ox/mail/write/textile", function () {
                         return i - 1;
                     }
                     break;
-                    
+
                 case "ol":
                     if (isList(line, rOL, level + 1)) {
                         // unordered list
@@ -245,28 +245,28 @@ define("io.ox/mail/write/textile", function () {
                     break;
                 }
             }
-            
+
             node = parent = null;
             return i;
         },
-        
+
         parse = function (str) {
-            
+
             // vars
             var content = str.replace(/</g, "&lt;"),
                 lines = [], i = 0, $i = 0, line,
-                
+
                 tmp = "",
                 open = false,
                 dash = false,
                 frag = $("<div/>").addClass("textile");
-            
+
             // multiline replacements:
-            
+
             // mail addresses & URLs
             content = content.replace(/([a-z][\w\-\.]+)@(.+\.\w{2,3})/ig, '<a href="mailto:$1&#64;$2" class="textile-url">$1&#64;$2</a>');
             content = content.replace(/https?:\/\/.+/ig, '<span class="textile-url">$1</span>');
-            
+
             // detect addresses
             content = content.replace(
                 /((^|\n)([a-zöäüß \-]+ \d+[a-z]*)([,.]*[ \n]*)(\d{5} [a-zäöüß \-]+))/ig,
@@ -277,23 +277,23 @@ define("io.ox/mail/write/textile", function () {
                         (s + b + c).replace(/\n/g, "<br/>") + '</a>';
                 }
             );
-            
+
             // code
             content = content.replace(/@([^@]+)@/g, function (m, code) {
                 return '<code class="textile-code">' + code.replace(/\n/g, "<br/>") + '</code>';
             });
-            
+
             // split
             lines = content.split(/\n/);
-            
+
             lookAhead(lines, 0, "", frag, 0);
-            
+
             // clean up
             lines = content = null;
-            
+
             return frag;
         };
-    
+
     return {
         parse: parse
     };

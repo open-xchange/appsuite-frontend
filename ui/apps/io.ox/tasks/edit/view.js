@@ -36,6 +36,22 @@ define('io.ox/tasks/edit/view',
             this.fields = {};
             this.rows = [];
             this.on('dispose', this.close);
+            //if recurrence is set make sure we have start and end date
+            //this prevents errors on saving because recurrence needs both fields filled
+            this.model.on('change:recurrence_type', function (model, value, changes) {
+                if (value) {
+                    if (!(model.get('start_date')) && model.get('start_date') !== 0) {
+                        if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
+                            model.set('start_date',  model.get('end_date') - date.DAY, {validate: true});
+                        } else {
+                            model.set('start_date', _.now(), {validate: true});
+                        }
+                    }
+                    if (!(model.get('end_date')) && model.get('end_date') !== 0) {
+                        model.set('end_date', model.get('start_date') + date.DAY, {validate: true});
+                    }
+                }
+            });
         },
         render: function (app) {
             var self = this;
@@ -47,9 +63,12 @@ define('io.ox/tasks/edit/view',
 
             //row 2 start date due date
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
+            
+            //row 3 recurrence
+            util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
 
-            //row 3 description
-            util.buildExtensionRow(self.$el, this.getRow(3), self.baton);
+            //row 4 description
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
 
             //expand link
             $('<a>').text(gt('Expand form')).attr('href', '#')
@@ -60,14 +79,11 @@ define('io.ox/tasks/edit/view',
             })
             .appendTo(this.$el);
 
-            //row 4 reminder
-            util.buildExtensionRow(self.$el, this.getRow(4), self.baton).addClass('collapsed');
-
-            //row 5 status progress priority privateFlag
+            //row 5 reminder
             util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass('collapsed');
 
-            //row 6 repeat
-            //util.buildRow(this.$el, this.fields.repeatLink);
+            //row 6 status progress priority privateFlag
+            util.buildExtensionRow(self.$el, this.getRow(6), self.baton).addClass('collapsed');
 
             //tabsection
             var temp = util.buildTabs([gt('Participants'),
@@ -128,13 +144,13 @@ define('io.ox/tasks/edit/view',
                 var value;
                 switch (tab) {
                 case 'details':
-                    value = this.rows[6][number];
-                    break;
-                case 'participants':
                     value = this.rows[7][number];
                     break;
-                case 'attachments':
+                case 'participants':
                     value = this.rows[8][number];
+                    break;
+                case 'attachments':
+                    value = this.rows[9][number];
                     break;
                 default:
                     value = this.rows[number];
@@ -145,7 +161,7 @@ define('io.ox/tasks/edit/view',
                 //create non extensionPoint nodes
                 self.createNonExt(app);
                 //fill with empty rows
-                this.rows = [[], [], [], [], [], [], [[], [], [], [], []], [], []];
+                this.rows = [[], [], [], [], [], [], [], [[], [], [], [], []], [], []];
                 //get extension points
                 this.point.each(function (extension) {
                     temp[extension.id] = extension;
@@ -161,30 +177,32 @@ define('io.ox/tasks/edit/view',
                 self.rows[2].push(temp.end_date);
                 self.rows[2].push(temp.start_date);
                 //row 3
-                self.rows[3].push(temp.note);
+                self.rows[3].push(temp.recurrence);
                 //row 4
-                self.rows[4].push([[util.buildLabel(gt('Remind me'), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
-                self.rows[4].push(temp.alarm);
+                self.rows[4].push(temp.note);
                 //row 5
-                self.rows[5].push(temp.status);
-                self.rows[5].push([[util.buildLabel(gt('Progress in %'), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
-                self.rows[5].push(temp.priority);
-                self.rows[5].push(temp.private_flag);
+                self.rows[5].push([[util.buildLabel(gt('Remind me'), this.fields.reminderDropdown.attr('id')), this.fields.reminderDropdown], 5]);
+                self.rows[5].push(temp.alarm);
+                //row 6
+                self.rows[6].push(temp.status);
+                self.rows[6].push([[util.buildLabel(gt('Progress in %'), this.fields.progress.attr('id')), this.fields.progress.parent()], 3]);
+                self.rows[6].push(temp.priority);
+                self.rows[6].push(temp.private_flag);
                 //detailtab
-                self.rows[6][0].push(temp.target_duration);
-                self.rows[6][0].push(temp.actual_duration);
-                self.rows[6][1].push(temp.target_costs);
-                self.rows[6][1].push(temp.actual_costs);
-                self.rows[6][1].push(temp.currency);
-                self.rows[6][2].push(temp.trip_meter);
-                self.rows[6][3].push(temp.billing_information);
-                self.rows[6][4].push(temp.companies);
+                self.rows[7][0].push(temp.target_duration);
+                self.rows[7][0].push(temp.actual_duration);
+                self.rows[7][1].push(temp.target_costs);
+                self.rows[7][1].push(temp.actual_costs);
+                self.rows[7][1].push(temp.currency);
+                self.rows[7][2].push(temp.trip_meter);
+                self.rows[7][3].push(temp.billing_information);
+                self.rows[7][4].push(temp.companies);
                 //participantstab
-                self.rows[7].push(temp.participants_list);
-                self.rows[7].push(temp.add_participant);
+                self.rows[8].push(temp.participants_list);
+                self.rows[8].push(temp.add_participant);
                 //attachmentstab
-                self.rows[8].push(temp.attachment_list);
-                self.rows[8].push(temp.attachment_upload);
+                self.rows[9].push(temp.attachment_list);
+                self.rows[9].push(temp.attachment_upload);
                 //delegate some events
                 self.$el.delegate('#task-edit-title', 'keyup', function () {
                     var newTitle = _.noI18n($(this).val());
@@ -240,11 +258,11 @@ define('io.ox/tasks/edit/view',
                 .text(''), reminderUtil.buildDropdownMenu())
                 .on('change', function (e) {
                     if (self.fields.reminderDropdown.prop('selectedIndex') === 0) {
-                        self.model.set('alarm', null);
+                        self.model.set('alarm', null, {validate: true});
                     } else {
                         var dates = reminderUtil.computePopupTime(new Date(),
                                 self.fields.reminderDropdown.val());
-                        self.model.set('alarm', dates.alarmDate.getTime());
+                        self.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
                     }
                 });
 
@@ -255,17 +273,17 @@ define('io.ox/tasks/edit/view',
                 if (value !== 'NaN' && value >= 0 && value <= 100) {
                     if (self.fields.progress.val() === '') {
                         self.fields.progress.val(0);
-                        self.model.set('status', 1);
+                        self.model.set('status', 1, {validate: true});
                     } else if (self.fields.progress.val() === '0' && self.model.get('status') === 2) {
-                        self.model.set('status', 1);
+                        self.model.set('status', 1, {validate: true});
                     } else if (self.fields.progress.val() === '100' && self.model.get('status') !== 3) {
-                        self.model.set('status', 3);
+                        self.model.set('status', 3, {validate: true});
                     } else if (self.model.get('status') === 3) {
-                        self.model.set('status', 2);
+                        self.model.set('status', 2, {validate: true});
                     } else if (self.model.get('status') === 1) {
-                        self.model.set('status', 2);
+                        self.model.set('status', 2, {validate: true});
                     }
-                    self.model.set('percent_completed', value);
+                    self.model.set('percent_completed', value, {validate: true});
                 } else {
                     setTimeout(function () {notifications.yell('error', gt('Please enter value between 0 and 100.')); }, 300);
                     self.model.trigger('change:percent_completed');

@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/tk/vgrid',
-    ['io.ox/core/tk/selection',
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/selection',
      'io.ox/core/event',
      'gettext!io.ox/core'
-    ], function (Selection, Events, gt) {
+    ], function (ext, Selection, Events, gt) {
 
     'use strict';
 
@@ -190,7 +191,11 @@ define('io.ox/core/tk/vgrid',
             multiple: true,
             draggable: true,
             dragType: '',
-            selectFirst: true
+            selectFirst: true,
+            toolbarPlacement: 'bottom',
+            secondToolbar: false,
+            swipeLeftHandler: false,
+            swipeRightHandler: false
         }, options || {});
 
         if (options.settings) {
@@ -216,31 +221,48 @@ define('io.ox/core/tk/vgrid',
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+
             // bottom toolbar
+            ignoreCheckbox = false,
+
+            fnToggleCheckbox = function (e) {
+                if (ignoreCheckbox) return;
+                var grid = e.data.grid, checked = $(this).prop('checked');
+                if (checked) {
+                    grid.selection.selectAll();
+                } else {
+                    grid.selection.clear();
+                }
+            },
+
+            uncheckSelectAll = function (list) {
+                if (list.length <= 1) {
+                    ignoreCheckbox = true;
+                    node.find('.select-all input').prop('checked', false);
+                    ignoreCheckbox = false;
+                }
+            },
+
             fnToggleEditable = function (e) {
-                    e.preventDefault();
-                    var grid = e.data.grid;
-                    grid.setEditable(!grid.getEditable());
-                },
-            fnShowAll = function (e) {
-                    var grid = e.data.grid;
-                    if ($(this).prop('checked')) {
-                        grid.selection.selectAll();
-                    } else {
-                        grid.selection.selectFirst();
-                    }
-                },
-            toolbar = $('<div>').addClass('vgrid-toolbar')
+                e.preventDefault();
+                var grid = e.data.grid;
+                grid.setEditable(!grid.getEditable());
+            },
+
+            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
+                .prependTo(node),
+            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
                 .append(
-                    // select all
-                    options.showSelectAll === true ?
-                        $('<input type="checkbox">')
-                        .css({ 'float': 'left', 'margin-right': '13px' })
-                        .on('change', { grid: this }, fnShowAll) :
-                        $(),
+                    // show checkbox
+                    options.showCheckbox === false ?
+                        [] :
+                        $('<label class="select-all">').append(
+                            $('<input type="checkbox" value="true">').attr('title', gt('Select all'))
+                        )
+                        .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
-                        $() :
+                        [] :
                         $('<a>', { href: '#' })
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
@@ -294,7 +316,6 @@ define('io.ox/core/tk/vgrid',
             hScrollToLabel,
             paintLabels,
             processLabels,
-            invalidLabels = false,
             cloneRow,
             currentOffset = null,
             paint,
@@ -313,18 +334,6 @@ define('io.ox/core/tk/vgrid',
                 return load.call(self, subset);
             });
 
-            // __chunkLoader = new ChunkedLoader({
-            //     all: function () {
-            //         return all;
-            //     },
-            //     fetch: function (subset, options) {
-            //         var load = loadData[options.mode] || loadData.all;
-            //         return load.call(self, subset);
-            //     },
-            //     MAX_CHUNK: options.maxChunkSize || 200,
-            //     MIN_CHUNK: options.minChunkSize || 50
-            // });
-
         // add label class
         template.node.addClass('selectable');
         label.node.addClass('vgrid-label');
@@ -340,6 +349,71 @@ define('io.ox/core/tk/vgrid',
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
 
+        this.selection.on('change', function () {
+
+        });
+
+        // second toolbar
+        if (_.device('!small')) {
+            // create extension point for second toolbar
+            ext.point('io.ox/core/vgrid/secondToolbar').extend({
+                index: 100,
+                id: "secondToolbar",
+                draw: function (baton) {
+                    // select all/none
+                    var link,
+                        sel = baton.grid.selection,
+                        fnShowAll = function (e) {
+                            var checked = link.prop('checked');
+                            sel[checked ? 'clear' : 'selectAll']();
+                            setLink(!checked);
+                        },
+                        setLink = function (all) {
+                            all = all || false;
+                            link.prop('checked', all).text(all ? gt('Select none') : gt('Select all'));
+                        };
+
+                    // fix link if selection is empty
+                    sel.on('empty', function (a) {
+                        setLink(false);
+                    });
+
+                    // draw link
+                    this.append(
+                        $('<div>').addClass('grid-info').append(
+                            link = $('<a href="#">').on('click', fnShowAll)
+                        )
+                    );
+                    setLink(false);
+                }
+            });
+        }
+
+        // draw second toolbar
+        ext.point('io.ox/core/vgrid/secondToolbar').invoke("draw", topbar, new ext.Baton({ grid: self, options: options }));
+
+        // swipe delegate
+        if (_.device('touch')) {
+            if (options.swipeLeftHandler) {
+                $(target).on('swipeleft', '.selectable', function (e) {
+                    if (currentMode !== 'search') {
+                        var node = $(this),
+                            key = node.attr('data-obj-id');
+
+                        options.swipeLeftHandler(e, key, node);
+                    }
+                });
+            }
+            if (options.swipeRightHandler) {
+                $(target).on('swiperight', '.selectable', function (e) {
+                    if (currentMode !== 'search') {
+                        var node = $(this),
+                            key = node.attr('data-obj-id');
+                        options.swipeRightHandler(e, key, node);
+                    }
+                });
+            }
+        }
         // due to performance reasons we don't scrol but jump
         scrollToLabel = function (index) {
             var obj = labels.list[index];
@@ -397,7 +471,6 @@ define('io.ox/core/tk/vgrid',
                     cumulatedLabelHeight += tail.outerHeight(true);
                 }
                 node = clone = defs = null;
-                invalidLabels = false;
                 return cumulatedLabelHeight;
             });
         };
@@ -464,7 +537,6 @@ define('io.ox/core/tk/vgrid',
 
         paint = (function () {
 
-            // calling this via LFO, so that we always get the latest data
             function cont(chunk) {
 
                 // vars
@@ -601,16 +673,15 @@ define('io.ox/core/tk/vgrid',
         }
 
         function apply(list, quiet) {
-            // changed?
-            if (invalidLabels || list.length !== all.length || !_.isEqual(all, list)) {
-                // store
-                all = list;
-                currentOffset = null;
-                // initialize selection
-                self.selection.init(all);
-                // labels
-                initLabels();
-            }
+
+            // store
+            all = list;
+            currentOffset = null;
+            // initialize selection
+            self.selection.init(all);
+            // labels
+            initLabels();
+
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
@@ -619,19 +690,18 @@ define('io.ox/core/tk/vgrid',
                     $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
                 );
             }
+
             // trigger event
             if (!quiet) {
                 self.trigger('change:ids', all);
             }
+
             // get proper offset
             var top, index, offset;
-            if (currentOffset !== null) {
-                offset = currentOffset;
-            } else {
-                top = scrollpane.scrollTop();
-                index = getIndex(top);
-                offset = index - (numVisible >> 1);
-            }
+            top = scrollpane.scrollTop();
+            index = getIndex(top);
+            offset = index - (numVisible >> 1);
+
             return paint(offset);
         }
 
@@ -701,7 +771,7 @@ define('io.ox/core/tk/vgrid',
                     else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
-                        self.selection.set(i);
+                        if (!i.length || self.selection.contains(i)) self.selection.set(i);
                     }
                     else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
@@ -746,8 +816,8 @@ define('io.ox/core/tk/vgrid',
                             self.idle();
                         })
                         .done(function () {
-                            var changed = !_.isEqual(all, list);
-                            updateSelection(list.length !== all.length || changed);
+                            var hasChanged = !_.isEqual(all, list);
+                            updateSelection(hasChanged);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -770,7 +840,6 @@ define('io.ox/core/tk/vgrid',
             // resize
             resize();
             currentOffset = null;
-            invalidLabels = true;
             initialized = true;
             // load all IDs
             return loadAll();
@@ -827,6 +896,8 @@ define('io.ox/core/tk/vgrid',
         // selection events
         this.selection
             .on('change', function (e, list) {
+                // reset select-all checkbox
+                uncheckSelectAll(list);
                 // prevent to long URLs
                 var id = _(list.length > 50 ? list.slice(0, 1) : list).map(function (obj) {
                     return self.selection.serialize(obj);
@@ -918,11 +989,6 @@ define('io.ox/core/tk/vgrid',
             return initLabels();
         };
 
-        this.invalidateLabels = function () {
-            // use case: delete items; esp. mail thread summary
-            invalidLabels = true;
-        };
-
         this.repaint = _.debounce(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
@@ -1007,6 +1073,10 @@ define('io.ox/core/tk/vgrid',
 
         this.getToolbar = function () {
             return toolbar;
+        };
+
+        this.getTopbar = function () {
+            return topbar;
         };
 
         this.getEditable = function () {
@@ -1122,6 +1192,9 @@ define('io.ox/core/tk/vgrid',
 
         if (options.toolbarPlacement !== 'none') {
             node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+            if (options.secondToolbar && _.device('!small')) {
+                node.addClass(options.toolbarPlacement === 'top' ? 'bottom-toolbar' : 'top-toolbar');
+            }
         }
 
         this.on('change:prop:folder', function (e, value, previous) {
@@ -1147,6 +1220,22 @@ define('io.ox/core/tk/vgrid',
         this.select = (function () {
 
             var hash = {};
+
+            // restore persistent settings
+            if (options.settings) {
+                _(options.settings.get('vgrid/previous', {})).each(function (cid, folder) {
+                    hash[folder] = [_.cid(cid)];
+                });
+            }
+
+            self.selection.on('change', function (e, list) {
+                var folder = self.prop('folder');
+                if (options.settings && list.length <= 1) {
+                    options.settings.set(['vgrid', 'previous', folder], _.cid(list[0])).save();
+                    // always store in fluent hash
+                    hash[folder] = list;
+                }
+            });
 
             self.on('beforechange:prop:folder', function (e, value, previous) {
                 if (previous !== undefined) {

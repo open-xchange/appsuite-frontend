@@ -78,7 +78,7 @@ define('plugins/portal/flickr/register',
             var photo, size = '', url;
 
             // set title
-            this.find('h2').text(baton.model.get('props').query || 'Flickr');
+            this.find('h2 .title').text(baton.model.get('props').query || 'Flickr');
 
             if (baton.data.error) {
                 this.append(
@@ -260,7 +260,7 @@ define('plugins/portal/flickr/register',
                 } else {
                     props = { method: method, query: q, description: description };
                     if (nsid) { props.nsid = nsid; }
-                    model.set({ title: description, props: props });
+                    model.set({ title: description, props: props }, {validate: true});
                     model.unset('candidate');
                     dialog.close();
                 }

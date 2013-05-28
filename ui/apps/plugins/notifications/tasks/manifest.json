@@ -1,4 +1,4 @@
 {
-	namespace: "io.ox/core/notifications",
-	requires: "tasks"
+    namespace: "io.ox/core/notifications",
+    requires: "tasks"
 }

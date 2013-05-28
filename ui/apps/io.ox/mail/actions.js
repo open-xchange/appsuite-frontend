@@ -419,6 +419,9 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list, baton) {
+            //remove last element from id-list if previewing during compose (forward mail as attachment)
+            var adjustFn = list[0].parent.adjustid || '';
+            list[0].id = _.isFunction(adjustFn) ? adjustFn(list[0].id) : list[0].id;
             // open side popup
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
                 new dialogs.SidePopup().show(baton.e, function (popup) {
@@ -531,16 +534,15 @@ define('io.ox/mail/actions',
         }
     });
 
-
     new Action('io.ox/mail/actions/vcard', {
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
             var context = e.context,
-                hasRightSuffix = context.filename && context.filename.match(/\.vcf$/i) !== null,
-                isVCardType = context.content_type && !!context.content_type.match(/^text\/vcard/i),
-                isDirctoryType = context.content_type && !!context.content_type.match(/^text\/directory/i);
-            return  (hasRightSuffix && isDirctoryType) || isVCardType;
+                hasRightSuffix = (/\.vcf$/i).test(context.filename),
+                isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
+                isDirectoryType = (/^text\/directory/i).test(context.content_type);
+            return  (hasRightSuffix && isDirectoryType) || isVCardType;
         },
         action: function (baton) {
             var attachment = baton.data;
@@ -617,9 +619,15 @@ define('io.ox/mail/actions',
         requires: 'some',
         multiple: function (data) {
             var url;
-            if (!_.isObject(_(data).first().parent)) {
+            if (_(data).first().msgref) {
+                //using msgref reference if previewing during compose (forward previewed mail as attachment)
+                url = api.getUrl(data, 'eml:reference');
+            } else if (!_.isObject(_(data).first().parent)) {
                 url = api.getUrl(data, 'eml');
             } else {
+                // adjust attachment id for previewing nested email within compose view
+                var adjustFn = _(data).first().parent.adjustid || '';
+                _(data).first().id = _.isFunction(adjustFn) ? adjustFn(_(data).first().id) : _(data).first().id;
                 // download attachment eml
                 url = api.getUrl(_(data).first(), 'download');
             }
@@ -632,13 +640,14 @@ define('io.ox/mail/actions',
         requires: 'one',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
+                //using baton.data.parent if previewing during compose (forward mail as attachment)
                 widgets.add('stickymail', {
                     plugin: 'mail',
-                    props: {
+                    props: $.extend({
                         id: baton.data.id,
                         folder_id: baton.data.folder_id,
                         title: baton.data.subject
-                    }
+                    }, baton.data.parent || {})
                 });
                 notifications.yell('success', gt('This mail has been added to the portal'));
             });

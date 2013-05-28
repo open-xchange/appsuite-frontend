@@ -458,7 +458,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($el.find("h1").text()).toEqual("original title");
 
-                    recipe.set("title", "updated title");
+                    recipe.set("title", "updated title", {validate: true});
 
                     j.expect($el.find("h1").text()).toEqual("updated title");
 
@@ -480,11 +480,11 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($el.find("h1").text()).toEqual("original title subtitle");
 
-                    recipe.set("title", "updated title");
+                    recipe.set("title", "updated title", {validate: true});
 
                     j.expect($el.find("h1").text()).toEqual("updated title subtitle");
 
-                    recipe.set("subtitle", "updated subtitle");
+                    recipe.set("subtitle", "updated subtitle", {validate: true});
 
                     j.expect($el.find("h1").text()).toEqual("updated title updated subtitle");
 
@@ -511,7 +511,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($el.find("h1").text()).toEqual("The great original title");
 
-                    recipe.set("title", "updated title");
+                    recipe.set("title", "updated title", {validate: true});
 
                     j.expect($el.find("h1").text()).toEqual("The great updated title");
                 });

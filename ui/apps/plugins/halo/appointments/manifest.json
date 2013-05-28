@@ -1,4 +1,4 @@
 {
-	namespace: "plugins/halo",
-	requires: "calendar"
+    namespace: "plugins/halo",
+    requires: "calendar"
 }

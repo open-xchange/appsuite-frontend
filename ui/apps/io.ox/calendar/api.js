@@ -344,6 +344,9 @@ define('io.ox/calendar/api',
                 api.trigger('delete:' + encodeURIComponent(_.cid(o)), o);
                 //remove Reminders in Notification Area
                 checkForNotification(o, true);
+            }).fail(function () {
+                all_cache = {};
+                api.trigger('delete');
             });
         },
 

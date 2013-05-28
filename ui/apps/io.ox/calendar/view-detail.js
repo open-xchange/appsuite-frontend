@@ -37,9 +37,17 @@ define("io.ox/calendar/view-detail",
 
     // draw via extension points
 
+    ext.point('io.ox/calendar/detail').extend({
+        index: 100,
+        id: 'inline-actions',
+        draw: function (data) {
+            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
+        }
+    });
+
     // draw appointment date & time
     ext.point("io.ox/calendar/detail").extend({
-        index: 100,
+        index: 200,
         id: "date",
         draw: function (data) {
             var node;
@@ -74,17 +82,9 @@ define("io.ox/calendar/view-detail",
         }
     });
 
-    ext.point('io.ox/calendar/detail').extend({
-        index: 350,
-        id: 'inline-actions',
-        draw: function (data) {
-            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
-        }
-    });
-
     // draw private flag
     ext.point("io.ox/calendar/detail").extend({
-        index: 150,
+        index: 250,
         id: "private-flag",
         draw: function (data) {
             if (data.private_flag) {
@@ -95,7 +95,7 @@ define("io.ox/calendar/view-detail",
 
     // draw title
     ext.point("io.ox/calendar/detail").extend({
-        index: 200,
+        index: 300,
         id: "title",
         draw: function (data) {
             this.append(
@@ -106,7 +106,7 @@ define("io.ox/calendar/view-detail",
 
     // draw location
     ext.point("io.ox/calendar/detail").extend({
-        index: 300,
+        index: 400,
         id: "location",
         draw: function (data) {
             if (data.location) {
@@ -119,7 +119,7 @@ define("io.ox/calendar/view-detail",
 
     // draw note/comment
     ext.point("io.ox/calendar/detail").extend({
-        index: 400,
+        index: 500,
         id: "note",
         draw: function (data) {
             if (data.note) {
@@ -174,7 +174,7 @@ define("io.ox/calendar/view-detail",
 
 
     ext.point("io.ox/calendar/detail").extend({
-        index: 500,
+        index: 600,
         id: "participants",
         draw: function (data) {
 
@@ -314,7 +314,7 @@ define("io.ox/calendar/view-detail",
 
 
     ext.point('io.ox/calendar/detail').extend({
-        index: 550,
+        index: 700,
         id: 'inline-actions-participantrelated',
         draw: function (data) {
             if (data.participants && data.participants.length > 1) {
@@ -326,7 +326,7 @@ define("io.ox/calendar/view-detail",
 
     // draw details
     ext.point("io.ox/calendar/detail").extend({
-        index: 700,
+        index: 800,
         id: "details",
         draw: function (data, options) {
             if (options && options.brief) {
@@ -446,7 +446,7 @@ define("io.ox/calendar/view-detail",
 
     ext.point("io.ox/calendar/detail").extend({
         id: 'attachments',
-        index: 600,
+        index: 550,
         draw: function (data) {
             var $node;
             if (calAPI.uploadInProgress(encodeURIComponent(_.cid(data)))) {

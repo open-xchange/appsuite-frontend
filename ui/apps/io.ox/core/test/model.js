@@ -66,7 +66,7 @@ define("io.ox/core/test/model",
                 });
 
                 j.it('change property value', function () {
-                    model.set('city', '44135 Dortmund');
+                    model.set('city', '44135 Dortmund', {validate: true});
                     j.expect(model.get('city')).toEqual('44135 Dortmund');
                 });
 
@@ -86,7 +86,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual('Matthias B.');
                         called = true;
                     });
-                    model.set('firstName', 'Matthias B.');
+                    model.set('firstName', 'Matthias B.', {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -98,7 +98,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual('Matthias');
                         called = true;
                     });
-                    model.set('firstName', 'Matthias');
+                    model.set('firstName', 'Matthias', {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -139,26 +139,26 @@ define("io.ox/core/test/model",
                 });
 
                 j.it('setting mandatory property', function () {
-                    model.set('familyName', 'B.');
+                    model.set('familyName', 'B.', {validate: true});
                     j.expect(model.get('familyName')).toEqual('B.');
                 });
 
                 j.it('clearing mandatory property', function () {
-                    model.set('familyName', '');
+                    model.set('familyName', '', {validate: true});
                     j.expect(model.get('familyName')).toEqual(''); // invalid states are allowed!
                 });
 
                 j.it('triggers invalid format event', function () {
                     var called = false;
                     // set value back
-                    model.set('familyName', 'B.');
+                    model.set('familyName', 'B.', {validate: true});
                     // catch error
                     model.off().on('error:invalid', function (e, error) {
                         j.expect(error.properties).toEqual(['familyName']);
                         j.expect(model.get('familyName')).toEqual('');
                         called = true;
                     });
-                    model.set('familyName', '');
+                    model.set('familyName', '', {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -170,8 +170,8 @@ define("io.ox/core/test/model",
                         j.expect(model.get('age')).toEqual(-1);
                         called = true;
                     });
-                    model.set('familyName', 'B.');
-                    model.set('age', -1);
+                    model.set('familyName', 'B.', {validate: true});
+                    model.set('age', -1, {validate: true});
                     model.save();
                     j.expect(called).toEqual(true);
                 });
@@ -181,8 +181,8 @@ define("io.ox/core/test/model",
                 });
 
                 j.it('returns all data via get()', function () {
-                    model.set('age', 34);
-                    model.set('email', 'matthias.biggeleben@open-xchange.com');
+                    model.set('age', 34, {validate: true});
+                    model.set('email', 'matthias.biggeleben@open-xchange.com', {validate: true});
                     j.expect(model.get()).toEqual({
                         firstName: 'Matthias',
                         familyName: 'B.',
@@ -252,7 +252,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual('123400009');
                         called = true;
                     });
-                    model.set('a', '0000');
+                    model.set('a', '0000', {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -264,7 +264,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual('12340000#');
                         called = true;
                     });
-                    model.set('b', '#');
+                    model.set('b', '#', {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -276,7 +276,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual(999);
                         called = true;
                     });
-                    model.set('c', -1);
+                    model.set('c', -1, {validate: true});
                     j.expect(called).toEqual(true);
                 });
 
@@ -288,7 +288,7 @@ define("io.ox/core/test/model",
                         j.expect(value).toEqual('1234----#_999');
                         called++;
                     });
-                    model.set('a', '----');
+                    model.set('a', '----', {validate: true});
                     j.expect(called).toEqual(1);
                 });
 
@@ -297,7 +297,7 @@ define("io.ox/core/test/model",
                     model.off().on('change:a change:b change:c change:x change:y change:z', function (e, key, value) {
                         called++;
                     });
-                    model.set('c', '1234');
+                    model.set('c', '1234', {validate: true});
                     j.expect(called).toEqual(3);
                 });
 
@@ -306,12 +306,12 @@ define("io.ox/core/test/model",
                     model.off().on('change:mod', function (e, key, value) {
                         called++;
                     });
-                    model.set('d', 0); // initial value -> no change, mod = 0
-                    model.set('d', 2); // no change, mod = 0
-                    model.set('d', 4); // no change, mod = 0
-                    model.set('d', 1); // change!, mod = 1
-                    model.set('d', 2); // change!, mod = 0
-                    model.set('d', 4); // no change, mod = 0
+                    model.set('d', 0, {validate: true}); // initial value -> no change, mod = 0
+                    model.set('d', 2, {validate: true}); // no change, mod = 0
+                    model.set('d', 4, {validate: true}); // no change, mod = 0
+                    model.set('d', 1, {validate: true}); // change!, mod = 1
+                    model.set('d', 2, {validate: true}); // change!, mod = 0
+                    model.set('d', 4, {validate: true}); // no change, mod = 0
                     j.expect(called).toEqual(2);
                 });
             });

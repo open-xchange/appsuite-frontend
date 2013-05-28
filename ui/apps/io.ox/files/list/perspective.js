@@ -116,7 +116,7 @@ define('io.ox/files/list/perspective',
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right, api);
 
         grid.selection.on('empty', function () {
             app.currentFile = null;
@@ -159,7 +159,7 @@ define('io.ox/files/list/perspective',
                     })
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
-                            if (e && e.code && e.code === 'UPL-0005') {
+                            if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                             }
                             else if (e && e.code && e.code === 'FLS-0024') {
@@ -207,7 +207,7 @@ define('io.ox/files/list/perspective',
                     })
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
-                            if (e && e.code && e.code === 'UPL-0005') {
+                            if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
                                 notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
                             }
                             else if (e && e.code && e.code === 'FLS-0024') {

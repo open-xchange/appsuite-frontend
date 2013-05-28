@@ -173,8 +173,9 @@ define("io.ox/core/gettext", [], function () {
                 custom[dictionary][key] = value;
             });
         }
+        return this;
     };
-    
+
     gt.enable = function () { enabled = true; };
 
     return gt;

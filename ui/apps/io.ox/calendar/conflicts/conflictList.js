@@ -16,9 +16,9 @@ define('io.ox/calendar/conflicts/conflictList',
      'io.ox/calendar/api',
      'gettext!io.ox/calendar/conflicts/conflicts'], function (ext, calAPI, gt) {
 
-	'use strict';
+    'use strict';
 
-	return {
+    return {
         drawList: function (conflicts) {
             var conflictList = $('<div>').append(
                 $('<h4 class="text-error">').text(gt('Conflicts detected'))
@@ -40,5 +40,5 @@ define('io.ox/calendar/conflicts/conflictList',
             );
             return conflictList;
         }
-	};
+    };
 });

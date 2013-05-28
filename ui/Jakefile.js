@@ -27,6 +27,7 @@ var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var less = require('./lib/less.js/lib/less/index.js');
 
+console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
 
 var pkgName = process.env['package'];
@@ -316,7 +317,6 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
 // jQuery UI
-
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
@@ -338,11 +338,13 @@ utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 if (path.existsSync('help')) {
     var helpDir = process.env.helpDir || utils.builddir;
     _.each(fs.readdirSync('help'), function (Lang) {
+        if (!fs.statSync(path.join('help', Lang)).isDirectory()) return;
         var lang = Lang.toLowerCase().replace(/_/g, '-');
         utils.copy(utils.list(path.join('help', Lang + '/')), {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
+    utils.copy(['help/help.css'], { to: helpDir });
 }
 
 // postinst utilities
@@ -502,6 +504,7 @@ function compileLess() {
     }
 
     function compile(dest, defs, defsInCore, src, srcInCore) {
+        dest = core(dest);
         utils.file(dest,
             [core('apps/themes/definitions.less'),
              defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
@@ -512,15 +515,15 @@ function compileLess() {
                     syncImport: true,
                     relativeUrls: true
                 }).parse('@import "apps/themes/definitions.less";\n' +
-                         '@import "' + defs + '";\n' +
-                         '@import "' + src + '";\n',
+                         '@import "' + defs.replace(/\\/g, '/') + '";\n' +
+                         '@import "' + src.replace(/\\/g, '/') + '";\n',
                 function (e, tree) {
                     if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
                 });
                 fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
             });
     }
-    
+
     // own themes
     _.each(ownThemes, function(defs) {
         if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
@@ -571,8 +574,6 @@ function docFile(file, title) {
 docFile("gettingStarted", "Getting Started");
 docFile("apache", "Apache Configuration");
 docFile("extensions", "Extension Points");
-docFile("extensionpoints_contact", "Extension Points / Contact App");
-docFile("extensionpoints_mail", "Extension Points / Mail App");
 docFile("libs", "External Libs");
 docFile("development_guide", "UI Development Style Guide");
 docFile("buildsystem", "Build System");

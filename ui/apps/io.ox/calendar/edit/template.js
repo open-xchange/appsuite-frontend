@@ -99,6 +99,7 @@ define('io.ox/calendar/edit/template',
 
             saveButton.hide();
             discardButton.hide();
+            self.options.app.getWindow().idle();//remove busy animation to prevent blocking
 
             // look for hard conflicts
             _(conflicts).each(function (conflict) {
@@ -135,7 +136,7 @@ define('io.ox/calendar/edit/template',
                                 .text(gt('Ignore conflicts'))
                                 .on('click', function (e) {
                                     e.preventDefault();
-                                    self.model.set('ignore_conflicts', true);
+                                    self.model.set('ignore_conflicts', true, {validate: true});
                                     saveButton.click();
                                 })
                         )

@@ -43,8 +43,8 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        requires: function () {
-            return _.device('!small');
+        requires: function (e) {
+            return (_.device('!small') && e.collection.has('one'));
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {

@@ -109,6 +109,24 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
             }
         }
     });
+    
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'recurrence-needs-start-date',
+        validate: function (attributes) {
+            if (attributes.recurrence_type && (attributes.start_date === undefined || attributes.start_date === null)) {//0 is a valid number so check precisely
+                this.add('start_date', gt('Recurring tasks need a valid start date.'));
+            }
+        }
+    });
+    
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'recurrence-needs-end-date',
+        validate: function (attributes) {
+            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
+                this.add('end_date', gt('Recurring tasks need a valid end date.'));
+            }
+        }
+    });
 
     return {
         defaults: defaults,

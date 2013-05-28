@@ -1,3 +1,14 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
 .io-ox-mail-write {
     .leftside, .rightside {
@@ -189,7 +200,7 @@
 }
 
 .io-ox-mail-write .section[data-section='All']{
-	font-family: @lightFontFamily;
+    font-family: @lightFontFamily;
 }
 
 .io-ox-mail-write-contact {
@@ -211,76 +222,78 @@
 }
 
 .io-ox-mail-write .section-item {
+
     position: relative;
     line-height: 1.5em;
     background-color: white;
     margin-bottom: 2px;
     padding: 4px 2.5em 4px 5px;
-}
 
-.io-ox-mail-write .section-item.pointer {
-    cursor: pointer;
-}
 
-.io-ox-mail-write .section-item div {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+    &.pointer {
+        cursor: pointer;
+    }
 
-.io-ox-mail-write .section-item .remove {
-    display: inline-block;
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    bottom: 1px;
-    width: 2em;
-    line-height: 1em;
-    background-color: #f5f5f5;
-    color: #ccc;
-    cursor: pointer;
-}
+    div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-.io-ox-mail-write .section-item .remove .icon {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    margin-top: -0.5em;
-    text-align: center;
-}
+    .remove {
+        display: inline-block;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        bottom: 1px;
+        width: 2em;
+        line-height: 1em;
+        background-color: #f5f5f5;
+        color: #aaa;
+        cursor: pointer;
+    }
 
-.io-ox-mail-write .section-item .remove:hover {
-    background-color: #a00;
-    color: #fff;
-    text-decoration: none;
-}
+    .remove:hover {
+        background-color: #a00;
+        color: #fff;
+        text-decoration: none;
+    }
 
-.io-ox-mail-write .section-item .group-label {
-    display: block;
-    font-style: italic;
-    margin-right: 1em;
-}
+    .remove [class^="icon-"] {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin-top: -0.5em;
+        text-align: center;
+    }
 
-.io-ox-mail-write .section-item.signature-remove a {
-    color: #800;
-}
+    .group-label {
+        display: block;
+        font-style: italic;
+        margin-right: 1em;
+    }
 
-.io-ox-mail-write .section-item .signature-preview {
-    font-style: italic;
-    color: #888;
-    white-space: normal;
-}
+    &.signature-remove a {
+        color: #800;
+    }
 
-.io-ox-mail-write .section-item.upload {
-    background-color: #f5f5f5;
-    padding-right: 5px;
-}
+     .signature-preview {
+        font-style: italic;
+        color: #888;
+        white-space: normal;
+    }
 
-.io-ox-mail-write .section-item.file {
-    position: relative;
-    height: 3em;
-    line-height: 1.5em;
+    &.upload {
+        background-color: #f5f5f5;
+        padding-right: 5px;
+    }
+
+    &.file {
+        position: relative;
+        height: 3em;
+        line-height: 1.5em;
+    }
 }
 
 .io-ox-mail-write .section-item > i {

@@ -16,13 +16,20 @@
 .vgrid-cell.contact {
     height: 40px;
     padding: 0.75em 13px 0.75em 13px;
+
+    /* swipe delete button */
+    .swipeDelete {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+    }
 }
 
 .vgrid-cell.contact .private_flag {
-	float: left;
-	color: #AAA;
-	font-size: 17px;
-	margin-right: 3px;
+    float: left;
+    color: #AAA;
+    font-size: 17px;
+    margin-right: 3px;
 }
 
 .vgrid-cell.contact .fullname {
@@ -108,17 +115,18 @@
 .contact-detail {
 
     .contact-header {
-        min-height: 90px;
+        min-height: 70px;
+        margin-bottom: 26px;
     }
 
     .field-label {
-        font-family: @lightFontFamily;
-        font-weight: 300;
-        color: #555;
+        font-size: 13px;
+        font-weight: 200;
+        color: #888;
         text-align: right;
         vertical-align: top;
         // fix spans
-        padding-right: 2em;
+        padding-right: 13px;
     }
 
     .field-value {
@@ -136,11 +144,11 @@
     }
 
     .private-flag {
-	    color: #AAA;
-		font-size: 20pt;
-		margin-right: 5px;
-		line-height: 1.2em;
-		float: left;
+        color: #AAA;
+        font-size: 20pt;
+        margin-right: 5px;
+        line-height: 1.2em;
+        float: left;
     }
 
     .job {
@@ -152,25 +160,39 @@
     }
 
     .picture {
-        width: 80px;
-        height: 80px;
+        float: left;
+        margin-right: 26px;
+        width: 64px;
+        height: 64px;
         display: inline-block;
-        float: right;
         background-position: right top;
         background-repeat: no-repeat;
         background-size: contain;
     }
-    
-    .attachment-item{
-		color: #333;
-	}
+
+    .attachment-item {
+        color: #333;
+    }
 
     .io-ox-inline-links {
-        margin: 2em 0;
+        margin: 0 0 34px 0;
+        text-align: left;
     }
 
     .breadcrumb {
-        margin: 3em 0 0 0;
+        margin: 26px 0 0 0;
+    }
+
+    .attachments-container {
+        margin: -18px 0 39px 0;
+    }
+
+    .member-name {
+        font-weight: bold;
+    }
+
+    .member {
+        margin-bottom: 1em;
     }
 }
 
@@ -178,40 +200,40 @@
 
 
 .btn.btn-inverse {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .hidden{
-	display: none;
+    display: none;
 }
 
 .mandatory.hidden{
-	display: block;
+    display: block;
 }
 
 .hidden.filled{
-	display: table-row;
+    display: table-row;
 }
 
 .savebutton{
-	float: right;
+    float: right;
 }
 
 .contact-edit{
-	overflow: auto;
+    overflow: auto;
 }
 
 .change-pic-link {
-	width: auto;
-	float: right;
+    width: auto;
+    float: right;
 }
 
 input#image1 {
-	width: 300px;
+    width: 300px;
 }
 
 .contact-detail input {
-	width: 270px;
+    width: 270px;
 }
 
 .picture-uploader {
@@ -225,4 +247,11 @@ input#image1 {
     background-clip: content-box;
 }
 
-
+@media (max-width: 480px) {
+    .abs.contact-grid-container {
+        left: 0px;
+    }
+    .contact-grid-index {
+        width: 0;
+    }
+}

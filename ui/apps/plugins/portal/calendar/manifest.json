@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "calendar"
+    namespace: "portal",
+    requires: "calendar"
 }

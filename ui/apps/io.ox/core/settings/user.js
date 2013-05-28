@@ -12,18 +12,18 @@
  */
 
 define('io.ox/core/settings/user', [
-	'io.ox/core/extensions',
-	'io.ox/core/api/user',
-	'io.ox/contacts/model',
-	'io.ox/contacts/edit/view-form',
-	'io.ox/core/tk/dialogs',
-	'io.ox/contacts/util'
+    'io.ox/core/extensions',
+    'io.ox/core/api/user',
+    'io.ox/contacts/model',
+    'io.ox/contacts/edit/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/util'
 ], function (ext, api, contactModel, ViewForm, dialogs, util) {
 
     'use strict';
 
 
-	// Model Factory for use with the edit dialog
+    // Model Factory for use with the edit dialog
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
     // The edit dialog
@@ -37,7 +37,7 @@ define('io.ox/core/settings/user', [
                 $node.append(new UserEdit({model: user}).render().$el);
 
                 user.on('change:first_name change:last_name', function () {
-                    user.set('display_name', util.getFullName(user.toJSON()));
+                    user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
                     //app.setTitle(util.getFullName(contact.toJSON()));
                 });
 

@@ -12,9 +12,8 @@
  */
 define('io.ox/tasks/api',
         ['io.ox/core/http',
-         'io.ox/core/config',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, configApi, apiFactory, folderApi) {
+         'io.ox/core/api/folder'], function (http, apiFactory, folderApi) {
 
     'use strict';
 
@@ -38,7 +37,7 @@ define('io.ox/tasks/api',
         checkForNotifications = function (ids, modifications) {
             //TODO: existance to folder_id not reliable indicating that it's a
             //      move operation (change due date for example)
-            if (modifications.folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
+            if (modifications.folder_id && modifications.folder_id !== ids[0].folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
                 api.getTasks();
                 require(['io.ox/core/api/reminder'], function (reminderApi) {
                     reminderApi.getReminders();
@@ -53,7 +52,7 @@ define('io.ox/tasks/api',
             }
 
             if (modifications.participants) {
-                var myId = configApi.get('identifier'),
+                var myId = ox.user_id,
                     triggered = false;
                 _(modifications.participants).each(function (obj) { //user is added to a task
                     if (obj.id === myId) {
@@ -108,6 +107,61 @@ define('io.ox/tasks/api',
                     }
                 });
             }
+        },
+        
+        /**
+         * applies task modifications to all cache
+         * @private
+         * @param  {array} tasks (objects with id and folder_id)
+         * @param  {string} folder (folder id of the current folder)
+         * @param  {object} modfications (modifications of the cachevalues)
+         * @return {deferred}
+         */
+        updateAllCache = function (tasks, folder, modifications) {
+
+            var list = _.copy(tasks, true),
+            //make sure we have an array
+            list = list || [];
+            list = _.isArray(list) ? list : [list];
+
+            if (list.length === 0) {//is's empty. nothing to do
+                return $.when();
+            }
+            //make sure ids are strings
+            folder = folder.toString();
+            _(list).each(function (task) {
+                task.id = task.id.toString();
+                task.folder_id = task.folder_id.toString();
+            });
+
+            if (list[0].folder_id && list[0].folder_id !== folder) {//move operation
+                return api.caches.all.clear();
+            }
+            var found = false,
+                cacheKey = api.cid({folder: folder,
+                                    sort: api.options.requests.all.sort,
+                                    order: api.options.requests.all.order});
+            //look for items and copy modifications to the cache to make it valid again
+            return api.caches.all.get(cacheKey).then(function (cachevalue) {
+                if (cachevalue) {
+                    _(cachevalue).each(function (singlevalue) {
+                        _(list).each(function (item) {
+                            if (singlevalue.id.toString() === item.id && singlevalue.folder_id.toString() === folder) {
+                                _.extend(singlevalue, modifications);//apply modified values
+                                found = true;
+                            }
+                        });
+                        
+                    });
+                    if (found) {
+                        return api.caches.all.add(cacheKey, cachevalue);
+                    } else {
+                        return $.when();
+                    }
+                } else {//just leave it to the next all request, no need to do it here
+                    return $.when();
+                }
+            });
         },
 
         /**
@@ -223,7 +277,7 @@ define('io.ox/tasks/api',
                 order: 'asc',
                 timezone: 'UTC',
                 getData: function (query) {
-                    return { folder: query.folder, pattern: query.pattern, end: query.end, start: query.start };
+                    return { pattern: query.pattern, end: query.end, start: query.start };
                 }
             }
         }
@@ -246,14 +300,33 @@ define('io.ox/tasks/api',
      */
     api.create = function (task) {
         task.participants = repairParticipants(task.participants);
-        var attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        var attachmentHandlingNeeded = task.tempAttachmentIndicator,
+            response;
         delete task.tempAttachmentIndicator;
+        if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
+            delete task.alarm;    //leaving it in would throw a backend error
+        }
         return http.PUT({
             module: 'tasks',
             params: { action: 'new', timezone: 'UTC' },
             data: task,
             appendColumns: false
-        }).done(function (response) {
+        }).then(function (obj) {
+            response = obj;
+            var cacheObj = _.copy(task, true),
+            cacheKey = api.cid({folder: cacheObj.folder_id,
+                                sort: api.options.requests.all.sort,
+                                order: api.options.requests.all.order});
+            cacheObj.id = obj.id;
+            return api.caches.all.get(cacheKey).then(function (cachevalue) {
+                if (cachevalue) {//only add if the key is there
+                    cachevalue = cachevalue.concat(cacheObj);
+                    return api.caches.all.add(cacheKey, cachevalue);
+                } else {//just leave it to the next all request, no need to do it here
+                    return $.when();
+                }
+            });
+        }).done(function (cache) {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
@@ -281,8 +354,14 @@ define('io.ox/tasks/api',
             task.folder_id = arguments[3];
             task.id = arguments[1];
         }
+        
+        //repair broken folder attribute
+        if (task.folder) {
+            task.folder_id = task.folder;
+            delete task.folder;
+        }
 
-        var useFolder = task.folder_id || task.folder;
+        var useFolder = task.folder_id;
 
         if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
             task.folder_id = newFolder;
@@ -312,7 +391,7 @@ define('io.ox/tasks/api',
             appendColumns: false
         }).pipe(function () {
             // update cache
-            return api.removeFromCache(key);
+            return $.when(api.removeFromCache(key), updateAllCache([task], useFolder, task));
         }).pipe(function () {
             //return object with id and folder id needed to save the attachments correctly
             obj = {folder_id: useFolder, id: task.id};
@@ -331,7 +410,7 @@ define('io.ox/tasks/api',
     };
 
     /**
-     * update list of taks used by done/undone actions when used with multiple selection
+     * update list of taks used by done/undone and move actions when used with multiple selection
      * @param  {array}    list of task objects (id, folder_id)
      * @param  {object}   modifications
      * @fires  api#refresh.all
@@ -343,13 +422,18 @@ define('io.ox/tasks/api',
         http.pause();
 
         _(list).map(function (obj) {
-            keys.push((obj.folder || obj.folder_id) + '.' + obj.id);
+          //repair broken folder attribute
+            if (obj.folder) {
+                obj.folder_id = obj.folder;
+                delete obj.folder;
+            }
+            keys.push(obj.folder_id + '.' + obj.id);
             return http.PUT({
                 module: 'tasks',
                 params: {
                     action: 'update',
                     id: obj.id,
-                    folder: obj.folder || obj.folder_id,
+                    folder: obj.folder_id,
                     timestamp: _.now(),
                     timezone: 'UTC'
                 },
@@ -359,7 +443,7 @@ define('io.ox/tasks/api',
         });
         return http.resume().pipe(function () {
             // update cache
-            return api.removeFromCache(keys);
+            return $.when(api.removeFromCache(keys), updateAllCache(list, modifications.folder_id || list[0].folder_id, modifications));
         }).done(function () {
             //notification check
             checkForNotifications(list, modifications);
@@ -466,7 +550,7 @@ define('io.ox/tasks/api',
         }).pipe(function (list) {
             // sorted by end_date filter over due Tasks
             var now = new Date(),
-                userId = configApi.get('identifier'),
+                userId = ox.user_id,
                 dueTasks = [],
                 confirmTasks = [];
             for (var i = 1; i < list.length; i++) {

@@ -21,8 +21,9 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/tk/attachments',
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
+    'io.ox/core/capabilities',
     'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, gt, capabilities) {
 
     "use strict";
 
@@ -201,6 +202,12 @@ define('io.ox/contacts/edit/view-form', [
         }
     };
 
+    // Remove attachment handling when infostore is not present
+    if (!capabilities.has('infostore')) {
+        delete meta.sections.attachments;
+        delete meta.i18n.attachments;
+    }
+
     _.each(['home', 'business', 'other'], function (type) {
         var fields = meta.sections[type + '_address'];
         meta.sections[type + '_address'] = _.compact(_.aprintf(
@@ -332,7 +339,7 @@ define('io.ox/contacts/edit/view-form', [
             id: 'save',
             action: function (options, baton) {
                 //check if attachments are changed
-                if (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0) {
+                if (options.attachmentList && (options.attachmentList.attachmentsToDelete.length > 0 || options.attachmentList.attachmentsToAdd.length > 0)) {
                     options.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                 }
                 options.parentView.trigger('save:start');
@@ -359,7 +366,7 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '');
+                baton.model.set("image1", '', {validate: true});
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }

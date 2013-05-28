@@ -1,16 +1,17 @@
 [
-	{
-	    title: "Address Book",
-	    company: "Open-Xchange",
-	    icon: "addressbook.png",
-	    category: "Basic",
-	    settings: false,
-	    requires: "contacts",
-	    index: 700
-	},
-	{
-		namespace: "io.ox/dev/testing/main",
-		path: "io.ox/contacts/test",
-		requires: "contacts"
-	}
+    {
+        title: "Address Book",
+        company: "Open-Xchange",
+        icon: "addressbook.png",
+        category: "Basic",
+        settings: false,
+        requires: "contacts",
+        refreshable: true,
+        index: 700
+    },
+    {
+        namespace: "io.ox/dev/testing/main",
+        path: "io.ox/contacts/test",
+        requires: "contacts"
+    }
 ]

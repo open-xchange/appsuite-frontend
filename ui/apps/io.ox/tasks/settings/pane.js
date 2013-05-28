@@ -14,16 +14,13 @@
 define('io.ox/tasks/settings/pane',
        ['settings!io.ox/tasks', 'io.ox/tasks/settings/model',
         'dot!io.ox/tasks/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/tasks/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+        'gettext!io.ox/tasks'], function (settings, tasksSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
-
-
-
     var tasksSettings =  settings.createModel(tasksSettingsModel),
         staticStrings =  {
-        TITLE_TASKS: gt('Tasks'),
+        TITLE_TASKS: gt.pgettext('app', 'Tasks'),
         TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
         TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
         NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
@@ -45,9 +42,9 @@ define('io.ox/tasks/settings/pane',
         render: function () {
             var self = this;
             //change attributetypes to string otherwise settings would be empty...
-            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString());
-            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString());
-            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString());
+            self.model.set('notifyAcceptedDeclinedAsCreator', self.model.get('notifyAcceptedDeclinedAsCreator').toString(), {validate: true});
+            self.model.set('notifyAcceptedDeclinedAsParticipant', self.model.get('notifyAcceptedDeclinedAsParticipant').toString(), {validate: true});
+            self.model.set('notifyNewModifiedDeleted', self.model.get('notifyNewModifiedDeleted').toString(), {validate: true});
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
                 strings: staticStrings,
                 optionsYesAnswers: optionsYes,
@@ -55,7 +52,7 @@ define('io.ox/tasks/settings/pane',
             }));
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             self._modelBinder.bind(self.model, self.el, defaultBindings);
-            
+
             return self;
 
         }
@@ -77,9 +74,9 @@ define('io.ox/tasks/settings/pane',
             //change to correct attributetypes before saving
             function makeBool(attribute) {
                 if (tasksViewSettings.model.get(attribute) === "true" || tasksViewSettings.model.get(attribute) === true) {
-                    tasksViewSettings.model.set(attribute, true);
+                    tasksViewSettings.model.set(attribute, true, {validate: true});
                 } else {
-                    tasksViewSettings.model.set(attribute, false);
+                    tasksViewSettings.model.set(attribute, false, {validate: true});
                 }
             }
             makeBool('notifyAcceptedDeclinedAsCreator');

@@ -12,38 +12,38 @@
  */
 
 define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox/realtime/rt'], function (rooms, rt) {
-	'use strict';
+    'use strict';
 
-	console.log("Setting up experiment");
-	window.rooms = rooms;
-	window.r = rooms.getRoom("a");
-	window.rt = rt;
+    console.log("Setting up experiment");
+    window.rooms = rooms;
+    window.r = rooms.getRoom("a");
+    window.rt = rt;
 
-	window.rtExperiments = {
-		run: function () {
-			var interval, checkInterval;
-			var i = 0;
-			var log = {};
+    window.rtExperiments = {
+        run: function () {
+            var interval, checkInterval;
+            var i = 0;
+            var log = {};
 
-			interval = setInterval(function () {
-				window.r.sayAndTrace(i);
-				log[i] = 0;
-			}, 500);
+            interval = setInterval(function () {
+                window.r.sayAndTrace(i);
+                log[i] = 0;
+            }, 500);
 
-			checkInterval = setInterval(function () {
-				_(log).each(function (count, key) {
-					if (count > 4) {
-						console.log("MISSING MESSAGE: ", key);
-						clearInterval(interval);
-						clearInterval(checkInterval);
-					}
-				});
-			});
-		}
-	};
+            checkInterval = setInterval(function () {
+                _(log).each(function (count, key) {
+                    if (count > 4) {
+                        console.log("MISSING MESSAGE: ", key);
+                        clearInterval(interval);
+                        clearInterval(checkInterval);
+                    }
+                });
+            });
+        }
+    };
 
-	console.log("Done");
+    console.log("Done");
 
-	return true;
+    return true;
 
 });

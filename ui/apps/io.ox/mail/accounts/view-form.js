@@ -87,7 +87,7 @@ define('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                    model.set('login', value);
+                    model.set('login', value, {validate: true});
                 }
 
                 if (self.model.get('id') !== 0) {//check for primary account
@@ -103,7 +103,7 @@ define('io.ox/mail/accounts/view-form',
 
                     //login for server should be email-address by default;
                     if (self.model.get('login') === undefined) {
-                        self.model.set('login', self.model.get('primary_address'));
+                        self.model.set('login', self.model.get('primary_address'), {validate: true});
                     }
 
                     //if login and mailadress are the same change login if mailadress changes
@@ -203,7 +203,7 @@ define('io.ox/mail/accounts/view-form',
                         .done(function (action) {
                             if (action === 'select') {
                                 var target = _(tree.selection.get()).first();
-                                self.model.set(property, target);
+                                self.model.set(property, target, {validate: true});
                             }
                             tree.destroy().done(function () {
                                 tree = dialog = null;

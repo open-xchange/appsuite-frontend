@@ -29,7 +29,7 @@ define('io.ox/files/actions',
 
     // actions
 
-	new Action('io.ox/files/actions/switch-to-list-view', {
+    new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'list');
@@ -242,11 +242,8 @@ define('io.ox/files/actions',
                                     return $('<p>').append(
                                         $('<div>').text(file.title || file.filename || ''),
                                         $('<div>').append(
-                                            $('<a>', { href: url, target: '_blank' })
-                                            .text(
-                                                // soft-break long words (like long URLs)
-                                                url.replace(/(\S{30})/g, '$1\u200B')
-                                            )
+                                            $('<a class="direct-link">', { href: url, target: '_blank' })
+                                            .text(url)
                                         )
                                     );
                                 })
@@ -260,14 +257,16 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/delete', {
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && isUnLocked(e);
+        },
         multiple: function (list) {
             var question = gt.ngettext(
                     'Do you really want to delete this file?',
                     'Do you really want to delete these files?',
                     list.length
             ),
-            responseSuccces = gt.ngettext(
+            responseSuccess = gt.ngettext(
                     'This file has been deleted',
                     'These files have been deleted',
                     list.length
@@ -275,6 +274,11 @@ define('io.ox/files/actions',
             responseFail = gt.ngettext(
                     'This file has not been deleted',
                     'These files have not been deleted',
+                    list.length
+            ),
+            responseFailLocked = gt.ngettext(
+                    'This file has not been deleted, as it is locked by its owner.',
+                    'These files have not been deleted, as they are locked by their owner.',
                     list.length
             );
 
@@ -288,9 +292,13 @@ define('io.ox/files/actions',
                         if (action === 'delete') {
                             api.remove(list).done(function (data) {
                                 api.propagate('delete', list[0]);
-                                notifications.yell('success', responseSuccces);
-                            }).fail(function () {
-                                notifications.yell('error', responseFail);
+                                notifications.yell('success', responseSuccess);
+                            }).fail(function (e) {
+                                if (e && e.code && e.code === 'IFO-0415') {
+                                    notifications.yell('error', responseFailLocked);
+                                } else {
+                                    notifications.yell('error', responseFail);
+                                }
                             });
                         }
                     });
@@ -298,8 +306,72 @@ define('io.ox/files/actions',
         }
     });
 
+    var isUnLocked = function (e) {
+        var list = _.getArray(e.context);
+        return _(list).reduce(function (memo, obj) {
+            return memo || !api.tracker.isLockedByOthers(obj);
+        }, false);
+    };
+
+    new Action('io.ox/files/actions/lock', {
+        requires: function (e) {
+            var list = _.getArray(e.context);
+            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                return memo || !api.tracker.isLocked(obj);
+            }, false);
+        },
+        multiple: function (list) {
+            var responseSuccess = gt.ngettext(
+                    'This file has been locked',
+                    'These files have been locked',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been locked',
+                    'These files have not been locked',
+                    list.length
+            );
+
+            api.lock(list).done(function (data) {
+                notifications.yell('success', responseSuccess);
+            }).fail(function () {
+                notifications.yell('error', responseFail);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/unlock', {
+        requires: function (e) {
+            var list = _.getArray(e.context);
+            return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                return memo || api.tracker.isLockedByMe(obj);
+            }, false);
+        },
+        multiple: function (list) {
+            var responseSuccess = gt.ngettext(
+                    'This file has been unlocked',
+                    'These files have been unlocked',
+                    list.length
+            ),
+            responseFail = gt.ngettext(
+                    'This file has not been unlocked',
+                    'These files have not been unlocked',
+                    list.length
+            );
+
+            api.unlock(list).done(function (data) {
+                notifications.yell('success', responseSuccess);
+            }).fail(function () {
+                notifications.yell('error', responseFail);
+            });
+        }
+    });
+
+
     new Action('io.ox/files/actions/rename', {
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && isUnLocked(e);
+        },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var $input = $('<input type="text" name="name" class="span12">');
@@ -357,7 +429,9 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/edit-description', {
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && isUnLocked(e);
+        },
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var $input = $('<textarea rows="10"></textarea>').css({width: '507px'});
@@ -410,10 +484,12 @@ define('io.ox/files/actions',
     });
 
 
-    function moveAndCopy(type, label, success, requires) {
+    function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             id: type,
-            requires: requires,
+            requires:  function (e) {
+                return e.collection.has('some') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+            },
             multiple: function (list, baton) {
 
                 var vGrid = baton.grid || (baton.app && baton.app.getGrid());
@@ -474,8 +550,8 @@ define('io.ox/files/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Files have been moved'), 'some delete');
-    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'), 'some read');
+    moveAndCopy('move', gt('Move'), gt('Files have been moved'));
+    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'));
 
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
@@ -684,6 +760,22 @@ define('io.ox/files/actions',
         prio: 'hi',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'lock',
+        index: 820,
+        prio: 'lo',
+        label: gt('Lock'),
+        ref: 'io.ox/files/actions/lock'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'unlock',
+        index: 850,
+        prio: 'hi',
+        label: gt('Unlock'),
+        ref: 'io.ox/files/actions/unlock'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({

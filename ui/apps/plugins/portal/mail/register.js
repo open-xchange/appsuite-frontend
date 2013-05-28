@@ -73,9 +73,9 @@ define('plugins/portal/mail/register',
                         return $('<div class="item">')
                             .data('item', mail)
                             .append(
-                                $('<span class="bold">').text(util.getDisplayName(mail.from[0])), $.txt(' '),
-                                $('<span class="normal">').text(strings.shorten(mail.subject, 50)), $.txt(' '),
-                                $('<span class="accent">').text(received)
+                                $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
+                                $('<span class="normal">').text(_.noI18n(strings.shorten(mail.subject, 50))), $.txt(' '),
+                                $('<span class="accent">').text(_.noI18n(received))
                             );
                     })
                 );
