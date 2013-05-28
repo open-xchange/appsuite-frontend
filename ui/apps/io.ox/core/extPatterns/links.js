@@ -116,7 +116,7 @@ define("io.ox/core/extPatterns/links",
 
     var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
         baton = ext.Baton.ensure(baton);
-        var nav = $('<nav>').appendTo(node);
+        var nav = $('<nav role="presentation">').appendTo(node);
         return getLinks(self, collection, baton, args)
             .always(function (links) {
                 // count resolved links
@@ -206,7 +206,7 @@ define("io.ox/core/extPatterns/links",
                                     $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
                                 }
                             }),
-                            $('<ul class="dropdown-menu dropdown-right">').append(
+                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                                 lo.map(wrapAsListItem)
                             )
                         )
@@ -242,7 +242,7 @@ define("io.ox/core/extPatterns/links",
         $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
 
         // create & add node first, since the rest is async
-        var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
+        var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
             node.addClass("pull-right").css({textAligh: 'left'});
         }

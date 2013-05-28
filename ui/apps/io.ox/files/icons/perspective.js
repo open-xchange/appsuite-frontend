@@ -157,6 +157,7 @@ define('io.ox/files/icons/perspective',
             }
             this.addClass('file-icon pull-left selectable')
                 .attr('data-obj-id', _.cid(file))
+                .attr('tabindex', 1)
                 .append(
                     (img ? wrap.append(img) : wrap),
                     $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))).prepend(
@@ -193,7 +194,7 @@ define('io.ox/files/icons/perspective',
                 win = app.getWindow(),
                 self = this,
                 scrollpane,
-                iconview = $('<div class="files-scrollable-pane" tabindex="1">'),
+                iconview = $('<div class="files-scrollable-pane" tabindex="1" role="section">'),
                 iconContainer,
                 start,
                 end,
@@ -243,7 +244,21 @@ define('io.ox/files/icons/perspective',
                 });
             }
 
-            iconview.on('click', '.selectable', function (e) {
+            iconview.on('keydown', '.selectable', function (e) {
+                switch (e.keyCode || e.which) {
+                case 13: // enter
+                    $(this).trigger('click');
+                    break;
+                case 37: // left
+                    $(this).prev().focus();
+                    break;
+                case 39: // right
+                    $(this).next().focus();
+                    break;
+                }
+            }).on('click', '.selectable', function (e) {
+                var self = this,
+                el;
                 var cid = _.cid($(this).attr('data-obj-id'));
                 if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
                     api.get(cid).done(function (file) {
@@ -253,6 +268,7 @@ define('io.ox/files/icons/perspective',
                         }
                         dialog.show(e, function (popup) {
                             popup.append(viewDetail.draw(file, app));
+                            el = popup.closest('.io-ox-sidepopup');
                         });
                         dialog.on('close', function () {
                             if (window.mejs) {
@@ -267,7 +283,9 @@ define('io.ox/files/icons/perspective',
                                 dropZoneInit(app);
                                 app.currentFile = tmp;
                             }
+                            $(self).focus(); // Refocus on clicked element
                         });
+                        _.defer(function () { el.focus(); }); // Focus SidePopup
                     });
                 } else {
                     dialog.close();
@@ -275,7 +293,7 @@ define('io.ox/files/icons/perspective',
             });
 
             drawIcon = function (file) {
-                var node = $('<div>');
+                var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
                     'draw', node, new ext.Baton({ data: file, options: options })
                 );

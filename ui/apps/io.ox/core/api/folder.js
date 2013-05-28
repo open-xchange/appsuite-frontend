@@ -940,15 +940,15 @@ define('io.ox/core/api/folder',
                 api.getSubFolders({ folder: id }).done(function (list) {
                     if (list.length) {
                         li.addClass('dropdown').append(
-                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">')
+                            $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
                             .append(
                                 $.txt(gt.noI18n(title)),
                                 $('<b class="caret">')
                             ),
-                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
+                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
                                 _(list).map(function (folder) {
                                     return $('<li>').append(
-                                        $('<a href="#" role="menuitem">')
+                                        $('<a href="#" tabindex="1" role="menuitem">')
                                         .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                     );
                                 })
@@ -975,9 +975,9 @@ define('io.ox/core/api/folder',
                 if (!clickable) {
                     elem = li.addClass('active').text(gt.noI18n(folder.title));
                 } else {
-                    li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
+                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').text(gt.noI18n(folder.title)));
                 }
-                li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
+                li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
             elem.attr('data-folder-id', folder.id).data(folder);
             this.append(li);

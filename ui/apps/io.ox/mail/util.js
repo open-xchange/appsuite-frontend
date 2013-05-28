@@ -150,7 +150,7 @@ define('io.ox/mail/util',
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                $('<a>', { href: '#', title: obj.email1 })
+                $('<a>', { href: '#', title: obj.email1, tabindex: 1 })
                     .addClass('person-link person-' + field)
                     .css('whiteSpace', 'nowrap')
                     .text(_.noI18n(obj.display_name))

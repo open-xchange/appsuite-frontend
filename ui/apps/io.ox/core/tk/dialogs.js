@@ -420,10 +420,10 @@ define("io.ox/core/tk/dialogs",
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<button class="btn btn-small btn-primary" data-action="close" >').text(options.saveOnClose ? gt('Save') : gt('Close'))
+                    $('<button class="btn btn-small btn-primary" data-action="close" role="button" tabindex="1">').text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs" tabindex="1">').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(

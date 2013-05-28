@@ -936,11 +936,11 @@ define('io.ox/mail/view-detail',
                     // box
                     $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
                     // drop down
-                    $('<ul class="dropdown-menu">')
+                    $('<ul class="dropdown-menu" role="menu">')
                     .append(
                         _(api.COLORS).reduce(function (memo, index, color) {
                             return memo.add($('<li>').append(
-                                $('<a href="#">').append(
+                                $('<a href="#" tabindex="1" role="menuitem">').append(
                                     index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
                                     $.txt(colorNames[color])
                                 )

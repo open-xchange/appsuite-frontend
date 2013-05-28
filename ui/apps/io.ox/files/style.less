@@ -72,6 +72,14 @@
 
     .file-icon {
 
+        &:focus {
+            outline: none;
+            .img-polaroid {
+                .box-shadow(0 1px 5px rgba(0, 0, 0, 0.4) inset);
+                border-color: #333;
+            }
+        }
+
         width: @outerWidth;
         height: @innerHeight + 59;
         margin: 0 18px 13px 0; // 18px allows 4 columns on IPhone
