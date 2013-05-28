@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/framework/view/pane',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
@@ -22,6 +25,8 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      * application window.
      *
      * @constructor
+     *
+     * @extends Events
      *
      * @param {BaseApplication} app
      *  The application containing this pane element.
@@ -38,6 +43,9 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      *  @param {String} [options.position='top']
      *      The border of the application window to attach the view pane to.
      *      Supported values are 'top', 'bottom', 'left', and 'right'.
+     *  @param {String} [options.resizeable=false]
+     *      If set to true, the pane will be resizeable at its inner border.
+     *      Has no effect for transparent overlay panes.
      *  @param {Boolean} [options.overlay=false]
      *      If set to true, the pane will overlay the application pane instead
      *      of reserving and consuming the space needed for its size.
@@ -50,12 +58,6 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      *      not hover the view component. Has no effect if the pane is not in
      *      transparent overlay mode, or if the current device is a touch
      *      device.
-     *  @param {Function} [options.insertHandler]
-     *      A function that will be called after this view pane has been
-     *      inserted into the application window. Needed if the geometry of the
-     *      pane DOM node needs to be initialized to perform further
-     *      initialization tasks. Will be called in the context of this view
-     *      pane instance.
      *  @param {Function} [options.componentInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      view component into this view pane. The function receives the
@@ -66,7 +68,10 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
      */
     function Pane(app, options) {
 
-        var // the container element representing the pane
+        var // self reference
+            self = this,
+
+            // the container element representing the pane
             node = Utils.createContainerNode('view-pane unselectable', options),
 
             // position of the pane in the application window
@@ -78,11 +83,75 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
             // transparent overlay pane
             transparent = overlay && Utils.getBooleanOption(options, 'transparent', false),
 
+            // minimum size of the view pane (for resizeable panes)
+            minSize = Utils.getIntegerOption(options, 'minSize', 1, 1),
+
+            // maximum size of the view pane (for resizeable panes)
+            maxSize = Utils.getIntegerOption(options, 'maxSize', 0x7FFFFFFF, minSize),
+
             // view components contained in this pane
             components = [],
 
             // handler called to insert a new component into this view pane
-            componentInserter = Utils.getFunctionOption(options, 'componentInserter');
+            componentInserter = Utils.getFunctionOption(options, 'componentInserter'),
+
+            // whether the view pane is oriented vertically
+            vertical = Utils.isVerticalPosition(position),
+
+            // the method to get or set the pane size, according to pane position
+            paneSizeFunc = _.bind(node[vertical ? 'height' : 'width'], node),
+
+            // correction factor for trailing view panes (enlarge when position becomes smaller)
+            resizeFactor = Utils.isLeadingPosition(position) ? 1 : -1,
+
+            // the original size of the view pane when tracking has been started
+            originalSize = 0;
+
+        // base constructor ---------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Returns the current size of the pane (width for left/right panes, or
+         * height for top/bottom panes).
+         */
+        function getPaneSize() {
+            return paneSizeFunc();
+        }
+
+        /**
+         * Changes the size of the pane (width for left/right panes, or height
+         * for top/bottom panes), and updates the entire view.
+         */
+        function setPaneSize(size) {
+            if (getPaneSize() !== size) {
+                paneSizeFunc(size);
+                app.getView().refreshPaneLayout();
+                self.trigger('resize', size);
+            }
+        }
+
+        /**
+         * Handles all tracking events to resize this view pane.
+         */
+        function trackingHandler(event) {
+            switch (event.type) {
+            case 'tracking:start':
+                originalSize = getPaneSize();
+                break;
+            case 'tracking:move':
+            case 'tracking:end':
+                var size = originalSize + resizeFactor * (vertical ? event.offsetY : event.offsetX);
+                setPaneSize(Utils.minMax(size, minSize, maxSize));
+                break;
+            case 'tracking:cancel':
+                setPaneSize(originalSize);
+                break;
+            }
+        }
 
         // methods ------------------------------------------------------------
 
@@ -107,7 +176,7 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
          *  Whether the view pane is currently visible.
          */
         this.isVisible = function () {
-            return node.css('display') !== 'none';
+            return (node.css('display') !== 'none') && Utils.containsNode(document, node);
         };
 
         /**
@@ -142,8 +211,13 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
          *  A reference to this instance.
          */
         this.toggle = function (state) {
+            var visible = this.isVisible();
+            $.cancelTracking();
             node.toggle(state);
-            app.getView().refreshPaneLayout();
+            if (visible !== this.isVisible()) {
+                app.getView().refreshPaneLayout();
+                this.trigger(this.isVisible() ? 'show' : 'hide');
+            }
             return this;
         };
 
@@ -198,11 +272,20 @@ define('io.ox/office/framework/view/pane', ['io.ox/office/tk/utils'], function (
         };
 
         this.destroy = function () {
+            this.events.destroy();
             _(components).invoke('destroy');
             node = components = null;
         };
 
         // initialization -----------------------------------------------------
+
+        // no size tracking for transparent view panes
+        if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
+            $('<div>').addClass('resizer ' + position)
+                .enableTracking()
+                .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
+                .appendTo(node);
+        }
 
         // overlay mode
         node.toggleClass('overlay', overlay);

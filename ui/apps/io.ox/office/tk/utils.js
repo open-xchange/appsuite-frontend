@@ -261,6 +261,52 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Iterates through a range of numbers, without creating a temporary array.
+     *
+     * @param {Number} begin
+     *  The iteration will be started with this value.
+     *
+     * @param {Number} end
+     *  The iteration will be stopped before this value will be reached
+     *  (half-open range).
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every value. Receives the
+     *  current value as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports the following
+     *  options:
+     *  @param {Object} [options.context]
+     *      If specified, the iterator will be called with this context (the
+     *      symbol 'this' will be bound to the context inside the iterator
+     *      function).
+     *  @param {Number} [options.step]
+     *      If specified, the current value will be increased or decreased by
+     *      this amount. If omitted, 'step' defaults to 1, if parameter 'begin'
+     *      is less then parameter 'end', otherwise 'step' defaults to -1.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateRange = function (begin, end, iterator, options) {
+
+        var // context for iterator function
+            context = Utils.getOption(options, 'context'),
+            // step value
+            step = Utils.getNumberOption(options, 'step', (begin <= end) ? 1 : -1),
+            // the current value
+            value = begin;
+
+        while ((begin <= end) ? (value < end) : (value > end)) {
+            if (iterator.call(context, value) === Utils.BREAK) { return Utils.BREAK; }
+            value += step;
+        }
+    };
+
+    /**
      * Converts a length value from an absolute CSS measurement unit into
      * another absolute CSS measurement unit.
      *
@@ -2468,6 +2514,29 @@ define.async('io.ox/office/tk/utils',
         }
 
     } : $.noop;
+
+    /**
+     * Executes the passed callback function and writes a message to the
+     * browser console containing the execution time of the callback.
+     *
+     * @param {String} message
+     *  The message that will be printed to the browser console. The execution
+     *  time will be appended to that message.
+     *
+     * @param {Function} callback
+     *  The callback function to be executed.
+     *
+     * @param {Object} [context]
+     *  The context to be bound to the callback function.
+     */
+    Utils.takeTime = function (message, callback, context) {
+        var t0 = new Date().getTime();
+        try {
+            return callback.call(context);
+        } finally {
+            Utils.log(message + ' (' + (new Date().getTime() - t0) + 'ms)');
+        }
+    };
 
     // global initialization ==================================================
 

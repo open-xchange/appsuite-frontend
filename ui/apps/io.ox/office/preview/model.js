@@ -8,7 +8,7 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
 define('io.ox/office/preview/model',
@@ -130,21 +130,12 @@ define('io.ox/office/preview/model',
          *  <img> element as jQuery object.
          */
         function createImageNode(page) {
-
-            var // the result Deferred object
-                def = $.Deferred(),
-                // the URL of the new image element
-                srcUrl = app.getPreviewModuleUrl({ convert_format: 'html', convert_action: 'getpage', page_number: page, returntype: 'file' }),
-                // the new image element
-                imgNode = $('<img>', { src: srcUrl });
-
-            // wait that the image is loaded
-            imgNode.one({
-                load: function () { def.resolve(imgNode); },
-                error: function () { def.reject(); }
-            });
-
-            return def.promise();
+            return app.createImageNode(app.getPreviewModuleUrl({
+                convert_format: 'html',
+                convert_action: 'getpage',
+                page_number: page,
+                returntype: 'file'
+            }), 15000);
         }
 
         /**
@@ -249,14 +240,26 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.fetchSiblings=false]
+         *      If set to true, additional sibling pages will be loaded and
+         *      stored in the internal page cache.
+         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  completed <img> element containing the SVG mark-up of the specified
          *  page (as jQuery object), or rejected on error.
          */
-        this.loadPageAsImage = function (page) {
-            return imageCache.getElement(page).done(function () {
-                fetchSiblingPages(imageCache, page);
+        this.loadPageAsImage = function (page, options) {
+            return imageCache.getElement(page).then(function (imgNode) {
+                // start fetching sibling pages into the cache
+                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
+                    fetchSiblingPages(imageCache, page);
+                }
+                // clone the cached image on every access
+                return app.createImageNode(imgNode.attr('src'), 15000);
             });
         };
 
@@ -267,13 +270,23 @@ define('io.ox/office/preview/model',
          * @param {Number} page
          *  The one-based index of the requested page.
          *
+         * @param {Object} [options]
+         *  A map with options to control the behavior of this method. The
+         *  following options are supported:
+         *  @param {Boolean} [options.fetchSiblings=false]
+         *      If set to true, additional sibling pages will be loaded and
+         *      stored in the internal page cache.
+         *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved with the
          *  SVG mark-up of the specified page as string, or rejected on error.
          */
-        this.loadPageAsSvg = function (page) {
+        this.loadPageAsSvg = function (page, options) {
             return svgCache.getElement(page).done(function () {
-                fetchSiblingPages(svgCache, page);
+                // start fetching sibling pages into the cache
+                if (Utils.getBooleanOption(options, 'fetchSiblings', false)) {
+                    fetchSiblingPages(svgCache, page);
+                }
             });
         };
 
