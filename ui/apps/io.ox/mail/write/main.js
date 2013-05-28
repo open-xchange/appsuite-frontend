@@ -24,11 +24,12 @@ define('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
+     'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/core/notifications',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, settings, gt) {
 
     'use strict';
 
@@ -849,6 +850,8 @@ define('io.ox/mail/write/main',
                         // reverse img fix
                         .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
+                //don’t send emoji images, but unicode characters
+                content.content = emoji.imageTagsToUnified(content.content);
             } else {
                 content = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
