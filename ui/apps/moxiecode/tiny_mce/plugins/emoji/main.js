@@ -43,6 +43,15 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 );
             });
             return parsedText.html();
+        },
+        imageTagsToUnified: function (html) {
+            var node = $('<div>').append(html);
+
+            node.find('img.emoji').each(function (index, node) {
+                $(node).replaceWith($(node).attr('data-emoji-unicode'));
+            });
+
+            return node.html();
         }
     }, emoji);
 });
