@@ -47,7 +47,7 @@ define('plugins/portal/birthdays/register',
         load: function (baton) {
             var aDay = 24 * 60 * 60 * 1000,
                 start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
-                end = start + WEEKS * aDay;
+                end = start + WEEKS * aDay * 7;
             return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
                 baton.data = data;
             });
@@ -72,7 +72,7 @@ define('plugins/portal/birthdays/register',
                         $list.append(
                             $('<div class="line">').append(
                                 $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(birthday)
+                                $('<span class="accent">').text(_.noI18n(birthday))
                             )
                         );
                         markDuplicate(name, hash);

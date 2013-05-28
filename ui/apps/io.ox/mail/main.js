@@ -99,18 +99,52 @@ define('io.ox/mail/main',
 //            audio.get(0).play();
 //        });
 
-        var vsplit = commons.vsplit(win.nodes.main, app);
+        var vsplit = commons.vsplit(win.nodes.main, app),
+            showSwipeButton = false,
+            canDeletePermission;
         left = vsplit.left.addClass('border-right');
         right = vsplit.right.addClass('mail-detail-pane').attr('tabindex', 1).scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
-            max: settings.get('threadMax', 500),
+            max: _.device('smartphone') ? 50: settings.get('threadMax', 500),
             selectFirst: false,
             threadView: settings.get('threadView') !== 'off',
             //adjust for custom default sort
             sort: settings.get('sort', 'thread'),
             unread: settings.get('unread', false),
             order: settings.get('order', 'desc')
+        });
+        // helper
+        var removeButton = function () {
+            if (showSwipeButton) {
+                var g = grid.getContainer();
+                $('.swipeDelete', g).remove();
+                showSwipeButton = false;
+            }
+        };
+
+        ext.point('io.ox/mail/swipeDelete').extend({
+            index: 666,
+            id: 'deleteButton',
+            draw: function (baton) {
+                // remove old buttons first
+                if (showSwipeButton) {
+                    removeButton();
+                }
+                this.append(
+                    $('<div class="btn btn-danger mail swipeDelete fadein">')
+                        .text(gt('Delete'))
+                        .on('mousedown', function (e) {
+                            // we have to use mousedown as the selection listens to this, too
+                            // otherwise we are to late to get the event
+                            e.preventDefault();
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
+                            removeButton();
+                            showSwipeButton = false;
+                        })
+                );
+                showSwipeButton = true;
+            }
         });
 
         // grid
@@ -120,6 +154,27 @@ define('io.ox/mail/main',
         options.maxChunkSize = options.maxChunkSize || 50;
         options.minChunkSize = options.minChunkSize || 10;
         options.settings = settings;
+
+        options.swipeRightHandler = function (e, id, cell) {
+            var obj = _.cid(id);
+            // check folder permission only once and cache the result
+            // until there is a folder change
+            if (canDeletePermission === undefined) {
+                api.getList([obj]).done(function (list) {
+                    folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
+                        if (folderAPI.can('delete', data)) {
+                            // cache permission for this folder
+                            canDeletePermission = true;
+                            ext.point('io.ox/mail/swipeDelete').invoke('draw', cell, list[0]);
+
+                        }
+                    });
+                });
+            } else if (canDeletePermission) {
+                ext.point('io.ox/mail/swipeDelete').invoke('draw', cell, obj);
+            }
+
+        };
 
         // threadview is based on a 500 (default) mail limit
         // in order to view all mails in a folder we offer a link
@@ -155,6 +210,10 @@ define('io.ox/mail/main',
 
         // folder change
         grid.on('change:prop:folder', function (e, folder) {
+            // reset delete permission
+            canDeletePermission = undefined;
+            // remove delete button
+            removeButton();
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
@@ -191,6 +250,9 @@ define('io.ox/mail/main',
         grid.on('change:prop:order', function (e, value) {
             grid.updateSettings('order', value);
         });
+
+        // remove delete button if needed
+        grid.selection.on('change', removeButton);
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);

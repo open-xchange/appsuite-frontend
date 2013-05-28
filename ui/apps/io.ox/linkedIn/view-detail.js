@@ -19,8 +19,8 @@ define("io.ox/linkedIn/view-detail",
 
     "use strict";
 
-    var actionPoint = ext.point("linkedIn/details/actions");
-    var rendererPoint = ext.point("linkedIn/details/renderer");
+    var actionPoint = ext.point("io.ox/linkedIn/details/actions");
+    var rendererPoint = ext.point("io.ox/linkedIn/details/renderer");
 
     function todo() {
         alert("TODO");

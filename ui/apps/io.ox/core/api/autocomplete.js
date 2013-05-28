@@ -13,10 +13,10 @@
 
 define('io.ox/core/api/autocomplete',
       ['io.ox/core/http',
-       'io.ox/core/config',
+       'io.ox/core/capabilities',
        'io.ox/contacts/api',
        'io.ox/core/api/resource',
-       'io.ox/core/api/group'], function (http, config, contactsAPI, resourceAPI, groupAPI) {
+       'io.ox/core/api/group'], function (http, capabilities, contactsAPI, resourceAPI, groupAPI) {
 
     'use strict';
 
@@ -35,6 +35,9 @@ define('io.ox/core/api/autocomplete',
         }
         if (options.groups) {
             this.apis.push({type: 'group', api: groupAPI});
+        }
+        if (options.msisdn && (capabilities.has('msisdn'))) {
+            this.options.calloptions = $.extend(this.options.calloptions || {}, { extra: ['msisdn'] });
         }
     }
 
@@ -55,7 +58,7 @@ define('io.ox/core/api/autocomplete',
                 };
 
             //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
-            options = config.get('msisdn') ? $.extend(options, { extra: ['msisdn'] }) : options;
+            options = $.extend(options, this.options.calloptions || {});
 
             if (query in this.cache) {
                 // cache hit
@@ -116,6 +119,11 @@ define('io.ox/core/api/autocomplete',
         processContactResults: function (type, data, query, options) {
             var tmp = [], hash = {}, self = this, list = [];
 
+            //distinguish email and phone objects
+            function getTarget(obj) {
+                return obj.email !== '' ? obj.email : obj.phone;
+            }
+
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
@@ -129,12 +137,12 @@ define('io.ox/core/api/autocomplete',
                     });
                 } else {
                     // create separate objects for each email value
-                    self.processContactItem(type, tmp, obj, ['email1', 'email2', 'email3']);
+                    self.processContactItem(type, tmp, obj, 'email', ['email1', 'email2', 'email3']);
                     //msisdn support: create separate objects for each phone number
-                    if (config.get('msisdn') &&  options.extra && options.extra.length) {
+                    if (options.extra && options.extra.length) {
                         //get requested extra columns and process
                         _.each(options.extra, function (id) {
-                            self.processContactItem(type, tmp, obj, http.getKeywordMapping('contacts', id, 'names'));
+                            self.processContactItem(type, tmp, obj, 'phone', contactsAPI.getMapping(id, 'names'));
                         });
                     }
                 }
@@ -142,7 +150,7 @@ define('io.ox/core/api/autocomplete',
             // 2/2: filter distribution lists & remove email duplicates
             tmp = _(tmp).filter(function (obj) {
                 var isDistributionList = obj.data.mark_as_distributionlist === true,
-                    isDuplicate = obj.email in hash;
+                    isDuplicate = hash[getTarget(obj)];
 
                 if (isDistributionList) {
                     if (self.options.distributionlists === false) {
@@ -150,7 +158,7 @@ define('io.ox/core/api/autocomplete',
                     }
                     return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
                 } else {
-                    return isDuplicate ? false : (hash[obj.email] = true);
+                    return isDuplicate ? false : (hash[getTarget(obj)] = true);
                 }
             });
             hash = null;
@@ -162,12 +170,13 @@ define('io.ox/core/api/autocomplete',
          * @param  {string} type
          * @param  {array} list
          * @param  {object} obj
+         * @param  {string} target (target property)
          * @param  {string|array} fields
          * @return {undefined}
          */
-        processContactItem: function (type, list, obj, fields) {
+        processContactItem: function (type, list, obj, target, fields) {
             //ensure array
-            var fields = [].concat(fields);
+            var fields = [].concat(fields), ids;
             //process each field
             _.each(fields, function (field) {
                 if (obj.data[field]) {
@@ -187,12 +196,21 @@ define('io.ox/core/api/autocomplete',
                     }
 
                     if (obj.data.folder_id !== 6 && type === 'user') return;
-                    list.push({
-                        type: obj.type,
-                        display_name: name,
-                        email: obj.data[field].toLowerCase(),
-                        data: _(obj.data).clone()
-                    });
+
+                    //store target value
+                    ids = {};
+                    ids[target] = obj.data[field].toLowerCase();
+
+                    list.push(
+                        $.extend({
+                            type: obj.type,
+                            display_name: name,
+                            data: _(obj.data).clone(),
+                            field: field,
+                            email: '',
+                            phone: ''
+                        }, ids)
+                    );
                 }
             });
         }

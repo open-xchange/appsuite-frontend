@@ -1,5 +1,5 @@
 {
-	namespace: "io.ox/dev/testing/main",
-	requires: "contacts",
-	path: "io.ox/contacts/distrib/test"
+    namespace: "io.ox/dev/testing/main",
+    requires: "contacts",
+    path: "io.ox/contacts/distrib/test"
 }

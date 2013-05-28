@@ -53,6 +53,8 @@ define('io.ox/core/api/factory',
             keyGenerator: null, // ~ use default
             // module
             module: '',
+            //column mapping
+            mapping: {},
             // for all, list, and get
             requests: {
                 all: { action: 'all', timezone: 'utc' },
@@ -429,6 +431,30 @@ define('io.ox/core/api/factory',
             caches: caches
         };
 
+        /**
+         * columns ids or names specified by id (example: 'email' fields from 'contacts' )
+         * @param  {string} id
+         * @param  {string} format ('ids', 'names')
+         * @example getMapping('cellular') of contactsAPI returns ['551', '552']
+         * @return {array} list of columnids or names
+         */
+        api.getMapping = function (id, format) {
+            //columns ids or names
+            format = format || 'ids';
+            //get ids
+            var names,
+                mappings = o.mapping[id] || [],
+                columns = [].concat(_.clone(mappings));
+            //map columnids to columnnames
+            if (format === 'names') {
+                names = http.getColumnMapping(o.module);
+                columns = _.map(columns, function (id) {
+                    return names[id];
+                });
+            }
+            return columns;
+        };
+
         // add search?
         if (o.requests.search) {
             /**
@@ -456,9 +482,9 @@ define('io.ox/core/api/factory',
                 if (opt.extra && opt.extra.length) {
                     list = [].concat(opt.columns);
                     _.each(opt.extra, function (id) {
-                        list = list.concat(http.getKeywordMapping(o.module, id));
+                        list = list.concat(api.getMapping(id));
                     });
-                    opt.columns = list.join(',');
+                    opt.columns = _.uniq(list).join(',');
                 }
                 delete opt.extra;
 

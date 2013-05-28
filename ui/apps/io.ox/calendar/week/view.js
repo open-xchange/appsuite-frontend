@@ -543,7 +543,9 @@ define('io.ox/calendar/week/view',
          */
         render: function () {
             // create timelabels
-            var timeLabel = [];
+            var timeLabel = [],
+                self = this;
+
             for (var i = 1; i < this.slots; i++) {
                 var number = new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME);
                 timeLabel.push(
@@ -554,9 +556,17 @@ define('io.ox/calendar/week/view',
             }
             timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
 
+            /**
+             * change the timeline css top value to the current time position
+             * @param  {Object} tl Timeline as jQuery object
+             */
+            var renderTimeline = function () {
+                var d = new date.Local();
+                self.timeline.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
+            };
             // create and animate timeline
-            this.renderTimeline(this.timeline);
-            setInterval(this.renderTimeline, 60000, this.timeline);
+            renderTimeline();
+            setInterval(renderTimeline, 60000);
 
             if (!Modernizr.touch) {
                 this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
@@ -666,15 +676,6 @@ define('io.ox/calendar/week/view',
                 $('.time', this.pane).height(this.cellHeight * this.fragmentation);
             }
             return this;
-        },
-
-        /**
-         * change the timeline css top value to the current time position
-         * @param  {Object} tl Timeline as jQuery object
-         */
-        renderTimeline: function (tl) {
-            var d = new date.Local();
-            tl.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
         },
 
         /**

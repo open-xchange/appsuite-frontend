@@ -352,19 +352,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         }
     };
 
-    //columns ids mapped by keywords
-    var keywordMapping = {
-        contacts: {
-            email: ['555', '556', '557'],
-            telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
-            fax: ['544', '550', '554']
-        }
-    };
-    //use telephone numbers for msisdn
-    keywordMapping.contacts.msisdn =  keywordMapping.contacts.telephone;
-    //customize mappings
-    ext.point('io.ox/core/http/mappings').invoke('customize', keywordMapping, keywordMapping);
-
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
@@ -952,10 +939,13 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
             window[callback] = function (response) {
                 // skip warnings
-                for (var key in response.data) {
-                    if (key === 'category' && response.data[key] === 13) {
-                        delete response.data[key];
-                    }
+                if (_.isArray(response.data)) {
+                    // Skip Warnings (category: 13)
+                    response.data = _(response.data).map(function (o) {
+                        if (o.category !== 13) {
+                            return o;
+                        }
+                    });
                 }
                 def[(response && response.error ? 'reject' : 'resolve')](response);
                 window[callback] = data = form = def = null;
@@ -998,30 +988,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          */
         getColumnMapping: function (module) {
             return _.clone(idMapping[module] || {});
-        },
-
-        /**
-         * columns ids or names specified by keyword (example: 'email' fields from 'contacts' )
-         * @param  {string} module]
-         * @param  {string} keyword
-         * @param  {string} format ('ids', 'names')
-         * @return {array} list of columnids or names
-         */
-        getKeywordMapping: function (module, keyword, format) {
-            //columns ids or names
-            format = format || 'ids';
-            //get ids
-            var names,
-                mappings = (keywordMapping[module] || [])[keyword] || [],
-                columns = [].concat(_.clone(mappings));
-            //parse
-            if (format === 'names') {
-                names = that.getColumnMapping(module);
-                columns = _.map(columns, function (id) {
-                    return names[id];
-                });
-            }
-            return columns;
         },
 
         /**

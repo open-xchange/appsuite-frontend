@@ -24,7 +24,8 @@
 .vgrid-cell.tasks .status {
     margin-left: 0.5em;
     float: right;
-	index: 2;
+    index: 2;
+    padding-bottom: 1px;
 }
 
 .vgrid-cell.tasks .priority,
@@ -40,7 +41,7 @@
 }
 
 .vgrid-cell.tasks .priority i.icon-star {
-	display: inline-block;
+    display: inline-block;
 }
 
 .vgrid-cell.tasks .title {
@@ -50,10 +51,10 @@
 }
 
 .vgrid-cell.tasks .private-flag {
-	float: left;
-	font-size: 18px;
-	margin-right: 3px;
-	color: #aaa;
+    float: left;
+    font-size: 18px;
+    margin-right: 3px;
+    color: #aaa;
 }
 
 .vgrid-cell.tasks .second-row {
@@ -72,7 +73,14 @@
     height: 13px;
     margin: 0 1em 0 0;
 }
-
+.vgrid-cell.tasks {
+    /* swipe delete button */
+    .swipeDelete {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+    }
+}
 //detailview
 
 .tasks-detailview {
@@ -86,81 +94,81 @@
         margin-bottom: 26px;
     }
 
-	.info-panel {
-	    margin-left: 2em;
-	    margin-bottom: 1em;
-		display: inline;
-	    float: right;
-	}
+    .info-panel {
+        margin-left: 2em;
+        margin-bottom: 1em;
+        display: inline;
+        float: right;
+    }
 
     .priority,
-	.status,
-	.end-date,
-	.alarm-date,
-	.task-progress {
-		float: right;
-	}
+    .status,
+    .end-date,
+    .alarm-date,
+    .task-progress {
+        float: right;
+    }
 
-	br {
-		line-height: 21px; // to correct strange behavior of priority
-	}
+    br {
+        line-height: 21px; // to correct strange behavior of priority
+    }
 
-	.attachments {
-		font-family: @lightFontFamily;
-	    color: #aaa;
-	}
+    .attachments {
+        font-family: @lightFontFamily;
+        color: #aaa;
+    }
 
-	.attachments-container {
-		margin-top: 0.8em;
-	}
-	.attachment-item{
-		color: #333;
-	}
-	.task-details {
-		margin: 1em 0 1em 0;
-	}
-	.detail-label{
-		color: #aaa;
-		display: inline-block;
-		margin-right: 0.5em;
-	}
-	.detail-value {
-		display: inline-block;
-		margin-right: 1em;
-	}
-	.tasks-detailview .note,
-	.tasks-detailview .tasks-inline-links {
-		margin-top: 1em;
-	}
-	.title {
-		display: inline;
-	}
-	.private-flag {
-		font-size: 20pt;
-		margin-right: 12px;
-		color: #aaa;
-	}
+    .attachments-container {
+        margin-top: 0.8em;
+    }
+    .attachment-item{
+        color: #333;
+    }
+    .task-details {
+        margin: 1em 0 1em 0;
+    }
+    .detail-label{
+        color: #aaa;
+        display: inline-block;
+        margin-right: 0.5em;
+    }
+    .detail-value {
+        display: inline-block;
+        margin-right: 1em;
+    }
+    .tasks-detailview .note,
+    .tasks-detailview .tasks-inline-links {
+        margin-top: 1em;
+    }
+    .title {
+        display: inline;
+    }
+    .private-flag {
+        font-size: 20pt;
+        margin-right: 12px;
+        color: #aaa;
+    }
 
-	.participants-table-name {
-		padding-right: 10px;
-	}
+    .participants-table-name {
+        padding-right: 10px;
+    }
 
-	.task-participants-table {
-		border-spacing: 3px;
-		border-collapse: separate;
-		left: -3px;
-		position: relative;
-	}
+    .task-participants-table {
+        border-spacing: 3px;
+        border-collapse: separate;
+        left: -3px;
+        position: relative;
+    }
 
-	.participants-table-colorsquare {
-		width: 13px;
-		height: 13px;
-	}
+    .participants-table-colorsquare {
+        width: 13px;
+        height: 13px;
+    }
 
-	/* Mobile */
+    /* Mobile */
     @media all and (max-width: 480px) {
-    	.info-panel {
-    		width: 100%; //to push the title under the info panel, prevents long titles to be ripped apart
-    	}
+        .info-panel {
+            width: 100%; //to push the title under the info panel, prevents long titles to be ripped apart
+        }
     }
 }

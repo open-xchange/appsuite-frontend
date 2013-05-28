@@ -18,8 +18,9 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/extensions',
      'io.ox/contacts/util',
      'io.ox/core/extPatterns/dnd',
+     'io.ox/core/capabilities',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd) {
+     ], function (view, model, gt, ext, util, dnd, capabilities) {
 
     'use strict';
 
@@ -81,21 +82,21 @@ define('io.ox/contacts/edit/main',
                                 app.quit();
                             });
 
-                            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                            if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
                                 app.dropZone = new dnd.UploadZone({
                                     ref: 'io.ox/contacts/edit/dnd/actions'
                                 }, editView);
+
+                                win.on('show', function () {
+                                    if (app.dropZone) {app.dropZone.include(); }
+                                });
+
+                                win.on('hide', function () {
+                                    if (app && app.dropZone) {
+                                        app.dropZone.remove();
+                                    }
+                                });
                             }
-
-                            win.on('show', function () {
-                                if (app.dropZone) {app.dropZone.include(); }
-                            });
-
-                            win.on('hide', function () {
-                                if (app && app.dropZone) {
-                                    app.dropZone.remove();
-                                }
-                            });
 
                             ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 

@@ -804,7 +804,7 @@ $(window).load(function () {
                 $('#background_loader').idle().fadeOut(DURATION, cont);
 
                 if (_.device('ios')) {
-                    //load on ios to safe transfered data
+                    //load on ios only
                     require(['plugins/mobile/addToHomescreen/register']);
                 }
             });

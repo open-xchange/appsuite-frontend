@@ -1,4 +1,4 @@
 {
-	namespace: "portal",
-	requires: "rss"
+    namespace: "portal",
+    requires: "rss"
 }

@@ -1,10 +1,10 @@
 [
-	{
-		path: "io.ox/oauth/keychain",
-		namespace: "io.ox/keychain/api",
-	},
-	{
-		path: "io.ox/oauth/settings",
-		namespace: "io.ox/settings/accounts/settings/pane",
-	}
+    {
+        path: "io.ox/oauth/keychain",
+        namespace: "io.ox/keychain/api",
+    },
+    {
+        path: "io.ox/oauth/settings",
+        namespace: "io.ox/settings/accounts/settings/pane",
+    }
 ]

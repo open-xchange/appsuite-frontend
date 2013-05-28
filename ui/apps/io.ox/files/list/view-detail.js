@@ -311,7 +311,7 @@ define('io.ox/files/list/view-detail',
                 $content = $('<table class="versiontable table table-striped table-hover table-bordered">').append(
                     $('<thead>').append(
                         $('<tr>').append(
-                            $('<th>').text('#'),
+                            $('<th>').text(_.noI18n('#')),
                             $('<th>').text(gt('File'))
                         )
                     )
@@ -326,7 +326,7 @@ define('io.ox/files/list/view-detail',
                 }
 
                 var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
-                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).text($historyDefaultLabel)
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).addClass('noI18n').text($historyDefaultLabel)
                         .on('click', function (e) {
                         e.preventDefault();
                         if ($content.is(':hidden')) {
@@ -356,7 +356,7 @@ define('io.ox/files/list/view-detail',
     ext.point(POINT + '/version').extend({ index: 10,
         id: 'filename',
         draw: function (baton) {
-            baton.label = baton.data.filename;
+            baton.label = _.noI18n(baton.data.filename);
             var row;
 
             this.append(

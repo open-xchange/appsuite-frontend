@@ -99,6 +99,7 @@ define('io.ox/calendar/edit/template',
 
             saveButton.hide();
             discardButton.hide();
+            self.options.app.getWindow().idle();//remove busy animation to prevent blocking
 
             // look for hard conflicts
             _(conflicts).each(function (conflict) {

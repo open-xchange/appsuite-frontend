@@ -29,7 +29,7 @@ define('io.ox/files/actions',
 
     // actions
 
-	new Action('io.ox/files/actions/switch-to-list-view', {
+    new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'list');
@@ -242,11 +242,8 @@ define('io.ox/files/actions',
                                     return $('<p>').append(
                                         $('<div>').text(file.title || file.filename || ''),
                                         $('<div>').append(
-                                            $('<a>', { href: url, target: '_blank' })
-                                            .text(
-                                                // soft-break long words (like long URLs)
-                                                url.replace(/(\S{30})/g, '$1\u200B')
-                                            )
+                                            $('<a class="direct-link">', { href: url, target: '_blank' })
+                                            .text(url)
                                         )
                                     );
                                 })

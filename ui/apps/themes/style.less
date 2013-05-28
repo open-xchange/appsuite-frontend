@@ -1969,6 +1969,8 @@ a.toolbar-action, .toolbar-action > a {
 ul.dropdown-menu li a.disabled { color:#999; }
 
 
+
+
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 
 /** clean bootstrap body padding **/
@@ -1993,26 +1995,6 @@ ul.dropdown-menu li a.disabled { color:#999; }
     .leftside { width: 250px; }
     .rightside { left: 250px; }
     .default-content-padding { padding: 26px 13px 26px 13px; }
-}
-
-@-webkit-keyframes slideleft {
-    from { -webkit-transform: translateX(-50%); }
-    to { -webkit-transform: translateX(0); }
-}
-
-@-webkit-keyframes slideright {
-    from { -webkit-transform: translateX(0); }
-    to { -webkit-transform: translateX(-50%); }
-}
-
-@keyframes slideleft {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
-}
-
-@keyframes slideright {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
 }
 
 // TINY SCREENS
@@ -2089,32 +2071,8 @@ ul.dropdown-menu li a.disabled { color:#999; }
 @media (max-width: 480px) {
 
     .ios {
-        .vgrid-tool
-        .vgrid.bottom-toolbar .vgrid-scrollpane {
-            /*bottom: 0px;
-            top: 0px;*/
-        }
-        .badge {
-            display: none;
-        }
-        #io-ox-topbar {
-            /*height: 40px;
-            position: fixed;
-            z-index: 500;
-            width: 100%;*/
-        }
-        .window-body {
-            /*bottom: 88px;*/
-        }
         .io-ox-foldertree {
             .overflow();
-        }
-        .window-head {
-            /*position: fixed;
-            top: initial;
-            right: initial;
-            width: 100%;
-            bottom: 0px;*/
         }
     }
     .foldertree-sidepanel {
@@ -2196,6 +2154,27 @@ ul.dropdown-menu li a.disabled { color:#999; }
         }
     }
 }
+/** some transitions **/
+@-webkit-keyframes slideleft {
+    from { -webkit-transform: translateX(-50%); }
+    to { -webkit-transform: translateX(0); }
+}
+
+@-webkit-keyframes slideright {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(-50%); }
+}
+
+@keyframes slideleft {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slideright {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
 @keyframes slidein {
 
     0% {
@@ -2240,4 +2219,33 @@ ul.dropdown-menu li a.disabled { color:#999; }
 
 .slideout {
     -webkit-animation: slideout 300ms;
+}
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+@-webkit-keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.fadein {
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    -webkit-animation: fadein 300ms;
+}
+.fadeout {
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    -webkit-animation: fadeout 300ms;
 }
