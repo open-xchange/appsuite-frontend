@@ -1029,8 +1029,10 @@ define('io.ox/mail/api',
     api.send = function (data, files, form) {
         var deferred,
             flatten = function (recipient) {
-                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''), address = recipient[1];
-                return name === '' ? address : '"' + name + '" <' + address + '>';
+                var name = $.trim(recipient[0] || '').replace(/^["']+|["']+$/g, ''),
+                    address = recipient[1],
+                    typesuffix = recipient[2] || '';
+                return name === '' ? address : '"' + name + '" <' + address + typesuffix + '>';
             };
 
         // clone data (to avoid side-effects)

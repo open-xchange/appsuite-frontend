@@ -818,15 +818,17 @@ define("io.ox/mail/write/view-main",
     * @return {array} array with contact object
     */
     function getNormalized(list) {
-        var elem, custom;
+        var elem;
         return list.map(function (elem) {
-            //if unknown email/phone is used
+
+            //parsed object?
             if (_.isArray(elem)) {
-                custom = {
-                    display_name: elem[0]
-                };
-                //email or phone property?
-                custom[mailUtil.getChannel(elem[1])] = elem[1];
+                var channel = mailUtil.getChannel(elem[1]),
+                    custom = {
+                        display_name: elem[0]
+                    };
+                //email or phone property? remove typesuffix (example: '0178000000/TYPE=PLMN')
+                custom[channel] = channel === 'phone' ? elem[1].split('/')[0] : elem[1];
                 elem = custom;
             }
 

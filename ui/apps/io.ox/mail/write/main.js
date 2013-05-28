@@ -834,7 +834,8 @@ define('io.ox/mail/write/main',
                 parse = function (list) {
                     return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                         .map(function (recipient) {
-                            return ['"' + recipient[0] + '"', recipient[1]];
+                            var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : '/TYPE=PLMN';
+                            return ['"' + recipient[0] + '"', recipient[1], typesuffix];
                         });
                 },
                 replyTo = parse(data.replyTo)[0] || [];
