@@ -29,7 +29,8 @@ define('io.ox/contacts/api',
             email: ['555', '556', '557'],
             telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
             cellular: ['551', '552'],
-            fax: ['544', '550', '554']
+            fax: ['544', '550', '554'],
+            addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
         };
 
     //mapped ids for msisdn
@@ -68,15 +69,64 @@ define('io.ox/contacts/api',
                     opt = opt || {};
                     query = query + '*';
                     var data = {
-                        display_name: query,
-                        first_name: query,
-                        last_name: query,
-                        email1: query,
-                        email2: query,
-                        email3: query,
                         orSearch: true,
                         emailAutoComplete: !!opt.emailAutoComplete
+                    },
+                    queryField = {
+                        names: {
+                            display_name: query,
+                            first_name: query,
+                            last_name: query,
+                            email1: query,
+                            email2: query,
+                            email3: query
+                        },
+                        addresses: {
+                            street_home: query,
+                            postal_code_home: query,
+                            city_home: query,
+                            state_home: query,
+                            country_home: query,
+                            street_business: query,
+                            postal_code_business: query,
+                            city_business: query,
+                            state_business: query,
+                            country_business: query,
+                            street_other: query,
+                            postal_code_other: query,
+                            city_other: query,
+                            state_other: query,
+                            country_other: query
+                        },
+                        phones: {
+                            telephone_business1: query,
+                            telephone_business2: query,
+                            telephone_home1: query,
+                            telephone_home2: query,
+                            telephone_other: query,
+                            fax_business: query,
+                            telephone_callback: query,
+                            telephone_car: query,
+                            telephone_company: query,
+                            fax_home: query,
+                            cellular_telephone1: query,
+                            cellular_telephone2: query,
+                            fax_other: query,
+                            telephone_isdn: query,
+                            telephone_pager: query,
+                            telephone_primary: query,
+                            telephone_radio: query,
+                            telephone_telex: query,
+                            telephone_ttytdd: query,
+                            telephone_ip: query,
+                            telephone_assistant: query
+                        }
                     };
+                    _(opt).each(function (value, key) {
+                        if (_(queryField).chain().keys().contains(key).value() && value === 'on') {
+                            data = _(data).extend(queryField[key] || {});
+                        }
+                    });
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
