@@ -257,7 +257,7 @@ define('io.ox/core/tk/vgrid',
                     options.showCheckbox === false ?
                         [] :
                         $('<label class="select-all">').append(
-                            $('<input type="checkbox" value="true">').attr('title', gt('Select all'))
+                            $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
                         )
                         .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle

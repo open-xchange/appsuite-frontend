@@ -398,7 +398,7 @@ define('io.ox/core/commons',
                     sides.left = $('<div class="leftside">').on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
-                        $('<a href="#" class="btn">').append(
+                        $('<a href="#" class="btn" tabindex="-1">').append(
                             $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),

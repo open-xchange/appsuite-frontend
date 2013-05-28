@@ -90,7 +90,7 @@ define('io.ox/files/views/create', [
             draw: function () {
                 this.append(
                     $('<label>').text(gt.pgettext('title', 'Title')),
-                    $('<input type="text" name="title">').addClass('span12')
+                    $('<input type="text" name="title" tabindex="1">').addClass('span12')
                 );
             }
         });
@@ -109,7 +109,7 @@ define('io.ox/files/views/create', [
             draw: function () {
                 this.append(
                     $('<label>').text(gt('Description')),
-                    $('<textarea name="description" rows="8" class="span12"></textarea>')
+                    $('<textarea name="description" rows="8" class="span12" tabindex="1"></textarea>')
                 );
             }
         });

@@ -31,7 +31,7 @@ define('io.ox/preview/main',
             });
         };
         clickableLink = function (desc, clickHandler) {
-            var $a = $('<a>', { draggable: true })
+            var $a = $('<a>', { draggable: true, tabindex: 1 })
                 .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + '&delivery=download');
             if (clickHandler) {
                 $a.on('click', clickHandler);
@@ -42,7 +42,7 @@ define('io.ox/preview/main',
         };
     } else {
         clickableLink = function (desc, clickHandler) {
-            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank'});
+            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank', tabindex: 1});
             if (clickHandler) {
                 link.on('click', clickHandler);
             }
