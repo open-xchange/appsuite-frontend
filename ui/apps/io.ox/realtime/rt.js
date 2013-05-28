@@ -47,6 +47,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var silenceCount = 0;
     var loadDetectionTimer = null;
     var closeCount = 0;
+    var ackBuffer = {};
 
     Event.extend(api);
 
@@ -135,6 +136,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     function received(stanza) {
+        console.log("Received");
         if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
@@ -158,9 +160,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
-                    console.log("Sending receipt " + stanza.seq);
+                    console.log("Enqueueing receipt " + stanza.seq);
                 }
-                subSocket.push("{type: 'ack', seq: " + stanza.seq + "}");
+                ackBuffer[Number(stanza.seq)] = 1;
             }
             if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
                 api.trigger("receive", stanza);
@@ -285,8 +287,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                         ox.trigger('relogin:required');
                     }
                 }
-
             }
+            drainAckBuffer();
         };
 
         request.onClose = function (response) {
@@ -346,6 +348,47 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     var reconnectBuffer = [];
+
+    function drainAckBuffer() {
+        if (_(ackBuffer).isEmpty()) {
+            return;
+        }
+        var start, stop;
+
+        start = stop = -1;
+        var seqExpression = [];
+
+        function addToSeqExpression(start, stop) {
+            if (start === stop) {
+                seqExpression.push(start);
+            } else {
+                seqExpression.push([start, stop]);
+            }
+        }
+
+        _(_(ackBuffer).keys().sort()).each(function (seq) {
+            if (start === -1) {
+                start = stop = seq;
+            } else if (seq === stop + 1) {
+                stop = seq;
+            } else {
+                addToSeqExpression(start, stop);
+                start = stop = seq;
+            }
+        });
+
+        addToSeqExpression(start, stop);
+        http.PUT({
+            module: 'rt',
+            params: {
+                action: 'send',
+                resource: tabId
+            },
+            data: {type: 'ack', seq: seqExpression}
+        });
+        ackBuffer = {};
+
+    }
 
     function drainBuffer() {
         request.requestCount = 0;
