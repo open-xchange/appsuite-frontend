@@ -307,7 +307,32 @@ define("io.ox/contacts/main",
             }
         });
 
+        // extend search form
 
+        ext.point('io.ox/contacts/search/defaults').extend({
+            names: true,
+            phones: false,
+            addresses: false
+        });
+
+        ext.point('io.ox/contacts/search/checkboxes').extend({
+            names: true,
+            phones: true,
+            addresses: true
+        });
+
+
+        win.nodes.search.find('.input-append').append(
+            _(ext.point('io.ox/contacts/search/checkboxes').options()).map(function (flag, name) {
+                var defaults = ext.point('io.ox/contacts/search/defaults').options();
+                return flag === true ?
+                    $('<label class="checkbox margin-right">').append(
+                        $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                        $.txt({ names: gt('Names and e-mail addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')}[name])
+                    ) :
+                    $();
+            })
+        );
 
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
