@@ -301,7 +301,23 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onSave: function () {
+                var self = this;
                 console.log('der SAVE');
+                this.model.save().done(function (response) {
+                    console.log(response);
+                    if (response === null) {
+                        notifications.yell('success', gt('Mailfilter updated'));
+                    } else {
+                        notifications.yell('success', gt('Mailfilter created'));
+                        var newCreatedDate =  self.model.attributes;
+                        newCreatedDate.id = response;
+                        console.log(newCreatedDate);
+                        self.collection.add(newCreatedDate);
+                        console.log(self);
+
+                    }
+
+                });
             },
 
             onChangeValue: function (e) {

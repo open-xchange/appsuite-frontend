@@ -28,26 +28,48 @@ define('io.ox/mail/mailfilter/settings/model',
             update: function (model) {
                 console.log('this is a UPDATE Call');
                 console.log(model);
+                return api.update(model.attributes);
+
             },
             create: function (model) {
                 console.log('this is a CREATE Call');
                 console.log(model);
+                return api.create(model.attributes);
             }
 
         });
 
         Validators.validationFor(ref, {
-
+            rulename: { format: 'string', mandatory: true}
+//            start_date : { format: 'date', mandatory: true},
+//            end_date: { format: 'date', mandatory: true}
         });
+
+
         return factory;
 
+    }
+
+    function provideEmptyModel() {
+        return {
+            "rulename": "",
+            "test": {
+                "id": "true"
+            },
+            "actioncmds": [{
+                "id": "stop"
+            }],
+            "flags": [],
+            "active": false
+        };
     }
 
 
     return {
         api: api,
         protectedMethods: {
-            buildFactory: buildFactory
+            buildFactory: buildFactory,
+            provideEmptyModel: provideEmptyModel
         }
     };
 });

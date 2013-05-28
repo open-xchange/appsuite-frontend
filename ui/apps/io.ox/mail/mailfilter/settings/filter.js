@@ -26,7 +26,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'use strict';
 
 
-    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api);
+    var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
+        collection;
 
 
     function renderDetailView(evt, data) {
@@ -35,12 +36,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myViewNode = $("<div>").addClass("accountDetail");
         myModel = data;
         myView = new AccountDetailView({model: myModel, node: myViewNode});
-
-//        myView.dialog = new dialogs.SidePopup({modal: true, arrow: false, saveOnClose: true}).show(evt, function (pane) {
-//            pane.append(myView.render().el);
-//        });
-
-
 
         myView.dialog = new dialogs.ModalDialog({
             width: 685
@@ -56,7 +51,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         myView.dialog.show();
 //        myView.succes = successDialog;
-//        myView.collection = collection;
+        myView.collection = collection;
+
+
+        myView.dialog.on('save', function () {
+//            if (myModel.isValid()) {
+            myView.dialog.getBody().find('.io-ox-mailfilter-edit').trigger('save');
+//            } else {
+//                myView.dialog.idle();
+//            }
+        });
+
         return myView.node;
     }
 
@@ -83,6 +88,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
             createExtpointForSelectedAccount = function (args) {
                 if (args.data.id !== undefined) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
+                } else {
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
                 }
             };
 
@@ -94,19 +101,19 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 } else {
                     var mailFilter = {},
-                        MailfilterEdit,
+                        MailfilterEdit;
 
-                        collection = _.reject(data, function (filter) {
-                            if (_.isEmpty(filter.flags)) {
-                                return false;
-                            }
-                            var test = _.reject(filter.flags, function (flag) {
-                                return flag === 'vacation' || 'autoforward';
-                            });
-
-                            return _.isEmpty(test);
-
+                    collection = _.reject(data, function (filter) {
+                        if (_.isEmpty(filter.flags)) {
+                            return false;
+                        }
+                        var test = _.reject(filter.flags, function (flag) {
+                            return flag === 'vacation' || 'autoforward';
                         });
+
+                        return _.isEmpty(test);
+
+                    });
 
                     collection = factory.createCollection(collection);
 
@@ -172,7 +179,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         },
 
                         onAdd: function (args) {
-                            console.log('add');
+                            args.data = {};
+                            args.data.node = this.el;
+
+
+                            args.data.obj = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
+                            createExtpointForSelectedAccount(args);
                         },
 
                         onEdit: function (args) {
@@ -182,10 +194,19 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             args.data.obj = this.collection.get(args.data.id);
 
                             args.data.node = this.el;
+                            console.log(args);
                             createExtpointForSelectedAccount(args);
                         },
-                        onDelete: function () {
+                        onDelete: function (args) {
+
                             console.log('delete');
+                            var selected = this.$el.find('[selected]'),
+                                self = this,
+                                id = selected.data('id');
+                            console.log(this);
+                            api.deleteRule(id).done(function () {
+                                self.collection.remove(id);
+                            });
                         }
 
                     });
