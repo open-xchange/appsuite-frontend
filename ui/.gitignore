@@ -8,3 +8,4 @@
 /local.conf
 /apps/themes/*/less
 /apps/plugins/playground
+npm-debug.log
