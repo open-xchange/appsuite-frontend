@@ -164,6 +164,7 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.hide();
                 updateArrow();
                 tree.toggle();
+                return $.when();
             },
 
             toggleNode = function () {
