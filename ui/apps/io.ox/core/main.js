@@ -481,7 +481,7 @@ define("io.ox/core/main",
         });
 
         /**
-         * Extenions
+         * Extensions
          */
 
         ext.point('io.ox/core/topbar/right').extend({
@@ -549,7 +549,48 @@ define("io.ox/core/main",
                 var helpLink = 'help/' + ox.language + '/index.html';
                 this.append(
                     $('<li>').append(
-                        $('<a>', { href: helpLink, target: '_blank' }).text(gt('Help'))
+                        $('<a>', { href: helpLink, target: '_blank' }).text(gt('User manual'))
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'app-specific-help',
+            index: 201,
+            draw: function () { //replaced by module
+                var helpDir = 'help/' + ox.language + '/',
+                    helpPoints = ext.point('io.ox/core/topbar/right/dropdown/appspecific').all(),
+                    node = this;
+                _(helpPoints).each(function (extension) {
+                    var appClass = extension.app.replace(/\W/g, '--');
+                    node.append(
+                        $('<li>', {'class': 'io-ox-specificHelp ' + appClass}).append(
+                            $('<a>', {
+                                href: helpDir + extension.href,
+                                target: '_blank'
+                            }).text(extension.desc)
+                        )
+                    );
+                });
+                ox.ui.windowManager.on('window.show', function (element) {
+                    var currentApp = ox.ui.App.getCurrentApp(),
+                        currentType = currentApp.attributes.name,
+                        appClass = currentType.replace(/\W/g, '--');
+                    node.find('.io-ox-specificHelp').hide();
+                    node.find('.io-ox-specificHelp.' + appClass).show();
+                    console.log("appClass = ", appClass, currentType);
+                });
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'knowledgebase',
+            index: 220,
+            draw: function () {
+                this.append(
+                    $('<li>').append(
+                        $('<a>', { href: 'https://knowledgebase.open-xchange.com', target: '_blank' }).text(gt('Knowledgebase'))
                     )
                 );
             }
@@ -557,7 +598,7 @@ define("io.ox/core/main",
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'fullscreen',
-            index: 200,
+            index: 250,
             draw: function () {
                 if (BigScreen.enabled) {
                     var fullscreenButton;
@@ -704,6 +745,87 @@ define("io.ox/core/main",
                     $('<small>').text(gt('Please sign in again to continue'))
                 );
             }
+        });
+
+        // add specific help links
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'contactSpecificHelp',
+            index: 1,
+            app: 'io.ox/contacts',
+            href: 'ox.appsuite.user.chap.contacts.html',
+            desc: gt('Addressbook chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'calendarSpecificHelp',
+            index: 1,
+            app: 'io.ox/calendar',
+            href: 'ox.appsuite.user.chap.calendar.html',
+            desc: gt('Calendar chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'calendarSettingsSpecificHelp',
+            index: 2,
+            app: 'io.ox/calendar',
+            href: 'ox.appsuite.user.sect.calendar.settings.html',
+            desc: gt('Calendar settings chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'taskSpecificHelp',
+            index: 1,
+            app: 'io.ox/tasks',
+            href: 'ox.appsuite.user.chap.tasks.html',
+            desc: gt('Task chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'taskSettingsSpecificHelp',
+            index: 2,
+            app: 'io.ox/tasks',
+            href: 'ox.appsuite.user.sect.tasks.settings.html',
+            desc: gt('Task settings chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'emailSpecificHelp',
+            index: 1,
+            app: 'io.ox/mail',
+            href: 'ox.appsuite.user.chap.email.html',
+            desc: gt('E-mail chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'emailSettingsSpecificHelp',
+            index: 2,
+            app: 'io.ox/mail',
+            href: 'ox.appsuite.user.sect.email.settings.html',
+            desc: gt('E-mail settings chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'fileSpecificHelp',
+            index: 1,
+            app: 'io.ox/files',
+            href: 'ox.appsuite.user.chap.files.html',
+            desc: gt('Files chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'fileSettingsSpecificHelp',
+            index: 2,
+            app: 'io.ox/files',
+            href: 'ox.appsuite.user.sect.files.settings.html',
+            desc: gt('Files settings chapter')
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
+            id: 'portalSettingsSpecificHelp',
+            index: 1,
+            app: 'io.ox/portal',
+            href: 'ox.appsuite.user.sect.portal.customize.html',
+            desc: gt('Portal settings chapter')
         });
 
         // add some senseless characters to avoid unwanted scrolling
