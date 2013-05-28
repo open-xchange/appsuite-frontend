@@ -479,9 +479,9 @@ define('io.ox/contacts/api',
 
         // duck checks
         if (api.looksLikeResource(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_resource.png';
         } else if (api.looksLikeDistributionList(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_group.png';
         } else if (obj.image1_url) {
             return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
         } else {
@@ -521,9 +521,9 @@ define('io.ox/contacts/api',
         if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.png';
             } else if (api.looksLikeDistributionList(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.png';
             }
             // also look for contact_id to support user objects directly
             var id = obj.contact_id || obj.id,
