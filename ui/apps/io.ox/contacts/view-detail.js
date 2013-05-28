@@ -352,10 +352,8 @@ define("io.ox/contacts/view-detail",
 
     ext.point("io.ox/contacts/detail/member").extend({
         draw: function (data) {
-            // draw member
             this.append(
                 $('<div class="member">').append(
-                    api.getPicture(data, { scaleType: 'cover', width: 48, height: 48 }).addClass('member-picture'),
                     $('<div class="member-name">').text(data.display_name),
                     $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
                 )
@@ -372,7 +370,7 @@ define("io.ox/contacts/view-detail",
 
             if (data.mark_as_distributionlist === true) {
 
-                var list = _.copy(data.distribution_list || [], true), hash = {};
+                var list = _.copy(data.distribution_list || [], true);
 
                 // if there are no members in the list
                 if (list.length === 0) {
@@ -382,18 +380,9 @@ define("io.ox/contacts/view-detail",
                     return;
                 }
 
-                // remove duplicates to fix backend bug
-                _(list).chain()
-                    .filter(function (member) {
-                        if (hash[member.mail]) {
-                            return false;
-                        } else {
-                            return (hash[member.mail] = true);
-                        }
-                    })
-                    .each(function (member) {
-                        ext.point("io.ox/contacts/detail/member").invoke('draw', this, member);
-                    }, this);
+                _.each(list, function (member) {
+                    ext.point("io.ox/contacts/detail/member").invoke('draw', this, member);
+                }, this);
 
                 return;
             }

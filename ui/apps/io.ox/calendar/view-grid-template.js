@@ -70,7 +70,7 @@ define("io.ox/calendar/view-grid-template",
                         );
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                fields.time.text(util.getTimeInterval(data));
+                util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {

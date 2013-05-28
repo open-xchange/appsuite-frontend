@@ -49,7 +49,6 @@ define("io.ox/contacts/main",
 
     // launcher
     app.setLauncher(function (options) {
-
         var showSwipeButton = false,
             hasDeletePermission;
         // get window
@@ -61,16 +60,6 @@ define("io.ox/contacts/main",
         app.setWindow(win);
         app.settings = settings;
 
-        function thumbClick(e) {
-            var text = $(this).data('text');
-            if (text) grid.scrollToLabelText(text);
-        }
-
-        function thumbMove(e) {
-            var text;
-            if (e.which === 1 && (text = $(this).data('text'))) grid.scrollToLabelText(text);
-        }
-
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left;
         right = vsplit.right.addClass('default-content-padding').scrollable();
@@ -80,9 +69,7 @@ define("io.ox/contacts/main",
             // grid container
             gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
             // thumb index
-            thumbs = $('<div class="atb contact-grid-index">')
-                .on('click', '.thumb-index', thumbClick)
-                .on('mousemove', '.thumb-index', thumbMove)
+            thumbs = $('<div class="atb contact-grid-index border-right">')
         );
 
         // folder tree
@@ -267,10 +254,11 @@ define("io.ox/contacts/main",
         }
 
         Thumb.prototype.draw = function (baton) {
-            var node = $('<div class="thumb-index">')
+            var node = $('<div>')
+                .addClass('thumb-index border-bottom')
                 .text(this.label || _.noI18n(this.text));
             if (this.enabled(baton)) {
-                node.data('text', this.text);
+                node.on('click', { text: this.text }, grid.scrollToLabelText);
             } else {
                 node.addClass('thumb-index-disabled');
             }
@@ -294,7 +282,8 @@ define("io.ox/contacts/main",
             hasDeletePermission = undefined;
             removeButton();
             if (_.device('!small')) {
-                ext.point('io.ox/contacts/thumbIndex').invoke('draw', thumbs, baton);
+                ext.point('io.ox/contacts/thumbIndex')
+                .invoke('draw', thumbs, baton);
             }
         });
 
@@ -302,15 +291,13 @@ define("io.ox/contacts/main",
             index: 100,
             id: 'draw',
             draw: function () {
-
                 // get labels
                 baton.labels = grid.getLabels().textIndex || {};
-
                 // update thumb listf
-                ext.point('io.ox/contacts/thumbIndex').invoke('getIndex', thumbs, baton);
+                ext.point('io.ox/contacts/thumbIndex')
+                    .invoke('getIndex', thumbs, baton);
 
                 thumbs.empty();
-
                 _(baton.data).each(function (thumb) {
                     thumbs.append(thumb.draw(baton));
                 });

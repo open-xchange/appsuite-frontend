@@ -499,8 +499,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links-participant',
-        ref: 'io.ox/calendar/links/inline-participants',
-        classes: 'io-ox-inline-links embedded'
+        ref: 'io.ox/calendar/links/inline-participants'
     }));
 
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({

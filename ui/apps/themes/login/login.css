@@ -226,7 +226,6 @@ body.down #io-ox-login-container .alert.alert-info {
     background-image: url(busy.gif);
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 31px 8px;
 }
 
 #io-ox-login-feedback {
