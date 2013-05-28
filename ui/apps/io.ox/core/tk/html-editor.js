@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/tk/html-editor', [], function () {
+define.async('io.ox/core/tk/html-editor',
+             ['moxiecode/tiny_mce/plugins/emoji/main'],
+             function (emoji) {
 
     'use strict';
 
@@ -44,6 +46,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
             // beautify dashes
             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+        o.content = emoji.unifiedToImageTag(o.content);
     }
 
     // simplify DOM tree
@@ -184,11 +187,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         var node = $(o.node), done;
         //console.debug('post', node.html());
         // remove iframes and other stuff that shouldn't be in an email
-        // images too - doesn't work with copy/paste
+        // images too - doesn't work with copy/paste (except for emoji classed images)
         node.find(
             'iframe, object, applet, input, textarea, button, select, ' +
             'canvas, script, noscript, audio, video, img'
-            ).remove();
+            )
+            .find(':not(img.emoji)').remove();
         // beautify SUP tags
         node.find('sup').css('lineHeight', '0');
         // unwrap

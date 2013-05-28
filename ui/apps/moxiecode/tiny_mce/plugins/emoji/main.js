@@ -26,6 +26,23 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
 
     return _.extend({
-        icons: icons
+        icons: icons,
+        unifiedToImageTag: function (text) {
+            var parsedText = $('<div>').append(emoji.unifiedToHTML(text));
+
+            parsedText.find('span.emoji').each(function (index, node) {
+                //parse unicode number
+                var unicode = '&#x' + _.find($(node).attr('class').split('emoji'), function (item) {
+                    return item.trim();
+                });
+                //transform unicode html entity to text
+                unicode = $('<div>').html(unicode).text();
+                $(node).replaceWith(
+                    $('<img src="apps/themes/login/1x1.gif" class="' + $(node).attr('class') + '">')
+                    .attr('data-emoji-unicode', unicode)
+                );
+            });
+            return parsedText.html();
+        }
     }, emoji);
 });
