@@ -4389,7 +4389,7 @@ msgstr "Wollen Sie dieses Widget wirklich löschen?"
 
 #: apps/io.ox/portal/settings/pane.js:250
 msgid "Just disable widget"
-msgstr "Widget löschen"
+msgstr "Widget nur deaktivieren"
 
 #: apps/io.ox/portal/main.js:37
 msgid "Good morning, %s"
@@ -4496,7 +4496,7 @@ msgstr "Diese Datei wurde hinzugefügt"
 #: apps/io.ox/files/views/create.js:81
 msgctxt "title"
 msgid "Title"
-msgstr "Beschreibung"
+msgstr "Titel"
 
 #. Appears in file icon view during searches
 #: apps/io.ox/files/icons/perspective.js:61
