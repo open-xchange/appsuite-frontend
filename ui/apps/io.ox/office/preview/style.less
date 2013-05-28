@@ -8,72 +8,16 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
+ * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-/* ========================================================================= */
-/* generic mix-in classes                                                    */
-/* ========================================================================= */
-
-.opacity(@opacity) {
-    opacity: @opacity / 100;
-    filter: ~"alpha(opacity=@{opacity})";
-}
-
-/* ========================================================================= */
-/* OX Preview                                                                */
-/* ========================================================================= */
-
 .io-ox-office-preview-main {
-
-/* thumbnail preview in the side pane */
-.view-pane.side-pane .group.page-preview {
-    margin: 8px auto;
-
-    a.button {
-        position: absolute;
-        .box-sizing(border-box);
-        padding: 3px;
-        border: 3px solid transparent;
-        .border-radius(5px);
-        color: white;
-        text-align: center;
-
-        &.selected {
-            border-color: @selectedBackground;
-        }
-
-        > .page {
-            position: relative;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: white;
-            width: 70px;
-            height: 90px;
-        }
-
-        > .caption {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 3px;
-        }
-    }
-}
 
 .page {
     /* fix for IE10, which does not render SVG text elements when line height is 0 */
     line-height: normal;
     overflow: hidden;
-
-    &, &:focus, &:active {
-        outline: none;
-    }
-
-    &.busy {
-        .opacity(0);
-        .transition(opacity 0.5s linear 0.5s);
-    }
 }
 
 }

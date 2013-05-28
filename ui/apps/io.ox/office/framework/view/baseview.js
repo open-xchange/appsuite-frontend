@@ -16,7 +16,6 @@ define('io.ox/office/framework/view/baseview',
      'io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
      'gettext!io.ox/office/main',
-     'io.ox/office/framework/view/nodetracking',
      'less!io.ox/office/framework/view/basestyle.less',
      'less!io.ox/office/framework/view/docs-icons.less'
     ], function (Events, Utils, Pane, gt) {
@@ -32,14 +31,6 @@ define('io.ox/office/framework/view/baseview',
      * Base class for the view instance of an office application. Creates the
      * application window, and provides functionality to create and control the
      * top, bottom, and side pane elements.
-     *
-     * Triggers the following events:
-     * - 'refresh:layout': After this view instance has refreshed the layout of
-     *      all registered view panes. This event will be triggered after
-     *      inserting new view panes into this view, or content nodes into the
-     *      application pane, after showing/hiding view panes, while and after
-     *      the browser window is resized, and when the method
-     *      BaseView.refreshPaneLayout() has been called manually.
      *
      * @constructor
      *
@@ -100,9 +91,6 @@ define('io.ox/office/framework/view/baseview',
 
             // inner shadows for application pane
             shadowNodes = {},
-
-            // whether refreshing the pane layout is currently locked
-            layoutLocks = 0,
 
             // alert banner currently shown
             currentAlert = null,
@@ -167,8 +155,8 @@ define('io.ox/office/framework/view/baseview',
                 }
             }
 
-            // do nothing if refreshing is currently locked, or the window is hidden
-            if ((layoutLocks > 0) || !app.getWindow().state.visible) { return; }
+            // do nothing if the window is hidden
+            if (!app.getWindow().state.visible) { return; }
 
             // update fixed view panes
             _(fixedPanes).each(updatePane);
@@ -202,9 +190,6 @@ define('io.ox/office/framework/view/baseview',
 
             // update overlay view panes
             _(overlayPanes).each(updatePane);
-
-            // notify listeners
-            self.trigger('refresh:layout');
         }
 
         /**
@@ -359,18 +344,6 @@ define('io.ox/office/framework/view/baseview',
         };
 
         /**
-         * Removes all DOM nodes from the container node of the application
-         * pane.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.removeAllContentNodes = function () {
-            appContainerNode.empty();
-            return this.refreshPaneLayout();
-        };
-
-        /**
          * Inserts new DOM nodes into the private storage container. The nodes
          * will not be visible but will be part of the living DOM, thus it will
          * be possible to access and modify the geometry of the nodes.
@@ -399,46 +372,26 @@ define('io.ox/office/framework/view/baseview',
          */
         this.addPane = function (pane) {
 
+            var // callback to be executed after the pane node is inside the DOM
+                insertHandler = Utils.getFunctionOption(pane.getOptions(), 'insertHandler');
+
             // insert the pane
             (pane.isOverlay() ? overlayPanes : fixedPanes).push(pane);
             app.getWindowNode().append(pane.getNode());
 
-            // refresh overall layout
-            return this.refreshPaneLayout();
-        };
-
-        /**
-         * Adjusts the positions of all view pane nodes, and the current alert
-         * banner.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
-         */
-        this.refreshPaneLayout = function () {
+            // refresh overall layout, call insert handler
             refreshPaneLayout();
+            if (_.isFunction(insertHandler)) {
+                insertHandler.call(pane);
+            }
+
             return this;
         };
 
         /**
-         * Prevents refreshing the pane layout while the specified callback
-         * function is running. After the callback function has finished, the
-         * pane layout will be adjusted once by calling the method
-         * BaseApplication.refreshPaneLayout().
-         *
-         * @param {Function} callback
-         *  The callback function that will be executed synchronously while
-         *  refreshing the pane layout is locked.
-         *
-         * @param {Object} [context]
-         *  The context bound to the callback function.
-         *
-         * @returns {BaseView}
-         *  A reference to this instance.
+         * Adjusts the positions of all view pane nodes.
          */
-        this.lockPaneLayout = function (callback, context) {
-            layoutLocks += 1;
-            callback.call(context);
-            layoutLocks -= 1;
+        this.refreshPaneLayout = function () {
             refreshPaneLayout();
             return this;
         };
@@ -713,16 +666,12 @@ define('io.ox/office/framework/view/baseview',
 
         // after construction, call initialization handler
         app.on('docs:init', function () {
-            self.lockPaneLayout(function () {
-                Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
-            });
+            Utils.getFunctionOption(options, 'initHandler', $.noop).call(self);
         });
 
         // after import, call deferred initialization handler, and update view and controller
         app.on('docs:import:after', function () {
-            self.lockPaneLayout(function () {
-                Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
-            });
+            Utils.getFunctionOption(options, 'deferredInitHandler', $.noop).call(self);
             windowShowHandler();
         });
 

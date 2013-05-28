@@ -9,7 +9,6 @@
  * Mail: info@open-xchange.com
  *
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
- * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
 define('io.ox/office/preview/main',
@@ -32,16 +31,8 @@ define('io.ox/office/preview/main',
      * @constructor
      *
      * @extends BaseApplication
-     *
-     * @param {Object} [appOptions]
-     *  A map of static application options, that have been passed to the
-     *  static method BaseApplication.createLauncher().
-     *
-     * @param {Object} [launchOptions]
-     *  A map of options to control the properties of the application. Supports
-     *  all options supported by the base class BaseApplication.
      */
-    var PreviewApplication = BaseApplication.extend({ constructor: function (appOptions, launchOptions) {
+    var PreviewApplication = BaseApplication.extend({ constructor: function (launchOptions) {
 
         var // self reference
             self = this,
@@ -51,7 +42,9 @@ define('io.ox/office/preview/main',
 
         // base constructor ---------------------------------------------------
 
-        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, appOptions, launchOptions);
+        BaseApplication.call(this, PreviewModel, PreviewView, PreviewController, importDocument, launchOptions, {
+            chromeless: true
+        });
 
         // private methods ----------------------------------------------------
 
@@ -101,6 +94,8 @@ define('io.ox/office/preview/main',
                 }
             })
             .done(function (data) {
+
+                // show a page of the document
                 jobId = data.JobID;
                 self.getModel().setPageCount(data.PageCount);
                 self.getView().restoreFromSavePoint(point);
@@ -141,6 +136,6 @@ define('io.ox/office/preview/main',
 
     // exports ================================================================
 
-    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
+    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication);
 
 });

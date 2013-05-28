@@ -98,17 +98,17 @@ define('io.ox/office/framework/app/baseapplication',
      *  extend the core application object. Receives the passed launch options
      *  as first parameter.
      *
-     * @param {Object} [appOptions]
-     *  A map of options that control the creation of the ox.ui.App base class.
-     *
      * @param {Object} [launchOptions]
      *  A map of options passed to the core launcher (the ox.launch() method)
-     *  that determine the actions to perform during application launch.
+     *  that determine the actions to perform during application launch. The
+     *
+     * @param {Object} [appOptions]
+     *  A map of options that control the creation of the ox.ui.App base class.
      *
      * @returns {ox.ui.App}
      *  The new application object.
      */
-    function createApplication(moduleName, ApplicationClass, appOptions, launchOptions) {
+    function createApplication(moduleName, ApplicationClass, launchOptions, appOptions) {
 
         var // the icon shown in the top bar launcher
             icon = Utils.getStringOption(appOptions, 'icon', ''),
@@ -121,7 +121,7 @@ define('io.ox/office/framework/app/baseapplication',
             });
 
         // mix-in constructor for additional application methods
-        ApplicationClass.call(app, appOptions, launchOptions);
+        ApplicationClass.call(app, launchOptions);
 
         return app;
     }
@@ -193,10 +193,6 @@ define('io.ox/office/framework/app/baseapplication',
      *  Must return a Deferred object that will be resolved or rejected after
      *  the document has been loaded.
      *
-     * @param {Object} [appOptions]
-     *  A map of static application options, that have been passed to the
-     *  static method BaseApplication.createLauncher().
-     *
      * @param {Object} [launchOptions]
      *  A map of options passed to the core launcher (the ox.launch() method)
      *  that determine the actions to perform during application launch. The
@@ -211,8 +207,21 @@ define('io.ox/office/framework/app/baseapplication',
      *  @param {Object} [launchOptions.file]
      *      The descriptor of the file to be imported, as provided and used by
      *      the Files application.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the application. The
+     *  following options are supported:
+     *  @param {Boolean} [options.search=false]
+     *      If set to true, the application will show and use the global search
+     *      tool bar.
+     *  @param {Boolean} [options.chromeless=true]
+     *      If set to true, the application window will not contain the main
+     *      tool bar attached to the left or bottom border.
+     *  @param {Boolean} [options.detachable=true]
+     *      If set to false, the application window will not be detached from
+     *      the DOM while it is hidden.
      */
-    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, appOptions, launchOptions) {
+    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, launchOptions, options) {
 
         var // self reference
             self = this,
@@ -713,62 +722,6 @@ define('io.ox/office/framework/app/baseapplication',
             return this.getServerModuleUrl(BaseApplication.CONVERTER_MODULE_NAME, options);
         };
 
-        /**
-         * Creates an <img> element, sets the passed URL, and returns a
-         * Deferred object waiting that the image has been loaded. If the
-         * browser does not trigger the appropriate events after the specified
-         * timeout, the Deferred object will be rejected automatically. If the
-         * application has been shut down before the image has been loaded, the
-         * pending Deferred object will neither be resolved nor rejected.
-         *
-         * @param {String} url
-         *  The image URL.
-         *
-         * @param {Number} [timeout=10000]
-         *  The time before the Deferred will be rejected without response from
-         *  the image node.
-         *
-         * @returns {jQuery.Promise}
-         *  The Promise of a Deferred object that will be resolved with the
-         *  image element (as jQuery object), when the 'load' event has been
-         *  received from the image node; or rejected, if the 'error' event has
-         *  been received from the image, or after the specified timeout delay
-         *  without response.
-         */
-        this.createImageNode = function (url, timeout) {
-
-            var // the result Deferred object
-                def = $.Deferred(),
-                // the image node
-                imgNode = $('<img>', { src: url }),
-                // the timer for the 10 seconds timeout
-                timer = null;
-
-            function loadHandler() {
-                // do not resolve if application is already shutting down
-                if (delayTimeouts) { def.resolve(imgNode); }
-            }
-
-            function errorHandler() {
-                // do not reject if application is already shutting down
-                if (delayTimeouts) { def.reject(); }
-            }
-
-            // wait that the image is loaded
-            imgNode.one({ load: loadHandler, error: errorHandler });
-
-            // timeout if server hangs, or browser fails to send any events because
-            // of internal errors (e.g.: SVG parse errors in Internet Explorer)
-            timer = this.executeDelayed(function () {
-                def.reject();
-            }, { delay: _.isNumber(timeout) ? timeout : 10000 });
-
-            return def.always(function () {
-                timer.abort();
-                imgNode.off({ load: loadHandler, error: errorHandler });
-            }).promise();
-        };
-
         // application setup --------------------------------------------------
 
         /**
@@ -793,9 +746,9 @@ define('io.ox/office/framework/app/baseapplication',
         /**
          * Registers a quit handler function that will be executed before the
          * application will be destroyed. This may happen if the application
-         * has been closed normally, if the user logs out from the entire
-         * AppSuite, or before the browser window or browser tab will be closed
-         * or refreshed. If the quit handlers return a Deferred object, closing
+         * has been closed normally, if the user logs out from the entire app
+         * suite, or before the browser window or browser tab will be closed or
+         * refreshed. If the quit handlers return a Deferred object, closing
          * the application, and logging out will be deferred until the Deferred
          * objects have been resolved or rejected.
          *
@@ -866,7 +819,7 @@ define('io.ox/office/framework/app/baseapplication',
 
         /**
          * Executes all registered quit handlers and returns a Deferred object
-         * that will be resolved or rejected according to the results of the
+         * that will be resolved or rejected according to the rasults of the
          * handlers.
          *
          * @internal
@@ -892,9 +845,6 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
-         *  @param {Object} [options.context]
-         *      The context that will be bound to 'this' in the passed callback
-         *      function.
          *  @param {Number} [options.delay=0]
          *      The time (in milliseconds) the execution of the passed callback
          *      function will be delayed.
@@ -931,8 +881,6 @@ define('io.ox/office/framework/app/baseapplication',
 
             var // the current browser timeout identifier
                 timeout = null,
-                // the context for the callback function
-                context = Utils.getOption(options, 'context'),
                 // the delay time for the next execution of the callback
                 delay = Utils.getIntegerOption(options, 'delay', 0, 0),
                 // whether to repeat execution of the callback function
@@ -957,7 +905,7 @@ define('io.ox/office/framework/app/baseapplication',
                     unregisterTimeout();
 
                     // execute the callback function, react on its result
-                    $.when(callback.call(context))
+                    $.when(callback())
                     .done(function (result) {
                         if (repeat && (result === true)) {
                             createTimeout();
@@ -1016,9 +964,6 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of this method. The
          *  following options are supported:
-         *  @param {Object} [options.context]
-         *      The context that will be bound to 'this' in the passed callback
-         *      function.
          *  @param {Number} [options.chunkLength=10]
          *      The number of elements that will be extracted from the passed
          *      data array and will be passed to the callback function.
@@ -1047,17 +992,13 @@ define('io.ox/office/framework/app/baseapplication',
                 def = $.Deferred(),
                 // the timer executing the callback function for the array chunks
                 timer = null,
-                // the context for the callback function
-                context = Utils.getOption(options, 'context'),
                 // the length of a single chunk in the array
                 chunkLength = Utils.getIntegerOption(options, 'chunkLength', 10, 1),
                 // current array index
                 index = 0;
 
             // check passed data array
-            if (dataArray.length === 0) {
-                return _.extend($.when(), { abort: $.noop });
-            }
+            if (dataArray.length === 0) { return $.when(); }
 
             // start a repeated timer, pass the delay times passed to this method
             timer = self.executeDelayed(function () {
@@ -1066,7 +1007,7 @@ define('io.ox/office/framework/app/baseapplication',
                 def.notify(index / dataArray.length);
 
                 // execute the callback, return whether to repeat execution
-                return $.when(callback.call(context, dataArray.slice(index, index + chunkLength), index))
+                return $.when(callback(dataArray.slice(index, index + chunkLength), index))
                     .then(function () {
                         index += chunkLength;
                         // repeat execution, if index has not reached end of array yet
@@ -1102,13 +1043,11 @@ define('io.ox/office/framework/app/baseapplication',
          *  created by this method. Supports all options also supported by the
          *  method BaseApplication.executeDelayed(). Especially, delayed and
          *  repeated execution of the deferred callback function is supported.
-         *  If a context is specified with the option 'options.context', it
-         *  will be used for both callback functions. Note that the delay time
-         *  will restart after each call of the debounced method, causing the
-         *  execution of the deferred callback to be postponed until the
-         *  debounced method has not been called again during the delay (this
-         *  is the behavior of the _.debounce() method). Additionally, supports
-         *  the following options:
+         *  Note that the delay time will restart after each call of the
+         *  debounced method, causing the execution of the deferred callback to
+         *  be postponed until the debounced method has not been called again
+         *  during the delay (this is the behavior of the _.debounce() method).
+         *  Additionally, supports the following options:
          *  @param {Number} [options.maxDelay]
          *      If specified, a delay time used as a hard limit to execute the
          *      deferred callback after the first call of the debounced method,
@@ -1123,9 +1062,7 @@ define('io.ox/office/framework/app/baseapplication',
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
 
-            var // the context for the callback functions
-                context = Utils.getOption(options, 'context'),
-                // whether to not restart the timer on repeated calls with delay time
+            var // whether to not restart the timer on repeated calls with delay time
                 maxDelay = Utils.getIntegerOption(options, 'maxDelay', 0),
                 // the current timer used to execute the callback
                 debounceTimer = null,
@@ -1137,7 +1074,7 @@ define('io.ox/office/framework/app/baseapplication',
             // callback for a delay timer, executing the deferred callback
             function timerCallback() {
                 // execute the callback and return its result (for repeated execution)
-                return deferredCallback.call(context);
+                return deferredCallback();
             }
 
             // aborts and clears all timers
@@ -1181,7 +1118,7 @@ define('io.ox/office/framework/app/baseapplication',
                 createTimers();
 
                 // call the direct callback with the passed arguments
-                return directCallback.apply(context, _.toArray(arguments));
+                return directCallback.apply(undefined, _.toArray(arguments));
             };
         };
 
@@ -1318,9 +1255,12 @@ define('io.ox/office/framework/app/baseapplication',
                 // create the application window
                 win = ox.ui.createWindow({
                     name: self.getName(),
-                    search: Utils.getBooleanOption(appOptions, 'search', false),
-                    chromeless: Utils.getBooleanOption(appOptions, 'chromeless', false)
+                    search: Utils.getBooleanOption(options, 'search', false),
+                    chromeless: Utils.getBooleanOption(options, 'chromeless', false)
                 });
+
+            // do not detach window if specified
+            win.detachable = Utils.getBooleanOption(options, 'detachable', true);
 
             // set the window at the application instance
             self.setWindow(win);
@@ -1470,12 +1410,6 @@ define('io.ox/office/framework/app/baseapplication',
      *  @param {String} [appOptions.icon]
      *      If specified, the CSS class name of a Bootstrap icon that will be
      *      shown in the top level launcher tab next to the application title.
-     *  @param {Boolean} [options.search=false]
-     *      Whether the application window will contain and support the global
-     *      search tool bar.
-     *  @param {Boolean} [options.chromeless=false]
-     *      Whether to hide the main window tool bar attached to the left or
-     *      bottom border.
      *
      * @returns {Object}
      *  The launcher object expected by the ox.launch() method.
@@ -1490,7 +1424,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // no running application: create and initialize a new application object
             if (!_.isObject(app)) {
-                app = createApplication(moduleName, ApplicationClass, appOptions, launchOptions);
+                app = createApplication(moduleName, ApplicationClass, launchOptions, appOptions);
             }
 
             return app;
