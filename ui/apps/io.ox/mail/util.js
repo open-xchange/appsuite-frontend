@@ -16,8 +16,9 @@ define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
      'io.ox/core/api/account',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, settings, gt) {
+     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, gt) {
 
     'use strict';
 
@@ -89,7 +90,8 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value) {
-            return value.replace(rNotDigitAndAt, '').length === 0 &&
+            return capabilities.has('msisdn') &&
+                   value.replace(rNotDigitAndAt, '').length === 0 &&
                    value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
         },
 
@@ -101,7 +103,7 @@ define('io.ox/mail/util',
             var recipient = $.trim(s), match, name, target;
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address / telephone number
-                if (match[3].indexOf('@') > -1) {
+                if (that.getChannel(match[3]) === 'email') {
                     target = match[3].replace(rMailCleanup, '').toLowerCase();
                 } else {
                     target = that.cleanupPhone(match[3]);
@@ -109,7 +111,7 @@ define('io.ox/mail/util',
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
                 // case 2: assume plain email address / telephone number
-                if (recipient.indexOf('@') > -1) {
+                if (that.getChannel(recipient) === 'email') {
                     target = recipient.replace(rMailCleanup, '').toLowerCase();
                     name = target.split(/@/)[0];
                 } else {
