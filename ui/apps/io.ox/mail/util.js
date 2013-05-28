@@ -66,6 +66,8 @@ define('io.ox/mail/util',
         rMailCleanup = /(^<|>$)/g,
         // regex: remove special characters from telephone number
         rTelephoneCleanup = /[^0-9+]/g,
+        // regex: used to identify phone numbers
+        rNotDigitAndAt = /[^A-Za-z@]/g,
         // regex: clean up display name
         rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
@@ -87,7 +89,8 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value) {
-            return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
+            return value.replace(rNotDigitAndAt, '').length === 0 &&
+                   value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
         },
 
         cleanupPhone: function (phone) {
@@ -131,7 +134,7 @@ define('io.ox/mail/util',
                 //look Bug 23983
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (msExchange || recipient[1].indexOf('@') > -1 || recipient[1].replace(rTelephoneCleanup, '').length > 8) {
+                if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
                     list.push(recipient);
                 }
             }
