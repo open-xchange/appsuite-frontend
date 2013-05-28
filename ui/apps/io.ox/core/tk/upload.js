@@ -21,7 +21,7 @@ define('io.ox/core/tk/upload',
 
     function hasLeftViewport(e) {
         e = e.originalEvent || e;
-        if (_.browser.Firefox || _.browser.Safari) return true;
+        if (_.browser.Firefox || _.browser.Safari || _.browser.IE) return true;
         return (e.clientX === 0 && e.clientY === 0);
     }
 
