@@ -579,7 +579,6 @@ define("io.ox/core/main",
                         appClass = currentType.replace(/\W/g, '--');
                     node.find('.io-ox-specificHelp').hide();
                     node.find('.io-ox-specificHelp.' + appClass).show();
-                    console.log("appClass = ", appClass, currentType);
                 });
             }
         });
