@@ -490,7 +490,7 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(str + '');
+                ed.setContent(emoji.unifiedToImageTag(str) + '');
             },
 
             clear = function () {

@@ -45,13 +45,6 @@
                     });
                 });
             });
-            ed.onSetContent.add(function (ed, o) {
-                require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
-                    if (o.content) {
-                        o.content = emoji.unifiedToImageTag(o.content);
-                    }
-                });
-            });
 
             //TODO: translate title
             ed.addButton('emoji', {
