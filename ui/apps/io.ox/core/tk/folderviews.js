@@ -168,9 +168,10 @@ define('io.ox/core/tk/folderviews',
 
             toggleNode = function () {
                 if (!open) {
-                    openNode();
+                    return openNode();
                 } else {
                     closeNode();
+                    return $.when();
                 }
             },
 
@@ -357,7 +358,7 @@ define('io.ox/core/tk/folderviews',
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
 
-            nodes.folder = tmplFolder.clone().on('dblclick', '.folder-arrow, .folder-label', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick mousedown', '.folder-arrow, .folder-label', toggleState);
 
             if (level > 0) {
                 nodes.folder.css('paddingLeft', (0 + level * SUBFOLDERPADDING) + 'px');
@@ -807,23 +808,26 @@ define('io.ox/core/tk/folderviews',
                 origEvent.preventDefault();
                 // cursor right
                 if (treeNode && !treeNode.isOpen()) {
-                    treeNode.open();
-                    self.repaint();
+                    treeNode.open().done(function () {
+                        self.repaint();
+                    });
                 }
                 return false;
             case 37:
                 // cursor left
                 origEvent.preventDefault();
                 if (treeNode && treeNode.isOpen()) {
-                    treeNode.close();
-                    self.repaint();
+                    treeNode.close().done(function () {
+                        self.repaint();
+                    });
                 }
                 return false;
             case 32:
             case 13:
                 // enter
-                treeNode.toggle();
-                self.repaint();
+                treeNode.toggle().done(function () {
+                        self.repaint();
+                    });
                 return false;
             }
         });

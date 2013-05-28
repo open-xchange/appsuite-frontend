@@ -850,19 +850,30 @@ a.button {
 }
 
 /* vGrid */
-
 .vgrid {
 
     .user-select(none);
     outline: none;
 
     .vgrid-scrollpane {
+
         outline: none;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
+
+        &:focus .vgrid-cell.selected {
+
+            background-color: @selectedBackground;
+
+            * {
+                color: #fff !important;
+            }
+
+        }
+
     }
 
     &:focus {
@@ -942,6 +953,19 @@ a.button {
         right: 0;
         left: auto;
     }
+
+    &.editable {
+
+        .vgrid-cell-checkbox {
+            display: block;
+        }
+
+        .vgrid-cell {
+            padding-left: 43px; /* width + padding of .vgrid-cell-checkbox */
+        }
+
+    }
+
 }
 
 .vgrid-cell {
@@ -970,93 +994,78 @@ a.button {
         background-color: mix(@textColor, @background, 1000%/255);
     }
 
-
-}
-
-.vgrid-cell-padding {
-    padding: 8px 13px 8px 13px; /* for consistent elements */
-}
-
-.vgrid-cell-checkbox {
-
-    position: absolute;
-	left: 0;
-	width: 30px;
-    height: 100%;
-    display: none;
-    cursor: pointer;
-    padding: 5px 0 6px 13px;
-
-    label {
-        display: inline;
-        margin-bottom: 0px; /* reset bootstrap */
+    &.odd {
+        /*background-color: mix(@textColor, @background, 1000%/255);*/
     }
 
-    input {
-        border: 0px none;
+    &.vgrid-label {
+        font-weight: bold;
+        text-align: center;
+        line-height: 1em;
+        padding: 5px 13px 4px 13px;
+        background-color: mix(@textColor, @background, 100%/15);
+        border-bottom: 1px solid mix(@textColor, @background, 300%/15);
+        cursor: pointer;
+        .vertical-gradient(@background, mix(@textColor, @background, 1500%/255));
+
+        &.left {
+            text-align: left;
+        }
+
     }
 
-}
+    &.selected {
 
+        background-color: #ddd;
 
-.vgrid.editable .vgrid-cell-checkbox {
-    display: block;
-}
+        * {
+            -webkit-font-smoothing: antialiased;
+        }
 
-.vgrid.editable .vgrid-cell {
-	padding-left: 43px; /* width + padding of .vgrid-cell-checkbox */
-}
+    }
 
-.vgrid-cell.odd {
-    /*background-color: mix(@textColor, @background, 1000%/255);*/
-}
+    &.relative {
+        position: relative;
+    }
 
-.vgrid-cell.vgrid-label {
-    font-weight: bold;
-    text-align: center;
-    line-height: 1em;
-    padding: 5px 13px 4px 13px;
-    background-color: mix(@textColor, @background, 100%/15);
-    border-bottom: 1px solid mix(@textColor, @background, 300%/15);
-    cursor: pointer;
-    .vertical-gradient(@background, mix(@textColor, @background, 1500%/255));
-}
+    &.no-border {
+        border-bottom: 0px none;
+    }
 
-.vgrid-cell.vgrid-label.left {
-    text-align: left;
-}
+    &.tail {
 
-.vgrid-cell.selected {
-    background-color: desaturate(@selectedBackground, 50%);
-    border-bottom-color: rgba(0, 0, 0, 0.20);
-}
+        border-bottom: 0px none;
+        padding-top: 1em;
+        padding-bottom: 1em;
 
-.vgrid-scrollpane:focus .vgrid-cell.selected {
-    background-color: @selectedBackground;
-}
+        * {
+            white-space: normal;
+            line-height: 1.1em;
+        }
 
-.vgrid-cell.selected * {
-    color: @selectedColor !important;
-    -webkit-font-smoothing: antialiased;
-}
+    }
 
-.vgrid-cell.relative {
-    position: relative;
-}
+    .vgrid-cell-checkbox {
 
-.vgrid-cell.no-border {
-    border-bottom: 0px none;
-}
+        position: absolute;
+    	left: 0;
+    	width: 30px;
+        height: 100%;
+        display: none;
+        cursor: pointer;
+        padding: 5px 0 6px 13px;
 
-.vgrid-cell.tail {
-    border-bottom: 0px none;
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
+        label {
+            display: inline;
+            margin-bottom: 0px; /* reset bootstrap */
+        }
 
-.vgrid-cell.tail * {
-    white-space: normal;
-    line-height: 1.1em;
+        input {
+            border: 0px none;
+        }
+
+    }
+
 }
 
 .io-ox-sidepopup .vgrid-cell {
@@ -1592,10 +1601,14 @@ input.nice-input {
 
         &.selected {
 
-            background-color: desaturate(@selectedBackground, 50%) !important;
+            background-color: @foldertreeSelectedBackground !important;
 
             * {
                 color: white !important;
+            }
+
+            .folder-counter-badge {
+                background-color: @foldertreeSelectedBackground !important;
             }
 
         }
@@ -1609,6 +1622,9 @@ input.nice-input {
 
     &:focus .folder.selected {
         background-color: @selectedBackground !important;
+        .folder-counter-badge {
+            background-color: @selectedBackground !important;
+        }
     }
 
     .folder-row {
@@ -1787,7 +1803,7 @@ input.nice-input {
             }
 
             .folder.show-counter {
-                .folder-label { color: @linkOnDark !important; }
+                .folder-label {}
             }
 
             .folder-arrow, a {
