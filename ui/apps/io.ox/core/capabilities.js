@@ -59,7 +59,12 @@ define('io.ox/core/capabilities', function () {
         },
 
         reset: function () {
-            capabilities = _.extend({}, added, ox.serverConfig.capabilities);
+            // consider "added" hash
+            capabilities = _.extend({}, added);
+            // loop over array
+            _(ox.serverConfig.capabilities).each(function (obj) {
+                capabilities[obj.id] = obj;
+            });
         }
     };
 
