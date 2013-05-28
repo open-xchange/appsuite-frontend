@@ -90,7 +90,7 @@ define('io.ox/mail/util',
             return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
         },
 
-        cleanup: function (phone) {
+        cleanupPhone: function (phone) {
             return phone.replace(rTelephoneCleanup, '');
         },
 
@@ -101,7 +101,7 @@ define('io.ox/mail/util',
                 if (match[3].indexOf('@') > -1) {
                     target = match[3].replace(rMailCleanup, '').toLowerCase();
                 } else {
-                    target = match[3].replace(rTelephoneCleanup, '');
+                    target = that.cleanupPhone(match[3]);
                 }
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
@@ -110,7 +110,7 @@ define('io.ox/mail/util',
                     target = recipient.replace(rMailCleanup, '').toLowerCase();
                     name = target.split(/@/)[0];
                 } else {
-                    name = target = recipient.replace(rTelephoneCleanup, '');
+                    name = target = that.cleanupPhone(recipient);
                 }
             }
             return [name, target];
