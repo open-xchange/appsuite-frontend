@@ -357,8 +357,8 @@
 }
 
 .io-ox-mail-write .text-editor:focus {
-    border-color: #fff;
-    .box-shadow(0px 0px 4px 0px @outlineColor);
+     border-color: rgba(82, 168, 236, 0.8);
+    .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
 }
 
 .io-ox-mail-write .change-format {
@@ -456,4 +456,61 @@
         }
     }
 }
+@media (max-width: 480px) {
+    .io-ox-mail-write {
 
+        input[type=text], textarea, .text-editor {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+        }
+        input[type=text]:focus, input[type=text].discreet:focus, textarea.discreet:focus {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+
+            border-color: #ccc;;
+        }
+        input[type=text].subject {
+            padding-left: 5px;
+        }
+        .leftside {
+            background: #fff; /* let's make it flat */
+            .title {
+                display: none;
+            }
+            padding: 5px;
+        }
+        .rightside {
+            background: #fff; /* let's make it flat */
+            padding: 5px;
+            .editor-outer-container {
+                border-top-width: 0;
+                left: 1px;
+                right: 1px;
+                top: 73px;
+            }
+            .editor-inner-container {
+                .text-editor {
+                    border-top: none;
+                    padding: 5px;
+                }
+                .text-editor:focus {
+                    box-shadow: none;
+                    -webkit-box-shadow: none;
+                    border-color: #ccc;
+                }
+            }
+            .editor-print-margin {
+                display: none !important;
+            }
+            .priority-overlay {
+                display: none;
+            }
+        }
+    }
+}
