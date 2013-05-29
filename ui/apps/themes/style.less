@@ -663,12 +663,19 @@
         outline: 0;
 
         &:focus {
-            i { color: darken(@toolbarButtonColor, 30%); text-decoration: none; }
+
+            i {
+                color: darken(@toolbarButtonColor, 30%);
+                text-decoration: none;
+            }
+
             i.accent-color {
                 background-color: darken(@toolbarButtonAccent, 10%);
                 border-color: darken(@toolbarButtonAccent, 10%);
             }
+
         }
+
     }
 
     & > a i {
@@ -1097,8 +1104,8 @@ a.button {
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
-        width: 30px;
+    	left: 0;
+    	width: 30px;
         display: none;
         cursor: pointer;
         padding: 7px 0 0 13px;
@@ -1380,7 +1387,7 @@ span.hint {
 
 /* inline links */
 .io-ox-inline-links {
-    position: relative;
+    position:relative;
     font-size: @inlineLinkFontSize;
     margin: @inlineLinksMargin;
     clear: both;
@@ -1475,8 +1482,22 @@ nav.io-ox-inline-links + header {
 
 /* side popups */
 .io-ox-sidepopup {
+
     background-color: white;
     z-index: 3; /* above .window-content */
+
+    &.right {
+        left: 49.5%;
+        right: 0px;
+        .box-shadow(-10px 0px 50px -5px #888);
+    }
+
+    &.left {
+        left: 0px;
+        right: 49.5%;
+        .box-shadow(10px 0px 50px -5px #888);
+    }
+
 }
 
 .io-ox-sidepopup-overlay {
@@ -1489,93 +1510,77 @@ nav.io-ox-inline-links + header {
     padding-top: 0px;
 }
 
-.io-ox-sidepopup.right {
-    left: 49.5%;
-    right: 0px;
-    .box-shadow(-10px 0px 50px -5px #888);
-}
-
-.io-ox-sidepopup.left {
-    left: 0px;
-    right: 49.5%;
-    .box-shadow(10px 0px 50px -5px #888);
-}
 
 .io-ox-sidepopup-close {
+
     text-align: right;
-    margin: 0 40px;
-}
+    margin: 13px 40px;
 
-.io-ox-sidepopup-close {
-
-    .btn-sidepopup {
-        display: inline-block;
-        background-color: #eee;
-        color: #aaa;
-        padding: 6px 13px;
-        border-radius: 0 0 5px 5px;
-        cursor: pointer;
+    .btn {
         margin-left: 13px;
         .user-select(none);
     }
 
-    .btn-sidepopup:hover {
-        background-color: #aaa;
-        color: #eee;
-        text-decoration: none;
-    }
 }
-
-
-.io-ox-sidepopup.left .io-ox-sidepopup-close { right: 25px; }
-.io-ox-sidepopup.right .io-ox-sidepopup-close { right: 25px; }
 
 .io-ox-sidepopup-arrow {
+
     position: absolute;
     z-index: 4;
-}
 
-.io-ox-sidepopup-arrow.left { left: 0px; right: 49.5%; }
-.io-ox-sidepopup-arrow.right { left: 49.5%; right: 0px; }
+    .border {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border: 20px solid transparent;
+        top: -20px;
+    }
 
-.io-ox-sidepopup-arrow .border {
-    position: absolute;
-    height: 0;
-    width: 0;
-    border: 20px solid transparent;
-    top: -20px;
-}
+    .triangle {
+        position: absolute;
+        height: 0;
+        width: 0px;
+        border: 20px solid transparent;
+        top: -20px;
+    }
 
-.io-ox-sidepopup-arrow .triangle {
-    position: absolute;
-    height: 0;
-    width: 0px;
-    border: 20px solid transparent;
-    top: -20px;
-}
+    &.left {
 
-.io-ox-sidepopup-arrow.left .border {
-    border-left-color: #eee;
-    right: -40px;
-}
+        left: 0px;
+        right: 49.5%;
 
-.io-ox-sidepopup-arrow.left .triangle {
-    border-left-color: #fff;
-    right: -39px;
-}
+        .border {
+            border-left-color: #eee;
+            right: -40px;
+        }
 
-.io-ox-sidepopup-arrow.right .border {
-    border-right-color: #eee;
-    left: -40px;
-}
+        .triangle {
+            border-left-color: #fff;
+            right: -39px;
+        }
 
-.io-ox-sidepopup-arrow.right .triangle {
-    border-right-color: #fff;
-    left: -39px;
+    }
+
+    &.right {
+
+        left: 49.5%;
+        right: 0px;
+
+        .border {
+            border-right-color: #eee;
+            left: -40px;
+        }
+
+        .triangle {
+            border-right-color: #fff;
+            left: -39px;
+        }
+
+    }
+
 }
 
 /* input fields */
-
 input.nice-input {
     color: @textColor;
     background-color: white;
@@ -1644,7 +1649,6 @@ input.nice-input {
 }
 
 /* folder tree */
-
 .io-ox-foldertree {
 
     overflow: auto;
@@ -1678,18 +1682,13 @@ input.nice-input {
             background-color: #efefef;
         }
 
-        &.selected {
+        &.selected, &.selected:hover {
 
-            background-color: @foldertreeSelectedBackground !important;
+            background-color: @selectedBackground;
 
             * {
-                color: white !important;
+                color: #fff;
             }
-
-            .folder-counter-badge {
-                background-color: @foldertreeSelectedBackground !important;
-            }
-
         }
 
         &.disabled {
@@ -1699,11 +1698,22 @@ input.nice-input {
 
     }
 
-    &:focus .folder.selected {
-        background-color: @selectedBackground !important;
-        .folder-counter-badge {
-            background-color: @selectedBackground !important;
+    &:focus .folder {
+
+        &.selected {
+
+            background-color: #08c;
+
+            * {
+                color: #fff;
+            }
+
+            .folder-counter-badge {
+                background-color: #006597;
+            }
+
         }
+
     }
 
     .folder-row {
@@ -1715,12 +1725,20 @@ input.nice-input {
     }
 
     .folder-arrow {
+
         display: table-cell;
         width: 50px;
         text-align: center;
         color: #aaa;
-        &:hover { text-decoration: none; }
-        i { display: block; width: 50px; }
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        i {
+            display: block; width: 50px;
+        }
+
     }
 
     .folder-label {
@@ -1770,8 +1788,14 @@ input.nice-input {
     }
 
     .show-counter {
-        .folder-counter-badge { display: inline-block; }
-        .folder-label { font-weight: bold; }
+
+        .folder-counter-badge {
+            display: inline-block;
+        }
+        .folder-label {
+            font-weight: bold;
+        }
+
     }
 
     .folder.selected .folder-counter-badge {
@@ -1820,7 +1844,9 @@ input.nice-input {
 
     background-color: @foldertreeSidepanelBackground;
 
-    &.border-right { border: 0px none; }
+    &.border-right {
+        border: 0px none;
+    }
 
     .resizebar {
         background: transparent;
@@ -1845,21 +1871,63 @@ input.nice-input {
                 color: @foldertreeSectionTitleColor;
             }
 
-            .folder.selectable .folder-label {
-                color: @foldertreeActiveLabelColor;
+            .folder {
+
+                &.selectable .folder-label {
+                    color: @foldertreeActiveLabelColor;
+                }
+
+                &.unreadable .folder-label {
+                    color: @foldertreePassiveLabelColor;
+                }
+
+                &.selectable.dnd-over, &.selectable:hover {
+                    background-color: @foldertreeHoverBackground;
+                }
+
+                &.selected {
+
+                    font-weight: bold;
+                    background-color: @foldertreeSelectedBackground;
+
+                    .folder-label {
+                        color: lighten(@linkColor, 20%);
+                    }
+
+                }
+
+                .shared-by {
+                    padding-left: 0;
+                    font-size: 12px;
+                }
+
+                .folder-counter-badge {
+                    background-color: @foldertreeBadgeBackground;
+                    color: @foldertreeBadgeColor;
+                }
+
             }
 
-            .folder.unreadable .folder-label {
-                color: @foldertreePassiveLabelColor;
+            &:focus .folder {
+
+                &.selected {
+
+                    background-color: #08c;
+
+                    .folder-label {
+                        color: #fff;
+                    }
+
+                    .folder-counter-badge {
+                        background-color: #006597;
+                    }
+
+                }
+
             }
 
             .folder-icon {
                 display: none;
-            }
-
-            .folder.selectable.dnd-over,
-            .folder.selectable:hover {
-                background-color: @foldertreeHoverBackground;
             }
 
             .io-ox-fail {
@@ -1867,35 +1935,9 @@ input.nice-input {
                 padding: 1em 0;
             }
 
-            .folder.selected {
-                background-image: none !important;
-                font-weight: bold;
-            }
-
-            .folder-counter-badge {
-                background-color: @foldertreeBadgeBackground;
-                color: @foldertreeBadgeColor;
-            }
-
-            .folder.show-counter {
-                .folder-label {}
-            }
-
             .folder-arrow, a {
                 font-size: 13px;
                 color: lighten(@linkColor, 20%);
-            }
-
-            .folder .shared-by {
-                padding-left: 0;
-                font-size: 12px;
-            }
-
-        }
-
-        &:focus.io-ox-foldertree {
-
-            .folder.selected {
             }
 
         }
