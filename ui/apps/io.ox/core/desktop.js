@@ -852,7 +852,7 @@ define("io.ox/core/desktop",
                     draw: function () {
                         return this.body.append(
                             // default perspective
-                            this.main = $('<div class="abs window-content">'),
+                            this.main = $('<div class="abs window-content">').attr({ tabindex: -1 }),
                             // search area
                             this.search = $('<div class="window-search">')
                         );
@@ -1158,9 +1158,11 @@ define("io.ox/core/desktop",
                 };
 
                 this.addPerspective = function (pers) {
-                    var id = pers.name;
+                    var id = pers.name, node;
                     if (this.nodes[id] === undefined) {
-                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
+                        this.nodes.body.append(
+                            node = $('<div class="abs window-content" tabindex="-1">').hide()
+                        );
                         perspectives[id] = pers;
                         return this.nodes[id] = node;
                     } else {
@@ -1359,7 +1361,8 @@ define("io.ox/core/desktop",
                                 autocomplete: 'off',
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
-                                id: searchId
+                                id: searchId,
+                                'aria-label': gt('Search')
                             })
                             .on(searchHandler)
                             .placeholder(),
@@ -1367,13 +1370,14 @@ define("io.ox/core/desktop",
                             $('<i class="icon-remove clear-query">')
                             .on('click', searchHandler.clear)
                         ),
-                        $('<button type="submit" data-action="search" class="btn margin-right"><i class="icon-search"></i></button>')
-                        .on('click', searchHandler.change)
+                        $('<button type="submit" data-action="search" class="btn margin-right" aria-hidden="true">')
+                            .on('click', searchHandler.change)
+                            .append('<i class="icon-search">')
+
                     ),
                     //abort button
                     $('<a href="#" data-action="remove">×</a>')
-                        .addClass('close')
-                        .addClass('close-big')
+                        .addClass('close close-big')
                         .on('click', function fnCancel(e) {
                                 e.preventDefault();
                                 win.search.stop();
@@ -1415,7 +1419,7 @@ define("io.ox/core/desktop",
                         id: 'search',
                         index: 300,
                         icon: function () {
-                            return $('<i class="icon-search">');
+                            return $('<i class="icon-search">').attr('aria-label', gt('Search'));
                         }
                     });
                 }

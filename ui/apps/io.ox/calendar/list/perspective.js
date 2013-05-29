@@ -32,7 +32,7 @@ define('io.ox/calendar/list/perspective',
         var win = app.getWindow(),
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
-            right = vsplit.right.addClass('default-content-padding calendar-detail-pane').scrollable(),
+            right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
             grid = new VGrid(left, {settings: settings}),
             findRecurrence = false;
 
@@ -73,7 +73,7 @@ define('io.ox/calendar/list/perspective',
         });
 
         var directAppointment;//directly linked appointments are stored here
-        
+
         //function to check for a selection change to prevent refresh from overiding direct links
         function checkDirectlink(e, list) {
             if (list.length > 1 || (list.length === 1 && list[0].id !== directAppointment.id)) {
@@ -84,7 +84,7 @@ define('io.ox/calendar/list/perspective',
         function showAppointment(obj, directlink) {
             // be busy
             right.busy(true);
-            
+
             //direct links are preferred
             if (directlink) {
                 grid.prop('directlink', true);
@@ -155,14 +155,23 @@ define('io.ox/calendar/list/perspective',
                 this.prepend(
                     $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
                         .append(
-                            $('<a>', { href: '#' })
+                            $('<a>', {
+                                    href: '#',
+                                    tabindex: 1,
+                                    'data-toggle': 'dropdown',
+                                    role: 'menuitem',
+                                    'aria-haspopup': true,
+                                    'aria-label': gt('Sort options')
+                                })
                                 .attr('data-toggle', 'dropdown')
                                 .append(
                                     $('<i class="icon-arrow-down">'),
                                     $('<i class="icon-arrow-up">')
                                 )
                                 .dropdown(),
-                            $('<ul>').addClass("dropdown-menu")
+                            $('<ul>').addClass("dropdown-menu").attr({
+                                    role: 'menu'
+                                })
                                 .append(
                                     buildOption('desc', gt('Ascending')),
                                     buildOption('asc', gt('Descending')),

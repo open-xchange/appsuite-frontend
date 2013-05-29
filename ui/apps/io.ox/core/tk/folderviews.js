@@ -164,6 +164,16 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.hide();
                 updateArrow();
                 tree.toggle();
+                return $.when();
+            },
+
+            toggleNode = function () {
+                if (!open) {
+                    return openNode();
+                } else {
+                    closeNode();
+                    return $.when();
+                }
             },
 
             // open/close tree node
@@ -178,7 +188,7 @@ define('io.ox/core/tk/folderviews',
                     if (isArrow || (isLabel && isUnselectable)) {
                         // avoid selection; allow for unreadable
                         e.preventDefault();
-                        if (!open) { openNode(); } else { closeNode(); }
+                        toggleNode();
                     }
                 }
             };
@@ -192,6 +202,7 @@ define('io.ox/core/tk/folderviews',
         // open & close
         this.open = openNode;
         this.close = closeNode;
+        this.toggle = toggleNode;
 
         this.isOpen = function () {
             return hasChildren() && (open === true || (tree.options.skipRoot && tree.options.rootFolderId === id));
@@ -457,7 +468,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = this.internal.paint.call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('paint');
                     p.running = null;
                 });
@@ -474,7 +485,7 @@ define('io.ox/core/tk/folderviews',
                 this.selection.clearIndex();
                 p.running = (this.internal.repaint || this.internal.paint).call(this) || $.when();
                 p.running.always(function () {
-                    self.selection.update();
+                    self.selection.updateIndex();
                     self.trigger('repaint');
                     p.running = null;
                 });
@@ -789,6 +800,37 @@ define('io.ox/core/tk/folderviews',
         this.selection.on('change', function (e, selection) {
             var id = _(selection).first();
             if (id) { self.options.select(id); }
+        })
+        .on('keyboard', function (event, origEvent, key) {
+            var id = this.get(),
+                treeNode = self.getNode(id);
+            switch (key) {
+            case 39:
+                origEvent.preventDefault();
+                // cursor right
+                if (treeNode && !treeNode.isOpen()) {
+                    treeNode.open().done(function () {
+                        self.repaint();
+                    });
+                }
+                return false;
+            case 37:
+                // cursor left
+                origEvent.preventDefault();
+                if (treeNode && treeNode.isOpen()) {
+                    treeNode.close().done(function () {
+                        self.repaint();
+                    });
+                }
+                return false;
+            case 32:
+            case 13:
+                // enter
+                treeNode.toggle().done(function () {
+                        self.repaint();
+                    });
+                return false;
+            }
         });
 
         function deferredEach(list, done) {
@@ -981,7 +1023,7 @@ define('io.ox/core/tk/folderviews',
                 }
             })
             .done(function () {
-                self.selection.update();
+                self.selection.updateIndex();
             })
             .fail(function (error) {
                 self.container.append(

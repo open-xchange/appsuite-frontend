@@ -219,7 +219,7 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             // inner container
-            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
+            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node).attr('tabindex', 1),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
 
             // bottom toolbar
@@ -257,13 +257,13 @@ define('io.ox/core/tk/vgrid',
                     options.showCheckbox === false ?
                         [] :
                         $('<label class="select-all">').append(
-                            $('<input type="checkbox" value="true">').attr('title', gt('Select all'))
+                            $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
                         )
                         .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#' })
+                        $('<a>', { href: '#', tabindex: -1 })
                         .css('float', 'left')
                         .append($('<i class="icon-th-list">'))
                         .on('click', { grid: this }, fnToggleEditable)
@@ -483,7 +483,7 @@ define('io.ox/core/tk/vgrid',
                     this.prepend(
                         fields.div = $('<div class="vgrid-cell-checkbox">').append(
                             fields.label = $('<label>').append(
-                                fields.input = $('<input type="checkbox" class="reflect-selection">')
+                                fields.input = $('<input type="checkbox" class="reflect-selection" aria-hidden="true">').attr('tabindex', -1)
                             )
                         )
                     );
@@ -1075,7 +1075,7 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.keyboard = function (flag) {
-            this.selection.keyboard(flag);
+            this.selection.keyboard(scrollpane, flag);
         };
 
         this.getToolbar = function () {
@@ -1220,6 +1220,10 @@ define('io.ox/core/tk/vgrid',
             this.scrollTop(0);
             self.selection.clear();
             self.selection.resetLastIndex();
+        });
+
+        scrollpane.on('focus', function () {
+            self.selection.selectSmart();
         });
 
         // default implementation if hash cannot be mapped

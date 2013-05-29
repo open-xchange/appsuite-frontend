@@ -33,7 +33,7 @@ define('io.ox/mail/folderview-extensions',
         index: 300,
         draw: function (baton) {
             this.append($('<li>').append(
-                $('<a href="#" data-action="add-mail-account">').text(gt('Add mail account')).on('click', addAccount)
+                $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">').text(gt('Add mail account')).on('click', addAccount)
             ));
         }
     });
@@ -48,7 +48,7 @@ define('io.ox/mail/folderview-extensions',
         index: 400,
         draw: function (baton) {
             this.append($('<li>').append(
-                $('<a href="#" data-action="subscribe">').text(gt('Subscribe IMAP folders'))
+                $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
                 .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
             ));
         }
@@ -71,7 +71,7 @@ define('io.ox/mail/folderview-extensions',
         draw: function (baton) {
             this.append(
                 $('<li>').append(
-                    $('<a href="#" data-action="markfolderread">')
+                    $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
                     .text(gt('Mark all mails as read'))
                     .on('click', { app: baton.app }, markMailFolderRead)
                     .addClass(baton.data.unread === 0 ? 'disabled' : undefined)
@@ -91,11 +91,12 @@ define('io.ox/mail/folderview-extensions',
         id: 'expunge',
         index: 75,
         draw: function (baton) {
-            var link = $('<a href="#" data-action="expunge">').text(gt('Clean up'));
+            var link = $('<a href="#" data-action="expunge" role="menuitem">').text(gt('Clean up'));
             this.append($('<li>').append(link));
             if (folderAPI.can('delete', baton.data)) {
-                link.on('click', { baton: baton }, expungeFolder);
-            } else {link.addClass('disabled').on('click', $.preventDefault);
+                link.attr('tabindex', 1).on('click', { baton: baton }, expungeFolder);
+            } else {
+                link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
             }
             this.append($('<li class="divider">'));
         }
@@ -112,12 +113,12 @@ define('io.ox/mail/folderview-extensions',
         id: 'clear',
         index: 450,
         draw: function (baton) {
-            var link = $('<a href="#" data-action="clearfolder">').text(gt('Empty folder'));
+            var link = $('<a href="#" data-action="clearfolder" role="menuitem">').text(gt('Empty folder'));
             this.append($('<li class="divider">'), $('<li>').append(link));
             if (folderAPI.can('delete', baton.data)) {
-                link.on('click', { baton: baton }, clearFolder);
+                link.attr('tabindex', 1).on('click', { baton: baton }, clearFolder);
             } else {
-                link.addClass('disabled').on('click', $.preventDefault);
+                link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
             }
         }
     });

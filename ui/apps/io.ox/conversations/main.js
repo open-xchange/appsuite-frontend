@@ -361,11 +361,11 @@ define("io.ox/conversations/main",
         });
 
         win.on("show", function () {
-            grid.selection.keyboard(true);
+            grid.keyboard(true);
             resumePolling();
         });
         win.on("hide", function () {
-            grid.selection.keyboard(false);
+            grid.keyboard(false);
             stopPolling();
         });
 

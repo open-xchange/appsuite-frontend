@@ -383,7 +383,7 @@ define('io.ox/contacts/actions',
                 });
                 return cleaned;
             }
-
+            
             api.getList(list).done(function (list) {
                 // set participants
                 var def = $.Deferred(),

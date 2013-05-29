@@ -43,10 +43,15 @@ define('io.ox/files/list/view-detail',
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<div>').addClass('title clear-title')
+                $('<div tabindex="1">').addClass('title clear-title')
                 .text(gt.noI18n(baton.data.title || baton.data.filename || '\u00A0'))
                 .on('dblclick', function () {
                     actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                })
+                .on('keydown', function (e) {
+                    if ((e.keyCode || e.which) === 13) { // enter
+                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                    }
                 })
             );
         }
@@ -192,11 +197,11 @@ define('io.ox/files/list/view-detail',
                     $('<div class="pull-left">').append(
                         $input
                     ),
-                    $uploadButton = $('<button class="uploadbutton">', { 'data-action': 'upload' }).addClass('btn btn-primary pull-right').text(gt('Upload file')),
+                    $uploadButton = $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row-fluid">').append(
                             $('<label>').text(gt('Version Comment')),
-                            $commentArea = $('<textarea rows="5"></textarea>')
+                            $commentArea = $('<textarea rows="5" tabindex="1"></textarea>')
                         ).hide()
                     )
                 )
@@ -326,7 +331,7 @@ define('io.ox/files/list/view-detail',
                 }
 
                 var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
-                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#' }).addClass('noI18n').text($historyDefaultLabel)
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#', tabindex: 1 }).addClass('noI18n').text($historyDefaultLabel)
                         .on('click', function (e) {
                         e.preventDefault();
                         if ($content.is(':hidden')) {
@@ -390,7 +395,7 @@ define('io.ox/files/list/view-detail',
         id: 'created_by',
         index: 40,
         draw: function (baton) {
-            this.find('td:last').append($('<span class="pull-right createdby">').append(userAPI.getLink(baton.data.created_by)));
+            this.find('td:last').append($('<span class="pull-right createdby">').append(userAPI.getLink(baton.data.created_by).attr('tabindex', 1)));
         }
     });
 

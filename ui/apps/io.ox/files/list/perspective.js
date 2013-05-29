@@ -31,7 +31,7 @@ define('io.ox/files/list/perspective',
         var win = app.getWindow(),
         vsplit = commons.vsplit(this.main, app),
         left = vsplit.left.addClass('border-right'),
-        right = vsplit.right.addClass('default-content-padding').scrollable(),
+        right = vsplit.right.addClass('default-content-padding').attr('tabindex', 1).scrollable(),
         grid = new VGrid(left, {settings: app.settings}),
         dropZone;
 

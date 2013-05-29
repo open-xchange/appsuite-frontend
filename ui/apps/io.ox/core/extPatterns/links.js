@@ -41,7 +41,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (baton) {
             baton = ext.Baton.ensure(baton);
             this.append(
-                $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
+                $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
                 .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
                     'data-prio': self.prio || 'lo',
@@ -72,8 +72,8 @@ define("io.ox/core/extPatterns/links",
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').append(
-                        $('<a href="#">').attr('data-action', extension.ref).text(extension.label)
+                    $('<li>').attr('role', 'menuitem').append(
+                        $('<a href="#" tabindex="1">').attr('data-action', extension.ref).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -116,7 +116,7 @@ define("io.ox/core/extPatterns/links",
 
     var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
         baton = ext.Baton.ensure(baton);
-        var nav = $('<nav>').appendTo(node);
+        var nav = $('<nav role="presentation">').appendTo(node);
         return getLinks(self, collection, baton, args)
             .always(function (links) {
                 // count resolved links
@@ -194,7 +194,7 @@ define("io.ox/core/extPatterns/links",
                 if (!multiple && all.length > 5 && lo.length > 1) {
                     nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more">').append(
+                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">').append(
                                 $.txt(gt('More')),
                                 $.txt(_.noI18n(' ...')),
                                 $('<b class="caret">')
@@ -206,7 +206,7 @@ define("io.ox/core/extPatterns/links",
                                     $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
                                 }
                             }),
-                            $('<ul class="dropdown-menu dropdown-right">').append(
+                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                                 lo.map(wrapAsListItem)
                             )
                         )
@@ -229,7 +229,7 @@ define("io.ox/core/extPatterns/links",
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 11000) })
                 .appendTo(this),
-            $toggle = $('<a href="#" data-toggle="dropdown">')
+            $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
                 .text(options.label || baton.label || '###')
                 .append(
@@ -242,7 +242,7 @@ define("io.ox/core/extPatterns/links",
         $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
 
         // create & add node first, since the rest is async
-        var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
+        var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
         if (options.open === 'left') {
             node.addClass("pull-right").css({textAligh: 'left'});
         }
@@ -309,14 +309,14 @@ define("io.ox/core/extPatterns/links",
         }
 
         function draw(extension, baton) {
-            var args = $.makeArray(arguments), a, ul, title = [];
+            var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
-                $('<div class="toolbar-button dropdown">').append(
-                    a = $('<a href="#" data-toggle="dropdown" title="">')
+                div = $('<div class="toolbar-button dropdown">').append(
+                    a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
-                    ul = $('<ul class="dropdown-menu dropdown-right-side">')
+                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu" aria-hidden="true">')
                 )
             );
             // get links
@@ -332,11 +332,15 @@ define("io.ox/core/extPatterns/links",
                             x.draw.call(ul, baton);
                         });
                     // set title attribute
-                    a.attr('title', extension.label || title.join(', '));
+                    a.attr('title', extension.label || title.join(', '))
+                     .attr('aria-label', extension.label || title.join(', '))
+                     .attr('aria-haspopup', true);
+
+                    div.attr('role', 'menu');
                     // add footer label?
                     if (extension.label) {
                         ul.append(
-                            $('<li class="dropdown-footer">').text(extension.label)
+                            $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
                         );
                     }
                 } else {
@@ -345,8 +349,13 @@ define("io.ox/core/extPatterns/links",
                     ul.remove();
                     if (links.length === 1) {
                         // directly link actions
-                        a.attr('title', links[0].label || '')
-                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        a.attr({
+                            title: links[0].label || '',
+                            'aria-label': links[0].label || '',
+                            role: 'menuitem',
+                            tabindex: 1
+                        })
+                        .on('click', { baton: baton, extension: links[0] }, actionClick);
                     } else {
                         a.addClass('disabled').on('click', preventDefault);
                     }

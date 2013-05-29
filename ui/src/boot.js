@@ -354,13 +354,15 @@ $(window).load(function () {
                     $('[data-i18n]').each(function () {
                         var node = $(this),
                             val = gt(node.attr('data-i18n')),
-                            target = node.attr('data-i18n-attr') || 'text';
-                        switch (target) {
-                        case 'value': node.val(val); break;
-                        case 'text': node.text(val); break;
-                        case 'label': node.contents().get(-1).nodeValue = val; break;
-                        default: node.attr(target, val); break;
-                        }
+                            target = (node.attr('data-i18n-attr') || 'text').split(',');
+                        _.each(target, function (el) {
+                            switch (el) {
+                            case 'value': node.val(val); break;
+                            case 'text': node.text(val); break;
+                            case 'label': node.contents().get(-1).nodeValue = val; break;
+                            default: node.attr(el, val); break;
+                            }
+                        });
                     });
                     // Set Cookie
                     _.setCookie('language', (ox.language = id));
@@ -683,7 +685,7 @@ $(window).load(function () {
                         var link;
                         i++;
                         node.append(
-                            $('<a href="#">')
+                            $('<a href="#" aria-label="' + lang[langSorted[id]] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])
                         );
@@ -696,9 +698,9 @@ $(window).load(function () {
                         changeLanguage($(this).val());
                         forcedLanguage = $(this).val();
                     });
-                    for (id in lang) {
+                    for (id in langSorted) {
                         sel.append(
-                            $('<option>').attr('value', id)
+                            $('<option aria-label="' + lang[langSorted[id]] + '">').attr('value', id)
                                 .text(lang[langSorted[id]])
                         );
                     }

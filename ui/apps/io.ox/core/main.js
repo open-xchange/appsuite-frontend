@@ -11,26 +11,26 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/main",
-    ["io.ox/core/desktop",
-     "io.ox/core/session",
-     "io.ox/core/http",
-     "io.ox/core/api/apps",
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/stage",
-     "io.ox/core/date",
+define('io.ox/core/main',
+    ['io.ox/core/desktop',
+     'io.ox/core/session',
+     'io.ox/core/http',
+     'io.ox/core/api/apps',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/stage',
+     'io.ox/core/date',
      'io.ox/core/notifications',
      'io.ox/core/commons', // defines jQuery plugin
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
-     "settings!io.ox/core",
-     "gettext!io.ox/core",
+     'settings!io.ox/core',
+     'gettext!io.ox/core',
      'io.ox/core/relogin',
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, settings, gt) {
+     'io.ox/core/bootstrap/basics'], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, settings, gt) {
 
     "use strict";
 
-    var PATH = ox.base + "/apps/io.ox/core",
+    var PATH = ox.base + '/apps/io.ox/core',
         DURATION = 250;
 
     var logout = function (opt) {
@@ -83,18 +83,14 @@ define("io.ox/core/main",
 
         var items = launchers.children('.launcher'),
         itemsVisible = launchers.children('.launcher:visible'),
-        itemsRight = topbar.children('.launcher.right'),
+        itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
         itemsLeftWidth = 0,
-        itemsRightWidth = $('#io-ox-top-logo-small', topbar).outerWidth(true),
         viewPortWidth = $(document).width(),
         launcherDropDownIcon = $('.launcher-dropdown', topbar),
         launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
         launcherDropDownIcon.hide();
 
-        itemsRight.each(function () {
-            itemsRightWidth += $(this).outerWidth(true);
-        });
         itemsVisible.each(function () {
             itemsLeftWidth += $(this).outerWidth(true);
         });
@@ -131,18 +127,8 @@ define("io.ox/core/main",
 
     // add launcher
     var addLauncher = function (side, label, fn) {
-        var node = $('<div class="launcher">'),
-            sideTags = side.split(' '),
-            wrap = false;
+        var node = $('<li class="launcher">');
 
-        if (sideTags.length > 1) {//only wrap uses 2 tags
-            wrap = true;
-            if (sideTags[0] === 'wrap') {//to make order unimportant
-                side = sideTags[1];
-            } else {
-                side = sideTags[0];
-            }
-        }
         if (fn) {
             node.hover(
                 function () { if (!Modernizr.touch) { $(this).addClass('hover'); } },
@@ -162,25 +148,18 @@ define("io.ox/core/main",
             });
         }
 
-        if (wrap) {//wrap means the label should be wrapped instead of appended to keep positioning
-            node.addClass(side);
-            //add wrapper
-            label.wrap(node);
-        } else {
-            // construct
-            node.append(
-                _.isString(label) ? $('<a href="#">').text(gt.pgettext('app', label)) :  label
-            );
-        }
-        // just add if not wrapped
-        if (!wrap) {
-            if (side === 'left') {
-                node.appendTo(launchers);
+        //construct
+        node.append(function () {
+            if (_.isString(label)) {
+                return $('<a href="#" tabindex="1">').text(gt.pgettext('app', label));
+            } else if (label[0].tagName === 'I') {
+                return $('<a href="#" tabindex="1">').append(label);
             } else {
-                node.addClass('right').appendTo(topbar);
+                return label;
             }
-        }
-        return node;
+        });
+
+        return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
     function initRefreshAnimation() {
@@ -395,8 +374,10 @@ define("io.ox/core/main",
 
         function add(node, container, model) {
             var placeholder;
-            node.attr('data-app-name', model.get('name') || model.id)
-                .attr('data-app-guid', model.guid);
+            node.attr({
+                'data-app-name': model.get('name') || model.id,
+                'data-app-guid': model.guid
+            });
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
@@ -418,7 +399,7 @@ define("io.ox/core/main",
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || 'icon-pencil';
-                launcher.addClass('user-content').addClass(cls).prepend($('<span>').append($('<i class="' + icon + '">')));
+                launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append($('<i class="' + icon + '"/>')));
             }
         }
 
@@ -445,7 +426,8 @@ define("io.ox/core/main",
                 $('<a>', {
                     href: '#',
                     'data-app-name': name,
-                    'data-app-guid': model.guid
+                    'data-app-guid': model.guid,
+                    tabindex: 1
                 })
                 .text(gt.pgettext('app', title))
             );
@@ -474,65 +456,50 @@ define("io.ox/core/main",
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
-            var node = launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+            var node = $('[data-app-guid="' + model.guid + '"]', launchers);
+            $('a', node).text(value);
             addUserContent(model, node);
             launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
             tabManager();
         });
 
-        /**
-         * Extensions
-         */
-
-        ext.point('io.ox/core/topbar/right').extend({
-            id: 'logo',
-            index: 100,
-            draw: function () {
-                // add small logo to top bar
-                this.append(
-                    $('<div>', { id: 'io-ox-top-logo-small' })
-                );
-            }
-        });
-
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
-            index: 10000,
+            index: 100,
             draw: function () {
-                var el = $('<span class="badge">').hide();
-                this.append(el);
+                var self = this;
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
-                setTimeout(function () {
-                    if (ox.online) {
-                        notifications.attach(el, addLauncher);
+                if (ox.online) {
+                    setTimeout(function () {
+                        self.prepend(notifications.attach(addLauncher));
                         tabManager();
-                    }
-                }, 5000);
+                    }, 5000);
+                }
             }
         });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
-            index: 2000,
+            index: 200,
             draw: function () {
                 this.append(
-                    addLauncher("right", $('<i class="icon-refresh">'), function () {
+                    addLauncher('right', $('<i class="icon-refresh">').attr('aria-label', gt('Refresh')), function () {
                         refresh();
                         return $.when();
                     })
-                    .attr("id", "io-ox-refresh-icon")
+                    .attr('id', 'io-ox-refresh-icon')
                 );
             }
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
-            index: 100,
+            index: 300,
             draw: function () {
                 this.append(
                     $('<li>').append(
-                        $('<a href="#" data-app-name="io.ox/settings">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" role="menuitem" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -549,7 +516,7 @@ define("io.ox/core/main",
                 var helpLink = 'help/' + ox.language + '/index.html';
                 this.append(
                     $('<li>').append(
-                        $('<a>', { href: helpLink, target: '_blank' }).text(gt('User manual'))
+                        $('<a>', { href: helpLink, target: '_blank',  role: 'menuitem', tabindex: 1 }).text(gt('User manual'))
                     )
                 );
             }
@@ -609,7 +576,7 @@ define("io.ox/core/main",
                     };
                     this.append(
                         $('<li>').append(
-                            fullscreenButton = $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
+                            fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
                         )
                         .on('click', function (e) {
                             e.preventDefault();
@@ -626,7 +593,7 @@ define("io.ox/core/main",
             draw: function () {
                 this.append(
                     $('<li>').append(
-                        $('<a href="#" data-action="about">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -643,9 +610,9 @@ define("io.ox/core/main",
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider"></li>'),
+                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li>').append(
-                        $('<a href="#" data-action="logout">').text(gt('Sign out'))
+                        $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -661,11 +628,11 @@ define("io.ox/core/main",
             draw: function () {
                 var div, a, ul;
                 this.append(
-                    div = $('<div class="launcher right dropdown">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                            $('<i class="icon-cog icon-white">')
+                    div = $('<div class="launcher" role="presentation">').append(
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                            $('<i class="icon-cog icon-white" aria-hidden="true">')
                         ),
-                        ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
+                        ul = $('<ul class="dropdown-menu" role="menu">')
                     )
                 );
                 if (!Modernizr.touch) {
@@ -675,7 +642,19 @@ define("io.ox/core/main",
                     );
                 }
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
+                a.attr('aria-label', gt('Settings'));
                 a.dropdown();
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'logo',
+            index: 10000,
+            draw: function () {
+                // add small logo to top bar
+                this.append(
+                    $('<div>', { id: 'io-ox-top-logo-small' })
+                );
             }
         });
 
@@ -684,7 +663,7 @@ define("io.ox/core/main",
             id: 'default',
             draw: function () {
                 if (capabilities.has('launchpad')) {
-                    addLauncher("left", $('<i class="icon-th icon-white">'), function () {
+                    addLauncher("left", $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
                         return require(["io.ox/launchpad/main"], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
@@ -721,8 +700,12 @@ define("io.ox/core/main",
             id: 'default',
             draw: function () {
 
+                var rightbar = $('<div class="launchers-secondary">');
+
                 // right side
-                ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
+                ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
+
+                topbar.append(rightbar);
 
                 // refresh animation
                 initRefreshAnimation();
@@ -959,7 +942,6 @@ define("io.ox/core/main",
             id: 'restore-confirm',
             index: 400,
             run: function (baton) {
-
                 if (baton.canRestore) {
 
                     var dialog,

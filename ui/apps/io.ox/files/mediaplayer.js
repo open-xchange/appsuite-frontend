@@ -51,6 +51,7 @@ define('io.ox/files/mediaplayer',
             _.extend(this.config, config);
             this.app = config.baton.app;
             this.win = this.app.getWindow();
+            this.lastActiveElement = $(document.activeElement);
 
             this.restore();
             this.list = this.filterMediaList(config.baton.allIds, config.videoSupport);
@@ -58,7 +59,7 @@ define('io.ox/files/mediaplayer',
             if (this.config.videoSupport) {
                 this.features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
             }
-
+            $('#io-ox-mediaplayer').remove();
 
             if (this.list.length > 0) {
                 this.show();
@@ -252,13 +253,14 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            var self = this;
+            var self = this,
+            inner;
             this.win.busy().nodes.outer.append(
                 this.container.append(
-                    $('<div class="atb mediaplayer_inner">').append(
+                    $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer">')
+                            $('<button class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
+                            $('<button class="btn btn-primary closemediaplayer" tabindex="1">')
                                 .text(gt('Close'))
                                 .one('click', $.proxy(this.close, this))
                         ),
@@ -286,29 +288,39 @@ define('io.ox/files/mediaplayer',
             this.drawItems();
             if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
+            _.defer(function () { $('#io-ox-mediaplayer').focus(); });
         },
 
         minimize: function () {
-            $('#io-ox-topbar > .minimizedmediaplayer').remove();
-            $('#io-ox-topbar').append(
-                $('<div class="launcher right minimizedmediaplayer">').append(
+            var minimizedPlayerLauncher;
+            $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
+            $('#io-ox-topbar > div.launchers-secondary').prepend(
+                minimizedPlayerLauncher = $('<div class="launcher minimizedmediaplayer" tabindex="1">').append(
                     $('<i>').addClass('icon-play icon-white')
                 ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();
                     $(this).remove();
                 })
+                .on('keydown', function (e) {
+                    if ((e.keyCode || e.which) === 13) { // enter
+                        ox.launch('io.ox/files/main');
+                        $('.mediaplayer_container').show();
+                        $(this).remove();
+                    }
+                })
             );
             this.container.hide();
+            minimizedPlayerLauncher.focus();
         },
 
         restore: function () {
-            if ($('#io-ox-topbar > .minimizedmediaplayer').length > 0) {
-                $('#io-ox-topbar > .minimizedmediaplayer').remove();
+            if ($('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').length > 0) {
+                $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();
+                _.defer(function () { $('#io-ox-mediaplayer').focus(); });
             }
-
         },
 
         close: function () {
@@ -318,9 +330,11 @@ define('io.ox/files/mediaplayer',
                     if (_.browser.Chrome) { this.mediaelement.setSrc(''); }
                     $(this.mediaelement).remove();
                 }
+                $('#io-ox-mediaplayer').remove();
                 this.container.remove();
                 this.list = [];
                 this.currentFile = null;
+                this.lastActiveElement.focus();
             }
         }
     };

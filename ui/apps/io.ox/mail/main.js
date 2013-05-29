@@ -103,7 +103,7 @@ define('io.ox/mail/main',
             showSwipeButton = false,
             canDeletePermission;
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('mail-detail-pane').scrollable();
+        right = vsplit.right.addClass('mail-detail-pane').attr('tabindex', 1).scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
             max: _.device('smartphone') ? 50: settings.get('threadMax', 500),
@@ -193,7 +193,7 @@ define('io.ox/mail/main',
             if (count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
+                $('<a href="#" tabindex="-1">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
             );
         };
 
@@ -386,14 +386,22 @@ define('io.ox/mail/main',
                 this.prepend(
                     $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
                     .append(
-                        $('<a>', { href: '#' })
-                        .attr('data-toggle', 'dropdown')
+                        $('<a>', {
+                            href: '#',
+                            tabindex: 1,
+                            'data-toggle': 'dropdown',
+                            role: 'menuitem',
+                            'aria-haspopup': true,
+                            'aria-label': gt('Sort options')
+                        })
                         .append(
                             $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
                             $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
                         )
                         .dropdown(),
-                        $('<ul>').addClass("dropdown-menu")
+                        $('<ul>').addClass("dropdown-menu").attr({
+                            role: 'menu'
+                        })
                         .on('click', 'a', { grid: grid }, hToolbarOptions)
                     )
                 );
@@ -587,12 +595,11 @@ define('io.ox/mail/main',
                 toggle(index, cid);
             });
 
-            grid.selection.on('keyboard', function (evt, e) {
-                var sel = grid.selection.get(), cid, index, key;
+            grid.selection.on('keyboard', function (evt, e, key) {
+                var sel = grid.selection.get(), cid, index;
                 if (sel.length === 1) {
                     cid = grid.selection.serialize(sel[0]);
                     index = grid.selection.getIndex(cid);
-                    key = e.which;
                     // cursor right? (open)
                     if (key === 39) {
                         open(index, cid);

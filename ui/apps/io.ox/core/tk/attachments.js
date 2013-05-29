@@ -301,10 +301,10 @@ define('io.ox/core/tk/attachments',
                         $('<span>').addClass('btn btn-file').append(
                             $('<span>').addClass('fileupload-new').text(gt('Select file')),
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
-                            (options.multi ? $('<input type="file" name="file" multiple="multiple">') : $('<input name="file" type="file">'))
+                            (options.multi ? $('<input type="file" name="file" multiple="multiple" tabindex="1">') : $('<input name="file" type="file" tabindex="1">'))
                         ),
-                        $('<a>', {'data-dismiss': 'fileupload'}).addClass('btn fileupload-exists').text(gt('Cancel')),
-                        (options.displayButton ? $('<button>', { 'data-action': 'upload' }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
+                        $('<a>', {'data-dismiss': 'fileupload', tabindex: 1}).addClass('btn fileupload-exists').text(gt('Cancel')),
+                        (options.displayButton ? $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
                     )
                 )
             );
