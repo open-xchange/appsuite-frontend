@@ -1514,13 +1514,27 @@ nav.io-ox-inline-links + header {
 .io-ox-sidepopup-close {
 
     text-align: right;
-    margin: 13px 40px;
+    margin: 0 40px;
 
     .btn {
         margin-left: 13px;
         .user-select(none);
     }
 
+    .btn-sidepopup {
+        display: inline-block;
+        background-color: #eee;
+        color: #aaa;
+        padding: 6px 13px;
+        border-radius: 0 0 5px 5px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #aaa;
+            color: #eee;
+            text-decoration: none;
+        }
+    }
 }
 
 .io-ox-sidepopup-arrow {
