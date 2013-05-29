@@ -57,7 +57,7 @@ define('io.ox/calendar/api',
                 recurrence_master: false
             }, o || {});
 
-            var key = o.folder + '.' + o.start + '.' + o.end,
+            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end,
                 params = {
                     action: 'updates',
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
@@ -132,7 +132,7 @@ define('io.ox/calendar/api',
                 order: 'asc'
             }, o || {});
             useCache = useCache === undefined ? true : !!useCache;
-            var key = o.folder + '.' + o.start + '.' + o.end + '.' + o.order,
+            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
                 params = {
                     action: 'all',
                     // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
@@ -259,15 +259,15 @@ define('io.ox/calendar/api',
 
         /**
          * used to cleanup Cache and trigger refresh after attachmentHandling
-         * @param  {object} obj (appointment object)
+         * @param  {object} o (appointment object)
          * @fires  api#update (data)
          * @return {deferred}
          */
-        attachmentCallback: function (obj) {
+        attachmentCallback: function (o) {
             all_cache = {};
-            var key = obj.folder_id + '.' + obj.id + '.' + (obj.recurrence_position || 0);
+            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
             delete get_cache[key];
-            return api.get(obj)
+            return api.get(o)
                 .pipe(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
@@ -326,7 +326,7 @@ define('io.ox/calendar/api',
         // appointment on the server
         remove: function (o) {
 
-            var key = o.folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
+            var key = (o.folder_id || o.folder) + '.' + o.id + '.' + (o.recurrence_position || 0);
 
             return http.PUT({
                 module: 'calendar',
