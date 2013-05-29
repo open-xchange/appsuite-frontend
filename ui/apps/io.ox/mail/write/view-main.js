@@ -211,7 +211,7 @@ define("io.ox/mail/write/view-main",
                         },
                         stringify: function (data) {
                             return data.display_name ?
-                                '"' + data.display_name + '" <' + data.email + '>' :
+                                '"' + data.display_name + '" <' + data.email + (data.phone || '') + '>' :
                                 data.email;
                         },
                         draw: function (data, query) {
