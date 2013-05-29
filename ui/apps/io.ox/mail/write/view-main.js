@@ -800,12 +800,15 @@ define("io.ox/mail/write/view-main",
             this.addRecipients(id, list);
             node.val('').focus();
         } else if ($.trim(node.val()) !== '') {
-            // not accepted but has content -> shake
+            // not accepted but has content
             node.attr('disabled', 'disabled')
                 .css({ border: '1px solid #a00', backgroundColor: '#fee' })
-                .done(function () {
+                .delay(600)
+                .queue(function () {
                     node.css({ border: '', backgroundColor: '' })
-                        .removeAttr('disabled').focus();
+                        .removeAttr('disabled')
+                        .focus()
+                        .dequeue();
                 });
         }
     }
