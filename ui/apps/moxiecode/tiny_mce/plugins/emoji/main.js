@@ -35,17 +35,31 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         );
     }
 
+    function iconInfo(icon) {
+        if (_.isString(icon)) {
+            return iconInfo([icon, emoji.EMOJI_MAP[icon]]);
+        }
+        if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
+            return {invalid: true};
+
+        return {
+            css: 'emoji' + icon[1][2],
+            unicode: icon[0],
+            desc: icon[1][1],
+            category: category_map[icon[0]]
+        };
+    }
+
     var category_map = createCategoryMap(),
         icons = _(emoji.EMOJI_MAP)
     .chain()
     .pairs()
-    .map(function (icon) {
-        return {css: 'emoji' + icon[1][2], unicode: icon[0], desc: icon[1][1]};
-    })
+    .map(iconInfo)
     .value();
 
     return _.extend({
         icons: icons,
+        iconInfo: iconInfo,
         categories: categories,
         unifiedToImageTag: function (text) {
             var parsedText = $('<div>').append(emoji.unifiedToHTML(text));
