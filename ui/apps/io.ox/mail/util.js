@@ -90,9 +90,11 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value) {
-            return capabilities.has('msisdn') &&
-                   value.replace(rNotDigitAndAt, '').length === 0 &&
-                   value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
+            return value.indexOf('/TYPE=PLMN') > 0 || (
+                           (capabilities.has('msisdn')) &&                   //acivated capability
+                           value.replace(rNotDigitAndAt, '').length === 0 && //no alphabetic digits and no @
+                           value.replace(rTelephoneCleanup, '').length > 0   //at least one numerical digit
+                       ) ? 'phone' : 'email';
         },
 
         cleanupPhone: function (phone) {
