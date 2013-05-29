@@ -72,6 +72,7 @@ define('io.ox/contacts/api',
                         orSearch: true,
                         emailAutoComplete: !!opt.emailAutoComplete
                     },
+                    defaultBehaviour = true,
                     queryField = {
                         names: {
                             display_name: query,
@@ -124,9 +125,13 @@ define('io.ox/contacts/api',
                     };
                     _(opt).each(function (value, key) {
                         if (_(queryField).chain().keys().contains(key).value() && value === 'on') {
-                            data = _(data).extend(queryField[key] || {});
+                            data = _(data).extend(queryField[key]);
+                            defaultBehaviour = false;
                         }
                     });
+                    if (defaultBehaviour) {
+                        data = _(data).extend(queryField.names);
+                    }
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
