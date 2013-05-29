@@ -20,25 +20,53 @@
                         'moxiecode/tiny_mce/plugins/emoji/main'], function (dialogs, emoji) {
                     var popup = new dialogs.SidePopup();
                     var p = popup.show(baton.event, function (pane) {
-                        var node = $('<div class="emoji_selector">');
-                        _(emoji.icons).each(function (icon) {
-                            node.append(
-                                $('<a href="#" class="emoji">')
-                                .attr('title', icon.desc)
-                                .addClass(icon.css)
-                                .click(function (evt) {
-                                    var ed = baton.editor,
-                                        node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
-                                        .addClass(icon.css)
-                                        .attr('data-emoji-unicode', icon.unicode);
-                                    evt.preventDefault();
+                        var iconSelector = {},
+                            categorySelector = $('<div class="emoji_category_selector">');
 
-                                    ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
-                                    p.close();
+                        _(emoji.categories)
+                        .chain()
+                        .keys()
+                        .each(function (category) {
+                            categorySelector.append(
+                                $('<a href="#" class="emoji_category" data-emoji-category="' + category + '">')
+                                .text(category)
+                                .click(function (evt) {
+                                    $('a.emoji_category').removeClass('open');
+                                    $(evt.target).addClass('open');
+                                    $('div.emoji_selector').remove();
+                                    pane.append(iconSelector[category]);
                                 })
                             );
+                            iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
+
+                            _(emoji.categories[category])
+                            .chain()
+                            .map(function (unicode) {
+                                return emoji.iconInfo(unicode);
+                            })
+                            .each(function (icon) {
+                                iconSelector[category].append(
+                                    $('<a href="#" class="emoji">')
+                                    .attr('title', icon.desc)
+                                    .addClass(icon.css)
+                                    .click(function (evt) {
+                                        var ed = baton.editor,
+                                            node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
+                                            .addClass(icon.css)
+                                            .attr('data-emoji-unicode', icon.unicode);
+                                        evt.preventDefault();
+
+                                        ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
+                                        p.close();
+                                    })
+                                );
+                            });
                         });
-                        pane.append(node);
+                        pane.append(
+                            categorySelector,
+                            _(iconSelector).values()[0]
+                        );
+                        $('a.emoji_category:first').addClass('open');
                     });
                     //steal focus back
                     p.on('close', function () {
