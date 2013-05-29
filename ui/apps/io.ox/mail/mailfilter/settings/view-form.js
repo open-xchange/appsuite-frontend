@@ -36,7 +36,6 @@ define('io.ox/mail/mailfilter/settings/view-form', [
             label: 'Mailfilter'
         }));
 
-
         return MailfilterEditView;
     }
 

@@ -25,10 +25,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     'use strict';
 
-
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection;
-
 
     function renderDetailView(evt, data) {
         var myView, myModel, myViewNode;
@@ -42,7 +40,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //            async: true
         });
 
-
         myView.dialog.append(
             myView.render().el
         )
@@ -50,9 +47,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         .addButton("cancel", gt('Cancel'));
 
         myView.dialog.show();
-//        myView.succes = successDialog;
         myView.collection = collection;
-
 
         myView.dialog.on('save', function () {
 //            if (myModel.isValid()) {
@@ -72,7 +67,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
             renderDetailView(evt, evt.data.obj);
         }
     });
-
 
     return {
         editMailfilter: function ($node) {
@@ -128,7 +122,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             var self = this;
                             self.$el.empty().append(self.template({
                                 id: this.model.get('id'),
-                                accountType: this.model.get('accountType')
+                                state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') }
+
                             }));
 
                             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
@@ -175,7 +170,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         events: {
                             'click [data-action="edit"]': 'onEdit',
                             'click [data-action="delete"]': 'onDelete',
-                            'click [data-action="add"]': 'onAdd'
+                            'click [data-action="add"]': 'onAdd',
+                            'click [data-action="toggle"]': 'onToggle'
                         },
 
                         onAdd: function (args) {
@@ -191,21 +187,44 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             var selected = this.$el.find('[selected]');
                             args.data = {};
                             args.data.id = selected.data('id');
+
                             args.data.obj = this.collection.get(args.data.id);
 
                             args.data.node = this.el;
-                            console.log(args);
-                            createExtpointForSelectedAccount(args);
+
+                            if (args.data.obj !== undefined) {
+                                createExtpointForSelectedAccount(args);
+                            }
+
                         },
+
                         onDelete: function (args) {
 
-                            console.log('delete');
                             var selected = this.$el.find('[selected]'),
                                 self = this,
                                 id = selected.data('id');
-                            console.log(this);
-                            api.deleteRule(id).done(function () {
-                                self.collection.remove(id);
+                            if (id) {
+                                api.deleteRule(id).done(function () {
+                                    self.collection.remove(id);
+                                });
+                            }
+
+                        },
+
+                        onToggle: function () {
+                            var selected = this.$el.find('[selected]'),
+                                self = this;
+
+                            var id = selected.data('id');
+
+                            var selectedObj = this.collection.get(id);
+
+                            var state = selectedObj.get('active') ? false : true;
+
+                            selectedObj.set('active', state);
+
+                            api.update(selectedObj).done(function () {
+                                self.render();
                             });
                         }
 

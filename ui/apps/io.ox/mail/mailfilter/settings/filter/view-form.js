@@ -140,23 +140,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             }
         },
 
-
-
-
-
-//        headerTranslation = {
-//            'From': 'Sender/From',
-//            'To Cc': 'Any recipient',
-//            'Subject': 'Subject',
-//            'List-Id': 'Mailing list',
-//            'X-BeenThere': 'Mailing list',
-//            'X-Mailinglist': 'Mailing list',
-//            'X-Mailing-List': 'Mailing list',
-//            'To': 'To',
-//            'Cc': 'CC',
-//            '': 'Header'
-//        },
-
         headerTranslation = {
             'From': gt('Sender/From'),
             'any': gt('Any recipient'),
@@ -179,10 +162,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             markmail: gt('Mark mail as'),
             tag: gt('Tag mail with'),
             flag: gt('Flag mail with')
-//            gt('Tag mail with'),
-//
         },
-
 
         colorNames = {
             NONE:       gt('None'),
@@ -237,7 +217,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
-                console.log('neu gerendert');
                 return this;
 
             },
@@ -281,7 +260,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
                 this.render();
-                console.log(this.model);
 
             },
 
@@ -296,24 +274,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray.splice(actionID, 1);
                 this.model.set('actioncmds', actionArray);
                 this.render();
-                console.log(this.model);
 
             },
 
             onSave: function () {
                 var self = this;
-                console.log('der SAVE');
                 this.model.save().done(function (response) {
-                    console.log(response);
                     if (response === null) {
                         notifications.yell('success', gt('Mailfilter updated'));
                     } else {
                         notifications.yell('success', gt('Mailfilter created'));
                         var newCreatedDate =  self.model.attributes;
                         newCreatedDate.id = response;
-                        console.log(newCreatedDate);
                         self.collection.add(newCreatedDate);
-                        console.log(self);
 
                     }
 
@@ -336,12 +309,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value],
                     checkForMultipleTests = $(this.el).find('[data-test-id]');
 
-                console.log(testAction + ' ' + value);
                 if (testAction === 'create-test') {
                     list.remove();
 
-                    console.log(value);
-                    console.log(checkForMultipleTests.length);
                     if (checkForMultipleTests.length > 1) {
 
                         testArray.tests.push(defaultTests[value]);
@@ -357,28 +327,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                     this.model.set('test', testArray);
-                    console.log(this.model);
 
                     this.render();
-
 
                 } else if (testAction === 'create-action') {
                     list.remove();
 
-                    console.log(value);
-
                     actionArray.push(defaultActions[value]);
 
-
                     this.model.set('actioncmds', actionArray);
-                    console.log(this.model);
 
                     this.render();
 
-
                 } else {
                     link.text(translatedValue);
-
 
                     if (checkForMultipleTests.length > 0) {
                         testArray.tests[testID].comparison = value;
@@ -387,10 +349,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                     this.model.set('test', testArray);
-                    console.log(this.model.get('test'));
                 }
-
-
 
             },
 
@@ -411,7 +370,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionsArray[actionID].flags = [value];
                 this.model.set('actioncmds', actionsArray);
 
-                console.log(this.model.get('actioncmds'));
             },
 
             onChangeTextTest: function (e) {
@@ -432,9 +390,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
 
-                console.log(this.model.get('test'));
             },
-
 
             onChangeTextTestSecond: function (e) {
                 e.preventDefault();
@@ -454,7 +410,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 this.model.set('test', testArray);
 
-                console.log(this.model.get('test'));
             },
 
             onChangeTextAction: function (e) {
@@ -469,7 +424,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray[actionID][type] = type === 'to' || 'text' ? value : [value];
                 this.model.set('actioncmds', actionArray);
 
-                console.log(this.model.get('actioncmds'));
             },
 
             onFolderSelect: function (e) {
@@ -527,13 +481,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
 
-                console.log(this.model.get('actioncmds'));
-
             },
 
             onCreateNewCondition: function () {
                 var list = $(this.el).find('ol.widget-list.tests');
-                console.log(list);
                 list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-test'}).text(gt('select new condition type')).append(
                         drawOptions('true', headerTranslation)
                     )
@@ -543,7 +494,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onCreateNewAction: function () {
                 var list = $(this.el).find('ol.widget-list.actions');
-                console.log(list);
                 list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-action'}).text(gt('select new action type')).append(
                         drawOptions('keep', actionsTranslations)
                     )
@@ -625,9 +575,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         $(this).closest('.flag-dropdown').attr('data-color-value', e.data.color).removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
     }
 
-
     var drawColorDropdown = function (activeColor) {
-//        var data = baton.data,
+
         var flagclass = 'flag_' + colorFlags[activeColor];
         return $('<div class="dropdown flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
         .addClass(flagclass)
@@ -644,7 +593,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             $.txt(colorNames[color])
                         )
                         .on('click', { color: index, flagclass: flagclass }, changeLabel)
-//                        .addClass(data.color_label === index ? 'active-label' : undefined)
                     );
                 })
             )
@@ -666,8 +614,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             } else {
                 appliedTest = [appliedTest];
             }
-
-            console.log(appliedTest);
 
             _(appliedTest).each(function (test, num) {
                 if (test.id === 'size') {
@@ -720,8 +666,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
 
             });
-
-            console.log(baton.model.get('actioncmds'));
 
             _(baton.model.get('actioncmds')).each(function (action, num) {
                 if (action.id !== 'stop') {
@@ -782,25 +726,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             this.append(headlineTest, listTests, drawCreateNewTestButton(), headlineActions, listActions, drawCreateNewActionButton());
 
-//            listTests.sortable({
-//                containment: this,
-//                axis: 'y',
-//                scroll: true,
-//                delay: 150,
-//                stop: function (e, ui) {
-////                    widgets.save(list);
-//                }
-//            });
-
-//            listActions.sortable({
-//                containment: this,
-//                axis: 'y',
-//                scroll: true,
-//                delay: 150,
-//                stop: function (e, ui) {
-////                    widgets.save(list);
-//                }
-//            });
         }
     });
 
@@ -853,8 +778,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         updateChoice: updateChoice
 
     }));
-
-
 
     return AccountDetailView;
 });

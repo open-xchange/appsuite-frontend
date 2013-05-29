@@ -54,12 +54,7 @@ define('io.ox/mail/mailfilter/settings/register',
                 });
             });
 
-
-        },
-
-        save: function () {
-            console.log('the save is triggered');
-
         }
+
     });
 });

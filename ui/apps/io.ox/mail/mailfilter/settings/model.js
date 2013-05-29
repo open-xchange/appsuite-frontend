@@ -19,21 +19,16 @@ define('io.ox/mail/mailfilter/settings/model',
 
     'use strict';
 
-
     function buildFactory(ref, api) {
         var factory = new ModelFactory({
             api: api,
             ref: ref,
 
             update: function (model) {
-                console.log('this is a UPDATE Call');
-                console.log(model);
                 return api.update(model.attributes);
 
             },
             create: function (model) {
-                console.log('this is a CREATE Call');
-                console.log(model);
                 return api.create(model.attributes);
             }
 
@@ -41,10 +36,7 @@ define('io.ox/mail/mailfilter/settings/model',
 
         Validators.validationFor(ref, {
             rulename: { format: 'string', mandatory: true}
-//            start_date : { format: 'date', mandatory: true},
-//            end_date: { format: 'date', mandatory: true}
         });
-
 
         return factory;
 
@@ -63,7 +55,6 @@ define('io.ox/mail/mailfilter/settings/model',
             "active": false
         };
     }
-
 
     return {
         api: api,

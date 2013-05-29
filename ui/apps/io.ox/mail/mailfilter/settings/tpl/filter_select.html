@@ -1,4 +1,6 @@
-<div class="selectable deletable-item" data-id="{{=it.id}}" data-accounttype="{{=it.accountType}}">
+<div class="selectable deletable-item {{=it.state.value}}" data-id="{{=it.id}}" >
     <div data-property="rulename"></div>
-    <!-- <a href="#" class="action" data-action="toggle">deactivate</a> -->
+    <div class="link-wrapper">
+        <a href="#" class="action" data-action="toggle">{{=it.state.text}}</a>
+    </div>
 </div>
