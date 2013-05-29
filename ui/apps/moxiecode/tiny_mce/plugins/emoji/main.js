@@ -11,12 +11,32 @@
  */
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
+       'moxiecode/tiny_mce/plugins/emoji/categories',
        'css!emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji) {
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories) {
 
     "use strict";
 
-    var icons = _(emoji.EMOJI_MAP)
+    //"invert" the categories object
+    function createCategoryMap() {
+        return _.object(
+            _(categories).chain().values().flatten(true).value(),
+            _(categories)
+            .chain()
+            .pairs()
+            .map(function (item) {
+                var category = item[0];
+                return _(item[1]).map(function () {
+                    return category;
+                });
+            })
+            .flatten(true)
+            .value()
+        );
+    }
+
+    var category_map = createCategoryMap(),
+        icons = _(emoji.EMOJI_MAP)
     .chain()
     .pairs()
     .map(function (icon) {
@@ -24,9 +44,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     })
     .value();
 
-
     return _.extend({
         icons: icons,
+        categories: categories,
         unifiedToImageTag: function (text) {
             var parsedText = $('<div>').append(emoji.unifiedToHTML(text));
 
