@@ -98,10 +98,9 @@ define('io.ox/core/main',
         var visibleTabs,
             i = 0,
             hidden = 0;
-
         for (i = items.length; i > 1; i--) {
             visibleTabs = itemsVisible.length - hidden;
-            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth || visibleTabs <= 3) {
+            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth /*|| visibleTabs <= 2*/) {
                 break;
             } else {
                 var lastVisibleItem = launchers.children('.launcher:visible').last();
@@ -112,7 +111,7 @@ define('io.ox/core/main',
                     itemsLeftWidth += launcherDropDownIconWidth;
                 }
                 if (visibleTabs <= 4) {
-                    $('.launcher.left-corner', topbar).hide();
+                    //$('.launcher.left-corner', topbar).hide();
                 }
             }
         }
@@ -471,10 +470,12 @@ define('io.ox/core/main',
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 if (ox.online) {
-                    setTimeout(function () {
+                    //setTimeout(function () {
+                    _.defer(function () {
                         self.prepend(notifications.attach(addLauncher));
                         tabManager();
-                    }, 5000);
+                    });
+                    //}, 5000);
                 }
             }
         });
