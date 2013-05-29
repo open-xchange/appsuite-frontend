@@ -53,7 +53,8 @@ define("io.ox/mail/write/view-main",
         index: 200,
         label: gt('Save'), // is "Save as draft" but let's keep it short for small devices
         cssClasses: 'btn',
-        ref: POINT + '/actions/draft'
+        ref: POINT + '/actions/draft',
+        tabIndex: '6'
     }));
 
     ext.point(POINT + '/toolbar').extend(new links.Button({
@@ -61,7 +62,8 @@ define("io.ox/mail/write/view-main",
         index: 1000,
         label: gt('Discard'),
         cssClasses: 'btn',
-        ref: POINT + '/actions/discard'
+        ref: POINT + '/actions/discard',
+        tabIndex: '6'
     }));
 
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
@@ -167,8 +169,8 @@ define("io.ox/mail/write/view-main",
             return function () {
 
                 var inputOptions = Modernizr.file && 'FormData' in window ?
-                    { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '2' } :
-                    { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '2' };
+                    { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '7' } :
+                    { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
 
                 return $('<div class="section-item upload">').append(
                     $('<input>', inputOptions).on('change', $.proxy(change, this))
@@ -187,7 +189,7 @@ define("io.ox/mail/write/view-main",
                 .append(
                     $('<input>', {
                         type: 'text',
-                        tabindex: '2',
+                        tabindex: (id === 'to' ? '2' : '7'),
                         id: 'writer_field_' + id
                     })
                     .attr('data-type', id) // not name=id!
@@ -251,7 +253,7 @@ define("io.ox/mail/write/view-main",
             var node = $('<div class="fromselect-wrapper">').append(
                    $('<label for="from" class="wrapping-label">').text(gt('From'))
                 ),
-                select = $('<select name="from">').css('width', '100%');
+                select = $('<select name="from" tabindex="7">').css('width', '100%');
 
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 // sort by mail address (across all accounts)
@@ -564,7 +566,11 @@ define("io.ox/mail/write/view-main",
                             })
                             .on('keyup', function () {
                                 var title = _.noI18n($.trim($(this).val()));
-                                app.setTitle(title);
+                                if (title.length > 0) {
+                                    app.setTitle(title);
+                                } else {
+                                    app.setTitle(app.getDefaultWindowTitle());
+                                }
                             }),
                             'mail_subject'
                         )

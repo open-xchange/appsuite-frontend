@@ -526,6 +526,10 @@ define('io.ox/mail/write/main',
             forward: gt('Forward')
         };
 
+        app.getDefaultWindowTitle = function () {
+            return windowTitles[composeMode || 'compose'];
+        };
+
         app.dirty = function (flag) {
             if (flag === true) {
                 previous = null; // always dirty this way
@@ -570,7 +574,8 @@ define('io.ox/mail/write/main',
             // add files (from contacts)
             this.addFiles(data.contacts_ids);
             // app title
-            var title = windowTitles[composeMode = mail.mode];
+            composeMode = mail.mode;
+            var title = app.getDefaultWindowTitle();
             win.nodes.main.find('h1.title').text(title);
             title = data.subject ? _.noI18n(data.subject) : title;
             app.setTitle(title);
