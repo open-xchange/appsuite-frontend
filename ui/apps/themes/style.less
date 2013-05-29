@@ -11,7 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-
 #background_loader.secure {
 
     background-color: rgba(255, 255, 255, 0);
@@ -661,14 +660,16 @@
 
         &:focus {
 
+            background-color: @toolbarFocusColor;
+
             i {
-                color: darken(@toolbarButtonColor, 30%);
+                color: white;
                 text-decoration: none;
             }
 
             i.accent-color {
-                background-color: darken(@toolbarButtonAccent, 10%);
-                border-color: darken(@toolbarButtonAccent, 10%);
+                background-color: @toolbarFocusColor;
+                border-color: @toolbarFocusColor;
             }
 
         }
@@ -1407,7 +1408,6 @@ nav.io-ox-inline-links + header {
 .io-ox-inline-links > span.dropdown {
     color: @inlineLinkColor;
     text-decoration: none;
-    outline: 0;
 }
 
 .io-ox-inline-links span.dropdown ul {
@@ -1666,6 +1666,7 @@ input.nice-input {
 .io-ox-foldertree {
 
     overflow: auto;
+    outline: 0;
     padding: 13px 0 4px 0;
     .user-select(none);
 
@@ -2000,6 +2001,18 @@ a.toolbar-action, .toolbar-action > a {
 .toolbar-action.pull-left { margin-right: 1px; }
 .toolbar-action.pull-right { margin-left: 1px; }
 .toolbar-action ul { text-align: left; }
+
+/* Focus */
+
+.toolbar-action a:focus {
+    background-color: @toolbarFocusColor;
+    i { color: white; }
+}
+
+.toolbar-button a:focus {
+    background-color: @toolbarFocusColor;
+    i { color: white; }
+}
 
 /* Empty detail view */
 

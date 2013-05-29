@@ -580,16 +580,19 @@ define('io.ox/mail/view-detail',
         },
 
         drawScaffold: function (baton, resolver) {
-            return $('<div class="mail-detail"></div>')
+
+            var node = $('<section class="mail-detail">')
                 .busy()
                 .one('resolve', { baton: baton }, resolver);
+
+            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
+
+            return node;
         },
 
         draw: function (baton) {
 
-            if (!baton) {
-                return $('<div>');
-            }
+            if (!baton) return $('<div>');
 
             // ensure baton
             baton = ext.Baton.ensure(baton);
@@ -601,8 +604,12 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
-                        container.replaceWith(self.draw(tmp));
+                        container.replaceWith(
+                            self.draw(ext.Baton({ data: tmp, app: baton.app, options: baton.options }))
+                        );
                     });
+
+            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
 
             try {
 

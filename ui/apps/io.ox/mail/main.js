@@ -103,7 +103,7 @@ define('io.ox/mail/main',
             showSwipeButton = false,
             canDeletePermission;
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('mail-detail-pane').attr('tabindex', 1).scrollable();
+        right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
             max: _.device('smartphone') ? 50: settings.get('threadMax', 500),
@@ -671,13 +671,15 @@ define('io.ox/mail/main',
 
         drawThread = function (baton) {
             viewDetail.drawThread.call(right.idle(), baton.set('options', {
+                tabindex: '1',
                 failMessage: gt('Couldn\'t load that email.'),
                 retry: drawThread
             }));
         };
 
         drawMail = function (data) {
-            var baton = ext.Baton({ data: data, app: app }),
+            console.log('HIER?');
+            var baton = ext.Baton({ data: data, app: app }).set('options', { tabindex: '1' }),
                 mail = viewDetail.draw(baton);
             right.idle().empty().append(mail);
         };
