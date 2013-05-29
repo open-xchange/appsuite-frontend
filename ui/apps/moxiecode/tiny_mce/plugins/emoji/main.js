@@ -59,6 +59,11 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     return _.extend({
         icons: icons,
+        iconsForCategory: function (category) {
+            return _(icons).filter(function (icon) {
+                return icon.category === category;
+            });
+        },
         iconInfo: iconInfo,
         categories: categories,
         unifiedToImageTag: function (text) {
