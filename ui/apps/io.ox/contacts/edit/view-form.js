@@ -236,6 +236,10 @@ define('io.ox/contacts/edit/view-form', [
     }
 
     function createContactEdit(ref) {
+        if (ref === 'io.ox/core/user') {// Remove attachment handling if view is used with user data instead of contact data
+            delete meta.sections.attachments;
+            delete meta.i18n.attachments;
+        }
         var point = views.point(ref + '/edit/view'),
             ContactEditView = point.createView({
                 tagName: 'div',
