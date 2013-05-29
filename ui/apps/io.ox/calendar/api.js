@@ -33,10 +33,7 @@ define('io.ox/calendar/api',
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
-                require(['io.ox/core/api/reminder'], function (reminderApi) {
-                    reminderApi.trigger('delete:appointment', obj);
-                    api.trigger('delete:appointment', obj);
-                });
+                api.trigger('delete:appointment', obj);
             } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
                 require(['io.ox/core/api/reminder'], function (reminderApi) {
                     reminderApi.getReminders();
@@ -326,7 +323,7 @@ define('io.ox/calendar/api',
         // appointment on the server
         remove: function (o) {
 
-            var key = o.folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
+            var key = (o.folder_id || o.folder) + '.' + o.id + '.' + (o.recurrence_position || 0);
 
             return http.PUT({
                 module: 'calendar',
