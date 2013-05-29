@@ -16,8 +16,9 @@ define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
      'io.ox/core/api/account',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, settings, gt) {
+     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, gt) {
 
     'use strict';
 
@@ -66,6 +67,8 @@ define('io.ox/mail/util',
         rMailCleanup = /(^<|>$)/g,
         // regex: remove special characters from telephone number
         rTelephoneCleanup = /[^0-9+]/g,
+        // regex: used to identify phone numbers
+        rNotDigitAndAt = /[^A-Za-z@]/g,
         // regex: clean up display name
         rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
@@ -87,10 +90,12 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value) {
-            return value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
+            return capabilities.has('msisdn') &&
+                   value.replace(rNotDigitAndAt, '').length === 0 &&
+                   value.replace(rTelephoneCleanup, '').length > 8 ? 'phone' : 'email';
         },
 
-        cleanup: function (phone) {
+        cleanupPhone: function (phone) {
             return phone.replace(rTelephoneCleanup, '');
         },
 
@@ -98,19 +103,19 @@ define('io.ox/mail/util',
             var recipient = $.trim(s), match, name, target;
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address / telephone number
-                if (match[3].indexOf('@') > -1) {
+                if (that.getChannel(match[3]) === 'email') {
                     target = match[3].replace(rMailCleanup, '').toLowerCase();
                 } else {
-                    target = match[3].replace(rTelephoneCleanup, '');
+                    target = that.cleanupPhone(match[3]);
                 }
                 name = match[1].replace(rDisplayNameCleanup, '');
             } else {
                 // case 2: assume plain email address / telephone number
-                if (recipient.indexOf('@') > -1) {
+                if (that.getChannel(recipient) === 'email') {
                     target = recipient.replace(rMailCleanup, '').toLowerCase();
                     name = target.split(/@/)[0];
                 } else {
-                    name = target = recipient.replace(rTelephoneCleanup, '');
+                    name = target = that.cleanupPhone(recipient);
                 }
             }
             return [name, target];
@@ -131,7 +136,7 @@ define('io.ox/mail/util',
                 //look Bug 23983
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
-                if (msExchange || recipient[1].indexOf('@') > -1 || recipient[1].replace(rTelephoneCleanup, '').length > 8) {
+                if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
                     list.push(recipient);
                 }
             }

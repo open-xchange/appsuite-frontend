@@ -17,9 +17,10 @@ define('io.ox/mail/accounts/settings',
        "io.ox/mail/accounts/model",
        'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
+       'io.ox/core/notifications',
        'gettext!io.ox/mail/accounts/settings',
        'less!io.ox/settings/style.less'
-       ], function (ext, api, AccountModel, AccountDetailView, dialogs, gt) {
+       ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
 
     'use strict';
 
@@ -46,6 +47,8 @@ define('io.ox/mail/accounts/settings',
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
             } else {
+                myModel.validate();
+                notifications.yell('error', gt('Account settings could not be saved.'));
                 myView.dialog.idle();
             }
         });

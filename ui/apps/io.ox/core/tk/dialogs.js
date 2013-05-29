@@ -420,7 +420,13 @@ define("io.ox/core/tk/dialogs",
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
+/*
+    Not sure if this is correctly merged...
+
                     $('<button class="btn btn-small btn-primary" data-action="close" role="button" tabindex="1">').text(options.saveOnClose ? gt('Save') : gt('Close'))
+*/
+                    $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
+                        .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs" tabindex="1">').append(closer, pane),
@@ -515,7 +521,7 @@ define("io.ox/core/tk/dialogs",
 
         popup.on('close', close);
 
-        closer.find('.btn').on('click', function (e) {
+        closer.find('.btn-sidepopup').on('click', function (e) {
             pane.trigger('click'); // route click to 'pane' since closer is above pane
             close(e); // close side popup
             return false;
@@ -560,7 +566,7 @@ define("io.ox/core/tk/dialogs",
                 if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
                     closer.find('.close-all').remove();
                     closer.prepend(
-                        $('<button class="btn btn-small close-all" data-action="close-all">').text(gt('Close all'))
+                        $('<a class="btn-sidepopup close-all" data-action="close-all">').text(gt('Close all'))
                         .on('click', { target: self.nodes.target }, closeAll)
                     );
                 }

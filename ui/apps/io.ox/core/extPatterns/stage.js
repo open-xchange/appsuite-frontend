@@ -27,10 +27,11 @@ define('io.ox/core/extPatterns/stage', ['io.ox/core/extensions'], function (ext)
 
         function next() {
             if (list.length) {
+                var current = list.shift();
                 try {
-                    ((list.shift().run || $.noop)(baton) || READY).then(next, def.reject);
+                    ((current.run || $.noop)(baton) || READY).then(next, def.reject);
                 } catch (e) {
-                    console.error('Stage', e.message, 'id', id, 'baton', baton, 'list', list);
+                    console.error('Stage.run()', e.message, 'stage', current, 'baton', baton, 'list', list);
                 }
             } else {
                 def.resolve();

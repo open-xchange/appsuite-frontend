@@ -84,13 +84,31 @@ define('io.ox/core/commons',
                     } else if (len > 1) {
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid);//grid is needed to apply busy animations correctly
+                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
                     } else {
                         if (draw.cancel) draw.cancel();
                         node.css('height', '').idle().empty();
                     }
                     // remember current selection
                     last = flat;
+                }
+            });
+        },
+
+        wireAppAndEmptyDetailView: function (app, node) {
+
+            app.getGrid().selection.on('empty', function () {
+                // call extensions
+                var id = app.get('name'), empty, folder = app.folder.get();
+                // check node first
+                if (node.children('.empty[data-folder="' + folder + '"]').length === 0) {
+                    empty = $('<div class="empty default-content-padding">').attr('data-folder', folder);
+                    node.parent().scrollTop(0);
+                    node.empty().append(empty);
+                    app.folder.getData().done(function (data) {
+                        var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
+                        ext.point(id + '/detail/empty').invoke('draw', empty, baton);
+                    });
                 }
             });
         },
@@ -298,7 +316,7 @@ define('io.ox/core/commons',
             });
             // on cancel search
             win.on('search:clear cancel-search', function () {
-                grid.setMode('all');
+                if (grid.getMode() !== 'all') grid.setMode('all');
             });
         },
 

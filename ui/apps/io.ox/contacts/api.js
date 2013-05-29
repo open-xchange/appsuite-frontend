@@ -29,7 +29,8 @@ define('io.ox/contacts/api',
             email: ['555', '556', '557'],
             telephone: ['542', '543', '545', '546', '548', '549', '551', '552', '553', '559', '560', '561', '562', '563', '564', '567', '568'],
             cellular: ['551', '552'],
-            fax: ['544', '550', '554']
+            fax: ['544', '550', '554'],
+            addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
         };
 
     //mapped ids for msisdn
@@ -68,15 +69,69 @@ define('io.ox/contacts/api',
                     opt = opt || {};
                     query = query + '*';
                     var data = {
-                        display_name: query,
-                        first_name: query,
-                        last_name: query,
-                        email1: query,
-                        email2: query,
-                        email3: query,
                         orSearch: true,
                         emailAutoComplete: !!opt.emailAutoComplete
+                    },
+                    defaultBehaviour = true,
+                    queryField = {
+                        names: {
+                            display_name: query,
+                            first_name: query,
+                            last_name: query,
+                            email1: query,
+                            email2: query,
+                            email3: query
+                        },
+                        addresses: {
+                            street_home: query,
+                            postal_code_home: query,
+                            city_home: query,
+                            state_home: query,
+                            country_home: query,
+                            street_business: query,
+                            postal_code_business: query,
+                            city_business: query,
+                            state_business: query,
+                            country_business: query,
+                            street_other: query,
+                            postal_code_other: query,
+                            city_other: query,
+                            state_other: query,
+                            country_other: query
+                        },
+                        phones: {
+                            telephone_business1: query,
+                            telephone_business2: query,
+                            telephone_home1: query,
+                            telephone_home2: query,
+                            telephone_other: query,
+                            fax_business: query,
+                            telephone_callback: query,
+                            telephone_car: query,
+                            telephone_company: query,
+                            fax_home: query,
+                            cellular_telephone1: query,
+                            cellular_telephone2: query,
+                            fax_other: query,
+                            telephone_isdn: query,
+                            telephone_pager: query,
+                            telephone_primary: query,
+                            telephone_radio: query,
+                            telephone_telex: query,
+                            telephone_ttytdd: query,
+                            telephone_ip: query,
+                            telephone_assistant: query
+                        }
                     };
+                    _(opt).each(function (value, key) {
+                        if (_(queryField).chain().keys().contains(key).value() && value === 'on') {
+                            data = _(data).extend(queryField[key]);
+                            defaultBehaviour = false;
+                        }
+                    });
+                    if (defaultBehaviour) {
+                        data = _(data).extend(queryField.names);
+                    }
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
@@ -479,9 +534,9 @@ define('io.ox/contacts/api',
 
         // duck checks
         if (api.looksLikeResource(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_resource.png';
         } else if (api.looksLikeDistributionList(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_group.xpng';
+            return ox.base + '/apps/themes/default/dummypicture_group.png';
         } else if (obj.image1_url) {
             return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
         } else {
@@ -521,9 +576,9 @@ define('io.ox/contacts/api',
         if (obj.id || obj.contact_id) {
             // duck checks
             if (api.looksLikeResource(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.png';
             } else if (api.looksLikeDistributionList(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.xpng';
+                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.png';
             }
             // also look for contact_id to support user objects directly
             var id = obj.contact_id || obj.id,

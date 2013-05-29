@@ -14,8 +14,8 @@
 /* VGrid elements */
 
 .vgrid-cell.contact {
+
     height: 40px;
-    padding: 0.75em 13px 0.75em 13px;
 
     /* swipe delete button */
     .swipeDelete {
@@ -36,16 +36,34 @@
     font-weight: bold;
 }
 
+.contact-grid-container {
+
+    .vgrid-cell.vgrid-label {
+        text-align: left;
+        font-weight: 200;
+        font-size: 32px;
+        line-height: 32px;
+        color: @linkColor;
+        padding-top: 25px;
+        padding-bottom: 15px;
+        background-image: none;
+        background-color: #fff;
+        border-top: 0px none;
+        border-bottom: 0px none;
+    }
+}
+
 /* Tabs */
 
 .abs.contact-grid-container {
-    left: 37px;
+    left: 35px;
     overflow: auto;
 }
 
 .contact-grid-index {
     width: 35px;
     overflow: hidden;
+    .user-select(none);
 }
 
 .contact-grid-index .thumb-index {
@@ -56,54 +74,19 @@
     text-align: center;
     white-space: nowrap;
     cursor: pointer;
-    background-color: #eee;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.20, #fff),
-        color-stop(1.00, #eee)
-    );
-    background-image: -o-linear-gradient(
-        top,
-        #fff 0%,
-        #eee 80%
-    );
-    background-image: -moz-linear-gradient(
-        center top,
-        #fff 20%,
-        #eee 100%
-    );
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');"
+    margin: 1px 1px 0 1px;
 }
 
 .contact-grid-index .thumb-index.thumb-index-disabled,
 .contact-grid-index .thumb-index.thumb-index-disabled:hover {
     color: #ccc;
     font-weight: normal;
-    background-color: #fff;
-    background-image: none;
-    border-bottom-color: #ddd;
     cursor: default;
 }
 
 .contact-grid-index .thumb-index:hover {
     color: white;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.20, #555),
-        color-stop(1.00, #111)
-    );
-    background-image: -o-linear-gradient(
-        top, #555 20%, #111 100%
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #111 0%,
-        #555 80%
-    );
+    background-color: @linkColor;
 }
 
 /* Detail view */
@@ -174,9 +157,8 @@
         color: #333;
     }
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 34px 0;
-        text-align: left;
     }
 
     .breadcrumb {
@@ -187,12 +169,25 @@
         margin: -18px 0 39px 0;
     }
 
-    .member-name {
-        font-weight: bold;
+    .member {
+        height: 48px;
+        clear: both;
+        margin-bottom: 1em;
     }
 
-    .member {
-        margin-bottom: 1em;
+    .member-picture {
+        float: left;
+        width: 48px;
+        height: 48px;
+        margin-right: 14px;
+        background-position: center center;
+        background-size: cover;
+        .border-radius(3px);
+    }
+
+    .member-name {
+        font-weight: bold;
+        padding-top: 4px;
     }
 }
 
@@ -254,4 +249,12 @@ input#image1 {
     .contact-grid-index {
         width: 0;
     }
+}
+
+li.io-ox-specificHelp {
+    margin-left: 10px;
+}
+
+li.io-ox-specificHelp a {
+    font-style: italic;
 }

@@ -203,6 +203,9 @@ define("io.ox/core/desktop",
                     },
 
                     getData: function () {
+
+                        if (folder === null) return $.Deferred.resolve({});
+
                         return require(['io.ox/core/api/folder']).pipe(function (api) {
                             return api.get({ folder: folder });
                         });
@@ -502,6 +505,14 @@ define("io.ox/core/desktop",
                 return true;
             }
             return false;
+        },
+
+        getCurrentApp: function () {
+            return currentWindow !== null ? currentWindow.app : null;
+        },
+
+        getCurrentWindow: function () {
+            return currentWindow;
         }
     });
 
@@ -1233,10 +1244,15 @@ define("io.ox/core/desktop",
                             $('<div class="progress progress-striped progress-warning active second"><div class="bar" style="width: 0%;"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
-                        // window HEAD
-                        win.nodes.head = $('<div class="window-head">'),
-                        // window BODY
-                        win.nodes.body = $('<div class="window-body">')
+                        // window SIDEPANEL
+                        win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
+                        // window MAIN PANEL
+                        win.nodes.panel = $('<div class="window-panel">').append(
+                            // window HEAD
+                            win.nodes.head = $('<div class="window-head">'),
+                            // window BODY
+                            win.nodes.body = $('<div class="window-body">')
+                        )
                     )
                     // capture controller events
                     .on('controller:quit', function () {

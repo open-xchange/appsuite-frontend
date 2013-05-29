@@ -271,9 +271,8 @@
         text-decoration: none;
     }
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     .modal-header {
@@ -294,7 +293,12 @@
 .vgrid-cell.file {
 
     display: table-row;
-    padding: 0 13px 0 13px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    .vgrid-cell-checkbox {
+        padding-top: 9px;
+    }
 
     .name {
         display: table-cell;

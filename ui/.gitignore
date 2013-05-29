@@ -7,3 +7,5 @@
 /debian/open-xchange-appsuite*.substvars
 /local.conf
 /apps/themes/*/less
+/apps/plugins/playground
+npm-debug.log

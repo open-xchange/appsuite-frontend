@@ -11,7 +11,24 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-//grid
+// grid
+
+.vgrid-cell.tasks {
+
+    padding-top: 13px;
+    padding-bottom: 13px;
+
+    .vgrid-cell-checkbox {
+        padding-top: 10px;
+    }
+
+    /* swipe delete button */
+    .swipeDelete {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+    }
+}
 
 .vgrid-cell.tasks .end_date {
     color: #777;
@@ -73,21 +90,13 @@
     height: 13px;
     margin: 0 1em 0 0;
 }
-.vgrid-cell.tasks {
-    /* swipe delete button */
-    .swipeDelete {
-        position: absolute;
-        top: 13px;
-        right: 10px;
-    }
-}
+
 //detailview
 
 .tasks-detailview {
 
-    .io-ox-inline-links {
+    .io-ox-inline-links:first-child {
         margin: 0 0 26px 0;
-        text-align: left;
     }
 
     header {

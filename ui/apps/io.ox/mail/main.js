@@ -698,6 +698,7 @@ define('io.ox/mail/main',
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
+        commons.wireAppAndEmptyDetailView(app, right);
 
         grid.setEmptyMessage(function (mode) {
             return mode === 'search' ?
