@@ -424,6 +424,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             delete options.trace;
             options.tracer = uuids.randomUUID();
         }
+        options.seq = seq;
+        seq++;
         return http.PUT({
             module: 'rt',
             params: {
