@@ -188,8 +188,17 @@ define('plugins/notifications/calendar/register',
             self.collection.remove(self.model);
             self.collection.hidden.push(self.model.get('cid'));
             setTimeout(function () {
-                self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
-                self.collection.add(reminder);
+                //get updated data
+                calApi.get(reminder.get('caldata')).done(function (calObj) {
+                    self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                    //fill in new data
+                    reminder.set('caldata', calObj);
+                    reminder.set('title', calObj.title);
+                    reminder.set('location', calObj.location);
+                    reminder.set('time', util.getTimeInterval(calObj));
+                    self.collection.add(reminder);
+                });
+                
             }, min * 60000);
         },
 
@@ -261,6 +270,7 @@ define('plugins/notifications/calendar/register',
         register: function (controller) {
             var InviteNotifications = controller.get('io.ox/calendar', InviteNotificationsView),
                 ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
+            ReminderNotifications.collection.hidden = [];
             calApi
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
@@ -328,7 +338,7 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderApi
-                .on('set:calendar:reminder', function (e, reminder) {
+                .on('add:calendar:reminder', function (e, reminder) {
 
                     var tmp = [],
                         counter = reminder.length,
@@ -356,9 +366,15 @@ define('plugins/notifications/calendar/register',
                             var isOver = data.end_date < now;
 
                             if (!isOver) {
+                                _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
+                                    if (reminderModel.get('cid') === inObj.cid) {
+                                        ReminderNotifications.collection.remove(reminderModel);
+                                    }
+                                });
+                                
                                 // do not add user suppressed ('remind me later') reminders
                                 if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
-                                    tmp.push(inObj);
+                                    ReminderNotifications.collection.add(new Backbone.Model(inObj));
                                 }
                             }
 
@@ -366,13 +382,16 @@ define('plugins/notifications/calendar/register',
 
                             if (counter === 0) {
                                 //all data processed. Update Collection
-                                ReminderNotifications.collection.reset(tmp);
+                                ReminderNotifications.collection.trigger('add');
                             }
                         });
                     });
-                })
-                .on('delete:appointment', removeReminders)
-                .getReminders();
+                });
+            calApi.on('delete:appointment', removeReminders)
+                  .on('delete:appointment', function () {
+                        reminderApi.getReminders();
+                    });
+            reminderApi.getReminders();
         }
     });
     return true;
