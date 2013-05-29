@@ -599,6 +599,8 @@
     .user-select(none);
     .box-sizing(border-box);
     filter: none;
+
+    &.css-table { table-layout: fixed; }
 }
 
 .window-sidepanel {
@@ -609,12 +611,13 @@
     left: 0px;
     width: 0px;
     z-index: 2;
-
     overflow: hidden;
-}
+    display:none;
 
-.window-sidepanel.visible {
-    overflow: visible;
+    &.visible {
+        display:block;
+        overflow: visible;
+    }
 }
 
 .window-panel {
@@ -626,8 +629,6 @@
     left: 0px;
     z-index: 1;
 }
-
-.window-head.css-table { table-layout: fixed; }
 
 .cell-70 { width: 70.0%; }
 .cell-50 { width: 50.0%; }
