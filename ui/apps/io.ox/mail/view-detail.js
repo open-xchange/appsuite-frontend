@@ -1469,13 +1469,13 @@ define('io.ox/mail/view-detail',
             var node = $('<section>')
                 .css({
                     fontFamily: '"Rokkitt", cursive',
-                    fontSize: '36px',
-                    lineHeight: '36px',
-                    padding: '20px',
+                    fontSize: '28px',
+                    lineHeight: '28px',
+                    padding: '14px',
                     color: '#fff',
-                    backgroundColor: '#B4B2A5',
-                    borderRadius: '10px',
-                    textShadow: '2px 2px 5px #000'
+                    backgroundColor: '#BCC0C0',
+                    borderRadius: '5px',
+                    textShadow: '1px 1px 3px #000'
                 })
                 .text('Buy premium. Now. Don\'t\u00A0ask!');
 
