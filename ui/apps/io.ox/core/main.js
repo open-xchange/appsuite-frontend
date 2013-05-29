@@ -536,7 +536,9 @@ define('io.ox/core/main',
                         $('<li>', {'class': 'io-ox-specificHelp ' + appClass}).append(
                             $('<a>', {
                                 href: helpDir + extension.href,
-                                target: '_blank'
+                                target: '_blank',
+                                role: 'menuitem',
+                                tabindex: 1
                             }).text(extension.desc)
                         )
                     );
@@ -557,7 +559,7 @@ define('io.ox/core/main',
             draw: function () {
                 this.append(
                     $('<li>').append(
-                        $('<a>', { href: 'https://knowledgebase.open-xchange.com', target: '_blank' }).text(gt('Knowledgebase'))
+                        $('<a>', { href: 'https://knowledgebase.open-xchange.com', target: '_blank', role: 'menuitem', tabindex: 1 }).text(gt('Knowledgebase'))
                     )
                 );
             }
