@@ -34,6 +34,7 @@
                                     evt.preventDefault();
 
                                     ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
+                                    p.close();
                                 })
                             );
                         });
