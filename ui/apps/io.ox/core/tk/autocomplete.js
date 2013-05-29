@@ -136,16 +136,15 @@ define('io.ox/core/tk/autocomplete',
                         popup.hide().appendTo(self.closest(o.parentSelector));
 
                         var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
-                        var myLeft = off.left -  (self.closest(o.parentSelector).offsetParent().offset().left);
+                        var myLeft = off.left - (self.closest(o.parentSelector).offsetParent().offset().left);
 
                         popup.removeClass('top-placement bottom-placement');
-
                         if (o.placement === 'top') {
                             // top
-                            popup.addClass('top-placement').css({ top: myTop - h - popup.outerHeight(), left: myLeft, width: w });
+                            popup.addClass('top-placement').css({ top: myTop - h - popup.outerHeight(), left: myLeft + 4, width: w });
                         } else {
                             // bottom
-                            popup.addClass('bottom-placement').css({ top: myTop, left: myLeft, width: w });
+                            popup.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                         }
 
                         popup.show();
