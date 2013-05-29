@@ -420,11 +420,6 @@ define("io.ox/core/tk/dialogs",
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-/*
-    Not sure if this is correctly merged...
-
-                    $('<button class="btn btn-small btn-primary" data-action="close" role="button" tabindex="1">').text(options.saveOnClose ? gt('Save') : gt('Close'))
-*/
                     $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
@@ -525,6 +520,10 @@ define("io.ox/core/tk/dialogs",
             pane.trigger('click'); // route click to 'pane' since closer is above pane
             close(e); // close side popup
             return false;
+        }).on('keydown', function (e) {
+            if ((e.keyCode || e.which) === 13) { // enter
+                $(this).trigger('click');
+            }
         });
 
         popup.on("click", processEvent);
