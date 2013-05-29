@@ -959,7 +959,8 @@ define('io.ox/core/tk/selection',
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
-                // e.preventDefault();
+                container.focus();
+                e.preventDefault();
             }
 
             // drag & drop
