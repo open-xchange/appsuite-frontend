@@ -11,9 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-*:focus {
-    outline: #08c auto 5px !important;
-};
 
 #background_loader.secure {
 
@@ -931,10 +928,6 @@ a.button {
 
     }
 
-    &:focus {
-        outline: none;
-    }
-
     .vgrid-toolbar {
 
         position: absolute;
@@ -1708,7 +1701,7 @@ input.nice-input {
             background-color: @selectedBackground;
 
             * {
-                color: #fff;
+                color: @foldertreeSelectedLabelColor;
             }
         }
 
@@ -1723,14 +1716,10 @@ input.nice-input {
 
         &.selected {
 
-            background-color: #08c;
+            background-color: @foldertreeSelectedFocusBackground;
 
             * {
-                color: #fff;
-            }
-
-            .folder-counter-badge {
-                background-color: #006597;
+                color: @foldertreeSelectedLabelColor;
             }
 
         }
@@ -1912,9 +1901,13 @@ input.nice-input {
                     background-color: @foldertreeSelectedBackground;
 
                     .folder-label {
-                        color: lighten(@linkColor, 20%);
+                        color: @foldertreeSelectedLabelColor;
                     }
 
+                }
+
+                &.show-counter .folder-label {
+                    color: lighten(@linkColor, 20%);
                 }
 
                 .shared-by {
@@ -1933,14 +1926,14 @@ input.nice-input {
 
                 &.selected {
 
-                    background-color: #08c;
-
-                    .folder-label {
-                        color: #fff;
-                    }
+                    background-color: @foldertreeSelectedFocusBackground;
 
                     .folder-counter-badge {
-                        background-color: #006597;
+                        background-color: @foldertreeBadgeFocusBackground;
+                    }
+
+                    .folder-label {
+                        color: @foldertreeSelectedLabelColor;
                     }
 
                 }
