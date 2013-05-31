@@ -565,6 +565,8 @@ define('io.ox/calendar/api',
                         timezone: 'UTC'
                     });
                 }
+            } else {
+                result.push({data: []});
             }
         });
 
