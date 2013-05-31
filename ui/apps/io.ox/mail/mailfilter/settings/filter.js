@@ -36,8 +36,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView = new AccountDetailView({model: myModel, node: myViewNode});
 
         myView.dialog = new dialogs.ModalDialog({
-            width: 685
-//            async: true
+            width: 685,
+            async: true
         });
 
         myView.dialog.append(

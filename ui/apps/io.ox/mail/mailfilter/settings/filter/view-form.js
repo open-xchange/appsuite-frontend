@@ -22,12 +22,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
     'use strict';
 
-
-    var staticStrings =  {
-
-    },
-
-        POINT = 'io.ox/mailfilter/settings/filter/detail',
+    var POINT = 'io.ox/mailfilter/settings/filter/detail',
 
         sizeValues = {
             over: gt('Is bigger than'),
@@ -154,14 +149,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         actionsTranslations = {
-            keep: gt('Keep'),
-            discard: gt('Discard'),
-            redirect: gt('Redirect to'),
-            move: gt('Move to folder'),
-            reject: gt('Reject with reason'),
-            markmail: gt('Mark mail as'),
-            tag: gt('Tag mail with'),
-            flag: gt('Flag mail with')
+            'keep': gt('Keep'),
+            'discard': gt('Discard'),
+            'redirect': gt('Redirect to'),
+            'move': gt('Move to folder'),
+            'reject': gt('Reject with reason'),
+            'markmail': gt('Mark mail as'),
+            'tag': gt('Tag mail with'),
+            'flag': gt('Flag mail with')
         },
 
         colorNames = {
@@ -211,7 +206,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             _modelBinder: undefined,
             initialize: function (options) {
 
-                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
+//                Backbone.Validation.bind(this, {selector: 'name', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
 
@@ -280,6 +275,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onSave: function () {
                 var self = this;
                 this.model.save().done(function (response) {
+                    self.dialog.close();
                     if (response === null) {
                         notifications.yell('success', gt('Mailfilter updated'));
                     } else {
@@ -289,6 +285,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         self.collection.add(newCreatedDate);
 
                     }
+
+                }).fail(function (response) {
+                    self.dialog.idle();
+                    _.each(response.error_params, function (error) {
+                        notifications.yell('error', gt(error));
+                    });
 
                 });
             },
@@ -311,9 +313,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 if (testAction === 'create-test') {
                     list.remove();
-
                     if (checkForMultipleTests.length > 1) {
-
                         testArray.tests.push(defaultTests[value]);
 
                     } else if (checkForMultipleTests.length === 1) {
@@ -342,7 +342,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 } else {
                     link.text(translatedValue);
 
-                    if (checkForMultipleTests.length > 0) {
+                    if (checkForMultipleTests.length > 1) {
                         testArray.tests[testID].comparison = value;
                     } else {
                         testArray.comparison = value;
@@ -733,7 +733,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         id: 'rulename',
         index: 100,
         fluid: true,
-        label: 'rulename',
+        label: gt('rulename'),
         control: '<input type="text" class="span7" name="rulename">',
         attribute: 'rulename'
     }));
