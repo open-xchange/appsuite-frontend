@@ -461,6 +461,8 @@ define('io.ox/core/tk/folderviews',
         // add event hub
         Events.extend(this);
 
+        this.selection.keyboard(container, true);
+
         this.paint = function () {
             var p = this.paint;
             if (p.running === null) {
