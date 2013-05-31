@@ -11,8 +11,7 @@
  */
 
 define("io.ox/core/test",
-    ["io.ox/core/test/model",
-     "io.ox/core/test/mailfilter"], function () {
+    ["io.ox/core/test/mailfilter"], function () {
 
     'use strict';
 
