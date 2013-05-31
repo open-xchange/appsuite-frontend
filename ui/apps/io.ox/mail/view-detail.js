@@ -692,7 +692,8 @@ define('io.ox/mail/view-detail',
             }
 
             function scrubThreadDelete(deleteAction) {
-                if (! deleteAction) { return; }
+
+                if (!deleteAction) return;
 
                 var modifiedBaton, sentFolder, inboxMails;
 
@@ -710,10 +711,12 @@ define('io.ox/mail/view-detail',
             }
 
             function drawThread(node, baton, pos, top, bottom, mails) {
+
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
                     nodes, inline, top, mail,
                     list = baton.data;
+
                 try {
                     // draw inline links for whole thread
                     if (list.length > 1) {
@@ -722,8 +725,8 @@ define('io.ox/mail/view-detail',
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
                         frag.appendChild(inline.get(0));
 
-                        //replace delete action with one excluding the sent folder
-                        scrubThreadDelete($(inline).find('[data-action=delete]'));
+                        // replace delete action with one excluding the sent folder
+                        scrubThreadDelete(inline.find('[data-action=delete]'));
 
                     }
                     // loop over thread - use fragment to be fast for tons of mails

@@ -1264,6 +1264,10 @@ define('io.ox/core/tk/vgrid',
                 return (currentMode === 'all' && hash[folder]) || null;
             };
         }());
+
+        this.focus = function () {
+            scrollpane.focus();
+        };
     };
 
     // make Template accessible

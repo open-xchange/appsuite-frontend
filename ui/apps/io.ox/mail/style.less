@@ -150,26 +150,31 @@
     float: right;
 }
 
-.vgrid-cell.mail .thread-size {
-    color: #999;
-    min-width: 1em;
-    font-weight: normal;
-    padding: 0 0.5em 0 0.5em;
-    margin-left: 1em;
-    display: inline-block;
-    float: right;
-    cursor: pointer;
-    overflow: visible;
-}
+.vgrid-cell.mail {
 
-.borderradius .vgrid-cell.mail .thread-size {
-    background-color: #e5e5e5;
-    text-align: center;
-    border-radius: 5px;
-}
+    .thread-size {
+        color: #999;
+        min-width: 1em;
+        font-weight: normal;
+        padding: 0 0.5em 0 0.5em;
+        margin-left: 1em;
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+        overflow: visible;
 
-.borderradius .vgrid-cell.mail.selected .thread-size {
-    background-color: darken(#ddd, 5%);
+        background-color: #e5e5e5;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    &.selected .thread-size {
+        background-color: darken(#ddd, 10%);
+    }
+
+    .vgrid-scrollpane:focus &.selected .thread-size {
+        background-color: #08c;
+    }
 }
 
 .vgrid.editable .vgrid-cell.thread-summary,

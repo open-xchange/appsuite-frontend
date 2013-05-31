@@ -779,9 +779,11 @@ define('io.ox/mail/main',
             actions.invoke('io.ox/mail/actions/move', null, baton);
         });
 
+        win.on('show:initial', grid.focus);
+
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)
-            .pipe(commons.showWindow(win, grid));
+            .then(commons.showWindow(win, grid));
     });
 
     return {

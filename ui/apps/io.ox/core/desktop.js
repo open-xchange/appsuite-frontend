@@ -897,6 +897,7 @@ define("io.ox/core/desktop",
                             }
 
                             if (firstShow) {
+                                self.trigger("show:initial"); // alias for open
                                 self.trigger("open");
                                 self.state.running = true;
                                 ox.ui.windowManager.trigger("window.open", self);
