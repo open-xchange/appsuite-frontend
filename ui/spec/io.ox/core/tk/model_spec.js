@@ -70,40 +70,35 @@ define(["io.ox/core/tk/model"], function (Model) {
             expect(model.isDirty()).toEqual(true);
         });
 
-        //TODO: port to waitsFor
         it('triggers general change event', function () {
-            var called = false;
-            model.off().on('change', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change');
                 expect(key).toEqual('firstName');
                 expect(value).toEqual('Matthias B.');
-                called = true;
             });
+            model.off().on('change', callback);
             model.set('firstName', 'Matthias B.', {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('triggers specific change event', function () {
-            var called = false;
-            model.off().on('change:firstName', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:firstName');
                 expect(key).toEqual('firstName');
                 expect(value).toEqual('Matthias');
-                called = true;
             });
+            model.off().on('change:firstName', callback);
             model.set('firstName', 'Matthias', {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
         it('calling save resets model', function () {
-            var called = false;
-            model.save().done(function () {
+            var callback = sinon.spy(function () {
                 expect(model.getChanges()).toEqual({});
                 expect(model.isDirty()).toEqual(false);
-                called = true;
             });
-            expect(called).toEqual(true);
+            model.save().done(callback);
+            expect(callback).toHaveBeenCalledOnce();
         });
     });
 
@@ -142,34 +137,29 @@ define(["io.ox/core/tk/model"], function (Model) {
             expect(model.get('familyName')).toEqual(''); // invalid states are allowed!
         });
 
-        //TODO: port to waitsFor
         it('triggers invalid format event', function () {
-            var called = false;
+            var callback = sinon.spy(function (e, error) {
+                expect(error.properties).toEqual(['familyName']);
+                expect(model.get('familyName')).toEqual('');
+            });
             // set value back
             model.set('familyName', 'B.', {validate: true});
             // catch error
-            model.off().on('error:invalid', function (e, error) {
-                expect(error.properties).toEqual(['familyName']);
-                expect(model.get('familyName')).toEqual('');
-                called = true;
-            });
+            model.off().on('error:invalid', callback);
             model.set('familyName', '', {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('triggers inconsistency event', function () {
-            var called = false;
-            model.off().on('error:invalid', function (e, error) {
+            var callback = sinon.spy(function (e, error) {
                 expect(e.type).toEqual('error:invalid');
                 expect(error.properties).toEqual(['age']);
                 expect(model.get('age')).toEqual(-1);
-                called = true;
             });
+            model.off().on('error:invalid', callback);
             model.set('familyName', 'B.', {validate: true});
             model.set('age', -1, {validate: true});
-            model.save();
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
         it('detects that model is dirty', function () {
@@ -189,20 +179,16 @@ define(["io.ox/core/tk/model"], function (Model) {
             });
         });
 
-        //TODO: port to waitsFor
         it('passes save without errors', function () {
-            var errors = 'No errors', done = 'Not done';
-            model.off().on('error:invalid', function (e, error) {
-                console.debug('Error', arguments);
-                errors = 'Errors';
-            });
-            model.save().done(function () {
+            var errorCallback = sinon.spy(),
+                doneCallback = sinon.spy(function () {
                 expect(model.getChanges()).toEqual({});
                 expect(model.isDirty()).toEqual(false);
-                done = 'Done';
             });
-            expect(done).toEqual('Done');
-            expect(errors).toEqual('No errors');
+            model.off().on('error:invalid', errorCallback);
+            model.save().done(doneCallback);
+            expect(doneCallback).toHaveBeenCalledOnce();
+            expect(errorCallback).not.toHaveBeenCalled();
         });
     });
 
@@ -241,81 +227,67 @@ define(["io.ox/core/tk/model"], function (Model) {
             expect(model.get('z')).toEqual('123456789_1111');
         });
 
-        //TODO: port to waitsFor
         it('check change event for x', function () {
-            var called = false;
-            model.off().on('change:x', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:x');
                 expect(key).toEqual('x');
                 expect(value).toEqual('123400009');
-                called = true;
             });
+            model.off().on('change:x', callback);
             model.set('a', '0000', {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('check change event for x', function () {
-            var called = false;
-            model.off().on('change:x', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:x');
                 expect(key).toEqual('x');
                 expect(value).toEqual('12340000#');
-                called = true;
             });
+            model.off().on('change:x', callback);
             model.set('b', '#', {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('check change event for y', function () {
-            var called = false;
-            model.off().on('change:y', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:y');
                 expect(key).toEqual('y');
                 expect(value).toEqual(999);
-                called = true;
             });
+            model.off().on('change:y', callback);
             model.set('c', -1, {validate: true});
-            expect(called).toEqual(true);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('check change event for combined z', function () {
-            var called = 0;
-            model.off().on('change:z', function (e, key, value) {
+            var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:z');
                 expect(key).toEqual('z');
                 expect(value).toEqual('1234----#_999');
-                called++;
             });
+            model.off().on('change:z', callback);
             model.set('a', '----', {validate: true});
-            expect(called).toEqual(1);
+            expect(callback).toHaveBeenCalledOnce();
         });
 
-        //TODO: port to waitsFor
         it('check for the right set of change events', function () {
-            var called = 0;
-            model.off().on('change:a change:b change:c change:x change:y change:z', function (e, key, value) {
-                called++;
-            });
+            var callback = sinon.spy();
+            model.off().on('change:a change:b change:c change:x change:y change:z', callback);
             model.set('c', '1234', {validate: true});
-            expect(called).toEqual(3);
+            expect(callback).toHaveBeenCalledThrice();
         });
 
-        //TODO: port to waitsFor
         it('check proper events for unchanged computed properties', function () {
-            var called = 0;
-            model.off().on('change:mod', function (e, key, value) {
-                called++;
-            });
+            var callback = sinon.spy();
+            model.off().on('change:mod', callback);
             model.set('d', 0, {validate: true}); // initial value -> no change, mod = 0
             model.set('d', 2, {validate: true}); // no change, mod = 0
             model.set('d', 4, {validate: true}); // no change, mod = 0
             model.set('d', 1, {validate: true}); // change!, mod = 1
             model.set('d', 2, {validate: true}); // change!, mod = 0
             model.set('d', 4, {validate: true}); // no change, mod = 0
-            expect(called).toEqual(2);
+            expect(callback).toHaveBeenCalledTwice();
         });
     });
 });
