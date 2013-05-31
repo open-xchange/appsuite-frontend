@@ -30,8 +30,11 @@ define(["io.ox/core/tk/model"], function (Model) {
 
     describe('Simple model without schema', function () {
 
-        it('create instance', function () {
+        beforeEach(function () {
             model = new Model({ data: data });
+        });
+
+        it('create instance', function () {
             expect(model).toBeDefined();
         });
 
@@ -63,10 +66,12 @@ define(["io.ox/core/tk/model"], function (Model) {
         });
 
         it('returns one change', function () {
+            model.set('city', '44135 Dortmund', {validate: true});
             expect(model.getChanges()).toEqual({ city: '44135 Dortmund' });
         });
 
         it('detects that model is dirty', function () {
+            model.set('city', '44135 Dortmund', {validate: true});
             expect(model.isDirty()).toEqual(true);
         });
 
@@ -85,10 +90,10 @@ define(["io.ox/core/tk/model"], function (Model) {
             var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:firstName');
                 expect(key).toEqual('firstName');
-                expect(value).toEqual('Matthias');
+                expect(value).toEqual('Matthias B.');
             });
             model.off().on('change:firstName', callback);
-            model.set('firstName', 'Matthias', {validate: true});
+            model.set('firstName', 'Matthias B.', {validate: true});
             expect(callback).toHaveBeenCalledOnce();
         });
 
@@ -104,7 +109,7 @@ define(["io.ox/core/tk/model"], function (Model) {
 
     describe('Model with schema', function () {
 
-        it('create instance', function () {
+        beforeEach(function () {
             var ComplexModel = Model.extend({ schema: schema });
             schema.check = function (data, Error) {
                 if (data.age < 0) {
@@ -112,6 +117,9 @@ define(["io.ox/core/tk/model"], function (Model) {
                 }
             };
             model = new ComplexModel({ data: data });
+        });
+
+        it('create instance', function () {
             expect(model).toBeDefined();
         });
 
@@ -163,6 +171,7 @@ define(["io.ox/core/tk/model"], function (Model) {
         });
 
         it('detects that model is dirty', function () {
+            model.set('familyName', 'B.', {validate: true});
             expect(model.isDirty()).toEqual(true);
         });
 
@@ -171,7 +180,7 @@ define(["io.ox/core/tk/model"], function (Model) {
             model.set('email', 'matthias.biggeleben@open-xchange.com', {validate: true});
             expect(model.get()).toEqual({
                 firstName: 'Matthias',
-                familyName: 'B.',
+                familyName: '',
                 city: 'Dortmund',
                 country: 'Germany',
                 age: 34,
@@ -186,6 +195,7 @@ define(["io.ox/core/tk/model"], function (Model) {
                 expect(model.isDirty()).toEqual(false);
             });
             model.off().on('error:invalid', errorCallback);
+            model.set('familyName', 'B.', {validate: true});
             model.save().done(doneCallback);
             expect(doneCallback).toHaveBeenCalledOnce();
             expect(errorCallback).not.toHaveBeenCalled();
@@ -194,8 +204,7 @@ define(["io.ox/core/tk/model"], function (Model) {
 
     describe('Model with computed properties', function () {
 
-        it('create instance with a, b, c and computed props x, y, z, and mod', function () {
-
+        beforeEach(function () {
             var CModel = Model
                 .extend({ schema: schema })
                 .addComputed('x', ['a', 'b'], function (a, b) {
@@ -212,6 +221,9 @@ define(["io.ox/core/tk/model"], function (Model) {
                 });
 
             model = new CModel({ data: { a: '5678', b: 9, c: 111, d: 0 } });
+        });
+
+        it('create instance with a, b, c and computed props x, y, z, and mod', function () {
             expect(model).toBeDefined();
         });
 
@@ -242,7 +254,7 @@ define(["io.ox/core/tk/model"], function (Model) {
             var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:x');
                 expect(key).toEqual('x');
-                expect(value).toEqual('12340000#');
+                expect(value).toEqual('12345678#');
             });
             model.off().on('change:x', callback);
             model.set('b', '#', {validate: true});
@@ -264,7 +276,7 @@ define(["io.ox/core/tk/model"], function (Model) {
             var callback = sinon.spy(function (e, key, value) {
                 expect(e.type).toEqual('change:z');
                 expect(key).toEqual('z');
-                expect(value).toEqual('1234----#_999');
+                expect(value).toEqual('1234----9_1111');
             });
             model.off().on('change:z', callback);
             model.set('a', '----', {validate: true});
