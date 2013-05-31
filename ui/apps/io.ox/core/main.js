@@ -820,13 +820,20 @@ define('io.ox/core/main',
             if (settings.get('autoStart') === 'none') {
                 autoStart = [];
             } else {
-                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) { return !_.isUndefined(o) && !_.isNull(o); });
+                autoStart = _([].concat(settings.get('autoStart'))).filter(function (o) {
+                    return !_.isUndefined(o) && !_.isNull(o);
+                });
             }
             if (_.isEmpty(autoStart)) {
                 autoStart.push("io.ox/mail");
             }
 
             return autoStart;
+        };
+
+        var getAutoLaunchDetails = function (str) {
+            var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
+            return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
         };
 
         // checks url which app to launch, needed to handle direct links
@@ -858,18 +865,19 @@ define('io.ox/core/main',
                     i: null
                 });
             }
-            return _.url.hash('app') ? _.url.hash('app').split(/,/) : autoLaunchArray();
+            var appURL = _.url.hash('app'),
+                manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app];
+            if (manifest && manifest.refreshable) {
+                return appURL.split(/,/);
+            } else {
+                return autoLaunchArray();
+            }
         }
 
         var baton = ext.Baton({
             block: $.Deferred(),
             autoLaunch: appCheck()
         });
-
-        var getAutoLaunchDetails = function (str) {
-            var pair = str.split(/:/), app = pair[0], method = pair[1] || '';
-            return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
-        };
 
         baton.autoLaunchApps = _(baton.autoLaunch)
         .chain()
@@ -984,7 +992,11 @@ define('io.ox/core/main',
                     dialog.on('click', '.content .close', function (e) {
                         ox.ui.App.removeRestorePoint($(this).data('id')).done(function (list) {
                             // continue if list is empty
-                            if (list.length === 0) def.resolve();
+                            if (list.length === 0) {
+                                _.url.hash({});
+                                baton.canRestore = false;
+                                def.resolve();
+                            }
                         });
                     });
 
