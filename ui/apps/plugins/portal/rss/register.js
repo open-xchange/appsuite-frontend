@@ -99,6 +99,9 @@ define('plugins/portal/rss/register',
                 //replace img tags with empty src
                 $body.find('img[src=""]').replaceWith(gt('show image'));
 
+                //add target to a tags
+                $body.find('a').attr('target', '_blank');
+
                 this.append(
                     $('<div class="text">').append(
                         $('<h2>').text(_.noI18n(item.subject)),
