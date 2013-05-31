@@ -68,7 +68,9 @@
 
 		$(document).on('mousedown touchstart', function (e) {
 			// Clicked outside the datepicker, hide it
-			if ($(e.target).closest('.datepicker').length == 0) {
+			if (e.target == that.element[0]) {
+				that.picker.is(':visible') ? that.hide() : that.show();
+			} else if ($(e.target).closest('.datepicker').length == 0) {
 				that.hide();
 			}
 		});
