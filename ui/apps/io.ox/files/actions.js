@@ -73,7 +73,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return checkMedia(e, 'audio', true);
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -88,7 +88,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return e.collection.has('multiple') && checkMedia(e, 'video', true);
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -901,13 +901,25 @@ define('io.ox/files/actions',
         }
     });
 
-    function checkMedia(e, type) {
+    function checkMedia(e, type, fromSelection) {
+        if (!e.collection.has('multiple') && !settings.get(type + 'Enabled')) {
+            return false;
+        }
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
         }
-        return settings.get(type + 'Enabled') && _(e.baton.allIds).reduce(function (memo, obj) {
-            return memo || api.checkMediaFile(type, obj.filename);
-        }, false);
+        if (fromSelection) {
+            return api.getList(e.baton.allIds).then(function (data) {
+                e.baton.allIds = data;
+                return _(data).reduce(function (memo, obj) {
+                    return memo || api.checkMediaFile(type, obj.filename);
+                }, false);
+            });
+        } else {
+            return _(e.baton.allIds).reduce(function (memo, obj) {
+                return memo || api.checkMediaFile(type, obj.filename);
+            }, false);
+        }
     }
 
     new Action('io.ox/files/icons/audioplayer', {
