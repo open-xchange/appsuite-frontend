@@ -100,7 +100,7 @@ define("io.ox/mail/write/view-main",
             }
 
             if (collapsable) {
-                this.sections[id + 'Label'].on('click', { id: id }, $.proxy(fnHideSection, this));
+                this.sections[id + 'Label'].on('click', { id: id }, $.proxy(fnToggleSection, this));
             } else {
                 this.sections[id + 'Label'].css('cursor', 'default');
             }
@@ -122,27 +122,18 @@ define("io.ox/mail/write/view-main",
         },
 
         showSection: function (id, focus) {
-            var secLabel = this.sections[id + 'Label'],
-                secLink = this.sections[id + 'Link'],
-                sec = this.sections[id];
-            if (secLabel) {
-                secLabel.show();
-            }
+            var sec = this.sections[id];
             if (sec) {
                 sec.show().trigger('show');
                 if (focus !== false) {
                     this.focusSection(id);
                 }
             }
-            if (secLink) {
-                secLink.hide();
-            }
         },
 
         hideSection: function (id, node) {
             this.sections[id + 'Label'].add(this.sections[id]).hide();
             $(node).trigger('hide');
-            this.sections[id + 'Link'].show();
         },
 
         createLink: function (id, label) {
@@ -152,7 +143,7 @@ define("io.ox/mail/write/view-main",
                     $('<a>', { href: '#', tabindex: '7' })
                     .attr('data-section-link', id)
                     .text(label)
-                    .on('click', { id: id }, $.proxy(fnShowSection, this))
+                    .on('click', { id: id }, $.proxy(fnToggleSection, this))
                 );
         },
 
@@ -380,16 +371,20 @@ define("io.ox/mail/write/view-main",
             );
 
             // CC
-            this.addSection('cc', gt('Copy to'), false, true)
+
+            this.addLink('cc', gt('Copy (CC) to'));
+            this.addSection('cc', gt('Copy (CC) to'), false, true)
                 .append(this.createRecipientList('cc'))
                 .append(this.createField('cc'));
-            this.addLink('cc', gt('Copy (CC) to'));
+
 
             // BCC
-            this.addSection('bcc', gt('Blind copy to'), false, true)
+
+            this.addLink('bcc', gt('Blind copy (BCC) to'));
+            this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
                 .append(this.createRecipientList('bcc'))
                 .append(this.createField('bcc'));
-            this.addLink('bcc', gt('Blind copy (BCC) to'));
+
 
             // Attachments (unless we're on iOS)
             if (ox.uploadsEnabled) {
@@ -410,6 +405,8 @@ define("io.ox/mail/write/view-main",
 
             // Signatures
             (function () {
+                self.addLink('signatures', gt('Signatures'));
+
                 var signatureNode = self.addSection('signatures', gt('Signatures'), false, true);
 
                 function fnDrawSignatures() {
@@ -453,8 +450,6 @@ define("io.ox/mail/write/view-main",
                     });
                 }
 
-                self.addLink('signatures', gt('Signatures'));
-
                 fnDrawSignatures();
                 snippetAPI.on('refresh.all', fnDrawSignatures);
                 signatureNode.on('dispose', function () {
@@ -481,6 +476,7 @@ define("io.ox/mail/write/view-main",
             });
 
             // Options
+            this.addLink('options', gt('More'));
             this.addSection('options', gt('Options'), false, true).append(
                 // Priority
                 $('<div>').addClass('section-item')
@@ -504,8 +500,6 @@ define("io.ox/mail/write/view-main",
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
                 .append(createCheckbox('vcard', gt('Attach my vCard')))
             );
-
-            this.addLink('options', gt('More'));
 
             if (!Modernizr.touch) {
                 var format = settings.get('messageFormat', 'html');
@@ -762,6 +756,17 @@ define("io.ox/mail/write/view-main",
             view.createUpload()
         );
     };
+
+    function fnToggleSection(e) {
+        var id = e.data.id,
+            target = e.target;
+        e.preventDefault();
+        if (this.sections[id].is(':visible')) {
+            this.hideSection(id, target);
+        } else {
+            this.showSection(id, target);
+        }
+    }
 
     function fnHideSection(e) {
         var id = e.data.id;
