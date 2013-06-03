@@ -564,7 +564,19 @@ define.async('io.ox/office/tk/utils',
      *  The generated string.
      */
     Utils.repeatString = function (text, count) {
-        return new Array(count + 1).join(text);
+        var result = null;
+        switch (count) {
+        case 0:
+            return '';
+        case 1:
+            return text;
+        }
+        result = Utils.repeatString(text, Math.floor(count / 2));
+        result += result;
+        if (count % 2) {
+            result += text;
+        }
+        return result;
     };
 
     /**
