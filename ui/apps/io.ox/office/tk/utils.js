@@ -2542,11 +2542,11 @@ define.async('io.ox/office/tk/utils',
      *  The context to be bound to the callback function.
      */
     Utils.takeTime = function (message, callback, context) {
-        var t0 = new Date().getTime();
+        var t0 = _.now();
         try {
             return callback.call(context);
         } finally {
-            Utils.log(message + ' (' + (new Date().getTime() - t0) + 'ms)');
+            Utils.log(message + ' (' + (_.now() - t0) + 'ms)');
         }
     };
 
