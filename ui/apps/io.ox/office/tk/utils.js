@@ -580,6 +580,49 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Trims non-printable characters and white-spaces at the beginning and end
+     * of the passed string.
+     *
+     * @param {String} text
+     *  The text to be trimmed.
+     *
+     * @returns {String}
+     *  The trimmed text.
+     */
+    Utils.trimString = function (text) {
+        return text.replace(/^[\x00-\x1f\s]+(.*?)[\x00-\x1f\s]+$/, '$1');
+    };
+
+    /**
+     * Replaces all non-printable characters (ASCII 0x00-0x1F) in the passed
+     * string with space characters.
+     *
+     * @param {String} text
+     *  The text to be cleaned from non-printable characters.
+     *
+     * @returns {String}
+     *  The new text without non-printable characters.
+     */
+    Utils.cleanString = function (text) {
+        return text.replace(/[\x00-\x1f]/g, ' ');
+    };
+
+    /**
+     * Trims non-printable characters and white-spaces at the beginning and end
+     * of the passed string, and replaces all embedded non-printable characters
+     * (ASCII 0x00-0x1F) with space characters.
+     *
+     * @param {String} text
+     *  The text to be trimmed and cleaned from non-printable characters.
+     *
+     * @returns {String}
+     *  The new trimmed text without non-printable characters.
+     */
+    Utils.trimAndCleanString = function (text) {
+        return Utils.cleanString(Utils.trimString(text));
+    };
+
+    /**
      * Returns the passed text with a capitalized first character.
      *
      * @param {String} text
