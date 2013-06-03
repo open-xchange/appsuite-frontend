@@ -24,11 +24,13 @@ define.async('io.ox/core/manifests',
         // returns 'requires' of a given app or plugin id
         // useful for upsell stuff
         getRequirements: function (id) {
+            validate();
             return (this.apps[id] || this.plugins[id] || {}).requires || '';
         },
 
         loadPluginsFor: function (pointName, cb) {
             cb = cb || $.noop;
+            validate();
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 cb();
                 return $.when();
@@ -39,6 +41,7 @@ define.async('io.ox/core/manifests',
 
         withPluginsFor: function (pointName, requirements) {
             requirements = requirements || [];
+            validate();
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return requirements;
             }
@@ -46,6 +49,7 @@ define.async('io.ox/core/manifests',
         },
 
         pluginsFor: function (pointName) {
+            validate();
             if (!this.pluginPoints[pointName] || this.pluginPoints[pointName].length === 0) {
                 return [];
             }
@@ -85,9 +89,9 @@ define.async('io.ox/core/manifests',
                 };
             }
         },
-        apps: {},
-        plugins: {},
-        pluginPoints: {}
+        apps: null,
+        plugins: null,
+        pluginPoints: null
     };
 
     ox.withPluginsFor = function (pointName, requirements) {
@@ -135,24 +139,30 @@ define.async('io.ox/core/manifests',
         });
     }
 
-    _(ox.serverConfig.manifests).each(process);
-
     var ts = _.now(), custom = [];
 
     var self = {
         manager: manifestManager,
         reset: function () {
-            manifestManager.pluginPoints = {};
-            manifestManager.plugins = {};
-            manifestManager.apps = {};
-
-            _(ox.serverConfig.manifests).each(process);
-
-            if (_.url.hash('customManifests')) {
-                _(custom).each(process);
-            }
+            manifestManager.apps = null;
+            manifestManager.plugins = null;
+            manifestManager.pluginPoints = null;
         }
     };
+
+    function validate() {
+        if (manifestManager.apps) return;
+
+        manifestManager.pluginPoints = {};
+        manifestManager.plugins = {};
+        manifestManager.apps = {};
+
+        _(ox.serverConfig.manifests).each(process);
+
+        if (_.url.hash('customManifests')) {
+            _(custom).each(process);
+        }
+    }
 
     var def = $.Deferred();
 
@@ -160,12 +170,11 @@ define.async('io.ox/core/manifests',
         require([ox.base + "/src/manifests.js?t=" + ts], function (list) {
             custom = list;
             console.info('Loading custom manifests', _(list).pluck('path'), list);
-            _(list).each(process);
             def.resolve(self);
         });
     } else {
         def.resolve(self);
     }
 
-    return def;
+    return def.promise();
 });

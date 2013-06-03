@@ -421,6 +421,7 @@ $(window).load(function () {
         function updateServerConfig(data) {
             ox.serverConfig = data || {};
             capabilities.reset();
+            manifests.reset();
         }
 
         function setFallbackConfig() {
@@ -749,9 +750,6 @@ $(window).load(function () {
             }
 
             debug('boot.js: Load "signin" plugins & set default language');
-
-            // make sure we get 'signin' plugins
-            manifests.reset();
 
             return $.when(
                 // load extensions
