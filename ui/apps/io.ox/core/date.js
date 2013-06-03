@@ -14,7 +14,8 @@
 define.async('io.ox/core/date',
     ['io.ox/core/gettext',
      'io.ox/core/config',
-     'gettext!io.ox/core'], function (gettext, config, gt) {
+     'settings!io.ox/core',
+     'gettext!io.ox/core'], function (gettext, config, settings, gt) {
 
     /*jshint white:false */
 
@@ -972,10 +973,11 @@ define.async('io.ox/core/date',
 
     // TODO: get default from local clock
     return $.when(
-        api.getTimeZone(config.get('timezone', 'UTC'))
+        api.getTimeZone(settings.get('timezone', 'UTC'))
             .then(null, function () { return api.getTimeZone('UTC'); }),
         locale
     ).then(function (tz) {
+
         api.Local = tz;
         return api;
     });
