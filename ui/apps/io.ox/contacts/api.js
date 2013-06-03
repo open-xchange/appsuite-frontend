@@ -562,8 +562,7 @@ define('io.ox/contacts/api',
             };
 
         // param empty/null
-        // och bitte klammern nutzen wenn ein ODER dabei ist - ist das jetzt genau so gewollt!?
-        if (typeof obj === 'string' && obj === '' || typeof obj === 'object' && obj === null) {
+        if ((typeof obj === 'string' && obj === '') || (typeof obj === 'object' && obj === null)) {
             return deferred.resolve(defaultUrl);
         }
         // normalize
