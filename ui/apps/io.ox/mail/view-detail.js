@@ -92,30 +92,30 @@ define('io.ox/mail/view-detail',
     var insertEmoticons = (function () {
 
         var emotes = {
-            ':-)': 'smile',
-            ':)': 'smile',
-            ';-)': 'wink',
-            ';)': 'wink',
-            ':-D': 'laugh',
-            ':D': 'laugh',
-            ':-|': 'neutral',
-            ':|': 'neutral',
-            ':-(': 'sad',
-            ':(': 'sad'
+            ':-)': '😊',
+            ':)': '😊',
+            ';-)': '😉',
+            ';)': '😉',
+            ':-D': '😃',
+            ':D': '😃',
+            ':-|': '😔', // may be, switch to 😐 once we have the icon for it (U+1F610)
+            ':|': '😔', // may be, switch to 😐 once we have the icon for it (U+1F610)
+            ':-(': '😞',
+            ':(': '😞'
         };
 
         var regex = /(&quot)?([:;]-?[(|)D])/g;
 
         return function (text) {
             if (!settings.get('displayEmoticons')) return text;
-            text = emoji.unifiedToImageTag(text);
-            return text.replace(regex, function (all, quot, match) {
+            text = text.replace(regex, function (all, quot, match) {
                 // if we hit &quot;-) we just return
                 if (quot) return all;
                 // otherwise find emote
                 var emote = emotes[match];
-                return !emote ? match : '<i class="emote ' + emote + '"></i>';
+                return !emote ? match : emote;
             });
+            return emoji.unifiedToImageTag(text);
         };
     }());
 
