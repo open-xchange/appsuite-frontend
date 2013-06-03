@@ -66,8 +66,14 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         },
         iconInfo: iconInfo,
         categories: categories,
-        unifiedToImageTag: function (text) {
-            var parsedText = $('<div>').append(emoji.unifiedToHTML(text));
+        unifiedToImageTag: function (text, options) {
+            var parsedText;
+            options = _.extend({forceProcessing: false}, options);
+
+            if (!options.forceProcessing && _.device('emoji')) {
+                return text;
+            }
+            parsedText = $('<div>').append(emoji.unifiedToHTML(text));
 
             parsedText.find('span.emoji').each(function (index, node) {
                 //parse unicode number
