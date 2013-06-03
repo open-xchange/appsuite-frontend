@@ -833,7 +833,7 @@ define("io.ox/mail/write/view-main",
             }
 
             var obj = {
-                display_name: elem.display_name.replace(/^('|")|('|")$/g, '') || '',
+                display_name: (elem.display_name || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''),
                 email: elem.email || '',
                 phone: elem.phone || '',
                 field: elem.field || '',
