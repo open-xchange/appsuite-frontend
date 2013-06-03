@@ -177,7 +177,7 @@ define('io.ox/backbone/forms',
                     return this.nodes.element;
                 }
 
-                this.nodes.element = $('<select>').addClass('control');
+                this.nodes.element = $('<select tabindex="1">').addClass('control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
                         $("<option>", {value: value}).text(label)
@@ -207,7 +207,7 @@ define('io.ox/backbone/forms',
             this.nodes.dropelements = {};
 
             function createSelect(name, from, to, setter, format) {
-                var node = self.nodes.dropelements[name] = $('<select size="1">').attr('name', name),
+                var node = self.nodes.dropelements[name] = $('<select tabindex="1" size="1">').attr('name', name),
                     i = Math.min(from, to),
                     $i = Math.max(from, to),
                     d = new date.Local(0),
