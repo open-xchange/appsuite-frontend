@@ -201,6 +201,13 @@ define("io.ox/contacts/main",
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        //
+        grid.setAllRequest('search', function () {
+            var options = win.search.getOptions();
+            options.folder = grid.prop('folder');
+            options.order = grid.prop('order');
+            return api.advancedsearch(win.search.query, options);
+        });
         // LFO callback
         var showContact, drawContact, drawFail;
 

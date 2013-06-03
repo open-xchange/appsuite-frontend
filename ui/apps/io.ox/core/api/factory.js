@@ -497,6 +497,38 @@ define('io.ox/core/api/factory',
             };
         }
 
+        // add advancedsearch?
+        if (o.requests.advancedsearch) {
+            /**
+             * advancedsearch
+             * @param  {string} query   [description]
+             * @param  {object} options
+             * @return {deferred}
+             */
+            api.advancedsearch = function (query, options) {
+                // merge defaults for search
+                var opt = $.extend({}, o.requests.advancedsearch, options || {}),
+                    getData = opt.getData;
+
+                options = options || {};
+
+                if (o.requests.advancedsearch.omitFolder && options.omitFolder !== false) {
+                    delete opt.folder;
+                }
+
+                // remove omitFolder & getData functions
+                delete opt.omitFolder;
+                delete opt.getData;
+
+                // go!
+                return http.PUT({
+                    module: o.module,
+                    params: opt,
+                    data: getData(query, options)
+                });
+            };
+        }
+
         Events.extend(api);
 
         /**
