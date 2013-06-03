@@ -168,7 +168,6 @@ define('io.ox/contacts/api',
                     _(opt).each(function (value, key) {
                         if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
                             _(queryFields[key]).each(function (name) {
-                                debugger;
                                 filter.push(['=', {'field': name}, query]);
                             });
                             defaultBehaviour = false;
