@@ -497,10 +497,10 @@ define('io.ox/tasks/actions',
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
                     // link
-                    $('<a href="#" data-toggle="dropdown">')
+                    $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
-                    $('<ul class="dropdown-menu dropdown-right">').append(
+                    $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                         util.buildDropdownMenu(new Date(), true)
                     )
                     .delegate('li a', 'click', {task: data}, function (e) {

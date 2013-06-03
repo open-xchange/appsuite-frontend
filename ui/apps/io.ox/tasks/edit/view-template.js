@@ -33,7 +33,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 100,
         className: 'span12',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="title-field span12" id="task-edit-title">',
+        control: '<input type="text" class="title-field span12" id="task-edit-title" tabindex="1">',
         attribute: 'title',
         label: gt('Subject')
     }));
@@ -44,7 +44,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 200,
         className: 'span12',
         labelClassName: 'task-edit-label',
-        control: '<textarea class="note-field span12" id="task-edit-note">',
+        control: '<textarea class="note-field span12" id="task-edit-note" tabindex="1">',
         attribute: 'note',
         label: gt('Description')
     }));
@@ -58,7 +58,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass('status-selector span12').attr('id', 'task-edit-status-select');
+            this.nodes.select = $('<select tabindex="1">').addClass('status-selector span12').attr('id', 'task-edit-status-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -98,7 +98,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass('priority-selector span12').attr('id', 'task-edit-priority-select');
+            this.nodes.select = $('<select tabindex="1">').addClass('priority-selector span12').attr('id', 'task-edit-priority-select');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -135,7 +135,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 600,
         className: 'span6',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="target_duration span12" id="task-edit-target-duration">',
+        control: '<input type="text" class="target_duration span12" id="task-edit-target-duration" tabindex="1">',
         attribute: 'target_duration',
         label: gt('Estimated duration in minutes'),
         updateModel: function () {
@@ -158,7 +158,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 700,
         className: 'span6',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="actual_duration span12" id="task-edit-actual-duration">',
+        control: '<input type="text" class="actual_duration span12" id="task-edit-actual-duration" tabindex="1">',
         attribute: 'actual_duration',
         label: gt('Actual duration in minutes'),
         updateModel: function () {
@@ -181,7 +181,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 800,
         className: 'span6',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="target_costs span12" id="task-edit-target-costs">',
+        control: '<input type="text" class="target_costs span12" id="task-edit-target-costs" tabindex="1">',
         attribute: 'target_costs',
         label: gt('Estimated costs'),
         updateModel: function () {
@@ -204,7 +204,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 900,
         className: 'span4',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="actual_costs span12" id="task-edit-actual-costs">',
+        control: '<input type="text" class="actual_costs span12" id="task-edit-actual-costs" tabindex="1">',
         attribute: 'actual_costs',
         label: gt('Actual costs'),
         updateModel: function () {
@@ -230,7 +230,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         render: function () {
             var self = this;
             this.nodes = {};
-            this.nodes.select = $('<select>').addClass('currency span12').attr('id', 'task-edit-currency');
+            this.nodes.select = $('<select tabindex="1">').addClass('currency span12').attr('id', 'task-edit-currency');
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -266,7 +266,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 1100,
         className: 'span12',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="trip-meter span12" id="task-edit-trip-meter">',
+        control: '<input type="text" class="trip-meter span12" id="task-edit-trip-meter" tabindex="1">',
         attribute: 'trip_meter',
         label: gt('Distance')
     }));
@@ -277,7 +277,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 1200,
         className: 'span12',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="billing-information span12" id="task-edit-billing-information">',
+        control: '<input type="text" class="billing-information span12" id="task-edit-billing-information" tabindex="1">',
         attribute: 'billing_information',
         label: gt('Billing information')
     }));
@@ -288,7 +288,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 1300,
         className: 'span12',
         labelClassName: 'task-edit-label',
-        control: '<input type="text" class="companies span12" id="task-edit-companies">',
+        control: '<input type="text" class="companies span12" id="task-edit-companies" tabindex="1">',
         attribute: 'companies',
         label: gt('Companies')
     }));
@@ -315,8 +315,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
                 node.append(
                     $('<div class="input-append">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field">'),
-                        $('<button class="btn" type="button" data-action="add">')
+                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">'),
+                        $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
@@ -541,7 +541,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                         };
                         baton.attachmentList.addFile(fileData);
                         $input.addClass('add-attachment').hide();
-                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                        $input = $('<input>', { type: 'file', tabindex: 1 }).appendTo($input.parent());
                     }
                 }
             });
@@ -549,7 +549,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
-    
+
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',

@@ -244,7 +244,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
                 // Construct the UI
                 this.controls = {
-                    checkbox: $('<input type="checkbox">'),
+                    checkbox: $('<input tabindex="1" type="checkbox">'),
                     checkboxLabel: $('<label class="checkbox control-label desc">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).text(gt("Edit")).hide(),
                     typeRadios: {

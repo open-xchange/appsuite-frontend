@@ -348,7 +348,7 @@ define('io.ox/backbone/forms',
                         $('<label class="checkbox">')
                         .addClass(this.labelClassName || '')
                         .append(
-                            this.nodes.checkbox = $('<input type="checkbox">'),
+                            this.nodes.checkbox = $('<input tabindex="1" type="checkbox">'),
                             this.label
                         )
                 );

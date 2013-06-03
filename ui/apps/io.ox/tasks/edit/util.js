@@ -21,11 +21,11 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
         },
         //build progressField and buttongroup
         buildProgress: function () {
-            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
+            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val('0')
                 .addClass('span6 progress-field');
 
             $('<div>').addClass('input-append').append(progress,
-                    $('<button>').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
+                    $('<button tabindex="1">').attr('data-action', 'minus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -37,7 +37,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button>').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
+                    $('<button tabindex="1">').attr('data-action', 'plus').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;
@@ -109,7 +109,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             for (var i = 0; i < tabs.length; i++) {
                 $('<li>').css('width', '33%')
                     .append($('<a>').addClass('tab-link').css('text-align', 'center')
-                        .attr({href: '#edit-task-tab' + [i] + uid, 'data-toggle': 'tab'}).text(tabs[i])).appendTo(table);
+                        .attr({tabindex: 1, href: '#edit-task-tab' + [i] + uid, 'data-toggle': 'tab'}).text(tabs[i])).appendTo(table);
             }
             for (var i = 0; i < tabs.length; i++) {
                 $('<div>').attr('id', 'edit-task-tab' + [i] + uid).addClass('tab-pane').appendTo(content);
@@ -137,7 +137,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
         },
-        
+
         buildConfirmationPopup: function (model, dialogs, isArray) {
             //build popup
             var popup = new dialogs.ModalDialog()
@@ -148,7 +148,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 note,
                 message,
                 state;
-                
+
             if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
                 title = model.title || '\u2014';
                 note  = model.note || '\u2014';
@@ -156,7 +156,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 title = model.get("title") || '\u2014';
                 note  = model.get("note") || '\u2014';
             }
-                
+
             body.append($("<h4>").text(_.noI18n(title)),
                         $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
             util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),

@@ -63,7 +63,7 @@ define('io.ox/tasks/edit/view',
 
             //row 2 start date due date
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
-            
+
             //row 3 recurrence
             util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
 
@@ -71,11 +71,12 @@ define('io.ox/tasks/edit/view',
             util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
 
             //expand link
-            $('<a>').text(gt('Expand form')).attr('href', '#')
+            $('<a tabindex="1">').text(gt('Expand form')).attr('href', '#')
             .on('click', function (e) {
                 e.preventDefault();
                 self.$el.find('.collapsed').show();
                 $(this).remove();
+                $('#task-edit-title').focus();
             })
             .appendTo(this.$el);
 
@@ -253,7 +254,7 @@ define('io.ox/tasks/edit/view',
 
                 });
             //row 4
-            this.fields.reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select').addClass('span12')
+            this.fields.reminderDropdown = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                 .append($('<option>')
                 .text(''), reminderUtil.buildDropdownMenu())
                 .on('change', function (e) {

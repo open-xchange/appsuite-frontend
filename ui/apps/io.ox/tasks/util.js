@@ -140,7 +140,7 @@ define('io.ox/tasks/util',
                     };
                 return result;
             },
-            
+
             //selects the default reminder if its available, otherwise the next item
             selectDefaultReminder: function (node) {
                 var interval = settings.get('interval', '5'),
@@ -159,7 +159,7 @@ define('io.ox/tasks/util',
                                 break;
                             }
                         }
-                        
+
                         if (!found) {//too late for today. use tomorrow
                             interval = 't';
                         }
@@ -233,7 +233,7 @@ define('io.ox/tasks/util',
                 }
 
                 if (bootstrapDropdown) {
-                    appendString = appendString.replace(/<option/g, "<li><a href='#'");
+                    appendString = appendString.replace(/<option/g, '<li><a tabindex="1" role="menuitem" href="#"');
                     appendString = appendString.replace(/option>/g, 'a></li>');
                 }
 
