@@ -229,8 +229,18 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     // Adapter for IndexedDB operations to the familiar deferreds
     function OP(request, type) {
         var def = $.Deferred();
-        request.onerror = function (e) { def.reject(e); };
-        request.onblocked = function (e) { def.reject(e); };
+        request.onerror = function (e) {
+            if (ox.debug === true) {
+                console.warn('IndexedDB: error request', request, type, e);
+            }
+            def.reject(e);
+        };
+        request.onblocked = function (e) {
+            if (ox.debug === true) {
+                console.warn('IndexedDB: blocked request', request, type, e);
+            }
+            def.reject(e);
+        };
         // stupid stupid workaround for stupid stupid runtime bug / or API is hard to understand
         // clear seems to return far too early; maybe browser bug.
         // Occurred during folder tree debugging. test code:
@@ -369,7 +379,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                         setupCompleted = initializeDB();
                     } else if (ox.online && (meta.version !== ox.version || meta.cleanUp)) {
                         meta.cleanUp = true;
-                        OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
                         if (ox.debug === true) {
                             console.warn('IndexedDB: Clearing persistent caches due to UI update');
                         }
