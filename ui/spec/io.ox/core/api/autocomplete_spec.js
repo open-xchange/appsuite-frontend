@@ -55,6 +55,26 @@ define(['shared/examples/for/api',
             });
         });
 
+        //server calls
+        describe('has some methods calling ser', function () {
+            it('with all needed parameters for search', function () {
+                var spy = sinon.spy($, 'ajax'),
+                    query = 'foo',
+                    param;
+                //call search
+                instance.search(query);
+                // spy if $.ajax was called
+                expect(spy).toHaveBeenCalledOnce();
+                // get params
+                param = JSON.parse(spy.getCall(0).args[0].data);
+                expect(param[0].data.display_name).toEqual(query + '*');
+                // Restore $.ajax to normal
+                $.ajax.restore();
+
+                return true;
+            });
+        });
+
         //results
         describe('has some parsing functionality', function () {
             it('should return an array for processItem', function () {
