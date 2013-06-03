@@ -11,14 +11,14 @@
  */
 if (jasmine) {
 
-    var matchers = {
+    var typeMatchers = {
 
         //arrays
         toBeArray: function () {
             return this.actual instanceof Array;
         },
         toBeArrayOfSize: function (size) {
-            return matchers.toBeArray.call(this) && this.actual.length === size;
+            return typeMatchers.toBeArray.call(this) && this.actual.length === size;
         },
 
         //functions
@@ -28,6 +28,6 @@ if (jasmine) {
     };
 
     beforeEach(function () {
-        this.addMatchers(matchers);
+        this.addMatchers(typeMatchers);
     });
 };
