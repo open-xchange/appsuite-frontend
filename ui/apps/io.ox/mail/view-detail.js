@@ -23,9 +23,10 @@ define('io.ox/mail/view-detail',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
+     'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less'
-    ], function (ext, links, util, api, config, http, account, settings, gt, folder) {
+    ], function (ext, links, util, api, config, http, account, settings, gt, folder, emoji) {
 
     'use strict';
 
@@ -107,6 +108,7 @@ define('io.ox/mail/view-detail',
 
         return function (text) {
             if (!settings.get('displayEmoticons')) return text;
+            text = emoji.unifiedToImageTag(text);
             return text.replace(regex, function (all, quot, match) {
                 // if we hit &quot;-) we just return
                 if (quot) return all;
@@ -376,6 +378,9 @@ define('io.ox/mail/view-detail',
 
                 // replace images on source level
                 source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+                if (isHTML && !isLarge) {
+                    source = emoji.unifiedToImageTag(source);
+                }
 
                 // robust constructor for large HTML
                 content = document.createElement('DIV');
