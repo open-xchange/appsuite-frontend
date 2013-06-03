@@ -77,11 +77,11 @@ define('io.ox/portal/settings/pane',
         this.append(
             $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">').append(
+                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
                         $.txt(gt('Add widget')), $.txt(' '),
                         $('<span class="caret">')
                     ),
-                    $('<ul class="dropdown-menu">').on('click', 'a', addWidget)
+                    $('<ul class="dropdown-menu" role="menu">').on('click', 'a', addWidget)
                 )
             )
         );
@@ -99,11 +99,11 @@ define('io.ox/portal/settings/pane',
                 if (isUnique || !isVisible) {
                     return $();
                 } else {
-                    return $('<li>')
+                    return $('<li role="presentation">')
                     // add disabld class if requires upsell
                     .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
                     .append(
-                        $('<a>', { href: '#', 'data-type': options.type }).text(options.title)
+                        $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
                     );
                 }
             })
@@ -133,11 +133,11 @@ define('io.ox/portal/settings/pane',
 
         return function (activeColor) {
             return $('<div class="action dropdown colors">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(gt('Color')),
-                $('<ul class="dropdown-menu">').append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').text(gt('Color')),
+                $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-color', 'data-color': color }).append(
+                            $('<a>', { href: '#', 'data-action': 'change-color', 'data-color': color, 'tabindex': 1, role: 'menuitem' }).append(
                                 $('<span class="color-example">').addClass('color-' + color),
                                 $.txt(name)
                             )
@@ -187,13 +187,13 @@ define('io.ox/portal/settings/pane',
 
     ext.point(POINT + '/view').extend({
         id: 'remove',
-        index: 400,
+        index: 600,
         draw: function (baton) {
             var data = baton.model.toJSON();
             if (!data.protectedWidget) {
                 this.append(
                     // close (has float: right)
-                    $('<a href="#" class="close" data-action="remove"><i class="icon-trash"/></a>')
+                    $('<a href="#" class="close" data-action="remove" tabindex="1"><i class="icon-trash"/></a>')
                 );
             }
         }
@@ -210,16 +210,16 @@ define('io.ox/portal/settings/pane',
                 // editable?
                 if (baton.view.options.editable) {
                     this.append(
-                        $('<a href="#" class="action" data-action="edit">').text(gt('Edit'))
+                        $('<a href="#" class="action" data-action="edit" tabindex="1">').text(gt('Edit'))
                     );
                 }
                 this.append(
                     drawChangeColor(data.color),
-                    $('<a href="#" class="action" data-action="toggle">').text(gt('Disable'))
+                    $('<a href="#" class="action" data-action="toggle" tabindex="1">').text(gt('Disable'))
                 );
             } else if (!data.protectedWidget) {
                 this.append(
-                    $('<a href="#" class="action" data-action="toggle">').text(gt('Enable'))
+                    $('<a href="#" class="action" data-action="toggle" tabindex="1">').text(gt('Enable'))
                 );
             } else {
                 this.append("&nbsp;");

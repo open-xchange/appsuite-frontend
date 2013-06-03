@@ -53,7 +53,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
             id: ref + '/edit/view/forwardmail',
             index: 150,
             label: model.fields.forwardmail,
-            control: '<input type="text" class="span6" name="forwardmail">',
+            control: '<input type="text" class="span6" name="forwardmail" tabindex="1">',
             attribute: 'forwardmail',
             customizeNode: function () {
                 this.$el.css({

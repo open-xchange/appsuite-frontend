@@ -111,6 +111,19 @@ define('io.ox/settings/accounts/settings/pane',
      * button.
      *
      */
+
+    var POINT = 'io.ox/settings/accounts/settings/detail', pane;
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: "header",
+        draw: function () {
+            this.addClass('io-ox-account-settings').append(
+                $('<h1 class="no-margin">').text(gt('Mail and Social Accounts'))
+            );
+        }
+    });
+
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
         id: "accountssettings",
@@ -156,7 +169,7 @@ define('io.ox/settings/accounts/settings/pane',
                         .each(function (submodule) {
                             $dropDown.append(
                                 $('<li>').append(
-                                    $('<a>', { href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
+                                    $('<a>', { tabindex: 1, role: 'menuitem', href: '#', 'data-actionname': submodule.actionName || submodule.id || '' })
                                     .text(submodule.displayName)
                                     .on('click', function (e) {
                                         e.preventDefault();

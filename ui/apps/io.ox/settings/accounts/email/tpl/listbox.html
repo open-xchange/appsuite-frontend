@@ -3,15 +3,14 @@
         <div class="clear-title" style="margin-bottom: 1em">{{=it.strings.TITLE}}</div>
     </div>
     <div class="section">
-        <div class="listbox" style="min-height: 250px;"></div>
+        <div class="listbox" style="min-height: 250px;" tabindex="2"></div>
         <div class="sectioncontent">
             <div class="dropdown">
-                <ul class="dropdown-menu" style="bottom: 105%; top: auto;">
+                <button tabindex="1" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-action="add" style="margin-right: 15px;" aria-haspopup="true">{{=it.strings.BUTTON_ADD}}</button>
+                <ul class="dropdown-menu" role="menu" style="bottom: 105%; top: auto;">
                 </ul>
-                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-action="add"
-                    style="margin-right: 15px; ">{{=it.strings.BUTTON_ADD}}</button>
-                <button class="btn" data-action="edit" style="margin-right: 15px; ">{{=it.strings.BUTTON_EDIT}}</button>
-                <button class="btn" data-action="delete">{{=it.strings.BUTTON_DELETE}}</button>
+                <button tabindex="3" class="btn" data-action="edit" style="margin-right: 15px; ">{{=it.strings.BUTTON_EDIT}}</button>
+                <button tabindex="3" class="btn" data-action="delete">{{=it.strings.BUTTON_DELETE}}</button>
             </div>
         </div>
     </div>

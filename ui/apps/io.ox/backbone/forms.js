@@ -381,7 +381,7 @@ define('io.ox/backbone/forms',
             render: function () {
                 var self = this;
                 this.nodes = {};
-                this.nodes.select = $('<select>');
+                this.nodes.select = $('<select tabindex="1">');
                 if (options.multiple) {
                     this.nodes.select.attr('multiple', 'multiple');
                 }
