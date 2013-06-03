@@ -309,7 +309,7 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text" tabindex="1">'));
                 this.nodes.inputField.val(this.model.get(this.attribute));
                 if (options.changeAppTitleOnKeyUp) {
                     this.nodes.inputField.on('keyup', $.proxy(function (e) {
@@ -569,7 +569,7 @@ define('io.ox/backbone/forms',
                 this.nodes.header = $('<div class="row sectionheader">').append(
                     $('<span class="offset2 span4">').append(
                         $('<i class="icon-minus-sign">'),
-                        $('<a href="#">').text(this.title).on('click', function () {
+                        $('<a tabindex="1" href="#">').text(this.title).on('click', function () {
                             if (self.state === 'mixed') {
                                 self.more();
                             } else if (self.state === 'allVisible') {
@@ -584,7 +584,7 @@ define('io.ox/backbone/forms',
                     return;
                 }
 
-                this.nodes.toggleLink = $('<a href="#" class="span6" data-action="toggle-' + options.id + '">').on('click', function () {
+                this.nodes.toggleLink = $('<a href="#" tabindex="1" class="span6" data-action="toggle-' + options.id + '">').on('click', function () {
                     if (self.state === 'mixed') {
                         self.more();
                     } else if (self.state === 'allVisible') {
@@ -596,7 +596,7 @@ define('io.ox/backbone/forms',
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
                     $('<span class="offset2 span4">').append(
                         $('<i class="icon-plus-sign">'),
-                        $('<a href="#" data-action="toggle-' + options.id + '">').text(this.title).on('click', function () {
+                        $('<a tabindex="1" href="#" data-action="toggle-' + options.id + '">').text(this.title).on('click', function () {
                             self.more();
                         })
                     ).appendTo(this.nodes.collapsedHeader);
@@ -775,7 +775,7 @@ define('io.ox/backbone/forms',
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
                         $('<div class="control">').append(
                             function () {
-                                self.nodes.dayField = $('<input type="text" class="input-small">');
+                                self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small">');
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.attr('disabled', true);
                                 }
@@ -792,7 +792,7 @@ define('io.ox/backbone/forms',
                                 if (options.display === "DATE") {
                                     return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                 } else if (options.display === "DATETIME") {
-                                    self.nodes.timeField = $('<input type="text" class="input-mini">');
+                                    self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
                                     if (self.model.get('full_time')) {
                                         self.nodes.timeField.hide();
                                         self.nodes.timezoneField.hide();

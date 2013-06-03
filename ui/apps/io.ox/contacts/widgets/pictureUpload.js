@@ -110,10 +110,16 @@ define('io.ox/contacts/widgets/pictureUpload',
                             .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide']()
                      ),
                     $('<form>').css({position: 'absolute'}).append(
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*">')
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="2">')
                             .css({ height: '110px', width: '110px', cursor: 'pointer', opacity: 0 })
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
+                            })
+                            .on('focus', function (e) {
+                                self.imgCon.addClass('focussed');
+                            })
+                            .on('blur', function (e) {
+                                self.imgCon.removeClass('focussed');
                             })
                     )
                 );

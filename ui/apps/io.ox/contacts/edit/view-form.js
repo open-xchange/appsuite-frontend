@@ -104,7 +104,7 @@ define('io.ox/contacts/edit/view-form', [
                     id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
-                    control: '<textarea rows="12" class="span6" name="' + options.field + '">',
+                    control: '<textarea rows="12" class="span6" name="' + options.field + '" tabindex="1">',
                     rare: options.isRare,
                     attribute: options.field
                 }), {
@@ -307,7 +307,7 @@ define('io.ox/contacts/edit/view-form', [
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
             cssClasses: "btn control",
-            tabIndex: 11,
+            tabIndex: 3,
             tagtype: "button"
         }));
 
@@ -318,7 +318,7 @@ define('io.ox/contacts/edit/view-form', [
             label: gt("Save"),
             ref: ref + "/actions/edit/save",
             cssClasses: "btn btn-primary control",
-            tabIndex: 10,
+            tabIndex: 2,
             tagtype: "button"
         }));
 
@@ -407,7 +407,7 @@ define('io.ox/contacts/edit/view-form', [
                         id: field,
                         index: fieldIndex,
                         label: model.fields[field],
-                        control: '<input type="text" class="input-xlarge" name="' + field + '">',
+                        control: '<input type="text" class="input-xlarge" name="' + field + '" tabindex="1">',
                         rare: isRare,
                         attribute: field
                     }), {
