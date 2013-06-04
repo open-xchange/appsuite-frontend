@@ -100,7 +100,7 @@ define('io.ox/core/main',
             hidden = 0;
         for (i = items.length; i > 1; i--) {
             visibleTabs = itemsVisible.length - hidden;
-            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth /*|| visibleTabs <= 2*/) {
+            if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
                 break;
             } else {
                 var lastVisibleItem = launchers.children('.launcher:visible').last();

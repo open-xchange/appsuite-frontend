@@ -2322,7 +2322,28 @@ ul.dropdown-menu li a.disabled { color:#999; }
 // mobile
 @media (max-width: 480px) {
 
+    .window-sidepanel.visible, .window-sidepanel {
+        left: -90%;
+        width: 90%;
+        right: initial;
+    }
 
+    .window-sidepanel {
+        //bottom: 40px;
+        display: block;
+        -webkit-backface-visibility: hidden;
+    }
+
+    .animate-moveright {
+        -webkit-transform: translateX(90%);
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 300ms;
+    }
+    .animate-moveleft {
+        -webkit-transform: translateX(0%);
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transition-duration: 300ms;
+    }
     .toolbar-button {
         margin: 0;
     }

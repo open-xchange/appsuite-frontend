@@ -483,7 +483,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, initResize, restoreWidth, makeResizable,
+            fnHide, fnShow, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -592,8 +592,24 @@ define('io.ox/core/commons-folderview',
             return $.when();
         };
 
+        fnHideSml = function () {
+            app.settings.set('folderview/visible/' + _.display(), visible = false).save();
+            top = container.scrollTop();
+            $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+        };
+
+        fnShowSml = function () {
+            app.settings.set('folderview/visible/' + _.display(), visible = true).save();
+            $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            return $.when();
+        };
+
         toggle = function () {
-            if (visible) { fnHide(); } else { fnShow();  }
+            if (_.device('small')) {
+                if (visible) { fnHideSml(); } else { fnShowSml();  }
+            } else {
+                if (visible) { fnHide(); } else { fnShow();  }
+            }
         };
 
         initResize = function () {
@@ -697,10 +713,9 @@ define('io.ox/core/commons-folderview',
                     //     return false;
                     // });
 
-                    if (_.device('touch && small')) {
+                    if (_.device('smartphone')) {
                         // mobile stuff
                         $('.foldertree-sidepanel').on('swipeleft', function (e) {
-                            //e.preventDefault();
                             toggle();
                         });
                     }
