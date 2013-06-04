@@ -678,7 +678,6 @@ define('io.ox/mail/main',
         };
 
         drawMail = function (data) {
-            console.log('HIER?');
             var baton = ext.Baton({ data: data, app: app }).set('options', { tabindex: '1' }),
                 mail = viewDetail.draw(baton);
             right.idle().empty().append(mail);
