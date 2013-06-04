@@ -1,3 +1,4 @@
 {
-    namespace: "signin"
+    "namespace": "signin",
+    "device": "iOS"
 }

@@ -19,7 +19,7 @@ define("io.ox/core/gettext", [], function () {
     var custom = { '*': {} };
     // To allow custom dictionaries, core plugins may not call gettext functions
     // during initialization.
-    var enabled = false;
+    var enabled = ox.signin;
 
     if (_.url.hash('debug-i18n')) {
         try {

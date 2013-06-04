@@ -344,7 +344,8 @@ $(window).load(function () {
 
         changeLanguage = function (id) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
-            return require(['io.ox/core/login.' + id]).done(function (gt) {
+            return $.when(require(['io.ox/core/login.' + id]),
+                          gettext.setLanguage(id)).done(function (gt) {
                 // 404 are a success for IE
                 // "except for some of the error ones on IE (since it triggers success callbacks on scripts that load 404s)
                 // (see https://github.com/jrburke/requirejs/wiki/Requirejs-2.0-draft)
@@ -370,6 +371,7 @@ $(window).load(function () {
                     if (_.browser.IE) {
                         $('input[type=text], input[type=password]').val('').placeholder();
                     }
+	                ox.trigger('language');
                 }
             });
         };
@@ -632,7 +634,7 @@ $(window).load(function () {
                         debug('boot.js: autoLogin > loginSuccess');
                         // are we on login page?
                         if (ox.signin) {
-                            gotoCore(true)
+                            gotoCore(true);
                         } else {
                             fetchUserSpecificServerConfig().done(function () {
                                 // apply session data (again) & page title
@@ -803,11 +805,6 @@ $(window).load(function () {
 
                 debug('boot.js: Fade in ...');
                 $('#background_loader').idle().fadeOut(DURATION, cont);
-
-                if (_.device('ios')) {
-                    //load on ios only
-                    require(['plugins/mobile/addToHomescreen/register']);
-                }
             });
         };
 
@@ -827,7 +824,7 @@ $(window).load(function () {
 
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'io.ox/core/gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
+        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
         'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );

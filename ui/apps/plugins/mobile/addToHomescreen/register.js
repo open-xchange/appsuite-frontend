@@ -8,7 +8,8 @@
 
 define('plugins/mobile/addToHomescreen/register',
     ['io.ox/core/extensions',
-    'css!plugins/mobile/addToHomescreen/style.css'], function (ext) {
+     'gettext!plugins/mobile/addToHomescreen/i18n',
+     'css!plugins/mobile/addToHomescreen/style.css'], function (ext, gt) {
 
     "use strict";
     var nav = window.navigator,
@@ -51,10 +52,6 @@ define('plugins/mobile/addToHomescreen/register',
             closeButton: true,          // Let the user close the balloon
             iterations: 100             // Internal/debug use
         };
-    // gettext workaround until we have real gt on login page
-    function gt(id) {
-        return $('#io-ox-login-feedback-strings').find('[data-i18n-id="' + id + '"]').text();
-    }
 
     // needed to tell if iPhone or iPad
     function getPlatform() {
@@ -66,7 +63,14 @@ define('plugins/mobile/addToHomescreen/register',
         if (!isIDevice) return;
 
         // message for bubble, inject icon and html
-        options.message = _.printf(gt('addtohomescreen'), getPlatform(), '<span class="addToHomeShare"></span>', '<strong>', '</strong>');
+        options.message = function () {
+            return (
+                //#. %1$s is the name of the platform
+                //#. %2$s is an the "add to home" icon
+                //#. %3$s and %4$s are markers for bold text.
+                gt('Install this web app on your %1$s: Tap %2$s and then %3$s\'Add to Home Screen\'%4$s',
+                    getPlatform(), '<span class="addToHomeShare"></span>', '<strong>', '</strong>'));
+        };
 
         var c = _.getCookie(options.cookieName);
         if (c) {
@@ -109,8 +113,12 @@ define('plugins/mobile/addToHomescreen/register',
             }
         }
         balloon.className = (isIPad ? 'addToHomeIpad' : 'addToHomeIphone') + (touchIcon ? ' addToHomeWide' : '');
-        balloon.innerHTML = touchIcon +
-            options.message + (options.arrow ? '<span class="addToHomeArrow"></span>' : '') + (options.closeButton ? '<span class="addToHomeClose">\u00D7</span>' : '');
+        updateLanguage();
+        function updateLanguage() {
+            balloon.innerHTML = touchIcon +
+                options.message() + (options.arrow ? '<span class="addToHomeArrow"></span>' : '') + (options.closeButton ? '<span class="addToHomeClose">\u00D7</span>' : '');
+        }
+        ox.on('language', updateLanguage);
 
         document.body.appendChild(balloon);
 

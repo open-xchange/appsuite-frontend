@@ -178,27 +178,64 @@
     });
 }());
 
-define("gettext", function (gettext) {
-    return {
+(function () {
+    var callbacks = {}, lang = null, langDef = $.Deferred();
+    define('gettext', {
+        /**
+         * Switches the language.
+         * Only the signin page is allowed to call this multiple times.
+         * @param {String} language The new language ID.
+         * @returns A promise which gets resolved when all known gettext
+         * modules have loaded their replacements.
+         * @private
+         */
+        setLanguage: function (language) {
+            assert(ox.signin || !this.language, 'Multiple setLanguage calls');
+            lang = language;
+            langDef.resolve();
+            if (!ox.signin) {
+                require(['io.ox/core/gettext']).done(function (gettext) {
+                    gettext.setLanguage(lang);
+                });
+            }
+            if (_.isEmpty(callbacks)) return $.when();
+            var names = _.keys(callbacks);
+            var files = _.map(names, function (n) { return n + '.' + lang; });
+            return require(files).done(function () {
+                var args = _.toArray(arguments);
+                _.each(names, function (n, i) { callbacks[n](args[i]); });
+            });
+        },
+        enable: function () {
+            require(['io.ox/core/gettext']).done(function (gt) { gt.enable(); });
+        },
         load: function (name, parentRequire, load, config) {
-            var gt;
-            require(["io.ox/core/gettext"]).pipe(function (gettext) {
-                gt = gettext;
-                assert(gettext.language.state() !== 'pending', _.printf(
-                    'Invalid gettext dependency on %s (before login).', name));
-                return gettext.language;
-            }).done(function (language) {
-                parentRequire([name + '.' + language], load, function (err) {
-                    load(gt(name + '.' + language, {
+            assert(langDef.state !== 'pending', _.printf(
+                'Invalid gettext dependency on %s (before login).', name));
+            langDef.done(function () {
+                parentRequire([name + '.' + lang], ox.signin ? wrap : load, error);
+            });
+            function wrap(f) {
+                var f2 = function () { return f.apply(this, arguments); };
+                // _.each by foot to avoid capturing members of f in closures
+                for (var i in f) (function (i) {
+                    f2[i] = function () { f[i].apply(f, arguments); };
+                }(i));
+                callbacks[name] = function (newF) { f = newF; };
+                load(f2);
+            }
+            function error() {
+                require(['io.ox/core/gettext']).done(function () {
+                    load(gt(name, {
                         nplurals: 2,
                         plural: 'n != 1',
                         dictionary: {}
                     }));
                 });
-            });
+            }
         }
-    };
-});
+    });
+}());
 
 /*
  * dot.js template loader
