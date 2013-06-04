@@ -25,7 +25,6 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require('./lib/less.js/lib/less/index.js');
 
 console.info('Node version:', process.version);
 console.info("Build path: " + utils.builddir);
@@ -57,12 +56,8 @@ version = ver + "-" + rev + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-function envBoolean(name) {
-    return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
-}
-
-var debug = envBoolean('debug');
-var disableStrictMode = envBoolean('disableStrictMode');
+var debug = utils.envBoolean('debug');
+var disableStrictMode = utils.envBoolean('disableStrictMode');
 
 if (debug) console.info("Debug mode: on");
 
@@ -352,6 +347,14 @@ if (path.existsSync('help')) {
 
 // postinst utilities
 
+utils.copy(utils.list('lib',
+    ['build/fileutils.js',
+     'build/themes.js',
+     'jake/',
+     'less.js/lib/',
+     'node_modules/',
+     'underscore.js']),
+    { to: utils.dest('share/lib') });
 utils.concat('update-themes.js', utils.list('lib',
     ['less.js/build/require-rhino.js',
      'less.js/build/ecma-5.js',
@@ -372,7 +375,7 @@ utils.topLevelTask('app', ['buildApp'], utils.summary('app'));
 
 // common task for external apps and the GUI
 
-utils.topLevelTask('buildApp', ['ox.pot'], function () {
+utils.topLevelTask('buildApp', ['ox.pot', 'update-themes'], function () {
     utils.includes.save();
     i18n.modules.save();
 });
@@ -481,85 +484,9 @@ utils.merge('manifests/' + pkgName + '.json',
         }
     });
 
-// themes
+// update-themes task
 
-if (!envBoolean('skipLess')) compileLess();
-function compileLess() {
-
-    var coreDir = process.env.coreDir || utils.builddir;
-
-    function core(file) { return path.join(coreDir, file); }
-
-    var ownLess = utils.list('apps', '**/*.less'), coreLess;
-    var ownThemes = utils.list('apps/themes/*/definitions.less');
-    var coreThemes = utils.list(core('apps/themes'), '*/definitions.less');
-
-    if ((ownThemes.length || ownLess.length) &&
-        !path.existsSync('apps/themes/definitions.less') &&
-        !path.existsSync(core('apps/themes/definitions.less')))
-    {
-        if (process.env.coreDir) {
-            console.warn('Warning: Invalid coreDir');
-        } else {
-            console.warn('Warning: Themes require either coreDir or skipLess');
-        }
-        return;
-    }
-
-    function compile(dest, defs, defsInCore, src, srcInCore) {
-        dest = core(dest);
-        utils.file(dest,
-            [core('apps/themes/definitions.less'),
-             defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
-            function () {
-                var ast;
-                new less.Parser({
-                    paths: [coreDir],
-                    syncImport: true,
-                    relativeUrls: true
-                }).parse('@import "apps/themes/definitions.less";\n' +
-                         '@import "' + defs.replace(/\\/g, '/') + '";\n' +
-                         '@import "' + src.replace(/\\/g, '/') + '";\n',
-                function (e, tree) {
-                    if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
-                });
-                fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
-            });
-    }
-
-    // own themes
-    _.each(ownThemes, function(defs) {
-        if (!coreLess) coreLess = utils.list(core('apps'), '**/*.less');
-        var dir = path.dirname(defs);
-        compile(path.join(dir, 'less/common.css'), defs, false,
-                'apps/themes/style.less', true);
-        compile(path.join(dir, 'less/style.css'), defs, false,
-                path.join(dir, 'style.less'), false);
-        _.each(ownLess, function (file) {
-            if (/^themes[\/\\]/.test(file)) return;
-            compile(path.join(dir, 'less', file), defs, false,
-                    path.join('apps', file), false);
-        });
-        _.each(coreLess, function (file) {
-            if (/^themes[\/\\]/.test(file)) return;
-            compile(path.join(dir, 'less', file), defs, false,
-                    path.join('apps', file), true);
-        });
-    });
-
-    // core themes
-    _.each(coreThemes,
-        function (defs) {
-            if (path.existsSync(path.join('apps/themes', defs))) return;
-            var dir = path.join('apps/themes', path.dirname(defs));
-            _.each(ownLess, function (file) {
-                if (/^themes[\/\\]/.test(file)) return;
-                compile(path.join(dir, 'less', file),
-                        path.join('apps/themes', defs), true,
-                        path.join('apps', file), false);
-            });
-        });
-}
+require('./lib/build/themes.js');
 
 // docs task
 
@@ -830,13 +757,13 @@ task("dist", [distDest], function () {
     }
     function dpkgSource(code) {
         if (code) return fail('tar exited with code ' + code);
-        if (envBoolean('skipDeb')) return done();
+        if (utils.envBoolean('skipDeb')) return done();
         utils.exec(['dpkg-source', '-Zbzip2', '-b', tarName],
                    { cwd: distDest }, done);
     }
     function done(code) {
         if (!code) return complete();
-        if (envBoolean('forceDeb')) {
+        if (utils.envBoolean('forceDeb')) {
             fail('dpkg-source exited with code ' + code);
         } else {
             console.warn('Warning: dpkg-source exited with code ' + code);

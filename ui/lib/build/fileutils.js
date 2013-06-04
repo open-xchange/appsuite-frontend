@@ -17,6 +17,14 @@ var child_process = require("child_process");
 var _ = require("../underscore");
 
 /**
+ * Tests for a boolean Jake parameter.
+ * Any of the following is interpreted as true: on, yes, true, 1
+ */
+exports.envBoolean = function (name) {
+    return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
+};
+
+/**
  * Default destination directory.
  * @type String
  */
@@ -41,6 +49,8 @@ exports.source = function(name) {
     if (process.env.BASEDIR) return process.env.BASEDIR + "/" + name;
     return name;
 };
+
+var hasJakefile = path.existsSync(exports.source('Jakefile.js'));
 
 /**
  * Number of generated files.
@@ -209,7 +219,11 @@ exports.file = function(dest, deps, callback, options, type) {
         callback.apply(this, arguments);
         counter++;
     }, options);
-    file(dest, [dir, exports.source("Jakefile.js")]);
+    if (hasJakefile) {
+        file(dest, [dir, exports.source('Jakefile.js')]);
+    } else {
+        file(dest, [dir]);
+    }
     var obj = { type: exports.fileType(type || path.extname(dest)) };
     var handlers = obj.type.getHooks("handler");
     for (var i = 0; i < handlers.length; i++) handlers[i].call(obj, dest);
