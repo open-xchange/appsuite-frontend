@@ -16,57 +16,61 @@
     window.tinymce.create('tinymce.plugins.EmojiPlugin', {
         init : function (ed, url) {
             ed.addCommand('mceInsertEmoji', function (ui, baton) {
-                require(['io.ox/core/tk/dialogs',
-                        'moxiecode/tiny_mce/plugins/emoji/main'], function (dialogs, emoji) {
-                    var popup = new dialogs.SidePopup();
-                    var p = popup.show(baton.event, function (pane) {
-                        var iconSelector = {},
-                            categorySelector = $('<div class="emoji_category_selector">');
+                var pane = $('td#mceEmojiPane'),
+                    iconSelector = {},
+                    categorySelector = $('<div class="emoji_category_selector">'),
+                    editorPane = $(baton.editor.contentAreaContainer);
 
-                        _(emoji.categories)
-                        .chain()
-                        .keys()
-                        .each(function (category) {
-                            categorySelector.append(
-                                $('<a href="#" class="emoji_category" data-emoji-category="' + category + '">')
-                                .text(category)
+                if (pane.length > 0) {
+                    pane.remove();
+                    return;
+                } else {
+                    pane = $('<td id="mceEmojiPane">');
+                    editorPane.parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
+                    editorPane.parent().append(pane);
+                    pane = pane.append($('<div>')).children().first();
+                }
+                require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
+                    _(emoji.categories)
+                    .chain()
+                    .keys()
+                    .each(function (category) {
+                        categorySelector.append(
+                            $('<a href="#" class="emoji_category" data-emoji-category="' + category + '">')
+                            .text(category)
+                            .click(function (evt) {
+                                $('a.emoji_category').removeClass('open');
+                                $(evt.target).addClass('open');
+                                $('div.emoji_selector').remove();
+                                pane.append(iconSelector[category]);
+                                baton.editor.focus();
+                            })
+                        );
+                        iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
+
+                        _(emoji.iconsForCategory(category)).each(function (icon) {
+                            iconSelector[category].append(
+                                $('<a href="#" class="emoji">')
+                                .attr('title', icon.desc)
+                                .addClass(icon.css)
                                 .click(function (evt) {
-                                    $('a.emoji_category').removeClass('open');
-                                    $(evt.target).addClass('open');
-                                    $('div.emoji_selector').remove();
-                                    pane.append(iconSelector[category]);
+                                    var ed = baton.editor,
+                                        node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
+                                        .addClass(icon.css)
+                                        .attr('data-emoji-unicode', icon.unicode);
+                                    evt.preventDefault();
+
+                                    ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
                                 })
                             );
-                            iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
-
-                            _(emoji.iconsForCategory(category)).each(function (icon) {
-                                iconSelector[category].append(
-                                    $('<a href="#" class="emoji">')
-                                    .attr('title', icon.desc)
-                                    .addClass(icon.css)
-                                    .click(function (evt) {
-                                        var ed = baton.editor,
-                                            node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
-                                            .addClass(icon.css)
-                                            .attr('data-emoji-unicode', icon.unicode);
-                                        evt.preventDefault();
-
-                                        ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
-                                        p.close();
-                                    })
-                                );
-                            });
                         });
-                        pane.append(
-                            categorySelector,
-                            _(iconSelector).values()[0]
-                        );
-                        $('a.emoji_category:first').addClass('open');
                     });
-                    //steal focus back
-                    p.on('close', function () {
-                        baton.editor.focus();
-                    });
+                    pane.append(
+                        categorySelector,
+                        _(iconSelector).values()[0]
+                    );
+
+                    $('a.emoji_category:first').addClass('open');
                 });
             });
 

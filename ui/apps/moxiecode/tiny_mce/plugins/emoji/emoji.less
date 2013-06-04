@@ -12,20 +12,40 @@
     font-family: 'AndroidEmojiRegular';
 }
 
-.emoji_selector {
-    a {
-        margin: 5px 3px;
-    }
-}
-
 img.emoji {
     border: 0;
 }
 
-a.emoji_category {
-    margin: 0px 1em;
 
-    &.open {
-        font-weight: bold;
+#mceEmojiPane {
+    vertical-align: top;
+    max-width: 60px;
+
+    a {
+        cursor: auto;
+    }
+
+    & > div {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    a.emoji_category {
+        margin: 0px 1em;
+
+        &.open {
+            font-weight: bold;
+        }
+    }
+    .emoji_selector {
+        white-space: normal;
+        overflow-y: auto;
+
+        a {
+            margin: 5px 3px;
+            width: 20px;
+            .emojifont;
+        }
     }
 }
