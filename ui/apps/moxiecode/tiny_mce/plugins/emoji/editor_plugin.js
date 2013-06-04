@@ -66,11 +66,18 @@
                         });
                     });
                     pane.append(
-                        categorySelector,
-                        _(iconSelector).values()[0]
+                        categorySelector
                     );
 
-                    $('a.emoji_category:first').addClass('open');
+                    $('a.emoji_category:last')
+                    .addClass('open')
+                    .append(
+                        _(iconSelector)
+                        .chain()
+                        .values()
+                        .last()
+                        .value()
+                    );
                 });
             });
 
