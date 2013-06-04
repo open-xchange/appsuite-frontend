@@ -648,6 +648,20 @@ define.async('io.ox/office/tk/utils',
         return _(text.split(' ')).map(Utils.capitalize).join(' ');
     };
 
+    /**
+     * Escapes HTML mark-up characters (angle brackets, ampersand, double
+     * quotes, and apostrophs) in the passed text.
+     *
+     * @param {String} text
+     *  The text containing special HTML mark-up characters.
+     *
+     * @returns {String}
+     *  The passed text with all mark-up characters escaped.
+     */
+    Utils.escapeHTML = function (text) {
+        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
+
     // options object ---------------------------------------------------------
 
     /**
