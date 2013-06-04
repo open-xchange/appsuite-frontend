@@ -656,58 +656,64 @@
     line-height: 52px;
     margin: 4px 0 8px 0;
 
+    ul {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
     & > a {
         width: 50px;
         text-align: center;
         height: 52px;
         display: inline-block;
         outline: 0;
+        i {
+            color: @toolbarButtonColor;
+            &.accent-color {
+                background-color: @toolbarButtonAccent;
+                color: #FFF;
+                border: 2px solid @toolbarButtonAccent;
+                width: 25px;
+                border-radius: 5px;
+                padding-top: 2px;
+            }
+        }
+        &:hover {
+            i {
+                color: darken(@toolbarButtonColor, 20%);
+                text-decoration: none;
+                &.accent-color {
+                    background-color: darken(@toolbarButtonAccent, 10%);
+                    border-color: darken(@toolbarButtonAccent, 10%);
+                }
+            }
+        }
 
         &:focus {
-
+            color: darken(@toolbarButtonColor, 20%);
+            text-decoration: none;
             background-color: @toolbarFocusColor;
 
             i {
                 color: white;
                 text-decoration: none;
+                &.accent-color {
+                    background-color: @toolbarFocusColor;
+                    border-color: @toolbarFocusColor;
+                }
             }
-
-            i.accent-color {
-                background-color: @toolbarFocusColor;
-                border-color: @toolbarFocusColor;
+        }
+        &.disabled {
+            i {
+                color: #eee;
+                cursor: default;
+                &.accent-color {
+                    background-color: #fff;
+                    border-color: #fff;
+                }
             }
         }
     }
-
-    & > a i {
-        color: @toolbarButtonColor;
-    }
-
-    &:hover > a i {
-        color: darken(@toolbarButtonColor, 20%);
-        text-decoration: none;
-    }
-
-    & > a i.accent-color {
-        background-color: @toolbarButtonAccent;
-        color: #FFF;
-        border: 2px solid @toolbarButtonAccent;
-        width: 25px;
-        border-radius: 5px;
-        padding-top: 2px;
-    }
-
-    &:hover > a i.accent-color {
-        background-color: darken(@toolbarButtonAccent, 10%);
-        border-color: darken(@toolbarButtonAccent, 10%);
-    }
-
-    & > a.disabled i {
-        color: #eee;
-        cursor: default;
-    }
-
-    ul { font-size: 14px; line-height: 20px; }
 }
 
 .window-container.classic .window-head {
@@ -1658,13 +1664,6 @@ input.nice-input {
     }
 }
 
-@media (max-width: 480px) {
-    .autocomplete-popup {
-        min-width: initial;
-        height: 145px;
-    }
-}
-
 /* folder tree */
 .io-ox-foldertree {
 
@@ -2012,10 +2011,7 @@ a.toolbar-action, .toolbar-action > a {
     i { color: white; }
 }
 
-.toolbar-button a:focus {
-    background-color: @toolbarFocusColor;
-    i { color: white; }
-}
+
 
 /* Empty detail view */
 
@@ -2341,7 +2337,12 @@ ul.dropdown-menu li a.disabled { color:#999; }
     .window-head { padding-left: 40px; } // iOS landscape back button fix
 }
 // mobile
-@media (max-width: 480px) {
+@media (max-width: 480px), (max-device-width: 480px) {
+
+    .autocomplete-popup {
+        min-width: initial;
+        height: 145px;
+    }
 
     .window-sidepanel.visible, .window-sidepanel {
         left: -90%;
@@ -2452,6 +2453,8 @@ ul.dropdown-menu li a.disabled { color:#999; }
         }
     }
 }
+
+
 /** some transitions **/
 @-webkit-keyframes slideleft {
     from { -webkit-transform: translateX(-50%); }

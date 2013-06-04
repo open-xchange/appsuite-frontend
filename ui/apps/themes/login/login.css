@@ -307,7 +307,7 @@ body.down #io-ox-login-container .alert.alert-info {
 }
 
 /* mobile stuff */
-@media (max-width: 480px) {
+@media (max-width: 480px), (max-device-width: 480px) {
     /* 100% divs on relogin page*/
     .relogin #io-ox-login-form [class*="span"] {
         margin-left: 0;
