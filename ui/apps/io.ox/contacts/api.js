@@ -743,7 +743,13 @@ define('io.ox/contacts/api',
             if (/\@/.test(data.email)) {
                 node.data({
                     display_name: name,
-                    email1: data.email
+                    email1: email
+                });
+            } else if (data.phone && data.phone !== name) {
+                node.addClass('halo-link');
+                node.data({
+                    display_name: name,
+                    email1: email
                 });
             } else {
                 //disable halo link if unique id (email) is missing
@@ -761,14 +767,19 @@ define('io.ox/contacts/api',
         cont = function (data) {
             if (_.isArray(data) && data.length > 0)
                 set(_.first(data).display_name);
-            else if (data && data.display_name)
+            else if (data && data.display_name) {
+                //workaround: email needed as id for msisdn halo links
+                email = data.email1 || email;
                 set(data.display_name);
+            }
             else if (_.isString(data))
                 set(data);
         };
         cont(data.display_name);
         if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
             clear();
+        } else if (data.phone) {
+            api.getByPhone(data.phone).done(cont).always(clear);
         } else {
             api.getByEmailadress(data.email).done(cont).always(clear);
         }
