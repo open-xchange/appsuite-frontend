@@ -24,9 +24,104 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
 
+        DEFAULTS = {
+            tests: {
+                'From': {
+                    'comparison': "matches",
+                    'headers': ["From"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'any': {
+                    'comparison': "matches",
+                    'headers': ["To", "Cc"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'Subject': {
+                    'comparison': "matches",
+                    'headers': ["Subject"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'mailingList': {
+                    'comparison': "matches",
+                    'headers': ["List-Id", "X-BeenThere", "X-Mailinglist", "X-Mailing-List"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'To': {
+                    'comparison': "matches",
+                    'headers': ["To"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'Cc': {
+                    'comparison': "matches",
+                    'headers': ["Cc"],
+                    'id': "header",
+                    'values': ['']
+                },
+                'cleanHeader': {
+                    'comparison': "matches",
+                    'headers': [""],
+                    'id': "header",
+                    'values': [""]
+                },
+                'envelope': {
+                    'comparison': "matches",
+                    'headers': ["To"],
+                    'id': "envelope",
+                    'values': [""]
+                },
+                'true': {
+                    'id': 'true'
+                },
+                'size': {
+                    'comparison': 'over',
+                    'id': 'size',
+                    'size': ''
+                }
+            },
+            actions: {
+                'keep': {
+                    'id': "keep"
+                },
+                'discard': {
+                    'id': "discard"
+                },
+                'redirect': {
+                    'id': "redirect",
+                    'to': ""
+                },
+                'move': {
+                    'id': "move",
+                    'into': ""
+                },
+                'reject': {
+                    'id': "reject",
+                    'text': ""
+
+                },
+                'markmail': {
+                    'flags': ["\\seen"],
+                    'id': "addflags"
+                },
+                'tag': {
+                    'flags': ["$"],
+                    'id': "addflags"
+
+                },
+                'flag': {
+                    'flags': ["$cl_1"],
+                    'id': "addflags"
+                }
+            }
+        },
+
         sizeValues = {
-            over: gt('Is bigger than'),
-            under: gt('Is smaller than')
+            'over': gt('Is bigger than'),
+            'under': gt('Is smaller than')
         },
 
         flagValues = {
@@ -35,104 +130,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         containsValues = {
-            contains: gt('Contains'),
-            is: gt('Is exactly'),
-            matches: gt('Matches'),
-            regex: gt('Regex') //needs no different translation
-        },
-
-        defaultTests = {
-            'From': {
-                'comparison': "matches",
-                'headers': ["From"],
-                'id': "header",
-                'values': ['']
-            },
-            'any': {
-                'comparison': "matches",
-                'headers': ["To", "Cc"],
-                'id': "header",
-                'values': ['']
-            },
-            'Subject': {
-                'comparison': "matches",
-                'headers': ["Subject"],
-                'id': "header",
-                'values': ['']
-            },
-            'mailingList': {
-                'comparison': "matches",
-                'headers': ["List-Id", "X-BeenThere", "X-Mailinglist", "X-Mailing-List"],
-                'id': "header",
-                'values': ['']
-            },
-            'To': {
-                'comparison': "matches",
-                'headers': ["To"],
-                'id': "header",
-                'values': ['']
-            },
-            'Cc': {
-                'comparison': "matches",
-                'headers': ["Cc"],
-                'id': "header",
-                'values': ['']
-            },
-            'cleanHeader': {
-                'comparison': "matches",
-                'headers': [""],
-                'id': "header",
-                'values': [""]
-            },
-            'envelope': {
-                'comparison': "matches",
-                'headers': ["To"],
-                'id': "envelope",
-                'values': [""]
-            },
-            'true': {
-                'id': 'true'
-            },
-            'size': {
-                'comparison': 'over',
-                'id': 'size',
-                'size': ''
-            }
-        },
-
-        defaultActions = {
-            'keep': {
-                'id': "keep"
-            },
-            'discard': {
-                'id': "discard"
-            },
-            'redirect': {
-                'id': "redirect",
-                'to': ""
-            },
-            'move': {
-                'id': "move",
-                'into': ""
-            },
-            'reject': {
-                'id': "reject",
-                'text': ""
-
-            },
-            'markmail': {
-                'flags': ["\\seen"],
-                'id': "addflags"
-            },
-            'tag': {
-                'flags': ["$"],
-                'id': "addflags"
-
-            },
-            'flag': {
-                'flags': ["$cl_1"],
-                'id': "addflags"
-            }
+            'contains': gt('Contains'),
+            'is': gt('Is exactly'),
+            'matches': gt('Matches'),
+            'regex': gt('Regex') //needs no different translation
         },
 
         headerTranslation = {
@@ -159,35 +160,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             'flag': gt('Flag mail with')
         },
 
-        colorNames = {
-            NONE:       gt('None'),
-            RED:        gt('Red'),
-            BLUE:       gt('Blue'),
-            GREEN:      gt('Green'),
-            GRAY:       gt('Gray'),
-            PURPLE:     gt('Purple'),
-            LIGHTGREEN: gt('Light green'),
-            ORANGE:     gt('Orange'),
-            PINK:       gt('Pink'),
-            LIGHTBLUE:  gt('Light blue'),
-            YELLOW:     gt('Yellow')
-        },
-
         COLORS = {
-            NONE:        0,
-            RED:         1,
-            ORANGE:      7,
-            YELLOW:     10,
-            LIGHTGREEN:  6,
-            GREEN:       3,
-            LIGHTBLUE:   9,
-            BLUE:        2,
-            PURPLE:      5,
-            PINK:        8,
-            GRAY:        4
+            NONE: { value: 0, text: gt('None') },
+            RED: { value: 1, text: gt('Red') },
+            ORANGE: { value: 7, text: gt('Orange') },
+            YELLOW: { value: 10, text: gt('Yellow') },
+            LIGHTGREEN: { value: 6, text: gt('Light green') },
+            GREEN: { value: 3, text: gt('Green') },
+            LIGHTBLUE: { value: 9, text: gt('Light blue') },
+            BLUE: { value: 2, text: gt('Blue') },
+            PURPLE: { value: 5, text: gt('Purple') },
+            PINK: { value: 8, text: gt('Pink') },
+            GRAY: { value: 4, text: gt('Gray') }
         },
 
-        colorFlags = {
+        COLORFLAGS = {
             '$cl_1': '1',
             '$cl_2': '2',
             '$cl_3': '3',
@@ -314,16 +301,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 if (testAction === 'create-test') {
                     list.remove();
                     if (checkForMultipleTests.length > 1) {
-                        testArray.tests.push(defaultTests[value]);
+                        testArray.tests.push(_.copy(DEFAULTS.tests[value], true));
 
                     } else if (checkForMultipleTests.length === 1) {
                         var createdArray = [testArray];
-                        createdArray.push(defaultTests[value]);
+                        createdArray.push(_.copy(DEFAULTS.tests[value], true));
                         testArray = { id: 'allof'};
                         testArray.tests = createdArray;
                     } else {
 
-                        testArray = defaultTests[value];
+                        testArray = _.copy(DEFAULTS.tests[value], true);
                     }
 
                     this.model.set('test', testArray);
@@ -333,7 +320,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 } else if (testAction === 'create-action') {
                     list.remove();
 
-                    actionArray.push(defaultActions[value]);
+                    actionArray.push(_.copy(DEFAULTS.actions[value], true));
 
                     this.model.set('actioncmds', actionArray);
 
@@ -347,7 +334,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     } else {
                         testArray.comparison = value;
                     }
-
                     this.model.set('test', testArray);
                 }
 
@@ -577,7 +563,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
     var drawColorDropdown = function (activeColor) {
 
-        var flagclass = 'flag_' + colorFlags[activeColor];
+        var flagclass = 'flag_' + COLORFLAGS[activeColor];
         return $('<div class="dropdown flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
         .addClass(flagclass)
         .append(
@@ -586,13 +572,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             // drop down
             $('<ul class="dropdown-menu">')
             .append(
-                _(COLORS).map(function (index, color) {
+                _(COLORS).map(function (colorObject) {
                     return $('<li>').append(
                         $('<a href="#">').attr({'data-action': 'change-color'}).append(
-                            index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
-                            $.txt(colorNames[color])
+                            colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
+                            $.txt(colorObject.text)
                         )
-                        .on('click', { color: index, flagclass: flagclass }, changeLabel)
+                        .on('click', { color: colorObject.value, flagclass: flagclass }, changeLabel)
                     );
                 })
             )
