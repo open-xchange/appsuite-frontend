@@ -18,4 +18,4 @@ then
 fi
 
 $NODEJS share/lib/jake/bin/cli.js -f share/lib/build/themes.js update-themes \
-    builddir=. noJakefile=1 --trace
+    builddir=. --trace
