@@ -507,8 +507,8 @@ define("io.ox/mail/write/view-main",
                 this.addSection('format', gt('Text format'), true, false).append(
 
                     $('<div class="section-item">').append(
-                        createRadio('format', 'text', gt('Text')),
-                        createRadio('format', 'html', gt('HTML'), true)
+                        createRadio('format', 'text', gt('Text'), format === 'text'),
+                        createRadio('format', 'html', gt('HTML'), format === 'html' || format === 'alternative')
                     )
                     .css({
                         paddingTop: '1em',

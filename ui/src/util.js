@@ -163,7 +163,11 @@
     };
 
 
-    var display = {};
+    var display = {},
+        hasNativeEmoji = (function () {
+            var support = _.browser.ios || _.browser.Android;
+            return support;
+        }());
 
     _(queries).each(function (query, key) {
         display[key] = Modernizr.mq(query);
@@ -192,6 +196,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
+            misc.emoji = hasNativeEmoji;
             // no arguments?s
             if (arguments.length === 0) {
                 return _.extend({}, browserLC, display, misc);

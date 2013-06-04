@@ -1,0 +1,52 @@
+@import '../../../../emoji/emoji.css';
+
+@font-face {
+    font-family: 'AndroidEmojiRegular';
+    src: url('font/androidemoji.eot');
+    src: url('font/androidemoji.eot') format('embedded-opentype'),
+         url('font/androidemoji.woff') format('woff'),
+         url('font/androidemoji.ttf') format('truetype');
+}
+
+.emojifont {
+    font-family: 'AndroidEmojiRegular';
+}
+
+img.emoji {
+    border: 0;
+}
+
+
+#mceEmojiPane {
+    vertical-align: top;
+    max-width: 60px;
+
+    a {
+        cursor: auto;
+    }
+
+    & > div {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    a.emoji_category {
+        margin: 0px 1em;
+        display: block;
+
+        &.open {
+            font-weight: bold;
+        }
+    }
+    .emoji_selector {
+        white-space: normal;
+        overflow-y: auto;
+
+        a {
+            margin: 5px 3px;
+            width: 20px;
+            .emojifont;
+        }
+    }
+}
