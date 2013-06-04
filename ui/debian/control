@@ -15,7 +15,7 @@ Description: OX App Suite HTML5 client
 
 Package: open-xchange-appsuite-manifest
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-core, nodejs >= 0.6.0 | open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Depends: ${misc:Depends}, open-xchange-core, nodejs (>= 0.6.0) | open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
 Replaces: open-xchange-appsuite-manifest (<< 7.2.1-0)
 Conflicts: open-xchange-appsuite-manifest (<< 7.2.1-0)
 Description: Manifest and apps included in the OX App Suite HTML5 client

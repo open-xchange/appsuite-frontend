@@ -9,7 +9,7 @@ then
     if command -v nodejs > /dev/null; then
         NODEJS=nodejs
     elif command -v node > /dev/null; then
-        NODEJS=node; fi
+        NODEJS=node
     else
         java -jar /opt/open-xchange/bundles/com.openexchange.scripting.rhino/lib/js.jar \
              share/update-themes.js
