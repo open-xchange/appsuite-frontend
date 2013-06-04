@@ -75,7 +75,7 @@
 
                     $('a.emoji_category:last')
                     .addClass('open')
-                    .append(
+                    .after(
                         _(iconSelector)
                         .chain()
                         .values()
