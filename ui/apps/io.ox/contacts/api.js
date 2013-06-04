@@ -526,68 +526,67 @@ define('io.ox/contacts/api',
     * @param  {string} phone (phonenumber)
     * @return {deferred} returns exactyl one contact object
     */
-    api.getByPhone = function (phone) {
-        phone = phone || '';
-        return fetchCache.get(phone).pipe(function (data) {
-            if (data !== null) {
-                return data;
-            } else if (phone === '') {
-                return {};
-            } else {
-                //search in all msisdn supported fields
-                var filter = _.map(api.getMapping('msisdn', 'names'), function (column) {
-                    return [].concat(['=', { 'field': column }, phone ]);
-                });
-                if (!filter.length) {
-                    return fetchCache.add(phone, {});
-                }
-                //server request
-                return http.PUT({
-                    module: 'contacts',
-                    params: {
-                        action: 'advancedSearch',
-                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
-                        timezone: 'UTC'
-                    },
-                    sort: 609,
-                    data: {
-                        'filter': [
-                            'or'
-                        ].concat(filter)
-
-                    }
-                }).pipe(function (data) {
-                    //TODO: use smarter server request instead
-                    if (data.length) {
-                        // favor contacts with an image
-                        data.sort(function (a, b) {
-                            return !!b.image1_url ? +1 : -1;
-                        });
-                        // favor contacts in global address book
-                        data.sort(function (a, b) {
-                            return b.folder_id === '6' ? +1 : -1;
-                        });
-                        // remove host
-                        if (data[0].image1_url) {
-                            data[0].image1_url = data[0].image1_url
-                                .replace(/^https?\:\/\/[^\/]+/i, '')
-                                .replace(/^\/ajax/, ox.apiRoot);
-                        }
-                        // use first contact
-                        return fetchCache.add(phone, {
-                            image1_url: data[0].image1_url,
-                            display_name: data[0].display_name,
-                            internal_userid: data[0].internal_userid,
-                            email1: data[0].email1
-                        });
-                    } else {
-                        // no data found
-                        return fetchCache.add(phone, {});
-                    }
-                });
-            }
-        });
-    };
+    //api.getByPhone = function (phone) {
+    // phone = phone || '';
+    // return fetchCache.get(phone).pipe(function (data) {
+    //     if (data !== null) {
+    //         return data;
+    //     } else if (phone === '') {
+    //         return {};
+    //     } else {
+    //         //search in all msisdn supported fields
+    //         var filter = _.map(api.getMapping('msisdn', 'names'), function (column) {
+    //             return [].concat(['=', { 'field': column }, phone ]);
+    //         });
+    //         if (!filter.length) {
+    //             return fetchCache.add(phone, {});
+    //         }
+    //         //server request
+    //         return http.PUT({
+    //             module: 'contacts',
+    //             params: {
+    //                 action: 'advancedSearch',
+    //                 columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+    //                 timezone: 'UTC'
+    //             },
+    //             sort: 609,
+    //             data: {
+    //                 'filter': [
+    //                     'or'
+    //                 ].concat(filter)
+    //             }
+    //         }).pipe(function (data) {
+    //             //TODO: use smarter server request instead
+    //             if (data.length) {
+    //                 // favor contacts with an image
+    //                 data.sort(function (a, b) {
+    //                     return !!b.image1_url ? +1 : -1;
+    //                 });
+    //                 // favor contacts in global address book
+    //                 data.sort(function (a, b) {
+    //                     return b.folder_id === '6' ? +1 : -1;
+    //                 });
+    //                 // remove host
+    //                 if (data[0].image1_url) {
+    //                     data[0].image1_url = data[0].image1_url
+    //                         .replace(/^https?\:\/\/[^\/]+/i, '')
+    //                         .replace(/^\/ajax/, ox.apiRoot);
+    //                 }
+    //                 // use first contact
+    //                 return fetchCache.add(phone, {
+    //                     image1_url: data[0].image1_url,
+    //                     display_name: data[0].display_name,
+    //                     internal_userid: data[0].internal_userid,
+    //                     email1: data[0].email1
+    //                 });
+    //             } else {
+    //                 // no data found
+    //                 return fetchCache.add(phone, {});
+    //             }
+    //         });
+    //     }
+    // });
+    //};
 
     /**
      * TODO: dirty copy/paste hack until I know hat fetchCache is good for
@@ -682,8 +681,8 @@ define('io.ox/contacts/api',
             }
         } else if (obj.email) {
             api.getByEmailadress(obj.email).done(success).fail(fail);
-        } else if (obj.phone) {
-            api.getByPhone(obj.phone).done(success).fail(fail);
+        //} else if (obj.phone) {
+        //    api.getByPhone(obj.phone).done(success).fail(fail);
         } else {
             fail();
         }
@@ -743,12 +742,12 @@ define('io.ox/contacts/api',
                     display_name: name,
                     email1: email
                 });
-            } else if (data.phone && data.phone !== name) {
-                node.addClass('halo-link');
-                node.data({
-                    display_name: name,
-                    email1: email
-                });
+            //} else if (data.phone && data.phone !== name) {
+            //    node.addClass('halo-link');
+            //    node.data({
+            //        display_name: name,
+            //        email1: email
+            //    });
             } else {
                 //disable halo link if unique id (email) is missing
                 node.removeClass('halo-link');
@@ -767,7 +766,7 @@ define('io.ox/contacts/api',
                 set(_.first(data).display_name);
             else if (data && data.display_name) {
                 //workaround: email needed as id for msisdn halo links
-                email = data.email1 || email;
+                //email = data.email1 || email;
                 set(data.display_name);
             }
             else if (_.isString(data))
@@ -776,8 +775,8 @@ define('io.ox/contacts/api',
         cont(data.display_name);
         if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
             clear();
-        } else if (data.phone) {
-            api.getByPhone(data.phone).done(cont).always(clear);
+        //} else if (data.phone) {
+        //    api.getByPhone(data.phone).done(cont).always(clear);
         } else {
             api.getByEmailadress(data.email).done(cont).always(clear);
         }
