@@ -39,10 +39,14 @@
                             $('<a href="#" class="emoji_category" data-emoji-category="' + category + '">')
                             .text(category)
                             .click(function (evt) {
+                                var closeOnly = $(evt.target).hasClass('open');
+
                                 $('a.emoji_category').removeClass('open');
-                                $(evt.target).addClass('open');
                                 $('div.emoji_selector').remove();
-                                pane.append(iconSelector[category]);
+                                if (!closeOnly) {
+                                    $(evt.target).addClass('open');
+                                    $(evt.target).after(iconSelector[category]);
+                                }
                                 baton.editor.focus();
                             })
                         );
