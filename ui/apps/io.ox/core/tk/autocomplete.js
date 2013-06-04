@@ -12,9 +12,8 @@
  */
 
 define('io.ox/core/tk/autocomplete',
-    [   'gettext!io.ox/mail',
-        'io.ox/mail/util'
-    ], function (gt, mailUtil) {
+    ['gettext!io.ox/mail',
+     'io.ox/core/util'], function (gt, util) {
 
     'use strict';
 
@@ -51,12 +50,11 @@ define('io.ox/core/tk/autocomplete',
 
                 //object related unique string
                 stringify: function (data) {
-                    var value;
+
                     if (data.type === 'resource' || data.type === 'group')
-                        value = data.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '');
-                    else
-                        value = data.display_name ? '"' + data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, '') + '" <' + data.email + '>' : data.email;
-                    return value;
+                        return util.unescapeDisplayName(data.data.display_name);
+
+                    return data.display_name ? '"' + util.unescapeDisplayName(data.display_name) + '" <' + data.email + '>' : data.email;
                 }
             }, o || {});
 

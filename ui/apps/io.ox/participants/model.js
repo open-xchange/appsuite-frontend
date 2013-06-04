@@ -16,7 +16,9 @@ define('io.ox/participants/model',
          'io.ox/core/api/group',
          'io.ox/core/api/resource',
          'io.ox/contacts/api',
-         'io.ox/contacts/util'], function (userAPI, groupAPI, resourceAPI, contactAPI, util) {
+         'io.ox/contacts/util',
+         'io.ox/core/util'
+         ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -132,7 +134,10 @@ define('io.ox/participants/model',
                         self.id = self.get('id');
                         self.trigger('change');
                     } else {
-                        self.set({display_name: (self.get('display_name') || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')}, {validate: true});
+                        self.set({
+                            display_name: coreUtil.unescapeDisplayName(self.get('display_name')),
+                            email1: self.get('mail') || self.get('email1')
+                        }, {validate: true});
                     }
                     self.trigger('change', self);
                     df.resolve();

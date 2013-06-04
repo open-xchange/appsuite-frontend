@@ -210,12 +210,14 @@ define("io.ox/contacts/view-detail",
         index: 200,
         id: 'contact-title',
         draw: function (baton) {
+
             var private_flag,
                 name = createText(util.getFullNameFormat(baton.data),
                     ['first_name', 'last_name', 'title', 'display_name']),
                 job = createText(getDescription(baton.data),
                     ['email1', 'email2', 'email3', 'company', 'position',
                      'profession', 'type']);
+
             this.append(
                 // right side
                 $('<div>').append(

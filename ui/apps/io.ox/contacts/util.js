@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
+define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], function (util, gt) {
 
     'use strict';
 
@@ -91,7 +91,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
             // use existing display name?
             if (obj.display_name) {
-                return single(4, String(obj.display_name).replace(/"|'/g, ''));
+                return single(4, util.unescapeDisplayName(obj.display_name));
             }
             // fallback
             if (obj.last_name) return single(2, obj.last_name);
@@ -107,7 +107,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
         getDisplayName: function (obj) {
             // use existing display name?
             if (obj.display_name) {
-                return String(obj.display_name).replace(/"|'/g, '');
+                return util.unescapeDisplayName(obj.display_name);
             }
             // combine last_name, and first_name
             if (obj.last_name && obj.first_name) {
@@ -145,7 +145,7 @@ define('io.ox/contacts/util', ['gettext!io.ox/contacts'], function (gt) {
 
             // use existing display name?
             if (obj.display_name) {
-                return single(4, String(obj.display_name).replace(/"|'/g, ''));
+                return single(4, util.unescapeDisplayName(obj.display_name));
             }
             // fallback
             if (obj.last_name) { return single(2, obj.last_name); }

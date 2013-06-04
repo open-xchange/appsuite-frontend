@@ -29,9 +29,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/snippets',
      'io.ox/core/strings',
      'io.ox/core/config',
+     'io.ox/core/util',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
+    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, settings, gt) {
 
     'use strict';
 
@@ -847,7 +848,7 @@ define("io.ox/mail/write/view-main",
             }
 
             var obj = {
-                display_name: (elem.display_name || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''),
+                display_name: util.unescapeDisplayName(elem.display_name),
                 email: elem.email || '',
                 phone: elem.phone || '',
                 field: elem.field || '',

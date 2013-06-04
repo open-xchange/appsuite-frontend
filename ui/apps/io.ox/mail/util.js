@@ -15,10 +15,11 @@
 define('io.ox/mail/util',
     ['io.ox/core/extensions',
      'io.ox/core/date',
+     'io.ox/core/util',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, gt) {
+     'gettext!io.ox/core'], function (ext, date, util, accountAPI, capabilities, settings, gt) {
 
     'use strict';
 
@@ -69,8 +70,6 @@ define('io.ox/mail/util',
         rTelephoneCleanup = /[^0-9+]/g,
         // regex: used to identify phone numbers
         rNotDigitAndAt = /[^A-Za-z@]/g,
-        // regex: clean up display name
-        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
 
         // mail addresses hash
         addresses = {};
@@ -110,7 +109,7 @@ define('io.ox/mail/util',
                 } else {
                     target = that.cleanupPhone(match[3]);
                 }
-                name = match[1].replace(rDisplayNameCleanup, '');
+                name = util.unescapeDisplayName(match[1]);
             } else {
                 // case 2: assume plain email address / telephone number
                 if (that.getChannel(recipient) === 'email') {
@@ -214,11 +213,13 @@ define('io.ox/mail/util',
         },
 
         getDisplayName: function (pair) {
-            if (!pair) {
-                return '';
-            }
-            var name = pair[0], email = String(pair[1] || '').toLowerCase(),
-                display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+
+            if (!pair) return '';
+
+            var name = pair[0],
+                email = String(pair[1] || '').toLowerCase(),
+                display_name = util.unescapeDisplayName(name);
+
             return display_name || email;
         },
 
@@ -245,7 +246,7 @@ define('io.ox/mail/util',
                 name = args[0][0];
                 address = args[0][1];
             }
-            name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+            name = util.unescapeDisplayName(name);
             address = $.trim(address || '').toLowerCase();
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
