@@ -1,6 +1,10 @@
-<div class="selectable deletable-item {{=it.state.value}}" data-id="{{=it.id}}" >
+<li class="selectable deletable-item {{=it.state.value}} {{=it.editable}}" data-id="{{=it.id}}" >
     <div data-property="rulename"></div>
     <div class="link-wrapper">
+    
+    {{? it.editable === 'editable'}}
         <a href="#" class="action" data-action="toggle">{{=it.state.text}}</a>
+    {{?}}
+        
     </div>
-</div>
+</li>

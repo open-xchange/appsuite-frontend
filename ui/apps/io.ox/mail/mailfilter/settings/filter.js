@@ -94,22 +94,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //                    no filters
 
                 } else {
-                    var mailFilter = {},
-                        MailfilterEdit;
+                    var mailFilter = {};
 
-                    collection = _.reject(data, function (filter) {
-                        if (_.isEmpty(filter.flags)) {
-                            return false;
-                        }
-                        var test = _.reject(filter.flags, function (flag) {
-                            return flag === 'vacation' || 'autoforward';
-                        });
-
-                        return _.isEmpty(test);
-
-                    });
-
-                    collection = factory.createCollection(collection);
+                    collection = factory.createCollection(data);
 
                     var AccountSelectView = Backbone.View.extend({
 
@@ -117,12 +104,25 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         initialize: function (options) {
                             this.template = doT.template(tmpl);
                             this._modelBinder = new Backbone.ModelBinder();
+
                         },
                         render: function () {
-                            var self = this;
+                            var self = this,
+                                flagArray = this.model.get('flags');
+
+                            function getEditableState() {
+                                if (flagArray) {
+                                    var value = flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
+                                    return value;
+                                } else {
+                                    return 'editable';
+                                }
+                            }
                             self.$el.empty().append(self.template({
                                 id: this.model.get('id'),
-                                state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') }
+                                state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
+                                editable: getEditableState()
+
 
                             }));
 
@@ -132,11 +132,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             return self;
                         },
                         events: {
-                            'click .deletable-item': 'onSelect'
+                            'click .deletable-item.editable': 'onSelect'
                         },
 
                         onSelect: function () {
-                            this.$el.parent().find('div[selected="selected"]').attr('selected', null);
+                            this.$el.parent().find('li[selected="selected"]').attr('selected', null);
                             this.$el.find('.deletable-item').attr('selected', 'selected');
                         }
 
@@ -151,6 +151,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                             this.collection.bind('add', this.render);
                             this.collection.bind('remove', this.render);
+
                         },
                         render: function () {
                             var self = this,
@@ -159,7 +160,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 strings: staticStrings
                             }));
                             this.collection.each(function (item) {
-                                self.$el.find('.listbox').append(
+                                self.$el.find('.widget-list').append(
                                     new AccountSelectView({ model: item }).render().el
                                 );
                             });
@@ -232,6 +233,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     mailFilter = new MailfilterEdit();
                     $node.append(mailFilter.render().$el);
+
+
+                    $node.find('ol').sortable({
+                        containment: this.el,
+                        axis: 'y',
+                        scroll: true,
+                        delay: 150,
+                        stop: function (e, ui) {
+                            var arrayOfFilters = $node.find('li[data-id]'),
+                                data = _.map(arrayOfFilters, function (single) {
+                                    return parseInt($(single).attr('data-id'), 10);
+                                });
+                            api.reorder(data); //TODO needs a respons?;
+                        }
+                    });
 
                 }
 

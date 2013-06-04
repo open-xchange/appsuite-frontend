@@ -84,6 +84,19 @@ define('io.ox/core/api/mailfilter',
                 module: 'mailfilter',
                 params: {action: 'config'}
             });
+        },
+
+        /**
+         * reorder rules
+         * @param  {array} data
+         * @return {deferred}
+         */
+        reorder: function (data) {
+            return http.PUT({
+                module: 'mailfilter',
+                params: {action: 'reorder'},
+                data: data
+            });
         }
     };
 
