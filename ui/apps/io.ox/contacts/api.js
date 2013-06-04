@@ -521,6 +521,11 @@ define('io.ox/contacts/api',
         });
     };
 
+    /**
+    * get contact redced/filtered contact data; manages caching
+    * @param  {string} phone (phonenumber)
+    * @return {deferred} returns exactyl one contact object
+    */
     api.getByPhone = function (phone) {
         phone = phone || '';
         return fetchCache.get(phone).pipe(function (data) {
@@ -529,7 +534,14 @@ define('io.ox/contacts/api',
             } else if (phone === '') {
                 return {};
             } else {
-                //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
+                //search in all msisdn supported fields
+                var filter = _.map(api.getMapping('msisdn', 'names'), function (column) {
+                    return [].concat(['=', { 'field': column }, phone ]);
+                });
+                if (!filter.length) {
+                    return fetchCache.add(phone, {});
+                }
+                //server request
                 return http.PUT({
                     module: 'contacts',
                     params: {
@@ -540,22 +552,8 @@ define('io.ox/contacts/api',
                     sort: 609,
                     data: {
                         'filter': [
-                            'or',
-                            [
-                                '=',
-                                {
-                                    'field': 'cellular_telephone1'
-                                },
-                                phone
-                            ],
-                            [
-                                '=',
-                                {
-                                    'field': 'cellular_telephone2'
-                                },
-                                phone
-                            ]
-                        ]
+                            'or'
+                        ].concat(filter)
 
                     }
                 }).pipe(function (data) {
