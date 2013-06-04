@@ -521,6 +521,76 @@ define('io.ox/contacts/api',
         });
     };
 
+    api.getByPhone = function (phone) {
+        phone = phone || '';
+        return fetchCache.get(phone).pipe(function (data) {
+            if (data !== null) {
+                return data;
+            } else if (phone === '') {
+                return {};
+            } else {
+                //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
+                return http.PUT({
+                    module: 'contacts',
+                    params: {
+                        action: 'advancedSearch',
+                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+                        timezone: 'UTC'
+                    },
+                    sort: 609,
+                    data: {
+                        'filter': [
+                            'or',
+                            [
+                                '=',
+                                {
+                                    'field': 'cellular_telephone1'
+                                },
+                                phone
+                            ],
+                            [
+                                '=',
+                                {
+                                    'field': 'cellular_telephone2'
+                                },
+                                phone
+                            ]
+                        ]
+
+                    }
+                }).pipe(function (data) {
+                    //TODO: use smarter server request instead
+                    if (data.length) {
+                        // favor contacts with an image
+                        data.sort(function (a, b) {
+                            return !!b.image1_url ? +1 : -1;
+                        });
+                        // favor contacts in global address book
+                        data.sort(function (a, b) {
+                            return b.folder_id === '6' ? +1 : -1;
+                        });
+                        // remove host
+                        if (data[0].image1_url) {
+                            data[0].image1_url = data[0].image1_url
+                                .replace(/^https?\:\/\/[^\/]+/i, '')
+                                .replace(/^\/ajax/, ox.apiRoot);
+                        }
+                        // use first contact
+                        return fetchCache.add(phone, {
+                            image1_url: data[0].image1_url,
+                            display_name: data[0].display_name,
+                            internal_userid: data[0].internal_userid,
+                            email1: data[0].email1
+                        });
+                    } else {
+                        // no data found
+                        return fetchCache.add(phone, {});
+                    }
+                });
+            }
+        });
+    };
+
     /**
      * TODO: dirty copy/paste hack until I know hat fetchCache is good for
      * @param  {object} obj
@@ -559,6 +629,11 @@ define('io.ox/contacts/api',
             fail = function () {
                 api.trigger('fail');
                 deferred.resolve(defaultUrl);
+            },
+            success = function (data) {
+                //do not set data.image1_url (would also update cached object)
+                var url = data.image1_url ? data.image1_url + '&' + $.param($.extend({}, options)) : defaultUrl;
+                deferred.resolve(url);
             };
 
         // param empty/null
@@ -608,13 +683,9 @@ define('io.ox/contacts/api',
                 fail();
             }
         } else if (obj.email) {
-            api.getByEmailadress(obj.email)
-                .done(function (data) {
-                    //do not set data.image1_url (would also update cached object)
-                    var url = data.image1_url ? data.image1_url + '&' + $.param($.extend({}, options)) : defaultUrl;
-                    deferred.resolve(url);
-                })
-                .fail(fail);
+            api.getByEmailadress(obj.email).done(success).fail(fail);
+        } else if (obj.phone) {
+            api.getByPhone(obj.phone).done(success).fail(fail);
         } else {
             fail();
         }
