@@ -182,6 +182,7 @@ define("io.ox/core/extPatterns/links",
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
 
             drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
+
                 // customize
                 if (extension.attributes) {
                     nav.attr(extension.attributes);
@@ -189,25 +190,28 @@ define("io.ox/core/extPatterns/links",
                 if (extension.classes) {
                     nav.addClass(extension.classes);
                 }
+
                 // add toggle unless multi-selection
-                var all = nav.children(), lo = nav.children('[data-prio="lo"]');
-                if (!multiple && all.length > 5 && lo.length > 1) {
+                var all = nav.children(),
+                    lo = all.filter('[data-prio="lo"]'),
+                    isSmall = _.device('small');
+
+                if (!multiple && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">').append(
-                                $.txt(gt('More')),
-                                $.txt(_.noI18n(' ...')),
-                                $('<b class="caret">')
-                            ).on('click', function (e) {
+                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
+                            .append(
+                                isSmall ?
+                                    [$.txt(gt('Actions')), $('<b class="caret">')] :
+                                    [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
+                            )
+                            .on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                                // fix dropdown position on-the-fly
                                 var left = $(this).parent().position().left;
-                                if (left < 100) {
-                                    $(this).next().removeClass('dropdown-right').addClass('dropdown-left');
-                                } else {
-                                    $(this).next().removeClass('dropdown-left').addClass('dropdown-right');
-                                }
+                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
                             }),
                             $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                                lo.map(wrapAsListItem)
+                                (isSmall ? all : lo).map(wrapAsListItem)
                             )
                         )
                     );

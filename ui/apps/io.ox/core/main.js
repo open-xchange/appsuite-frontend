@@ -75,7 +75,7 @@ define('io.ox/core/main',
     gt.pgettext('app', 'Files');
     gt.pgettext('app', 'Conversations');
 
-    function tabManager() {
+    var tabManager = _.debounce(function () {
         // Reset first
         launchers.children('.launcher:hidden').each(function (i, node) {
             $(node).show();
@@ -122,7 +122,7 @@ define('io.ox/core/main',
                 $('li', launcherDropdown).eq(-i).show();
             }
         }
-    }
+    }, 100);
 
     // add launcher
     var addLauncher = function (side, label, fn) {

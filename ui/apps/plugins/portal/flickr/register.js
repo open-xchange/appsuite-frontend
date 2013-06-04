@@ -129,17 +129,17 @@ define('plugins/portal/flickr/register',
                 });
                 // use size
                 if (size) {
+                    if (photo.title) {
+                        this.append(
+                            $('<caption>').text(photo.title)
+                        );
+                    }
                     this.append(
                         img = $('<div class="photo">').css('backgroundImage', 'url(' + url + ')')
                     );
                     if (flickrUrl) {
                         img.wrap(
                             $('<a>', { href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/', target: '_blank' })
-                        );
-                    }
-                    if (photo.title) {
-                        this.append(
-                            $('<caption>').text(photo.title)
                         );
                     }
                 }

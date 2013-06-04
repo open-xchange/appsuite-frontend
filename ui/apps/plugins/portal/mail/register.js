@@ -47,10 +47,13 @@ define('plugins/portal/mail/register',
         },
 
         load: function (baton) {
+
+            var numOfItems = _.device('small') ? 5 : 15;
+
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
-                var folderName = mailboxName ? mailboxName + "/INBOX" : api.getDefaultFolder();
+                var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
                 return api.getAll({ folder:  folderName }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, 20)).done(function (data) {
+                    return api.getList(mails.slice(0, numOfItems)).done(function (data) {
                         baton.data = data;
                     });
                 });

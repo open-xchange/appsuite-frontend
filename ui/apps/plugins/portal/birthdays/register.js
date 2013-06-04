@@ -57,7 +57,8 @@ define('plugins/portal/birthdays/register',
 
             var $list = $('<div class="content">'),
                 hash = {},
-                contacts = baton.data;
+                contacts = baton.data,
+                numOfItems = _.device('small') ? 5 : 15;
 
             if (contacts.length === 0) {
                 $list.append(
@@ -65,7 +66,7 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 $list.addClass('pointer');
-                _(contacts).each(function (contact) {
+                _(contacts.slice(0, numOfItems)).each(function (contact) {
                     var birthday = new date.Local(date.Local.utc(contact.birthday)).format(date.DATE),
                         name = util.getFullName(contact);
                     if (!isDuplicate(name, hash)) {
