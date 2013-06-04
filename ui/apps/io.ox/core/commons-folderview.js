@@ -582,6 +582,9 @@ define('io.ox/core/commons-folderview',
             var nodes = app.getWindow().nodes;
             nodes.panel.css('left', '0px');
             nodes.sidepanel.removeClass('visible').css('width', '');
+            if (app.getGrid) {
+                app.getGrid().focus();
+            }
         };
 
         fnShow = function () {
@@ -589,6 +592,7 @@ define('io.ox/core/commons-folderview',
             var nodes = app.getWindow().nodes;
             nodes.sidepanel.addClass('visible');
             restoreWidth();
+            baton.$.container.focus();
             return $.when();
         };
 

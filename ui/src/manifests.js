@@ -1,8 +1,8 @@
 define(function () {
     return [
         {
-            namespace: ['core'],
-            path: 'plugins/upsell/simple-wizard/register'
+            namespace: 'core',
+            path: 'plugins/upsell/bubbles/register'
         },
         // {
         //     namespace: ['io.ox/settings/main'],
