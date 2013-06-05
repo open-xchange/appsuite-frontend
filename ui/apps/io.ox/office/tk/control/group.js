@@ -74,6 +74,9 @@ define('io.ox/office/tk/control/group',
             // create the group container element
             groupNode = $('<div>').addClass('group'),
 
+            // the current value of this control group
+            groupValue = null,
+
             // update handler functions
             updateHandlers = [];
 
@@ -358,10 +361,20 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
+         * Returns the current value of this control group.
+         *
+         * @returns {Any}
+         *  The current value of this control group.
+         */
+        this.getValue = function () {
+            return groupValue;
+        };
+
+        /**
          * Updates the controls in this group with the specified value, by
          * calling the registered update handlers.
          *
-         * @param value
+         * @param {Any} value
          *  The new value to be displayed in the controls of this group.
          *
          * @returns {Group}
@@ -369,12 +382,22 @@ define('io.ox/office/tk/control/group',
          */
         this.update = function (value) {
             if (!_.isUndefined(value)) {
+                groupValue = value;
                 _(updateHandlers).each(function (updateHandler) {
                     updateHandler.call(this, value);
                 }, this);
             }
             return this;
         };
+
+        /**
+         * Debounced call of the Group.update() method with the current value
+         * of this group. Can be used to refresh the appearance of the group
+         * after changing its content.
+         */
+        this.refresh = _.debounce(function () {
+            self.update(groupValue);
+        });
 
         this.destroy = function () {
             this.events.destroy();

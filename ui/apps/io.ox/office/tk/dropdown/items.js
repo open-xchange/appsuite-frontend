@@ -159,6 +159,7 @@ define('io.ox/office/tk/dropdown/items',
          */
         this.clearItemGroup = function () {
             itemGroupNode.empty();
+            this.refresh();
             return this;
         };
 
@@ -239,6 +240,8 @@ define('io.ox/office/tk/dropdown/items',
 
             // call external handler
             itemCreateHandler.call(this, button, options);
+
+            this.refresh();
             return button;
         };
 
