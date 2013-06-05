@@ -395,17 +395,6 @@ define('io.ox/core/tk/forms',
             }
         },
 
-        createListBox: function (options) {
-            var ldiv = $('<div>').addClass('listbox');
-            ldiv.append(utils.createListSpacer());
-            _.each(options.model.get(options.dataid), function (item, k) {
-//                console.log(k + ':' + item.dataid);
-                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
-            });
-            ldiv.append(utils.createListSpacer());
-            return ldiv;
-        },
-
         createListItem: function (options) {
             options.classStr = options.classStr || 'deletable-item';
             var item = $('<div>');

@@ -43,7 +43,7 @@ define('io.ox/settings/main',
         },
         label: {
             build: function () {
-                this.addClass("settings-label");
+                this.addClass('settings-label');
             },
             set: function (data, fields, index) {
                 this.text(data.group || '');
@@ -92,7 +92,7 @@ define('io.ox/settings/main',
             saveSettings = function (triggeredBy) {
 
             switch (triggeredBy) {
-            case "changeMain":
+            case 'changeMain':
                 if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
                     var settingsID = currentSelection.id + '/settings';
                     ext.point(settingsID + '/detail').invoke('save');
@@ -163,7 +163,7 @@ define('io.ox/settings/main',
             var index = 200;
 
             _(apps).each(function (app) {
-                ext.point("io.ox/settings/pane").extend(_.extend({}, {
+                ext.point('io.ox/settings/pane').extend(_.extend({}, {
                     title: app.description,
                     ref: app.id,
                     index: index
@@ -173,13 +173,13 @@ define('io.ox/settings/main',
             });
         });
 
-        ext.point("io.ox/settings/pane").extend({
+        ext.point('io.ox/settings/pane').extend({
             title: gt('Basic settings'),
             index: 50,
             id: 'io.ox/core'
         });
 
-        ext.point("io.ox/settings/pane").extend({
+        ext.point('io.ox/settings/pane').extend({
             title: gt('Mail and Social Accounts'),
             index: 600,
             id: 'io.ox/settings/accounts'
@@ -188,7 +188,7 @@ define('io.ox/settings/main',
         var getAllSettingsPanes = function () {
             var def = $.Deferred();
             appsInitialized.done(function () {
-                def.resolve(ext.point("io.ox/settings/pane").list());
+                def.resolve(ext.point('io.ox/settings/pane').list());
             });
 
             appsInitialized.fail(def.reject);

@@ -11,12 +11,17 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'gettext!io.ox/mail', 'settings!io.ox/mail', 'less!io.ox/mail/settings/signatures/style.less'], function (ext, gt, settings) {
+define('io.ox/mail/settings/signatures/register',
+    ['io.ox/core/extensions',
+     'gettext!io.ox/mail',
+     'settings!io.ox/mail',
+     'less!io.ox/mail/settings/signatures/style.less'], function (ext, gt, settings) {
+
     'use strict';
 
     function fnMigrateClassicSignatures() {
         var def = $.Deferred();
-        require(["io.ox/core/config", "io.ox/core/api/snippets"], function (config, snippets) {
+        require(['io.ox/core/config', 'io.ox/core/api/snippets'], function (config, snippets) {
             var classicSignatures = config.get('gui.mail.signatures');
 
             var deferreds = _(classicSignatures).map(function (classicSignature) {
@@ -71,7 +76,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                 var $entirePopup = $pane.closest('.io-ox-sidepopup');
                 $('<form>').append(
                     $('<div class="row-fluid">').append(
-                        $name = $('<input type="text" class="span12">').attr('placeholder', gt("Name"))
+                        $name = $('<input type="text" class="span12">').attr('placeholder', gt('Name'))
                     ),
                     $error = $('<div>').addClass('help-block error'),
                     $('<div class="row-fluid">').append(
@@ -105,7 +110,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                 });
 
                 // Replace the buttons
-                var $buttonDiv = $entirePopup.find(".io-ox-sidepopup-close");
+                var $buttonDiv = $entirePopup.find('.io-ox-sidepopup-close');
 
                 $buttonDiv.empty();
 
@@ -147,7 +152,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
                             update.id = signature.id;
 
-                            require(["io.ox/core/api/snippets"], function (snippets) {
+                            require(['io.ox/core/api/snippets'], function (snippets) {
                                 var def = null;
                                 if (signature.id) {
                                     def = snippets.update(update);
@@ -157,7 +162,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                                 def.done(function (resp) {
                                     idle();
                                     popup.close();
-                                }).fail(require("io.ox/core/notifications").yell);
+                                }).fail(require('io.ox/core/notifications').yell);
                             });
 
                             return false;
@@ -208,7 +213,7 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         $('<td>').css({width: '10%', textAlign: 'center'}).append(
                             $('<input type="checkbox">').attr('data-index', index)
                         ),
-                        $('<td>').css({width: "80%", padding: '10px'}).append(
+                        $('<td>').css({width: '80%', padding: '10px'}).append(
                             classicSignature.signature_name, $('<br>'),
                             $('<div>').text(gt.noI18n(preview)).addClass('classic-sig-preview')
                         )
@@ -240,7 +245,8 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
 
                 $pane.append($('<br>'), $('<br>'), $('<br>'));
 
-                var $button = $('<button class="btn btn-primary">').text(gt('Import signatures')).appendTo($pane);
+                var $button = $('<button class="btn btn-primary">')
+                    .text(gt('Import signatures')).appendTo($pane);
 
                 $button.on('click', function () {
                     busy();
@@ -276,28 +282,61 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
         index: 300,
         draw: function () {
             var $node = this;
-            require(["io.ox/core/api/snippets", 'io.ox/core/config'], function (snippets, config) {
+            require(['io.ox/core/api/snippets', 'io.ox/core/config'], function (snippets, config) {
                 var $list, signatures;
+
                 function fnDrawAll() {
                     snippets.getAll('signature').done(function (sigs) {
                         signatures = {};
                         $list.empty();
                         _(sigs).each(function (signature) {
-                            var $item = $('<div class="selectable deletable-item">').attr('data-id', signature.id).text(gt.noI18n(signature.displayname));
+                            signatures[signature.id] = signature;
+
+                            var isDefault = settings.get('defaultSignature') === signature.id,
+                                $item = $('<li>')
+                                    .attr('data-id', signature.id)
+                                    .append(
+                                        $('<div class="pull-right">').append(
+                                            $('<a class="action" tabindex="3" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))),
+                                            $('<a class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                                            $('<a class="close">').attr({
+                                                'data-action': 'delete',
+                                                title: gt('Delete'),
+                                                tabindex: 3
+                                            }).append($('<i class="icon-trash">'))
+                                        ),
+                                        $('<span class="list-title">').text(gt.noI18n(signature.displayname))
+                                    );
                             if (settings.get('defaultSignature') === signature.id) {
-                                $item.append($('<span>').attr('data-default', 'default').text(gt('(Default)')).css({color: '#999', 'padding-left': '10px'}));
+                                $item.addClass('default');
                             }
                             $list.append($item);
-                            signatures[signature.id] = signature;
                         });
                     });
                 }
                 try {
 
-                    $node.append($('<legend class="sectiontitle">').text(gt("Signatures")));
+                    $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
 
                     // List
-                    $list = $('<div class="listbox">').css({minHeight: "80px", maxHeight: "200px"}).appendTo($node);
+                    $list = $('<ul class="settings-list">')
+                    .on('click', 'a[data-action=edit]', function (e) {
+                        var id = $(this).parent().attr('data-id');
+                        fnEditSignature(e, signatures[id]);
+                    })
+                    .on('click', 'a[data-action=delete]', function (e) {
+                        var id = $(this).parent().attr('data-id');
+                        snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
+                    })
+                    .on('click', 'a[data-action=default]', function (e) {
+                        var id = $(this).parent().attr('data-id');
+                        settings.set('defaultSignature', id).save();
+                        $list.find('li').removeClass('default')
+                            .find('a[data-action="default"]').text(gt('Set as default'));
+                        $(this).parent().addClass('default')
+                            .find('a[data-action="default"]').text(gt('(Default)'));
+                    })
+                    .appendTo($node);
 
 
                     fnDrawAll();
@@ -306,42 +345,14 @@ define('io.ox/mail/settings/signatures/register', ['io.ox/core/extensions', 'get
                         fnDrawAll();
                     });
 
-                    $list.on('click', '.selectable', function (e) {
-                        $list.find('div[selected="selected"]').attr('selected', null);
-                        $(this).attr('selected', 'selected');
-                        $('.sectioncontent button', $node).prop('disabled', false);
-                    });
-
-                    // Buttons
                     $('<div class="sectioncontent">').append(
-                        $('<button class="btn btn-primary">').text(gt('Add')).on('click', fnEditSignature).css({marginRight: '15px'}),
-                        $('<button class="btn" disabled>').text(gt('Edit')).on('click', function (evt) {
-                            var id = $list.find('div[selected="selected"]').first().attr('data-id');
-                            fnEditSignature(evt, signatures[id]);
-                        }).css({marginRight: '15px'}),
-                        $('<button class="btn" disabled>').text(gt('Delete')).on('click', function (evt) {
-                            var id = $list.find('div[selected="selected"]').first().attr('data-id');
-                            snippets.destroy(id).fail(require("io.ox/core/notifications").yell);
-                        }).css({marginRight: '15px'}),
-                        $('<button class="btn" disabled>').text(gt('Set as default')).on('click', function (evt) {
-                            var selected = $list.find('div[selected="selected"]'),
-                            current = $list.find('span[data-default="default"]');
-                            if (current.parent().attr('data-id') === selected.attr('data-id')) {
-                                settings.set('defaultSignature', false).save();
-                                current.remove();
-                            } else {
-                                current.remove();
-                                selected.append($('<span>').attr('data-default', 'default').text(gt('(Default)')).css({color: '#999', 'padding-left': '10px'}));
-                                settings.set('defaultSignature', selected.attr('data-id')).save();
-                            }
-                        }).css({marginRight: '15px'})
+                        $('<button class="btn btn-primary">').text(gt('Add')).on('click', fnEditSignature)
                     ).appendTo($node);
 
-                    $("<br>").appendTo($node);
-
+                    $('<br>').appendTo($node);
 
                     if (config.get('gui.mail.signatures') && !_.isNull && config.get('gui.mail.signatures').length > 0) {
-                        $('<a href="#">').text(gt("Import signatures")).on('click', function (e) {
+                        $('<a href="#">').text(gt('Import signatures')).on('click', function (e) {
                             fnImportSignatures(e, config.get('gui.mail.signatures'));
                             return false;
                         }).appendTo($node);

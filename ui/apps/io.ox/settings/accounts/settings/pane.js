@@ -14,9 +14,9 @@
 define('io.ox/settings/accounts/settings/pane',
     ['io.ox/core/extensions',
        'io.ox/core/tk/dialogs',
-       "io.ox/keychain/api",
-       "io.ox/keychain/model",
-       "io.ox/core/api/folder",
+       'io.ox/keychain/api',
+       'io.ox/keychain/model',
+       'io.ox/core/api/folder',
        'gettext!io.ox/settings/accounts',
        'withPluginsFor!keychainSettings'
    ], function (ext, dialogs, api, keychainModel, folderAPI, gt) {
@@ -33,7 +33,7 @@ define('io.ox/settings/accounts/settings/pane',
 
         removeSelectedItem = function (account) {
             var def = $.Deferred();
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog({easyOut: true})
                     .text(gt('Do you really want to delete this account?'))
                     .addPrimaryButton('delete', gt('Delete account'))
@@ -59,13 +59,15 @@ define('io.ox/settings/accounts/settings/pane',
                 'data-id': o.id,
                 'data-accounttype': o.accountType
             }).append(
-                $('<span data-property="displayName" class="pull-left">'),
-                $('<a class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
-                $('<a class="close">').attr({
-                    'data-action': 'delete',
-                    title: gt('Delete'),
-                    tabindex: 3
-                }).append($('<i class="icon-trash">'))
+                $('<div class="pull-right">').append(
+                    $('<a class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                    $('<a class="close">').attr({
+                        'data-action': 'delete',
+                        title: gt('Delete'),
+                        tabindex: 3
+                    }).append($('<i class="icon-trash">'))
+                ),
+                $('<span data-property="displayName" class="list-title">')
             );
         },
 
@@ -159,9 +161,9 @@ define('io.ox/settings/accounts/settings/pane',
 
 
 
-    ext.point("io.ox/settings/accounts/settings/detail").extend({
+    ext.point('io.ox/settings/accounts/settings/detail').extend({
         index: 300,
-        id: "accountssettings",
+        id: 'accountssettings',
         draw: function (data) {
             var  that = this;
 
@@ -207,7 +209,7 @@ define('io.ox/settings/accounts/settings/pane',
                                         e.preventDefault();
                                         // looks like oauth?
                                         if ('reauthorize' in submodule) {
-                                            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
                                             submodule.createInteractively(win);
                                         } else {
                                             submodule.createInteractively(e);
@@ -226,7 +228,7 @@ define('io.ox/settings/accounts/settings/pane',
                     },
 
                     onAdd: function (args) {
-                        require(["io.ox/settings/accounts/settings/createAccountDialog"], function (accountDialog) {
+                        require(['io.ox/settings/accounts/settings/createAccountDialog'], function (accountDialog) {
                             accountDialog.createAccountInteractively(args);
                         });
                     },
@@ -252,9 +254,9 @@ define('io.ox/settings/accounts/settings/pane',
 
             redraw();
 
-            api.on("refresh.all refresh.list", redraw);
-            data.grid.selection.on("change", function (a, b) {
-                api.off("refresh.all refresh.list", redraw);
+            api.on('refresh.all refresh.list', redraw);
+            data.grid.selection.on('change', function (a, b) {
+                api.off('refresh.all refresh.list', redraw);
             });
         },
         save: function () {
