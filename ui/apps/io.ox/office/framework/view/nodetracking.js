@@ -87,7 +87,6 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         }
 
         // trigger the event
-        Utils.warn('triggering ' + event.type + ' event...');
         trackingNode.trigger(event);
     }
 
