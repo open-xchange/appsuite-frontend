@@ -62,12 +62,32 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * @param {String} type
      *  The name of the event.
      *
+     * @param {jQuery.Event} [sourceEvent]
+     *  The original event object that caused the tracking event. Will be used
+     *  to pass the state of additional control keys (SHIFT, ALT, CTRL, META)
+     *  to the event listeners.
+     *
      * @param {Object} [data]
      *  Additional properties to be inserted into the event object passed to
      *  all event listeners.
      */
-    function triggerEvent(type, data) {
-        trackingNode.trigger(_.extend({ type: type, startX: startX, startY: startY }, data));
+    function triggerEvent(type, sourceEvent, data) {
+
+        var // the event object passed to all listeners
+            event = _.extend({ type: type, startX: startX, startY: startY }, data);
+
+        // extend with states of all control keys
+        if (_.isObject(sourceEvent)) {
+            _(event).extend({
+                shiftKey: sourceEvent.shiftKey,
+                altKey: sourceEvent.altKey,
+                ctrlKey: sourceEvent.ctrlKey,
+                metaKey: sourceEvent.metaKey
+            });
+        }
+
+        // trigger the event
+        trackingNode.trigger(event);
     }
 
     /**
@@ -104,22 +124,22 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Starts tracking the passed source node. Triggers a 'tracking:start'
      * event at the current tracking node.
      */
-    function trackingStart(sourceNode, pageX, pageY) {
+    function trackingStart(event, pageX, pageY, sourceNode) {
         cancelTracking();
         initTracking(sourceNode);
         startX = lastX = pageX;
         startY = lastY = pageY;
-        triggerEvent('tracking:start', { pageX: pageX, pageY: pageY });
+        triggerEvent('tracking:start', event, { pageX: pageX, pageY: pageY });
     }
 
     /**
      * Triggers a 'tracking:move' event at the current tracking node, if the
      * tracking position has been changed since the last call of this method.
      */
-    function trackingMove(pageX, pageY) {
+    function trackingMove(event, pageX, pageY) {
         var moveX = pageX - lastX, moveY = pageY - lastY;
         if (trackingNode && (moveX !== 0) || (moveY !== 0)) {
-            triggerEvent('tracking:move', { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
+            triggerEvent('tracking:move', event, { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
             lastX = pageX;
             lastY = pageY;
         }
@@ -129,10 +149,10 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Stops tracking the current tracking node normally. Triggers a
      * 'tracking:end' event at the current tracking node.
      */
-    function trackingEnd(pageX, pageY) {
+    function trackingEnd(event, pageX, pageY) {
         if (trackingNode) {
-            trackingMove(pageX, pageY);
-            triggerEvent('tracking:end', { pageX: pageX, pageY: pageY, endX: pageX, endY: pageY, offsetX: pageX - startX, offsetY: pageY - startY });
+            trackingMove(event, pageX, pageY);
+            triggerEvent('tracking:end', event, { pageX: pageX, pageY: pageY, endX: pageX, endY: pageY, offsetX: pageX - startX, offsetY: pageY - startY });
             deinitTracking();
         }
     }
@@ -142,7 +162,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      */
     function mouseDownHandler(event) {
         if (event.button === 0) {
-            trackingStart(this, event.pageX, event.pageY);
+            trackingStart(event, event.pageX, event.pageY, this);
             event.preventDefault();
         } else {
             cancelTracking();
@@ -153,14 +173,14 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Event handler for 'mousemove' browser events.
      */
     function mouseMoveHandler(event) {
-        trackingMove(event.pageX, event.pageY);
+        trackingMove(event, event.pageX, event.pageY);
     }
 
     /**
      * Event handler for 'mouseup' browser events.
      */
     function mouseUpHandler(event) {
-        trackingEnd(event.pageX, event.pageY);
+        trackingEnd(event, event.pageX, event.pageY);
     }
 
     /**
@@ -170,7 +190,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 1) && (changed.length === 1)) {
-            trackingStart(this, changed[0].pageX, changed[0].pageY);
+            trackingStart(event, changed[0].pageX, changed[0].pageY, this);
         } else {
             cancelTracking();
         }
@@ -183,7 +203,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 1) && (changed.length === 1)) {
-            trackingMove(changed[0].pageX, changed[0].pageY);
+            trackingMove(event, changed[0].pageX, changed[0].pageY);
         } else {
             cancelTracking();
         }
@@ -196,7 +216,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 0) && (changed.length === 1)) {
-            trackingEnd(changed[0].pageX, changed[0].pageY);
+            trackingEnd(event, changed[0].pageX, changed[0].pageY);
         } else {
             cancelTracking();
         }
@@ -274,6 +294,11 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *      (1) {Number} startX, {Number} startY
      *          The start position of this tracking sequence, as passed to the
      *          initial 'tracking:start' event.
+     *
+     * Additionally, the event objects of all events but the 'tracking:cancel'
+     * event will contain the properties 'shiftKey', 'altKey', 'ctrlKey', and
+     * 'metaKey' with the values copied from the originating GUI events (mouse
+     * events or touch events).
      *
      * @returns {jQuery}
      *  A reference to this collection.
