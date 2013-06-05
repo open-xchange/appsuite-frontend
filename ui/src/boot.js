@@ -753,9 +753,6 @@ $(window).load(function () {
 
             debug('boot.js: Load "signin" plugins & set default language');
 
-            // make sure we get 'signin' plugins
-            manifests.reset();
-
             return $.when(
                 // load extensions
                 manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
