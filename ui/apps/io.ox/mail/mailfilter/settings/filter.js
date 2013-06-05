@@ -31,9 +31,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
     function renderDetailView(evt, data) {
         var myView, myModel, myViewNode;
 
-        myViewNode = $("<div>").addClass("accountDetail");
         myModel = data;
-        myView = new AccountDetailView({model: myModel, node: myViewNode});
+        myView = new AccountDetailView({model: myModel});
 
         myView.dialog = new dialogs.ModalDialog({
             width: 685,
