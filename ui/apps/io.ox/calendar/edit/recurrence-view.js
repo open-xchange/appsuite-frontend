@@ -442,18 +442,18 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         month: {
                             options: {
-                                0: gt("january"),
-                                1: gt("february"),
-                                2: gt("march"),
-                                3: gt("april"),
-                                4: gt("may"),
-                                5: gt("june"),
-                                6: gt("july"),
-                                7: gt("august"),
-                                8: gt("september"),
-                                9: gt("october"),
-                                10: gt("november"),
-                                11: gt("december")
+                                0: gt("January"),
+                                1: gt("February"),
+                                2: gt("March"),
+                                3: gt("April"),
+                                4: gt("May"),
+                                5: gt("June"),
+                                6: gt("July"),
+                                7: gt("August"),
+                                8: gt("September"),
+                                9: gt("October"),
+                                10: gt("November"),
+                                11: gt("December")
                             },
                             initial: 2
                         }
