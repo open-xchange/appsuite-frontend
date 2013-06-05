@@ -87,6 +87,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         }
 
         // trigger the event
+        Utils.warn('triggering ' + event.type + ' event...');
         trackingNode.trigger(event);
     }
 
@@ -97,7 +98,17 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         trackingNode = $(sourceNode);
         $('body').append(overlayNode.css('cursor', trackingNode.css('cursor')));
         $(document).on(DOCUMENT_EVENT_MAP);
-        _.defer(function () { $(document).on(DEFERRED_EVENT_MAP); });
+        // attach deferred events that would otherwise interfere with tracking
+        // start event (e.g. another 'mousedown' event or a 'focusout' event
+        // that causes canceling tracking otherwise). Check that tracking is
+        // still active, a 'mouseup' event may be triggered before the deferred
+        // code actually runs.
+        _.defer(function () {
+            if (trackingNode) {
+                // fail-save: prevent double registration of the handlers
+                $(document).off(DEFERRED_EVENT_MAP).on(DEFERRED_EVENT_MAP);
+            }
+        });
     }
 
     /**
