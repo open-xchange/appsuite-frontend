@@ -445,7 +445,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.sendWithoutSequence = function (options) {
-        var def = $.Deferred();
+        var def = $.Deferred(),
+            bufferinterval = 0;
         if (options.trace) {
             delete options.trace;
             options.tracer = uuids.randomUUID();
@@ -474,7 +475,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
             if (!queue.timer) {
                 queue.timer = true;
-                setTimeout(drainBuffer, BUFFER_INTERVAL);
+                bufferinterval = (_.isNumber(options.bufferinterval)) ? options.bufferinterval : BUFFER_INTERVAL;
+                setTimeout(drainBuffer, bufferinterval);
             }
         } else {
             request.requestCount = 0;

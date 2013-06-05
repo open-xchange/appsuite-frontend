@@ -2437,6 +2437,16 @@ define.async('io.ox/office/tk/utils',
         }
     };
 
+    /**
+     * Checking if the global timer is already running.
+     *
+     * @returns {Boolean}
+     *  Whether the global timer is running.
+     */
+    Utils.isGlobalTimerRunning = function () {
+        return globalTimer !== null;
+    };
+
     // key codes --------------------------------------------------------------
 
     /**
