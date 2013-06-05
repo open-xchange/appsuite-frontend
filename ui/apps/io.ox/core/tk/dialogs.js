@@ -38,7 +38,6 @@ define("io.ox/core/tk/dialogs",
             lastFocus = $(),
             innerFocus = $(),
             deferred = $.Deferred(),
-            closeViaEscapeKey,
             isBusy = false,
             self = this,
             data = {},
@@ -46,7 +45,7 @@ define("io.ox/core/tk/dialogs",
             o = _.extend({
                 underlayAction: null,
                 defaultAction: null,
-                easyOut: false,
+                easyOut: true,
                 center: true,
                 async: false,
                 top: "50%"
@@ -66,7 +65,6 @@ define("io.ox/core/tk/dialogs",
 
             close = function () {
                 self.trigger('close');
-                nodes.popup.off('keydown', closeViaEscapeKey);
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
@@ -88,18 +86,26 @@ define("io.ox/core/tk/dialogs",
             },
 
             busy = function () {
-                nodes.footer.find('input, select, button').attr('disabled', 'disabled');
-                nodes.body.find('input, select, button, textarea').attr('disabled', 'disabled');
-                nodes.body.css('opacity', 0.5);
+                nodes.footer
+                    .find('input, select, button')
+                    .attr('disabled', 'disabled');
+                nodes.body
+                    .css('opacity', 0.5)
+                    .find('input, select, button, textarea')
+                    .attr('disabled', 'disabled');
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
                 isBusy = true;
             },
 
             idle = function () {
-                nodes.footer.find('input, select, button').removeAttr('disabled');
-                nodes.body.find('input, select, button, textarea').removeAttr('disabled');
-                nodes.body.css('opacity', '');
+                nodes.footer
+                    .find('input, select, button')
+                    .removeAttr('disabled');
+                nodes.body
+                    .css('opacity', '')
+                    .find('input, select, button, textarea')
+                    .removeAttr('disabled');
                 innerFocus.focus();
                 isBusy = false;
             },
@@ -120,7 +126,23 @@ define("io.ox/core/tk/dialogs",
                 }
 
                 (e.originalEvent || e).processed = true;
+            },
+
+            fnKey = function (e) {
+                console.log('popup key event', e);
+                switch (e.which) {
+                case 27: // ESC
+                    if (o.easyOut && !isBusy) {
+                        invoke('cancel');
+                    }
+                    break;
+                case 13: // Enter
+                    break;
+                default:
+                    break;
+                }
             };
+
 
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
@@ -194,54 +216,39 @@ define("io.ox/core/tk/dialogs",
             if (options.type) {
                 opt[options.type] = true;
             }
-
             var button = $.button(opt);
             nodes.buttons.push(button);
             return button.addClass(options.classes);
         };
 
         this.addButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options));
             return this;
         };
 
         this.addDangerButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            button.addClass('btn-danger');
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-danger'));
             return this;
         };
+
         this.addSuccessButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            button.addClass('btn-success');
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-success'));
             return this;
         };
+
         this.addWarningButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            button.addClass('btn-warning');
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-warning'));
             return this;
         };
+
         this.addPrimaryButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            button.addClass('btn-primary');
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-primary'));
             return this;
         };
 
         this.addAlternativeButton = function (action, label, dataaction, options) {
-            var button = addButton(action, label, dataaction, options);
-            button.css({ 'float': 'left', marginLeft: 0 });
-            nodes.footer.prepend(button);
+            nodes.footer.prepend(addButton(action, label, dataaction, options).css({ 'float': 'left', marginLeft: 0 }));
             return this;
-        };
-
-        closeViaEscapeKey = function (e) {
-            if (e.which === 27 && !isBusy) {
-                invoke('cancel');
-            }
         };
 
         this.close = function () {
@@ -338,9 +345,7 @@ define("io.ox/core/tk/dialogs",
                 nodes.popup.find('.btn').not('.btn-danger').first().focus();
             }
 
-            if (o.easyOut) {
-                nodes.popup.on('keydown', closeViaEscapeKey);
-            }
+            nodes.popup.on('keydown', fnKey);
 
             if (callback) {
                 callback.call(nodes.popup, this);
@@ -354,8 +359,6 @@ define("io.ox/core/tk/dialogs",
         nodes.underlay.click(function () {
             if (o && o.underlayAction) {
                 invoke(o.underlayAction);
-            } else if (o && o.easyOut && !isBusy) {
-                invoke("cancel");
             }
         });
 
