@@ -36,9 +36,12 @@
                     .keys()
                     .each(function (category) {
                         categorySelector.append(
-                            $('<a href="#" class="emoji_category" data-emoji-category="' + category + '">')
+                            $('<a href="#" class="emoji_category" data-emoji-category="' + category + '" tabindex="5">')
                             .text(category)
-                            .click(function (evt) {
+                            .on('keydown click', function (evt) {
+                                if (evt.type !== 'click' && evt.which !== 13) {
+                                    return;
+                                }
                                 var closeOnly = $(evt.target).hasClass('open');
 
                                 $('a.emoji_category').removeClass('open');
@@ -47,14 +50,18 @@
                                     $(evt.target).addClass('open');
                                     $(evt.target).after(iconSelector[category]);
                                 }
-                                baton.editor.focus();
+                                if (evt.type === 'keydown') {
+                                    evt.preventDefault();
+                                } else if (evt.type === 'click') {
+                                    baton.editor.focus();
+                                }
                             })
                         );
                         iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
 
                         _(emoji.iconsForCategory(category)).each(function (icon) {
                             iconSelector[category].append(
-                                $('<a href="#" class="emoji">')
+                                $('<a href="#" class="emoji" tabindex="5">')
                                 .attr('title', icon.desc)
                                 .addClass(icon.css)
                                 .click(function (evt) {
@@ -88,7 +95,6 @@
             //TODO: translate title
             ed.addButton('emoji', {
                 title: 'Insert Emoji',
-                image: url + '/img/smile.gif',
                 onclick: function (e) {
                     ed.execCommand('mceInsertEmoji', true, {event: e, editor: ed});
                 }

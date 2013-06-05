@@ -16,23 +16,30 @@ img.emoji {
     border: 0;
 }
 
+.oxSkin .mceIcon.mce_emoji {
+    background: url('../../../../emoji/emoji.png');
+    //copy of .emoji1f603
+    background-position: -380px -300px;
+}
+
 
 #mceEmojiPane {
-    vertical-align: top;
-    max-width: 60px;
+    width: 255px;
 
     a {
         cursor: auto;
     }
 
     & > div {
+        max-width: 225px;
+        min-width: 100px;
         height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+        padding: 7px 14px;
     }
 
     a.emoji_category {
-        margin: 0px 1em;
         display: block;
         color: @linkColor;
 
@@ -47,7 +54,6 @@ img.emoji {
         a {
             margin: 5px 3px;
             width: 20px;
-            .emojifont;
         }
     }
 }
