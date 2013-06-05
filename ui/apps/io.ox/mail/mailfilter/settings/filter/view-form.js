@@ -187,6 +187,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
+        checkForMultipleTests = function (el) {
+            return $(el).find('[data-test-id]');
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
             className: "io-ox-mailfilter-edit",
@@ -222,12 +226,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 e.preventDefault();
                 var node = $(e.target),
-                    list = node.closest('li'),
-                    testID = list.attr('data-test-id'),
-                    testArray =  this.model.get('test'),
-                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+                    testID = node.closest('li').attr('data-test-id'),
+                    testArray =  this.model.get('test');
 
-                if (checkForMultipleTests.length > 2) {
+                if (checkForMultipleTests(this.el).length > 2) {
                     testArray.tests.splice(testID, 1);
                 } else {
 
@@ -249,8 +251,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 e.preventDefault();
                 var node = $(e.target),
-                    list = node.closest('li'),
-                    actionID = list.attr('data-action-id'),
+                    actionID = node.closest('li').attr('data-action-id'),
                     actionArray =  this.model.get('actioncmds');
 
                 actionArray.splice(actionID, 1);
@@ -261,16 +262,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this;
+
                 this.model.save().done(function (response) {
                     self.dialog.close();
                     if (response === null) {
                         notifications.yell('success', gt('Mailfilter updated'));
                     } else {
                         notifications.yell('success', gt('Mailfilter created'));
-                        var newCreatedDate =  self.model.attributes;
-                        newCreatedDate.id = response;
-                        self.collection.add(newCreatedDate);
-
+                        var newCreatedFilter =  self.model.attributes;
+                        newCreatedFilter.id = response;
+                        self.collection.add(newCreatedFilter);
                     }
 
                 }).fail(function (response) {
@@ -295,15 +296,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     testArray =  this.model.get('test'),
                     actionArray = this.model.get('actioncmds'),
-                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value],
-                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+                    translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
 
                 if (testAction === 'create-test') {
                     list.remove();
-                    if (checkForMultipleTests.length > 1) {
+                    if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests.push(_.copy(DEFAULTS.tests[value], true));
 
-                    } else if (checkForMultipleTests.length === 1) {
+                    } else if (checkForMultipleTests(this.el).length === 1) {
                         var createdArray = [testArray];
                         createdArray.push(_.copy(DEFAULTS.tests[value], true));
                         testArray = { id: 'allof'};
@@ -320,16 +320,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 } else if (testAction === 'create-action') {
                     list.remove();
 
-                    actionArray.push(_.copy(DEFAULTS.actions[value], true));
+                    actionArray.unshift(_.copy(DEFAULTS.actions[value], true));
 
                     this.model.set('actioncmds', actionArray);
-
                     this.render();
 
                 } else {
                     link.text(translatedValue);
 
-                    if (checkForMultipleTests.length > 1) {
+                    if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests[testID].comparison = value;
                     } else {
                         testArray.comparison = value;
@@ -365,10 +364,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = node.closest('li'),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
-                    testArray =  this.model.get('test'),
-                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+                    testArray =  this.model.get('test');
 
-                if (checkForMultipleTests.length > 1) {
+                if (checkForMultipleTests(this.el).length > 1) {
                     testArray.tests[testID][type] = type === 'size' ? value : [value];
                 } else {
                     testArray[type] = type === 'size' ? value : [value];
@@ -385,10 +383,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = node.closest('li'),
                     type = list.attr('data-type-second'),
                     testID = list.attr('data-test-id'),
-                    testArray =  this.model.get('test'),
-                    checkForMultipleTests = $(this.el).find('[data-test-id]');
+                    testArray =  this.model.get('test');
 
-                if (checkForMultipleTests.length > 1) {
+                if (checkForMultipleTests(this.el).length > 1) {
                     testArray.tests[testID][type] = type === 'size' ? value : [value];
                 } else {
                     testArray[type] = type === 'size' ? value : [value];

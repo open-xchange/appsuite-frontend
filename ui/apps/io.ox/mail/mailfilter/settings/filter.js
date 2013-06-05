@@ -164,6 +164,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     new AccountSelectView({ model: item }).render().el
                                 );
                             });
+                            this.$el.trigger('makesortable');
 
                             return this;
                         },
@@ -172,7 +173,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             'click [data-action="edit"]': 'onEdit',
                             'click [data-action="delete"]': 'onDelete',
                             'click [data-action="add"]': 'onAdd',
-                            'click [data-action="toggle"]': 'onToggle'
+                            'click [data-action="toggle"]': 'onToggle',
+                            'makesortable': 'onMakeSortable'
                         },
 
                         onAdd: function (args) {
@@ -227,27 +229,29 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             api.update(selectedObj).done(function () {
                                 self.render();
                             });
+                        },
+
+                        onMakeSortable: function () {
+
+                            this.$el.find('ol').sortable({
+                                containment: this.el,
+                                axis: 'y',
+                                scroll: true,
+                                delay: 150,
+                                stop: function (e, ui) {
+                                    var arrayOfFilters = $node.find('li[data-id]'),
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
+                                    api.reorder(data); //TODO needs a respons?;
+                                }
+                            });
                         }
 
                     });
 
                     mailFilter = new MailfilterEdit();
                     $node.append(mailFilter.render().$el);
-
-
-                    $node.find('ol').sortable({
-                        containment: this.el,
-                        axis: 'y',
-                        scroll: true,
-                        delay: 150,
-                        stop: function (e, ui) {
-                            var arrayOfFilters = $node.find('li[data-id]'),
-                                data = _.map(arrayOfFilters, function (single) {
-                                    return parseInt($(single).attr('data-id'), 10);
-                                });
-                            api.reorder(data); //TODO needs a respons?;
-                        }
-                    });
 
                 }
 
