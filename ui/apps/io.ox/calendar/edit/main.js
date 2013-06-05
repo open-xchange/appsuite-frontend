@@ -30,6 +30,7 @@ define('io.ox/calendar/edit/main',
         controller = _.extend(app, {
 
             start: function () {
+                var self = this;
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     this.dropZone = new dnd.UploadZone({
                         ref: "io.ox/calendar/edit/dnd/actions"
@@ -40,7 +41,7 @@ define('io.ox/calendar/edit/main',
 
                 if ('folder' in state && 'id' in state) {
                     return api.get({ folder: state.folder, id: state.id }).done(function (data) {
-                        this.edit(data);
+                        self.edit(data);
                     });
                 }
             },
