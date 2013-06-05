@@ -642,148 +642,21 @@ define("io.ox/core/tk/dialogs",
     };
 
     //TODO: Less C&P
-    var pane = $('<div>').addClass('abs io-ox-dialog-pane').append(
-        $("<div>").addClass("content")
-    )
-    .append(
-        $("<div>").addClass("form-actions")
-    );
-
-
-    var SlidingPane = function () {
-        var self = this;
-        var nodes = {
-            pane: pane.clone().hide().appendTo('body'),
-            relativeTo: null
-        };
-
-        nodes.content = nodes.pane.find('.content');
-        nodes.controls = nodes.pane.find('.form-actions');
-
-        this.visible = false;
-
-        var deferred = $.Deferred(),
-
-        close = function () {
-            self.visible = false;
-            nodes.pane.fadeOut();
-        },
-
-        invoke = function (e) {
-            deferred.resolve(e.data);
-            close();
-        };
-
-        this.text = function (str) {
-            nodes.content.text(str || "");
-            return this;
-        };
-
-        this.append = function (node) {
-            nodes.content.append(node);
-            return this;
-        };
-
-        this.addButton = function (action, label) {
-            nodes.controls.append(
-                $.button({
-                    label: label,
-                    data: action,
-                    click: invoke
-                })
-            );
-            return this;
-        };
-
-        this.relativeTo = function (node) {
-            nodes.relativeTo = $(node);
-            return this;
-        };
-
-        this.toggle = function () {
-            if (this.visible) {
-                invoke("toggeled");
-            } else {
-                this.show();
-            }
-        };
-
-        this.show = function () {
-            this.visible = true;
-            var offset, top, left, height, width, windowHeight, windowWidth;
-
-            windowHeight = $(window).height();
-            windowWidth = $(window).width();
-
-            // Force Rendering for shrink-to-fit size detection
-            // There has to be a cleverer way to do this
-            var oldOpacity = nodes.pane.css("opacity");
-            nodes.pane.css("opacity", "0.001");
-            nodes.pane.show();
-
-            height = nodes.controls.outerHeight(true) + nodes.content.outerHeight(true) + 2;
-            //width =  Math.max(nodes.controls.outerWidth(true), nodes.content.outerWidth(true)) + 2;
-            width = nodes.content.find('.block').outerWidth(true) + 20;
-            nodes.pane.hide();
-            nodes.pane.css("opacity", oldOpacity);
-
-            if (nodes.relativeTo) {
-                // Depending on where our anchor element is, position the pane
-                offset = nodes.relativeTo.offset();
-                // Is the anchor in the upper half?
-                if (offset.top < (windowHeight / 2)) {
-                    // Yup, so we'll put the pane below the anchor
-                    top = offset.top + nodes.relativeTo.outerHeight() + 3;
-                } else {
-                    // Nope, so we'll put the pane above the anchor
-                    top = offset.top - height - 10;
-                    if (top < 0) {
-                        top = 0;
-                    }
-                }
-
-                // Is the anchor to the left or the right of the center?
-
-                if (offset.left < (windowWidth / 2)) {
-                    // It's on the left, so we align the left sides
-                    left = offset.left;
-                } else {
-                    // It's on the right, so we align the right sides
-                    left = offset.left + nodes.relativeTo.outerWidth() - width;
-                }
-
-                nodes.pane.css({
-                    height: height + "px",
-                    width: width + "px",
-                    top: top + "px",
-                    left: left + "px"
-                });
-            } else {
-                // Hm. Put it in the center. Though, truth be told, this is probably supposed
-                // to be a dialog
-                nodes.pane.css({
-                    height: height + "px",
-                    width: width + "px",
-                    marginTop: 0 - (height / 2 >> 0) + "px"
-                });
-            }
-            nodes.pane.fadeIn();
-            return deferred;
-        };
-    };
+    var pane = $('<div>').addClass('abs io-ox-dialog-pane')
+            .append(
+                $("<div>").addClass("content"),
+                $("<div>").addClass("form-actions")
+        );
 
     return {
         ModalDialog: Dialog,
         CreateDialog: CreateDialog,
-        SlidingPane: SlidingPane,
         SidePopup: SidePopup,
         busy: function (node) {
-            node.find('button').attr('disabled', 'disabled');
-            node.find('input').attr('disabled', 'disabled');
+            node.find('button, input').attr('disabled', 'disabled');
         },
         idle: function (node) {
-            node.find('button').removeAttr('disabled');
-            node.find('input').removeAttr('disabled');
+            node.find('button, input').removeAttr('disabled');
         }
     };
 });
