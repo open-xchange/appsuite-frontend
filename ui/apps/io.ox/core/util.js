@@ -21,11 +21,11 @@ define('io.ox/core/util', [/* only add light core deps, not stuff like account A
         // but "Say \"Hello\"" becomes Say "Hello"
         unescapeDisplayName: function (str) {
 
-            str = String(str || '');
+            str = $.trim(String(str || ''));
 
             // remove outer quotes
             while (str.length > 1 && /^["'\\\s]/.test(str[0]) && str[0] === str.substr(-1)) {
-                str = str.substr(1, str.length - 2);
+                str = $.trim(str.substr(1, str.length - 2));
             }
 
             // unescape inner quotes
