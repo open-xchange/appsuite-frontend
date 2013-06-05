@@ -15,13 +15,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/extensions',
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
-    'io.ox/mail/mailfilter/settings/view-form',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/mail',
     'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
     'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
     'io.ox/mail/mailfilter/settings/filter/view-form'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, gt, listboxtmpl, tmpl, AccountDetailView) {
+], function (ext, api, mailfilterModel, dialogs, gt, listboxtmpl, tmpl, AccountDetailView) {
 
     'use strict';
 
@@ -29,10 +28,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
         collection;
 
     function renderDetailView(evt, data) {
-        var myView, myModel, myViewNode;
+        var myView;
 
-        myModel = data;
-        myView = new AccountDetailView({model: myModel});
+        myView = new AccountDetailView({model: data});
 
         myView.dialog = new dialogs.ModalDialog({
             width: 685,
@@ -55,13 +53,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //                myView.dialog.idle();
 //            }
         });
-
-        return myView.node;
     }
 
     ext.point("io.ox/settings/mailfilter/filter/settings/detail").extend({
         index: 200,
-        id: "emailaccountssettings",
+        id: "mailfiltersettings",
         draw: function (evt) {
             renderDetailView(evt, evt.data.obj);
         }
@@ -72,19 +68,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             var deferred = $.Deferred(),
 
-            staticStrings =  {
-                BUTTON_ADD: gt('Add'),
-                BUTTON_EDIT: gt('Edit'),
-                BUTTON_DELETE: gt('Delete'),
-                TITLE: gt('Mail Filter')
-            },
-            createExtpointForSelectedAccount = function (args) {
-                if (args.data.id !== undefined) {
+                staticStrings =  {
+                    BUTTON_ADD: gt('Add'),
+                    BUTTON_EDIT: gt('Edit'),
+                    BUTTON_DELETE: gt('Delete'),
+                    TITLE: gt('Mail Filter')
+                },
+                createExtpointForSelectedFilter = function (args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
-                } else {
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
-                }
-            };
+                };
 
             api.getRules().done(function (data) {
 
@@ -93,7 +85,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //                    no filters
 
                 } else {
-                    var mailFilter = {};
 
                     collection = factory.createCollection(data);
 
@@ -106,8 +97,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         },
                         render: function () {
-                            var self = this,
-                                flagArray = this.model.get('flags');
+                            var flagArray = this.model.get('flags');
 
                             function getEditableState() {
                                 if (flagArray) {
@@ -117,18 +107,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     return 'editable';
                                 }
                             }
-                            self.$el.empty().append(self.template({
+                            this.$el.empty().append(this.template({
                                 id: this.model.get('id'),
                                 state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
                                 editable: getEditableState()
 
-
                             }));
 
-                            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                            self._modelBinder.bind(self.model, self.el, defaultBindings);
+                            this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
 
-                            return self;
+                            return this;
                         },
                         events: {
                             'click .deletable-item.editable': 'onSelect'
@@ -139,9 +127,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             this.$el.find('.deletable-item').attr('selected', 'selected');
                         }
 
-                    });
+                    }),
 
-                    var MailfilterEdit = Backbone.View.extend({
+                        MailfilterEdit = Backbone.View.extend({
 
                         initialize: function () {
                             this.template = doT.template(listboxtmpl);
@@ -153,8 +141,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         },
                         render: function () {
-                            var self = this,
-                                $dropDown;
+                            var self = this;
                             self.$el.empty().append(self.template({
                                 strings: staticStrings
                             }));
@@ -180,9 +167,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             args.data = {};
                             args.data.node = this.el;
 
-
                             args.data.obj = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
-                            createExtpointForSelectedAccount(args);
+                            createExtpointForSelectedFilter(args);
                         },
 
                         onEdit: function (args) {
@@ -195,7 +181,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             args.data.node = this.el;
 
                             if (args.data.obj !== undefined) {
-                                createExtpointForSelectedAccount(args);
+                                createExtpointForSelectedFilter(args);
                             }
 
                         },
@@ -215,13 +201,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         onToggle: function () {
                             var selected = this.$el.find('[selected]'),
-                                self = this;
-
-                            var id = selected.data('id');
-
-                            var selectedObj = this.collection.get(id);
-
-                            var state = selectedObj.get('active') ? false : true;
+                                self = this,
+                                id = selected.data('id'),
+                                selectedObj = this.collection.get(id),
+                                state = selectedObj.get('active') ? false : true;
 
                             selectedObj.set('active', state);
 
@@ -242,14 +225,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     data = _.map(arrayOfFilters, function (single) {
                                         return parseInt($(single).attr('data-id'), 10);
                                     });
-                                    api.reorder(data); //TODO needs a respons?;
+                                    api.reorder(data); //TODO needs a response?;
                                 }
                             });
                         }
 
-                    });
+                    }),
 
-                    mailFilter = new MailfilterEdit();
+                        mailFilter = new MailfilterEdit();
+
                     $node.append(mailFilter.render().$el);
 
                 }

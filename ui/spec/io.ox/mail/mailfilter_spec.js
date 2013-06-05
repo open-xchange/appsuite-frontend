@@ -20,18 +20,23 @@ define(["io.ox/core/api/mailfilter",
 
 //         sharedExamplesFor(api);
 
-        it('triggers a getRules call without filter', function () {
-            api.getRules().done(function (response) {
-                expect(response).toBe(true);
-            });
+         beforeEach(function () {
+             this.server = sinon.fakeServer.create();
+             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":{}}');
+             });
+         });
+         afterEach(function () {
+             this.server.restore();
+         });
+
+        it('should return available filters', function () {
+            var result = api.getRules();
+            expect(result).toBeDeferred();
+            expect(result.state()).toBe('pending');
+            this.server.respond();
+            expect(result.state()).toBe('resolved');
         });
 
-        it('triggers a getRules call with unsupported filter', function () {
-            var data;
-            api.getRules('aaaaaaaa').done(function (response) {
-                data = response;
-            });
-            expect(_.isEmpty(data)).toBe(true);
-        });
     });
 });
