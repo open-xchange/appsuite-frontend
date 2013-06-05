@@ -59,11 +59,16 @@ define('io.ox/core/cache',
 
         return function (name, persistent, options) {
 
+            if (/app-cache\.index$/.test(name) && Modernizr.localstorage) {
+                // due to the sync behavior of localstorage, we can rescue
+                // the savepoints to a persistent cache.
+                preferredPersistentCache = 'localstorage';
+            }
+
             var opt = _.extend({
                     fluent: 'simple',
                     persistent: preferredPersistentCache
                 }, options || {}),
-
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
