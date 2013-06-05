@@ -163,7 +163,6 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     function mouseDownHandler(event) {
         if (event.button === 0) {
             trackingStart(event, event.pageX, event.pageY, this);
-            event.preventDefault();
         } else {
             cancelTracking();
         }
