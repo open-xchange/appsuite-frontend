@@ -129,7 +129,6 @@ define("io.ox/core/tk/dialogs",
             },
 
             fnKey = function (e) {
-                console.log('popup key event', e);
                 switch (e.which) {
                 case 27: // ESC
                     if (o.easyOut && !isBusy) {
