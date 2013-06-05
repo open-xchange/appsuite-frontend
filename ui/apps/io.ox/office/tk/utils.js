@@ -24,6 +24,9 @@ define.async('io.ox/office/tk/utils',
         // the CSS classes added to localized icons
         localeIconClasses = null,
 
+        // a global timer that can be used for performance debugging
+        globalTimer = null,
+
         // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
@@ -2393,6 +2396,44 @@ define.async('io.ox/office/tk/utils',
         if (input) {
             input.selectionStart = start;
             input.selectionEnd = _.isNumber(end) ? end : start;
+        }
+    };
+
+    // functions for the global timer ----------------------------------------------------
+
+    /**
+     * Starting the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, when the timer starts.
+     */
+    Utils.startGlobalTimer = function (message) {
+        Utils.log(message);
+        globalTimer = _.now();
+    };
+
+    /**
+     * Logging info from the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, if the timer runs.
+     */
+    Utils.logGlobalTimer  = function (message) {
+        if (globalTimer) {
+            Utils.log(message + ' (' + (_.now() - globalTimer) + 'ms)');
+        }
+    };
+
+    /**
+     * Stopping the global timer.
+     *
+     * @param {String} message
+     *  A message that is displayed in the console, when the timer is stopped.
+     */
+    Utils.stopGlobalTimer = function (message) {
+        if (globalTimer) {
+            Utils.log(message + ' (' + (_.now() - globalTimer) + 'ms)');
+            globalTimer = null;
         }
     };
 
