@@ -12,20 +12,17 @@
  */
 
 define('io.ox/mail/mailfilter/settings/register',
-        ['io.ox/core/extensions', 'io.ox/core/notifications',
-         'io.ox/core/api/user', 'gettext!io.ox/mail', 'less!io.ox/mail/mailfilter/settings/style.less'], function (ext, notifications, userAPI, gt) {
+        ['io.ox/core/extensions', 'gettext!io.ox/mail',
+         'less!io.ox/mail/mailfilter/settings/style.less'], function (ext, gt) {
 
     'use strict';
-
-    var filterModel;
 
     ext.point("io.ox/settings/pane").extend({
         id: 'mailfilter',
         title: gt("Mail Filter"),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 425,
-        lazySaveSettings: true
+        index: 425
     });
 
     ext.point("io.ox/mailfilter/settings/detail").extend({
@@ -36,10 +33,8 @@ define('io.ox/mail/mailfilter/settings/register',
 
             $node.append($container);
 
-            require(["io.ox/mail/mailfilter/settings/filter"], function (filters) {
-                filters.editMailfilter($container).done(function (filter) {
-                    filterModel = filter;
-                }).fail(function (error) {
+            ox.load(["io.ox/mail/mailfilter/settings/filter"]).done(function (filters) {
+                filters.editMailfilter($container).fail(function (error) {
                     var msg;
                     if (error.code === 'MAIL_FILTER-0015') {
                         msg = gt('Unable to contact mailfilter backend.');
