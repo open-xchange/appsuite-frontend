@@ -33,6 +33,11 @@ define('io.ox/mail/settings/defaults', function () {
             'isColorQuoted': false,
             'selectFirstMessage': true,
             'defaultSignature': false,
+            // Possible values for mobileSignature:
+            // false: disabled
+            // a string: the custom mobile signature
+            // true: same as the desktop signature
+            'mobileSignature': false,
             'threadView': 'inbox',
             //for persistent sort
             'sort': 'thread',

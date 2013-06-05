@@ -276,9 +276,51 @@ define('io.ox/mail/settings/signatures/register',
                     });
                 }
                 try {
-
-                    $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
-
+                    if (_.device('desktop')) {
+                        $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
+                        addSignatureList($node);
+                    } else {
+                        var radioNone, radioCustom, radioDesktop, signatureText;
+                        var desktopSignatures = $('<div>').hide();
+                        var signature = settings.get('mobileSignature');
+                        addSignatureList(desktopSignatures);
+                        $node.append($('<legend class="sectiontitle">').text(
+                                    //#. Section title for the mobile signature
+                                    gt('Signature')))
+                            .append($('<label class="radio">')
+                                .text(gt('No signature'))
+                                .append(radioNone = $('<input type="radio" name="mobileSignature">')
+                                    .attr('checked', signature === false)))
+                            .append($('<label class="radio">')
+                                .append(radioCustom = $('<input type="radio" name="mobileSignature">')
+                                    .attr('checked', typeof signature === 'string'))
+                                .append(signatureText = $('<textarea class="span12">')
+                                    .val(settings.get('mobileSignature'))))
+                            .append($('<label class="radio">')
+                                .text(gt('Desktop signature'))
+                                .append(radioDesktop = $('<input type="radio" name="mobileSignature">')
+                                    .attr('checked', signature === true))
+                                .append(desktopSignatures))
+                            .on('change', function (e) {
+                                var desktopVisible = false;
+                                if (radioNone.attr('checked')) {
+                                    signature = false;
+                                } else if (radioCustom.attr('checked')) {
+                                    signature = signatureText.val();
+                                } else if (radioDesktop.attr('checked')) {
+                                    signature = true;
+                                    desktopVisible = true;
+                                }
+                                console.log('setting', signature);
+                                settings.set('mobileSignature', signature).save();
+                                desktopSignatures.toggle(desktopVisible);
+                            });
+                    }
+                } catch (e) {
+                    console.error(e, e.stack);
+                }
+                
+                function addSignatureList($node) {
                     // List
                     $list = $('<ul class="settings-list">')
                     .on('click keydown', 'a[data-action=edit]', function (e) {
@@ -323,10 +365,7 @@ define('io.ox/mail/settings/signatures/register',
                             return false;
                         }).appendTo($node);
                     }
-                } catch (e) {
-                    console.error(e, e.stack);
                 }
-
 
             });
         }
