@@ -416,10 +416,10 @@ define.async('io.ox/core/tk/html-editor',
 
             theme_advanced_buttons1:
                 'bold,italic,underline,strikethrough,|,' +
-                'bullist,numlist,outdent,indent,|,' +
+                'emoji,bullist,numlist,outdent,indent,|,' +
                 'justifyleft,justifycenter,justifyright,|,' +
                 'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo,emoji,',
+                'undo,redo,',
             theme_advanced_buttons2: '',
             theme_advanced_buttons3: '',
             theme_advanced_toolbar_location: 'top',

@@ -92,16 +92,16 @@ define('io.ox/mail/view-detail',
     var insertEmoticons = (function () {
 
         var emotes = {
-            ':-)': '😊',
-            ':)': '😊',
-            ';-)': '😉',
-            ';)': '😉',
-            ':-D': '😃',
-            ':D': '😃',
-            ':-|': '😔', // may be, switch to 😐 once we have the icon for it (U+1F610)
-            ':|': '😔', // may be, switch to 😐 once we have the icon for it (U+1F610)
-            ':-(': '😞',
-            ':(': '😞'
+            ':-)': '&#x1F60A;',
+            ':)': '&#x1F60A;',
+            ';-)': '&#x1F609;',
+            ';)': '&#x1F609;',
+            ':-D': '&#x1F603;',
+            ':D': '&#x1F603;',
+            ':-|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':-(': '&#x1F61E;',
+            ':(': '&#x1F61E;'
         };
 
         var regex = /(&quot)?([:;]-?[(|)D])/g;
@@ -112,7 +112,7 @@ define('io.ox/mail/view-detail',
                 // if we hit &quot;-) we just return
                 if (quot) return all;
                 // otherwise find emote
-                var emote = emotes[match];
+                var emote = $('<div>').html(emotes[match]).text();
                 return !emote ? match : emote;
             });
             return emoji.unifiedToImageTag(text);
