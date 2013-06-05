@@ -197,7 +197,7 @@ define('io.ox/tasks/actions',
                 } else {
 
                     //build popup
-                    var popup = new dialogs.ModalDialog({ easyOut: true })
+                    var popup = new dialogs.ModalDialog()
                         .header($('<h4>').text(gt('Move')))
                         .addPrimaryButton('ok', gt('Move'))
                         .addButton('cancel', gt('Cancel'));

@@ -221,7 +221,7 @@ define('io.ox/core/export/export',
     return {
         show: function (module, id) {
             var id = String(id),
-                dialog = new dialogs.ModalDialog({ width: 500, easyOut: true }),
+                dialog = new dialogs.ModalDialog({ width: 500 }),
                 baton = {id: id, module: module, simulate: true, format: {}, nodes: {}};
             // get folder and build dialog
             folderApi.get({ folder: id}).done(function (folder) {

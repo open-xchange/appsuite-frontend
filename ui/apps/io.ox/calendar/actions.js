@@ -302,7 +302,7 @@ define('io.ox/calendar/actions',
     var copyMove = function (type, apiAction, title) {
         return function (list) {
             ox.load(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews']).done(function (api, dialogs, views) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                var dialog = new dialogs.ModalDialog()
                     .header($('<h4>').text(title))
                     .addPrimaryButton('ok', gt('Move'))
                     .addButton('cancel', gt('Cancel'));

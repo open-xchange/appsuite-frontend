@@ -144,7 +144,7 @@ define('io.ox/contacts/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));
@@ -383,7 +383,7 @@ define('io.ox/contacts/actions',
                 });
                 return cleaned;
             }
-            
+
             api.getList(list).done(function (list) {
                 // set participants
                 var def = $.Deferred(),

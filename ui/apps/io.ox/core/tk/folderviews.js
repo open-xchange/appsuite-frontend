@@ -561,7 +561,6 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({
                         async: true,
-                        easyOut: true,
                         width: 400
                     })
                     .header(
@@ -697,8 +696,7 @@ define('io.ox/core/tk/folderviews',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
                     width: 500,
-                    addclass: 'subscribe-imap-folder',
-                    easyOut: true
+                    addclass: 'subscribe-imap-folder'
                 });
                 var changesArray = [];
 

@@ -161,28 +161,8 @@ define("io.ox/calendar/view-grid-template",
             });
 
             return $div;
-        },
-
-        // simple click handler used by several simple grids
-        hOpenDetailPopup: function (e) {
-
-            var data = e.data || $(this).data("appointment");
-
-            require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"],
-                function (view, dialogs) {
-                    new dialogs.ModalDialog({
-                            width: 600,
-                            easyOut: true
-                        })
-                        .append(view.draw(data))
-                        .addButton("close", "Close")
-                        .show();
-                    data = null;
-                }
-            );
-
-            return false;
         }
+
     };
 
     return that;

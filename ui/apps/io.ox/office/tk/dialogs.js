@@ -54,7 +54,6 @@ define('io.ox/office/tk/dialogs',
         var // create the dialog instance
             dialog = new CoreDialogs.ModalDialog({
                 width: Utils.getIntegerOption(options, 'width', 400),
-                easyOut: true,
                 async: Utils.getBooleanOption(options, 'async', false)
             }),
             // the title text

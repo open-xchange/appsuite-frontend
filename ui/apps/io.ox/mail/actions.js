@@ -153,7 +153,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                new dialogs.ModalDialog({ easyOut: true, width: 700 })
+                new dialogs.ModalDialog({ width: 700 })
                     .addPrimaryButton("close", gt("Close"))
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
@@ -293,7 +293,7 @@ define('io.ox/mail/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));

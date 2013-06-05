@@ -198,7 +198,7 @@ define('plugins/portal/flickr/register',
 
     function edit(model, view) {
 
-        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 }),
+        var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
             $q = $('<input type="text" class="input-block-level">'),
             $description = $('<input type="text" class="input-block-level">'),
             $method = $('<select class="input-block-level">').append(

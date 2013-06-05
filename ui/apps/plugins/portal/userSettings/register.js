@@ -45,7 +45,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
     function changePassword(e) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
 
-            new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 })
+            new dialogs.ModalDialog({ async: true, width: 400 })
             .header($('<h4>').text('Change password'))
             .build(function () {
                 this.getContentNode().append(

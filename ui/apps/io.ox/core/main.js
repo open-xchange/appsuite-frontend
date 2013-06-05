@@ -291,7 +291,7 @@ define('io.ox/core/main',
                                 node.text(getString(countdown));
                             }, 1000);
 
-                        dialog = new dialogs.ModalDialog()
+                        dialog = new dialogs.ModalDialog({ easyOut: false })
                             .header($('<h4>').text(gt('Automatic logout')))
                             .append(node)
                             .topmost()

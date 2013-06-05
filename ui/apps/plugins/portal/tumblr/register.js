@@ -171,7 +171,7 @@ define('plugins/portal/tumblr/register',
 
     function edit(model, view) {
 
-        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true, width: 400 }),
+        var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
             $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div>').addClass('alert alert-error').hide(),

@@ -310,7 +310,7 @@ define('io.ox/portal/settings/pane',
             var self = this, dialog;
             // do we have custom data that might be lost?
             if (!_.isEmpty(this.model.get('props'))) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                var dialog = new dialogs.ModalDialog()
                 .header($("<h4>").text(gt('Delete widget')))
                 .append($('<span>').text(gt('Do you really want to delete this widget?')))
                 .addPrimaryButton('delete',

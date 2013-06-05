@@ -132,7 +132,7 @@ define('plugins/portal/rss/register',
 
     function edit(model, view) {
 
-        var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+        var dialog = new dialogs.ModalDialog({ async: true }),
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div class="alert alert-error">').hide(),

@@ -226,7 +226,7 @@ define('io.ox/files/actions',
 
                 // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ easyOut: true, width: 600 })
+                    new dialogs.ModalDialog({ width: 600 })
                         .build(function () {
                             // header
                             this.header($('<h4>').text('Direct link'));
@@ -410,7 +410,7 @@ define('io.ox/files/actions',
                 });
 
 
-                dialog = new dialogs.ModalDialog({easyOut: true}).append(
+                dialog = new dialogs.ModalDialog().append(
                     $form
                 )
                 .addPrimaryButton('rename', gt('Rename'))
@@ -511,7 +511,7 @@ define('io.ox/files/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog({ easyOut: true })
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton("ok", label)
                             .addButton("cancel", gt("Cancel"));

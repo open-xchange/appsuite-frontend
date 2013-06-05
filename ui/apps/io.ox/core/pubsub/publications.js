@@ -87,7 +87,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         render: function () {
             var self = this;
             //build popup
-            var popup = new dialogs.ModalDialog({ async: true, easyOut: true })
+            var popup = new dialogs.ModalDialog({ async: true })
                 .addPrimaryButton('publish', gt('Publish'))
                 .addButton('cancel', gt('Cancel'));
             //Header

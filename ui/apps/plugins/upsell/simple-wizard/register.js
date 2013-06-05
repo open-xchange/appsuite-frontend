@@ -122,7 +122,7 @@ define('plugins/upsell/simple-wizard/register',
             ox.trigger('upsell:simple-wizard:init', that.getVariables(options), settings);
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                instance = new dialogs.ModalDialog({ easyOut: false, width: settings.width })
+                instance = new dialogs.ModalDialog({ width: settings.width })
                     .build(function () {
                         if (settings.zeroPadding) {
                             this.getPopup().addClass('zero-padding');

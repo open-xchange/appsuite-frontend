@@ -222,7 +222,7 @@ define('io.ox/core/tk/autocomplete',
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
-                e.stopPropagation();
+                // e.stopPropagation();
                 if (isOpen) {
                     switch (e.which) {
                     case 27: // escape

@@ -244,7 +244,6 @@ define('io.ox/mail/accounts/settings',
 
                 new dialogs.ModalDialog({
                     width: 400,
-                    easyOut: true,
                     async: true
                 })
                 .header(
@@ -300,7 +299,6 @@ define('io.ox/mail/accounts/settings',
                 var self = this,
                     successDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        easyOut: true,
                         async: true
                     });
                 successDialogbox.header()
@@ -324,7 +322,6 @@ define('io.ox/mail/accounts/settings',
                 var self = this,
                     failDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        easyOut: true,
                         async: true
                     });
                 failDialogbox.header()

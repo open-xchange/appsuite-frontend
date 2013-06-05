@@ -67,15 +67,12 @@
         var button;
         if (opt.purelink === true) {
             button = $("<a>").addClass(className).append(text);
-
         } else {
             button = $("<button>").addClass(className).append(
                 $("<span>").append(text)
-                );
+            );
         }
-        button.on(
-        "click", opt.data, opt.click
-        );
+        button.on("click", opt.data, opt.click);
 
         // add id?
         if (opt.id !== undefined) {

@@ -186,7 +186,7 @@ define('io.ox/mail/accounts/view-form',
                     require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
 
                         var label = gt('Select folder'),
-                            dialog = new dialogs.ModalDialog({ easyOut: true })
+                            dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton("select", label)
                             .addButton("cancel", gt("Cancel"));
