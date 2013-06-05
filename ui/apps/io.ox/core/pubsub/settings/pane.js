@@ -129,7 +129,7 @@ define('io.ox/core/pubsub/settings/pane',
             entity = model.get('entity');
             if (entity.id) {
                 // single file
-                options.leaf = $('<a href="#" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
+                options.leaf = $('<a href="#" tabindex="1" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
             }
             folder = entity.folder;
         }
@@ -144,7 +144,7 @@ define('io.ox/core/pubsub/settings/pane',
             return nameNode.addClass('disabled');
         }
 
-        return nameNode.after(' (', $('<a>', { href: url, target: '_blank' }).text(gt('Link')), ')');
+        return nameNode.after(' (', $('<a>', { href: url, target: '_blank', tabindex: 1 }).text(gt('Link')), ')');
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
@@ -188,28 +188,28 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
-                dynamicAction = $('<a href="#" class="action" data-action="refresh">').text(gt('Refresh'));
+                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled
                 dynamicAction = $('<span>');
             } else if (data.target) {
                 // this is a publication
-                dynamicAction = $('<a href="#" class="action" data-action="edit">').text(gt('Edit'));
+                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="edit">').text(gt('Edit'));
             }
 
             url = getUrl(data);
 
             this.addClass('item').append(
                 $('<div class="actions">').append(
-                    $('<a href="#" class="close" data-action="remove">').html('&times;'),
                     enabled ? dynamicAction : '',
-                    $('<a href="#" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable'))
+                    $('<a href="#" tabindex="1" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable')),
+                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="icon-trash">'))
                 ),
                 $('<div class="content">').append(
                     $('<div class="name">').text(getDisplayName(data) || '\u00A0'),
                     $('<div class="url">').append(
                         enabled ?
-                            $('<a target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
+                            $('<a tabindex="1" target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
                             $('<i>').text(getShortUrl(url))
                     ),
                     createPathInformation(baton.model)

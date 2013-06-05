@@ -360,7 +360,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                                'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
                                'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
 
-            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a>').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
+            var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
                 }));
