@@ -22,6 +22,8 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/util',
      'io.ox/mail/util',
      'io.ox/preview/main',
+     'io.ox/core/api/user',
+     'io.ox/core/capabilities',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
@@ -31,7 +33,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/config',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
+    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, settings, gt) {
 
     'use strict';
 
@@ -251,19 +253,49 @@ define("io.ox/mail/write/view-main",
             var node = $('<div class="fromselect-wrapper">').append(
                    $('<label for="from" class="wrapping-label">').text(gt('From'))
                 ),
-                select = $('<select name="from">').css('width', '100%');
+                select = $('<select name="from">').css('width', '100%'),
+                accounts, msisdns;
 
-            accountAPI.getAllSenderAddresses().done(function (addresses) {
+            //get accounts
+            accounts = accountAPI.getAllSenderAddresses().then(function (addresses) {
                 // sort by mail address (across all accounts)
-                addresses.sort(function (a, b) {
+                return addresses.sort(function (a, b) {
                     a = mailUtil.formatSender(a);
                     b = mailUtil.formatSender(b);
                     return a < b ? -1 : +1;
                 });
+
+            });
+
+            //get msisdn numbers
+            msisdns = !capabilities.has('msisdn') ? [] : userAPI.get({id: ox.user_id}).then(function (data) {
+                return _(contactsAPI.getMapping('msisdn', 'names'))
+                        .chain()
+                        .map(function (field) {
+                            if (data[field]) {
+                                return {
+                                    fieldlabel: getFieldLabel(field),
+                                    displayname: data.display_name,
+                                    text: '"' + data.display_name + '" <' + data[field] + '>',
+                                    value: mailUtil.cleanupPhone(data[field]) + '/TYPE=PLMN'
+                                };
+                            }
+                        })
+                        .compact()
+                        .value();
+            });
+
+            //append to selectbox
+            new $.when(accounts, msisdns).then(function (addresses, numbers) {
                 _(addresses).each(function (address) {
                     var value = mailUtil.formatSender(address),
                         option = $('<option>', { value: value }).text(_.noI18n(value))
                         .data({ displayname: address[0], primaryaddress: address[1] });
+                    select.append(option);
+                });
+                _(numbers).each(function (number) {
+                    var option = $('<option>', { value: number.value }).text(_.noI18n(number.text))
+                        .data({ displayname: number.displayname, primaryaddress: number.value});
                     select.append(option);
                 });
             });
