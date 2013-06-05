@@ -37,13 +37,14 @@ define('io.ox/calendar/edit/main',
                     }, this);
                 }
 
-                var state = this.getState();
+                // var state = this.getState();
 
-                if ('folder' in state && 'id' in state) {
-                    return api.get({ folder: state.folder, id: state.id }).done(function (data) {
-                        self.edit(data);
-                    });
-                }
+                // if ('folder' in state && 'id' in state) {
+                //     console.log('simple open appointment', state);
+                //     return api.get({ folder: state.folder, id: state.id }).done(function (data) {
+                //         self.edit(data);
+                //     });
+                // }
             },
 
             stop: function () {
