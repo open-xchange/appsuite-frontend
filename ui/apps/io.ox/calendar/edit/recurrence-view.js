@@ -358,10 +358,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                                     gt("third"),
 
                                 4:  //#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-                                    gt("fourth"),
+                                    gt("fourth")
 
-                                5:  //#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-                                    gt("last")
+                                // 5:  //#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
+                                //     gt("last")
                             }
                         },
                         day: {
