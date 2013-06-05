@@ -76,18 +76,27 @@ define('io.ox/core/main',
     gt.pgettext('app', 'Conversations');
 
     var tabManager = _.debounce(function () {
+
+        var items = launchers.children('.launcher'),
+            launcherDropDownIcon = $('.launcher-dropdown', topbar);
+
+        // we don't show any launcher in top-bar on small devices
+        if (_.device('small')) {
+            items.hide();
+            launcherDropDownIcon.show();
+            return;
+        }
+
         // Reset first
         launchers.children('.launcher:hidden').each(function (i, node) {
             $(node).show();
         });
 
-        var items = launchers.children('.launcher'),
-        itemsVisible = launchers.children('.launcher:visible'),
-        itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
-        itemsLeftWidth = 0,
-        viewPortWidth = $(document).width(),
-        launcherDropDownIcon = $('.launcher-dropdown', topbar),
-        launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
+        var itemsVisible = launchers.children('.launcher:visible'),
+            itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
+            itemsLeftWidth = 0,
+            viewPortWidth = $(document).width(),
+            launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
         launcherDropDownIcon.hide();
 
@@ -816,7 +825,9 @@ define('io.ox/core/main',
         }
 
         var autoLaunchArray = function () {
+
             var autoStart = [];
+
             if (settings.get('autoStart') === 'none') {
                 autoStart = [];
             } else {
@@ -865,8 +876,13 @@ define('io.ox/core/main',
                     i: null
                 });
             }
+
+            // always use portal on small devices!
+            if (_.device('small')) return ['io.ox/portal'];
+
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app];
+
             if (manifest && manifest.refreshable) {
                 return appURL.split(/,/);
             } else {

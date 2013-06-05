@@ -47,13 +47,10 @@ define('plugins/portal/mail/register',
         },
 
         load: function (baton) {
-
-            var numOfItems = _.device('small') ? 5 : 15;
-
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
                 var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
                 return api.getAll({ folder:  folderName }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, numOfItems)).done(function (data) {
+                    return api.getList(mails.slice(0, 25)).done(function (data) {
                         baton.data = data;
                     });
                 });
@@ -69,9 +66,11 @@ define('plugins/portal/mail/register',
                 return !util.isDeleted(obj);
             });
 
+            var numOfItems = _.device('small') ? 5 : 15;
+
             if (list && list.length) {
                 $content.append(
-                    _(list).map(function (mail) {
+                    _(list.slice(0, numOfItems)).map(function (mail) {
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         return $('<div class="item">')
                             .data('item', mail)

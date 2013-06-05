@@ -77,12 +77,9 @@ define('io.ox/portal/main',
                     // greeting
                     $('<h1 class="greeting">').append(
                         baton.$.greeting = $('<span class="greeting-phrase">'),
-                        $('<span class="signin">').append(
-                            $('<i class="icon-user">'), $.txt(' '),
-                            $.txt(
-                                //#. Portal. Logged in as user
-                                gt('Signed in as %1$s', ox.user)
-                            )
+                        $('<span class="signin">').text(
+                            //#. Portal. Logged in as user
+                            gt('Signed in as %1$s', ox.user)
                         )
                     )
                 )
@@ -400,7 +397,8 @@ define('io.ox/portal/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/portal',
-            chromeless: true
+            chromeless: true,
+            simple: _.device('small')
         }));
 
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main.addClass('io-ox-portal'), appBaton);

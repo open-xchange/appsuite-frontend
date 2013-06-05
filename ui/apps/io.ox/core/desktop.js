@@ -799,7 +799,8 @@ define("io.ox/core/desktop",
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
-                this.detachable = true;
+                this.detachable = false;
+                this.simple = false;
 
                 var quitOnClose = false,
                     // perspectives
@@ -869,7 +870,12 @@ define("io.ox/core/desktop",
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
                         if (node.parent().length === 0) {
-                            node.appendTo(pane);
+                            if (this.simple) {
+                                node.insertAfter('#io-ox-topbar');
+                                $('body').css('overflowY', 'auto');
+                            } else {
+                                node.appendTo(pane);
+                            }
                         }
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         this.trigger("beforeshow");
@@ -916,8 +922,9 @@ define("io.ox/core/desktop",
                     // detach if there are no iframes
                     this.trigger("beforehide");
                     // TODO: decide on whether or not to detach nodes
-                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
+                    if (this.simple || (this.detachable && this.nodes.outer.find("iframe").length === 0)) {
                         this.nodes.outer.detach();
+                        $('body').css('overflowY', '');
                     } else {
                         this.nodes.outer.hide();
                     }
@@ -1229,11 +1236,24 @@ define("io.ox/core/desktop",
 
             // window container
             win.nodes.outer = $('<div class="window-container">')
-                .attr({
-                    id: opt.id,
-                    "data-window-nr": guid
-                })
-                .append(
+                .attr({ id: opt.id, "data-window-nr": guid });
+
+            // create very simple window?
+            if (opt.simple) {
+                win.simple = true;
+                win.nodes.outer.addClass('simple-window').append(
+                    win.nodes.main = $('<div class="window-content" tabindex="-1">')
+                );
+                win.nodes.blocker = $();
+                win.nodes.sidepanel = $();
+                win.nodes.panel = $();
+                win.nodes.head = $();
+                win.nodes.body = $();
+                win.nodes.search = $();
+
+            } else {
+
+                win.nodes.outer.append(
                     $('<div class="window-container-center">')
                     .data({ width: width + unit })
                     .css({ width: width + unit })
@@ -1261,17 +1281,18 @@ define("io.ox/core/desktop",
                     })
                 );
 
-            // classic window header?
-            if (opt.classic) win.nodes.outer.addClass('classic');
+                // classic window header?
+                if (opt.classic) win.nodes.outer.addClass('classic');
 
-            // add default css class
-            if (opt.name) {
-                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                // add default css class
+                if (opt.name) {
+                    win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                }
+
+                // draw window head
+                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+                ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             }
-
-            // draw window head
-            ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
-            ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);

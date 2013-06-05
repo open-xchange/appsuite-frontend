@@ -500,6 +500,23 @@ define("io.ox/core/tk/dialogs",
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
+
+                    // is inside simple-window?
+                    if (self.nodes.simple.length) {
+                        var popups = self.nodes.simple.find('.io-ox-sidepopup'), prev;
+                        if (popups.length > 1) {
+                            prev = popups.eq(-2);
+                            prev.show();
+                            $('body').scrollTop(prev.attr('data-scrolltop') || 0);
+                        } else {
+                            self.nodes.simple.find('[data-hidden-by-sidepopup]')
+                                .removeAttr('data-hidden-by-sidepopup')
+                                .show();
+                            $('body').scrollTop(0);
+                        }
+                        self.nodes.simple = null;
+                    }
+
                     if (options.modal) {
                         overlay.detach();
                     } else {
@@ -518,15 +535,17 @@ define("io.ox/core/tk/dialogs",
 
         popup.on('close', close);
 
-        closer.find('.btn-sidepopup').on('click', function (e) {
-            pane.trigger('click'); // route click to 'pane' since closer is above pane
-            close(e); // close side popup
-            return false;
-        }).on('keydown', function (e) {
-            if ((e.keyCode || e.which) === 13) { // enter
-                $(this).trigger('click');
-            }
-        });
+        closer.find('.btn-sidepopup')
+            .on('click', function (e) {
+                pane.trigger('click'); // route click to 'pane' since closer is above pane
+                close(e); // close side popup
+                return false;
+            })
+            .on('keydown', function (e) {
+                if ((e.keyCode || e.which) === 13) { // enter
+                    $(this).trigger('click');
+                }
+            });
 
         popup.on("click", processEvent);
 
@@ -535,9 +554,11 @@ define("io.ox/core/tk/dialogs",
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
                 closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .io-ox-dialog-popup, .notifications-overlay"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .io-ox-dialog-popup, .notifications-overlay"),
-                target: target || my.parents(".window-body, .io-ox-dialog-popup, .notifications-overlay")
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, c, .io-ox-dialog-popup, .notifications-overlay"),
+                target: target || my.parents(".window-body, .simple-window, .io-ox-dialog-popup, .notifications-overlay"),
+                simple: my.closest('.simple-window')
             };
+
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
@@ -595,8 +616,21 @@ define("io.ox/core/tk/dialogs",
                 popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
                 arrow.css('zIndex', zIndex + 1);
 
+                // is inside simple-window?
+                if (self.nodes.simple.length) {
+                    self.nodes.simple.find('.window-content:visible')
+                        .attr('data-hidden-by-sidepopup', 'true')
+                        .hide();
+                    self.nodes.simple.find('.io-ox-sidepopup:visible').each(function () {
+                        $(this).attr('data-scrolltop', $('body').scrollTop()).hide();
+                    });
+                    $('body').scrollTop(0);
+                }
+
                 // add popup to proper element
-                self.nodes.target.append((options.modal ? overlay : popup).css('visibility', 'hidden'));
+                self.nodes.target.append(
+                    (options.modal ? overlay : popup).css('visibility', 'hidden')
+                );
 
                 // call custom handler
                 (handler || $.noop).call(self, pane.empty(), e, my);

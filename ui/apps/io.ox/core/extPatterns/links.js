@@ -114,10 +114,20 @@ define("io.ox/core/extPatterns/links",
         return actions.applyCollection(self.ref, collection, baton, args);
     };
 
-    var drawLinks = function (self, collection, node, baton, args, bootstrapMode) {
+    var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
+
         baton = ext.Baton.ensure(baton);
         var nav = $('<nav role="presentation">').appendTo(node);
-        return getLinks(self, collection, baton, args)
+
+        // customize
+        if (extension.attributes) {
+            nav.attr(extension.attributes);
+        }
+        if (extension.classes) {
+            nav.addClass(extension.classes);
+        }
+
+        return getLinks(extension, collection, baton, args)
             .always(function (links) {
                 // count resolved links
                 var count = 0;
@@ -182,14 +192,6 @@ define("io.ox/core/extPatterns/links",
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
 
             drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
-
-                // customize
-                if (extension.attributes) {
-                    nav.attr(extension.attributes);
-                }
-                if (extension.classes) {
-                    nav.addClass(extension.classes);
-                }
 
                 // add toggle unless multi-selection
                 var all = nav.children(),
