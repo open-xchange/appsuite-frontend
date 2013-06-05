@@ -95,7 +95,6 @@
             //TODO: translate title
             ed.addButton('emoji', {
                 title: 'Insert Emoji',
-                image: url + '/img/smile.gif',
                 onclick: function (e) {
                     ed.execCommand('mceInsertEmoji', true, {event: e, editor: ed});
                 }
