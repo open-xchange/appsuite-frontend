@@ -292,9 +292,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     testArray =  this.model.get('test');
 
                 if (checkForMultipleTests(this.el).length > 1) {
-                    testArray.tests[testID][type] = type === 'size' ? value : [value];
+                    testArray.tests[testID][type] = [value];
                 } else {
-                    testArray[type] = type === 'size' ? value : [value];
+                    testArray[type] = [value];
                 }
 
                 this.model.set('test', testArray);
@@ -425,7 +425,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         name = test.headers[0] === '' ? headerTranslation.cleanHeader : headerTranslation[test.headers[0]];
                     }
 
-                    if (test.headers[0] === '') {
+                    if (test.headers[0] === '' || name === undefined) {
+                        name = headerTranslation.cleanHeader;
                         listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).text(name).append(
                                 elements.drawInputfieldTestSecond(test.headers[0]),
                                 elements.drawOptions(test.comparison, containsValues),
