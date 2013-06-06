@@ -87,7 +87,7 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
-            return contactModel.factory.realm("edit").retain().get(api.reduce(obj)).done(function (data) {
+            return contactModel.factory.realm('edit').retain().get(api.reduce(obj)).done(function (data) {
 
                 // actually data IS a model
                 model = data;
@@ -137,8 +137,7 @@ define('io.ox/contacts/distrib/main',
 
             container = win.nodes.main
                 .addClass('create-distributionlist')
-                .scrollable()
-                .css({ width: '700px', margin: '20px auto 20px auto' });
+                .scrollable();
 
             // hash state support
             var state = app.getState();
@@ -155,11 +154,11 @@ define('io.ox/contacts/distrib/main',
                 if (_.isEqual(initialDistlist, model.changedSinceLoading())) {
                     def.resolve();
                 } else {
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Do you really want to discard your changes?"))
-                            .addPrimaryButton("delete", gt('Discard'))
-                            .addButton("cancel", gt('Cancel'))
+                            .text(gt('Do you really want to discard your changes?'))
+                            .addPrimaryButton('delete', gt('Discard'))
+                            .addButton('cancel', gt('Cancel'))
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {

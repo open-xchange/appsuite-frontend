@@ -37,7 +37,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         index: 100,
         attribute: 'display_name',
         label: gt('List name'), // noun
-        control: '<input type="text" class="input-xlarge">',
+        control: '<input tabindex="1" type="text" class="input-xlarge">',
         buildControls: function () {
             var self = this,
                 buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
@@ -75,14 +75,14 @@ define('io.ox/contacts/distrib/create-dist-view',
                 this.itemList = $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list'),
 
                 $('<div>').attr('data-holder', 'data-holder').append(
-                    self.createField(this, 'name', 'input#mail', gt('Name'), '2'),
-                    self.createField(this, 'mail', 'input#name', gt('Email address'), '3')
+                    self.createField(this, 'name', 'input#mail', gt('Name')),
+                    self.createField(this, 'mail', 'input#name', gt('Email address'))
                 ),
 
                 $('<a>').attr({
                     'data-action': 'add',
                     'href': '#',
-                    'tabindex': '4'
+                    'tabindex': '1'
                 })
                 .addClass('btn btn-inverse')
                 .text('+')
@@ -126,7 +126,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 _(this.model.get('distribution_list')).each(function (member) {
 
                     self.$el.find('.item-list').append(
-                            self.drawListetItem(member)
+                            self.drawListedItem(member)
                     );
                 });
             }
@@ -182,7 +182,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         drawEmptyItem: function (node) {
             node.append(
-                $('<div>').addClass('listet-item backstripes')
+                $('<div>').addClass('listed-item backstripes')
                 .attr({ 'data-mail': 'empty' })
                 .text(gt('This list has no members yet'))
             );
@@ -217,7 +217,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             return newMember;
         },
 
-        createField: function (options, id, related, label, tab) {
+        createField: function (options, id, related, label) {
             var self = this;
             return $('<div>')
             .addClass('fieldset ' + id)
@@ -225,7 +225,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 $('<label>', { 'for' : 'input_field_' + id }).text(label),
                 $('<input>', {
                     type: 'text',
-                    tabindex: tab,
+                    tabindex: 1,
                     id: id
                 })
                 .attr('data-type', id) // not name=id!
@@ -292,7 +292,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             this.$el.find('.item-list').empty();
             _(this.model.get('distribution_list')).each(function (member) {
                 self.$el.find('.item-list').append(
-                        self.drawListetItem(member)
+                        self.drawListedItem(member)
                 );
             });
 
@@ -308,23 +308,24 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
         },
 
-        drawListetItem: function (o) {
+        drawListedItem: function (o) {
             var self = this,
-                frame = $('<div>').addClass('listet-item').attr({
+                frame = $('<div>').addClass('listed-item').attr({
                 'data-mail': o.display_name + '_' + o.mail
             }),
             img = api.getPicture(o.mail).addClass('contact-image'),
-            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
+            button = $('<a>', { href: '#', tabindex: 1 }).addClass('close')
+            .append($('<i class="icon-trash">'))
             .on('click', {mail: o.mail, name: o.display_name }, function (e) {
                 self.model.removeMember(e.data.mail, e.data.name);
             });
-            frame.append(button);
             frame.append(img)
             .append(
                 $('<div>').addClass('person-link ellipsis')
-                .append($('<div>').append(api.getDisplayName({email: o.mail, display_name: o.display_name }))),
+                .append($('<div>').append(api.getDisplayName({email: o.mail, display_name: o.display_name }).attr('tabindex', 1))),
                 $('<div>').addClass('person-selected-mail')
-                .text((o.mail))
+                .text((o.mail)),
+                button
             );
             api.on('fail', function () {
                 self.drawFail();
