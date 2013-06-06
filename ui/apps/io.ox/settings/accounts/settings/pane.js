@@ -118,31 +118,29 @@ define('io.ox/settings/accounts/settings/pane',
                 'keydown [data-action="delete"]': 'onDelete'
             },
             onDelete: function (e) {
-                if (e.type !== 'click' && e.which !== 13) {
-                    return;
-                }
-                var account = {
-                    id: this.model.get('id'),
-                    accountType: this.model.get('accountType')
-                };
-                if (account.id !== 0) {
-                    removeSelectedItem(account);
-                } else {
-                    new dialogs.ModalDialog({easyOut: true})
-                        .text(gt('Your primary mail account can not be deleted.'))
-                        .addPrimaryButton('ok', gt('Ok'))
-                        .show();
+                if ((e.type === 'click') || (e.which === 13)) {
+                    var account = {
+                        id: this.model.get('id'),
+                        accountType: this.model.get('accountType')
+                    };
+                    if (account.id !== 0) {
+                        removeSelectedItem(account);
+                    } else {
+                        new dialogs.ModalDialog({easyOut: true})
+                            .text(gt('Your primary mail account can not be deleted.'))
+                            .addPrimaryButton('ok', gt('Ok'))
+                            .show();
+                    }
+                    e.preventDefault();
                 }
             },
             onSelect: function (e) {
-
                 if (e.type !== 'click' && e.which !== 13) {
                     return;
                 }
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
                 this.$el.find('.deletable-item').attr('selected', 'selected');
             }
-
         });
 
 
@@ -233,16 +231,16 @@ define('io.ox/settings/accounts/settings/pane',
                         });
                     },
 
-                    onEdit: function (args) {
-                        if (args.type !== 'click' && args.which !== 13) {
-                            return;
+                    onEdit: function (e) {
+                        if ((e.type === 'click') || (e.which === 13)) {
+                            var selected = this.$el.find('[selected]');
+                            e.data = {};
+                            e.data.id = selected.data('id');
+                            e.data.accountType = selected.data('accounttype');
+                            e.data.node = this.el;
+                            createExtpointForSelectedAccount(e);
+                            e.preventDefault();
                         }
-                        var selected = this.$el.find('[selected]');
-                        args.data = {};
-                        args.data.id = selected.data('id');
-                        args.data.accountType = selected.data('accounttype');
-                        args.data.node = this.el;
-                        createExtpointForSelectedAccount(args);
                     }
 
                 });

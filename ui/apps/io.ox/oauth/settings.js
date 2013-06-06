@@ -70,25 +70,24 @@ define("io.ox/oauth/settings",
                         $('<div class="controls">').append(
                             $displayNameField = $('<input type="text" name="displayName">').val(account.displayName)
                         ) // End controls
-                    ), // End control-group
-
-                    $('<div class="control-group">').append(
-                        $('<div class="controls">').append(
-                            $('<button class="btn btn-primary">').text(gt("Save")).on('click', doSave),
-                            $.txt(gt.noI18n("\u00A0")),
-                            $('<button class="btn">').text(gt("Reauthorize")).on('click', doReauthorize)
-                        ) // End controls
                     ) // End control-group
                 ) // End form
             ); // End detail-pane
 
-            dialog = new dialogs.SidePopup({
-                modal: true,
-                arrow: false
-            }).show(args, function (pane) {
-                pane.append($form);
-            });
-
+            dialog = new dialogs.ModalDialog();
+            dialog
+                .append($form)
+                .addPrimaryButton('save', gt('Save'))
+                .addButton('reauthorize', gt('Reauthorize'))
+                .addButton('discard', gt('Discard'))
+                .show()
+                .done(function (action) {
+                    if (action === 'save') {
+                        doSave();
+                    } else if (action === 'reauthorize') {
+                        doReauthorize();
+                    }
+                });
         };
     }
 
