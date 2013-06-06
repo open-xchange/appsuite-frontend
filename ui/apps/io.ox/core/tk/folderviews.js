@@ -980,7 +980,7 @@ define('io.ox/core/tk/folderviews',
             if (api.is('shared', data)) {
                 folder.append(
                     $('<div>').addClass('shared-by').append(
-                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName'])
+                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
                     )
                 );
             }
