@@ -142,6 +142,10 @@ define('io.ox/core/import/import',
                         .invoke('draw', this);
                     this.getPopup().addClass('import-dialog');
                 })
+                .show(function () {
+                    //focus
+                    this.find('select').focus();
+                })
                 .on('import', function () {
 
                     var type = baton.nodes.select.val() || '',

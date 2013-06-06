@@ -242,9 +242,6 @@ define('io.ox/core/export/export',
                     .show(function () {
                         //focus
                         this.find('select').focus();
-                        this.on('keydown', function (e) {
-                            e.stopPropagation();
-                        });
                     })
                     .done(function (action) {
                         if (action === 'export') {
