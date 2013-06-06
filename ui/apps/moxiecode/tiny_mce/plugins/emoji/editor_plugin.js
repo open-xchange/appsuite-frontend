@@ -58,12 +58,7 @@
                         );
                         iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
 
-                        _(emoji.iconsForCategory(category))
-                        .chain()
-                        .filter(function (icon) {
-                            return icon.unicode.length === 1;
-                        })
-                        .each(function (icon) {
+                        _(emoji.iconsForCategory(category)).each(function (icon) {
                             iconSelector[category].append(
                                 $('<a href="#" class="emoji" tabindex="5">')
                                 .attr('title', icon.desc)
