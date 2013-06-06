@@ -79,7 +79,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 //parse unicode number
                 var unicode = '&#x' + _.find($(node).attr('class').split('emoji'), function (item) {
                     return item.trim();
-                });
+                }) + ';';
                 //transform unicode html entity to text
                 unicode = $('<div>').html(unicode).text();
                 $(node).replaceWith(
