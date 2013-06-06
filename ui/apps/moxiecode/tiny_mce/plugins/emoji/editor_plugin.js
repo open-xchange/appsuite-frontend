@@ -28,7 +28,6 @@
                     pane = $('<td id="mceEmojiPane">');
                     editorPane.parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
                     editorPane.parent().append(pane);
-                    pane = pane.append($('<div>')).children().first();
                 }
                 require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
                     _(emoji.categories)
