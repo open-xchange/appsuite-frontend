@@ -271,7 +271,7 @@ define("io.ox/mail/write/textile", function () {
             content = content.replace(
                 /((^|\n)([a-zöäüß \-]+ \d+[a-z]*)([,.]*[ \n]*)(\d{5} [a-zäöüß \-]+))/ig,
                 function (m, all, a, s, b, c) {
-                    return a + '<a href="http://maps.google.de/maps?z=18&q=' +
+                    return a + '<a href="http://maps.google.com/maps?z=18&q=' +
                         encodeURIComponent(s + ", " + c) +
                         '" target="_blank" title="Google Maps..." class="textile-address">' +
                         (s + b + c).replace(/\n/g, "<br/>") + '</a>';
