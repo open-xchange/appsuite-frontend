@@ -105,8 +105,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                     }
 
                     if (newMember) {
-                        self.validateMail(newMember);
-
                         if (self.isUnique(newMember)) {
                             self.model.addMember(newMember);
                         }
@@ -132,13 +130,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                     );
                 });
             }
-        },
-
-        validateMail: function (newMember) {
-            var regEmail = /\@/,
-                self = this,
-                message = gt('The email address ' + newMember.mail + ' is not valid'),
-                result = (regEmail.test(newMember.mail) || newMember.mail === '') ? true : self.drawAlert(message, self.$el);
         },
 
        /**

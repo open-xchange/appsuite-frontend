@@ -86,14 +86,19 @@ define('io.ox/mail/util',
         /**
          * identify channel (email or phone)
          * @param  {string} value
+         * @param  {boolean} check for activated cap first (optional: default is true)
          * @return {string} channel
          */
-        getChannel: function (value) {
-            return value.indexOf('/TYPE=PLMN') > 0 || (
-                           (capabilities.has('msisdn')) &&                   //acivated capability
-                           value.replace(rNotDigitAndAt, '').length === 0 && //no alphabetic digits and no @
-                           value.replace(rTelephoneCleanup, '').length > 0   //at least one numerical digit
-                       ) ? 'phone' : 'email';
+        getChannel: function (value, check) {
+            var type = value.indexOf('/TYPE=PLMN') > 0,
+                //no check OR activated cap
+                setting = !(check || true) || capabilities.has('msisdn'),
+                //no '@' AND no alphabetic digit AND at least one numerical digit
+                phoneval = function () {
+                            return value.replace(rNotDigitAndAt, '').length === 0 &&
+                                   value.replace(rTelephoneCleanup, '').length > 0;
+                        };
+            return type || (setting && phoneval()) ? 'phone' : 'email';
         },
 
         cleanupPhone: function (phone) {

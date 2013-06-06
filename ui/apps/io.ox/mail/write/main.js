@@ -756,6 +756,9 @@ define('io.ox/mail/write/main',
                 mailAPI.forward(obj, getDefaultEditorMode())
                 .done(function (data) {
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
+                    //remove type suffix from sender/recipients (mail forwarded inline)
+                    if (data.attachments[0].content)
+                        data.attachments[0].content = data.attachments[0].content.replace(new RegExp('/TYPE=PLMN', 'g'), '');
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
                         var ed = app.getEditor();

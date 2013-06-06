@@ -203,7 +203,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
             var templates = [],
                 node;
             for (var i = 0; i < baton.templates.length; i++) {
-                if (baton.templates[i].indexOf(baton.data.entityModule) === 0) {
+                if (baton.templates[i] && baton.templates[i].indexOf(baton.data.entityModule) === 0) {
                     templates.push(baton.templates[i]);
                 }
             }

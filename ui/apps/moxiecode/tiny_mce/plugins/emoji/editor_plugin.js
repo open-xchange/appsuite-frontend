@@ -28,7 +28,6 @@
                     pane = $('<td id="mceEmojiPane">');
                     editorPane.parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
                     editorPane.parent().append(pane);
-                    pane = pane.append($('<div>')).children().first();
                 }
                 require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
                     _(emoji.categories)
@@ -59,7 +58,12 @@
                         );
                         iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
 
-                        _(emoji.iconsForCategory(category)).each(function (icon) {
+                        _(emoji.iconsForCategory(category))
+                        .chain()
+                        .filter(function (icon) {
+                            return icon.unicode.length === 1;
+                        })
+                        .each(function (icon) {
                             iconSelector[category].append(
                                 $('<a href="#" class="emoji" tabindex="5">')
                                 .attr('title', icon.desc)
