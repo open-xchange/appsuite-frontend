@@ -372,7 +372,21 @@ define('io.ox/mail/api',
     // false -> caused by refresh
     var cacheControl = {},
         getAll = api.getAll,
-        search = api.search;
+        getList = api.getList,
+        get = api.get,
+        search = api.search,
+
+        /**
+         * remove typesuffix from sender/reciepients (example 017012345678/TYPE=PLMN)
+         * @param  {object} mail
+         * @return {undefined}
+         */
+        removeTypeSuffix = function (mail) {
+            mail.from[0][1] = mail.from[0][1].split('/')[0];
+            _.each(mail.to, function (recipient) {
+                recipient[1] = recipient[1].split('/')[0];
+            });
+        };
 
     api.getAll = function (options, useCache) {
         // use cache?
@@ -387,6 +401,36 @@ define('io.ox/mail/api',
         }
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
+        });
+    };
+
+    /**
+     * pipes getList() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * @param  {array} ids
+     * @param  {boolean} useCache (default is true)
+     * @param  {object} options
+     * @return {deferred}
+     */
+    api.getList = function (ids, useCache, options) {
+        return getList.call(this, ids, useCache, options).then(function (data) {
+            _.each(data, removeTypeSuffix);
+            return data;
+        });
+    };
+
+    /**
+     * pipes get() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * @param  {object} options
+     * @param  {boolan} useCache (default is true)
+     * @fires api#refresh.list
+     * @return {deferred} (resolve returns response)
+     */
+    api.get = function (options, useCache) {
+        return get.call(this, options, useCache).then(function (mail) {
+            if (_.isObject(mail)) {
+                removeTypeSuffix(mail);
+            }
+            return mail;
         });
     };
 
