@@ -13,7 +13,8 @@ define('shared/examples/for/api', [], function () {
     return function (api, options) {
         options = _.extend({
             markedPending: {},
-            testData: {}
+            testData: {},
+            args: {}
         }, options);
 
         afterEach(function () {
@@ -32,7 +33,7 @@ define('shared/examples/for/api', [], function () {
                 });
 
                 it('should return a deferred object for getAll', function () {
-                    expect(api.getAll()).toBeDeferred();
+                    expect(api.getAll(options.args['getAll'] || {})).toBeDeferred();
                 });
 
                 it('should define a getList method', function () {
