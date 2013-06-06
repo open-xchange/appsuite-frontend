@@ -616,7 +616,7 @@ define('io.ox/core/commons-folderview',
         };
 
         toggle = function () {
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 if (visible) { fnHideSml(); } else { fnShowSml();  }
             } else {
                 if (visible) { fnHide(); } else { fnShow();  }
@@ -626,14 +626,13 @@ define('io.ox/core/commons-folderview',
         initResize = function () {
 
             // no resize in either touch devices or small devices
-            if (_.device('touch || small')) return;
+            if (_.device('smartphone')) return;
 
             makeResizable();
             restoreWidth();
         };
 
         initTree = function (views) {
-
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
                     type: options.type,
@@ -726,6 +725,11 @@ define('io.ox/core/commons-folderview',
 
                     if (_.device('smartphone')) {
                         // mobile stuff
+                        $('.window-sidepanel').css({
+                            'width': '90%',
+                            'left': '-90%',
+                            'right': 'intial'
+                        });
                         $('.foldertree-sidepanel').on('swipeleft', function (e) {
                             toggle();
                         });

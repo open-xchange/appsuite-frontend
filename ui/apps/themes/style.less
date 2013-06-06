@@ -2269,12 +2269,13 @@ ul.dropdown-menu li a.disabled { color:#999; }
         border-top: 1px solid #ddd;
         border-right: 0px none;
 
-        .toolbar-button { line-height: 44px; float: left; }
+        .toolbar-button { line-height: 44px; float: left; margin: 0;}
         .toolbar-button > a { height: 40px; }
         .dropdown-right-side { top: auto; bottom: 40px; left: 5px; }
     }
 
     .window-sidepanel.visible {
+        bottom: 40px;
         width: auto;
         right: 0;
     }
@@ -2343,14 +2344,8 @@ ul.dropdown-menu li a.disabled { color:#999; }
         height: 145px;
     }
 
-    .window-sidepanel.visible, .window-sidepanel {
-        left: -90%;
-        width: 90%;
-        right: initial;
-    }
-
     .window-sidepanel {
-        //bottom: 40px;
+
         display: block;
         -webkit-backface-visibility: hidden;
     }

@@ -257,7 +257,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         node.addClass('slideup').removeClass('slidedown');
                         node.on('transitionEnd webkitTransitionEnd', function () {
                             container.removeClass('slideup slidedown');
-                            console.log('cleanup');
                             node.remove();
                             node = null;
                         });
