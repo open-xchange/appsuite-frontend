@@ -607,9 +607,11 @@ define("io.ox/mail/write/view-main",
 
     supportsPreview = function (file) {
         // is not local?
-        if (file.message) {
+        if (file.message) { // mail
             return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
-        } else if (file.display_name) {
+        } else if (file.display_name) { // v-card
+            return true;
+        } else if (file.id && file.folder_id) { // infostore
             return true;
         } else {
             return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
@@ -638,6 +640,11 @@ define("io.ox/mail/write/view-main",
         } else if (file.display_name) {
             // if is vCard
             require(['io.ox/contacts/view-detail'], function (view) {
+                popup.append(view.draw(file));
+            });
+        } else if (file.id && file.folder_id) { // infostore
+            // if is infostore
+            require(['io.ox/files/list/view-detail'], function (view) {
                 popup.append(view.draw(file));
             });
         } else {
