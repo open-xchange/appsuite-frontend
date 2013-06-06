@@ -232,11 +232,14 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         // type = info | warning | error | success
         yell: (function () {
 
+
+            //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
+
             var validType = /^(info|warning|error|success)$/,
                 active = false,
                 container = null,
                 timer = null,
-                TIMEOUT = 10000,
+                TIMEOUT = _.device('smartphone') ? 1000 : 10000,
 
                 clear = function () {
                     if (timer !== null) {
@@ -250,10 +253,21 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     $('body').off('click tap', fader);
                     active = false;
                     var node = container.children().first();
-                    node.fadeOut(function () {
-                        node.remove();
-                        node = null;
-                    });
+                    if (_.device('smartphone')) {
+                        node.addClass('slideup').removeClass('slidedown');
+                        node.on('transitionEnd webkitTransitionEnd', function () {
+                            container.removeClass('slideup slidedown');
+                            console.log('cleanup');
+                            node.remove();
+                            node = null;
+                        });
+                    } else {
+                        node.fadeOut(function () {
+                            node.remove();
+                            node = null;
+                        });
+                    }
+
                 },
 
                 documentClick = function (e) {
@@ -292,6 +306,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 // add message
                 if (validType.test(o.type)) {
+
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         container.empty().append(
@@ -307,12 +322,14 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                         }
                         active = true;
                         clear();
+                        if (_.device('smartphone')) container.addClass('slidedown');
                         timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
                     }, 100);
+
+
                 }
             };
         }())
     };
-
     return new NotificationController();
 });

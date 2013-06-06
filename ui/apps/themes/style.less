@@ -2338,7 +2338,6 @@ ul.dropdown-menu li a.disabled { color:#999; }
 }
 // mobile
 @media (max-width: 480px), (max-device-width: 480px) {
-
     .autocomplete-popup {
         min-width: initial;
         height: 145px;
@@ -2394,7 +2393,7 @@ ul.dropdown-menu li a.disabled { color:#999; }
     }
 
     #io-ox-notifications-popups {
-        top: 10px;
+        top: -40px;
         left: 10px;
         right: 10px;
         width: auto;
@@ -2454,72 +2453,19 @@ ul.dropdown-menu li a.disabled { color:#999; }
     }
 }
 
-
-/** some transitions **/
-@-webkit-keyframes slideleft {
-    from { -webkit-transform: translateX(-50%); }
-    to { -webkit-transform: translateX(0); }
+.slidedown {
+    //-webkit-animation-delay: 2s;
+    -webkit-transform: translateY(50px);
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 300ms;
+    -webkit-animation-timing-function: ease-in;
 }
+.slideup {
+    -webkit-transform: translateY(-60px);
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 300ms;
+    -webkit-animation-timing-function: ease-in;
 
-@-webkit-keyframes slideright {
-    from { -webkit-transform: translateX(0); }
-    to { -webkit-transform: translateX(-50%); }
-}
-
-@keyframes slideleft {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
-}
-
-@keyframes slideright {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-@keyframes slidein {
-
-    0% {
-        transform: translateX(-100%);
-    }
-    100% {
-       transform: translateX(0%);
-    }
-}
-
-@keyframes slideout {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-@-webkit-keyframes slidein {
-
-    0% {
-        -webkit-transform: translateX(-100%);
-    }
-    100% {
-       -webkit-transform: translateX(0%);
-    }
-}
-
-@-webkit-keyframes slideout {
-    0% {
-        -webkit-transform: translateX(0%);
-    }
-    100% {
-        -webkit-transform: translateX(-100%);
-    }
-}
-
-.slidein {
-    -webkit-animation: slidein 300ms;
-}
-
-.slideout {
-    -webkit-animation: slideout 300ms;
 }
 
 
