@@ -202,8 +202,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         draw: function (baton) {
             var templates = [],
                 node;
+            console.log("BATON", baton.templates);
             for (var i = 0; i < baton.templates.length; i++) {
-                if (baton.templates[i].indexOf(baton.data.entityModule) === 0) {
+                if (baton.templates[i] && baton.templates[i].indexOf(baton.data.entityModule) === 0) {
                     templates.push(baton.templates[i]);
                 }
             }
