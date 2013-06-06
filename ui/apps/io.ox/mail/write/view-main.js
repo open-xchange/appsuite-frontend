@@ -16,6 +16,7 @@ define("io.ox/mail/write/view-main",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/mail/actions",
+     'io.ox/mail/api',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
      'io.ox/contacts/api',
@@ -32,7 +33,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/util',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, settings, gt) {
+    ], function (ext, links, actions, mailAPI, View, Model, contactsAPI, contactsUtil, mailUtil, pre, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, settings, gt) {
 
     'use strict';
 
@@ -613,6 +614,8 @@ define("io.ox/mail/write/view-main",
             return true;
         } else if (file.id && file.folder_id) { // infostore
             return true;
+        } else if (file.atmsgref) { // forward mail attachment
+            return true;
         } else {
             return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
         }
@@ -647,6 +650,32 @@ define("io.ox/mail/write/view-main",
             require(['io.ox/files/list/view-detail'], function (view) {
                 popup.append(view.draw(file));
             });
+        } else if (file.atmsgref) { // forward mail attachment
+            require(['io.ox/preview/main'], function (p) {
+                var pos = file.atmsgref.lastIndexOf('/');
+                file.parent = {
+                    folder_id: file.atmsgref.substr(0, pos),
+                    id: file.atmsgref.substr(pos + 1)
+                };
+                var pre = new p.Preview({
+                    data: file,
+                    filename: file.filename,
+                    parent: file.parent,
+                    mimetype: file.content_type,
+                    dataURL: mailAPI.getUrl(file, 'view')
+                }, {
+                    width: popup.parent().width(),
+                    height: 'auto'
+                });
+                if (pre.supportsPreview()) {
+                    popup.append(
+                        $('<h4>').addClass('mail-attachment-preview').text(file.filename)
+                    );
+                    pre.appendTo(popup);
+                    popup.append($('<div>').text('\u00A0'));
+                }
+            });
+
         } else {
             // inject image as data-url
             reader = new FileReader();

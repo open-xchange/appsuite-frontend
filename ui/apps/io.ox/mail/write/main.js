@@ -422,12 +422,15 @@ define('io.ox/mail/write/main',
             view.form.find('input#writer_field_replyTo').val(value);
         };
 
-        app.setAttachments = function (list) {
+        app.setAttachments = function (data) {
             // look for real attachments
             var found = false;
-            _(list || []).each(function (attachment) {
+            _(data.attachments || []).each(function (attachment) {
                 if (attachment.disp === 'attachment') {
                     // add as linked attachment
+                    if (data.msgref) {
+                        attachment.atmsgref = data.msgref;
+                    }
                     attachment.type = 'file';
                     found = true;
                     view.form.find('input[type=file]').last()
@@ -563,7 +566,7 @@ define('io.ox/mail/write/main',
             this.setCC(data.cc);
             this.setBCC(data.bcc);
             this.setReplyTo(data.headers && data.headers['Reply-To']);
-            this.setAttachments(data.attachments);
+            this.setAttachments(data);
             this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
