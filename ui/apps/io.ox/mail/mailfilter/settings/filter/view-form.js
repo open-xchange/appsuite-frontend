@@ -11,113 +11,19 @@
  */
 
 define('io.ox/mail/mailfilter/settings/filter/view-form',
-    ['io.ox/core/tk/view',
-     'io.ox/core/notifications',
+    ['io.ox/core/notifications',
      'gettext!io.ox/settings/settings',
      'io.ox/core/extensions',
      'io.ox/backbone/forms',
      'io.ox/backbone/views',
+     'io.ox/mail/mailfilter/settings/filter/form-elements',
+     'io.ox/mail/mailfilter/settings/filter/defaults',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (View, notifications, gt, ext, forms, views) {
+    ], function (notifications, gt, ext, forms, views, elements, DEFAULTS) {
 
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
-
-        DEFAULTS = {
-            tests: {
-                'From': {
-                    'comparison': "matches",
-                    'headers': ["From"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'any': {
-                    'comparison': "matches",
-                    'headers': ["To", "Cc"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'Subject': {
-                    'comparison': "matches",
-                    'headers': ["Subject"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'mailingList': {
-                    'comparison': "matches",
-                    'headers': ["List-Id", "X-BeenThere", "X-Mailinglist", "X-Mailing-List"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'To': {
-                    'comparison': "matches",
-                    'headers': ["To"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'Cc': {
-                    'comparison': "matches",
-                    'headers': ["Cc"],
-                    'id': "header",
-                    'values': ['']
-                },
-                'cleanHeader': {
-                    'comparison': "matches",
-                    'headers': [""],
-                    'id': "header",
-                    'values': [""]
-                },
-                'envelope': {
-                    'comparison': "matches",
-                    'headers': ["To"],
-                    'id': "envelope",
-                    'values': [""]
-                },
-                'true': {
-                    'id': 'true'
-                },
-                'size': {
-                    'comparison': 'over',
-                    'id': 'size',
-                    'size': ''
-                }
-            },
-            actions: {
-                'keep': {
-                    'id': "keep"
-                },
-                'discard': {
-                    'id': "discard"
-                },
-                'redirect': {
-                    'id': "redirect",
-                    'to': ""
-                },
-                'move': {
-                    'id': "move",
-                    'into': ""
-                },
-                'reject': {
-                    'id': "reject",
-                    'text': ""
-
-                },
-                'markmail': {
-                    'flags': ["\\seen"],
-                    'id': "addflags"
-                },
-                'tag': {
-                    'flags': ["$"],
-                    'id': "addflags"
-
-                },
-                'flag': {
-                    'flags': ["$cl_1"],
-                    'id': "addflags"
-                }
-            }
-        },
 
         sizeValues = {
             'over': gt('Is bigger than'),
@@ -455,11 +361,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onChangeColor: function (e) {
                 var self = this,
-                list = $(e.currentTarget).closest('li[data-action-id]'),
-                type = list.attr('data-type'),
-                actionID = list.attr('data-action-id'),
-                colorValue = list.find('div.flag').attr('data-color-value'),
-                actionArray =  this.model.get('actioncmds');
+                    list = $(e.currentTarget).closest('li[data-action-id]'),
+                    type = list.attr('data-type'),
+                    actionID = list.attr('data-action-id'),
+                    colorValue = list.find('div.flag').attr('data-color-value'),
+                    actionArray =  this.model.get('actioncmds');
 
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
@@ -469,7 +375,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onCreateNewCondition: function () {
                 var list = $(this.el).find('ol.widget-list.tests');
                 list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-test'}).text(gt('select new condition type')).append(
-                        drawOptions('true', headerTranslation)
+                        elements.drawOptions('true', headerTranslation)
                     )
                 );
 
@@ -478,7 +384,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onCreateNewAction: function () {
                 var list = $(this.el).find('ol.widget-list.actions');
                 list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-action'}).text(gt('select new action type')).append(
-                        drawOptions('keep', actionsTranslations)
+                        elements.drawOptions('keep', actionsTranslations)
                     )
                 );
 
@@ -486,111 +392,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
         });
 
-    var drawOptions = function (activeValue, values) {
-
-        var active = values[activeValue];
-        return $('<div class="action dropdown value">').append(
-            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
-            $('<ul class="dropdown-menu">').append(
-                _(values).map(function (name, value) {
-                    return $('<li>').append(
-                        $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value}).append(
-                            $.txt(name)
-                        )
-                    );
-                })
-            )
-        );
-    };
-
-
-    var drawOptionsActions = function (activeValue, values) {
-
-        var active = values[activeValue];
-        return $('<div class="action dropdown value">').append(
-            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
-            $('<ul class="dropdown-menu">').append(
-                _(values).map(function (name, value) {
-                    return $('<li>').append(
-                        $('<a>', { href: '#', 'data-action': 'change-value-actions', 'data-value': value}).append(
-                            $.txt(name)
-                        )
-                    );
-                })
-            )
-        );
-    };
-
-    var drawInputfieldTest = function (activeValue) {
-        return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test'}).val(activeValue);
-    };
-
-    var drawInputfieldTestSecond = function (activeValue) {
-        return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second'}).val(activeValue);
-    };
-
-    var drawInputfieldAction = function (activeValue) {
-        return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action'}).val(activeValue);
-    };
-
-    var drawDisabledInputfield = function (activeValue) {
-        return $('<input>').attr({ type: 'text', disabled: 'disabled', 'data-action': 'change-text-action'}).val(activeValue);
-    };
-
-    var drawFolderSelect = function () {
-        return $('<button>').addClass('btn folderselect').attr('type', 'button').text('select Folder');
-    };
-
-    var drawDeleteButton = function (type) {
-        return $('<a href="#" class="close" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
-    };
-
-    var drawCreateNewTestButton = function () {
-        return $('<a>').addClass('newcondition').attr('type', 'button').text(gt('Add condition'));
-    };
-
-    var drawCreateNewActionButton = function () {
-        return $('<a>').addClass('newaction').attr('type', 'button').text(gt('Add action'));
-    };
-
-    function changeLabel(e) {
-        e.preventDefault();
-        $(this).closest('.flag-dropdown').attr('data-color-value', e.data.color).removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
-    }
-
-    var drawColorDropdown = function (activeColor) {
-
-        var flagclass = 'flag_' + COLORFLAGS[activeColor];
-        return $('<div class="dropdown flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
-        .addClass(flagclass)
-        .append(
-            // box
-            $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
-            // drop down
-            $('<ul class="dropdown-menu">')
-            .append(
-                _(COLORS).map(function (colorObject) {
-                    return $('<li>').append(
-                        $('<a href="#">').attr({'data-action': 'change-color'}).append(
-                            colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
-                            $.txt(colorObject.text)
-                        )
-                        .on('click', { color: colorObject.value, flagclass: flagclass }, changeLabel)
-                    );
-                })
-            )
-        );
-    };
-
     ext.point(POINT + '/view').extend({
         index: 150,
         id: 'tests',
         draw: function (baton) {
 
             var listTests = $('<ol class="widget-list tests">'),
-                listActions = $('<ol class="widget-list actions">');
-
-            var appliedTest = baton.model.get('test');
+                listActions = $('<ol class="widget-list actions">'),
+                appliedTest = baton.model.get('test');
 
             if (appliedTest.tests) {
                 appliedTest = appliedTest.tests;
@@ -601,9 +410,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             _(appliedTest).each(function (test, num) {
                 if (test.id === 'size') {
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'size', 'data-test-id': num}).text(headerTranslation[test.id]).append(
-                            drawOptions(test.comparison, sizeValues),
-                            drawInputfieldTest(test.size),
-                            drawDeleteButton('test')
+                            elements.drawOptions(test.comparison, sizeValues),
+                            elements.drawInputfieldTest(test.size),
+                            elements.drawDeleteButton('test')
                         )
                     );
                 } else if (test.id === 'header') {
@@ -618,31 +427,31 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     if (test.headers[0] === '') {
                         listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).text(name).append(
-                                drawInputfieldTestSecond(test.headers[0]),
-                                drawOptions(test.comparison, containsValues),
-                                drawInputfieldTest(test.values[0]),
-                                drawDeleteButton('test')
+                                elements.drawInputfieldTestSecond(test.headers[0]),
+                                elements.drawOptions(test.comparison, containsValues),
+                                elements.drawInputfieldTest(test.values[0]),
+                                elements.drawDeleteButton('test')
                             )
                         );
                     } else {
                         listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num, 'data-type': 'values'}).text(name).append(
-                                drawOptions(test.comparison, containsValues),
-                                drawInputfieldTest(test.values[0]),
-                                drawDeleteButton('test')
+                                elements.drawOptions(test.comparison, containsValues),
+                                elements.drawInputfieldTest(test.values[0]),
+                                elements.drawDeleteButton('test')
                             )
                         );
                     }
 
                 } else if (appliedTest.length !== 1 && test.id === 'true') {
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-test-id': num}).text('ein Fall von Alle').append(
-                            drawDeleteButton('test')
+                            elements.drawDeleteButton('test')
                     ));
                 } else if (test.id === 'envelope') {
 
                     listTests.append($('<li>').addClass('filter-settings-view').attr({'data-type': 'values', 'data-test-id': num}).text(headerTranslation[test.id]).append(
-                            drawOptions(test.comparison, containsValues),
-                            drawInputfieldTest(test.values[0]),
-                            drawDeleteButton('test')
+                            elements.drawOptions(test.comparison, containsValues),
+                            elements.drawInputfieldTest(test.values[0]),
+                            elements.drawDeleteButton('test')
                         )
                     );
 
@@ -655,59 +464,58 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     if (action.id === 'redirect') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'to'}).text(actionsTranslations[action.id]).append(
-                                drawInputfieldAction(action.to),
-                                drawDeleteButton('action')
+                                elements.drawInputfieldAction(action.to),
+                                elements.drawDeleteButton('action')
                             )
                         );
                     }
 
                     else if (action.id === 'move') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'into'}).text(actionsTranslations[action.id]).append(
-                            drawDisabledInputfield(action.into),
-                            drawFolderSelect(),
-                            drawDeleteButton('action')
+                            elements.drawDisabledInputfield(action.into),
+                            elements.drawFolderSelect(),
+                            elements.drawDeleteButton('action')
                         ));
                     }
                     else if (action.id === 'reject') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations[action.id]).append(
-                            drawInputfieldAction(action.text),
-                            drawDeleteButton('action')
+                            elements.drawInputfieldAction(action.text),
+                            elements.drawDeleteButton('action')
                         ));
                     }
                     else if (action.id === 'addflags') {
                         if (/delete|seen/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.markmail).append(
-                                    drawOptionsActions(action.flags[0], flagValues),
-                                    drawDeleteButton('action')
+                                    elements.drawOptionsActions(action.flags[0], flagValues),
+                                    elements.drawDeleteButton('action')
                               ));
                         } else if (/^\$cl/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.flag).append(
-                                    drawColorDropdown(action.flags[0]),
-                                    drawDeleteButton('action')
+                                    elements.drawColorDropdown(action.flags[0], COLORS, COLORFLAGS),
+                                    elements.drawDeleteButton('action')
 
                             ));
                         } else {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.tag).append(
-                                  drawInputfieldAction(action.text),
-                                  drawDeleteButton('action')
+                                  elements.drawInputfieldAction(action.text),
+                                  elements.drawDeleteButton('action')
                           ));
                         }
 
                     }
                     else {
                         listActions.append($('<li>').addClass('filter-settings-view').attr('data-action-id', num).text(actionsTranslations[action.id]).append(
-                                drawDeleteButton('action')
+                                elements.drawDeleteButton('action')
                         ));
                     }
 
                 }
             });
 
+            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions'));
-            var headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
-
-            this.append(headlineTest, listTests, drawCreateNewTestButton(), headlineActions, listActions, drawCreateNewActionButton());
+            this.append(headlineTest, listTests, elements.drawCreateNewTestButton(), headlineActions, listActions, elements.drawCreateNewActionButton());
 
         }
     });
