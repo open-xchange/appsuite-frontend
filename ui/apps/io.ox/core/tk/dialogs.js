@@ -129,16 +129,18 @@ define("io.ox/core/tk/dialogs",
             },
 
             fnKey = function (e) {
-                switch (e.which) {
-                case 27: // ESC
-                    if (o.easyOut && !isBusy) {
-                        invoke('cancel');
+                if (!isBusy) {
+                    switch (e.which) {
+                    case 27: // ESC
+                        if (o.easyOut) {
+                            invoke('cancel');
+                        }
+                        break;
+                    case 13: // Enter
+                        break;
+                    default:
+                        break;
                     }
-                    break;
-                case 13: // Enter
-                    break;
-                default:
-                    break;
                 }
             };
 

@@ -49,7 +49,7 @@ define('io.ox/core/commons-folderview',
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
                     .append(
                         // container
-                        baton.$.container = $('<div class="abs foldertree-container" tabindex="1">'),
+                        baton.$.container = $('<div class="abs foldertree-container">'),
                         // toolbar
                         baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
                     )
@@ -428,6 +428,7 @@ define('io.ox/core/commons-folderview',
                         type: baton.options.type,
                         rootFolderId: '1',
                         skipRoot: true,
+                        tabindex: 0,
                         cut: folder.id,
                         customize: function (data) {
                             var canMove = api.can('moveFolder', folder, data);
@@ -438,7 +439,13 @@ define('io.ox/core/commons-folderview',
                     });
                     dialog.show(function () {
                         tree.paint().done(function () {
-                            tree.select(folder.id);
+                            // open the foldertree to the current folder
+                            tree.select(folder.id).done(function () {
+                                // select first active element
+                                tree.selection.updateIndex().selectFirst();
+                                // focus
+                                dialog.getBody().focus();
+                            });
                         });
                     })
                     .done(function (action) {

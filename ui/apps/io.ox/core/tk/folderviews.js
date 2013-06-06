@@ -438,7 +438,8 @@ define('io.ox/core/tk/folderviews',
             type: null,
             open: [],
             toggle: $.noop,
-            select: $.noop
+            select: $.noop,
+            tabindex: 1
         }, opt);
 
         this.internal = { destroy: $.noop };
@@ -448,6 +449,7 @@ define('io.ox/core/tk/folderviews',
 
         $(container)
             .addClass('io-ox-foldertree')
+            .attr({ tabindex: this.options.tabindex })
             // add tree container
             .append(this.container = $('<div class="folder-root">'));
 
