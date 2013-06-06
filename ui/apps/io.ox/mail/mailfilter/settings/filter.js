@@ -70,8 +70,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 staticStrings =  {
                     BUTTON_ADD: gt('Add'),
-                    BUTTON_EDIT: gt('Edit'),
-                    BUTTON_DELETE: gt('Delete'),
                     TITLE: gt('Mail Filter')
                 },
                 createExtpointForSelectedFilter = function (args) {
@@ -110,6 +108,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             this.$el.empty().append(this.template({
                                 id: this.model.get('id'),
                                 state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
+                                edit: gt('Edit'),
                                 editable: getEditableState()
 
                             }));

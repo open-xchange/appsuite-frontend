@@ -3,16 +3,15 @@
         <div class="clear-title" style="margin-bottom: 1em">{{=it.strings.TITLE}}</div>
     </div>
     <div class="section">
-        <div class="listbox" style="min-height: 250px;">
-            <ol class="widget-list"></ol>
-        </div>
-        <div class="sectioncontent">
-            <div class="dropdown">
-                <button class="btn btn-primary" data-action="add"
-                    style="margin-right: 15px; ">{{=it.strings.BUTTON_ADD}}</button>
-                <button class="btn" data-action="edit" style="margin-right: 15px; ">{{=it.strings.BUTTON_EDIT}}</button>
-                <button class="btn" data-action="delete">{{=it.strings.BUTTON_DELETE}}</button>
+    
+        <div id="controls">
+            <div class="btn-group pull-right">
+                <button class="btn btn-primary" data-action="add" style="margin-right: 15px; ">{{=it.strings.BUTTON_ADD}}</button>
             </div>
+        </div>
+        <ol class="widget-list"></ol>
+        <div class="sectioncontent">
+            
         </div>
     </div>
 </div>

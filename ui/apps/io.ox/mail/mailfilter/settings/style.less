@@ -1,20 +1,25 @@
 .io-ox-mailfilter-settings {
     
+    max-width: 700px;
+    
+    
     div.listbox {
         border: none;
     }
-
-    div[data-property="rulename"] {
-       float: left;
-    } 
     
+    #controls {
+        padding: 13px;
+        height: 30px;
+        margin-bottom: 13px;
+    }
+   
     li.selectable {
         background-color: #f5f5f5;
         padding: 13px;
         margin: 0 0 7px 0;
         cursor: pointer;
         position: relative;
-        width: 530px;
+        text-align: left;
     }
     
     li.selectable.disabled {
@@ -23,14 +28,14 @@
         color: #888;
     }
     
-   .listbox .deletable-item div.link-wrapper {
+   .deletable-item div.pull-right {
         float: right;
-        text-align: left;
-        margin-right: 1em;
     }
     
     a.action {
+        float: left;
         font-style: normal;
+        margin-right: 2em;
     }
     
     ol.widget-list {
