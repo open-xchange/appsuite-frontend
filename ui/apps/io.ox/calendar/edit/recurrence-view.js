@@ -180,7 +180,14 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     }).val(renderDate()),
                     keys = new KeyListener($dateInput);
 
-                $dateInput.datepicker({format: CalendarWidgets.dateFormat, parentEl: $(this).parent(), autoclose: true});
+                $dateInput.datepicker({
+                    format: CalendarWidgets.dateFormat,
+                    parentEl: $(this).parent(),
+                    weekStart: dateAPI.locale.weekStart,
+                    autoclose: true,
+                    todayHighlight: true,
+                    todayBtn: true
+                });
 
                 $anchor.after($dateInput);
                 $anchor.hide();
