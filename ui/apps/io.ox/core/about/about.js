@@ -43,8 +43,9 @@ define('io.ox/core/about/about', ['io.ox/core/extensions', 'io.ox/core/tk/dialog
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').append(
-                            $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
-                            .on('click', { popup: this }, click),
+                            _.device('!touch') ?
+                                $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
+                                .on('click', { popup: this }, click) : [],
                             $.txt(gt('About'))
                         )
                     );
