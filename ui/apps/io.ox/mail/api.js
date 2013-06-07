@@ -19,8 +19,9 @@ define('io.ox/mail/api',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
+     'io.ox/mail/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, settings, gt) {
+     'gettext!io.ox/mail'], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -374,19 +375,7 @@ define('io.ox/mail/api',
         getAll = api.getAll,
         getList = api.getList,
         get = api.get,
-        search = api.search,
-
-        /**
-         * remove typesuffix from sender/reciepients (example 017012345678/TYPE=PLMN)
-         * @param  {object} mail
-         * @return {undefined}
-         */
-        removeTypeSuffix = function (mail) {
-            mail.from[0][1] = mail.from[0][1].split('/')[0];
-            _.each(mail.to, function (recipient) {
-                recipient[1] = recipient[1].split('/')[0];
-            });
-        };
+        search = api.search;
 
     api.getAll = function (options, useCache) {
         // use cache?
@@ -413,7 +402,7 @@ define('io.ox/mail/api',
      */
     api.getList = function (ids, useCache, options) {
         return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, removeTypeSuffix);
+            _.each(data, util.removeTypeSuffix);
             return data;
         });
     };
@@ -428,7 +417,7 @@ define('io.ox/mail/api',
     api.get = function (options, useCache) {
         return get.call(this, options, useCache).then(function (mail) {
             if (_.isObject(mail)) {
-                removeTypeSuffix(mail);
+                util.removeTypeSuffix(mail);
             }
             return mail;
         });

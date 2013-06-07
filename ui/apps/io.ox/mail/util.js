@@ -129,6 +129,26 @@ define('io.ox/mail/util',
         },
 
         /**
+         * remove typesuffix from sender/reciepients (example 017012345678/TYPE=PLMN)
+         * @param  {object} mail
+         * @return {undefined}
+         */
+        removeTypeSuffix:  function (mail) {
+            if (_.isObject(mail)) {
+                if (mail.from[0][1])
+                    mail.from[0][1] = mail.from[0][1].split('/')[0];
+                if (_.isArray(mail.to)) {
+                    _.each(mail.to, function (recipient) {
+                        recipient[1] = recipient[1].split('/')[0];
+                    });
+                }
+            } else if (_.isString(mail)) {
+                mail = mail.replace(new RegExp('/TYPE=PLMN', 'g'), '');
+            }
+            return mail;
+        },
+
+        /**
          * Parse comma or semicolon separated list of recipients
          * Example: '"Doe, Jon" <jon@doe.foo>, "\'World, Hello\'" <hi@dom.tld>, urbi@orbi.tld'
          */

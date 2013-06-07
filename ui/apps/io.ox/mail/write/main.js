@@ -705,7 +705,7 @@ define('io.ox/mail/write/main',
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
                             //remove type suffix from sender/recipients (quoted mail)
                             if (data.attachments[0].content)
-                                data.attachments[0].content = data.attachments[0].content.replace(new RegExp('/TYPE=PLMN', 'g'), '');
+                                data.attachments[0].content = mailUtil.removeTypeSuffix(data.attachments[0].content);
                             app.setMail({ data: data, mode: type, initial: true })
                             .done(function () {
                                 var ed = app.getEditor();
@@ -753,7 +753,7 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     //remove type suffix from sender/recipients (mail forwarded inline)
                     if (data.attachments[0].content)
-                        data.attachments[0].content = data.attachments[0].content.replace(new RegExp('/TYPE=PLMN', 'g'), '');
+                        data.attachments[0].content = mailUtil.removeTypeSuffix(data.attachments[0].content);
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
                         var ed = app.getEditor();
