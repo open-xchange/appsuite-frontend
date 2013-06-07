@@ -202,12 +202,17 @@ define('io.ox/tasks/actions',
                         .addPrimaryButton('ok', gt('Move'))
                         .addButton('cancel', gt('Cancel'));
                     popup.getBody().css({ height: '250px' });
-                    var tree = new views.FolderList(popup.getBody(), { type: 'tasks' }),
+                    var tree = new views.FolderList(popup.getBody(), {
+                            type: 'tasks',
+                            tabindex: 0
+                        }),
                         id = String(task.folder || task.folder_id);
                     //go
                     popup.show(function () {
                         tree.paint().done(function () {
-                            tree.select(id);
+                            tree.select(id).done(function () {
+                                popup.getBody().focus();
+                            });
                         });
                     })
                     .done(function (action) {
