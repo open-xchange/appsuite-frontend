@@ -54,7 +54,7 @@ function compileLess() {
             function () {
                 var ast;
                 new less.Parser({
-                    paths: [coreDir],
+                    paths: ['.', coreDir],
                     syncImport: true,
                     relativeUrls: true
                 }).parse('@import "apps/themes/definitions.less";\n' +
