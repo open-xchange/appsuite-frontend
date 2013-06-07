@@ -91,9 +91,11 @@ define('io.ox/mail/util',
          * @return {string} channel
          */
         getChannel: function (value, check) {
+            //default value
+            check = check || typeof check === 'undefined';
             var type = value.indexOf('/TYPE=PLMN') > 0,
                 //no check OR activated cap
-                setting = !(check || true) || capabilities.has('msisdn'),
+                setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
                 phoneval = function () {
                             return value.replace(rNotDigitAndAt, '').length === 0 &&
