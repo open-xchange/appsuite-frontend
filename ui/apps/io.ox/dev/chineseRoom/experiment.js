@@ -12,38 +12,54 @@
  */
 
 define('io.ox/dev/chineseRoom/experiment', ['io.ox/dev/chineseRoom/room', 'io.ox/realtime/rt'], function (rooms, rt) {
-    'use strict';
+	'use strict';
 
-    console.log("Setting up experiment");
-    window.rooms = rooms;
-    window.r = rooms.getRoom("a");
-    window.rt = rt;
+	console.log("Setting up experiment");
+	window.rooms = rooms;
+	window.r = rooms.getRoom("a");
+	window.rt = rt;
 
-    window.rtExperiments = {
-        run: function () {
-            var interval, checkInterval;
-            var i = 0;
-            var log = {};
+	window.rtExperiments = {
+		run: function () {
+			window.r.join();
+			var interval, checkInterval;
+			var i = 0;
+			var log = {};
 
-            interval = setInterval(function () {
-                window.r.sayAndTrace(i);
-                log[i] = 0;
-            }, 500);
+			interval = setInterval(function () {
+				window.r.sayAndTrace(i, ox.base + "///" + i);
+				log[i] = 0;
+				i++;
+			}, 500);
 
-            checkInterval = setInterval(function () {
-                _(log).each(function (count, key) {
-                    if (count > 4) {
-                        console.log("MISSING MESSAGE: ", key);
-                        clearInterval(interval);
-                        clearInterval(checkInterval);
-                    }
-                });
-            });
-        }
-    };
+			window.r.on("received", function (e, o) {
+				delete log[Number(o.message)];
+				console.log("Received: ", o, log);
+			});
 
-    console.log("Done");
+			function check() {
+				var failed = false;
+				_(log).each(function (count, key) {
+					console.log(key, count);
+					if (count > 4) {
+						console.log("MISSING MESSAGE: ", ox.base + "///" + key);
+						clearInterval(interval);
+						window.r.leave();
+						failed = true;
+						return;
+					}
+					log[key]++;
+				});
+				if (!failed) {
+					setTimeout(check, 1000);
+				}
+			}
 
-    return true;
+			setTimeout(check, 1000);
+		}
+	};
 
+	console.log("Done");
+
+	return true;
 });
