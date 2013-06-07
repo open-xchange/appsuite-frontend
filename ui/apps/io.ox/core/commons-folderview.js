@@ -38,7 +38,7 @@ define('io.ox/core/commons-folderview',
             type: undefined,
             view: 'ApplicationFolderTree',
             // disable folder popup as it takes to much space for startup on small screens
-            visible: _.device('!small') ? app.settings.get('folderview/visible/' + _.display(), false): false
+            visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), false)
         });
 
         // draw container
@@ -633,13 +633,17 @@ define('io.ox/core/commons-folderview',
         };
 
         initTree = function (views) {
+
+            var open = app.settings.get('folderview/open/' + _.display());
+            open = _.isArray(open) ? open : [];
+
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
                     type: options.type,
                     rootFolderId: String(options.rootFolderId),
-                    open: app.settings.get('folderview/open', []),
+                    open: open,
                     toggle: function (open) {
-                        app.settings.set('folderview/open', open).save();
+                        app.settings.set('folderview/open/' + _.display(), open).save();
                     }
                 });
 

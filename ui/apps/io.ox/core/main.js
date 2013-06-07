@@ -719,13 +719,15 @@ define('io.ox/core/main',
             }
         });
 
+        var menuLabel = gt('Help');
+
         // add specific help links
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
             id: 'contactSpecificHelp',
             index: 1,
             app: 'io.ox/contacts',
             href: 'ox.appsuite.user.chap.contacts.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
@@ -733,7 +735,7 @@ define('io.ox/core/main',
             index: 1,
             app: 'io.ox/calendar',
             href: 'ox.appsuite.user.chap.calendar.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
@@ -741,7 +743,7 @@ define('io.ox/core/main',
             index: 1,
             app: 'io.ox/tasks',
             href: 'ox.appsuite.user.chap.tasks.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
@@ -749,7 +751,7 @@ define('io.ox/core/main',
             index: 1,
             app: 'io.ox/mail',
             href: 'ox.appsuite.user.chap.email.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
@@ -757,7 +759,7 @@ define('io.ox/core/main',
             index: 1,
             app: 'io.ox/files',
             href: 'ox.appsuite.user.chap.files.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
@@ -765,14 +767,14 @@ define('io.ox/core/main',
             index: 1,
             app: 'io.ox/portal',
             href: 'ox.appsuite.user.sect.portal.customize.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
         ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
             id: 'genericHelp',
             index: 1,
             app: 'genericHelp',
             href: 'index.html',
-            desc: gt('User manual')
+            desc: menuLabel
         });
 
         // add some senseless characters to avoid unwanted scrolling

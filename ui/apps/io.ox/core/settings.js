@@ -86,22 +86,17 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
         };
 
         var resolve = function (path, callback, create) {
-            var key, parts = getParts(path), tmp = tree || {};
+            var key, parts = getParts(path), tmp = tree || {}, notPlainObject;
             while (parts.length) {
                 key = parts.shift();
                 if (_.isObject(tmp)) {
                     if (parts.length) {
-                        if (!_.isObject(tmp[key]) && !!create) {
-                            tmp = (tmp[key] = {});
-                        } else {
-                            tmp = tmp[key];
-                        }
+                        notPlainObject = !!create && (!_.isObject(tmp[key]) || _.isArray(tmp[key]));
+                        tmp = notPlainObject ? (tmp[key] = {}) : tmp[key];
                     } else {
                         callback(tmp, key);
                     }
-                } else {
-                    break;
-                }
+                } else break;
             }
         };
 
