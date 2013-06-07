@@ -439,6 +439,8 @@ define("io.ox/mail/write/view-main",
 
             // Signatures
             (function () {
+                if (_.device('smartphone')) return;
+
                 self.addLink('signatures', gt('Signatures'));
 
                 var signatureNode = self.addSection('signatures', gt('Signatures'), false, true);

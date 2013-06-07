@@ -132,10 +132,12 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _(config.get('gui.mail.signatures') || []).map(function (obj) {
-            obj.signature_name = _.noI18n(obj.signature_name);
-            return obj;
-        });
+        view.signatures = _.device('smartphone') ?
+            [{ id: 0, content: settings.get('mobileSignature') }] :
+            _(config.get('gui.mail.signatures') || []).map(function (obj) {
+                obj.signature_name = _.noI18n(obj.signature_name);
+                return obj;
+            });
 
         function trimSignature(text) {
             // remove white-space and evil \r
@@ -360,10 +362,11 @@ define('io.ox/mail/write/main',
 
         app.setBody = function (str) {
             // get default signature
+            var dsID = _.device('smartphone') ?
+                (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
+                settings.get('defaultSignature');
             var ds = _(view.signatures)
-                    .find(function (o) {
-                        return o.id === settings.get('defaultSignature');
-                    }),
+                    .find(function (o) { return o.id === dsID; }),
                 content = trimContent(str);
 
             // set signature?

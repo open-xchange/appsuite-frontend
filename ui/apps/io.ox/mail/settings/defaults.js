@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/settings/defaults', function () {
+define('io.ox/mail/settings/defaults', ['gettext!io.ox/mail'], function (gt) {
 
     'use strict';
 
@@ -33,11 +33,10 @@ define('io.ox/mail/settings/defaults', function () {
             'isColorQuoted': false,
             'selectFirstMessage': true,
             'defaultSignature': false,
-            // Possible values for mobileSignature:
-            // false: disabled
-            // a string: the custom mobile signature
-            // true: same as the desktop signature
-            'mobileSignature': false,
+            'mobileSignature':
+                //#. %s is the product name
+                gt('Sent from %s via mobile', ox.serverConfig.productName),
+            'mobileSignatureType': 'none', // one of 'none', 'custom'
             'threadView': 'inbox',
             //for persistent sort
             'sort': 'thread',

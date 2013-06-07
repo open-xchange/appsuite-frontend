@@ -275,51 +275,43 @@ define('io.ox/mail/settings/signatures/register',
                         });
                     });
                 }
+                var radioNone, radioCustom, signatureText;
                 try {
-                    if (_.device('desktop')) {
-                        $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
-                        addSignatureList($node);
-                    } else {
-                        var radioNone, radioCustom, radioDesktop, signatureText;
-                        var desktopSignatures = $('<div>').hide();
-                        var signature = settings.get('mobileSignature');
-                        addSignatureList(desktopSignatures);
+                    if (_.device('smartphone')) {
+                        var type = settings.get('mobileSignatureType');
+                        if (type !== 'custom') type = 'none';
                         $node.append($('<legend class="sectiontitle">').text(
                                     //#. Section title for the mobile signature
                                     gt('Signature')))
                             .append($('<label class="radio">')
                                 .text(gt('No signature'))
                                 .append(radioNone = $('<input type="radio" name="mobileSignature">')
-                                    .attr('checked', signature === false)))
+                                    .attr('checked', type === 'none'))
+                                    .on('change', radioChange))
                             .append($('<label class="radio">')
                                 .append(radioCustom = $('<input type="radio" name="mobileSignature">')
-                                    .attr('checked', typeof signature === 'string'))
+                                    .attr('checked', type === 'custom')
+                                    .on('change', radioChange))
                                 .append(signatureText = $('<textarea class="span12">')
-                                    .val(settings.get('mobileSignature'))))
-                            .append($('<label class="radio">')
-                                .text(gt('Desktop signature'))
-                                .append(radioDesktop = $('<input type="radio" name="mobileSignature">')
-                                    .attr('checked', signature === true))
-                                .append(desktopSignatures))
-                            .on('change', function (e) {
-                                var desktopVisible = false;
-                                if (radioNone.attr('checked')) {
-                                    signature = false;
-                                } else if (radioCustom.attr('checked')) {
-                                    signature = signatureText.val();
-                                } else if (radioDesktop.attr('checked')) {
-                                    signature = true;
-                                    desktopVisible = true;
-                                }
-                                console.log('setting', signature);
-                                settings.set('mobileSignature', signature).save();
-                                desktopSignatures.toggle(desktopVisible);
-                            });
+                                    .val(settings.get('mobileSignature'))
+                                    .on('change', textChange)));
+                    } else {
+                        $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
+                        addSignatureList($node);
                     }
                 } catch (e) {
                     console.error(e, e.stack);
                 }
                 
+                function radioChange() {
+                    var type = radioCustom.attr('checked') ? 'custom' : 'none';
+                    settings.set('mobileSignatureType', type).save();
+                }
+                
+                function textChange() {
+                    settings.set('mobileSignature', signatureText.val()).save();
+                }
+
                 function addSignatureList($node) {
                     // List
                     $list = $('<ul class="settings-list">')
