@@ -101,6 +101,7 @@
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
         chrome = ua.indexOf('Chrome/') > -1,
+        phantom = ua.indexOf('PhantomJS/') > -1,
         MacOS = ua.indexOf('Macintosh') > -1,
         Windows = ua.indexOf('Windows') > -1,
         Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1),
@@ -119,8 +120,11 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: !iOS && !Android && webkit && !chrome ?
+        Safari: !iOS && !Android && webkit && !chrome && !phantom ?
             ua.split('Version/')[1].split(' Safari')[0] : undefined,
+        /** PhantomJS (needed for headless spec runner) */
+        PhantomJS: webkit && phantom ?
+            ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
         /** Chrome */
         Chrome: webkit && chrome ?
             ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
