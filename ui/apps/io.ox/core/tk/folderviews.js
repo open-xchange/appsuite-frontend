@@ -711,7 +711,10 @@ define('io.ox/core/tk/folderviews',
                 .addPrimaryButton('save', gt('Save'))
                 .addButton('cancel', gt('Cancel'))
                 .show(function () {
-                    tree.paint();
+                    tree.paint().done(function () {
+                        tree.selection.updateIndex().selectFirst();
+                        pane.getBody().focus();
+                    });
                 })
                 .done(function (action) {
                     if (action === 'save') {

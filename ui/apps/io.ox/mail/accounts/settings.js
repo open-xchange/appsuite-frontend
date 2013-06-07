@@ -41,7 +41,9 @@ define('io.ox/mail/accounts/settings',
         )
         .addPrimaryButton("save", gt('Save'))
         .addButton("cancel", gt('Cancel'))
-        .show();
+        .show(function () {
+            this.find('input[type=text]:first').focus();
+        });
 
         myView.dialog.on('save', function () {
             if (myModel.isValid()) {
@@ -283,7 +285,7 @@ define('io.ox/mail/accounts/settings',
                     createExtpointForNewAccount(args);
                 })
                 .show(function () {
-                    this.find('input[type=text]').focus();
+                    this.find('input[type=text]:first').focus();
                 });
 
             });

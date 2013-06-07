@@ -156,7 +156,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     }
                 });
                 //go
-                popup.show();
+                popup.show(function () {
+                    popup.getBody().find('input[type="checkbox"]:first').focus();
+                });
             }
 
         }

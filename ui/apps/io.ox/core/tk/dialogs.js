@@ -132,6 +132,8 @@ define("io.ox/core/tk/dialogs",
                 if (!isBusy) {
                     switch (e.which) {
                     case 27: // ESC
+                        // prevent other elements to trigger close
+                        e.stopPropagation();
                         if (o.easyOut) {
                             invoke('cancel');
                         }

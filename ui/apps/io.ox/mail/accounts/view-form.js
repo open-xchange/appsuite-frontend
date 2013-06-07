@@ -193,11 +193,15 @@ define('io.ox/mail/accounts/view-form',
                         dialog.getBody().css({ height: '250px' });
                         var tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',
+                                tabindex: 0,
                                 rootFolderId: 'default' + self.model.get('id')
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
-                                tree.select(id);
+                                tree.select(id).done(function () {
+                                    tree.selection.updateIndex();
+                                    dialog.getBody().focus();
+                                });
                             });
                         })
                         .done(function (action) {
