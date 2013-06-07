@@ -657,6 +657,19 @@ define('io.ox/core/commons-folderview',
                 }
             });
 
+            // mobile quirks, cannot be applied to css class
+            // because it would be applied to desktop clients using
+            // a small screen, too
+            if (_.device('smartphone')) {
+                // mobile stuff
+                $('.window-sidepanel').css({
+                    'width': '90%',
+                    'left': '-90%',
+                    'right': 'intial'
+                });
+                // listen to swipe
+                sidepanel.on('swipeleft', toggle);
+            }
             // paint now
             return tree.paint().pipe(function () {
 
@@ -722,18 +735,6 @@ define('io.ox/core/commons-folderview',
                     //     $(this).closest('.foldertree-sidepanel').find('.foldertree-toolbar > [data-action="options"]').addClass('open');
                     //     return false;
                     // });
-
-                    if (_.device('smartphone')) {
-                        // mobile stuff
-                        $('.window-sidepanel').css({
-                            'width': '90%',
-                            'left': '-90%',
-                            'right': 'intial'
-                        });
-                        $('.foldertree-sidepanel').on('swipeleft', function (e) {
-                            toggle();
-                        });
-                    }
 
                     initTree = loadTree = null;
                 });
