@@ -759,6 +759,11 @@ define('io.ox/mail/actions',
                 createCalendarApp = function (participants, notetext) {
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {
+                            //remove participants received mail via msisdn
+                            participants = _.filter(participants, function (participant) {
+                                if (participant.mail)
+                                    return util.getChannel(participant.mail, false) !== 'phone';
+                            });
                             var initData = {participants: participants, title: notetext, folder_id: currentFolder};
                             this.create(initData);
 //                             to set Dirty
