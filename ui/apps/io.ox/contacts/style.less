@@ -97,76 +97,115 @@
 
 .contact-detail {
 
+    .io-ox-inline-links:first-child {
+        margin: 0 0 26px 0;
+    }
+
     .contact-header {
-        min-height: 70px;
+
         margin-bottom: 26px;
-    }
 
-    .field-label {
-        font-size: 13px;
-        font-weight: 200;
-        color: #888;
-        text-align: right;
-        vertical-align: top;
-        // fix spans
-        padding-right: 13px;
-    }
-
-    .field-value {
-        font-weight: normal;
-        vertical-align: top;
-        padding-bottom: 0.5em;
-    }
-
-    .name {
-        margin-bottom: 0.25em;
-        display: inline-block;
-        & > div {
+        .picture {
+            float: left;
+            width: 64px;
+            height: 64px;
             display: inline-block;
+            background-position: right top;
+            background-repeat: no-repeat;
+            background-size: contain;
+            margin-top: 5px; /* to match h1's cap-line */
+        }
+
+        .picture + div {
+            padding-left: 90px;
+        }
+
+        .private-flag {
+            color: #888;
+            font-size: 32px;
+            line-height: 32px;
+            margin-right: 10px;
+            float: left;
+        }
+
+        h1 {
+            font-family: @lightFontFamily;
+            font-weight: 200;
+            font-size: 24px;
+            line-height: 28px;
+            margin: 0 0 4px 0;
+        }
+
+        h2 {
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 200;
+            color: #888;
+            margin: 0 0 14px 0;
         }
     }
 
-    .private-flag {
-        color: #AAA;
-        font-size: 20pt;
-        margin-right: 5px;
-        line-height: 1.2em;
-        float: left;
-    }
-
-    .job {
-        font-size: 1.25em;
-        color: #888;
-        & > div {
-            display: inline-block;
-        }
-    }
-
-    .picture {
-        float: left;
-        margin-right: 26px;
-        width: 64px;
-        height: 64px;
-        display: inline-block;
-        background-position: right top;
-        background-repeat: no-repeat;
-        background-size: contain;
+    .attachments-container {
+        margin: -18px 0 26px 0;
+        clear: both;
     }
 
     .attachment-item {
         color: #333;
     }
 
-    .io-ox-inline-links:first-child {
-        margin: 0 0 34px 0;
+    .comment, .description {
+        max-width: 720px; /* twice block-width plus margin */
+        margin-bottom: 26px;
+    }
+
+    .block {
+
+        display: inline-block;
+        float: left;
+        width: 350px;
+        margin: 0 10px 30px 0;
+
+        legend {
+            font-family: @lightFontFamily;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 200;
+            margin-bottom: 14px;
+            border-bottom: 0px none;
+        }
+
+        label {
+            color: #aaa;
+            font-weight: 200;
+            display: inline-block;
+            margin: 0 7px 0 0;
+            color: #aaa;
+        }
+    }
+
+    .google-maps {
+
+        color: #333;
+        white-space: pre;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        caption {
+            font-size: 12px;
+            color: @linkColor;
+            margin-top: 10px;
+        }
+    }
+
+    .clear-both {
+        clear: both;
     }
 
     .breadcrumb {
         margin: 26px 0 0 0;
-    }
-
-    .attachments-container {
-        margin: -18px 0 39px 0;
     }
 
     .member {
@@ -191,8 +230,17 @@
     }
 }
 
-/*new contact form*/
+/* smartphone */
+@media (max-width: 480px), (max-device-width: 480px)  {
+    .contact-detail .block {
+        width: 100%;
+        margin-right: 0;
+        line-height: 24px;
+    }
+}
 
+
+/*new contact form*/
 
 .btn.btn-inverse {
     vertical-align: top;

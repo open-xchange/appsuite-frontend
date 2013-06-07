@@ -34,133 +34,6 @@ define("io.ox/contacts/view-detail",
             .join(arguments[0] || "");
     };
 
-    function addField(label, value, node, fn) {
-        if (value) {
-            node.append(
-                $('<div class="row-fluid">').append(
-                     // label
-                    $('<div class="span5 field-label">').text(label),
-                    // value
-                    node = $('<div class="span7 field-value">')
-                )
-            );
-            if (_.isFunction(fn)) {
-                fn(node);
-            } else {
-                if (typeof fn === "string") {
-                    node.addClass(fn);
-                }
-                node.text(_.noI18n(value));
-            }
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    function addDistribMail(label, name, mail, node) {
-        node.append(
-            $('<div class="row-fluid">').append(
-                // label
-                $('<div class="span5 field-label">').text(label),
-                // value
-                $('<div class="span7 field-value">').append(
-                    $('<a href="#" class="halo-link">').data({ email1: mail })
-                        .text(_.noI18n(name)), $.txt(_.noI18n(' ')),
-                    $('<span>').text(_.noI18n(mail))
-                )
-            )
-        );
-        return 1;
-    }
-
-    function clickMail(e) {
-        e.preventDefault();
-        // set recipient
-        var data = { to: [[e.data.display_name, e.data.email]] };
-        // open compose
-        require(['io.ox/mail/write/main'], function (m) {
-            m.getApp().launch().done(function () {
-                this.compose(data);
-            });
-        });
-    }
-
-    function addMail(label, value, data) {
-        return addField(label, value, this, function (node) {
-            node
-            .addClass('email')
-            .append(
-                $('<a href="#">')
-                .attr({ href: 'mailto:' + value }).text(_.noI18n(value))
-                .on('click', { email: value, display_name: data.display_name }, clickMail)
-            );
-        });
-    }
-
-    function addPhone(label, value, node) {
-        return addField(label, value, node, function (node) {
-            node
-            .addClass("tel")
-            .append(
-                $('<a href="#">')
-                .attr({ href: (_.device('smartphone') ? 'tel:' : 'callto:') + value }).text(_.noI18n(value))
-            );
-        });
-    }
-
-    function addAddress(label, data, suffix, node) {
-        var f = _.map(['street', 'postal_code', 'city', 'state', 'country'],
-                      function (field) { return data[field + suffix] || ''; });
-        if (!_.some(f)) return 0;
-        return addField(label, true, node, function (node) {
-            var text =
-                //#. Format of addresses
-                //#. %1$s is the street
-                //#. %2$s is the postal code
-                //#. %3$s is the city
-                //#. %4$s is the state
-                //#. %5$s is the country
-                gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', f);
-            var a = $("<a>", {
-                    href: "http://www.google.com/maps?q=" +
-                          encodeURIComponent(text.replace('/\n/g', ', ')),
-                    target: "_blank"
-                }).addClass("nolink");
-            _.each(text.split('\n'), function (line) {
-                if (line) a.append($.txt(line), $('<br>'));
-            });
-            a.append(
-                $('<small class="maps">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
-            );
-            node.append(a);
-        });
-    }
-
-    ext.point("io.ox/contacts/detail").extend({
-        index: 200,
-        id: "contact-details",
-        draw: function (baton) {
-            var node;
-            this.append(
-                node = $('<header class="row-fluid contact-header">')
-            );
-            ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
-        }
-    });
-
-    ext.point("io.ox/contacts/detail").extend({
-        index: 400,
-        id: "contact-content",
-        draw: function (baton) {
-            var node;
-            this.append(
-                node = $('<article class="row-fluid">')
-            );
-            ext.point('io.ox/contacts/detail/content').invoke('draw', node, baton);
-        }
-    });
-
     function getDescription(data) {
         function single(index, value, translated) {
             var params = new Array(index);
@@ -186,13 +59,74 @@ define("io.ox/contacts/view-detail",
     }
 
     function createText(format, classes) {
-        return _.aprintf(format.format, function (index) {
-            return $('<div>').addClass(classes[index])
-                             .text(_.noI18n(format.params[index]));
-        }, function (text) {
-            return $.txt(text);
-        });
+        return _.aprintf(
+            format.format,
+            function (index) {
+                return $('<span>').addClass(classes[index]).text(_.noI18n(format.params[index]));
+            },
+            function (text) {
+                return $.txt(text);
+            }
+        );
     }
+
+    function looksLikeHTML(str) {
+        return (/<\w/).test(str);
+    }
+
+    function drawBusyAttachments(node) {
+        node.append(
+            $('<section class="attachments-container">').append(
+                $('<span class="field-label attachments">').text(gt('Attachments')),
+                $.txt(' '),
+                $('<span class="attachments-value">').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()
+            )
+        );
+    }
+
+    function attachmentFail(container, contact) {
+        container.empty().append(
+            $.fail(gt('Could not load attachments for this contact.'), function () {
+                ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, contact);
+            })
+        );
+    }
+
+    function buildDropdown(container, label, data) {
+        new links.DropdownLinks({
+            label: label,
+            classes: 'attachment-item',
+            ref: 'io.ox/contacts/attachment/links'
+        }).draw.call(container, data);
+    }
+
+    /*
+     * Extensions
+     */
+
+    var INDEX = 100;
+
+    ext.point("io.ox/contacts/detail").extend({
+        index: (INDEX += 100),
+        id: "inline-actions",
+        draw: function (baton) {
+            ext.point("io.ox/contacts/detail/actions").invoke("draw", this, baton.data);
+        }
+    });
+
+    ext.point("io.ox/contacts/detail").extend({
+        index: (INDEX += 100),
+        id: "contact-details",
+        draw: function (baton) {
+            var node;
+            this.append(
+                node = $('<header class="row-fluid contact-header">')
+            );
+            ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
+        }
+    });
+
+    // HEAD
 
     ext.point("io.ox/contacts/detail/head").extend({
         index: 100,
@@ -211,68 +145,43 @@ define("io.ox/contacts/view-detail",
         id: 'contact-title',
         draw: function (baton) {
 
-            var private_flag,
-                name = createText(util.getFullNameFormat(baton.data),
+            var name = createText(util.getFullNameFormat(baton.data),
                     ['first_name', 'last_name', 'title', 'display_name']),
                 job = createText(getDescription(baton.data),
                     ['email1', 'email2', 'email3', 'company', 'position',
                      'profession', 'type']);
 
             this.append(
-                // right side
                 $('<div>').append(
-                    $('<div class="name clear-title">').append(name),
-                    private_flag = $('<i class="icon-lock private-flag">').hide(),
-                    $('<div class="job clear-title">').append(job)
+                    // right side
+                    $('<i class="icon-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<h1>').append(name),
+                    $('<h2>').append(job)
                 )
             );
+
             if (baton.data.private_flag) {
-                private_flag.show();
-            } else {
-                private_flag.hide();
+                this.find('.private-flag').show();
             }
         }
     });
 
     ext.point("io.ox/contacts/detail").extend({
-        index: 100,
-        id: "inline-actions",
-        draw: function (baton) {
-            ext.point("io.ox/contacts/detail/actions").invoke("draw", this, baton.data);
-        }
-    });
-
-    function looksLikeHTML(str) {
-        return (/<\w/).test(str);
-    }
-
-    //attachments
-    ext.point("io.ox/contacts/detail").extend({
-        index: 300,
+        index: (INDEX += 100),
         id: "attachments",
         draw: function (baton) {
             if (api.uploadInProgress(encodeURIComponent(_.cid(baton.data)))) {
                 drawBusyAttachments(this);
             }
             else if (baton.data.number_of_attachments > 0) {
-                ext.point('io.ox/contacts/detail-attach').invoke('draw', this, baton.data);
+                ext.point('io.ox/contacts/detail/attachments').invoke('draw', this, baton.data);
             }
         }
     });
 
-    function drawBusyAttachments(node) {
-        node.append(
-            $('<section class="attachments-container">').append(
-                $('<span class="field-label attachments">').text(gt('Attachments')),
-                $.txt(' '),
-                $('<span class="attachments-value">').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()
-            )
-        );
-    }
+    // Attachments
 
-    ext.point('io.ox/contacts/detail-attach').extend({
-        index: 100,
-        id: 'attachments',
+    ext.point('io.ox/contacts/detail/attachments').extend({
         draw: function (contact) {
             var attachmentNode, linkContainer;
             if (this.hasClass('attachments-container')) { // if attachmentrequest fails the container is allready there
@@ -302,57 +211,26 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    var attachmentFail = function (container, contact) {
-        container.empty().append(
-                $.fail(gt('Could not load attachments for this contact.'), function () {
-                    ext.point('io.ox/contacts/detail-attach').invoke('draw', container, contact);
-                })
-            );
-    };
+    // Content
 
-    var buildDropdown = function (container, label, data) {
-        new links.DropdownLinks({
-                label: label,
-                classes: 'attachment-item',
-                ref: 'io.ox/contacts/attachment/links'
-            }).draw.call(container, data);
-    };
-
-    ext.point("io.ox/contacts/detail/content").extend({
-        index: 'last',
-        id: "description", // only for resources
+    ext.point("io.ox/contacts/detail").extend({
+        index: (INDEX += 100),
+        id: "contact-content",
         draw: function (baton) {
-            var text = $.trim(baton.data.description || '');
-            if (text !== '') {
-                addField(gt('Description'), true, this, function (node) {
-                    node.html(looksLikeHTML(text) ? text : text.replace(/\n/g, '<br>'));
-                });
-                if (baton.data.callbacks && 'extendDescription' in baton.data.callbacks) {
-                    addField('', '\u00A0', this, function (node) {
-                        node.append(
-                            $('<a href="#">').text(gt('Copy to description'))
-                            .on('click', { description: text.replace(/[ \t]+/g, ' ') }, baton.data.callbacks.extendDescription)
-                        );
-                    });
-                }
-                addField('', '\u00A0', this);
-            }
+
+            var node = $('<article>').appendTo(this),
+                id = baton.data.mark_as_distributionlist ?
+                    'io.ox/contacts/detail/list' :
+                    'io.ox/contacts/detail/content';
+
+            ext.point(id).invoke('draw', node, baton);
         }
     });
 
-    ext.point("io.ox/contacts/detail/content").extend({
-        index: 100,
-        id: 'company',
-        draw: function (baton) {
-            var r = 0, data = baton.data;
-            r += addField(gt("Department"), data.department, this);
-            r += addField(gt("Position"), data.position, this);
-            r += addField(gt("Profession"), data.profession, this);
-            if (r > 0) { addField("", "\u00A0", this); }
-        }
-    });
+    // Distribution list members
 
     ext.point("io.ox/contacts/detail/member").extend({
+
         draw: function (data) {
             // draw member
             this.append(
@@ -365,128 +243,308 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    ext.point("io.ox/contacts/detail/content").extend({
-        index: 200,
-        id: 'mail-address',
+    ext.point("io.ox/contacts/detail/list").extend({
+
         draw: function (baton) {
 
-            var data = baton.data;
+            var list = _.copy(baton.data.distribution_list || [], true), hash = {};
 
-            if (data.mark_as_distributionlist === true) {
-
-                var list = _.copy(data.distribution_list || [], true), hash = {};
-
-                // if there are no members in the list
-                if (list.length === 0) {
-                    this.append(
-                        $('<div>').text(gt('This list has no members yet'))
-                    );
-                    return;
-                }
-
-                // remove duplicates to fix backend bug
-                _(list).chain()
-                    .filter(function (member) {
-                        if (hash[member.mail]) {
-                            return false;
-                        } else {
-                            return (hash[member.mail] = true);
-                        }
-                    })
-                    .each(function (member) {
-                        ext.point("io.ox/contacts/detail/member").invoke('draw', this, member);
-                    }, this);
-
+            // if there are no members in the list
+            if (list.length === 0) {
+                this.append(
+                    $('<div>').text(gt('This list has no members yet'))
+                );
                 return;
             }
 
-            var dupl = {},
-            r = 0;
-            r += addMail.call(this, gt("Primary Email"), data.email1, data);
-            dupl[data.email1] = true;
-            if (dupl[data.email2] !== true) {
-                r += addMail.call(this, gt("Alternative Email"), data.email2, data);
-                dupl[data.email2] = true;
-            }
-            if (dupl[data.email3] !== true) {
-                r += addMail.call(this, gt("Alternative Email"), data.email3, data);
-            }
-            if (r > 0) {
-                addField("", "\u00A0", this);
-            }
+            // remove duplicates to fix backend bug
+            _(list)
+                .chain()
+                .filter(function (member) {
+                    if (hash[member.mail]) {
+                        return false;
+                    } else {
+                        return (hash[member.mail] = true);
+                    }
+                })
+                .each(function (member) {
+                    ext.point("io.ox/contacts/detail/member").invoke('draw', this, member);
+                }, this);
         }
     });
+
+    function block(legend, list) {
+
+        var args = _(arguments).toArray(),
+            rows = _(args.slice(1)).compact();
+
+        if (rows.length === 0) return [];
+
+        return $('<div class="block">').append(
+            [$('<legend>').text(args[0])].concat(rows)
+        );
+    }
+
+    function row(label, builder) {
+
+        if (_.isFunction(label)) {
+            builder = label;
+            label = null;
+        }
+
+        var build = builder();
+
+        if (!build) return null;
+
+        return $('<div>').append(
+            label ? $('<label>').text(label) : [],
+            _.isString(build) ? $.txt(build) : build
+        );
+    }
+
+    function simple(label, value) {
+        value = $.trim(value);
+        if (!value) return null;
+        return $('<div>').append(
+            $('<label>').text(label),
+            $('<span>').text(value)
+        );
+    }
+
+    function clickMail(e) {
+        e.preventDefault();
+        // set recipient
+        var data = { to: [[e.data.display_name, e.data.email]] };
+        // open compose
+        ox.load(['io.ox/mail/write/main']).done(function (m) {
+            m.getApp().launch().done(function () {
+                this.compose(data);
+            });
+        });
+    }
+
+    function mail(address, name) {
+        if (!address) return null;
+        return $('<div>').append(
+            $('<label>').text(gt('E-Mail')),
+            $('<a>', { href: 'mailto:' + address })
+                .text(_.noI18n(address))
+                .on('click', { email: address, display_name: name }, clickMail)
+        );
+    }
+
+    function getMailAddresses(data) {
+        return _([data.email1, data.email2, data.email3])
+            .chain()
+            .compact()
+            .map(function (address) {
+                return $.trim(address).toLowerCase();
+            })
+            .uniq()
+            .value();
+    }
+
+    function phone(label, number) {
+        number = $.trim(number);
+        if (!number) return null;
+        return $('<div>').append(
+            $('<label>').text(label),
+            $('<a>', { href: 'callto:' + number }).text(number)
+        );
+    }
+
+    function IM(number) {
+
+        number = $.trim(number);
+        if (!number) return null;
+
+        if (/^skype:/.test(number)) {
+            number = number.split('skype:')[1];
+            return $('<div>').append(
+                $('<label>').text('Skype'),
+                $('<a>', { href: 'callto:' + number + '?call' }).text(number)
+            );
+        }
+
+        if (/^x-apple:/.test(number)) {
+            number = number.split('x-apple:')[1];
+            return $('<div>').append(
+                $('<label>').text('iMessage'),
+                $('<a>', { href: 'imessage://' + number + '@me.com' }).text(number)
+            );
+        }
+
+        return simple(gt('Messenger'), number);
+    }
+
+    // data is full contact data
+    // type is 'business' or 'home' or 'other'
+    function address(data, type) {
+
+        data = _(['street', 'postal_code', 'city', 'state', 'country']).map(function (field) {
+            return data[field + '_' + type] || '';
+        });
+
+        if (!_.some(data)) return null;
+
+        var text =
+            //#. Format of addresses
+            //#. %1$s is the street
+            //#. %2$s is the postal code
+            //#. %3$s is the city
+            //#. %4$s is the state
+            //#. %5$s is the country
+            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data);
+
+        return $('<a class="google-maps" target="_blank">')
+            .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace('/\n/g', ', ')))
+            .append(
+                $.txt($.trim(text)),
+                $('<caption>').append(
+                    $('<i class="icon-external-link">'),
+                    $.txt(' Google Maps \u2122') // \u2122 = &trade;
+                )
+            );
+    }
+
+    ext.point("io.ox/contacts/detail/content")
+
+        // Contact note/comment
+        .extend({
+            id: "comment",
+            index: 100,
+            draw: function (baton) {
+
+                var comment = $.trim(baton.data.note || '');
+                if (comment !== '') {
+                    this.append(
+                        $('<div class="comment">').text(comment)
+                    );
+                }
+            }
+        })
+
+        // Personal
+        .extend({
+            id: 'personal',
+            index: 200,
+            draw: function (baton) {
+
+                var data = baton.data,
+                    addresses = getMailAddresses(data),
+                    fullname = util.getFullName(baton.data);
+
+                this.append(
+
+                    block(gt('Personal'),
+                        simple(gt('Name'), fullname),
+                        simple(gt('Middle name'), data.second_name),
+                        simple(gt('Suffix'), data.suffix),
+                        simple(gt('Nickname'), data.nickname),
+                        row(gt('Birthday'), function () {
+                            if (baton.data.birthday)
+                                return new date.Local(baton.data.birthday).format(date.DATE);
+                        })
+                    ),
+
+                    block(gt('Job'),
+                        simple(gt('Position'), data.position),
+                        simple(gt('Department'), data.department),
+                        simple(gt('Profession'), data.profession),
+                        simple(gt('Company'), data.company),
+                        simple(gt('Room number'), data.room_number)
+                    ),
+
+                    block(gt('Mail and Messaging'),
+                        mail(addresses[0], fullname),
+                        mail(addresses[1], fullname),
+                        mail(addresses[2], fullname),
+                        IM(data.instant_messenger1),
+                        IM(data.instant_messenger2)
+                    ),
+
+                    block(gt('Phone numbers'),
+                        phone(gt('Mobile'), data.cellular_telephone1),
+                        phone(gt('Mobile'), data.cellular_telephone2),
+                        phone(gt('Phone (business)'), data.telephone_business1),
+                        phone(gt('Phone (business)'), data.telephone_business2),
+                        phone(gt('Phone (private)'), data.telephone_home1),
+                        phone(gt('Phone (private)'), data.telephone_home2),
+                        phone(gt('Phone (other)'), data.telephone_other),
+                        simple(gt('Fax (business)'), data.fax_business),
+                        simple(gt('Fax (private)'), data.fax_home),
+                        simple(gt('Fax (other)'), data.fax_other)
+                    ),
+
+                    block(gt('Business Address'),
+                        address(data, 'business')
+                    ),
+
+                    block(gt('Home Address'),
+                        address(data, 'home')
+                    ),
+
+                    block(gt('Other Address'),
+                        address(data, 'other')
+                    ),
+
+                    block(
+                        //#. section name for contact fields in detail view
+                        gt('Miscellaneous'),
+                        simple(gt('URL'), data.url),
+                        // looks stupid but actually easier to read and not much shorter than any smart-ass solution
+                        simple(gt('Optional 01'), data.userfield01),
+                        simple(gt('Optional 02'), data.userfield02),
+                        simple(gt('Optional 03'), data.userfield03),
+                        simple(gt('Optional 04'), data.userfield04),
+                        simple(gt('Optional 05'), data.userfield05),
+                        simple(gt('Optional 06'), data.userfield06),
+                        simple(gt('Optional 07'), data.userfield07),
+                        simple(gt('Optional 08'), data.userfield08),
+                        simple(gt('Optional 09'), data.userfield09),
+                        simple(gt('Optional 10'), data.userfield10),
+                        simple(gt('Optional 11'), data.userfield11),
+                        simple(gt('Optional 12'), data.userfield12),
+                        simple(gt('Optional 13'), data.userfield13),
+                        simple(gt('Optional 14'), data.userfield14),
+                        simple(gt('Optional 15'), data.userfield15),
+                        simple(gt('Optional 16'), data.userfield16),
+                        simple(gt('Optional 17'), data.userfield17),
+                        simple(gt('Optional 18'), data.userfield18),
+                        simple(gt('Optional 19'), data.userfield19),
+                        simple(gt('Optional 20'), data.userfield20)
+                    )
+                );
+            }
+        });
+
+
+    // Resource description
+    // only applies to resource because they have a "description" field.
+    // contacts just have a "note"
 
     ext.point("io.ox/contacts/detail/content").extend({
-        index: 300,
-        id: 'phone',
+        index: 'last',
+        id: "description", //
         draw: function (baton) {
-            var r = 0, data = baton.data;
-            r += addPhone(gt("Phone (business)"), data.telephone_business1, this);
-            r += addPhone(gt("Phone (business)"), data.telephone_business2, this);
-            r += addPhone(gt("Phone (private)"), data.telephone_home1, this);
-            r += addPhone(gt("Phone (private)"), data.telephone_home2, this);
-            r += addPhone(gt("Mobile"), data.cellular_telephone1, this);
-            r += addPhone(gt("Mobile"), data.cellular_telephone2, this);
-            if (r > 0) {
-                addField("", "\u00A0", this);
+
+            var str = $.trim(baton.data.description || '');
+            if (str !== '') {
+                this.append(
+                    $('<div class="description">').append(
+                        $('<div>').html(
+                            looksLikeHTML(str) ? str : str.replace(/\n/g, '<br>')
+                        ),
+                        // add callback?
+                        baton.data.callbacks && 'extendDescription' in baton.data.callbacks ?
+                            $('<a href="#">').text(gt('Copy to description'))
+                            .on('click', { description: str.replace(/[ \t]+/g, ' ') }, 'wurst' || baton.data.callbacks.extendDescription)
+                            : []
+                    )
+                );
             }
         }
     });
-
-    ext.point("io.ox/contacts/detail/content").extend({
-        index: 400,
-        id: 'address',
-        draw: function (baton) {
-            var r = 0, data = baton.data;
-            r += addAddress(gt.pgettext("address", "Work"), data, '_business', this);
-            if (r > 0) { addField("", "\u00A0", this); r = 0; }
-            r += addAddress(gt.pgettext("address", "Home"), data, '_home', this);
-            if (r > 0) { addField("", "\u00A0", this); }
-        }
-    });
-
-    ext.point("io.ox/contacts/detail/content").extend({
-        index: 500,
-        id: 'birthday',
-        draw: function (baton) {
-            var r = 0, bday = baton.data.birthday;
-            if (bday || bday === 0) {
-                r += addField(gt("Birthday"),
-                              new date.Local(bday).format(date.DATE), this);
-            }
-            if (r > 0) {
-                addField("", "\u00A0", this);
-            }
-        }
-    });
-
-    // ext.point("io.ox/contacts/detail").extend({
-    //     index: 10000,
-    //     id: 'qr',
-    //     draw: function (baton) {
-    //         var data = baton.data;
-    //         if (Modernizr.canvas && !data.mark_as_distributionlist) {
-    //             addField("\u00A0", true, this, function (node) {
-    //                 node.append(
-    //                     $('<i class="icon-qrcode">'), $.txt(' '),
-    //                     $("<a>", { href: '#' })
-    //                     .text(gt('Show QR code'))
-    //                     .on("click", function (e) {
-    //                         e.preventDefault();
-    //                         node.empty().busy();
-    //                         require(["io.ox/contacts/view-qrcode"], function (qr) {
-    //                             var vc = qr.getVCard(data);
-    //                             node.idle().qrcode(vc);
-    //                             vc = node = qr = null;
-    //                         });
-    //                     })
-    //                 );
-    //             });
-    //             addField("", "\u00A0", this);
-    //         }
-    //     }
-    // });
 
     ext.point("io.ox/contacts/detail").extend({
         index: 'last',
@@ -502,7 +560,8 @@ define("io.ox/contacts/view-detail",
                     options.handler = baton.app.folder.set;
                 }
                 this.append(
-                    folderAPI.getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
+                    folderAPI.getBreadcrumb(baton.data.folder_id, options)
+                    .addClass('chromeless clear-both')
                 );
             }
         }
@@ -516,7 +575,7 @@ define("io.ox/contacts/view-detail",
 
         draw: function (baton) {
 
-            if (!baton) return $();
+            if (!baton) return $('<div>');
 
             try {
 
