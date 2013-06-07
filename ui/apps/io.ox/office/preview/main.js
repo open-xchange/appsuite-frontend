@@ -94,11 +94,21 @@ define('io.ox/office/preview/main',
                     action: 'convertdocument',
                     convert_format: 'html',
                     convert_action: 'beginconvert'
-                },
-                resultFilter: function (data) {
-                    // check required entries, returning undefined will reject this request
-                    return (_.isNumber(data.JobID) && (data.JobID > 0) && _.isNumber(data.PageCount) && (data.PageCount > 0)) ? data : undefined;
                 }
+            })
+            .then(function (data) {
+                var def = $.Deferred(),
+                    loadError = !_.isNumber(data.JobID) || (data.JobID <= 0) || !_.isNumber(data.PageCount) || (data.PageCount <= 0);
+
+                if (loadError) {
+                    var cause = Utils.getStringOption(data, 'cause', '');
+
+                    if (cause === 'passwordProtected') {
+                        _.extend(data, {message: gt('The document is password protected.')});
+                    }
+                }
+
+                return (loadError ? def.reject(data) : def.resolve(data));
             })
             .done(function (data) {
                 jobId = data.JobID;
