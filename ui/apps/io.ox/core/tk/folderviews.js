@@ -417,6 +417,10 @@ define('io.ox/core/tk/folderviews',
             });
         };
 
+        this.getNodes = function () {
+            return nodes;
+        };
+
         this.customize = function () {
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', nodes.folder, data, tree.options);
@@ -733,7 +737,7 @@ define('io.ox/core/tk/folderviews',
                     }
                 });
 
-                tree.container.on('change', 'input', function () {
+                tree.container.on('change', 'input[type="checkbox"]', function (e) {
                     var folder = $(this).val(),
                         checkboxStatus = $(this).is(':checked'),
                         changes = { subscribed: checkboxStatus },
@@ -830,6 +834,21 @@ define('io.ox/core/tk/folderviews',
                 }
                 return false;
             case 32:
+                // space
+                // disable space on checkbox option
+                if (opt.checkbox) {
+                    origEvent.preventDefault();
+                    var chkbox = treeNode.getNodes().subscriber;
+                    // toggle checkbox
+                    chkbox
+                        .prop('checked', !chkbox.prop('checked'))
+                        .trigger('change');
+                    return false;
+                }
+                treeNode.toggle().done(function () {
+                        self.repaint();
+                    });
+                return false;
             case 13:
                 // enter
                 treeNode.toggle().done(function () {
