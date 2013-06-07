@@ -100,6 +100,10 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
 
         var // additional options for auto-scrolling
             trackingOptions = $(sourceNode).data('tracking-options') || {},
+            // whether horizontal auto-scrolling is enabled
+            horizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
+            // whether vertical auto-scrolling is enabled
+            vertical = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'vertical'),
             // the border node for auto-scrolling
             borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
             // the minimum increment for auto-scrolling
@@ -115,7 +119,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             // the last increment for auto-scrolling, in horizontal and vertical direction
             scrollX = 0, scrollY = 0;
 
-        if (Utils.getBooleanOption(trackingOptions, 'autoScroll', false)) {
+        if (horizontal || vertical) {
 
             scrollTimer = window.setInterval(function () {
 
@@ -123,21 +127,25 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
                     scrollBorder = Utils.getNodePositionInWindow(borderNode);
 
                 // calculate new horizontal increment
-                if (lastX < scrollBorder.left + innerPadding) {
-                    scrollX = Math.max(-maxIncrement, Math.min(-minIncrement, scrollX) * acceleration);
-                } else if (lastX >= scrollBorder.left + scrollBorder.width - innerPadding) {
-                    scrollX = Math.min(maxIncrement, Math.max(minIncrement, scrollX) * acceleration);
-                } else {
-                    scrollX = 0;
+                if (horizontal) {
+                    if (lastX < scrollBorder.left + innerPadding) {
+                        scrollX = (scrollX > -minIncrement) ? -minIncrement : Math.max(-maxIncrement, scrollX * acceleration);
+                    } else if (lastX >= scrollBorder.left + scrollBorder.width - innerPadding) {
+                        scrollX = (scrollX < minIncrement) ? minIncrement : Math.min(maxIncrement, scrollX * acceleration);
+                    } else {
+                        scrollX = 0;
+                    }
                 }
 
                 // calculate new vertical increment
-                if (lastY < scrollBorder.top + innerPadding) {
-                    scrollY = Math.max(-maxIncrement, Math.min(-minIncrement, scrollY) * acceleration);
-                } else if (lastY >= scrollBorder.top + scrollBorder.height - innerPadding) {
-                    scrollY = Math.min(maxIncrement, Math.max(minIncrement, scrollY) * acceleration);
-                } else {
-                    scrollY = 0;
+                if (vertical) {
+                    if (lastY < scrollBorder.top + innerPadding) {
+                        scrollY = (scrollY > -minIncrement) ? -minIncrement : Math.max(-maxIncrement, scrollY * acceleration);
+                    } else if (lastY >= scrollBorder.top + scrollBorder.height - innerPadding) {
+                        scrollY = (scrollY < minIncrement) ? minIncrement : Math.min(maxIncrement, scrollY * acceleration);
+                    } else {
+                        scrollY = 0;
+                    }
                 }
 
                 // notify listeners
@@ -324,7 +332,16 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Enables tracking events for all nodes contained in the current
      * collection. If one of the nodes is clicked or tapped, and dragged
      * around while holding the mouse button or keeping the device touched, it
-     * will trigger the following events:
+     * will trigger specific tracking events ('tracking:start',
+     * 'tracking:move', 'tracking:end', and 'tracking:cancel') that can be used
+     * to implement the desired behavior, similar to the browser system mouse
+     * or touch events (for example: moving a DOM node around, resizing a DOM
+     * node, all other kinds of selection behavior, drawing in a canvas).
+     * Additionally, while tracking is active, automatic scrolling of a
+     * scrollable node can be implemented by listening to the tracking event
+     * 'tracking:scroll'.
+     *
+     * The following events will be triggered by every tracked node:
      *
      * - 'tracking:start'
      *      Directly after tracking has been started with a mouse click or by
@@ -384,9 +401,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *
      * - 'tracking:scroll'
      *      While dragging the mouse or touch point around with auto-scrolling
-     *      enabled (see 'options' parameter of this method), and the border of
-     *      the scroll border node has been reached or left. The event object
-     *      contains the following properties:
+     *      enabled (see below for the 'options' parameter of this method), and
+     *      the border of the scroll border node has been reached or left. The
+     *      event object contains the following properties:
      *      (1) {Number} pageX, {Number} pageY
      *          The page position, as passed to the previous 'tracking:move'
      *          event (or the initial 'tracking:start' event, if no
@@ -408,12 +425,14 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * @param {Object} [options]
      *  Additional options controlling the behavior of the tracking nodes. The
      *  following options are supported:
-     *  @param {Boolean} [options.autoScroll=false]
-     *      If set to true, the active tracking node will trigger
-     *      'tracking:scroll' events while the mouse or touch point hovers or
-     *      leaves the borders of a certain rectangle (of either the tracking
-     *      node itself, or another custom node in the DOM, see following
-     *      options).
+     *  @param {Boolean|String} [options.autoScroll=false]
+     *      If set to true, auto-scrolling will be activated for horizontal and
+     *      vertical direction. If set to either 'horizontal' or 'vertical',
+     *      auto-scrolling will be enabled only for the specified direction.
+     *      The active tracking node will trigger 'tracking:scroll' events
+     *      repeatedly as long as the mouse or touch point hovers or leaves the
+     *      borders of a certain rectangle (of either the tracking node itself,
+     *      or another custom node in the DOM, see the 'borderNode' option).
      *  @param {jQuery|HTMLElement|String} [options.borderNode]
      *      If specified, the node that will be used to decide whether to
      *      enable auto-scrolling mode. If the mouse or touch point reaches or
