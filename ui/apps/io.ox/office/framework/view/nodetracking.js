@@ -225,7 +225,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     function trackingStart(event, pageX, pageY, sourceNode) {
         cancelTracking();
         initTracking(sourceNode, pageX, pageY);
-        triggerEvent('tracking:start', event, { pageX: pageX, pageY: pageY });
+        triggerEvent('tracking:start', event, { target: event.target, pageX: pageX, pageY: pageY });
     }
 
     /**
@@ -354,6 +354,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *          The start position that will also be passed to all subsequent
      *          'tracking:move', 'tracking:end', and 'tracking:cancel' events.
      *          Here, will be equal to the 'pageX' and 'pageY' properties.
+     *      (3) {HTMLElement} target
+     *          The target node, as received from the corresponding browser
+     *          event.
      *
      * - 'tracking:move'
      *      While dragging the mouse or touch point around. The event object
