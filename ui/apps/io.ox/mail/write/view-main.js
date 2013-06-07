@@ -734,6 +734,8 @@ define("io.ox/mail/write/view-main",
 
                 // message?
                 if (isMessage) {
+                    //remove typesuffix when displaying attached mail;
+                    mailUtil.removeTypeSuffix(file.message);
                     info = $('<span>').addClass('filesize').text('');
                     icon = $('<i>').addClass('icon-paper-clip');
                     name = file.message.subject || '\u00A0';
