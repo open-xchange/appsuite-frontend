@@ -703,6 +703,9 @@ define('io.ox/mail/write/main',
                         mailAPI[type](obj, getDefaultEditorMode())
                         .done(function (data) {
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
+                            //remove type suffix from sender/recipients (quoted mail)
+                            if (data.attachments[0].content)
+                                data.attachments[0].content = data.attachments[0].content.replace(new RegExp('/TYPE=PLMN', 'g'), '');
                             app.setMail({ data: data, mode: type, initial: true })
                             .done(function () {
                                 var ed = app.getEditor();
