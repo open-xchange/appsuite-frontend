@@ -93,7 +93,7 @@ define('io.ox/mail/util',
         getChannel: function (value, check) {
             //default value
             check = check || typeof check === 'undefined';
-            var type = value.indexOf('/TYPE=PLMN') > 0,
+            var type = value.indexOf('/TYPE=PLMN') > -1,
                 //no check OR activated cap
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
