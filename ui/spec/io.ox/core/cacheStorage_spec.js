@@ -41,6 +41,9 @@ define(['io.ox/core/extensions',
      */
     _([simple, localstorage, indexeddb]).each(function (testStorage) {
 
+    //FIXME: indexeddb does return undefined, if browser doesn’t support it
+    if (!testStorage)
+        return;
     describe("Caching Storagelayer: " + testStorage.getStorageLayerName(), function () {
 
         it('check storagelayer', function () {
