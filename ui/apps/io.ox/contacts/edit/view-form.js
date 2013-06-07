@@ -311,7 +311,7 @@ define('io.ox/contacts/edit/view-form', [
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
             cssClasses: "btn control",
-            tabIndex: 1,
+            tabIndex: 3,
             tagtype: "button"
         }));
 
@@ -322,7 +322,7 @@ define('io.ox/contacts/edit/view-form', [
             label: gt("Save"),
             ref: ref + "/actions/edit/save",
             cssClasses: "btn btn-primary control",
-            tabIndex: 1,
+            tabIndex: 2,
             tagtype: "button"
         }));
 
