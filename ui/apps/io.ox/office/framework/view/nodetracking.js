@@ -51,7 +51,10 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         startX = 0, startY = 0,
 
         // the tracking position passed to the last event
-        lastX = 0, lastY = 0;
+        lastX = 0, lastY = 0,
+
+        // the browser timer used for auto-scrolling
+        scrollTimer = null;
 
     // private global functions ===============================================
 
@@ -91,11 +94,75 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     }
 
     /**
+     * Initializes auto-scrolling mode after tracking has been started.
+     */
+    function initAutoScrolling(sourceNode, pageX, pageY) {
+
+        var // additional options for auto-scrolling
+            trackingOptions = $(sourceNode).data('tracking-options') || {},
+            // the border node for auto-scrolling
+            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
+            // the minimum increment for auto-scrolling
+            minIncrement = Utils.getIntegerOption(trackingOptions, 'minIncrement', 10, 1),
+            // the maximum increment for auto-scrolling
+            maxIncrement = Utils.getIntegerOption(trackingOptions, 'maxIncrement', Math.max(100, minIncrement), minIncrement),
+            // the maximum increment for auto-scrolling
+            acceleration = Utils.getNumberOption(trackingOptions, 'acceleration', 1.2, 1.05),
+            // the inner padding in the scroll node where auto-scrolling is active
+            innerPadding = Utils.getIntegerOption(trackingOptions, 'innerPadding', 0, 0),
+            // the time in milliseconds between auto-scrolling events
+            scrollInterval = Utils.getIntegerOption(trackingOptions, 'scrollInterval', 100, 100),
+            // the last increment for auto-scrolling, in horizontal and vertical direction
+            scrollX = 0, scrollY = 0;
+
+        if (Utils.getBooleanOption(trackingOptions, 'autoScroll', false)) {
+
+            scrollTimer = window.setInterval(function () {
+
+                var // the current screen position of the scroll node
+                    scrollBorder = Utils.getNodePositionInWindow(borderNode);
+
+                // calculate new horizontal increment
+                if (lastX < scrollBorder.left + innerPadding) {
+                    scrollX = Math.max(-maxIncrement, Math.min(-minIncrement, scrollX) * acceleration);
+                } else if (lastX >= scrollBorder.left + scrollBorder.width - innerPadding) {
+                    scrollX = Math.min(maxIncrement, Math.max(minIncrement, scrollX) * acceleration);
+                } else {
+                    scrollX = 0;
+                }
+
+                // calculate new vertical increment
+                if (lastY < scrollBorder.top + innerPadding) {
+                    scrollY = Math.max(-maxIncrement, Math.min(-minIncrement, scrollY) * acceleration);
+                } else if (lastY >= scrollBorder.top + scrollBorder.height - innerPadding) {
+                    scrollY = Math.min(maxIncrement, Math.max(minIncrement, scrollY) * acceleration);
+                } else {
+                    scrollY = 0;
+                }
+
+                // notify listeners
+                if ((Math.round(scrollX) !== 0) || (Math.round(scrollY) !== 0)) {
+                    triggerEvent('tracking:scroll', undefined, { pageX: lastX, pageY: lastY, scrollX: Math.round(scrollX), scrollY: Math.round(scrollY) });
+                }
+
+            }, scrollInterval);
+        }
+    }
+
+    /**
      * Initializes tracking mode after tracking has been started.
      */
-    function initTracking(sourceNode) {
+    function initTracking(sourceNode, pageX, pageY) {
+
+        // store the current tracing node
         trackingNode = $(sourceNode);
+        startX = lastX = pageX;
+        startY = lastY = pageY;
+
+        // insert the overlay node for mouse pointer
         $('body').append(overlayNode.css('cursor', trackingNode.css('cursor')));
+
+        // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
         // attach deferred events that would otherwise interfere with tracking
         // start event (e.g. another 'mousedown' event or a 'focusout' event
@@ -108,6 +175,18 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
                 $(document).off(DEFERRED_EVENT_MAP).on(DEFERRED_EVENT_MAP);
             }
         });
+
+        // initialize auto scrolling
+        initAutoScrolling(sourceNode, pageX, pageY);
+    }
+
+    /**
+     * Deinitializes auto-scrolling mode after tracking has been finished or
+     * canceled.
+     */
+    function deinitAutoScrolling() {
+        window.clearTimeout(scrollTimer);
+        scrollTimer = null;
     }
 
     /**
@@ -117,6 +196,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         $(document).off(DOCUMENT_EVENT_MAP).off(DEFERRED_EVENT_MAP);
         trackingNode = null;
         overlayNode.remove();
+        deinitAutoScrolling();
     }
 
     /**
@@ -136,9 +216,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      */
     function trackingStart(event, pageX, pageY, sourceNode) {
         cancelTracking();
-        initTracking(sourceNode);
-        startX = lastX = pageX;
-        startY = lastY = pageY;
+        initTracking(sourceNode, pageX, pageY);
         triggerEvent('tracking:start', event, { pageX: pageX, pageY: pageY });
     }
 
@@ -304,17 +382,68 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *          The start position of this tracking sequence, as passed to the
      *          initial 'tracking:start' event.
      *
+     * - 'tracking:scroll'
+     *      While dragging the mouse or touch point around with auto-scrolling
+     *      enabled (see 'options' parameter of this method), and the border of
+     *      the scroll border node has been reached or left. The event object
+     *      contains the following properties:
+     *      (1) {Number} pageX, {Number} pageY
+     *          The page position, as passed to the previous 'tracking:move'
+     *          event (or the initial 'tracking:start' event, if no
+     *          'tracking:move' event has been triggered yet).
+     *      (2) {Number} startX, {Number} startY
+     *          The start position of this tracking sequence, as passed to the
+     *          initial 'tracking:start' event.
+     *      (3) {Number} scrollX, {Number} scrollY
+     *          The suggested horizontal and vertical scrolling distance. These
+     *          values will start at the minimum distance, and will increase
+     *          over time to the maximum distance configured in the 'options'
+     *          parameter of this method.
+     *
      * Additionally, the event objects of all events but the 'tracking:cancel'
-     * event will contain the properties 'shiftKey', 'altKey', 'ctrlKey', and
-     * 'metaKey' with the values copied from the originating GUI events (mouse
-     * events or touch events).
+     * and 'tracking:scroll' event will contain the properties 'shiftKey',
+     * 'altKey', 'ctrlKey', and 'metaKey' with the values copied from the
+     * originating GUI events (mouse events or touch events).
+     *
+     * @param {Object} [options]
+     *  Additional options controlling the behavior of the tracking nodes. The
+     *  following options are supported:
+     *  @param {Boolean} [options.autoScroll=false]
+     *      If set to true, the active tracking node will trigger
+     *      'tracking:scroll' events while the mouse or touch point hovers or
+     *      leaves the borders of a certain rectangle (of either the tracking
+     *      node itself, or another custom node in the DOM, see following
+     *      options).
+     *  @param {jQuery|HTMLElement|String} [options.borderNode]
+     *      If specified, the node that will be used to decide whether to
+     *      enable auto-scrolling mode. If the mouse or touch point reaches or
+     *      leaves the borders of this node, 'tracking:scroll' events will be
+     *      triggered. If omitted, the border of the active tracking node will
+     *      be used instead. Has no effect, if the option 'autoScroll' has not
+     *      been set to true.
+     *  @param {Integer} [options.minIncrement=10]
+     *      The minimum amount of pixels (absolute value) passed to listeners
+     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
+     *      Has no effect, if the option 'autoScroll' has not been set to true.
+     *  @param {Integer} [options.maxIncrement=100]
+     *      The maximum amount of pixels (absolute value) passed to listeners
+     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
+     *      Has no effect, if the option 'autoScroll' has not been set to true.
+     *  @param {Integer} [options.innerPadding=0]
+     *      The inner distance from the borders of the scroll node where
+     *      auto-scrolling will be active. Has no effect, if the option
+     *      'autoScroll' has not been set to true.
+     *  @param {Integer} [options.scrollInterval=100]
+     *      The minimum time in milliseconds between two 'tracking:scroll'
+     *      events. Has no effect, if the option 'autoScroll' has not been set
+     *      to true.
      *
      * @returns {jQuery}
      *  A reference to this collection.
      */
-    $.fn.enableTracking = function () {
+    $.fn.enableTracking = function (options) {
         // prevent multiple registration of the event handlers
-        return this.off(NODE_EVENT_MAP).on(NODE_EVENT_MAP);
+        return this.off(NODE_EVENT_MAP).on(NODE_EVENT_MAP).data('tracking-options', options);
     };
 
     /**
