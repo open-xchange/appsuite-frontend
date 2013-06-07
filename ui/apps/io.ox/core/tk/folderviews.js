@@ -383,7 +383,7 @@ define('io.ox/core/tk/folderviews',
                     nodes.arrow = $('<div class="folder-arrow"><i class="icon-chevron-right"></i></div>');
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
-                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', 'value': data.id }).css('float', 'right');
+                    nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id }).css('float', 'right');
                     if (data.subscribed) {
                         nodes.subscriber.attr('checked', 'checked');
                     }
@@ -689,6 +689,7 @@ define('io.ox/core/tk/folderviews',
             var container = $('<div>'),
                 tree = new ApplicationFolderTree(container, {
                 type: options.type,
+                tabindex: 0,
                 rootFolderId: options.rootFolderId,
                 checkbox: true,
                 all: true,
@@ -713,7 +714,7 @@ define('io.ox/core/tk/folderviews',
                 .show(function () {
                     tree.paint().done(function () {
                         tree.selection.updateIndex().selectFirst();
-                        pane.getBody().focus();
+                        pane.getBody().find('.io-ox-foldertree').focus();
                     });
                 })
                 .done(function (action) {
