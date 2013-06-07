@@ -224,6 +224,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             this.$el.find('ol').sortable({
                                 containment: this.el,
                                 axis: 'y',
+                                handle: '.drag-handle',
                                 scroll: true,
                                 delay: 150,
                                 stop: function (e, ui) {

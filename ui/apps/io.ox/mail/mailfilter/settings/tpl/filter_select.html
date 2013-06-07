@@ -1,4 +1,5 @@
 <li class="selectable deletable-item {{=it.state.value}} {{=it.editable}}" data-id="{{=it.id}}" >
+    <div class="drag-handle"><i class="icon-reorder"/></div>
     <div class="pull-right">
     {{? it.editable === 'editable'}}
         <a href="#" class="action" data-action="edit">{{=it.edit}}</a>
