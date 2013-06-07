@@ -33,8 +33,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         myView = new AccountDetailView({model: data});
 
-        console.log(data);
-
         myView.dialog = new dialogs.ModalDialog({
             width: 685,
             async: true
@@ -58,7 +56,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         });
 
         myView.dialog.on('cancel', function () {
-            console.log(myView);
+//            console.log(myView);
         });
     }
 
