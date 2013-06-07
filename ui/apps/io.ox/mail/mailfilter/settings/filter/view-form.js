@@ -350,6 +350,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             actionArray[actionID][type] = value;
                             self.model.set('actioncmds', actionArray);
                             inputField.val(value);
+                            inputField.attr('title', value);
                         }
                         tree.destroy().done(function () {
                             tree = dialog = null;
@@ -525,7 +526,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         id: 'rulename',
         index: 100,
         fluid: true,
-        label: gt('rulename'),
+        label: gt('Rule name'),
         control: '<input type="text" class="span7" name="rulename">',
         attribute: 'rulename'
     }));

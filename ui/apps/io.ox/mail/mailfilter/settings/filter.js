@@ -28,14 +28,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
         collection;
 
     function renderDetailView(evt, data) {
-        var myView;
+        var myView,
+            header = data.id === undefined ? gt('Create new rule') : gt('Edit rule');
 
         myView = new AccountDetailView({model: data});
+
+        console.log(data);
 
         myView.dialog = new dialogs.ModalDialog({
             width: 685,
             async: true
-        });
+        }).header($('<h4>').text(header));
 
         myView.dialog.append(
             myView.render().el
@@ -53,6 +56,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //                myView.dialog.idle();
 //            }
         });
+
+        myView.dialog.on('cancel', function () {
+            console.log(myView);
+        });
     }
 
     ext.point("io.ox/settings/mailfilter/filter/settings/detail").extend({
@@ -69,7 +76,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             var deferred = $.Deferred(),
 
                 staticStrings =  {
-                    BUTTON_ADD: gt('Add'),
+                    BUTTON_ADD: gt('Add new rule'),
                     TITLE: gt('Mail Filter')
                 },
                 createExtpointForSelectedFilter = function (args) {
@@ -170,23 +177,24 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             createExtpointForSelectedFilter(args);
                         },
 
-                        onEdit: function (args) {
+                        onEdit: function (e) {
+                            e.preventDefault();
                             var selected = this.$el.find('[selected]');
-                            args.data = {};
-                            args.data.id = selected.data('id');
+                            e.data = {};
+                            e.data.id = selected.data('id');
 
-                            args.data.obj = this.collection.get(args.data.id);
+                            e.data.obj = this.collection.get(e.data.id);
 
-                            args.data.node = this.el;
+                            e.data.node = this.el;
 
-                            if (args.data.obj !== undefined) {
-                                createExtpointForSelectedFilter(args);
+                            if (e.data.obj !== undefined) {
+                                createExtpointForSelectedFilter(e);
                             }
 
                         },
 
-                        onDelete: function (args) {
-
+                        onDelete: function (e) {
+                            e.preventDefault();
                             var selected = this.$el.find('[selected]'),
                                 self = this,
                                 id = selected.data('id');
@@ -198,7 +206,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         },
 
-                        onToggle: function () {
+                        onToggle: function (e) {
+                            e.preventDefault();
                             var selected = this.$el.find('[selected]'),
                                 self = this,
                                 id = selected.data('id'),

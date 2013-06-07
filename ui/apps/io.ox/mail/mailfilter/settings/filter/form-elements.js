@@ -29,11 +29,11 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
         },
 
         drawDisabledInputfield: function (activeValue) {
-            return $('<input>').attr({ type: 'text', disabled: 'disabled', 'data-action': 'change-text-action'}).val(activeValue);
+            return $('<input>').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action'}).val(activeValue);
         },
 
         drawFolderSelect: function () {
-            return $('<button>').addClass('btn folderselect').attr('type', 'button').text('select Folder');
+            return $('<a>').addClass('folderselect').attr('type', 'button').text('select Folder');
         },
 
         drawDeleteButton: function (type) {
