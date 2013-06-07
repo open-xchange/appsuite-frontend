@@ -521,6 +521,7 @@ define('io.ox/files/actions',
                             tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'infostore',
                                 open: settings.get('folderpopup/open', []),
+                                tabindex: 0,
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
@@ -530,7 +531,9 @@ define('io.ox/files/actions',
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
-                                tree.select(id);
+                                tree.select(id).done(function () {
+                                    dialog.getBody().focus();
+                                });
                             });
                         })
                         .done(function (action) {

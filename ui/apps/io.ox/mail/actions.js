@@ -303,6 +303,7 @@ define('io.ox/mail/actions',
                             tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',
                                 open: settings.get('folderpopup/open', []),
+                                tabindex: 0,
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
@@ -312,7 +313,9 @@ define('io.ox/mail/actions',
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
-                                tree.select(id);
+                                tree.select(id).done(function () {
+                                    dialog.getBody().focus();
+                                });
                             });
                         })
                         .done(function (action) {

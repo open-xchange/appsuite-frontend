@@ -154,6 +154,7 @@ define('io.ox/contacts/actions',
                             tree = new views.FolderList(dialog.getBody(), {
                                 type: 'contacts',
                                 open: settings.get('folderpopup/open', []),
+                                tabindex: 0,
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
@@ -163,7 +164,9 @@ define('io.ox/contacts/actions',
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
-                                tree.select(id);
+                                tree.select(id).done(function () {
+                                    dialog.getBody().focus();
+                                });
                             });
                         })
                         .done(function (action) {
