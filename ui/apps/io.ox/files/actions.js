@@ -61,9 +61,7 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/publish', {
-        requires: function () {
-            return true;
-        },
+        requires: 'one',
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
                 publications.buildPublishDialog(baton);
