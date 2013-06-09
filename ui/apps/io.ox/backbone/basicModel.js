@@ -36,21 +36,26 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
     }
 
     var BasicModel = Backbone.Model.extend({
+
         initialize: function (obj) {
+
             var self = this;
             this._valid = true;
             this.attributeValidity = {};
             this.id = obj.id;
 
-            this.on("change:id", function () {
-                self.id = self.get("id");
+            this.on('change:id', function () {
+                self.id = self.get('id');
             });
 
             if (this.init) {
                 this.init();
             }
-            this.url = "invalidURL";
+
+            // model might already have a prop or function 'url'
+            this.url = this.url || 'invalidURL';
         },
+
         point: function (subpath) {
             if (/^\//.test(subpath)) {
                 subpath = subpath.substring(1);
