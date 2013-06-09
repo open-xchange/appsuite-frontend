@@ -65,6 +65,23 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             );
         },
 
+        drawOptionsExtern: function (activeValue, values, options, classes) {
+
+            var active = values[activeValue];
+            return $('<div class="action dropdown value ">').addClass(classes).append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
+                $('<ul class="dropdown-menu">').append(
+                    _(values).map(function (name, value) {
+                        return $('<li>').append(
+                            $('<a>', { href: '#', 'data-action': 'change-value-extern', 'data-value': value}).data(options).append(
+                                $.txt(name)
+                            )
+                        );
+                    })
+                )
+            );
+        },
+
         drawOptionsActions: function (activeValue, values) {
 
             var active = values[activeValue];
@@ -107,6 +124,15 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
                             .on('click', { color: colorObject.value, flagclass: flagclass }, changeLabel)
                         );
                     })
+                )
+            );
+        },
+
+        drawcheckbox: function (value) {
+            return $('<div>').addClass('control-group').append(
+                $('<div>').addClass('controls'),
+                $('<label>').addClass('checkbox').text(gt('Process subsequent rules even when this rule matches')).append(
+                $('<input type="checkbox">').attr({'data-action': 'check-for-stop', 'checked': value})
                 )
             );
         }

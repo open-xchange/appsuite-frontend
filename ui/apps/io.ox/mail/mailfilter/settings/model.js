@@ -48,9 +48,7 @@ define('io.ox/mail/mailfilter/settings/model',
             "test": {
                 "id": "true"
             },
-            "actioncmds": [{
-                "id": "stop"
-            }],
+            "actioncmds": [],
             "flags": [],
             "active": false
         };

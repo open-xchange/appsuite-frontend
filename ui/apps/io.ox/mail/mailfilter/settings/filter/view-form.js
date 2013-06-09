@@ -115,6 +115,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             events: {
                 'save': 'onSave',
                 'click [data-action="change-value"]': 'onChangeValue',
+
+                'click [data-action=change-value-extern]': 'onChangeValueExtern',
+
                 'click [data-action="change-value-actions"]': 'onChangeValueAction',
                 'change [data-action="change-text-test"]': 'onChangeTextTest',
                 'change [data-action="change-text-test-second"]': 'onChangeTextTestSecond',
@@ -125,7 +128,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 'click [data-action="remove-test"]': 'onRemoveTest',
                 'click [data-action="remove-action"]': 'onRemoveAction',
                 'click .newcondition': 'onCreateNewCondition',
-                'click .newaction': 'onCreateNewAction'
+                'click .newaction': 'onCreateNewAction',
+                'click [data-action="check-for-stop"]': 'onCheckStopAction'
             },
 
             onRemoveTest: function (e) {
@@ -189,6 +193,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 });
             },
 
+            onChangeValueExtern: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    data = node.data();
+
+                if (data.target) {
+                    var arrayOfTests = this.model.get('test');
+                    arrayOfTests.id = data.value;
+                    this.model.set('test', arrayOfTests);
+                }
+                this.render();
+
+            },
+
             onChangeValue: function (e) {
                 e.preventDefault();
                 var node = $(e.target),
@@ -226,7 +244,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 } else if (testAction === 'create-action') {
                     list.remove();
 
-                    actionArray.unshift(_.copy(DEFAULTS.actions[value], true));
+                    actionArray.push(_.copy(DEFAULTS.actions[value], true));
 
                     this.model.set('actioncmds', actionArray);
                     this.render();
@@ -316,6 +334,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onFolderSelect: function (e) {
+                e.preventDefault();
                 var self = this,
                     list = $(e.currentTarget).closest('li'),
                     type = list.attr('data-type'),
@@ -361,6 +380,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onChangeColor: function (e) {
+                e.preventDefault();
                 var self = this,
                     list = $(e.currentTarget).closest('li[data-action-id]'),
                     type = list.attr('data-type'),
@@ -388,6 +408,31 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         elements.drawOptions('keep', actionsTranslations)
                     )
                 );
+
+            },
+
+            onCheckStopAction: function (e) {
+                var currentState = $(e.currentTarget).attr('checked'),
+                    arrayOfActions = this.model.get('actioncmds'),
+                    currentPosition;
+
+
+                function filterForValue(array) {
+                    _.each(array, function (single, id) {
+                        currentPosition = single.id === 'stop' ? id : undefined;
+                    });
+                }
+
+                filterForValue(arrayOfActions, 'stop');
+
+                if (currentState === 'checked') {
+                    arrayOfActions.splice(currentPosition, 1);
+
+                } else {
+                    arrayOfActions.push({id: 'stop'});
+                }
+
+                this.model.set('actioncmds', arrayOfActions);
 
             }
 
@@ -531,46 +576,54 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         attribute: 'rulename'
     }));
 
-    function updateChoice() {
-        this.nodes.select.val(this.model.get(this.attributeStack)[this.attribute]);
-    }
 
-    function render() {
-        var self = this;
-        this.nodes = {};
-        this.nodes.select = $('<select>');
-        if (this.multiple) {
-            this.nodes.select.attr('multiple', 'multiple');
-        }
-        _(this.selectOptions).each(function (label, value) {
-            self.nodes.select.append(
-                $("<option>", {value: value}).text(label)
-            );
-        });
-        this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
-        this.updateChoice();
-        this.nodes.select.on('change', function () {
-            var completeData = self.model.get(self.attributeStack);
-            if (completeData.tests) { // check if there are multiple tests
-                completeData.id = self.nodes.select.val();
-                self.model.set(self.attributeStack, completeData, {validate: true});
+    ext.point(POINT + '/view').extend({
+        index: 100,
+        id: 'appliesto',
+        draw: function (baton) {
+            var arrayOfTests = baton.model.get('test'),
+                options = {
+                    target: 'id'
+//                    test: { nrInArray: '', target: ''  },
+//                    action: { nrInArray: '', target: ''  }
+                },
+                partOne,
+                partTwo,
+                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('all'), anyof: gt('any')}, options, 'no-positioning');
+            if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
+                if (arrayOfTests.id === 'allof') {
+                    partOne = gt('Apply rule if');
+                    partTwo = gt('conditions are met.');
+                } else {
+                    partOne = gt('Apply rule if');
+                    partTwo = gt('condition is met.');
+                }
+                this.append($('<span>').text(partOne), optionsSwitch, $('<span>').text(partTwo));
             }
 
-        });
-    }
+        }
+    });
 
-    views.point(POINT + '/view').extend(new forms.SelectBoxField({
-        id: 'appliesTo',
-        index: 100,
-        fluid: true,
-        label: gt('applies to'),
-        attributeStack: 'test',
-        attribute: 'id',
-        selectOptions: {allof: gt('all'), anyof: gt('any')},
-        render: render,
-        updateChoice: updateChoice
+    ext.point(POINT + '/view').extend({
+        index: 200,
+        id: 'stopaction',
+        draw: function (baton) {
 
-    }));
+            var arrayOfActions = baton.model.get('actioncmds'),
+            checkbox,
+            stopAction;
+
+            function filterForValue(array, value) {
+                _.each(array, function (single, id) {
+                    stopAction = single.id === 'stop' ? false : true;
+                });
+            }
+
+            filterForValue(arrayOfActions, 'stop');
+            this.append(elements.drawcheckbox(stopAction));
+
+        }
+    });
 
     return AccountDetailView;
 });

@@ -40,9 +40,6 @@ define('io.ox/mail/autoforward/settings/model',
                         },
                         {
                             "id": "keep"
-                        },
-                        {
-                            "id": "stop"
                         }
                     ],
                     "flags": ["autoforward"],
