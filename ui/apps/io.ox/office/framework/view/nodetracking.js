@@ -158,9 +158,18 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     }
 
     /**
+     * Deinitializes auto-scrolling mode after tracking has been finished or
+     * canceled.
+     */
+    function deinitAutoScrolling() {
+        window.clearTimeout(scrollTimer);
+        scrollTimer = null;
+    }
+
+    /**
      * Initializes tracking mode after tracking has been started.
      */
-    function initTracking(sourceNode, pageX, pageY) {
+    function initTracking(sourceNode, targetNode, pageX, pageY) {
 
         // store the current tracing node
         trackingNode = $(sourceNode);
@@ -168,7 +177,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         startY = lastY = pageY;
 
         // insert the overlay node for mouse pointer
-        $('body').append(overlayNode.css('cursor', trackingNode.css('cursor')));
+        $('body').append(overlayNode.css('cursor', $(targetNode).css('cursor')));
 
         // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
@@ -186,15 +195,6 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
 
         // initialize auto scrolling
         initAutoScrolling(sourceNode, pageX, pageY);
-    }
-
-    /**
-     * Deinitializes auto-scrolling mode after tracking has been finished or
-     * canceled.
-     */
-    function deinitAutoScrolling() {
-        window.clearTimeout(scrollTimer);
-        scrollTimer = null;
     }
 
     /**
@@ -222,9 +222,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      * Starts tracking the passed source node. Triggers a 'tracking:start'
      * event at the current tracking node.
      */
-    function trackingStart(event, pageX, pageY, sourceNode) {
+    function trackingStart(event, sourceNode, pageX, pageY) {
         cancelTracking();
-        initTracking(sourceNode, pageX, pageY);
+        initTracking(sourceNode, event.target, pageX, pageY);
         triggerEvent('tracking:start', event, { target: event.target, pageX: pageX, pageY: pageY });
     }
 
@@ -258,7 +258,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      */
     function mouseDownHandler(event) {
         if (event.button === 0) {
-            trackingStart(event, event.pageX, event.pageY, this);
+            trackingStart(event, this, event.pageX, event.pageY);
         } else {
             cancelTracking();
         }
@@ -285,7 +285,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         var touches = event.originalEvent.touches,
             changed = event.originalEvent.changedTouches;
         if ((touches.length === 1) && (changed.length === 1)) {
-            trackingStart(event, changed[0].pageX, changed[0].pageY, this);
+            trackingStart(event, this, changed[0].pageX, changed[0].pageY);
         } else {
             cancelTracking();
         }
