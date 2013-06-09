@@ -98,13 +98,15 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 // add buy-a-gift
-                var url = settings.get('customLocations/buy-a-gift', 'http://www.amazon.de/');
-                $list.append(
-                    $('<div class="buy-a-gift">').append(
-                        $('<i class="icon-gift">'), $.txt(' '),
-                        $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
-                    )
-                );
+                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'));
+                if (url !== 'none' && url !== '') {
+                    $list.append(
+                        $('<div class="buy-a-gift">').append(
+                            $('<i class="icon-gift">'), $.txt(' '),
+                            $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
+                        )
+                    );
+                }
                 // loop
                 _(baton.data).each(function (contact) {
                     var utc = date.Local.utc(contact.birthday), birthday, next, now, days, delta,
