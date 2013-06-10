@@ -4,10 +4,11 @@
     {{? it.editable === 'editable'}}
         <a href="#" class="action" data-action="edit">{{=it.edit}}</a>
         <a href="#" class="action" data-action="toggle">{{=it.state.text}}</a>
-    {{?}}
         <a href="#" class="close" data-action="delete">
             <i class="icon-trash"/>
         </a>
+    {{?}}
+        
     </div>
     <span data-property="rulename" class="list-title"></span>
 </li>

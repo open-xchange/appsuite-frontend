@@ -45,6 +45,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         .addButton("cancel", gt('Cancel'));
 
         myView.dialog.show();
+        myView.$el.find('input[name="rulename"]').focus();
         myView.collection = collection;
 
         myView.dialog.on('save', function () {

@@ -45,7 +45,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             var active = values[activeValue];
             return $('<div class="action dropdown value">').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
-                $('<ul class="dropdown-menu">').append(
+                $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
                             $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value}).append(
@@ -62,7 +62,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             var active = values[activeValue] || activeValue;
             return $('<div class="action ' + options.toggle + ' value ">').addClass(options.classes).append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
-                $('<ul class="dropdown-menu">').append(
+                $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
                             $('<a>', { href: '#', 'data-action': 'change-value-extern', 'data-value': value}).data(options).append(
@@ -105,7 +105,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
                 // box
                 $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
                 // drop down
-                $('<ul class="dropdown-menu">')
+                $('<ul class="dropdown-menu" role="menu">')
                 .append(
                     _(colors).map(function (colorObject) {
                         return $('<li>').append(
