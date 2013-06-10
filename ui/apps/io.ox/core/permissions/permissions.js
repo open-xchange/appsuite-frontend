@@ -200,7 +200,7 @@ define('io.ox/core/permissions/permissions',
         index: 200,
         id: 'entitysentence',
         draw: function (baton) {
-            var node;
+            var node, options;
             this.append(
                 $('<div class="entity">').append(
                     node = $('<div>').append(
@@ -211,47 +211,39 @@ define('io.ox/core/permissions/permissions',
                     )
                 )
             );
+
+            options = $('<div>').append(
+                // folder rights
+                gt('Folder permissions'), $.txt(_.noI18n(': ')),
+                    addDropdown('folder', baton), $.txt(_.noI18n('. ')),
+                // object rights
+                gt('Object permissions'), $.txt(_.noI18n(': ')),
+                addDropdown('read', baton), $.txt(_.noI18n(', ')),
+                addDropdown('write', baton), $.txt(_.noI18n(', ')),
+                addDropdown('delete', baton), $.txt(_.noI18n('. ')),
+                // admin
+                gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
+                    addDropdown('admin', baton), $.txt(_.noI18n('. ')));
             if (baton.admin) {
-                node.append(
-                    addRemoveButton(baton.model.get('entity')),
-                    $('<div class="readwrite">').append(
-                        // folder rights
-                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
-                        // object rights
-                        gt('Object permissions'), $.txt(_.noI18n(': ')),
-                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
-                        // admin
-                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
-                    )
-                );
+                options.addClass('readwrite');
             } else {
-                node.append(
-                    $('<div class="readonly">').append(
-                        // folder rights
-                        gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                            addDropdown('folder', baton), $.txt(_.noI18n('. ')),
-                        // object rights
-                        gt('Object permissions'), $.txt(_.noI18n(': ')),
-                        addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                        addDropdown('delete', baton), $.txt(_.noI18n('. ')),
-                        // admin
-                        gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                            addDropdown('admin', baton), $.txt(_.noI18n('. '))
-                    )
-                );
+                options.addClass('readonly');
             }
+            node.append(
+                addRemoveButton(baton.model.get('entity')),
+                options
+            );
+
             baton.view.updateRole();
         }
     });
 
     addRemoveButton = function (entity) {
-        if (isFolderAdmin && entity !== ox.user_id)
+        if (isFolderAdmin && entity !== ox.user_id) {
             return $('<a href="# "class="close">').append($('<i class="icon-trash">'));
+        } else {
+            return $();
+        }
     };
 
     addDropdown = function (permission, baton) {
