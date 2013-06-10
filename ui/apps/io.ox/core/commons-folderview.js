@@ -539,14 +539,14 @@ define('io.ox/core/commons-folderview',
             function resetWidths() {
                 if ($(window).width() < 700) {
                     app.getWindow().nodes.panel.css('left', '');
-                    sidepanel.attr('style', '');
+                    sidepanel.removeAttr('style');
                 }
             }
 
             function getWidths() {
                 windowContainer   = sidepanel.closest('.window-container-center');
                 maxSidePanelWidth = windowContainer.width() / 2;
-                resetWidths();
+                restoreWidth();
             }
 
             function applyWidth(width) {
