@@ -85,6 +85,16 @@ define('io.ox/mail/util',
     that = {
 
         /**
+         * currently registred types
+         * @example: { MSISND : PLMN }
+         * @example: 017012345678/TYPE=PLMN)
+         * @return {array} list of types
+         */
+        getChannelTypes: function () {
+            return settings.get('channeltypes', {'MSISDN': 'PLMN'});
+        },
+
+        /**
          * identify channel (email or phone)
          * @param  {string} value
          * @param  {boolean} check for activated cap first (optional: default is true)
@@ -93,7 +103,7 @@ define('io.ox/mail/util',
         getChannel: function (value, check) {
             //default value
             check = check || typeof check === 'undefined';
-            var type = value.indexOf('/TYPE=PLMN') > -1,
+            var type = value.indexOf('/TYPE=' + that.getChannelTypes().MSISDN) > -1,
                 //no check OR activated cap
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit

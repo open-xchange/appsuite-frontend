@@ -394,7 +394,7 @@ define('io.ox/mail/api',
     };
 
     /**
-     * pipes getList() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes getList() to remove typesuffix from sender
      * @param  {array} ids
      * @param  {boolean} useCache (default is true)
      * @param  {object} options
@@ -408,7 +408,7 @@ define('io.ox/mail/api',
     };
 
     /**
-     * pipes get() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes get() to remove typesuffix from sender
      * @param  {object} options
      * @param  {boolan} useCache (default is true)
      * @fires api#refresh.list
@@ -1486,6 +1486,16 @@ define('io.ox/mail/api',
             document.fixedtitle = false;
             document.title = document.temptitle;
         }
+    };
+
+    /**
+     * currently registred types
+     * @example: { MSISND : PLMN }
+     * @example: 017012345678/TYPE=PLMN)
+     * @return {array} list of types
+     */
+    api.getChannelTypes = function () {
+        return util.getChannelTypes();
     };
 
     return api;

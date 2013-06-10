@@ -856,7 +856,7 @@ define('io.ox/mail/write/main',
                 parse = function (list) {
                     return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                         .map(function (recipient) {
-                            var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : '/TYPE=PLMN';
+                            var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : '/TYPE=' + mailUtil.getChannelTypes().MSISDN;
                             return ['"' + recipient[0] + '"', recipient[1], typesuffix];
                         });
                 },

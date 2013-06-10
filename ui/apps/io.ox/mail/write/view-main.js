@@ -277,7 +277,7 @@ define("io.ox/mail/write/view-main",
                                     fieldlabel: getFieldLabel(field),
                                     displayname: data.display_name,
                                     text: '"' + data.display_name + '" <' + data[field] + '>',
-                                    value: mailUtil.cleanupPhone(data[field]) + '/TYPE=PLMN'
+                                    value: mailUtil.cleanupPhone(data[field]) + '/TYPE=' + mailUtil.getChannelTypes().MSISDN
                                 };
                             }
                         })
