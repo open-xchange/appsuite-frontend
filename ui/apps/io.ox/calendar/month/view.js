@@ -290,15 +290,16 @@ define('io.ox/calendar/month/view',
         index: 100,
         draw: function (baton) {
             var a = baton.model,
+                folder = baton.folder,
                 conf = 1,
                 confString = _.noI18n('%1$s'),
                 classes = '';
-
-            if (a.get('private_flag') && myself !== a.get('created_by')) {
+            if (a.get('private_flag') && ox.user_id !== a.get('created_by')) {
                 classes = 'private disabled';
             } else {
+                conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                 classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
-                    ' ' + util.getConfirmationClass(conf = util.getConfirmationStatus(a.attributes, myself)) +
+                    ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {
                     confString =

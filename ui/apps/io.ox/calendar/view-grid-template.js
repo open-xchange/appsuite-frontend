@@ -15,10 +15,11 @@ define("io.ox/calendar/view-grid-template",
     ["io.ox/calendar/util",
      "io.ox/core/tk/vgrid",
      "io.ox/core/extensions",
+     "io.ox/core/api/folder",
      "gettext!io.ox/calendar",
      "io.ox/core/api/user",
      "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, gt, userAPI, resourceAPI) {
+     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     "use strict";
     var fnClickPerson = function (e) {
@@ -57,7 +58,12 @@ define("io.ox/calendar/view-grid-template",
                 };
             },
             set: function (data, fields, index) {
-                this.addClass(util.getConfirmationClass(util.getConfirmationStatus(data)) + (data.hard_conflict ? ' hardconflict' : ''));
+                var folder = folderAPI.get({ folder: data.folder_id }),
+                    self = this;
+                folder.done(function (folder) {
+                    var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                    self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                });
                 fields.title
                     .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
