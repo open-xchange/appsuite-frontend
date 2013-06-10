@@ -13,9 +13,10 @@
 define('io.ox/calendar/acceptdeny',
     ['io.ox/calendar/api',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/api/folder',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'], function (api, dialogs, util, calSettings, gt) {
+     'gettext!io.ox/calendar'], function (api, dialogs, folderAPI, util, calSettings, gt) {
 
     'use strict';
 
@@ -74,40 +75,49 @@ define('io.ox/calendar/acceptdeny',
                 $(this).find('[data-property="comment"]').focus();
             })
             .done(function (action, data, node) {
-                var val = $.trim($(node).find('[data-property="comment"]').val());
-                if (action === 'cancel') {
-                    return;
-                }
-                o.data = {};
-                o.data.confirmmessage = val;
 
-                switch (action) {
-                case 'cancel':
-                    return;
-                case 'accepted':
-                    o.data.confirmation = 1;
-                    break;
-                case 'declined':
-                    o.data.confirmation = 2;
-                    break;
-                case 'tentative':
-                    o.data.confirmation = 3;
-                    break;
-                }
+                var folder = folderAPI.get({ folder: o.folder });
+                folder.done(function (folder) {
+                    var val = $.trim($(node).find('[data-property="comment"]').val());
 
-                api.confirm(o)
-                    .done(function () {
-                        if (showReminderSelect) {
-                            var reminder = parseInt(reminderSelect.find('select').val(), 10);
-                            // if (reminder !== defaultReminder) {
-                            delete o.data;
-                            o.alarm = reminder;
-                            api.update(o);
-                            // }
-                        }
-                    }).fail(function (err) {
-                        console.log('ERROR', err);
-                    });
+                    if (action === 'cancel') {
+                        return;
+                    }
+                    o.data = {};
+                    o.data.confirmmessage = val;
+                    // add current user id in shared folder
+                    if (folderAPI.is('shared', folder)) {
+                        o.data.id = folder.created_by;
+                    }
+
+                    switch (action) {
+                    case 'cancel':
+                        return;
+                    case 'accepted':
+                        o.data.confirmation = 1;
+                        break;
+                    case 'declined':
+                        o.data.confirmation = 2;
+                        break;
+                    case 'tentative':
+                        o.data.confirmation = 3;
+                        break;
+                    }
+
+                    api.confirm(o)
+                        .done(function () {
+                            if (showReminderSelect) {
+                                var reminder = parseInt(reminderSelect.find('select').val(), 10);
+                                // if (reminder !== defaultReminder) {
+                                delete o.data;
+                                o.alarm = reminder;
+                                api.update(o);
+                                // }
+                            }
+                        }).fail(function (err) {
+                            console.log('ERROR', err);
+                        });
+                });
             });
     };
 });
