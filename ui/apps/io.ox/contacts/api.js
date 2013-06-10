@@ -34,7 +34,7 @@ define('io.ox/contacts/api',
         };
 
     //mapped ids for msisdn
-    mapping.msisdn =  settings.get('msisdn', mapping.cellular);
+    mapping.msisdn =  settings.get('msisdn/columns', mapping.cellular);
 
     // generate basic API
     var api = apiFactory({
