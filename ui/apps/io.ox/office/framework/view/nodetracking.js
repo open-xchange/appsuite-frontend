@@ -104,48 +104,56 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             horizontal = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'horizontal'),
             // whether vertical auto-scrolling is enabled
             vertical = Utils.getBooleanOption(trackingOptions, 'autoScroll', false) || (Utils.getStringOption(trackingOptions, 'autoScroll') === 'vertical'),
-            // the border node for auto-scrolling
-            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
-            // the minimum increment for auto-scrolling
-            minIncrement = Utils.getIntegerOption(trackingOptions, 'minIncrement', 10, 1),
-            // the maximum increment for auto-scrolling
-            maxIncrement = Utils.getIntegerOption(trackingOptions, 'maxIncrement', Math.max(100, minIncrement), minIncrement),
-            // the maximum increment for auto-scrolling
-            acceleration = Utils.getNumberOption(trackingOptions, 'acceleration', 1.2, 1.05),
-            // the inner padding in the scroll node where auto-scrolling is active
-            innerPadding = Utils.getIntegerOption(trackingOptions, 'innerPadding', 0, 0),
             // the time in milliseconds between auto-scrolling events
             scrollInterval = Utils.getIntegerOption(trackingOptions, 'scrollInterval', 100, 100),
-            // the last increment for auto-scrolling, in horizontal and vertical direction
+            // the border node for auto-scrolling
+            borderNode = ('borderNode' in trackingOptions) ? $(trackingOptions.borderNode).first() : $(sourceNode),
+            // the margin around the border box where auto-scrolling becomes active
+            borderMargin = Utils.getIntegerOption(trackingOptions, 'borderMargin', 0),
+            // the size of the border around the scrolling border box for acceleration
+            borderSize = Utils.getIntegerOption(trackingOptions, 'borderSize', 30, 0),
+            // the minimum scrolling speed
+            minSpeed = Utils.getIntegerOption(trackingOptions, 'minSpeed', 10, 1),
+            // the maximum scrolling speed
+            maxSpeed = Utils.getIntegerOption(trackingOptions, 'maxSpeed', Math.max(100, minSpeed), minSpeed),
+            // the speed acceleration between two 'tracking:scroll' events
+            acceleration = Utils.getNumberOption(trackingOptions, 'acceleration', 1.2, 1.05),
+            // the last scroll increment, in horizontal and vertical direction
             scrollX = 0, scrollY = 0;
+
+        // returns the maximum speed for the passed distance to the border box
+        function getMaxSpeed(distance) {
+            return (borderSize === 0) ? maxSpeed : (Math.min(1, (distance - 1) / borderSize) * (maxSpeed - minSpeed) + minSpeed);
+        }
 
         if (horizontal || vertical) {
 
             scrollTimer = window.setInterval(function () {
 
                 var // the current screen position of the scroll node
-                    scrollBorder = Utils.getNodePositionInWindow(borderNode);
+                    borderBox = Utils.getNodePositionInWindow(borderNode),
+                    // the distances from border box to tracking position
+                    leftDist = horizontal ? (borderBox.left - borderMargin - lastX) : 0,
+                    rightDist = horizontal ? (lastX - (borderBox.left + borderBox.width + borderMargin)) : 0,
+                    topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
+                    bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
 
                 // calculate new horizontal increment
-                if (horizontal) {
-                    if (lastX < scrollBorder.left + innerPadding) {
-                        scrollX = (scrollX > -minIncrement) ? -minIncrement : Math.max(-maxIncrement, scrollX * acceleration);
-                    } else if (lastX >= scrollBorder.left + scrollBorder.width - innerPadding) {
-                        scrollX = (scrollX < minIncrement) ? minIncrement : Math.min(maxIncrement, scrollX * acceleration);
-                    } else {
-                        scrollX = 0;
-                    }
+                if (leftDist > 0) {
+                    scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
+                } else if (rightDist > 0) {
+                    scrollX = (scrollX < minSpeed) ? minSpeed : Math.min(scrollX * acceleration, getMaxSpeed(rightDist));
+                } else {
+                    scrollX = 0;
                 }
 
                 // calculate new vertical increment
-                if (vertical) {
-                    if (lastY < scrollBorder.top + innerPadding) {
-                        scrollY = (scrollY > -minIncrement) ? -minIncrement : Math.max(-maxIncrement, scrollY * acceleration);
-                    } else if (lastY >= scrollBorder.top + scrollBorder.height - innerPadding) {
-                        scrollY = (scrollY < minIncrement) ? minIncrement : Math.min(maxIncrement, scrollY * acceleration);
-                    } else {
-                        scrollY = 0;
-                    }
+                if (topDist > 0) {
+                    scrollY = (scrollY > -minSpeed) ? -minSpeed : Math.max(scrollY * acceleration, -getMaxSpeed(topDist));
+                } else if (bottomDist > 0) {
+                    scrollY = (scrollY < minSpeed) ? minSpeed : Math.min(scrollY * acceleration, getMaxSpeed(bottomDist));
+                } else {
+                    scrollY = 0;
                 }
 
                 // notify listeners
@@ -436,29 +444,44 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
      *      repeatedly as long as the mouse or touch point hovers or leaves the
      *      borders of a certain rectangle (of either the tracking node itself,
      *      or another custom node in the DOM, see the 'borderNode' option).
-     *  @param {jQuery|HTMLElement|String} [options.borderNode]
-     *      If specified, the node that will be used to decide whether to
-     *      enable auto-scrolling mode. If the mouse or touch point reaches or
-     *      leaves the borders of this node, 'tracking:scroll' events will be
-     *      triggered. If omitted, the border of the active tracking node will
-     *      be used instead. Has no effect, if the option 'autoScroll' has not
-     *      been set to true.
-     *  @param {Integer} [options.minIncrement=10]
-     *      The minimum amount of pixels (absolute value) passed to listeners
-     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
-     *      Has no effect, if the option 'autoScroll' has not been set to true.
-     *  @param {Integer} [options.maxIncrement=100]
-     *      The maximum amount of pixels (absolute value) passed to listeners
-     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
-     *      Has no effect, if the option 'autoScroll' has not been set to true.
-     *  @param {Integer} [options.innerPadding=0]
-     *      The inner distance from the borders of the scroll node where
-     *      auto-scrolling will be active. Has no effect, if the option
-     *      'autoScroll' has not been set to true.
      *  @param {Integer} [options.scrollInterval=100]
      *      The minimum time in milliseconds between two 'tracking:scroll'
-     *      events. Has no effect, if the option 'autoScroll' has not been set
-     *      to true.
+     *      events while auto-scrolling mode is active.
+     *  @param {Integer} [options.minSpeed=10]
+     *      The minimum amount of pixels (absolute value) passed to listeners
+     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
+     *  @param {Integer} [options.maxSpeed=100]
+     *      The maximum amount of pixels (absolute value) passed to listeners
+     *      of the 'tracking:scroll' event while auto-scrolling mode is active.
+     *  @param {jQuery|HTMLElement|String} [options.borderNode]
+     *      If specified, the node whose border box will be used to decide
+     *      whether to enable auto-scrolling mode. If the mouse or touch point
+     *      reaches or leaves the border box of this node, 'tracking:scroll'
+     *      events will be triggered. If omitted, the border box of the active
+     *      tracking node will be used instead. The size of the border box can
+     *      be modified with the option 'borderMargin'.
+     *  @param {Integer} [options.borderMargin=0]
+     *      The distance from the physical border box of the scroll node (see
+     *      option 'borderNode') where auto-scrolling becomes active. Positive
+     *      values increase the size of the border box, negative values
+     *      decrease its size.
+     *  @param {Integer} [options.borderSize=30]
+     *      The size of the acceleration area outside the border box (defined
+     *      by the options 'borderNode' and 'borderMargin'). Will be used to
+     *      determine the maximum scroll distance that can be reached while
+     *      accelerating. If the tracking position hovers the inner edge of the
+     *      acceleration area, the scroll distance will stick to the minimum
+     *      scroll distance defined by the option 'minSpeed'. At the outer
+     *      edge (and outside the acceleration area), the scroll distance will
+     *      accelerate from the minimum distance to the maximum distance
+     *      defined by the option 'maxSpeed' over time. Inside the area, the
+     *      maximum available scroll distance will be between the defined
+     *      limits, according to the current tracking position.
+     *  @param {Number} [options.acceleration=1.2]
+     *      Acceleration factor while increasing the (absolute value of the)
+     *      scrolling distance between two 'tracking:scroll' events from the
+     *      minimum to the maximum value (see options 'minSpeed' and
+     *      'maxSpeed').
      *
      * @returns {jQuery}
      *  A reference to this collection.
