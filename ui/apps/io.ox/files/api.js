@@ -109,6 +109,9 @@ define('io.ox/files/api',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
+        'aac' : 'audio/aac',
+        'm4a' : 'audio/mp4',
+        'm4b' : 'audio/mp4',
         // video
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
@@ -715,23 +718,24 @@ define('io.ox/files/api',
      * @return {boolean}
      */
     api.checkMediaFile = function (type, filename) {
+
+        /*  NOTE: See comments in mediaplayer.js */
+
         var pattern;
         if (type === 'video') {
             if (!Modernizr.video) { return false; }
-            // Disabled for Safari
-            // Not sure yet why it doesn't play any video files, this should be temporary
-            // Direct links to Files that are normally supported also don't work
-            if (_.browser.Safari) { return false; }
-            pattern =                             '\\.(mp4|m4v|mov|wmv|mpe?g|ogv|webm|3gp)';
-            if (_.browser.Chrome) {     pattern = '\\.(mp4|m4v|wmv|mpe?g|ogv|webm)'; }
-            if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
-            if (_.browser.IE) {         pattern = '\\.(mp4|m4v|wmv|mpe?g)'; }
-            if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(mp4|m4v|ogv|webm)'; }
+            else if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
+            else if (_.browser.IE) {         pattern = '\\.(mp4|m4v)'; }
+            else if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
+            else { return false; }
         } else {
             if (!Modernizr.audio) { return false; }
-            pattern =                             '\\.(mp3|m4a|m4b|wma|wav|ogg)';
-            if (_.browser.Safari) {     pattern = '\\.(mp3|m4a|m4b|wav)'; }
-            if (_.browser.IE) {         pattern = '\\.(mp3|m4a|m4b|wma|wav)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|mp4|ogg)'; }
+            else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
+            else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
+            else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg)'; }
+            else { return false; }
         }
         return (new RegExp(pattern, 'i')).test(filename);
     };
