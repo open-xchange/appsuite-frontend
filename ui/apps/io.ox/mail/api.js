@@ -1488,15 +1488,5 @@ define('io.ox/mail/api',
         }
     };
 
-    /**
-     * currently registred types
-     * @example: { MSISND : PLMN }
-     * @example: 017012345678/TYPE=PLMN)
-     * @return {array} list of types
-     */
-    api.getChannelTypes = function () {
-        return util.getChannelTypes();
-    };
-
     return api;
 });

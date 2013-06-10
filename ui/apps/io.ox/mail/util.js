@@ -18,7 +18,8 @@ define('io.ox/mail/util',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, gt) {
+     'settings!io.ox/contacts',
+     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -86,13 +87,16 @@ define('io.ox/mail/util',
 
         /**
          * currently registred types
-         * @example: { MSISND : PLMN }
-         * @example: 017012345678/TYPE=PLMN)
+         * @example: { MSISND : '/TYPE=PLMN' }
          * @return {array} list of types
          */
-        getChannelTypes: function () {
-            return settings.get('channeltypes', {'MSISDN': 'PLMN'});
-        },
+        getChannelSuffixes: (function () {
+            //important: used for global replacements so keep this value unique
+            var types = { msisdn: contactsSetting.get('msisdn/suffix', '/TYPE=PLMN') };
+            return function () {
+                return types;
+            };
+        }()),
 
         /**
          * identify channel (email or phone)
@@ -103,7 +107,7 @@ define('io.ox/mail/util',
         getChannel: function (value, check) {
             //default value
             check = check || typeof check === 'undefined';
-            var type = value.indexOf('/TYPE=' + that.getChannelTypes().MSISDN) > -1,
+            var type = value.indexOf(that.getChannelSuffixes().MSISDN) > -1,
                 //no check OR activated cap
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
