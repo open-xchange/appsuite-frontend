@@ -289,6 +289,9 @@ define('io.ox/core/tk/attachments',
         });
 
         var fileUploadWidget = function (options) {
+            options = _.extend({
+                tabindex: 1
+            }, options);
             var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid')),
             input;
             if (options.displayLabel) node.append($('<label>').text(options.displayLabelText || gt('File')));
@@ -302,12 +305,19 @@ define('io.ox/core/tk/attachments',
                         $('<span>').addClass('btn btn-file').append(
                             $('<span>').addClass('fileupload-new').text(gt('Select file')),
                             $('<span>').addClass('fileupload-exists').text(gt('Change')),
-                            input = (options.multi ? $('<input type="file" name="file" multiple="multiple" tabindex="1">') : $('<input name="file" type="file" tabindex="1">'))
+                            input = $('<input name="file" type="file">')
+                                .prop({
+                                    multiple: options.multi
+                                })
+                                .attr({
+                                    tabindex: options.tabindex
+                                })
                         ),
                         $('<a>', {'data-dismiss': 'fileupload', tabindex: 1}).addClass('btn fileupload-exists').text(gt('Cancel')),
                         (options.displayButton ? $('<button>', { 'data-action': 'upload', tabindex: 1 }).addClass('btn btn-primary').text(gt('Upload file')).hide() : '')
                     )
                 )
+
             );
             input.on('focus', function () {
                 $(this).parent().addClass('hover');
