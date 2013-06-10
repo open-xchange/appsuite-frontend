@@ -21,9 +21,15 @@ define('io.ox/core/api/autocomplete',
     'use strict';
 
     function Autocomplete(options) {
+        var that = this;
         this.options = options || {};
         this.cache = {};
         this.apis = [];
+
+        contactsAPI.on('create update delete', function () {
+            that.cache = {};
+        });
+
         if (options.users) {
             this.apis.push({type: 'user', api: contactsAPI});
         }

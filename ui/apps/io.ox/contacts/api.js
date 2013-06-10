@@ -381,6 +381,7 @@ define('io.ox/contacts/api',
      * @param  {array} list (object)
      * @fires  api#refresh.all
      * @fires  api#delete + cid
+     * @fires  api#delete (data)
      * @return {promise}
      */
     api.remove =  function (list) {
@@ -405,6 +406,7 @@ define('io.ox/contacts/api',
             .done(function () {
                 _(list).map(function (data) {
                     api.trigger('delete:' + encodeURIComponent(_.cid(data)), data);
+                    api.trigger('delete', data);
                 });
                 api.trigger('refresh.all');
             });
