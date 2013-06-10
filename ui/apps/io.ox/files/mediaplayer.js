@@ -11,6 +11,19 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
+/*
+    NOTE:
+
+    We cannot yet determine what content is in a container like mp4, aac or mov.
+    This information should come from the backend so we can decide if the currently used
+    browsers native html5 video playback or one of the fallbacks can play the provided
+    file correctly.
+    mp4 files e.g. can be audio only, video only or mixed and will therefore be displayed
+    in both players for now.
+
+    Flash and silverlight fallbacks are only working for audiofiles because of this.
+    If we provide an unsupported video file to a flash fallback it is likely to crash.
+*/
 
 define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
@@ -70,7 +83,6 @@ define('io.ox/files/mediaplayer',
         resetPlayer: function (url, mimetype) {
             if (this.mediaelement) {
                 if (!_.browser.IE) { this.mediaelement.pause(); }
-                if (_.browser.Chrome) { this.mediaelement.setSrc(''); }
                 $(this.mediaelement).remove();
             }
             this.drawPlayer(url, mimetype);
@@ -325,10 +337,10 @@ define('io.ox/files/mediaplayer',
 
         close: function () {
             if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0) {
-                if (this.mediaelement) {
-                    this.mediaelement.pause();
-                    if (_.browser.Chrome) { this.mediaelement.setSrc(''); }
-                    $(this.mediaelement).remove();
+                if (window.mejs) {
+                    _(window.mejs.players).each(function (player) {
+                        player.pause();
+                    });
                 }
                 $('#io-ox-mediaplayer').remove();
                 this.container.remove();
