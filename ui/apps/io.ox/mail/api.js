@@ -402,7 +402,7 @@ define('io.ox/mail/api',
      */
     api.getList = function (ids, useCache, options) {
         return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, util.removeTypeSuffix);
+            _.each(data, util.removeChannelSuffix);
             return data;
         });
     };
@@ -417,7 +417,7 @@ define('io.ox/mail/api',
     api.get = function (options, useCache) {
         return get.call(this, options, useCache).then(function (mail) {
             if (_.isObject(mail)) {
-                util.removeTypeSuffix(mail);
+                util.removeChannelSuffix(mail);
             }
             return mail;
         });
@@ -916,7 +916,7 @@ define('io.ox/mail/api',
                         // nothing to do - nothing to break
                     } else {
                         //general: remove type suffix from sender/recipients
-                        data.attachments[0].content = util.removeTypeSuffix(data.attachments[0].content);
+                        data.attachments[0].content = util.removeChannelSuffix(data.attachments[0].content);
                         //content-type specific
                         if (data.attachments[0].content_type === 'text/plain') {
                             $('<div>')

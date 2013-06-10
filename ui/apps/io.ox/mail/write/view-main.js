@@ -735,7 +735,7 @@ define("io.ox/mail/write/view-main",
                 // message?
                 if (isMessage) {
                     //remove typesuffix when displaying attached mail;
-                    mailUtil.removeTypeSuffix(file.message);
+                    mailUtil.removeChannelSuffix(file.message);
                     info = $('<span>').addClass('filesize').text('');
                     icon = $('<i>').addClass('icon-paper-clip');
                     name = file.message.subject || '\u00A0';
@@ -862,7 +862,7 @@ define("io.ox/mail/write/view-main",
                         display_name: elem[0]
                     };
                 //email or phone property? remove typesuffix
-                custom[channel] = mailUtil.removeTypeSuffix(elem[1]);
+                custom[channel] = mailUtil.removeChannelSuffix(elem[1]);
                 elem = custom;
             }
 
