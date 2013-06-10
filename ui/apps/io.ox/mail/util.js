@@ -162,12 +162,23 @@ define('io.ox/mail/util',
                 if (!_.isEmpty(types)) {
                     if (_.isString(mail)) {
                         mail = remove(mail);
+                    } else if (_.isArray(mail)) {
+                        //array of nested mails
+                        _.each(mail, function (message) {
+                            message = that.removeChannelSuffix(message);
+                        });
                     } else if (_.isObject(mail)) {
                         if (mail.from[0][1])
                             mail.from[0][1] = remove(mail.from[0][1]);
                         if (_.isArray(mail.to)) {
                             _.each(mail.to, function (recipient) {
                                 recipient[1] = remove(recipient[1]);
+                            });
+                        }
+                        ///nestedm mail
+                        if (_.isArray(mail.nested_msgs)) {
+                            _.each(mail.nested_msgs, function (message) {
+                                message = that.removeChannelSuffix(message);
                             });
                         }
                     }

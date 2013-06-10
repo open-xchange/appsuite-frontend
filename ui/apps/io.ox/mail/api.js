@@ -910,6 +910,9 @@ define('io.ox/mail/api',
             })
             .pipe(function (data) {
                 var text = '', quote = '', tmp = '';
+                //fix nested messages
+                if (data.nested_msgs)
+                    data.nested_msgs = util.removeChannelSuffix(data.nested_msgs);
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
