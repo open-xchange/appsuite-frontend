@@ -203,11 +203,33 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 e.preventDefault();
                 var node = $(e.target),
                     data = node.data();
-
                 if (data.target) {
                     var arrayOfTests = this.model.get('test');
                     arrayOfTests.id = data.value;
                     this.model.set('test', arrayOfTests);
+                } else if (data.test === 'create') {
+
+                    var testArray =  this.model.get('test');
+                    if (checkForMultipleTests(this.el).length > 1) {
+                        testArray.tests.push(_.copy(DEFAULTS.tests[data.value], true));
+
+                    } else if (checkForMultipleTests(this.el).length === 1) {
+                        var createdArray = [testArray];
+                        createdArray.push(_.copy(DEFAULTS.tests[data.value], true));
+                        testArray = { id: 'allof'};
+                        testArray.tests = createdArray;
+                    } else {
+
+                        testArray = _.copy(DEFAULTS.tests[data.value], true);
+                    }
+
+                    this.model.set('test', testArray);
+
+                } else if (data.action === 'create') {
+                    var actionArray = this.model.get('actioncmds');
+                    actionArray.push(_.copy(DEFAULTS.actions[data.value], true));
+
+                    this.model.set('actioncmds', actionArray);
                 }
                 this.render();
 
@@ -225,46 +247,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     testAction = list.attr('data-action'),
 
                     testArray =  this.model.get('test'),
-                    actionArray = this.model.get('actioncmds'),
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
 
-                if (testAction === 'create-test') {
-                    list.remove();
-                    if (checkForMultipleTests(this.el).length > 1) {
-                        testArray.tests.push(_.copy(DEFAULTS.tests[value], true));
+                link.text(translatedValue);
 
-                    } else if (checkForMultipleTests(this.el).length === 1) {
-                        var createdArray = [testArray];
-                        createdArray.push(_.copy(DEFAULTS.tests[value], true));
-                        testArray = { id: 'allof'};
-                        testArray.tests = createdArray;
-                    } else {
-
-                        testArray = _.copy(DEFAULTS.tests[value], true);
-                    }
-
-                    this.model.set('test', testArray);
-
-                    this.render();
-
-                } else if (testAction === 'create-action') {
-                    list.remove();
-
-                    actionArray.push(_.copy(DEFAULTS.actions[value], true));
-
-                    this.model.set('actioncmds', actionArray);
-                    this.render();
-
+                if (checkForMultipleTests(this.el).length > 1) {
+                    testArray.tests[testID].comparison = value;
                 } else {
-                    link.text(translatedValue);
-
-                    if (checkForMultipleTests(this.el).length > 1) {
-                        testArray.tests[testID].comparison = value;
-                    } else {
-                        testArray.comparison = value;
-                    }
-                    this.model.set('test', testArray);
+                    testArray.comparison = value;
                 }
+                this.model.set('test', testArray);
 
             },
 
@@ -399,24 +391,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
-
-            },
-
-            onCreateNewCondition: function () {
-                var list = $(this.el).find('ol.widget-list.tests');
-                list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-test'}).text(gt('select new condition type')).append(
-                        elements.drawOptions('true', headerTranslation)
-                    )
-                );
-
-            },
-
-            onCreateNewAction: function () {
-                var list = $(this.el).find('ol.widget-list.actions');
-                list.append($('<li>').addClass('filter-settings-view').attr({'data-action': 'create-action'}).text(gt('select new action type')).append(
-                        elements.drawOptions('keep', actionsTranslations)
-                    )
-                );
 
             },
 
@@ -571,7 +545,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             var headlineTest = $('<legend>').addClass("sectiontitle expertmode").text(gt('Conditions')),
                 headlineActions = $('<legend>').addClass("sectiontitle expertmode").text(gt('Actions'));
 
-            this.append(headlineTest, listTests, elements.drawCreateNewTestButton(), headlineActions, listActions, elements.drawCreateNewActionButton());
+            this.append(
+                headlineTest, listTests,
+                elements.drawOptionsExtern(gt('Create new condition'), headerTranslation, {
+                    test: 'create',
+                    classes: 'no-positioning block',
+                    toggle: 'dropdown'
+                }),
+                headlineActions, listActions,
+                elements.drawOptionsExtern(gt('Create new action'), actionsTranslations, {
+                    action: 'create',
+                    classes: 'no-positioning block',
+                    toggle: 'dropup'
+                })
+            );
 
         }
     });
@@ -592,13 +579,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         draw: function (baton) {
             var arrayOfTests = baton.model.get('test'),
                 options = {
-                    target: 'id'
+                    target: 'id',
+                    toggle: 'dropdown',
+                    classes: 'no-positioning'
 //                    test: { nrInArray: '', target: ''  },
 //                    action: { nrInArray: '', target: ''  }
                 },
                 partOne,
                 partTwo,
-                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('all'), anyof: gt('any')}, options, 'no-positioning');
+                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('all'), anyof: gt('any')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 if (arrayOfTests.id === 'allof') {
                     partOne = gt('Apply rule if');

@@ -40,14 +40,6 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             return $('<a href="#" class="close" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
         },
 
-        drawCreateNewTestButton: function () {
-            return $('<a>').addClass('newcondition').attr('type', 'button').text(gt('Add condition'));
-        },
-
-        drawCreateNewActionButton: function () {
-            return $('<a>').addClass('newaction').attr('type', 'button').text(gt('Add action'));
-        },
-
         drawOptions: function (activeValue, values) {
 
             var active = values[activeValue];
@@ -65,10 +57,10 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             );
         },
 
-        drawOptionsExtern: function (activeValue, values, options, classes) {
+        drawOptionsExtern: function (activeValue, values, options) {
 
-            var active = values[activeValue];
-            return $('<div class="action dropdown value ">').addClass(classes).append(
+            var active = values[activeValue] || activeValue;
+            return $('<div class="action ' + options.toggle + ' value ">').addClass(options.classes).append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
                 $('<ul class="dropdown-menu">').append(
                     _(values).map(function (name, value) {
