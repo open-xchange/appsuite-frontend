@@ -100,7 +100,7 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.nodes.file_upload = attachments.fileUploadWidget({displayLabel: true});
+            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0 });
             this.append(
                 baton.nodes.file_upload
             );
