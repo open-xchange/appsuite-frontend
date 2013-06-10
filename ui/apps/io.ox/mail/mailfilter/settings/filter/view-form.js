@@ -97,6 +97,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return $(el).find('[data-test-id]');
         },
 
+        prepareFolderForDisplay = function (folder) {
+            var arrayOfParts = folder.split("/");
+            arrayOfParts.shift();
+            return arrayOfParts.join("/");
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
             className: "io-ox-mailfilter-edit",
@@ -365,10 +371,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     })
                     .done(function (action) {
                         if (action === 'select') {
-                            var value = _(tree.selection.get()).first();
+                            var value = _(tree.selection.get()).first(),
+                                prepared = prepareFolderForDisplay(value);
+
                             actionArray[actionID][type] = value;
                             self.model.set('actioncmds', actionArray);
-                            inputField.val(value);
+
+                            inputField.val(prepared);
                             inputField.attr('title', value);
                         }
                         tree.destroy().done(function () {
@@ -519,7 +528,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     else if (action.id === 'move') {
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'into'}).text(actionsTranslations[action.id]).append(
-                            elements.drawDisabledInputfield(action.into),
+                            elements.drawDisabledInputfield(prepareFolderForDisplay(action.into)),
                             elements.drawFolderSelect(),
                             elements.drawDeleteButton('action')
                         ));
