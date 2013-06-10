@@ -349,7 +349,7 @@ define("io.ox/contacts/view-detail",
         if (!number) return null;
         return $('<div>').append(
             $('<label>').text(label),
-            $('<a>', { href: 'callto:' + number }).text(number)
+            $('<a>', { href: _.device('smartphone') ? 'tel:' + number: 'callto:' + number }).text(number)
         );
     }
 
