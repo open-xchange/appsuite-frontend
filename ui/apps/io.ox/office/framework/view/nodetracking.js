@@ -53,6 +53,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         // the tracking position passed to the last event
         lastX = 0, lastY = 0,
 
+        // whether the mouse or touch point has been moved after tracking has started
+        moved = false,
+
         // the browser timer used for auto-scrolling
         scrollTimer = null;
 
@@ -138,6 +141,9 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
                     topDist = vertical ? (borderBox.top - borderMargin - lastY) : 0,
                     bottomDist = vertical ? (lastY - (borderBox.top + borderBox.height + borderMargin)) : 0;
 
+                // start auto-scrolling after the first 'tracking:move' event
+                if (!moved) { return; }
+
                 // calculate new horizontal increment
                 if (leftDist > 0) {
                     scrollX = (scrollX > -minSpeed) ? -minSpeed : Math.max(scrollX * acceleration, -getMaxSpeed(leftDist));
@@ -183,6 +189,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         trackingNode = $(sourceNode);
         startX = lastX = pageX;
         startY = lastY = pageY;
+        moved = false;
 
         // insert the overlay node for mouse pointer
         $('body').append(overlayNode.css('cursor', $(targetNode).css('cursor')));
@@ -246,6 +253,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
             triggerEvent('tracking:move', event, { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
             lastX = pageX;
             lastY = pageY;
+            moved = true;
         }
     }
 
