@@ -859,8 +859,8 @@ define("io.ox/mail/write/view-main",
                     custom = {
                         display_name: elem[0]
                     };
-                //email or phone property? remove typesuffix
-                custom[channel] = mailUtil.removeChannelSuffix(elem[1]);
+                //email or phone property?
+                custom[channel] = elem[1];
                 elem = custom;
             }
 
