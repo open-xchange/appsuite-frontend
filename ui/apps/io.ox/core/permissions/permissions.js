@@ -264,14 +264,18 @@ define('io.ox/core/permissions/permissions',
             return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
-            $('<a href="#" data-toggle="dropdown">').attr('data-type', permission).text(menus[permission][selected]),
-            $('<ul class="dropdown-menu">')
+            $('<a href="#">').attr({
+                'data-type': permission,
+                'aria-haspopup': true,
+                'data-toggle': 'dropdown'
+            }).text(menus[permission][selected]),
+            $('<ul class="dropdown-menu" role="menu">')
         );
         _(menus[permission]).each(function (item, value) {
             if (value === '64') return true; // Skip maximum rights
             menu.find('ul').append(
                 $('<li>').append(
-                    $('<a>', { href: '#', 'data-value': value }).addClass('bit').text(item)
+                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem'}).addClass('bit').text(item)
                 )
             );
         });
