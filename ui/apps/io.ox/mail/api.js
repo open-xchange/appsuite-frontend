@@ -914,47 +914,52 @@ define('io.ox/mail/api',
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
                         // nothing to do - nothing to break
-                    } else if (data.attachments[0].content_type === 'text/plain') {
-                        $('<div>')
-                            // escape everything but BR tags
-                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                            .contents().each(function () {
-                                if (this.tagName === 'BR') {
-                                    text += '\n';
-                                } else {
-                                    text += $(this).text();
-                                }
+                    } else {
+                        //general: remove type suffix from sender/recipients
+                        data.attachments[0].content = util.removeTypeSuffix(data.attachments[0].content);
+                        //content-type specific
+                        if (data.attachments[0].content_type === 'text/plain') {
+                            $('<div>')
+                                // escape everything but BR tags
+                                .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
+                                .contents().each(function () {
+                                    if (this.tagName === 'BR') {
+                                        text += '\n';
+                                    } else {
+                                        text += $(this).text();
+                                    }
+                                });
+                            // remove white space
+                            text = $.trim(text);
+                            // polish for html editing
+                            if (view === 'html') {
+                                // escape '<'
+                                text = text.replace(/</ig, '&lt;');
+                                // replace '\n>' sequences by blockquote-tags
+                                _(text.split(/\n/).concat('\n')).each(function (line) {
+                                    if (/^> /.test(line)) {
+                                        quote += line.substr(2) + '\n';
+                                    } else {
+                                        tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                        quote = '';
+                                    }
+                                });
+                                // transform line-feeds back to BR
+                                data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
+                            } else {
+                                // replace
+                                data.attachments[0].content = $.trim(text);
+                            }
+                        } else if (data.attachments[0].content_type === 'text/html') {
+                            // robust approach for large mails
+                            tmp = document.createElement('DIV');
+                            tmp.innerHTML = data.attachments[0].content;
+                            _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                                node.removeAttribute('style');
                             });
-                        // remove white space
-                        text = $.trim(text);
-                        // polish for html editing
-                        if (view === 'html') {
-                            // escape '<'
-                            text = text.replace(/</ig, '&lt;');
-                            // replace '\n>' sequences by blockquote-tags
-                            _(text.split(/\n/).concat('\n')).each(function (line) {
-                                if (/^> /.test(line)) {
-                                    quote += line.substr(2) + '\n';
-                                } else {
-                                    tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
-                                    quote = '';
-                                }
-                            });
-                            // transform line-feeds back to BR
-                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
-                        } else {
-                            // replace
-                            data.attachments[0].content = $.trim(text);
+                            data.attachments[0].content = tmp.innerHTML;
+                            tmp = null;
                         }
-                    } else if (data.attachments[0].content_type === 'text/html') {
-                        // robust approach for large mails
-                        tmp = document.createElement('DIV');
-                        tmp.innerHTML = data.attachments[0].content;
-                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                            node.removeAttribute('style');
-                        });
-                        data.attachments[0].content = tmp.innerHTML;
-                        tmp = null;
                     }
                 } else {
                     data.attachments = data.attachments || [{}];
