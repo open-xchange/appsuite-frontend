@@ -401,6 +401,7 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.getList = function (ids, useCache, options) {
+        //TOOD: use this until backend removes channel suffix
         return getList.call(this, ids, useCache, options).then(function (data) {
             _.each(data, util.removeChannelSuffix);
             return data;
@@ -415,6 +416,7 @@ define('io.ox/mail/api',
      * @return {deferred} (resolve returns response)
      */
     api.get = function (options, useCache) {
+        //TOOD: use this until backend removes channel suffix
         return get.call(this, options, useCache).then(function (mail) {
             if (_.isObject(mail)) {
                 util.removeChannelSuffix(mail);
@@ -911,6 +913,7 @@ define('io.ox/mail/api',
             .pipe(function (data) {
                 var text = '', quote = '', tmp = '';
                 //fix nested messages
+                //TOOD: use this until backend removes channel suffix
                 if (data.nested_msgs)
                     data.nested_msgs = util.removeChannelSuffix(data.nested_msgs);
                 // transform pseudo-plain text to real text
@@ -919,6 +922,7 @@ define('io.ox/mail/api',
                         // nothing to do - nothing to break
                     } else {
                         //general: remove type suffix from sender/recipients
+                        //TOOD: use this until backend removes channel suffix
                         data.attachments[0].content = util.removeChannelSuffix(data.attachments[0].content);
                         //content-type specific
                         if (data.attachments[0].content_type === 'text/plain') {
