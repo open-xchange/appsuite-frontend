@@ -446,10 +446,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     api.sendWithoutSequence = function (options) {
         var def = $.Deferred(),
-            bufferinterval = 0;
+            bufferinterval = (_.isNumber(options.bufferinterval)) ? options.bufferinterval : BUFFER_INTERVAL;
         if (options.trace) {
             delete options.trace;
             options.tracer = uuids.randomUUID();
+        }
+        if (_.isNumber(options.bufferinterval)) {
+            delete options.bufferinterval;  // Do not send bufferinterval to server
         }
         if (_.isUndefined(options.seq)) {
             def.resolve(); // Pretend a message without sequence numbers always arrives
@@ -475,7 +478,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             queue.stanzas.push(JSON.parse(JSON.stringify(options)));
             if (!queue.timer) {
                 queue.timer = true;
-                bufferinterval = (_.isNumber(options.bufferinterval)) ? options.bufferinterval : BUFFER_INTERVAL;
                 setTimeout(drainBuffer, bufferinterval);
             }
         } else {
