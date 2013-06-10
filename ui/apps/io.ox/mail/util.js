@@ -146,16 +146,24 @@ define('io.ox/mail/util',
          * @return {undefined}
          */
         removeTypeSuffix:  function (mail) {
-            if (_.isObject(mail)) {
+            var list = that.getChannelTypes(),
+                //remove typesuffx from string
+                remove = function (value) {
+                    _.each(list, function (type) {
+                        value = value.replace(new RegExp('/TYPE=' + type, 'ig'), '');
+                    });
+                    return value;
+                };
+            if (_.isString(mail)) {
+                mail = remove(mail);
+            } else if (_.isObject(mail)) {
                 if (mail.from[0][1])
-                    mail.from[0][1] = mail.from[0][1].split('/')[0];
+                    mail.from[0][1] = remove(mail.from[0][1]);
                 if (_.isArray(mail.to)) {
                     _.each(mail.to, function (recipient) {
-                        recipient[1] = recipient[1].split('/')[0];
+                        recipient[1] = remove(recipient[1]);
                     });
                 }
-            } else if (_.isString(mail)) {
-                mail = mail.replace(new RegExp('/TYPE=PLMN', 'g'), '');
             }
             return mail;
         },

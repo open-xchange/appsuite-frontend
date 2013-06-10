@@ -861,8 +861,8 @@ define("io.ox/mail/write/view-main",
                     custom = {
                         display_name: elem[0]
                     };
-                //email or phone property? remove typesuffix (example: '0178000000/TYPE=PLMN')
-                custom[channel] = channel === 'phone' ? elem[1].split('/')[0] : elem[1];
+                //email or phone property? remove typesuffix
+                custom[channel] = mailUtil.removeTypeSuffix(elem[1]);
                 elem = custom;
             }
 
