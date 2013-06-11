@@ -210,6 +210,34 @@ define.async('io.ox/office/tk/utils',
         });
     };
 
+    /**
+     * Finds the last element in the passed array, that passed a truth test.
+     *
+     * @param {Array} array
+     *  The array to be searched for a matching element.
+     *
+     * @param {Function} iterator
+     *  The iterator implementing the truth test. Receives the array element,
+     *  the element index, and the complete array. The method iterates
+     *  backwards through the array, and returns the first array element that
+     *  passes the truth test.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Any}
+     *  The last matching element in the array; or undefined, if no element
+     *  passes the truth test.
+     */
+    Utils.findLast = function (array, iterator, context) {
+        for (var index = array.length - 1; index >= 0; index -= 1) {
+            if (iterator.call(context, array[index], index, array)) {
+                return array[index];
+            }
+        }
+    };
+
     // calculation, conversion, string manipulation ---------------------------
 
     /**
