@@ -222,9 +222,10 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     function dateField(options) {
-        options.point.extend(new forms.DateControlGroup({
+        options.point.extend(new forms.DatePicker({
             id: options.field,
             index: options.index,
+            display: 'DATE',
             label: model.fields[options.field],
             attribute: options.field,
             rare: options.isRare
