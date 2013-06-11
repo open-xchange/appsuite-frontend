@@ -33,7 +33,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
         },
 
         drawFolderSelect: function () {
-            return $('<a>').addClass('folderselect').attr('type', 'button').text('select Folder');
+            return $('<a href="#">').addClass('folderselect').text('select Folder');
         },
 
         drawDeleteButton: function (type) {
