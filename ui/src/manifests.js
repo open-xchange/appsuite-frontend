@@ -1,10 +1,9 @@
 define(function () {
     return [
         {
-            namespace: 'core',
-            path: 'plugins/upsell/bubbles/register'
+            namespace: 'portal',
+            path: 'plugins/playground/fluppi/register'
         },
-
         {
             namespace: ['io.ox/settings/main'],
             path: 'io.ox/mail/mailfilter/settings/register',
@@ -22,10 +21,10 @@ define(function () {
         //     namespace: ['io.ox/settings/main'],
         //     path: 'io.ox/core/pubsub/settings/register'
         // },
-        {
-            namespace: ['io.ox/portal/widgets'],
-            path: 'plugins/owm/portal'
-        },
+        // {
+        //     namespace: ['io.ox/portal/widgets'],
+        //     path: 'plugins/owm/portal'
+        // },
         {
             path: 'io.ox/mail/main',
             title: "Mail",

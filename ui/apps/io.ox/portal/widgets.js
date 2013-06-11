@@ -146,6 +146,9 @@ define('io.ox/portal/widgets',
         },
 
         getPluginByType: function (type) {
+            // look for full plugin path
+            var plugin = ext.point('io.ox/portal/widget/' + type).prop('plugin');
+            if (plugin) return plugin;
             // look for type
             var prop = ext.point('io.ox/portal/widget/' + type).prop('type');
             return 'plugins/portal/' + (prop || type) + '/register';

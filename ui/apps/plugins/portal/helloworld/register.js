@@ -23,6 +23,9 @@ define('plugins/portal/helloworld/register',
 
     console.info('Loaded portal plugin: plugins/portal/helloworld/register');
 
+    // this line allows putting this file to other folders than "apps/plugins/portal"
+    ext.point('io.ox/portal/widget').extend({ id: 'helloworld' });
+
     ext.point('io.ox/portal/widget/helloworld').extend({
 
         // widget title (fills <h2> title node)
