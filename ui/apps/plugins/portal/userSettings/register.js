@@ -17,6 +17,7 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
     'use strict';
 
     function changeUserData(e) {
+
         require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, userEdit) {
 
             var popup = new dialogs.SidePopup({ easyOut: true }),
@@ -42,11 +43,12 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
         });
     }
 
-    function changePassword(e) {
+    function changePassword() {
+
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
 
             new dialogs.ModalDialog({ async: true, width: 400 })
-            .header($('<h4>').text('Change password'))
+            .header($('<h4>').text(gt('Change password')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Your current password')),
@@ -122,4 +124,13 @@ define('plugins/portal/userSettings/register', ['io.ox/core/extensions', 'gettex
         editable: false,
         unique: true
     });
+
+    return {
+        changePassword: function (e) {
+            if (e && e.preventDefault) e.preventDefault();
+            require(['io.ox/core/capabilities'], function (capabilities) {
+                if (capabilities.has('edit_password')) changePassword();
+            });
+        }
+    };
 });

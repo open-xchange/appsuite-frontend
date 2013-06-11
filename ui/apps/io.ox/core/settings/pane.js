@@ -18,9 +18,11 @@ define('io.ox/core/settings/pane',
          'io.ox/backbone/forms',
          'io.ox/core/http',
          'io.ox/core/api/apps',
+         'io.ox/core/capabilities',
+         'plugins/portal/userSettings/register',
          'settings!io.ox/core',
          'gettext!io.ox/core'],
-         function (ext, BasicModel, views, forms, http, appAPI, settings, gt) {
+         function (ext, BasicModel, views, forms, http, appAPI, capabilities, userSettings, settings, gt) {
 
     'use strict';
 
@@ -29,7 +31,7 @@ define('io.ox/core/settings/pane',
         reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
 
     ext.point("io.ox/core/settings/detail").extend({
-        index: 100,
+        index: 50,
         id: 'extensions',
         draw: function () {
             var model = settings.createModel(BasicModel);
@@ -51,6 +53,23 @@ define('io.ox/core/settings/pane',
             new SettingView({model: model}).render().$el.appendTo(this);
         }
     });
+
+    if (capabilities.has('edit_password')) {
+        point.basicExtend({
+            id: 'change-password',
+            index: 'last',
+            draw: function () {
+                this.append(
+                    $('<div class="control-group">').append(
+                        $('<div class="controls">').append(
+                            $('<a class="btn">').text(gt('Change password'))
+                            .on('click', userSettings.changePassword)
+                        )
+                    )
+                );
+            }
+        });
+    }
 
     point.extend(new forms.SelectControlGroup({
         id: 'language',
