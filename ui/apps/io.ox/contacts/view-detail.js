@@ -110,7 +110,9 @@ define("io.ox/contacts/view-detail",
         index: (INDEX += 100),
         id: "inline-actions",
         draw: function (baton) {
-            ext.point("io.ox/contacts/detail/actions").invoke("draw", this, baton.data);
+            if (!api.looksLikeResource(baton.data)) {
+                ext.point("io.ox/contacts/detail/actions").invoke("draw", this, baton.data);
+            }
         }
     });
 
@@ -523,18 +525,33 @@ define("io.ox/contacts/view-detail",
     // only applies to resource because they have a "description" field.
     // contacts just have a "note"
 
+    var regPhone = /(\+?[\d\x20\/()]{4,})/g,
+        regClean = /[^+0-9]/g;
+
     ext.point("io.ox/contacts/detail/content").extend({
         index: 'last',
         id: "description", //
         draw: function (baton) {
 
-            var str = $.trim(baton.data.description || '');
+            var str = $.trim(baton.data.description || ''), isHTML;
             if (str !== '') {
+
+                isHTML = looksLikeHTML(str);
+
+                // find phone numbers & links
+                str = str.replace(regPhone, function (match) {
+                    var number = match.replace(regClean, '');
+                    return '<a href="callto:' + number + '">' + match + '</a>';
+                });
+
+                // fix missing newlines
+                if (!isHTML) {
+                    str = str.replace(/\n/g, '<br>');
+                }
+
                 this.append(
                     $('<div class="description">').append(
-                        $('<div>').html(
-                            looksLikeHTML(str) ? str : str.replace(/\n/g, '<br>')
-                        ),
+                        $('<div>').html(str),
                         // add callback?
                         baton.data.callbacks && 'extendDescription' in baton.data.callbacks ?
                             $('<a href="#">').text(gt('Copy to description'))

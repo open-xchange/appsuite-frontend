@@ -416,8 +416,8 @@
     .section-title {
         color: #EEE;
         border: none;
-        font-size: 24px;
         font-family: @lightFontFamily;
+        font-size: 24px;
         margin: 0 0 4px 13px;
         line-height: 46px;
     }
@@ -1390,6 +1390,7 @@ span.hint {
 .io-ox-inline-links {
     position: relative;
     font-size: @inlineLinkFontSize;
+    font-weight: 300;
     margin: @inlineLinksMargin;
     clear: both;
     z-index: 3;
@@ -1487,16 +1488,18 @@ nav.io-ox-inline-links + header {
     background-color: white;
     z-index: 3; /* above .window-content */
 
+    @shadowColor: #ccc;
+
     &.right {
         left: 49.5%;
         right: 0px;
-        .box-shadow(-10px 0px 50px -5px #888);
+        .box-shadow(-10px 0px 50px -5px @shadowColor);
     }
 
     &.left {
         left: 0px;
         right: 49.5%;
-        .box-shadow(10px 0px 50px -5px #888);
+        .box-shadow(10px 0px 50px -5px @shadowColor);
     }
 
 }
@@ -1509,8 +1512,8 @@ nav.io-ox-inline-links + header {
 .io-ox-sidepopup-pane {
     top: 60px;
     padding-top: 0px;
+    outline: 0;
 }
-
 
 .io-ox-sidepopup-close {
 
@@ -1756,6 +1759,7 @@ input.nice-input {
 
     .folder-label {
 
+        font-weight: 300;
         display: table-cell;
         margin: 0 1em 0 0;
 
@@ -1830,9 +1834,9 @@ input.nice-input {
         margin-bottom: 21px;
 
         .section-title {
-            font-size: 21px;
-            line-height: 1em;
-            font-weight: 300;
+            font-size: 22px;
+            line-height: 26px;
+            font-weight: 100;
             color: #ccc;
             padding: 0 13px 0.5em 13px;
         }
@@ -1856,6 +1860,8 @@ input.nice-input {
 .foldertree-sidepanel {
 
     background-color: @foldertreeSidepanelBackground;
+
+    background-image: radial-gradient(ellipse at center, lighten(@foldertreeSidepanelBackground, 8%) 0%, @foldertreeSidepanelBackground 100%);
 
     &.border-right {
         border: 0px none;
@@ -1886,6 +1892,10 @@ input.nice-input {
 
             .folder {
 
+                .folder-label {
+                    text-shadow: 0 0 2px #000;
+                }
+
                 &.selectable .folder-label {
                     color: @foldertreeActiveLabelColor;
                 }
@@ -1906,7 +1916,6 @@ input.nice-input {
                     .folder-label {
                         color: @foldertreeSelectedLabelColor;
                     }
-
                 }
 
                 &.show-counter .folder-label {
@@ -1948,8 +1957,8 @@ input.nice-input {
             }
 
             .io-ox-fail {
-                background-color: #2a2a2a;
-                padding: 1em 0;
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 1em;
             }
 
             .folder-arrow, a {
@@ -1965,8 +1974,8 @@ input.nice-input {
         top: auto;
         height: 40px - 1;
         line-height: 40px - 1;
-        border-top: 1px solid darken(@foldertreeSidepanelBackground, 10%);
-        background-color: @foldertreeSidepanelBackground;
+        border-top: 1px solid darken(@foldertreeSidepanelBackground, 5%);
+        background-color: darken(@foldertreeSidepanelBackground, 1%);
     }
 
     &.side-shift {
@@ -2091,14 +2100,10 @@ a.toolbar-action, .toolbar-action > a {
 .cursor-pointer { cursor: pointer; }
 
 .participant-image {
-    height: 54px; /* allows 3 lines with 18px line-height */
-    width: 54px;
+    float: left;
     margin-right: 1em;
     display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    float: left;
+    .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
 }
 
 .participant-image.contact-image,

@@ -261,8 +261,8 @@
 @foldertreeSelectedLabelColor: #fff;
 @foldertreeActiveLabelColor: #ccc;
 @foldertreePassiveLabelColor: #888;
-@foldertreeHoverBackground: #555;
-@foldertreeSelectedBackground: #2A2A2A;
+@foldertreeHoverBackground: rgba(255, 255, 255, 0.10);
+@foldertreeSelectedBackground: rgba(0, 0, 0, 0.20);
 @foldertreeSelectedFocusBackground: #08c;
 @foldertreeBadgeBackground: @badgeBackground;
 @foldertreeBadgeFocusBackground: #006597;
@@ -389,6 +389,15 @@
     -moz-animation-name: @name;
     -ms-animation-name: @name;
     animation-name: @name;
+}
+
+.picture(@width: 64px, @height: 64px) {
+    width: @width;
+    height: @height;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    .border-radius(50%);
 }
 
 .ellipsis {

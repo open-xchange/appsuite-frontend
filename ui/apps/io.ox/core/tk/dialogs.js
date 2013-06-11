@@ -415,7 +415,6 @@ define("io.ox/core/tk/dialogs",
             close,
             closeAll,
             closeByEscapeKey,
-            closeByScroll,
             closeByClick,
             closeByEvent, //for example: The view within this SidePopup closes itself
             previousProp,
@@ -423,14 +422,14 @@ define("io.ox/core/tk/dialogs",
 
             overlay,
 
-            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
+            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                     $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs" tabindex="1">').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(
@@ -471,12 +470,6 @@ define("io.ox/core/tk/dialogs",
             }
         };
 
-        closeByScroll = function (e) {
-            if (!options.disableCloseByScroll) {
-                close(e);
-            }
-        };
-
         closeByClick = function (e) {
             if (!(e.target && $(e.target).attr('data-process-event') === 'true') && !isProcessed(e)) {
                 processEvent(e);
@@ -498,7 +491,7 @@ define("io.ox/core/tk/dialogs",
 
                 // remove handlers & avoid leaks
                 $(document).off('keydown', closeByEscapeKey);
-                self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
+                self.nodes.closest.prop('sidepopup', previousProp);
                 self.nodes.click.off("click", closeByClick);
                 popup.off('view:remove', closeByEvent);
                 self.lastTrigger = previousProp = null;
@@ -599,7 +592,6 @@ define("io.ox/core/tk/dialogs",
 
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
-                self.nodes.closest.on("scroll", closeByScroll);
                 popup.on('view:remove', closeByEvent);
                 $(document).on("keydown", closeByEscapeKey);
 
@@ -651,6 +643,7 @@ define("io.ox/core/tk/dialogs",
                     self.nodes.target.append(arrow);
                 }
 
+                pane.parent().focus();
                 self.trigger('show');
             }
         };

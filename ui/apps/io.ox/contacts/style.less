@@ -107,13 +107,9 @@
 
         .picture {
             float: left;
-            width: 64px;
-            height: 64px;
             display: inline-block;
-            background-position: right top;
-            background-repeat: no-repeat;
-            background-size: contain;
             margin-top: 5px; /* to match h1's cap-line */
+            .picture();
         }
 
         .picture + div {
@@ -155,6 +151,7 @@
     }
 
     .comment, .description {
+        font-weight: 300;
         max-width: 720px; /* twice block-width plus margin */
         margin-bottom: 26px;
     }
@@ -216,12 +213,8 @@
 
     .member-picture {
         float: left;
-        width: 48px;
-        height: 48px;
         margin-right: 14px;
-        background-position: center center;
-        background-size: cover;
-        .border-radius(3px);
+        .picture(48px, 48px);
     }
 
     .member-name {
