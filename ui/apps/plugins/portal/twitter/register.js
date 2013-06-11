@@ -282,7 +282,7 @@ define('plugins/portal/twitter/register',
         },
 
         requiresSetUp: function () {
-            return keychain.isEnabled('twitter') && ! keychain.hasStandardAccount('twitter');
+            return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
         performSetUp: function () {
@@ -291,6 +291,10 @@ define('plugins/portal/twitter/register',
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('twitter'))
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+
             return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                 baton.data = data;
             });
@@ -399,7 +403,6 @@ define('plugins/portal/twitter/register',
                     ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
                 })
             );
-            console.log("DEBUG", error);
         }
     });
 
