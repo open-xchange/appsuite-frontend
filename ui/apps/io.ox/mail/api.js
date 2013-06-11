@@ -912,18 +912,11 @@ define('io.ox/mail/api',
             })
             .pipe(function (data) {
                 var text = '', quote = '', tmp = '';
-                //fix nested messages
-                //TOOD: use this until backend removes channel suffix
-                if (data.nested_msgs)
-                    data.nested_msgs = util.removeChannelSuffix(data.nested_msgs);
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
                         // nothing to do - nothing to break
                     } else {
-                        //general: remove type suffix from sender/recipients
-                        //TOOD: use this until backend removes channel suffix
-                        data.attachments[0].content = util.removeChannelSuffix(data.attachments[0].content);
                         //content-type specific
                         if (data.attachments[0].content_type === 'text/plain') {
                             $('<div>')
