@@ -100,22 +100,25 @@ define('io.ox/files/actions',
     });
 
     // editor
-    new Action('io.ox/files/actions/editor', {
-        requires: function (e) {
-            return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
-        }
-    });
+    if (window.Blob) {
 
-    new Action('io.ox/files/actions/editor-new', {
-        action: function (baton) {
-            ox.launch('io.ox/editor/main').done(function () {
-                this.create({ folder: baton.app.folder.get() });
-            });
-        }
-    });
+        new Action('io.ox/files/actions/editor', {
+            requires: function (e) {
+                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
+            },
+            action: function (baton) {
+                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
+            }
+        });
+
+        new Action('io.ox/files/actions/editor-new', {
+            action: function (baton) {
+                ox.launch('io.ox/editor/main').done(function () {
+                    this.create({ folder: baton.app.folder.get() });
+                });
+            }
+        });
+    }
 
     new Action('io.ox/files/actions/download', {
         requires: 'some',
@@ -628,6 +631,13 @@ define('io.ox/files/actions',
         id: 'upload',
         label: gt('Upload new file'),
         ref: POINT + '/actions/upload'
+    });
+
+    new ActionLink(POINT + '/links/toolbar/default', {
+        index: 200,
+        id: 'note',
+        label: gt('Add note'),
+        ref: POINT + '/actions/editor-new'
     });
 
     // VIEWS
