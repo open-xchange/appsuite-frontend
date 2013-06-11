@@ -56,6 +56,7 @@ define('io.ox/mail/write/main',
     });
 
     var UUID = 1;
+    var blocked = {};
     var timerScale = {
         minute: 60000, //60s
         minutes: 60000
@@ -119,6 +120,15 @@ define('io.ox/mail/write/main',
 
         if (Modernizr.touch) messageFormat = 'text'; // See Bug 24802
 
+        function blockReuse(sendtype) {
+            blocked[sendtype] = (blocked[sendtype] || 0) + 1;
+        }
+
+        function unblockReuse(sendtype) {
+            blocked[sendtype] = (blocked[sendtype] || 0) - 1;
+            if (blocked[sendtype] <= 0)
+                delete blocked[sendtype];
+        }
 
         function getDefaultEditorMode() {
             return messageFormat === 'text' ? 'text' : 'html';
@@ -957,6 +967,7 @@ define('io.ox/mail/write/main',
             // get mail
             var mail = this.getMail(), def = $.Deferred();
 
+            blockReuse(mail.data.sendtype);
             prepareMailForSending(mail);
 
             function cont() {
@@ -970,6 +981,7 @@ define('io.ox/mail/write/main',
                         win.idle().show();
                         // TODO: check if backend just says "A severe error occured"
                         notifications.yell(result);
+                        unblockReuse(mail.data.sendtype);
                     } else {
                         if (result.warnings)
                             //warnings
@@ -1018,6 +1030,7 @@ define('io.ox/mail/write/main',
                         }
                         app.dirty(false);
                         app.quit();
+                        unblockReuse(mail.data.sendtype);
                     }
                     def.resolve(result);
                 });
@@ -1172,16 +1185,20 @@ define('io.ox/mail/write/main',
         getApp: createInstance,
 
         reuse: function (type, data) {
-            if (type === 'reply') {
+            //disable reuse if at least one app is sending (depends on type)
+            var unblocked = function (sendtype) {
+                    return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
+                };
+            if (type === 'reply' && unblocked(mailAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
             }
-            if (type === 'replyall') {
+            if (type === 'replyall' && unblocked(mailAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:replyall.' + _.cid(data));
             }
-            if (type === 'forward') {
+            if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
                 return ox.ui.App.reuse('io.ox/mail:forward.' + _.cid(data));
             }
-            if (type === 'edit') {
+            if (type === 'edit' && unblocked(mailAPI.SENDTYPE.DRAFT)) {
                 return ox.ui.App.reuse('io.ox/mail:edit.' + _.cid(data));
             }
         }
