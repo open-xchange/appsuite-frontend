@@ -753,7 +753,8 @@ task("dist", [distDest], function () {
         }
 
         utils.exec(['tar', 'cjf', debName + '.orig.tar.bz2', tarName],
-                   { cwd: distDest }, dpkgSource);
+                   { cwd: distDest, env: { COPYFILE_DISABLE: 'true' } },
+                   dpkgSource);
     }
     function dpkgSource(code) {
         if (code) return fail('tar exited with code ' + code);
