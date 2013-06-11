@@ -1,10 +1,6 @@
 define(function () {
     return [
         {
-            namespace: 'portal',
-            path: 'plugins/playground/fluppi/register'
-        },
-        {
             namespace: ['io.ox/settings/main'],
             path: 'io.ox/mail/mailfilter/settings/register',
             requires: 'mailfilter'
