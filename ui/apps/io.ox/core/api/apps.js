@@ -30,9 +30,10 @@ define('io.ox/core/api/apps',
 
     // Construct App Data
     _(manifests.manager.apps).each(function (appManifest) {
+
         if (!appManifest.path || !appManifest.category) {
             if (window.console && console.warn) {
-                console.warn('Ignored app', appManifest);
+                console.warn('Ignored app. Missing path/category', appManifest);
             }
             return;
         }
