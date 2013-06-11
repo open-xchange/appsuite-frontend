@@ -309,8 +309,10 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text" tabindex="1">'));
-                this.nodes.inputField.val(this.model.get(this.attribute));
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.nodes.inputField
+                    .val(this.model.get(this.attribute))
+                    .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
                     this.nodes.inputField.on('keyup', $.proxy(function (e) {
                         this.baton.app.setTitle(this.nodes.inputField.val());

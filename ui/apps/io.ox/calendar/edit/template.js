@@ -206,6 +206,7 @@ define('io.ox/calendar/edit/template',
         nextTo: 'start-date'
     });
 
+    // find free time link
     point.basicExtend({
         id: 'find-free-time-1',
         index: 550,
@@ -328,8 +329,8 @@ define('io.ox/calendar/edit/template',
             var node = this;
             node.append(
                     $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant">').attr("placeholder", gt("Add participant/resource")),
-                        $('<button class="btn" type="button" data-action="add">')
+                        $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
+                        $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
@@ -513,7 +514,7 @@ define('io.ox/calendar/edit/template',
             if (capabilities.has('freebusy !alone')) {
                 var selector = 'label.find-free-time, .find-free-time legend';
                 this.parent().find(selector).append(
-                    $('<a href="#" class="pull-right">').text(gt('Find a free time'))
+                    $('<a href="#" class="pull-right" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }
