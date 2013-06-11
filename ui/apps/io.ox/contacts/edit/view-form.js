@@ -83,6 +83,12 @@ define('io.ox/contacts/edit/view-form', [
 
         alwaysVisible: ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'],
 
+        input_type: {
+            'email1': 'email',
+            'email2': 'email',
+            'email3': 'email'
+        },
+
         i18n: {
             personal: gt('Personal information'),
             messaging: gt('Messaging'),
@@ -396,7 +402,8 @@ define('io.ox/contacts/edit/view-form', [
             _(fields).each(function (field) {
 
                 var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
-                    isRare = _(meta.rare).indexOf(field) > -1;
+                    isRare = _(meta.rare).indexOf(field) > -1,
+                    input_type = meta.input_type[field] || 'text';
 
                 if (meta.special[field]) {
                     meta.special[field]({
@@ -412,7 +419,7 @@ define('io.ox/contacts/edit/view-form', [
                         id: field,
                         index: fieldIndex,
                         label: model.fields[field],
-                        control: '<input type="text" name="' + field + '" tabindex="1">',
+                        control: '<input type="' + input_type + '" name="' + field + '" tabindex="1">',
                         rare: isRare,
                         attribute: field
                     }), {
