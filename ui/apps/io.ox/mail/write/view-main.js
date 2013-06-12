@@ -525,11 +525,7 @@ define("io.ox/mail/write/view-main",
                 .append(createRadio('priority', '5', gt('Low')))
                 .on('change', 'input', function () {
                     var radio = $(this);
-                    if (radio.val() === '1' && radio.prop('checked')) {
-                        self.applyHighPriority(true);
-                    } else {
-                        self.applyHighPriority(false);
-                    }
+                    if (radio.prop('checked')) self.app.setPriority(radio.val());
                 }),
                 // Attach vCard
                 $('<div>').addClass('section-item')
