@@ -2468,6 +2468,25 @@ ul.dropdown-menu li a.disabled { color:#999; }
 
 }
 
+@-webkit-keyframes slideleft {
+    from { -webkit-transform: translateX(-50%); }
+    to { -webkit-transform: translateX(0); }
+}
+
+@-webkit-keyframes slideright {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(-50%); }
+}
+
+@keyframes slideleft {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slideright {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
 
 @keyframes fadein {
     from { opacity: 0; }
