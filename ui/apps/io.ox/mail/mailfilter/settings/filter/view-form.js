@@ -613,7 +613,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         draw: function (baton) {
 
             var checkStopAction = function (e) {
-                var currentState = $(e.currentTarget).attr('checked'),
+                var currentState = $(e.currentTarget).find('[type="checkbox"]').attr('checked'),
                     arrayOfActions = baton.model.get('actioncmds'),
                     currentPosition;
 
