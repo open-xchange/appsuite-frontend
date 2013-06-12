@@ -396,8 +396,13 @@ define('io.ox/backbone/forms',
 
                 this.initialState = this.state;
 
-                this.drawHeader();
-                this.drawExtensions();
+                if (_.device('small')) {
+                    this.drawExtensions();
+                    this.drawHeader();
+                } else if (_.device('!small')) {
+                    this.drawHeader();
+                    this.drawExtensions();
+                }
 
                 if (this.state === 'mixed' || this.state === 'collapsed') {
                     this.less();
