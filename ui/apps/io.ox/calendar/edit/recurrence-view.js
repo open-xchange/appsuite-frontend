@@ -10,8 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/core/tk/config-sentence", "io.ox/core/date", 'io.ox/core/tk/keys', 'gettext!io.ox/calendar/edit/main', 'less!io.ox/calendar/edit/style.less'], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
+define("io.ox/calendar/edit/recurrence-view",
+    ["io.ox/calendar/model",
+     "io.ox/core/tk/config-sentence",
+     "io.ox/core/date",
+     "io.ox/core/tk/keys",
+     "gettext!io.ox/calendar/edit/main",
+     "less!io.ox/calendar/edit/style.less"], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
+
     "use strict";
+
     var DAYS = model.DAYS,
         RECURRENCE_TYPES = model.RECURRENCE_TYPES;
 
@@ -89,7 +97,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 }).appendTo($dayList);
             });
 
-            $dayList.append($('<li>').append(
+            $dayList.attr({ role: 'menu' }).append($('<li>').append(
                 gt("Close"),
                 $('<i class="icon-remove">')
             ).on("click", function () {
@@ -120,7 +128,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 self.trigger("redraw", self);
             }
 
-            $anchor.popover({
+            $anchor.attr({ 'aria-haspopup': true, role: 'menuitem' }).popover({
                 placement: 'top',
                 html: true,
                 content: function () {
@@ -245,6 +253,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
 
     var RecurrenceView = function (options) {
         _.extend(this, {
+            tabindex: 0,
             init: function () {
                 var self = this;
                 this.$el.addClass("io-ox-recurrence-view");
@@ -261,6 +270,18 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         yearly: $('<input type="radio" name="recurrence_type" value="yearly">')
                     }
                 };
+
+                // add tabindex to all control elements
+                var rec = function (controls) {
+                    _.each(controls, function (value) {
+                        if (value instanceof $) {
+                            value.attr({ tabindex: self.tabindex });
+                        } else {
+                            rec(value);
+                        }
+                    });
+                };
+                rec(this.controls);
 
                 this.nodes = {
                     summary: $('<span>'),
@@ -285,7 +306,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 // Config Sentences
 
                 this.sentences = {
-                    daily: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> days</a>. '), {
+                    daily: new ConfigSentence(gt('The appointment is repeated <a href="#" tabindex="' + self.tabindex + '" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> days</a>. '), {
                         id: 'daily',
                         phrase: function (n) {
                             if (n === 1) {
@@ -305,7 +326,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         initial: 1,
                         gt: gt
                     }),
-                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="custom" data-attribute="days">monday</a>. '), {
+                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#" tabindex="' + self.tabindex + '" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#" tabindex="' + self.tabindex + '" data-widget="custom" data-attribute="days">monday</a>. '), {
                         id: 'weekly',
                         interval: {
                             phrase: function (n) {
@@ -327,7 +348,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         days: CalendarWidgets.days
                     }),
-                    monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
+                    monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#" tabindex="' + self.tabindex + '" data-widget="custom" data-attribute="dayInMonth">10</a> <a href="#" tabindex="' + self.tabindex + '" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
                         id: 'monthlyDate',
                         interval: {
                             phrase: function (n) {
@@ -348,7 +369,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         dayInMonth: CalendarWidgets.dayInMonth
                     }),
-                    monthlyDay: new ConfigSentence(gt('The appointment is repeated the <a href="#" data-widget="options" data-attribute="ordinal">second</a> <a href="#" data-widget="options" data-attribute="day">wednesday</a> <a href="#" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
+                    monthlyDay: new ConfigSentence(gt('The appointment is repeated the <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="ordinal">second</a> <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="day">wednesday</a> <a href="#" tabindex="' + self.tabindex + '" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
                         id: 'monthlyDay',
                         ordinal: {
                             options: {
@@ -396,7 +417,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             gt: gt
                         }
                     }),
-                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> of <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
+                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#" tabindex="' + self.tabindex + '" data-widget="custom" data-attribute="dayInMonth">10</a> of <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="month">october</a>. '), {
                         id: 'yearlyDate',
                         dayInMonth: CalendarWidgets.dayInMonth,
                         month: {
@@ -417,7 +438,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             initial: 2
                         }
                     }),
-                    yearlyDay: new ConfigSentence(gt('The appointment is repeated every <a href="#" data-widget="options" data-attribute="ordinal">first</a> <a href="#" data-widget="options" data-attribute="day">wednesday</a> in <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
+                    yearlyDay: new ConfigSentence(gt('The appointment is repeated every <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="ordinal">first</a> <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="day">wednesday</a> in <a href="#" tabindex="' + self.tabindex + '" data-widget="options" data-attribute="month">october</a>. '), {
                         id: 'yearlyDay',
                         ordinal: {
                             options: {
@@ -478,7 +499,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                     }
                 };
                 this.ends = {
-                    never: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">never ends</a>.'), {
+                    never: new ConfigSentence(gt('The series <a href="#" tabindex="' + self.tabindex + '" data-attribute="ending" data-widget="options">never ends</a>.'), {
                         id: 'never',
                         ending: _.extend({}, endingOptions, {
                             chooseLabel: function (value) {
@@ -486,7 +507,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             }
                         })
                     }).on("change:ending", this.endingChanged, this).on("change", this.updateModel, this),
-                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
+                    date: new ConfigSentence(gt('The series <a href="#" tabindex="' + self.tabindex + '" data-attribute="ending" data-widget="options">ends</a> on <a href="#"  tabindex="' + self.tabindex + '"data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
                         id: 'date',
                         ending: endingOptions,
                         until: CalendarWidgets.datePicker,
@@ -495,7 +516,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             return (self.model.get('start_date') || _.now()) + (4 * dateAPI.WEEK); //tasks may not have a start date at this point
                         }
                     }).on("change:ending", this.endingChanged, this).on("change", this.updateModel, this),
-                    after: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
+                    after: new ConfigSentence(gt('The series <a href="#" tabindex="' + self.tabindex + '" data-attribute="ending" data-widget="options">ends</a> <a href="#" tabindex="' + self.tabindex + '" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.'), {
                         id: 'after',
                         ending: endingOptions,
                         occurrences: {
