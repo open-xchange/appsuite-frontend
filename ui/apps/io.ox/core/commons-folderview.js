@@ -589,6 +589,7 @@ define('io.ox/core/commons-folderview',
             var nodes = app.getWindow().nodes;
             nodes.panel.css('left', '0px');
             nodes.sidepanel.removeClass('visible').css('width', '');
+            app.trigger('folderview:close');
             if (app.getGrid) {
                 app.getGrid().focus();
             }
@@ -600,6 +601,7 @@ define('io.ox/core/commons-folderview',
             nodes.sidepanel.addClass('visible');
             restoreWidth();
             baton.$.container.focus();
+            app.trigger('folderview:open');
             return $.when();
         };
 
@@ -779,11 +781,21 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
+        var icon = $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
+
+        app.on('folderview:open', function () {
+            icon.attr('class', 'icon-folder-open');
+        });
+
+        app.on('folderview:close', function () {
+            icon.attr('class', 'icon-folder-close');
+        });
+
         new links.ActionGroup(TOGGLE, {
             id: 'folder',
             index: 200,
             icon: function () {
-                return $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
+                return icon;
             }
         });
 
