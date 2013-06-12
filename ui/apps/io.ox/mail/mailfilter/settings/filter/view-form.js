@@ -636,9 +636,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         id: 'stopaction',
         draw: function (baton) {
 
-            var arrayOfActions = baton.model.get('actioncmds'),
-            checkbox,
-            stopAction;
+            var target = baton.view.dialog.getFooter(),
+                arrayOfActions = baton.model.get('actioncmds'),
+                checkbox,
+                stopAction;
 
             function filterForValue(array, value) {
                 _.each(array, function (single, id) {
@@ -647,7 +648,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             }
 
             filterForValue(arrayOfActions, 'stop');
-            this.append(elements.drawcheckbox(stopAction));
+            target.append(elements.drawcheckbox(stopAction));
 
         }
     });

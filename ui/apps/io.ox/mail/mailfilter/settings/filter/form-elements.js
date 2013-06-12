@@ -123,9 +123,13 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
         },
 
         drawcheckbox: function (value) {
-            return $('<div>').addClass('control-group').append(
+            return $('<div>').addClass('control-group').css({
+                'display': 'inline-block',
+                'float': 'left',
+                'padding-top': '4px'
+            }).append(
                 $('<div>').addClass('controls'),
-                $('<label>').addClass('checkbox').text(gt('Process subsequent rules even when this rule matches')).append(
+                $('<label>').addClass('checkbox').text(gt('Process subsequent rules')).append(
                 $('<input type="checkbox">').attr({'data-action': 'check-for-stop', 'checked': value})
                 )
             );
