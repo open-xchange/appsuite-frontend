@@ -124,18 +124,22 @@ define('io.ox/editor/main',
                 $('<form class="form-inline">').append(
                     $('<div class="header">').append(
                         // title
-                        $('<label>').append(
-                            $('<input type="text" class="title" tabindex="1">')
-                            .attr('placeholder', gt('Enter document title here'))
-                        ),
+
+                        $('<input type="text" class="title" tabindex="1">')
+                        .attr('placeholder', gt('Enter document title here')),
+
                         // save & close buttons
-                        $('<button class="save btn btn-primary" tabindex="3">').text(gt('Save')),
-                        $('<button class="quit btn" tabindex="4">').text(gt('Close'))
+
+                        $('<div class="button-wrap">').append(
+                            $('<button class="save btn btn-primary" tabindex="3">').text(gt('Save')),
+                            $('<button class="quit btn" tabindex="4">').text(gt('Close'))
+                        )
+
                     ),
                     $('<div class="body">').append(
                         // editor
                         $('<textarea class="content" tabindex="2">').val('')
-                        .attr('placeholder', gt('You can quick-save your changes via Ctrl+Enter.'))
+                        .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
                     )
                 )
             );

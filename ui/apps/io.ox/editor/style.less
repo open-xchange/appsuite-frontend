@@ -27,7 +27,10 @@
         height: 50px;
         z-index: 2;
     }
-
+    .button-wrap {
+        display: inline-block;
+        float: right;
+    }
     .body {
         position: relative;
         top: -50px;
@@ -47,7 +50,7 @@
     .title {
         border: 1px solid #f5f5f5;
         font-weight: bold;
-        width: 400px;
+        width: 55%;
         padding-left: 13px;
         padding-right: 13px;
     }
@@ -82,6 +85,24 @@
     .alert {
         overflow: hidden;
         margin: 0;
+    }
+    // mobile
+    @media (max-width: 700px) {
+        .title {
+            .box-sizing(border-box);
+            width: 100%;
+            padding: 14px;
+        }
+        .header {
+
+        }
+        .button-wrap {
+            margin-top: 10px;
+        }
+        .body {
+            padding-top: 80px;
+        }
+
     }
 }
 
