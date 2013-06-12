@@ -100,6 +100,23 @@ define('io.ox/tasks/model', ['io.ox/tasks/api',
             }
         }
     });
+    
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'Actual-costs-out-of-limits',
+        validate: function (attributes) {
+            if (attributes.actual_costs && (attributes.actual_costs < -130000 || attributes.actual_costs > 130000)) {
+                this.add('actual_costs', gt('Costs must be between -130000 and 130000.'));
+            }
+        }
+    });
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'target-costs-out-of-limits',
+        validate: function (attributes) {
+            if (attributes.target_costs && (attributes.target_costs < -130000 || attributes.target_costs > 130000)) {
+                this.add('target_costs', gt('Costs must be between -130000 and 130000.'));
+            }
+        }
+    });
 
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'progress-not-between-0-and-100',
