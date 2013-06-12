@@ -466,7 +466,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                                 $('<div>').addClass('pull-right').append(
                                     $('<div>').css({'float': 'left', 'margin-right': '1em'}).append(
-                                        $('<div>').css('overflow', 'hidden').append(elements.drawInputfieldTestSecond(test.headers[0])),
+                                        $('<div>').css('overflow', 'hidden').append(
+                                            elements.drawInputfieldTestSecond(test.headers[0], gt('Name'))
+                                        ),
                                         $('<div>').append(
                                             elements.drawOptions(test.comparison, containsValues),
                                             elements.drawInputfieldTest(test.values[0])
@@ -581,13 +583,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             this.append(
                 headlineTest, listTests,
-                elements.drawOptionsExtern(gt('Create new condition'), headerTranslation, {
+                elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
                     classes: 'no-positioning block',
                     toggle: 'dropdown'
                 }),
                 headlineActions, listActions,
-                elements.drawOptionsExtern(gt('Create new action'), actionsTranslations, {
+                elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
                     action: 'create',
                     classes: 'no-positioning block',
                     toggle: 'dropup'
@@ -619,20 +621,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 //                    test: { nrInArray: '', target: ''  },
 //                    action: { nrInArray: '', target: ''  }
                 },
-                partOne,
-                partTwo,
-                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('all'), anyof: gt('any')}, options);
+                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met.'), anyof: gt('Apply rule if any condition is met.')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
-                if (arrayOfTests.id === 'allof') {
-                    partOne = gt('Apply rule if');
-                    partTwo = gt('conditions are met.');
-                } else {
-                    partOne = gt('Apply rule if');
-                    partTwo = gt('condition is met.');
-                }
-                this.append($('<div>').addClass('line').append(
-                    $('<span>').text(partOne), optionsSwitch, $('<span>').text(partTwo))
-                );
+                this.append($('<div>').addClass('line').append(optionsSwitch));
+            } else {
+                this.append($('<div>').addClass('line').text(gt('Apply rule if all conditions are met.')));
             }
 
         }

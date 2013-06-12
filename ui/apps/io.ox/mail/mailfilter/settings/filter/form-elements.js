@@ -20,8 +20,10 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test'}).val(activeValue);
         },
 
-        drawInputfieldTestSecond: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second'}).val(activeValue);
+        drawInputfieldTestSecond: function (activeValue, label) {
+            return $('<label>').text(label = label ? label : '').append(
+                $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second'}).val(activeValue)
+            );
         },
 
         drawInputfieldAction: function (activeValue) {
@@ -33,7 +35,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
         },
 
         drawFolderSelect: function () {
-            return $('<a href="#">').addClass('folderselect').text('select Folder');
+            return $('<a href="#">').addClass('folderselect').text('Select folder');
         },
 
         drawDeleteButton: function (type) {

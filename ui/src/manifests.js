@@ -3,7 +3,8 @@ define(function () {
         {
             namespace: ['io.ox/settings/main'],
             path: 'io.ox/mail/mailfilter/settings/register',
-            requires: 'mailfilter'
+            requires: 'mailfilter',
+            device: '!small'
         },
         // {
         //     namespace: ['io.ox/settings/main'],
