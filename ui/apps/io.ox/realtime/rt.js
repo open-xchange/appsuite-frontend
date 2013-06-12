@@ -136,7 +136,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     }
 
     function received(stanza) {
-        console.log("Received");
+        if (api.debug) {
+            console.log("Received");
+        }
         if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
