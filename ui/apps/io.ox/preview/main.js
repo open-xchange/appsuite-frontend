@@ -111,7 +111,7 @@ define('io.ox/preview/main',
     }));
 
     // register audio typed renderer
-    if (Modernizr.audio) {
+    if (Modernizr.audio && _.device('!android')) {
         Renderer.point.extend(new Engine({
             id: 'audio',
             index: 10,

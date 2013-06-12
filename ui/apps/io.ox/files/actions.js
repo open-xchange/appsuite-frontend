@@ -73,7 +73,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -88,7 +88,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -922,7 +922,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return checkMedia(e, 'audio');
+            return _.device('!android') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -936,7 +936,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
-            return checkMedia(e, 'video');
+            return _.device('!android') && checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
