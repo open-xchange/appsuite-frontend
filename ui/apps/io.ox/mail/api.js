@@ -554,18 +554,27 @@ define('io.ox/mail/api',
         });
     };
 
+    var resetTrashFolders = function () {
+        return $.when.apply($,
+            _(accountAPI.getFoldersByType('trash')).map(function (folder) {
+                console.log('Remove trash folder', folder);
+                return api.caches.all.grepRemove(folder + DELIM);
+            })
+        );
+    };
+
     var clearCaches = function (obj, targetFolderId) {
-            return function () {
-                var id = obj.folder_id || obj.folder;
-                return $.when(
-                    api.caches.get.remove(obj),
-                    api.caches.get.remove(id),
-                    api.caches.list.remove(obj),
-                    api.caches.list.remove(id),
-                    api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
-                );
-            };
+        return function () {
+            var id = obj.folder_id || obj.folder;
+            return $.when(
+                api.caches.get.remove(obj),
+                api.caches.get.remove(id),
+                api.caches.list.remove(obj),
+                api.caches.list.remove(id),
+                api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
+            );
         };
+    };
 
     var refreshAll = function (obj) {
         $.when.apply($, obj).done(function () {
@@ -655,13 +664,15 @@ define('io.ox/mail/api',
                 action: 'expunge'
             },
             data: [folder_id]
-        }).pipe(function (data) {
+        })
+        .then(function (data) {
             return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
                 folderAPI.reload(folder_id);
                 return data;
             });
-        }).done(function () {
+        })
+        .done(function () {
             notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
@@ -684,13 +695,18 @@ define('io.ox/mail/api',
                 tree: '1'
             },
             data: [folder_id]
-        }).pipe(function (data) {
+        })
+        .then(function (data) {
             return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
                 folderAPI.reload(folder_id);
                 return data;
             });
-        }).done(function () {
+        })
+        .then(function () {
+            return resetTrashFolders();
+        })
+        .done(function () {
             notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
         });
