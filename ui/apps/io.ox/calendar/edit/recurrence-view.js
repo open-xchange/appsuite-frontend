@@ -46,7 +46,7 @@ define("io.ox/calendar/edit/recurrence-view",
 
                 $row.append(
                     $('<td>').append(
-                        $('<a href="#">').text(i).on('click', clickHandler(i)).css({marginRight: "11px"})
+                        $('<a href="#">').attr({ tabindex: $anchor.attr('tabindex') }).text(i).on('click', clickHandler(i)).css({marginRight: "11px"})
                     )
                 );
 
@@ -56,7 +56,7 @@ define("io.ox/calendar/edit/recurrence-view",
             }
 
             function drawState() {
-                $anchor.text(self[attribute]);
+                $anchor.text(self[attribute]).focus();
                 self.trigger("redraw", self);
             }
 
@@ -124,7 +124,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         selectedDays.push(DAYS.i18n[day]);
                     }
                 });
-                $anchor.text(selectedDays.join(", "));
+                $anchor.text(selectedDays.join(", ")).focus();
                 self.trigger("redraw", self);
             }
 
@@ -177,7 +177,7 @@ define("io.ox/calendar/edit/recurrence-view",
                     self[attribute] = options.initial();
                 }
                 var value = renderDate();
-                $anchor.text(value);
+                $anchor.text(value).focus();
                 self.trigger("redraw", self);
             }
 

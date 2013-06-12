@@ -46,7 +46,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
             function drawState() {
                 var value = self[attribute];
-                $anchor.text(options.phrase(value));
+                $anchor.text(options.phrase(value)).focus();
                 self.trigger("redraw", self);
             }
 
@@ -123,7 +123,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 if (options.chooseLabel) {
                     label = options.chooseLabel(self[attribute]);
                 }
-                $anchor.text(label);
+                $anchor.text(label).focus();
                 self.trigger("redraw", self);
             }
 
@@ -132,7 +132,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             _(options.options).each(function (label, value) {
                 $menu.append(
                     $('<li>')
-                        .append($('<a href="#">').text(label).on("click", function (e) {
+                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex') }).text(label).on("click", function (e) {
                             e.preventDefault();
                             self[attribute] = value;
                             self.trigger("change", self);
