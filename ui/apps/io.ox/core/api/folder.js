@@ -67,7 +67,9 @@ define('io.ox/core/api/folder',
                     if (error.categories === 'PERMISSION_DENIED') {
                         notifications.yell(error);
                     } else {
-                        console.error('folder.get', id, error);
+                        if (ox.debug) {
+                            console.error('folder.get', id, error);
+                        }
                     }
                 });
             };
@@ -222,7 +224,9 @@ define('io.ox/core/api/folder',
                         });
                     })
                     .fail(function (e) {
-                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                        if (ox.debug) {
+                            console.error('folder.getSubFolders', opt.folder, e.error, e);
+                        }
                     });
                 };
 
