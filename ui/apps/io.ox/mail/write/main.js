@@ -81,6 +81,27 @@ define('io.ox/mail/write/main',
         };
     }
 
+    function prepareMailForSending(mail) {
+        // get flat ids for data.infostore_ids
+        if (mail.data.infostore_ids) {
+            mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+        }
+        // get flat cids for data.contacts_ids
+        if (mail.data.contacts_ids) {
+            mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+        }
+        // move nested messages into attachment array
+        _(mail.data.nested_msgs).each(function (obj) {
+            mail.data.attachments.push({
+                id: mail.data.attachments.length + 1,
+                filemname: obj.subject,
+                content_type: 'message/rfc822',
+                msgref: obj.msgref
+            });
+        });
+        delete mail.data.nested_msgs;
+    }
+
     // multi instance pattern
     function createInstance() {
 
@@ -714,6 +735,9 @@ define('io.ox/mail/write/main',
                         mailAPI[type](obj, getDefaultEditorMode())
                         .done(function (data) {
                             data.sendtype = mailAPI.SENDTYPE.REPLY;
+                            //remove type suffix from sender/recipients (quoted mail)
+                            if (data.attachments[0].content)
+                                data.attachments[0].content = mailUtil.removeTypeSuffix(data.attachments[0].content);
                             app.setMail({ data: data, mode: type, initial: true })
                             .done(function () {
                                 var ed = app.getEditor();
@@ -761,7 +785,7 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     //remove type suffix from sender/recipients (mail forwarded inline)
                     if (data.attachments[0].content)
-                        data.attachments[0].content = data.attachments[0].content.replace(new RegExp('/TYPE=PLMN', 'g'), '');
+                        data.attachments[0].content = mailUtil.removeTypeSuffix(data.attachments[0].content);
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
                         var ed = app.getEditor();
@@ -949,24 +973,8 @@ define('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail(), def = $.Deferred();
-            // get flat ids for data.infostore_ids
-            if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
-            // move nested messages into attachment array
-            _(mail.data.nested_msgs).each(function (obj) {
-                mail.data.attachments.push({
-                    id: mail.data.attachments.length + 1,
-                    filemname: obj.subject,
-                    content_type: 'message/rfc822',
-                    msgref: obj.msgref
-                });
-            });
-            delete mail.data.nested_msgs;
+
+            prepareMailForSending(mail);
 
             function cont() {
                 // start being busy
@@ -1073,14 +1081,8 @@ define('io.ox/mail/write/main',
             var mail = this.getMail(),
                 def = new $.Deferred();
 
-            // get flat ids for data.infostore_ids
-            if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
+            prepareMailForSending(mail);
+
             // send!
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 

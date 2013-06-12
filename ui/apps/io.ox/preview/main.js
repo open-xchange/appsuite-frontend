@@ -236,8 +236,10 @@ define('io.ox/preview/main',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
             var self = this;
-            require(['io.ox/mail/view-detail'], function (view) {
+            require(['io.ox/mail/view-detail',
+                      'io.ox/mail/util'], function (view, util) {
                 var data = file.data.nested_message;
+                util.removeTypeSuffix(data);
                 data.parent = file.parent;
                 //preview during compose (forward mail as attachment)
                 if (!data.parent && data.msgref) {
