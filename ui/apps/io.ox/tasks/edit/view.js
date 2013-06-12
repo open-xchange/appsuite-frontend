@@ -56,13 +56,13 @@ define('io.ox/tasks/edit/view',
         },
         render: function (app) {
             var self = this;
-            
+
             //row0 headlinetext cancel and savebutton
             self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
 
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
-            
+
             //row 4 description
             util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
 
@@ -252,17 +252,23 @@ define('io.ox/tasks/edit/view',
                 .text(saveBtnText)
                 .on('click', function (e) {
 
+                    e.stopPropagation();
+                    app.getWindow().busy();
+
                     //check if waiting for attachmenthandling is needed
                     if (self.baton.attachmentList.attachmentsToAdd.length +
                         self.baton.attachmentList.attachmentsToDelete.length > 0) {
                         self.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
-                    e.stopPropagation();
+
                     self.model.save().done(function () {
                         app.markClean();
                         app.quit();
                     }).fail(function (response) {
-                        setTimeout(function () {notifications.yell('error', response.error); }, 300);
+                        setTimeout(function () {
+                            app.getWindow().idle();
+                            notifications.yell('error', response.error);
+                        }, 300);
                         console.log(response);
                     });
 
