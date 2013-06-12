@@ -12,7 +12,7 @@
  */
 define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyListener) {
     "use strict";
-    
+
     var Widgets = {
         toggle: function ($anchor, attribute, options) {
             var self = this;
@@ -38,10 +38,9 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             this.on('change:' + attribute, drawState);
         },
         number: function ($anchor, attribute, options) {
-            var self = this;
-            var gt = options.gt;
-            
-            var originalContent = $anchor.html();
+            var self = this,
+                gt = options.gt,
+                originalContent = $anchor.html();
 
             self[attribute] = options.initial;
 
@@ -129,11 +128,11 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             }
 
             // Now build the menu
-            var $menu = $('<ul class="dropdown-menu no-clone">');
+            var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
             _(options.options).each(function (label, value) {
                 $menu.append(
-                    $('<li>').append(
-                        $('<a href="#">').text(label).on("click", function (e) {
+                    $('<li>')
+                        .append($('<a href="#">').text(label).on("click", function (e) {
                             e.preventDefault();
                             self[attribute] = value;
                             self.trigger("change", self);
@@ -146,7 +145,9 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
             // Tell the anchor that it triggers the dropdown
             $anchor.attr({
-                'data-toggle': 'dropdown'
+                'data-toggle': 'dropdown',
+                'aria-haspopup': true,
+                role: 'menuitem'
             });
 
             $anchor.dropdown();
@@ -196,7 +197,6 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         this.id = options.id;
 
     }
-
 
     return ConfigSentence;
 });
