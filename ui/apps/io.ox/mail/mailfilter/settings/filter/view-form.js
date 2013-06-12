@@ -134,8 +134,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 'click [data-action="remove-test"]': 'onRemoveTest',
                 'click [data-action="remove-action"]': 'onRemoveAction',
                 'click .newcondition': 'onCreateNewCondition',
-                'click .newaction': 'onCreateNewAction',
-                'click [data-action="check-for-stop"]': 'onCheckStopAction'
+                'click .newaction': 'onCreateNewAction'
             },
 
             onRemoveTest: function (e) {
@@ -392,32 +391,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
 
-            },
-
-            onCheckStopAction: function (e) {
-                var currentState = $(e.currentTarget).attr('checked'),
-                    arrayOfActions = this.model.get('actioncmds'),
-                    currentPosition;
-
-
-                function filterForValue(array) {
-                    _.each(array, function (single, id) {
-                        currentPosition = single.id === 'stop' ? id : undefined;
-                    });
-                }
-
-                filterForValue(arrayOfActions, 'stop');
-
-                if (currentState === 'checked') {
-                    arrayOfActions.splice(currentPosition, 1);
-
-                } else {
-                    arrayOfActions.push({id: 'stop'});
-                }
-
-                this.model.set('actioncmds', arrayOfActions);
-
             }
+
+
 
         });
 
@@ -636,7 +612,31 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         id: 'stopaction',
         draw: function (baton) {
 
-            var target = baton.view.dialog.getFooter(),
+            var checkStopAction = function (e) {
+                var currentState = $(e.currentTarget).attr('checked'),
+                    arrayOfActions = baton.model.get('actioncmds'),
+                    currentPosition;
+
+                function filterForValue(array) {
+                    _.each(array, function (single, id) {
+                        currentPosition = single.id === 'stop' ? id : undefined;
+                    });
+                }
+
+                filterForValue(arrayOfActions, 'stop');
+
+                if (currentState === 'checked') {
+                    arrayOfActions.splice(currentPosition, 1);
+
+                } else {
+                    arrayOfActions.push({id: 'stop'});
+                }
+
+                baton.model.set('actioncmds', arrayOfActions);
+
+            },
+
+                target = baton.view.dialog.getFooter(),
                 arrayOfActions = baton.model.get('actioncmds'),
                 checkbox,
                 stopAction;
@@ -648,7 +648,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             }
 
             filterForValue(arrayOfActions, 'stop');
-            target.append(elements.drawcheckbox(stopAction));
+            target.append(elements.drawcheckbox(stopAction).on('change', checkStopAction));
 
         }
     });
