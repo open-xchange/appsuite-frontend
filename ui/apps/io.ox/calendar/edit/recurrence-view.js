@@ -16,6 +16,7 @@ define("io.ox/calendar/edit/recurrence-view",
      "io.ox/core/date",
      "io.ox/core/tk/keys",
      "gettext!io.ox/calendar/edit/main",
+     "io.ox/core/tk/mobiscroll",
      "less!io.ox/calendar/edit/style.less"], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
 
     "use strict";
@@ -187,20 +188,46 @@ define("io.ox/calendar/edit/recurrence-view",
                         marginBottom: 0
                     }).val(renderDate()),
                     keys = new KeyListener($dateInput);
-
-                $dateInput.datepicker({
-                    format: CalendarWidgets.dateFormat,
-                    parentEl: $(this).parent(),
-                    weekStart: dateAPI.locale.weekStart,
-                    autoclose: true,
-                    todayHighlight: true,
-                    todayBtn: true
-                });
+                
+                if (_.device('small')) {
+                    var dateOrder = dateAPI.getFormat(dateAPI.DATE).replace(/\W/g, '').toLowerCase(),
+                    dateFormat = dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yy').toLowerCase(),
+                    theme = 'android-ics light';
+                    if (_.device('ios')) {
+                        theme = 'ios';
+                    }
+                    $dateInput.mobiscroll().date({
+                        theme: theme,
+                        setText: gt('Ok'),
+                        cancelText: gt('Cancel'),
+                        dateFormat: dateFormat,
+                        dateOrder: dateOrder,
+                        display: 'bottom',
+                        dayText: gt('Days'),
+                        monthText: gt('Months'),
+                        yearText: gt('Years'),
+                        showLabel: true,
+                        endYear: new Date().getFullYear() + 100
+                    });
+                } else {
+                    $dateInput.datepicker({
+                        format: CalendarWidgets.dateFormat,
+                        parentEl: $(this).parent(),
+                        weekStart: dateAPI.locale.weekStart,
+                        autoclose: true,
+                        todayHighlight: true,
+                        todayBtn: true
+                    });
+                }
 
                 $anchor.after($dateInput);
                 $anchor.hide();
 
-                $dateInput.select();
+                if (_.device('small')) {
+                    $dateInput.mobiscroll('show');
+                } else {
+                    $dateInput.select();
+                }
                 keys.include();
 
                 // On change
