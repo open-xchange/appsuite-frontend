@@ -504,6 +504,36 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'app-specific-help',
+            index: 200,
+            draw: function () { //replaced by module
+                var helpDir = 'help/' + ox.language + '/',
+                    node = this,
+                    startingPoints = {
+                    'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
+                    'io.ox/calendar': 'ox.appsuite.user.chap.calendar.html',
+                    'io.ox/tasks': 'ox.appsuite.user.chap.tasks.html',
+                    'io.ox/mail': 'ox.appsuite.user.chap.email.html',
+                    'io.ox/files': 'ox.appsuite.user.chap.files.html',
+                    'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
+                };
+
+                node.append(
+                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
+                        .on('click', function (e) {
+                            var currentApp = ox.ui.App.getCurrentApp(),
+                                currentType = currentApp.attributes.name,
+                                target = currentType in startingPoints ? startingPoints[currentType] : 'index.html';
+                            e.preventDefault();
+                            window.open(helpDir + target);
+                        })
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'settings',
             index: 300,
             draw: function () {
@@ -516,41 +546,6 @@ define('io.ox/core/main',
                         ox.launch('io.ox/settings/main');
                     })
                 );
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'app-specific-help',
-            index: 200,
-            draw: function () { //replaced by module
-                var helpDir = 'help/' + ox.language + '/',
-                    helpPoints = ext.point('io.ox/core/topbar/right/dropdown/appspecific').all(),
-                    node = this;
-                _(helpPoints).each(function (extension) {
-                    var appClass = extension.app.replace(/\W/g, '--');
-                    node.append(
-                        $('<li>', {'class': 'io-ox-specificHelp ' + appClass}).append(
-                            $('<a>', {
-                                href: helpDir + extension.href,
-                                target: '_blank',
-                                role: 'menuitem',
-                                tabindex: 1
-                            }).text(extension.desc)
-                        )
-                    );
-                });
-                ox.ui.windowManager.on('window.show', function (element) {
-                    var currentApp = ox.ui.App.getCurrentApp(),
-                        currentType = currentApp.attributes.name,
-                        appClass = currentType.replace(/\W/g, '--'),
-                        currentHelp;
-                    node.find('.io-ox-specificHelp').hide();
-                    currentHelp = node.find('.io-ox-specificHelp.' + appClass);
-                    if (currentHelp.size() === 0) {
-                        currentHelp = node.find('.io-ox-specificHelp.io-ox-genericHelp');
-                    }
-                    currentHelp.show();
-                });
             }
         });
 
@@ -717,64 +712,6 @@ define('io.ox/core/main',
                     $('<small>').text(gt('Please sign in again to continue'))
                 );
             }
-        });
-
-        var menuLabel = gt('Help');
-
-        // add specific help links
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'contactSpecificHelp',
-            index: 1,
-            app: 'io.ox/contacts',
-            href: 'ox.appsuite.user.chap.contacts.html',
-            desc: menuLabel
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'calendarSpecificHelp',
-            index: 1,
-            app: 'io.ox/calendar',
-            href: 'ox.appsuite.user.chap.calendar.html',
-            desc: menuLabel
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'taskSpecificHelp',
-            index: 1,
-            app: 'io.ox/tasks',
-            href: 'ox.appsuite.user.chap.tasks.html',
-            desc: menuLabel
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'emailSpecificHelp',
-            index: 1,
-            app: 'io.ox/mail',
-            href: 'ox.appsuite.user.chap.email.html',
-            desc: menuLabel
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'fileSpecificHelp',
-            index: 1,
-            app: 'io.ox/files',
-            href: 'ox.appsuite.user.chap.files.html',
-            desc: menuLabel
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'portalSettingsSpecificHelp',
-            index: 1,
-            app: 'io.ox/portal',
-            href: 'ox.appsuite.user.sect.portal.customize.html',
-            desc: menuLabel
-        });
-        ext.point('io.ox/core/topbar/right/dropdown/appspecific').extend({
-            id: 'genericHelp',
-            index: 1,
-            app: 'genericHelp',
-            href: 'index.html',
-            desc: menuLabel
         });
 
         // add some senseless characters to avoid unwanted scrolling
