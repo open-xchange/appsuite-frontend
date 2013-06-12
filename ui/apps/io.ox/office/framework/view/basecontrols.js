@@ -13,14 +13,32 @@
 
 define('io.ox/office/framework/view/basecontrols',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/control/label'
-    ], function (Utils, Label) {
+     'io.ox/office/tk/control/label',
+     'gettext!io.ox/office/main'
+    ], function (Utils, Label, gt) {
 
     'use strict';
 
     // static class BaseControls ==============================================
 
     var BaseControls = {};
+
+    // constants --------------------------------------------------------------
+
+    /**
+     * Standard options for the 'Close' button.
+     */
+    BaseControls.QUIT_OPTIONS = { icon: 'icon-remove', tooltip: gt('Close document') };
+
+    /**
+     * Standard options for the 'Hide side panel' button.
+     */
+    BaseControls.HIDE_SIDEPANE_OPTIONS = { icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false };
+
+    /**
+     * Standard options for the 'Show side panel' button.
+     */
+    BaseControls.SHOW_SIDEPANE_OPTIONS = { icon: 'docs-show-sidepane', tooltip: gt('Show side panel'), value: true };
 
     // class StatusLabel ======================================================
 

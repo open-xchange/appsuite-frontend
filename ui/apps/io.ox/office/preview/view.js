@@ -40,7 +40,6 @@ define('io.ox/office/preview/view',
 
         // options for the button and label elements
         GroupOptions = {
-            QUIT:    { icon: 'icon-remove',        tooltip: gt('Close document') },
             FIRST:   { icon: 'docs-first-page',    tooltip: gt('Show first page') },
             PREV:    { icon: 'docs-previous-page', tooltip: gt('Show previous page') },
             NEXT:    { icon: 'docs-next-page',     tooltip: gt('Show next page') },
@@ -129,9 +128,9 @@ define('io.ox/office/preview/view',
             // initialize the side pane
             sidePane
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
-                    .addGroup('app/view/sidepane', new Button({ icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false }))
+                    .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
                     .addRightTab()
-                    .addGroup('app/quit', new Button(GroupOptions.QUIT))
+                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
                 .addViewComponent(new Component(app)
                     .addGroup('pages/current', pageGroup)
@@ -149,9 +148,9 @@ define('io.ox/office/preview/view',
             // create the top overlay pane
             self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
-                    .addGroup('app/view/sidepane', new Button({ icon: 'docs-show-sidepane', tooltip: gt('Show side panel'), value: true }))
+                    .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
                     .addGap()
-                    .addGroup('app/quit', new Button(GroupOptions.QUIT))
+                    .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
             );
 

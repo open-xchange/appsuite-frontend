@@ -14,9 +14,8 @@
 define('io.ox/office/framework/view/sidepane',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/view/pane',
-     'io.ox/office/framework/view/toolbox',
-     'gettext!io.ox/office/main'
-    ], function (Utils, Pane, ToolBox, gt) {
+     'io.ox/office/framework/view/toolbox'
+    ], function (Utils, Pane, ToolBox) {
 
     'use strict';
 
