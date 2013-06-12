@@ -315,6 +315,16 @@ utils.copy(utils.list("lib/bootstrap", ["img/*"]),
 utils.copy(utils.list("lib", ["jquery-ui.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
+//Mobiscroll
+utils.concat("mobi.js", [utils.string("// NOJSHINT\n"),
+                         "lib/mobiscroll/js/mobiscroll.core.js",
+                         "lib/mobiscroll/js/mobiscroll.datetime.js",
+                         "lib/mobiscroll/js/mobiscroll.android-ics.js",
+                         "lib/mobiscroll/js/mobiscroll.ios.js"],
+    { to: utils.dest("apps/mobiscroll/js"), type:"source"});
+utils.copy(utils.list("lib/mobiscroll", ["css/*"]),
+        { to: utils.dest("apps/mobiscroll/")});
+
 // jQuery Imageloader
 
 utils.copy(utils.list("lib", ["jquery.imageloader.js"]),

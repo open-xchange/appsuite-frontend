@@ -33,7 +33,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
-            return e.collection.has('create') && _.device('!small');
+            return e.collection.has('create');// && _.device('!small');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
@@ -44,7 +44,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/edit', {
         requires: function (e) {
-            return (_.device('!small') && e.collection.has('one'));
+            return e.collection.has('one');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {

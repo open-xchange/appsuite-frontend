@@ -35,6 +35,7 @@ define('io.ox/tasks/edit/view',
             //needed to do it this way, otherwise data stays for next instance of view and causes errors
             this.fields = {};
             this.rows = [];
+            this.collapsed = true;
             this.on('dispose', this.close);
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
@@ -55,30 +56,43 @@ define('io.ox/tasks/edit/view',
         },
         render: function (app) {
             var self = this;
+            
             //row0 headlinetext cancel and savebutton
             self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
 
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
+            
+            //row 4 description
+            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
+
+            //expand link
+            var colLink = $('<a tabindex="1">').addClass('expand-link').attr('href', '#')
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    self.$el.find('.collapsed').toggle();
+                    self.collapsed = !self.collapsed;
+                    if (self.collapsed) {
+                        $(this).text(gt('Expand form'));
+                    } else {
+                        $(this).text(gt('Collapse form'));
+                    }
+                })
+                .appendTo(this.$el);
+            if (self.collapsed) {
+                colLink.text(gt('Expand form'));
+            } else {
+                colLink.text(gt('Collapse form'));
+            }
 
             //row 2 start date due date
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
 
             //row 3 recurrence
-            util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
-
-            //row 4 description
-            util.buildExtensionRow(self.$el, this.getRow(4), self.baton);
-
-            //expand link
-            $('<a tabindex="1">').text(gt('Expand form')).attr('href', '#')
-            .on('click', function (e) {
-                e.preventDefault();
-                self.$el.find('.collapsed').show();
-                $(this).remove();
-                $('#task-edit-title').focus();
-            })
-            .appendTo(this.$el);
+            if (!(_.device('small'))) {
+                util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
+            }
 
             //row 5 reminder
             util.buildExtensionRow(self.$el, this.getRow(5), self.baton).addClass('collapsed');
@@ -96,11 +110,11 @@ define('io.ox/tasks/edit/view',
                 participantsTab = temp.content.find('#edit-task-tab0'  + '-' + self.cid),
                 attachmentsTab = temp.content.find('#edit-task-tab1'  + '-' + self.cid),
                 detailsTab = temp.content.find('#edit-task-tab2'  + '-' + self.cid);
-            this.$el.append(tabs.addClass('collapsed'), temp.content);
+            this.$el.append(tabs.addClass('collapsed'), temp.content.addClass('collapsed'));
 
             //partitipants tab
-            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton).addClass('collapsed');
-            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton).addClass('collapsed');
+            util.buildExtensionRow(participantsTab, [this.getRow(0, app, 'participants')], self.baton);
+            util.buildExtensionRow(participantsTab, [this.getRow(1, app, 'participants')], self.baton);
 
             //attachmentTab
             var attachmentTabheader = tabs.find('a:eq(1)');
@@ -109,7 +123,7 @@ define('io.ox/tasks/edit/view',
                 attachmentTabheader.text(
                     //#. %1$s is the number of currently attached attachments
                     //#, c-format
-                    gt('Attachments (%1$s)', gt.noI18n(number)));
+                    gt('(%1$s) Attachments', gt.noI18n(number)));
             });
 
             this.getRow(0, app, 'attachments').invoke('draw', attachmentsTab, self.baton);

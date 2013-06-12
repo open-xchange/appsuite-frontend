@@ -18,7 +18,8 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'less!io.ox/backbone/forms.less'], function (ext, Events, date, settings, gt) {
+     'less!io.ox/backbone/forms.less',
+     'io.ox/core/tk/mobiscroll'], function (ext, Events, date, settings, gt) {
 
     "use strict";
 
@@ -673,7 +674,12 @@ define('io.ox/backbone/forms',
                     return value;
                 }
 
-                return new date.Local(mydate).format(date.DATE);
+                if (_.device('small') && !model.get('full_time')) {
+                    return new date.Local(mydate).format(date.DATE_TIME);
+                } else {
+                    return new date.Local(mydate).format(date.DATE);
+                }
+                
             },
 
             _toTime: function (value, attribute) {
@@ -715,16 +721,24 @@ define('io.ox/backbone/forms',
                     return value;
                 }
                 var mydate = new date.Local(myValue);
-                var parsedDate = date.Local.parse(value, date.DATE);
+                var parsedDate;
+                if (_.device('small') && !model.get('full_time')) {
+                    parsedDate = date.Local.parse(value, date.DATE_TIME);
+                } else {
+                    parsedDate = date.Local.parse(value, date.DATE);
+                }
 
                 if (_.isNull(parsedDate)) {
                     return value;
                 }
-
-                mydate.setDate(parsedDate.getDate());
-                mydate.setMonth(parsedDate.getMonth());
-                mydate.setYear(parsedDate.getYear());
-                return mydate.getTime();
+                if (_.device('small') && !model.get('full_time')) {
+                    return parsedDate.getTime();
+                } else {
+                    mydate.setDate(parsedDate.getDate());
+                    mydate.setMonth(parsedDate.getMonth());
+                    mydate.setYear(parsedDate.getYear());
+                    return mydate.getTime();
+                }
             }
         };
 
@@ -766,7 +780,7 @@ define('io.ox/backbone/forms',
         modelEvents['invalid:' + options.attribute] = 'showError';
         modelEvents.valid = 'removeError';
         modelEvents['change:full_time'] = 'onFullTimeChange';
-
+        var mobileMode = _.device('small');
         _.extend(this, {
             tagName: 'div',
             render: function () {
@@ -777,11 +791,11 @@ define('io.ox/backbone/forms',
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
                         $('<div class="control">').append(
                             function () {
-                                self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small">');
+                                self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.attr('disabled', true);
                                 }
-
+    
                                 if (options.display === "DATETIME") {
                                     self.nodes.timezoneField = $('<span class="label">');
                                     if (self.model.get(self.attribute)) {
@@ -790,40 +804,91 @@ define('io.ox/backbone/forms',
                                         self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
                                     }
                                 }
-
-                                if (options.display === "DATE") {
+                                if (mobileMode) {
+                                    self.nodes.dayField.toggleClass('input-medium', 'input-small');
                                     return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
-                                } else if (options.display === "DATETIME") {
-                                    self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
-                                    if (self.model.get('full_time')) {
-                                        self.nodes.timeField.hide();
-                                        self.nodes.timezoneField.hide();
+                                } else {
+                                    
+                                    if (options.display === "DATE") {
+                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                    } else if (options.display === "DATETIME") {
+                                        
+                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
+                                        if (self.model.get('full_time')) {
+                                            self.nodes.timeField.hide();
+                                            self.nodes.timezoneField.hide();
+                                        }
+                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
                                     }
-                                    return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
                                 }
                             }
                         )
                     )
                 );
                 this.setValueInField();
-                // get the right date format
-                var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
-                this.nodes.dayField.datepicker({
-                    format: dateFormat,
-                    weekStart: date.locale.weekStart,
-                    parentEl: self.nodes.controlGroup,
-                    todayHighlight: true,
-                    todayBtn: true
-                });
+                
+                
+                if (!mobileMode) {
+                    // get the right date format
+                    var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
+                    this.nodes.dayField.datepicker({
+                        format: dateFormat,
+                        weekStart: date.locale.weekStart,
+                        parentEl: self.nodes.controlGroup,
+                        todayHighlight: true,
+                        todayBtn: true
+                    });
+                } else {//do funky mobiscroll stuff
+                    var dateOrder = date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
+                        dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
+                        timeFormat = date.getFormat(date.TIME).replace(/m/g, 'i'),
+                        timeWheels = timeFormat.replace(/\W/g, ''),
+                        theme = 'android-ics light';
+                    if (_.device('ios')) {
+                        theme = 'ios';
+                    }
+                    if (options.display === "DATETIME") {
+                        this.nodes.dayField.mobiscroll().datetime({
+                            theme: theme,
+                            setText: gt('Ok'),
+                            cancelText: gt('Cancel'),
+                            dateFormat: dateFormat,
+                            dateOrder: dateOrder,
+                            timeFormat: timeFormat,
+                            timeWheels: timeWheels,
+                            display: 'bottom',
+                            minuteText: gt('Minutes'),
+                            hourText: gt('Hours'),
+                            dayText: gt('Days'),
+                            monthText: gt('Months'),
+                            yearText: gt('Years'),
+                            showLabel: true,
+                            endYear: new Date().getFullYear() + 100
+                        });
+                        
+                    } else {
+                        this.nodes.dayField.mobiscroll().date({ theme: 'ios', dateFormat: dateFormat, display: 'bottom', lang: 'de'});
+                    }
+                    
+                    this.nodes.dayField.val = function (value) {//repairing functionality
+                        if (arguments.length > 0) {
+                            this['0'].value = value;
+                        } else {
+                            return this['0'].value;
+                        }
+                    };
+                    this.nodes.dayField.timeWheels = timeWheels;//save the timewheelsformat (needed if changed from fulltime back to normal mode)
+                    this.nodes.dayField.timeFormat = timeFormat;//save the timeformat (needed if changed from fulltime back to normal mode)
+                }
 
-                if (options.display === "DATETIME") {
+                if (!mobileMode && options.display === "DATETIME") {
                     this.nodes.timeField.combobox(comboboxHours);
                     this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
                 }
-
+                
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
 
-                if (options.overwritePositioning) {
+                if (!mobileMode && options.overwritePositioning) {
                     this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
                 }
 
@@ -847,7 +912,7 @@ define('io.ox/backbone/forms',
                 }
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
 
-                if (options.display === "DATETIME") {
+                if (!mobileMode && options.display === "DATETIME") {
                     this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
                 }
             },
@@ -880,12 +945,24 @@ define('io.ox/backbone/forms',
                 }
             },
             onFullTimeChange: function () {
-                if (this.model.get('full_time')) {
-                    this.nodes.timeField.hide();
-                    this.nodes.timezoneField.hide();
+                if (_.device('small')) {//
+                    if (this.model.get('full_time')) {
+                        this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
+                        this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
+                        this.nodes.timezoneField.hide();
+                    } else {
+                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.nodes.dayField.timeWheels);//add the timewheels again
+                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.nodes.dayField.timeFormat);//add the timeFormat again
+                        this.nodes.timezoneField.show();
+                    }
                 } else {
-                    this.nodes.timeField.show();
-                    this.nodes.timezoneField.show();
+                    if (this.model.get('full_time')) {
+                        this.nodes.timeField.hide();
+                        this.nodes.timezoneField.hide();
+                    } else {
+                        this.nodes.timeField.show();
+                        this.nodes.timezoneField.show();
+                    }
                 }
             },
             modelEvents: modelEvents

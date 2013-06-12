@@ -430,7 +430,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 }
             }
             var mydate = new date.Local(date.Local.utc(myValue));
-            var parsedDate = date.Local.parse(value, date.DATE);
+            var parsedDate;
+            if (_.device('small')) {
+                parsedDate = date.Local.parse(value, date.DATE_TIME);
+            } else {
+                parsedDate = date.Local.parse(value, date.DATE);
+            }
 
             if (value === '') { //empty input means date should be undefined
                 return null;
@@ -441,11 +446,14 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 //setTimeout(function () {notifications.yell('error', gt('Please enter a valid date.')); }, 300);
                 return model.get(attribute);
             }
-
-            mydate.setDate(parsedDate.getDate());
-            mydate.setMonth(parsedDate.getMonth());
-            mydate.setYear(parsedDate.getYear());
-            return date.Local.localTime(mydate.getTime());
+            if (_.device('small')) {
+                return parsedDate.getTime();
+            } else {
+                mydate.setDate(parsedDate.getDate());
+                mydate.setMonth(parsedDate.getMonth());
+                mydate.setYear(parsedDate.getYear());
+                return date.Local.localTime(mydate.getTime());
+            }
         }
     };
 
