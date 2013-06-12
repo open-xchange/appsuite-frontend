@@ -598,11 +598,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 //                    test: { nrInArray: '', target: ''  },
 //                    action: { nrInArray: '', target: ''  }
                 },
-                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met.'), anyof: gt('Apply rule if any condition is met.')}, options);
+                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 this.append($('<div>').addClass('line').append(optionsSwitch));
             } else {
-                this.append($('<div>').addClass('line').text(gt('Apply rule if all conditions are met.')));
+                this.append($('<div>').addClass('line').text(gt('Apply rule if all conditions are met')));
             }
 
         }
