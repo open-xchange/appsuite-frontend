@@ -186,6 +186,7 @@ define('io.ox/editor/main',
                 title: '',
                 content: ''
             });
+            _.extend(previous, { filename: 'unnamed.txt', title: 'unnamed.txt' });
             win.show(function () {
                 app.setState({ folder: opt.folder });
                 view.focus();
