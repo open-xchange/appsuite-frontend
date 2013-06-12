@@ -183,19 +183,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="target_costs span12" id="task-edit-target-costs" tabindex="1">',
         attribute: 'target_costs',
-        label: gt('Estimated costs'),
-        updateModel: function () {
-            var value = this.nodes.inputField.val();
-            if (!isNaN(parseFloat(value, 10)) || value === '') {
-                if (value === '') {
-                    value = null;
-                }
-                this.model.set(this.attribute, value, {validate: true});
-            } else {
-                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
-                this.nodes.inputField.val(this.model.get(this.attribute));
-            }
-        }
+        label: gt('Estimated costs')
     }));
 
     //actual costs
@@ -206,19 +194,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="actual_costs span12" id="task-edit-actual-costs" tabindex="1">',
         attribute: 'actual_costs',
-        label: gt('Actual costs'),
-        updateModel: function () {
-            var value = this.nodes.inputField.val();
-            if (!isNaN(parseFloat(value, 10)) || value === '') {
-                if (value === '') {
-                    value = null;
-                }
-                this.model.set(this.attribute, value, {validate: true});
-            } else {
-                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
-                this.nodes.inputField.val(this.model.get(this.attribute));
-            }
-        }
+        label: gt('Actual costs')
     }));
 
     //currency

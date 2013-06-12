@@ -26,8 +26,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return true;
         },
         number: function (val) {
-            var regex = /^\d+$/;
-            return regex.test(val) ||
+           
+            var isValid = !isNaN(parseFloat(val, 10)) &&  //check if its a number
+                          (parseFloat(val, 10).toString().length === val.toString().length);//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            return isValid ||
                 'Please enter a valid number';
         },
         array: function (val) {
