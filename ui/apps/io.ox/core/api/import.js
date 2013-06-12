@@ -53,15 +53,23 @@ define('io.ox/core/api/import',
      */
     api.importFile = function (data) {
         var def = $.Deferred();
+        importFileCall(data).then(function (res) {
+            //hint: undefined is usually a filtered warning message
+            var data = res.data || [res],
+                failcount =  _.reduce(res.data, function (count, item) {
+                    return count + item && item.error ? 1 : 0;
+                }, 0);
 
-        importFileCall(data).done(function (res) {
-            if (res.data[0] && res.data[0].error) {
-                def.reject(res.data[0]);
+            //import of all entries failed
+            if (failcount === data.length) {
+                def.reject(data);
             } else {
-                def.resolve(res.data[0]);
+                def.resolve(data);
             }
         }).fail(function (res) {
-            def.reject(res);
+            //ensure array
+            data = res.data || [res];
+            def.reject(data);
         });
         return def;
     };
