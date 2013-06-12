@@ -184,7 +184,7 @@ define('io.ox/files/actions',
                         var html = [], text = [];
                         _(list).each(function (file) {
                             var url = ox.abs + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            var label = gt('File: %1$s', file.title || file.filename);
+                            var label = gt('File: %1$s', file.filename || file.title);
                             html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
                             text.push(label + '\n' + gt('Direct link: %1$s', url));
                         });
@@ -243,7 +243,7 @@ define('io.ox/files/actions',
                                         '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
                                     return $('<p>').append(
-                                        $('<div>').text(file.title || file.filename || ''),
+                                        $('<div>').text(file.filename || file.title || ''),
                                         $('<div>').append(
                                             $('<a class="direct-link">', { href: url, target: '_blank' })
                                             .text(url)
@@ -384,17 +384,19 @@ define('io.ox/files/actions',
                     var name = $input.val();
                     var update = {
                         id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        title: name
+                        folder_id: baton.data.folder_id
                     };
-                    if (baton.data.filename) {
+                    //title only entries
+                    if (!baton.data.filename && baton.data.title) {
+                        update.title = name;
+                    } else {
                         update.filename = name;
                     }
 
                     return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
-                $input.val(baton.data.title || baton.data.filename);
+                $input.val(baton.data.filename || baton.data.title);
                 var $form = $('<form>').append(
                     $('<div class="row-fluid">').append(
                         $('<label for="name">').append($('<b>').text(gt('Name'))),
@@ -859,11 +861,11 @@ define('io.ox/files/actions',
             return !!app.currentFile;
         },
         label: function (app) {
-            if (app.currentFile.title) {
+            if (app.currentFile.filename || app.currentFile.title) {
                 return gt(
-                    //#. %1$s is the title of the file
+                    //#. %1$s is the filename or title of the file
                     'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
-                    String(app.currentFile.title).replace(/</g, '&lt;')
+                    String(app.currentFile.filename || app.currentFile.title).replace(/</g, '&lt;')
                 );
             } else {
                 return gt('Drop here to upload a <b class="dndignore">new version</b>');
