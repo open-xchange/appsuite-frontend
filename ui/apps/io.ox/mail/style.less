@@ -39,15 +39,25 @@
     display: none;
 }
 
-.vgrid-cell.mail .priority {
-    font-weight: bold;
-    float: right;
-    .high {
-        color: @mailPriority;
+.vgrid-cell.mail {
+
+    .priority {
+        font-weight: bold;
+        float: right;
+        .high {
+            color: @mailPriority;
+        }
+        .low {
+            i:first-child { color: #888; }
+            color: #ccc;
+        }
     }
-    .low {
-        i:first-child { color: #888; }
-        color: #ccc;
+
+    &.selected .priority {
+        .low {
+            i:first-child { opacity: 1; }
+            i { opacity: 0.5; }
+        }
     }
 }
 
