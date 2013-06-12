@@ -45,10 +45,7 @@ define('io.ox/contacts/edit/main',
 
             app.setWindow(win);
 
-            container = win.nodes.main
-                .css({ backgroundColor: '#fff' })
-                .scrollable()
-                .addClass('container-fluid default-content-padding');
+            container = win.nodes.main.scrollable();
 
             var cont = function (data) {
 

@@ -250,7 +250,7 @@ define('io.ox/contacts/edit/view-form', [
         var point = views.point(ref + '/edit/view'),
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact'
+                className: 'edit-contact container-fluid default-content-padding'
             });
 
         point.extend(new PictureUpload({
