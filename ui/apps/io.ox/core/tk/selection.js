@@ -694,6 +694,13 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
+        this.selectIndex = function (index) {
+            var item = observedItems[lastValidIndex];
+            if (item !== undefined) {
+                this.select(item.data);
+            }
+        };
+
         this.selectLastIndex = function () {
             if (lastValidIndex !== -1) {
                 var item = observedItems[lastValidIndex] || _.last(observedItems);

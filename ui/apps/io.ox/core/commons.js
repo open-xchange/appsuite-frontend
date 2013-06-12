@@ -127,7 +127,14 @@ define('io.ox/core/commons',
             });
             // clean up selection index on delete
             api.on('beforedelete', function (e, ids) {
+
                 grid.selection.removeFromIndex(ids);
+
+                var list = grid.selection.get(), index;
+                if (list.length === 1) {
+                    index = grid.selection.getIndex(list[0]);
+                    grid.selection.selectIndex(index + 1);
+                }
             });
         },
 
