@@ -62,8 +62,11 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
         drawOptionsExtern: function (activeValue, values, options) {
 
             var active = values[activeValue] || activeValue;
+            if (options.caret) {
+                active = active + '<b class="caret">';
+            }
             return $('<div class="action ' + options.toggle + ' value ">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').html(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(

@@ -593,7 +593,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 options = {
                     target: 'id',
                     toggle: 'dropdown',
-                    classes: 'no-positioning'
+                    classes: 'no-positioning',
+                    caret: true
 //                    test: { nrInArray: '', target: ''  },
 //                    action: { nrInArray: '', target: ''  }
                 },
