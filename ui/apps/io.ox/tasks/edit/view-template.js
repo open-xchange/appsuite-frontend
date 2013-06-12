@@ -554,6 +554,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'span12',
+        tabindex: 1,
         index: 2100
     }));
 
