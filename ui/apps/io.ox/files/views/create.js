@@ -36,31 +36,36 @@ define('io.ox/files/views/create', [
             function saveFile() {
                 var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]')[0].files : []) || [],
                     folder = app.folder.get();
-                api.uploadFile({
-                    form: $form,
-                    file: _(files).first(),
-                    json: {
-                        folder: folder,
-                        description: $form.find('textarea').val(),
-                        title: $form.find('input[type="text"]').val()
-                    },
-                    folder: folder
-                }).done(function (data) {
-                    api.propagate('new', data);
-                    notifications.yell('success', gt('This file has been added'));
-                    dialog.close();
-                }).fail(function (e) {
-                    if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
-                        notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
-                    }
-                    else if (e && e.code && e.code === 'FLS-0024') {
-                        notifications.yell('error', gt('The allowed quota is reached.'));
-                    }
-                    else {
-                        notifications.yell('error', gt('This file has not been added'));
-                    }
-
-                });
+                if ($form.find('input[type="file"]').val()) {
+                    api.uploadFile({
+                        form: $form,
+                        file: _(files).first(),
+                        json: {
+                            folder: folder,
+                            description: $form.find('textarea').val(),
+                            title: $form.find('input[type="text"]').val()
+                        },
+                        folder: folder
+                    }).done(function (data) {
+                        api.propagate('new', data);
+                        notifications.yell('success', gt('This file has been added'));
+                        dialog.close();
+                    }).fail(function (e) {
+                        if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
+                            notifications.yell('error', gt(e.error, e.error_params[0], e.error_params[1]));
+                        }
+                        else if (e && e.code && e.code === 'FLS-0024') {
+                            notifications.yell('error', gt('The allowed quota is reached.'));
+                        }
+                        else {
+                            notifications.yell('error', gt('This file has not been added'));
+                        }
+                    });
+                } else {
+                    notifications.yell('error', gt('No file selected for upload.'));
+                    dialog.idle();
+                    $form.find('input[type="file"]').focus();
+                }
             }
 
             dialog.header($('<h4>').text(gt('Add new file')));
@@ -68,12 +73,10 @@ define('io.ox/files/views/create', [
             dialog
                 .addPrimaryButton('save', gt('Save'), 'save')
                 .addButton('cancel', gt('Cancel'), 'cancel')
-                .show(function () { $form.find('input:first').focus(); })
-                .done(function (action) {
-                    if (action === 'save') {
-                        saveFile();
-                    }
-                });
+                .on('save', function (e) {
+                    saveFile();
+                })
+                .show(function () { $form.find('input:first').focus(); });
         };
 
         ext.point(POINT + '/form').extend({
