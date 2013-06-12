@@ -614,19 +614,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             var checkStopAction = function (e) {
                 var currentState = $(e.currentTarget).find('[type="checkbox"]').attr('checked'),
-                    arrayOfActions = baton.model.get('actioncmds'),
-                    currentPosition;
+                    arrayOfActions = baton.model.get('actioncmds');
 
-                function filterForValue(array) {
+                function getCurrentPosition(array) {
+                    var currentPosition;
                     _.each(array, function (single, id) {
-                        currentPosition = single.id === 'stop' ? id : undefined;
+                        if (single.id === 'stop') {
+                            currentPosition = id;
+                        }
                     });
+
+                    return currentPosition;
                 }
 
-                filterForValue(arrayOfActions, 'stop');
-
                 if (currentState === 'checked') {
-                    arrayOfActions.splice(currentPosition, 1);
+                    arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
 
                 } else {
                     arrayOfActions.push({id: 'stop'});
@@ -638,17 +640,30 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 target = baton.view.dialog.getFooter(),
                 arrayOfActions = baton.model.get('actioncmds'),
-                checkbox,
-                stopAction;
+                checkbox;
 
-            function filterForValue(array, value) {
+            function checkForStopAction(array) {
+                var stopAction;
+                if (!baton.model.id) { // default value
+                    return true;
+                }
+
                 _.each(array, function (single, id) {
-                    stopAction = single.id === 'stop' ? false : true;
+                    if (single.id === 'stop') {
+                        stopAction = false;
+                    }
+
                 });
+                if (stopAction === undefined) {
+                    return true;
+                }
+                return stopAction;
             }
 
-            filterForValue(arrayOfActions, 'stop');
-            target.append(elements.drawcheckbox(stopAction).on('change', checkStopAction));
+            if (!target.find('[type="checkbox"]').length) {
+                target.append(elements.drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+            }
+
 
         }
     });
