@@ -403,6 +403,9 @@ define('io.ox/contacts/api',
                     fetchCache.clear()
                 );
             })
+            .fail(function (response) {
+                notifications.yell('error', response.error);
+            })
             .done(function () {
                 _(list).map(function (data) {
                     api.trigger('delete:' + encodeURIComponent(_.cid(data)), data);
