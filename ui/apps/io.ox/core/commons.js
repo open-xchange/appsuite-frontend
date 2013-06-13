@@ -555,5 +555,27 @@ define('io.ox/core/commons',
         return tmp.center();
     };
 
+    // Accessibility F6 jump
+    var macos = _.device('macos');
+    $(document).on('keydown.f6', function (e) {
+
+        if (e.which === 117 && (macos || e.ctrlKey)) {
+
+            var items = $('.f6-target:visible'),
+                closest = $(document.activeElement).closest('.f6-target'),
+                index = (items.index(closest) || 0) + 1,
+                next;
+
+            if (index >= items.length) index = 0;
+            next = items.eq(index);
+
+            if (next.attr('tabindex') === '1') {
+                next.focus();
+            } else {
+                next.find('[tabindex="1"]').first().focus();
+            }
+        }
+    });
+
     return commons;
 });

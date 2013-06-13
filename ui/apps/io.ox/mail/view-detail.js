@@ -591,7 +591,9 @@ define('io.ox/mail/view-detail',
                 .busy()
                 .one('resolve', { baton: baton }, resolver);
 
-            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
+            if (baton.options.tabindex) {
+                node.attr('tabindex', baton.options.tabindex);
+            }
 
             return node;
         },
@@ -615,7 +617,10 @@ define('io.ox/mail/view-detail',
                         );
                     });
 
-            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
+            if (baton.options.tabindex) {
+                // we add f6-target just here; first mail in thread
+                node.addClass('f6-target').attr('tabindex', baton.options.tabindex);
+            }
 
             try {
 

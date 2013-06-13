@@ -219,7 +219,7 @@ define('io.ox/core/tk/vgrid',
             responsiveChange = true,
             firstRun = true,
             // inner container
-            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node).attr('tabindex', 1),
+            scrollpane = $('<div class="abs vgrid-scrollpane f6-target" tabindex="1">').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
 
             // bottom toolbar

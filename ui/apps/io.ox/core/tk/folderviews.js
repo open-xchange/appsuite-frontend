@@ -452,7 +452,7 @@ define('io.ox/core/tk/folderviews',
         var self = this;
 
         $(container)
-            .addClass('io-ox-foldertree')
+            .addClass('io-ox-foldertree f6-target')
             .attr({ tabindex: this.options.tabindex })
             // add tree container
             .append(this.container = $('<div class="folder-root">'));
