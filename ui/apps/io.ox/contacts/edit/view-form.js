@@ -305,11 +305,7 @@ define('io.ox/contacts/edit/view-form', [
             index: _.device('small') ? 10 : 300,
             id: 'inline-actions',
             ref: ref + '/edit/view/inline',
-            classes: 'form-horizontal',
-            customizeNode: function ($node) {
-                $node.addClass("controls");
-                $node.css({marginBottom: '20px', clear: 'both'});
-            }
+            classes: 'form-horizontal controls'
         }));
 
         views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
