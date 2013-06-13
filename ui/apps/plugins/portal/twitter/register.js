@@ -86,7 +86,7 @@ define('plugins/portal/twitter/register',
     };
 
     var loadFromTwitter = function (params) {
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1.1/statuses/home_timeline.json', params: params});
         return def.pipe(function (response) {
             if (response) {
                 var jsonResponse = JSON.parse(response);
