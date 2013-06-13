@@ -92,6 +92,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return;
 
             settings.set('userEncoding', encoding);
+            settings.save();
         },
 
         // HTML related API
