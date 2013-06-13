@@ -1914,9 +1914,16 @@ ul.dropdown-menu li a.disabled { color:#999; }
     #io-ox-notifications-overlay { right: 320px; }
 }
 
-// landscape
-@media (max-width: 700px) and (orientation:landscape) {
-    .window-head { padding-left: 40px; } // iOS landscape back button fix
+// landscape fullscreen on iPhone
+// iOS will go fullscreen and show an overaly with own buttons
+// we need to position our buttons around them
+@media (height: 320px) and (orientation:landscape) {
+    .window-head {
+        padding-right: 40px;
+        .toolbar-button {
+            float: right;
+        }
+    }
 }
 // mobile
 @media (max-width: 480px) {
