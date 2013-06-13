@@ -371,7 +371,9 @@ define('io.ox/core/commons-folderview',
                                     .val(ucfirst(folder.module))
                             )
                         );
-                        if (config.get('modules.caldav.active') && folder.module === 'calendar') {
+                        // show CalDAV URL for calendar folders
+                        // users requires "caldav" capability
+                        if (folder.module === 'calendar' && capabilities.has('caldav')) {
                             node.append(
                                 $('<div class="row-fluid">').append(
                                     $('<label>')
