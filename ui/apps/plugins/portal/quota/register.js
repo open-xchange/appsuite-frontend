@@ -16,8 +16,9 @@ define("plugins/portal/quota/register",
      'gettext!plugins/portal',
      'io.ox/core/api/quota',
      'io.ox/core/strings',
+     'io.ox/core/capabilities',
      'less!plugins/portal/quota/style.less'
-    ], function (ext, gt, api, strings) {
+    ], function (ext, gt, api, strings, capabilities) {
 
     "use strict";
 
@@ -26,20 +27,22 @@ define("plugins/portal/quota/register",
     },
     availableQuota = function (quota) {
         var fields = [];
-
-        fields.push({
-            quota: quota.file.quota,
-            usage: quota.file.use,
-            name: 'memory-file',
-            i18nName: gt('File quota')
-        });
-
+        
+        if (capabilities.has('infostore')) {
+            fields.push({
+                quota: quota.file.quota,
+                usage: quota.file.use,
+                name: 'memory-file',
+                i18nName: gt('File quota')
+            });
+        }
         fields.push({
             quota: quota.mail.quota,
             usage: quota.mail.use,
             name: 'memory-mail',
             i18nName: gt('Mail quota')
         });
+       
 
         fields.push({
             quota: quota.mail.countquota,
