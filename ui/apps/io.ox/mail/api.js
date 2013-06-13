@@ -520,6 +520,8 @@ define('io.ox/mail/api',
     };
 
     var update = function (list, data, apiAction) {
+        var move = false,
+            modfolder = data.folder_id || data.folder;
 
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
@@ -529,12 +531,16 @@ define('io.ox/mail/api',
 
         // now talk to server
         _(list).map(function (obj) {
+            var folder  = obj.folder || obj.folder_id;
+            if (modfolder && modfolder !== folder) {
+                move = true;
+            }
             return http.PUT({
                 module: 'mail',
                 params: {
                     action: apiAction || 'update',
                     id: obj.id,
-                    folder: obj.folder || obj.folder_id,
+                    folder: folder,
                     timestamp: _.now() // to be safe
                 },
                 data: data,
@@ -542,11 +548,14 @@ define('io.ox/mail/api',
             });
         });
         // resume & trigger refresh
-        return http.resume().pipe(function () {
+        return http.resume().pipe(function (response) {
             // trigger update events
             _(list).each(function (obj) {
                 api.trigger('update:' + encodeURIComponent(_.cid(obj)), obj);
             });
+            if (apiAction === 'copy' || move) {//give response if its a copy action (to look if there was an error)
+                return { list: list, response: response};//not doing this as a standardaction to prevent errors with functions looking only for the list parameter
+            }
             // return list
             return list;
         });
@@ -856,17 +865,31 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.move = function (list, targetFolderId) {
+        var response;
         if (list.length >= 100) {
             notifications.yell('info', gt('Moving mails ... This may take a few seconds.'));
 
-            return update(list, { folder_id: targetFolderId })
-            .done(function () {
-                notifications.yell('success', gt('Mails have been moved'));
+            return update(list, { folder_id: targetFolderId }).pipe(function (resp) {
+                response = resp.response;
+                return resp.list;
+            })
+            .pipe(function () {
+                var errorText;
+                for (var i = 0; i < response.length; i++) {//look if something went wrong
+                    if (response[i].error) {
+                        errorText = response[i].error.error;
+                        break;
+                    }
+                }
+                
                 api.trigger('move', list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
                 api.caches.all.clear().done(function () {
                     api.trigger('refresh.all');
                 });
+                if (errorText) {
+                    return errorText;
+                }
             });
 
         } else {
@@ -876,16 +899,26 @@ define('io.ox/mail/api',
                 api.trigger('refresh.all');
                 // start update on server
                 return update(list, { folder_id: targetFolderId })
-                    .pipe(function () {
+                    .pipe(function (resp) {
+                        response = resp.response;
                         list = _.isArray(list) ? list : [list];
                         return _(list).map(function (obj) {
                             return (clearCaches(obj, targetFolderId))();
                         });
                     })
-                    .done(function () {
-                        notifications.yell('success', gt('Mail has been moved'));
+                    .pipe(function () {
+                        var errorText;
+                        for (var i = 0; i < response.length; i++) {//look if something went wrong
+                            if (response[i].error) {
+                                errorText = response[i].error.error;
+                                break;
+                            }
+                        }
                         api.trigger('move', list, targetFolderId);
                         folderAPI.reload(targetFolderId, list);
+                        if (errorText) {
+                            return errorText;
+                        }
                     });
             });
         }
@@ -899,12 +932,27 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.copy = function (list, targetFolderId) {
+        var response;
+        //targetFolderId
         return update(list, { folder_id: targetFolderId }, 'copy')
-            .pipe(clearCaches(list, targetFolderId))
-            .done(refreshAll)
-            .done(function () {
-                notifications.yell('success', gt('Mail has been copied'));
+            .pipe(function (resp) {
+                response = resp.response;
+                clearCaches(list, targetFolderId);
+                return resp.list;
+            })
+            .pipe(refreshAll)
+            .pipe(function () {
+                var errorText;
+                for (var i = 0; i < response.length; i++) {//look if something went wrong
+                    if (response[i].error) {
+                        errorText = response[i].error.error;
+                        break;
+                    }
+                }
                 folderAPI.reload(targetFolderId, list);
+                if (errorText) {
+                    return errorText;
+                }
             });
     };
 
