@@ -22,7 +22,7 @@
     @widget-padding: 13px;
 
     padding: 13px (13px - @spacing) 13px 13px;
-    overflow: visible;
+    overflow: auto;
 
     .header {
         margin: 0 13px @vert-spacing 0;
@@ -385,6 +385,7 @@
 
         @spacing: 13px;
         padding-right: @spacing;
+        overflow: visible;
 
         h1.greeting {
             font-family: @normalFontFamily;
@@ -417,6 +418,19 @@
         }
         .photo-stream, .photo-stream .content {
             height: 320px;
+        }
+
+        .widget.requires-setup {
+            background-color: transparent;
+        }
+
+        .widget.requires-setup, .widget.error-occurred {
+            .content {
+                text-align: left;
+                color: #888;
+                cursor: pointer;
+                padding-top: 0;
+            }
         }
     }
 
