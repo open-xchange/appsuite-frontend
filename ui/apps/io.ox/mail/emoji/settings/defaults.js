@@ -15,8 +15,7 @@ define('io.ox/mail/emoji/settings/defaults', [], function () {
 
     var settingsDefaults = {
         availableEncodings: 'unified',
-        defaultEncoding: 'unified',
-        userEncoding: 'unified'
+        defaultEncoding: 'unified'
     };
 
     return settingsDefaults;
