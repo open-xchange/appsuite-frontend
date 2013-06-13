@@ -78,7 +78,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
         },
         iconInfo: iconInfo,
-        categories: categories,
+        categories: categories.unified,
 
         // encodings API
         encodings: encodings,
