@@ -262,6 +262,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/print-appointment', {
+        capabilities: 'printing',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
@@ -272,6 +273,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
         requires: 'one',
+        capabilities: 'printing',
         action: function (baton) {
             var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';
             if (baton.data[POS]) options[POS] = baton.data[POS];
@@ -280,6 +282,7 @@ define('io.ox/calendar/actions',
     });
 
     new Action('io.ox/calendar/detail/actions/print', {
+        capabilities: 'printing',
         id: 'print',
         requires: function (e) {
             var win = e.baton.window;
