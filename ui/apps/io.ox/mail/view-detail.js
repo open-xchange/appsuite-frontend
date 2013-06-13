@@ -107,14 +107,15 @@ define('io.ox/mail/view-detail',
         var regex = /(&quot)?([:;]-?[(|)D])/g;
 
         return function (text) {
-            if (!settings.get('displayEmoticons')) return text;
-            text = text.replace(regex, function (all, quot, match) {
-                // if we hit &quot;-) we just return
-                if (quot) return all;
-                // otherwise find emote
-                var emote = $('<div>').html(emotes[match]).text();
-                return !emote ? match : emote;
-            });
+            if (settings.get('displayEmoticons')) {
+                text = text.replace(regex, function (all, quot, match) {
+                    // if we hit &quot;-) we just return
+                    if (quot) return all;
+                    // otherwise find emote
+                    var emote = $('<div>').html(emotes[match]).text();
+                    return !emote ? match : emote;
+                });
+            }
             return emoji.unifiedToImageTag(text);
         };
     }());
