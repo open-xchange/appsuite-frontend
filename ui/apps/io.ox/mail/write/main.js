@@ -61,6 +61,12 @@ define('io.ox/mail/write/main',
             minutes: 60000
         };
 
+    function stopAutoSave(app) {
+        if (app.autosave) {
+            window.clearTimeout(app.autosave.timer);
+        }
+    }
+
     function initAutoSaveAsDraft(app) {
 
         var timeout = settings.get('autoSaveDraftsAfter', false),
@@ -74,12 +80,10 @@ define('io.ox/mail/write/main',
 
         if (!timeout || !scale) return; // settings not parsable
 
-        if (app.autosave) {
-            window.clearTimeout(app.autosave.timer);
-        }
+        stopAutoSave(app);
 
         delay = function () {
-            _.delay(timer, timeout * scale);
+            app.autosave.timer = _.delay(timer, timeout * scale);
         };
 
         timer = function () {
@@ -91,8 +95,7 @@ define('io.ox/mail/write/main',
             }
         };
 
-        app.autosave = { timer: timer };
-
+        app.autosave = {};
         delay();
     }
 
@@ -1157,10 +1160,8 @@ define('io.ox/mail/write/main',
                 for (var id in editorHash) {
                     editorHash[id].destroy();
                 }
-                //clear timer for autosave
-                if (app.autosave) {
-                    window.clearTimeout(app.autosave.timer);
-                }
+                // clear timer for autosave
+                stopAutoSave(app);
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;
             };
