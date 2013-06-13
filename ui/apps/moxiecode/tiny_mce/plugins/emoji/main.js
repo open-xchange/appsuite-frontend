@@ -12,8 +12,9 @@
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'settings!io.ox/mail/emoji',
        'css!emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories) {
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories, settings) {
 
     "use strict";
 
@@ -50,12 +51,23 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         };
     }
 
+    function parseEncodings() {
+        //TODO: may be, filter the list for encodings, we support in the frontend
+        var e = settings.get('availableEncodings', 'unified');
+
+        return _(e.split(','))
+            .map(function (encoding) {
+                return encoding.trim();
+            });
+    }
+
     var category_map = createCategoryMap(),
         icons = _(emoji.EMOJI_MAP)
             .chain()
             .pairs()
             .map(iconInfo)
-            .value();
+            .value(),
+        encodings = parseEncodings();
 
     return _.extend({
         // plain data API
@@ -67,6 +79,20 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         },
         iconInfo: iconInfo,
         categories: categories,
+
+        // encodings API
+        encodings: encodings,
+        defaultEncoding: function () {
+            var defaultEncoding = settings.get('defaultEncoding', 'unified');
+
+            return settings.get('userEncoding', defaultEncoding);
+        },
+        setDefaultEncoding: function (encoding) {
+            if (!_(encodings).contains(encoding))
+                return;
+
+            settings.set('userEncoding', encoding);
+        },
 
         // HTML related API
         unifiedToImageTag: function (text, options) {
