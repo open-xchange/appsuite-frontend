@@ -28,7 +28,7 @@ function compileLess() {
 
     var coreDir = process.env.coreDir || utils.builddir;
 
-    function core(file) { return path.join(coreDir, file); }
+    function core(file) { return path.join(coreDir, file).replace(/\\/g, '/'); }
 
     var ownLess = utils.list('apps', '**/*.less'), coreLess;
     var ownThemes = utils.list('apps/themes/*/definitions.less');
