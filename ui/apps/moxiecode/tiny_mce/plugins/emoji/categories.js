@@ -10,7 +10,8 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('moxiecode/tiny_mce/plugins/emoji/categories', [], function () {
+define('moxiecode/tiny_mce/plugins/emoji/categories',
+       ['gettext!io.ox/mail/emoji'], function (gt) {
     "use strict";
 
     function category(cat) {
@@ -22,5 +23,8 @@ define('moxiecode/tiny_mce/plugins/emoji/categories', [], function () {
 
     return {
         'unified': category('unified')
+        translatedNames: {
+            'unified': gt('Unified')
+        }
     };
 });
