@@ -1,3 +1,16 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 @import '../../../../emoji/emoji.css';
 
 @font-face {
@@ -22,39 +35,85 @@ img.emoji {
     background-position: -380px -300px;
 }
 
+.oxSkin .mceEmojiPane {
 
-#mceEmojiPane {
+    display: table-cell;
     width: 255px;
+    position: relative;
     vertical-align: top;
 
-    a {
-        cursor: auto;
-    }
+    border: 1px solid #ccc;
+    border-width: 1px 1px 1px 0;
 
-    & > div {
-        max-width: 225px;
-        min-width: 100px;
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
+    @background: #f5f5f5;
+
+    .emoji-header {
+
+        line-height: 20px;
+        height: 20px;
+        bottom: auto;
+
         padding: 7px 14px;
-    }
+        background-color: @background;
 
-    a.emoji_category {
-        display: block;
-        color: @linkColor;
-
-        &.open {
+        .emoji-category {
             font-weight: bold;
+            color: #333;
+            display: inline-block;
+            width: 100%;
+            padding-right: 30px;
+            .ellipsis();
+            .box-sizing(border-box);
+        }
+
+        i {
+            line-height: 20px;
         }
     }
-    .emoji_selector {
-        white-space: normal;
-        overflow-y: auto;
 
-        a {
-            margin: 5px 3px;
-            width: 20px;
+    .emoji-icons {
+
+        top: 34px;
+        bottom: 65px;
+        padding: 14px;
+        white-space: normal;
+
+        overflow: auto;
+        background-color: white;
+    }
+
+    .emoji {
+        width: 20px;
+        margin: 0 7px 7px 0;
+        cursor: pointer;
+    }
+
+    .emoji-footer {
+
+        top: auto;
+        height: 50px;
+        padding: 7px 0 7px 14px;
+        white-space: normal;
+        border-top: 1px solid #fff;
+
+        overflow: hidden;
+        background-color: @background;
+        .vertical-gradient(@background, darken(@background, 10%));
+
+        .emoji {
+            margin: 0 27px 3px 0;
         }
+    }
+
+    /* bootstrap re-resets */
+
+    .dropdown-toggle, .dropdown-toggle * { cursor: pointer; }
+
+    .dropdown-menu {
+        padding: 5px 0;
+        margin: 2px 0 0;
+        background-color: #FFF;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        a { cursor: pointer; }
     }
 }

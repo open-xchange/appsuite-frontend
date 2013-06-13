@@ -8,108 +8,240 @@
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+
 (function () {
 
-    "use strict";
+    'use strict';
 
-    window.tinymce.create('tinymce.plugins.EmojiPlugin', {
-        init : function (ed, url) {
-            ed.addCommand('mceInsertEmoji', function (ui, baton) {
-                var pane = $('td#mceEmojiPane'),
-                    iconSelector = {},
-                    categorySelector = $('<div class="emoji_category_selector">'),
-                    editorPane = $(baton.editor.contentAreaContainer);
+    //
+    // View. One per editor instance.
+    //
 
-                if (pane.length > 0) {
-                    pane.remove();
-                    return;
-                } else {
-                    pane = $('<td id="mceEmojiPane">');
-                    editorPane.parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
-                    editorPane.parent().append(pane);
-                }
-                require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
-                    _(emoji.categories)
-                    .chain()
-                    .keys()
-                    .each(function (category) {
-                        categorySelector.append(
-                            $('<a href="#" class="emoji_category" data-emoji-category="' + category + '" tabindex="5">')
-                            .text(category)
-                            .on('keydown click', function (evt) {
-                                if (evt.type !== 'click' && evt.which !== 13) {
-                                    return;
-                                }
-                                var closeOnly = $(evt.target).hasClass('open');
+    var EmojiView = Backbone.View.extend({
 
-                                $('a.emoji_category').removeClass('open');
-                                $('div.emoji_selector').remove();
-                                if (!closeOnly) {
-                                    $(evt.target).addClass('open');
-                                    $(evt.target).after(iconSelector[category]);
-                                }
-                                if (evt.type === 'keydown') {
-                                    evt.preventDefault();
-                                } else if (evt.type === 'click') {
-                                    baton.editor.focus();
-                                }
-                            })
-                        );
-                        iconSelector[category] = $('<div class="emoji_selector">').addClass(category);
+        tagName: 'div',
+        className: 'mceEmojiPane',
 
-                        _(emoji.iconsForCategory(category)).each(function (icon) {
-                            iconSelector[category].append(
-                                $('<a href="#" class="emoji" tabindex="5">')
-                                .attr('title', icon.desc)
-                                .addClass(icon.css)
-                                .click(function (evt) {
-                                    var ed = baton.editor,
-                                        node = $('<img src="apps/themes/login/1x1.gif" class="emoji">')
-                                        .addClass(icon.css)
-                                        .attr('data-emoji-unicode', icon.unicode);
-                                    evt.preventDefault();
+        events: {
+            'click .emoji-icons .emoji': 'onInsertEmoji',
+            'click .emoji-footer .emoji': 'onSelectCategory',
+            'click .emoji-option': 'onSelectEmojiCollection'
+        },
 
-                                    ed.execCommand('mceInsertContent', false, node.prop('outerHTML'));
-                                })
-                            );
-                        });
-                    });
-                    pane.append(
-                        categorySelector
+        // when user clicks on emoji. inserts emoji into editor
+        onInsertEmoji: function (e) {
+            e.preventDefault();
+            var icon = $(e.target).data('icon'),
+                html = '<img src="apps/themes/login/1x1.gif" ' +
+                    'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '">';
+            this.editor.execCommand('mceInsertContent', false, html);
+        },
+
+        // when user clicks on emoji category
+        onSelectCategory: function (e) {
+            var node = $(e.target);
+            this.setCategory(node.attr('data-category'));
+        },
+
+        // when user select emoji set in drop-down
+        onSelectEmojiCollection: function (e) {
+            e.preventDefault();
+            var node = $(e.target);
+            this.setCollection(node.attr('data-collection'));
+        },
+
+        initialize: function (options) {
+            this.editor = options.editor;
+            this.isRendered = false;
+            this.currentCategory = '';
+            this.currentCollection = '';
+        },
+
+        render: function () {
+
+            this.$el.append(
+                $('<div class="emoji-header abs">').append(
+                    // Options drop down
+                    $('<div class="emoji-options dropdown pull-right">').append(
+                        // link
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="1" role="menuitem" aria-haspopup="true">')
+                        .attr('arial-label', 'Options')
+                        .append(
+                            $('<i class="icon-cog" aria-hidden="true" role="presentation">')
+                        ),
+                        // list
+                        $('<ul class="dropdown-menu" role="menu">')
+                    ),
+                    $('<span class="emoji-category">')
+                ),
+                $('<div class="emoji-icons abs">'),
+                $('<div class="emoji-footer abs">')
+            );
+
+            this.drawOptions();
+            this.drawCategoryIcons();
+            this.setCategory('People');
+            this.setCollection('Unified');
+            this.isRendered = true;
+
+            return this;
+        },
+
+        // lists differet emoji sets in options drop-down (top/right)
+        drawOptions: function () {
+
+            var options = 'Unified,SoftBank,Japanese Carrier'.split(',');
+
+            this.$el.find('.emoji-options ul').append(
+                _(options).map(function (option) {
+                    return $('<li>').append(
+                        $('<a href="#" class="emoji-option">')
+                        .attr('data-collection', option)
+                        .append(
+                            $('<i class="icon-none">'),
+                            $.txt(option)
+                        )
                     );
+                })
+            );
+        },
 
-                    $('a.emoji_category:last')
-                    .addClass('open')
-                    .after(
-                        _(iconSelector)
-                        .chain()
-                        .values()
-                        .last()
-                        .value()
+        // TODO: uses internal list. must be configurable later on
+        drawCategoryIcons: (function () {
+
+            // evil copy-paste trap: codes must be lower-case!
+            var codes = '1f603 2764 2600 1f431 1f374 1f3e0 2702 26bd 002320e3'.split(' '),
+                category = 'People Nature Objects Places Symbols People Nature People Places'.split(' ');
+
+            function draw(code, i) {
+                return $('<a href="#" class="emoji" tabindex="5">')
+                    .attr('data-category', category[i])
+                    .attr('title', category[i])
+                    .addClass('emoji' + code);
+            }
+
+            return function () {
+                this.$el.find('.emoji-footer').append(
+                    _(codes).map(draw)
+                );
+            };
+        }()),
+
+        // get emojis of current category
+        // TODO: consider currentColleciton
+        // returns Deferred Object
+        getEmojis: function () {
+            var category = this.currentCategory;
+            return require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
+                return emoji.iconsForCategory(category);
+            });
+        },
+
+        // draw all emojis of current category
+        drawEmojis: function () {
+
+            var node = this.$el.find('.emoji-icons').hide().empty();
+
+            this.getEmojis().done(function (list) {
+
+                _(list).each(function (icon) {
+                    node.append(
+                        $('<a href="#" class="emoji" tabindex="5">')
+                        .attr('title', icon.desc)
+                        .addClass(icon.css)
+                        .data('icon', icon)
                     );
                 });
-            });
 
-            //TODO: translate title
-            ed.addButton('emoji', {
-                title: 'Insert Emoji',
-                onclick: function (e) {
-                    ed.execCommand('mceInsertEmoji', true, {event: e, editor: ed});
-                }
+                node.show().scrollTop(0);
             });
-            ed.contentCSS.push(url + '/emoji.less');
         },
-        getInfo: function () {
-            return {
-                longname: 'Emoji plugin',
-                author: 'Julian Bäume',
-                authorurl: 'http://open-xchange.com',
-                infourl: 'http://oxpedia.org/wiki/AppSuite:Emoji',
-                version: '0.1'
-            };
+
+        // set current category. sets title and triggers repaint of all icons
+        setCategory: function (category) {
+            if (category !== this.currentCategory) {
+                this.currentCategory = category;
+                this.$el.find('.emoji-category').text(category);
+                this.drawEmojis();
+            }
+        },
+
+        setCollection: function (collection) {
+            if (collection !== this.currentCollection) {
+                this.currentCollection = collection;
+                // set visual check-mark
+                var options = this.$el.find('.emoji-options');
+                options.find('[data-collection] i').attr('class', 'icon-none');
+                options.find('[data-collection="' + collection + '"]')
+                    .find('i').attr('class', 'icon-ok');
+            }
+        },
+
+        // hide/show view
+        toggle: function () {
+            if (!this.isRendered) {
+                this.render();
+            } else {
+                this.$el.toggle();
+            }
         }
     });
 
+    //
+    // Plugin functions
+    //
+
+    // this is called for each editor instance
+    function init(ed, url) {
+
+        var view = null;
+
+        ed.addCommand('mceInsertEmoji', function (ui, baton) {
+
+            if (view === null) {
+                // create instance only once per editor
+                view = new EmojiView({ editor: ed });
+                // hook into tinyMCE's table
+                $(baton.editor.contentAreaContainer)
+                    .parent().append(view.$el).end()
+                    .parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
+            }
+
+            view.toggle();
+        });
+
+        // TODO: translate title
+        ed.addButton('emoji', {
+            title: 'Insert Emoji',
+            onclick: function (e) {
+                ed.execCommand('mceInsertEmoji', true, { event: e, editor: ed });
+            }
+        });
+
+        ed.contentCSS.push(url + '/emoji.less');
+    }
+
+    function getInfo() {
+        return {
+            longname: 'Emoji plugin',
+            author: 'Julian Bäume',
+            authorurl: 'http://open-xchange.com',
+            infourl: 'http://oxpedia.org/wiki/AppSuite:Emoji',
+            version: '0.1'
+        };
+    }
+
+    //
+    // Register plugin
+    //
+
+    window.tinymce.create('tinymce.plugins.EmojiPlugin', {
+        init: init,
+        getInfo: getInfo
+    });
+
     window.tinymce.PluginManager.add('emoji', window.tinymce.plugins.EmojiPlugin);
+
 }());

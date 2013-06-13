@@ -12,8 +12,9 @@
  */
 
 define.async('io.ox/core/tk/html-editor',
-             ['moxiecode/tiny_mce/plugins/emoji/main'],
-             function (emoji) {
+    ['moxiecode/tiny_mce/plugins/emoji/main',
+     'settings!io.ox/core'
+     ], function (emoji, settings) {
 
     'use strict';
 
@@ -375,7 +376,15 @@ define.async('io.ox/core/tk/html-editor',
     }
 
     function Editor(textarea) {
+
         var def = $.Deferred(), ed;
+
+        var toolbarDefault = 'bold,italic,underline,strikethrough,|,' +
+                'emoji,|,bullist,numlist,outdent,indent,|,' +
+                'justifyleft,justifycenter,justifyright,|,' +
+                'forecolor,backcolor,|,formatselect,|,' +
+                'undo,redo,';
+
         (textarea = $(textarea)).tinymce({
 
             gecko_spellcheck: true,
@@ -414,24 +423,19 @@ define.async('io.ox/core/tk/html-editor',
                 }
             },
 
-            theme_advanced_buttons1:
-                'bold,italic,underline,strikethrough,|,' +
-                'emoji,bullist,numlist,outdent,indent,|,' +
-                'justifyleft,justifycenter,justifyright,|,' +
-                'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo,',
-            theme_advanced_buttons2: '',
-            theme_advanced_buttons3: '',
-            theme_advanced_toolbar_location: 'top',
-            theme_advanced_toolbar_align: 'left',
+            theme_advanced_buttons1: settings.get('tinyMCE/theme_advanced_buttons1', toolbarDefault),
+            theme_advanced_buttons2: settings.get('tinyMCE/theme_advanced_buttons2', ''),
+            theme_advanced_buttons3: settings.get('tinyMCE/theme_advanced_buttons3', ''),
+            theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
+            theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
             // formats
             theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
 
             // colors
             theme_advanced_more_colors: false,
-            theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,3366FF,FFBE33',
+            //theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
+            //theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
