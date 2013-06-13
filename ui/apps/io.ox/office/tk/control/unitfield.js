@@ -41,19 +41,18 @@ define('io.ox/office/tk/control/unitfield',
      *  options of input fields (see method Utils.createTextField() for
      *  details). Additionally, the following options are supported:
      *  @param {Boolean} [options.readOnly=false]
-     *      If set to true, the text in the text field cannot be edited.
+     *      If set to true, the text in the unit field cannot be edited.
      *  @param {Boolean} [options.select=false]
      *      If set to true, the entire text will be selected after the text
      *      field has been clicked. Note that the text will always be selected
-     *      independent from this option, if the text field gets focus via
+     *      independent from this option, if the unit field gets focus via
      *      keyboard navigation.
-     *  @param {TextField.Validator} [options.validator]
-     *      A text validator that will be used to convert the values from
-     *      'update' events to the text representation used in this text field,
-     *      to validate the text while typing in the text field, and to convert
+     *  @param {UnitField.LengthUnitValidator} [options.validator]
+     *      A validator that will be used to convert the values from 'update'
+     *      events to the text representation used in this unit field, to
+     *      validate the text while typing in the unit field, and to convert
      *      the entered text to the value returned by the action handler. If no
-     *      validator has been specified, a default validator will be used that
-     *      does not perform any conversions.
+     *      validator has been specified, a default validator will be used.
      */
     function UnitField(options) {
 
@@ -72,7 +71,7 @@ define('io.ox/office/tk/control/unitfield',
 
     } // class UnitField
 
-    // class TextField.LengthUnitValidator ========================================
+    // class UnitField.LengthUnitValidator ========================================
 
     /**
      * A validator for unit fields that restricts the allowed values to
