@@ -25,6 +25,31 @@ define('io.ox/office/framework/view/baseview',
     var // the global root element used to store DOM elements temporarily
         tempStorageNode = $('<div>', { id: 'io-ox-office-temp' }).appendTo('body');
 
+    // global functions =======================================================
+
+    function getMarginOption(options, name) {
+
+        var // the raw margin property
+            margin = Utils.getOption(options, name);
+
+        if (_.isObject(margin)) {
+            return _({ left: 0, right: 0, top: 0, bottom: 0 }).extend(margin);
+        }
+
+        if (!_.isNumber(margin)) {
+            margin = 0;
+        }
+        return { left: margin, right: margin, top: margin, bottom: margin };
+    }
+
+    function getCssMarginOption(options, name) {
+
+        var // the margin property, as object
+            margin = getMarginOption(options, name);
+
+        return margin.top + 'px ' + margin.right + 'px ' + margin.bottom + 'px ' + margin.left + 'px';
+    }
+
     // class BaseView =========================================================
 
     /**
@@ -67,9 +92,20 @@ define('io.ox/office/framework/view/baseview',
      *      of the application container node is locked and synchronized with
      *      the size of the application pane (with regard to padding, see the
      *      option 'options.appPanePadding').
-     *  @param {String} [options.margin='0']
-     *      The margin between the fixed application pane and the embedded
-     *      application container node, as CSS 'margin' attribute.
+     *  @param {Number|Object} [options.contentMargin=0]
+     *      The margins between the fixed application pane and the embedded
+     *      application container node, in pixels. If set to a number, all
+     *      margins will be set to the specified value. Otherwise, an object
+     *      with the optional properties 'left', 'right', 'top', and 'bottom'
+     *      for specific margins for each border. Missing properties default to
+     *      the value zero.
+     *  @param {Number|Object} [options.overlayMargin=0]
+     *      The margins between the overlay panes and the inner borders of the
+     *      application pane, in pixels. If set to a number, all margins will
+     *      be set to the specified value. Otherwise, an object with the
+     *      optional properties 'left', 'right', 'top', and 'bottom' for
+     *      specific margins for each border. Missing properties default to the
+     *      value zero.
      */
     function BaseView(app, options) {
 
@@ -108,6 +144,9 @@ define('io.ox/office/framework/view/baseview',
 
             // the temporary container for all nodes while application is hidden
             tempNode = $('<div>').addClass(windowNodeClasses).appendTo(tempStorageNode),
+
+            // margins of overlay panes to the borders of the application pane
+            overlayMargin = getMarginOption(options, 'overlayMargin'),
 
             // whether the application is hidden explicitly
             viewHidden = false;
@@ -179,13 +218,8 @@ define('io.ox/office/framework/view/baseview',
             shadowNodes.left.css({ top: offsets.top, bottom: offsets.bottom, left: offsets.left - 10, width: 10 });
             shadowNodes.right.css({ top: offsets.top, bottom: offsets.bottom, right: offsets.right - 10, width: 10 });
 
-            // skip scroll bars of application pane for overlay panes
-            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-x'))) {
-                offsets.right += Utils.SCROLLBAR_WIDTH;
-            }
-            if (/^(scroll|auto)$/.test(appPaneNode.css('overflow-y'))) {
-                offsets.bottom += Utils.SCROLLBAR_HEIGHT;
-            }
+            // skip margins for overlay panes
+            _(offsets).each(function (offset, pos) { offsets[pos] += overlayMargin[pos]; });
 
             // update alert banner
             if (_.isObject(currentAlert)) {
@@ -693,7 +727,7 @@ define('io.ox/office/framework/view/baseview',
         appPane.getNode()
             .attr('tabindex', -1) // make focusable for global keyboard shortcuts
             .toggleClass('scrollable', Utils.getBooleanOption(options, 'scrollable', false))
-            .append(appContainerNode.css('margin', Utils.getStringOption(options, 'margin', '0')), appBusyNode.hide());
+            .append(appContainerNode.css('margin', getCssMarginOption(options, 'contentMargin')), appBusyNode.hide());
 
         // add the main application pane to the application window
         app.getWindowNode().addClass(windowNodeClasses).append(appPane.getNode());
