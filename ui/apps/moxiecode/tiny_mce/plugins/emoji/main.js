@@ -47,7 +47,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             css: 'emoji' + icon[1][2],
             unicode: icon[0],
             desc: icon[1][1],
-            category: category_map[icon[0]]
+            category: category_map[icon[0]] || 'People' // matthias: was undefined, needed that to continue
         };
     }
 
