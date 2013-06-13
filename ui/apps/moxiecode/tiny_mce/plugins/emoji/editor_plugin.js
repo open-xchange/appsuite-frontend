@@ -91,21 +91,28 @@
 
         // lists differet emoji sets in options drop-down (top/right)
         drawOptions: function () {
+            var pane = this.$el.find('.emoji-options ul');
 
-            var options = 'Unified,SoftBank,Japanese Carrier'.split(',');
+            require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
+                var options = emoji.collections;
 
-            this.$el.find('.emoji-options ul').append(
-                _(options).map(function (option) {
-                    return $('<li>').append(
-                        $('<a href="#" class="emoji-option">')
-                        .attr('data-collection', option)
-                        .append(
-                            $('<i class="icon-none">'),
-                            $.txt(option)
-                        )
-                    );
-                })
-            );
+                pane.append(
+                    _(options).map(function (option) {
+                        var checkBox = $('<i class="icon-none">');
+                        if (option === emoji.defaultCollection()) {
+                            checkBox.attr('class', 'icon-ok');
+                        }
+                        return $('<li>').append(
+                            $('<a href="#" class="emoji-option">')
+                            .attr('data-collection', option)
+                            .append(
+                                checkBox,
+                                $.txt(option)
+                            )
+                        );
+                    })
+                );
+            });
         },
 
         // TODO: uses internal list. must be configurable later on
@@ -176,6 +183,9 @@
                 options.find('[data-collection] i').attr('class', 'icon-none');
                 options.find('[data-collection="' + collection + '"]')
                     .find('i').attr('class', 'icon-ok');
+                require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
+                    emoji.setDefaultCollection(collection);
+                });
             }
         },
 
