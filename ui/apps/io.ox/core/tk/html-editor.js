@@ -431,7 +431,7 @@ define.async('io.ox/core/tk/html-editor',
             // colors
             theme_advanced_more_colors: false,
             theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
+            theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,3366FF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
