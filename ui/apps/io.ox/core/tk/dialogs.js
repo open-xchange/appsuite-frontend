@@ -389,9 +389,10 @@ define("io.ox/core/tk/dialogs",
 
     var CreateDialog = function (options) {
 
-        options = options || {};
-        options.top = "50px";
-        options.center = false;
+        options = $.extend(
+            {top: '50px', center: false},
+            options || {}
+        );
 
         Dialog.call(this, options);
     };

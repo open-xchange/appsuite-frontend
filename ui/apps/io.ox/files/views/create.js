@@ -27,7 +27,7 @@ define('io.ox/files/views/create', [
         show = function (app) {
 
             var $form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
-            dialog = new dialogs.CreateDialog({ easyOut: true });
+            dialog = new dialogs.CreateDialog({ easyOut: true, width: 600, center: true});
 
             ext.point(POINT + '/form').invoke('draw', $form);
 
@@ -84,17 +84,6 @@ define('io.ox/files/views/create', [
             id: 'createfile',
             draw: function () {
                 ext.point(POINT + '/field').invoke('draw', this);
-            }
-        });
-
-        ext.point(POINT + '/field').extend({
-            id: 'title',
-            index: 100,
-            draw: function () {
-                this.append(
-                    $('<label>').text(gt.pgettext('title', 'Title')),
-                    $('<input type="text" name="title">').addClass('span12')
-                );
             }
         });
 
