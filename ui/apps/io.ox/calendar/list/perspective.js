@@ -19,9 +19,10 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/extensions',
      'io.ox/core/date',
      'io.ox/calendar/util',
+     'io.ox/core/extPatterns/actions',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
+    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
 
     'use strict';
 
@@ -266,8 +267,15 @@ define('io.ox/calendar/list/perspective',
             updateGridOptions();
             grid.refresh(true);
         });
-        //to show an appointment without it being in the grid, needed for direct links
+
+        // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
+
+        // drag & drop support
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+        });
+
         grid.paint();
     };
 
