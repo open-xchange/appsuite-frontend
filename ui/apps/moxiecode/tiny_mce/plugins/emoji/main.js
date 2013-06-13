@@ -82,6 +82,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         // collections API
         collections: collections,
+        collectionName: function (collection) {
+            return categories.translatedNames[collection];
+        },
         defaultCollection: function () {
             var defaultCollection = settings.get('defaultCollection');
 
