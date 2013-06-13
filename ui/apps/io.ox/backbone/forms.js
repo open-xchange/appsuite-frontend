@@ -18,8 +18,9 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'less!io.ox/backbone/forms.less',
-     'io.ox/core/tk/mobiscroll'], function (ext, Events, date, settings, gt) {
+     'io.ox/core/tk/mobiscroll',
+     'less!io.ox/backbone/forms.less'
+     ], function (ext, Events, date, settings, gt, mobiSettings) {
 
     "use strict";
 
@@ -839,35 +840,11 @@ define('io.ox/backbone/forms',
                         todayBtn: true
                     });
                 } else {//do funky mobiscroll stuff
-                    var dateOrder = date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
-                        dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
-                        timeFormat = date.getFormat(date.TIME).replace(/m/g, 'i'),
-                        timeWheels = timeFormat.replace(/\W/g, ''),
-                        theme = 'android-ics light';
-                    if (_.device('ios')) {
-                        theme = 'ios';
-                    }
                     if (options.display === "DATETIME") {
-                        this.nodes.dayField.mobiscroll().datetime({
-                            theme: theme,
-                            setText: gt('Ok'),
-                            cancelText: gt('Cancel'),
-                            dateFormat: dateFormat,
-                            dateOrder: dateOrder,
-                            timeFormat: timeFormat,
-                            timeWheels: timeWheels,
-                            display: 'bottom',
-                            minuteText: gt('Minutes'),
-                            hourText: gt('Hours'),
-                            dayText: gt('Days'),
-                            monthText: gt('Months'),
-                            yearText: gt('Years'),
-                            showLabel: true,
-                            endYear: new Date().getFullYear() + 100
-                        });
+                        this.nodes.dayField.mobiscroll().datetime();
                         
                     } else {
-                        this.nodes.dayField.mobiscroll().date({ theme: 'ios', dateFormat: dateFormat, display: 'bottom', lang: 'de'});
+                        this.nodes.dayField.mobiscroll().date();
                     }
                     
                     this.nodes.dayField.val = function (value) {//repairing functionality
@@ -877,8 +854,6 @@ define('io.ox/backbone/forms',
                             return this['0'].value;
                         }
                     };
-                    this.nodes.dayField.timeWheels = timeWheels;//save the timewheelsformat (needed if changed from fulltime back to normal mode)
-                    this.nodes.dayField.timeFormat = timeFormat;//save the timeformat (needed if changed from fulltime back to normal mode)
                 }
 
                 if (!mobileMode && options.display === "DATETIME") {
@@ -951,8 +926,8 @@ define('io.ox/backbone/forms',
                         this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
                         this.nodes.timezoneField.hide();
                     } else {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.nodes.dayField.timeWheels);//add the timewheels again
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.nodes.dayField.timeFormat);//add the timeFormat again
+                        this.nodes.dayField.mobiscroll('option', 'timeWheels', mobiSettings.timeWheels);//add the timewheels again
+                        this.nodes.dayField.mobiscroll('option', 'timeFormat', mobiSettings.timeFormat);//add the timeFormat again
                         this.nodes.timezoneField.show();
                     }
                 } else {
