@@ -15,10 +15,11 @@ define('io.ox/files/actions',
     ['io.ox/files/api',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/extPatterns/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, capabilities, notifications, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, gt, settings) {
 
     'use strict';
 
@@ -380,13 +381,16 @@ define('io.ox/files/actions',
                 var $input = $('<input type="text" name="name" class="span12">');
                 var dialog = null;
 
+                /**
+                 * @return {promise}
+                 */
                 function fnRename() {
                     var name = $input.val();
                     var update = {
                         id: baton.data.id,
                         folder_id: baton.data.folder_id
                     };
-                    //title only entries
+                    //'title only' entries
                     if (!baton.data.filename && baton.data.title) {
                         update.title = name;
                     } else {
@@ -396,7 +400,42 @@ define('io.ox/files/actions',
                     return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
-                $input.val(baton.data.filename || baton.data.title);
+                /**
+                 * user have to confirm if name doesn't contains a file extension
+                 * @return {promise}
+                 */
+                function process() {
+                    var name = $input.val(),
+                        extmissing = !/\.\w{1,4}$/.test(name),
+                        def = $.Deferred();
+                    //missing extension
+                    if (extmissing) {
+                        new dialogs.ModalDialog()
+                            .addPrimaryButton('rename', gt('Yes'))
+                            .addButton('change', gt('Change Name'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'rename')
+                                    def.resolve();
+                                else
+                                    def.reject();
+                            });
+                    } else {
+                        def.resolve();
+                    }
+                    //rename or abort
+                    def.then(function () {
+                        return fnRename();
+                    }, function () {
+                        //store user input and call action again
+                        baton.tmp = name;
+                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                    });
+                    return def.promise();
+                }
+
+                $input.val(baton.tmp || baton.data.filename || baton.data.title);
+                delete baton.tmp;
                 var $form = $('<form>').append(
                     $('<div class="row-fluid">').append(
                         $('<label for="name">').append($('<b>').text(gt('Name'))),
@@ -404,16 +443,12 @@ define('io.ox/files/actions',
                     )
                 );
 
+                //'enter'
                 $form.on('submit', function (e) {
                     e.preventDefault();
-                    dialog.busy();
-                    fnRename().done(function () {
-                        dialog.close();
-                    }).fail(function () {
-                        dialog.idle();
-                    });
+                    dialog.close();
+                    process();
                 });
-
 
                 dialog = new dialogs.ModalDialog({easyOut: true}).append(
                     $form
@@ -426,7 +461,7 @@ define('io.ox/files/actions',
                 })
                 .done(function (action) {
                     if (action === 'rename') {
-                        fnRename();
+                        process();
                     }
                 });
             });
