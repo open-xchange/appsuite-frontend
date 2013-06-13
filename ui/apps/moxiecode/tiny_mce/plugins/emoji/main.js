@@ -51,13 +51,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         };
     }
 
-    function parseEncodings() {
-        //TODO: may be, filter the list for encodings, we support in the frontend
-        var e = settings.get('availableEncodings', 'unified');
+    function parseCollections() {
+        //TODO: may be, filter the list for collections, we support in the frontend
+        var e = settings.get('availableCollections');
 
         return _(e.split(','))
-            .map(function (encoding) {
-                return encoding.trim();
+            .map(function (collection) {
+                return collection.trim();
             });
     }
 
@@ -67,7 +67,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             .pairs()
             .map(iconInfo)
             .value(),
-        encodings = parseEncodings();
+        collections = parseCollections();
 
     return _.extend({
         // plain data API
@@ -80,18 +80,18 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         iconInfo: iconInfo,
         categories: categories.unified,
 
-        // encodings API
-        encodings: encodings,
-        defaultEncoding: function () {
-            var defaultEncoding = settings.get('defaultEncoding', 'unified');
+        // collections API
+        collections: collections,
+        defaultCollection: function () {
+            var defaultCollection = settings.get('defaultCollection');
 
-            return settings.get('userEncoding', defaultEncoding);
+            return settings.get('userCollection', defaultCollection);
         },
-        setDefaultEncoding: function (encoding) {
-            if (!_(encodings).contains(encoding))
+        setDefaultCollection: function (collection) {
+            if (!_(collections).contains(collection))
                 return;
 
-            settings.set('userEncoding', encoding);
+            settings.set('userCollection', collection);
             settings.save();
         },
 
