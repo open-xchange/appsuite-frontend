@@ -58,7 +58,8 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
-        multiple: function (list) {
+        multiple: function (list, baton) {
+
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -76,11 +77,21 @@ define('io.ox/mail/actions',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
+                                // prevent user from staying on the empty detail view page
+                                if (_.device('small')) {
+                                    // press back button manually
+                                    $('.rightside-navbar a').trigger('click');
+                                }
                                 api.remove(list);
                             }
                         });
                 });
             } else {
+                // prevent user from staying on the empty detail view page
+                if (_.device('small')) {
+                    // press back button manually
+                    $('.rightside-navbar a').trigger('click');
+                }
                 api.remove(list);
             }
         }
