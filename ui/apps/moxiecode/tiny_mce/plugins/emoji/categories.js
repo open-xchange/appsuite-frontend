@@ -22,9 +22,13 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
     }
 
     return {
-        'unified': category('unified')
+        'unified': category('unified'),
+        'softbank': category('softbank'),
+        'japan_carrier': category('japan_carrier'),
         translatedNames: {
-            'unified': gt('Unified')
+            'unified': gt('Unified'),
+            'softbank': gt('SoftBank'),
+            'japan_carrier': gt('Japanese Carrier')
         }
     };
 });
