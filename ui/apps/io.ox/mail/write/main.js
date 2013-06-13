@@ -55,30 +55,45 @@ define('io.ox/mail/write/main',
         }
     });
 
-    var UUID = 1;
-    var timerScale = {
-        minute: 60000, //60s
-        minutes: 60000
-    };
+    var UUID = 1,
+        timerScale = {
+            minute: 60000, //60s
+            minutes: 60000
+        };
 
     function initAutoSaveAsDraft(app) {
-        var timeout = settings.get('autoSaveDraftsAfter', false),
-            scale, timer, performAutoSave = _.bind(app.saveDraft, app);
 
-        if (!timeout) { return; }
+        var timeout = settings.get('autoSaveDraftsAfter', false),
+            scale, delay, timer;
+
+        if (!timeout) return;
 
         timeout = timeout.split('_');
         scale = timerScale[timeout[1]];
         timeout = timeout[0];
 
-        if (!timeout || !scale) { /* settings not parsable */ return; }
+        if (!timeout || !scale) return; // settings not parsable
 
         if (app.autosave) {
             window.clearTimeout(app.autosave.timer);
         }
-        app.autosave = {
-            timer: _.delay(performAutoSave, timeout * scale)
+
+        delay = function () {
+            _.delay(timer, timeout * scale);
         };
+
+        timer = function () {
+            // only auto-save if something changed (see Bug #26927)
+            if (app.dirty()) {
+                app.saveDraft();
+            } else {
+                delay();
+            }
+        };
+
+        app.autosave = { timer: timer };
+
+        delay();
     }
 
     function prepareMailForSending(mail) {
@@ -1106,6 +1121,7 @@ define('io.ox/mail/write/main',
                 });
 
             _.defer(initAutoSaveAsDraft, this);
+
             return def.then(function (result) {
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
