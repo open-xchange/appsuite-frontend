@@ -302,7 +302,7 @@ define('io.ox/contacts/edit/view-form', [
 
         // Actions
         point.basicExtend(new links.InlineLinks({
-            index: 300,
+            index: _.device('small') ? 10 : 300,
             id: 'inline-actions',
             ref: ref + '/edit/view/inline',
             classes: 'form-horizontal',
