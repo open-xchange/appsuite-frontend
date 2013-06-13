@@ -66,7 +66,7 @@
                     // Options drop down
                     $('<div class="emoji-options dropdown pull-right">').append(
                         // link
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="1" role="menuitem" aria-haspopup="true">')
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="5" role="menuitem" aria-haspopup="true">')
                         .attr('arial-label', 'Options')
                         .append(
                             $('<i class="icon-cog" aria-hidden="true" role="presentation">')

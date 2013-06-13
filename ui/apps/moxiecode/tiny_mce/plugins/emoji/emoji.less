@@ -50,13 +50,14 @@ img.emoji {
     .emoji-header {
 
         line-height: 20px;
-        height: 20px;
+        height: 34px;
         bottom: auto;
 
-        padding: 7px 14px;
+        padding: 0 0 0 14px;
         background-color: @background;
 
         .emoji-category {
+            line-height: 34px;
             font-weight: bold;
             color: #333;
             display: inline-block;
@@ -68,6 +69,21 @@ img.emoji {
 
         i {
             line-height: 20px;
+        }
+    }
+
+    .emoji-options {
+        .dropdown-toggle {
+            width: 34px;
+            height: 20px;
+            padding: 7px 0;
+            display: inline-block;
+            text-align: center;
+        }
+        .dropdown-toggle:focus {
+            outline: 0;
+            background-color: #08c;
+            i { color: white; }
         }
     }
 
@@ -83,9 +99,15 @@ img.emoji {
     }
 
     .emoji {
+
         width: 20px;
         margin: 0 7px 7px 0;
         cursor: pointer;
+
+        &:focus {
+            outline: 5px solid #ccc;
+            background-color: #ccc;
+        }
     }
 
     .emoji-footer {
