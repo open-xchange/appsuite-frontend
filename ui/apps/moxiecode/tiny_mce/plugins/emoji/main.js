@@ -52,12 +52,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     var category_map = createCategoryMap(),
         icons = _(emoji.EMOJI_MAP)
-    .chain()
-    .pairs()
-    .map(iconInfo)
-    .value();
+            .chain()
+            .pairs()
+            .map(iconInfo)
+            .value();
 
     return _.extend({
+        // plain data API
         icons: icons,
         iconsForCategory: function (category) {
             return _(icons).filter(function (icon) {
@@ -66,6 +67,8 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         },
         iconInfo: iconInfo,
         categories: categories,
+
+        // HTML related API
         unifiedToImageTag: function (text, options) {
             var parsedText;
             options = _.extend({forceProcessing: false}, options);
