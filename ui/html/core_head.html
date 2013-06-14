@@ -41,9 +41,11 @@ html, body { background-color: #fff; margin: 0; padding: 0; border: 0; overflow:
 <script>
 var root = location.pathname.replace(/\/[^\/]*$/, '');
 //fix URL
-//var oldRoot = root;
-//root = root.replace(/^\/\//, '/');
-//location.href = location.href.replace(oldRoot, root);
+var oldRoot = root;
+root = root.replace(/^\/\//, '/');
+if (oldRoot !== root) {//only change if it's different, otherwise we get infinite reloads
+	location.href = location.href.replace(oldRoot, root);
+}
 window.ox = {
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
