@@ -69,21 +69,20 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 keys.include();
 
                 // TODO: Allow only number entries
-
                 function updateValue() {
                     var value = parseInt($numberInput.val(), 10);
-                    if (!isNaN(value)) {
-                        try {
-                            $content.remove();
-                        } catch (e) { }
-                        $anchor.show();
-                        self[attribute] = value;
-                        self.trigger("change", self);
-                        self.trigger("change:" + attribute, self);
-                        drawState();
+                    if (isNaN(value)) {
+                        value = options.initial || 1;
                     }
+                    try {
+                        $content.remove();
+                    } catch (e) { }
+                    $anchor.show();
+                    self[attribute] = value;
+                    self.trigger("change", self);
+                    self.trigger("change:" + attribute, self);
+                    drawState();
                     keys.destroy();
-
                 }
                 $numberInput.on("blur", function () {
                     updateValue();

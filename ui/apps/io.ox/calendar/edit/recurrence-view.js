@@ -303,6 +303,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         tabindex: self.tabindex,
                         interval: {
                             phrase: function (n) {
+                                n = Math.max(1, n);
                                 if (n === 1) {
                                     //#. as in: The appointment is repeated every month
                                     //#. This is inserted into an HTML construct and is the form without the number
@@ -366,6 +367,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         },
                         interval: {
                             phrase: function (n) {
+                                n = Math.max(1, n);
                                 if (n === 1) {
                                     return gt("every month");
                                 }
@@ -493,6 +495,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         ending: endingOptions,
                         occurrences: {
                             phrase: function (n) {
+                                n = Math.max(1, n);
                                 return gt.format(gt.ngettext(
                                     'after %1$d appointment',
                                     'after %1$d appointments', n), n);
@@ -570,7 +573,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         chooseSentenceHint = gt("Click on a sentence to choose when to repeat the appointment.");
 
                     this.nodes.alternative1.children().detach();
-                    this.nodes.alternative2.children().detach();
+                    this.nodes.alternative2.hide().children().detach();
                     switch (type) {
                     case RECURRENCE_TYPES.DAILY:
                         this.nodes.alternative1.append(this.sentences.daily.$el);
@@ -593,7 +596,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         this.nodes.alternative1.append(
                             this.createGhost(this.sentences.monthlyDay)
                         );
-                        this.nodes.alternative2.append(
+                        this.nodes.alternative2.show().append(
                             this.createGhost(this.sentences.monthlyDate)
                         );
                         this.setHint(useLinksHint);
@@ -609,7 +612,7 @@ define("io.ox/calendar/edit/recurrence-view",
                             this.choice.set("dayInMonth", this.model.get("day_in_month"));
                             this.choice.set("interval", this.model.get("interval"));
                             this.nodes.alternative2.children().detach();
-                            this.nodes.alternative2.append(this.sentences.monthlyDate.$el);
+                            this.nodes.alternative2.show().append(this.sentences.monthlyDate.$el);
                         } else {
                             this.setHint(chooseSentenceHint);
                             this.nodes.alternative1.find(".muted").removeClass("muted");
@@ -621,7 +624,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         this.nodes.alternative1.append(
                             this.createGhost(this.sentences.yearlyDay)
                         );
-                        this.nodes.alternative2.append(
+                        this.nodes.alternative2.show().append(
                             this.createGhost(this.sentences.yearlyDate)
                         );
                         this.setHint(useLinksHint);
@@ -637,7 +640,7 @@ define("io.ox/calendar/edit/recurrence-view",
                             this.choice.set("month", this.model.get("month"));
                             this.choice.set("dayInMonth", this.model.get("day_in_month"));
                             this.nodes.alternative2.children().detach();
-                            this.nodes.alternative2.append(this.sentences.yearlyDate.$el);
+                            this.nodes.alternative2.show().append(this.sentences.yearlyDate.$el);
                         } else {
                             this.setHint(chooseSentenceHint);
                             this.nodes.alternative1.find(".muted").removeClass("muted");
