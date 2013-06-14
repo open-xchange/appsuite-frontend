@@ -851,7 +851,7 @@ define("io.ox/mail/write/view-main",
 
             //parsed object?
             if (_.isArray(elem)) {
-                var channel = mailUtil.getChannel(elem[1]),
+                var channel = mailUtil.getChannel ? mailUtil.getChannel(elem[1]) : 'email',
                     custom = {
                         display_name: elem[0]
                     };
