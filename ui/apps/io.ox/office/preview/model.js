@@ -135,7 +135,8 @@ define('io.ox/office/preview/model',
                 convert_action: 'getpage',
                 page_number: page,
                 returntype: 'file'
-            }), 15000);
+            }), 60000);
+
         }
 
         /**
