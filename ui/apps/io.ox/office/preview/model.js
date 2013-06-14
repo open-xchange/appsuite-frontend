@@ -201,7 +201,7 @@ define('io.ox/office/preview/model',
 
             // start the background task
             fetchPagesTimer = app.processArrayDelayed(function (pages) {
-                // The method processArrayDelayed() passes one-element array.
+                // The method processArrayDelayed() passes a one-element array.
                 // Returning a Deferred object causes processArrayDelayed() to
                 // wait until it is resolved, or to abort if it is rejected.
                 return cache.getElement(pages[0]);

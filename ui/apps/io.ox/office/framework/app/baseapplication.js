@@ -880,10 +880,9 @@ define('io.ox/office/framework/app/baseapplication',
         // timeouts -----------------------------------------------------------
 
         /**
-         * Executes the passed callback function once or repeatedly in a
-         * browser timeout. If the application will be closed before the
-         * callback function has been started, or while the callback function
-         * will be repeated, it will not be executed anymore.
+         * Invokes the passed callback function once in a browser timeout. If
+         * the application will be closed before the callback function has been
+         * started, it will not be called anymore.
          *
          * @param {Function} callback
          *  The callback function that will be executed in a browser timeout
@@ -898,34 +897,20 @@ define('io.ox/office/framework/app/baseapplication',
          *  @param {Number} [options.delay=0]
          *      The time (in milliseconds) the execution of the passed callback
          *      function will be delayed.
-         *  @param {Boolean} [options.repeat=false]
-         *      If set to true, the return value of the callback function will
-         *      be evaluated to decide whether to repeat its execution. If the
-         *      callback function returns the Boolean value true, or a Deferred
-         *      object that will be resolved with the Boolean value true, a new
-         *      timeout will be started and the callback function will be
-         *      executed again, as long as it returns true.
-         *  @param {Number} [options.repeatDelay=options.delay]
-         *      The time (in milliseconds) the repeated execution of the passed
-         *      callback function will be delayed. If omitted, the specified
-         *      initial delay time (option 'options.delay') will be used.
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after the
          *  callback function has been executed. If the callback function
          *  returns a simple value or object, the Deferred object will be
          *  resolved with that value. If the callback function returns a
-         *  Deferred object by itself, its state and result value will be
-         *  forwarded to the Promise returned by this method. If the callback
-         *  function will be executed repeatedly, the Promise will not be
-         *  resolved before the last execution cycle. If the Deferred object
-         *  returned by the callback function is rejected, repeated execution
-         *  will be stopped, and the returned Promise will be rejected too. The
+         *  Deferred object or a Promise by itself, its state and result value
+         *  will be forwarded to the Promise returned by this method. The
          *  Promise contains an additional method 'abort()' that can be called
-         *  before the timeout has been fired to cancel the pending or repeated
-         *  execution of the callback function. In that case, the Promise will
-         *  neither be resolved nor rejected. When the application will be
-         *  closed, it aborts all pending callback functions automatically.
+         *  before the timeout has been fired to cancel the pending execution
+         *  of the callback function. In that case, the Promise will neither be
+         *  resolved nor rejected. When the application will be closed, it
+         *  aborts all pending callback functions automatically (also, without
+         *  resolving the Promise).
          */
         this.executeDelayed = function (callback, options) {
 
@@ -935,8 +920,6 @@ define('io.ox/office/framework/app/baseapplication',
                 context = Utils.getOption(options, 'context'),
                 // the delay time for the next execution of the callback
                 delay = Utils.getIntegerOption(options, 'delay', 0, 0),
-                // whether to repeat execution of the callback function
-                repeat = Utils.getBooleanOption(options, 'repeat', false),
                 // the result Deferred object
                 def = $.Deferred(),
                 // the Promise of the Deferred object
@@ -947,8 +930,8 @@ define('io.ox/office/framework/app/baseapplication',
                 timeout = null;
             }
 
-            // creates and registers a browser timeout that executes the callback
-            function createTimeout() {
+            // do not call from other unregistered pending timeouts when application closes
+            if (delayTimeouts) {
 
                 // create a new browser timeout
                 timeout = window.setTimeout(function () {
@@ -958,28 +941,14 @@ define('io.ox/office/framework/app/baseapplication',
 
                     // execute the callback function, react on its result
                     $.when(callback.call(context))
-                    .done(function (result) {
-                        if (repeat && (result === true)) {
-                            createTimeout();
-                        } else {
-                            def.resolve(result);
-                        }
-                    })
-                    .fail(function (result) {
-                        def.reject(result);
-                    });
+                    .done(function (result) { def.resolve(result); })
+                    .fail(function (result) { def.reject(result); });
 
                 }, delay);
 
                 // register the browser timeout
                 delayTimeouts.push(timeout);
             }
-
-            // do not call from other unregistered pending timeouts when application closes
-            if (delayTimeouts) { createTimeout(); }
-
-            // switch to repetition delay time
-            delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
 
             // add an abort() method to the Promise
             promise.abort = function () {
@@ -994,21 +963,120 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Executes the passed callback function repeatedly for small chunks of
-         * the passed data array in a browser timeout loop.
+         * Invokes the passed callback function repeatedly in a browser timeout
+         * loop. If the application will be closed before the callback function
+         * has been started, or while the callback function will be repeated,
+         * it will not be called anymore.
          *
          * @param {Function} callback
-         *  The callback function that will be executed in a browser timeout
-         *  after the delay time. Receives a chunk of the passed data array as
-         *  first parameter, and the absolute index of the first element of the
-         *  chunk in the complete array as second parameter. If the callback
-         *  function returns a Deferred object (or a Promise), repeated
-         *  execution will be delayed until the Deferred object will be
-         *  resolved or rejected. In case the Deferred object will be rejected,
-         *  repeated execution will be cancelled, and the Deferred object
-         *  returned by this method will be rejected immediately.
+         *  The callback function that will be invoked repeatedly in a browser
+         *  timeout loop after the initial delay time. Does not receive any
+         *  parameters. The return value of the function will be used to decide
+         *  whether to continue the repeated execution. If the function returns
+         *  Utils.BREAK, execution will be stopped. If the function returns a
+         *  Deferred object, or the Promise of a Deferred object, looping will
+         *  be deferred until the Deferred object is resolved or rejected.
+         *  After resolving the Deferred object, the delay time will start, and
+         *  the callback will be called again. Otherwise, after the Deferred
+         *  object has been rejected, execution will be stopped. All other
+         *  return values will be ignored, and the callback loop will continue.
          *
-         * @param {Object[]|jQuery} dataArray
+         * @param {Object} [options]
+         *  A map with options controlling the behavior of this method. The
+         *  following options are supported:
+         *  @param {Object} [options.context]
+         *      The context that will be bound to 'this' in the passed callback
+         *      function.
+         *  @param {Number} [options.delay=0]
+         *      The time (in milliseconds) the execution of the passed callback
+         *      function will be delayed.
+         *  @param {Number} [options.repeatDelay=options.delay]
+         *      The time (in milliseconds) the repeated execution of the passed
+         *      callback function will be delayed. If omitted, the specified
+         *      initial delay time (option 'options.delay') will be used.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved after the
+         *  callback function has been invoked the last time. This Promise
+         *  contains an additional method 'abort()' that can be called before
+         *  or while the callback loop is executed to stop the loop
+         *  immediately. In that case, the Promise will never be resolved. When
+         *  the application will be closed, it aborts all running callback
+         *  loops automatically (also, without resolving the Promise).
+         */
+        this.repeatDelayed = function (callback, options) {
+
+            var // the current timeout before invoking the callback
+                timer = null,
+                // the context for the callback function
+                context = Utils.getOption(options, 'context'),
+                // the delay time for the next execution of the callback
+                delay = Utils.getIntegerOption(options, 'delay', 0, 0),
+                // the result Deferred object
+                def = $.Deferred();
+
+            // creates and registers a browser timeout that executes the callback
+            function createTimer() {
+
+                // create a new browser timeout
+                timer = self.executeDelayed(function () {
+
+                    var // the result of the callback
+                        result = callback.call(context);
+
+                    if (result === Utils.BREAK) {
+                        def.resolve();
+                    } else {
+                        $.when(result).done(createTimer).fail(function () { def.resolve(); });
+                    }
+
+                }, Utils.extendOptions(options, { delay: delay }));
+            }
+
+            // create initial timer, switch to repetition delay time
+            createTimer();
+            delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
+
+            // add an abort() method to the Promise
+            return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+        };
+
+        /**
+         * Invokes the passed callback function repeatedly for small chunks of
+         * the passed data array in a browser timeout loop. If the application
+         * will be closed before the callback function has been started, or
+         * while the callback function will be repeated, it will not be called
+         * anymore.
+         *
+         * @param {Function} callback
+         *  The callback function that will be invoked repeatedly in a browser
+         *  timeout loop after the initial delay time. Receives the following
+         *  parameters:
+         *  (1) {Array|jQuery} chunk
+         *      The current chunk of the data array passed in the 'dataArray'
+         *      method parameter. The actual type  depends on the return type
+         *      of the slice() method of the passed data array (e.g., the
+         *      slice() method of jQuery collections returns a new jQuery
+         *      collection).
+         *  (2) {Number} index
+         *      The absolute index of the first element of the chunk in the
+         *      complete array.
+         *  (3) {Array|jQuery} dataArray
+         *      The entire data array as passed in the 'dataArray' method
+         *      parameter.
+         *  The return value of the function will be used to decide whether to
+         *  continue the repeated execution to the end of the array. If the
+         *  function returns Utils.BREAK, execution will be stopped. If the
+         *  function returns a Deferred object, or the Promise of a Deferred
+         *  object, looping will be deferred until the Deferred object is
+         *  resolved or rejected. After resolving the Deferred object, the
+         *  delay time will start, and the callback will be called again for
+         *  the chunk in the array. Otherwise, after the Deferred object has
+         *  been rejected, execution will be stopped. All other return values
+         *  will be ignored, and the callback loop will continue to the end of
+         *  the array.
+         *
+         * @param {Array|jQuery} dataArray
          *  A JavaScript array, or another array-like object that provides an
          *  attribute 'length' and a method 'slice(begin, end)', e.g. a jQuery
          *  collection.
@@ -1032,14 +1100,16 @@ define('io.ox/office/framework/app/baseapplication',
          *
          * @returns {jQuery.Promise}
          *  The Promise of a Deferred object that will be resolved after all
-         *  array elements have been processed; or rejected, if the callback
-         *  function returns and rejects a Deferred object. The Promise will be
-         *  notified about the progress (floating-point value between 0.0 and
-         *  1.0). The Promise contains an additional method 'abort()' that can
-         *  be called before processing all array elements has been finished to
-         *  cancel the entire loop immediately. In that case, the Promise will
-         *  neither be resolved nor rejected. When the application will be
-         *  closed, it aborts all running loops automatically.
+         *  array elements have been processed successfully; or rejected, if
+         *  the callback function returns Utils.BREAK or a rejected Deferred
+         *  object. The Promise will be notified about the progress (as a
+         *  floating-point value between 0.0 and 1.0). The Promise contains an
+         *  additional method 'abort()' that can be called before processing
+         *  all array elements has been finished to cancel the entire loop
+         *  immediately. In that case, the Promise will neither be resolved nor
+         *  rejected. When the application will be closed, it aborts all
+         *  running loops automatically (also, without resolving nor rejecting
+         *  the Promise).
          */
         this.processArrayDelayed = function (callback, dataArray, options) {
 
@@ -1059,24 +1129,45 @@ define('io.ox/office/framework/app/baseapplication',
                 return _.extend($.when(), { abort: $.noop });
             }
 
-            // start a repeated timer, pass the delay times passed to this method
-            timer = self.executeDelayed(function () {
+            // start a background loop, pass the delay times passed to this method
+            timer = self.repeatDelayed(function () {
+
+                var // the result of the callback
+                    result = null;
 
                 // notify listeners about the progress
                 def.notify(index / dataArray.length);
 
                 // execute the callback, return whether to repeat execution
-                return $.when(callback.call(context, dataArray.slice(index, index + chunkLength), index))
-                    .then(function () {
-                        index += chunkLength;
-                        // repeat execution, if index has not reached end of array yet
-                        return index < dataArray.length;
-                    });
+                result = callback.call(context, dataArray.slice(index, index + chunkLength), index, dataArray);
 
-            }, Utils.extendOptions(options, { repeat: true }));
+                // immediately break the loop, if Utils.BREAK is returned
+                if (result === Utils.BREAK) {
+                    def.reject();
+                    // stop the loop timer
+                    return Utils.BREAK;
+                }
 
-            // listen to the timer result, and resolve/reject the own Deferred object
-            timer.done(function () { def.notify(1).resolve(); }).fail(function () { def.reject(); });
+                // handle Deferred objects returned by the callback
+                return $.when(result)
+                .fail(function () {
+                    // immediately break the loop, if returned Deferred has been rejected
+                    def.reject();
+                    // the Deferred returned by $.when(result) is rejected, so the
+                    // background loop will be stopped automatically
+                })
+                .then(function () {
+                    // prepare next iteration
+                    index += chunkLength;
+                    // keep the background loop running inside the array
+                    if (index < dataArray.length) { return; }
+                    // loop has been finished successfully
+                    def.notify(1).resolve();
+                    // returning a rejected Deferred stops the loop timer
+                    return $.Deferred().reject();
+                });
+
+            }, options);
 
             // extend the promise with an 'abort()' method that aborts the timer
             return _.extend(def.promise(), { abort: function () { timer.abort(); } });
@@ -1100,15 +1191,13 @@ define('io.ox/office/framework/app/baseapplication',
          * @param {Object} [options]
          *  A map with options controlling the behavior of the debounced method
          *  created by this method. Supports all options also supported by the
-         *  method BaseApplication.executeDelayed(). Especially, delayed and
-         *  repeated execution of the deferred callback function is supported.
-         *  If a context is specified with the option 'options.context', it
-         *  will be used for both callback functions. Note that the delay time
-         *  will restart after each call of the debounced method, causing the
-         *  execution of the deferred callback to be postponed until the
-         *  debounced method has not been called again during the delay (this
-         *  is the behavior of the _.debounce() method). Additionally, supports
-         *  the following options:
+         *  method BaseApplication.executeDelayed(). If a context is specified
+         *  with the option 'options.context', it will be used for both
+         *  callback functions. Note that the delay time will restart after
+         *  each call of the debounced method, causing the execution of the
+         *  deferred callback to be postponed until the debounced method has
+         *  not been called again during the delay (this is the behavior of the
+         *  _.debounce() method). Additionally, supports the following options:
          *  @param {Number} [options.maxDelay]
          *      If specified, a delay time used as a hard limit to execute the
          *      deferred callback after the first call of the debounced method,
@@ -1118,7 +1207,7 @@ define('io.ox/office/framework/app/baseapplication',
          * @returns {Function}
          *  The debounced method that can be called multiple times, and that
          *  executes the deferred callback function once after execution of the
-         *  current script endsPasses all arguments to the direct callback
+         *  current script ends. Passes all arguments to the direct callback
          *  function, and returns its result.
          */
         this.createDebouncedMethod = function (directCallback, deferredCallback, options) {
@@ -1159,7 +1248,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // create a new timeout executing the callback function
                 if (!debounceTimer) {
-                    debounceTimer = self.executeDelayed(timerCallback, options).always(clearTimers);
+                    debounceTimer = self.executeDelayed(timerCallback, options).done(clearTimers);
                 }
 
                 // reset the first-call flag, but set it back in a direct
@@ -1170,7 +1259,7 @@ define('io.ox/office/framework/app/baseapplication',
 
                 // on first call, create a timer for the maximum delay
                 if (!maxTimer && (maxDelay > 0)) {
-                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).always(clearTimers);
+                    maxTimer = self.executeDelayed(timerCallback, Utils.extendOptions(options, { delay: maxDelay })).done(clearTimers);
                 }
             }
 
