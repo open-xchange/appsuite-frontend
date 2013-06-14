@@ -20,20 +20,33 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     //"invert" the categories object
     function createCategoryMap() {
-        return _.object(
-            _(categories).chain().values().flatten(true).value(),
-            _(categories)
-            .chain()
-            .pairs()
-            .map(function (item) {
-                var category = item[0];
-                return _(item[1]).map(function () {
-                    return category;
-                });
-            })
-            .flatten(true)
-            .value()
-        );
+        return categories[defaultCollection()].then(function (categories) {
+            category_map = _.object(
+                _(categories).chain().values().flatten(true).value(),
+                _(categories)
+                    .chain()
+                    .pairs()
+                    .map(function (item) {
+                        var category = item[0];
+                        return _(item[1]).map(function () {
+                            return category;
+                        });
+                    })
+                    .flatten(true)
+                    .value()
+            );
+            icons = _(emoji.EMOJI_MAP)
+                .chain()
+                .pairs()
+                .map(iconInfo)
+                .value();
+        });
+    }
+
+    function defaultCollection() {
+        var defaultCollection = settings.get('defaultCollection');
+
+        return settings.get('userCollection', defaultCollection);
     }
 
     function iconInfo(icon) {
@@ -61,13 +74,12 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
     }
 
-    var category_map = createCategoryMap(),
-        icons = _(emoji.EMOJI_MAP)
-            .chain()
-            .pairs()
-            .map(iconInfo)
-            .value(),
+    var category_map = {},
+        icons = [],
         collections = parseCollections();
+
+    //generate category_map for the first time
+    createCategoryMap();
 
     return _.extend({
         // plain data API
@@ -78,24 +90,25 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
         },
         iconInfo: iconInfo,
-        categories: categories.unified,
+        categories: function () {
+            return categories[this.defaultCollection()].then(function (data) {
+                return data.meta || [];
+            });
+        },
 
         // collections API
         collections: collections,
         collectionTitle: function (collection) {
             return categories.translatedNames[collection];
         },
-        defaultCollection: function () {
-            var defaultCollection = settings.get('defaultCollection');
-
-            return settings.get('userCollection', defaultCollection);
-        },
+        defaultCollection: defaultCollection,
         setDefaultCollection: function (collection) {
             if (!_(collections).contains(collection))
                 return;
 
             settings.set('userCollection', collection);
             settings.save();
+            createCategoryMap();
         },
 
         // HTML related API

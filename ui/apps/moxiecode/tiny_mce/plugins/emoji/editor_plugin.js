@@ -115,29 +115,27 @@
             });
         },
 
-        // TODO: uses internal list. must be configurable later on
-        drawCategoryIcons: (function () {
+        drawCategoryIcons: function () {
+            var footer = this.$el.find('.emoji-footer');
 
-            // evil copy-paste trap: codes must be lower-case!
-            var codes = '1f603 2764 2600 1f431 1f374 1f3e0 2702 26bd 002320e3'.split(' '),
-                category = 'People Nature Objects Places Symbols People Nature People Places'.split(' ');
-
-            function draw(code, i) {
+            function draw(category) {
                 return $('<a href="#" class="emoji" tabindex="5">')
-                    .attr('data-category', category[i])
-                    .attr('title', category[i])
-                    .addClass('emoji' + code);
+                    .attr('data-category', category.name)
+                    .attr('title', category.title)
+                    .addClass(category.iconClass);
             }
 
-            return function () {
-                this.$el.find('.emoji-footer').append(
-                    _(codes).map(draw)
+            require(['moxiecode/tiny_mce/plugins/emoji/main'])
+            .then(function (emoji) {
+                return emoji.categories();
+            }).then(function (categories) {
+                footer.append(
+                    _(categories).map(draw)
                 );
-            };
-        }()),
+            });
+        },
 
         // get emojis of current category
-        // TODO: consider currentColleciton
         // returns Deferred Object
         getEmojis: function () {
             var category = this.currentCategory;
