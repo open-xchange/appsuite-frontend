@@ -670,7 +670,6 @@ define("io.ox/calendar/edit/recurrence-view",
                 this.nodes.summary.empty();
                 var self = this,
                     sum;
-                console.log(this.more);
                 if (this.more) {
                     sum = this.nodes.summary;
                     sum.one('click', function (e) {
