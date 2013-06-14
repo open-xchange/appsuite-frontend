@@ -1941,13 +1941,12 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
-     *  @param [options.value]
-     *      A value, object, or function that will be copied to the
-     *      'data-value' attribute of the control. Must not be null or
-     *      undefined.
-     *  @param [options.userData]
-     *      A value or object that will be copied to the 'data-userdata'
-     *      attribute of the control. May contain any user-defined data.
+     *  @param {Any} [options.value]
+     *      A value, object, or function that will be copied to the attribute
+     *      'data-value' of the control. Must not be null or undefined.
+     *  @param {Any} [options.userData]
+     *      A value or object that will be copied to the attribute
+     *      'data-userdata' of the control. May contain any user-defined data.
      *  @param {Number|String} [options.width]
      *      The total width of the control element (including padding). If
      *      omitted, the size will be set automatically according to the

@@ -122,10 +122,17 @@ define('io.ox/office/tk/dropdown/items',
          * @returns {jQuery}
          *  The section node with the passed identifier.
          */
-        function getOrCreateSectionNode(sectionId, label) {
-            var sectionNode = getSectionNode(sectionId);
+        function getOrCreateSectionNode(sectionId, options) {
+
+            var sectionNode = getSectionNode(sectionId),
+                label = Utils.getStringOption(options, 'label', ''),
+                separator = Utils.getBooleanOption(options, 'separator', false);
+
             if (sectionNode.length === 0) {
-                if (_.isString(label)) {
+                if (separator && (itemGroupNode.children().length > 0)) {
+                    itemGroupNode.append($('<div>').addClass('separator'));
+                }
+                if (label.length > 0) {
                     itemGroupNode.append(Utils.createLabel({ label: label }));
                 }
                 sectionNode = Utils.createContainerNode('item-section').attr('data-section', sectionId).appendTo(itemGroupNode);
@@ -169,14 +176,20 @@ define('io.ox/office/tk/dropdown/items',
          * @param {String} sectionId
          *  The unique identifier of the section.
          *
-         * @param {String} [label]
-         *  If specified, a heading label will be created for the section.
+         * @param {Object} [options]
+         *  A map of options to control the appearance of the section. The
+         *  following options are supported:
+         *  @param {String} [options.label]
+         *      If specified, a heading label will be created for the section.
+         *  @param {Boolean} [options.separator]
+         *      If set to true, a horizontal line will be drawn above the
+         *      section.
          *
          * @returns {Items}
          *  A reference to this instance.
          */
-        this.createSection = function (sectionId, label) {
-            getOrCreateSectionNode(sectionId, label);
+        this.createSection = function (sectionId, options) {
+            getOrCreateSectionNode(sectionId, options);
             return this;
         };
 
