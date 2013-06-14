@@ -277,8 +277,9 @@ define("io.ox/calendar/util",
                 var L = date.locale,
                     diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
                                        (date.TIME & date.TIMEZONE ? 'v' : '')];
-                return new D(data.start_date).formatInterval(
-                    new D(data.end_date), diff.m);
+                var stuff = new D(data.start_date).formatInterval(
+                        new D(data.end_date), diff.a || diff.m);
+                return stuff;
             }
         },
 
