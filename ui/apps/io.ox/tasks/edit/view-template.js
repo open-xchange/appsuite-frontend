@@ -565,5 +565,16 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         }
     });
 
+    // bottom toolbar for mobile only
+    ext.point('io.ox/tasks/edit/bottomToolbar').extend({
+        id: 'toolbar',
+        index: 2500,
+        draw: function (options) {
+            // must be on a non overflow container to work with position:fixed
+            var node = $(options.app.attributes.window.nodes.body);
+            node.append($('<div class="app-bottom-toolbar">').append(options.cancel, options.save));
+        }
+    });
+
     return null; //just used to clean up the view class
 });

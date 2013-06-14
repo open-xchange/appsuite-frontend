@@ -2226,7 +2226,14 @@ a.toolbar-action, .toolbar-action > a {
 
 ul.dropdown-menu li a.disabled { color:#999; }
 
+/** Flat inputs **/
 
+input.flat-input {
+    border-width: 0px;
+    .box-shadow(none);
+    border-bottom-width: 1px;
+    .border-radius(0);
+}
 
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
@@ -2364,6 +2371,52 @@ ul.dropdown-menu li a.disabled { color:#999; }
 }
 // mobile
 @media (max-width: 480px), (max-device-width: 480px) {
+    .default-content-padding {
+        padding: 5px 10px 5px 10px;
+    }
+    .app-bottom-toolbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 40px;
+        background-color: #ddd;
+        z-index: 666;
+        a.btn {
+            padding: 0;
+            line-height: 40px;
+            border: 0;
+            border-radius: 0;
+            margin: 0px;
+            height: 40px;
+            width: 50%;
+
+        }
+        button.btn {
+            border: 0;
+            border-radius: 0;
+            margin: 0px;
+            height: 40px;
+            width: 50%;
+        }
+    }
+
+    // flat input fields
+
+    textarea.flat, input.flat {
+        border-width: 0px;
+        .box-shadow(none);
+        border-bottom-width: 1px;
+        .border-radius(0);
+        &:focus {
+            border-width: 0px;
+            .box-shadow(none);
+            border-bottom-width: 1px;
+            border-color: initial;
+        }
+    }
+
     .autocomplete-popup {
         min-width: initial;
         height: 145px;

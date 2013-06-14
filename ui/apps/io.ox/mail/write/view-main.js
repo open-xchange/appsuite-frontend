@@ -70,6 +70,34 @@ define("io.ox/mail/write/view-main",
         tabIndex: '6'
     }));
 
+    /*
+     * extension point for mobile toolbar on the bottom of the page
+     */
+    ext.point(POINT +  '/bottomToolbar').extend({
+        id: 'toolbar',
+        index: 100,
+        draw: function (ref) {
+            var node = $(this.app.attributes.window.nodes.body),
+                toolbar = $('<div class="app-bottom-toolbar">');
+
+            // disable the button
+            ext.point(POINT + '/toolbar').disable('draft');
+
+            // reorder button
+            ext.point(POINT + "/toolbar").replace({id: 'discard', index: 50});
+
+            //invoke other buttons with new container
+            ext.point(POINT + '/toolbar').invoke(
+                'draw', toolbar, ext.Baton({ app: this.app })
+            );
+
+            node.append(toolbar);
+            // pass reference around for later use
+            ref.buttons = toolbar;
+        }
+
+    });
+
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
 
     var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
@@ -380,7 +408,7 @@ define("io.ox/mail/write/view-main",
 
         render: function () {
 
-            var self = this, app = self.app, buttons;
+            var self = this, app = self.app, buttons = {};
 
             /*
              * LEFTSIDE
@@ -420,7 +448,7 @@ define("io.ox/mail/write/view-main",
                 .append(this.createField('bcc'));
 
 
-            // Attachments (unless we're on iOS)
+            // Attachments
             if (ox.uploadsEnabled) {
                 this.fileCount = 0;
                 var uploadSection = this.createSection('attachments', gt('Attachments'), false, true);
@@ -560,13 +588,18 @@ define("io.ox/mail/write/view-main",
 
             this.rightside = $('<div class="rightside">');
 
-            ext.point(POINT + '/toolbar').invoke(
-                'draw', buttons = $('<div class="inline-buttons top">'), ext.Baton({ app: app })
-            );
+            // custom toolbar on mobile
+            if (_.device('smartphone')) {
+                ext.point(POINT + '/bottomToolbar').invoke('draw', this, buttons);
+            } else {
+                ext.point(POINT + '/toolbar').invoke(
+                    'draw', buttons.buttons = $('<div class="inline-buttons top">'), ext.Baton({ app: app })
+                );
+            }
 
             this.rightside.append(
                 // buttons
-                buttons,
+                _.device('!smartphone') ? buttons.buttons: $(),
                 // subject field
                 $('<div>').css('position', 'relative').append(
                     $('<div>').addClass('subject-wrapper')

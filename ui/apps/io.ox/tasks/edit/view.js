@@ -75,8 +75,17 @@ define('io.ox/tasks/edit/view',
             var self = this;
 
             //row0 headlinetext cancel and savebutton
+
             self.$el.append($('<div>').addClass('task-edit-headline row-fluid').append(this.getRow(0, app)));
 
+            if (_.device('smartphone')) {
+                // create new toolbar on bottom
+                ext.point('io.ox/tasks/edit/bottomToolbar').invoke('draw', this, {
+                    app: app,
+                    save: self.fields.saveButton,
+                    cancel: self.fields.cancel
+                });
+            }
             //row 1 subject
             util.buildExtensionRow(self.$el, this.getRow(1, app), self.baton);
 
@@ -107,7 +116,7 @@ define('io.ox/tasks/edit/view',
             util.buildExtensionRow(self.$el, this.getRow(2), self.baton).addClass('collapsed');
 
             //row 3 recurrence
-            if (!(_.device('small'))) {
+            if (_.device('!small')) {
                 util.buildExtensionRow(self.$el, this.getRow(3), self.baton).addClass('collapsed');
             }
 
@@ -200,6 +209,7 @@ define('io.ox/tasks/edit/view',
                 });
                 //put extension points and non extensionpoints into right rows and order
                 //headline row 0
+
                 self.rows[0].push(self.fields.headline);
                 self.rows[0].push(self.fields.saveButton);
                 self.rows[0].push(self.fields.cancel);
@@ -260,11 +270,16 @@ define('io.ox/tasks/edit/view',
             }
             //row 0
             this.fields.headline = $('<h1>').addClass('clear-title title').text(headlineText);
-            this.fields.cancel = $('<button>').attr('data-action', 'discard').addClass('btn cancel').text(gt('Discard'))
-                        .on('click', function () {
-                            app.quit();
-                        });
-            this.fields.saveButton = $('<button>').attr('data-action', 'save')
+            this.fields.cancel = $('<button>')
+                .attr('data-action', 'discard')
+                .addClass('btn cancel')
+                .text(gt('Discard'))
+                .on('click', function () {
+                    app.quit();
+                });
+
+            this.fields.saveButton = $('<button>')
+                .attr('data-action', 'save')
                 .addClass('btn btn-primary task-edit-save')
                 .text(saveBtnText)
                 .on('click', function (e) {
@@ -275,7 +290,7 @@ define('io.ox/tasks/edit/view',
                     //check if waiting for attachmenthandling is needed
                     if (self.baton.attachmentList.attachmentsToAdd.length +
                         self.baton.attachmentList.attachmentsToDelete.length > 0) {
-                        self.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                        self.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
 
                     self.model.save().done(function () {
@@ -289,6 +304,9 @@ define('io.ox/tasks/edit/view',
                     });
 
                 });
+
+
+
             //row 4
             this.fields.reminderDropdown = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                 .append($('<option>')
@@ -332,10 +350,16 @@ define('io.ox/tasks/edit/view',
             this.fields.progress.val(this.model.get('percent_completed'));
 
             //row 6
-            this.fields.repeatLink = $('<a>').text(gt('Repeat')).addClass('repeat-link').attr('href', '#')
-                .on('click', function (e) { e.preventDefault();
-                                            setTimeout(function () {notifications.yell('info', gt('Under construction')); }, 300);
-                                        });
+            this.fields.repeatLink = $('<a>')
+                .text(gt('Repeat'))
+                .addClass('repeat-link')
+                .attr('href', '#')
+                .on('click', function (e) {
+                    e.preventDefault();
+                    setTimeout(function () {
+                        notifications.yell('info', gt('Under construction'));
+                    }, 300);
+                });
         },
         close: function () {
             //clean up to prevent strange sideeffects
