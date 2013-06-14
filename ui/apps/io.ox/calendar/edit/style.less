@@ -319,8 +319,19 @@ div.edit-appointment-participant div {
     background-color: #eee;
     padding: 10px;
 
+    * {
+        .box-sizing(border-box);
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
     .inset {
         padding-left: 5px;
+        height: 20px;
+    }
+
+    input[type="text"] {
+        min-width: 25px;
+        padding: 0 2px;
     }
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
@@ -328,15 +339,6 @@ div.edit-appointment-participant div {
             width: 94% //to keep everything inside the box
         }
     }
-}
-
-.io-ox-recurrence-type-choice a:hover {
-    text-decoration: none;
-    outline: 0;
-}
-
-.io-ox-recurrence-type-choice li {
-    cursor: pointer;
 }
 
 .io-ox-recurrence-day-picker li {
