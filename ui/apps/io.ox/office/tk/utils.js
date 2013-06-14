@@ -621,7 +621,7 @@ define.async('io.ox/office/tk/utils',
      *  The trimmed text.
      */
     Utils.trimString = function (text) {
-        return text.replace(/^[\x00-\x1f\s]+(.*?)[\x00-\x1f\s]+$/, '$1');
+        return text.replace(/^[\x00-\x1f\s]+|[\x00-\x1f\s]+$/g, '');
     };
 
     /**
@@ -681,7 +681,7 @@ define.async('io.ox/office/tk/utils',
 
     /**
      * Escapes HTML mark-up characters (angle brackets, ampersand, double
-     * quotes, and apostrophs) in the passed text.
+     * quotes, and apostrophes) in the passed text.
      *
      * @param {String} text
      *  The text containing special HTML mark-up characters.
@@ -690,7 +690,7 @@ define.async('io.ox/office/tk/utils',
      *  The passed text with all mark-up characters escaped.
      */
     Utils.escapeHTML = function (text) {
-        return text
+        return Utils.cleanString(text)
             // replace the ampersand with the text &amp; (must be done first!)
             .replace(/&/g, '&amp;')
             // replace the left angle bracket with the text &lt;
@@ -700,15 +700,7 @@ define.async('io.ox/office/tk/utils',
             // replace the double quote character with the text &quot;
             .replace(/"/g, '&quot;')
             // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
-            .replace(/'/g, '&#39;')
-            // normalize white-space (convert to SPACE characters)
-            .replace(/\s/g, ' ')
-            // do not start with a SPACE character
-            .replace(/^ /, '\xa0')
-            // convert SPACE/SPACE pairs to SPACE/NBSP pairs
-            .replace(/ {2}/g, ' \xa0')
-            // do not end with a SPACE character
-            .replace(/ $/, '\xa0');
+            .replace(/'/g, '&#39;');
     };
 
     // options object ---------------------------------------------------------
