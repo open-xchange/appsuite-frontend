@@ -690,7 +690,25 @@ define.async('io.ox/office/tk/utils',
      *  The passed text with all mark-up characters escaped.
      */
     Utils.escapeHTML = function (text) {
-        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return text
+            // replace the ampersand with the text &amp; (must be done first!)
+            .replace(/&/g, '&amp;')
+            // replace the left angle bracket with the text &lt;
+            .replace(/</g, '&lt;')
+            // replace the right angle bracket with the text &gt;
+            .replace(/>/g, '&gt;')
+            // replace the double quote character with the text &quot;
+            .replace(/"/g, '&quot;')
+            // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
+            .replace(/'/g, '&#39;')
+            // normalize white-space (convert to SPACE characters)
+            .replace(/\s/g, ' ')
+            // do not start with a SPACE character
+            .replace(/^ /, '\xa0')
+            // convert SPACE/SPACE pairs to SPACE/NBSP pairs
+            .replace(/ {2}/g, ' \xa0')
+            // do not end with a SPACE character
+            .replace(/ $/, '\xa0');
     };
 
     // options object ---------------------------------------------------------
