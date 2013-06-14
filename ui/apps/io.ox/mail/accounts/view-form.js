@@ -116,7 +116,7 @@ define('io.ox/mail/accounts/view-form',
                     });
 
                     //login for server should be email-address by default;
-                    if (self.model.get('login') === undefined) {
+                    if (self.model.get('login') === undefined && self.model.get('primary_address') !== '') {
                         self.model.set('login', self.model.get('primary_address'), {validate: true});
                     }
 
