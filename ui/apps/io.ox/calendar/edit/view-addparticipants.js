@@ -41,7 +41,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                     resources: true,
                     distributionlists: true,
                     parentSelector: '.io-ox-calendar-edit',
-                    placement: 'bottom'
+                    placement: 'bottom',
+                    keepId: false
                 },
                 options = $.extend(defaults, opt),
                 autocompleteAPI = new AutocompleteAPI(options);
@@ -117,7 +118,9 @@ define('io.ox/calendar/edit/view-addparticipants',
                             case 'contact':
                                 if (obj.data.internal_userid && obj.data.email1 === obj.email) {
                                     obj.data.type = 1; //user
-                                    obj.data.id = obj.data.internal_userid;
+                                    if (!options.keepId) {
+                                        obj.data.id = obj.data.internal_userid;
+                                    }
                                 } else if (obj.data.mark_as_distributionlist) {
                                     obj.data.type = 6; //distlistunsergroup
                                 } else {

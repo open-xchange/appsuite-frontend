@@ -38,32 +38,38 @@
     .item-list {
         overflow-x: hidden;
         overflow-y: auto;
+        margin-bottom: 20px;
 
         .listed-item {
-            width: 700px;
-            float: left;
-            margin-bottom: 3px;
+            position: relative;
+            margin: 0 0 2px 0;
+            float:left;
 
-            .person-link.ellipsis {
-                width: 260px;
-                margin-top: 12px;
-                float: left;
-            }
+            .remove {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                width: 30px;
+                line-height: 1em;
+                background-color: #f5f5f5;
+                cursor: pointer;
+                color: #ccc;
 
-            .person-selected-mail {
-                width: 240px;
-                margin-top: 12px;
-                margin-left: 20px;
-                float: left;
-            }
+                &:hover {
+                    background-color: #a00;
+                    color: #fff;
+                    text-decoration: none
+                };
 
-            a.close {
-                margin-top: 8px;
-                margin-right: 4px;
-                float: right;
-                display: inline-block;
-                height: 16px;
-                width: 16px
+                .icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
             }
 
             &.backstripes[data-mail="empty"] {
@@ -105,7 +111,7 @@
         margin-right: 0px;
     }
 
-    .alert { margin-top: 18px; }
+    .alert { margin-top: 1em;}
 }
 
 
