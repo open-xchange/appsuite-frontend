@@ -23,6 +23,7 @@ define("io.ox/mail/accounts/model",
     var AccountModel = keychainModel.Account.extend({
 
         defaults: {
+            //some conditional defaults defined in view-form.render (pop3)
             spam_handler: "NoSpamHandler"
         },
 

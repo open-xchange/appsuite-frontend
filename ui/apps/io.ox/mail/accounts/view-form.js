@@ -56,6 +56,15 @@ define('io.ox/mail/accounts/view-form',
 
         optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
 
+        //conditional defaults
+        defaults = {
+            pop3: {
+                pop3_refresh_rate: optionsRefreshRatePop[0],
+                pop3_delete_write_through: false,
+                pop3_expunge_on_quit: false
+            }
+        },
+
         AccountDetailView = Backbone.View.extend({
             tagName: "div",
             _modelBinder: undefined,
@@ -97,6 +106,11 @@ define('io.ox/mail/accounts/view-form',
                         if (value !== 'pop3') {
                             pop3nodes.hide();
                         } else {
+                            //conditional defaults
+                            _.each(defaults.pop3, function (value, key) {
+                                if (!model.has(key))
+                                    model.set(key, value);
+                            });
                             pop3nodes.show();
                         }
                     });
