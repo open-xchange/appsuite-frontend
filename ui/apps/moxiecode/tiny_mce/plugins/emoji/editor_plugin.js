@@ -107,7 +107,7 @@
                             .attr('data-collection', option)
                             .append(
                                 checkBox,
-                                $.txt(emoji.collectionName(option))
+                                $.txt(emoji.collectionTitle(option))
                             )
                         );
                     })
