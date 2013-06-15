@@ -166,12 +166,7 @@
         retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 240dpi)'
     };
 
-
-    var display = {},
-        hasNativeEmoji = (function () {
-            var support = _.browser.ios || _.browser.Android;
-            return support;
-        }());
+    var display = {};
 
     _(queries).each(function (query, key) {
         display[key] = Modernizr.mq(query);
@@ -185,6 +180,12 @@
     _.displayInfo = display;
     // extend underscore utilities
     _.mixin({
+
+        // make this public so that it can be patched by UI plugins
+        hasNativeEmoji: function () {
+            var support = _.browser.ios > 5 || _.browser.Android > 4.1 || (_.browser.MacOS && _.browser.Safari);
+            return support;
+        },
 
         // returns current device size
         display: function () {
@@ -200,7 +201,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
-            misc.emoji = hasNativeEmoji;
+            misc.emoji = _.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
                 return _.extend({}, browserLC, display, misc);

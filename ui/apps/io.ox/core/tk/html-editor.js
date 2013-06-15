@@ -193,7 +193,7 @@ define.async('io.ox/core/tk/html-editor',
             'iframe, object, applet, input, textarea, button, select, ' +
             'canvas, script, noscript, audio, video, img'
             )
-            .find(':not(img.emoji)').remove();
+            .filter(':not(img.emoji)').remove();
         // beautify SUP tags
         node.find('sup').css('lineHeight', '0');
         // unwrap
@@ -383,7 +383,7 @@ define.async('io.ox/core/tk/html-editor',
                 'emoji,|,bullist,numlist,outdent,indent,|,' +
                 'justifyleft,justifycenter,justifyright,|,' +
                 'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo,';
+                'undo,redo';
 
         (textarea = $(textarea)).tinymce({
 
@@ -447,7 +447,7 @@ define.async('io.ox/core/tk/html-editor',
             paste_auto_cleanup_on_paste: true,
             paste_remove_styles: true,
             paste_remove_styles_if_webkit: true,
-            paste_strip_class_attributes: 'all',
+            paste_strip_class_attributes: 'mso', // 'all' kills emoji support!
             paste_block_drop: false,
 
             // post processing (string-based)
