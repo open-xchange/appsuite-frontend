@@ -34,7 +34,7 @@
         onInsertEmoji: function (e) {
             e.preventDefault();
             var icon = $(e.target).data('icon'),
-                html = '<img src="apps/themes/login/1x1.gif" ' +
+                html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
                     'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '">';
             this.editor.execCommand('mceInsertContent', false, html);
         },
@@ -60,6 +60,9 @@
         },
 
         render: function () {
+
+            // add tab-control?
+
 
             this.$el.append(
                 $('<div class="emoji-header abs">').append(
