@@ -45,7 +45,6 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     function defaultCollection() {
         var defaultCollection = settings.get('defaultCollection');
-
         return settings.get('userCollection', defaultCollection);
     }
 
@@ -78,18 +77,75 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         icons = [],
         collections = parseCollections();
 
-    //generate category_map for the first time
+    // generate category_map for the first time
     createCategoryMap();
 
+    function escape(s) {
+        return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
+    }
+
     return _.extend({
+
         // plain data API
         icons: icons,
+
+        // add to "recently used" category
+        recent: function (unicode) {
+
+            var recently = settings.get('recently', {}),
+                // encode unicode to avoid backend bug
+                key = escape(unicode);
+
+            if (key in recently) {
+                recently[key].count++;
+                recently[key].time = _.now();
+            } else {
+                recently[key] = { count: 1, time: _.now() };
+            }
+
+            settings.set('recently', recently).save();
+        },
+
         iconsForCategory: function (category) {
+
+            if (category === 'recently') {
+
+                var recently = settings.get('recently', {});
+
+                return _(icons)
+                    .chain()
+                    // get relevant icons
+                    .filter(function (icon) {
+                        // encode unicode to avoid backend bug
+                        var key = escape(icon.unicode);
+                        return key in recently;
+                    })
+                    .map(function (icon) {
+                        var key = escape(icon.unicode);
+                        return [icon, recently[key]];
+                    })
+                    // sort by timestamp
+                    .sortBy(function (array) {
+                        return array[1].time;
+                    })
+                    // get first 40 icons (5 rows; 8 per row)
+                    .first(40)
+                    // now sort by frequency (descending order)
+                    .sortBy(function (array) {
+                        return 0 - array[1].count;
+                    })
+                    // extract the icon
+                    .pluck(0)
+                    .value();
+            }
+
             return _(icons).filter(function (icon) {
                 return icon.category === category;
             });
         },
+
         iconInfo: iconInfo,
+
         categories: function () {
             return categories[this.defaultCollection()].then(function (data) {
                 return data.meta || [];
@@ -98,13 +154,16 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         // collections API
         collections: collections,
+
         collectionTitle: function (collection) {
             return categories.translatedNames[collection];
         },
+
         defaultCollection: defaultCollection,
+
         setDefaultCollection: function (collection) {
-            if (!_(collections).contains(collection))
-                return;
+
+            if (!_(collections).contains(collection)) return;
 
             settings.set('userCollection', collection);
             settings.save();
@@ -113,6 +172,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         // HTML related API
         unifiedToImageTag: function (text, options) {
+
             var parsedText;
             options = _.extend({forceProcessing: false}, options);
 
@@ -135,7 +195,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
             return parsedText.html();
         },
+
         imageTagsToUnified: function (html) {
+
             var node = $('<div>').append(html);
 
             node.find('img.emoji').each(function (index, node) {
@@ -143,6 +205,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
 
             return node.html();
-        }
+        },
+
+        // make settings accessible, esp. for editor plugin
+        settings: settings
+
     }, emoji);
 });

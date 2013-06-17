@@ -15,7 +15,8 @@ define('io.ox/mail/emoji/settings/defaults', [], function () {
 
     var settingsDefaults = {
         availableCollections: 'unified',
-        defaultCollection: 'unified'
+        defaultCollection: 'unified',
+        recently: {}
     };
 
     return settingsDefaults;
