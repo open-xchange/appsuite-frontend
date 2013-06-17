@@ -507,7 +507,8 @@ define("io.ox/calendar/edit/recurrence-view",
                 };
 
                 // Events
-                this.controls.checkbox.on("change", function () {
+                this.controls.checkbox.on("change", function (e) {
+                    e.preventDefault();
                     if (self.controls.checkbox.is(":checked")) {
                         if (self.lastConfiguration) {
                             self.model.set(self.lastConfiguration, {validate: true});
@@ -527,11 +528,14 @@ define("io.ox/calendar/edit/recurrence-view",
 
                 this.controls.detailToggle.on('click', function (e) {
                     e.preventDefault();
-                    if (self.more) {
-                        self.showLess();
-                    } else {
-                        self.showMore();
+                    self.showLess();
+                });
+
+                this.nodes.summary.on('click', function (e) {
+                    if (self.controls.checkbox.is(":checked")) {
+                        e.preventDefault();
                     }
+                    self.toggle();
                 });
 
                 _("recurrence_type days month day_in_month interval occurrences until".split(" ")).each(function (attr) {
@@ -670,34 +674,26 @@ define("io.ox/calendar/edit/recurrence-view",
                 this.updatingView = false;
             },
             updateSummary: function () {
-                this.nodes.summary.empty();
                 var self = this,
-                    sum;
-                if (this.more) {
-                    sum = this.nodes.summary;
-                    sum.one('click', function (e) {
-                        e.preventDefault();
-                        self.showMore();
-                    });
+                    sum = this.nodes.summary.empty();
+                if (this.model.get('recurrence_type') === RECURRENCE_TYPES.NO_RECURRENCE) {
+                    sum.text(gt("Repeat"));
                 } else {
-                    if (this.model.get('recurrence_type') === RECURRENCE_TYPES.NO_RECURRENCE) {
-                        this.nodes.summary.empty().text(gt("Repeat"));
-                    } else {
+                    if (!this.more) {
                         this.nodes.summary.append(sum = $('<a href="#" tabindex="' + self.tabindex + '">'));
                     }
-                }
-
-                if (this.choice && this.choice.id === "no-choice") {
-                    sum.append(
-                        this.choice.ghost(),
-                        $("<span>&nbsp;</span>")
-                    );
-                } else {
-                    sum.append(
-                        this.choice.ghost(),
-                        this.endsChoice.ghost(),
-                        $("<span>&nbsp;</span>")
-                    );
+                    if (this.choice && this.choice.id === "no-choice") {
+                        sum.append(
+                            this.choice.ghost(),
+                            $("<span>&nbsp;</span>")
+                        );
+                    } else {
+                        sum.append(
+                            this.choice.ghost(),
+                            this.endsChoice.ghost(),
+                            $("<span>&nbsp;</span>")
+                        );
+                    }
                 }
             },
             updateModel: function () {
@@ -866,6 +862,15 @@ define("io.ox/calendar/edit/recurrence-view",
                 this.more = false;
                 this.nodes.recView.slideUp();
                 this.updateSummary();
+            },
+            toggle: function () {
+                if (this.controls.checkbox.is(":checked")) {
+                    if (this.more) {
+                        this.showLess();
+                    } else {
+                        this.showMore();
+                    }
+                }
             },
             updateSuggestions: function () {
                 if (!this.model.get("start_date")) {
