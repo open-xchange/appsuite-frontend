@@ -327,14 +327,17 @@ define('io.ox/calendar/edit/template',
         id: 'add-participant',
         index: 1500,
         draw: function (options) {
-            var node = this;
+            var node = this,
+            input;
             node.append(
-                    $('<div class="input-append span6 input-append-fix">').append(
+                    input = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
+
+            if (!_.browser.Firefox) { input.append('input-append-fix'); }
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 

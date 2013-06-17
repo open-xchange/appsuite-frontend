@@ -284,19 +284,21 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         id: 'add_participant',
         index: 1500,
         draw: function (options) {
-            var node = this;
+            var node = this,
+            input;
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
                 var collection = options.model.getParticipants();
 
                 node.append(
-                    $('<div class="input-append span6 input-append-fix">').append(
+                    input = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
                 );
+                if (!_.browser.Firefox) { input.append('input-append-fix'); }
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render({

@@ -86,13 +86,15 @@ define('io.ox/contacts/distrib/create-dist-view',
         render: function (baton) {
             var self = this;
 
-            var pNode = $('<div class="autocomplete-controls input-append input-append-fix">').append(
+            var pNode = $('<div class="autocomplete-controls input-append">').append(
                     $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add member') + ' ...'),
                     $('<button class="btn" type="button" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))
                 ),
 
             autocomplete = new AddParticipantsView({ el: pNode });
+
+            if (!_.browser.Firefox) { pNode.append('input-append-fix'); }
 
             autocomplete.render({
                 autoselect: true,
