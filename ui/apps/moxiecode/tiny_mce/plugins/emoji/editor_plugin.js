@@ -110,8 +110,6 @@
 
             this.drawOptions();
             this.drawCategoryIcons();
-            this.setCategory('People');
-            this.setCollection('unified');
             this.isRendered = true;
 
             return this;
