@@ -135,9 +135,9 @@ define('io.ox/contacts/distrib/main',
                 });
             });
 
-            container = win.nodes.main
-                .addClass('create-distributionlist')
-                .scrollable();
+            container = $('<div>').addClass('create-distributionlist container-fluid default-content-padding');
+
+            win.nodes.main.addClass('scrollable').append(container);
 
             // hash state support
             var state = app.getState();

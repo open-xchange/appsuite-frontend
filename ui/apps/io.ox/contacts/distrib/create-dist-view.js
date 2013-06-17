@@ -33,21 +33,19 @@ define('io.ox/contacts/distrib/create-dist-view',
             tagName: 'div'
         });
 
-    point.extend(new forms.ControlGroup({
-        id: 'displayname',
-        index: 100,
-        attribute: 'display_name',
-        label: gt('List name'), // noun
-        control: '<input tabindex="1" type="text" class="input-xlarge">',
-        buildControls: function () {
-            var self = this,
-                buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                // element
-                this.buildElement(),
+    point.extend({
+        id: 'title-controls',
+        index: 100,
+        className: 'row-fluid title-controls',
+        render: function (baton) {
+            var self = this,
+            buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
+
+            this.$el.append(
+                $('<h1 class="clear-title title">').text(gt('Create distribution list')),
                 // save/create button
-                $('<button class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
+                $('<button class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -56,24 +54,41 @@ define('io.ox/contacts/distrib/create-dist-view',
                     });
                 }),
                 // cancel button
-                $('<button class="btn" data-action="discard">').text(gt('Discard')).on('click', function () {
+                $('<button class="btn" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
                     // use this sneaky channel
                     $(this).trigger('controller:quit');
                 })
+            );
+        }
+    });
+
+
+    point.extend(new forms.ControlGroup({
+        id: 'displayname',
+        index: 200,
+        attribute: 'display_name',
+        className: 'row-fluid',
+        label: gt('List name'), // noun
+        control: '<input tabindex="1" type="text" class="span6">',
+        buildControls: function () {
+            var self = this;
+            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
+                // element
+                this.buildElement()
             ));
         }
-
     }));
 
     point.extend({
         id: 'add-members',
         index: 300,
+        className: 'row-fluid',
         render: function (baton) {
             var self = this;
 
             var pNode = $('<div class="autocomplete-controls input-append">').append(
-                    $('<input tabindex="1" type="text" class="add-participant permissions-participant-input-field">').attr('placeholder', gt('Add member') + ' ...'),
-                    $('<button class="btn" type="button" data-action="add">')
+                    $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add member') + ' ...'),
+                    $('<button class="btn" type="button" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))
                 ),
 
@@ -110,7 +125,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             this.$el.append(
                 $('<legend>').addClass('sectiontitle').text(gt('Members')),
-                this.itemList = $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list row-fluid'),
+                this.itemList = $('<div>').addClass('item-list row-fluid'),
                 pNode
             );
 
@@ -256,7 +271,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'notice',
         index: 400,
         render: function (baton) {
-            this.$el.append($('<div class="alert alert-info">').css({'max-width': '406px'}).text(gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
+            this.$el.append($('<div class="alert alert-info">').css({'max-width': '340px'}).text(gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
         }
     });
 

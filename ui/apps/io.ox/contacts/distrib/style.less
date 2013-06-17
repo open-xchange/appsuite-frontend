@@ -1,28 +1,31 @@
 .create-distributionlist {
 
-    .scrollable-pane {
-        margin: 20px auto 20px auto;
-        width: 700px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    .title-controls .btn {
+        float:right;
     }
+    .title-controls .btn-primary { margin-left: 13px; }
 
-    .section-group.header {
-        padding-top: 10px;
-        min-height: 60px;
-
-        .input {
-            float: left;
-            width: auto;
-        }
-    }
-
-    .section.last { border: none; }
-
-    .sectiontitle {
+    label.control-label {
         font-size: 13px;
-        margin: 20px 0 15px 0;
         color: #888;
-        font-weight: 300;
-        border-bottom: 1px solid #E5E5E5;
+
+        span { white-space: nowrap; }
+    }
+
+    div.section {
+        display: block;
+        clear: both;
+        padding: 20px;
+    }
+
+    h1.title {
+        font-size: 20px;
+        float: left;
     }
 
     .item-list-header {
@@ -30,9 +33,12 @@
         overflow: hidden;
     }
 
-    .controls .btn {
-        float: right;
-        margin-left: 13px;
+    .sectiontitle {
+        font-size: 13px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-weight: normal;
+        margin: 20px 0 15px 0;
+        color: #888;
     }
 
     .item-list {
@@ -41,8 +47,9 @@
         margin-bottom: 20px;
 
         .listed-item {
+            &:nth-child(odd) { margin-left:0; }
+            margin-bottom:2px;
             position: relative;
-            margin: 0 0 2px 0;
             float:left;
 
             .remove {
@@ -79,48 +86,16 @@
         }
     }
 
-    label {
-        color: #888;
-        font-weight: 300;
-        display: block;
-    }
-    input { width: 310px; }
+    .add-participant { width: 340px; }
 
-    .fieldset {
-        width: 240px;
-        margin-top: 12px;
+    .alert { margin-top: 1em; }
+
+    .contact-image {
         float: left;
-
-        &.name {
-            width: 290px;
-            margin-left: 0px;
-            margin-right: 25px;
-            margin-bottom: 200px;
-        }
-
-        &.mail {
-            margin-left:  20px;
-            margin-bottom: 200px;
-            width: 230px;
-        }
+        display: inline-block;
+        margin: 0 1em 0 5px;
+        .picture(48px, 48px);
     }
-
-    .btn.btn-inverse {
-        float: right;
-        margin-top: 37px;
-        margin-right: 0px;
-    }
-
-    .alert { margin-top: 1em;}
 }
 
 
-.create-distributionlist .contact-image,
-.create-distributionlist-contact-image {
-    float: left;
-    display: inline-block;
-    margin: 0 1em 0 5px;
-    .picture(48px, 48px);
-}
-
-.create-distributionlist-contact-image { margin-left: 0; }
