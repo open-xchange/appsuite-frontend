@@ -11,14 +11,23 @@
  */
 
 define('moxiecode/tiny_mce/plugins/emoji/categories',
-       ['gettext!io.ox/mail/emoji'], function (gt) {
+       ['gettext!io.ox/mail/emoji',
+       'raw!moxiecode/tiny_mce/plugins/emoji/unified.json',
+       'raw!moxiecode/tiny_mce/plugins/emoji/softbank.json',
+       'raw!moxiecode/tiny_mce/plugins/emoji/japan_carrier.json'
+    ], function (gt, unified, softbank, japan_carrier) {
     "use strict";
 
+    var c = {
+        unified: unified,
+        softbank: softbank,
+        japan_carrier: japan_carrier
+    };
+
     function category(cat) {
-        return require(['raw!moxiecode/tiny_mce/plugins/emoji/' + cat + '.json'])
-            .then(function (data) {
-                return JSON.parse(data || '{}');
-            }).promise();
+        var data = c[cat];
+
+        return JSON.parse(data || '{}');
     }
 
     return {

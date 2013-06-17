@@ -20,27 +20,27 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     //"invert" the categories object
     function createCategoryMap() {
-        return categories[defaultCollection()].then(function (categories) {
-            category_map = _.object(
-                _(categories).chain().values().flatten(true).value(),
-                _(categories)
-                    .chain()
-                    .pairs()
-                    .map(function (item) {
-                        var category = item[0];
-                        return _(item[1]).map(function () {
-                            return category;
-                        });
-                    })
-                    .flatten(true)
-                    .value()
-            );
-            icons = _(emoji.EMOJI_MAP)
+        var cat = categories[defaultCollection()];
+
+        category_map = _.object(
+            _(cat).chain().values().flatten(true).value(),
+            _(cat)
                 .chain()
                 .pairs()
-                .map(iconInfo)
-                .value();
-        });
+                .map(function (item) {
+                    var category = item[0];
+                    return _(item[1]).map(function () {
+                        return category;
+                    });
+                })
+                .flatten(true)
+                .value()
+        );
+        icons = _(emoji.EMOJI_MAP)
+            .chain()
+            .pairs()
+            .map(iconInfo)
+            .value();
     }
 
     function defaultCollection() {
@@ -147,9 +147,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         iconInfo: iconInfo,
 
         categories: function () {
-            return categories[this.defaultCollection()].then(function (data) {
-                return data.meta || [];
-            });
+            return categories[this.defaultCollection()].meta || [];
         },
 
         // collections API
