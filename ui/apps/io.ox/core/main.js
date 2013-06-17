@@ -33,6 +33,11 @@ define('io.ox/core/main',
     var PATH = ox.base + '/apps/io.ox/core',
         DURATION = 250;
 
+    // enable special logging to investigate why boot fails
+    var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
+
+    debug('core: Loaded');
+
     var logout = function (opt) {
 
         opt = _.extend({
@@ -375,6 +380,8 @@ define('io.ox/core/main',
     }());
 
     function launch() {
+
+        debug('core: launch()');
 
         /**
          * Listen to events on apps collection
@@ -816,22 +823,36 @@ define('io.ox/core/main',
             }
         });
 
+        function fail(type) {
+            return function () {
+                console.error('core: Failed to load:', type, baton);
+            };
+        }
+
+        requirejs.onError = function () {
+            console.error('requirejs', arguments);
+        };
+
         // start loading stuff
         baton.loaded = $.when(
             baton.block,
-            ext.loadPlugins(),
-            require(baton.autoLaunchApps),
-            require(['io.ox/core/api/account']).pipe(function (api) {
-                var def = $.Deferred();
-                api.all().always(def.resolve);
-                return def;
-            })
+            ext.loadPlugins().fail(fail('loadPlugins')),
+            require(baton.autoLaunchApps).fail(fail('autoLaunchApps')),
+            require(['io.ox/core/api/account']).then(
+                function (api) {
+                    var def = $.Deferred();
+                    api.all().always(def.resolve);
+                    return def;
+                },
+                fail('account')
+            )
         );
 
         new Stage('io.ox/core/stages', {
             id: 'first',
             index: 100,
             run: function () {
+                debug('core: Stage "first"');
             }
         });
 
@@ -839,6 +860,9 @@ define('io.ox/core/main',
             id: 'update-tasks',
             index: 200,
             run: function () {
+
+                debug('core: Stage "update-tasks"');
+
                 if (ox.online) {
                     var def = $.Deferred();
                     require(['io.ox/core/updates/updater'], function (updater) {
@@ -854,6 +878,9 @@ define('io.ox/core/main',
             id: 'restore-check',
             index: 300,
             run: function (baton) {
+
+                debug('core: Stage "restore-check"');
+
                 return ox.ui.App.canRestore().done(function (canRestore) {
                     baton.canRestore = canRestore;
                 });
@@ -864,6 +891,9 @@ define('io.ox/core/main',
             id: 'restore-confirm',
             index: 400,
             run: function (baton) {
+
+                debug('core: Stage "restore-confirm"');
+
                 if (baton.canRestore) {
 
                     var dialog,
@@ -923,6 +953,9 @@ define('io.ox/core/main',
             id: 'restore',
             index: 500,
             run: function (baton) {
+
+                debug('core: Stage "restore"');
+
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
                     baton.autoLaunch = [];
@@ -941,7 +974,11 @@ define('io.ox/core/main',
             index: 600,
             run: function (baton) {
 
+                debug('core: Stage "load"', baton);
+
                 return baton.loaded.done(function (instantFadeOut) {
+
+                    debug('core: Stage "load" > loaded.done');
 
                     // draw top bar now
                     ext.point('io.ox/core/topbar').invoke('draw');
@@ -951,6 +988,8 @@ define('io.ox/core/main',
                         $('#io-ox-screens').css('top', '0px');
                         topbar.hide();
                     }
+
+                    debug('core: Stage "load" > autoLaunch ...');
 
                     // auto launch
                     _(baton.autoLaunch).each(function (id) {
@@ -976,6 +1015,9 @@ define('io.ox/core/main',
                     ox.ui.App.restore();
 
                     baton.instantFadeOut = instantFadeOut;
+                })
+                .fail(function () {
+                    console.warn('core: Stage "load" > loaded.fail!', baton);
                 });
             }
         });
@@ -984,6 +1026,9 @@ define('io.ox/core/main',
             id: 'curtain',
             index: 700,
             run: function (baton) {
+
+                debug('core: Stage "curtain"');
+
                 if (baton.instantFadeOut) {
                     // instant fade out
                     $("#background_loader").idle().hide();
@@ -996,6 +1041,7 @@ define('io.ox/core/main',
             }
         });
 
+        debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);
     }
 

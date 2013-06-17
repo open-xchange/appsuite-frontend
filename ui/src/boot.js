@@ -274,15 +274,19 @@ $(window).load(function () {
             // hide login dialog
             $('#io-ox-login-screen').hide();
             $(this).busy();
+            debug('boot.js: loadCore > load settings ...');
             // get configuration & core
             require(['settings!io.ox/core'], function (settings) {
                 var theme = settings.get('theme') || 'default';
+                debug('boot.js: loadCore > load config ...');
                 config.load().done(function () {
+                    debug('boot.js: loadCore > require "main" & set theme');
                     $.when(
                         require(['io.ox/core/main']),
                         themes.set(theme)
                     ).done(function (core) {
                         // go!
+                        debug('boot.js: core.launch()');
                         core.launch();
                     })
                     .fail(function (e) {
@@ -532,8 +536,9 @@ $(window).load(function () {
                     gettext.enable();
                     return $.when();
                 }
-                return manifests.manager.loadPluginsFor('core')
-                    .done(gettext.enable);
+
+                debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
+                return manifests.manager.loadPluginsFor('core').done(gettext.enable);
             }
 
             function gotoSignin() {
@@ -646,10 +651,12 @@ $(window).load(function () {
                         if (ox.signin) {
                             gotoCore(true);
                         } else {
+                            debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
                             fetchUserSpecificServerConfig().done(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
                                 loadCoreFiles().done(function () {
                                     loadCore();
                                 });
