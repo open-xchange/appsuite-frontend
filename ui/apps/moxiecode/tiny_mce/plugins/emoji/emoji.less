@@ -46,6 +46,40 @@ img.emoji {
     border-width: 1px 1px 1px 0;
 
     @background: #f5f5f5;
+    @emojiTabHeight: 34px;
+
+    .emoji-tabs {
+        height: @emojiTabHeight;
+        bottom: auto;
+    }
+
+    .emoji-tab {
+        line-height: 20px;
+        color: white;
+        padding: 7px 14px;
+        background-color: #ccc;
+        border: 1px solid white;
+        cursor: pointer;
+        .box-sizing(border-box);
+    }
+
+    .emoji-tab.left {
+        right: 50%;
+        border-right: 0px none;
+    }
+
+    .emoji-tab.right {
+        left: 50%;
+    }
+
+    .emoji-tab.active {
+        background-color: #333;
+    }
+
+    .emoji-tab:focus, .emoji-tab:active {
+        outline: 0;
+        background-color: #555;
+    }
 
     .emoji-header {
 
@@ -70,6 +104,10 @@ img.emoji {
         i {
             line-height: 20px;
         }
+    }
+
+    &.emoji-use-tabs .emoji-header {
+        top: @emojiTabHeight;
     }
 
     .emoji-options {
@@ -97,6 +135,11 @@ img.emoji {
         overflow: auto;
         background-color: white;
     }
+
+    &.emoji-use-tabs .emoji-icons {
+        top: 34px + @emojiTabHeight;
+    }
+
 
     .emoji {
 
