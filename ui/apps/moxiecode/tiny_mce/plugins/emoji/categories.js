@@ -18,22 +18,10 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
     ], function (gt, unified, softbank, japan_carrier) {
     "use strict";
 
-    var c = {
-        unified: unified,
-        softbank: softbank,
-        japan_carrier: japan_carrier
-    };
-
-    function category(cat) {
-        var data = c[cat];
-
-        return JSON.parse(data || '{}');
-    }
-
     return {
-        'unified': category('unified'),
-        'softbank': category('softbank'),
-        'japan_carrier': category('japan_carrier'),
+        'unified': JSON.parse(unified),
+        'softbank': JSON.parse(softbank),
+        'japan_carrier': JSON.parse(japan_carrier),
         translatedNames: {
             'unified': gt('Unified'),
             'softbank': gt('SoftBank'),
