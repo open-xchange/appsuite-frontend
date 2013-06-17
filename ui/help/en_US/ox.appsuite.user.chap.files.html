@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Chapter 9.  Files</title>
 <link rel="stylesheet" type="text/css" href="../help.css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.settings.html" title="8.7. Calendar Settings">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="8.6.4. Scheduling appointments with several participants">
 <link rel="next" href="ox.appsuite.user.sect.files.gui.html" title="9.1. The Files Components">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
@@ -14,15 +14,13 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
-<li class="active"><a>Chapter 9. 
-    <span class="phrase">Files</span>
-    
-    
-    </a></li>
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.settings.html">Prev</a></li>
+<a class="brand">Open-Xchange</a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.share.freebusy.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Home</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">ToC</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.gui.html">Next</a></li>
 </ul></div></div></div>
-<div lang="en-EN" class="chapter">
+<div class="oxhelp-content">
+  <div lang="en-EN" class="chapter">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="ox.appsuite.user.chap.files"></a>Chapter 9. 
     <span class="phrase">Files</span>
@@ -31,7 +29,7 @@
     </h1></div></div></div>
 <div class="toc">
 <p><b>Table of Contents</b></p>
-<dl class="toc">
+<dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.files.gui.html">9.1 The 
       <span class="phrase"><span class="guilabel"><strong>Files</strong></span></span>
       
@@ -61,8 +59,9 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.copy.html">9.5.7 Copying files</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.addportal.html">9.5.8 Adding files to the portal</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.delete.html">9.5.9 Deleting files</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.10 Working with versions</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.11 Editing multiple files at one time</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.lock.html">9.5.10 Locking or unlocking files</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 Working with versions</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 Editing multiple files at one time</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 Accessing Files with WebDAV</a></span></dt>
 <dd><dl>
@@ -75,7 +74,7 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Files Settings</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm139798765795280"></a><a class="indexterm" name="idm139798766548256"></a><a class="indexterm" name="idm139798762922688"></a><div class="concept">
+<a class="indexterm" name="idm139657326835488"></a><a class="indexterm" name="idm139657326328048"></a><a class="indexterm" name="idm139657324363184"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files"></a><p>Learn how to use the 
     <span class="phrase"><span class="guilabel"><strong>Files</strong></span></span>
       
@@ -109,35 +108,17 @@
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.start"></a><p class="title"><b>In order to launch the 
-     <span class="phrase"><span class="guilabel"><strong>Files</strong></span></span>
+<a name="ox.appsuite.user.task.files.start"></a><p class="title"><b>How to start the <span class="phrase"><span class="guilabel"><strong>Files</strong></span></span>
       
       
-      
-    application, use one of the following options:</b></p>
-<div class="procedure"><ul class="procedure"><li class="step">
-<p>Click on 
-	  <span class="phrase"><span class="guimenu"><strong>Files</strong></span></span>
+       app:
+    </b></p>
+<div class="procedure"><ul class="procedure"><li class="step"><p>Click on <span class="phrase"><span class="guimenu"><strong>Files</strong></span></span>
           
           
-          
-          in the menu bar.
-        </p>
-<p>Click on
-	  <span class="phrase"><span class="guimenu"><strong>Files</strong></span></span>
-          
-          
-          
-          below <span class="guilabel"><strong>Your applications</strong></span> on the <span class="guimenu"><strong>Apps</strong></span> page.
-	</p>
-</li></ul></div>
+           in the menu bar.
+        </p></li></ul></div>
 </div>
 </div>
-<div class="oxhelp-navigation-bottom"><div class="pagination"><ul class="">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.settings.html">Prev</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Content</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.gui.html">Next</a></li>
-</ul></div></div>
 </body>
 </html>
