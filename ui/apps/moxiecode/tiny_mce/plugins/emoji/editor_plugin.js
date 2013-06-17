@@ -148,20 +148,18 @@
                     .addClass(category.iconClass);
             }
 
-            var footer = this.$el.find('.emoji-footer');
+            var footer = this.$el.find('.emoji-footer'),
+                categories = this.emoji.categories();
 
-            return this.emoji.categories().then(function (categories) {
-
-                categories.unshift({
-                    name: 'recently',
-                    title: 'Recently used',
-                    iconClass: 'emoji1f552'
-                });
-
-                footer.append(
-                    _(categories).map(draw)
-                );
+            categories.unshift({
+                name: 'recently',
+                title: 'Recently used',
+                iconClass: 'emoji1f552'
             });
+
+            footer.append(
+                _(categories).map(draw)
+            );
         },
 
         // get emojis of current category
