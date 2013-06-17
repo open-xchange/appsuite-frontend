@@ -129,7 +129,7 @@
                         $('<a href="#" class="emoji-option">')
                         .attr('data-collection', collection)
                         .append(
-                            $('<i>').addClass(options === defaultCollection ? 'icon-ok' : 'icon-none'),
+                            $('<i>').addClass(collection === defaultCollection ? 'icon-ok' : 'icon-none'),
                             $.txt(self.emoji.collectionTitle(collection))
                         )
                     );
