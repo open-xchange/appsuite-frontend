@@ -13,8 +13,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
        'settings!io.ox/mail/emoji',
-       'css!emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories, settings) {
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less',
+       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji.css',
+       'css!emoji/emoji.css'], function (emoji, categories, settings) {
 
     "use strict";
 
@@ -56,7 +57,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             return {invalid: true};
 
         return {
-            css: 'emoji' + icon[1][2],
+            css: cssFor(icon[0]),
             unicode: icon[0],
             desc: icon[1][1],
             category: category_map[icon[0]] || 'People' // matthias: was undefined, needed that to continue
@@ -71,6 +72,15 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             .map(function (collection) {
                 return collection.trim();
             });
+    }
+
+    function cssFor(unicode) {
+        var icon = emoji.EMOJI_MAP[unicode];
+        if (defaultCollection() === 'softbank' || defaultCollection() === 'japan_carrier') {
+            return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+        }
+
+        return 'emoji' + icon[2];
     }
 
     var category_map = {},
