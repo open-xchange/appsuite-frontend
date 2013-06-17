@@ -131,7 +131,7 @@ define('io.ox/office/tk/control/radiolist',
         // base constructors --------------------------------------------------
 
         BaseClass.call(this, Utils.extendOptions(options, { value: splitValue }));
-        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options, { plainCaret: hasSplitButton }));
+        DropDownClass.call(this, Utils.extendOptions({ itemValueResolver: itemClickHandler }, options, hasSplitButton ? { caret: 'only' } : undefined));
 
         // private methods ----------------------------------------------------
 

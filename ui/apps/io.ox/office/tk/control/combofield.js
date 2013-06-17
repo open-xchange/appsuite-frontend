@@ -62,7 +62,7 @@ define('io.ox/office/tk/control/combofield',
 
         TextField.call(this, options);
         // no caption for the drop-down button
-        List.call(this, Utils.extendOptions(options, { plainCaret: true }));
+        List.call(this, Utils.extendOptions(options, { caret: 'only' }));
 
         // private methods ----------------------------------------------------
 

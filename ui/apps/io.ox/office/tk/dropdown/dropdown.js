@@ -47,12 +47,13 @@ define('io.ox/office/tk/dropdown/dropdown',
      *  Supports all generic button formatting options (see method
      *  Utils.createButton() for details). Additionally, the following options
      *  are supported:
-     *  @param {Boolean} [options.plainCaret=false]
-     *      If set to true, the drop-down button will not contain a caption or
-     *      any other formatting, regardless of the other settings in the
-     *      options object. Can be used to mix-in the drop-down button into a
-     *      complex control group where the options object contains the
-     *      formatting for the main group contents.
+     *  @param {String} [options.caret='add']
+     *      Specifies the appearance of the drop-down caret icon at the right
+     *      border of the drop-down menu button. If set to 'add' or omitted,
+     *      the caret icon will be added to the caption as specified in this
+     *      options map. If set to 'none', the caret will not appear. If set to
+     *      'only', the caret icon will be the only contents of the drop-down
+     *      button, regardless of the other settings in the options map.
      *  @param {Boolean} [options.autoLayout=false]
      *      If set to true, the drop-down menu will be positioned and sized
      *      automatically. If the available space is not sufficient for the
@@ -69,20 +70,17 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the root node of the group object
             groupNode = this.getNode(),
 
-            // plain caret button, or button with caption and formatting
-            plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
+            // appearance of the caret icon
+            caretMode = Utils.getStringOption(options, 'caret', 'all'),
 
             // automatic position and size of the drop-down menu
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
 
-            // the icon for the drop-down caret
-            caretIcon = Utils.createIcon('docs-caret down'),
-
             // the drop-down caret
-            caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),
+            caretSpan = (caretMode !== 'none') ? $('<span>').addClass('dropdown-caret').append(Utils.createIcon('docs-caret down')) : $(),
 
             // the drop-down button
-            menuButton = Utils.createButton(plainCaret ? {} : options).addClass('dropdown-button').append(caretSpan),
+            menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button').append(caretSpan),
 
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
