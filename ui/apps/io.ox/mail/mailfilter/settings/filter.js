@@ -29,9 +29,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     function renderDetailView(evt, data) {
         var myView,
-            header = data.id === undefined ? gt('Create new rule') : gt('Edit rule');
+            header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
+            testArray, actionArray, rulename;
 
         myView = new AccountDetailView({model: data});
+
+        testArray = _.copy(myView.model.get('test'), true);
+        actionArray = _.copy(myView.model.get('actioncmds'), true);
+        rulename = _.copy(myView.model.get('rulename'), true);
+
 
         myView.dialog = new dialogs.ModalDialog({
             width: 685,
@@ -57,7 +63,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
         });
 
         myView.dialog.on('cancel', function () {
-//            console.log(myView);
+            // reset the model
+            myView.model.set('test', testArray);
+            myView.model.set('actioncmds', actionArray);
+            myView.model.set('rulename', rulename);
         });
     }
 
@@ -89,9 +98,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 //                    no filters
 
                 } else {
-
                     collection = factory.createCollection(data);
-
                     var AccountSelectView = Backbone.View.extend({
 
                         _modelBinder: undefined,
@@ -139,8 +146,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         initialize: function () {
                             this.template = doT.template(listboxtmpl);
                             _.bindAll(this);
-                            this.collection = collection;
 
+                            this.collection = collection;
                             this.collection.bind('add', this.render);
                             this.collection.bind('remove', this.render);
 
@@ -181,9 +188,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             var selected = this.$el.find('[selected]');
                             e.data = {};
                             e.data.id = selected.data('id');
-
                             e.data.obj = this.collection.get(e.data.id);
-
                             e.data.node = this.el;
 
                             if (e.data.obj !== undefined) {
@@ -241,7 +246,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     }),
 
                         mailFilter = new MailfilterEdit();
-
                     $node.append(mailFilter.render().$el);
 
                 }

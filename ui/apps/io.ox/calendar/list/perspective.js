@@ -19,9 +19,10 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/extensions',
      'io.ox/core/date',
      'io.ox/calendar/util',
+     'io.ox/core/extPatterns/actions',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, settings, gt) {
+    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
 
     'use strict';
 
@@ -34,7 +35,8 @@ define('io.ox/calendar/list/perspective',
             left = vsplit.left.addClass('border-right'),
             right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
             grid = new VGrid(left, {settings: settings}),
-            findRecurrence = false;
+            findRecurrence = false,
+            optDropdown = null;
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -59,7 +61,13 @@ define('io.ox/calendar/list/perspective',
         grid.addLabelTemplate(tmpl.label);
 
         // requires new label?
-        grid.requiresLabel = tmpl.requiresLabel;
+        grid.requiresLabel = function (i, data, current) {
+            // disable labels in search mode
+            if (grid.getMode() === 'search') {
+                return false;
+            }
+            return tmpl.requiresLabel(i, data, current);
+        };
 
         api.on('create', function (e, data) {
             if (app.folder.get() === data.folder) {
@@ -70,6 +78,13 @@ define('io.ox/calendar/list/perspective',
         // special search: list request
         grid.setListRequest("search", function (ids) {
             return $.Deferred().resolve(ids);
+        });
+
+        // hide grid toolbar options on search
+        grid.on('change:mode', function (e, cur) {
+            if (optDropdown && cur) {
+                optDropdown[cur === 'search' ? 'hide' : 'show']();
+            }
         });
 
         var directAppointment;//directly linked appointments are stored here
@@ -153,7 +168,7 @@ define('io.ox/calendar/list/perspective',
             index: 100,
             draw: function () {
                 this.prepend(
-                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    optDropdown = $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
                         .append(
                             $('<a>', {
                                     href: '#',
@@ -266,8 +281,15 @@ define('io.ox/calendar/list/perspective',
             updateGridOptions();
             grid.refresh(true);
         });
-        //to show an appointment without it being in the grid, needed for direct links
+
+        // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
+
+        // drag & drop support
+        win.nodes.outer.on('selection:drop', function (e, baton) {
+            actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+        });
+
         grid.paint();
     };
 

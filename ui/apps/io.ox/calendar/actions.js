@@ -15,11 +15,12 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar/actions',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/print'
-    ], function (ext, links, api, util, gt, config, notifications, print) {
+     'io.ox/core/print',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/calendar'
+    ], function (ext, links, api, util, config, notifications, print, settings, gt) {
 
     'use strict';
 
@@ -302,46 +303,69 @@ define('io.ox/calendar/actions',
         }
     });
 
-    var copyMove = function (type, apiAction, title) {
-        return function (list) {
-            ox.load(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews']).done(function (api, dialogs, views) {
-                var dialog = new dialogs.ModalDialog()
-                    .header($('<h4>').text(title))
-                    .addPrimaryButton('ok', gt('Move'))
-                    .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var item = _(list).first(),
-                    id = String(item.folder_id || item.folder),
-                    tree = new views.FolderList(dialog.getBody(), {
-                        type: type,
-                        tabindex: 0
-                    });
-                dialog.show(function () {
-                    tree.paint().done(function () {
-                        tree.select(id).done(function () {
-                            dialog.getBody().focus();
+    var copyMove = function (type, title) {
+
+        return function (list, baton) {
+
+            var vGrid = baton.grid || (baton.app && baton.app.getGrid());
+
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder']).done(function (dialogs, views, folderAPI) {
+
+                function commit(target) {
+                    if (type === "move" && vGrid) vGrid.busy();
+                    api[type](list, target).then(
+                        function () {
+                            var response = type === 'move' ?
+                                gt.ngettext('Appointment has been moved', 'Appointments have been moved', list.length) :
+                                gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
+                            notifications.yell('success', response);
+                            folderAPI.reload(target, list);
+                            if (type === "move" && vGrid) vGrid.idle();
+                        },
+                        notifications.yell
+                    );
+                }
+
+                if (baton.target) {
+                    commit(baton.target);
+                } else {
+                    var dialog = new dialogs.ModalDialog()
+                        .header($('<h4>').text(title))
+                        .addPrimaryButton('ok', gt('Move'))
+                        .addButton('cancel', gt('Cancel'));
+                    dialog.getBody().css('height', '250px');
+                    var folderId = String(list[0].folder_id),
+                        id = settings.get('folderpopup/last') || folderId,
+                        tree = new views.FolderList(dialog.getBody(), {
+                            type: 'calendar',
+                            open: settings.get('folderpopup/open', []),
+                            tabindex: 0,
+                            toggle: function (open) {
+                                settings.set('folderpopup/open', open).save();
+                            },
+                            select: function (id) {
+                                settings.set('folderpopup/last', id).save();
+                            }
+                        });
+                    dialog.show(function () {
+                        tree.paint().done(function () {
+                            tree.select(id).done(function () {
+                                dialog.getBody().focus();
+                            });
+                        });
+                    })
+                    .done(function (action) {
+                        if (action === 'ok') {
+                            var target = _(tree.selection.get()).first();
+                            if (target && (type === 'copy' || target !== folderId)) {
+                                commit(target);
+                            }
+                        }
+                        tree.destroy().done(function () {
+                            tree = dialog = null;
                         });
                     });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var target = _(tree.selection.get()).first();
-                        if (target && target !== id) {
-                            // use proper action
-                            api[apiAction](list, target)
-                                .done(function () {
-                                    var response = apiAction === 'move' ?
-                                        gt.ngettext('Appointment has been moved', 'Appointments have been moved', list.length) :
-                                        gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
-                                    notifications.yell('success', response);
-                                })
-                                .fail(notifications.yell);
-                        }
-                    }
-                    tree.destroy().done(function () {
-                        tree = dialog = null;
-                    });
-                });
+                }
             });
         };
     };
@@ -349,7 +373,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/move', {
         id: 'move',
         requires: 'some delete',
-        multiple: copyMove('calendar', 'move', gt('Move'))
+        multiple: copyMove('move', gt('Move'))
     });
 
     new Action('io.ox/calendar/actions/freebusy', {

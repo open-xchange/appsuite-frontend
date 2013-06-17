@@ -281,8 +281,12 @@ define('io.ox/mail/actions',
                     function commit(target) {
                         if (type === "move" && vGrid) vGrid.busy();
                         api[type](list, target).then(
-                            function () {
-                                notifications.yell('success', success);
+                            function (resp) {
+                                if (resp) {
+                                    notifications.yell('error', resp);
+                                } else {
+                                    notifications.yell('success', success);
+                                }
                                 folderAPI.reload(target, list);
                                 if (type === "move" && vGrid) vGrid.idle();
                             },

@@ -17,8 +17,9 @@ define('io.ox/core/settings/user', [
     'io.ox/contacts/model',
     'io.ox/contacts/edit/view-form',
     'io.ox/core/tk/dialogs',
-    'io.ox/contacts/util'
-], function (ext, api, contactModel, ViewForm, dialogs, util) {
+    'io.ox/contacts/util',
+    'gettext!io.ox/core'
+], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
 
     'use strict';
 
@@ -35,7 +36,22 @@ define('io.ox/core/settings/user', [
             return factory.realm('edit').get({}).done(function (user) {
 
                 $node.append(new UserEdit({model: user}).render().$el);
-
+                $($node.find('.edit-contact')[0]).on('dispose', function () {
+                    $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                    if (!_.isEmpty(user.changed)) {//check if there is something to save
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you really want to discard your changes?'))
+                            .addPrimaryButton('save', gt('Save changes'))
+                            .addButton('discard', gt('Discard changes'))
+                            .show()
+                            .done(function (action) {
+                                if  (action === 'save') {
+                                    user.save();
+                                }
+                            });
+                    }
+                });
+                
                 user.on('change:first_name change:last_name', function () {
                     user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
                     //app.setTitle(util.getFullName(contact.toJSON()));

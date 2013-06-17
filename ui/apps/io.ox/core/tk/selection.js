@@ -273,8 +273,8 @@ define('io.ox/core/tk/selection',
         };
 
         getNode = function (id) {
-            // Why we do the replacement regex stuff: Bug #24543
-            return $('.selectable[data-obj-id="' + self.serialize(id).replace(/\\\./, '\\\\.') + '"]', container);
+            // Why we do the replacement regex stuff: Bug #24543 / #26915
+            return $('.selectable[data-obj-id="' + self.serialize(id).replace(/\\\./g, '\\\\.') + '"]', container);
         };
 
         isSelected = function (id) {

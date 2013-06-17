@@ -196,12 +196,12 @@ define('io.ox/mail/util',
                     sender = this.parseRecipients(data.headers.Sender);
                     // only show if display names differ (otherwise it looks like a senseless duplicate)
                     if (sender[0][0] !== data.from[0][0]) {
-                        tmp.prepend(
-                            this.serializeList({ sender: sender }, 'sender'),
+                        tmp.append(
                             $.txt(_.noI18n(' ')),
-                            //#. (From) email1 on behalf of email2. Appears in email detail view.
-                            gt('on behalf of'),
-                            $.txt(_.noI18n(' '))
+                            //#. (From) email1 via email2. Appears in email detail view.
+                            gt('via'),
+                            $.txt(_.noI18n(' ')),
+                            this.serializeList({ sender: sender }, 'sender')
                         );
                     }
                 }

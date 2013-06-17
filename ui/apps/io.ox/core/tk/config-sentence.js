@@ -26,7 +26,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 self[attribute] = newValue;
                 self.trigger("change", self);
                 self.trigger("change:" + attribute, self);
-
+                drawState();
             });
 
             function drawState() {
@@ -35,7 +35,6 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             }
 
             drawState();
-            this.on('change:' + attribute, drawState);
         },
         number: function ($anchor, attribute, options) {
             var self = this,
@@ -70,20 +69,20 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 keys.include();
 
                 // TODO: Allow only number entries
-
                 function updateValue() {
                     var value = parseInt($numberInput.val(), 10);
-                    if (!isNaN(value)) {
-                        try {
-                            $content.remove();
-                        } catch (e) { }
-                        $anchor.show();
-                        self[attribute] = value;
-                        self.trigger("change", self);
-                        self.trigger("change:" + attribute, self);
+                    if (isNaN(value)) {
+                        value = options.initial || 1;
                     }
+                    try {
+                        $content.remove();
+                    } catch (e) { }
+                    $anchor.show();
+                    self[attribute] = value;
+                    self.trigger("change", self);
+                    self.trigger("change:" + attribute, self);
+                    drawState();
                     keys.destroy();
-
                 }
                 $numberInput.on("blur", function () {
                     updateValue();
@@ -106,8 +105,6 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             });
 
             drawState();
-
-            this.on("change:" + attribute, drawState);
         },
         options: function ($anchor, attribute, options) {
             // First we need to wrap the anchor
@@ -137,6 +134,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                             self[attribute] = value;
                             self.trigger("change", self);
                             self.trigger("change:" + attribute, self);
+                            drawState();
                         })
                     )
                 );
@@ -153,9 +151,6 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             $anchor.dropdown();
 
             drawState();
-
-            this.on("change:" + attribute, drawState);
-
         },
         custom: function ($anchor, attribute, func, options) {
             func.call(this, $anchor, attribute, options);
@@ -172,6 +167,9 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 attribute = $anchor.data("attribute") || 'value',
                 widget = $anchor.data("widget"),
                 opts = options[attribute] || options;
+            if (options.tabindex) {
+                $anchor.attr({ tabindex: options.tabindex});
+            }
             // TODO: Use ExtensionPoints here
             if (Widgets[widget]) {
                 Widgets[widget].call(self, $anchor, attribute, opts, options);
@@ -185,13 +183,15 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         };
 
         this.ghost = function () {
-            var $ghost = this.$el.clone();
-            $ghost.find('*').off();
-            $ghost.find('a').each(function () {
-                $(this).replaceWith($.txt($(this).text()));
-            });
-            $ghost.find(".no-clone, .datepicker, .popover").remove();
-            return $ghost;
+            var $ghost = this.$el.clone(false);
+            $ghost.find(".no-clone, .datepicker, .popover")
+                .remove();
+            $ghost
+                .find('*')
+                .each(function () {
+                    $(this).replaceWith($.txt($(this).text()));
+                });
+            return $ghost.text();
         };
 
         this.id = options.id;

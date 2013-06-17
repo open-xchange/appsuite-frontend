@@ -141,21 +141,43 @@
     }
     
     li[data-type-second="headers"] {
+    
         height: 70px;
+        
+        label {
+            line-height: 30px;
+        }
+        
+        .action.dropdown.value {
+            line-height: 40px;
+        }
+        
+        .close {
+            line-height: 70px;
+        }
+        
+        span.list-title {
+            line-height: 70px;
+        }
+        
+        .pull-right div.inner {
+            float: left;
+            margin-right: 1em;
+        }
+        
+        .pull-right div.inner first-label {
+            overflow: hidden;
+        }
+        
+        input[data-action="change-text-test"] {
+            margin-right: 0px;
+        }
+        
     }
     
     ol.widget-list {
         list-style-type: none;
         margin: 0;
-    }
-    
-    [data-type-second="headers"] label {
-        line-height: 30px;
-    }
-    
-    
-    [data-type-second="headers"] input[data-action="change-text-test"] {
-        margin-right: 0px;
     }
     
     input[data-action="change-text-test"], input[data-action="change-text-action"] {
@@ -181,7 +203,7 @@
         /*float: right;*/
         display: inline-block;
         position: absolute;
-        top: 10px;
+        top: 3px;
         right: 45px;
     }
 
@@ -217,4 +239,10 @@
         .border-radius(5px);
     }
     
+}
+
+.control-group.mailfilter {
+    display: inline-block;
+    float: left;
+    padding-top: 4px;
 }

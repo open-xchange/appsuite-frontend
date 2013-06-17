@@ -107,14 +107,15 @@ define('io.ox/mail/view-detail',
         var regex = /(&quot)?([:;]-?[(|)D])/g;
 
         return function (text) {
-            if (!settings.get('displayEmoticons')) return text;
-            text = text.replace(regex, function (all, quot, match) {
-                // if we hit &quot;-) we just return
-                if (quot) return all;
-                // otherwise find emote
-                var emote = $('<div>').html(emotes[match]).text();
-                return !emote ? match : emote;
-            });
+            if (settings.get('displayEmoticons')) {
+                text = text.replace(regex, function (all, quot, match) {
+                    // if we hit &quot;-) we just return
+                    if (quot) return all;
+                    // otherwise find emote
+                    var emote = $('<div>').html(emotes[match]).text();
+                    return !emote ? match : emote;
+                });
+            }
             return emoji.unifiedToImageTag(text);
         };
     }());
@@ -590,7 +591,9 @@ define('io.ox/mail/view-detail',
                 .busy()
                 .one('resolve', { baton: baton }, resolver);
 
-            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
+            if (baton.options.tabindex) {
+                node.attr('tabindex', baton.options.tabindex);
+            }
 
             return node;
         },
@@ -614,7 +617,10 @@ define('io.ox/mail/view-detail',
                         );
                     });
 
-            if (baton.options.tabindex) node.attr('tabindex', baton.options.tabindex);
+            if (baton.options.tabindex) {
+                // we add f6-target just here; first mail in thread
+                node.addClass('f6-target').attr('tabindex', baton.options.tabindex);
+            }
 
             try {
 

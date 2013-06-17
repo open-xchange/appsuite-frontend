@@ -120,7 +120,8 @@ define('io.ox/calendar/invitations/register',
 
         function render(baton) {
 
-            var appointments = [];
+            var appointments = [],
+                introductions = [];
 
             _(baton.analysis.annotations).each(function (annotation) {
                 if (annotation.appointment) {
@@ -129,11 +130,11 @@ define('io.ox/calendar/invitations/register',
             });
 
             _(baton.analysis.changes).each(function (change) {
-                // preference on currentAppointment, so that we can show the current status
-                var appointment = change.currentAppointment || change.newAppointment || change.deletedAppointment;
+                var appointment = change.deletedAppointment || change.newAppointment || change.currentAppointment;
                 if (appointment) {
                     appointments.push(appointment);
                 }
+                introductions.push(change.introduction);
             });
 
             var appointment = appointments[0],
@@ -146,7 +147,7 @@ define('io.ox/calendar/invitations/register',
                 baton.$.well.replaceWith($well);
             }
 
-            drawScaffold.call(baton.$.well = $well, 'app');
+            drawScaffold.call(baton.$.well = $well, 'appointment');
 
             if (accepted) {
                 baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
@@ -204,6 +205,12 @@ define('io.ox/calendar/invitations/register',
             // so, let's use the first one
             .find(selector).addClass('disabled').attr('disabled', 'disabled');
 
+
+
+            if (baton.analysis.messageType !== 'request' && introductions[0]) {
+                baton.$.well.find('.muted').html(introductions[0]);
+            }
+
             baton.$.well.find('.appointmentInfo').append(
                 _(appointments).map(function (appointment) {
                     return $('<div>').append(drawSummary(appointment));
@@ -260,7 +267,8 @@ define('io.ox/calendar/invitations/register',
         $node.append(
             $('<div class="change">').append(
                 renderConflicts(change),
-                renderAppointment(change.newAppointment || change.currentAppointment || change.deletedAppointment, baton)
+                // preference on currentAppointment, so that we can show the current status
+                renderAppointment(change.currentAppointment || change.newAppointment || change.deletedAppointment, baton)
             )
         );
     }
@@ -370,12 +378,15 @@ define('io.ox/calendar/invitations/register',
         var text = type !== 'task' ?
             gt('This email contains an appointment') :
             gt('This email contains a task');
+
         return this.append(
             $('<div class="muted">').text(text),
             $('<div class="appointmentInfo">'),
-            $('<div class="itip-action-container">').css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' }).append(
-                $('<div class="itip-actions">')
-            )
+            $('<div class="itip-action-container">')
+                .css({ textAlign: 'right', marginTop: '1em', minHeight: '30px' })
+                .append(
+                    $('<div class="itip-actions">')
+                )
         );
     }
 

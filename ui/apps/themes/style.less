@@ -209,8 +209,16 @@
             background-color: @topbarLauncherBackgroundHover;
             & > a { color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover; }
         }
+
         a:focus {
-            color: @topbarLauncherColor-hover; background-color: @topbarLauncherBackgroundHover;
+            outline: 0;
+            color: @topbarLauncherColor-hover;
+            background-color: #08c;
+        }
+
+        a:active {
+            color: @topbarLauncherColor-hover;
+            background-color: @topbarLauncherBackgroundHover;
         }
 
         &.upsell {

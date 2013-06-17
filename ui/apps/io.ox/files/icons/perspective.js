@@ -133,6 +133,10 @@ define('io.ox/files/icons/perspective',
         return false;
     }
 
+    function cid_find(str) {
+        return str.replace(/\\\./g, '\\\\.');
+    }
+
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
@@ -505,7 +509,8 @@ define('io.ox/files/icons/perspective',
 
             api.on('update', function (e, obj) {
                 // update icon
-                var cid = _.cid(obj), icon = iconview.find('.file-icon[data-obj-id="' + cid + '"]');
+                var cid = _.cid(obj),
+                    icon = iconview.find('.file-icon[data-obj-id="' + cid_find(cid) + '"]');
                 if (icon.length) {
                     icon.replaceWith(drawIcon(obj));
                 }
@@ -579,11 +584,11 @@ define('io.ox/files/icons/perspective',
                                 prev = indexPrevPosition(newIds, cid),
                                 next = indexNextPosition(newIds, cid);
 
-                            iconview.find('.file-icon[data-obj-id="' + cid + '"]').remove();
+                            iconview.find('.file-icon[data-obj-id="' + cid_find(cid) + '"]').remove();
 
                             if (indexPrev(newIds, cid)) {
-                                if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
-                                    iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-obj-id="' + cid_find(prev) + '"]').length) {
+                                    iconview.find('.file-icon[data-obj-id="' + cid_find(prev) + '"]').after(drawIcon(data));
                                 } else {
                                     iconview.find('.file-icon-container').prepend(drawIcon(data));
                                 }
@@ -595,7 +600,7 @@ define('io.ox/files/icons/perspective',
 
                         _(deleted).each(function (cid) {
 
-                            iconview.find('.file-icon[data-obj-id="' + cid + '"]').remove();
+                            iconview.find('.file-icon[data-obj-id="' + cid_find(cid) + '"]').remove();
                             end = end - 1;
 
                         });
@@ -606,8 +611,8 @@ define('io.ox/files/icons/perspective',
                                 prev = indexPrevPosition(newIds, cid);
 
                             if (indexPrev(newIds, cid)) {
-                                if (iconview.find('.file-icon[data-obj-id="' + prev + '"]').length) {
-                                    iconview.find('.file-icon[data-obj-id="' + prev + '"]').after(drawIcon(data));
+                                if (iconview.find('.file-icon[data-obj-id="' + cid_find(prev) + '"]').length) {
+                                    iconview.find('.file-icon[data-obj-id="' + cid_find(prev) + '"]').after(drawIcon(data));
                                 } else {
                                     iconview.find('.file-icon-container').prepend(drawIcon(data));
                                 }

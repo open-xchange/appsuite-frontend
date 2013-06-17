@@ -12,27 +12,41 @@
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'settings!io.ox/mail/emoji',
        'css!emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories) {
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories, settings) {
 
     "use strict";
 
     //"invert" the categories object
     function createCategoryMap() {
-        return _.object(
-            _(categories).chain().values().flatten(true).value(),
-            _(categories)
-            .chain()
-            .pairs()
-            .map(function (item) {
-                var category = item[0];
-                return _(item[1]).map(function () {
-                    return category;
-                });
-            })
-            .flatten(true)
-            .value()
-        );
+        return categories[defaultCollection()].then(function (categories) {
+            category_map = _.object(
+                _(categories).chain().values().flatten(true).value(),
+                _(categories)
+                    .chain()
+                    .pairs()
+                    .map(function (item) {
+                        var category = item[0];
+                        return _(item[1]).map(function () {
+                            return category;
+                        });
+                    })
+                    .flatten(true)
+                    .value()
+            );
+            icons = _(emoji.EMOJI_MAP)
+                .chain()
+                .pairs()
+                .map(iconInfo)
+                .value();
+        });
+    }
+
+    function defaultCollection() {
+        var defaultCollection = settings.get('defaultCollection');
+
+        return settings.get('userCollection', defaultCollection);
     }
 
     function iconInfo(icon) {
@@ -46,18 +60,29 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             css: 'emoji' + icon[1][2],
             unicode: icon[0],
             desc: icon[1][1],
-            category: category_map[icon[0]]
+            category: category_map[icon[0]] || 'People' // matthias: was undefined, needed that to continue
         };
     }
 
-    var category_map = createCategoryMap(),
-        icons = _(emoji.EMOJI_MAP)
-    .chain()
-    .pairs()
-    .map(iconInfo)
-    .value();
+    function parseCollections() {
+        //TODO: may be, filter the list for collections, we support in the frontend
+        var e = settings.get('availableCollections');
+
+        return _(e.split(','))
+            .map(function (collection) {
+                return collection.trim();
+            });
+    }
+
+    var category_map = {},
+        icons = [],
+        collections = parseCollections();
+
+    //generate category_map for the first time
+    createCategoryMap();
 
     return _.extend({
+        // plain data API
         icons: icons,
         iconsForCategory: function (category) {
             return _(icons).filter(function (icon) {
@@ -65,7 +90,28 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
         },
         iconInfo: iconInfo,
-        categories: categories,
+        categories: function () {
+            return categories[this.defaultCollection()].then(function (data) {
+                return data.meta || [];
+            });
+        },
+
+        // collections API
+        collections: collections,
+        collectionTitle: function (collection) {
+            return categories.translatedNames[collection];
+        },
+        defaultCollection: defaultCollection,
+        setDefaultCollection: function (collection) {
+            if (!_(collections).contains(collection))
+                return;
+
+            settings.set('userCollection', collection);
+            settings.save();
+            createCategoryMap();
+        },
+
+        // HTML related API
         unifiedToImageTag: function (text, options) {
             var parsedText;
             options = _.extend({forceProcessing: false}, options);

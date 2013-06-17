@@ -602,11 +602,17 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                                     o.data = JSON.parse(o.data);
                                     module = o.data[i].module;
                                 }
-                                tmp = sanitize(response[i].data, module, o.data[i].columns);
-                                data.push({ data: tmp, timestamp: timestamp });
-                                // handle warnings within multiple
-                                if (response[i].error !== undefined) {
-                                    console.warn('http.js: warning inside multiple');
+                                
+                                // handle errors within multiple
+                                if (response[i].error !== undefined && response[i].category !== 13) {
+                                    data.push({ error: response[i], timestamp: timestamp });
+                                } else {
+                                    //handle warnings within multiple
+                                    if (response[i].category === 13) {
+                                        console.warn('http.js: warning inside multiple');
+                                    }
+                                    tmp = sanitize(response[i].data, module, o.data[i].columns);
+                                    data.push({ data: tmp, timestamp: timestamp });
                                 }
                             } else {
                                 // error
@@ -1113,6 +1119,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                         for (i = 0, $l = q.length; i < $l; i++) {
                             if (data[i].data && data[i].timestamp) {
                                 q[i].deferred.resolve(data[i].data, data[i].timestamp);
+                            } else if (data[i].error) {
+                                q[i].deferred.reject(data[i].error);
                             } else {
                                 q[i].deferred.resolve(data[i]);
                             }

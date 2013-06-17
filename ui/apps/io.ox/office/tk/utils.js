@@ -621,7 +621,7 @@ define.async('io.ox/office/tk/utils',
      *  The trimmed text.
      */
     Utils.trimString = function (text) {
-        return text.replace(/^[\x00-\x1f\s]+(.*?)[\x00-\x1f\s]+$/, '$1');
+        return text.replace(/^[\x00-\x1f\s]+|[\x00-\x1f\s]+$/g, '');
     };
 
     /**
@@ -681,7 +681,7 @@ define.async('io.ox/office/tk/utils',
 
     /**
      * Escapes HTML mark-up characters (angle brackets, ampersand, double
-     * quotes, and apostrophs) in the passed text.
+     * quotes, and apostrophes) in the passed text.
      *
      * @param {String} text
      *  The text containing special HTML mark-up characters.
@@ -690,7 +690,17 @@ define.async('io.ox/office/tk/utils',
      *  The passed text with all mark-up characters escaped.
      */
     Utils.escapeHTML = function (text) {
-        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return Utils.cleanString(text)
+            // replace the ampersand with the text &amp; (must be done first!)
+            .replace(/&/g, '&amp;')
+            // replace the left angle bracket with the text &lt;
+            .replace(/</g, '&lt;')
+            // replace the right angle bracket with the text &gt;
+            .replace(/>/g, '&gt;')
+            // replace the double quote character with the text &quot;
+            .replace(/"/g, '&quot;')
+            // replace the apostrophe with the text &#39; (&apos; is not an HTML entity!)
+            .replace(/'/g, '&#39;');
     };
 
     // options object ---------------------------------------------------------
@@ -1941,13 +1951,12 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
-     *  @param [options.value]
-     *      A value, object, or function that will be copied to the
-     *      'data-value' attribute of the control. Must not be null or
-     *      undefined.
-     *  @param [options.userData]
-     *      A value or object that will be copied to the 'data-userdata'
-     *      attribute of the control. May contain any user-defined data.
+     *  @param {Any} [options.value]
+     *      A value, object, or function that will be copied to the attribute
+     *      'data-value' of the control. Must not be null or undefined.
+     *  @param {Any} [options.userData]
+     *      A value or object that will be copied to the attribute
+     *      'data-userdata' of the control. May contain any user-defined data.
      *  @param {Number|String} [options.width]
      *      The total width of the control element (including padding). If
      *      omitted, the size will be set automatically according to the

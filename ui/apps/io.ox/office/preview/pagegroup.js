@@ -126,7 +126,11 @@ define('io.ox/office/preview/pagegroup',
         var createPageButton = (function () {
 
             var // list of pending buttons waiting to load their page contents
-                pendingInfos = [];
+                pendingInfos = [],
+                // the background loop processing the pending pages
+                timer = null,
+                // the number of pages currently loaded (number of running AJAX requests)
+                runningRequests = 0;
 
             // direct callback: called every time when createPageButton() has been called
             function createButtonNode(page) {
@@ -159,38 +163,54 @@ define('io.ox/office/preview/pagegroup',
                 return buttonNode;
             }
 
-            // deferred callback: loads the pages into the existing button nodes
+            // deferred callback: starts a background loop that loads all pending pages into the button nodes
             function loadPages() {
 
-                var // pending nodes and page number
-                    pendingInfo = null;
+                // check if the background loop is already running
+                if (timer) { return; }
 
-                // find a pending button that is still in the DOM (buttons may have been removed in the meantime)
-                while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(self.getNode(), pendingInfo.buttonNode)) {}
-                if (!pendingInfo) { return; }
+                // create a new background loop that processes all pages contained in pendingInfos
+                timer = app.repeatDelayed(function () {
 
-                // load the page into the button node
-                ViewUtils.loadPageIntoNode(pendingInfo.pageNode, app.getModel(), pendingInfo.page)
-                .done(function (pageSize) {
-                    pendingInfo.busyNode.remove();
-                    pendingInfo.buttonNode.append(pendingInfo.pageNode);
-                    updatePageSize(pendingInfo.buttonNode, pendingInfo.pageNode, pageSize);
-                })
-                .fail(function () {
-                    pendingInfo.busyNode.empty().addClass('icon-remove').css({
-                        color: '#f88',
-                        fontSize: '60px',
-                        lineHeight: pendingInfo.busyNode.height() + 'px',
-                        textDecoration: 'none' // otherwise, IE underlines when hovering
+                    var // pending nodes and page number
+                        pendingInfo = null;
+
+                    // do not request more than 10 pages at a time
+                    if (runningRequests >= 5) { return; }
+
+                    // find a pending button that is still in the DOM (buttons may have been removed
+                    // in the meantime), abort the background loop, if no more pages have to be loaded
+                    while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(self.getNode(), pendingInfo.buttonNode)) {}
+                    if (!pendingInfo) { return Utils.BREAK; }
+
+                    // load the page into the button node
+                    runningRequests += 1;
+                    ViewUtils.loadPageIntoNode(pendingInfo.pageNode, app.getModel(), pendingInfo.page)
+                    .always(function () {
+                        runningRequests -= 1;
+                    })
+                    .done(function (pageSize) {
+                        pendingInfo.busyNode.remove();
+                        pendingInfo.buttonNode.append(pendingInfo.pageNode);
+                        updatePageSize(pendingInfo.buttonNode, pendingInfo.pageNode, pageSize);
+                    })
+                    .fail(function () {
+                        pendingInfo.busyNode.empty().addClass('icon-remove').css({
+                            color: '#f88',
+                            fontSize: '60px',
+                            lineHeight: pendingInfo.busyNode.height() + 'px',
+                            textDecoration: 'none' // otherwise, IE underlines when hovering
+                        });
                     });
-                });
 
-                // if more pages are waiting, return true to repeat deferred callback after the delay
-                return pendingInfos.length > 0;
+                }, { delay: 25 });
+
+                // forget reference to the timer, when all page requests are running
+                timer.done(function () { timer = null; });
             }
 
             // create and return the debounced createPageButton() method
-            return app.createDebouncedMethod(createButtonNode, loadPages, { delay: 25, repeat: true });
+            return app.createDebouncedMethod(createButtonNode, loadPages);
 
         }()); // end of local scope of createPageButton()
 
