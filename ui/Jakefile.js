@@ -251,25 +251,10 @@ function htmlFilter (data) {
         .replace(/@debug@/g, debug);
 }
 
-function bodyFilter(data) {
-    var body_lines = data.split(/\r?\n|\r/);
-    for (var i = 0; i < body_lines.length; i++) {
-        body_lines[i].replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
-            i18n.addMessage({
-                msgid: msgid,
-                locations: [{ name: "html/core_body.html", line: i + 1 }]
-            }, "html/core_body.html");
-        });
-    }
-    i18n.modules.add("io.ox/core/login", "html/core_body.html",
-                     "html/core_body.html");
-    return htmlFilter(data);
-}
-
 utils.copy(utils.list('html', 'core_head.html'),
     { to: 'tmp', filter: htmlFilter });
 utils.copy(utils.list('html', 'core_body.html'),
-    { to: 'tmp', filter: bodyFilter });
+    { to: 'tmp', filter: htmlFilter });
 utils.concat('core', ['html/index.html'], { filter: utils.includeFilter });
 utils.concat('signin', ['html/signin.html'], { filter: utils.includeFilter });
 utils.concat('core.appcache', ['html/core.appcache'], { filter: htmlFilter });
