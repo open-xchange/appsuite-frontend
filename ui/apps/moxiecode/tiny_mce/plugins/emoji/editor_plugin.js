@@ -148,7 +148,7 @@
                     .addClass(category.iconClass);
             }
 
-            var footer = this.$el.find('.emoji-footer'),
+            var footer = this.$el.find('.emoji-footer').empty(),
                 categories = this.emoji.categories();
 
             categories.unshift({
@@ -218,6 +218,7 @@
                 options.find('[data-collection] i').attr('class', 'icon-none');
                 options.find('[data-collection="' + collection + '"]')
                     .find('i').attr('class', 'icon-ok');
+                this.drawCategoryIcons();
             }
         },
 
