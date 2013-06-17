@@ -290,8 +290,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 var collection = options.model.getParticipants();
 
                 node.append(
-                    $('<div class="input-append">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">'),
+                    $('<div class="input-append span6 input-append-fix">').append(
+                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),

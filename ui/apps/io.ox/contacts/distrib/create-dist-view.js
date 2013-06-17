@@ -86,7 +86,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         render: function (baton) {
             var self = this;
 
-            var pNode = $('<div class="autocomplete-controls input-append">').append(
+            var pNode = $('<div class="autocomplete-controls input-append input-append-fix">').append(
                     $('<input tabindex="1" type="text" class="add-participant">').attr('placeholder', gt('Add member') + ' ...'),
                     $('<button class="btn" type="button" data-action="add" tabindex="1">')
                         .append($('<i class="icon-plus">'))

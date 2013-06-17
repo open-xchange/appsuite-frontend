@@ -329,7 +329,7 @@ define('io.ox/calendar/edit/template',
         draw: function (options) {
             var node = this;
             node.append(
-                    $('<div class="input-append span6">').append(
+                    $('<div class="input-append span6 input-append-fix">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
