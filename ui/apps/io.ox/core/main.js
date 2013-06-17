@@ -464,6 +464,9 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
+            if (_.device('small')) {
+                launchers.hide();
+            }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
             launcherDropdown.children().removeClass('active-app')
