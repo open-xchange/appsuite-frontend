@@ -71,7 +71,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             groupNode = this.getNode(),
 
             // appearance of the caret icon
-            caretMode = Utils.getStringOption(options, 'caret', 'all'),
+            caretMode = Utils.getStringOption(options, 'caret', 'add'),
 
             // automatic position and size of the drop-down menu
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
