@@ -52,6 +52,11 @@
             position: relative;
             float:left;
 
+            .person-selected-mail {
+                padding-right: 30px;
+                .ellipsis;
+            }
+
             .remove {
                 position: absolute;
                 top: 0px;
@@ -88,6 +93,15 @@
 
     .alert { margin-top: 1em; }
 
+    .add-participant { width: 340px; }
+
+    .contact-image {
+        float: left;
+        display: inline-block;
+        margin: 0 1em 0 5px;
+        .picture(48px, 48px);
+    }
+
     @media (max-width: 767px) {
         .title-controls .btn-primary { margin-bottom: 5px; }
         .autocomplete-controls {
@@ -105,7 +119,6 @@
                 width: 37px;
                 right: 0px;
             }
-
         }
     }
 
@@ -113,16 +126,6 @@
         .alert { max-width: 340px; }
     }
 
-    .add-participant { width: 340px; }
-
-
-
-    .contact-image {
-        float: left;
-        display: inline-block;
-        margin: 0 1em 0 5px;
-        .picture(48px, 48px);
-    }
 }
 
 
