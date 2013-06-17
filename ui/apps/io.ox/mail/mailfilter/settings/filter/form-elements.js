@@ -79,10 +79,11 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements',
             );
         },
 
-        drawOptionsActions: function (activeValue, values) {
+        drawOptionsActions: function (activeValue, values, classes) {
 
             var active = values[activeValue];
-            return $('<div class="action dropdown value">').append(
+            classes = classes ? classes : '';
+            return $('<div class="action dropdown value ' + classes + '">').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">').text(active),
                 $('<ul class="dropdown-menu">').append(
                     _(values).map(function (name, value) {

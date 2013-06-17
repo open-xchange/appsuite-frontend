@@ -524,7 +524,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         if (/delete|seen/.test(action.flags[0])) {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'text'}).text(actionsTranslations.markmail).append(
                                     $('<div>').addClass('pull-right').append(
-                                        elements.drawOptionsActions(action.flags[0], flagValues),
+                                        elements.drawOptionsActions(action.flags[0], flagValues, 'mark-as'),
                                         elements.drawDeleteButton('action')
                                     )
                               ));
