@@ -34,7 +34,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 self.trigger("redraw", self);
             }
 
-            drawState();
+            this.on("change:" + attribute, drawState);
         },
         number: function ($anchor, attribute, options) {
             var self = this,
@@ -104,7 +104,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 });
             });
 
-            drawState();
+            this.on("change:" + attribute, drawState);
         },
         options: function ($anchor, attribute, options) {
             // First we need to wrap the anchor
@@ -150,7 +150,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
             $anchor.dropdown();
 
-            drawState();
+            this.on("change:" + attribute, drawState);
         },
         custom: function ($anchor, attribute, func, options) {
             func.call(this, $anchor, attribute, options);
