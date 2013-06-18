@@ -83,7 +83,6 @@ sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
-chmod +x "%{buildroot}$APPSUITE/share/update-themes.sh"
 
 find "%{buildroot}$APPSUITE" -type d \
     | sed -e 's,%{buildroot},%dir ,' > tmp/files
