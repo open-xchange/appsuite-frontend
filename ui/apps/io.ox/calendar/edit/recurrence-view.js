@@ -14,10 +14,9 @@ define("io.ox/calendar/edit/recurrence-view",
     ["io.ox/calendar/model",
      "io.ox/core/tk/config-sentence",
      "io.ox/core/date",
-     "io.ox/core/tk/keys",
      "gettext!io.ox/calendar/edit/main",
      "io.ox/core/tk/mobiscroll",
-     "less!io.ox/calendar/edit/style.less"], function (model, ConfigSentence, dateAPI, KeyListener, gt) {
+     "less!io.ox/calendar/edit/style.less"], function (model, ConfigSentence, dateAPI, gt) {
 
     "use strict";
 
@@ -136,8 +135,7 @@ define("io.ox/calendar/edit/recurrence-view",
                 e.preventDefault();
                 var $dateInput = $('<input type="text" class="input-small no-clone">').css({
                         marginBottom: 0
-                    }).val(renderDate()),
-                    keys = new KeyListener($dateInput);
+                    }).val(renderDate());
 
                 if (_.device('small')) {
                     $dateInput.mobiscroll().date();
@@ -160,7 +158,6 @@ define("io.ox/calendar/edit/recurrence-view",
                 } else {
                     $dateInput.select();
                 }
-                keys.include();
 
                 // On change
                 function updateValue() {
@@ -171,31 +168,22 @@ define("io.ox/calendar/edit/recurrence-view",
                         self.trigger("change:" + attribute, self);
                         drawState();
                     }
-                    keys.destroy();
                     try {
                         $dateInput.datepicker('remove');
                         $dateInput.remove();
                     } catch (e) { }
-                    $anchor.show();
+                    $anchor.show().focus();
                 }
 
-                $dateInput.on("change", function () {
+                $dateInput.on("hide", function (e) {
                     updateValue();
                 });
 
                 // Enter
-                $dateInput.on("enter", function () {
-                    updateValue();
-                });
-
-                // Escape
-                keys.on("esc", function () {
-                    $dateInput.val(self[attribute]);
-                    keys.destroy();
-                    try {
-                        $dateInput.remove();
-                    } catch (e) { }
-                    $anchor.show();
+                $dateInput.on("keydown", function (e) {
+                    if (e.which === 13) {
+                        updateValue();
+                    }
                 });
             });
 
@@ -687,7 +675,7 @@ define("io.ox/calendar/edit/recurrence-view",
                         this.choice.ghost(),
                         (this.choice && this.choice.id === "no-choice") ? $() : this.endsChoice.ghost(),
                         $("<span>&nbsp;</span>")
-                    ).focus();
+                    );
                 } else {
                     this.controls.checkboxLabel.css('display', 'block');
                 }
@@ -860,6 +848,7 @@ define("io.ox/calendar/edit/recurrence-view",
                 this.more = false;
                 this.nodes.recView.hide();
                 this.updateSummary();
+                $('a:first', this.nodes.summary).focus();
             },
             toggle: function () {
                 if (this.controls.checkbox.is(":checked")) {
