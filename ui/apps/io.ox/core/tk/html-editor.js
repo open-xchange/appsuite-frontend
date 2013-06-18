@@ -560,10 +560,14 @@ define.async('io.ox/core/tk/html-editor',
             // loop over top-level nodes
             var tmp = '';
             $(ed.getBody()).children().each(function () {
-                var text = '';
+                var text = '',
+                    content;
                 // get text via selection
+                // use jQuery to parse HTML, because there is no obvious way to
+                // transform the emoji img tags to unicode before getContent call
                 ed.selection.select(this, true);
-                text = ed.selection.getContent({ format: 'text' });
+                content = emoji.imageTagsToUnified(ed.selection.getContent());
+                text = $('<div>').html(content).text();
                 switch (this.tagName) {
                 case 'BLOCKQUOTE':
                     tmp += quote(text) + '\n\n';
