@@ -40,7 +40,7 @@ define("io.ox/calendar/edit/recurrence-view",
                     selectedDays = [];
 
                 _(nodes).each(function (node, day) {
-                    node.find("span").removeClass("icon-ok, icon-remove");
+                    node.find("span").removeClass("icon-ok icon-remove");
                     if (value[day]) {
                         selectedDays.push(DAYS.i18n[day]);
                         node.find("span").addClass("icon-ok");
@@ -55,7 +55,12 @@ define("io.ox/calendar/edit/recurrence-view",
 
             // Now build the menu
             var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
-            _(DAYS.values).each(function (day, value) {
+
+            for (var i = 0; i < dateAPI.locale.weekStart; i++) {
+                DAYS.values.push(DAYS.values.shift());
+            }
+
+            _(DAYS.values).each(function (day) {
                 $menu.append(
                      nodes[day] = $('<li>')
                         .append($('<a href="#">')
@@ -560,12 +565,9 @@ define("io.ox/calendar/edit/recurrence-view",
                     type = this.model.get('recurrence_type');
 
                 if (type === RECURRENCE_TYPES.NO_RECURRENCE) {
-                    this.nodes.summary.empty().text(gt("Repeat"));
                     this.controls.checkbox.removeAttr("checked");
-                    this.controls.checkboxLabel.css('display', 'inline-block');
                 } else {
                     this.controls.checkbox.attr('checked', 'checked');
-                    this.controls.checkboxLabel.css('display', 'block');
                     this.lastConfiguration = {};
 
                     _(["recurrence_type", "days", "day_in_month", "interval", "occurrences", "until"]).each(function (attr) {
@@ -671,27 +673,23 @@ define("io.ox/calendar/edit/recurrence-view",
                 this.updatingView = false;
             },
             updateSummary: function () {
-                var self = this,
-                    sum = this.nodes.summary.empty();
-                if (this.model.get('recurrence_type') === RECURRENCE_TYPES.NO_RECURRENCE) {
-                    sum.text(gt("Repeat"));
+                var sum;
+                this.nodes.summary
+                    .empty()
+                    .append(
+                        $("<span>&nbsp;</span>"),
+                        sum = $('<a href="#" tabindex="' + this.tabindex + '">')
+                            .css('fontSize', 'small')
+                    );
+                if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
+                    this.controls.checkboxLabel.css('display', 'inline-block');
+                    sum.append(
+                        this.choice.ghost(),
+                        (this.choice && this.choice.id === "no-choice") ? $() : this.endsChoice.ghost(),
+                        $("<span>&nbsp;</span>")
+                    ).focus();
                 } else {
-                    if (!this.more) {
-                        this.nodes.summary.append(sum = $('<a href="#" tabindex="' + self.tabindex + '">'));
-                    }
-                    if (this.choice && this.choice.id === "no-choice") {
-                        sum.append(
-                            this.choice.ghost(),
-                            $("<span>&nbsp;</span>")
-                        );
-                    } else {
-                        sum.append(
-                            this.choice.ghost(),
-                            this.endsChoice.ghost(),
-                            $("<span>&nbsp;</span>")
-                        );
-                    }
-                    sum.focus();
+                    this.controls.checkboxLabel.css('display', 'block');
                 }
             },
             updateModel: function () {
@@ -854,13 +852,13 @@ define("io.ox/calendar/edit/recurrence-view",
             },
             showMore: function () {
                 this.more = true;
-                this.nodes.recView.slideDown();
+                this.nodes.recView.show();
                 $('a:first', this.nodes.recView).focus();
                 this.updateSummary();
             },
             showLess: function () {
                 this.more = false;
-                this.nodes.recView.slideUp();
+                this.nodes.recView.hide();
                 this.updateSummary();
             },
             toggle: function () {
@@ -962,8 +960,9 @@ define("io.ox/calendar/edit/recurrence-view",
                         $('<div class="row-fluid">').append(
                             this.controls.checkboxLabel.append(
                                 this.controls.checkbox,
-                                this.nodes.summary
-                            )
+                                $.txt(gt("Repeat"))
+                            ),
+                            this.nodes.summary
                         ),
                         this.nodes.recView.append(
                             this.controls.detailToggle,
