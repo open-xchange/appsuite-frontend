@@ -68,8 +68,8 @@
 
             var collectionControl = this.emoji.settings.get('collectionControl', 'tabs');
 
-            this.showTabs = collectionControl === 'tabs';
-            this.showDropdown = collectionControl === 'dropdown';
+            this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
+            this.showDropdown = collectionControl === 'dropdown' && this.emoji.collections.length > 1;
 
             // add tab-control?
             if (this.showTabs) {
