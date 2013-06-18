@@ -53,7 +53,14 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
             Symbols: gt('Symbols'),
             Nature: gt('Nature'),
             Objects: gt('Objects'),
-            Places: gt('Places')
+            Places: gt('Places'),
+            // tabs
+            commonEmoji:
+                //#. Emojis that work across all Japanese carriers. In Japanese: 他社共通絵文字
+                gt('Common Emoji'),
+            allEmoji:
+                //#. Emojis of SoftBank set. In Japanese: 全絵文字
+                gt('All Emoji')
         }
     };
 });
