@@ -107,7 +107,7 @@ define('io.ox/mail/util',
         getChannel: function (value, check) {
             //default value
             check = check || typeof check === 'undefined';
-            var type = value.indexOf(that.getChannelSuffixes().MSISDN) > -1,
+            var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
                 //no check OR activated cap
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
@@ -410,6 +410,7 @@ define('io.ox/mail/util',
             }, 0);
         },
 
+        //deprecated?
         getInitialDefaultSender: function () {
             var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
