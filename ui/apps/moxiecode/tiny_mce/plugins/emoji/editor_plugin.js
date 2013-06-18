@@ -15,6 +15,13 @@
 
     'use strict';
 
+    // helper
+
+    function closeView(ed, e) {
+        if (e.which === 9) return;
+        if (this.isOpen) this.toggle();
+    }
+
     //
     // View. One per editor instance.
     //
@@ -58,8 +65,10 @@
         },
 
         initialize: function (options) {
+
             this.editor = options.editor;
             this.isRendered = false;
+            this.isOpen = false;
             this.currentCategory = '';
             this.currentCollection = '';
         },
@@ -111,6 +120,13 @@
             this.setCollection();
             this.drawOptions();
             this.isRendered = true;
+            this.isOpen = true;
+
+            // auto close emoji view on keypress or click inside editor
+            if (this.emoji.settings.get('autoClose') === true) {
+                this.editor.onKeyDown.add(_.bind(closeView, this));
+                this.editor.onClick.add(_.bind(closeView, this));
+            }
 
             return this;
         },
@@ -233,6 +249,7 @@
                 this.render();
             } else {
                 this.$el.toggle();
+                this.isOpen = !this.isOpen;
             }
         }
     });
