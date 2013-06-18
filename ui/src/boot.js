@@ -713,6 +713,10 @@ $(window).load(function () {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
+
+            // make sure we get 'signin' plugins
+            manifests.reset();
+
             return $.when(
                     // load extensions
                     manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
