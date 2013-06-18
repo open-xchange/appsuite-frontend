@@ -14,19 +14,27 @@ define('io.ox/mail/print',
     ['io.ox/core/print',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'gettext!io.ox/mail'], function (print, api, util, gt) {
+     'io.ox/mail/view-detail',
+     'gettext!io.ox/mail'], function (print, api, util, detailview,  gt) {
 
     'use strict';
 
-    var regImageSrc = /(<img[^>]+src=")\/ajax/g;
+    var regImageSrc = /(<img[^>]+src=")\/ajax/g,
+        //TODO: add setting (html OR text)
+        type = 'html';
 
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
-        var source = String(data.attachments[0].content || ''),
-            isLarge = source.length > 1024 * 512; // > 512 KB
-        // replace images on source level
-        source = source.replace(regImageSrc, '$1' + ox.apiRoot);
-        return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
+        if (type === 'text') {
+            var source = String(data.attachments[0].content || ''),
+                isLarge = source.length > 1024 * 512; // > 512 KB
+            // replace images on source level
+            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+            return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
+        } else {
+            //use cleanup from detailview
+            return detailview.getContent(data).content.html();
+        }
     }
 
     function getList(data, field) {
@@ -54,7 +62,7 @@ define('io.ox/mail/print',
             print.smart({
 
                 get: function (obj) {
-                    return api.get(_.extend({ view: 'text' }, obj));
+                    return api.get(_.extend({ view: type}, obj));
                 },
 
                 i18n: {
@@ -64,7 +72,7 @@ define('io.ox/mail/print',
 
                 process: process,
                 selection: selection,
-                selector: '.mail',
+                selector: '.mail' + '-' + type,
                 sortBy: 'sort_date',
                 window: win
             });
