@@ -48,9 +48,10 @@ define("io.ox/mail/accounts/model",
                 required: true,
                 msg: gt('This field has to be filled')
             },
-            login: {
-                required: true,
-                msg: gt('This field has to be filled')
+            login: function (value) {
+                //for setups without any explicit login name for primary account
+                if (this.attributes.id !== 0 && $.trim(value) === '')
+                    return gt('This field has to be filled');
             },
             transport_server: {
                 required: true,
