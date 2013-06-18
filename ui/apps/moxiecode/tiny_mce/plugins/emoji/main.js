@@ -116,7 +116,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     .filter(function (icon) {
                         // encode unicode to avoid backend bug
                         var key = escape(icon.unicode);
-                        return key in recently;
+                        return key in recently && !!icon.category;
                     })
                     .map(function (icon) {
                         var key = escape(icon.unicode);
