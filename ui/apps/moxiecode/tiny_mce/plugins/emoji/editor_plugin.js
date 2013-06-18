@@ -70,21 +70,18 @@
 
             this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
             this.showDropdown = collectionControl === 'dropdown' && this.emoji.collections.length > 1;
-            if (!this.currentCategory) {
-                this.setCategory(_(this.emoji.categories()).first().name);
-            }
 
             // add tab-control?
             if (this.showTabs) {
                 this.$el.addClass('emoji-use-tabs').append(
                     $('<div class="emoji-tabs abs">').append(
-                        // TODO: we directly use the Japanese terms; no translation
+                        // we directly use the Japanese terms; no translation
                         $('<a href="#" class="emoji-tab left abs" tabindex="5">')
-                            .attr('data-collection', 'softbank')
-                            .text('SoftBank'),
-                        $('<a href="#" class="emoji-tab right abs" tabindex="5">')
                             .attr('data-collection', 'japan_carrier')
-                            .text('Japanese')
+                            .text('他社共通絵文字'),
+                        $('<a href="#" class="emoji-tab right abs" tabindex="5">')
+                            .attr('data-collection', 'softbank')
+                            .text('全絵文字')
                     )
                 );
             }
@@ -111,9 +108,8 @@
                 $('<div class="emoji-footer abs">')
             );
 
+            this.setCollection();
             this.drawOptions();
-            this.drawCategoryIcons();
-            this.drawEmojis();
             this.isRendered = true;
 
             return this;
@@ -124,7 +120,7 @@
 
             var pane = this.$el.find('.emoji-options ul'),
                 options = this.emoji.collections,
-                defaultCollection = this.emoji.defaultCollection(),
+                current = this.currentCollection,
                 self = this;
 
             pane.append(
@@ -133,8 +129,8 @@
                         $('<a href="#" class="emoji-option">')
                         .attr('data-collection', collection)
                         .append(
-                            $('<i>').addClass(collection === defaultCollection ? 'icon-ok' : 'icon-none'),
-                            $.txt(self.emoji.collectionTitle(collection))
+                            $('<i>').addClass(options === current ? 'icon-ok' : 'icon-none'),
+                            $.txt(self.emoji.getTitle(collection))
                         )
                     );
                 })
@@ -151,15 +147,11 @@
             }
 
             var footer = this.$el.find('.emoji-footer').empty(),
-                categories = this.emoji.categories();
+                categories = this.emoji.getCategories();
 
-            categories.unshift({
-                name: 'recently',
-                title: 'Recently used',
-                iconClass: 'emoji1f552'
-            });
+            categories.unshift(this.emoji.getRecently());
 
-            footer.append(
+            footer.empty().append(
                 _(categories).map(draw)
             );
         },
@@ -193,34 +185,45 @@
 
         // set current category. sets title and triggers repaint of all icons
         setCategory: function (category) {
-            if (category !== this.currentCategory) {
-                this.currentCategory = category;
-                this.$el.find('.emoji-category').text(category);
-                this.drawEmojis();
+
+            if (category === undefined) {
+                category = this.currentCategory === 'recently' || this.emoji.hasCategory(this.currentCategory) ?
+                    this.currentCategory :
+                    this.emoji.getDefaultCategory();
             }
+
+            // always draw emojis because the collection might have changed
+            this.currentCategory = category;
+            this.$el.find('.emoji-category').text(this.emoji.getTitle(category));
+            this.drawEmojis();
         },
 
         setCollection: function (collection) {
 
+            if (collection === undefined) {
+                collection = this.emoji.getCollection();
+            }
+
             if (collection !== this.currentCollection) {
 
                 this.currentCollection = collection;
-                this.emoji.setDefaultCollection(collection);
+                this.emoji.setCollection(collection);
 
                 // set active collection in tab-conrol
                 if (this.showTabs) {
                     var tabs = this.$el.find('.emoji-tabs');
                     tabs.find('[data-collection]').removeClass('active');
                     tabs.find('[data-collection="' + collection + '"]').addClass('active');
-                    return;
+                } else {
+                    // set visual check-mark in drop-down menu
+                    var options = this.$el.find('.emoji-options');
+                    options.find('[data-collection] i').attr('class', 'icon-none');
+                    options.find('[data-collection="' + collection + '"]')
+                        .find('i').attr('class', 'icon-ok');
                 }
 
-                // set visual check-mark in drop-down menu
-                var options = this.$el.find('.emoji-options');
-                options.find('[data-collection] i').attr('class', 'icon-none');
-                options.find('[data-collection="' + collection + '"]')
-                    .find('i').attr('class', 'icon-ok');
                 this.drawCategoryIcons();
+                this.setCategory();
             }
         },
 
@@ -250,7 +253,7 @@
                 view = new EmojiView({ editor: ed });
                 // load required code now
                 require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
-                    view.emoji = emoji;
+                    view.emoji = emoji.getInstance();
                     // hook into tinyMCE's DOM
                     var container = $(ed.getContainer());
                     container.find('.mceIframeContainer').parent().append(

@@ -19,85 +19,69 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     "use strict";
 
-    //"invert" the categories object
-    function createCategoryMap() {
-        var cat = categories[defaultCollection()];
-
-        category_map = _.object(
-            _(cat).chain().values().flatten(true).value(),
-            _(cat)
-                .chain()
-                .pairs()
-                .map(function (item) {
-                    var category = item[0];
-                    return _(item[1]).map(function () {
-                        return category;
-                    });
-                })
-                .flatten(true)
-                .value()
-        );
-        icons = _(emoji.EMOJI_MAP)
-            .chain()
-            .pairs()
-            .map(iconInfo)
-            .value();
-    }
-
-    function defaultCollection() {
-        var defaultCollection = settings.get('defaultCollection');
-        return settings.get('userCollection', defaultCollection);
-    }
-
-    function iconInfo(icon) {
-        if (_.isString(icon)) {
-            return iconInfo([icon, emoji.EMOJI_MAP[icon]]);
-        }
-        if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
-            return {invalid: true};
-
-        return {
-            css: cssFor(icon[0]),
-            unicode: icon[0],
-            desc: icon[1][1],
-            category: category_map[icon[0]] || 'People' // matthias: was undefined, needed that to continue
-        };
-    }
-
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
         var e = settings.get('availableCollections');
 
-        return _(e.split(','))
-            .map(function (collection) {
-                return collection.trim();
-            });
+        return _(e.split(',')).map(function (collection) {
+            return collection.trim();
+        });
     }
 
-    function cssFor(unicode) {
-        var icon = emoji.EMOJI_MAP[unicode];
-        if (defaultCollection() === 'softbank' || defaultCollection() === 'japan_carrier') {
-            return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
-        }
-
-        return 'emoji' + icon[2];
-    }
-
-    var category_map = {},
-        icons = [],
-        collections = parseCollections();
-
-    // generate category_map for the first time
-    createCategoryMap();
+    var collections = parseCollections();
 
     function escape(s) {
         return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
     }
 
-    return _.extend({
+    // introduce Emoji class
+    function Emoji() {
+
+        // inherit from emoji
+        _.extend(this, emoji);
 
         // plain data API
-        icons: icons,
+        this.icons = [];
+        this.collections = collections;
+        this.category_map = {};
+
+        // make settings accessible, esp. for editor plugin
+        this.settings = settings;
+
+        var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
+        this.currentCollection = settings.get('userCollection', defaultCollection);
+
+        this.createCategoryMap();
+    }
+
+    _.extend(Emoji.prototype, {
+
+        iconInfo: function (icon) {
+
+            if (_.isString(icon))
+                return this.iconInfo([icon, emoji.EMOJI_MAP[icon]]);
+
+            if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
+                return { invalid: true };
+
+            return {
+                css: this.cssFor(icon[0]),
+                unicode: icon[0],
+                desc: icon[1][1],
+                category: this.category_map[icon[0]]
+            };
+        },
+
+        cssFor: function (unicode) {
+
+            var icon = emoji.EMOJI_MAP[unicode];
+
+            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
+                return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            }
+
+            return 'emoji' + icon[2];
+        },
 
         // add to "recently used" category
         recent: function (unicode) {
@@ -116,13 +100,17 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             settings.set('recently', recently).save();
         },
 
+        getRecently: function () {
+            return categories.recently;
+        },
+
         iconsForCategory: function (category) {
 
             if (category === 'recently') {
 
                 var recently = settings.get('recently', {});
 
-                return _(icons)
+                return _(this.icons)
                     .chain()
                     // get relevant icons
                     .filter(function (icon) {
@@ -149,33 +137,72 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     .value();
             }
 
-            return _(icons).filter(function (icon) {
+            return _(this.icons).filter(function (icon) {
                 return icon.category === category;
             });
         },
 
-        iconInfo: iconInfo,
-
-        categories: function () {
-            return categories[this.defaultCollection()].meta || [];
+        getCategories: function () {
+            return (categories[this.currentCollection].meta || []).slice(); // return copy
         },
 
-        // collections API
-        collections: collections,
-
-        collectionTitle: function (collection) {
-            return categories.translatedNames[collection];
+        getDefaultCategory: function () {
+            return (_(this.getCategories()).first() || {}).name;
         },
 
-        defaultCollection: defaultCollection,
+        hasCategory: function (category) {
+            return _(categories[this.currentCollection].meta).chain().pluck('name').indexOf(category).value() > -1;
+        },
 
-        setDefaultCollection: function (collection) {
+        getTitle: function (id) {
+            return categories.translations[id];
+        },
 
-            if (!_(collections).contains(collection)) return;
+        setCollection: function (collection) {
 
-            settings.set('userCollection', collection);
-            settings.save();
-            createCategoryMap();
+            if (!_(this.collections).contains(collection)) return;
+
+            this.currentCollection = collection;
+            settings.set('userCollection', collection).save();
+            this.createCategoryMap();
+        },
+
+        getCollection: function () {
+            return this.currentCollection;
+        },
+
+        // "invert" the categories object
+        createCategoryMap: function () {
+
+            var cat = categories[this.currentCollection];
+
+            this.category_map = _.object(
+                _(cat).chain().values().flatten(true).value(),
+                _(cat)
+                    .chain()
+                    .pairs()
+                    .map(function (item) {
+                        var category = item[0];
+                        return _(item[1]).map(function () {
+                            return category;
+                        });
+                    })
+                    .flatten(true)
+                    .value()
+            );
+
+            this.icons = _(emoji.EMOJI_MAP)
+                .chain()
+                .pairs()
+                .map(this.iconInfo, this)
+                .value();
+        }
+    });
+
+    return {
+
+        getInstance: function () {
+            return new Emoji();
         },
 
         // HTML related API
@@ -213,10 +240,6 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
 
             return node.html();
-        },
-
-        // make settings accessible, esp. for editor plugin
-        settings: settings
-
-    }, emoji);
+        }
+    };
 });
