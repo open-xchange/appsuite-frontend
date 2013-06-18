@@ -76,11 +76,8 @@ define('io.ox/office/tk/dropdown/dropdown',
             // automatic position and size of the drop-down menu
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
 
-            // the drop-down caret
-            caretSpan = (caretMode !== 'none') ? $('<span>').addClass('dropdown-caret').append(Utils.createIcon('docs-caret down')) : $(),
-
             // the drop-down button
-            menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button').append(caretSpan),
+            menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
 
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
@@ -486,6 +483,11 @@ define('io.ox/office/tk/dropdown/dropdown',
         };
 
         // initialization -----------------------------------------------------
+
+        // initialize the caret icon
+        if (caretMode !== 'none') {
+            menuButton.addClass('caret-visible').append($('<span>').addClass('dropdown-caret').append(Utils.createIcon('docs-caret down')));
+        }
 
         // append menu button and menu to the group container
         this.addFocusableControl(menuButton);

@@ -1204,9 +1204,9 @@ define.async('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the iteration. Supports the following
      *  options:
-     *  @param {Boolean} [options.children]
+     *  @param {Boolean} [options.children=false]
      *      If set to true, only direct child nodes will be visited.
-     *  @param {Boolean} [options.reverse]
+     *  @param {Boolean} [options.reverse=false]
      *      If set to true, the descendant nodes are visited in reversed order.
      *
      * @returns {Utils.BREAK|Undefined}
@@ -2058,7 +2058,7 @@ define.async('io.ox/office/tk/utils',
      * @param {jQuery} controls
      *  A jQuery collection containing one or more form controls.
      *
-     * @param {Boolean} [state]
+     * @param {Boolean} [state=true]
      *  If omitted or set to true, all form controls in the passed collection
      *  will be enabled. Otherwise, all controls will be disabled.
      *
@@ -2436,7 +2436,7 @@ define.async('io.ox/office/tk/utils',
         }
     };
 
-    // functions for the global timer ----------------------------------------------------
+    // global timer -----------------------------------------------------------
 
     /**
      * Starting the global timer.
