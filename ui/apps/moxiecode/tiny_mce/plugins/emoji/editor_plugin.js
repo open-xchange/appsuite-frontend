@@ -70,6 +70,9 @@
 
             this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
             this.showDropdown = collectionControl === 'dropdown' && this.emoji.collections.length > 1;
+            if (!this.currentCategory) {
+                this.setCategory(_(this.emoji.categories()).first().name);
+            }
 
             // add tab-control?
             if (this.showTabs) {
@@ -110,6 +113,7 @@
 
             this.drawOptions();
             this.drawCategoryIcons();
+            this.drawEmojis();
             this.isRendered = true;
 
             return this;
