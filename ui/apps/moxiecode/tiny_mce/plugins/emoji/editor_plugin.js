@@ -75,6 +75,9 @@
 
         render: function () {
 
+            // outer container first to fix firefox's problems with position: relative in table cells
+            var node = $('<div class="table-cell-fix">');
+
             var collectionControl = this.emoji.settings.get('collectionControl', 'tabs');
 
             this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
@@ -82,7 +85,7 @@
 
             // add tab-control?
             if (this.showTabs) {
-                this.$el.addClass('emoji-use-tabs').append(
+                node.addClass('emoji-use-tabs').append(
                     $('<div class="emoji-tabs abs">').append(
                         // we directly use the Japanese terms; no translation
                         $('<a href="#" class="emoji-tab left abs" tabindex="5">')
@@ -95,7 +98,7 @@
                 );
             }
 
-            this.$el.append(
+            node.append(
                 $('<div class="emoji-header abs">').append(
                     // Options drop down
                     this.showDropdown ?
@@ -116,6 +119,8 @@
                 $('<div class="emoji-icons abs">'),
                 $('<div class="emoji-footer abs">')
             );
+
+            this.$el.append(node);
 
             this.setCollection();
             this.drawOptions();

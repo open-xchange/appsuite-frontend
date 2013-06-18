@@ -36,11 +36,17 @@ img.emoji {
     background-position: -380px -300px;
 }
 
+.oxSkin .table-cell-fix {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
 .oxSkin .mceEmojiPane {
 
     display: table-cell;
+    height: 100%;
     width: 255px;
-    position: relative;
     vertical-align: top;
 
     border: 1px solid #ccc;
@@ -108,7 +114,7 @@ img.emoji {
         }
     }
 
-    &.emoji-use-tabs .emoji-header {
+    .emoji-use-tabs .emoji-header {
         top: @emojiTabHeight;
     }
 
@@ -138,7 +144,7 @@ img.emoji {
         background-color: white;
     }
 
-    &.emoji-use-tabs .emoji-icons {
+    .emoji-use-tabs .emoji-icons {
         top: 34px + @emojiTabHeight;
     }
 
