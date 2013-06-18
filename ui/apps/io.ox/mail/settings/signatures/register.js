@@ -74,7 +74,7 @@ define('io.ox/mail/settings/signatures/register',
         popup = new dialogs.ModalDialog();
         popup.header($("<h4>").text(gt('Edit signature')));
         popup.append(
-            $('<form>').append(
+            $('<div>').append(
                 $('<div class="row-fluid">').append(
                     $name = $('<input type="text" class="span12">').attr('placeholder', gt('Name'))
                 ),
@@ -302,12 +302,12 @@ define('io.ox/mail/settings/signatures/register',
                 } catch (e) {
                     console.error(e, e.stack);
                 }
-                
+
                 function radioChange() {
                     var type = radioCustom.attr('checked') ? 'custom' : 'none';
                     settings.set('mobileSignatureType', type).save();
                 }
-                
+
                 function textChange() {
                     settings.set('mobileSignature', signatureText.val()).save();
                 }
