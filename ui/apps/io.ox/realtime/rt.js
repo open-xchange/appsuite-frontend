@@ -46,6 +46,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var initialReset = true;
     var silenceCount = 0;
     var loadDetectionTimer = null;
+    var highLoad = false;
     var closeCount = 0;
     var ackBuffer = {};
 
@@ -511,6 +512,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     setInterval(function () {
         if (silenceCount < 7 && !disconnected) {
+            if (highLoad) {
+                highLoad = false;
+                api.trigger("normalLoad");
+            }
             _(resendBuffer).each(function (m) {
                 m.count++;
                 if (m.count < INFINITY) {
