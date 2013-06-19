@@ -202,12 +202,8 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    // resolve chicken-and-egg problem with setLanguage and gettext!... module
-    require(['gettext']).done(function (gettext) {
-        gettext.setLanguage('en_US');
-    });
-    
-    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes, gt) {
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+        var gt; // set by initialize()
 
         debug('boot.js: require > loadSuccess');
 
@@ -558,7 +554,7 @@ $(window).load(function () {
                             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
-                            initialize();
+                            require(['io.ox/core/login-i18n']).done(initialize);
                         },
                         function fail() {
                             // nope, had some stuff in the caches but server is down
@@ -674,7 +670,8 @@ $(window).load(function () {
         /**
          * Initialize login screen
          */
-        initialize = function () {
+        initialize = function (gtModule) {
+            gt = gtModule;
 
             // shortcut
             var sc = ox.serverConfig,
@@ -863,7 +860,7 @@ $(window).load(function () {
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
         'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
-        'themes', 'io.ox/core/login-i18n', 'io.ox/core/settings'],
+        'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );
 
