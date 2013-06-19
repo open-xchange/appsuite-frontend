@@ -27,7 +27,8 @@ define('io.ox/calendar/edit/template',
 
     'use strict';
 
-    var point = views.point('io.ox/calendar/edit/section');
+    var point = views.point('io.ox/calendar/edit/section'),
+        collapsed = false;
 
     // subpoint for conflicts
     var pointConflicts = point.createSubpoint('conflicts', {
@@ -211,7 +212,7 @@ define('io.ox/calendar/edit/template',
         id: 'find-free-time-1',
         index: 550,
         nextTo: 'end-date',
-        draw: function (baton) {
+        draw: function () {
             if (_.device('!small')) {
                 this.append(
                     $('<div class="span4"><label class="find-free-time"></label></div>')
@@ -230,13 +231,17 @@ define('io.ox/calendar/edit/template',
         index: 600
     }));
 
+    // move recurrence view to collapsible area on mobile devices
+    var recurrenceIndex = _.device('small') ? 950 : 650;
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'span12',
         tabindex: 1,
-        index: 650
-    }));
+        index: recurrenceIndex
+    }), {
+        rowClass: 'collapsed'
+    });
 
     // note
     point.extend(new forms.InputField({
@@ -249,11 +254,30 @@ define('io.ox/calendar/edit/template',
         label: gt("Description")
     }));
 
+    // separator or toggle
     point.basicExtend({
         id: 'noteSeparator',
         index: 750,
-        draw: function () {
-            this.append($('<span>&nbsp;</span>'));
+        draw: function (baton) {
+            var self = this;
+            if (_.device('small')) {
+                this.append(
+                    $('<a href="#">')
+                        .text(gt('Expand form'))
+                        .addClass('actionToggle')
+                        .on('click', function () {
+                            $('.row-fluid.collapsed', baton.parentView.$el).toggle();
+                            if (collapsed) {
+                                $(this).text(gt('Expand form'));
+                            } else {
+                                $(this).text(gt('Collapse form'));
+                            }
+                            collapsed = !collapsed;
+                        })
+                );
+            } else {
+                this.append($('<span>&nbsp;</span>'));
+            }
         }
     });
 
@@ -267,7 +291,9 @@ define('io.ox/calendar/edit/template',
             attribute: 'alarm',
             label: gt("Reminder"),
             selectOptions: util.getReminderOptions()
-        }));
+        }), {
+            rowClass: 'collapsed'
+        });
     }());
 
     // shown as
@@ -286,7 +312,8 @@ define('io.ox/calendar/edit/template',
             4: gt('Free')
         }
     }), {
-        nextTo: 'alarm'
+        nextTo: 'alarm',
+        rowClass: 'collapsed'
     });
 
     // private?
@@ -300,7 +327,8 @@ define('io.ox/calendar/edit/template',
         attribute: 'private_flag',
         index: 1000
     }), {
-        nextTo: 'shown_as'
+        nextTo: 'shown_as',
+        rowClass: 'collapsed'
     });
 
     // participants label
@@ -309,12 +337,15 @@ define('io.ox/calendar/edit/template',
         className: 'span12 find-free-time',
         label: gt('Participants'),
         index: 1300
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
     // participants
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
+        rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
@@ -328,6 +359,7 @@ define('io.ox/calendar/edit/template',
     point.basicExtend({
         id: 'add-participant',
         index: 1500,
+        rowClass: 'collapsed',
         draw: function (options) {
             var node = this,
             input;
@@ -416,7 +448,8 @@ define('io.ox/calendar/edit/template',
             this.$el.css("paddingTop", "5px");
         }
     }), {
-        nextTo: "add-participant"
+        nextTo: "add-participant",
+        rowClass: 'collapsed'
     });
 
     // Attachments
@@ -427,7 +460,9 @@ define('io.ox/calendar/edit/template',
         className: 'span12',
         label: gt('Attachments'),
         index: 1600
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
 
     point.extend(new attachments.EditableAttachmentList({
@@ -445,11 +480,14 @@ define('io.ox/calendar/edit/template',
             }
             api.attachmentCallback(obj);
         }
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
     point.basicExtend({
         id: 'attachments_upload',
         index: 1800,
+        rowClass: 'collapsed',
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
                 $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
@@ -488,11 +526,14 @@ define('io.ox/calendar/edit/template',
                 app.view.baton.attachmentList.addFile(fileData);
             });
         }
+    }, {
+        rowClass: 'collapsed'
     });
 
     point.basicExtend({
         id: 'dummy_spacer',
         index: 10000,
+        rowClass: 'collapsed',
         draw: function () {
             this.append('<div>').css('height', '100px');
         }

@@ -44,6 +44,7 @@ define('io.ox/calendar/edit/view-main',
             _(rows).each(function (row) {
                 var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
                 _(row).each(function (extension) {
+                    $rowNode.addClass(extension.rowClass || '');
                     extension.invoke("draw", $rowNode, self.baton);
                 });
             });
