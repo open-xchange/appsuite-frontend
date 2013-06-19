@@ -495,7 +495,7 @@ define.async('io.ox/core/tk/html-editor',
         var resizeEditor = _.debounce(function () {
                 var p = textarea.parent(), w = p.width(), h = p.height(),
                     iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
-                p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
+                p.find('table.mceLayout').css({ width: w + 'px', height: iframeHeight + 'px' });
                 p.find('iframe').css('height', iframeHeight + 'px');
             }, 100),
 
