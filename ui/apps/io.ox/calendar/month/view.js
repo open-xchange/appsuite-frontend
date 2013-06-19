@@ -281,7 +281,7 @@ define('io.ox/calendar/month/view',
                     });
                     return tmp;
                 }),
-                $('<div>').addClass('scrollpane')
+                $('<div class="scrollpane f6-target" tabindex="1">')
             );
     };
 

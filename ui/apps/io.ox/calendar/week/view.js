@@ -80,7 +80,7 @@ define('io.ox/calendar/week/view',
             this.options = _.extend(this.options, opt);
 
             // initialize main objects
-            this.pane           = $('<div>').addClass('scrollpane').attr({ tabindex: 1 });
+            this.pane           = $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 });
             this.fulltimePane   = $('<div>').addClass('fulltime');
             this.fulltimeCon    = $('<div>').addClass('fulltime-container');
             this.fulltimeNote   = $('<div>').addClass('note');

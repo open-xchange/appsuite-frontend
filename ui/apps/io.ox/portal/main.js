@@ -401,7 +401,9 @@ define('io.ox/portal/main',
             simple: _.device('small')
         }));
 
-        ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main.addClass('io-ox-portal'), appBaton);
+        win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
+
+        ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
         app.updateTitle();
         _.tick(1, 'hour', app.updateTitle);

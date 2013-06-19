@@ -379,7 +379,7 @@ define('io.ox/calendar/month/perspective',
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll = $('<input type="checkbox">')
+                                        this.showAll = $('<input type="checkbox" tabindex="1">')
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
