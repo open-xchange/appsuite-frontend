@@ -139,7 +139,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 currency: gt('Currency'),
                 trip_meter: gt('Distance'),
                 billing_information: gt('Billing information'),
-                company: gt('Company'),
+                companies: gt('Companies'),
                 date_completed: gt('Date completed')
             };
 

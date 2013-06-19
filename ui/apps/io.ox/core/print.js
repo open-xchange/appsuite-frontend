@@ -148,7 +148,6 @@ define('io.ox/core/print',
             var name = 'print_' + _.now(), // avoid bugs about non-opening windows
                 options = this.getWindowOptions(url),
                 win = window.open(url, name, options.string);
-            win.moveTo(options.left, options.top);
             return win;
         },
 
