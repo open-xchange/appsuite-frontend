@@ -298,7 +298,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     ),
                     $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
                 );
-                if (!_.browser.Firefox) { input.append('input-append-fix'); }
+                if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render({

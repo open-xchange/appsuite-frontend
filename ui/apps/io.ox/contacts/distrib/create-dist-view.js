@@ -94,7 +94,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             autocomplete = new AddParticipantsView({ el: pNode });
 
-            if (!_.browser.Firefox) { pNode.append('input-append-fix'); }
+            if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
             autocomplete.render({
                 autoselect: true,

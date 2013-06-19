@@ -339,7 +339,7 @@ define('io.ox/calendar/edit/template',
                     )
                 );
 
-            if (!_.browser.Firefox) { input.append('input-append-fix'); }
+            if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
