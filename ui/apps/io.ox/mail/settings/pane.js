@@ -17,8 +17,9 @@ define('io.ox/mail/settings/pane',
     'dot!io.ox/mail/settings/form.html',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
     'gettext!io.ox/mail',
-    'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+    'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, notifications, capabilities, gt, api) {
 
     'use strict';
 
@@ -86,7 +87,10 @@ define('io.ox/mail/settings/pane',
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,
                         optionsAutoSaveMinutes: optionsAutoSave,
-                        optionsAllAccounts: addresses.map(function (address) { return address[1]; })
+                        optionsAllAccounts: addresses.map(function (address) { return address[1]; }),
+                        caps:  {
+                            contactCollect: capabilities.has('collect_email_addresses') ? 'true' : 'false'
+                        }
                     })
                 );
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
