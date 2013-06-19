@@ -795,9 +795,9 @@ define("io.ox/calendar/edit/recurrence-view",
                 return $('<span class="muted" tabindex="' + self.tabindex + '">')
                     .append(sentence.ghost())
                     .on('click keydown', function (e) {
-                        e.preventDefault();
                         // hit space or enter
                         if (e.type === 'keydown' && (e.which === 13 || e.which === 32)) {
+                            e.preventDefault();
                             self.setChoice(sentence);
                             self.updateModel();
                             $('a:first', sentence.$el).focus();
