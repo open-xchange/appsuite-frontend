@@ -113,7 +113,10 @@ define('io.ox/mail/settings/pane',
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,
                         optionsAutoSaveMinutes: optionsAutoSave,
-                        optionsAllAccounts: [].concat(addresses, numbers)
+                        optionsAllAccounts: [].concat(addresses, numbers),
+                        caps:  {
+                            contactCollect: capabilities.has('collect_email_addresses') ? 'true' : 'false'
+                        }
                     })
                 );
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');

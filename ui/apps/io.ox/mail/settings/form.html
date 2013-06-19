@@ -13,12 +13,14 @@
                 <label class="checkbox expertmode">{{=it.strings.PERMANENT_REMOVE_MAILS}}
                     <input type="checkbox" data-property="removeDeletedPermanently">
                 </label>
-                <label class="checkbox expertmode">{{=it.strings.COLLECT_CONTACTS_SENDING}}
-                    <input type="checkbox" data-property="contactCollectOnMailTransport">
-                </label>
-                <label class="checkbox expertmode" >{{=it.strings.COLLECT_CONTACTS_READING}}
-                    <input type="checkbox" data-property="contactCollectOnMailAccess">
-                </label>
+                {{ if (it.caps.contactCollect === 'true') { }}
+                    <label class="checkbox expertmode">{{=it.strings.COLLECT_CONTACTS_SENDING}}
+                        <input type="checkbox" data-property="contactCollectOnMailTransport">
+                    </label>
+                    <label class="checkbox expertmode" >{{=it.strings.COLLECT_CONTACTS_READING}}
+                        <input type="checkbox" data-property="contactCollectOnMailAccess">
+                    </label>
+                {{ } }}
                 <label class="checkbox expertmode" >{{=it.strings.USE_FIXED_WIDTH_FONT}}
                     <input type="checkbox" data-property="useFixedWidthFont">
                 </label>
