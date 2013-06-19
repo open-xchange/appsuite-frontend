@@ -149,6 +149,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     console.log("Closing socket, because I got a session expired error");
                 }
                 subSocket.close();
+                socket.unsubscribe();
                 disconnected = true;
                 ox.trigger('relogin:required');
             }
