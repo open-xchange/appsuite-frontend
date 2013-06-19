@@ -1,0 +1,21 @@
+/* glue: 0.2.9.1 hash: 8f03901539 */
+.sprite-emoji_categories-category_tools,
+.sprite-emoji_categories-category_symbols,
+.sprite-emoji_categories-category_season_event,
+.sprite-emoji_categories-category_recently,
+.sprite-emoji_categories-category_hobbies,
+.sprite-emoji_categories-category_food,
+.sprite-emoji_categories-category_facial_expression,
+.sprite-emoji_categories-category_emotion,
+.sprite-emoji_categories-category_daily_life,
+.sprite-emoji_categories-category_character{background-image:url('emoji_categories.png');background-repeat:no-repeat}
+.sprite-emoji_categories-category_tools{background-position:0px 0px;width:20px;height:20px;}
+.sprite-emoji_categories-category_symbols{background-position:-20px 0px;width:20px;height:20px;}
+.sprite-emoji_categories-category_season_event{background-position:0px -20px;width:20px;height:20px;}
+.sprite-emoji_categories-category_recently{background-position:-20px -20px;width:20px;height:20px;}
+.sprite-emoji_categories-category_hobbies{background-position:-40px 0px;width:20px;height:20px;}
+.sprite-emoji_categories-category_food{background-position:-40px -20px;width:20px;height:20px;}
+.sprite-emoji_categories-category_facial_expression{background-position:0px -40px;width:20px;height:20px;}
+.sprite-emoji_categories-category_emotion{background-position:-20px -40px;width:20px;height:20px;}
+.sprite-emoji_categories-category_daily_life{background-position:-40px -40px;width:20px;height:20px;}
+.sprite-emoji_categories-category_character{background-position:-60px 0px;width:20px;height:20px;}
