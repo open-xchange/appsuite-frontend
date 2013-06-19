@@ -1,6 +1,10 @@
 {
   "meta": [
     {
+      "name": "recently",
+      "iconClass": "sprite-emoji_categories-category_recently"
+    },
+    {
       "name": "Face",
       "title": "Face",
       "iconClass": "softbank sprite-emoji_categories-category_facial_expression"
