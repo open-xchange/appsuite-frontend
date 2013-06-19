@@ -797,12 +797,11 @@ define("io.ox/calendar/edit/recurrence-view",
                     .on('click keydown', function (e) {
                         e.preventDefault();
                         // hit space or enter
-                        if (e.type === 'keydown' && !(e.which === 13 || e.which === 32)) {
-                            return false;
+                        if (e.type === 'keydown' && (e.which === 13 || e.which === 32)) {
+                            self.setChoice(sentence);
+                            self.updateModel();
+                            $('a:first', sentence.$el).focus();
                         }
-                        self.setChoice(sentence);
-                        self.updateModel();
-                        $('a:first', sentence.$el).focus();
                     })
                     .css({cursor: 'pointer'});
             },
