@@ -106,7 +106,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+            return e.collection.has('one') && e.collection.has('create');
         },
         action: function (baton) {
             var params = baton.data,
@@ -231,7 +231,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create') && _.device('!small');
+            return e.collection.has('one') && e.collection.has('create');
         },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
