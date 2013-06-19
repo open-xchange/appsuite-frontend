@@ -71,6 +71,9 @@
             this.isOpen = false;
             this.currentCategory = '';
             this.currentCollection = '';
+
+            // for optional run-time access
+            this.$el.data('view', this);
         },
 
         render: function () {
