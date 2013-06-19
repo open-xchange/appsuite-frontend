@@ -15,10 +15,11 @@ define('io.ox/files/actions',
     ['io.ox/files/api',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/extPatterns/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, capabilities, notifications, gt, settings) {
+     'settings!io.ox/files'], function (api, ext, links, actionPerformer, capabilities, notifications, gt, settings) {
 
     'use strict';
 
@@ -73,7 +74,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -88,7 +89,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return e.collection.has('multiple') && checkMedia(e, 'audio');
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -102,22 +103,25 @@ define('io.ox/files/actions',
     });
 
     // editor
-    new Action('io.ox/files/actions/editor', {
-        requires: function (e) {
-            return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
-        },
-        action: function (baton) {
-            ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
-        }
-    });
+    if (window.Blob) {
 
-    new Action('io.ox/files/actions/editor-new', {
-        action: function (baton) {
-            ox.launch('io.ox/editor/main').done(function () {
-                this.create({ folder: baton.app.folder.get() });
-            });
-        }
-    });
+        new Action('io.ox/files/actions/editor', {
+            requires: function (e) {
+                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename);
+            },
+            action: function (baton) {
+                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
+            }
+        });
+
+        new Action('io.ox/files/actions/editor-new', {
+            action: function (baton) {
+                ox.launch('io.ox/editor/main').done(function () {
+                    this.create({ folder: baton.app.folder.get() });
+                });
+            }
+        });
+    }
 
     new Action('io.ox/files/actions/download', {
         requires: 'some',
@@ -181,7 +185,7 @@ define('io.ox/files/actions',
                         var html = [], text = [];
                         _(list).each(function (file) {
                             var url = ox.abs + ox.root + '/#!&app=io.ox/files&perspective=list&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            var label = gt('File: %1$s', file.title || file.filename);
+                            var label = gt('File: %1$s', file.filename || file.title);
                             html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
                             text.push(label + '\n' + gt('Direct link: %1$s', url));
                         });
@@ -240,7 +244,7 @@ define('io.ox/files/actions',
                                         '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
 
                                     return $('<p>').append(
-                                        $('<div>').text(file.title || file.filename || ''),
+                                        $('<div>').text(file.filename || file.title || ''),
                                         $('<div>').append(
                                             $('<a class="direct-link">', { href: url, target: '_blank' })
                                             .text(url)
@@ -377,21 +381,61 @@ define('io.ox/files/actions',
                 var $input = $('<input type="text" name="name" class="span12">');
                 var dialog = null;
 
+                /**
+                 * @return {promise}
+                 */
                 function fnRename() {
                     var name = $input.val();
                     var update = {
                         id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        title: name
+                        folder_id: baton.data.folder_id
                     };
-                    if (baton.data.filename) {
+                    //'title only' entries
+                    if (!baton.data.filename && baton.data.title) {
+                        update.title = name;
+                    } else {
                         update.filename = name;
                     }
 
                     return api.update(update).fail(require('io.ox/core/notifications').yell);
                 }
 
-                $input.val(baton.data.title || baton.data.filename);
+                /**
+                 * user have to confirm if name doesn't contains a file extension
+                 * @return {promise}
+                 */
+                function process() {
+                    var name = $input.val(),
+                        extmissing = !/\.\w{1,4}$/.test(name),
+                        def = $.Deferred();
+                    //missing extension
+                    if (extmissing) {
+                        new dialogs.ModalDialog()
+                            .addPrimaryButton('rename', gt('Yes'))
+                            .addButton('change', gt('Change Name'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'rename')
+                                    def.resolve();
+                                else
+                                    def.reject();
+                            });
+                    } else {
+                        def.resolve();
+                    }
+                    //rename or abort
+                    def.then(function () {
+                        return fnRename();
+                    }, function () {
+                        //store user input and call action again
+                        baton.tmp = name;
+                        actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
+                    });
+                    return def.promise();
+                }
+
+                $input.val(baton.tmp || baton.data.filename || baton.data.title);
+                delete baton.tmp;
                 var $form = $('<form>').append(
                     $('<div class="row-fluid">').append(
                         $('<label for="name">').append($('<b>').text(gt('Name'))),
@@ -399,16 +443,12 @@ define('io.ox/files/actions',
                     )
                 );
 
+                //'enter'
                 $form.on('submit', function (e) {
                     e.preventDefault();
-                    dialog.busy();
-                    fnRename().done(function () {
-                        dialog.close();
-                    }).fail(function () {
-                        dialog.idle();
-                    });
+                    dialog.close();
+                    process();
                 });
-
 
                 dialog = new dialogs.ModalDialog({easyOut: true}).append(
                     $form
@@ -421,7 +461,7 @@ define('io.ox/files/actions',
                 })
                 .done(function (action) {
                     if (action === 'rename') {
-                        fnRename();
+                        process();
                     }
                 });
             });
@@ -627,6 +667,13 @@ define('io.ox/files/actions',
         id: 'upload',
         label: gt('Upload new file'),
         ref: POINT + '/actions/upload'
+    });
+
+    new ActionLink(POINT + '/links/toolbar/default', {
+        index: 200,
+        id: 'note',
+        label: gt('Add note'),
+        ref: POINT + '/actions/editor-new'
     });
 
     // VIEWS
@@ -849,11 +896,11 @@ define('io.ox/files/actions',
             return !!app.currentFile;
         },
         label: function (app) {
-            if (app.currentFile.title) {
+            if (app.currentFile.filename || app.currentFile.title) {
                 return gt(
-                    //#. %1$s is the title of the file
+                    //#. %1$s is the filename or title of the file
                     'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
-                    String(app.currentFile.title).replace(/</g, '&lt;')
+                    String(app.currentFile.filename || app.currentFile.title).replace(/</g, '&lt;')
                 );
             } else {
                 return gt('Drop here to upload a <b class="dndignore">new version</b>');
@@ -912,7 +959,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return checkMedia(e, 'audio');
+            return _.device('!android') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -926,7 +973,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
-            return checkMedia(e, 'video');
+            return _.device('!android') && checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {

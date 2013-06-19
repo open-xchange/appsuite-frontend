@@ -146,7 +146,19 @@ define('io.ox/core/import/import',
 
                     var type = baton.nodes.select.val() || '',
                         file = baton.nodes.file_upload.find('input[type=file]'),
-                        popup = this;
+                        popup = this,
+                        failHandler = function (data) {
+                            var list = [];
+                            _.each(data, function (item) {
+                                if (item && item.code === 'CON-0600') {
+                                    //append first value which caused conversion error (csv import)
+                                    item.error = item.error + '\n' + item.error_stack[0];
+                                }
+                                list.push(item && item.error || gt('An unknown error occurred'));
+                            });
+                            notifications.yell('error', list.join('\n\n'));
+                            popup.idle();
+                        };
 
                     if (file.val() === '') {
                         notifications.yell('error', gt('Please select a file to import'));
@@ -160,7 +172,12 @@ define('io.ox/core/import/import',
                         type: type,
                         folder: id
                     })
-                    .done(function (res) {
+                    .done(function (data) {
+                        //get failed records
+                        var failed = _.filter(data, function (item) {
+                            return item && item.error;
+                        });
+                        //cache
                         try {
                             baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
                                 baton.api.trigger('refresh.all');
@@ -170,13 +187,16 @@ define('io.ox/core/import/import',
                             console.warn('import triggering global refresh because of unknown API', e);
                             ox.trigger('refresh^');
                         }
-                        notifications.yell('success', gt('Data imported successfully'));
+                        //partially failed?
+                        if (failed.length === 0) {
+                            notifications.yell('success', gt('Data imported successfully'));
+                        } else {
+                            var custom = { error: gt('Data only partially imported ( %1$s of %2$s records)', (data.length - failed.length), data.length)};
+                            failHandler([].concat(custom, failed));
+                        }
                         popup.close();
                     })
-                    .fail(function (res) {
-                        notifications.yell('error', res && res.error || gt('An unknown error occurred'));
-                        popup.idle();
-                    });
+                    .fail(failHandler);
                 })
                 .show();
             });

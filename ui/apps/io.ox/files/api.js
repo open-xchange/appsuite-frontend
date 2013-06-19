@@ -320,7 +320,7 @@ define('io.ox/files/api',
 
             return http.UPLOAD({
                     module: 'files',
-                    params: { action: 'new' },
+                    params: { action: 'new', filename: options.filename },
                     data: formData,
                     fixPost: true
                 })
@@ -373,7 +373,7 @@ define('io.ox/files/api',
 
         return http.UPLOAD({
                 module: 'files',
-                params: { action: 'update', timestamp: _.now(), id: options.id },
+                params: { action: 'update', timestamp: _.now(), id: options.id, filename: options.filename },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
             })

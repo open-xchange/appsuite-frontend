@@ -139,6 +139,10 @@ define("plugins/portal/linkedIn/register",
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('linkedin'))
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+
             return proxy.request({
                 api: 'linkedin',
                 url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'

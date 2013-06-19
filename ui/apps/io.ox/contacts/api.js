@@ -34,7 +34,7 @@ define('io.ox/contacts/api',
         };
 
     //mapped ids for msisdn
-    mapping.msisdn =  settings.get('msisdn', mapping.cellular);
+    mapping.msisdn =  settings.get('msisdn/columns', mapping.cellular);
 
     // generate basic API
     var api = apiFactory({
@@ -381,6 +381,7 @@ define('io.ox/contacts/api',
      * @param  {array} list (object)
      * @fires  api#refresh.all
      * @fires  api#delete + cid
+     * @fires  api#delete (data)
      * @return {promise}
      */
     api.remove =  function (list) {
@@ -402,9 +403,13 @@ define('io.ox/contacts/api',
                     fetchCache.clear()
                 );
             })
+            .fail(function (response) {
+                notifications.yell('error', response.error);
+            })
             .done(function () {
                 _(list).map(function (data) {
                     api.trigger('delete:' + encodeURIComponent(_.cid(data)), data);
+                    api.trigger('delete', data);
                 });
                 api.trigger('refresh.all');
             });

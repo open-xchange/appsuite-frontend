@@ -44,10 +44,10 @@ define('io.ox/mail/accounts/settings',
         .show();
 
         myView.dialog.on('save', function () {
+            myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
             } else {
-                myModel.validate();
                 notifications.yell('error', gt('Account settings could not be saved.'));
                 myView.dialog.idle();
             }

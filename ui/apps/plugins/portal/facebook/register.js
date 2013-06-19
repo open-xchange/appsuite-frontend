@@ -154,6 +154,10 @@ define('plugins/portal/facebook/register',
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('facebook'))
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+
             return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({

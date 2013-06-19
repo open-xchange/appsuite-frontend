@@ -21,6 +21,17 @@ define(function () {
             path: 'plugins/owm/portal'
         },
         {
+            path: 'io.ox/editor/main',
+            title: "Editor",
+            company: "Open-Xchange",
+            icon: "default.png",
+            category: "Productivity",
+            settings: false,
+            requires: "infostore",
+            refreshable: true,
+            visible: false
+        },
+        {
             path: 'io.ox/mail/main',
             title: "Mail",
             company: "Open-Xchange",

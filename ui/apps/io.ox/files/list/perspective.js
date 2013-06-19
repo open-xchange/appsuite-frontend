@@ -44,7 +44,7 @@ define('io.ox/files/list/perspective',
                 return { name: name };
             },
             set: function (data, fields, index) {
-                var title = data.title || data.filename || '\u00A0';
+                var title = data.filename || data.title || '\u00A0';
                 fields.name.text(cut(title));
             }
         });

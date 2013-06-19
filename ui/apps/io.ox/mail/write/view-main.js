@@ -277,7 +277,7 @@ define("io.ox/mail/write/view-main",
                                     fieldlabel: getFieldLabel(field),
                                     displayname: data.display_name,
                                     text: '"' + data.display_name + '" <' + data[field] + '>',
-                                    value: mailUtil.cleanupPhone(data[field]) + '/TYPE=PLMN'
+                                    value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
                                 };
                             }
                         })
@@ -523,11 +523,7 @@ define("io.ox/mail/write/view-main",
                 .append(createRadio('priority', '5', gt('Low')))
                 .on('change', 'input', function () {
                     var radio = $(this);
-                    if (radio.val() === '1' && radio.prop('checked')) {
-                        self.applyHighPriority(true);
-                    } else {
-                        self.applyHighPriority(false);
-                    }
+                    if (radio.prop('checked')) self.app.setPriority(radio.val());
                 }),
                 // Attach vCard
                 $('<div>').addClass('section-item')
@@ -734,8 +730,6 @@ define("io.ox/mail/write/view-main",
 
                 // message?
                 if (isMessage) {
-                    //remove typesuffix when displaying attached mail;
-                    mailUtil.removeTypeSuffix(file.message);
                     info = $('<span>').addClass('filesize').text('');
                     icon = $('<i>').addClass('icon-paper-clip');
                     name = file.message.subject || '\u00A0';
@@ -857,18 +851,18 @@ define("io.ox/mail/write/view-main",
 
             //parsed object?
             if (_.isArray(elem)) {
-                var channel = mailUtil.getChannel(elem[1]),
+                var channel = mailUtil.getChannel ? mailUtil.getChannel(elem[1]) : 'email',
                     custom = {
                         display_name: elem[0]
                     };
-                //email or phone property? remove typesuffix (example: '0178000000/TYPE=PLMN')
-                custom[channel] = channel === 'phone' ? elem[1].split('/')[0] : elem[1];
+                //email or phone property?
+                custom[channel] = elem[1];
                 elem = custom;
             }
 
             var obj = {
                 display_name: (elem.display_name || '').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''),
-                email: elem.email || '',
+                email: elem.email || elem.mail || '',
                 phone: elem.phone || '',
                 field: elem.field || '',
                 image1_url: elem.image1_url || '',

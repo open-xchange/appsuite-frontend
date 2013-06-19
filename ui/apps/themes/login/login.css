@@ -73,6 +73,16 @@ body.down #io-ox-login-container .alert.alert-info {
     font-style: normal;
 }
 
+.noscript {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 65000;
+    width: 400px;
+    margin: -50px 0 0 -200px;
+    z-index: 65301;
+}
+
 #background_loader {
     position: absolute;
     top: 0px;

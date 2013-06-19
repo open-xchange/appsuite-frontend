@@ -394,30 +394,32 @@ define('io.ox/mail/api',
     };
 
     /**
-     * pipes getList() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes getList() to remove typesuffix from sender
      * @param  {array} ids
      * @param  {boolean} useCache (default is true)
      * @param  {object} options
      * @return {deferred}
      */
     api.getList = function (ids, useCache, options) {
+        //TOOD: use this until backend removes channel suffix
         return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, util.removeTypeSuffix);
+            _.each(data, util.removeChannelSuffix);
             return data;
         });
     };
 
     /**
-     * pipes get() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes get() to remove typesuffix from sender
      * @param  {object} options
      * @param  {boolan} useCache (default is true)
      * @fires api#refresh.list
      * @return {deferred} (resolve returns response)
      */
     api.get = function (options, useCache) {
+        //TOOD: use this until backend removes channel suffix
         return get.call(this, options, useCache).then(function (mail) {
             if (_.isObject(mail)) {
-                util.removeTypeSuffix(mail);
+                util.removeChannelSuffix(mail);
             }
             return mail;
         });
@@ -552,18 +554,27 @@ define('io.ox/mail/api',
         });
     };
 
+    var resetTrashFolders = function () {
+        return $.when.apply($,
+            _(accountAPI.getFoldersByType('trash')).map(function (folder) {
+                console.log('Remove trash folder', folder);
+                return api.caches.all.grepRemove(folder + DELIM);
+            })
+        );
+    };
+
     var clearCaches = function (obj, targetFolderId) {
-            return function () {
-                var id = obj.folder_id || obj.folder;
-                return $.when(
-                    api.caches.get.remove(obj),
-                    api.caches.get.remove(id),
-                    api.caches.list.remove(obj),
-                    api.caches.list.remove(id),
-                    api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
-                );
-            };
+        return function () {
+            var id = obj.folder_id || obj.folder;
+            return $.when(
+                api.caches.get.remove(obj),
+                api.caches.get.remove(id),
+                api.caches.list.remove(obj),
+                api.caches.list.remove(id),
+                api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
+            );
         };
+    };
 
     var refreshAll = function (obj) {
         $.when.apply($, obj).done(function () {
@@ -653,13 +664,15 @@ define('io.ox/mail/api',
                 action: 'expunge'
             },
             data: [folder_id]
-        }).pipe(function (data) {
+        })
+        .then(function (data) {
             return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
                 folderAPI.reload(folder_id);
                 return data;
             });
-        }).done(function () {
+        })
+        .done(function () {
             notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
@@ -682,13 +695,18 @@ define('io.ox/mail/api',
                 tree: '1'
             },
             data: [folder_id]
-        }).pipe(function (data) {
+        })
+        .then(function (data) {
             return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
                 folderAPI.reload(folder_id);
                 return data;
             });
-        }).done(function () {
+        })
+        .then(function () {
+            return resetTrashFolders();
+        })
+        .done(function () {
             notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
         });
@@ -914,47 +932,50 @@ define('io.ox/mail/api',
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
                         // nothing to do - nothing to break
-                    } else if (data.attachments[0].content_type === 'text/plain') {
-                        $('<div>')
-                            // escape everything but BR tags
-                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                            .contents().each(function () {
-                                if (this.tagName === 'BR') {
-                                    text += '\n';
-                                } else {
-                                    text += $(this).text();
-                                }
+                    } else {
+                        //content-type specific
+                        if (data.attachments[0].content_type === 'text/plain') {
+                            $('<div>')
+                                // escape everything but BR tags
+                                .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
+                                .contents().each(function () {
+                                    if (this.tagName === 'BR') {
+                                        text += '\n';
+                                    } else {
+                                        text += $(this).text();
+                                    }
+                                });
+                            // remove white space
+                            text = $.trim(text);
+                            // polish for html editing
+                            if (view === 'html') {
+                                // escape '<'
+                                text = text.replace(/</ig, '&lt;');
+                                // replace '\n>' sequences by blockquote-tags
+                                _(text.split(/\n/).concat('\n')).each(function (line) {
+                                    if (/^> /.test(line)) {
+                                        quote += line.substr(2) + '\n';
+                                    } else {
+                                        tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                        quote = '';
+                                    }
+                                });
+                                // transform line-feeds back to BR
+                                data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
+                            } else {
+                                // replace
+                                data.attachments[0].content = $.trim(text);
+                            }
+                        } else if (data.attachments[0].content_type === 'text/html') {
+                            // robust approach for large mails
+                            tmp = document.createElement('DIV');
+                            tmp.innerHTML = data.attachments[0].content;
+                            _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                                node.removeAttribute('style');
                             });
-                        // remove white space
-                        text = $.trim(text);
-                        // polish for html editing
-                        if (view === 'html') {
-                            // escape '<'
-                            text = text.replace(/</ig, '&lt;');
-                            // replace '\n>' sequences by blockquote-tags
-                            _(text.split(/\n/).concat('\n')).each(function (line) {
-                                if (/^> /.test(line)) {
-                                    quote += line.substr(2) + '\n';
-                                } else {
-                                    tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
-                                    quote = '';
-                                }
-                            });
-                            // transform line-feeds back to BR
-                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
-                        } else {
-                            // replace
-                            data.attachments[0].content = $.trim(text);
+                            data.attachments[0].content = tmp.innerHTML;
+                            tmp = null;
                         }
-                    } else if (data.attachments[0].content_type === 'text/html') {
-                        // robust approach for large mails
-                        tmp = document.createElement('DIV');
-                        tmp.innerHTML = data.attachments[0].content;
-                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                            node.removeAttribute('style');
-                        });
-                        data.attachments[0].content = tmp.innerHTML;
-                        tmp = null;
                     }
                 } else {
                     data.attachments = data.attachments || [{}];

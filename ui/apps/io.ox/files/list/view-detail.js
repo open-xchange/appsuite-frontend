@@ -44,7 +44,7 @@ define('io.ox/files/list/view-detail',
         draw: function (baton) {
             this.append(
                 $('<div>').addClass('title clear-title')
-                .text(gt.noI18n(baton.data.title || baton.data.filename || '\u00A0'))
+                .text(gt.noI18n(baton.data.filename || baton.data.title || '\u00A0'))
                 .on('dblclick', function () {
                     actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                 })

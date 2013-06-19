@@ -159,7 +159,7 @@ define('io.ox/files/icons/perspective',
                 .attr('data-obj-id', _.cid(file))
                 .append(
                     (img ? wrap.append(img) : wrap),
-                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))).prepend(
+                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.filename || file.title, 55))).prepend(
                             (file.locked_until ? $('<i class="icon-lock">') : '')
                         ),
                     $('<input type="checkbox" class="reflect-selection" style="display:none">')

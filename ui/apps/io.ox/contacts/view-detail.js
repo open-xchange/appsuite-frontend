@@ -440,7 +440,7 @@ define("io.ox/contacts/view-detail",
             var r = 0, bday = baton.data.birthday;
             if (bday || bday === 0) {
                 r += addField(gt("Birthday"),
-                              new date.Local(bday).format(date.DATE), this);
+                              new date.Local(date.Local.utc(bday)).format(date.DATE), this);//use utc time. birthdays must not be converted
             }
             if (r > 0) {
                 addField("", "\u00A0", this);

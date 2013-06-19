@@ -12,8 +12,10 @@
  */
 
 define.async('io.ox/core/tk/html-editor',
-             ['moxiecode/tiny_mce/plugins/emoji/main'],
-             function (emoji) {
+    ['moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core'
+     ], function (emoji, capabilities, settings) {
 
     'use strict';
 
@@ -192,7 +194,7 @@ define.async('io.ox/core/tk/html-editor',
             'iframe, object, applet, input, textarea, button, select, ' +
             'canvas, script, noscript, audio, video, img'
             )
-            .find(':not(img.emoji)').remove();
+            .filter(':not(img.emoji)').remove();
         // beautify SUP tags
         node.find('sup').css('lineHeight', '0');
         // unwrap
@@ -375,7 +377,32 @@ define.async('io.ox/core/tk/html-editor',
     }
 
     function Editor(textarea) {
-        var def = $.Deferred(), ed;
+
+        var def = $.Deferred(), ed,
+            toolbar1, toolbar2, toolbar3;
+
+        // toolbar default
+        toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
+            ',|,emoji,|,bullist,numlist,outdent,indent' +
+            ',|,justifyleft,justifycenter,justifyright' +
+            ',|,formatselect,fontselect,fontsizeselect' +
+            ',|,forecolor,backcolor';
+
+        toolbar2 = '';
+        toolbar3 = '';
+
+        // consider custom configurations
+        toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
+        toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', toolbar2);
+        toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', toolbar3);
+
+        // remove unsupported stuff
+        if (!capabilities.has('emoji')) {
+            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, '');
+            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, '');
+            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, '');
+        }
+
         (textarea = $(textarea)).tinymce({
 
             gecko_spellcheck: true,
@@ -414,24 +441,19 @@ define.async('io.ox/core/tk/html-editor',
                 }
             },
 
-            theme_advanced_buttons1:
-                'bold,italic,underline,strikethrough,|,' +
-                'emoji,bullist,numlist,outdent,indent,|,' +
-                'justifyleft,justifycenter,justifyright,|,' +
-                'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo,',
-            theme_advanced_buttons2: '',
-            theme_advanced_buttons3: '',
-            theme_advanced_toolbar_location: 'top',
-            theme_advanced_toolbar_align: 'left',
+            theme_advanced_buttons1: toolbar1,
+            theme_advanced_buttons2: toolbar2,
+            theme_advanced_buttons3: toolbar3,
+            theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
+            theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
             // formats
             theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
 
             // colors
             theme_advanced_more_colors: false,
-            theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-            theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
+            //theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
+            //theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
             theme_advanced_default_foreground_color: '#000000',
             theme_advanced_default_background_color: '#FFFFFF',
 
@@ -443,7 +465,7 @@ define.async('io.ox/core/tk/html-editor',
             paste_auto_cleanup_on_paste: true,
             paste_remove_styles: true,
             paste_remove_styles_if_webkit: true,
-            paste_strip_class_attributes: 'all',
+            paste_strip_class_attributes: 'mso', // 'all' kills emoji support!
             paste_block_drop: false,
 
             // post processing (string-based)
@@ -538,10 +560,14 @@ define.async('io.ox/core/tk/html-editor',
             // loop over top-level nodes
             var tmp = '';
             $(ed.getBody()).children().each(function () {
-                var text = '';
+                var text = '',
+                    content;
                 // get text via selection
+                // use jQuery to parse HTML, because there is no obvious way to
+                // transform the emoji img tags to unicode before getContent call
                 ed.selection.select(this, true);
-                text = ed.selection.getContent({ format: 'text' });
+                content = emoji.imageTagsToUnified(ed.selection.getContent());
+                text = $('<div>').html(content).text();
                 switch (this.tagName) {
                 case 'BLOCKQUOTE':
                     tmp += quote(text) + '\n\n';

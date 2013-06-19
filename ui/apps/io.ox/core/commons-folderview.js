@@ -579,22 +579,19 @@ define('io.ox/core/commons-folderview',
                 app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
                 sidepanel.removeClass('side-shift slideout').attr('style', '').hide();
             }
-
         };
 
         fnHide = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
-
             if (_.device('small')) {
                 sidepanel.addClass('slideout');
-
             } else {
                 app.getWindow().nodes.body.removeClass('side-shift').attr('style', '');
                 sidepanel.removeClass('side-shift').attr('style', '').hide();
             }
-
+            app.trigger('folderview:close');
         };
 
         fnShow = function () {
@@ -606,6 +603,7 @@ define('io.ox/core/commons-folderview',
                 sidepanel.addClass('slidein');
             }
             app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
+            app.trigger('folderview:open');
             return $.when();
         };
 
@@ -759,11 +757,21 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
+        var icon = $('<i class="icon-folder-close">').attr('aria-label', gt('Toggle folder'));
+
+        app.on('folderview:open', function () {
+            icon.attr('class', 'icon-folder-open');
+        });
+
+        app.on('folderview:close', function () {
+            icon.attr('class', 'icon-folder-close');
+        });
+
         new links.ActionGroup(TOGGLE, {
             id: 'folder',
             index: 200,
             icon: function () {
-                return $('<i class="icon-folder-close">');
+                return icon;
             }
         });
 

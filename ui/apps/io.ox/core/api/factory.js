@@ -352,6 +352,10 @@ define('io.ox/core/api/factory',
                     defs.push(api.caches.list.remove(ids));
                     defs.push(api.caches.get.remove(ids));
                 }
+                // reset trash?
+                if (api.resetTrashFolders) {
+                    defs.push(api.resetTrashFolders());
+                }
                 // clear
                 return $.when.apply($, defs).done(function () {
                     // trigger item specific events to be responsive

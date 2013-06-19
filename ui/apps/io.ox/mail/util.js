@@ -18,7 +18,8 @@ define('io.ox/mail/util',
      'io.ox/core/api/account',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
-     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, gt) {
+     'settings!io.ox/contacts',
+     'gettext!io.ox/core'], function (ext, date, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -85,6 +86,19 @@ define('io.ox/mail/util',
     that = {
 
         /**
+         * currently registred types
+         * @example: { MSISND : '/TYPE=PLMN' }
+         * @return {array} list of types
+         */
+        getChannelSuffixes: (function () {
+            //important: used for global replacements so keep this value unique
+            var types = { msisdn: contactsSetting.get('msisdn/suffix', '/TYPE=PLMN') };
+            return function () {
+                return types;
+            };
+        }()),
+
+        /**
          * identify channel (email or phone)
          * @param  {string} value
          * @param  {boolean} check for activated cap first (optional: default is true)
@@ -93,7 +107,7 @@ define('io.ox/mail/util',
         getChannel: function (value, check) {
             //default value
             check = check || typeof check === 'undefined';
-            var type = value.indexOf('/TYPE=PLMN') > 0,
+            var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
                 //no check OR activated cap
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
@@ -131,24 +145,46 @@ define('io.ox/mail/util',
         },
 
         /**
-         * remove typesuffix from sender/reciepients (example 017012345678/TYPE=PLMN)
-         * @param  {object} mail
+         * remove typesuffix from sender/reciepients
+         * @param  {object|string} mail
          * @return {undefined}
          */
-        removeTypeSuffix:  function (mail) {
-            if (_.isObject(mail)) {
-                if (mail.from[0][1])
-                    mail.from[0][1] = mail.from[0][1].split('/')[0];
-                if (_.isArray(mail.to)) {
-                    _.each(mail.to, function (recipient) {
-                        recipient[1] = recipient[1].split('/')[0];
-                    });
+        removeChannelSuffix: !capabilities.has('msisdn') ? _.identity :
+            function (mail) {
+                var types = that.getChannelSuffixes(),
+                    //remove typesuffx from string
+                    remove = function (value) {
+                        _.each(types, function (type) {
+                            value = value.replace(new RegExp(type, 'ig'), '');
+                        });
+                        return value;
+                    };
+                if (!_.isEmpty(types)) {
+                    if (_.isString(mail)) {
+                        mail = remove(mail);
+                    } else if (_.isArray(mail)) {
+                        //array of nested mails
+                        _.each(mail, function (message) {
+                            message = that.removeChannelSuffix(message);
+                        });
+                    } else if (_.isObject(mail)) {
+                        if (mail.from[0][1])
+                            mail.from[0][1] = remove(mail.from[0][1]);
+                        if (_.isArray(mail.to)) {
+                            _.each(mail.to, function (recipient) {
+                                recipient[1] = remove(recipient[1]);
+                            });
+                        }
+                        ///nestedm mail
+                        if (_.isArray(mail.nested_msgs)) {
+                            _.each(mail.nested_msgs, function (message) {
+                                message = that.removeChannelSuffix(message);
+                            });
+                        }
+                    }
                 }
-            } else if (_.isString(mail)) {
-                mail = mail.replace(new RegExp('/TYPE=PLMN', 'g'), '');
-            }
-            return mail;
-        },
+                return mail;
+            },
 
         /**
          * Parse comma or semicolon separated list of recipients
@@ -374,6 +410,7 @@ define('io.ox/mail/util',
             }, 0);
         },
 
+        //deprecated?
         getInitialDefaultSender: function () {
             var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
