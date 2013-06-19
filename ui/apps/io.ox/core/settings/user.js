@@ -33,8 +33,17 @@ define('io.ox/core/settings/user', [
         editCurrentUser: function ($node) {
             // Load the user
             return factory.realm('edit').get({}).done(function (user) {
+                var $userEditView = new UserEdit({model: user}).render().$el;
 
-                $node.append(new UserEdit({model: user}).render().$el);
+                /* remove image edit dialog for PIM users, because they cannot access the place where the image is stored */
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    /* I would have preferred to use folderAPI.can('read', 6)... */
+                    folderAPI.get({ folder: 6, cache: false }).fail(function (data) {
+                        $userEditView.find('div.header-pic').remove();
+                    });
+                });
+
+                $node.append($userEditView);
 
                 user.on('change:first_name change:last_name', function () {
                     user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));

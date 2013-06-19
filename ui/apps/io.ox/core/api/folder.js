@@ -64,11 +64,7 @@ define('io.ox/core/api/folder',
                     cache.add(data.id, data);
                 })
                 .fail(function (error) {
-                    if (error.categories === 'PERMISSION_DENIED') {
-                        notifications.yell(error);
-                    } else {
-                        console.error('folder.get', id, error);
-                    }
+                    console.error('folder.get', id, error);
                 });
             };
 
