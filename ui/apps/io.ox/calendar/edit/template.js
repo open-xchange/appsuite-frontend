@@ -38,7 +38,7 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="row-fluid">');
+            var row = $('<div class="row-fluid header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
             this.append(row);
@@ -253,7 +253,7 @@ define('io.ox/calendar/edit/template',
         id: 'noteSeparator',
         index: 750,
         draw: function () {
-            this.append($('<span>&nbsp;</span>').css({height: '10px'}));
+            this.append($('<span>&nbsp;</span>'));
         }
     });
 
