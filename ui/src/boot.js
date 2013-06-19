@@ -554,6 +554,7 @@ $(window).load(function () {
                             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
+                            gettext.setLanguage('en_US');
                             require(['io.ox/core/login-i18n']).done(initialize);
                         },
                         function fail() {
