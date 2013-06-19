@@ -215,7 +215,7 @@ $(window).load(function () {
             var node = feedbackNode;
             if (!node) return;
             if (typeof node === 'function') node = node();
-            if (typeof node === 'string') node = $txt(gt(node));
+            if (typeof node === 'string') node = $.txt(gt(node));
             $('#io-ox-login-feedback').empty().append(
                 $('<div class="alert alert-block alert-' + feedbackType +
                               ' selectable-text">').append(node)
