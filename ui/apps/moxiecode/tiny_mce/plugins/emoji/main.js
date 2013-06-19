@@ -22,8 +22,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
-        var e = settings.get('availableCollections');
-
+        var e = settings.get('availableCollections', '');
         return _(e.split(',')).map(function (collection) {
             return collection.trim();
         });
@@ -105,6 +104,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             return _(categories[this.currentCollection].meta).find(function (cat) {
                 return cat.name === 'recently';
             }) || categories.recently;
+        },
+
+        resetRecents: function () {
+            settings.set('recently', {}).save();
         },
 
         iconsForCategory: function (category) {

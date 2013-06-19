@@ -45,7 +45,6 @@ img.emoji {
 
 .oxSkin .mceEmojiPane {
 
-    display: table-cell;
     height: 100%;
     width: 255px;
     vertical-align: top;
@@ -149,6 +148,14 @@ img.emoji {
         top: 34px + @emojiTabHeight;
     }
 
+    .reset-recents {
+        color: @linkColor;
+        cursor: pointer;
+        display: block;
+        margin: 7px 0;
+        text-align: right;
+        &:hover { text-decoration: underline; }
+    }
 
     .emoji {
 
