@@ -743,15 +743,15 @@ define('io.ox/backbone/forms',
             }
         };
 
-
         //customize datepicker
         //just localize the picker, use en as default with current languages
         $.fn.datepicker.dates.en = {
-            "days": date.locale.days,
-            "daysShort": date.locale.daysShort,
-            "daysMin": date.locale.daysStandalone,
-            "months": date.locale.months,
-            "monthsShort": date.locale.monthsShort
+            days: date.locale.days,
+            daysShort: date.locale.daysShort,
+            daysMin: date.locale.daysStandalone,
+            months: date.locale.months,
+            monthsShort: date.locale.monthsShort,
+            today: gt('Today')
         };
 
         var hours_typeahead = [],

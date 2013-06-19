@@ -1,7 +1,7 @@
 Name:           open-xchange-appsuite
 Version:        7.2.0
 %define         ox_release 0
-Release:        %{ox_release}
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
@@ -83,7 +83,6 @@ sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
-chmod +x "%{buildroot}$APPSUITE/share/update-themes.sh"
 
 find "%{buildroot}$APPSUITE" -type d \
     | sed -e 's,%{buildroot},%dir ,' > tmp/files

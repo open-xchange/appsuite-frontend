@@ -36,7 +36,7 @@ define('io.ox/participants/views',
                 $text: $('<div class="participant-name">'),
                 $mail: $('<div class="participant-email">'),
                 $extra: $('<div class="extra-decorator">'),
-                $removeButton: $('<div class="remove"><div class="icon"><i class="icon-remove"></i></div></div>')
+                $removeButton: $('<div class="remove"><div class="icon"><i class="icon-trash"></i></div></div>')
             };
 
             this.setDisplayName();
@@ -187,16 +187,11 @@ define('io.ox/participants/views',
                     counter++;
                 }
             });
-            var row = null;
-            var c = 0;
+            var row = $('<div class="row-fluid">');
             _(this.nodes).chain().values().each(function (node) {
-                if (c % 2 === 0) {
-                    row = $('<div class="row-fluid">');
-                    self.$el.append(row);
-                }
                 row.append(node);
-                c++;
             });
+            self.$el.append(row);
             return this;
         },
         createParticipantNode: function (participant) {

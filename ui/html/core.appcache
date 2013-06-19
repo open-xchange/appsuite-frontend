@@ -22,7 +22,7 @@ CACHE:
 @base@/apps/themes/default/logo-small.png
 
 # modules
-api/apps/load/@base@,io.ox/core/http.js,io.ox/core/session.js,io.ox/core/cache.js,io.ox/core/extensions.js,io.ox/core/manifests.js,io.ox/core/capabilities.js,io.ox/core/config.js,io.ox/core/settings.js,io.ox/core/event.js,io.ox/core/cache/indexeddb.js,io.ox/core/cache/localstorage.js,io.ox/core/cache/simple.js,io.ox/core/async.js,/text;io.ox/core/bootstrap/css/bootstrap.less
+# api/apps/load/@base@,io.ox/core/http.js,io.ox/core/session.js,io.ox/core/cache.js,io.ox/core/extensions.js,io.ox/core/manifests.js,io.ox/core/capabilities.js,io.ox/core/config.js,io.ox/core/settings.js,io.ox/core/event.js,io.ox/core/cache/indexeddb.js,io.ox/core/cache/localstorage.js,io.ox/core/cache/simple.js,io.ox/core/async.js,/text;io.ox/core/bootstrap/css/bootstrap.less
 api/apps/load/@base@,plugins/halo/register.js
 
 NETWORK:

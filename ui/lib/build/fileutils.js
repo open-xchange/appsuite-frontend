@@ -150,6 +150,8 @@ exports.summary = function(name) {
  * @param {Function} options.mapper An optional file name mapper.
  * It's a function which takes the original target file name (as computed by
  * files.dir and options.to) as parameter and returns the mapped file name.
+ * @param {Number} options.mode Optional file permissions as UNIX file mode.
+ * If present and non-zero, chmod is used to set the file mode of each target.
  */
 exports.copy = function(files, options) {
     var srcDir = files.dir || "";
@@ -239,6 +241,8 @@ exports.file = function(dest, deps, callback, options, type) {
  * the contents of a file as parameter and returns the filtered contents.
  * @param {String} options.type An optional file type. Defaults to the file
  * extension of the destination.
+ * @param {Number} options.mode Optional file permissions as UNIX file mode.
+ * If present and non-zero, chmod is used to set the file mode of the target.
  */
 exports.copyFile = function(src, dest, options) {
     var type = getType(dest, options);
@@ -247,9 +251,15 @@ exports.copyFile = function(src, dest, options) {
             fs.writeFileSync(dest,
                 type.filter(this, fs.readFileSync(src, "utf8"),
                     function(line) { return { name: src, line: line }; }));
+            if (options && options.mode !== undefined) {
+                fs.chmodSync(dest, options.mode);
+            }
         } : function() {
             var data = fs.readFileSync(src);
             fs.writeFileSync(dest, data, 0, data.length, null);
+            if (options && options.mode !== undefined) {
+                fs.chmodSync(dest, options.mode);
+            }
         };
     exports.file(dest, [src], callback, options && options.type);
 };

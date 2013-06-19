@@ -9,12 +9,18 @@
  *
  */
 
+.participantsrow .participant-wrapper {
+
+    &:nth-child(odd) { margin-left:0; }
+    margin-bottom:2px;
+    float:left;
+
+}
+
 .participant-wrapper {
 
     position: relative;
-    margin: 0 0 2px 0;
     min-height: 54px; /* for floating icon */
-
     line-height: 20px;
 
     .autocomplete-item & {
@@ -82,3 +88,23 @@
         }
     }
 }
+
+@media (max-width: 767px) {
+    .input-append-fix {
+        display: block;
+        position: relative;
+        height: 30px;
+        input {
+            position: absolute;
+            left: 0px;
+            right: 36px;
+            width: auto !important;
+        }
+        button {
+            position: absolute;
+            width: 37px;
+            right: 0px;
+        }
+    }
+}
+

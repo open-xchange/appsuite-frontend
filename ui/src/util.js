@@ -89,7 +89,7 @@
      // supported browsers
     _.browserSupport = {
         'Chrome'    : 20,
-        'Safari'    : 5,
+        'Safari'    : 6,
         'Firefox'   : 10,
         'IE'        : 9,
         'Android'   : 4.1,

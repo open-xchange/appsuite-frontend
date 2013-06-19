@@ -15,6 +15,13 @@
 
     'use strict';
 
+    // helper
+
+    function closeView(ed, e) {
+        if (e.which === 9) return;
+        if (this.isOpen) this.toggle();
+    }
+
     //
     // View. One per editor instance.
     //
@@ -27,15 +34,20 @@
         events: {
             'click .emoji-icons .emoji': 'onInsertEmoji',
             'click .emoji-footer .emoji': 'onSelectCategory',
-            'click .emoji-option': 'onSelectEmojiCollection'
+            'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection'
         },
 
         // when user clicks on emoji. inserts emoji into editor
         onInsertEmoji: function (e) {
+
             e.preventDefault();
-            var icon = $(e.target).data('icon'),
+
+            var recently = {},
+                icon = $(e.target).data('icon'),
                 html = '<img src="apps/themes/login/1x1.gif" rel="0" ' +
                     'class="emoji ' + icon.css + '" data-emoji-unicode="' + icon.unicode + '">';
+
+            this.emoji.recent(icon.unicode);
             this.editor.execCommand('mceInsertContent', false, html);
         },
 
@@ -53,73 +65,103 @@
         },
 
         initialize: function (options) {
+
             this.editor = options.editor;
             this.isRendered = false;
+            this.isOpen = false;
             this.currentCategory = '';
             this.currentCollection = '';
+
+            // for optional run-time access
+            this.$el.data('view', this);
         },
 
         render: function () {
 
+            // outer container first to fix firefox's problems with position: relative in table cells
+            var node = $('<div class="table-cell-fix">');
+
+            var collectionControl = this.emoji.settings.get('collectionControl', 'tabs');
+
+            this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
+            this.showDropdown = collectionControl === 'dropdown' && this.emoji.collections.length > 1;
+
             // add tab-control?
+            if (this.showTabs) {
+                node.addClass('emoji-use-tabs').append(
+                    $('<div class="emoji-tabs abs">').append(
+                        // we directly use the Japanese terms; no translation
+                        $('<a href="#" class="emoji-tab left abs" tabindex="5">')
+                            .attr('data-collection', 'japan_carrier')
+                            .text(this.emoji.getTitle('commonEmoji')), // 他社共通絵文字
+                        $('<a href="#" class="emoji-tab right abs" tabindex="5">')
+                            .attr('data-collection', 'softbank')
+                            .text(this.emoji.getTitle('allEmoji')) // 全絵文字
+                    )
+                );
+            }
 
-
-            this.$el.append(
+            node.append(
                 $('<div class="emoji-header abs">').append(
                     // Options drop down
-                    $('<div class="emoji-options dropdown pull-right">').append(
-                        // link
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="5" role="menuitem" aria-haspopup="true">')
-                        .attr('arial-label', 'Options')
-                        .append(
-                            $('<i class="icon-cog" aria-hidden="true" role="presentation">')
-                        ),
-                        // list
-                        $('<ul class="dropdown-menu" role="menu">')
-                    ),
+                    this.showDropdown ?
+                        $('<div class="emoji-options dropdown pull-right">').append(
+                            // link
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="5" role="menuitem" aria-haspopup="true">')
+                            .attr('arial-label', 'Options')
+                            .append(
+                                $('<i class="icon-cog" aria-hidden="true" role="presentation">')
+                            ),
+                            // list
+                            $('<ul class="dropdown-menu" role="menu">')
+                        ) :
+                        [],
+                    // category name
                     $('<span class="emoji-category">')
                 ),
                 $('<div class="emoji-icons abs">'),
                 $('<div class="emoji-footer abs">')
             );
 
+            this.$el.append(node);
+
+            this.setCollection();
             this.drawOptions();
-            this.drawCategoryIcons();
-            this.setCategory('People');
-            this.setCollection('unified');
             this.isRendered = true;
+            this.isOpen = true;
+
+            // auto close emoji view on keypress or click inside editor
+            if (this.emoji.settings.get('autoClose') === true) {
+                this.editor.onKeyDown.add(_.bind(closeView, this));
+                this.editor.onClick.add(_.bind(closeView, this));
+            }
 
             return this;
         },
 
         // lists differet emoji sets in options drop-down (top/right)
         drawOptions: function () {
-            var pane = this.$el.find('.emoji-options ul');
 
-            require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
-                var options = emoji.collections;
+            var pane = this.$el.find('.emoji-options ul'),
+                options = this.emoji.collections,
+                current = this.currentCollection,
+                self = this;
 
-                pane.append(
-                    _(options).map(function (option) {
-                        var checkBox = $('<i class="icon-none">');
-                        if (option === emoji.defaultCollection()) {
-                            checkBox.attr('class', 'icon-ok');
-                        }
-                        return $('<li>').append(
-                            $('<a href="#" class="emoji-option">')
-                            .attr('data-collection', option)
-                            .append(
-                                checkBox,
-                                $.txt(emoji.collectionTitle(option))
-                            )
-                        );
-                    })
-                );
-            });
+            pane.append(
+                _(options).map(function (collection) {
+                    return $('<li>').append(
+                        $('<a href="#" class="emoji-option">')
+                        .attr('data-collection', collection)
+                        .append(
+                            $('<i>').addClass(collection === current ? 'icon-ok' : 'icon-none'),
+                            $.txt(self.emoji.getTitle(collection))
+                        )
+                    );
+                })
+            );
         },
 
         drawCategoryIcons: function () {
-            var footer = this.$el.find('.emoji-footer');
 
             function draw(category) {
                 return $('<a href="#" class="emoji" tabindex="5">')
@@ -128,23 +170,22 @@
                     .addClass(category.iconClass);
             }
 
-            require(['moxiecode/tiny_mce/plugins/emoji/main'])
-            .then(function (emoji) {
-                return emoji.categories();
-            }).then(function (categories) {
-                footer.append(
-                    _(categories).map(draw)
-                );
-            });
+            var footer = this.$el.find('.emoji-footer').empty(),
+                categories = this.emoji.getCategories();
+
+            categories.unshift(this.emoji.getRecently());
+
+            footer.empty().append(
+                _(categories).map(draw)
+            );
         },
 
         // get emojis of current category
         // returns Deferred Object
         getEmojis: function () {
-            var category = this.currentCategory;
-            return require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
-                return emoji.iconsForCategory(category);
-            });
+            var category = this.currentCategory,
+                list = this.emoji.iconsForCategory(category);
+            return list;
         },
 
         // draw all emojis of current category
@@ -152,41 +193,61 @@
 
             var node = this.$el.find('.emoji-icons').hide().empty();
 
-            this.getEmojis().done(function (list) {
+            var list = this.getEmojis();
 
-                _(list).each(function (icon) {
-                    node.append(
-                        $('<a href="#" class="emoji" tabindex="5">')
-                        .attr('title', icon.desc)
-                        .addClass(icon.css)
-                        .data('icon', icon)
-                    );
-                });
-
-                node.show().scrollTop(0);
+            _(list).each(function (icon) {
+                node.append(
+                    $('<a href="#" class="emoji" tabindex="5">')
+                    .attr('title', icon.desc)
+                    .addClass(icon.css)
+                    .data('icon', icon)
+                );
             });
+
+            node.show().scrollTop(0);
         },
 
         // set current category. sets title and triggers repaint of all icons
         setCategory: function (category) {
-            if (category !== this.currentCategory) {
-                this.currentCategory = category;
-                this.$el.find('.emoji-category').text(category);
-                this.drawEmojis();
+
+            if (category === undefined) {
+                category = this.currentCategory === 'recently' || this.emoji.hasCategory(this.currentCategory) ?
+                    this.currentCategory :
+                    this.emoji.getDefaultCategory();
             }
+
+            // always draw emojis because the collection might have changed
+            this.currentCategory = category;
+            this.$el.find('.emoji-category').text(this.emoji.getTitle(category));
+            this.drawEmojis();
         },
 
         setCollection: function (collection) {
+
+            if (collection === undefined) {
+                collection = this.emoji.getCollection();
+            }
+
             if (collection !== this.currentCollection) {
+
                 this.currentCollection = collection;
-                // set visual check-mark
-                var options = this.$el.find('.emoji-options');
-                options.find('[data-collection] i').attr('class', 'icon-none');
-                options.find('[data-collection="' + collection + '"]')
-                    .find('i').attr('class', 'icon-ok');
-                require(['moxiecode/tiny_mce/plugins/emoji/main']).then(function (emoji) {
-                    emoji.setDefaultCollection(collection);
-                });
+                this.emoji.setCollection(collection);
+
+                // set active collection in tab-conrol
+                if (this.showTabs) {
+                    var tabs = this.$el.find('.emoji-tabs');
+                    tabs.find('[data-collection]').removeClass('active');
+                    tabs.find('[data-collection="' + collection + '"]').addClass('active');
+                } else {
+                    // set visual check-mark in drop-down menu
+                    var options = this.$el.find('.emoji-options');
+                    options.find('[data-collection] i').attr('class', 'icon-none');
+                    options.find('[data-collection="' + collection + '"]')
+                        .find('i').attr('class', 'icon-ok');
+                }
+
+                this.drawCategoryIcons();
+                this.setCategory();
             }
         },
 
@@ -196,6 +257,7 @@
                 this.render();
             } else {
                 this.$el.toggle();
+                this.isOpen = !this.isOpen;
             }
         }
     });
@@ -209,18 +271,25 @@
 
         var view = null;
 
-        ed.addCommand('mceInsertEmoji', function (ui, baton) {
+        ed.addCommand('mceInsertEmoji', function (ui) {
 
             if (view === null) {
                 // create instance only once per editor
                 view = new EmojiView({ editor: ed });
-                // hook into tinyMCE's table
-                $(baton.editor.contentAreaContainer)
-                    .parent().append(view.$el).end()
-                    .parentsUntil('table').last().find('td.mceToolbar').attr('colspan', 2);
+                // load required code now
+                require(['moxiecode/tiny_mce/plugins/emoji/main'], function (emoji) {
+                    view.emoji = emoji.getInstance();
+                    // hook into tinyMCE's DOM
+                    var container = $(ed.getContainer());
+                    container.find('.mceIframeContainer').parent().append(
+                        view.$el
+                    );
+                    container.find('td.mceToolbar').attr('colspan', 2);
+                    view.toggle();
+                });
+            } else {
+                view.toggle();
             }
-
-            view.toggle();
         });
 
         // TODO: translate title

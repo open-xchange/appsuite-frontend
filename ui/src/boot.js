@@ -202,12 +202,8 @@ $(window).load(function () {
     };
     _.extend(require, req);
 
-    // resolve chicken-and-egg problem with setLanguage and gettext!... module
-    require(['gettext']).done(function (gettext) {
-        gettext.setLanguage('en_US');
-    });
-    
-    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes, gt) {
+    function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+        var gt; // set by initialize()
 
         debug('boot.js: require > loadSuccess');
 
@@ -219,7 +215,7 @@ $(window).load(function () {
             var node = feedbackNode;
             if (!node) return;
             if (typeof node === 'function') node = node();
-            if (typeof node === 'string') node = $txt(gt(node));
+            if (typeof node === 'string') node = $.txt(gt(node));
             $('#io-ox-login-feedback').empty().append(
                 $('<div class="alert alert-block alert-' + feedbackType +
                               ' selectable-text">').append(node)
@@ -274,15 +270,19 @@ $(window).load(function () {
             // hide login dialog
             $('#io-ox-login-screen').hide();
             $(this).busy();
+            debug('boot.js: loadCore > load settings ...');
             // get configuration & core
             require(['settings!io.ox/core'], function (settings) {
                 var theme = settings.get('theme') || 'default';
+                debug('boot.js: loadCore > load config ...');
                 config.load().done(function () {
+                    debug('boot.js: loadCore > require "main" & set theme');
                     $.when(
                         require(['io.ox/core/main']),
                         themes.set(theme)
                     ).done(function (core) {
                         // go!
+                        debug('boot.js: core.launch()');
                         core.launch();
                     })
                     .fail(function (e) {
@@ -532,8 +532,9 @@ $(window).load(function () {
                     gettext.enable();
                     return $.when();
                 }
-                return manifests.manager.loadPluginsFor('core')
-                    .done(gettext.enable);
+
+                debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
+                return manifests.manager.loadPluginsFor('core').done(gettext.enable);
             }
 
             function gotoSignin() {
@@ -553,7 +554,8 @@ $(window).load(function () {
                             document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
-                            initialize();
+                            gettext.setLanguage('en_US');
+                            require(['io.ox/core/login-i18n']).done(initialize);
                         },
                         function fail() {
                             // nope, had some stuff in the caches but server is down
@@ -646,10 +648,12 @@ $(window).load(function () {
                         if (ox.signin) {
                             gotoCore(true);
                         } else {
+                            debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
                             fetchUserSpecificServerConfig().done(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
                                 loadCoreFiles().done(function () {
                                     loadCore();
                                 });
@@ -667,7 +671,8 @@ $(window).load(function () {
         /**
          * Initialize login screen
          */
-        initialize = function () {
+        initialize = function (gtModule) {
+            gt = gtModule;
 
             // shortcut
             var sc = ox.serverConfig,
@@ -856,7 +861,7 @@ $(window).load(function () {
     require([
         'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
         'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities', 'io.ox/core/config',
-        'themes', 'io.ox/core/login-i18n', 'io.ox/core/settings'],
+        'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );
 

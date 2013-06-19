@@ -38,7 +38,7 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="row-fluid">');
+            var row = $('<div class="row-fluid header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
             this.append(row);
@@ -76,7 +76,7 @@ define('io.ox/calendar/edit/template',
             );
             this.append(discardButton = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
-                .css({float: 'right'})
+                .css({float: _.device('small') ? 'left' : 'right'})
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -211,10 +211,12 @@ define('io.ox/calendar/edit/template',
         id: 'find-free-time-1',
         index: 550,
         nextTo: 'end-date',
-        draw: function () {
-            this.append(
-                $('<div class="span4"><label class="find-free-time"></label></div>')
-            );
+        draw: function (baton) {
+            if (_.device('!small')) {
+                this.append(
+                    $('<div class="span4"><label class="find-free-time"></label></div>')
+                );
+            }
         }
     });
 
@@ -251,7 +253,7 @@ define('io.ox/calendar/edit/template',
         id: 'noteSeparator',
         index: 750,
         draw: function () {
-            this.append($('<span>&nbsp;</span>').css({height: '10px'}));
+            this.append($('<span>&nbsp;</span>'));
         }
     });
 
@@ -327,14 +329,17 @@ define('io.ox/calendar/edit/template',
         id: 'add-participant',
         index: 1500,
         draw: function (options) {
-            var node = this;
+            var node = this,
+            input;
             node.append(
-                    $('<div class="input-append span6">').append(
+                    input = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
+
+            if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
@@ -512,7 +517,7 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            if (capabilities.has('freebusy !alone')) {
+            if (capabilities.has('freebusy !alone') && _.device('!small')) {
                 var selector = 'label.find-free-time, .find-free-time legend';
                 this.parent().find(selector).append(
                     $('<a href="#" class="pull-right" tabindex="1">').text(gt('Find a free time'))

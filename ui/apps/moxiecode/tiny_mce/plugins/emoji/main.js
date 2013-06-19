@@ -13,17 +13,177 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
        'settings!io.ox/mail/emoji',
-       'css!emoji/emoji.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'], function (emoji, categories, settings) {
+       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji_categories.css',
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less',
+       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji.css',
+       'css!emoji/emoji.css'], function (emoji, categories, settings) {
 
     "use strict";
 
-    //"invert" the categories object
-    function createCategoryMap() {
-        return categories[defaultCollection()].then(function (categories) {
-            category_map = _.object(
-                _(categories).chain().values().flatten(true).value(),
-                _(categories)
+    function parseCollections() {
+        //TODO: may be, filter the list for collections, we support in the frontend
+        var e = settings.get('availableCollections', '');
+        return _(e.split(',')).map(function (collection) {
+            return collection.trim();
+        });
+    }
+
+    var collections = parseCollections();
+
+    function escape(s) {
+        return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
+    }
+
+    // introduce Emoji class
+    function Emoji() {
+
+        // inherit from emoji
+        _.extend(this, emoji);
+
+        // plain data API
+        this.icons = [];
+        this.collections = collections;
+        this.category_map = {};
+
+        // make settings accessible, esp. for editor plugin
+        this.settings = settings;
+
+        var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
+        this.currentCollection = settings.get('userCollection', defaultCollection);
+
+        this.createCategoryMap();
+    }
+
+    _.extend(Emoji.prototype, {
+
+        iconInfo: function (icon) {
+
+            if (_.isString(icon))
+                return this.iconInfo([icon, emoji.EMOJI_MAP[icon]]);
+
+            if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
+                return { invalid: true };
+
+            return {
+                css: this.cssFor(icon[0]),
+                unicode: icon[0],
+                desc: icon[1][1],
+                category: this.category_map[icon[0]]
+            };
+        },
+
+        cssFor: function (unicode) {
+
+            var icon = emoji.EMOJI_MAP[unicode];
+
+            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
+                return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            }
+
+            return 'emoji' + icon[2];
+        },
+
+        // add to "recently used" category
+        recent: function (unicode) {
+
+            var recently = settings.get('recently', {}),
+                // encode unicode to avoid backend bug
+                key = escape(unicode);
+
+            if (key in recently) {
+                recently[key].count++;
+                recently[key].time = _.now();
+            } else {
+                recently[key] = { count: 1, time: _.now() };
+            }
+
+            settings.set('recently', recently).save();
+        },
+
+        getRecently: function () {
+            return _(categories[this.currentCollection].meta).find(function (cat) {
+                return cat.name === 'recently';
+            }) || categories.recently;
+        },
+
+        iconsForCategory: function (category) {
+
+            if (category === 'recently') {
+
+                var recently = settings.get('recently', {});
+
+                return _(this.icons)
+                    .chain()
+                    // get relevant icons
+                    .filter(function (icon) {
+                        // encode unicode to avoid backend bug
+                        var key = escape(icon.unicode);
+                        return key in recently && !!icon.category;
+                    })
+                    .map(function (icon) {
+                        var key = escape(icon.unicode);
+                        return [icon, recently[key]];
+                    })
+                    // sort by timestamp
+                    .sortBy(function (array) {
+                        return array[1].time;
+                    })
+                    // get first 40 icons (5 rows; 8 per row)
+                    .first(40)
+                    // now sort by frequency (descending order)
+                    .sortBy(function (array) {
+                        return 0 - array[1].count;
+                    })
+                    // extract the icon
+                    .pluck(0)
+                    .value();
+            }
+
+            return _(this.icons).filter(function (icon) {
+                return icon.category === category;
+            });
+        },
+
+        getCategories: function () {
+            return (categories[this.currentCollection].meta || []).slice()
+            .filter(function (cat) {
+                return cat.name !== 'recently';
+            }); // return copy
+        },
+
+        getDefaultCategory: function () {
+            return (_(this.getCategories()).first() || {}).name;
+        },
+
+        hasCategory: function (category) {
+            return _(categories[this.currentCollection].meta).chain().pluck('name').indexOf(category).value() > -1;
+        },
+
+        getTitle: function (id) {
+            return categories.translations[id];
+        },
+
+        setCollection: function (collection) {
+
+            if (!_(this.collections).contains(collection)) return;
+
+            this.currentCollection = collection;
+            settings.set('userCollection', collection).save();
+            this.createCategoryMap();
+        },
+
+        getCollection: function () {
+            return this.currentCollection;
+        },
+
+        // "invert" the categories object
+        createCategoryMap: function () {
+
+            var cat = categories[this.currentCollection];
+
+            this.category_map = _.object(
+                _(cat).chain().values().flatten(true).value(),
+                _(cat)
                     .chain()
                     .pairs()
                     .map(function (item) {
@@ -35,84 +195,24 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     .flatten(true)
                     .value()
             );
-            icons = _(emoji.EMOJI_MAP)
+
+            this.icons = _(emoji.EMOJI_MAP)
                 .chain()
                 .pairs()
-                .map(iconInfo)
+                .map(this.iconInfo, this)
                 .value();
-        });
-    }
-
-    function defaultCollection() {
-        var defaultCollection = settings.get('defaultCollection');
-
-        return settings.get('userCollection', defaultCollection);
-    }
-
-    function iconInfo(icon) {
-        if (_.isString(icon)) {
-            return iconInfo([icon, emoji.EMOJI_MAP[icon]]);
         }
-        if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
-            return {invalid: true};
+    });
 
-        return {
-            css: 'emoji' + icon[1][2],
-            unicode: icon[0],
-            desc: icon[1][1],
-            category: category_map[icon[0]] || 'People' // matthias: was undefined, needed that to continue
-        };
-    }
+    return {
 
-    function parseCollections() {
-        //TODO: may be, filter the list for collections, we support in the frontend
-        var e = settings.get('availableCollections');
-
-        return _(e.split(','))
-            .map(function (collection) {
-                return collection.trim();
-            });
-    }
-
-    var category_map = {},
-        icons = [],
-        collections = parseCollections();
-
-    //generate category_map for the first time
-    createCategoryMap();
-
-    return _.extend({
-        // plain data API
-        icons: icons,
-        iconsForCategory: function (category) {
-            return _(icons).filter(function (icon) {
-                return icon.category === category;
-            });
-        },
-        iconInfo: iconInfo,
-        categories: function () {
-            return categories[this.defaultCollection()].then(function (data) {
-                return data.meta || [];
-            });
-        },
-
-        // collections API
-        collections: collections,
-        collectionTitle: function (collection) {
-            return categories.translatedNames[collection];
-        },
-        defaultCollection: defaultCollection,
-        setDefaultCollection: function (collection) {
-            if (!_(collections).contains(collection))
-                return;
-
-            settings.set('userCollection', collection);
-            settings.save();
-            createCategoryMap();
+        getInstance: function () {
+            return new Emoji();
         },
 
         // HTML related API
         unifiedToImageTag: function (text, options) {
+
             var parsedText;
             options = _.extend({forceProcessing: false}, options);
 
@@ -135,7 +235,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             });
             return parsedText.html();
         },
+
         imageTagsToUnified: function (html) {
+
             var node = $('<div>').append(html);
 
             node.find('img.emoji').each(function (index, node) {
@@ -144,5 +246,5 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             return node.html();
         }
-    }, emoji);
+    };
 });

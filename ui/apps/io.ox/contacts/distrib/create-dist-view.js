@@ -94,6 +94,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             autocomplete = new AddParticipantsView({ el: pNode });
 
+            if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
+
             autocomplete.render({
                 autoselect: true,
                 parentSelector: 'body',
@@ -271,7 +273,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         id: 'notice',
         index: 400,
         render: function (baton) {
-            this.$el.append($('<div class="alert alert-info">').css({'max-width': '340px'}).text(gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
+            this.$el.append($('<div class="alert alert-info">').text(gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')));
         }
     });
 

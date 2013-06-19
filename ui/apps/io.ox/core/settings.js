@@ -159,17 +159,27 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     params: { action: 'list' },
                     data: [path]
                 })
-                .pipe(function (data) {
-                    if (!detached) {
-                        tree = data[0].tree;
-                        meta = data[0].meta;
-                        initial = JSON.parse(JSON.stringify(tree));
+                .then(
+                    function success(data) {
+                        if (!detached) {
+                            tree = data[0].tree;
+                            meta = data[0].meta;
+                            initial = JSON.parse(JSON.stringify(tree));
+                            return applyDefaults();
+                        } else {
+                            return $.when();
+                        }
+                    },
+                    function fail(e) {
+                        tree = {};
+                        meta = {};
+                        initial = {};
+                        detached = true;
+                        console.error('Cannot load jslob', path, e);
                         return applyDefaults();
-                    } else {
-                        return $.when();
                     }
-                })
-                .pipe(function () {
+                )
+                .then(function () {
                     self.trigger('load', tree, meta);
                     var data = { tree: tree, meta: meta };
                     return settingsCache.add(path, data).pipe(function () { return data; });
