@@ -13,8 +13,9 @@
 
 define.async('io.ox/core/tk/html-editor',
     ['moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/core/capabilities',
      'settings!io.ox/core'
-     ], function (emoji, settings) {
+     ], function (emoji, capabilities, settings) {
 
     'use strict';
 
@@ -377,13 +378,30 @@ define.async('io.ox/core/tk/html-editor',
 
     function Editor(textarea) {
 
-        var def = $.Deferred(), ed;
+        var def = $.Deferred(), ed,
+            toolbar1, toolbar2, toolbar3;
 
-        var toolbarDefault = 'bold,italic,underline,strikethrough,|,' +
-                'emoji,|,bullist,numlist,outdent,indent,|,' +
-                'justifyleft,justifycenter,justifyright,|,' +
-                'forecolor,backcolor,|,formatselect,|,' +
-                'undo,redo';
+        // toolbar default
+        toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
+            ',|,emoji,|,bullist,numlist,outdent,indent' +
+            ',|,justifyleft,justifycenter,justifyright' +
+            ',|,formatselect,fontselect,fontsizeselect' +
+            ',|,forecolor,backcolor';
+
+        toolbar2 = '';
+        toolbar3 = '';
+
+        // consider custom configurations
+        toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
+        toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', toolbar2);
+        toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', toolbar3);
+
+        // remove unsupported stuff
+        if (!capabilities.has('emoji')) {
+            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, '');
+            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, '');
+            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, '');
+        }
 
         (textarea = $(textarea)).tinymce({
 
@@ -423,9 +441,9 @@ define.async('io.ox/core/tk/html-editor',
                 }
             },
 
-            theme_advanced_buttons1: settings.get('tinyMCE/theme_advanced_buttons1', toolbarDefault),
-            theme_advanced_buttons2: settings.get('tinyMCE/theme_advanced_buttons2', ''),
-            theme_advanced_buttons3: settings.get('tinyMCE/theme_advanced_buttons3', ''),
+            theme_advanced_buttons1: toolbar1,
+            theme_advanced_buttons2: toolbar2,
+            theme_advanced_buttons3: toolbar3,
             theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
             theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
