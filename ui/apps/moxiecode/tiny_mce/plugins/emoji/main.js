@@ -102,7 +102,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         },
 
         getRecently: function () {
-            return categories.recently;
+            return _(categories[this.currentCollection].meta).find(function (cat) {
+                return cat.name === 'recently';
+            }) || categories.recently;
         },
 
         iconsForCategory: function (category) {
@@ -144,7 +146,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         },
 
         getCategories: function () {
-            return (categories[this.currentCollection].meta || []).slice(); // return copy
+            return (categories[this.currentCollection].meta || []).slice()
+            .filter(function (cat) {
+                return cat.name !== 'recently';
+            }); // return copy
         },
 
         getDefaultCategory: function () {
