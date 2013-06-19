@@ -82,6 +82,7 @@ define('io.ox/mail/settings/pane',
              * THIS COMMENT IS IMPORTANT, DON’T REMOVE
              */
             api.getSenderAddresses(0).done(function (addresses) {
+
                 self.$el.empty().append(
                     tmpl.render('io.ox/mail/settings', {
                         strings: staticStrings,
@@ -89,6 +90,15 @@ define('io.ox/mail/settings/pane',
                         optionsAllAccounts: addresses.map(function (address) { return address[1]; })
                     })
                 );
+
+                // hide non-configurable sections
+                self.$el.find('[data-property-section]').each(function () {
+                    var section = $(this), property = section.attr('data-property-section');
+                    if (!settings.isConfigurable(property)) {
+                        section.remove();
+                    }
+                });
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
             });
