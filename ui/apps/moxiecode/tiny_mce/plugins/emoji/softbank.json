@@ -3,47 +3,47 @@
     {
       "name": "Face",
       "title": "Face",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_facial_expression"
     },
     {
       "name": "Feeling_Decoration",
       "title": "Feeling: decoration",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_emotion"
     },
     {
       "name": "Weather_Season",
       "title": "Weather: Season",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_season_event"
     },
     {
       "name": "Character",
       "title": "Character",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_character"
     },
     {
       "name": "Food",
       "title": "Food",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_food"
     },
     {
       "name": "Life",
       "title": "Life",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_daily_life"
     },
     {
       "name": "Tool",
       "title": "Tool",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_tools"
     },
     {
       "name": "Hobby",
       "title": "Hobby",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_hobbies"
     },
     {
       "name": "Letters_Symbols",
       "title": "Letters: Symbols",
-      "iconClass": ""
+      "iconClass": "softbank sprite-emoji_categories-category_symbols"
     }
   ],
   "Letters_Symbols": [

@@ -13,6 +13,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
        ['emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
        'settings!io.ox/mail/emoji',
+       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji_categories.css',
        'less!moxiecode/tiny_mce/plugins/emoji/emoji.less',
        'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji.css',
        'css!emoji/emoji.css'], function (emoji, categories, settings) {
