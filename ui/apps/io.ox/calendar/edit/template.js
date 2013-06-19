@@ -76,7 +76,7 @@ define('io.ox/calendar/edit/template',
             );
             this.append(discardButton = $('<button class="btn" data-action="discard" >')
                 .text(gt("Discard"))
-                .css({float: 'right'})
+                .css({float: _.device('small') ? 'left' : 'right'})
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -212,7 +212,6 @@ define('io.ox/calendar/edit/template',
         index: 550,
         nextTo: 'end-date',
         draw: function (baton) {
-            debugger;
             if (_.device('!small')) {
                 this.append(
                     $('<div class="span4"><label class="find-free-time"></label></div>')
