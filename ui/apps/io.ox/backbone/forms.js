@@ -680,7 +680,7 @@ define('io.ox/backbone/forms',
                 } else {
                     return new date.Local(mydate).format(date.DATE);
                 }
-                
+
             },
 
             _toTime: function (value, attribute) {
@@ -796,7 +796,7 @@ define('io.ox/backbone/forms',
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.attr('disabled', true);
                                 }
-    
+
                                 if (options.display === "DATETIME") {
                                     self.nodes.timezoneField = $('<span class="label">');
                                     if (self.model.get(self.attribute)) {
@@ -807,13 +807,13 @@ define('io.ox/backbone/forms',
                                 }
                                 if (mobileMode) {
                                     self.nodes.dayField.toggleClass('input-medium', 'input-small');
-                                    return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                    return [self.nodes.dayField];
                                 } else {
-                                    
+
                                     if (options.display === "DATE") {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === "DATETIME") {
-                                        
+
                                         self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
                                         if (self.model.get('full_time')) {
                                             self.nodes.timeField.hide();
@@ -827,8 +827,8 @@ define('io.ox/backbone/forms',
                     )
                 );
                 this.setValueInField();
-                
-                
+
+
                 if (!mobileMode) {
                     // get the right date format
                     var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
@@ -842,11 +842,11 @@ define('io.ox/backbone/forms',
                 } else {//do funky mobiscroll stuff
                     if (options.display === "DATETIME") {
                         this.nodes.dayField.mobiscroll().datetime();
-                        
+
                     } else {
                         this.nodes.dayField.mobiscroll().date();
                     }
-                    
+
                     this.nodes.dayField.val = function (value) {//repairing functionality
                         if (arguments.length > 0) {
                             this['0'].value = value;
@@ -860,7 +860,7 @@ define('io.ox/backbone/forms',
                     this.nodes.timeField.combobox(comboboxHours);
                     this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
                 }
-                
+
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
 
                 if (!mobileMode && options.overwritePositioning) {
