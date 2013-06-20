@@ -15,7 +15,6 @@ define('io.ox/calendar/edit/template',
     ['io.ox/core/extensions',
      'gettext!io.ox/calendar/edit/main',
      'io.ox/calendar/util',
-     'io.ox/core/date',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/tk/attachments',
@@ -23,7 +22,7 @@ define('io.ox/calendar/edit/template',
      'io.ox/calendar/api',
      'io.ox/participants/views',
      'io.ox/core/capabilities'
-    ], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
+    ], function (ext, gt, util, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
 
     'use strict';
 
