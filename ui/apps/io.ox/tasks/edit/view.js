@@ -255,7 +255,6 @@ define('io.ox/tasks/edit/view',
                             app.getWindow().idle();
                             notifications.yell('error', response.error);
                         }, 300);
-                        console.log(response);
                     });
 
                 });
