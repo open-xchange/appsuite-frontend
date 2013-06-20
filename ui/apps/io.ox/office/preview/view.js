@@ -103,7 +103,7 @@ define('io.ox/office/preview/view',
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
             contentMargin: { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
-            overlayMargin: { right: Utils.SCROLLBAR_WIDTH, bottom: Utils.SCROLLBAR_HEIGHT }
+            overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
 
         // private methods ----------------------------------------------------

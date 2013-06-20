@@ -262,6 +262,9 @@ define('io.ox/office/framework/view/component',
                 self.trigger('change', key, value);
             });
 
+            // set the key as data attribute
+            group.getNode().attr('data-key', key);
+
             return this;
         };
 

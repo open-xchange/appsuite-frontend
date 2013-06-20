@@ -656,9 +656,11 @@ i.docs-caret {
 
     > .view-component.toolbox {
         display: inline-block;
+        padding-left: 4px;
+        padding-right: 4px;
 
-        &:not(:last-child) { padding-right: 4px; }
-        &:not(:first-child) { padding-left: 4px; }
+        &:first-child { padding-left: 0; }
+        &:last-child { padding-right: 0; }
     }
 }
 
