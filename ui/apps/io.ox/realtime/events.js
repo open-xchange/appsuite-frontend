@@ -9,7 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- * 
+ *
  * A module with which you can register for events as transmitted via the RT system. It provides the customary
  * on(eventName, callback), off(eventName, callback), once(eventName, callback) methods. To see which
  * events are available, you can check in the console with events.protectedMethods.backend.events().done(function (supported) { console.log(supported);});
