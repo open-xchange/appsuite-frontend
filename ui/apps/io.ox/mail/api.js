@@ -28,7 +28,7 @@ define('io.ox/mail/api',
     'use strict';
 
     var DONE = $.when(),
-        DELAY = 1000 * 3, // 3 seconds
+        DELAY = 1000 * 60, // 60 seconds (kind of protection against unwanted selection; e.g. Bug #26575)
         DELIM = '//';
 
     var tracker = (function () {
