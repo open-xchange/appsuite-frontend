@@ -119,6 +119,13 @@ define('io.ox/realtime/events', ['io.ox/realtime/rt', 'io.ox/core/http'], functi
 		}
 	};
 
+	rt.on("reset", function () {
+		_(events).chain().keys().each(function (eventName) {
+			var entry = events[eventName];
+			internal.backend.on(eventName, entry.selector, rt.resource);
+		});
+	});
+
 	module.protectedMethods = internal;
 
 	return module;
