@@ -159,7 +159,6 @@ define('io.ox/participants/views',
         },
 
         fnKey: function (e) {
-            e.preventDefault();
             switch (e.which) {
             case 13: // enter
                 // trigger default click handler
