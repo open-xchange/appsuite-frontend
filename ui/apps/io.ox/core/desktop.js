@@ -1589,6 +1589,16 @@ define("io.ox/core/desktop",
             .idle()
             .empty();
     };
+    // only disable, don't show night-rider
+    ox.disable = function () {
+        $('#background_loader')
+            .addClass('busy block secure')
+            .on('touchmove', function (e) {
+                e.preventDefault();
+                return false;
+            })
+            .show();
+    };
 
     // simple launch
     ox.launch = function (id, data) {

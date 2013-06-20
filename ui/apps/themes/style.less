@@ -12,7 +12,6 @@
  */
 
 #background_loader.secure {
-
     background-color: rgba(255, 255, 255, 0);
     .transition(background-color 0.5s linear);
 
@@ -2525,10 +2524,83 @@ input.flat-input {
             text-align: right;
         }
     }
+
+    .dropdown-menu {
+        min-width: initial;
+        position: fixed;
+        top: auto;
+        bottom: 0px;
+        left: 14px !important;
+        right: 14px;
+        .border-radius(0);
+        .active-app {
+            a {
+               font-weight: bold;
+            }
+        }
+        .divider {
+            display: none;
+        }
+
+        li {
+
+            margin-left: 10px;
+            margin-right: 10px;
+            border-bottom: 1px solid #ccc;
+            &:last-child {
+                border-bottom-width: 0;
+            }
+        }
+        li > a {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+            margin-left: -10px;
+            margin-right: -10px;
+            line-height: 25px;
+            font-size: 20px;
+            font-weight: 300;
+            max-width: none !important;
+
+        }
+        i {
+            position: absolute;
+            right: -10px;
+            top: -20px;
+            color: #FFF;
+            background: #444;
+            height: 33px;
+            width: 33px;
+            border-radius: 20px;
+            border: 2px solid #999;
+            text-align: center;
+            line-height: 33px;
+            font-size: 17px;
+        }
+
+        &.slidedown {
+            -webkit-transform: translateY(110%);
+            -webkit-transition-property: -webkit-transform;
+            -webkit-transition-duration: 300ms;
+            -webkit-animation-timing-function: ease-in;
+        }
+        &.slideup {
+            -webkit-transform: translateY(0%);
+            -webkit-transition-property: -webkit-transform;
+            -webkit-transition-duration: 300ms;
+            -webkit-animation-timing-function: ease-in;
+
+        }
+
+    }
+
+    #background_loader {
+        height: 150% !important;
+    }
+
 }
 
 .slidedown {
-    //-webkit-animation-delay: 2s;
     -webkit-transform: translateY(50px);
     -webkit-transition-property: -webkit-transform;
     -webkit-transition-duration: 300ms;

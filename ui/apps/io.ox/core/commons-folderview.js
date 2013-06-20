@@ -676,7 +676,9 @@ define('io.ox/core/commons-folderview',
                     'right': 'intial'
                 });
                 // listen to swipe
+                // TODO: works not reliable on android stock browsers, add a manual close button also
                 sidepanel.on('swipeleft', toggle);
+
             }
             // paint now
             return tree.paint().pipe(function () {

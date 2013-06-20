@@ -142,6 +142,14 @@ $(window).load(function () {
         $('html').addClass('ios');
     }
 
+    if (_.device('Android')) {
+        // disable context menu on chrome for android
+        document.oncontextmenu = function (e) {
+            e.preventDefault();
+            return false;
+        }
+    }
+
     // be busy
     $('#background_loader').busy();
 

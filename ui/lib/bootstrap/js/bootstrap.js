@@ -635,9 +635,11 @@
 
 
  /* DROPDOWN CLASS DEFINITION
+  * Modified 20.6.2013 - Added a new mobile modal menu
   * ========================= */
 
-  var toggle = '[data-toggle=dropdown]'
+  var toggle = '[data-toggle=dropdown]',
+    phone = _.device('smartphone')
     , Dropdown = function (element) {
         var $el = $(element).on('click.dropdown.data-api', this.toggle)
         $('html').on('click.dropdown.data-api', function () {
@@ -653,17 +655,32 @@
       var $this = $(this)
         , $parent
         , isActive
+        , $ul;
 
       if ($this.is('.disabled, :disabled')) return
-
       $parent = getParent($this)
+
+      if (phone) {
+        $ul = $parent.find('ul');
+        if ($ul.length > 0) {
+          $parent.data('menu', $ul);
+          $('body').append($ul.css({'z-index': 65500})
+            .prepend($('<i class="icon-remove">')
+              .on('click', clearMenus)));
+
+        }
+      }
 
       isActive = $parent.hasClass('open')
 
       clearMenus(e)
 
       if (!isActive) {
-        $parent.toggleClass('open')
+        $parent.toggleClass('open');
+        if (phone) {
+          ox.disable(true);
+          $parent.data('menu').show();
+        }
       }
 
       $this.focus()
@@ -716,6 +733,14 @@
     if (e && e.button === 2) { return; }
     // Ignore ctrl click to make firefox mac users happy
     if (e && e.ctrlKey) { return; }
+    // on phone close only on item select or X icon
+    if (phone && $(e.target).attr('id') === "background_loader") {
+      return;
+    }
+    if (phone) {
+      $('.dropdown-menu').hide();
+      ox.idle();
+    }
     $(toggle).each(function () {
       getParent($(this)).removeClass('open')
     })
@@ -766,12 +791,11 @@
   /* APPLY TO STANDARD DROPDOWN ELEMENTS
    * =================================== */
 
-  $(document)
-    .on('click.dropdown.data-api touchstart.dropdown.data-api', clearMenus)
-    .on('click.dropdown touchstart.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-    .on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
-    .on('click.dropdown.data-api touchstart.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
-    .on('keydown.dropdown.data-api touchstart.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
+$(document)
+    .on('click.dropdown.data-api', clearMenus)
+    .on('click.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
 
 }(window.jQuery);/* =========================================================
  * bootstrap-modal.js v2.2.2
