@@ -79,6 +79,7 @@ define('io.ox/core/pubsub/model',
             },
             performRefresh: function () {
                 if (this.refreshState() === 'ready') {
+                    api.subscriptions.refresh(this);
                     return (this._refresh = _.wait(5000));
                 }  else {
                     return this._refresh;
