@@ -271,6 +271,30 @@ define('io.ox/office/framework/view/pane',
             return this;
         };
 
+        /**
+         * Visits all view components registered at this view pane.
+         *
+         * @param {Function} iterator
+         *  The iterator called for each view component. Receives the reference
+         *  to the view component, and its insertion index. If the iterator
+         *  returns the Utils.BREAK object, the iteration process will be
+         *  stopped immediately.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         *
+         * @returns {Utils.BREAK|Undefined}
+         *  A reference to the Utils.BREAK object, if the iterator has returned
+         *  Utils.BREAK to stop the iteration process, otherwise undefined.
+         */
+        this.iterateViewComponents = function (iterator, context) {
+            return _(components).any(function (component, index) {
+                return iterator.call(context, component, index) === Utils.BREAK;
+            }) ? Utils.BREAK : undefined;
+        };
+
         this.destroy = function () {
             this.events.destroy();
             _(components).invoke('destroy');

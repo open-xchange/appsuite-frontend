@@ -648,6 +648,7 @@ i.docs-caret {
 
 /* inline style view panes */
 .view-pane.inline {
+    white-space: nowrap;
     text-align: left;
 
     &.right {
@@ -658,8 +659,8 @@ i.docs-caret {
         display: inline-block;
         white-space: nowrap;
 
-        &:not(:last-child) { padding-right: 4px; }
-        &:not(:first-child) { padding-left: 4px; }
+        &.toolbox:not(:last-child) { padding-right: 4px; }
+        &.toolbox:not(:first-child) { padding-left: 4px; }
         
         > .group {
             display: inline-block;
