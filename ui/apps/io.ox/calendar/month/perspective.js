@@ -467,6 +467,29 @@ define('io.ox/calendar/month/perspective',
                 });
             });
 
+            this.main
+                .on('keydown', function (e) {
+                switch (e.which) {
+                case 37: // left
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'prev'
+                    });
+                    break;
+                case 39: // right
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'next'
+                    });
+                    break;
+                case 13: // enter
+                    $(e.target).click();
+                    break;
+                default:
+                    break;
+                }
+            });
+
             // define default sidepopup dialog
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {

@@ -310,7 +310,9 @@ define('io.ox/calendar/month/view',
                 }
             }
 
-            this.addClass(classes)
+            this
+                .attr({ tabindex: 1 })
+                .addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')

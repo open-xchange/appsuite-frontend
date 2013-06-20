@@ -279,6 +279,9 @@ define('io.ox/calendar/week/view',
                 this.setStartDate('next');
                 this.trigger('onRefresh');
                 break;
+            case 13: // enter
+                this.onClickAppointment(e);
+                break;
             default:
                 break;
             }
@@ -289,10 +292,10 @@ define('io.ox/calendar/week/view',
          * @param  {Event} e Mouse event
          */
         onClickAppointment: function (e) {
-            var cT = $(e.currentTarget);
+            var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid($(e.currentTarget).data('cid') + '');
+                    obj = _.cid(cT.data('cid') + '');
                 if (!cT.hasClass('current')) {
                     $('.appointment', self.$el)
                         .removeClass('current opac')
@@ -1569,7 +1572,9 @@ define('io.ox/calendar/week/view',
                 }
             }
 
-            this.addClass(classes)
+            this
+                .attr({ tabindex: 1 })
+                .addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')
