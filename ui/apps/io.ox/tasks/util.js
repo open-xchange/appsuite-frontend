@@ -239,6 +239,61 @@ define('io.ox/tasks/util',
 
                 return appendString;
             },
+            
+            //returns the same as buildDropdownMenu but returns an array of value string pairs
+            buildOptionArray: function (time) {
+                if (!time) {
+                    time = new Date();
+                }
+                var result = [ [5, gt('in 5 minutes')],
+                               [15, gt('in 15 minutes')],
+                               [30, gt('in 30 minutes')],
+                               [60, gt('in one hour')]];
+
+                // variable daytimes
+                var i = time.getHours();
+
+                if (i < 6) {
+                    i = 0;
+                } else if (i < 12) {
+                    i = 1;
+                } else if (i < 15) {
+                    i = 2;
+                } else if (i < 18) {
+                    i = 3;
+                } else if (i < 22) {
+                    i = 4;
+                }
+
+                while (i < lookupDaytimeStrings.length) {
+                    result.push(['d' + i, lookupDaytimeStrings[i]]);
+                    i++;
+                }
+                
+                //weekdays
+                var circleIncomplete = true,
+                    startday = time.getDay();
+
+                i = (time.getDay() + 2) % 7;
+
+                result.push(['t', gt('tomorrow')]);
+
+                while (circleIncomplete) {
+                    result.push(['w' + i, lookupWeekdayStrings[i]]);
+                    if (i < 6) {
+                        i++;
+                    } else {
+                        i = 0;
+                    }
+
+                    if (i === startday) {
+                        result.push(['ww', gt('in one week')]);
+                        circleIncomplete = false;
+                    }
+                }
+                
+                return result;
+            },
 
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
