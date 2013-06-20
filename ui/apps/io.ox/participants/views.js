@@ -20,7 +20,8 @@ define('io.ox/participants/views',
         tagName: 'div',
 
         events: {
-            'click .remove': 'onRemove'
+            'click .remove': 'onRemove',
+            'keydown': 'fnKey'
         },
 
         render: function () {
@@ -29,7 +30,10 @@ define('io.ox/participants/views',
 
             // we set the class this way because some controller pass an existing node
             this.$el.addClass('participant-wrapper')
-                .attr('data-cid', this.model.cid);
+                .attr({
+                    'data-cid': this.model.cid,
+                    tabindex: 1
+                });
 
             this.nodes = {
                 $img: $('<div>'),
@@ -154,13 +158,30 @@ define('io.ox/participants/views',
             }
         },
 
+        fnKey: function (e) {
+            e.preventDefault();
+            switch (e.which) {
+            case 13: // enter
+                // trigger default click handler
+                this.$el.click();
+                break;
+            case 46: // del
+                this.onRemove(e);
+                break;
+            default:
+                break;
+            }
+        },
+
         onRemove: function (e) {
             // remove participant from model
             e.preventDefault();
             // get cid from parent node
-            var cid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
-            // remove from collection by cid
-            this.model.collection.remove(this.model.collection.get(cid));
+            if ($(e.currentTarget).hasClass('removable')) {
+                var cid = $(e.currentTarget).closest('[data-cid]').attr('data-cid');
+                // remove from collection by cid
+                this.model.collection.remove(this.model.collection.get(cid));
+            }
         }
     });
 
