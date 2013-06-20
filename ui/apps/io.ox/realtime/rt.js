@@ -61,9 +61,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (matches(json, namespace, element)) {
             return new RealtimePayload(json);
         } else {
-            if (json.payloads) {
-                for (i = 0; i < json.payloads.length; i++) {
-                    var payload = get(json.payloads[i], namespace, element);
+            if (json.payloads || json.data) {
+                var payloads = json.payloads || json.data;
+                for (i = 0; i < payloads.length; i++) {
+                    var payload = get(payloads[i], namespace, element);
                     if (payload !== null) {
                         return payload;
                     }
@@ -77,7 +78,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         if (matches(json, namespace, element)) {
             collector.push(new RealtimePayload(json));
         }
-        _(json.payloads || []).each(function (p) {
+        _(json.payloads || json.data || []).each(function (p) {
             getAll(collector, p, namespace, element);
         });
     }
@@ -109,6 +110,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         this.payloads = json.payloads || [];
         this.tracer = json.tracer;
         this.seq = _.isNull(json.seq) ? -1 : Number(json.seq);
+        if (_.isNaN(this.seq)) {
+            this.seq = -1;
+        }
         this.tracer = json.tracer;
         this.log = json.log;
 
@@ -506,6 +510,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         console.log("Disconnected", disconnected);
         console.log("silenceCount", silenceCount);
     };
+
+    api.resource = tabId;
 
     setInterval(function () {
         if (!connecting) {
