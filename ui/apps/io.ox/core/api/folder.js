@@ -192,7 +192,7 @@ define('io.ox/core/api/folder',
                     .pipe(function (data, timestamp) {
                         // rearrange on multiple ???
                         if (data.timestamp) {
-                            timestamp = _.now(); // force update
+                            timestamp = _.then(); // force update
                             data = data.data;
                         }
                         //apply blacklist

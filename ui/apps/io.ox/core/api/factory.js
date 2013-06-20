@@ -382,7 +382,7 @@ define('io.ox/core/api/factory',
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
-                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() }),
+                var opt = $.extend({}, o.requests.remove, { timestamp: _.then() }),
                     data = http.simplify(ids);
                 // done
                 var done = function () {

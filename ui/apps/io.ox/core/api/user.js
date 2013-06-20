@@ -68,7 +68,7 @@ define('io.ox/core/api/user',
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp || _.now()
+                        timestamp: o.timestamp || _.then()
                     },
                     data: o.data,
                     appendColumns: false
@@ -126,7 +126,7 @@ define('io.ox/core/api/user',
 
             return http.UPLOAD({
                 module: 'user',
-                params: { action: 'update', id: o.id, timestamp: o.timestamp || _.now() },
+                params: { action: 'update', id: o.id, timestamp: o.timestamp || _.then() },
                 data: form,
                 fixPost: true
             })
@@ -137,7 +137,7 @@ define('io.ox/core/api/user',
                 action: 'update',
                 form: file,
                 data: changes,
-                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now()}
+                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then()}
             })
             .pipe(filter);
         }

@@ -108,7 +108,7 @@ define('io.ox/tasks/api',
                 });
             }
         },
-        
+
         /**
          * applies task modifications to all cache
          * @private
@@ -151,7 +151,7 @@ define('io.ox/tasks/api',
                                 found = true;
                             }
                         });
-                        
+
                     });
                     if (found) {
                         return api.caches.all.add(cacheKey, cachevalue);
@@ -354,7 +354,7 @@ define('io.ox/tasks/api',
             task.folder_id = arguments[3];
             task.id = arguments[1];
         }
-        
+
         //repair broken folder attribute
         if (task.folder) {
             task.folder_id = task.folder;
@@ -384,7 +384,7 @@ define('io.ox/tasks/api',
             params: {action: 'update',
                 folder: useFolder,
                 id: task.id,
-                timestamp: _.now(),
+                timestamp: _.then(),
                 timezone: 'UTC'
             },
             data: task,
@@ -434,7 +434,7 @@ define('io.ox/tasks/api',
                     action: 'update',
                     id: obj.id,
                     folder: obj.folder_id,
-                    timestamp: _.now(),
+                    timestamp: _.then(),
                     timezone: 'UTC'
                 },
                 data: modifications,
