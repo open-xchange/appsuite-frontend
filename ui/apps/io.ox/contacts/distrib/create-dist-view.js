@@ -17,16 +17,13 @@ define('io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
      'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
-     'io.ox/core/api/autocomplete',
      'io.ox/contacts/util',
      'io.ox/core/extensions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/notifications'
-    ], function (views, forms, gt, autocomplete, api, AutocompleteAPI, util, ext, AddParticipantsView, notifications) {
+    ], function (views, forms, gt, autocomplete, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
-
-    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false });
 
     var point = views.point('io.ox/contacts/distrib/create-dist-view'),
         ContactCreateDistView = point.createView({
