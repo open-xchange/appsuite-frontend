@@ -301,14 +301,13 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Actions
-        point.basicExtend(new links.InlineLinks({
+        point.basicExtend(new links.ButtonGroup(ref + '/edit/view', {
             index: _.device('small') ? 10 : 300,
-            id: 'inline-actions',
-            ref: ref + '/edit/view/inline',
+            id: 'buttons',
             classes: 'form-horizontal controls'
         }));
 
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+        views.ext.point(ref + "/edit/view/buttons").extend(new links.Button({
             id: "discard",
             index: 100,
             label: gt("Discard"),
@@ -319,7 +318,7 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Save
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+        views.ext.point(ref + "/edit/view/buttons").extend(new links.Button({
             id: "save",
             index: 100,
             label: gt("Save"),
