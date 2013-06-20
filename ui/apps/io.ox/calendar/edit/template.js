@@ -183,11 +183,12 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
+    var datepickerSpan = _.device('small') ? 'span6' : 'span4';
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'span4',
+        className: datepickerSpan,
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -197,14 +198,15 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'span4',
+        className: datepickerSpan,
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
-        nextTo: 'start-date'
+        nextTo: 'start-date',
+        rowClass: 'dateinput'
     });
 
     // find free time link
