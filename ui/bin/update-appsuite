@@ -1,6 +1,11 @@
 #!/bin/sh
 
-cd "$(dirname "$0")/.."
+## cd ##
+
+if [ ! -f core ]; then
+    echo "HTML files not found in $(pwd)" >&2
+    exit 1
+fi
 
 VERSION=$(sed -n \
     '/v=/{s/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p;q}' \
