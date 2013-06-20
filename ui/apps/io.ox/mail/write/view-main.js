@@ -755,6 +755,9 @@ define("io.ox/mail/write/view-main",
         }
 
         if (list.length) {
+            var $section = view.sections.attachments,
+                $upload = $section.children().last();
+
             // loop over all attachments
             _(list).each(function (file) {
 
@@ -789,7 +792,7 @@ define("io.ox/mail/write/view-main",
                 }
 
                 // draw
-                view.sections.attachments.append(
+                $section.append(
                     $('<div>').addClass('section-item file').append(
                         // icon
                         icon,
@@ -811,8 +814,9 @@ define("io.ox/mail/write/view-main",
                         )
                         .on('click', function (e) {
                             e.preventDefault();
-                            $(this).parent().prev().remove();
-                            $(this).parent().remove();
+                            //remove upload container and all file 'label divs'
+                            $upload.nextUntil('.upload', '.file').remove();
+                            $upload.replaceWith('');
                         })
                     )
                 );
