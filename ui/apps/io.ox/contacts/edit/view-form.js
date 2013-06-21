@@ -234,7 +234,9 @@ define('io.ox/contacts/edit/view-form', [
             display: 'DATE',
             label: model.fields[options.field],
             attribute: options.field,
-            rare: options.isRare
+            rare: options.isRare,
+            className: 'form-horizontal date-field',
+            labelClassName: 'control-label'
         }), {
             hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
                 return !model.isSet(options.field);
