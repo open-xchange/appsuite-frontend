@@ -64,7 +64,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'edit',
         requires:  function (e) {
-            return e.collection.has('one') && e.collection.has('modify') && _.device('!small');
+            return e.collection.has('one') && e.collection.has('modify');
         },
         action: function (baton) {
             var data = baton.data;
@@ -88,7 +88,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create',
         requires:  function (e) {
-            return e.collection.has('create') && _.device('!small');
+            return e.collection.has('create');
         },
         action: function (baton) {
             require(['io.ox/contacts/edit/main'], function (m) {

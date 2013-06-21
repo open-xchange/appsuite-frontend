@@ -32,6 +32,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 e.stopImmediatePropagation();
                 this.model.set("image1", '', {validate: true});
                 this.closeBtn.hide();
+                this.addImgText.show();
                 this.setImageURL();
                 this.fileInput.val('');
             },
@@ -73,6 +74,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
                 reader.onload = function (e) {
                     self.closeBtn.show();
+                    self.addImgText.hide();
                     self.setImageURL(e.target.result);
                 };
 
@@ -108,7 +110,13 @@ define('io.ox/contacts/widgets/pictureUpload',
                         this.closeBtn = $('<div class="close">').css({ zIndex: 2 })
                             .html('&times;')
                             .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide']()
-                     ),
+                    ).append(
+                        this.addImgText = $('<div class="add-img-text">')
+                            .css({ zIndex: 2 })
+                            .append(
+                                $('<span>').text(gt('Upload Image'))
+                            )[hasImage ? 'hide' : 'show']()
+                    ),
                     $('<form>').css({position: 'absolute'}).append(
                         self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">')
                             .css({ height: '110px', width: '110px', cursor: 'pointer', opacity: 0 })

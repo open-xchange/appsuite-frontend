@@ -195,86 +195,6 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-    function DateControlGroup(options) {
-
-        ControlGroup.call(this, _.extend({
-            buildElement: buildElement,
-            setValueInElement: setValueInElement,
-            updateModel: updateModel
-        }, options || {}));
-
-        function buildElement() {
-            var self = this;
-            var parent = $('<span>');
-            this.nodes.dropelements = {};
-
-            function createSelect(name, from, to, setter, format) {
-                var node = self.nodes.dropelements[name] = $('<select tabindex="1" size="1">').attr('name', name),
-                    i = Math.min(from, to),
-                    $i = Math.max(from, to),
-                    d = new date.Local(0),
-                    options = [];
-                for (; i <= $i; i++) {
-                    setter.call(d, i);
-                    options.push($('<option>').val(i).text(d.format(format)));
-                }
-                // revert?
-                if (from > to) {
-                    options.reverse();
-                }
-                // add empty option
-                options.unshift($('<option>').text(''));
-                // append
-                parent.append(node.append(options));
-            }
-
-            date.getFormat(date.DATE).replace(
-                /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
-                function (match, y, m, d) {
-                    var proto = date.Local.prototype;
-                    if (y) {
-                        var year = (new date.Local()).getYear();
-                        createSelect('year', year, year - 150, proto.setYear, y);
-                    } else if (m) {
-                        createSelect('month', 0, 11, proto.setMonth, 'MMMM');
-                    } else if (d) {
-                        createSelect('day', 1, 31, proto.setDate, match);
-                    }
-                });
-            parent.on('change', 'select', function () {
-                self.updateModel($(this).val() === '');
-            });
-
-            return parent;
-        }
-
-        function setValueInElement(valueFromModel) {
-            if (!this.nodes.dropelements) return;
-
-            var de = this.nodes.dropelements;
-            if (valueFromModel) {
-                var d = new date.Local(date.Local.utc(valueFromModel));
-                de.year.val(d.getYear());
-                de.month.val(d.getMonth());
-                de.day.val(d.getDate());
-            } else {
-                de.year.val('');
-                de.month.val('');
-                de.day.val('');
-            }
-        }
-
-        function updateModel(clear) {
-            var de = this.nodes.dropelements;
-            this.setValueInModel(clear ? null :
-                date.Local.localTime(new date.Local(
-                    de.year.val()  || new date.Local().getYear(),
-                    de.month.val() || 0,
-                    de.day.val()   || 1)));
-        }
-
-    }
-
     function addErrorHandling(options, object) {
         if (!object.modelEvents) {
             object.modelEvents = {};
@@ -476,8 +396,13 @@ define('io.ox/backbone/forms',
 
                 this.initialState = this.state;
 
-                this.drawHeader();
-                this.drawExtensions();
+                if (_.device('small')) {
+                    this.drawExtensions();
+                    this.drawHeader();
+                } else if (_.device('!small')) {
+                    this.drawHeader();
+                    this.drawExtensions();
+                }
 
                 if (this.state === 'mixed' || this.state === 'collapsed') {
                     this.less();
@@ -949,7 +874,6 @@ define('io.ox/backbone/forms',
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
-        DateControlGroup: DateControlGroup,
         Section: Section,
         Header: Header,
         InputField: InputField,

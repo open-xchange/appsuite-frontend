@@ -19,23 +19,28 @@
 
 .edit-contact {
 
-    .form-horizontal input.span3.control {
-    width: 206px;
-    }
-
-    .btn {
-        margin-right: 13px;
-    }
-
-    .contact_attachments_buttons .btn {
-        margin-left: -1px;
-    }
+    max-width: 620px;
 
     .attachment-edit-row {
         margin-bottom: 9px;
     }
 
+    label.private-flag {
+        padding-left: 0px;
+
+        input {
+            position: absolute;
+            left: 10px;
+        }
+    }
+
     .io-ox-core-tk-attachment {
+
+        &.span12 {
+            margin-left: 0;
+            width: 100%;
+        }
+
         .delete {
             width: 25px;
             font-size: 19px;
@@ -48,16 +53,45 @@
         }
     }
 
-    .form-horizontal .control-group {
-        margin-bottom: 10px;
+    .form-horizontal {
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            max-width: 435px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fileupload.fileupload-new {
+            margin-left: 180px;
+        }
+
+        .attachment-edit-row .span6 {
+            float: none;
+            margin-left: 180px;
+            width: auto;
+        }
+
+        &.controls {
+            margin-bottom: 20px;
+            text-align: right;
+
+            nav > :first-child {
+                float: left;
+            }
+        }
     }
 
-    .form-horizontal .private-flag {
-        margin-left: 180px;
+    div.form-horizontal.controls {
+        width: 100%;
     }
 
-    .form-horizontal.controls {
+    .date-field div.control {
         margin-left: 180px;
+        line-height: 0;
     }
 
     .sectionheader {
@@ -73,62 +107,13 @@
         margin-left: 15px;
     }
 
-    select[name="day"], select[name="month"], select[name="year"] {
-        height: 30px;
-        margin-right: 15px;
-        &:last-child {
-           margin-right: 0;
+    .clear-title {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &.job {
+            font-size: 1.25em;
+            color: #888;
         }
-    }
-
-    select[name="day"] {
-        width: 60px;
-    }
-
-    select[name="month"] {
-        width: 125px;
-    }
-
-    select[name="year"] {
-        width: 69px;
-    }
-
-    .sectionheader .offset2 {
-        margin-left: 200px;
-    }
-
-    .clear-title.job {
-        font-size: 1.25em;
-        color: #888;
-    }
-
-    .span2.header-pic {
-        width: 160px;
-    }
-
-    .picture-uploader {
-        width: 100px;
-        height: 100px;
-        display: inline-block;
-        float: left;
-        background-position: right top;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-clip: content-box;
-
-        &.focussed {
-            border-color: @linkColor;
-        }
-    }
-
-    .picture-uploader .close {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        opacity: 0.6;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-        background-color: #fff;
     }
 }
