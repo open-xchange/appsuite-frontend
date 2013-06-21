@@ -371,13 +371,22 @@ define('io.ox/mail/write/main',
         };
 
         app.setFrom = function (data) {
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX';
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                $select = view.leftside.find('.fromselect-wrapper select');
             return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
                 if (data.from && data.from.length === 2) {
                     // from is already set in the mail, prefer this
                     from = { displayname: data.from[0], primaryaddress: data.from[1] };
                 }
-                view.leftside.find('.fromselect-wrapper select').val(mailUtil.formatSender(from.displayname, from.primaryaddress));
+
+                $select.val(mailUtil.formatSender(from.displayname, from.primaryaddress));
+                //identify option via data.primaryadress
+                _.each($select.children(), function (option) {
+                    var $option = $(option),
+                        data = $option.data();
+                    if (data.primaryaddress === from.primaryaddress)
+                        $select.val($option.attr('value'));
+                });
             });
         };
 
