@@ -266,7 +266,8 @@ define('io.ox/calendar/edit/template',
                     $('<a href="#">')
                         .text(gt('Expand form'))
                         .addClass('actionToggle')
-                        .on('click', function () {
+                        .on('click', function (e) {
+                            e.preventDefault();
                             $('.row-fluid.collapsed', baton.parentView.$el).toggle();
                             if (collapsed) {
                                 $(this).text(gt('Expand form'));
@@ -363,22 +364,25 @@ define('io.ox/calendar/edit/template',
         rowClass: 'collapsed',
         draw: function (options) {
             var node = this,
-            input;
+            pNode;
             node.append(
-                    input = $('<div class="input-append span6">').append(
+                    pNode = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
 
-            if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
-
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
-                var collection = options.model.getParticipants();
-                var autocomplete = new AddParticipantsView({el: node});
-                autocomplete.render();
+                var collection = options.model.getParticipants(),
+                    autocomplete = new AddParticipantsView({ el: pNode });
+
+                if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
+
+                autocomplete.render({
+                    // parentSelector: 'body'
+                });
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
