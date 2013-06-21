@@ -723,6 +723,15 @@ define("io.ox/core/desktop",
                         break;
                     }
                 }
+                //remove the window from cache if it's there
+                appCache.get('windows').done(function (winCache) {
+                    var index = _.indexOf(winCache, win.name);
+                    
+                    if (index > -1) {
+                        winCache.splice(index, 1);
+                        appCache.add('windows', winCache || []);
+                    }
+                });
             }
 
             var isEmpty = numOpen() === 0;
@@ -1484,11 +1493,10 @@ define("io.ox/core/desktop",
 
         var def,
             $blocker = $('#background_loader'),
-            buttonTimer,
-            blockerTimer;
+            buttonTimer;
 
         function startTimer() {
-            blockerTimer = setTimeout(function () {
+            var blockerTimer = setTimeout(function () {
                 // visualize screen blocker
                 ox.busy(true);
                 buttonTimer = setTimeout(function () {
@@ -1497,16 +1505,17 @@ define("io.ox/core/desktop",
                         var button = $('<button>').addClass('btn btn-primary').text(gt('Cancel')).fadeIn();
                         button.on('click', function () {
                             def.reject(true);
-                            clear();
+                            clear(blockerTimer);
                         });
                         $blocker
                             .append(button);
                     }
                 }, 5000);
             }, 1000);
+            return blockerTimer;
         }
 
-        function clear() {
+        function clear(blockerTimer) {
             clearTimeout(blockerTimer);
             clearTimeout(buttonTimer);
             blockerTimer = null;
@@ -1527,9 +1536,9 @@ define("io.ox/core/desktop",
             if (!$blocker.hasClass('secure')) {
                 ox.busy();
             }
-            startTimer();
+            var blockertimer = startTimer();
 
-            require(req).always(clear).then(
+            require(req).always(clear(blockertimer)).then(
                 def.resolve,
                 function fail() {
                     def.reject(false);
