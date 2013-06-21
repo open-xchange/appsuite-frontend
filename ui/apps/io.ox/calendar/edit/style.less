@@ -297,6 +297,9 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
+    span.dropdown { position:static; }
+    span.dropdown.open { position:relative; }
+
     .inset {
         padding-left: 5px;
         height: 20px;
@@ -358,6 +361,14 @@
 
         textarea.note {
             min-height: 0px;
+        }
+
+        .io-ox-recurrence-view {
+
+            .inset {
+                height: auto;
+            }
+
         }
 
         .fileupload .uneditable-input {
