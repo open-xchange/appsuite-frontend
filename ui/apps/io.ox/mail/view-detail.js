@@ -145,7 +145,7 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
-    
+
     var openTaskLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/tasks/main', { folder: e.data.folder}).done(function () {
@@ -177,7 +177,7 @@ define('io.ox/mail/view-detail',
             });
         });
     };
-    
+
     var openAppointmentLink = function (e) {
         e.preventDefault();
         ox.launch('io.ox/calendar/main', { folder: e.data.folder, perspective: 'list' }).done(function () {
@@ -226,7 +226,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawAppointmentLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -248,7 +248,7 @@ define('io.ox/mail/view-detail',
         }
         return link;
     };
-    
+
     var drawTaskLink = function (matches, title) {
         var link, href, folder, id;
         // create link
@@ -591,7 +591,6 @@ define('io.ox/mail/view-detail',
         },
 
         draw: function (baton) {
-
             if (!baton) {
                 return $('<div>');
             }
