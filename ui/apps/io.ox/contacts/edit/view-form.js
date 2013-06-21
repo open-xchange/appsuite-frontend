@@ -127,7 +127,8 @@ define('io.ox/contacts/edit/view-form', [
                     id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
-                    labelClassName: 'private-flag',
+                    labelClassName: 'private-flag control-label',
+                    className: 'form-horizontal control-group',
                     rare: options.isRare,
                     attribute: options.field
                 }), {
