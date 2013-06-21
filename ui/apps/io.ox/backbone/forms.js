@@ -715,7 +715,7 @@ define('io.ox/backbone/forms',
                 this.$el.append(
                     this.nodes.controlGroup = $('<div class="control-group">').append(
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
-                        $('<div class="control">').append(
+                        $('<div class="controls">').append(
                             function () {
                                 self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
                                 if (options.initialStateDisabled) {
