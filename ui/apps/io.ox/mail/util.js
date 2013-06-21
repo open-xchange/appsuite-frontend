@@ -279,7 +279,7 @@ define('io.ox/mail/util',
         },
 
         getFlag: function (data) {
-            return data.color_label || 0;
+            return parseInt(data.color_label || 0, 10);
         },
 
         getPriority: function (data) {

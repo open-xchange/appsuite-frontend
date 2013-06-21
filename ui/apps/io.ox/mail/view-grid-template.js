@@ -45,7 +45,7 @@ define('io.ox/mail/view-grid-template',
                             $.txt(' '),
                             threadSizeIcon = $('<i class="icon-caret-right">')
                         ),
-                        flag = $('<div class="flag">').text(_.noI18n('\u00A0')),
+                        flag = $('<i class="flag icon-flag-alt">'),
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
@@ -96,7 +96,8 @@ define('io.ox/mail/view-grid-template',
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
-                fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
+                var color = data.color_label || 0;
+                fields.flag.get(0).className = 'flag flag_' + color + ' ' + (color === 0 ? 'icon-flag-alt' : 'icon-flag');
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }
