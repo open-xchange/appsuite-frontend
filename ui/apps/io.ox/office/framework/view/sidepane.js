@@ -81,7 +81,8 @@ define('io.ox/office/framework/view/sidepane',
 
         Pane.call(this, app, Utils.extendOptions({
             // default options, can be overridden by passed options
-            css: { width: SidePane.DEFAULT_WIDTH + 'px' }
+            css: { width: SidePane.DEFAULT_WIDTH + 'px' },
+            focusable: true
         }, options, {
             // fixed options, will override passed options
             position: (Utils.getStringOption(options, 'position') === 'left') ? 'left' : 'right',
