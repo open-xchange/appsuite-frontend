@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.2.2-4) stable; urgency=low
+
+  * Second feature freeze for 7.2.2 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 21 Jun 2013 16:36:47 +0200
+
 open-xchange-appsuite (7.2.2-3) stable; urgency=low
 
   * Feature freeze for 7.2.2 release
