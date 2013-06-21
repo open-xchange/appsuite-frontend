@@ -235,11 +235,17 @@ define('io.ox/contacts/distrib/create-dist-view',
                 'data-mail': o.display_name + '_' + o.mail
             }),
             img = api.getPicture(o.mail).addClass('contact-image'),
-            button = $('<div>', { tabindex: 1 }).addClass('remove')
-            .append($('<div class="icon">').append($('<i class="icon-trash">')))
-            .on('click', {mail: o.mail, name: o.display_name }, function (e) {
+
+            button = $('<a href="#" class="remove" tabindex="1">').append(
+                $('<div class="icon">').append(
+                    $('<i class="icon-trash">')
+                )
+            )
+            .on('click', { mail: o.mail, name: o.display_name }, function (e) {
+                e.preventDefault();
                 self.model.removeMember(e.data.mail, e.data.name);
             });
+
             frame.append(img)
             .append(
                 $('<div>').addClass('person-link ellipsis')

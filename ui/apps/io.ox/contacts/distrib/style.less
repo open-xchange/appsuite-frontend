@@ -58,6 +58,7 @@
             }
 
             .remove {
+                display: block;
                 position: absolute;
                 top: 0px;
                 right: 0px;
@@ -67,8 +68,9 @@
                 background-color: #f5f5f5;
                 cursor: pointer;
                 color: #ccc;
+                outline: 0;
 
-                &:hover {
+                &:hover, &:focus {
                     background-color: #a00;
                     color: #fff;
                     text-decoration: none
