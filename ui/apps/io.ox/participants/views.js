@@ -189,10 +189,7 @@ define('io.ox/participants/views',
         tagName: 'div',
         className: 'participantsrow',
         initialize: function (options) {
-            var self = this;
-            options.collection.on('add', _.bind(this.onAdd, this));
-            options.collection.on('remove', _.bind(this.onRemove, this));
-            options.collection.on('reset', _.bind(this.updateContainer, this));
+            options.collection.on('add remove reset', _.bind(this.updateContainer, this));
         },
         render: function () {
             var self = this,
@@ -228,12 +225,6 @@ define('io.ox/participants/views',
             this.nodes = {};
             this.$el.empty();
             this.render();
-        },
-        onAdd: function (participant, participants, options) {
-            this.updateContainer();
-        },
-        onRemove: function (participant, participants, options) {
-            this.updateContainer();
         }
     });
 
