@@ -570,6 +570,8 @@ define('io.ox/core/commons',
 
         if (e.which === 117 && (macos || e.ctrlKey)) {
 
+            e.preventDefault();
+
             var items = $('.f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),
                 index = (items.index(closest) || 0) + 1,
