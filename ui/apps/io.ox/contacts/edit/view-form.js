@@ -173,30 +173,34 @@ define('io.ox/contacts/edit/view-form', [
                     render: function (baton) {
                         var baton = this.baton,
                             $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
-                            $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                            $inputWrap = attachments.fileUploadWidget({
+                                displayButton: false,
+                                multi: true,
+                                wrapperClass: 'form-horizontal control-group'
+                            }),
                             $input = $inputWrap.find('input[type="file"]')
                                 .on('change', function (e) {
-                            e.preventDefault();
-                            if (_.browser.IE !== 9) {
-                                _($input[0].files).each(function (fileData) {
-                                    baton.attachmentList.addFile(fileData);
+                                    e.preventDefault();
+                                    if (_.browser.IE !== 9) {
+                                        _($input[0].files).each(function (fileData) {
+                                            baton.attachmentList.addFile(fileData);
+                                        });
+                                        $input.trigger('reset.fileupload');
+                                    } else {
+                                        if ($input.val()) {
+                                            var fileData = {
+                                                name: $input.val().match(/[^\/\\]+$/),
+                                                size: 0,
+                                                hiddenField: $input
+                                            };
+                                            baton.attachmentList.addFile(fileData);
+                                            $input.addClass('add-attachment').hide();
+                                            $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                                        }
+                                    }
+                                }).on('focus', function () {
+                                    $input.attr('tabindex', '1');
                                 });
-                                $input.trigger('reset.fileupload');
-                            } else {
-                                if ($input.val()) {
-                                    var fileData = {
-                                        name: $input.val().match(/[^\/\\]+$/),
-                                        size: 0,
-                                        hiddenField: $input
-                                    };
-                                    baton.attachmentList.addFile(fileData);
-                                    $input.addClass('add-attachment').hide();
-                                    $input = $('<input>', { type: 'file' }).appendTo($input.parent());
-                                }
-                            }
-                        }).on('focus', function () {
-                            $input.attr('tabindex', '1');
-                        });
 
                         $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
                     }
