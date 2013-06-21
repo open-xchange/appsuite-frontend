@@ -1974,7 +1974,8 @@ define.async('io.ox/office/tk/utils',
 
         control
             .width(Utils.getOption(options, 'width', ''))
-            .css(Utils.getObjectOption(options, 'css', {}));
+            .css(Utils.getObjectOption(options, 'css', {}))
+            .on('dragstart', false);
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'));
         Utils.setControlUserData(control, Utils.getOption(options, 'userData'));

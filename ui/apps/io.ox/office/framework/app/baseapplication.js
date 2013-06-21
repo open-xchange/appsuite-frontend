@@ -1027,7 +1027,15 @@ define('io.ox/office/framework/app/baseapplication',
                     if (result === Utils.BREAK) {
                         def.resolve();
                     } else {
-                        $.when(result).done(createTimer).fail(function () { def.resolve(); });
+                        $.when(result)
+                        .done(function () {
+                            // do not create a new timeout if execution has been
+                            // aborted while the asynchronous code was running
+                            if (timer) { createTimer(); }
+                        })
+                        .fail(function () {
+                            def.resolve();
+                        });
                     }
 
                 }, Utils.extendOptions(options, { delay: delay }));
@@ -1038,7 +1046,10 @@ define('io.ox/office/framework/app/baseapplication',
             delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
 
             // add an abort() method to the Promise
-            return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+            return _.extend(def.promise(), { abort: function () {
+                timer.abort();
+                timer = null;
+            } });
         };
 
         /**
