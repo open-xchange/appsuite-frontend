@@ -91,8 +91,10 @@ define('io.ox/office/tk/control/group',
          * Shows or hides this group.
          */
         function showGroup(visible) {
-            groupNode.toggleClass(HIDDEN_CLASS, !visible);
-            self.trigger('show', visible);
+            if (self.isVisible() !== visible) {
+                groupNode.toggleClass(HIDDEN_CLASS, !visible);
+                self.trigger('show', visible);
+            }
         }
 
         /**
@@ -147,7 +149,8 @@ define('io.ox/office/tk/control/group',
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value passed to the method Group.update().
+         *  group. Receives the value passed to the method Group.update(),
+         *  followed by the old value of the group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -381,10 +384,11 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.update = function (value) {
+            var oldValue = groupValue;
             if (!_.isUndefined(value)) {
                 groupValue = value;
                 _(updateHandlers).each(function (updateHandler) {
-                    updateHandler.call(this, value);
+                    updateHandler.call(this, value, oldValue);
                 }, this);
             }
             return this;
