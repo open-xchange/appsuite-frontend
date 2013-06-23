@@ -216,8 +216,6 @@ $(window).load(function () {
 
     function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
 
-        var gt; // set by initialize()
-
         debug('boot.js: require > loadSuccess');
 
         // feedback
