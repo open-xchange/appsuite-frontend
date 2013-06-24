@@ -547,7 +547,8 @@ $(window).load(function () {
                     path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
                     glue = path.indexOf('#') > -1 ? '&' : '#';
                 hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
-                _.url.redirect(path + glue + hash);
+
+                _.url.redirect((hash ? path + glue + hash : path));
             }
 
             function continueWithoutAutoLogin() {
