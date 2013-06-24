@@ -286,7 +286,8 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
         return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
-                    var url = baton.model.url(),
+                    console.log(baton);
+                    var url = baton.target.url,
                         text = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), '<a href="' + url + '">' + url + '</a>'),
                         textplain = gt('Hi!<br><br>%1$s shares a publication with you:<br>%2$s', util.getMailFullName(user.toJSON()), url),
                         data = {
