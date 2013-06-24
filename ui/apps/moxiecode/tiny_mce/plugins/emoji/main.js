@@ -246,7 +246,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var node = $('<div>').append(html);
 
-            node.find('img.emoji').each(function (index, node) {
+            node.find('img[data-emoji-unicode]').each(function (index, node) {
                 $(node).replaceWith($(node).attr('data-emoji-unicode'));
             });
 
