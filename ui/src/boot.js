@@ -213,13 +213,17 @@ $(window).load(function () {
         ox.on('language', displayFeedback);
 
         function displayFeedback() {
+
             var node = feedbackNode;
+
             if (!node) return;
             if (typeof node === 'function') node = node();
             if (typeof node === 'string') node = $.txt(gt(node));
+
             $('#io-ox-login-feedback').empty().append(
-                $('<div class="alert alert-block alert-' + feedbackType +
-                              ' selectable-text">').append(node)
+                $('<div role="alert" class="selectable-text alert alert-block alert-info">').append(
+                    node
+                )
             );
         }
 
@@ -317,10 +321,10 @@ $(window).load(function () {
                     $('#io-ox-login-form').css('opacity', '');
                     // show error
                     if (error && error.error === '0 general') {
-                        feedback('info', 'No connection to server. Please ' +
+                        feedback('error', 'No connection to server. Please ' +
                                  'check your internet connection and retry.');
                     } else {
-                        feedback('info', $.txt(_.formatError(error, '%1$s')));
+                        feedback('error', $.txt(_.formatError(error, '%1$s')));
                     }
                     // restore form
                     restore();
@@ -336,10 +340,10 @@ $(window).load(function () {
             $('#io-ox-login-feedback').busy().empty();
             // user name and password shouldn't be empty
             if ($.trim(username).length === 0) {
-                return fail({ error: gt('enter-credentials'), code: 'UI-0001' }, 'username');
+                return fail({ error: gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
             }
             if ($.trim(password).length === 0 && ox.online) {
-                return fail({ error: gt('enter-password'), code: 'UI-0002' }, 'password');
+                return fail({ error: gt('Please enter your password.'), code: 'UI-0002' }, 'password');
             }
             // login
             session.login(
@@ -555,7 +559,7 @@ $(window).load(function () {
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
                             // set page title now
-                            document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login'
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');
