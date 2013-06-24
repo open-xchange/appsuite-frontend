@@ -78,7 +78,7 @@ captureTimeout = 60000;
 singleRun = false;
 
 proxies =  {
-    '/api/apps/load/': 'http://localhost:8337/apps/load/'
+    '/api/': 'http://localhost:8337/api/'
 }
 
 // plugins to load
