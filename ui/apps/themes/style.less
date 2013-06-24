@@ -1234,6 +1234,12 @@ a.nolink {
     border-left: 1px solid @defaultBorderColor;
 }
 
+
+input.search-query::-ms-clear {
+    // Removes the native clear button for input fields on the search field
+    display: none;
+}
+
 /*  removed because searchfield is now type=text */
 .no-searchfield .searchfield-wrapper {
     width: 300px;
@@ -2349,9 +2355,16 @@ ul.dropdown-menu li a.disabled { color:#999; }
     #io-ox-notifications-overlay { right: 320px; }
 }
 
-// landscape
-@media (max-width: 700px) and (orientation:landscape) {
-    .window-head { padding-left: 40px; } // iOS landscape back button fix
+// landscape fullscreen on iPhone
+// iOS will go fullscreen and show an overaly with own buttons
+// we need to position our buttons around them
+@media (height: 320px) and (orientation:landscape) {
+    .window-head {
+        padding-right: 40px;
+        .toolbar-button {
+            float: right;
+        }
+    }
 }
 // mobile
 @media (max-width: 480px), (max-device-width: 480px) {
@@ -2382,6 +2395,7 @@ ul.dropdown-menu li a.disabled { color:#999; }
     #io-ox-top-logo-small {
         margin: 8px 0px 0 10px;
     }
+
     .ios {
         .io-ox-foldertree {
             .overflow();

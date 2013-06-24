@@ -175,6 +175,21 @@ define('io.ox/core/pubsub/settings/pane',
         return getSiteName(data.displayName) || data.displayName || '';
     }
 
+    function isDestructiveRefresh(data) {
+        return isDestructiveRefresh.needsWarning[data.source];
+    }
+
+    isDestructiveRefresh.needsWarning = {
+        "com.openexchange.subscribe.crawler.google.calendar": true
+    };
+
+    function refreshWarning(data) {
+        if (isDestructiveRefresh(data)) {
+            return $('<span class="text-warning"></span>').text(gt("Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"));
+        }
+        return $();
+    }
+
     ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
@@ -189,6 +204,9 @@ define('io.ox/core/pubsub/settings/pane',
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
                 dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
+                if (isDestructiveRefresh(data)) {
+                    dynamicAction.addClass("text-error");
+                }
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled
                 dynamicAction = $('<span>');
@@ -212,7 +230,9 @@ define('io.ox/core/pubsub/settings/pane',
                             $('<a tabindex="1" target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
                             $('<i>').text(getShortUrl(url))
                     ),
-                    createPathInformation(baton.model)
+                    createPathInformation(baton.model),
+                    refreshWarning(data)
+
                 )
             );
 

@@ -164,7 +164,7 @@ define('io.ox/files/icons/perspective',
                 .attr('tabindex', 1)
                 .append(
                     (img ? wrap.append(img) : wrap),
-                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.title, 55))).prepend(
+                    $('<div class="title drag-title">').text(gt.noI18n(cut(file.filename || file.title, 55))).prepend(
                             (file.locked_until ? $('<i class="icon-lock">') : '')
                         ),
                     $('<input type="checkbox" class="reflect-selection" style="display:none">')
@@ -230,7 +230,8 @@ define('io.ox/files/icons/perspective',
                .on('folder:change', function (e, id, folder) {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    app.getWindow().search.close();
+                    app.getWindow().search.clear();
+                    app.getWindow().search.active = false;
                     self.main.closest('.search-open').removeClass('search-open');
                     allIds = [];
                     self.selection.clear();
@@ -354,11 +355,12 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
-                _.debounce($('img.img-polaroid').imageloader({
+                $('img.img-polaroid').imageloader({
                     callback: function (elm) {
                         $(elm).fadeIn();
-                    }
-                }), 300);
+                    },
+                    timeout: 60000
+                });
 
                 self.selection.update();
             };

@@ -445,7 +445,7 @@ define("io.ox/contacts/view-detail",
                         simple(gt('Nickname'), data.nickname),
                         row(gt('Birthday'), function () {
                             if (baton.data.birthday)
-                                return new date.Local(baton.data.birthday).format(date.DATE);
+                                new date.Local(date.Local.utc(baton.data.birthday)).format(date.DATE);//use utc time. birthdays must not be converted
                         })
                     ),
 

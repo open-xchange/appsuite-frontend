@@ -46,6 +46,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var initialReset = true;
     var silenceCount = 0;
     var loadDetectionTimer = null;
+    var highLoad = false;
     var closeCount = 0;
     var ackBuffer = {};
 
@@ -141,9 +142,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     function received(stanza) {
         if (api.debug) {
-            console.log("Received");
+            console.log("Received  Stanza");
         }
-        if (stanza.get("atmosphere", "received")) {
+        if (stanza.get("", "error")) {
+            if (api.debug) {
+                console.log("Received Stanza contained an error");
+            }
+            var error = stanza.get("", "error");
+            if (error.data && error.data.code === 1005) {
+                if (api.debug) {
+                    console.log("Closing socket, because I got a session expired error");
+                }
+                subSocket.close();
+                socket.unsubscribe();
+                disconnected = true;
+                ox.trigger('relogin:required');
+            }
+        } else if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
                 receivedAcknowledgement(sequenceNumber);
@@ -239,7 +254,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             silenceCount = 0;
             request.requestCount = 0;
             closeCount = 0;
-            if (response.status !== 200 && response.status !== 408) { // 200 = OK, 208 == TIMEOUT, which is expected
+            if (response.status !== 200 && response.status !== 408) { // 200 = OK, 408 == TIMEOUT, which is expected
                 if (!disconnected) {
                     if (api.debug) {
                         console.log("Triggering offline, because request failed with status: ", response.status);
@@ -279,20 +294,6 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 var stanza = new RealtimeStanza(json);
                 received(stanza);
-                if (json.error && /^SES/.test(json.error)) {
-                    if (json.error.indexOf(ox.session) === -1 && !connecting && !disconnected && !/^SES-0201/.test(json.error)) {
-                        reconnect();
-                    } else {
-                        if (api.debug) {
-                            console.log("Closing socket, because I got a session expired error");
-                        }
-
-                        subSocket.close();
-                        disconnected = true;
-
-                        ox.trigger('relogin:required');
-                    }
-                }
             }
             drainAckBuffer();
         };
@@ -523,6 +524,10 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     setInterval(function () {
         if (silenceCount < 7 && !disconnected) {
+            if (highLoad) {
+                highLoad = false;
+                api.trigger("normalLoad");
+            }
             _(resendBuffer).each(function (m) {
                 m.count++;
                 if (m.count < INFINITY) {

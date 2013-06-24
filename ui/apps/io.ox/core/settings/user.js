@@ -34,24 +34,33 @@ define('io.ox/core/settings/user', [
         editCurrentUser: function ($node) {
             // Load the user
             return factory.realm('edit').get({}).done(function (user) {
+                var $userEditView = new UserEdit({model: user}).render().$el;
 
-                $node.append(new UserEdit({model: user}).render().$el);
+                /* remove image edit dialog for PIM users, because they cannot access the place where the image is stored */
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    /* I would have preferred to use folderAPI.can('read', 6)... */
+                    folderAPI.get({ folder: 6, cache: false }).fail(function (data) {
+                        $userEditView.find('div.header-pic').remove();
+                    });
+                });
+
+                $node.append($userEditView);
                 $($node.find('.edit-contact')[0]).on('dispose', function () {
                     $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                     if (!_.isEmpty(user.changed)) {//check if there is something to save
                         new dialogs.ModalDialog()
-                            .text(gt('Do you really want to discard your changes?'))
-                            .addPrimaryButton('save', gt('Save changes'))
-                            .addButton('discard', gt('Discard changes'))
-                            .show()
-                            .done(function (action) {
-                                if  (action === 'save') {
-                                    user.save();
-                                }
-                            });
+                        .text(gt('Do you really want to discard your changes?'))
+                        .addPrimaryButton('save', gt('Save changes'))
+                        .addButton('discard', gt('Discard changes'))
+                        .show()
+                        .done(function (action) {
+                            if  (action === 'save') {
+                                user.save();
+                            }
+                        });
                     }
                 });
-                
+
                 user.on('change:first_name change:last_name', function () {
                     user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
                     //app.setTitle(util.getFullName(contact.toJSON()));

@@ -23,6 +23,7 @@ define("io.ox/mail/accounts/model",
     var AccountModel = keychainModel.Account.extend({
 
         defaults: {
+            //some conditional defaults defined in view-form.render (pop3)
             spam_handler: "NoSpamHandler"
         },
 
@@ -31,10 +32,14 @@ define("io.ox/mail/accounts/model",
                 required: true,
                 msg: gt('The account must be named')
             },
-            primary_address: {
-                required: true,
-                fn: _.noI18n('isMailAddress')
-            },
+            primary_address: [
+                {
+                    required: true,
+                    msg: gt('This field has to be filled')
+                }, {
+                    fn: _.noI18n('isMailAddress')
+                }
+            ],
             mail_server: {
                 required: true,
                 msg: gt('This field has to be filled')

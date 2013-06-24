@@ -106,6 +106,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             }) || categories.recently;
         },
 
+        resetRecents: function () {
+            settings.set('recently', {}).save();
+        },
+
         iconsForCategory: function (category) {
 
             if (category === 'recently') {

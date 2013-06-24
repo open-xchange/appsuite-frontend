@@ -268,12 +268,12 @@ define("io.ox/mail/write/view-main",
                         .chain()
                         .map(function (field) {
                             if (data[field]) {
-                                return {
-                                    fieldlabel: getFieldLabel(field),
-                                    displayname: data.display_name,
-                                    text: '"' + data.display_name + '" <' + data[field] + '>',
-                                    value: mailUtil.cleanupPhone(data[field]) + '/TYPE=PLMN'
-                                };
+                                return [
+                                    data.display_name,
+                                    mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn,
+                                    data.display_name + ' <' + mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn + '>',
+                                    data.display_name + ' <' + data[field] + '>'
+                                ];
                             }
                         })
                         .compact()
@@ -289,8 +289,8 @@ define("io.ox/mail/write/view-main",
                     select.append(option);
                 });
                 _(numbers).each(function (number) {
-                    var option = $('<option>', { value: number.value }).text(_.noI18n(number.text))
-                        .data({ displayname: number.displayname, primaryaddress: number.value});
+                    var option = $('<option>', { value: number[2] }).text(number[3])
+                        .data({ displayname: number[0], primaryaddress: number[1]});
                     select.append(option);
                 });
             });
@@ -780,8 +780,6 @@ define("io.ox/mail/write/view-main",
 
                 // message?
                 if (isMessage) {
-                    //remove typesuffix when displaying attached mail;
-                    mailUtil.removeTypeSuffix(file.message);
                     info = $('<span>').addClass('filesize').text('');
                     icon = $('<i>').addClass('icon-paper-clip');
                     name = file.message.subject || '\u00A0';
@@ -918,12 +916,12 @@ define("io.ox/mail/write/view-main",
 
             //parsed object?
             if (_.isArray(elem)) {
-                var channel = mailUtil.getChannel(elem[1]),
+                var channel = mailUtil.getChannel ? mailUtil.getChannel(elem[1]) : 'email',
                     custom = {
                         display_name: elem[0]
                     };
-                //email or phone property? remove typesuffix (example: '0178000000/TYPE=PLMN')
-                custom[channel] = channel === 'phone' ? elem[1].split('/')[0] : elem[1];
+                //email or phone property?
+                custom[channel] = elem[1];
                 elem = custom;
             }
 

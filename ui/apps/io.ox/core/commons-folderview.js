@@ -611,11 +611,13 @@ define('io.ox/core/commons-folderview',
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+            app.trigger('folderview:close');
         };
 
         fnShowSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            app.trigger('folderview:open');
             return $.when();
         };
 

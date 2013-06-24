@@ -34,7 +34,8 @@
         events: {
             'click .emoji-icons .emoji': 'onInsertEmoji',
             'click .emoji-footer .emoji': 'onSelectCategory',
-            'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection'
+            'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection',
+            'click .reset-recents': 'onResetRecents'
         },
 
         // when user clicks on emoji. inserts emoji into editor
@@ -62,6 +63,13 @@
             e.preventDefault();
             var node = $(e.target);
             this.setCollection(node.attr('data-collection'));
+        },
+
+        // when user clicks on "Reset" in "Recently used" list
+        onResetRecents: function (e) {
+            e.preventDefault();
+            this.emoji.resetRecents();
+            this.drawEmojis();
         },
 
         initialize: function (options) {
@@ -203,6 +211,13 @@
                     .data('icon', icon)
                 );
             });
+
+            // add "reset" link for recently
+            if (list.length > 0 && this.currentCategory === 'recently') {
+                node.append(
+                    $('<a href="#" class="reset-recents">').text('Reset this list')
+                );
+            }
 
             node.show().scrollTop(0);
         },

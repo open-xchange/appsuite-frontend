@@ -104,9 +104,24 @@ define('io.ox/mail/folderview-extensions',
 
     function clearFolder(e) {
         e.preventDefault();
-        // get current folder id
-        var baton = e.data.baton, id = baton.app.folder.get();
-        mailAPI.clear(id);
+
+        var baton = e.data.baton,
+        id = _(baton.app.folderView.selection.get()).first();
+        $.when(
+            folderAPI.get({ folder: id }),
+            ox.load(['io.ox/core/tk/dialogs'])
+        ).done(function (folder, dialogs) {
+            new dialogs.ModalDialog()
+                .text(gt('Do you really want to empty folder "%s"?', folder.title))
+                .addPrimaryButton('delete', gt('Empty'))
+                .addButton('cancel', gt('Cancel'))
+                .show()
+                .done(function (action) {
+                    if (action === 'delete') {
+                        mailAPI.clear(id);
+                    }
+                });
+        });
     }
 
     ext.point(POINT + '/sidepanel/toolbar/options').extend({

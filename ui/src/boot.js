@@ -543,7 +543,7 @@ $(window).load(function () {
                     path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
                     glue = path.indexOf('#') > -1 ? '&' : '#';
                 hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
-                _.url.redirect(path + glue + hash);
+                _.url.redirect((hash ? path + glue + hash : path));
             }
 
             function continueWithoutAutoLogin() {
@@ -776,6 +776,9 @@ $(window).load(function () {
             }
 
             debug('boot.js: Load "signin" plugins & set default language');
+
+            // make sure we get 'signin' plugins
+            manifests.reset();
 
             return $.when(
                 // load extensions

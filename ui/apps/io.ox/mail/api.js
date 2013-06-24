@@ -394,30 +394,32 @@ define('io.ox/mail/api',
     };
 
     /**
-     * pipes getList() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes getList() to remove typesuffix from sender
      * @param  {array} ids
      * @param  {boolean} useCache (default is true)
      * @param  {object} options
      * @return {deferred}
      */
     api.getList = function (ids, useCache, options) {
+        //TOOD: use this until backend removes channel suffix
         return getList.call(this, ids, useCache, options).then(function (data) {
-            _.each(data, util.removeTypeSuffix);
+            _.each(data, util.removeChannelSuffix);
             return data;
         });
     };
 
     /**
-     * pipes get() to remove typesuffix from sender (example 017012345678/TYPE=PLMN)
+     * pipes get() to remove typesuffix from sender
      * @param  {object} options
      * @param  {boolan} useCache (default is true)
      * @fires api#refresh.list
      * @return {deferred} (resolve returns response)
      */
     api.get = function (options, useCache) {
+        //TOOD: use this until backend removes channel suffix
         return get.call(this, options, useCache).then(function (mail) {
             if (_.isObject(mail)) {
-                util.removeTypeSuffix(mail);
+                util.removeChannelSuffix(mail);
             }
             return mail;
         });
@@ -978,47 +980,50 @@ define('io.ox/mail/api',
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
                         // nothing to do - nothing to break
-                    } else if (data.attachments[0].content_type === 'text/plain') {
-                        $('<div>')
-                            // escape everything but BR tags
-                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                            .contents().each(function () {
-                                if (this.tagName === 'BR') {
-                                    text += '\n';
-                                } else {
-                                    text += $(this).text();
-                                }
+                    } else {
+                        //content-type specific
+                        if (data.attachments[0].content_type === 'text/plain') {
+                            $('<div>')
+                                // escape everything but BR tags
+                                .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
+                                .contents().each(function () {
+                                    if (this.tagName === 'BR') {
+                                        text += '\n';
+                                    } else {
+                                        text += $(this).text();
+                                    }
+                                });
+                            // remove white space
+                            text = $.trim(text);
+                            // polish for html editing
+                            if (view === 'html') {
+                                // escape '<'
+                                text = text.replace(/</ig, '&lt;');
+                                // replace '\n>' sequences by blockquote-tags
+                                _(text.split(/\n/).concat('\n')).each(function (line) {
+                                    if (/^> /.test(line)) {
+                                        quote += line.substr(2) + '\n';
+                                    } else {
+                                        tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                        quote = '';
+                                    }
+                                });
+                                // transform line-feeds back to BR
+                                data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
+                            } else {
+                                // replace
+                                data.attachments[0].content = $.trim(text);
+                            }
+                        } else if (data.attachments[0].content_type === 'text/html') {
+                            // robust approach for large mails
+                            tmp = document.createElement('DIV');
+                            tmp.innerHTML = data.attachments[0].content;
+                            _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                                node.removeAttribute('style');
                             });
-                        // remove white space
-                        text = $.trim(text);
-                        // polish for html editing
-                        if (view === 'html') {
-                            // escape '<'
-                            text = text.replace(/</ig, '&lt;');
-                            // replace '\n>' sequences by blockquote-tags
-                            _(text.split(/\n/).concat('\n')).each(function (line) {
-                                if (/^> /.test(line)) {
-                                    quote += line.substr(2) + '\n';
-                                } else {
-                                    tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
-                                    quote = '';
-                                }
-                            });
-                            // transform line-feeds back to BR
-                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
-                        } else {
-                            // replace
-                            data.attachments[0].content = $.trim(text);
+                            data.attachments[0].content = tmp.innerHTML;
+                            tmp = null;
                         }
-                    } else if (data.attachments[0].content_type === 'text/html') {
-                        // robust approach for large mails
-                        tmp = document.createElement('DIV');
-                        tmp.innerHTML = data.attachments[0].content;
-                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                            node.removeAttribute('style');
-                        });
-                        data.attachments[0].content = tmp.innerHTML;
-                        tmp = null;
                     }
                 } else {
                     data.attachments = data.attachments || [{}];
