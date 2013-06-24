@@ -331,11 +331,12 @@ define('io.ox/files/icons/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
-                _.debounce($('img.img-polaroid').imageloader({
+                $('img.img-polaroid').imageloader({
                     callback: function (elm) {
                         $(elm).fadeIn();
-                    }
-                }), 300);
+                    },
+                    timeout: 60000
+                });
 
                 self.selection.update();
             };
