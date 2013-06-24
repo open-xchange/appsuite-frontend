@@ -80,7 +80,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }
 
-            return 'emoji' + icon[2];
+            return 'emoji emoji' + icon[2];
         },
 
         // add to "recently used" category
