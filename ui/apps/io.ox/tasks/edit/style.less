@@ -20,16 +20,19 @@
     }
 
     .typeahead.calendaredit {
+
         height: 200px;
-        overflow: auto;
-        min-width: 70px;
-        max-width: 70px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-width: 85px;
+
+        a {
+            text-align: right;
+            padding: 3px 15px 3px 3px;
+        }
+
     }
 
-    .typeahead.calendaredit a {
-        text-align: right;
-        padding: 3px 15px 3px 3px;
-    }
 
     .title {
         float:left;
