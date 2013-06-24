@@ -14,10 +14,9 @@
 define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
                                     'gettext!io.ox/core',
                                     'io.ox/core/date',
-                                    'settings!io.ox/calendar',
                                     'css!mobiscroll/css/mobiscroll.core.css',
                                     'css!mobiscroll/css/mobiscroll.android-ics.css',
-                                    'css!mobiscroll/css/mobiscroll.ios.css'], function (mobi, gt, date, dateSettings) {
+                                    'css!mobiscroll/css/mobiscroll.ios.css'], function (mobi, gt, date) {
 
     'use strict';
 
@@ -40,7 +39,6 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
             yearText: gt('Years'),
             showLabel: true,
             separator: ' ',
-            stepMinute: parseInt(dateSettings.get('interval'), 10),
             display: 'bottom',
             endYear: new Date().getFullYear() + 100,
             theme: 'android-ics light'
