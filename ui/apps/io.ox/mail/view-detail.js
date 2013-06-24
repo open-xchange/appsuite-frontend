@@ -622,7 +622,11 @@ define('io.ox/mail/view-detail',
 
             if (baton.options.tabindex) {
                 // we add f6-target just here; first mail in thread
-                node.addClass('f6-target').attr('tabindex', baton.options.tabindex);
+                node.addClass('f6-target').attr({
+                    tabindex: baton.options.tabindex,
+                    role: 'document',
+                    'aria-label': baton.data.subject
+                });
             }
 
             try {
