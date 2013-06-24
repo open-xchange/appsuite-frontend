@@ -31,6 +31,15 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     function parseUnicode(str) {
         var unicode;
 
+        //HACK: fix number emojis and flags (&#x doesn’t work with to large numbers)
+        //may be, there is a better way to calculate the utf-8 code from the number
+        if (str.length === 6) {
+            return parseUnicode(str.substr(0, 2)) + parseUnicode(str.substr(2));
+        }
+        if (str.length === 10) {
+            return parseUnicode(str.substr(0, 5)) + parseUnicode(str.substr(5));
+        }
+
         unicode = '&#x' + str + ';';
         //transform unicode html entity to text
         return $('<div>').html(unicode).text();
