@@ -1,12 +1,27 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 @fluidGridColumnWidth:    6.382978723%;
 @fluidGridGutterWidth:    2.127659574%;
 
 #fluidGridSystem {
+
   // Setup the mixins to be used
   .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
     width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
     margin-left: @fluidGridGutterWidth;
   }
+
 }
 
 .io-ox-calendar-edit {
@@ -235,7 +250,7 @@
         height: 200px;
         overflow-y: auto;
         overflow-x: hidden;
-        min-width: 70px;
+        min-width: 85px;
 
         a {
             text-align: right;
@@ -282,6 +297,9 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
+    span.dropdown { position:static; }
+    span.dropdown.open { position:relative; }
+
     .inset {
         padding-left: 5px;
         height: 20px;
@@ -309,12 +327,52 @@
             float: none;
         }
 
+        .sectiontitle {
+            margin: 0;
+        }
+
+        .dateinput .span6 {
+
+            width: 50%;
+            float: left;
+
+            &[data-extension-id="end-date"] .control-group {
+                float: right;
+            }
+
+            .input-small {
+                width: 9em;
+            }
+
+        }
+
+        .actionToggle {
+            display: block;
+            margin: 10px 0;
+        }
+
+        .collapsed {
+            display: none;
+        }
+
         .control-group {
             margin-bottom: 0;
         }
 
         textarea.note {
             min-height: 0px;
+        }
+
+        .io-ox-recurrence-view {
+
+            .inset {
+                height: auto;
+            }
+
+        }
+
+        .fileupload .uneditable-input {
+            width: 185px;
         }
 
     }

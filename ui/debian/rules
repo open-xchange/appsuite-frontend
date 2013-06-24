@@ -23,6 +23,10 @@ override_dh_auto_install:
 	done
 	cp -r $(FRONTEND)/apps $(BACKEND)/
 	mv $(FRONTEND)/share $(BACKEND)/
+	mkdir -p debian/open-xchange-appsuite/opt/open-xchange/appsuite/bin
+	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
+	    debian/open-xchange-appsuite/opt/open-xchange/appsuite/bin/touch-appsuite
+	chmod +x debian/open-xchange-appsuite/opt/open-xchange/appsuite/bin/touch-appsuite
 
 override_dh_auto_clean:
 	sh build.sh clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \

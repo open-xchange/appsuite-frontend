@@ -4,8 +4,8 @@ if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
 if [ -n "$1" ]
 then
-    $NODEJS lib/appsserver.js "$@"
+    $NODEJS lib/appserver.js "$@"
 else
     if [ -f ./local.conf ]; then . ./local.conf; fi
-    $NODEJS lib/appsserver.js $builddir
+    $NODEJS lib/appserver.js $builddir
 fi

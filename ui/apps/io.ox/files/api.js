@@ -471,7 +471,7 @@ define('io.ox/files/api',
                 params: {
                     action: 'update',
                     id: file.id,
-                    timestamp: _.now()
+                    timestamp: _.then()
                 },
                 data: updateData,
                 appendColumns: false
@@ -667,7 +667,7 @@ define('io.ox/files/api',
                     action: action || 'update',
                     id: o.id,
                     folder: o.folder_id || o.folder,
-                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                    timestamp: o.timestamp || _.then() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false

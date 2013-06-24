@@ -28,7 +28,7 @@
 
     var EmojiView = Backbone.View.extend({
 
-        tagName: 'div',
+        tagName: 'td',
         className: 'mceEmojiPane',
 
         events: {

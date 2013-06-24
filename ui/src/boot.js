@@ -203,6 +203,7 @@ $(window).load(function () {
     _.extend(require, req);
 
     function loadSuccess(http, session, cache, extensions, gettext, manifests, capabilities, config, themes) {
+
         var gt; // set by initialize()
 
         debug('boot.js: require > loadSuccess');
@@ -210,7 +211,7 @@ $(window).load(function () {
         // feedback
         var feedbackType = null, feedbackNode = null;
         ox.on('language', displayFeedback);
-        
+
         function displayFeedback() {
             var node = feedbackNode;
             if (!node) return;
@@ -221,7 +222,7 @@ $(window).load(function () {
                               ' selectable-text">').append(node)
             );
         }
-        
+
         function feedback(type, node) {
             feedbackType = type;
             feedbackNode = node;
@@ -537,9 +538,12 @@ $(window).load(function () {
                 return manifests.manager.loadPluginsFor('core').done(gettext.enable);
             }
 
-            function gotoSignin() {
-                var ref = (location.hash || '').replace(/^#/, '');
-                _.url.redirect((ox.serverConfig.logoutLocation || ox.logoutLocation) + (ref ? '#ref=' + enc(ref) : ''));
+            function gotoSignin(hash) {
+                var ref = (location.hash || '').replace(/^#/, ''),
+                    path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
+                    glue = path.indexOf('#') > -1 ? '&' : '#';
+                hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
+                _.url.redirect(path + glue + hash);
             }
 
             function continueWithoutAutoLogin() {
@@ -569,9 +573,14 @@ $(window).load(function () {
                 }
             }
 
-            var hash = _.url.hash();
+            // take care of invalid sessions
+            ox.relogin = function () {
+                if (!ox.signin) gotoSignin('autologin=false');
+            };
+            ox.on('relogin:required', ox.relogin);
 
             // got session via hash?
+            var hash = _.url.hash();
             if (hash.session) {
 
                 debug('boot.js: autoLogin > hash.session', hash.session);

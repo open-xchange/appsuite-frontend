@@ -116,7 +116,9 @@ define('io.ox/mail/view-detail',
                     return !emote ? match : emote;
                 });
             }
-            return emoji.unifiedToImageTag(text);
+            return emoji.unifiedToImageTag(text, {
+                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+            });
         };
     }());
 
@@ -939,33 +941,46 @@ define('io.ox/mail/view-detail',
     };
 
     function changeLabel(e) {
+
         e.preventDefault();
-        $(this).closest('.flag-dropdown').removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
-        return api.changeColor(e.data.data, e.data.color);
+
+        var color = e.data.color, node = $(this).closest('.flag-dropdown'),
+            className = 'flag-dropdown-icon ';
+
+        // set proper icon class
+        className += color === 0 ? 'icon-flag-alt' : 'icon-flag';
+        className += ' flag_' + color;
+
+        node.find('.flag-dropdown-icon').attr('class', className);
+
+        return api.changeColor(e.data.data, color);
     }
 
     ext.point('io.ox/mail/detail/header').extend({
         index: 130,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data,
-            flagclass = 'flag_' + util.getFlag(data);
+
+            var data = baton.data, color = util.getFlag(data);
+
             this.append(
-                $('<div class="dropdown flag-dropdown clear-title flag">')
-                .addClass(flagclass)
-                .append(
+                $('<div class="dropdown flag-dropdown clear-title flag">').append(
                     // box
-                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
+                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" tabindex="1">').append(
+                        $('<i class="flag-dropdown-icon">')
+                            .addClass(color === 0 ? 'icon-flag-alt' : 'icon-flag')
+                            .addClass('flag_' + color)
+                    ),
                     // drop down
                     $('<ul class="dropdown-menu" role="menu">')
                     .append(
                         _(api.COLORS).reduce(function (memo, index, color) {
                             return memo.add($('<li>').append(
                                 $('<a href="#" tabindex="1" role="menuitem">').append(
-                                    index > 0 ? $('<span class="flag-example">').addClass('flag_' + index) : $(),
+                                    index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),
                                     $.txt(colorNames[color])
                                 )
-                                .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
+                                .on('click', { data: data, color: index }, changeLabel)
                                 .addClass(data.color_label === index ? 'active-label' : undefined)
                             ));
                         }, $())

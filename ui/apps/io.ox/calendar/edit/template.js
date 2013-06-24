@@ -15,7 +15,6 @@ define('io.ox/calendar/edit/template',
     ['io.ox/core/extensions',
      'gettext!io.ox/calendar/edit/main',
      'io.ox/calendar/util',
-     'io.ox/core/date',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/tk/attachments',
@@ -23,11 +22,12 @@ define('io.ox/calendar/edit/template',
      'io.ox/calendar/api',
      'io.ox/participants/views',
      'io.ox/core/capabilities'
-    ], function (ext, gt, util, dateAPI, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
+    ], function (ext, gt, util, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
 
     'use strict';
 
-    var point = views.point('io.ox/calendar/edit/section');
+    var point = views.point('io.ox/calendar/edit/section'),
+        collapsed = false;
 
     // subpoint for conflicts
     var pointConflicts = point.createSubpoint('conflicts', {
@@ -182,11 +182,12 @@ define('io.ox/calendar/edit/template',
         label: gt('Location')
     }));
 
+    var datepickerSpan = _.device('small') ? 'span6' : 'span4';
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'span4',
+        className: datepickerSpan,
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -196,14 +197,15 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'span4',
+        className: datepickerSpan,
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
-        nextTo: 'start-date'
+        nextTo: 'start-date',
+        rowClass: 'dateinput'
     });
 
     // find free time link
@@ -211,7 +213,7 @@ define('io.ox/calendar/edit/template',
         id: 'find-free-time-1',
         index: 550,
         nextTo: 'end-date',
-        draw: function (baton) {
+        draw: function () {
             if (_.device('!small')) {
                 this.append(
                     $('<div class="span4"><label class="find-free-time"></label></div>')
@@ -230,13 +232,17 @@ define('io.ox/calendar/edit/template',
         index: 600
     }));
 
+    // move recurrence view to collapsible area on mobile devices
+    var recurrenceIndex = _.device('small') ? 950 : 650;
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'span12',
         tabindex: 1,
-        index: 650
-    }));
+        index: recurrenceIndex
+    }), {
+        rowClass: 'collapsed'
+    });
 
     // note
     point.extend(new forms.InputField({
@@ -249,11 +255,31 @@ define('io.ox/calendar/edit/template',
         label: gt("Description")
     }));
 
+    // separator or toggle
     point.basicExtend({
         id: 'noteSeparator',
         index: 750,
-        draw: function () {
-            this.append($('<span>&nbsp;</span>'));
+        draw: function (baton) {
+            var self = this;
+            if (_.device('small')) {
+                this.append(
+                    $('<a href="#">')
+                        .text(gt('Expand form'))
+                        .addClass('actionToggle')
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            $('.row-fluid.collapsed', baton.parentView.$el).toggle();
+                            if (collapsed) {
+                                $(this).text(gt('Expand form'));
+                            } else {
+                                $(this).text(gt('Collapse form'));
+                            }
+                            collapsed = !collapsed;
+                        })
+                );
+            } else {
+                this.append($('<span>&nbsp;</span>'));
+            }
         }
     });
 
@@ -267,7 +293,9 @@ define('io.ox/calendar/edit/template',
             attribute: 'alarm',
             label: gt("Reminder"),
             selectOptions: util.getReminderOptions()
-        }));
+        }), {
+            rowClass: 'collapsed'
+        });
     }());
 
     // shown as
@@ -286,7 +314,8 @@ define('io.ox/calendar/edit/template',
             4: gt('Free')
         }
     }), {
-        nextTo: 'alarm'
+        nextTo: 'alarm',
+        rowClass: 'collapsed'
     });
 
     // private?
@@ -300,7 +329,8 @@ define('io.ox/calendar/edit/template',
         attribute: 'private_flag',
         index: 1000
     }), {
-        nextTo: 'shown_as'
+        nextTo: 'shown_as',
+        rowClass: 'collapsed'
     });
 
     // participants label
@@ -309,12 +339,15 @@ define('io.ox/calendar/edit/template',
         className: 'span12 find-free-time',
         label: gt('Participants'),
         index: 1300
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
     // participants
     point.basicExtend({
         id: 'participants_list',
         index: 1400,
+        rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
@@ -328,24 +361,28 @@ define('io.ox/calendar/edit/template',
     point.basicExtend({
         id: 'add-participant',
         index: 1500,
+        rowClass: 'collapsed',
         draw: function (options) {
             var node = this,
-            input;
+            pNode;
             node.append(
-                    input = $('<div class="input-append span6">').append(
+                    pNode = $('<div class="input-append span6">').append(
                         $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
                         $('<button class="btn" type="button" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     )
                 );
 
-            if (!_.browser.Firefox) { input.addClass('input-append-fix'); }
-
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
-                var collection = options.model.getParticipants();
-                var autocomplete = new AddParticipantsView({el: node});
-                autocomplete.render();
+                var collection = options.model.getParticipants(),
+                    autocomplete = new AddParticipantsView({ el: pNode });
+
+                if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
+
+                autocomplete.render({
+                    // parentSelector: 'body'
+                });
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
@@ -416,7 +453,8 @@ define('io.ox/calendar/edit/template',
             this.$el.css("paddingTop", "5px");
         }
     }), {
-        nextTo: "add-participant"
+        nextTo: "add-participant",
+        rowClass: 'collapsed'
     });
 
     // Attachments
@@ -427,7 +465,9 @@ define('io.ox/calendar/edit/template',
         className: 'span12',
         label: gt('Attachments'),
         index: 1600
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
 
     point.extend(new attachments.EditableAttachmentList({
@@ -445,11 +485,14 @@ define('io.ox/calendar/edit/template',
             }
             api.attachmentCallback(obj);
         }
-    }));
+    }), {
+        rowClass: 'collapsed'
+    });
 
     point.basicExtend({
         id: 'attachments_upload',
         index: 1800,
+        rowClass: 'collapsed',
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
                 $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
@@ -488,11 +531,14 @@ define('io.ox/calendar/edit/template',
                 app.view.baton.attachmentList.addFile(fileData);
             });
         }
+    }, {
+        rowClass: 'collapsed'
     });
 
     point.basicExtend({
         id: 'dummy_spacer',
         index: 10000,
+        rowClass: 'collapsed',
         draw: function () {
             this.append('<div>').css('height', '100px');
         }

@@ -19,16 +19,16 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
                                     'css!mobiscroll/css/mobiscroll.ios.css'], function (mobi, gt, date) {
 
     'use strict';
-    
+
     var settings = {},
         set = false;
-    
+
     //put some defaults in to reduce code duplications
     if ($.mobiscroll && !set) {
         settings = {
             dateOrder: date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
             dateFormat: date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
-            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i'),
+            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
             monthNamesShort: date.locale.monthsShort,
             setText: gt('Ok'),
             cancelText: gt('Cancel'),
@@ -38,17 +38,19 @@ define('io.ox/core/tk/mobiscroll', ['apps/mobiscroll/js/mobi.js',
             monthText: gt('Months'),
             yearText: gt('Years'),
             showLabel: true,
+            separator: ' ',
             display: 'bottom',
             endYear: new Date().getFullYear() + 100,
             theme: 'android-ics light'
         };
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
+
         if (_.device('ios')) {
             settings.theme = 'ios';
         }
         $.mobiscroll.setDefaults(settings);
         set = true;
     }
-    
+
     return settings;
 });

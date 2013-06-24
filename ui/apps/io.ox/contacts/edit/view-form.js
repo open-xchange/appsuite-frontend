@@ -83,6 +83,12 @@ define('io.ox/contacts/edit/view-form', [
 
         alwaysVisible: ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'],
 
+        input_type: {
+            'email1': 'email',
+            'email2': 'email',
+            'email3': 'email'
+        },
+
         i18n: {
             personal: gt('Personal information'),
             messaging: gt('Messaging'),
@@ -104,7 +110,7 @@ define('io.ox/contacts/edit/view-form', [
                     id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
-                    control: '<textarea rows="12" class="span6" name="' + options.field + '" tabindex="1">',
+                    control: '<textarea rows="12" name="' + options.field + '" tabindex="1">',
                     rare: options.isRare,
                     attribute: options.field
                 }), {
@@ -121,7 +127,8 @@ define('io.ox/contacts/edit/view-form', [
                     id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
-                    labelClassName: 'private-flag',
+                    labelClassName: 'private-flag control-label',
+                    className: 'form-horizontal control-group',
                     rare: options.isRare,
                     attribute: options.field
                 }), {
@@ -166,30 +173,34 @@ define('io.ox/contacts/edit/view-form', [
                     render: function (baton) {
                         var baton = this.baton,
                             $node = $('<form>').appendTo(this.$el).attr('id', 'attachmentsForm'),
-                            $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+                            $inputWrap = attachments.fileUploadWidget({
+                                displayButton: false,
+                                multi: true,
+                                wrapperClass: 'form-horizontal control-group'
+                            }),
                             $input = $inputWrap.find('input[type="file"]')
                                 .on('change', function (e) {
-                            e.preventDefault();
-                            if (_.browser.IE !== 9) {
-                                _($input[0].files).each(function (fileData) {
-                                    baton.attachmentList.addFile(fileData);
+                                    e.preventDefault();
+                                    if (_.browser.IE !== 9) {
+                                        _($input[0].files).each(function (fileData) {
+                                            baton.attachmentList.addFile(fileData);
+                                        });
+                                        $input.trigger('reset.fileupload');
+                                    } else {
+                                        if ($input.val()) {
+                                            var fileData = {
+                                                name: $input.val().match(/[^\/\\]+$/),
+                                                size: 0,
+                                                hiddenField: $input
+                                            };
+                                            baton.attachmentList.addFile(fileData);
+                                            $input.addClass('add-attachment').hide();
+                                            $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                                        }
+                                    }
+                                }).on('focus', function () {
+                                    $input.attr('tabindex', '1');
                                 });
-                                $input.trigger('reset.fileupload');
-                            } else {
-                                if ($input.val()) {
-                                    var fileData = {
-                                        name: $input.val().match(/[^\/\\]+$/),
-                                        size: 0,
-                                        hiddenField: $input
-                                    };
-                                    baton.attachmentList.addFile(fileData);
-                                    $input.addClass('add-attachment').hide();
-                                    $input = $('<input>', { type: 'file' }).appendTo($input.parent());
-                                }
-                            }
-                        }).on('focus', function () {
-                            $input.attr('tabindex', '1');
-                        });
 
                         $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
                     }
@@ -222,12 +233,15 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     function dateField(options) {
-        options.point.extend(new forms.DateControlGroup({
+        options.point.extend(new forms.DatePicker({
             id: options.field,
             index: options.index,
+            display: 'DATE',
             label: model.fields[options.field],
             attribute: options.field,
-            rare: options.isRare
+            rare: options.isRare,
+            className: 'form-horizontal date-field',
+            labelClassName: 'control-label'
         }), {
             hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
                 return !model.isSet(options.field);
@@ -243,7 +257,7 @@ define('io.ox/contacts/edit/view-form', [
         var point = views.point(ref + '/edit/view'),
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact'
+                className: 'edit-contact container-fluid default-content-padding'
             });
 
         point.extend(new PictureUpload({
@@ -253,7 +267,7 @@ define('io.ox/contacts/edit/view-form', [
                 this.$el.css({
                     display: 'inline-block',
                     height: "100px"
-                }).addClass("span2 header-pic");
+                }).addClass("title header-pic");
             }
         }));
 
@@ -294,18 +308,13 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Actions
-        point.basicExtend(new links.InlineLinks({
-            index: 300,
-            id: 'inline-actions',
-            ref: ref + '/edit/view/inline',
-            classes: 'form-horizontal',
-            customizeNode: function ($node) {
-                $node.addClass("controls");
-                $node.css({marginBottom: '20px', clear: 'both'});
-            }
+        point.basicExtend(new links.ButtonGroup(ref + '/edit/view', {
+            index: _.device('small') ? 10 : 300,
+            id: 'buttons',
+            classes: 'form-horizontal controls'
         }));
 
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+        views.ext.point(ref + "/edit/view/buttons").extend(new links.Button({
             id: "discard",
             index: 100,
             label: gt("Discard"),
@@ -316,7 +325,7 @@ define('io.ox/contacts/edit/view-form', [
         }));
 
         // Save
-        views.ext.point(ref + "/edit/view/inline").extend(new links.Button({
+        views.ext.point(ref + "/edit/view/buttons").extend(new links.Button({
             id: "save",
             index: 100,
             label: gt("Save"),
@@ -395,7 +404,8 @@ define('io.ox/contacts/edit/view-form', [
             _(fields).each(function (field) {
 
                 var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
-                    isRare = _(meta.rare).indexOf(field) > -1;
+                    isRare = _(meta.rare).indexOf(field) > -1,
+                    input_type = meta.input_type[field] || 'text';
 
                 if (meta.special[field]) {
                     meta.special[field]({
@@ -411,7 +421,7 @@ define('io.ox/contacts/edit/view-form', [
                         id: field,
                         index: fieldIndex,
                         label: model.fields[field],
-                        control: '<input type="text" class="input-xlarge" name="' + field + '" tabindex="1">',
+                        control: '<input type="' + input_type + '" name="' + field + '" tabindex="1">',
                         rare: isRare,
                         attribute: field
                     }), {

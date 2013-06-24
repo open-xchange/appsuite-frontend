@@ -27,7 +27,13 @@ define('io.ox/core/tk/upload',
 
     function isFileDND(e) {
         // Learned from: http://stackoverflow.com/questions/6848043/how-do-i-detect-a-file-is-being-dragged-rather-than-a-draggable-element-on-my-pa
-        return e.originalEvent && e.originalEvent.dataTransfer && (_(e.originalEvent.dataTransfer.types).contains('Files') || _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'));
+        return e.originalEvent && e.originalEvent.dataTransfer && (
+            !_.browser.Firefox ||
+            e.originalEvent.dataTransfer.dropEffect !== 'none'
+        ) && (
+            _(e.originalEvent.dataTransfer.types).contains('Files') ||
+            _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file')
+        );
     }
 
     /**

@@ -107,6 +107,7 @@ define('io.ox/core/relogin',
         }
     }
 
+    ox.off('relogin:required', ox.relogin);
     ox.on('relogin:required', relogin);
 
     return relogin;

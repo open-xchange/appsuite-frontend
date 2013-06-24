@@ -54,6 +54,23 @@ define('io.ox/tasks/edit/view',
                 }
             });
         },
+        changeMode: function (mode) {
+            if (mode === 'edit') {
+                if (this.fields.headline) {
+                    this.fields.headline.text(gt('Edit task'));
+                }
+                if (this.fields.saveButton) {
+                    this.fields.saveButton.text(gt('Save'));
+                }
+            } else {
+                if (this.fields.headline) {
+                    this.fields.headline.text(gt('Create task'));
+                }
+                if (this.fields.saveButton) {
+                    this.fields.saveButton.text(gt('Create'));
+                }
+            }
+        },
         render: function (app) {
             var self = this;
 
@@ -269,7 +286,6 @@ define('io.ox/tasks/edit/view',
                             app.getWindow().idle();
                             notifications.yell('error', response.error);
                         }, 300);
-                        console.log(response);
                     });
 
                 });

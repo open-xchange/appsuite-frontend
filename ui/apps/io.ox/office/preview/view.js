@@ -103,7 +103,7 @@ define('io.ox/office/preview/view',
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
             contentMargin: { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
-            overlayMargin: { right: Utils.SCROLLBAR_WIDTH, bottom: Utils.SCROLLBAR_HEIGHT }
+            overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
 
         // private methods ----------------------------------------------------
@@ -147,7 +147,7 @@ define('io.ox/office/preview/view',
                 );
 
             // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', focusable: true, overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
                     .addGap()
@@ -161,7 +161,7 @@ define('io.ox/office/preview/view',
             );
 
             // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', focusable: true, overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
                     .addGroup('pages/previous', new Button(GroupOptions.PREV))

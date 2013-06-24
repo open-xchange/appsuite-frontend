@@ -402,6 +402,11 @@
             return (new Date()).getTime();
         },
 
+        // return timestamp far away in the future
+        then: function () {
+            return 2116800000000;
+        },
+
         /**
          * Return the first parameter that is not undefined
          */

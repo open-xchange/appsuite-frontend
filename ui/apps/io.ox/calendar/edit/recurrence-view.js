@@ -28,7 +28,7 @@ define("io.ox/calendar/edit/recurrence-view",
             var self = this,
                 nodes = {},
                 now = new dateAPI.Local(),
-                $container = $('<span class="dropdown">');
+                $container = $('<span class="dropdown">').css({ zIndex: 1 });
 
             self[attribute] = Math.pow(2, now.getDay());
             $anchor.after($container);
@@ -138,7 +138,12 @@ define("io.ox/calendar/edit/recurrence-view",
                     }).val(renderDate());
 
                 if (_.device('small')) {
-                    $dateInput.mobiscroll().date();
+                    $dateInput.mobiscroll({
+                        preset: 'date',
+                        onSelect: function () {
+                            updateValue();
+                        }
+                    });
                 } else {
                     $dateInput.datepicker({
                         format: CalendarWidgets.dateFormat,
@@ -169,7 +174,11 @@ define("io.ox/calendar/edit/recurrence-view",
                         drawState();
                     }
                     try {
-                        $dateInput.datepicker('remove');
+                        if (_.device('small')) {
+                            // $dateInput.mobiscroll('destroy');
+                        } else {
+                            $dateInput.datepicker('remove');
+                        }
                         $dateInput.remove();
                     } catch (e) { }
                     $anchor.show().focus();
@@ -796,7 +805,7 @@ define("io.ox/calendar/edit/recurrence-view",
                     .append(sentence.ghost())
                     .on('click keydown', function (e) {
                         // hit space or enter
-                        if (e.type === 'keydown' && (e.which === 13 || e.which === 32)) {
+                        if (e.type === 'click' || (e.type === 'keydown' && (e.which === 13 || e.which === 32))) {
                             e.preventDefault();
                             self.setChoice(sentence);
                             self.updateModel();

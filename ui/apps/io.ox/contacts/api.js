@@ -296,7 +296,7 @@ define('io.ox/contacts/api',
                         action: 'update',
                         id: o.id,
                         folder: o.folder,
-                        timestamp: o.timestamp || _.now(),
+                        timestamp: o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
                     data: o.data,
@@ -389,7 +389,7 @@ define('io.ox/contacts/api',
         // remove
         return http.PUT({
                 module: 'contacts',
-                params: { action: 'delete', timestamp: _.now(), timezone: 'UTC' },
+                params: { action: 'delete', timestamp: _.then(), timezone: 'UTC' },
                 appendColumns: false,
                 data: _(list).map(function (data) {
                     return { folder: data.folder_id, id: data.id };
@@ -848,7 +848,7 @@ define('io.ox/contacts/api',
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     timezone: 'UTC',
-                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                    timestamp: o.timestamp || _.then() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false

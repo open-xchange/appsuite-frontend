@@ -284,7 +284,6 @@ define("io.ox/core/extPatterns/links",
     var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
             $parent = $("<div>").addClass('btn-group')
-                .css({ display: 'inline-block' })
                 .addClass(options.classes)
                 .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
                 .appendTo(this);

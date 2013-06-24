@@ -17,8 +17,9 @@ define('plugins/notifications/tasks/register',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
      'io.ox/tasks/util',
+     'io.ox/core/tk/reminder-util',
      'less!plugins/notifications/tasks/style.less'
-    ], function (ext, gt, api, reminderApi, util) {
+    ], function (ext, gt, api, reminderApi, util, reminderUtil) {
 
     'use strict';
 
@@ -196,22 +197,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model,
-                selectionBox;
-
-            this.attr('data-cid', model.get('cid')).attr('model-cid', model.cid)
-            .append(
-                $('<div class="title">').text(_.noI18n(model.get('title'))),
-                $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
-                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
-                $('<div class="task-actions">').append(
-                    selectionBox = $('<select class="dateselect" data-action="selector">').append(util.buildDropdownMenu(new Date())),
-                    $('<button class="btn btn-inverse taskremindbtn" data-action="remindAgain">').text(gt('Remind me again')),
-                    $('<button class="btn btn-inverse taskRemindOkBtn" data-action="ok">').text(gt('OK'))
-
-                )
-            );
-            selectionBox.val('15');//set to 15minutes as default
+            reminderUtil.draw(this, baton.model, util.buildOptionArray(new Date()));
         }
     });
 
@@ -221,14 +207,15 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="ok"]': 'deleteReminder',
-            'click [data-action="remindAgain"]': 'remindAgain',
-            'click [data-action="selector"]': 'selectClicked',
+            'change [data-action="selector"]': 'remindAgain',
+            'click [data-action="selector"]': 'remindAgain',
             'click': 'onClickItem'
         },
 
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
             ext.point('io.ox/core/notifications/task-reminder/item').invoke('draw', this.$el, baton);
+            $('.dropdown-menu', this.$el).on('click', 'a', $.proxy(this.remindAgain, this));
             return this;
         },
 
@@ -238,30 +225,31 @@ define('plugins/notifications/tasks/register',
             this.model.collection.remove(this.model);
         },
 
-        selectClicked: function (e) {
-            e.stopPropagation();
-        },
-
         remindAgain: function (e) {
+            e.stopPropagation();
             var endDate = new Date(),
                 dates,
                 reminder,
                 model = this.model,
+                time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
-
-            dates = util.computePopupTime(endDate, this.$el.find('.dateselect').val());
-            endDate = dates.alarmDate;
-            reminderApi.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
-                return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
-            }).done(function () {
-                api.trigger('update:' + key[0]);//update detailview
-            });
-            e.stopPropagation();
-            model.collection.remove(model);
+            if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+                dates = util.computePopupTime(endDate, time);
+                endDate = dates.alarmDate;
+                reminderApi.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
+                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+                }).done(function () {
+                    api.trigger('update:' + key[0]);//update detailview
+                });
+                model.collection.remove(model);
+            }
         },
 
         onClickItem: function (e) {
-
+            if ($(e.target).is('a') || $(e.target).is('i')) {//ignore chevron and dropdownlinks
+                return;
+            }
+            
             var overlay = $('#io-ox-notifications-overlay'),
                 obj = {
                     id: this.model.get('id'),

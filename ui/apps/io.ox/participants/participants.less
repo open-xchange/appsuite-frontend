@@ -44,10 +44,11 @@
         display: none;
     }
 
-    .remove:hover {
+    .remove:hover, .remove:focus {
         background-color: #a00;
         color: #fff;
         text-decoration: none;
+        outline: 0;
     }
 
     .remove .icon {
@@ -68,6 +69,7 @@
 
     .extra-decorator {
         color: #888;
+        &:hover { color: #888; text-decoration: none }
     }
 
     .participant-name {

@@ -379,7 +379,7 @@ define('io.ox/calendar/month/perspective',
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll = $('<input type="checkbox">')
+                                        this.showAll = $('<input type="checkbox" tabindex="1">')
                                             .prop('checked', settings.get('showAllPrivateAppointments', false))
                                             .on('change', $.proxy(function (e) {
                                                 settings.set('showAllPrivateAppointments', this.showAll.prop('checked')).save();
@@ -465,6 +465,29 @@ define('io.ox/calendar/month/perspective',
                     $('[id^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
                     self.gotoMonth();
                 });
+            });
+
+            this.main
+                .on('keydown', function (e) {
+                switch (e.which) {
+                case 37: // left
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'prev'
+                    });
+                    break;
+                case 39: // right
+                    self.gotoMonth({
+                        duration: _.device('desktop') ? 400 : 0,
+                        date: 'next'
+                    });
+                    break;
+                case 13: // enter
+                    $(e.target).click();
+                    break;
+                default:
+                    break;
+                }
             });
 
             // define default sidepopup dialog

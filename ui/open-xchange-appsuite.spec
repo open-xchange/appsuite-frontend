@@ -96,6 +96,11 @@ cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
 mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 
+mkdir -p "%{buildroot}/opt/open-xchange/appsuite/bin"
+sed -e "s:## cd ##:cd %{docroot}:" bin/touch-appsuite > \
+    "%{buildroot}/opt/open-xchange/appsuite/bin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/appsuite/bin/touch-appsuite"
+
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
 
@@ -129,6 +134,10 @@ UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
 %dir %{docroot}
 %{docroot}
 %exclude %{docroot}/help
+%dir /opt/open-xchange
+%dir /opt/open-xchange/appsuite
+%dir /opt/open-xchange/appsuite/bin
+/opt/open-xchange/appsuite/bin/update-appsuite
 
 %files manifest -f tmp/files
 %defattr(-,root,root)

@@ -360,7 +360,7 @@ utils.concat('update-themes.js', utils.list('lib',
      'less.js/lib/less/tree.js',
      'build/update-themes.js']),
     { to: utils.dest('share') });
-utils.copy(utils.list('lib/build', ['update.sh', 'update-themes.sh']),
+utils.copy(utils.list('lib/build', 'update-themes.sh'),
     { to: utils.dest('share'), mode: 0x1ed /* 755 octal */ });
 
 // external apps
@@ -446,7 +446,7 @@ utils.merge('manifests/' + pkgName + '.json',
             var combinedManifest = [];
             _.each(manifests, function (m, i) {
                 var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                             .exec(names[i])[1] + '/';
+                             .exec(names[i])[1].replace(/\\/g, '/') + '/';
                 var data = null;
                 try {
                     data = new Function('return (' + m + ')')();

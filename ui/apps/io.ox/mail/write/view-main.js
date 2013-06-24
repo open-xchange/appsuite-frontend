@@ -580,6 +580,14 @@ define("io.ox/mail/write/view-main",
                                 tabindex: '3',
                                 placeholder: gt('Subject')
                             })
+                            /* no padding-right for input fields in IE9
+                               -> Bug 27069 - Subject does not scroll properly for long strings in IE9 */
+                            .css('width', function () {
+                                return _.device('desktop') && _.browser.IE < 10 ? '85%' : null;
+                            })
+                            .css('padding-right', function () {
+                                return _.device('desktop') && _.browser.IE < 10 ? '5px' : null;
+                            })
                             .addClass('subject')
                             .val('')
                             .placeholder()
@@ -755,6 +763,9 @@ define("io.ox/mail/write/view-main",
         }
 
         if (list.length) {
+            var $section = view.sections.attachments,
+                $upload = $section.children().last();
+
             // loop over all attachments
             _(list).each(function (file) {
 
@@ -789,7 +800,7 @@ define("io.ox/mail/write/view-main",
                 }
 
                 // draw
-                view.sections.attachments.append(
+                $section.append(
                     $('<div>').addClass('section-item file').append(
                         // icon
                         icon,
@@ -811,8 +822,9 @@ define("io.ox/mail/write/view-main",
                         )
                         .on('click', function (e) {
                             e.preventDefault();
-                            $(this).parent().prev().remove();
-                            $(this).parent().remove();
+                            //remove upload container and all file 'label divs'
+                            $upload.nextUntil('.upload', '.file').remove();
+                            $upload.replaceWith('');
                         })
                     )
                 );

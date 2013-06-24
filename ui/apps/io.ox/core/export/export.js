@@ -249,7 +249,7 @@ define('io.ox/core/export/export',
                                 def = baton.format[id].getDeferred() || new $.Deferred();
                             def.done(function (data) {
                                 if (data) {
-                                    window.location.href = data;
+                                    window.location.href = data + '&content_disposition=attachment';
                                 }
                             })
                             .fail(function (obj) {

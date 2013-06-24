@@ -176,60 +176,67 @@ define('io.ox/core/commons',
 
         addGridToolbarFolder: function (app, grid) {
 
-            ext.point(app.get('name') + '/vgrid/toolbar').extend({
-                id: 'info',
-                index: 200,
-                draw: function () {
-                    this.append($('<div class="grid-info">'));
-                }
-            });
-
             function fnOpen(e) {
                 e.preventDefault();
                 app.showFolderView();
             }
 
-            // right now, only mail folders support "total"
-            var name = app.get('name'),
-                supportsTotal = true, // name === 'io.ox/mail',
-                searchAcrossFolders = name !== 'io.ox/mail';
-
-            function updateFolderCount(id, data) {
-                var total = data.total,
-                    node = grid.getToolbar().find('.folder-count[data-folder-id="' + id + '"]');
-
-                //cannot use .show() .hide() here because in firefox this keeps adding display: block to the span instead of inline
-                if (total > 0) {
-                    node.css('display', 'inline');
-                } else {
-                    node.css('display', 'none');
-                }
-                node.text('(' + total + ')');
-            }
-
-            function drawFolderName(folder_id) {
-                var link = $('<a href="#" data-action="open-folderview">')
-                    .attr({ tabindex: 1 })
-                    .append(folderAPI.getTextNode(folder_id))
-                    .on('click', fnOpen);
-                if (supportsTotal) {
-                    link.after(
-                        $.txt(' '),
-                        $('<span class="folder-count">').attr('data-folder-id', folder_id).hide()
+            ext.point(app.get('name') + '/vgrid/toolbar').extend({
+                id: 'info',
+                index: 200,
+                draw: function () {
+                    this.append(
+                        $('<div class="grid-info">')
+                        .on('click', '.folder-name', fnOpen)
                     );
                 }
-                return link;
+            });
+
+            // right now, only mail folders support "total"
+            var name = app.get('name'),
+                searchAcrossFolders = name !== 'io.ox/mail';
+
+            function getInfoNode() {
+                return grid.getToolbar().find('.grid-info');
+            }
+
+            function drawFolderInfo(folder_id) {
+
+                if (!folder_id) return;
+
+                var node = getInfoNode();
+
+                node.empty()
+                .attr('data-folder-id', folder_id)
+                .append(
+                    $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $.txt(' '),
+                    $('<span class="folder-count">').attr('data-folder-id', folder_id)
+                );
+
+                folderAPI.get({ folder: folder_id }).done(function (data) {
+
+                    var total = data.total,
+                        node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
+
+                    node.find('.folder-name').text(data.title);
+
+                    if (total > 0) {
+                        node.find('.folder-count').text('(' + total + ')');
+                    }
+                });
             }
 
             grid.on('change:prop:folder change:mode', function (e, value) {
-                var folder_id = grid.prop('folder'), mode = grid.getMode(),
-                    node = grid.getToolbar().find('.grid-info').empty();
+
+                var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
+
                 if (mode === 'all') {
                     // non-search; show foldername
-                    node.append(
-                        drawFolderName(folder_id)
-                    );
-                } else if (mode === 'search') {
+                    drawFolderInfo(folder_id);
+                }
+                else if (mode === 'search') {
+                    node = getInfoNode().empty();
                     // search across all folders
                     if (searchAcrossFolders) {
                         node.append(
@@ -249,13 +256,15 @@ define('io.ox/core/commons',
             });
 
             // unread counter for mail
-            if (supportsTotal) {
-                folderAPI.on('update:total', function (e, id, data) {
-                    updateFolderCount(id, data);
-                });
-            }
+            folderAPI.on('update:total', function (e, id, data) {
+                drawFolderInfo(id, data);
+            });
 
             ext.point(app.get('name') + '/vgrid/toolbar').invoke('draw', grid.getToolbar());
+
+            // try to set initial value
+            var id = app.folder.get();
+            drawFolderInfo(id);
         },
 
         /**
@@ -560,6 +569,8 @@ define('io.ox/core/commons',
     $(document).on('keydown.f6', function (e) {
 
         if (e.which === 117 && (macos || e.ctrlKey)) {
+
+            e.preventDefault();
 
             var items = $('.f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),

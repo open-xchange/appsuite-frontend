@@ -4,21 +4,10 @@ SET _NODECMD=%NODEJS%
 IF "%_NODECMD%"=="" SET _NODECMD=node.exe
 
 cd /D %~dp0
+echo Building ui...
 
-IF "%1"=="" goto DoCompile
-IF "%1"=="--trace" goto DoCompile
+SET _TMPFILE=%tmp%\ui-build.log
 
-%_NODECMD% lib\jake\bin\cli.js -f Jakefile %*
-
-goto Done
-
-:DoCompile
-
-SET _TMPFILE=%tmp%\oxwebbuild.log
-rem Ignore --trace to avoid strange stack trace output, don't pass any params
-%_NODECMD% lib\jake\bin\cli.js -f Jakefile 2> %_TMPFILE%
+%_NODECMD% lib\jake\bin\cli.js -f Jakefile %* 2> %_TMPFILE%
 type %_TMPFILE%
 del /q %_TMPFILE%
-
-:Done
-SET _NODECMD=

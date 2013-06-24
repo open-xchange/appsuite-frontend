@@ -17,16 +17,13 @@ define('io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
      'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
-     'io.ox/core/api/autocomplete',
      'io.ox/contacts/util',
      'io.ox/core/extensions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/notifications'
-    ], function (views, forms, gt, autocomplete, api, AutocompleteAPI, util, ext, AddParticipantsView, notifications) {
+    ], function (views, forms, gt, autocomplete, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
-
-    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false });
 
     var point = views.point('io.ox/contacts/distrib/create-dist-view'),
         ContactCreateDistView = point.createView({
@@ -238,11 +235,17 @@ define('io.ox/contacts/distrib/create-dist-view',
                 'data-mail': o.display_name + '_' + o.mail
             }),
             img = api.getPicture(o.mail).addClass('contact-image'),
-            button = $('<div>', { tabindex: 1 }).addClass('remove')
-            .append($('<div class="icon">').append($('<i class="icon-trash">')))
-            .on('click', {mail: o.mail, name: o.display_name }, function (e) {
+
+            button = $('<a href="#" class="remove" tabindex="1">').append(
+                $('<div class="icon">').append(
+                    $('<i class="icon-trash">')
+                )
+            )
+            .on('click', { mail: o.mail, name: o.display_name }, function (e) {
+                e.preventDefault();
                 self.model.removeMember(e.data.mail, e.data.name);
             });
+
             frame.append(img)
             .append(
                 $('<div>').addClass('person-link ellipsis')

@@ -281,7 +281,7 @@ define('io.ox/calendar/month/view',
                     });
                     return tmp;
                 }),
-                $('<div>').addClass('scrollpane')
+                $('<div class="scrollpane f6-target" tabindex="1">')
             );
     };
 
@@ -310,7 +310,9 @@ define('io.ox/calendar/month/view',
                 }
             }
 
-            this.addClass(classes)
+            this
+                .attr({ tabindex: 1 })
+                .addClass(classes)
                 .append(
                     $('<div>')
                     .addClass('appointment-content')

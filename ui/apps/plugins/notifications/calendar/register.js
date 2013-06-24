@@ -18,8 +18,9 @@ define('plugins/notifications/calendar/register',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
      'io.ox/core/api/user',
+     'io.ox/core/tk/reminder-util',
      'gettext!plugins/notifications'
-    ], function (calApi, reminderApi, util, ext, userApi, gt) {
+    ], function (calApi, reminderApi, util, ext, userApi, reminderUtil, gt) {
 
     'use strict';
 
@@ -59,31 +60,13 @@ define('plugins/notifications/calendar/register',
 
     ext.point('io.ox/core/notifications/reminder/item').extend({
         draw: function (baton) {
-            var model = baton.model;
-            this.attr('data-cid', model.get('cid')).append(
-                $('<div class="time">').text(model.get('time')),
-                $('<div class="date">').text(model.get('date')),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="location">').text(model.get('location')),
-                $('<div class="actions">').append(
-                    $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                        $('<a href="#" data-action="reminderbutton">').attr('data-toggle', 'dropdown').text(gt('Remind me again')).append(
-                            $('<i>').addClass('icon-chevron-down').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
-                        ),
-                        $('<ul>').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
-                            var minutes = [5, 10, 15, 45],
-                                ret = '';
-                            for (var i = 0; i < minutes.length; i++) {
-                                ret += '<li><a ref="#" data-action="reminder" data-value="' + minutes[i] + '">' +
-                                    gt.format(gt.npgettext('in', '%d minute', '%d minutes', minutes[i]), minutes[i]) +
-                                    '</a></li>';
-                            }
-                            return ret;
-                        })
-                    ).delegate(),
-                    $('<button class="btn btn-inverse" data-action="accept">').text(gt('OK'))
-                )
-            );
+            //build selectoptions
+            var minutes = [5, 10, 15, 45],
+                options = [];
+            for (var i = 0; i < minutes.length; i++) {
+                options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
+            }
+            reminderUtil.draw(this, baton.model, options);
         }
     });
 
@@ -146,7 +129,9 @@ define('plugins/notifications/calendar/register',
 
         events: {
             'click': 'onClickItem',
-            'click [data-action="accept"]': 'onClickOk'
+            'change [data-action="selector"]': 'onClickReminder',
+            'click [data-action="selector"]': 'onClickReminder',
+            'click [data-action="ok"]': 'onClickOk'
         },
 
         render: function () {
@@ -157,7 +142,7 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a')) {
+            if ($(e.target).is('a') || $(e.target).is('i')) {//ignore chevron and dropdownlinks
                 return;
             }
             var obj = this.model.get('remdata'),
@@ -182,24 +167,27 @@ define('plugins/notifications/calendar/register',
         },
 
         onClickReminder: function (e) {
+            e.stopPropagation();
             var self = this,
-                min = $(e.target).data('value'),
+                min = $(e.target).data('value') || $(e.target).val(),
                 reminder = self.model;
-            self.collection.remove(self.model);
-            self.collection.hidden.push(self.model.get('cid'));
-            setTimeout(function () {
-                //get updated data
-                calApi.get(reminder.get('caldata')).done(function (calObj) {
-                    self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
-                    //fill in new data
-                    reminder.set('caldata', calObj);
-                    reminder.set('title', calObj.title);
-                    reminder.set('location', calObj.location);
-                    reminder.set('time', util.getTimeInterval(calObj));
-                    self.collection.add(reminder);
-                });
-                
-            }, min * 60000);
+            if (min !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+                self.collection.remove(self.model);
+                self.collection.hidden.push(self.model.get('cid'));
+                setTimeout(function () {
+                    //get updated data
+                    calApi.get(reminder.get('caldata')).done(function (calObj) {
+                        self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                        //fill in new data
+                        reminder.set('caldata', calObj);
+                        reminder.set('title', calObj.title);
+                        reminder.set('location', calObj.location);
+                        reminder.set('time', util.getTimeInterval(calObj));
+                        self.collection.add(reminder);
+                    });
+                    
+                }, min * 60000);
+            }
         },
 
         onClickOk: function (e) {

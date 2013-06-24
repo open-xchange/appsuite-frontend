@@ -45,10 +45,7 @@ define('io.ox/contacts/edit/main',
 
             app.setWindow(win);
 
-            container = win.nodes.main
-                .css({ backgroundColor: '#fff' })
-                .scrollable()
-                .css({ width: '700px', margin: '20px auto 20px auto' });
+            container = win.nodes.main.scrollable();
 
             var cont = function (data) {
 

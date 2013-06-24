@@ -541,7 +541,7 @@ define('io.ox/mail/api',
                     action: apiAction || 'update',
                     id: obj.id,
                     folder: folder,
-                    timestamp: _.now() // to be safe
+                    timestamp: _.then() // to be safe
                 },
                 data: data,
                 appendColumns: false
@@ -881,7 +881,7 @@ define('io.ox/mail/api',
                         break;
                     }
                 }
-                
+
                 api.trigger('move', list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
                 api.caches.all.clear().done(function () {

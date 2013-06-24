@@ -31,12 +31,14 @@ nopt.invalidHandler = function (key, val) {
 
 var options = nopt({
     help: Boolean,
+    manifests: [path, Array],
     port: Number,
     server: url,
     verbose: Boolean,
     zoneinfo: path
 }, {
     h: '--help',
+    m: '--manifests',
     p: '--port',
     s: '--server',
     v: '--verbose',
@@ -47,23 +49,32 @@ if (options.help) usage(0);
 
 function usage(exitCode) {
     (exitCode ? console.error : console.log)(
-        'Usage: appserver.sh [OPTION]... [PATH]...\n\n' +
-        '  -h,      --help          print this help message and exit\n' +
-        '  -p PORT, --port=PORT     listen on PORT (default: 8337)\n' +
-        '  -s URL,  --server=URL    use the HTTP API at the specified URL\n' +
-        '  -v,      --verbose       print all files and URLs, not only errors\n' +
-        '  -z PATH, --zoneinfo=PATH use timezone data from the specified path\n' +
-        '                           (default: /usr/share/zoneinfo/)\n\n' +
+        'Usage: node lib/appserver.js [OPTION]... [PATH]...\n\n' +
+        '  -h,      --help           print this help message and exit\n' +
+        '  -m PATH, --manifests=PATH add manifests from the specified path (default:\n' +
+        '                            the "manifests" subdirectory of every file path)\n' +
+        '  -p PORT, --port=PORT      listen on PORT (default: 8337)\n' +
+        '  -s URL,  --server=URL     use an existing server as fallback\n' +
+        '  -v,      --verbose        print all files and URLs, not only errors\n' +
+        '  -z PATH, --zoneinfo=PATH  use timezone data from the specified path\n' +
+        '                            (default: /usr/share/zoneinfo/)\n\n' +
         'Files are searched in each PATH in order and requested from the server if not\n' +
         'found. If no paths are specified, the default is /var/www/appsuite/.');
     process.exit(exitCode);
 }
 
-var prefixes = options.argv.remain;
-if (!prefixes.length) prefixes =  ['/var/www/appsuite/'];
-prefixes = prefixes.map(function(prefix) {
-    return path.join(prefix, 'apps/');
+var prefixes = options.argv.remain.map(function (s) {
+    return path.resolve(s);
 });
+if (!prefixes.length) prefixes =  ['/var/www/appsuite/'];
+var manifests = options.manifests || append(prefixes, 'manifests/');
+prefixes = append(prefixes, 'apps/');
+
+function append(array, suffix) {
+    return array.map(function(prefix) {
+        return path.join(prefix, suffix);
+    });
+}
 
 var tzModule = 'io.ox/core/date/tz/zoneinfo/';
 var tzPath = options.zoneinfo || '/usr/share/zoneinfo/';
@@ -77,6 +88,7 @@ if (options.server) {
         console.error('Server must be an HTTP(S) URL');
         usage(1);
     }
+    var protocol = server.protocol === 'https:' ? https : http;
 }
 
 var escapes = {
@@ -113,6 +125,20 @@ function httpDate(d) {
 }
 
 http.createServer(function (request, response) {
+    var URL = url.parse(request.url, true);
+    if (request.method === 'GET') {
+        if (URL.pathname.slice(0, 15) === '/api/apps/load/') {
+            return load(request, response);
+        } else if (URL.pathname.slice(0, 19) === '/api/apps/manifests' &&
+                   URL.query.action === 'config')
+        {
+            return injectManifests(request, response);
+        }
+    }
+    return proxy(request, response);
+}).listen(options.port || 8337);
+
+function load(request, response) {
     
     // parse request URL
     var list = url.parse(request.url).pathname.split(',');
@@ -127,7 +153,7 @@ http.createServer(function (request, response) {
             files.push(invalid(list[i]));
             continue;
         }
-        if (m[2].slice(0, tzModule.length) == tzModule) {
+        if (m[2].slice(0, tzModule.length) === tzModule) {
             var paths = tzPath;
             var name = m[2].slice(tzModule.length);
         } else {
@@ -147,16 +173,18 @@ http.createServer(function (request, response) {
     
     // invalid module name
     function invalid(fullName) {
-        console.log('Invalid module name: ' + fullName);
-        response.write("console.log('Invalid module name: \"" +
-                       escape(fullName) + "\"');\n");
+        return function () {
+            console.log('Invalid module name: ' + fullName);
+            response.write("console.log('Invalid module name: \"" +
+                           escape(fullName) + "\"');\n");
+        };
     }
     
     // remote file
     function remote(filename, fullName, name) {
         if (!options.server) {
-            console.log('Could not read', filename);
             return function() {
+                console.log('Could not read', filename);
                 response.write("define('" + escape(fullName) +
                     "', function () { throw new Error(\"Could not read '" +
                     escape(name) + "'\"); });\n");
@@ -165,10 +193,8 @@ http.createServer(function (request, response) {
         remoteCounter++;
         var chunks = [];
         var URL = url.resolve(options.server,
-                              'apps/load/' + version + ',' + fullName);
-        var opt = url.parse(URL);
-        var protocol = opt.protocol === 'https:' ? https : http;
-        protocol.get(opt, ok).on('error', error);
+                              'api/apps/load/' + version + ',' + fullName);
+        protocol.get(url.parse(URL), ok).on('error', error);
         return function () {
             if (options.verbose) console.log(URL);
             for (var i = 0; i < chunks.length; i++) response.write(chunks[i]);
@@ -237,4 +263,106 @@ http.createServer(function (request, response) {
         response.end();
         if (options.verbose) console.log();
     }
-}).listen(options.port || 8337);
+}
+
+function lock() {
+    var counter = 1, cb;
+    var L = function (f) {
+        counter++;
+        return function () {
+            var retval = f.apply(this, arguments);
+            if (!--counter) cb();
+            return retval;
+        };
+    };
+    L.done = function (callback) {
+        cb = callback;
+        if (!--counter) cb();
+    };
+    return L;
+};
+
+function injectManifests(request, response) {
+    if (!options.server) {
+        response.writeHead(501, 'No --server specified',
+            { 'Content-Type': 'text/plain' });
+        response.end('No --server specified');
+        return;
+    }
+    var URL = url.resolve(options.server, request.url.slice(1))
+    if (options.verbose) console.log(URL);
+    var opt = url.parse(URL, true);
+    opt.headers = request.headers;
+    opt.headers.host = opt.host;
+    delete opt.headers['accept-encoding'];
+    protocol.request(opt, function (res) {
+        if (res.statusCode !== 200) {
+            response.writeHead(res.statusCode, res.headers);
+            res.pipe(response);
+            return;
+        }
+        var reply = [], map = {}, L = lock();
+        res.on('data', data).on('end', end);
+        function data(chunk) { reply.push(chunk); }
+        function end() {
+            reply = JSON.parse(reply.join(''));
+            if (reply.error) {
+                response.end(JSON.stringify(reply, null, 4));
+                return;
+            }
+            var list = reply.data.manifests;
+            for (var i in list) map[list[i].path] = list[i];
+            manifests.forEach(readDir);
+            L.done(sendReply);
+        }
+        function readDir(dir) {
+            fs.readdir(dir, L(function (err, files) {
+                if (err) return console.error(err.message);
+                files.forEach(function (file) {
+                    fs.readFile(path.join(dir, file), 'utf8', L(addManifest));
+                });
+            }));
+        }
+        function addManifest(err, manifest) {
+            if (err) return console.error(err.message);
+            manifest = Function('return (' + manifest + ')')();
+            if (!(manifest instanceof Array)) manifest = [manifest];
+            for (var i in manifest) map[manifest[i].path] = manifest[i];
+        }
+        function sendReply() {
+            var list = reply.data.manifests = [];
+            for (var i in map) {
+                if (opt.query.session || /signin/.test(map[i].namespace)) {
+                    list.push(map[i]);
+                }
+            }
+            response.end(JSON.stringify(reply, null, 4));
+        }
+    }).end();
+}
+
+function proxy(request, response) {
+    if (!options.server) {
+        response.writeHead(501, 'No --server specified',
+            { 'Content-Type': 'text/plain' });
+        response.end('No --server specified');
+        return;
+    }
+    var URL = url.resolve(options.server, request.url.slice(1));
+    if (options.verbose) console.log(URL);
+    var opt = url.parse(URL);
+    opt.method = request.method;
+    opt.headers = request.headers;
+    opt.headers.host = opt.host;
+    request.pipe(protocol.request(opt, function (res) {
+        var cookies = res.headers['set-cookie'];
+        if (cookies) {
+            if (typeof cookies === 'string') cookies = [cookies];
+            res.headers['set-cookie'] = cookies.map(function (s) {
+                return s.replace(/;\s*secure/i, '');
+            });
+        }
+        response.writeHead(res.statusCode, res.headers);
+        res.pipe(response);
+    }));
+}
