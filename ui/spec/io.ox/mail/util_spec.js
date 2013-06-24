@@ -43,7 +43,7 @@ define(['io.ox/mail/util',
                 expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
                 expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
             });
-            it('should correctly remove "/TYPE=PLMN" typesuffix from data', function () {
+            xit('should correctly remove "/TYPE=PLMN" typesuffix from data', function () {
                 var mail = {
                         from: [
                             ['017012345678','017012345678/TYPE=PLMN']
