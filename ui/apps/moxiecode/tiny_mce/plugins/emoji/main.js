@@ -218,9 +218,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         unifiedToImageTag: function (text, options) {
 
             var parsedText;
-            options = _.extend({forceProcessing: false}, options);
+            options = options || {};
 
-            if (!options.forceProcessing && _.device('emoji')) {
+            if (options.forceEmojiIcons !== true && _.device('emoji')) {
                 return text;
             }
             parsedText = $('<div>').append(emoji.unifiedToHTML(text));
