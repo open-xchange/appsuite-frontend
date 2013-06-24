@@ -446,7 +446,7 @@ utils.merge('manifests/' + pkgName + '.json',
             var combinedManifest = [];
             _.each(manifests, function (m, i) {
                 var prefix = /^apps[\\\/](.*)[\\\/]manifest\.json$/
-                             .exec(names[i])[1] + '/';
+                             .exec(names[i])[1].replace(/\\/g, '/') + '/';
                 var data = null;
                 try {
                     data = new Function('return (' + m + ')')();
