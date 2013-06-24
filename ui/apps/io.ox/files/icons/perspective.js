@@ -225,7 +225,8 @@ define('io.ox/files/icons/perspective',
                .on('folder:change', function (e, id, folder) {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    app.getWindow().search.close();
+                    app.getWindow().search.clear();
+                    app.getWindow().search.active = false;
                     self.main.closest('.search-open').removeClass('search-open');
                     allIds = [];
                     self.selection.clear();
