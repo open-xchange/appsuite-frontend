@@ -63,7 +63,9 @@ function usage(exitCode) {
     process.exit(exitCode);
 }
 
-var prefixes = options.argv.remain.map(path.resolve, path);
+var prefixes = options.argv.remain.map(function (s) {
+    return path.resolve(s);
+});
 if (!prefixes.length) prefixes =  ['/var/www/appsuite/'];
 var manifests = options.manifests || append(prefixes, 'manifests/');
 prefixes = append(prefixes, 'apps/');
