@@ -1060,6 +1060,12 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
+
+input.search-query::-ms-clear {
+    // Removes the native clear button for input fields on the search field
+    display: none;
+}
+
 /*  removed because searchfield is now type=text */
 .no-searchfield .searchfield-wrapper {
     width: 300px;
