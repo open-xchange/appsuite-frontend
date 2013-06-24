@@ -580,6 +580,14 @@ define("io.ox/mail/write/view-main",
                                 tabindex: '3',
                                 placeholder: gt('Subject')
                             })
+                            /* no padding-right for input fields in IE9
+                               -> Bug 27069 - Subject does not scroll properly for long strings in IE9 */
+                            .css('width', function () {
+                                return _.device('desktop') && _.browser.IE < 10 ? '85%' : null;
+                            })
+                            .css('padding-right', function () {
+                                return _.device('desktop') && _.browser.IE < 10 ? '5px' : null;
+                            })
                             .addClass('subject')
                             .val('')
                             .placeholder()
