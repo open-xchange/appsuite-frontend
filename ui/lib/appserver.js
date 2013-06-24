@@ -285,16 +285,27 @@ function injectManifests(request, response) {
         response.end('No --server specified');
         return;
     }
-    var opt = url.parse(url.resolve(options.server, request.url.slice(1)),
-                        true);
+    var URL = url.resolve(options.server, request.url.slice(1))
+    if (options.verbose) console.log(URL);
+    var opt = url.parse(URL, true);
     opt.headers = request.headers;
+    opt.headers.host = opt.host;
     delete opt.headers['accept-encoding'];
     protocol.request(opt, function (res) {
+        if (res.statusCode !== 200) {
+            response.writeHead(res.statusCode, res.headers);
+            res.pipe(response);
+            return;
+        }
         var reply = [], map = {}, L = lock();
         res.on('data', data).on('end', end);
         function data(chunk) { reply.push(chunk); }
         function end() {
             reply = JSON.parse(reply.join(''));
+            if (reply.error) {
+                response.end(JSON.stringify(reply, null, 4));
+                return;
+            }
             var list = reply.data.manifests;
             for (var i in list) map[list[i].path] = list[i];
             manifests.forEach(readDir);
@@ -333,10 +344,20 @@ function proxy(request, response) {
         response.end('No --server specified');
         return;
     }
-    var opt = url.parse(url.resolve(options.server, request.url.slice(1)));
+    var URL = url.resolve(options.server, request.url.slice(1));
+    if (options.verbose) console.log(URL);
+    var opt = url.parse(URL);
     opt.method = request.method;
     opt.headers = request.headers;
+    opt.headers.host = opt.host;
     request.pipe(protocol.request(opt, function (res) {
+        var cookies = res.headers['set-cookie'];
+        if (cookies) {
+            if (typeof cookies === 'string') cookies = [cookies];
+            res.headers['set-cookie'] = cookies.map(function (s) {
+                return s.replace(/;\s*secure/i, '');
+            });
+        }
         response.writeHead(res.statusCode, res.headers);
         res.pipe(response);
     }));
