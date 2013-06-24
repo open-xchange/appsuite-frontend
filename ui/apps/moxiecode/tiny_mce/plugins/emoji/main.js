@@ -213,7 +213,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         // HTML related API
         unifiedToImageTag: function (text, options) {
 
-            var parsedText;
+            var parsedText,
+                self = this;
+
             options = options || {};
 
             if (options.forceEmojiIcons !== true && _.device('emoji')) {
@@ -229,7 +231,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 //transform unicode html entity to text
                 unicode = $('<div>').html(unicode).text();
                 $(node).replaceWith(
-                    $('<img src="apps/themes/login/1x1.gif" class="' + $(node).attr('class') + '">')
+                    $('<img src="apps/themes/login/1x1.gif" class="' + self.getInstance().cssFor(unicode) + '">')
                     .attr('data-emoji-unicode', unicode)
                 );
             });
