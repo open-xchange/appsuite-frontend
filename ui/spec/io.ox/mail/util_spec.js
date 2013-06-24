@@ -15,8 +15,8 @@ define(['io.ox/mail/util',
 
     describe('Utilities for mail:', function () {
         //guarantee same number of arguments for wrapper functions
-        describe('has some msisdn methods', function () {
-            it('correctly identifying channel "email" or "phone"', function () {
+        describe('has some msisdn methods and', function () {
+            it('should correctly identify channel "email" or "phone"', function () {
 
                 //without considering activated capability
                 expect(util.getChannel('/TYPE=PLMN')).toEqual('phone');
@@ -38,12 +38,12 @@ define(['io.ox/mail/util',
                     expect(util.getChannel('(01701) 23456-78')).toEqual('email');
                 }
             });
-            it('correctly removing inalid chars from phone numbers', function () {
+            it('should correctly remove inalid chars from phone numbers', function () {
                 expect(util.cleanupPhone('+17012345678')).toEqual('+17012345678');
                 expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
                 expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
             });
-            it('correctly removing "/TYPE=PLMN" typesuffix from data', function () {
+            it('should correctly remove "/TYPE=PLMN" typesuffix from data', function () {
                 var mail = {
                         from: [
                             ['017012345678','017012345678/TYPE=PLMN']
