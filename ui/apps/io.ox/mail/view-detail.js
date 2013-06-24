@@ -116,7 +116,9 @@ define('io.ox/mail/view-detail',
                     return !emote ? match : emote;
                 });
             }
-            return emoji.unifiedToImageTag(text);
+            return emoji.unifiedToImageTag(text, {
+                forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
+            });
         };
     }());
 
