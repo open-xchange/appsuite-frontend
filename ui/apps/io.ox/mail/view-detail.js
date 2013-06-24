@@ -116,6 +116,7 @@ define('io.ox/mail/view-detail',
                     return !emote ? match : emote;
                 });
             }
+            text = emoji.getInstance().softbankToUnified(text);
             return emoji.unifiedToImageTag(text, {
                 forceEmojiIcons: settings.get('emoji/forceEmojiIcons', false)
             });
