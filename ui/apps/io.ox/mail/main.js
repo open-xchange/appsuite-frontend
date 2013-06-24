@@ -774,7 +774,7 @@ define('io.ox/mail/main',
         win.on('show:initial', grid.focus);
 
         // Push mail
-        if (require("io.ox/core/capabilities").has("rt")) {
+        /*if (require("io.ox/core/capabilities").has("rt")) {
             require(["io.ox/realtime/events"], function (rtEvents) {
                 rtEvents.on("mail:new", function (data) {
                     //if (data.folder === "default0/INBOX") {
@@ -783,7 +783,7 @@ define('io.ox/mail/main',
                     //}
                 });
             });
-        }
+        }*/
 
         // go!
         commons.addFolderSupport(app, grid, 'mail', options.folder)
