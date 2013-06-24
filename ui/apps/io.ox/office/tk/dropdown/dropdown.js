@@ -494,7 +494,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // register event handlers
         this.on('change cancel', function () { toggleMenu(false); })
-            .on('show enable', function (state) { if (!state) { toggleMenu(false); } });
+            .on('show enable', function (event, state) { if (!state) { toggleMenu(false); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
