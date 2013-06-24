@@ -546,7 +546,7 @@ define('io.ox/core/commons-folderview',
             }
 
             function getWidths() {
-                windowContainer   = sidepanel.closest('.window-container-center');
+                windowContainer = sidepanel.closest('.window-container-center');
                 maxSidePanelWidth = windowContainer.width() / 2;
                 restoreWidth();
             }
@@ -581,8 +581,6 @@ define('io.ox/core/commons-folderview',
                 var width = $(this).data('resize-width') || 250;
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
-
-            $(window).on('resize', _.debounce(getWidths, 200));
         };
 
         fnHide = function () {
