@@ -28,6 +28,14 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         });
     }
 
+    function parseUnicode(str) {
+        var unicode;
+
+        unicode = '&#x' + str + ';';
+        //transform unicode html entity to text
+        return $('<div>').html(unicode).text();
+    }
+
     var collections = parseCollections();
 
     function escape(s) {
@@ -229,11 +237,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             parsedText.find('span.emoji').each(function (index, node) {
                 //parse unicode number
-                var unicode = '&#x' + _.find($(node).attr('class').split('emoji'), function (item) {
+                var unicode = parseUnicode(_.find($(node).attr('class').split('emoji'), function (item) {
                     return item.trim();
-                }) + ';';
-                //transform unicode html entity to text
-                unicode = $('<div>').html(unicode).text();
+                }));
                 $(node).replaceWith(
                     $('<img src="apps/themes/login/1x1.gif" class="' + self.getInstance().cssFor(unicode) + '">')
                     .attr('data-emoji-unicode', unicode)
