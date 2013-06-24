@@ -171,16 +171,18 @@ function load(request, response) {
     
     // invalid module name
     function invalid(fullName) {
-        console.log('Invalid module name: ' + fullName);
-        response.write("console.log('Invalid module name: \"" +
-                       escape(fullName) + "\"');\n");
+        return function () {
+            console.log('Invalid module name: ' + fullName);
+            response.write("console.log('Invalid module name: \"" +
+                           escape(fullName) + "\"');\n");
+        };
     }
     
     // remote file
     function remote(filename, fullName, name) {
         if (!options.server) {
-            console.log('Could not read', filename);
             return function() {
+                console.log('Could not read', filename);
                 response.write("define('" + escape(fullName) +
                     "', function () { throw new Error(\"Could not read '" +
                     escape(name) + "'\"); });\n");
