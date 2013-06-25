@@ -42,7 +42,8 @@ define('io.ox/mail/api',
 
             // track mails that are manually marked as unseen
             explicitUnseen = {},
-            unseen = {};
+            unseen = {},
+            colorLabel = {};
 
         var extend = function (a, b) {
             return _.extend(a, { flags: b.flags, color_label: b.color_label });
@@ -127,6 +128,7 @@ define('io.ox/mail/api',
                 function reset(obj) {
                     var cid = _.cid(obj);
                     unseen[cid] = (obj.flags & 32) !== 32;
+                    colorLabel[cid] = parseInt(obj.color_label || 0, 10);
                 }
 
                 return function (list) {
@@ -180,6 +182,16 @@ define('io.ox/mail/api',
             isUnseen: function (obj) {
                 var cid = getCID(obj);
                 return !!unseen[cid];
+            },
+
+            getColorLabel: function (obj) {
+                var cid = getCID(obj);
+                return colorLabel[cid];
+            },
+
+            setColorLabel: function (obj) {
+                var cid = getCID(obj);
+                colorLabel[cid] = obj.color_label;
             },
 
             applyAutoRead: function (obj) {
@@ -738,6 +750,7 @@ define('io.ox/mail/api',
         return $.when(
             tracker.update(list, function (obj) {
                 obj.color_label = label;
+                tracker.setColorLabel(obj);
             })
             .done(function () { api.trigger('refresh.list'); }),
             local ? DONE : update(list, { color_label: label })

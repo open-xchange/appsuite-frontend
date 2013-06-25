@@ -314,10 +314,6 @@ define('io.ox/mail/util',
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 
-        getFlag: function (data) {
-            return parseInt(data.color_label || 0, 10);
-        },
-
         getPriority: function (data) {
             // normal?
             if (data.priority === 3) return $();
