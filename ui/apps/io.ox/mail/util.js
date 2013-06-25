@@ -423,6 +423,15 @@ define('io.ox/mail/util',
                     obj.attachments.length === 1 && obj.attachments[0].content === null;
             };
 
+            //remove last element from id (previewing during compose)
+            //TODO: there must be a better solution (frank)
+            var fixIds = function (data, obj) {
+                if (data.parent && data.parent.needsfix) {
+                    var tmp = obj.id.split('.');
+                    obj.id = obj.id.split('.').length > 1 ? tmp.splice(1, tmp.length).join('.') : obj.id;
+                }
+            };
+
             return function (data) {
 
                 var i, $i, obj, dat, attachments = [],
@@ -438,6 +447,7 @@ define('io.ox/mail/util',
                             _.extend({}, dat, { mail: mail, title: obj.filename || '' })
                         );
                     } else {
+                        fixIds(data, obj);
                         attachments.push({
                             id: obj.id,
                             content_type: 'message/rfc822',
@@ -451,10 +461,18 @@ define('io.ox/mail/util',
                     }
                 }
 
+                //fix referenced mail
+                if (data.parent && mail && mail.folder_id === undefined) {
+                    console.log('fixed mail', data, mail);
+                    mail.id =  data.parent.id;
+                    mail.folder_id = data.parent.folder_id;
+                }
+
                 // get non-inline attachments
                 for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
                     obj = data.attachments[i];
                     if (obj.disp === 'attachment') {
+                        fixIds(data, obj);
                         attachments.push(
                             _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
