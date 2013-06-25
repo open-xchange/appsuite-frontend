@@ -939,7 +939,7 @@ define('io.ox/core/api/folder',
      */
     api.getBreadcrumb = (function () {
 
-        var dropdown = function (li, id, title) {
+        var dropdown = function (li, id, title, options) {
             _.defer(function () {
                 api.getSubFolders({ folder: id }).done(function (list) {
                     if (list.length) {
@@ -951,10 +951,29 @@ define('io.ox/core/api/folder',
                             ),
                             $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
                                 _(list).map(function (folder) {
-                                    return $('<li>').append(
-                                        $('<a href="#" tabindex="1" role="menuitem">')
+                                    var $a, $li = $('<li>').append(
+                                        $a = $('<a href="#" tabindex="1" role="menuitem">')
                                         .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                     );
+                                    /**
+                                     * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile
+                                     *
+                                     * on mobile devices the dropdowns are moved around in the down
+                                     * causing the click delegate to break which is defined on the "breadcrump" element
+                                     * Therfore we need to bind the handler on each dropdown href for mobile as the
+                                     * handlers will stay alive after append the whole dropdown to a new
+                                     * root node in the DOM.
+                                     */
+                                    if (_.device('smartphone')) {
+                                        $a.on('click', function (e) {
+                                            e.preventDefault();
+                                            var id = $(this).attr('data-folder-id');
+                                            if (id !== undefined) {
+                                                _.call(options.handler, id, $(this).data());
+                                            }
+                                        });
+                                    }
+                                    return $li;
                                 })
                             )
                         );
@@ -972,7 +991,7 @@ define('io.ox/core/api/folder',
                 clickable = properModule && options.handler !== undefined;
 
             if (isLast && options.subfolder && clickable) {
-                dropdown(elem = li, folder.id, folder.title);
+                dropdown(elem = li, folder.id, folder.title, options);
             } else if (isLast && options.last) {
                 elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
@@ -983,6 +1002,7 @@ define('io.ox/core/api/folder',
                 }
                 li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
+
             elem.attr('data-folder-id', folder.id).data(folder);
             this.append(li);
         };
