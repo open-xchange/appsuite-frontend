@@ -100,7 +100,7 @@ define('io.ox/office/framework/view/sidepane',
             // update top/bottom positions of scrollable container in case the fixed tool boxes have changed
             scrollableNode.css({ top: fixedTopNode.height() - 1, bottom: fixedBottomNode.height() - 1 });
             // toggle visibility of border lines above/below container node
-            scrollableNode.toggleClass('scrollable', scrollableNode[0].clientHeight < scrollableNode[0].scrollHeight);
+            scrollableNode.toggleClass('scrolling', scrollableNode[0].clientHeight < scrollableNode[0].scrollHeight);
 
             // notify listeners
             self.trigger('refresh:layout');
