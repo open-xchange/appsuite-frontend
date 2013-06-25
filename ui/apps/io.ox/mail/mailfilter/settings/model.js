@@ -35,7 +35,12 @@ define('io.ox/mail/mailfilter/settings/model',
         });
 
         Validators.validationFor(ref, {
-            rulename: { format: 'string', mandatory: true}
+            rulename: { format: 'string', mandatory: true},
+            test: { format:  'string'}, // to validate always true
+            actioncmds: { format: 'array' },
+            flags: { format: 'array' },
+            active: { format: 'boolean'}
+
         });
 
         return factory;
@@ -44,7 +49,7 @@ define('io.ox/mail/mailfilter/settings/model',
 
     function provideEmptyModel() {
         return {
-            "rulename": "",
+            "rulename": gt('New rule'),
             "test": {
                 "id": "true"
             },
