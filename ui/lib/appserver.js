@@ -81,6 +81,9 @@ var tzPath = options.zoneinfo || '/usr/share/zoneinfo/';
 if (tzPath.slice(-1) !== '/') tzPath += '/';
 tzPath = [tzPath];
 
+var appsLoadPath = '/api/apps/load/';
+var manifestsPath = '/api/manifests';
+
 if (options.server) {
     if (options.server.slice(-1) != '/') options.server += '/';
     var server = url.parse(options.server);
@@ -89,6 +92,8 @@ if (options.server) {
         usage(1);
     }
     var protocol = server.protocol === 'https:' ? https : http;
+    appsLoadPath = server.pathname + appsLoadPath.slice(1);
+    manifestsPath = server.pathname + manifestsPath.slice(1);
 }
 
 var escapes = {
@@ -127,9 +132,9 @@ function httpDate(d) {
 http.createServer(function (request, response) {
     var URL = url.parse(request.url, true);
     if (request.method === 'GET') {
-        if (URL.pathname.slice(0, 15) === '/api/apps/load/') {
+        if (URL.pathname.slice(0, appsLoadPath.length) === appsLoadPath) {
             return load(request, response);
-        } else if (URL.pathname.slice(0, 19) === '/api/apps/manifests' &&
+        } else if (URL.pathname === manifestsPath &&
                    URL.query.action === 'config')
         {
             return injectManifests(request, response);
@@ -143,7 +148,6 @@ function load(request, response) {
     // parse request URL
     var list = url.parse(request.url).pathname.split(',');
     var version = list.shift();
-    version = version.slice(version.lastIndexOf('v='));
     
     // find local files, request unknown files from server
     var files = [], remoteCounter = 0;
@@ -192,8 +196,7 @@ function load(request, response) {
         }
         remoteCounter++;
         var chunks = [];
-        var URL = url.resolve(options.server,
-                              'api/apps/load/' + version + ',' + fullName);
+        var URL = url.resolve(options.server, version + ',' + fullName);
         protocol.get(url.parse(URL), ok).on('error', error);
         return function () {
             if (options.verbose) console.log(URL);
@@ -253,8 +256,7 @@ function load(request, response) {
         
         // set headers
         response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
-        var d = new Date(new Date().getTime() + 3e10);
-        response.setHeader('Expires', httpDate(d));
+        response.setHeader('Expires', '0');
         
         // send data
         for (var i = 0; i < files.length; i++) files[i]();
@@ -289,7 +291,7 @@ function injectManifests(request, response) {
         response.end('No --server specified');
         return;
     }
-    var URL = url.resolve(options.server, request.url.slice(1))
+    var URL = url.resolve(options.server, request.url);
     if (options.verbose) console.log(URL);
     var opt = url.parse(URL, true);
     opt.headers = request.headers;
@@ -348,7 +350,7 @@ function proxy(request, response) {
         response.end('No --server specified');
         return;
     }
-    var URL = url.resolve(options.server, request.url.slice(1));
+    var URL = url.resolve(options.server, request.url);
     if (options.verbose) console.log(URL);
     var opt = url.parse(URL);
     opt.method = request.method;
