@@ -817,10 +817,22 @@ define('io.ox/mail/write/main',
             data.msgref = data.folder_id + '/' + data.id;
 
             function getMail(data) {
-                // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
-                if (messageFormat === 'text' && settings.get('allowHtmlMessages', true) === true) {
+                if (data.content_type !== 'text/html' &&
+                    messageFormat === 'text' &&
+                    settings.get('allowHtmlMessages', true) === true
+                ) {
+                    // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
                     var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
                     return mailAPI.get(options);
+                } else if (data.content_type === 'text/html' &&
+                           messageFormat === 'text' &&
+                           settings.get('allowHtmlMessages', true) === true
+                ) {
+                    // we are editing a message with html format, keep it
+                    data.format = 'html';
+                    view.form.find('input[name=format][value=text]').attr('checked', null);
+                    view.form.find('input[name=format][value=html]').attr('checked', 'checked');
+                    return $.Deferred().resolve(data);
                 } else {
                     return $.Deferred().resolve(data);
                 }
@@ -830,7 +842,7 @@ define('io.ox/mail/write/main',
                 // get fresh plain textt mail
                 getMail(data).then(
                     function success(data) {
-                        app.setMail({ data: data, mode: 'compose', initial: false })
+                        app.setMail({ data: data, mode: 'compose', initial: false, format: data.format })
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
@@ -1120,9 +1132,11 @@ define('io.ox/mail/write/main',
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
                 mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
+                    var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
+
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no' });
+                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
         };
