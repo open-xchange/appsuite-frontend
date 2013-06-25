@@ -16,6 +16,16 @@ define(['io.ox/mail/util',
     describe('Utilities for mail:', function () {
         //guarantee same number of arguments for wrapper functions
         describe('has some msisdn methods and', function () {
+
+            beforeEach(function () {
+                cap = sinon.stub(capabilities, 'has');
+                cap.withArgs('msisdn').returns(true);
+            });
+
+            afterEach(function () {
+                capabilities.has.restore();
+            });
+
             it('should correctly identify channel "email" or "phone"', function () {
 
                 //without considering activated capability
