@@ -62,7 +62,8 @@ define('io.ox/core/cache',
             if (/app-cache\.index$/.test(name) && Modernizr.localstorage) {
                 // due to the sync behavior of localstorage, we can rescue
                 // the savepoints to a persistent cache.
-                preferredPersistentCache = 'localstorage';
+                options = options || {};
+                options.persistent = 'localstorage';
             }
 
             var opt = _.extend({
