@@ -30,14 +30,17 @@ define('io.ox/settings/main',
                 var title;
                 this.addClass('application')
                     .append(
-                        title = $('<div>').addClass('title')
+                        title = $('<div>')
+                            .addClass('title')
                     );
+                if (_.device('smartphone')) title.prepend($('<i class="icon-chevron-right" style="float:right">'));
                 return { title: title };
             },
             set: function (data, fields, index) {
                 var title = gt.pgettext('app', data.title);
-                fields.title.text(
-                    title === data.title ? gt(data.title) : title
+                fields.title.append($.txt(
+                        title === data.title ? gt(data.title) : title
+                    )
                 );
             }
         },
