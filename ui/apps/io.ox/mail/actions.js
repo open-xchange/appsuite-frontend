@@ -296,7 +296,7 @@ define('io.ox/mail/actions',
                                 if (resp) {
                                     notifications.yell('error', resp);
                                 } else {
-                                    notifications.yell('success', success);
+                                    notifications.yell('success', list.length > 1 ? success.multi : success.single);
                                 }
                                 folderAPI.reload(target, list);
                                 if (type === "move" && vGrid) vGrid.idle();
@@ -350,8 +350,8 @@ define('io.ox/mail/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Mails have been moved'));
-    moveAndCopy('copy', gt('Copy'), gt('Mails have been copied'));
+    moveAndCopy('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
+    moveAndCopy('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
