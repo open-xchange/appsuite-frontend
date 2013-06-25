@@ -98,7 +98,8 @@ define('io.ox/participants/views',
         },
 
         setRows: function (mail, extra) {
-            this.nodes.$mail.text(mail || '');
+            mail = mail || '';
+            this.nodes.$mail.text(gt.noI18n(mail));
             this.nodes.$extra.text(extra || '');
             if (mail && extra) {
                 this.$el.addClass('three-rows');

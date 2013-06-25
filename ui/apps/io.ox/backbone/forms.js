@@ -725,9 +725,9 @@ define('io.ox/backbone/forms',
                                 if (options.display === "DATETIME") {
                                     self.nodes.timezoneField = $('<span class="label">');
                                     if (self.model.get(self.attribute)) {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
+                                        self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr));
                                     } else {
-                                        self.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+                                        self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(_.now()).abbr));
                                     }
                                 }
                                 if (mobileMode) {
@@ -806,9 +806,9 @@ define('io.ox/backbone/forms',
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
                 if (value && options.display === "DATETIME") {
-                    this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
+                    this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(value).abbr));
                 } else if (options.display === "DATETIME") {
-                    this.nodes.timezoneField.text(date.Local.getTTInfoLocal(_.now()).abbr);
+                    this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(_.now()).abbr));
                 }
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
 

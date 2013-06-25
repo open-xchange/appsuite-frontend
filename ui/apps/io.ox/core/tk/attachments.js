@@ -294,7 +294,7 @@ define('io.ox/core/tk/attachments',
             }, options);
             var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'row-fluid')),
             input;
-            if (options.displayLabel) node.append($('<label>').text(options.displayLabelText || gt('File')));
+            if (options.displayLabel) node.append($('<label>').text(gt.noI18n(options.displayLabelText) || gt('File')));
             node.append(
                 $('<div>', { 'data-provides': 'fileupload' }).addClass('fileupload fileupload-new')
                     .append($('<div>').addClass('input-append').append(
