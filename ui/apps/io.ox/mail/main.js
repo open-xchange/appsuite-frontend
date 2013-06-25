@@ -110,9 +110,9 @@ define('io.ox/mail/main',
             selectFirst: false,
             threadView: settings.get('threadView') !== 'off',
             //adjust for custom default sort
-            sort: settings.get('sort', 'thread'),
-            unread: settings.get('unread', false),
-            order: settings.get('order', 'desc')
+            sort: settings.get('vgrid/sort', 'thread'),
+            order: settings.get('vgrid/order', 'desc'),
+            unread: settings.get('unread', false)
         });
         // helper
         var removeButton = function () {
@@ -226,9 +226,9 @@ define('io.ox/mail/main',
 
         //get sorting settings with fallback for extpoint
         var sortSettings = {};
-        sortSettings.sort = options.sort || settings.get('sort', 'thread');
+        sortSettings.sort = options.sort || settings.get('vgrid/sort', 'thread');
+        sortSettings.order = options.desc || settings.get('vgrid/order', 'desc');
         sortSettings.unread = options.unread || settings.get('unread', false);
-        sortSettings.order = options.desc || settings.get('order', 'desc');
 
         //check if folder actually supports threadview
         if (sortSettings.sort === 'thread' && options.threadView === false) {
@@ -267,7 +267,7 @@ define('io.ox/mail/main',
             if (grid.prop('sort') === 'thread' && !isOn) {
                 grid.prop('sort', '610');
             } //jump back only if thread was the original setting
-            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox && settings.get('sort') === 'thread') {
+            else if (grid.prop('sort') === '610' && type === 'folder' && isOn && isInbox && settings.get('vgrid/sort') === 'thread') {
                 grid.prop('sort', 'thread');
             }
 
