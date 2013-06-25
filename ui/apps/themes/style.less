@@ -2466,7 +2466,7 @@ input.flat-input {
     }
 
     #io-ox-notifications-popups {
-        top: -40px;
+        top: -80px;
         left: 10px;
         right: 10px;
         width: auto;
@@ -2524,15 +2524,18 @@ input.flat-input {
             text-align: right;
         }
     }
-
+    /** custom bootstrap dropdowns on mobile devices **/
     .dropdown-menu {
+        max-height: 90%;
+        .overflow-y();
         min-width: initial;
         position: fixed;
         top: auto;
         bottom: 0px;
-        left: 14px !important;
-        right: 14px;
+        left: 0 !important;
+        right: 0;
         .border-radius(0);
+        background-color: transparent;
         .active-app {
             a {
                font-weight: bold;
@@ -2543,27 +2546,34 @@ input.flat-input {
         }
 
         li {
+            background-color: #fff;
+            margin: 5px;
+            .border-radius(2px);
+            //border-bottom: 1px solid #ccc;
+            text-align: center;
 
-            margin-left: 10px;
-            margin-right: 10px;
-            border-bottom: 1px solid #ccc;
             &:last-child {
                 border-bottom-width: 0;
+
             }
         }
         li > a {
+             .ellipsis;
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             user-select: none;
             margin-left: -10px;
             margin-right: -10px;
-            line-height: 25px;
-            font-size: 20px;
+            line-height: 30px;
+            font-size: 18px;
             font-weight: 300;
             max-width: none !important;
-
+            &:hover {
+                margin: 0px;
+            };
         }
-        i {
+
+        ix {
             position: absolute;
             right: -10px;
             top: -20px;
@@ -2594,22 +2604,23 @@ input.flat-input {
 
     }
 
-    #background_loader {
+    #background_loader, #background_loader.secure.block {
+        background-color: rgba(0,0,0,.6);
         height: 150% !important;
     }
 
 }
 
 .slidedown {
-    -webkit-transform: translateY(50px);
+    -webkit-transform: translateY(90px);
     -webkit-transition-property: -webkit-transform;
-    -webkit-transition-duration: 300ms;
+    -webkit-transition-duration: 400ms;
     -webkit-animation-timing-function: ease-in;
 }
 .slideup {
-    -webkit-transform: translateY(-60px);
+    -webkit-transform: translateY(-90px);
     -webkit-transition-property: -webkit-transform;
-    -webkit-transition-duration: 300ms;
+    -webkit-transition-duration: 400ms;
     -webkit-animation-timing-function: ease-in;
 
 }
