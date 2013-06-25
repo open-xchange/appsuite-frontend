@@ -1126,6 +1126,10 @@ define('io.ox/mail/write/main',
                 mail.data.flags += mailAPI.FLAGS.DRAFT;
             }
 
+            // never append vcard when saving as draft
+            // backend will append vcard for every send operation (which save as draft is)
+            delete mail.data.vcard;
+
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
