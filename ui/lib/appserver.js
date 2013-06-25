@@ -49,7 +49,7 @@ if (options.help) usage(0);
 
 function usage(exitCode) {
     (exitCode ? console.error : console.log)(
-        'Usage: node lib/appserver.js [OPTION]... [PATH]...\n\n' +
+        'Usage: appserver [OPTION]... [PATH]...\n\n' +
         '  -h,      --help           print this help message and exit\n' +
         '  -m PATH, --manifests=PATH add manifests from the specified path (default:\n' +
         '                            the "manifests" subdirectory of every file path)\n' +
