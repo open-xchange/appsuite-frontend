@@ -45,7 +45,7 @@ define('io.ox/mail/main',
             if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
-                grid.updateSettings('sort', option);
+                //grid.updateSettings('sort', option);
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
@@ -350,7 +350,7 @@ define('io.ox/mail/main',
                                     drawGridOptions(undefined, 'sort');
                                 //sort must not react to the prop change event because autotoggle
                                 //uses this too and would mess up the persistent settings
-                                grid.updateSettings('sort', key);
+                                //grid.updateSettings('sort', key);
                             });
                     }
                 },
