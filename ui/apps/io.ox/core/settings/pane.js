@@ -97,11 +97,16 @@ define('io.ox/core/settings/pane',
             userTZ = settings.get('timezone', 'UTC'),
             sorted = {};
 
-        // Sort the technical names by the alphabetic position of their values
+        // Sort the technical names by the GMT offset
         technicalNames.sort(function (a, b) {
             var va = available[a],
-                vb = available[b];
-            return va === vb ? 0 : va < vb ? -1 : 1;
+                vb = available[b],
+                diff = Number(va.substr(4, 3)) - Number(vb.substr(4, 3));
+            if (diff === 0 || _.isNaN(diff)) {
+                return (vb === va) ? 0 : (va < vb) ? -1 : 1;
+            } else {
+                return diff;
+            }
         });
 
         // filter double entries and sum up results in 'sorted' array
