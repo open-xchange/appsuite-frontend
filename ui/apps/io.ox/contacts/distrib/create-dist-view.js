@@ -95,7 +95,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             autocomplete.render({
                 autoselect: true,
-                parentSelector: 'body',
+                parentSelector: '.create-distributionlist',
                 placement: 'bottom',
                 contacts: true,
                 distributionlists: false,

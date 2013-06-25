@@ -380,9 +380,7 @@ define('io.ox/calendar/edit/template',
 
                 if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
-                autocomplete.render({
-                    // parentSelector: 'body'
-                });
+                autocomplete.render();
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
