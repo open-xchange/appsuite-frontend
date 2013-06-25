@@ -665,7 +665,7 @@
         if ($ul.length > 0) {
           $parent.data('menu', $ul);
           $('body').append($ul.css({'z-index': 65500})
-            .prepend($('<i class="icon-remove">')
+            .prepend($('<li><a><i class="icon-chevron-down"></i></a></li>')
               .on('click', clearMenus)));
 
         }
