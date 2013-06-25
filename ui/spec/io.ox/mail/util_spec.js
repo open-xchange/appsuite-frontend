@@ -69,6 +69,16 @@ define(['io.ox/mail/util',
                 expect(util.removeTypeSuffix(mail))
                 .toEqual({from: [['017012345678','017012345678']],to: [['017012345678','017012345678'],['017012345678','017012345678']]})
             });
+            xit('should handle empty from fields', function () {
+                var mail = {
+                    from: [],
+                    to: [
+                        ['017012345678','017012345678/TYPE=PLMN']
+                    ]
+                }
+                expect(util.removeChannelSuffix(mail))
+                    .toEqual({from: [], to: [['017012345678','017012345678']]});
+            });
         });
 
         describe('parse recepient', function () {
