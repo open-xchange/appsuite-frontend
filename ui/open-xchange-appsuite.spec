@@ -96,10 +96,10 @@ cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
 mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
 
-mkdir -p "%{buildroot}/opt/open-xchange/appsuite/bin"
+mkdir -p "%{buildroot}/opt/open-xchange/sbin"
 sed -e "s:## cd ##:cd %{docroot}:" bin/touch-appsuite > \
-    "%{buildroot}/opt/open-xchange/appsuite/bin/touch-appsuite"
-chmod +x "%{buildroot}/opt/open-xchange/appsuite/bin/touch-appsuite"
+    "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
