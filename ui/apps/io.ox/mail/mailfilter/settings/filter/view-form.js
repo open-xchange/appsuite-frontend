@@ -191,10 +191,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 }).fail(function (response) {
                     self.dialog.idle();
-                    _.each(response.error_params, function (error) {
-                        notifications.yell('error', gt(error));
-                    });
-
+                    if (response.error_params[0] === null || response.error_params[0] === '') {
+                        notifications.yell('error', gt(response.error));
+                    } else {
+                        _.each(response.error_params, function (error) {
+                            notifications.yell('error', gt(error));
+                        });
+                    }
                 });
             },
 
