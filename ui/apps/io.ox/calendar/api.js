@@ -250,6 +250,9 @@ define('io.ox/calendar/api',
                             api.trigger('update:' + encodeURIComponent(_.cid(data)), data);
                             return data;
                         });
+                }, function () {
+                    all_cache = {};
+                    api.trigger('delete');
                 });
             }
         },
