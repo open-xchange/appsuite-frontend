@@ -674,9 +674,15 @@ $(window).load(function () {
                             });
                         }
                     },
-                    function loginFailed() {
-                        debug('boot.js: autoLogin > loginSuccess');
-                        continueWithoutAutoLogin();
+                    function loginFailed(data) {
+                        debug('boot.js: autoLogin > loginFailed', data);
+                        // special autologin error handling. redirect user to an
+                        // external page defined in the error params
+                        if (data.code === 'LGI-0016' && (data.error_params || []).length === 1) {
+                            window.location.href = data.error_params[0];
+                        } else {
+                            continueWithoutAutoLogin();
+                        }
                     }
                 );
             }
