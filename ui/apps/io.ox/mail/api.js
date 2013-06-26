@@ -128,7 +128,7 @@ define('io.ox/mail/api',
                 function reset(obj) {
                     var cid = _.cid(obj);
                     unseen[cid] = (obj.flags & 32) !== 32;
-                    colorLabel[cid] = parseInt(obj.color_label || 0, 10);
+                    colorLabel[cid] = parseInt(obj.color_label, 10) || 0;
                 }
 
                 return function (list) {
@@ -186,12 +186,12 @@ define('io.ox/mail/api',
 
             getColorLabel: function (obj) {
                 var cid = getCID(obj);
-                return colorLabel[cid];
+                return colorLabel[cid] || 0; // fallback to 0 to avoid undefined
             },
 
             setColorLabel: function (obj) {
                 var cid = getCID(obj);
-                colorLabel[cid] = obj.color_label;
+                colorLabel[cid] = parseInt(obj.color_label, 10) || 0;
             },
 
             applyAutoRead: function (obj) {
