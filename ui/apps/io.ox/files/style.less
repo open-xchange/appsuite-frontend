@@ -324,4 +324,42 @@ ul.breadcrumb li.prefix {
             width: 125px;
         }
     }
+    body > .io-ox-dialog-popup {
+        top: 0;
+        margin-top: 0;
+        width: auto;
+        overflow-y: auto;
+        bottom: 0;
+        height: 100%;
+        max-height: 100%;
+        .modal-body {
+            max-height: auto;
+        }
+        .modal-footer {
+            bottom: 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            padding:0;
+
+            .row-fluid {
+                [class*="span"] {
+                    margin-left: 0;
+                    float:left;
+                }
+                .btn {
+                    border: 0;
+                    border-radius: 0;
+                    margin: 0px;
+                    height: 40px;
+                    width: 100%;
+                    padding: 0;
+                    line-height: 40px;
+                }
+                .span3 {
+                    width:50%;
+                }
+            }
+        }
+    }
 }

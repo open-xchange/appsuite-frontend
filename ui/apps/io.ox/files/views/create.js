@@ -87,29 +87,24 @@ define('io.ox/files/views/create', [
             }
         });
 
-        ext.point(POINT + '/field').extend({
-            id: 'file',
-            index: 200,
-            draw: function () {
-                this.append(attachments.fileUploadWidget({displayLabel: true}));
-            }
-        });
-
-        ext.point(POINT + '/field').extend({
-            id: 'comment',
-            index: 300,
-            draw: function () {
-                this.append(
-                    $('<label>').text(gt('Description')),
-                    $('<textarea name="description" rows="8" class="span12" tabindex="1"></textarea>')
-                );
-            }
-        });
-
-        // Disable attachments for specific devices (see boot.js)
-        if (!ox.uploadsEnabled) {
-            ext.point(POINT + '/field').disable('file');
-        }
+        ext.point(POINT + '/field')
+            .extend({
+                id: 'file',
+                index: 200,
+                draw: function () {
+                    this.append(attachments.fileUploadWidget({displayLabel: true}));
+                }
+            })
+            .extend({
+                id: 'comment',
+                index: 300,
+                draw: function () {
+                    this.append(
+                        $('<label>').text(gt('Description')),
+                        $('<textarea name="description" rows="8" class="span12" tabindex="1"></textarea>')
+                    );
+                }
+            });
 
         return {
             show: show
