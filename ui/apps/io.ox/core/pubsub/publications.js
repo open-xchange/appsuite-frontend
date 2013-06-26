@@ -109,7 +109,9 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                     if (!self.model.id) { self.model.id = id; }
 
                     self.model.fetch().done(function (model, collection) {
-                        var publications = pubsub.publications();
+                        var publications = pubsub.publications(),
+                            pubUrl = model[model.target].url;
+                        notifications.yell('success', gt('The publication has been made available as %s', pubUrl));
                         //update the model-(collection)
                         publications.add(model, {merge: true});
                         if (self.model.get('invite')) {
