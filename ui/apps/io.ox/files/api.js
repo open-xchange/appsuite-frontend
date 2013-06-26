@@ -724,14 +724,15 @@ define('io.ox/files/api',
         var pattern;
         if (type === 'video') {
             if (!Modernizr.video) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(mp4|m4v|ogv|webm)'; }
-            else if (_.browser.Safari) {     pattern = '\\.(mp4|m4v|mpe?g)'; }
-            else if (_.browser.IE) {         pattern = '\\.(mp4|m4v)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(m4v|ogv|webm)'; }
+            else if (_.browser.IE || _.browser.Safari) {
+                pattern = '\\.(m4v)';
+            }
             else if (_.browser.Firefox) {    pattern = '\\.(ogv|webm)'; }
             else { return false; }
         } else {
             if (!Modernizr.audio) { return false; }
-            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|mp4|ogg)'; }
+            if (_.browser.Chrome) {          pattern = '\\.(mp3|wav|m4a|m4b|ogg)'; }
             else if (_.browser.Safari) {     pattern = '\\.(mp3|wav|m4a|m4b|aac)'; }
             else if (_.browser.IE) {         pattern = '\\.(mp3|wav|m4a|m4b)'; }
             else if (_.browser.Firefox) {    pattern = '\\.(mp3|wav|ogg)'; }
