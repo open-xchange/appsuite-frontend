@@ -65,8 +65,9 @@
     },
 
     change: function(e, invoked) {
-      var file = e.target.files !== undefined ? e.target.files[0] : (e.target.value ? { name: e.target.value.replace(/^.+\\/, '') } : null)
       if (invoked === 'clear') return
+
+      var file = e.target.files !== undefined ? e.target.files[0] : (e.target.value ? { name: e.target.value.replace(/^.+\\/, '') } : null)
 
       if (!file) {
         this.clear()
@@ -77,7 +78,7 @@
       this.$hidden.attr('name', '')
       this.$input.attr('name', this.name)
 
-      if (this.type === "image" && this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match('image.*') : file.name.match('\\.(gif|png|jpe?g)$')) && typeof FileReader !== "undefined") {
+      if (this.type === "image" && this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match('image.*') : file.name.match(/\.(gif|png|jpe?g)$/i)) && typeof FileReader !== "undefined") {
         var reader = new FileReader()
         var preview = this.$preview
         var element = this.$element
@@ -100,7 +101,7 @@
       this.$input.attr('name', '')
 
       //ie8+ doesn't support changing the value of input with type=file so clone instead
-      if($.browser.msie){
+      if (navigator.userAgent.match(/msie/i)){
           var inputClone = this.$input.clone(true);
           this.$input.after(inputClone);
           this.$input.remove();
@@ -153,19 +154,16 @@
  /* FILEUPLOAD DATA-API
   * ================== */
 
-  $(function () {
-    $('body').on('click.fileupload.data-api', '[data-provides="fileupload"]', function (e) {
-      var $this = $(this)
-      if ($this.data('fileupload')) return
-      $this.fileupload($this.data())
+  $(document).on('click.fileupload.data-api', '[data-provides="fileupload"]', function (e) {
+    var $this = $(this)
+    if ($this.data('fileupload')) return
+    $this.fileupload($this.data())
 
-      var $target = $(e.target).is('[data-dismiss=fileupload],[data-trigger=fileupload]') ?
-        $(e.target) : $(e.target).parents('[data-dismiss=fileupload],[data-trigger=fileupload]').first()
-      if ($target.length > 0) {
-          $target.trigger('click.fileupload')
-          e.preventDefault()
-      }
-    })
+    var $target = $(e.target).closest('[data-dismiss="fileupload"],[data-trigger="fileupload"]');
+    if ($target.length > 0) {
+      $target.trigger('click.fileupload')
+      e.preventDefault()
+    }
   })
 
 }(window.jQuery);
