@@ -326,7 +326,7 @@ define('io.ox/tasks/api',
                     return $.when();
                 }
             });
-        }).done(function (cache) {
+        }).then(function (cache) {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
             }
