@@ -87,7 +87,7 @@ define('io.ox/mail/mailfilter/settings/filter/defaults',
                 },
                 'move': {
                     'id': "move",
-                    'into': ""
+                    'into': "default0/INBOX"
                 },
                 'reject': {
                     'id': "reject",
