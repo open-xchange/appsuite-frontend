@@ -507,6 +507,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     }
 
                     else if (action.id === 'move') {
+                        if (action.into === '') {
+                            action.into = 'default0/INBOX';
+                        }
                         listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'into'}).text(actionsTranslations[action.id]).append(
                                 $('<div>').addClass('pull-right').append(
                                     elements.drawFolderSelect(),
