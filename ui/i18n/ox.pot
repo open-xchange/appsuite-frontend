@@ -2733,7 +2733,7 @@ msgid "every week"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:323
-msgid "The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
+msgid "The appointment is repeated on day <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:330
@@ -2807,7 +2807,7 @@ msgid "day of the weekend"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:392
-msgid "The appointment is repeated every year on day <a href=\"#\"  data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
+msgid "The appointment is repeated every year on day <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:397

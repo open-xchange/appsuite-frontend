@@ -2700,14 +2700,14 @@ msgstr "每周"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:301
 msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>. "
+"The appointment is repeated on day <a href=\"#\" data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"months</a>. "
 msgstr ""
 "約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">每 "
 "<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
+"\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "a> 日重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:310
@@ -2791,12 +2791,11 @@ msgstr "周末日期"
 #: apps/io.ox/calendar/edit/recurrence-view.js:380
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>. "
+"\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
+"\"options\" data-attribute=\"month\">october</a>. "
 msgstr ""
 "約會將於每年的 <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">十月</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
+"\">十月</a> <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth"
 "\"><span class=\"number-control\">10</span></a> 日重複。 "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:392

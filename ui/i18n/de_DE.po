@@ -2872,7 +2872,7 @@ msgstr "jede Woche"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:323
 msgid ""
-"The appointment is repeated on day <a href=\"#\"  data-widget=\"custom\" "
+"The appointment is repeated on day <a href=\"#\" data-widget=\"custom\" "
 "data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
 "data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
 "months</a>. "
@@ -2965,11 +2965,11 @@ msgstr "Tag des Wochenendes"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:392
 msgid ""
-"The appointment is repeated every year on day <a href=\"#\"  data-widget="
+"The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
 "\"options\" data-attribute=\"month\">october</a>. "
 msgstr ""
-"Der Termin findet jedes Jahr am <a href=\"#\" data-widget=\"number\" data-"
+"Der Termin findet jedes Jahr am <a href=\"#\" data-widget=\"custom\" data-"
 "attribute=\"dayInMonth\"><span class=\"number-control\">10.</span></a> "
 "Tag im <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">"
 "Oktober</a> "

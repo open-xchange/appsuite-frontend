@@ -272,10 +272,10 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 };
 
                 this.nodes.typeChoice.append(
-                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.daily).append(gt("Daily")),
-                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.weekly).append(gt("Weekly")),
-                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.monthly).append(gt("Monthly")),
-                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.yearly).append(gt("Yearly"))
+                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.daily).append(gt("daily")),
+                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.weekly).append(gt("weekly")),
+                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.monthly).append(gt("monthly")),
+                    $('<label class="span3 radio control-label desc">').append(this.controls.typeRadios.yearly).append(gt("yearly"))
                 );
 
                 // UI state
@@ -327,7 +327,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                         },
                         days: CalendarWidgets.days
                     }),
-                    monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
+                    monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#" data-widget="custom" data-attribute="dayInMonth">10</a> <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>. '), {
                         id: 'monthlyDate',
                         interval: {
                             phrase: function (n) {
@@ -396,7 +396,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                             gt: gt
                         }
                     }),
-                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#"  data-widget="custom" data-attribute="dayInMonth">10</a> of <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
+                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#" data-widget="custom" data-attribute="dayInMonth">10</a> of <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
                         id: 'yearlyDate',
                         dayInMonth: CalendarWidgets.dayInMonth,
                         month: {

@@ -2857,8 +2857,12 @@ msgid "every week"
 msgstr "în fiecare săptămână"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:301
-msgid "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
-msgstr "Întâlnirea se repetă <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">a zecea zi</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> luni</a>. "
+msgid ""
+"The appointment is repeated on day <a href=\"#\" data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"months</a>. "
+msgstr "Întâlnirea se repetă <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">a zecea zi</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">o dată la <span class=\"number-control\">2</span> luni</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:310
 #: apps/io.ox/calendar/edit/recurrence-view.js:372
@@ -2931,8 +2935,11 @@ msgid "day of the weekend"
 msgstr "zi din weekend"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:380
-msgid "The appointment is repeated every year on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
-msgstr "Întâlnirea se repetă în fiecare an <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">în a zecea zi</span></a> din <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octombrie</a>. "
+msgid ""
+"The appointment is repeated every year on day <a href=\"#\" data-widget="
+"\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
+"\"options\" data-attribute=\"month\">october</a>. "
+msgstr "Întâlnirea se repetă în fiecare an <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">în a zecea zi</span></a> din <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octombrie</a>. "
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:392
 #: apps/io.ox/calendar/edit/recurrence-view.js:441

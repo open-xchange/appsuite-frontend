@@ -2837,8 +2837,12 @@ msgid "every week"
 msgstr "毎週"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:301
-msgid "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span class=\"number-control\">2</span> months</a>. "
-msgstr "このアポイントは <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> か月ごと</a> の <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> 日に繰り返されます。"
+msgid ""
+"The appointment is repeated on day <a href=\"#\" data-widget=\"custom\" "
+"data-attribute=\"dayInMonth\">10</a> <a href=\"#\"  data-widget=\"number\" "
+"data-attribute=\"interval\">every <span class=\"number-control\">2</span> "
+"months</a>. "
+msgstr "このアポイントは <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\"><span class=\"number-control\">2</span> か月ごと</a> の <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> 日に繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:310
 #: apps/io.ox/calendar/edit/recurrence-view.js:372
@@ -2911,8 +2915,11 @@ msgid "day of the weekend"
 msgstr "週末"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:380
-msgid "The appointment is repeated every year on day <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">october</a>. "
-msgstr "このアポイントは毎年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">10 月</a> の <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> 日に繰り返されます。"
+msgid ""
+"The appointment is repeated every year on day <a href=\"#\" data-widget="
+"\"custom\" data-attribute=\"dayInMonth\">10</a> of <a href=\"#\" data-widget="
+"\"options\" data-attribute=\"month\">october</a>. "
+msgstr "このアポイントは毎年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">10 月</a> の <a href=\"#\" data-widget=\"custom\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> 日に繰り返されます。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:392
 #: apps/io.ox/calendar/edit/recurrence-view.js:441
