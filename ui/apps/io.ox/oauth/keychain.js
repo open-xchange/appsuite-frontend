@@ -15,8 +15,16 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http", "io.ox/core/event", "io.ox/core/notifications"], function (ext, http, Events, notifications) {
+define.async("io.ox/oauth/keychain",
+    ["io.ox/core/extensions",
+     "io.ox/core/http",
+     "io.ox/core/event",
+     "io.ox/core/notifications",
+     'gettext!io.ox/core'
+    ], function (ext, http, Events, notifications, gt) {
+
     "use strict";
+
     var moduleDeferred = $.Deferred(),
         cache = null,
         point = ext.point("io.ox/keychain/api");
@@ -121,7 +129,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         self.trigger("create", response.data);
                         self.trigger("refresh.all refresh.list");
                         ox.trigger("refresh-portal");
-                        notifications.yell("success", "Account added successfully");
+                        notifications.yell("success", gt("Account added successfully"));
                     };
 
                     popupWindow.location = interaction.authUrl + '&display=popup';
