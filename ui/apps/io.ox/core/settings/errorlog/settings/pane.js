@@ -227,6 +227,8 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
         getUrl: function (model) {
             return model.get('url')
+                // obscure password parameters (see bug #27250)
+                .replace(/password=[^&#]+/g, 'password=****')
                 // make slahes and commas readable
                 .replace(/%2F/g, '/').replace(/%2C/g, ',');
         },
@@ -247,6 +249,10 @@ define('io.ox/core/settings/errorlog/settings/pane',
                     } catch (e) {
                         // ... in this case we just return the string
                         return data;
+                    }
+                    // obscure password properties (at least top-level; see bug #27250)
+                    if (_.isObject(data) && 'password' in data) {
+                        data.password = '****';
                     }
                     return JSON.stringify(data, null, '  ');
                 })
