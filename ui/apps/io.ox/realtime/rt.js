@@ -49,6 +49,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var highLoad = false;
     var closeCount = 0;
     var ackBuffer = {};
+    var rejectAll = false;
 
     Event.extend(api);
 
@@ -136,6 +137,41 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         delete resendDeferreds[sequenceNumber];
     }
 
+    function resetSequence(newSequence) {
+        resendBuffer = {};
+        _(resendDeferreds).chain().values().each(function (def) {
+            def.reject();
+        });
+        resendDeferreds = {};
+        queue.stanzas = [];
+        queue.timer = false;
+        rejectAll = true;
+        http.PUT({
+            module: 'rt',
+            params: {
+                action: 'send',
+                resource: tabId
+            },
+            data: {type: 'nextSequence', seq: newSequence}
+        }).done(function () {
+            rejectAll = false;
+            resendBuffer = {};
+            _(resendDeferreds).chain().values().each(function (def) {
+                def.reject();
+            });
+            resendDeferreds = {};
+            queue.stanzas = [];
+            queue.timer = false;
+            if (api.debug) {
+                console.log("Got reset command, nextSequence is ", seq);
+            }
+            seq = newSequence;
+            serverSequenceThreshhold = 0;
+            api.trigger("reset");
+        });
+
+    }
+
     function received(stanza) {
         if (api.debug) {
             console.log("Received  Stanza");
@@ -153,6 +189,8 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 socket.unsubscribe();
                 disconnected = true;
                 ox.trigger('relogin:required');
+            } else if (error.data && error.data.code === 1006) {
+                resetSequence(-1);
             }
         } else if (stanza.get("atmosphere", "received")) {
             _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
@@ -165,12 +203,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             });
         } else if (stanza.get("atmosphere", "nextSequence")) {
             if (!initialReset) {
-                api.trigger("reset");
-                seq = stanza.get("atmosphere", "nextSequence").data;
-                serverSequenceThreshhold = 0;
-                if (api.debug) {
-                    console.log("Got reset command, nextSequence is ", seq);
-                }
+                resetSequence(stanza.get("atmosphere", "nextSequence").data);
             } else {
                 initialReset = false;
             }
@@ -409,18 +442,29 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                     receivedAcknowledgement(sequenceNumber);
                 });
             }
+        }).fail(function (resp) {
+            if (resp.code === "RT_STANZA-1006") {
+                resetSequence(0);
+            }
         });
 
         if (api.debug) {
             console.log("->", queue.stanzas);
         }
-        queue.stanzas = [];
+
         queue.timer = false;
+        queue.stanzas = [];
         if (api.interrupt) {
             alert("INTERRUPT!");
             api.interrupt = false;
         }
     }
+
+    api.internal = {
+        setSequence: function (newSequence) {
+            seq = newSequence;
+        }
+    };
 
     api.query = function (options) {
         if (options.trace) {
@@ -436,8 +480,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 resource: tabId
             },
             data: options
-        }).then(function (responseStanza) {
+        }).done(function (responseStanza) {
             return new RealtimeStanza(responseStanza);
+        }).fail(function (resp) {
+            if (resp.code === "RT_STANZA-1006") {
+                resetSequence(0);
+            }
         });
     };
 
@@ -449,6 +497,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     api.sendWithoutSequence = function (options) {
         var def = $.Deferred();
+        if (rejectAll) {
+            return def.reject();
+        }
         if (options.trace) {
             delete options.trace;
             options.tracer = uuids.randomUUID();
