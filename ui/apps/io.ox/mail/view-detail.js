@@ -654,7 +654,6 @@ define('io.ox/mail/view-detail',
             }
 
             container.append(node);
-            node.closest('.scrollable').scrollTop(0);
 
             return container;
         },

@@ -673,6 +673,7 @@ define('io.ox/mail/main',
             var baton = ext.Baton({ data: data, app: app }).set('options', { tabindex: '1' }),
                 mail = viewDetail.draw(baton);
             right.idle().empty().append(mail);
+            right.closest('.scrollable').scrollTop(0);
         };
 
         drawFail = function (obj, e) {
