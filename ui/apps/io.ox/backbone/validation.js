@@ -26,7 +26,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
             return true;
         },
         number: function (val) {
-           
+
             var isValid = !isNaN(parseFloat(val, 10)) &&  //check if its a number
                           (parseFloat(val, 10).toString().length === val.toString().length);//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
             return isValid ||
@@ -64,6 +64,10 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions", 'gettext!io.ox/bac
         },
         url: function (val) {
             return true;
+        },
+        object: function (val) {
+            return _.isObject(val) ||
+                gt('Please enter a valid object');
         }
     };
 

@@ -36,7 +36,7 @@ define('io.ox/mail/mailfilter/settings/model',
 
         Validators.validationFor(ref, {
             rulename: { format: 'string', mandatory: true},
-            test: { format:  'string'}, // to validate always true
+            test: { format:  'object'},
             actioncmds: { format: 'array' },
             flags: { format: 'array' },
             active: { format: 'boolean'}
