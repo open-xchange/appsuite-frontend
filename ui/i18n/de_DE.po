@@ -2827,19 +2827,19 @@ msgstr[0] "nach %1$d Termin"
 msgstr[1] "nach %1$d Terminen"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:268
-msgid "Daily"
+msgid "daily"
 msgstr "Täglich"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:269
-msgid "Weekly"
+msgid "weekly"
 msgstr "Wöchentlich"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:270
-msgid "Monthly"
+msgid "monthly"
 msgstr "Monatlich"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:271
-msgid "Yearly"
+msgid "yearly"
 msgstr "Jährlich"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:281
