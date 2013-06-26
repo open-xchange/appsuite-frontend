@@ -58,12 +58,10 @@ define('io.ox/calendar/edit/template',
     var saveButton, discardButton;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
-        id: 'buttons',
+        id: 'save',
         draw: function (baton) {
-            var save, discard;
-            this.append(saveButton = $('<button class="btn btn-primary" data-action="save" >')
+            this.append(saveButton = $('<button class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
-                .css({float: 'right', marginLeft: '13px'})
                 .on('click', function () {
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -74,15 +72,24 @@ define('io.ox/calendar/edit/template',
                     });
                 })
             );
-            this.append(discardButton = $('<button class="btn" data-action="discard" >')
+
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        index: 200,
+        id: 'discard',
+        draw: function (baton) {
+            this.append(discardButton = $('<button class="btn discard" data-action="discard" >')
                 .text(gt("Discard"))
-                .css({float: _.device('small') ? 'left' : 'right'})
                 .on('click', function () {
                     baton.app.quit();
                 })
             );
         }
     });
+
+
 
     // conflicts
     pointConflicts.extend({
@@ -579,6 +586,26 @@ define('io.ox/calendar/edit/template',
             }
         }
     });
+
+     // bottom toolbar for mobile only
+    ext.point('io.ox/calendar/edit/bottomToolbar').extend({
+        id: 'toolbar',
+        index: 2500,
+        draw: function (baton) {
+            // must be on a non overflow container to work with position:fixed
+            var node = this, toolbar;//$(options.app.attributes.window.nodes.body);
+            node.append(toolbar = $('<div class="app-bottom-toolbar">'));
+            ext.point('io.ox/calendar/edit/section/buttons').replace({
+                id: 'save',
+                index: 200
+            }).replace({
+                id: 'discard',
+                index: 100
+            });
+            ext.point('io.ox/calendar/edit/section/buttons').enable('save').enable('discard').invoke('draw', toolbar, baton);
+        }
+    });
+
 
     // Disable attachments for specific devices (see boot.js)
     if (!ox.uploadsEnabled || !capabilities.has('infostore')) {
