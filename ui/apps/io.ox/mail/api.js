@@ -350,7 +350,8 @@ define('io.ox/mail/api',
         NORMAL:  '0',
         REPLY:   '1',
         FORWARD: '2',
-        DRAFT:   '3'
+        DRAFT:   '3',
+        EDIT_DRAFT: '4'
     };
 
     api.FLAGS = {
@@ -1235,7 +1236,10 @@ define('io.ox/mail/api',
 
         return http.UPLOAD({
             module: 'mail',
-            params: { action: 'new' },
+            params: {
+                action: 'new',
+                deleteDraftOnTransport: data.sendtype === api.SENDTYPE.EDIT_DRAFT
+            },
             data: form,
             dataType: 'text'
         });
