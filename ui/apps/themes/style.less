@@ -2039,10 +2039,11 @@ a.toolbar-action, .toolbar-action > a {
 
 
 
-/* Empty detail view */
+/* Guidance view */
 
-.empty {
+.guidance {
 
+    .overflow(auto);
     @distance: 40px;
 
     h1.folder-name {
@@ -2053,13 +2054,17 @@ a.toolbar-action, .toolbar-action > a {
         margin: 0 0 0 0;
     }
 
-    section {
+    header, section {
         margin: 0 0 @distance 0;
     }
 
     .folder-summary {
-        color: #aaa;
-        margin-top: 0;
+        color: #888;
+        margin: 0;
+    }
+
+    .folder-actions {
+        margin-top: 14px;
     }
 
     h2 {
@@ -2070,26 +2075,17 @@ a.toolbar-action, .toolbar-action > a {
         margin: @distance 0 5px 0;
     }
 
-    ul {
-        margin: 0 0 @distance 0;
-    }
+    ul.compact {
 
-    ul li {
-        display: inline-block;
-        list-style-type: none;
-
-        a {
-            display: inline-block;
-            margin-right: 14px;
+        li {
+            a.disabled {
+                display: none;
+            }
         }
 
-        a.disabled {
+        li.divider {
             display: none;
         }
-    }
-
-    li.divider {
-        display: none;
     }
 
     canvas {

@@ -585,6 +585,7 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
+
         var Perspective = function (name) {
             // init
             this.main = $();
@@ -594,13 +595,13 @@ define("io.ox/core/desktop",
             this.save = $.noop;
             this.restore = $.noop;
             this.afterShow = $.noop;
+            this.afterHide = $.noop;
 
             this.show = function (app, opt) {
+
                 var win = app.getWindow();
 
-                if (opt.perspective === win.currentPerspective) {
-                    return;
-                }
+                if (opt.perspective === win.currentPerspective) return;
 
                 this.main = win.addPerspective(this);
 
@@ -626,21 +627,44 @@ define("io.ox/core/desktop",
                 win.updateToolbar();
                 this.afterShow(app, opt);
             };
+
+            this.hide = function () {
+                this.main.hide();
+                this.afterHide();
+            };
         };
 
-        Perspective.show = function (app, p) {
-            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
-                var oldPers = app.getWindow().getPerspective();
+        function handlePerspectiveChange(app, p, newPers) {
 
-                if (oldPers && _.isFunction(oldPers.save)) {
-                    oldPers.save();
-                }
+            var oldPers = app.getWindow().getPerspective();
 
+            if (oldPers && _.isFunction(oldPers.save)) {
+                oldPers.save();
+            }
+
+            if (newPers) {
                 newPers.show(app, { perspective: p });
-
-                if (newPers && _.isFunction(newPers.restore)) {
+                if (_.isFunction(newPers.restore)) {
                     newPers.restore();
                 }
+            }
+        }
+
+        Perspective.show = function (app, p) {
+
+            if (p === 'main') {
+                var win = app.getWindow(),
+                    perspective = win.getPerspective();
+                if (perspective) {
+                    perspective.hide();
+                }
+                win.currentPerspective = 'main';
+                win.nodes.main.show();
+                return $.when();
+            }
+
+            return require([app.get('name') + '/' + p.split(":")[0] + '/perspective'], function (newPers) {
+                handlePerspectiveChange(app, p, newPers);
             });
         };
 
@@ -726,7 +750,7 @@ define("io.ox/core/desktop",
                 //remove the window from cache if it's there
                 appCache.get('windows').done(function (winCache) {
                     var index = _.indexOf(winCache, win.name);
-                    
+
                     if (index > -1) {
                         winCache.splice(index, 1);
                         appCache.add('windows', winCache || []);
@@ -812,7 +836,6 @@ define("io.ox/core/desktop",
                 this.simple = false;
 
                 var quitOnClose = false,
-                    // perspectives
                     perspectives = {},
                     self = this,
                     firstShow = true;
@@ -1193,12 +1216,10 @@ define("io.ox/core/desktop",
                 };
 
                 this.setPerspective = function (pers) {
-                    var id = pers.name;
-                    if (id !== this.currentPerspective.split(':')[0]) {
-                        if (perspectives[id] !== undefined) {
-                            this.nodes[this.currentPerspective.split(':')[0]].hide();
-                            this.nodes[this.currentPerspective.split(':')[0] = id].show();
-                        }
+                    var id = pers.name, current = this.currentPerspective.split(':')[0];
+                    if (id !== current && id in perspectives) {
+                        if (current in perspectives) perspectives[current].hide();
+                        this.nodes[this.currentPerspective = id].show();
                     }
                     return this;
                 };

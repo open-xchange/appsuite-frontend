@@ -897,6 +897,14 @@ define('io.ox/mail/actions',
         }
     });
 
+    // guidance
+
+    new Action('io.ox/mail/actions/guidance', {
+        action: function (baton) {
+            ox.ui.Perspective.show(baton.app, 'guidance');
+        }
+    });
+
     // toolbar
 
     new links.ActionGroup('io.ox/mail/links/toolbar', {
@@ -912,6 +920,19 @@ define('io.ox/mail/actions',
         id: 'compose',
         label: gt('Compose new mail'),
         ref: 'io.ox/mail/actions/compose'
+    });
+
+    new links.ActionGroup('io.ox/mail/links/toolbar', {
+        id: 'guidance',
+        index: 400,
+        icon: function () {
+            return $('<i class="icon-question-sign">');
+        }
+    });
+
+    new links.ActionLink('io.ox/mail/links/toolbar/guidance', {
+        label: gt('Guidance'),
+        ref: 'io.ox/mail/actions/guidance'
     });
 
     // inline links
