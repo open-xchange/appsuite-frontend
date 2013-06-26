@@ -1370,6 +1370,8 @@ define('io.ox/office/framework/app/baseapplication',
             var // create the new save point with basic information
                 savePoint = {
                     module: this.getName(),
+                    icon: Utils.getStringOption(appOptions, 'icon'),
+                    description: this.getFullFileName(),
                     point: { file: _.clone(file) }
                 };
 

@@ -923,7 +923,8 @@ define('io.ox/core/main',
                             this.append(
                                 $('<div class="alert alert-info alert-block">').append(
                                     $('<button type="button" class="close" data-dismiss="alert">&times;</button>').data(item),
-                                    $.txt(item.description || item.module)
+                                    item.icon ? $('<i class="' + item.icon + '">') : $(),
+                                    $('<span>').text(item.description || item.module)
                                 )
                             );
                         }, dialog.find('.content'));
