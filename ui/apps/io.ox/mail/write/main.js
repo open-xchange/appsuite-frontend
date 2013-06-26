@@ -842,6 +842,7 @@ define('io.ox/mail/write/main',
                 // get fresh plain textt mail
                 getMail(data).then(
                     function success(data) {
+                        data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                         app.setMail({ data: data, mode: 'compose', initial: false, format: data.format })
                         .done(function () {
                             app.setFrom(data || {});
@@ -1136,6 +1137,7 @@ define('io.ox/mail/write/main',
 
                     view.form.find('.section-item.file').remove();
                     $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                    draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                     app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
                 });
             });
