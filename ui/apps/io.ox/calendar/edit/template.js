@@ -494,28 +494,37 @@ define('io.ox/calendar/edit/template',
         draw: function (baton) {
             var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
                 $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
-                $input = $inputWrap.find('input[type="file"]')
-                    .on('change', function (e) {
-                e.preventDefault();
-                if (_.browser.IE !== 9) {
-                    _($input[0].files).each(function (fileData) {
-                        baton.attachmentList.addFile(fileData);
-                    });
-                    $input.trigger('reset.fileupload');
-                } else {
-                    if ($input.val()) {
-                        var fileData = {
-                            name: $input.val().match(/[^\/\\]+$/),
-                            size: 0,
-                            hiddenField: $input
-                        };
-                        baton.attachmentList.addFile(fileData);
-                        $input.addClass('add-attachment').hide();
-                        $input = $('<input>', { type: 'file' }).appendTo($input.parent());
+                $input = $inputWrap.find('input[type="file"]'),
+                changeHandler = function (e) {
+                    e.preventDefault();
+                    if (_.browser.IE !== 9) {
+                        _($input[0].files).each(function (fileData) {
+                            baton.attachmentList.addFile(fileData);
+                        });
+                        $input.trigger('reset.fileupload');
+                    } else {
+                        //IE
+                        if ($input.val()) {
+                            var fileData = {
+                                name: $input.val().match(/[^\/\\]+$/),
+                                size: 0,
+                                hiddenField: $input
+                            };
+                            baton.attachmentList.addFile(fileData);
+                            //hide input field with file
+                            $input.addClass('add-attachment').hide();
+                            //create new input field
+                            $input = $('<input>', { type: 'file', name: 'file' })
+                                    .on('change', changeHandler)
+                                    .appendTo($input.parent());
+                        }
                     }
-                }
+                };
+            $input.on('change', changeHandler);
+            $inputWrap.on('change.fileupload', function (e) {
+                //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
+                $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
-
             $node.append($('<div>').addClass('span12').append($inputWrap));
         }
     });
