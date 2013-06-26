@@ -145,7 +145,7 @@ define('io.ox/office/framework/view/pane',
          * focusable with special keyboard shortcuts.
          */
         function updateFocusable() {
-            node.toggleClass('f6-target', focusable && (components.length > 0) && self.isVisible());
+            //node.toggleClass('f6-target', focusable && (components.length > 0) && self.isVisible());
         }
 
         /**
