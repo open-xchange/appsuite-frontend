@@ -498,6 +498,7 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
+            if (_.device('smartphone')) return;
             var data = baton.data;
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
