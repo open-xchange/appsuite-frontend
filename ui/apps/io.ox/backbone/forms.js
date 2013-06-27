@@ -600,7 +600,7 @@ define('io.ox/backbone/forms',
                     return value;
                 }
                 mydate = new date.Local(mydate);
-                if (_.device('small') && !model.get('full_time')) {
+                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
                     return mydate.format(date.DATE) + ' ' + mydate.format(date.TIME);
                 } else {
                     return mydate.format(date.DATE);
@@ -648,7 +648,7 @@ define('io.ox/backbone/forms',
                 }
                 var mydate = new date.Local(myValue);
                 var parsedDate;
-                if (_.device('small') && !model.get('full_time')) {
+                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
                     parsedDate = date.Local.parse(value, date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME));
                 } else {
                     parsedDate = date.Local.parse(value, date.DATE);
@@ -657,7 +657,7 @@ define('io.ox/backbone/forms',
                 if (_.isNull(parsedDate)) {
                     return value;
                 }
-                if (_.device('small') && !model.get('full_time')) {
+                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
                     return parsedDate.getTime();
                 } else {
                     mydate.setDate(parsedDate.getDate());
