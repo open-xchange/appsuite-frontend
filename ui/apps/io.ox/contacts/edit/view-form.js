@@ -233,14 +233,14 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     function dateField(options) {
-        options.point.extend(new forms.DatePicker({
+        options.point.extend(new forms.DateControlGroup({
             id: options.field,
             index: options.index,
-            display: 'DATE',
             label: model.fields[options.field],
             attribute: options.field,
             rare: options.isRare,
             className: 'form-horizontal date-field',
+            inputClassName: 'input-small',
             labelClassName: 'control-label'
         }), {
             hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
