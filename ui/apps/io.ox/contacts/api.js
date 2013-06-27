@@ -911,6 +911,7 @@ define('io.ox/contacts/api',
      * @return {deferred}
      */
     api.birthdays = function (options) {
+
         var now = _.now(),
             params = _.extend({
             start: now,

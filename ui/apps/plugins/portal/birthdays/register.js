@@ -48,7 +48,7 @@ define('plugins/portal/birthdays/register',
             var aDay = 24 * 60 * 60 * 1000,
                 start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
                 end = start + WEEKS * aDay * 7;
-            return api.birthdays({start: start, end: end, right_hand_limit: 14}).done(function (data) {
+            return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
                 baton.data = data;
             });
         },
@@ -59,6 +59,12 @@ define('plugins/portal/birthdays/register',
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('small') ? 5 : 15;
+
+            // ignore broken birthdays
+            contacts = _(contacts).filter(function (contact) {
+                // null, undefined, empty string, 0 (yep 1.1.1970). And > 1863-01-01.
+                return !!contact.birthday && contact.birthday > -3376598400000;
+            });
 
             if (contacts.length === 0) {
                 $list.append(
