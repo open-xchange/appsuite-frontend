@@ -766,24 +766,33 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markUnread = function (list) {
+
         list = [].concat(list);
 
-        _(list).each(function (obj) {
-            obj.flags = obj.flags & ~32;
-            api.caches.get.merge(obj);
-            api.caches.list.merge(obj);
-        });
-
-        return $.when(
-            tracker.update(list, function (obj) {
-                tracker.setUnseen(obj);
+        var defs = _(list).chain()
+            .map(function (obj) {
                 obj.flags = obj.flags & ~32;
+                return [api.caches.get.merge(obj), api.caches.list.merge(obj)];
             })
-            .done(function () { api.trigger('refresh.list'); }),
-            update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
-                folderAPI.reload(list);
-            })
-        );
+            .flatten()
+            .value();
+
+        return $.when.apply($, defs).then(function () {
+            return $.when(
+                // local update
+                tracker.update(list, function (obj) {
+                    tracker.setUnseen(obj);
+                    obj.flags = obj.flags & ~32;
+                })
+                .done(function () {
+                    api.trigger('refresh.list');
+                }),
+                // server update
+                update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+                    folderAPI.reload(list);
+                })
+            );
+        });
     };
 
     /**
@@ -794,52 +803,47 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markRead = function (list) {
+
         list = [].concat(list);
 
-        function updateCache(list) {
-            return tracker.update(list, function (obj) {
-                tracker.setSeen(obj);
+        var defs = _(list).chain()
+            .map(function (obj) {
                 obj.flags = obj.flags | 32;
-                api.caches.get.merge(obj);
-                api.caches.list.merge(obj);
-            });
-        }
+                return [api.caches.get.merge(obj), api.caches.list.merge(obj)];
+            })
+            .flatten()
+            .value();
 
-        function reloadFolders(list) {
-            _(list).chain()
-            .map(function (elem) {
-                return elem.folder || elem.folder_id;
-            }).uniq().each(function (elem) {
-                folderAPI.reload(elem);
-            });
-        }
-
-        if (list[0].folder && !list[0].id) {
-            // request is to mark folder as read, so update all items in the
-            // folder (cache only, backend will handle the rest)
-            return api.caches.list.values().done(function (res) {
-                //FIXME: is there a better way to get all elements within a folder?
-                var folderItems = _(res).select(function (obj) {
-                        var f = list[0].folder;
-                        return (obj.folder === f) || (obj.folder_id === f);
-                    });
-
-                return updateCache(folderItems).done(function () {
+        return $.when.apply($, defs).then(function () {
+            return $.when(
+                // local update
+                tracker.update(list, function (obj) {
+                    tracker.setSeen(obj);
+                    obj.flags = obj.flags | 32;
+                })
+                .done(function () {
                     api.trigger('refresh.list');
-                    update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                        reloadFolders(list);
-                        api.trigger('update:set-seen', list);//used by notification area
-                    });
-                });
-            });
-        }
+                }),
+                // server update
+                update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+                    folderAPI.reload(list);
+                    api.trigger('update:set-seen', list);//used by notification area
+                })
+            );
+        });
+    };
 
-        return updateCache(list).done(function () {
-            api.trigger('refresh.list');
-            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                reloadFolders(list);
-                api.trigger('update:set-seen', list);//used by notification area
+    api.markFolderRead = function (folder) {
+
+        // getAll contains flags
+        return api.getAll({ folder: folder }).then(function (list) {
+
+            // reduce to unread items
+            list = _(list).filter(function (obj) {
+                return util.isUnseen(obj);
             });
+
+            return api.markRead(list);
         });
     };
 

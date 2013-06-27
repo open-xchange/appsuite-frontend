@@ -210,7 +210,7 @@ define('io.ox/mail/guidance/perspective',
                     lineHeight: '28px',
                     padding: '14px',
                     color: '#fff',
-                    backgroundColor: '#6C7DA0',
+                    backgroundColor: '#FF5F13', // kind of nato orange
                     borderRadius: '5px',
                     textShadow: '1px 1px 3px #000',
                     maxWidth: '450px',

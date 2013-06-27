@@ -56,12 +56,10 @@ define('io.ox/mail/folderview-extensions',
 
     function markMailFolderRead(e) {
         e.preventDefault();
-        var item = { folder: e.data.app.folder.get() };
-
-        mailAPI.markRead(item).done(function () {
+        mailAPI.markFolderRead(e.data.folder).done(function () {
             // TODO: unify events?
-            mailAPI.trigger('update:set-seen', item); //remove notifications in notification area
-            folderAPI.trigger('update:unread', item);
+            mailAPI.trigger('update:set-seen', {}); //remove notifications in notification area
+            folderAPI.trigger('update:unread', { folder_id: e.data.folder });
         });
     }
 
@@ -73,7 +71,7 @@ define('io.ox/mail/folderview-extensions',
                 $('<li>').append(
                     $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
                     .text(gt('Mark all mails as read'))
-                    .on('click', { app: baton.app }, markMailFolderRead)
+                    .on('click', { folder: baton.app.folder.get() }, markMailFolderRead)
                     .addClass(baton.data.unread === 0 ? 'disabled' : undefined)
                 )
             );

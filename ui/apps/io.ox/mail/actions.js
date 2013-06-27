@@ -356,13 +356,9 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
-                var bool = e.collection.has('toplevel') &&
-                    _(list).reduce(function (memo, data) {
-                        return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
-                    }, true);
-                return bool;
-            });
+            var data = e.context;
+            if (_.isArray(data)) return true;
+            return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
         },
         multiple: function (list) {
             api.markUnread(list);
@@ -372,13 +368,9 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markread', {
         id: 'markread',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
-                var bool = e.collection.has('toplevel') &&
-                    _(list).reduce(function (memo, data) {
-                        return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
-                    }, false);
-                return bool;
-            });
+            var data = e.context;
+            if (_.isArray(data)) return true;
+            return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === 0;
         },
         multiple: function (list) {
             api.markRead(list);
