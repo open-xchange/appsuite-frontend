@@ -120,6 +120,13 @@ define.async('io.ox/office/tk/utils',
      */
     Utils.SELECTED_CLASS = 'selected';
 
+    /**
+     * A Boolean flag specifying whether the Internet Explorer 9 is running.
+     *
+     * @constant
+     */
+    Utils.IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
+
     // generic JS object helpers ----------------------------------------------
 
     /**
@@ -2384,7 +2391,7 @@ define.async('io.ox/office/tk/utils',
     // text field elements ----------------------------------------------------
 
     /**
-     * Creates and returns a new text input field.
+     * Creates and returns a new text <input> field.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new text input field.
@@ -2402,25 +2409,45 @@ define.async('io.ox/office/tk/utils',
     };
 
     /**
+     * Creates and returns a new <textarea> element.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new text area.
+     *  Supports all generic options supported by the Utils.createControl()
+     *  method. Additionally, the following options are supported:
+     *  @param {String} [options.placeholder='']
+     *      A place holder text that will be shown in an empty text area.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new text area element.
+     */
+    Utils.createTextArea = function (options) {
+        var textArea = Utils.createControl('textarea', undefined, options);
+        return textArea.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
+    };
+
+    /**
      * Returns the current selection in the passed text field.
      *
-     * @param {jQuery} textField
-     *  A jQuery object containing a text field element.
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
      *
      * @returns {Object}
      *  An object with the attributes 'start' and 'end' containing the start
      *  and end character offset of the selection in the text field.
      */
     Utils.getTextFieldSelection = function (textField) {
-        var input = textField.get(0);
-        return input ? { start: input.selectionStart, end: input.selectionEnd } : undefined;
+        var node = Utils.getDomNode(textField);
+        return { start: node.selectionStart, end: node.selectionEnd };
     };
 
     /**
      * Changes the current selection in the passed text field.
      *
-     * @param {jQuery} textField
-     *  A jQuery object containing a text field element.
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
      *
      * @param {Number} start
      *  The start character offset of the new selection in the text field.
@@ -2430,11 +2457,28 @@ define.async('io.ox/office/tk/utils',
      *  omitted, sets a text cursor according to the passed start position.
      */
     Utils.setTextFieldSelection = function (textField, start, end) {
-        var input = textField.get(0);
-        if (input) {
-            input.selectionStart = start;
-            input.selectionEnd = _.isNumber(end) ? end : start;
-        }
+        var node = Utils.getDomNode(textField);
+        node.selectionStart = start;
+        node.selectionEnd = _.isNumber(end) ? end : start;
+    };
+
+    /**
+     * Replaces the current selection of the text field with the specified
+     * text, and places a simple text cursor behind the new text.
+     *
+     * @param {HTMLElement|jQuery} textField
+     *  A text field element (an HTML <input> or <textarea> element). If this
+     *  object is a jQuery collection, used the first DOM node it contains.
+     *
+     * @param {String} [text='']
+     *  The text used to replace the selected text in the text field. If
+     *  omitted, the selection will simply be deleted.
+     */
+    Utils.replaceTextInTextFieldSelection = function (textField, text) {
+        var node = Utils.getDomNode(textField), start = node.selectionStart;
+        text = _.isString(text) ? text : '';
+        node.value = node.value.substring(0, start) + text + node.value.substring(node.selectionEnd);
+        node.selectionStart = node.selectionEnd = start + text.length;
     };
 
     // global timer -----------------------------------------------------------
