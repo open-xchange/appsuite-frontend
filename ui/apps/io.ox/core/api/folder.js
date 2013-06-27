@@ -553,6 +553,8 @@ define('io.ox/core/api/folder',
                     });
                 })
                 .fail(function (error) {
+                    if (error && error.code && error.code === 'FLD-0018')
+                        error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
                     api.trigger('update:fail', error, opt.folder);
                 });
             });

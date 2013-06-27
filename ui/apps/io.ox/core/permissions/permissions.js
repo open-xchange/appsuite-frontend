@@ -400,6 +400,7 @@ define('io.ox/core/permissions/permissions',
                     .done(function (action) {
                         if (isFolderAdmin && action === 'save') {
                             api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
+                                //TODO: dialog should stay open if error occurs
                                 collection.off();
                             });
                         } else if (action === 'cancel' || action === 'ok') {
