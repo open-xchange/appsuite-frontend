@@ -26,8 +26,8 @@ define('io.ox/files/views/create', [
 
         show = function (app) {
 
-            var $form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
-            dialog = new dialogs.CreateDialog({ easyOut: true, width: 600, center: true});
+            var $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
+            dialog = new dialogs.CreateDialog({ width: 450, center: true});
 
             ext.point(POINT + '/form').invoke('draw', $form);
 
@@ -68,7 +68,7 @@ define('io.ox/files/views/create', [
                 }
             }
 
-            dialog.header($('<h4>').text(gt('Add new file')));
+            dialog.header($('<h4>').text(gt('Upload new file')));
             dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
             dialog
                 .addPrimaryButton('save', gt('Save'), 'save')
@@ -101,7 +101,7 @@ define('io.ox/files/views/create', [
                 draw: function () {
                     this.append(
                         $('<label>').text(gt('Description')),
-                        $('<textarea name="description" rows="8" class="span12" tabindex="1"></textarea>')
+                        $('<textarea name="description" rows="4" class="span12" tabindex="1"></textarea>')
                     );
                 }
             });
