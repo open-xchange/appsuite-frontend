@@ -2535,6 +2535,7 @@ input.flat-input {
         left: 0 !important;
         right: 0;
         .border-radius(0);
+        border: 0;
         background-color: transparent;
         .active-app {
             a {
@@ -2573,20 +2574,10 @@ input.flat-input {
             };
         }
 
-        ix {
-            position: absolute;
-            right: -10px;
-            top: -20px;
-            color: #FFF;
-            background: #444;
-            height: 33px;
-            width: 33px;
-            border-radius: 20px;
-            border: 2px solid #999;
-            text-align: center;
-            line-height: 33px;
-            font-size: 17px;
-        }
+        .io-ox-action-link:last-child {
+            margin: 0;
+        };
+
 
         &.slidedown {
             -webkit-transform: translateY(110%);
