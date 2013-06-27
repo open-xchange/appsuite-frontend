@@ -19,8 +19,9 @@ define('io.ox/settings/main',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
       'gettext!io.ox/core',
+      'settings!io.ox/settings/configjump',
       'io.ox/core/settings/errorlog/settings/pane',
-      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
+      'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
 
@@ -173,6 +174,56 @@ define('io.ox/settings/main',
                 }, app));
                 index += 100;
 
+            });
+        });
+
+        // Create extensions for the config jump pages
+        _(configJumpSettings.get()).chain().keys().each(function (id) {
+            var declaration = configJumpSettings.get(id);
+            if (declaration.requires) {
+                if (!require("io.ox/core/capabilities").has(declaration.requires)) {
+                    return;
+                }
+            }
+            ext.point("io.ox/settings/pane").extend(_.extend({
+                id: id,
+                title: gt(declaration.title || ''),
+                ref: 'io.ox/configjump/' + id,
+                loadSettingPane: false
+            }, declaration));
+
+            ext.point("io.ox/configjump/" + id + "/settings/detail").extend({
+                id: 'iframe',
+                index: 100,
+                draw: function () {
+                    var $node = this;
+                    var fillUpURL = $.Deferred();
+
+                    if (declaration.url.indexOf("[token]") > 0) {
+                        // Grab token
+                        $node.busy();
+                        require(["io.ox/core/http"], function (http) {
+                            http.GET({
+                                module: 'token',
+                                params: {
+                                    action: 'acquireToken'
+                                }
+                            }).done(function (resp) {
+                                fillUpURL.resolve(declaration.url.replace("[token]", resp.token));
+                            }).fail(require("io.ox/core/notifications").yell);
+                        });
+                    } else {
+                        fillUpURL.resolve(declaration.url);
+                    }
+
+                    fillUpURL.done(function (url) {
+                        $node.idle();
+                        $node.append($('<iframe>', { src: url, frameborder: 0 }).css({
+                            width: '100%',
+                            height: '100%'
+                        }));
+                    });
+                }
             });
         });
 
