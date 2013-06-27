@@ -593,7 +593,8 @@ define('io.ox/calendar/edit/template',
         index: 2500,
         draw: function (baton) {
             // must be on a non overflow container to work with position:fixed
-            var node = this, toolbar;//$(options.app.attributes.window.nodes.body);
+            var node = $(baton.app.attributes.window.nodes.body),
+                toolbar;
             node.append(toolbar = $('<div class="app-bottom-toolbar">'));
             ext.point('io.ox/calendar/edit/section/buttons').replace({
                 id: 'save',
