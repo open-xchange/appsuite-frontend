@@ -295,18 +295,6 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        // Show backend errors
-        point.extend(new forms.ErrorAlert({
-            id: ref + '/edit/view/backendErrors',
-            className: 'span7',
-            index: 250,
-            customizeNode: function () {
-                this.$el.css({
-                    marginTop: '15px'
-                });
-            }
-        }));
-
         // Actions
         point.basicExtend(new links.ButtonGroup(ref + '/edit/view', {
             index: _.device('small') ? 10 : 300,
