@@ -31,7 +31,7 @@ define('io.ox/contacts/edit/view-form', [
 
     var meta = {
         sections: {
-            personal: ['title', 'first_name', 'last_name', 'display_name',
+            personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
                          'second_name', 'suffix', 'nickname', 'birthday',
                          'marital_status', 'number_of_children', 'spouse_name',
                          'anniversary', 'url'],
@@ -65,8 +65,8 @@ define('io.ox/contacts/edit/view-form', [
             attachments: ['attachments_list', 'attachments_buttons']
         },
 
-        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
-               // phone
+        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'anniversary',
+               // phones
                'telephone_company', 'fax_other',
                'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
                'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
@@ -81,7 +81,7 @@ define('io.ox/contacts/edit/view-form', [
                'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
                ],
 
-        alwaysVisible: ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'],
+        alwaysVisible: ['first_name', 'last_name', 'email1', 'cellular_telephone1'],
 
         input_type: {
             'email1': 'email',
@@ -271,13 +271,13 @@ define('io.ox/contacts/edit/view-form', [
             }
         }));
 
-        point.extend(new views.AttributeView({
-            id: ref + '/edit/view/display_name_header',
-            index: 150,
-            tagName: 'div',
-            className: 'clear-title',
-            attribute: 'display_name'
-        }));
+        // point.extend(new views.AttributeView({
+        //     id: ref + '/edit/view/display_name_header',
+        //     index: 150,
+        //     tagName: 'div',
+        //     className: 'clear-title',
+        //     attribute: 'display_name'
+        // }));
 
         point.extend(new views.AttributeView({
             id: ref + '/edit/view/profession_header',
