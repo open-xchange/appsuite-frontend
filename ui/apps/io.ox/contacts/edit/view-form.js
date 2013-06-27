@@ -110,7 +110,7 @@ define('io.ox/contacts/edit/view-form', [
                     id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
-                    control: '<textarea rows="12" name="' + options.field + '" tabindex="1">',
+                    control: '<textarea rows="12" name="' + options.field + '" tabindex="1" class="input-xlarge">',
                     rare: options.isRare,
                     attribute: options.field
                 }), {
@@ -408,7 +408,7 @@ define('io.ox/contacts/edit/view-form', [
                         id: field,
                         index: fieldIndex,
                         label: model.fields[field],
-                        control: '<input type="' + input_type + '" name="' + field + '" tabindex="1">',
+                        control: '<input type="' + input_type + '" name="' + field + '" tabindex="1" class="input-xlarge">',
                         rare: isRare,
                         attribute: field
                     }), {
