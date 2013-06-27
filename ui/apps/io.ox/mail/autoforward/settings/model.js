@@ -60,6 +60,7 @@ define('io.ox/mail/autoforward/settings/model',
             ref: ref,
 
             update: function (model) {
+                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 if (model.attributes.forwardmail === '') {
                     return api.deleteRule(model.attributes.id);
                 } else {
@@ -67,6 +68,7 @@ define('io.ox/mail/autoforward/settings/model',
                 }
             },
             create: function (model) {
+                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 return api.create(providePreparedData(model.attributes));
             }
 
