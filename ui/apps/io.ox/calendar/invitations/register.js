@@ -496,9 +496,10 @@ define('io.ox/calendar/invitations/register',
     }
 
     function drawSummary(data) {
-        var recurrenceString = util.getRecurrenceString(data);
+        var recurrenceString = util.getRecurrenceString(data),
+            separator = data.title ? $.txt(', ') : $.txt('');
         return [
-            $('<b>').text(data.title), $.txt(', '),
+            $('<b>').text(data.title), separator,
             $('<span class="day">').append(
                 $.txt(gt.noI18n(util.getDateInterval(data))),
                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
