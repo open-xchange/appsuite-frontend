@@ -101,6 +101,11 @@ define("io.ox/calendar/edit/recurrence-view",
             var self = this,
                 originalContent = $anchor.html();
 
+            // check options
+            if (!options || !options.model) {
+                return false;
+            }
+
             if (options.initial) {
                 self[attribute] = _.isFunction(options.initial) ? options.initial() : options.initial;
             } else {

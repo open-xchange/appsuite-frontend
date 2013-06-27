@@ -17,6 +17,11 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         toggle: function ($anchor, attribute, options) {
             var self = this;
 
+            // check options
+            if (!options || !options.values) {
+                return false;
+            }
+
             self[attribute] = 0;
             $anchor.text(options.values[self.value]);
 
@@ -40,6 +45,11 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             var self = this,
                 gt = options.gt,
                 originalContent = $anchor.html();
+
+            // check options
+            if (!options || !options.initial || !options.phrase) {
+                return false;
+            }
 
             self[attribute] = options.initial;
 
@@ -110,6 +120,12 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         options: function ($anchor, attribute, options) {
             // First we need to wrap the anchor
             var self = this;
+
+            // check options
+            if (!options || !options.options) {
+                return false;
+            }
+
             self[attribute] = options.initial;
 
             var $container = $('<span class="dropdown">').css({ zIndex: 1 });
