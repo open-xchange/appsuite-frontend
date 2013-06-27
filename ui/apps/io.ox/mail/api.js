@@ -195,6 +195,10 @@ define('io.ox/mail/api',
             },
 
             applyAutoRead: function (obj) {
+
+                // looks like attachment?
+                if (obj && obj.msgref) return;
+
                 var cid = getCID(obj);
                 if (unseen[cid] === true) {
                     unseen[cid] = false;
