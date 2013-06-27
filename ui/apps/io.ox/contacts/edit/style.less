@@ -19,8 +19,6 @@
 
 .edit-contact {
 
-    max-width: 620px;
-
     .attachment-edit-row {
         margin-bottom: 9px;
     }
@@ -34,52 +32,9 @@
         }
     }
 
-    .io-ox-core-tk-attachment {
-
-        &.span12 {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .delete {
-            width: 25px;
-            font-size: 19px;
-            padding-left: 12px;
-            cursor: pointer;
-        }
-        .attachment-icon {
-            padding-left: 15px;
-            width: 45px;
-        }
-    }
-
     .form-horizontal {
-        .control-group {
-            margin-bottom: 10px;
-        }
 
-        input, textarea {
-            width: 100%;
-            max-width: 435px;
-            padding: 4px 0;
-            margin: 0;
-        }
-
-        .fileupload.fileupload-new {
-            .controls;
-
-            .uneditable-input {
-                width: 200px;
-            }
-        }
-
-        .attachment-edit-row .span6 {
-            float: none;
-            margin-left: 180px;
-            width: auto;
-        }
-
-        &.controls {
+        &.btn-group.controls {
             margin-bottom: 20px;
             text-align: right;
 
@@ -87,14 +42,6 @@
                 float: left;
             }
         }
-    }
-
-    div.form-horizontal.controls {
-        width: 100%;
-    }
-
-    .sectionheader {
-        margin-top: 20px;
     }
 
     .sectionheader.collapsed {
@@ -113,6 +60,16 @@
         &.job {
             font-size: 1.25em;
             color: #888;
+        }
+    }
+    .title.header-pic {
+        float: left;
+        margin-right: 60px;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) {
+        .title.header-pic {
+            float: none;
         }
     }
 }

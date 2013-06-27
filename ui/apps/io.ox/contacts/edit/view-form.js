@@ -265,8 +265,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             customizeNode: function () {
                 this.$el.css({
-                    display: 'inline-block',
-                    height: "100px"
+                    display: 'inline-block'
                 }).addClass("title header-pic");
             }
         }));
