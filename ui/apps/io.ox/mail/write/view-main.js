@@ -196,7 +196,12 @@ define("io.ox/mail/write/view-main",
                     { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
 
                 return $('<div class="section-item upload">').append(
-                    $('<input>', inputOptions).on('change', $.proxy(change, this))
+                    $('<div data-provides="fileupload" class="fileupload fileupload-new">').append(
+                        $('<span class="btn btn-file">').append(
+                            $('<span class="fileupload-new">').text(gt('Select file')),
+                            $('<input>', inputOptions).on('change', $.proxy(change, this))
+                        )
+                    )
                 );
             };
 
