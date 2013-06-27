@@ -287,20 +287,44 @@ $(window).load(function () {
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
             require(['settings!io.ox/core'], function (settings) {
-                var theme = settings.get('theme') || 'default';
+                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
                 debug('boot.js: loadCore > load config ...');
                 config.load().done(function () {
-                    debug('boot.js: loadCore > require "main" & set theme');
-                    $.when(
-                        require(['io.ox/core/main']),
-                        themes.set(theme)
-                    ).done(function (core) {
-                        // go!
-                        debug('boot.js: core.launch()');
-                        core.launch();
-                    })
-                    .fail(function (e) {
-                        console.error('Cannot launch core!', e);
+
+                    debug('boot.js: loadCore > require "main" & set theme', theme);
+
+                    var def1 = require(['io.ox/core/main']),
+                        def2 = themes.set(theme);
+
+                    function cont() {
+                        def1.then(
+                            function success(core) {
+                                // go!
+                                debug('boot.js: core.launch()');
+                                core.launch();
+                            },
+                            function fail(e) {
+                                console.error('Cannot launch core!', e);
+                            }
+                        );
+                    }
+
+                    function fail() {
+                        console.error('Could not load theme: ' + theme);
+                        gotoSignin('autologin=false');
+                    }
+
+                    $.when(def1, def2).always(function () {
+                        // failed to load theme?
+                        if (def2.state() === 'rejected') {
+                            // give up if it was the default theme
+                            if (theme === 'default') return fail();
+                            // otherwise try to load default theme now
+                            console.error('Could not load custom theme: ' + theme);
+                            themes.set('default').then(cont, fail);
+                        } else {
+                            cont();
+                        }
                     });
                 });
             });
@@ -531,6 +555,14 @@ $(window).load(function () {
             return fetchServerConfig('generalconfig');
         }
 
+        function gotoSignin(hash) {
+            var ref = (location.hash || '').replace(/^#/, ''),
+                path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
+                glue = path.indexOf('#') > -1 ? '&' : '#';
+            hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
+            _.url.redirect((hash ? path + glue + hash : path));
+        }
+
         /**
          * Auto login
          */
@@ -549,14 +581,6 @@ $(window).load(function () {
 
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
                 return manifests.manager.loadPluginsFor('core').done(gettext.enable);
-            }
-
-            function gotoSignin(hash) {
-                var ref = (location.hash || '').replace(/^#/, ''),
-                    path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
-                    glue = path.indexOf('#') > -1 ? '&' : '#';
-                hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
-                _.url.redirect((hash ? path + glue + hash : path));
             }
 
             function continueWithoutAutoLogin() {

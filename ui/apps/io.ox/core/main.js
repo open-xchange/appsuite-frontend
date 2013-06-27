@@ -866,14 +866,17 @@ define('io.ox/core/main',
 
                 debug('core: Stage "update-tasks"');
 
-                if (ox.online) {
-                    var def = $.Deferred();
-                    require(['io.ox/core/updates/updater'], function (updater) {
-                        updater.runUpdates().done(def.resolve).fail(def.reject);
-                    }).fail(def.reject);
-
-                    return def;
-                }
+                require(['io.ox/core/updates/updater']).then(
+                    function success(updater) {
+                        // this is not mission-critical so continue if anything fails
+                        return updater.runUpdates().always(function () {
+                            return $.when();
+                        });
+                    },
+                    function fail() {
+                        return $.when();
+                    }
+                );
             }
         });
 
