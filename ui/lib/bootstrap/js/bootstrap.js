@@ -665,8 +665,11 @@
         if ($ul.length > 0) {
           $parent.data('menu', $ul);
           $('body').append($ul.css({'z-index': 65500})
-            .prepend($('<li><a><i class="icon-chevron-down"></i></a></li>')
-              .on('click', clearMenus)));
+            .prepend($('<li><a href="#" class="io-ox-action-link"><i class="icon-chevron-down"></i></a></li>')
+              .on('click', function (e) {
+                e.preventDefault();
+                clearMenus();
+              })));
 
         }
       }
@@ -734,7 +737,7 @@
     // Ignore ctrl click to make firefox mac users happy
     if (e && e.ctrlKey) { return; }
     // on phone close only on item select or X icon
-    if (phone && $(e.target).attr('id') === "background_loader") {
+    if (phone && e && $(e.target).attr('id') === "background_loader") {
       return;
     }
     if (phone) {
