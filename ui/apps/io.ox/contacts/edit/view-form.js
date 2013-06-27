@@ -298,12 +298,13 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend(new links.ButtonGroup(ref + '/edit/view', {
             index: _.device('small') ? 10 : 300,
             id: 'buttons',
-            classes: 'form-horizontal controls'
+            classes: 'row-fluid',
+            attributes: {'class': 'controls'}
         }));
 
         views.ext.point(ref + "/edit/view/buttons").extend(new links.Button({
             id: "discard",
-            index: 100,
+            index: 150,
             label: gt("Discard"),
             ref: ref + "/actions/edit/discard",
             cssClasses: "btn control",
