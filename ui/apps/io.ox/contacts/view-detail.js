@@ -445,7 +445,7 @@ define("io.ox/contacts/view-detail",
                         simple(gt('Nickname'), data.nickname),
                         row(gt('Birthday'), function () {
                             if (baton.data.birthday)
-                                new date.Local(date.Local.utc(baton.data.birthday)).format(date.DATE);//use utc time. birthdays must not be converted
+                                return new date.Local(date.Local.utc(baton.data.birthday)).format(date.DATE); //use utc time. birthdays must not be converted
                         })
                     ),
 
@@ -493,7 +493,10 @@ define("io.ox/contacts/view-detail",
                     block(
                         //#. section name for contact fields in detail view
                         gt('Miscellaneous'),
-                        simple(gt('URL'), data.url),
+                        row(gt('URL'), function () {
+                            if (baton.data.url)
+                                return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
+                        }),
                         // looks stupid but actually easier to read and not much shorter than any smart-ass solution
                         simple(gt('Optional 01'), data.userfield01),
                         simple(gt('Optional 02'), data.userfield02),
