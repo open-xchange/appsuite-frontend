@@ -106,7 +106,8 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create');
+            var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true;
+            return exists && e.collection.has('one') && e.collection.has('create');
         },
         action: function (baton) {
             var params = baton.data,
