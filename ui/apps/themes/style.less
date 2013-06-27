@@ -2225,6 +2225,22 @@ a.toolbar-action, .toolbar-action > a {
 
 ul.dropdown-menu li a.disabled { color:#999; }
 
+.fileupload .uneditable-input { display:none; }
+
+.fileupload-new .uneditable-input {
+    display:none;
+}
+.fileupload-exists .uneditable-input {
+    display: inline-block;
+}
+
+.fileupload-new .input-append .btn-file {
+    .border-radius(3px);
+}
+.fileupload-exists .input-append .btn-file {
+    .border-radius(0 3px 3px 0);
+}
+
 /** Flat inputs **/
 
 input.flat-input {

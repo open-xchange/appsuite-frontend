@@ -61,48 +61,30 @@ define('io.ox/core/tk/attachments',
                         odd = true,
                         row;
                     _(this.allAttachments).each(function (attachment) {
-                        if (odd) {
-                            row = $('<div>').addClass("row-fluid attachment-edit-row").appendTo(self.$el);
-                            odd = false;
-                        } else {
-                            odd = true;
-                        }
-                        row.append($('<div>').addClass('span6').append(self.renderAttachment(attachment).addClass('span12')));
+                        self.$el.addClass('span12 io-ox-core-tk-attachment-list').append(self.renderAttachment(attachment));
                     });
 
                     //trigger refresh of attachmentcounter
                     this.baton.parentView.trigger('attachmentCounterRefresh', this.allAttachments.length);
 
-                    //replace x with icon
-                    self.$el.find('.delete').each(function (index, deleteNode) {
-                        $(deleteNode).text('').append('<i class="icon-remove">');
-                    });
                     return this;
                 },
                 renderAttachment: function (attachment) {
                     var self = this;
-                    var size;
-                    var $el = $('<div class="io-ox-core-tk-attachment">');
-                    $el.append(
-                        $('<table width="100%">').append(
-                            $('<tr>').append(
-                                $('<td class="attachment-icon">').append($('<i>').addClass('icon-paper-clip')),
-                                $('<td class="details">').append(
-                                    $('<table>').append(
-                                        $('<tr>').append(
-                                            $('<td class="filename">').text(attachment.filename)
-                                        ),
-                                        $('<tr>').append(
-                                            size = $('<td class="filesize muted">').text(strings.fileSize(attachment.file_size))
-                                        )
-                                    )
-                                ),
-                                $('<td class="delete">').text('x').on('click', function () {
-                                    self.deleteAttachment(attachment);
-                                })
-                            )
+                    var size, removeFile;
+                    var $el = $('<div class="span6">').append(
+                        $('<div class="io-ox-core-tk-attachment file">').append(
+                            $('<i class="icon-paper-clip">'),
+                            $('<div class="row-1">').text(attachment.filename),
+                            $('<div class="row-2">').append(
+                                size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                            ),
+                            removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="icon-trash">'))
                         )
                     );
+
+                    removeFile.on('click', function () { self.deleteAttachment(attachment); });
+
                     if (size.text() === "0 B") {size.text(" "); }
 
                     return $el;

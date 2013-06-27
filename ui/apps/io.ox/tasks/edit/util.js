@@ -105,7 +105,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
         //Tabs
         buildTabs: function (tabs, uid) {//uid is important so tabs dont change tabs in other apps
             var table = $('<ul>').addClass('nav nav-tabs'),
-                content = $('<div>').addClass('tab-content');
+                content = $('<div>').addClass('row-fluid tab-content');
             for (var i = 0; i < tabs.length; i++) {
                 $('<li>').css('width', '33%')
                     .append($('<a>').addClass('tab-link').css('text-align', 'center')
@@ -117,25 +117,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             table.find('li :first').addClass('active');
             content.find('div :first').addClass('active');
             return {table: table, content: content};
-        },
-
-        buildAttachmentNode: function (node, attachments) {
-            var tempNodes = [];
-            node.empty();
-            for (var i = 0; i < attachments.length; i++) {
-                tempNodes.push([$('<i>').addClass('icon-remove task-remove-attachment').attr('lnr', i),
-                                $('<i>').addClass('icon-paper-clip'),
-                                $('<div>').text(_.noI18n(attachments[i].name)).addClass('task-attachment-name'),
-                                $('<div>').text(_.noI18n(strings.fileSize(attachments[i].size))).addClass('task-attachment-filesize')]);
-            }
-            //check if we have an odd number of attachments
-            if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
-                tempNodes.push({});
-            }
-
-            for (var i = 0; i < tempNodes.length; i += 2) {
-                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
-            }
         },
 
         buildConfirmationPopup: function (model, dialogs, isArray) {
