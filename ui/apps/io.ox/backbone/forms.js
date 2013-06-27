@@ -496,7 +496,7 @@ define('io.ox/backbone/forms',
                 var self = this;
 
                 this.nodes.header = $('<div class="row sectionheader">').append(
-                    $('<span class="offset2 span4">').append(
+                    $('<span class="offset1 span4">').append(
                         $('<i class="icon-minus-sign">'),
                         $('<a tabindex="1" href="#">').text(this.title).on('click', function () {
                             if (self.state === 'mixed') {
@@ -523,7 +523,7 @@ define('io.ox/backbone/forms',
 
                 if (this.state === 'collapsed' || this.initialState === 'mixed') {
                     this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
-                    $('<span class="offset2 span4">').append(
+                    $('<span class="offset1 span4">').append(
                         $('<i class="icon-plus-sign">'),
                         $('<a tabindex="1" href="#" data-action="toggle-' + options.id + '">').text(this.title).on('click', function () {
                             self.more();
