@@ -710,11 +710,6 @@
         console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
-    try {
-        if (assert(true) === 0) delete window.assert; // Available only in debug builds
-    } catch (e) {
-        // do nothing if delete fails (this happens on IE8 -_-)
-    }
 
     /**
      * Converts HTML entities to Unicode characters.
