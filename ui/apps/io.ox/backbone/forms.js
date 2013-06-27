@@ -209,7 +209,9 @@ define('io.ox/backbone/forms',
             this.nodes.dropelements = {};
 
             function createSelect(name, from, to, setter, format) {
-                var node = self.nodes.dropelements[name] = $('<select tabindex="1" size="1">').attr('name', name),
+                var node = self.nodes.dropelements[name] = $('<select tabindex="1" size="1">')
+                        .addClass(self.inputClassName || 'input-medium')
+                        .attr('name', name),
                     i = Math.min(from, to),
                     $i = Math.max(from, to),
                     d = new date.Local(0),
