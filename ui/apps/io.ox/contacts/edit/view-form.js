@@ -141,7 +141,7 @@ define('io.ox/contacts/edit/view-form', [
                 options.point.extend(new attachments.EditableAttachmentList({
                     id: options.field,
                     registerAs: 'attachmentList',
-                    className: 'div',
+                    className: 'row-fluid',
                     index: options.index,
                     module: 7,
                     finishedCallback: function (model, id) {
