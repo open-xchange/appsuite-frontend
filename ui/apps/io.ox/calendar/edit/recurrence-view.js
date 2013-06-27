@@ -147,6 +147,9 @@ define("io.ox/calendar/edit/recurrence-view",
                         preset: 'date',
                         onSelect: function () {
                             updateValue();
+                        },
+                        onCancel: function () {
+                            updateValue();
                         }
                     });
                 } else {
