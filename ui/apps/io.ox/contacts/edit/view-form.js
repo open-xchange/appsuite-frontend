@@ -67,7 +67,7 @@ define('io.ox/contacts/edit/view-form', [
 
         rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'url', 'anniversary',
                // phone
-               'telephone_company', 'fax_home', 'fax_other',
+               'telephone_company', 'fax_other',
                'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
                'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
                'telephone_callback', 'telephone_ip',
