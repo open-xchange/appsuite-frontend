@@ -312,8 +312,8 @@ define('io.ox/calendar/invitations/register',
             return $();
         }
         var $node = $("<div>");
-        var text = gt.format(gt.ngettext('You already have %1$d appointment in this timeframe.',
-            'You already have %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
+        var text = gt.format(gt.ngettext('There is already %1$d appointment in this timeframe.',
+            'There are already %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
         $node.append(
             $('<div class="alert alert-info">').append(
