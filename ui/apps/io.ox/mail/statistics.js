@@ -18,13 +18,15 @@ define('io.ox/mail/statistics',
 
     'use strict';
 
-    var COLUMNS = '603,604,610';
+    var COLUMNS = '603,604,610',
+        WIDTH = _.device('small') ? 280 : 500,
+        HEIGHT = _.device('small') ? 150 : 200;
 
     return {
 
         sender: function (node, options) {
 
-            var canvas = $('<canvas width="500" height="200">'),
+            var canvas = $('<canvas>', { width: WIDTH, height: HEIGHT }),
                 isSent = accountAPI.is('sent', options.folder);
 
             node.append(
@@ -82,7 +84,7 @@ define('io.ox/mail/statistics',
 
         weekday: function (node, options) {
 
-            var canvas = $('<canvas width="500" height="200">');
+            var canvas = $('<canvas>', { width: WIDTH, height: HEIGHT });
 
             node.append(
                 $('<h2>').text(gt('Mails per week-day (%)')),
