@@ -106,7 +106,14 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('one') && e.collection.has('create');
+            var allowed = e.collection.has('one') && e.collection.has('create');
+            if (allowed) {
+                //if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
+                if (!e.baton.data.folder_id) {//you need to have a folder id to edit
+                    allowed = false;
+                }
+            }
+            return allowed;
         },
         action: function (baton) {
             var params = baton.data,
