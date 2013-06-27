@@ -197,6 +197,7 @@ define('io.ox/settings/main',
                 index: 100,
                 draw: function () {
                     var $node = this;
+                    $node.css({height: "100%"});
                     var fillUpURL = $.Deferred();
 
                     if (declaration.url.indexOf("[token]") > 0) {
@@ -220,7 +221,7 @@ define('io.ox/settings/main',
                         $node.idle();
                         $node.append($('<iframe>', { src: url, frameborder: 0 }).css({
                             width: '100%',
-                            height: '100%'
+                            minHeight: '90%'
                         }));
                     });
                 }
