@@ -132,7 +132,6 @@ define('io.ox/calendar/edit/main',
                                 }
                                 notifications.yell('error', response.error);
                             }
-
                         });
 
                         self.setTitle(gt('Edit appointment'));
@@ -222,6 +221,17 @@ define('io.ox/calendar/edit/main',
                                 self.getWindow().busy();
                             });
                         }
+
+                        self.model.on('backendError', function (response) {
+                            try {
+                                self.getWindow().idle();
+                            } catch (e) {
+                                if (response.code === 'UPL-0005') {//uploadsize to big
+                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
+                                }
+                                notifications.yell('error', response.error);
+                            }
+                        });
 
                         self.setTitle(gt('Create appointment'));
 
