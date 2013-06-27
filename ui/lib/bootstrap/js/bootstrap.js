@@ -660,11 +660,14 @@
       if ($this.is('.disabled, :disabled')) return
       $parent = getParent($this)
 
+      // on a phone detach the menu and attach it to the body again
+      // with position fixed. Then it will be a modal menu in fullscreen
       if (phone) {
         $ul = $parent.find('ul');
         if ($ul.length > 0) {
           $parent.data('menu', $ul);
-          $('body').append($ul.css({'z-index': 65500})
+          $('body').append($ul.addClass('custom-dropdown')
+            // add extra close item to the first li
             .prepend($('<li><a href="#" class="io-ox-action-link"><i class="icon-chevron-down"></i></a></li>')
               .on('click', function (e) {
                 e.preventDefault();
@@ -736,7 +739,7 @@
     if (e && e.button === 2) { return; }
     // Ignore ctrl click to make firefox mac users happy
     if (e && e.ctrlKey) { return; }
-    // on phone close only on item select or X icon
+    // on phone close only on item select or close item in the list
     if (phone && e && $(e.target).attr('id') === "background_loader") {
       return;
     }
