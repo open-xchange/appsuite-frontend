@@ -287,7 +287,7 @@ define('io.ox/calendar/actions',
         id: 'print',
         requires: function (e) {
             var win = e.baton.window;
-            if (win && win.getPerspective) {
+            if (_.device('!small') && win && win.getPerspective) {
                 var pers = win.getPerspective();
                 return pers && pers.name !== 'list';
             } else {
