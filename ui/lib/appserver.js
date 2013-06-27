@@ -68,6 +68,7 @@ var prefixes = options.argv.remain.map(function (s) {
 });
 if (!prefixes.length) prefixes =  ['/var/www/appsuite/'];
 var manifests = options.manifests || append(prefixes, 'manifests/');
+manifests.reverse();
 prefixes = append(prefixes, 'apps/');
 
 function append(array, suffix) {
@@ -82,7 +83,7 @@ if (tzPath.slice(-1) !== '/') tzPath += '/';
 tzPath = [tzPath];
 
 var appsLoadPath = '/api/apps/load/';
-var manifestsPath = '/api/manifests';
+var manifestsPath = '/api/apps/manifests';
 
 if (options.server) {
     if (options.server.slice(-1) != '/') options.server += '/';
@@ -321,7 +322,9 @@ function injectManifests(request, response) {
             fs.readdir(dir, L(function (err, files) {
                 if (err) return console.error(err.message);
                 files.forEach(function (file) {
-                    fs.readFile(path.join(dir, file), 'utf8', L(addManifest));
+                    file = path.join(dir, file);
+                    if (options.verbose) console.log(file);
+                    fs.readFile(file, 'utf8', L(addManifest));
                 });
             }));
         }
@@ -339,6 +342,7 @@ function injectManifests(request, response) {
                 }
             }
             response.end(JSON.stringify(reply, null, 4));
+            if (options.verbose) console.log();
         }
     }).end();
 }
