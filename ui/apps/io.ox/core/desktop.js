@@ -20,7 +20,8 @@ define("io.ox/core/desktop",
      "io.ox/core/cache",
      "io.ox/core/notifications",
      "io.ox/core/upsell",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, gt) {
+     "io.ox/core/adaptiveLoader",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
 
     "use strict";
 
@@ -466,8 +467,8 @@ define("io.ox/core/desktop",
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
-                        ox.adaptiveLoading.stop();
-                        var requirements = ox.adaptiveLoading.startAndEnhance(obj.module, [obj.module + "/main"]);
+                        adaptiveLoader.stop();
+                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + "/main"]);
                         return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
@@ -1606,8 +1607,8 @@ define("io.ox/core/desktop",
     ox.launch = function (id, data) {
         var def = $.Deferred();
         if (_.isString(id)) {
-            ox.adaptiveLoading.stop();
-            var requirements = ox.adaptiveLoading.startAndEnhance(id.replace(/\/main$/, ''), [id]);
+            adaptiveLoader.stop();
+            var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
             require(requirements).then(
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
@@ -1626,8 +1627,8 @@ define("io.ox/core/desktop",
     };
 
     ox.ui.apps.on("resume", function (app) {
-        ox.adaptiveLoading.stop();
-        ox.adaptiveLoading.listen(app.get("name"));
+        adaptiveLoader.stop();
+        adaptiveLoader.listen(app.get("name"));
     });
 
 
