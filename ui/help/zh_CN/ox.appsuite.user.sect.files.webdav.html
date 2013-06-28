@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. 以 WebDAV 访问文件</title>
+<title>9.6. 用 WebDAV 访问信息文件</title>
 <link rel="stylesheet" type="text/css" href="../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Chapter 9.  文件">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.11. 同时编辑多个文件">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. Linux 下设置 WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.multiple.html" title="9.5.12. 同时编辑多个文件">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. 在 Linux 下设置 WebDAV">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="http://www.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css"/> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,40 +22,40 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.webdav"></a>9.6. 以 WebDAV 访问文件</h2></div></div></div>
-<a class="indexterm" name="idm139897023326880"></a><a class="indexterm" name="idm139897023325264"></a><a class="indexterm" name="idm139897023323648"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav"></a><p>使用 WebDAV，您可以如访问磁盘中的本地文件一样访问<span class="phrase">
+<a name="ox.appsuite.user.sect.files.webdav"></a>9.6. 用 WebDAV 访问信息文件</h2></div></div></div>
+<a class="indexterm" name="idm139863093114064"></a><a class="indexterm" name="idm139863093112672"></a><a class="indexterm" name="idm139863093111280"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files.webdav"></a><p>使用 WebDAV，您可以如访问磁盘中的本地文件一样访问 <span class="phrase">
         <span class="guilabel"><strong>文件</strong></span>
       </span>
       
       
-      应用程序文件。与从组件 GUI 访问相比，WebDAV 有优点也有缺点：</p>
+       应用程序文件。与从组件 GUI 访问相比，WebDAV 有优点也有缺点：</p>
 <div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: disc; ">
-<li class="listitem"><p>优点是使用如 Windows Explore 之文件浏览器直接访问。您不用登陆到 Groupware GUI。</p></li>
-<li class="listitem"><p>缺点是您只能看到当前文档版本。版本信息或额外信息，例如回文皆不会显是。</p></li>
+<li class="listitem"><p>优点是使用文件浏览器快速直接访问。 例如：Windows Explorer。您不需要登录到组件图像用户界面。</p></li>
+<li class="listitem"><p>缺点是您只能看到当前文档版本。版本历史或附加信息，像意见，皆不会显示。</p></li>
 </ul></div>
 <p>
-      <span class="phrase"><strong>警告：</strong></span>如果您以 WebDAV 删除一个文件，不只当前版本，所有版本都会丢失。为了删除一个特定版本，特别使用<a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="如何删除某版本：">如何删除某版本：</a>描述的方法。</p>
+      <span class="phrase"><strong>警告：</strong></span>如果删除一个带 WebDAV 的文件，将会失去所有版本而不是只有当前版本。为了删除一个特定版本，只使用 <a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="如何删除某版本：">如何删除某版本：</a> 描述的方法。</p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav.setup"></a><p>以一个文件浏览器访问<span class="phrase">
+<a name="ox.appsuite.user.concept.files.webdav.setup"></a><p>在以文件浏览器（例如 Windows Explorer）访问 <span class="phrase">
         <span class="guilabel"><strong>文件</strong></span>
       </span>
       
       
-      应用程序文件之前，例如 Windows Explorer，您必须设置 WebDAV 访问。是系统软件而定，步骤不一：</p>
+       程序文件之前，您必须设置 WebDAV 访问。是系统软件而定，步骤相异：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. Linux 下设置 WebDAV">Linux 下设置 WebDAV</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. 在 Linux 下设置 WebDAV">在 Linux 下设置 WebDAV </a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="9.6.2. Windows XP 下设置 WebDAV">Windows XP 下设置 WebDAV</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="9.6.2. 在 视窗 XP 下设置 WebDAV">在 视窗 XP 下设置 WebDAV</a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. Windows Vista 下设置 WebDAV">Windows Vista 下设置 WebDAV</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. 在 视窗 Vista 下设置 WebDAV">在 视窗 Vista 下设置 WebDAV</a>
           </p></li>
 <li class="listitem"><p>
-            <a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.4. Windows 7 下设置 WebDAV">Windows 7 下设置 WebDAV</a>
+            <a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.4. 在 视窗 7 下设置 WebDAV">在 视窗 7 下设置 WebDAV</a>
           </p></li>
 </ul></div>
 <p>
