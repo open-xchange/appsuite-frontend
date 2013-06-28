@@ -297,11 +297,11 @@ define('io.ox/office/framework/app/baseapplication',
             // call the import handler
             return importHandler.call(self, point)
                 .always(function () {
+                    imported = true;
                     afterImport();
                     self.trigger('docs:import:after');
                 })
                 .done(function () {
-                    imported = true;
                     self.trigger('docs:import:success');
                 })
                 .fail(function (result) {
@@ -548,9 +548,9 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Return whether importing the document has been completed. Will be
-         * false before this application triggers the 'docs:import:success'
-         * event, and true afterwards.
+         * Return whether importing the document has been completed regardless
+         * whether it was successful. Will be false before this application
+         * triggers the 'docs:import:after' event, and true afterwards.
          *
          * @returns {Boolean}
          *  Whether importing the document has been completed.
@@ -1027,7 +1027,15 @@ define('io.ox/office/framework/app/baseapplication',
                     if (result === Utils.BREAK) {
                         def.resolve();
                     } else {
-                        $.when(result).done(createTimer).fail(function () { def.resolve(); });
+                        $.when(result)
+                        .done(function () {
+                            // do not create a new timeout if execution has been
+                            // aborted while the asynchronous code was running
+                            if (timer) { createTimer(); }
+                        })
+                        .fail(function () {
+                            def.resolve();
+                        });
                     }
 
                 }, Utils.extendOptions(options, { delay: delay }));
@@ -1038,7 +1046,10 @@ define('io.ox/office/framework/app/baseapplication',
             delay = Utils.getIntegerOption(options, 'repeatDelay', delay, 0);
 
             // add an abort() method to the Promise
-            return _.extend(def.promise(), { abort: function () { timer.abort(); } });
+            return _.extend(def.promise(), { abort: function () {
+                timer.abort();
+                timer = null;
+            } });
         };
 
         /**
@@ -1359,6 +1370,8 @@ define('io.ox/office/framework/app/baseapplication',
             var // create the new save point with basic information
                 savePoint = {
                     module: this.getName(),
+                    icon: Utils.getStringOption(appOptions, 'icon'),
+                    description: this.getFullFileName(),
                     point: { file: _.clone(file) }
                 };
 

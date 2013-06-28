@@ -46,8 +46,8 @@ define('io.ox/office/tk/control/radiogroup',
      */
     function RadioGroup(options) {
 
-        var // self reference
-            self = this,
+        var // all existing option buttons (cached for performance)
+            optionButtons = $(),
 
             // fall-back value for toggle click
             toggleValue = Utils.getOption(options, 'toggleValue'),
@@ -62,13 +62,6 @@ define('io.ox/office/tk/control/radiogroup',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns all option buttons as jQuery collection.
-         */
-        function getOptionButtons() {
-            return self.getNode().children(Utils.BUTTON_SELECTOR);
-        }
-
-        /**
          * Activates an option button in this radio group.
          *
          * @param value
@@ -76,7 +69,7 @@ define('io.ox/office/tk/control/radiogroup',
          *  does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
-            Utils.selectOptionButton(getOptionButtons(), value, equality);
+            Utils.selectOptionButton(optionButtons, value, equality);
         }
 
         /**
@@ -91,13 +84,24 @@ define('io.ox/office/tk/control/radiogroup',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns all option buttons as jQuery collection.
+         *
+         * @returns {jQuery}
+         *  The collection with all existing option buttons.
+         */
+        this.getOptionButtons = function () {
+            return optionButtons;
+        };
+
+        /**
          * Removes all option buttons from this radio group.
          *
          * @returns {RadioGroup}
          *  A reference to this instance.
          */
         this.clearOptionButtons = function () {
-            getOptionButtons().remove();
+            optionButtons.remove();
+            optionButtons = $();
             return this;
         };
 
@@ -128,6 +132,7 @@ define('io.ox/office/tk/control/radiogroup',
                 button = Utils.createButton(buttonOptions);
 
             // insert the button, add tool tip
+            optionButtons = optionButtons.add(button);
             this.addFocusableControl(button);
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
             return this;

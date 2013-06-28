@@ -22,10 +22,7 @@ define('io.ox/office/tk/dropdown/dropdown',
         KeyCodes = Utils.KeyCodes,
 
         // marker CSS class for groups with opened drop-down menu
-        OPEN_CLASS = 'dropdown-open',
-
-        // whether the IE9 is running
-        IE9 = _.isNumber(_.browser.IE) && (_.browser.IE < 10);
+        OPEN_CLASS = 'dropdown-open';
 
     // class DropDown =========================================================
 
@@ -47,12 +44,13 @@ define('io.ox/office/tk/dropdown/dropdown',
      *  Supports all generic button formatting options (see method
      *  Utils.createButton() for details). Additionally, the following options
      *  are supported:
-     *  @param {Boolean} [options.plainCaret=false]
-     *      If set to true, the drop-down button will not contain a caption or
-     *      any other formatting, regardless of the other settings in the
-     *      options object. Can be used to mix-in the drop-down button into a
-     *      complex control group where the options object contains the
-     *      formatting for the main group contents.
+     *  @param {String} [options.caret='add']
+     *      Specifies the appearance of the drop-down caret icon at the right
+     *      border of the drop-down menu button. If set to 'add' or omitted,
+     *      the caret icon will be added to the caption as specified in this
+     *      options map. If set to 'none', the caret will not appear. If set to
+     *      'only', the caret icon will be the only contents of the drop-down
+     *      button, regardless of the other settings in the options map.
      *  @param {Boolean} [options.autoLayout=false]
      *      If set to true, the drop-down menu will be positioned and sized
      *      automatically. If the available space is not sufficient for the
@@ -69,20 +67,14 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the root node of the group object
             groupNode = this.getNode(),
 
-            // plain caret button, or button with caption and formatting
-            plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
+            // appearance of the caret icon
+            caretMode = Utils.getStringOption(options, 'caret', 'add'),
 
             // automatic position and size of the drop-down menu
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
 
-            // the icon for the drop-down caret
-            caretIcon = Utils.createIcon('docs-caret down'),
-
-            // the drop-down caret
-            caretSpan = $('<span>').addClass('dropdown-caret').append(caretIcon),
-
             // the drop-down button
-            menuButton = Utils.createButton(plainCaret ? {} : options).addClass('dropdown-button').append(caretSpan),
+            menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
 
             // the drop-down menu element containing the menu view component
             menuNode = $('<div>').addClass('io-ox-office-main dropdown-container'),
@@ -320,9 +312,9 @@ define('io.ox/office/tk/dropdown/dropdown',
             // set size of menu node to 'auto' to be able to obtain the effective size
             menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
             // Bug 26537: IE9 does not get the correct width, have to set children to inline-block mode...
-            if (IE9) { menuNode.children().css('display', 'inline-block'); }
+            if (Utils.IE9) { menuNode.children().css('display', 'inline-block'); }
             menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
-            if (IE9) { menuNode.children().css('display', ''); }
+            if (Utils.IE9) { menuNode.children().css('display', ''); }
 
             // restore min-width and min-height of the menu node, and other CSS properties
             menuNode.css(menuMinSize);
@@ -489,12 +481,17 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // initialization -----------------------------------------------------
 
+        // initialize the caret icon
+        if (caretMode !== 'none') {
+            menuButton.addClass('caret-visible').append($('<span>').addClass('dropdown-caret').append(Utils.createIcon('docs-caret down')));
+        }
+
         // append menu button and menu to the group container
         this.addFocusableControl(menuButton);
 
         // register event handlers
         this.on('change cancel', function () { toggleMenu(false); })
-            .on('show enable', function (state) { if (!state) { toggleMenu(false); } });
+            .on('show enable', function (event, state) { if (!state) { toggleMenu(false); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });

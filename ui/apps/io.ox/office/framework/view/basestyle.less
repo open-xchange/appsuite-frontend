@@ -166,7 +166,7 @@ i.docs-caret {
             border-top: 1px solid transparent;
             border-bottom: 1px solid transparent;
 
-            &.scrollable {
+            &.scrolling {
                 border-top-color: #181818;
                 border-bottom-color: #181818;
             }
@@ -194,7 +194,7 @@ i.docs-caret {
         }
 
         /* scrollable application pane, center container node horizontally into application pane */
-        &.scrollable {
+        &.scrolling {
             .overflow(auto);
             text-align: center;
 
@@ -328,10 +328,10 @@ i.docs-caret {
     .button {
         text-align: left;
 
-        &.dropdown-button {
+        &.dropdown-button.caret-visible {
             padding-right: 7px + @control-padding;
 
-            > .caption > span:last-child {
+            > .caption {
                 margin-right: @caption-spacing;
             }
 
@@ -649,19 +649,24 @@ i.docs-caret {
 
 /* inline style view panes */
 .view-pane.inline {
+    white-space: nowrap;
     text-align: left;
 
     &.right {
         text-align: right;
     }
 
-    > .view-component.toolbox {
+    > .view-component {
         display: inline-block;
-        padding-left: 4px;
-        padding-right: 4px;
+        white-space: nowrap;
 
-        &:first-child { padding-left: 0; }
-        &:last-child { padding-right: 0; }
+        &.toolbox:not(:last-child) { padding-right: 4px; }
+        &.toolbox:not(:first-child) { padding-left: 4px; }
+        
+        > .group {
+            display: inline-block;
+            white-space: nowrap;
+        }
     }
 }
 
