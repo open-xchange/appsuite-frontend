@@ -16,9 +16,8 @@ define('io.ox/calendar/week/view',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
-     'io.ox/core/print',
      'settings!io.ox/calendar',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, print, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, gt, folderAPI, settings) {
 
     'use strict';
 
@@ -62,24 +61,36 @@ define('io.ox/calendar/week/view',
         // init values from prespective
         initialize: function (opt) {
             // init options
-            this.options = _.extend(this.options, opt);
+            _.extend(this.options, opt);
 
             // define view events
             var events = {
-                'mouseenter .appointment': 'onHover',
-                'mouseleave .appointment': 'onHover',
-                'mousedown .week-container>.day' : 'onLasso',
-                'mousemove .week-container>.day' : 'onLasso',
-                'mouseup' : 'onLasso',
-                'click .appointment': 'onClickAppointment',
-                'swipeleft .timeslot' : 'onControlView',
-                'swiperight .timeslot' : 'onControlView',
                 'click .control.next,.control.prev,.control.today': 'onControlView',
                 'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
             };
 
-            // taphold on touch devices
-            events[(_.device('touch') ? 'taphold' : 'dblclick') + ' .week-container>.day,.fulltime>.day'] = 'onCreateAppointment';
+            if (_.device('touch')) {
+                _.extend(events, {
+                    'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
+                    'tap .appointment': 'onClickAppointment',
+                    'swipeleft .timeslot' : 'onControlView',
+                    'swiperight .timeslot' : 'onControlView'
+                });
+            } else {
+                _.extend(events, {
+                    'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment',
+                    'click .appointment': 'onClickAppointment'
+                });
+                if (_.device('desktop')) {
+                    _.extend(events, {
+                        'mouseenter .appointment': 'onHover',
+                        'mouseleave .appointment': 'onHover',
+                        'mousedown .week-container>.day' : 'onLasso',
+                        'mousemove .week-container>.day' : 'onLasso',
+                        'mouseup' : 'onLasso'
+                    });
+                }
+            }
 
             this.delegateEvents(events);
 
@@ -1541,12 +1552,14 @@ define('io.ox/calendar/week/view',
             if (folder.folder) {
                 data = {folder_id: folder.folder};
             }
-            print.open('printCalendar', data, {
-                template: tmpl.name,
-                start: start,
-                end: end,
-                work_day_start_time: self.workStart * date.HOUR,
-                work_day_end_time: self.workEnd * date.HOUR
+            ox.load(['io.ox/core/print']).done(function (print) {
+                print.open('printCalendar', data, {
+                    template: tmpl.name,
+                    start: start,
+                    end: end,
+                    work_day_start_time: self.workStart * date.HOUR,
+                    work_day_end_time: self.workEnd * date.HOUR
+                });
             });
         }
     });
