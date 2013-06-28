@@ -357,11 +357,25 @@ define('io.ox/mail/actions',
         id: 'markunread',
         requires: function (e) {
             var data = e.context;
-            if (_.isArray(data)) return true;
+                
+            if (_.isArray(data)) {
+                var read = false;
+                //don't use each here because you cannot cancel it if one read mail was found
+                for (var i = 0; i < data.length; i++) {
+                    if (!api.tracker.isUnseen(data[i])) {
+                        read = true;
+                        break;
+                    }
+                }
+                return read;
+            }
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
         },
         multiple: function (list) {
-            api.markUnread(list);
+            var self = this;
+            api.markUnread(list).done(function () {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            });
         }
     });
 
@@ -369,11 +383,25 @@ define('io.ox/mail/actions',
         id: 'markread',
         requires: function (e) {
             var data = e.context;
-            if (_.isArray(data)) return true;
+                
+            if (_.isArray(data)) {
+                var unRead = false;
+                //don't use each here because you cannot cancel it if one unread mail was found
+                for (var i = 0; i < data.length; i++) {
+                    if (api.tracker.isUnseen(data[i])) {
+                        unRead = true;
+                        break;
+                    }
+                }
+                return unRead;
+            }
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === 0;
         },
         multiple: function (list) {
-            api.markRead(list);
+            var self = this;
+            api.markRead(list).done(function () {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            });
         }
     });
 
