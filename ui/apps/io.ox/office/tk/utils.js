@@ -2304,7 +2304,7 @@ define.async('io.ox/office/tk/utils',
         var // Create the DOM anchor element representing the button (href='#' is
             // essential for tab traveling). Do NOT use <button> elements, Firefox has
             // problems with text clipping and correct padding of the <button> contents.
-            button = Utils.createControl('a', { href: '#', tabindex: 0 }, options).addClass('button');
+            button = Utils.createControl('a', { href: '#', tabindex: 1 }, options).addClass('button');
 
         Utils.setControlCaption(button, options);
         return button;
