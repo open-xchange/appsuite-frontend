@@ -297,11 +297,11 @@ define('io.ox/office/framework/app/baseapplication',
             // call the import handler
             return importHandler.call(self, point)
                 .always(function () {
+                    imported = true;
                     afterImport();
                     self.trigger('docs:import:after');
                 })
                 .done(function () {
-                    imported = true;
                     self.trigger('docs:import:success');
                 })
                 .fail(function (result) {
@@ -548,9 +548,9 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Return whether importing the document has been completed. Will be
-         * false before this application triggers the 'docs:import:success'
-         * event, and true afterwards.
+         * Return whether importing the document has been completed regardless
+         * whether it was successful. Will be false before this application
+         * triggers the 'docs:import:after' event, and true afterwards.
          *
          * @returns {Boolean}
          *  Whether importing the document has been completed.
