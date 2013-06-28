@@ -183,6 +183,7 @@ define('io.ox/dev/testing/main',
                         );
                     });
                 },
+
                 reportRunnerResults: function (runner) {
                     // stop being busy
                     win.nodes.main.idle();
@@ -192,8 +193,9 @@ define('io.ox/dev/testing/main',
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
                     // reset hash
-                    location.hash = '#app=io.ox/dev/testing&suites=' + _.url.hash('suites') + '&cap=' + _.url.hash('cap');
+                    location.hash = '#app=io.ox/dev/testing&suites=' + _.url.hash('suites') + '&cap=' + (_.url.hash('cap') || '');
                 },
+
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id
                     var node = win.nodes.main.find(

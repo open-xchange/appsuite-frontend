@@ -27,6 +27,24 @@ define('io.ox/mail/statistics',
         return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '">');
     }
 
+    var fetch = (function () {
+
+        // hash of deferred objects
+        var hash = {};
+
+        return function (options) {
+
+            var cid = JSON.stringify(options);
+
+            if (!hash[cid]) {
+                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS });
+            }
+
+            return hash[cid];
+        };
+
+    }());
+
     return {
 
         sender: function (node, options) {
@@ -41,7 +59,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }, false).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var who = {}, attr = isSent ? 'to' : 'from';
 
@@ -96,7 +114,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var days = [0, 0, 0, 0, 0, 0, 0];
 
@@ -138,7 +156,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var hours = _.times(24, function () { return 0; });
 

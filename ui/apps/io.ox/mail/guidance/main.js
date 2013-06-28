@@ -176,19 +176,19 @@ define('io.ox/mail/guidance/main',
         }
     });
 
-    // ext.point('io.ox/mail/guidance').extend({
-    //     id: 'folder-statistic-hour',
-    //     index: INDEX += 100,
-    //     draw: function (baton) {
+    ext.point('io.ox/mail/guidance').extend({
+        id: 'folder-statistic-hour',
+        index: INDEX += 100,
+        draw: function (baton) {
 
-    //         var node = $('<section>').busy();
-    //         this.append(node);
+            var node = $('<section>').busy();
+            this.append(node);
 
-    //         require(['io.ox/mail/statistics'], function (statistics) {
-    //             statistics.hour(node, { folder: baton.folder });
-    //         });
-    //     }
-    // });
+            require(['io.ox/mail/statistics'], function (statistics) {
+                statistics.hour(node, { folder: baton.folder });
+            });
+        }
+    });
 
     return { sidePopup: sidePopup };
 });
