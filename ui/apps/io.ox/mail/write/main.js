@@ -1162,7 +1162,7 @@ define('io.ox/mail/write/main',
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
-                mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
+                mailAPI.get({ folder_id: folder, id: id, edit: '1' }).then(function (draftMail) {
                     var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
 
                     view.form.find('.section-item.file').remove();
