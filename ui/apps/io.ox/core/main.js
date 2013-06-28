@@ -1007,7 +1007,7 @@ define('io.ox/core/main',
                             ox.launch(settings.get('autoStart'));
                             return;
                         }
-                        launch = require(details.app).getApp().launch();
+                        launch = ox.launch(details.app);
                         method = details.method;
                         // explicit call?
                         if (method) {

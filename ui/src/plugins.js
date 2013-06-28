@@ -67,6 +67,10 @@
                 } else {
                     load(q.join(), modulename);
                 }
+                _.each(q, function (module) {
+                    $(window).trigger("require:load", module);
+                });
+
                 if (queue.length) console.error('recursive require', queue);
             }
 

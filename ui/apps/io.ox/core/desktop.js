@@ -466,7 +466,9 @@ define("io.ox/core/desktop",
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
-                        return ox.load([obj.module + '/main']).pipe(function (m) {
+                        ox.adaptiveLoading.stop();
+                        var requirements = ox.adaptiveLoading.startAndEnhance(obj.module, [obj.module + "/main"]);
+                        return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
@@ -1604,7 +1606,9 @@ define("io.ox/core/desktop",
     ox.launch = function (id, data) {
         var def = $.Deferred();
         if (_.isString(id)) {
-            require([id]).then(
+            ox.adaptiveLoading.stop();
+            var requirements = ox.adaptiveLoading.startAndEnhance(id.replace(/\/main$/, ''), [id]);
+            require(requirements).then(
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
@@ -1620,6 +1624,12 @@ define("io.ox/core/desktop",
         }
         return def;
     };
+
+    ox.ui.apps.on("resume", function (app) {
+        ox.adaptiveLoading.stop();
+        ox.adaptiveLoading.listen(app.get("name"));
+    });
+
 
     return {};
 

@@ -174,6 +174,110 @@ $(window).load(function () {
         ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
     });
 
+
+    if (localStorage) {
+        ox.adaptiveLoading = {
+            listen: function (chunkName) {
+                console.log("listen", chunkName);
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.init();
+                }
+                ox.adaptiveLoading.currentChunk = chunkName;
+                ox.adaptiveLoading.modules = ox.adaptiveLoading.cache[chunkName] || [];
+            },
+            startAndLoad: function (chunkName) {
+                console.log("startAndLoad", chunkName);
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.init();
+                }
+                ox.adaptiveLoading.listen(chunkName);
+                if (ox.adaptiveLoading.cache[chunkName]) {
+                    console.log("CHUNKED LOADING:", chunkName, ox.adaptiveLoading.cache[chunkName]);
+                    return require(ox.adaptiveLoading.cache[chunkName]);
+                }
+            },
+            startAndEnhance: function (chunkName, requirements) {
+                console.log("startAndEnhance", chunkName, requirements);
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.init();
+                }
+                ox.adaptiveLoading.listen(chunkName);
+                if (ox.adaptiveLoading.cache[chunkName]) {
+                    console.log("CHUNKED LOADING:", chunkName, ox.adaptiveLoading[chunkName]);
+                    _(ox.adaptiveLoading.cache[chunkName]).each(function (m) {
+                        if (!_(requirements).contains(m)) {
+                            requirements.push(m);
+                        }
+                    });
+                }
+                console.log("enhanced", requirements);
+                return requirements;
+            },
+
+            stop: function () {
+                console.log("stop", ox.adaptiveLoading.currentChunk);
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.init();
+                }
+                if (!ox.adaptiveLoading.currentChunk) {
+                    return;
+                }
+                ox.adaptiveLoading.cache[ox.adaptiveLoading.currentChunk] = _.uniq(ox.adaptiveLoading.modules);
+                console.log(ox.adaptiveLoading.cacheKey, ox.adaptiveLoading.cache);
+                localStorage.setItem(ox.adaptiveLoading.cacheKey, JSON.stringify(ox.adaptiveLoading.cache));
+                delete ox.adaptiveLoading.modules;
+                delete ox.adaptiveLoading.currentChunk;
+            },
+
+            record: function (chunkName, milliseconds) {
+                console.log("record", chunkName);
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.init();
+                }
+                setTimeout(function () {
+                    if (ox.adaptiveLoading.currentChunk === chunkName) {
+                        ox.adaptiveLoading.stop();
+                    }
+                });
+                return ox.adaptiveLoading.listen(chunkName);
+            },
+            init: function () {
+                console.log("init");
+                ox.adaptiveLoading.cacheKey = "ox-adaptiveload-" + ox.base + "[" + (ox.user || 'anon') + "]";
+                ox.adaptiveLoading.cache = JSON.parse(localStorage.getItem(ox.adaptiveLoading.cacheKey));
+                if (!ox.adaptiveLoading.cache) {
+                    ox.adaptiveLoading.cache = {};
+                }
+                console.log("cache", ox.adaptiveLoading.cache);
+                $(window).on("require:load", function (event, module) {
+                    if (ox.adaptiveLoading.modules) {
+                        ox.adaptiveLoading.modules.push(module.replace(/\.js$/, ''));
+                    }
+                    if (!ox.adaptiveLoading.dirty) {
+                        ox.adaptiveLoading.dirty = true;
+                        setTimeout(function () {
+                            if (ox.adaptiveLoading.currentChunk) {
+                                ox.adaptiveLoading.cache[ox.adaptiveLoading.currentChunk] = _.uniq(ox.adaptiveLoading.modules);
+                                console.log(ox.adaptiveLoading.cacheKey, ox.adaptiveLoading.cache);
+                                localStorage.setItem(ox.adaptiveLoading.cacheKey, JSON.stringify(ox.adaptiveLoading.cache));
+                            }
+                            ox.adaptiveLoading.dirty = false;
+                        }, 3000);
+                    }
+                });
+            }
+        };
+    } else {
+        ox.adaptiveLoading = {
+            listen: $.noop,
+            startAndLoad: $.noop,
+            startAndEnhance: $.noop,
+            stop: $.noop,
+            record: $.noop,
+            init: $.noop
+        };
+    }
+
     // detect if backend is down
     var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
