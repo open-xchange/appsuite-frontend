@@ -95,6 +95,9 @@ define('io.ox/dev/testing/main',
                 // run test
                 if (_(suites).indexOf('ALL') > -1 || _(suites).indexOf(e.id) > -1) {
                     e.test(jasmine, {
+                        // node to draw stuff
+                        node: win.nodes.main,
+                        // helper
                         Done: Done,
                         // Stick in any number of deferreds, optionally end the arguments list with a message and a timeout
                         // e.g.:
@@ -189,7 +192,7 @@ define('io.ox/dev/testing/main',
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
                     // reset hash
-                    location.hash = '#app=io.ox/dev/testing';
+                    location.hash = '#app=io.ox/dev/testing&suites=' + _.url.hash('suites') + '&cap=' + _.url.hash('cap');
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id
@@ -223,44 +226,46 @@ define('io.ox/dev/testing/main',
         win.nodes.main
             .addClass('io-ox-testing selectable-text')
             .css({ overflow: 'auto', padding: '1.5em 13px 1.5em 13px' })
-            .append($('<div>').addClass('header'))
-            .append($('<div>').addClass('summary').css('lineHeight', '2em').text('\u00A0'))
-            .append($('<div>').addClass('results'));
+            .append(
+                $('<div class="header">'),
+                $('<div class="summary">').css('lineHeight', '2em').text('\u00A0'),
+                $('<div class="results">'),
+                $('<div class="playground">')
+            );
 
         win.on('open', function () {
             // load all tests
-            ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
-                .done(function () {
-                    // show ids
-                    var ids = $('<div>').append(
-                            $('<b>').text('Available suites: ')
-                        ).appendTo(win.nodes.main.find('.header'));
-                    // split suites string
-                    suites = suites ? String(suites).split(/,/) : [];
-                    // loop over all extensions
-                    _(['ALL'].concat(
-                            ext.point('test/suite')
-                                .chain()
-                                .sortBy(function (e) {
-                                    return e.id;
-                                })
-                                .map(function (e) {
-                                    return e.id;
-                                })
-                                .value()
-                            )
+            ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' }).done(function () {
+                // show ids
+                var ids = $('<div>').append(
+                        $('<b>').text('Available suites: ')
+                    ).appendTo(win.nodes.main.find('.header'));
+                // split suites string
+                suites = suites ? String(suites).split(/,/) : [];
+                // loop over all extensions
+                _(['ALL'].concat(
+                        ext.point('test/suite')
+                            .chain()
+                            .sortBy(function (e) {
+                                return e.id;
+                            })
+                            .map(function (e) {
+                                return e.id;
+                            })
+                            .value()
                         )
-                        .each(function (id, i, list) {
-                            // show id
-                            addLink(ids, id);
-                            if (i < list.length - 1) {
-                                ids.append($.txt(' \u2013 ')); // ndash
-                            }
-                        });
-                    // go
-                    initializeReporter();
-                    runSuite();
-                });
+                    )
+                    .each(function (id, i, list) {
+                        // show id
+                        addLink(ids, id);
+                        if (i < list.length - 1) {
+                            ids.append($.txt(' \u2013 ')); // ndash
+                        }
+                    });
+                // go
+                initializeReporter();
+                runSuite();
+            });
         });
 
         win.show();

@@ -33,9 +33,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/strings',
      'io.ox/core/config',
      'io.ox/core/util',
+     'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, View, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, config, util, sender, settings, gt) {
 
     'use strict';
 
@@ -102,7 +103,7 @@ define("io.ox/mail/write/view-main",
 
     var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
 
-    var view = View.extend({
+    var View = ViewClass.extend({
 
         initialize: function () {
             var self = this;
@@ -110,7 +111,7 @@ define("io.ox/mail/write/view-main",
         },
 
         focusSection: function (id) {
-            this.sections[id].find('input[type!=hidden]').eq(0).focus();
+            this.sections[id].find('input[type!=hidden], select').eq(0).focus();
         },
 
         createSection: function (id, label, show, collapsable) {
@@ -278,56 +279,16 @@ define("io.ox/mail/write/view-main",
 
         createSenderField: function () {
 
+            var node, select;
+
             var node = $('<div class="fromselect-wrapper">').append(
-                   $('<label for="from" class="wrapping-label">').text(gt('From'))
-                ),
-                select = $('<select name="from" tabindex="7">').css('width', '100%'),
-                accounts, msisdns;
+               $('<label for="from" class="wrapping-label">').text(gt('From')),
+               select = $('<select class="sender-dropdown" name="from" tabindex="7">').css('width', '100%')
+            );
 
-            //get accounts
-            accounts = accountAPI.getAllSenderAddresses().then(function (addresses) {
-                // sort by mail address (across all accounts)
-                return addresses.sort(function (a, b) {
-                    a = mailUtil.formatSender(a);
-                    b = mailUtil.formatSender(b);
-                    return a < b ? -1 : +1;
-                });
+            sender.drawOptions(select);
 
-            });
-
-            //get msisdn numbers
-            msisdns = !capabilities.has('msisdn') ? [] : userAPI.get({id: ox.user_id}).then(function (data) {
-                return _(contactsAPI.getMapping('msisdn', 'names'))
-                        .chain()
-                        .map(function (field) {
-                            if (data[field]) {
-                                return [
-                                    data.display_name,
-                                    mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn,
-                                    data.display_name + ' <' + mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn + '>',
-                                    data.display_name + ' <' + data[field] + '>'
-                                ];
-                            }
-                        })
-                        .compact()
-                        .value();
-            });
-
-            //append to selectbox
-            new $.when(accounts, msisdns).then(function (addresses, numbers) {
-                _(addresses).each(function (address) {
-                    var value = mailUtil.formatSender(address),
-                        option = $('<option>', { value: value }).text(_.noI18n(value))
-                        .data({ displayname: address[0], primaryaddress: address[1] });
-                    select.append(option);
-                });
-                _(numbers).each(function (number) {
-                    var option = $('<option>', { value: number[2] }).text(number[3])
-                        .data({ displayname: number[0], primaryaddress: number[1]});
-                    select.append(option);
-                });
-            });
-            return node.append(select);
+            return node;
         },
 
         createReplyToField: function () {
@@ -536,12 +497,10 @@ define("io.ox/mail/write/view-main",
             accountAPI.getAllSenderAddresses().done(function (addresses) {
                 if (addresses.length <= 1) {
                     self.scrollpane.find('div.fromselect-wrapper').hide();
+                } else {
+                    // show section
+                    self.showSection('sender');
                 }
-                self.sections.sender.show();
-                if (self.sections.sender.children(':visible').length === 0) {
-                    $('a[data-section-link="sender"]').hide();
-                }
-                self.sections.sender.hide();
             });
 
             // Options
@@ -1092,5 +1051,5 @@ define("io.ox/mail/write/view-main",
         return label;
     }
 
-    return view;
+    return View;
 });
