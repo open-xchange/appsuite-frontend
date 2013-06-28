@@ -191,8 +191,8 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
         startY = lastY = pageY;
         moved = false;
 
-        // insert the overlay node for mouse pointer
-        $('body').append(overlayNode.css('cursor', $(targetNode).css('cursor')));
+        // set the mouse pointer of the target node at the overlay node
+        overlayNode.css('cursor', $(targetNode).css('cursor'));
 
         // register event listeners
         $(document).on(DOCUMENT_EVENT_MAP);
@@ -218,7 +218,7 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     function deinitTracking() {
         $(document).off(DOCUMENT_EVENT_MAP).off(DEFERRED_EVENT_MAP);
         trackingNode = null;
-        overlayNode.remove();
+        overlayNode.detach();
         deinitAutoScrolling();
     }
 
@@ -250,6 +250,8 @@ define('io.ox/office/framework/view/nodetracking', ['io.ox/office/tk/utils'], fu
     function trackingMove(event, pageX, pageY) {
         var moveX = pageX - lastX, moveY = pageY - lastY;
         if (trackingNode && (moveX !== 0) || (moveY !== 0)) {
+            // insert overlay node on first move event
+            if (overlayNode.parent().length === 0) { $('body').append(overlayNode); }
             triggerEvent('tracking:move', event, { pageX: pageX, pageY: pageY, moveX: moveX, moveY: moveY, offsetX: pageX - startX, offsetY: pageY - startY });
             lastX = pageX;
             lastY = pageY;
