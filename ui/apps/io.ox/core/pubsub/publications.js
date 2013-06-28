@@ -125,6 +125,7 @@ define('io.ox/core/pubsub/publications', ['gettext!io.ox/core/pubsub',
                             // close popup now
                             popup.close();
                         }
+                        ox.trigger('refresh^');
                     });
                 }).fail(function (error) {
                     popup.idle();
