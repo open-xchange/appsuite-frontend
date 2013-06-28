@@ -887,10 +887,10 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            // default perspective
-                            this.main = $('<div class="abs window-content">').attr({ tabindex: -1 }),
                             // search area
-                            this.search = $('<div class="window-search">')
+                            this.search = $('<div class="window-search">'),
+                            // default perspective
+                            this.main = $('<div class="abs window-content">').attr({ tabindex: -1 })
                         );
                     }
                 });
@@ -1381,7 +1381,6 @@ define("io.ox/core/desktop",
                 var searchHandler = {
 
                     keydown: function (e) {
-                        e.stopPropagation();
                         if (e.which === 27) {
                             win.search.close();
                         } else if (e.which === 13 && $(this).val() === '') {
@@ -1431,12 +1430,9 @@ define("io.ox/core/desktop",
 
                     ),
                     //abort button
-                    $('<a href="#" data-action="remove">×</a>')
-                        .addClass('close close-big')
-                        .on('click', function fnCancel(e) {
-                                e.preventDefault();
-                                win.search.stop();
-                            })
+                    $('<a href="#" data-action="remove" tabindex="1">×</a>')
+                    .addClass('close close-big')
+                    .on('click', function (e) { e.preventDefault(); win.search.stop(); })
                 )
                 .on('change', 'input', function () { win.search.previous = ''; })
                 .on('submit', false)
