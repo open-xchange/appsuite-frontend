@@ -239,7 +239,8 @@ define("io.ox/backbone/modelFactory",
 
         this.release = function () {
             refCount--;
-            if (refCount === 0) {
+            if (refCount <= 0) {
+                refCount = 0;
                 this.destroy();
             }
         };

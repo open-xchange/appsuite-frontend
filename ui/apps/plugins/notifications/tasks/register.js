@@ -234,7 +234,7 @@ define('plugins/notifications/tasks/register',
 
         deleteReminder: function (e) {
             e.stopPropagation();
-            reminderApi.deleteReminder(this.model.attributes.reminderId);
+            reminderApi.deleteReminder(this.model.get('reminder').id);
             this.model.collection.remove(this.model);
         },
 
@@ -245,12 +245,13 @@ define('plugins/notifications/tasks/register',
         remindAgain: function (e) {
             var endDate = new Date(),
                 dates,
+                reminder,
                 model = this.model,
                 key = [model.get('folder_id') + '.' + model.get('id')];
 
             dates = util.computePopupTime(endDate, this.$el.find('.dateselect').val());
             endDate = dates.alarmDate;
-            reminderApi.remindMeAgain(endDate.getTime(), model.attributes.reminderId).pipe(function () {
+            reminderApi.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
                 return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
             }).done(function () {
                 api.trigger('update:' + key[0]);//update detailview
@@ -314,33 +315,33 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
-            reminderApi.on('set:tasks:reminder', function (e, reminderTaskIds, reminderIds) {
-                api.getAll({}, false).done(function (tasks) {
-                    var items = [];
-                    _(tasks).each(function (taskObj) {
-                        var index = $.inArray(taskObj.id, reminderTaskIds);
-                        if (index !== -1) {
-                            var task = util.interpretTask(taskObj);
-                            items.push(
-                                new Backbone.Model({
-                                    id: task.id,
-                                    folder_id: task.folder_id,
-                                    badge: task.badge,
-                                    reminderId: reminderIds[index],
-                                    title: task.title,
-                                    end_date: task.end_date,
-                                    status: task.status
-                                })
-                            );
-                        }
-                    });
-                    notifications.collection.reset(items);
+            reminderApi.on('add:tasks:reminder', function (e, reminders) {
+                var taskIds = [];
+                _(reminders).each(function (reminder) {
+                    taskIds.push({id: reminder.target_id,
+                                  folder: reminder.folder});
                 });
-            });
-            api.on('delete', function (e, ids) {
+                api.getList(taskIds).done(function (tasks) {
+                    _(tasks).each(function (task) {
+                        _(reminders).each(function (reminder) {
+                            if (reminder.target_id === task.id) {
+                                var obj = util.interpretTask(task);
+                                obj.reminder = reminder;
+                                notifications.collection.add(new Backbone.Model(obj));
+                            }
+                        });
+                    });
+                });
+            }).on('remove:reminder', function (e, ids) {//ids of task objects
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
+            });
+            api.on('delete', function (e, ids) {//ids of task objects
+                _(ids).each(function (id) {
+                    notifications.collection.remove(notifications.collection._byId[id.id]);
+                });
+                reminderApi.getReminders();//to delete stored reminders
             });
         }
     });
