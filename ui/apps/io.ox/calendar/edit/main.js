@@ -120,16 +120,53 @@ define('io.ox/calendar/edit/main',
                             });
                         }
 
-                        self.model.on('backendError', function (response) {
-                            try {
-                                self.getWindow().idle();
-                            } catch (e) {
-                                if (response.code === 'UPL-0005') {//uploadsize to big
-                                    api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
+                        self.model
+                            .on('backendError', function (response) {
+                                try {
+                                    self.getWindow().idle();
+                                } catch (e) {
+                                    if (response.code === 'UPL-0005') {//uploadsize to big
+                                        api.removeFromUploadList(encodeURIComponent(_.cid(this.attributes)));//remove busy animation
+                                    }
+                                    notifications.yell('error', response.error);
                                 }
-                                notifications.yell('error', response.error);
-                            }
-                        });
+                            })
+                            .on('conflicts', function (con) {
+                                var hardConflict = false;
+                                // look for hard conflicts
+                                _(con).each(function (conflict) {
+                                    if (conflict.hard_conflict) {
+                                        hardConflict = true;
+                                        return;
+                                    }
+                                });
+
+                                ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
+                                    var dialog = new dialogs.ModalDialog({ top: "20%", center: false })
+                                        .append(conflictView.drawList(con).addClass('additional-info'));
+                                    if (hardConflict) {
+                                        dialog.prepend(
+                                            $('<div class="alert alert-info hard-conflict">')
+                                                .text(gt('Conflicts with resources cannot be ignored'))
+                                        );
+                                    } else {
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'));
+                                    }
+                                    dialog.addButton('cancel', gt('Cancel'))
+                                        .show()
+                                        .done(function (action) {
+                                            if (action === 'cancel') {
+                                                return;
+                                            }
+                                            if (action === 'ignore') {
+                                                self.model.set('ignore_conflicts', true, { validate: true });
+                                                self.model.save().done(function () {
+                                                    self.onSave();
+                                                });
+                                            }
+                                        });
+                                });
+                            });
 
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 

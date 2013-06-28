@@ -55,12 +55,11 @@ define('io.ox/calendar/edit/template',
     });
 
     // buttons
-    var saveButton, discardButton;
     ext.point('io.ox/calendar/edit/section/buttons').extend({
         index: 100,
         id: 'save',
         draw: function (baton) {
-            this.append(saveButton = $('<button class="btn btn-primary save" data-action="save" >')
+            this.append($('<button class="btn btn-primary save" data-action="save" >')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
                 .on('click', function () {
                     //check if attachments are changed
@@ -80,7 +79,7 @@ define('io.ox/calendar/edit/template',
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append(discardButton = $('<button class="btn discard" data-action="discard" >')
+            this.append($('<button class="btn discard" data-action="discard" >')
                 .text(gt("Discard"))
                 .on('click', function () {
                     baton.app.quit();
@@ -89,68 +88,11 @@ define('io.ox/calendar/edit/template',
         }
     });
 
-
-
     // conflicts
     pointConflicts.extend({
         index: 100,
         id: 'io.ox/calendar/edit/conflicts/main',
-        tagName: 'div',
-        modelEvents: {
-            'conflicts': 'showConflicts'
-        },
-        showConflicts: function (conflicts) {
-
-            var self = this,
-                hardConflict = false;
-
-            saveButton.hide();
-            discardButton.hide();
-            self.options.app.getWindow().idle();//remove busy animation to prevent blocking
-
-            // look for hard conflicts
-            _(conflicts).each(function (conflict) {
-                if (conflict.hard_conflict) {
-                    hardConflict = true;
-                    return;
-                }
-            });
-
-            require(["io.ox/calendar/conflicts/conflictList"], function (c) {
-                self.$el.empty().append(
-                    // appointment list
-                    c.drawList(conflicts),
-                    // hardConflict?
-                    hardConflict ?
-                        $('<div class="alert alert-info hard-conflict">').text(gt('Conflicts with resources cannot be ignored')) :
-                        $(),
-                    // buttons
-                    $('<div class="buttons">').append(
-                        $('<span class="span12">').css('textAlign', 'right').append(
-                            // hide/cancel
-                            $('<a class="btn">')
-                                .text(gt('Hide conflicts'))
-                                .on('click', function (e) {
-                                    e.preventDefault();
-                                    self.$el.empty();
-                                    saveButton.show();
-                                    discardButton.show();
-                                }),
-                            // accept/ignore
-                            hardConflict ? $() :
-                                $('<a class="btn btn-danger">')
-                                .css('marginLeft', '1em')
-                                .text(gt('Ignore conflicts'))
-                                .on('click', function (e) {
-                                    e.preventDefault();
-                                    self.model.set('ignore_conflicts', true, {validate: true});
-                                    saveButton.click();
-                                })
-                        )
-                    )
-                );
-            });
-        }
+        tagName: 'div'
     });
 
     // alert error
