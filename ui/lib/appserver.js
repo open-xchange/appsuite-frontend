@@ -34,7 +34,7 @@ var options = nopt({
     manifests: [path, Array],
     port: Number,
     server: url,
-    verbose: Boolean,
+    verbose: ['local', 'remote', 'proxy', 'all', Array],
     zoneinfo: path
 }, {
     h: '--help',
@@ -44,6 +44,15 @@ var options = nopt({
     v: '--verbose',
     z: '--zoneinfo'
 }, process.argv, 2);
+
+var verbose = options.verbose.reduce(function (opt, val) {
+    if (val === 'all') {
+        opt.local = opt.remote = opt.proxy = true;
+    } else {
+        opt[val] = true;
+    }
+    return opt;
+}, {});
 
 if (options.help) usage(0);
 
@@ -55,7 +64,9 @@ function usage(exitCode) {
         '                            the "manifests" subdirectory of every file path)\n' +
         '  -p PORT, --port=PORT      listen on PORT (default: 8337)\n' +
         '  -s URL,  --server=URL     use an existing server as fallback\n' +
-        '  -v,      --verbose        print all files and URLs, not only errors\n' +
+        '  -v TYPE, --verbose=TYPE   print more information depending on TYPE:\n' +
+        '                            local: local files, remote: remote files,\n' +
+        '                            proxy: forwarded URLs, all: shortcut for all three\n' +
         '  -z PATH, --zoneinfo=PATH  use timezone data from the specified path\n' +
         '                            (default: /usr/share/zoneinfo/)\n\n' +
         'Files are searched in each PATH in order and requested from the server if not\n' +
@@ -167,7 +178,9 @@ function load(request, response) {
         }
         for (var j = 0; j < paths.length; j++) {
             var filename = path.join(paths[j], name);
-            if (path.existsSync(filename)) break;
+            if (path.existsSync(filename) && fs.statSync(filename).isFile()) {
+                break;
+            }
         }
         files.push(j >= paths.length ? remote(filename, list[i], m[2]) :
                    !m[1]             ? module(filename, list[i]) :
@@ -190,9 +203,13 @@ function load(request, response) {
         if (!options.server) {
             return function() {
                 console.log('Could not read', filename);
-                response.write("define('" + escape(fullName) +
-                    "', function () { throw new Error(\"Could not read '" +
-                    escape(name) + "'\"); });\n");
+                response.write(
+                    "define('" + escape(fullName) + "', function () {\n" +
+                    "  if (ox.debug) console.log(\"Could not read '" +
+                        escape(name) + "'\");\n" +
+                    "  throw new Error(\"Could not read '" +
+                        escape(name) + "'\");\n" +
+                    "});\n");
             };
         }
         remoteCounter++;
@@ -200,7 +217,7 @@ function load(request, response) {
         var URL = url.resolve(options.server, version + ',' + fullName);
         protocol.get(url.parse(URL), ok).on('error', error);
         return function () {
-            if (options.verbose) console.log(URL);
+            if (verbose.remote) console.log(URL);
             for (var i = 0; i < chunks.length; i++) response.write(chunks[i]);
         };
         function ok(res) {
@@ -225,7 +242,7 @@ function load(request, response) {
     // normal RequireJS module
     function module(filename, fullName) {
         return function () {
-            if (options.verbose) console.log(filename);
+            if (verbose.local) console.log(filename);
             response.write(fs.readFileSync(filename));
         };
     }
@@ -233,7 +250,7 @@ function load(request, response) {
     // raw data as string (e.g. timezones)
     function raw(filename, fullName) {
         return function () {
-            if (options.verbose) console.log(filename);
+            if (verbose.local) console.log(filename);
             var data = fs.readFileSync(filename), s = [];
             for (var j = 0; j < data.length; j++) s.push(data[j]);
             s = String.fromCharCode.apply(String, s);
@@ -245,7 +262,7 @@ function load(request, response) {
     // text file as a string (e.g. CSS)
     function text(filename, fullName) {
         return function () {
-            if (options.verbose) console.log(filename);
+            if (verbose.local) console.log(filename);
             var s = fs.readFileSync(filename, 'utf8');
             response.write("define('" + escape(fullName) + "','" + escape(s) +
                 "');\n");
@@ -264,7 +281,7 @@ function load(request, response) {
         
         // all done
         response.end();
-        if (options.verbose) console.log();
+        if (verbose.local || verbose.remote) console.log();
     }
 }
 
@@ -287,13 +304,13 @@ function lock() {
 
 function injectManifests(request, response) {
     if (!options.server) {
-        response.writeHead(501, 'No --server specified',
+        console.error('Manifests require --server');
+        response.writeHead(501, 'Manifests require --server',
             { 'Content-Type': 'text/plain' });
-        response.end('No --server specified');
+        response.end('Manifests require --server');
         return;
     }
     var URL = url.resolve(options.server, request.url);
-    if (options.verbose) console.log(URL);
     var opt = url.parse(URL, true);
     opt.headers = request.headers;
     opt.headers.host = opt.host;
@@ -323,7 +340,7 @@ function injectManifests(request, response) {
                 if (err) return console.error(err.message);
                 files.forEach(function (file) {
                     file = path.join(dir, file);
-                    if (options.verbose) console.log(file);
+                    if (verbose.local) console.log(file);
                     fs.readFile(file, 'utf8', L(addManifest));
                 });
             }));
@@ -342,20 +359,21 @@ function injectManifests(request, response) {
                 }
             }
             response.end(JSON.stringify(reply, null, 4));
-            if (options.verbose) console.log();
+            if (verbose.local) console.log();
         }
     }).end();
 }
 
 function proxy(request, response) {
     if (!options.server) {
+        console.log('No --server specified to forward', request.url);
         response.writeHead(501, 'No --server specified',
             { 'Content-Type': 'text/plain' });
         response.end('No --server specified');
         return;
     }
     var URL = url.resolve(options.server, request.url);
-    if (options.verbose) console.log(URL);
+    if (verbose.proxy) console.log(URL);
     var opt = url.parse(URL);
     opt.method = request.method;
     opt.headers = request.headers;
