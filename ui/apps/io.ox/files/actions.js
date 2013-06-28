@@ -125,14 +125,17 @@ define('io.ox/files/actions',
         requires: 'some',
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            _(list).each(function (o) {
+            if (list.length === 1) {
+                var o = _.first(list);
                 api.get(o).done(function (file) {
                     if (o.version) {
                         file = _.extend({}, file, { version: o.version });
                     }
                     window.open(api.getUrl(file, 'download'));
                 });
-            });
+            } else {
+                window.open(api.getUrl(list, 'zip'));
+            }
         }
     });
 

@@ -623,6 +623,12 @@ define('io.ox/files/api',
             return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
             return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
+        case 'zip':
+            return url + '?' + $.param({
+                action: 'zipdocuments',
+                body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
+                session: ox.session // required here!
+            });
         default:
             return url + query;
         }
