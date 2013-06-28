@@ -655,6 +655,7 @@ define('io.ox/files/api',
     };
 
     var copymove = function (list, action, targetFolderId) {
+        var errors = [];//object to store errors inside the multiple
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -671,6 +672,9 @@ define('io.ox/files/api',
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
+            }).then(function () {
+            }, function (errorObj) {
+                errors.push(errorObj);
             });
         });
         // resume & trigger refresh
@@ -685,6 +689,8 @@ define('io.ox/files/api',
                         );
                     })
                 );
+            }).then(function () {
+                return errors;//return errors inside multiple
             })
             .done(function () {
                 api.trigger('refresh.all');

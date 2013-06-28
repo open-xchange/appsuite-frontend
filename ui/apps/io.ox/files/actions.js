@@ -537,8 +537,12 @@ define('io.ox/files/actions',
                     function commit(target) {
                         if (type === "move" && vGrid) vGrid.busy();
                         api[type](list, target).then(
-                            function () {
-                                notifications.yell('success', success);
+                            function (errors) {
+                                if (errors.length > 0) {
+                                    notifications.yell('error', errors[0].error);//show only the first one, to prevent notification stacking
+                                } else {
+                                    notifications.yell('success', success);
+                                }
                                 folderAPI.reload(target, list);
                                 if (type === "move" && vGrid) vGrid.idle();
                             },
