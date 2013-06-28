@@ -121,6 +121,14 @@ define.async('io.ox/office/tk/utils',
     Utils.SELECTED_CLASS = 'selected';
 
     /**
+     * A Boolean flag specifying whether the current display is a retina
+     * display.
+     *
+     * @constant
+     */
+    Utils.RETINA = _.device('retina');
+
+    /**
      * A Boolean flag specifying whether the Internet Explorer 9 is running.
      *
      * @constant
@@ -2149,7 +2157,7 @@ define.async('io.ox/office/tk/utils',
      *  The new icon element, as jQuery object.
      */
     Utils.createIcon = function (icon, white) {
-        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', _.device('retina'));
+        return $('<i>').addClass(icon + ' ' + localeIconClasses).toggleClass('retina', Utils.RETINA);
     };
 
     /**
