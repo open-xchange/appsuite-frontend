@@ -20,7 +20,8 @@ define("io.ox/core/desktop",
      "io.ox/core/cache",
      "io.ox/core/notifications",
      "io.ox/core/upsell",
-     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, gt) {
+     "io.ox/core/adaptiveLoader",
+     "gettext!io.ox/core"], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, gt) {
 
     "use strict";
 
@@ -466,7 +467,9 @@ define("io.ox/core/desktop",
             this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
-                        return ox.load([obj.module + '/main']).pipe(function (m) {
+                        adaptiveLoader.stop();
+                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + "/main"]);
+                        return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
@@ -1604,7 +1607,9 @@ define("io.ox/core/desktop",
     ox.launch = function (id, data) {
         var def = $.Deferred();
         if (_.isString(id)) {
-            require([id]).then(
+            adaptiveLoader.stop();
+            var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
+            require(requirements).then(
                 function (m) {
                     m.getApp(data).launch(data).done(function () {
                         def.resolveWith(this, arguments);
@@ -1620,6 +1625,12 @@ define("io.ox/core/desktop",
         }
         return def;
     };
+
+    ox.ui.apps.on("resume", function (app) {
+        adaptiveLoader.stop();
+        adaptiveLoader.listen(app.get("name"));
+    });
+
 
     return {};
 

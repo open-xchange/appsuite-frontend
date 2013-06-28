@@ -147,7 +147,7 @@ $(window).load(function () {
         document.oncontextmenu = function (e) {
             e.preventDefault();
             return false;
-        }
+        };
     }
 
     // be busy
