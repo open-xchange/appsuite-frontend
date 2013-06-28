@@ -59,25 +59,29 @@ define('io.ox/calendar/week/view',
             allowLasso: true
         },
 
-        // define view events
-        events: {
-            'mouseenter .appointment': 'onHover',
-            'mouseleave .appointment': 'onHover',
-            'mousedown .week-container>.day' : 'onLasso',
-            'mousemove .week-container>.day' : 'onLasso',
-            'mouseup' : 'onLasso',
-            'click .appointment': 'onClickAppointment',
-            'dblclick .week-container>.day,.fulltime>.day' : 'onCreateAppointment',
-            'swipeleft .timeslot' : 'onControlView',
-            'swiperight .timeslot' : 'onControlView',
-            'click .control.next,.control.prev,.control.today': 'onControlView',
-            'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
-        },
-
         // init values from prespective
         initialize: function (opt) {
             // init options
             this.options = _.extend(this.options, opt);
+
+            // define view events
+            var events = {
+                'mouseenter .appointment': 'onHover',
+                'mouseleave .appointment': 'onHover',
+                'mousedown .week-container>.day' : 'onLasso',
+                'mousemove .week-container>.day' : 'onLasso',
+                'mouseup' : 'onLasso',
+                'click .appointment': 'onClickAppointment',
+                'swipeleft .timeslot' : 'onControlView',
+                'swiperight .timeslot' : 'onControlView',
+                'click .control.next,.control.prev,.control.today': 'onControlView',
+                'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
+            };
+
+            // taphold on touch devices
+            events[(_.device('touch') ? 'taphold' : 'dblclick') + ' .week-container>.day,.fulltime>.day'] = 'onCreateAppointment';
+
+            this.delegateEvents(events);
 
             // initialize main objects
             this.pane           = $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 });
@@ -914,8 +918,8 @@ define('io.ox/calendar/week/view',
                         lineHeight: Math.min(height, self.cellHeight) + 'px',
                         width: width + '%',
                         minHeight: (self.minCellHeight - 1) + 'px',
-                        maxWidth: self.appWidth + '%',
-                        zIndex: j
+                        maxWidth: self.appWidth + '%'
+                        // zIndex: j
                     })
                     .addClass(border ? 'border' : '');
                 }
