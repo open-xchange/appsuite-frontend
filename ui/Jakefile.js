@@ -882,3 +882,27 @@ function checkExtensions(name, deps, f) {
     }).scan(f);
     function checkPoint(id) { return self.points[id[1]] = true; }
 }
+
+// run tests
+
+desc('Do a single run of all tests');
+task('test', [], function () {
+    var karma = require("karma"),
+        configFile = nextGen(karma) ? path.resolve('./karma.conf_next.js') : path.resolve('./karma.conf.js');
+    function nextGen(karma) {
+        var version = {},
+            tmp = karma.VERSION.split('.');
+
+        version.major = Number(tmp[0]);
+        version.minor = Number(tmp[1]);
+        version.bugfix = Number(tmp[2]);
+
+        return version.minor >= 9 && version.bugfix >= 3;
+    }
+
+    karma.server.start({
+        configFile: configFile,
+        singleRun: true,
+        autoWatch: false
+    });
+});
