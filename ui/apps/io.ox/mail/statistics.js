@@ -22,11 +22,16 @@ define('io.ox/mail/statistics',
         WIDTH = _.device('small') ? 280 : 500,
         HEIGHT = _.device('small') ? 150 : 200;
 
+    function createCanvas() {
+        // attribute notation does not work! don't know why. maybe retina whatever.
+        return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '">');
+    }
+
     return {
 
         sender: function (node, options) {
 
-            var canvas = $('<canvas>', { width: WIDTH, height: HEIGHT }),
+            var canvas = createCanvas(),
                 isSent = accountAPI.is('sent', options.folder);
 
             node.append(
@@ -84,7 +89,7 @@ define('io.ox/mail/statistics',
 
         weekday: function (node, options) {
 
-            var canvas = $('<canvas>', { width: WIDTH, height: HEIGHT });
+            var canvas = createCanvas();
 
             node.append(
                 $('<h2>').text(gt('Mails per week-day (%)')),
