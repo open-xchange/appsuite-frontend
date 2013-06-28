@@ -48,7 +48,7 @@ define('io.ox/calendar/freebusy/controller',
                 // folder data
                 folderData = {},
                 // shared navigation date
-                refDate = new date.Local();
+                refDate = new date.Local(options.start_date) || new date.Local();
 
             this.promise = state.promise();
 
@@ -265,7 +265,6 @@ define('io.ox/calendar/freebusy/controller',
                     mode: mode,
                     refDate: refDate,
                     showFulltime: false,
-                    startDate: options.start_date,
                     todayClass: ''
                 });
 
