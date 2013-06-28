@@ -313,10 +313,6 @@ define('io.ox/mail/util',
             return name === '' ? address : '"' + name + '" <' + address + '>';
         },
 
-        getFlag: function (data) {
-            return data.color_label || 0;
-        },
-
         getPriority: function (data) {
             // normal?
             if (data.priority === 3) return $();

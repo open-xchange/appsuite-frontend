@@ -96,7 +96,8 @@ define('io.ox/mail/view-grid-template',
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
-                fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
+                var color = api.tracker.getColorLabel(data);
+                fields.flag.get(0).className = 'flag flag_' + (color || 0);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }

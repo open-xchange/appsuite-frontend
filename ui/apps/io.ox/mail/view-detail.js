@@ -936,7 +936,9 @@ define('io.ox/mail/view-detail',
         id: 'flag',
         draw: function (baton) {
             var data = baton.data,
-            flagclass = 'flag_' + util.getFlag(data);
+            color = api.tracker.getColorLabel(data),
+            flagclass = 'flag_' + color;
+
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
                 .addClass(flagclass)
@@ -953,7 +955,7 @@ define('io.ox/mail/view-detail',
                                     $.txt(colorNames[color])
                                 )
                                 .on('click', { data: data, color: index, flagclass: flagclass }, changeLabel)
-                                .addClass(data.color_label === index ? 'active-label' : undefined)
+                                .addClass(color === index ? 'active-label' : undefined)
                             ));
                         }, $())
                     )
