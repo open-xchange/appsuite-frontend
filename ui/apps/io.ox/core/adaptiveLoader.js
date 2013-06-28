@@ -113,8 +113,12 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
     } else {
         api = {
             listen: $.noop,
-            startAndLoad: $.noop,
-            startAndEnhance: $.noop,
+            startAndLoad: function () {
+                return $.Deferred().resolve();
+            },
+            startAndEnhance: function (chunkName, requirements) {
+                return requirements;
+            },
             stop: $.noop,
             record: $.noop,
             init: $.noop
