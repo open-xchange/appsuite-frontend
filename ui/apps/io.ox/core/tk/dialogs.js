@@ -203,6 +203,11 @@ define("io.ox/core/tk/dialogs",
             return this;
         };
 
+        this.prepend = function (node) {
+            nodes.body.prepend(node);
+            return this;
+        };
+
         var addButton = function (action, label, dataaction, options) {
 
             options = options || {};
