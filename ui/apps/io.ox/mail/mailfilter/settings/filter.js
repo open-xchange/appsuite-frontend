@@ -85,7 +85,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 staticStrings =  {
                     BUTTON_ADD: gt('Add new rule'),
-                    TITLE: gt('Mail Filter')
+                    TITLE: gt('Mail Filter'),
+                    EMPTY: gt('There is no rule defined')
                 },
                 createExtpointForSelectedFilter = function (args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
@@ -93,162 +94,161 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             api.getRules().done(function (data) {
 
-                if (_.isEmpty(data)) {
+                collection = factory.createCollection(data);
+                var AccountSelectView = Backbone.View.extend({
 
-//                    no filters
+                    _modelBinder: undefined,
+                    initialize: function (options) {
+                        this.template = doT.template(tmpl);
+                        this._modelBinder = new Backbone.ModelBinder();
 
-                } else {
-                    collection = factory.createCollection(data);
-                    var AccountSelectView = Backbone.View.extend({
+                    },
+                    render: function () {
+                        var flagArray = this.model.get('flags');
 
-                        _modelBinder: undefined,
-                        initialize: function (options) {
-                            this.template = doT.template(tmpl);
-                            this._modelBinder = new Backbone.ModelBinder();
-
-                        },
-                        render: function () {
-                            var flagArray = this.model.get('flags');
-
-                            function getEditableState() {
-                                if (flagArray) {
-                                    var value = flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
-                                    return value;
-                                } else {
-                                    return 'editable';
-                                }
+                        function getEditableState() {
+                            if (flagArray) {
+                                var value = flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
+                                return value;
+                            } else {
+                                return 'editable';
                             }
-                            this.$el.empty().append(this.template({
-                                id: this.model.get('id'),
-                                state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
-                                edit: gt('Edit'),
-                                editable: getEditableState()
-
-                            }));
-
-                            this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
-
-                            return this;
-                        },
-                        events: {
-                            'click .deletable-item.editable': 'onSelect'
-                        },
-
-                        onSelect: function () {
-                            this.$el.parent().find('li[selected="selected"]').attr('selected', null);
-                            this.$el.find('.deletable-item').attr('selected', 'selected');
                         }
+                        this.$el.empty().append(this.template({
+                            id: this.model.get('id'),
+                            state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
+                            edit: gt('Edit'),
+                            editable: getEditableState()
 
-                    }),
+                        }));
 
-                        MailfilterEdit = Backbone.View.extend({
+                        this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
 
-                        initialize: function () {
-                            this.template = doT.template(listboxtmpl);
-                            _.bindAll(this);
+                        return this;
+                    },
+                    events: {
+                        'click .deletable-item.editable': 'onSelect'
+                    },
 
-                            this.collection = collection;
-                            this.collection.bind('add', this.render);
-                            this.collection.bind('remove', this.render);
+                    onSelect: function () {
+                        this.$el.parent().find('li[selected="selected"]').attr('selected', null);
+                        this.$el.find('.deletable-item').attr('selected', 'selected');
+                    }
 
-                        },
-                        render: function () {
-                            var self = this;
-                            self.$el.empty().append(self.template({
-                                strings: staticStrings
-                            }));
+                }),
+
+                    MailfilterEdit = Backbone.View.extend({
+
+                    initialize: function () {
+                        this.template = doT.template(listboxtmpl);
+                        _.bindAll(this);
+
+                        this.collection = collection;
+                        this.collection.bind('add', this.render);
+                        this.collection.bind('remove', this.render);
+
+                    },
+                    render: function () {
+                        var self = this;
+                        self.$el.empty().append(self.template({
+                            strings: staticStrings
+                        }));
+
+                        if (this.collection.length === 0) {
+                            self.$el.find('.widget-list').append($('<div>').text(staticStrings.EMPTY));
+                        } else {
                             this.collection.each(function (item) {
                                 self.$el.find('.widget-list').append(
                                     new AccountSelectView({ model: item }).render().el
                                 );
                             });
                             this.$el.trigger('makesortable');
+                        }
 
-                            return this;
-                        },
+                        return this;
+                    },
 
-                        events: {
-                            'click [data-action="edit"]': 'onEdit',
-                            'click [data-action="delete"]': 'onDelete',
-                            'click [data-action="add"]': 'onAdd',
-                            'click [data-action="toggle"]': 'onToggle',
-                            'makesortable': 'onMakeSortable'
-                        },
+                    events: {
+                        'click [data-action="edit"]': 'onEdit',
+                        'click [data-action="delete"]': 'onDelete',
+                        'click [data-action="add"]': 'onAdd',
+                        'click [data-action="toggle"]': 'onToggle',
+                        'makesortable': 'onMakeSortable'
+                    },
 
-                        onAdd: function (args) {
-                            args.data = {};
-                            args.data.node = this.el;
+                    onAdd: function (args) {
+                        args.data = {};
+                        args.data.node = this.el;
 
-                            args.data.obj = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
-                            createExtpointForSelectedFilter(args);
-                        },
+                        args.data.obj = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
+                        createExtpointForSelectedFilter(args);
+                    },
 
-                        onEdit: function (e) {
-                            e.preventDefault();
-                            var selected = this.$el.find('[selected]');
-                            e.data = {};
-                            e.data.id = selected.data('id');
-                            e.data.obj = this.collection.get(e.data.id);
-                            e.data.node = this.el;
+                    onEdit: function (e) {
+                        e.preventDefault();
+                        var selected = this.$el.find('[selected]');
+                        e.data = {};
+                        e.data.id = selected.data('id');
+                        e.data.obj = this.collection.get(e.data.id);
+                        e.data.node = this.el;
 
-                            if (e.data.obj !== undefined) {
-                                createExtpointForSelectedFilter(e);
-                            }
+                        if (e.data.obj !== undefined) {
+                            createExtpointForSelectedFilter(e);
+                        }
 
-                        },
+                    },
 
-                        onDelete: function (e) {
-                            e.preventDefault();
-                            var selected = this.$el.find('[selected]'),
-                                self = this,
-                                id = selected.data('id');
-                            if (id) {
-                                api.deleteRule(id).done(function () {
-                                    self.collection.remove(id);
-                                });
-                            }
-
-                        },
-
-                        onToggle: function (e) {
-                            e.preventDefault();
-                            var selected = this.$el.find('[selected]'),
-                                self = this,
-                                id = selected.data('id'),
-                                selectedObj = this.collection.get(id),
-                                state = selectedObj.get('active') ? false : true;
-
-                            selectedObj.set('active', state);
-
-                            api.update(selectedObj).done(function () {
-                                self.render();
-                            });
-                        },
-
-                        onMakeSortable: function () {
-
-                            this.$el.find('ol').sortable({
-                                containment: this.el,
-                                axis: 'y',
-                                handle: '.drag-handle',
-                                scroll: true,
-                                delay: 150,
-                                stop: function (e, ui) {
-                                    var arrayOfFilters = $node.find('li[data-id]'),
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
-                                    api.reorder(data); //TODO needs a response?;
-                                }
+                    onDelete: function (e) {
+                        e.preventDefault();
+                        var selected = this.$el.find('[selected]'),
+                            self = this,
+                            id = selected.data('id');
+                        if (id !== false) {
+                            api.deleteRule(id).done(function () {
+                                self.collection.remove(id);
                             });
                         }
 
-                    }),
+                    },
 
-                        mailFilter = new MailfilterEdit();
-                    $node.append(mailFilter.render().$el);
+                    onToggle: function (e) {
+                        e.preventDefault();
+                        var selected = this.$el.find('[selected]'),
+                            self = this,
+                            id = selected.data('id'),
+                            selectedObj = this.collection.get(id),
+                            state = selectedObj.get('active') ? false : true;
 
-                }
+                        selectedObj.set('active', state);
+
+                        api.update(selectedObj).done(function () {
+                            self.render();
+                        });
+                    },
+
+                    onMakeSortable: function () {
+
+                        this.$el.find('ol').sortable({
+                            containment: this.el,
+                            axis: 'y',
+                            handle: '.drag-handle',
+                            scroll: true,
+                            delay: 150,
+                            stop: function (e, ui) {
+                                var arrayOfFilters = $node.find('li[data-id]'),
+                                data = _.map(arrayOfFilters, function (single) {
+                                    return parseInt($(single).attr('data-id'), 10);
+                                });
+                                api.reorder(data); //TODO needs a response?;
+                            }
+                        });
+                    }
+
+                }),
+
+                    mailFilter = new MailfilterEdit();
+                $node.append(mailFilter.render().$el);
+
 
             }).fail(function (error) {
                 deferred.reject(error);
