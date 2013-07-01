@@ -97,7 +97,7 @@ define('io.ox/office/preview/view',
             page = 0,
 
             // current zoom level (index into the predefined arrays)
-            zoom = 0;
+            zoom = null;
 
         // base constructor ---------------------------------------------------
 
@@ -537,7 +537,7 @@ define('io.ox/office/preview/view',
          *  The current zoom factor in percent.
          */
         this.getZoomFactor = function () {
-            return (zoom === 0) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
+            return (!_.isNumber(zoom) || (zoom === 0)) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
         };
 
         /**
@@ -559,8 +559,8 @@ define('io.ox/office/preview/view',
          *  PreviewView.getSavePoint().
          */
         this.restoreFromSavePoint = function (point) {
-            zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
+            changeZoom(Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel()));
             app.getController().update();
         };
 
