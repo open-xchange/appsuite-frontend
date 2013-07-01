@@ -61,16 +61,25 @@ define('io.ox/core/print',
 
         request: function (manager, selection) {
 
-            var win = this.openURL(ox.base + '/busy.html');
+            var id = 'print_loader_' + _.now(), win;
 
-            require([manager], function (m) {
-                if (_.isFunction(m.open)) {
-                    m.open(selection, win);
-                } else {
-                    console.error('Missing function "open" in:', manager, m);
-                }
-            });
+            window[id] = function () {
+                require([manager]).then(
+                    function success(m) {
+                        if (_.isFunction(m.open)) {
+                            m.open(selection, win);
+                        } else {
+                            console.error('Missing function "open" in:', manager, m);
+                        }
+                    },
+                    function fail() {
+                        console.error('Failed to load print manager');
+                    }
+                );
+                delete window[id];
+            };
 
+            var win = this.openURL(ox.base + '/busy.html#callback=' + id);
             return win;
         },
 
