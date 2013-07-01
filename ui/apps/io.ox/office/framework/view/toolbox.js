@@ -45,9 +45,6 @@ define('io.ox/office/framework/view/toolbox',
      *      the tool box. The heading label can be clicked to collapse (hide
      *      all its contents but the heading label) and expand (show all its
      *      contents) the tool box.
-     *  @param {Boolean} [options.F6_target=true]
-     *      If false the tool box won't be added to the F6 focus chain, otherwise
-     *      it will be part of the chain.
      */
     function ToolBox(app, options) {
 
@@ -171,11 +168,6 @@ define('io.ox/office/framework/view/toolbox',
         // initialization -----------------------------------------------------
 
         this.getNode().addClass('toolbox');
-
-        // check F6-target option and set special marker CSS class
-        if (Utils.getBooleanOption(options, 'F6_target', true)) {
-            this.getNode().addClass('f6-target');
-        }
 
         // tool box with heading (button that collapses/expands the tool box)
         if (_.isString(headingLabel)) {

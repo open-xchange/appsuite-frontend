@@ -45,7 +45,7 @@ var options = nopt({
     z: '--zoneinfo'
 }, process.argv, 2);
 
-var verbose = options.verbose.reduce(function (opt, val) {
+var verbose = (options.verbose || []).reduce(function (opt, val) {
     if (val === 'all') {
         opt.local = opt.remote = opt.proxy = true;
     } else {

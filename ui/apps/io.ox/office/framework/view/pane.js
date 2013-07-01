@@ -24,6 +24,10 @@ define('io.ox/office/framework/view/pane',
      * Represents a container element attached to a specific border of the
      * application window.
      *
+     * Instances of this class trigger the following events:
+     * - 'show': After the view pane has been shown or hidden. The event
+     *      handler receives the new visibility state.
+     *
      * @constructor
      *
      * @extends Events
@@ -46,9 +50,6 @@ define('io.ox/office/framework/view/pane',
      *  @param {String} [options.resizeable=false]
      *      If set to true, the pane will be resizeable at its inner border.
      *      Has no effect for transparent overlay panes.
-     *  @param {String} [options.focusable=false]
-     *      If set to true, the pane will be focusable with keyboard shortcuts
-     *      (usually the F6 key with platform dependent control keys).
      *  @param {Boolean} [options.overlay=false]
      *      If set to true, the pane will overlay the application pane instead
      *      of reserving and consuming the space needed for its size.
@@ -79,9 +80,6 @@ define('io.ox/office/framework/view/pane',
 
             // position of the pane in the application window
             position = Utils.getStringOption(options, 'position', 'top'),
-
-            // whether the pane will be focusable with keyboard
-            focusable = Utils.getBooleanOption(options, 'focusable', false),
 
             // overlay pane or fixed pane
             overlay = Utils.getBooleanOption(options, 'overlay', false),
@@ -141,14 +139,6 @@ define('io.ox/office/framework/view/pane',
         }
 
         /**
-         * Updates the CSS marker class controlling whether this view pane is
-         * focusable with special keyboard shortcuts.
-         */
-        function updateFocusable() {
-            //node.toggleClass('f6-target', focusable && (components.length > 0) && self.isVisible());
-        }
-
-        /**
          * Handles all tracking events to resize this view pane.
          */
         function trackingHandler(event) {
@@ -190,7 +180,7 @@ define('io.ox/office/framework/view/pane',
          *  Whether the view pane is currently visible.
          */
         this.isVisible = function () {
-            return (node.css('display') !== 'none') && Utils.containsNode(document, node);
+            return node.is(':visible');
         };
 
         /**
@@ -229,9 +219,8 @@ define('io.ox/office/framework/view/pane',
             $.cancelTracking();
             node.toggle(state);
             if (visible !== this.isVisible()) {
-                updateFocusable();
                 app.getView().refreshPaneLayout();
-                this.trigger(this.isVisible() ? 'show' : 'hide');
+                this.trigger('show', this.isVisible());
             }
             return this;
         };
@@ -283,7 +272,6 @@ define('io.ox/office/framework/view/pane',
             } else {
                 node.append(component.getNode());
             }
-            updateFocusable();
             return this;
         };
 
@@ -322,6 +310,7 @@ define('io.ox/office/framework/view/pane',
         // no size tracking for transparent view panes
         if (!transparent && Utils.getBooleanOption(options, 'resizeable', false)) {
             $('<div>').addClass('resizer ' + position)
+                .append($('<div>').addClass('handle h1'), $('<div>').addClass('handle h2'))
                 .enableTracking()
                 .on('tracking:start tracking:move tracking:end tracking:cancel', trackingHandler)
                 .appendTo(node);

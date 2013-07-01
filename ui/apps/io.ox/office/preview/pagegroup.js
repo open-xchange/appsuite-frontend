@@ -324,8 +324,8 @@ define('io.ox/office/preview/pagegroup',
 
         // update pages while scrolling (debounced to skip a few scroll events)
         scrollableNode.on('scroll', app.createDebouncedMethod($.noop, function () {
-            this.updatePages();
-        }, { context: this, delay: 50, maxDelay: 200 }));
+            self.updatePages();
+        }, { delay: 50, maxDelay: 200 }));
 
         // when refreshing the side pane (e.g. due to changed size of browser
         // window), update the pages shown in the current visible area
@@ -334,7 +334,7 @@ define('io.ox/office/preview/pagegroup',
         });
 
         // when showing or resizing the side pane, scroll to current page
-        sidePane.on('show resize', function (event) {
+        sidePane.on('show resize', function () {
             self.selectAndShowPage(app.getView().getPage());
         });
 
