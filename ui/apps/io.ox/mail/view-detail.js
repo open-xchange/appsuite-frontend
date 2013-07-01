@@ -935,9 +935,7 @@ define('io.ox/mail/view-detail',
         index: 130,
         id: 'flag',
         draw: function (baton) {
-            var data = baton.data,
-            color = api.tracker.getColorLabel(data),
-            flagclass = 'flag_' + color;
+            var data = baton.data, flagclass = 'flag_' + api.tracker.getColorLabel(data);
 
             this.append(
                 $('<div class="dropdown flag-dropdown clear-title flag">')
