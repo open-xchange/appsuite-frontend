@@ -11,6 +11,7 @@ var match = location.hash.match(/callback=([^&]+)/), id;
 if (match && match.length) {
     id = match[1];
     if (window.opener && window.opener[id]) {
+        window.opener.focus();
         window.opener[id]();
     }
 }

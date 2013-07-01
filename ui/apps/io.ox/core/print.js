@@ -61,18 +61,21 @@ define('io.ox/core/print',
 
         request: function (manager, selection) {
 
-            var id = 'print_loader_' + _.now(), win;
+            var id = 'print_initialize_' + _.now(), win;
 
             window[id] = function () {
                 require([manager]).then(
                     function success(m) {
                         if (_.isFunction(m.open)) {
                             m.open(selection, win);
+                            win.focus();
                         } else {
+                            win.close();
                             console.error('Missing function "open" in:', manager, m);
                         }
                     },
                     function fail() {
+                        win.close();
                         console.error('Failed to load print manager');
                     }
                 );
