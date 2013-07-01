@@ -791,7 +791,7 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', gt('autologout'));
+                    feedback('info', $.txt(gt('autologout')));
                 }
 
                 debug('boot.js: Check browser support');
@@ -801,10 +801,10 @@ $(window).load(function () {
 
                     if (_.device('android')) {
                         // special info for not supported android
-                        feedback('info', _.printf(gt('os-android'), _.browserSupport.Android));
+                        feedback('info', $.txt(_.printf(gt('os-android'), _.browserSupport.Android)));
                     } else if (_.device('ios')) {
                         // special info for not supported iOS
-                        feedback('info', _.printf(gt('os-ios'), _.browserSupport.iOS));
+                        feedback('info', $.txt(_.printf(gt('os-ios'), _.browserSupport.iOS)));
                     } else {
                         // general warning about browser
                         feedback('info', $(
@@ -823,7 +823,7 @@ $(window).load(function () {
                 } else if (_.device('android || (ios && small)')) {
                     // TODO remove after 7.4
                     // inform about preview mode for 7.2
-                    feedback('info', gt('mobile-preview'));
+                    feedback('info', $.txt(gt('mobile-preview')));
                 }
 
                 // show login dialog
