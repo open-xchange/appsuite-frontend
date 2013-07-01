@@ -28,6 +28,7 @@ define('io.ox/mail/actions',
      'settings!io.ox/mail'
     ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, settings) {
 
+
     'use strict';
 
     var isDraftFolder = function (folder_id) {
@@ -1189,6 +1190,45 @@ define('io.ox/mail/actions',
         label: gt('Drop here to import this mail'),
         action: function (file, app) {
             app.queues.importEML.offer(file);
+        }
+    });
+
+
+    // Mobile multi select
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'unread',
+        index: 10,
+        draw: function (data) {
+            console.log('in ext', arguments);
+            //debugger;
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-envelope">').on('click', function (e) {
+                            console.log('click auf envelope');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            actions.invoke('io.ox/mail/actions/markunread', null, baton);
+
+                        })
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 20,
+        draw: function (data) {
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-trash">')
+                    )
+                )
+            );
         }
     });
 

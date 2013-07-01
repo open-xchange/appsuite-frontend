@@ -68,9 +68,39 @@ define('io.ox/core/commons',
             };
         }()),
 
+        mobileMultiSelection: (function () {
+            var points = {};
+
+            function draw(id, selection, grid) {
+                // inline links
+                var node = $('<div>');
+                (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
+                    .invoke('draw', node, {data: selection, grid: grid});
+
+                return node;
+            }
+
+            return function (id, node, selection, api, grid) {
+                console.log('mobile multiselect');
+                var buttons = $('.window-toolbar .toolbar-button'),
+                    toolbar = $('.window-toolbar'),
+                    container = $('<div id="multi-select-toolbar">');
+                if (selection.length > 0) {
+                    buttons.hide();
+                    $('#multi-select-toolbar').remove();
+                    toolbar.append(container.append(draw(id, selection, grid)));
+                } else {
+                    $('#multi-select-toolbar').remove();
+                    buttons.show();
+                }
+            };
+        }()),
+
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '';
             grid.selection.on('change', function (e, selection) {
+                debugger;
+                console.log('change normal');
                 var len = selection.length,
                     // work with reduced string-based set
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
@@ -102,6 +132,16 @@ define('io.ox/core/commons',
                     last = flat;
                 }
             });
+            grid.selection.on('_m_change', function (e, selection) {
+                console.log('_m_change');
+                var len = selection.length,
+                    // work with reduced string-based set
+                    flat = JSON.stringify(_([].concat(selection)).map(function (o) {
+                        return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
+                    }));
+                commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
+            });
+
         },
 
         /**
@@ -416,11 +456,15 @@ define('io.ox/core/commons',
                 }, 100);
             };
 
+            var mobileSelect = function (e) {
+                console.log('alter schisss');
+            };
+
             return function (parent, app) {
                 var sides = {};
                 parent.addClass('vsplit').append(
                     // left
-                    sides.left = $('<div class="leftside">').on('select', select),
+                    sides.left = $('<div class="leftside">').on('select', select).on('mobile_select', mobileSelect),
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<a href="#" class="btn" tabindex="-1">').append(

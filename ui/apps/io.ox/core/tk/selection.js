@@ -63,10 +63,12 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
+            touchstartHandler,
             update,
             clear,
             isSelected,
             select,
+            selectOnly,
             deselect,
             toggle,
             isCheckbox,
@@ -120,9 +122,16 @@ define('io.ox/core/tk/selection',
                 self.trigger('empty');
             }
         };
-
+        selectOnly = function () {
+            console.log('selectonly ', self.get());
+            var list = self.get();
+            self.trigger('_m_change', list);
+            if (list.length === 0) {
+                self.trigger('empty');
+            }
+        };
         // apply selection
-        apply = function (id, e) {
+        apply = function (id, e, selectonly) {
             // range?
             if (isRange(e)) {
                 // range selection
@@ -136,8 +145,12 @@ define('io.ox/core/tk/selection',
                 last = prev = id;
                 lastValidIndex = getIndex(id);
             }
-            // event
-            changed();
+            if (!selectonly) {
+                // event
+                changed();
+            } else {
+                selectOnly();
+            }
         };
 
         selectFirst = function (e) {
@@ -226,6 +239,7 @@ define('io.ox/core/tk/selection',
             // we check for isDefaultPrevented because elements inside .selectable
             // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
+                console.log('mousedown');
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
@@ -266,6 +280,25 @@ define('io.ox/core/tk/selection',
             }
             // remove helper classes
             container.find('.pending-select').removeClass('pending-select');
+        };
+
+        touchstartHandler = function (e) {
+            var node, key, id;
+            // we check for isDefaultPrevented because elements inside .selectable
+            // might also react on mousedown/click, e.g. folder tree open/close toggle
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
+                if (isCheckbox(e)) {
+                    console.log('touchstart on checkbox');
+                    e.preventDefault();
+                    apply(id, e, true);
+
+                } else {
+                    console.log('let go');
+                }
+            }
         };
 
         getIndex = function (id) {
@@ -780,7 +813,8 @@ define('io.ox/core/tk/selection',
         container.on('contextmenu', function (e) { e.preventDefault(); })
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
-            .on('click', '.selectable', clickHandler);
+            .on('click', '.selectable', clickHandler)
+            .on('touchstart', '.selectable', touchstartHandler);
 
         /*
         * DND

@@ -205,8 +205,8 @@ define('io.ox/core/tk/vgrid',
         // mobile
         if (_.device('small')) {
             // override options, no toggles and no multiple selection for the moment
-            options.showToggle = false;
-            options.multiple = false;
+            //options.showToggle = false;
+            //options.multiple = false;
         }
 
         // target node
