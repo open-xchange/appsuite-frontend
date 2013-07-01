@@ -103,7 +103,6 @@ define('plugins/mobile/addToHomescreen/register',
             touchIcon = isRetina ?
                 document.querySelector('head link[rel^=apple-touch-icon][sizes="114x114"],head link[rel^=apple-touch-icon][sizes="144x144"]') :
                 document.querySelector('head link[rel^=apple-touch-icon][sizes="57x57"],head link[rel^=apple-touch-icon]');
-            console.log('touchicon', touchIcon, isRetina);
             if (touchIcon) {
                 touchIcon = '<span style="background-image:url(' + touchIcon.href + ')" class="addToHomeTouchIcon"></span>';
             }
