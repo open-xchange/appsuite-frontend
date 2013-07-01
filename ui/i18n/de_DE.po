@@ -101,7 +101,7 @@ msgid ""
 "Install this web app on your %s: Tap %s and then %s'Add to Home Screen'%s"
 msgstr ""
 "Installieren Sie diese Web-Applikation auf Ihrem %s:  Tippen Sie auf %s, "
-"gefolgt von %s'Zu lokalem Screen hinzufügen'%s"
+"gefolgt von %s'Zum Home-Bildschirm hinzufügen'%s"
 
 #: html/core_body.html:114
 msgid "Languages"
