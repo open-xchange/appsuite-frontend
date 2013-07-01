@@ -78,8 +78,11 @@ define('io.ox/office/preview/view',
             // tool pane floating over the bottom of the application pane
             bottomOverlayPane = null,
 
-            // the application status label
-            statusLabel = new BaseControls.StatusLabel(app),
+            // the status label for the current zoom
+            zoomLabel = new BaseControls.StatusLabel(app),
+
+            // the status label for the page number
+            pageLabel = new BaseControls.StatusLabel(app),
 
             // the page preview control
             pageGroup = null,
@@ -158,11 +161,6 @@ define('io.ox/office/preview/view',
                 )
             );
 
-            // create the second overlay pane containing the status label
-            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true })
-                .addViewComponent(new ToolBox(app, { focusable: false }).addPrivateGroup(statusLabel))
-            );
-
             // create the bottom overlay pane
             self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
@@ -174,6 +172,11 @@ define('io.ox/office/preview/view',
                     .addGroup('zoom/dec', new Button(GroupOptions.ZOOMOUT))
                     .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
                 )
+            );
+
+            // create the overlay pane containing the status labels
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                .addViewComponent(new ToolBox(app, { focusable: false }).addPrivateGroup(pageLabel).addGap().addPrivateGroup(zoomLabel))
             );
 
             // initially, hide the side pane, and show the overlay tool bars
@@ -238,13 +241,6 @@ define('io.ox/office/preview/view',
         }
 
         /**
-         * Shows the status label with the passed caption text.
-         */
-        function showStatusLabel(caption) {
-            statusLabel.update({ caption: caption, type: 'success', fadeOut: true });
-        }
-
-        /**
          * Fetches the specified page from the preview model and shows it with
          * the current zoom level in the page node.
          *
@@ -273,11 +269,14 @@ define('io.ox/office/preview/view',
             currentId = (uniqueId += 1);
             page = newPage;
             pageGroup.selectAndShowPage(page);
-            showStatusLabel(
-                //#. %1$s is the current page index in office document preview
-                //#. %2$s is the number of pages in office document preview
-                //#, c-format
-                gt('Page %1$s of %2$s', page, model.getPageCount()));
+            pageLabel.update({
+                caption:
+                    //#. %1$s is the current page index in office document preview
+                    //#. %2$s is the number of pages in office document preview
+                    //#, c-format
+                    gt('Page %1$s of %2$s', page, model.getPageCount()),
+                type: 'info'
+            });
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
@@ -326,10 +325,13 @@ define('io.ox/office/preview/view',
             if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel()) && (zoom !== newZoom)) {
                 zoom = newZoom;
                 updateZoom();
-                showStatusLabel(
-                    //#. %1$d is the current zoom factor, in percent
-                    //#, c-format
-                    gt('Zoom: %1$d%', self.getZoomFactor()));
+                zoomLabel.update({
+                    caption:
+                        //#. %1$d is the current zoom factor, in percent
+                        //#, c-format
+                        gt('Zoom: %1$d%', self.getZoomFactor()),
+                    type: 'info'
+                });
             }
         }
 

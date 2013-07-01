@@ -180,7 +180,7 @@ define('io.ox/office/framework/view/pane',
          *  Whether the view pane is currently visible.
          */
         this.isVisible = function () {
-            return node.is(':visible');
+            return node.css('display') !== 'none';
         };
 
         /**
@@ -215,12 +215,12 @@ define('io.ox/office/framework/view/pane',
          *  A reference to this instance.
          */
         this.toggle = function (state) {
-            var visible = this.isVisible();
+            var visible = (state === true) || ((state !== false) && !this.isVisible());
             $.cancelTracking();
-            node.toggle(state);
-            if (visible !== this.isVisible()) {
+            if (this.isVisible() !== visible) {
+                node.toggle(state);
                 app.getView().refreshPaneLayout();
-                this.trigger('show', this.isVisible());
+                this.trigger('show', visible);
             }
             return this;
         };

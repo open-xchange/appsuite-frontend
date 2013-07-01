@@ -39,8 +39,8 @@ define('io.ox/office/preview/pagegroup',
             // the scrollable area in the side pane
             scrollableNode = sidePane.getScrollableNode(),
 
-            // all button elements currently created, mapped by page index
-            buttonNodes = {},
+            // all button elements, mapped by one-based page index
+            buttonNodes = [],
 
             // number of pages per row
             columns = 0,
@@ -55,26 +55,10 @@ define('io.ox/office/preview/pagegroup',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the position and size the button element of the specified
-         * page would take, according to the current size of the scrollable
-         * area.
-         *
-         * @param {Number} page
-         *  The one-based index of the page.
+         * Highlights the button representing the page with the passed index.
          */
-        function getPageButtonRectangle(page) {
-
-            var // zero-based column index of the button
-                col = (page - 1) % columns,
-                // zero-based row index of the button
-                row = Math.floor((page - 1) / columns);
-
-            return {
-                left: col * buttonWidth,
-                top: row * BUTTON_HEIGHT,
-                width: buttonWidth,
-                height: BUTTON_HEIGHT
-            };
+        function updateHandler(page) {
+            Utils.selectOptionButton(self.getNode().find(Utils.BUTTON_SELECTOR), page);
         }
 
         /**
@@ -123,7 +107,7 @@ define('io.ox/office/preview/pagegroup',
          * @returns {jQuery}
          *  The button element created by this method.
          */
-        var createPageButton = (function () {
+        var updateButtonNode = (function () {
 
             var // list of pending buttons waiting to load their page contents
                 pendingInfos = [],
@@ -132,35 +116,42 @@ define('io.ox/office/preview/pagegroup',
                 // the number of pages currently loaded (number of running AJAX requests)
                 runningRequests = 0;
 
-            // direct callback: called every time when createPageButton() has been called
-            function createButtonNode(page) {
+            // direct callback: called every time when updateButtonNode() has been called
+            function registerButtonNode(buttonNode, page, visible) {
 
-                var // the dummy node containing the busy animation
-                    busyNode = $('<div>').addClass('page'),
-                    // the page node containing the page contents
-                    pageNode = $('<div>').addClass('page'),
-                    // the button node containing the page node and the page number
-                    buttonNode = Utils.createButton({
-                        value: page,
-                        label: String(page),
-                        css: getPageButtonRectangle(page)
-                    }).append(busyNode);
+                var // the object containing all information about the button node
+                    pendingInfo = null;
 
-                // select button of active page
-                Utils.toggleButtons(buttonNode, page === app.getView().getPage());
+                // clear the button if it is not visible anymore
+                if (!visible) {
+                    pendingInfos = _(pendingInfos).filter(function (pendingInfo) { return page !== pendingInfo.page; });
+                    buttonNode.find('.page').remove();
+                    return;
+                }
 
-                // insert the button node and page node into the DOM before loading the image
-                self.addChildNodes(buttonNode);
-                app.getView().insertTemporaryNode(pageNode);
+                // do nothing if the button node is already initialized
+                if (buttonNode.find('.page').length > 0) {
+                    return;
+                }
+
+                // create the target page node, and a temporary busy node
+                pendingInfo = {
+                    page: page,
+                    buttonNode: buttonNode,
+                    busyNode: $('<div>').addClass('page'),
+                    pageNode: $('<div>').addClass('page')
+                };
+
+                // insert the page node into the DOM before loading the image
+                app.getView().insertTemporaryNode(pendingInfo.pageNode);
 
                 // set default page size (DIN A* Portrait) before loading the page (in case of error)
-                updatePageSize(buttonNode, busyNode, { width: 210, height: 297 });
-                busyNode.append($('<div>').addClass('abs').busy());
+                buttonNode.append(pendingInfo.busyNode);
+                updatePageSize(buttonNode, pendingInfo.busyNode, { width: 210, height: 297 });
+                pendingInfo.busyNode.append($('<div>').addClass('abs').busy());
 
                 // register the nodes for the deferred callback loading the page contents
-                pendingInfos.push({ page: page, buttonNode: buttonNode, busyNode: busyNode, pageNode: pageNode });
-
-                return buttonNode;
+                pendingInfos.push(pendingInfo);
             }
 
             // deferred callback: starts a background loop that loads all pending pages into the button nodes
@@ -178,9 +169,9 @@ define('io.ox/office/preview/pagegroup',
                     // do not request more than 10 pages at a time
                     if (runningRequests >= 5) { return; }
 
-                    // find a pending button that is still in the DOM (buttons may have been removed
+                    // find a pending button that still contains its busy node (buttons may have been hidden
                     // in the meantime), abort the background loop, if no more pages have to be loaded
-                    while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(self.getNode(), pendingInfo.buttonNode)) {}
+                    while ((pendingInfo = pendingInfos.shift()) && !Utils.containsNode(pendingInfo.buttonNode, pendingInfo.busyNode)) {}
                     if (!pendingInfo) { return Utils.BREAK; }
 
                     // load the page into the button node
@@ -209,69 +200,25 @@ define('io.ox/office/preview/pagegroup',
                 timer.done(function () { timer = null; });
             }
 
-            // create and return the debounced createPageButton() method
-            return app.createDebouncedMethod(createButtonNode, loadPages);
+            // create and return the debounced updateButtonNode() method
+            return app.createDebouncedMethod(registerButtonNode, loadPages);
 
         }()); // end of local scope of createPageButton()
 
         /**
-         * Updates the position and size of the specified page button. Creates
-         * a new page button if necessary.
-         *
-         * @param {Number} page
-         *  The one-based index of the page.
-         *
-         * @returns {jQuery}
-         *  The button element.
-         */
-        function updatePageButton(page) {
-
-            if (page in buttonNodes) {
-                buttonNodes[page].css(getPageButtonRectangle(page));
-            } else {
-                buttonNodes[page] = createPageButton(page);
-            }
-
-            return buttonNodes[page];
-        }
-
-        /**
-         * Highlights the button representing the page with the passed index.
-         */
-        function updateHandler(page) {
-            Utils.selectOptionButton(self.getNode().children(), page);
-        }
-
-        // methods ------------------------------------------------------------
-
-        /**
          * Updates all preview pages currently shown, according to the visible
          * range in the scrollable area.
-         *
-         * @returns {PageGroup}
-         *  A reference to this instance.
          */
-        this.updatePages = function () {
+        function updateVisiblePages() {
 
-            var // number of pages shown in the document
-                pageCount = app.getModel().getPageCount(),
-                // position and size of visible area in scrollable area
+            var // position and size of visible area in scrollable area
                 visiblePosition = Utils.getVisibleAreaPosition(scrollableNode),
-                // inner width available for button nodes
-                innerWidth = visiblePosition.width - 2 * HOR_MARGIN,
                 // top margin of group node, used as offset in position calculations
-                topMargin = Utils.convertCssLength(this.getNode().css('margin-top'), 'px', 0),
+                topMargin = Utils.convertCssLength(self.getNode().css('margin-top'), 'px', 0),
                 // row range visible in the scrollable node (closed range)
                 firstRow = 0, lastRow = 0,
                 // page range visible in the scrollable node (closed range)
                 firstPage = 0, lastPage = 0;
-
-            // calculate number of pages available per row, and effective button width
-            columns = Math.max(1, Math.floor(innerWidth / BUTTON_WIDTH + 0.4));
-            buttonWidth = Math.floor(innerWidth / columns);
-
-            // update size of the own group node
-            this.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
 
             // get row range in visible area (add a row above and below)
             firstRow = Math.floor((visiblePosition.top - topMargin) / BUTTON_HEIGHT) - 1;
@@ -281,19 +228,66 @@ define('io.ox/office/preview/pagegroup',
             firstPage = Math.max(1, firstRow * columns + 1);
             lastPage = Math.min(app.getModel().getPageCount(), (lastRow + 1) * columns);
 
-            // remove existing page buttons not shown anymore
+            // create page data for all visible button nodes, remove page data from other button nodes
             _(buttonNodes).each(function (buttonNode, page) {
-                if ((page < firstPage) || (page > lastPage)) {
-                    buttonNode.remove();
-                    delete buttonNodes[page];
+                updateButtonNode(buttonNode, page, (firstPage <= page) && (page <= lastPage));
+            });
+        }
+
+        /**
+         * Updates the position of the button nodes according to the current
+         * width of the side pane.
+         */
+        function updateButtonNodes() {
+
+            var // number of pages shown in the document
+                pageCount = app.getModel().getPageCount(),
+                // inner width available for button nodes
+                innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH;
+
+            // do nothing, if the side pane is not visible, or no pages are available
+            if ((pageCount === 0) || !sidePane.isVisible()) { return; }
+
+            // create empty button nodes for all pages on first call
+            if (buttonNodes.length === 0) {
+                for (var page = 1; page <= pageCount; page += 1) {
+                    buttonNodes[page] = Utils.createButton({ value: page, label: String(page) });
+                    self.addFocusableControl(buttonNodes[page]);
                 }
+            }
+
+            // calculate number of pages available per row, and effective button width
+            columns = Math.max(1, Math.floor(innerWidth / BUTTON_WIDTH + 0.4));
+            buttonWidth = Math.floor(innerWidth / columns);
+
+            // update size of the own group node
+            self.getNode().width(innerWidth).height(Math.ceil(pageCount / columns) * BUTTON_HEIGHT);
+
+            // update position and size of all button nodes
+            _(buttonNodes).each(function (buttonNode, page) {
+
+                var // zero-based column index of the button
+                    col = (page - 1) % columns,
+                    // zero-based row index of the button
+                    row = Math.floor((page - 1) / columns);
+
+                buttonNode.css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
             });
 
-            // create missing page buttons, update position of all existing pages
-            Utils.iterateRange(firstPage, lastPage + 1, updatePageButton);
+            // update page data for all visible button nodes
+            updateVisiblePages();
+        }
 
-            return this;
-        };
+        /**
+         * Scrolls the scrollable node to the specified button node.
+         */
+        function scrollToButton(buttonNode) {
+            if (sidePane.isVisible()) {
+                Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
+            }
+        }
+
+        // methods ------------------------------------------------------------
 
         /**
          * Selects the specified page in the preview, and scrolls the preview
@@ -306,12 +300,8 @@ define('io.ox/office/preview/pagegroup',
          *  A reference to this instance.
          */
         this.selectAndShowPage = function (page) {
-
-            var // the button node of the specified page (created if necessary)
-                buttonNode = sidePane.isVisible() ? updatePageButton(page) : null;
-
-            if (buttonNode) {
-                Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
+            if (page in buttonNodes) {
+                scrollToButton(buttonNodes[page]);
                 updateHandler(page);
             }
             return this;
@@ -322,20 +312,23 @@ define('io.ox/office/preview/pagegroup',
         this.registerUpdateHandler(updateHandler)
             .registerChangeHandler('click', { selector: Utils.BUTTON_SELECTOR });
 
-        // update pages while scrolling (debounced to skip a few scroll events)
-        scrollableNode.on('scroll', app.createDebouncedMethod($.noop, function () {
-            self.updatePages();
-        }, { delay: 50, maxDelay: 200 }));
-
         // when refreshing the side pane (e.g. due to changed size of browser
-        // window), update the pages shown in the current visible area
-        sidePane.on('refresh:layout', function () {
-            self.updatePages();
-        });
+        // window or side pane), update the positions of all button nodes
+        sidePane.on('refresh:layout', updateButtonNodes);
 
         // when showing or resizing the side pane, scroll to current page
         sidePane.on('show resize', function () {
             self.selectAndShowPage(app.getView().getPage());
+        });
+
+        // update pages while scrolling (debounced to skip a few scroll events)
+        scrollableNode.on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 50, maxDelay: 200 }));
+
+        // keyboard focus traveling: scroll to focused node
+        this.getNode().on('focusin', function (event) {
+            if ($(event.target).is(Utils.BUTTON_SELECTOR)) {
+                scrollToButton(event.target);
+            }
         });
 
     } // class PageGroup

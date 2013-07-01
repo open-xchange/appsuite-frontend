@@ -94,16 +94,6 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
-         * Changes the visibility of this view component and triggers a 'show'
-         * event.
-         */
-        function showComponent(state) {
-            if (self.isVisible() !== state) {
-                node.toggleClass(HIDDEN_CLASS, !state);
-            }
-        }
-
-        /**
          * Inserts the passed control group into this view component, either by
          * calling the handler function passed to the constructor, or by
          * appending the root node of the group to the children of the own root
@@ -128,7 +118,7 @@ define('io.ox/office/framework/view/component',
             // update focusability depending on the group's enabled state
             group.on({
                 cancel: function () { self.trigger('cancel'); },
-                enable: updateFocusable
+                'show enable layout': updateFocusable
             });
 
             // make this view component focusable, if it contains any groups
@@ -295,7 +285,7 @@ define('io.ox/office/framework/view/component',
          * Returns whether this view component is visible.
          */
         this.isVisible = function () {
-            return node.is(':visible');
+            return !node.hasClass(HIDDEN_CLASS);
         };
 
         /**
@@ -305,8 +295,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.show = function () {
-            showComponent(true);
-            return this;
+            return this.toggle(true);
         };
 
         /**
@@ -316,8 +305,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            showComponent(false);
-            return this;
+            return this.toggle(false);
         };
 
         /**
@@ -332,7 +320,10 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.toggle = function (state) {
-            showComponent((state === true) || ((state !== false) && this.isVisible()));
+            var visible = (state === true) || ((state !== false) && node.hasClass(HIDDEN_CLASS));
+            if (this.isVisible() !== visible) {
+                node.toggleClass(HIDDEN_CLASS, !visible);
+            }
             return this;
         };
 
