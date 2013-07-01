@@ -2412,7 +2412,7 @@ define.async('io.ox/office/tk/utils',
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-        var textField = Utils.createControl('input', { type: 'text' }, options);
+        var textField = Utils.createControl('input', { type: 'text', tabindex: 1 }, options);
         return textField.attr('placeholder', Utils.getStringOption(options, 'placeholder', ''));
     };
 

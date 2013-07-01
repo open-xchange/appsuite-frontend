@@ -357,7 +357,13 @@ define('io.ox/office/tk/control/group',
         this.enable = function (state) {
 
             var // enable/disable the entire group node with all its descendants
-                enabled = Utils.enableControls(groupNode, state);
+                enabled = Utils.enableControls(groupNode, state),
+                selector = '[tabindex="';
+
+            // Set tabindex dependent on state to make it (in)accessible for
+            // the F6 travel function.
+            selector += state ? '0"]' : '1"]';
+            groupNode.find(selector).attr({tabindex: state ? 1: 0});
 
             // trigger an 'enable' event so that derived classes can react
             return this.trigger('enable', enabled);
