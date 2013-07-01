@@ -14,8 +14,9 @@
 define.async('io.ox/core/tk/html-editor',
     ['moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/core/capabilities',
-     'settings!io.ox/core'
-     ], function (emoji, capabilities, settings) {
+     'settings!io.ox/core',
+     'io.ox/core/extensions'
+     ], function (emoji, capabilities, settings, ext) {
 
     'use strict';
 
@@ -484,6 +485,11 @@ define.async('io.ox/core/tk/html-editor',
                             console.error('Ooops! setup.onKeyDown()', e);
                         }
                     }
+                });
+
+                ext.point('3rd.party/emoji/editor_css').each(function (point) {
+                    var url = ed.convertURL(require.toUrl(point.css));
+                    ed.contentCSS.push(url);
                 });
             }
         });
