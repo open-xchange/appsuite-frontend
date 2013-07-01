@@ -386,7 +386,7 @@ define.async('io.ox/core/tk/html-editor',
         toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
             ',|,emoji,|,bullist,numlist,outdent,indent' +
             ',|,justifyleft,justifycenter,justifyright' +
-            ',|,formatselect,fontselect,fontsizeselect' +
+            //',|,formatselect,fontselect,fontsizeselect' +
             ',|,forecolor,backcolor';
 
         toolbar2 = '';
