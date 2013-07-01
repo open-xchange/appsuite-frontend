@@ -27,7 +27,7 @@ define('moxiecode/tiny_mce/plugins/emoji/categories',
 
         recently: {
             name: 'recently',
-            iconClass: 'emoji1f552'
+            iconClass: 'emoji-unified emoji1f552'
         },
 
         translations: {
