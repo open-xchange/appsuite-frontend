@@ -115,6 +115,9 @@ define('io.ox/office/preview/view',
 
             model = app.getModel();
 
+            // make the application pane focusable for global navigation with F6 key
+            self.getAppPaneNode().addClass('f6-target').attr('tabindex', 1);
+
             // create the side pane
             self.addPane(sidePane = new SidePane(app, {
                 position: 'right',
@@ -147,7 +150,7 @@ define('io.ox/office/preview/view',
                 );
 
             // create the top overlay pane
-            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', focusable: true, overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(topOverlayPane = new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
                     .addGap()
@@ -157,11 +160,11 @@ define('io.ox/office/preview/view',
 
             // create the second overlay pane containing the status label
             self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true })
-                .addViewComponent(new ToolBox(app).addPrivateGroup(statusLabel))
+                .addViewComponent(new ToolBox(app, { focusable: false }).addPrivateGroup(statusLabel))
             );
 
             // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', focusable: true, overlay: true, transparent: true, hoverEffect: true })
+            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
                 .addViewComponent(new ToolBox(app)
                     .addGroup('pages/first',    new Button(GroupOptions.FIRST))
                     .addGroup('pages/previous', new Button(GroupOptions.PREV))

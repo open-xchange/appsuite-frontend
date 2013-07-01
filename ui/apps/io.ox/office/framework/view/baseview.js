@@ -725,7 +725,6 @@ define('io.ox/office/framework/view/baseview',
         // create the application pane, and insert the container node
         appPane = new Pane(app, { classes: 'app-pane unselectable' });
         appPane.getNode()
-            .addClass('f6-target') // make focusable for global keyboard shortcuts
             .toggleClass('scrolling', Utils.getBooleanOption(options, 'scrollable', false))
             .append(appContainerNode.css('margin', getCssMarginOption(options, 'contentMargin')), appBusyNode.hide());
 

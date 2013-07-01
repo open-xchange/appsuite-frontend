@@ -120,11 +120,29 @@ i.docs-caret {
         position: absolute;
         z-index: 10;
 
+        > .handle {
+            position: absolute;
+            .box-sizing(border-box);
+            border-left: 1px solid fade(white, 10%);
+            border-top: 1px solid fade(white, 10%);
+            border-right: 1px solid fade(black, 25%);
+            border-bottom: 1px solid fade(black, 25%);
+        }
+
         &.top, &.bottom {
             left: 0;
             right: 0;
             height: 12px;
             cursor: ns-resize;
+
+            > .handle {
+                left: 50%;
+                width: 120px;
+                height: 3px;
+                margin-left: -60px;
+                &.h1 { top: 2px; }
+                &.h2 { top: 7px; }
+            }
         }
 
         &.left, &.right {
@@ -132,6 +150,15 @@ i.docs-caret {
             bottom: 0;
             width: 12px;
             cursor: ew-resize;
+
+            > .handle {
+                top: 50%;
+                width: 3px;
+                height: 120px;
+                margin-top: -60px;
+                &.h1 { left: 2px; }
+                &.h2 { left: 7px; }
+            }
         }
 
         &.top { bottom: 0; }

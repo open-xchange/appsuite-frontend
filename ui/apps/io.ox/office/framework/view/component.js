@@ -54,6 +54,11 @@ define('io.ox/office/framework/view/component',
      *  @param {Object} [options.css]
      *      Additional CSS formatting that will be set at the root DOM node of
      *      this view component.
+     *  @param {Boolean} [options.focusable=true]
+     *      If set to true or omitted, the view component will be inserted into
+     *      the chain of focusable nodes reachable with specific global
+     *      keyboard shortcuts (usually the F6 key with platform dependent
+     *      control keys).
      *  @param {Function} [options.groupInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      group into this view component. The function receives the reference
@@ -74,6 +79,9 @@ define('io.ox/office/framework/view/component',
 
             // all control groups, mapped by key
             groupsByKey = {},
+
+            // whether the pane will be focusable with keyboard
+            focusable = Utils.getBooleanOption(options, 'focusable', true),
 
             // handler called to insert a new group into this view component
             groupInserter = Utils.getFunctionOption(options, 'groupInserter');
@@ -116,8 +124,15 @@ define('io.ox/office/framework/view/component',
                 node.append(group.getNode());
             }
 
-            // always forward 'cancel' events (e.g. closed drop-down menu)
-            group.on('cancel', function () { self.trigger('cancel'); });
+            // always forward 'cancel' events (e.g. closed drop-down menu),
+            // update focusability depending on the group's enabled state
+            group.on({
+                cancel: function () { self.trigger('cancel'); },
+                enable: updateFocusable
+            });
+
+            // make this view component focusable, if it contains any groups
+            updateFocusable();
         }
 
         /**
@@ -127,6 +142,14 @@ define('io.ox/office/framework/view/component',
             return _(groups).filter(function (group) {
                 return group.isVisible() && group.isEnabled() && group.hasFocusableControls();
             });
+        }
+
+        /**
+         * Updates the CSS marker class controlling whether this view component
+         * is focusable with special keyboard shortcuts.
+         */
+        function updateFocusable() {
+            node.toggleClass('f6-target', focusable && (getEnabledGroups().length > 0));
         }
 
         /**
@@ -272,7 +295,7 @@ define('io.ox/office/framework/view/component',
          * Returns whether this view component is visible.
          */
         this.isVisible = function () {
-            return !node.hasClass(HIDDEN_CLASS);
+            return node.is(':visible');
         };
 
         /**
