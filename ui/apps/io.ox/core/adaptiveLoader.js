@@ -92,7 +92,7 @@ define('io.ox/core/adaptiveLoader', ['io.ox/core/extensions', 'io.ox/core/capabi
                     api.cache = {};
                 }
                 api.log("cache", api.cache);
-                $(window).on("require:load", function (event, module) {
+                $(window).on("require:require", function (event, module) {
                     if (api.modules) {
                         api.modules.push(module.replace(/\.js$/, ''));
                     }

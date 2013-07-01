@@ -10,101 +10,28 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/guidance/perspective',
+define('io.ox/mail/guidance/main',
     ['io.ox/core/extensions',
+     'io.ox/core/tk/dialogs',
      'gettext!io.ox/mail'
-    ], function (ext, gt) {
+    ], function (ext, dialogs, gt) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('guidance');
-
-    perspective.render = function (app) {
+    function sidePopup(app, e) {
 
         var id = app.get('name'),
-            folder = app.folder.get(),
-            node = this.main.busy().addClass('guidance default-content-padding fade');
+            folder = app.folder.get();
 
-        // add this perspective next to "window-panel"
-        app.getWindow().nodes.panel.after(this.main);
-
-        app.folder.getData().done(function (data) {
-            node.idle();
-            var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
-            ext.point('io.ox/mail/guidance').invoke('draw', node, baton);
-            node.addClass('in');
-
-            perspective.afterShow = function () {
-                this.main.addClass('in');
-            };
-
-            perspective.afterHide = function () {
-                this.main.removeClass('in');
-            };
-        });
-    };
-
-    function back(e) {
-        e.preventDefault();
-        var baton = e.data.baton;
-        ox.ui.Perspective.show(baton.app, 'main');
-    }
-
-    function openFolderView(e) {
-        e.preventDefault();
-        var baton = e.data.baton;
-        baton.app.showFolderView();
-        ox.ui.Perspective.show(baton.app, 'main');
-    }
-
-    function compose(e) {
-        require(['io.ox/core/extPatterns/actions'], function (actions) {
-            actions.invoke('io.ox/mail/actions/compose', null, e.data.baton);
+        new dialogs.SidePopup({ closely: true }).show(e, function (popup) {
+            app.folder.getData().done(function (data) {
+                var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
+                ext.point('io.ox/mail/guidance').invoke('draw', popup.addClass('guidance'), baton);
+            });
         });
     }
 
     var INDEX = 100;
-
-    ext.point('io.ox/mail/guidance').extend({
-        id: 'header',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var section = $('<header class="primary-actions">');
-            ext.point('io.ox/mail/guidance/header').invoke('draw', section, baton);
-            this.append(section);
-        }
-    });
-
-    ext.point('io.ox/mail/guidance/header').extend({
-        id: 'back',
-        index: 100,
-        draw: function (baton) {
-            this.append(
-                $('<a href="#">').append(
-                    $('<i class="icon-chevron-left">'),
-                    $.txt(' '),
-                    $.txt(gt('Back to application'))
-                )
-                .on('click', { baton: baton }, back),
-                $.txt('\u00A0\u00A0 ')
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/guidance/header').extend({
-        id: 'primary-actions',
-        index: 200,
-        draw: function (baton) {
-            this.append(
-                $('<a href="#">').append(
-                    $('<i class="icon-pencil">'),
-                    $.txt(' '),
-                    $.txt(gt('Compose new mail'))
-                )
-                .on('click', { baton: baton }, compose)
-            );
-        }
-    });
 
     ext.point('io.ox/mail/guidance').extend({
         id: 'foldername',
@@ -147,9 +74,6 @@ define('io.ox/mail/guidance/perspective',
                 $('<section class="folder-summary">').append(
 
                     $('<span>').text(text),
-                    $.txt('\u00A0\u00A0 '),
-
-                    $('<a href="#">').text(gt('Change folder')).on('click', { baton: baton }, openFolderView),
                     $.txt('\u00A0\u00A0 '),
 
                     // drop-down
@@ -200,13 +124,13 @@ define('io.ox/mail/guidance/perspective',
         draw: function (baton) {
 
             $('head').append(
-                $('<link href="http://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet" type="text/css">')
+                $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')
             );
 
             var node = $('<section>')
                 .css({
-                    fontFamily: '"Rokkitt", cursive',
-                    fontSize: '28px',
+                    fontFamily: '"Nunito", cursive, sans-serif',
+                    fontSize: '24px',
                     lineHeight: '28px',
                     padding: '14px',
                     color: '#fff',
@@ -252,19 +176,19 @@ define('io.ox/mail/guidance/perspective',
         }
     });
 
-    // ext.point('io.ox/mail/guidance').extend({
-    //     id: 'folder-statistic-hour',
-    //     index: INDEX += 100,
-    //     draw: function (baton) {
+    ext.point('io.ox/mail/guidance').extend({
+        id: 'folder-statistic-hour',
+        index: INDEX += 100,
+        draw: function (baton) {
 
-    //         var node = $('<section>').busy();
-    //         this.append(node);
+            var node = $('<section>').busy();
+            this.append(node);
 
-    //         require(['io.ox/mail/statistics'], function (statistics) {
-    //             statistics.hour(node, { folder: baton.folder });
-    //         });
-    //     }
-    // });
+            require(['io.ox/mail/statistics'], function (statistics) {
+                statistics.hour(node, { folder: baton.folder });
+            });
+        }
+    });
 
-    return perspective;
+    return { sidePopup: sidePopup };
 });

@@ -232,18 +232,29 @@ define('io.ox/core/api/account',
 
     /**
      * get the primary address for a given account
-     * @param  {string} accountId [optional: default account will be used instead]
+     * @param  {string} account_id [optional: default account will be used instead]
      * @return {deferred} returns array (name, primary adress)
      */
-    api.getPrimaryAddress = function (accountId) {
-        return api.get(accountId || 0)
+    api.getPrimaryAddress = function (account_id) {
+
+        return api.get(account_id || 0)
+        .then(ensureDisplayName)
         .then(function (account) {
-            if (!account) { return $.Deferred().reject(account); }
-            return account;
+
+            if (!account) return $.Deferred().reject(account);
+
+            // use user-setting for primary account and unified folders
+            if (account_id === 0 || api.isUnified(account_id)) {
+                return require(['settings!io.ox/mail']).then(function (settings) {
+                    var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
+                    return [account.personal, defaultSendAddress || account.primary_address];
+                });
+            }
+
+            return [account.personal, account.primary_address];
         })
-        .then(addPersonalFallback)
-        .then(function (account) {
-            return getAddressArray(account.personal || '', account.primary_address);
+        .then(function (address) {
+            return getAddressArray(address[0], address[1]);
         });
     };
 
@@ -253,34 +264,47 @@ define('io.ox/core/api/account',
      * @return {deferred} object with properties 'displayname' and 'primaryaddress'
      */
     api.getPrimaryAddressFromFolder = function (folder_id) {
+
         // get account id (strict)
         var account_id = this.parseAccountId(folder_id, true),
             isUnified = api.isUnified(account_id);
+
         // get primary address
-        return this.getPrimaryAddress(isUnified ? 0 : account_id).then(function (data) {
-            // use user-setting for primary account and unified folders
-            if (account_id === 0 || isUnified) {
-                return require(['settings!io.ox/mail']).then(function (settings) {
-                    var address = settings.get('defaultSendAddress');
-                    return { displayname: data[0], primaryaddress: address || data[1] };
-                });
-            } else {
-                return { displayname: data[0], primaryaddress: data[1] };
-            }
+        return this.getPrimaryAddress(isUnified ? 0 : account_id);
+    };
+
+    api.getDefaultDisplayName = function () {
+        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
+            return userAPI.getCurrentUser().then(function (user) {
+                return contactsUtil.getMailFullName(user.toJSON());
+            });
         });
     };
 
-    function addPersonalFallback(account) {
-        if (account && !account.personal) {
-            return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (contactsUtil, userAPI) {
-                return userAPI.getCurrentUser().then(function (user) {
-                    account.personal = contactsUtil.getMailFullName(user.toJSON());
-                    return account;
-                });
+    // make sure account's personal is set
+    var ensureDisplayName = (function () {
+
+        var defer = null;
+
+        return function (account) {
+
+            // no account given or account already has "personal"
+            if (!account || account.personal) {
+                return $.Deferred().resolve(account);
+            }
+
+            if (defer === null) {
+                // load personal once
+                defer = api.getDefaultDisplayName();
+            }
+
+            return defer.then(function (personal) {
+                account.personal = personal;
+                return account;
             });
-        }
-        return account;
-    }
+        };
+
+    }());
 
     function getAddressArray(name, address) {
         name = $.trim(name || '');
@@ -294,18 +318,14 @@ define('io.ox/core/api/account',
      * @return {deferred} returns array the personal name and a list of (alias) addresses
      */
     function getSenderAddress(account) {
+
         // just for robustness
         if (!account) return [];
-        // no addresses?
-        if (!account.addresses && account.id === 0) {
-            //FIXME: once the backend returns something in account.addresses,
-            // it should be safe to remove this code
-            return _(config.get('modules.mail.addresses')).map(function (address) {
-                return getAddressArray(account.personal, address);
-            });
-        } else if (!account.addresses) { // null, undefined, empty
+
+        if (!account.addresses) { // null, undefined, empty
             return [getAddressArray(account.personal, account.primary_address)];
         }
+
         // looks like addresses continas primary address plus aliases
         var addresses = String(account.addresses || '').split(',').sort();
         // build common array of [display_name, email]
@@ -320,7 +340,9 @@ define('io.ox/core/api/account',
      * @return {deferred} returns array the personal name and a list of (alias) addresses
      */
     api.getSenderAddresses = function (accountId) {
-        return this.get(accountId || 0).then(addPersonalFallback).then(getSenderAddress);
+        return this.get(accountId || 0)
+            .then(ensureDisplayName)
+            .then(getSenderAddress);
     };
 
     /**
@@ -328,14 +350,24 @@ define('io.ox/core/api/account',
      * @return {promise} returns array of arrays
      */
     api.getAllSenderAddresses = function () {
-        return api.all().then(function (list) {
-            return $.when.apply($, _(list).map(addPersonalFallback)).then(function () {
-                return _(arguments).flatten(true);
-            }).then(function (list) {
-                return $.when.apply($, _(list).map(getSenderAddress)).then(function () {
-                    return _(arguments).flatten(true);
-                });
-            });
+        return api.all()
+        .then(function (list) {
+            return $.when.apply($, _(list).map(ensureDisplayName));
+        })
+        .then(function () {
+            return _(arguments).flatten(true);
+        })
+        .then(function (list) {
+            return $.when.apply($, _(list).map(getSenderAddress));
+        })
+        .then(function () {
+            return _(arguments).flatten(true);
+        })
+        .then(function (addresses) {
+            // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
+            // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
+            // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
+            return addresses;
         });
     };
 
@@ -374,6 +406,10 @@ define('io.ox/core/api/account',
             }
         })
         .pipe(function (list) {
+
+            idHash = {};
+            typeHash = {};
+
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
@@ -543,6 +579,8 @@ define('io.ox/core/api/account',
             }
         });
     };
+
+    api.cache = accountsAllCache;
 
     /**
      * jslob testapi

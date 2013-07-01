@@ -18,13 +18,38 @@ define('io.ox/mail/statistics',
 
     'use strict';
 
-    var COLUMNS = '603,604,610';
+    var COLUMNS = '603,604,610',
+        WIDTH = _.device('small') ? 280 : 500,
+        HEIGHT = _.device('small') ? 150 : 200;
+
+    function createCanvas() {
+        // attribute notation does not work! don't know why. maybe retina whatever.
+        return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '">');
+    }
+
+    var fetch = (function () {
+
+        // hash of deferred objects
+        var hash = {};
+
+        return function (options) {
+
+            var cid = JSON.stringify(options);
+
+            if (!hash[cid]) {
+                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS });
+            }
+
+            return hash[cid];
+        };
+
+    }());
 
     return {
 
         sender: function (node, options) {
 
-            var canvas = $('<canvas width="500" height="200">'),
+            var canvas = createCanvas(),
                 isSent = accountAPI.is('sent', options.folder);
 
             node.append(
@@ -34,7 +59,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }, false).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var who = {}, attr = isSent ? 'to' : 'from';
 
@@ -82,14 +107,14 @@ define('io.ox/mail/statistics',
 
         weekday: function (node, options) {
 
-            var canvas = $('<canvas width="500" height="200">');
+            var canvas = createCanvas();
 
             node.append(
                 $('<h2>').text(gt('Mails per week-day (%)')),
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var days = [0, 0, 0, 0, 0, 0, 0];
 
@@ -131,7 +156,7 @@ define('io.ox/mail/statistics',
                 canvas
             );
 
-            api.getAll({ folder: options.folder, columns: COLUMNS }).done(function (data) {
+            fetch({ folder: options.folder, columns: COLUMNS }).done(function (data) {
 
                 var hours = _.times(24, function () { return 0; });
 

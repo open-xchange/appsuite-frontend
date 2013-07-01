@@ -412,7 +412,8 @@ define("io.ox/core/tk/dialogs",
 
         options = _.extend({
             modal: false,
-            arrow: true
+            arrow: true,
+            closely: false // closely positon to click/touch location
         }, options || {});
 
         var processEvent,
@@ -556,9 +557,9 @@ define("io.ox/core/tk/dialogs",
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .io-ox-dialog-popup, .notifications-overlay"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, c, .io-ox-dialog-popup, .notifications-overlay"),
-                target: target || my.parents(".window-body, .simple-window, .io-ox-dialog-popup, .notifications-overlay"),
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
+                target: target || my.parents(".window-body, .simple-window, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
                 simple: my.closest('.simple-window')
             };
 
@@ -566,7 +567,7 @@ define("io.ox/core/tk/dialogs",
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .notifications-overlay").css("zIndex") || 1) + 2;
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").css("zIndex") || 1) + 2;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);
@@ -605,7 +606,8 @@ define("io.ox/core/tk/dialogs",
                 // decide for proper side
                 var docWidth = $('body').width(), mode,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
-                    firstPopup = parentPopup.length === 0;
+                    firstPopup = parentPopup.length === 0,
+                    x;
 
                 // get side
                 if (/^(left|right)$/.test(options.side)) {
@@ -617,6 +619,10 @@ define("io.ox/core/tk/dialogs",
 
                 popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
                 arrow.css('zIndex', zIndex + 1);
+
+                if (options.closely && _.device('!small')) {
+                    popup.add(arrow).css(mode === 'left' ? 'right' : 'left', '20%');
+                }
 
                 // is inside simple-window?
                 if (self.nodes.simple.length) {

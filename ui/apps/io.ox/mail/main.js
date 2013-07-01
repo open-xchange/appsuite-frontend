@@ -757,7 +757,8 @@ define('io.ox/mail/main',
                 _(ext.point('io.ox/mail/search/checkboxes').options()).map(function (flag, name) {
                     return flag === true ?
                         $('<label class="checkbox margin-right">').append(
-                            $('<input type="checkbox" value="on">').attr({ name: name, checked: defaults[name] ? 'checked' : null }),
+                            $('<input type="checkbox" value="on" tabindex="1">')
+                                .attr({ name: name, checked: defaults[name] ? 'checked' : null }),
                             $.txt(translations[name])
                         ) :
                         $();

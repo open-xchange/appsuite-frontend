@@ -201,6 +201,9 @@ $(window).load(function () {
     require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
+            _(deps).each(function (m) {
+                $(window).trigger("require:require", m);
+            })
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();

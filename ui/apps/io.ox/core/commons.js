@@ -556,10 +556,11 @@ define('io.ox/core/commons',
 
             var items = $('.f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),
-                index = (items.index(closest) || 0) + 1,
+                index = (items.index(closest) || 0) + (e.shiftKey ? -1 : +1),
                 next;
 
             if (index >= items.length) index = 0;
+            if (index < 0) index = items.length - 1;
             next = items.eq(index);
 
             if (next.attr('tabindex') === '1') {

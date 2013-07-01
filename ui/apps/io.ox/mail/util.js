@@ -303,15 +303,23 @@ define('io.ox/mail/util',
          *
          * @return the email address or a string like "Display Name" <email@address.example>
          */
-        formatSender: function (name, address) {
+        formatSender: function (name, address, quote) {
+
             var args = _(arguments).toArray();
+
             if (_.isArray(args[0])) {
+                quote = address;
                 name = args[0][0];
                 address = args[0][1];
             }
+
             name = util.unescapeDisplayName(name);
             address = $.trim(address || '').toLowerCase();
-            return name === '' ? address : '"' + name + '" <' + address + '>';
+
+            // short version; just mail address
+            if (name === '') return address;
+            // long version; display_name plus address
+            return (quote === false ? name : '"' + name + '"') + ' <' + address + '>';
         },
 
         getPriority: function (data) {

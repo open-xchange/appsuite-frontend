@@ -26,10 +26,11 @@ define('io.ox/mail/write/main',
      'io.ox/mail/write/view-main',
      'moxiecode/tiny_mce/plugins/emoji/main',
      'io.ox/core/notifications',
+     'io.ox/mail/sender',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, settings, gt) {
+     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
 
     'use strict';
 
@@ -386,27 +387,23 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            var from_field = view.leftside.find('.fromselect-wrapper select > :selected');
-            return [from_field.data('displayname'), from_field.data('primaryaddress')];
+            var select = view.leftside.find('.sender-dropdown');
+            return sender.get(select);
         };
 
         app.setFrom = function (data) {
-            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                $select = view.leftside.find('.fromselect-wrapper select');
-            return accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
-                if (data.from && data.from.length === 2) {
-                    // from is already set in the mail, prefer this
-                    from = { displayname: data.from[0], primaryaddress: data.from[1] };
-                }
 
-                $select.val(mailUtil.formatSender(from.displayname, from.primaryaddress));
-                //identify option via data.primaryadress
-                _.each($select.children(), function (option) {
-                    var $option = $(option),
-                        data = $option.data();
-                    if (data.primaryaddress === from.primaryaddress)
-                        $select.val($option.attr('value'));
-                });
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                select = view.leftside.find('.sender-dropdown');
+
+            // from is already set in the mail, prefer this
+            if (data.from && data.from.length === 2) {
+                sender.set(select, data.from);
+                return;
+            }
+
+            accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
+                sender.set(select, from);
             });
         };
 
@@ -958,7 +955,7 @@ define('io.ox/mail/write/main',
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
                 headers: headers,
-                reply_to: mailUtil.formatSender(replyTo[0], replyTo[1]),
+                reply_to: mailUtil.formatSender(replyTo),
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
@@ -1034,11 +1031,13 @@ define('io.ox/mail/write/main',
                         notifications.yell(result);
                         unblockReuse(mail.data.sendtype);
                     } else {
-                        if (result.warnings)
+                        if (result.warnings) {
                             //warnings
                             notifications.yell('warning', result.warnings.error);
-                        else
-                            notifications.yell('success', gt('Mail has been sent'));
+                        }
+
+                        // we no longer yell on success - that's expected result
+
                         // update base mail
                         var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
                             isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
