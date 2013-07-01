@@ -59,6 +59,11 @@ define('io.ox/office/framework/view/component',
      *      the chain of focusable nodes reachable with specific global
      *      keyboard shortcuts (usually the F6 key with platform dependent
      *      control keys).
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, all control groups in this view component will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view component. Has no effect, if the current device is a touch
+     *      device.
      *  @param {Function} [options.groupInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      group into this view component. The function receives the reference
@@ -370,6 +375,11 @@ define('io.ox/office/framework/view/component',
         };
 
         // initialization -----------------------------------------------------
+
+        // hover effect for view components embedded in the pane (not for touch devices)
+        if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
+            node.addClass('hover-effect');
+        }
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

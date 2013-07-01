@@ -57,11 +57,9 @@ define('io.ox/office/framework/view/pane',
      *      If set to true, the background of an overlay pane will be
      *      transparent. Has no effect if the pane is not in overlay mode.
      *  @param {Boolean} [options.hoverEffect=false]
-     *      If set to true, the view components in a transparent overlay view
-     *      pane will be displayed half-transparent as long as the mouse does
-     *      not hover the view component. Has no effect if the pane is not in
-     *      transparent overlay mode, or if the current device is a touch
-     *      device.
+     *      If set to true, all control groups in all view components will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view pane. Has no effect, if the current device is a touch device.
      *  @param {Function} [options.componentInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      view component into this view pane. The function receives the
