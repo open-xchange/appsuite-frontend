@@ -10,7 +10,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define('moxiecode/tiny_mce/plugins/emoji/main',
-       ['emoji/emoji',
+       ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
        'settings!io.ox/mail/emoji',
        'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji_categories.css',

@@ -334,7 +334,7 @@ utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
 utils.copy(utils.list("lib/node_modules/emoji/lib", ["emoji.js", "emoji.css", "emoji.png"]),
-        { to: utils.dest("apps/emoji") });
+        { to: utils.dest("apps/3rd.party/emoji") });
 
 //online help
 
