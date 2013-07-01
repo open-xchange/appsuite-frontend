@@ -399,9 +399,9 @@ define.async('io.ox/core/tk/html-editor',
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, '');
-            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, '');
-            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, '');
+            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
         }
 
         (textarea = $(textarea)).tinymce({
