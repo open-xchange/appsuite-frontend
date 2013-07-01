@@ -127,27 +127,4 @@ define(["io.ox/core/api/mailfilter",
 
     });
 
-     describe('Mailfilter list', function () {
-
-         beforeEach(function () {
-             this.server = sinon.fakeServer.create();
-
-             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":{}}');
-             });
-         });
-
-         afterEach(function () {
-             this.server.restore();
-         });
-
-         it('should return available filters', function () {
-             var result = api.getRules();
-             expect(result).toBeDeferred();
-             expect(result.state()).toBe('pending');
-             this.server.respond();
-             expect(result.state()).toBe('resolved');
-         });
-
-     });
 });
