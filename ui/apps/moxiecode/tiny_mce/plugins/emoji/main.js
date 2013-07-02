@@ -61,7 +61,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     }
 
     // introduce Emoji class
-    function Emoji() {
+    function Emoji(opt) {
+
+        opt = opt || {};
 
         // inherit from emoji
         _.extend(this, emoji);
@@ -76,7 +78,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         //FIXME: check if default is still valid after icons have been removed
         var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
-        this.currentCollection = settings.get('userCollection', defaultCollection);
+        this.currentCollection = opt.collection || settings.get('userCollection', defaultCollection);
 
         this.createCategoryMap();
     }
@@ -242,8 +244,8 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     return {
 
-        getInstance: function () {
-            return new Emoji();
+        getInstance: function (opt) {
+            return new Emoji(opt);
         },
 
         // HTML related API
