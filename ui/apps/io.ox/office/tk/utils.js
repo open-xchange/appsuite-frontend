@@ -1977,6 +1977,12 @@ define.async('io.ox/office/tk/utils',
      *  @param {Any} [options.value]
      *      A value, object, or function that will be copied to the attribute
      *      'data-value' of the control. Must not be null or undefined.
+     *  @param {String} [options.dataValue]
+     *      A string that will be inserted into the 'data-value' attribute of
+     *      the control. If omitted, the JSON string representation of the
+     *      'options.value' option will be used instead (all double-quote
+     *      characters will be removed from the string though), unless the
+     *      passed value is a function.
      *  @param {Any} [options.userData]
      *      A value or object that will be copied to the attribute
      *      'data-userdata' of the control. May contain any user-defined data.
@@ -2000,7 +2006,7 @@ define.async('io.ox/office/tk/utils',
             .css(Utils.getObjectOption(options, 'css', {}))
             .on('dragstart', false);
 
-        Utils.setControlValue(control, Utils.getOption(options, 'value'));
+        Utils.setControlValue(control, Utils.getOption(options, 'value'), Utils.getStringOption(options, 'dataValue'));
         Utils.setControlUserData(control, Utils.getOption(options, 'userData'));
 
         return control;
@@ -2026,13 +2032,26 @@ define.async('io.ox/office/tk/utils',
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      *
-     * @param value
+     * @param {Any} value
      *  A value, object, or function that will be copied to the 'value' data
      *  attribute of the control. Must not be null or undefined.
+     *
+     * @param {String} [dataValue]
+     *  A string value that will be inserted into the 'data-value' attribute of
+     *  the control. If omitted, the JSON string representation of the passed
+     *  value will be used instead (all double-quote characters will be removed
+     *  from the string though), unless the passed value is a function.
      */
-    Utils.setControlValue = function (control, value) {
+    Utils.setControlValue = function (control, value, dataValue) {
         if (!_.isUndefined(value) && !_.isNull(value)) {
             control.data('value', value);
+            // set the data-value attribute
+            if (!_.isString(dataValue) && !_.isFunction(value)) {
+                dataValue = JSON.stringify(value).replace(/"/g, '');
+            }
+            if (dataValue) {
+                control.attr('data-value', dataValue);
+            }
         }
     };
 

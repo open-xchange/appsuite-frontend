@@ -14,9 +14,8 @@
 define('io.ox/office/preview/pagegroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/framework/view/sidepane',
      'io.ox/office/preview/viewutils'
-    ], function (Utils, Group, SidePane, ViewUtils) {
+    ], function (Utils, Group, ViewUtils) {
 
     'use strict';
 
