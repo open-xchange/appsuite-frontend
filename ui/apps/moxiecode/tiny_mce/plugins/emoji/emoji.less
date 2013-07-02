@@ -11,7 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-@import '../../../../3rd.party/emoji/emoji.css';
+/* FIXME: move this into extension point for 7.4! */
+@import '/appsuite/apps/3rd.party/emoji/emoji.css';
 
 @font-face {
     font-family: 'AndroidEmojiRegular';
@@ -30,9 +31,9 @@ img.emoji {
 }
 
 .oxSkin .mceIcon.mce_emoji {
-    background: url('../../../../3rd.party/emoji/emoji.png');
-    //copy of .emoji1f603
-    background-position: -380px -300px;
+    background: url('img/emoji.png');
+    width: 20px;
+    height: 20px;
 }
 
 .oxSkin .table-cell-fix {
