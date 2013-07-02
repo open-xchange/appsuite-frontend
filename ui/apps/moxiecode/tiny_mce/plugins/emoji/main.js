@@ -84,7 +84,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return this.iconInfo([icon, emoji.EMOJI_MAP[icon]]);
 
             if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
-                return { invalid: true };
+                return undefined;
 
             return {
                 css: this.cssFor(icon[0]),
