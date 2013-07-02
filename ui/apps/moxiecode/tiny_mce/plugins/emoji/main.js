@@ -28,9 +28,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
         var e = settings.get('availableCollections', '');
-        return _(e.split(',')).map(function (collection) {
-            return collection.trim();
-        });
+        return _(e.split(','))
+            .chain()
+            .map(function (collection) {
+                return collection.trim();
+            })
+            .compact()
+            .value();
     }
 
     function parseUnicode(str) {
