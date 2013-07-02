@@ -98,6 +98,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var icon = emoji.EMOJI_MAP[unicode];
 
+            if (!this.category_map[unicode]) {
+                return undefined;
+            }
+
             if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
                 return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }

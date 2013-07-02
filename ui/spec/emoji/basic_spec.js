@@ -28,6 +28,10 @@ define([
                 expect(this.emoji.cssFor('\u2600')).toBe('emoji-unified emoji2600');
             });
 
+            it('should not provide any CSS for unknown unicode', function () {
+                expect(this.emoji.cssFor('\u2599')).not.toBeDefined();
+            });
+
             it('should provide information for unicode emoji', function () {
                 var info = this.emoji.iconInfo('\u2600');
                 expect(typeof info).toBe('object');
