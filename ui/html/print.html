@@ -156,7 +156,7 @@
 
 
 <!-- the only magic we need here; asks UI to use the upper template -->
-<script>window.opener[location.search.substr(1)](document);</script>
+<script>(window.opener || window.parent)[location.search.substr(1)](document);</script>
 
 </body>
 </html>
