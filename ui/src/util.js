@@ -201,6 +201,7 @@
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
             misc.touch = Modernizr.touch;
+            misc.standalone = ("standalone" in window.navigator) && window.navigator.standalone;
             misc.emoji = _.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
