@@ -61,28 +61,73 @@ define('io.ox/core/print',
 
         request: function (manager, selection) {
 
-            var id = 'print_initialize_' + _.now(), win;
+            var win;
 
-            window[id] = function () {
+            function cont() {
                 require([manager]).then(
                     function success(m) {
                         if (_.isFunction(m.open)) {
                             m.open(selection, win);
-                            win.focus();
                         } else {
-                            win.close();
                             console.error('Missing function "open" in:', manager, m);
                         }
                     },
                     function fail() {
-                        win.close();
                         console.error('Failed to load print manager');
                     }
                 );
-                delete window[id];
-            };
+            }
 
-            var win = this.openURL(ox.base + '/busy.html#callback=' + id);
+            if (_.device('desktop')) {
+
+                cont();
+
+                win = this.openURL(ox.base + '/busy.html');
+
+            } else {
+                // use iframe in modal dialog on mobile devices
+                ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
+
+                    var iframe = $('<iframe>', { src: ox.base + '/busy.html', frameborder: 0 }).css({
+                        width: '100%',
+                        height: '100%'
+                    });
+
+                    // create new dialog
+                    var dHeight = window.innerHeight * 0.9,
+                        dialog = new dialogs.ModalDialog({
+                            width: window.innerWidth * 0.9,
+                            height: dHeight
+                        })
+                        .addPrimaryButton("print", gt('Print'), null, {
+                            click: function () {
+                                win.print();
+                            }
+                        })
+                        .addButton("cancel", gt("Cancel"));
+                    dHeight -= 100;
+                    dialog.getBody().css({
+                        height: dHeight,
+                        maxHeight: dHeight
+                    });
+
+                    dialog
+                        .append(iframe)
+                        .show()
+                        .done(function (action) {
+                            if (action === 'print') {
+                                win.print();
+                            }
+                        });
+
+                    // set win for callbacks
+                    win = iframe[0].contentWindow;
+
+                    cont();
+                });
+
+            }
+
             return win;
         },
 
