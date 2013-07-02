@@ -80,13 +80,15 @@ define('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
-                var self = this;
+                var self = this,
+                    //convention with backend
+                    hidePrimaryAccountDetails = _.isNull(self.model.attributes.mail_server);
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop,
                     settings: {
-                        hideAccountDetails: self.model.attributes.id === 0 && !settings.get('showPrimaryAccountDetails', true)
+                        hideAccountDetails: self.model.attributes.id === 0 && hidePrimaryAccountDetails
                     }
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
