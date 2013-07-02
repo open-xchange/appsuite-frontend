@@ -12,11 +12,18 @@
 define('moxiecode/tiny_mce/plugins/emoji/main',
        ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
+       'css!3rd.party/emoji/emoji.css',
        'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
-    ], function (emoji, categories, settings) {
+    ], function (emoji, categories, ext, settings) {
 
     "use strict";
+
+    ext.point('3rd.party/emoji/editor_css').extend({
+        id: 'unified/icons',
+        css: '3rd.party/emoji/emoji.css'
+    });
 
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
