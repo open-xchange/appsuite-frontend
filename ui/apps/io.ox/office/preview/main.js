@@ -15,14 +15,18 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/app/baseapplication',
+     'io.ox/office/framework/app/toolbaractions',
      'io.ox/office/preview/model',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, BaseApplication, PreviewModel, PreviewView, PreviewController, gt) {
+    ], function (Utils, BaseApplication, ToolBarActions, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
+
+    var // the module name of this application
+        MODULE_NAME = 'io.ox/office/preview';
 
     // class PreviewApplication ===============================================
 
@@ -149,8 +153,24 @@ define('io.ox/office/preview/main',
 
     }}); // class PreviewApplication
 
+    // static initialization ==================================================
+
+    ToolBarActions.createIcon(MODULE_NAME, {
+        id: 'download',
+        icon: 'icon-download-alt',
+        label: gt('Download'),
+        action: function (app) { app.download(); }
+    });
+
+    ToolBarActions.createIcon(MODULE_NAME, {
+        id: 'print',
+        icon: 'icon-print',
+        label: gt('Print'),
+        action: function (app) { app.print(); }
+    });
+
     // exports ================================================================
 
-    return BaseApplication.createLauncher('io.ox/office/preview', PreviewApplication, { chromeless: true });
+    return BaseApplication.createLauncher(MODULE_NAME, PreviewApplication);
 
 });
