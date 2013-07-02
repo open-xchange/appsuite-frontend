@@ -51,6 +51,13 @@
     box-shadow: @shadow1, @shadow2;
 }
 
+.box-shadow-4(@shadow1, @shadow2, @shadow3, @shadow4) {
+    -webkit-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
+    -moz-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
+    -ms-box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
+    box-shadow: @shadow1, @shadow2, @shadow3, @shadow4;
+}
+
 /* shadow for hovering elements */
 .drop-shadow(@size: 5px) {
     .box-shadow(0 @size (2 * @size) fade(black, 20%));
@@ -833,6 +840,9 @@ i.docs-caret {
             @item-height: 42px;
             /* border width of buttons in framed design mode */
             @item-border-width: 3px;
+            /* shadow effects for selected buttons */
+            @shadow-effect-1: 0 5px 10px fade(black, 20%);
+            @shadow-effect-2: 0 2px 4px fade(black, 20%) inset;
 
             .button {
                 height: @item-height;
@@ -844,20 +854,32 @@ i.docs-caret {
 
                 &.selected {
                     border-color: @selectedBackground;
-                    .drop-shadow();
+                    .box-shadow-2(@shadow-effect-1, @shadow-effect-2);
+                    background-color: fade(@selectedBackground, 15%);
                 }
             }
 
             &:not(.disabled) .button:not(.disabled) {
 
-                &:hover:not(:focus) { border-color: fade(black, 10%); }
-                &:active:not(:focus) { border-color: fade(black, 10%); }
-                &:focus { border-color: fade(@selectedBackground, 60%); }
+                &:not(.selected) {
+                    &:hover:not(:focus) { border-color: fade(black, 10%); }
+                    &:active { border-color: fade(black, 15%); }
+
+                    /* focused but not selected: add focus glow effect outside of button */
+                    &:focus:not(:active) {
+                        .box-shadow-2(0 0 0 1px @selectedBackground, @focus-glow-effect);
+                    }
+                }
 
                 &.selected {
                     &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
-                    &:active:not(:focus) { border-color: darken(@selectedBackground, 10%); }
-                    &:focus { border-color: darken(@selectedBackground, 20%); }
+                    &:active { border-color: darken(@selectedBackground, 10%); }
+
+                    /* selected and focused: extend shadow effect with focus glow effect outside of button */
+                    &:focus:not(:active) {
+                        border-color: lighten(@selectedBackground, 10%);
+                        .box-shadow-4(@shadow-effect-1, @shadow-effect-2, 0 0 0 1px @selectedBackground, @focus-glow-effect);
+                    }
                 }
             }
         }

@@ -27,16 +27,22 @@ define('io.ox/office/framework/view/basecontrols',
 
     /**
      * Standard options for the 'Close' button.
+     *
+     * @constant
      */
     BaseControls.QUIT_OPTIONS = { icon: 'icon-remove', tooltip: gt('Close document') };
 
     /**
      * Standard options for the 'Hide side panel' button.
+     *
+     * @constant
      */
     BaseControls.HIDE_SIDEPANE_OPTIONS = { icon: 'docs-hide-sidepane', tooltip: gt('Hide side panel'), value: false };
 
     /**
      * Standard options for the 'Show side panel' button.
+     *
+     * @constant
      */
     BaseControls.SHOW_SIDEPANE_OPTIONS = { icon: 'docs-show-sidepane', tooltip: gt('Show side panel'), value: true };
 

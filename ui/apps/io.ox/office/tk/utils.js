@@ -65,6 +65,8 @@ define.async('io.ox/office/tk/utils',
     /**
      * A unique object used as return value in callback functions of iteration
      * loops to break the iteration process immediately.
+     *
+     * @constant
      */
     Utils.BREAK = {};
 
@@ -72,16 +74,22 @@ define.async('io.ox/office/tk/utils',
      * The full identifier of the current locale, with leading lower-case
      * language identifier, and trailing upper-case country identifier,
      * separated by an underscore character, e.g. 'en_US'.
+     *
+     * @constant
      */
     Utils.LOCALE = '';
 
     /**
      * The lower-case language identifier of the current locale, e.g. 'en'.
+     *
+     * @constant
      */
     Utils.LANGUAGE = '';
 
     /**
      * The upper-case country identifier of the current locale, e.g. 'US'.
+     *
+     * @constant
      */
     Utils.COUNTRY = '';
 
@@ -2265,7 +2273,11 @@ define.async('io.ox/office/tk/utils',
      *  'left', and 'right'.
      */
     Utils.setControlTooltip = function (control, tooltip, placement) {
-        control.first().attr('title', tooltip || '');
+        if (tooltip) {
+            control.first().attr('title', tooltip);
+        } else {
+            control.first().removeAttr('title');
+        }
     };
 
     // label elements ---------------------------------------------------------

@@ -325,10 +325,8 @@ define('io.ox/office/preview/pagegroup',
         scrollableNode.on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 50, maxDelay: 200 }));
 
         // keyboard focus traveling: scroll to focused node
-        this.getNode().on('focusin', function (event) {
-            if ($(event.target).is(Utils.BUTTON_SELECTOR)) {
-                scrollToButton(event.target);
-            }
+        this.getNode().on('focusin', Utils.BUTTON_SELECTOR, function (event) {
+            scrollToButton(event.target);
         });
 
     } // class PageGroup
