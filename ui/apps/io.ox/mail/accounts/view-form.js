@@ -80,7 +80,6 @@ define('io.ox/mail/accounts/view-form',
             },
             render: function () {
                 var self = this;
-                window.account = self.model; //FIXME: WTF?
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
