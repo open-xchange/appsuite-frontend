@@ -15,8 +15,9 @@ define('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/notifications',
      'text!io.ox/mail/accounts/account_detail.html',
+      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
-    ], function (View, notifications, tmpl, gt) {
+    ], function (View, notifications, tmpl, settings, gt) {
 
     'use strict';
 
@@ -83,7 +84,10 @@ define('io.ox/mail/accounts/view-form',
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
-                    optionsRefreshRate: optionsRefreshRatePop
+                    optionsRefreshRate: optionsRefreshRatePop,
+                    settings: {
+                        hideAccountDetails: self.model.attributes.id === 0 && !settings.get('showPrimaryAccountDetails', true)
+                    }
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
 
