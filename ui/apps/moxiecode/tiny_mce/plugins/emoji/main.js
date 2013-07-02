@@ -70,6 +70,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         // make settings accessible, esp. for editor plugin
         this.settings = settings;
 
+        //FIXME: check if default is still valid after icons have been removed
         var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
         this.currentCollection = settings.get('userCollection', defaultCollection);
 
@@ -102,6 +103,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return undefined;
             }
 
+            //TODO: move this to softbanke emoji app
             if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
                 return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }
