@@ -168,20 +168,29 @@ define('io.ox/core/api/account',
      * @return {boolean}
      */
     api.is = (function () {
+
         var unifiedFolders = {
-            inbox:  /^default\d+\/INBOX(?:\/|$)/,
-            sent:   /^default\d+\/Sent(?:\/|$)/,
-            trash:  /^default\d+\/Trash(?:\/|$)/,
-            drafts: /^default\d+\/Drafts(?:\/|$)/,
-            spam:   /^default\d+\/Spam(?:\/|$)/
+            inbox:  /^default\d+\DINBOX(?:\/|$)/,
+            sent:   /^default\d+\DSent(?:\/|$)/,
+            trash:  /^default\d+\DTrash(?:\/|$)/,
+            drafts: /^default\d+\DDrafts(?:\/|$)/,
+            spam:   /^default\d+\DSpam(?:\/|$)/
         };
-        return function (type, id) {
+
+        function is(type, id) {
             if (api.isUnified(id)) {
                 var re = unifiedFolders[type];
                 return Boolean(re && re.test(id));
             } else {
                 return typeHash[id] === type;
             }
+        }
+
+        return function (type, id) {
+            type = String(type || '').split('|');
+            return _(type).reduce(function (memo, type) {
+                return memo || is(type, id);
+            }, false);
         };
     }());
 

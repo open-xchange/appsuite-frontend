@@ -277,7 +277,7 @@ define('io.ox/mail/util',
 
         getDisplayName: function (pair) {
 
-            if (!pair) return '';
+            if (!_.isArray(pair)) return '';
 
             var name = pair[0],
                 email = String(pair[1] || '').toLowerCase(),
@@ -295,7 +295,12 @@ define('io.ox/mail/util',
             field = field || 'from';
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
-            return $('<span>').addClass('person').text(_.noI18n(dn));
+            if (field === 'to' && dn === '') {
+                dn = gt('No recipients');
+            } else {
+                dn = _.noI18n(dn);
+            }
+            return $('<span class="person">').text(dn);
         },
 
         /**

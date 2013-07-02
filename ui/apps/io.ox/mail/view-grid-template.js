@@ -92,7 +92,7 @@ define('io.ox/mail/view-grid-template',
                     fields.threadSizeIcon.attr('class', (index + 1) in that.openThreads ? 'icon-caret-down' : 'icon-caret-right');
                 }
                 fields.from.empty().append(
-                    util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent', data.folder_id) ? 'to' : 'from')
+                    util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from')
                 );
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');

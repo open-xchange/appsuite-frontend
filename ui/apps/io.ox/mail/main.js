@@ -303,7 +303,7 @@ define('io.ox/mail/main',
                 .find('i').attr('class', 'icon-ok');
             // sent folder?
             list.find('[data-option="from-to"] span').text(
-                account.is('sent', props.folder) ? gt('To') : gt('From')
+                account.is('sent|drafts', props.folder) ? gt('To') : gt('From')
             );
             // unread
             dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
