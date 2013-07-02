@@ -9,6 +9,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: apps/io.ox/core/print.js:42
+msgid "Printout"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:297 apps/io.ox/core/print.js:144
+#: apps/io.ox/core/pubsub/subscriptions.js:102
+msgid "Error"
+msgstr ""
+
+#: apps/io.ox/core/print.js:145
+msgid "Cannot print this item"
+msgid_plural "Cannot print these items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/office/preview/view.js:43
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:44
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:45
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:46
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:47
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/view.js:48
+msgid "Zoom in"
+msgstr ""
+
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#: apps/io.ox/office/preview/view.js:247
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#. %1$d is the current zoom factor, in percent
+#, c-format
+#: apps/io.ox/office/preview/view.js:261
+msgid "Zoom: %1$d%"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:308
+#: apps/io.ox/office/preview/view.js:306 apps/io.ox/office/preview/view.js:324
+msgid "Load Error"
+msgstr ""
+
+#. %1$d is the current page number that caused the error
+#, c-format
+#: apps/io.ox/office/preview/view.js:327
+msgid "An error occurred while loading page %1$d."
+msgstr ""
+
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:35
 msgid "Unified"
 msgstr ""
@@ -3542,11 +3605,6 @@ msgstr ""
 msgid "No notifications"
 msgstr ""
 
-#: apps/io.ox/core/notifications.js:297 apps/io.ox/core/print.js:132
-#: apps/io.ox/core/pubsub/subscriptions.js:102
-msgid "Error"
-msgstr ""
-
 #: apps/io.ox/core/permissions/permissions.js:34
 msgid "Guest"
 msgstr ""
@@ -4148,16 +4206,6 @@ msgstr ""
 msgid "Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster."
 msgstr ""
 
-#: apps/io.ox/core/print.js:42
-msgid "Printout"
-msgstr ""
-
-#: apps/io.ox/core/print.js:133
-msgid "Cannot print this item"
-msgid_plural "Cannot print these items"
-msgstr[0] ""
-msgstr[1] ""
-
 #: apps/io.ox/core/login-i18n.js:20
 msgid "User name"
 msgstr ""
@@ -4337,54 +4385,6 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js:79
 msgid "Click to open."
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:43
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:44
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:45
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:46
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:47
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:48
-msgid "Zoom in"
-msgstr ""
-
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/view.js:277
-msgid "Page %1$s of %2$s"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:308
-#: apps/io.ox/office/preview/view.js:306
-msgid "Load Error"
-msgstr ""
-
-#. %1$d is the current page number that caused the error
-#, c-format
-#: apps/io.ox/office/preview/view.js:309
-msgid "An error occurred while loading page %1$d."
-msgstr ""
-
-#. %1$d is the current zoom factor, in percent
-#, c-format
-#: apps/io.ox/office/preview/view.js:329
-msgid "Zoom: %1$d%"
 msgstr ""
 
 #: apps/io.ox/office/preview/main.js:107
