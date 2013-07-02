@@ -828,6 +828,24 @@ define("io.ox/core/main",
         });
 
         new Stage('io.ox/core/stages', {
+            id: 'secretCheck',
+            index: 250,
+            run: function () {
+                if (ox.online) {
+                    require(["io.ox/keychain/api"], function (keychainAPI) {
+                        keychainAPI.checkSecrets().done(function (analysis) {
+                            if (!analysis.secretWorks) {
+                                // Show dialog
+                                require(["io.ox/keychain/secretRecoveryDialog"], function (d) { d.show(); });
+                                console.error("Couldn't decrypt accounts: ", analysis.diagnosis);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
             id: 'restore-check',
             index: 300,
             run: function (baton) {
