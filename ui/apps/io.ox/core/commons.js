@@ -554,7 +554,7 @@ define('io.ox/core/commons',
 
             e.preventDefault();
 
-            var items = $('.f6-target:visible'),
+            var items = $('#io-ox-core .f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),
                 index = (items.index(closest) || 0) + (e.shiftKey ? -1 : +1),
                 next;
