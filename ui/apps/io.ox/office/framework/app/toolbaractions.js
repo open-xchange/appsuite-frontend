@@ -13,8 +13,9 @@
 
 define('io.ox/office/framework/app/toolbaractions',
     ['io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils'
-    ], function (links, Utils) {
+     'io.ox/office/tk/utils',
+     'gettext!io.ox/office/main'
+    ], function (links, Utils, gt) {
 
     'use strict';
 
@@ -85,6 +86,60 @@ define('io.ox/office/framework/app/toolbaractions',
             label: label,
             index: 100,
             ref: ACTION_POINT
+        });
+    };
+
+    /**
+     * Creates a new 'search' icon in the global window tool bar of the
+     * specified application type. The created action toggles the search tool
+     * bar of the application window. Registration is done globally once per
+     * application type, using the extension framework.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    ToolBarActions.createSearchIcon = function (moduleName) {
+        ToolBarActions.createIcon(moduleName, {
+            id: 'search',
+            icon: 'icon-search',
+            label: gt('Toggle search'),
+            action: function (app) { app.getWindow().search.toggle(); }
+        });
+    };
+
+    /**
+     * Creates a new 'download' icon in the global window tool bar of the
+     * specified application type. The created action calls the method
+     * 'BaseApplication.download()'. Registration is done globally once per
+     * application type, using the extension framework.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    ToolBarActions.createDownloadIcon = function (moduleName) {
+        ToolBarActions.createIcon(moduleName, {
+            id: 'download',
+            icon: 'icon-download-alt',
+            label: gt('Download'),
+            action: function (app) { app.download(); }
+        });
+    };
+
+    /**
+     * Creates a new 'print' icon in the global window tool bar of the
+     * specified application type. The created action calls the method
+     * 'BaseApplication.print()'. Registration is done globally once per
+     * application type, using the extension framework.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    ToolBarActions.createPrintIcon = function (moduleName) {
+        ToolBarActions.createIcon(moduleName, {
+            id: 'print',
+            icon: 'icon-print',
+            label: gt('Print'),
+            action: function (app) { app.print(); }
         });
     };
 

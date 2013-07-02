@@ -155,19 +155,8 @@ define('io.ox/office/preview/main',
 
     // static initialization ==================================================
 
-    ToolBarActions.createIcon(MODULE_NAME, {
-        id: 'download',
-        icon: 'icon-download-alt',
-        label: gt('Download'),
-        action: function (app) { app.download(); }
-    });
-
-    ToolBarActions.createIcon(MODULE_NAME, {
-        id: 'print',
-        icon: 'icon-print',
-        label: gt('Print'),
-        action: function (app) { app.print(); }
-    });
+    ToolBarActions.createDownloadIcon(MODULE_NAME);
+    ToolBarActions.createPrintIcon(MODULE_NAME);
 
     // exports ================================================================
 
