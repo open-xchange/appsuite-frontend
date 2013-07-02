@@ -44,6 +44,18 @@ define([
             it('should provide dummy information for unknown unicodes', function () {
                 expect(this.emoji.iconInfo('\u2599')).not.toBeDefined();
             });
+
+            it('should convert unified unicode emoji to image tag', function () {
+                var imgTag = emoji.unifiedToImageTag('\u2600');
+
+                expect($(imgTag).attr('data-emoji-unicode')).toBe('\u2600');
+            });
+
+            it('should convert special image tags to unified emoji unicode', function () {
+                var imgTag = emoji.unifiedToImageTag('\u2600');
+
+                expect(emoji.imageTagsToUnified(imgTag)).toBe('\u2600');
+            });
         });
 
         describe('handles different unicode encoding lengths', function () {
