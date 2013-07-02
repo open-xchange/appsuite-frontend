@@ -61,9 +61,13 @@ function compileLess() {
                          '@import "' + defs.replace(/\\/g, '/') + '";\n' +
                          '@import "' + src.replace(/\\/g, '/') + '";\n',
                 function (e, tree) {
-                    if (e) fail(JSON.stringify(e, null, 4)); else ast = tree;
+                    if (e) fail(less.formatError(e)); else ast = tree;
                 });
-                fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
+                try {
+                    fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
+                } catch (e) {
+                    fail(less.formatError(e));
+                }
             });
     }
 
