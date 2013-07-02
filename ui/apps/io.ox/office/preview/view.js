@@ -465,6 +465,8 @@ define('io.ox/office/preview/view',
             // convert type keyword to zoom factor
             switch (zoomType) {
             case 'width':
+                // TODO
+                return 100;
             case 'page':
                 // TODO
                 return 100;
