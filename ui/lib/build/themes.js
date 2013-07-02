@@ -52,23 +52,23 @@ function compileLess() {
             [core('apps/themes/definitions.less'),
              defsInCore ? core(defs) : defs, srcInCore ? core(src) : src],
             function () {
-                var ast;
                 new less.Parser({
                     paths: ['.', coreDir],
-                    syncImport: true,
                     relativeUrls: true
                 }).parse('@import "apps/themes/definitions.less";\n' +
                          '@import "' + defs.replace(/\\/g, '/') + '";\n' +
                          '@import "' + src.replace(/\\/g, '/') + '";\n',
                 function (e, tree) {
-                    if (e) fail(less.formatError(e)); else ast = tree;
+                    if (e) return fail(less.formatError(e));
+                    try {
+                        fs.writeFileSync(dest,
+                            tree.toCSS({ compress: !utils.debug }));
+                        complete();
+                    } catch (e) {
+                        fail(less.formatError(e));
+                    }
                 });
-                try {
-                    fs.writeFileSync(dest, ast.toCSS({ compress: !utils.debug }));
-                } catch (e) {
-                    fail(less.formatError(e));
-                }
-            });
+            }, { async: true });
     }
 
     // own themes
