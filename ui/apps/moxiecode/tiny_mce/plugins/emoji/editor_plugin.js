@@ -89,7 +89,7 @@
             // outer container first to fix firefox's problems with position: relative in table cells
             var node = $('<div class="table-cell-fix">');
 
-            var collectionControl = this.emoji.settings.get('collectionControl', 'tabs');
+            var collectionControl = this.emoji.settings.get('collectionControl', 'none');
 
             this.showTabs = collectionControl === 'tabs' && _(this.emoji.collections).contains('softbank');
             this.showDropdown = collectionControl === 'dropdown' && this.emoji.collections.length > 1;

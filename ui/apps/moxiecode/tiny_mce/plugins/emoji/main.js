@@ -10,15 +10,20 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define('moxiecode/tiny_mce/plugins/emoji/main',
-       ['emoji/emoji',
+       ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
-       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji_categories.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less',
-       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji.css',
-       'css!emoji/emoji.css'], function (emoji, categories, settings) {
+       'css!3rd.party/emoji/emoji.css',
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
+    ], function (emoji, categories, ext, settings) {
 
     "use strict";
+
+    ext.point('3rd.party/emoji/editor_css').extend({
+        id: 'unified/icons',
+        css: '3rd.party/emoji/emoji.css'
+    });
 
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
@@ -94,10 +99,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
             var icon = emoji.EMOJI_MAP[unicode];
 
             if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
-                return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+                return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }
 
-            return 'emoji emoji' + icon[2];
+            return 'emoji-unified emoji' + icon[2];
         },
 
         // add to "recently used" category

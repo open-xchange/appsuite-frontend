@@ -14,7 +14,7 @@ define('io.ox/mail/emoji/settings/defaults', [], function () {
     'use strict';
 
     var settingsDefaults = {
-        availableCollections: 'unified,softbank,japan_carrier',
+        availableCollections: 'unified',
         defaultCollection: 'unified',
         recently: {}
     };

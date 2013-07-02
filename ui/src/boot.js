@@ -836,7 +836,7 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', 'You have been automatically logged out');
+                    feedback('info', $.txt(gt('autologout')));
                 }
 
                 debug('boot.js: Check browser support');
@@ -846,27 +846,10 @@ $(window).load(function () {
 
                     if (_.device('android')) {
                         // special info for not supported android
-                        feedback('info', function () {
-                            return $.txt(
-                                //#. %n in the lowest version of Android
-                                gt('You need to use Android %n or higher.',
-                                    _.browserSupport.Android));
-                        });
+                        feedback('info', $.txt(_.printf(gt('os-android'), _.browserSupport.Android)));
                     } else if (_.device('ios')) {
                         // special info for not supported iOS
-                        feedback('info', function () {
-                            return $.txt(
-                                //#. %n is the lowest version of iOS
-                                gt('You need to use iOS %n or higher.',
-                                    _.browserSupport.iOS));
-                        });
-                    } else if (_.browser.Chrome) {
-                        // warning about Chrome version
-                        feedback('info', function () {
-                            return $('<b>').text(gt('Your browser version is not supported!'))
-                                .add($.txt(_.noI18n('\xa0')))
-                                .add($('<div>').text(gt('Please update your browser.')));
-                        });
+                        feedback('info', $.txt(_.printf(gt('os-ios'), _.browserSupport.iOS)));
                     } else {
                         // general warning about browser
                         feedback('info', function () {
@@ -887,9 +870,7 @@ $(window).load(function () {
                 } else if (_.device('android || (ios && small)')) {
                     // TODO remove after 7.4
                     // inform about preview mode for 7.2
-                    feedback('info', 'Unsupported Preview - Certain ' +
-                        'functions disabled and stability not assured until ' +
-                        'general release later this year');
+                    feedback('info', $.txt(gt('mobile-preview')));
                 }
 
                 // show login dialog
