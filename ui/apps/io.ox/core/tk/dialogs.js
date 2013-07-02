@@ -215,7 +215,7 @@ define("io.ox/core/tk/dialogs",
             var opt = {
                 label: label,
                 data: { action: action },
-                click: invoke,
+                click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse
