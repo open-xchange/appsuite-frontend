@@ -33,7 +33,13 @@ define('io.ox/office/preview/view',
         KeyCodes = Utils.KeyCodes,
 
         // predefined zoom factors
-        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600];
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
+
+        // margins between page and border of application pane
+        CONTENT_MARGIN = { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
+
+        // margins between overlay panes and border of application pane
+        OVERLAY_MARGIN = { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT };
 
     // class PreviewView ======================================================
 
@@ -83,7 +89,7 @@ define('io.ox/office/preview/view',
             // current zoom type (percentage or keyword)
             zoomType = 100,
 
-            // the current effective zoom factor
+            // the current effective zoom factor, in percent
             zoomFactor = 100;
 
         // base constructor ---------------------------------------------------
@@ -92,7 +98,7 @@ define('io.ox/office/preview/view',
             initHandler: initHandler,
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
-            contentMargin: { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
+            contentMargin: CONTENT_MARGIN,
             overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
 
@@ -171,7 +177,10 @@ define('io.ox/office/preview/view',
             self.getAppPaneNode().on('keydown', keyHandler);
 
             // set focus to application pane after import
-            app.on('docs:import:after', function () { self.grabFocus(); });
+            app.on('docs:import:after', function () {
+                self.on('refresh:layout', function () { updateZoom(); });
+                self.grabFocus();
+            });
         }
 
         /**
@@ -248,7 +257,7 @@ define('io.ox/office/preview/view',
                 caption:
                     //#. %1$d is the current zoom factor, in percent
                     //#, c-format
-                    gt('Zoom: %1$d%', self.getZoomFactor()),
+                    gt('Zoom: %1$d%', zoomFactor),
                 type: 'info'
             });
         }, updatePageStatus, { delay: 1000 });
@@ -333,20 +342,39 @@ define('io.ox/office/preview/view',
          */
         function updateZoom(scrollTo) {
 
-            var // the current zoom factor
-                zoomFactor = self.getZoomFactor() / 100,
-                // the original size of the page
+            var // the original size of the page
                 pageSize = pageNode.data('size'),
                 // the application pane node
-                appPaneNode = self.getAppPaneNode();
+                appPaneNode = self.getAppPaneNode(),
+                // the available width for a page in the application pane
+                availableWidth = appPaneNode[0].clientWidth - CONTENT_MARGIN.left - CONTENT_MARGIN.right,
+                // the available height for a page in the application pane
+                availableHeight = appPaneNode[0].clientHeight - CONTENT_MARGIN.top - CONTENT_MARGIN.bottom;
+
+            // calculate the effective zoom factor
+            if (_.isNumber(zoomType)) {
+                zoomFactor = zoomType;
+            } else if (_.isObject(pageSize)) {
+                switch (zoomType) {
+                case 'width':
+                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), 100);
+                    break;
+                case 'page':
+                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), Math.floor(availableHeight / pageSize.height * 100), 100);
+                    break;
+                default:
+                    Utils.warn('PreviewView.updateZoom(): unsupported zoom type "' + zoomType + '"');
+                    zoomFactor = 100;
+                }
+            } else {
+                zoomFactor = 100;
+            }
+            zoomFactor = Utils.minMax(zoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
 
             // set the current zoom factor to the page (prevent zooming on invalid pages)
             if (_.isObject(pageSize)) {
-                ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor);
+                ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor / 100);
             }
-
-            // refresh view (scroll bars may have appeared or vanished)
-            self.refreshPaneLayout();
 
             // update scroll position
             switch (scrollTo) {
@@ -456,24 +484,7 @@ define('io.ox/office/preview/view',
          *  The current zoom factor in percent.
          */
         this.getZoomFactor = function () {
-
-            // fixed percentage
-            if (_.isNumber(zoomType)) {
-                return zoomType;
-            }
-
-            // convert type keyword to zoom factor
-            switch (zoomType) {
-            case 'width':
-                // TODO
-                return 100;
-            case 'page':
-                // TODO
-                return 100;
-            }
-
-            Utils.warn('PreviewView.getZoomFactor(): unsupported zoom type "' + zoomType + '"');
-            return 100;
+            return zoomFactor;
         };
 
         /**
@@ -526,12 +537,10 @@ define('io.ox/office/preview/view',
          */
         this.decreaseZoomLevel = function () {
 
-            var // the current effective zoom factor
-                zoomFactor = this.getZoomFactor();
+            var // find last entry in ZOOM_FACTORS with a factor less than current zoom
+                prevZoomFactor = Utils.findLast(ZOOM_FACTORS, function (factor) { return factor < zoomFactor; });
 
-            // find last entry in ZOOM_FACTORS with a factor less than current zoom
-            zoomFactor = Utils.findLast(ZOOM_FACTORS, function (factor) { return factor < zoomFactor; });
-            return this.setZoomType(_.isNumber(zoomFactor) ? zoomFactor : this.getMinZoomFactor());
+            return this.setZoomType(_.isNumber(prevZoomFactor) ? prevZoomFactor : this.getMinZoomFactor());
         };
 
         /**
@@ -544,12 +553,10 @@ define('io.ox/office/preview/view',
          */
         this.increaseZoomLevel = function () {
 
-            var // the current effective zoom factor
-                zoomFactor = this.getZoomFactor();
+            var // find first entry in ZOOM_FACTORS with a factor greater than current zoom
+                nextZoomFactor = _(ZOOM_FACTORS).find(function (factor) { return factor > zoomFactor; });
 
-            // find first entry in ZOOM_FACTORS with a factor greater than current zoom
-            zoomFactor = _(ZOOM_FACTORS).find(function (factor) { return factor > zoomFactor; });
-            return this.setZoomType(_.isNumber(zoomFactor) ? zoomFactor : this.getMaxZoomFactor());
+            return this.setZoomType(_.isNumber(nextZoomFactor) ? nextZoomFactor : this.getMaxZoomFactor());
         };
 
         /**
@@ -575,7 +582,7 @@ define('io.ox/office/preview/view',
             // restore zoom type
             zoomType = Utils.getOption(point, 'zoom');
             if (_.isNumber(zoomType)) {
-                zoomType = Utils.minMax(Math.round(zoomType), ZOOM_FACTORS[0], _.last(ZOOM_FACTORS));
+                zoomType = Math.round(zoomType);
             } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
                 zoomType = 100;
             }
