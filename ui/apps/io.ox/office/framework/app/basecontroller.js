@@ -106,6 +106,12 @@ define('io.ox/office/framework/app/basecontroller',
                         return def;
                     },
                     focus: 'wait' // application may resume
+                },
+
+                'document/print': {
+                    // enabled in read-only mode
+                    set: function () { app.print(); },
+                    shortcut: { keyCode: Utils.KeyCodes.P, ctrlOrMetaKey: true }
                 }
             },
 
