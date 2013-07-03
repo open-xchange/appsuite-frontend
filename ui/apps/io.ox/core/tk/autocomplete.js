@@ -24,6 +24,7 @@ define('io.ox/core/tk/autocomplete',
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
+
                 minLength: 1,
                 maxResults: 25,
                 delay: 100,
@@ -48,14 +49,20 @@ define('io.ox/core/tk/autocomplete',
                     return data;
                 },
 
-                //object related unique string
+                name: function (data) {
+                    return util.unescapeDisplayName(data.display_name);
+                },
+
+                // object related unique string
                 stringify: function (data) {
 
                     if (data.type === 'resource' || data.type === 'group')
-                        return util.unescapeDisplayName(data.data.display_name);
+                        return this.name(data.contact);
 
-                    return data.display_name ? '"' + util.unescapeDisplayName(data.display_name) + '" <' + data.email + '>' : data.email;
+                    var name = this.name(data);
+                    return name ? '"' + name + '" <' + data.email + '>' : data.email;
                 }
+
             }, o || {});
 
 
@@ -72,7 +79,7 @@ define('io.ox/core/tk/autocomplete',
 
             update = function () {
                 // get data from current item and update input field
-                var data = scrollpane.children().eq(Math.max(0, index)).data('data');
+                var data = scrollpane.children().eq(Math.max(0, index)).data();
                 lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
                 self.val(lastValue);
 
@@ -167,6 +174,7 @@ define('io.ox/core/tk/autocomplete',
                 },
 
             fnSelectItem = function (e) {
+                    e.data = $(this).data();
                     select(e.data.index);
                     o.click.call(self.get(0), e);
                     close();
@@ -179,10 +187,23 @@ define('io.ox/core/tk/autocomplete',
                         // draw results
                         popup.idle();
                         _(list.slice(0, o.maxResults)).each(function (data, index) {
-                            var node = $('<div>')
-                                .addClass('autocomplete-item')
-                                .data('data', data)
-                                .on('click', { index: index, contact: data.contact, email: data.email, field: data.field || '', phone: data.phone || '', distlistarray: data.data.distribution_list, id: data.data.id, folder_id: data.data.folder_id, image1_url: data.data.image1_url, display_name: data.data.display_name }, fnSelectItem);
+                            var node = $('<div class="autocomplete-item">')
+                                .data({
+                                    index: index,
+                                    contact: data.data,
+                                    email: data.email,
+                                    field: data.field || '',
+                                    phone: data.phone || '',
+                                    type: data.type,
+                                    distlistarray: data.data.distribution_list,
+                                    id: data.data.id,
+                                    folder_id: data.data.folder_id,
+                                    image1_url: data.data.image1_url,
+                                    first_name: data.data.first_name,
+                                    last_name: data.data.last_name,
+                                    display_name: data.data.display_name
+                                })
+                                .on('click', fnSelectItem);
                             o.draw.call(node, data, query);
                             node.appendTo(scrollpane);
                         });
@@ -249,7 +270,7 @@ define('io.ox/core/tk/autocomplete',
                         e.preventDefault();
                         if (!e.shiftKey) { // ignore back-tab
                             update();
-                            $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data('data'));
+                            $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data());
                             close();
                         }
                         break;
@@ -316,7 +337,7 @@ define('io.ox/core/tk/autocomplete',
         * @return {object|boolean} data object or false
         */
         this.getSelectedItem = function () {
-            var data = scrollpane.children().eq(Math.max(0, index)).data('data');
+            var data = scrollpane.children().eq(Math.max(0, index)).data();
             return index < 0 ? false : data;
         };
 

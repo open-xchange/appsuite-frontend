@@ -104,6 +104,10 @@ define('io.ox/contacts/distrib/create-dist-view',
             });
 
             autocomplete.on('select', function (data) {
+
+                // overwrite display_name
+                data.display_name = util.getMailFullName(data);
+
                 var newMember,
                     mailValue = data.email1 || data.email2 || data.email3 || data.mail,
                     nameValue = data.display_name;
@@ -134,7 +138,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             } else {
                 _(this.model.get('distribution_list')).each(function (member) {
                     self.$el.find('.item-list').append(
-                            self.drawListedItem(member)
+                        self.drawListedItem(member)
                     );
                 });
             }
@@ -184,6 +188,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         },
 
         copyContact: function (options, contact, selectedMail) {
+
             var newMember;
 
             if (_.isString(contact)) {
@@ -199,6 +204,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
                 newMember = {
                     id: contact.id,
+                    folder_id: contact.folder_id,
                     display_name: contact.display_name,
                     mail: selectedMail,
                     mail_field: mailNr
@@ -219,45 +225,34 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         },
 
-        drawFail: function () {
-            var self = this;
-            $('.error-alerts').empty();
-            $('.error-alerts').append(
-                $.fail(gt("Couldn't load all contact images."), function () {
-                    self.model.trigger('change:distribution_list');
-                })
-            );
-        },
-
         drawListedItem: function (o) {
-            var self = this,
-                frame = $('<div>').addClass('listed-item span6').attr({
-                'data-mail': o.display_name + '_' + o.mail
-            }),
-            img = api.getPicture(o.mail).addClass('contact-image'),
 
-            button = $('<a href="#" class="remove" tabindex="1">').append(
-                $('<div class="icon">').append(
-                    $('<i class="icon-trash">')
-                )
-            )
-            .on('click', { mail: o.mail, name: o.display_name }, function (e) {
-                e.preventDefault();
-                self.model.removeMember(e.data.mail, e.data.name);
-            });
+            var self = this;
 
-            frame.append(img)
-            .append(
-                $('<div>').addClass('person-link ellipsis')
-                .append($('<div>').append(api.getDisplayName({email: o.mail, display_name: o.display_name }).attr('tabindex', 1))),
-                $('<div>').addClass('person-selected-mail')
-                .text((o.mail)),
-                button
-            );
-            api.on('fail', function () {
-                self.drawFail();
-            });
-            return frame;
+            return $('<div class="listed-item span6">')
+                .attr('data-mail', o.display_name + '_' + o.mail)
+                .append(
+                    // contact picture
+                    api.getPicture(o, { scaleType: 'cover', width: 54, height: 54 }).addClass('contact-image'),
+                    // name
+                    $('<div class="person-name ellipsis">').text(o.display_name),
+                    // mail address
+                    $('<div class="person-mail ellipsis">').append(
+                        $('<a href="#" class="halo-link" tabindex="1">')
+                            .data({ email1: o.mail })
+                            .text(o.mail)
+                    ),
+                    // remove icon
+                    $('<a href="#" class="remove" tabindex="1">').append(
+                        $('<div class="icon">').append(
+                            $('<i class="icon-trash">')
+                        )
+                    )
+                    .on('click', { mail: o.mail, name: o.display_name }, function (e) {
+                        e.preventDefault();
+                        self.model.removeMember(e.data.mail, e.data.name);
+                    })
+                );
         },
 
         fnClickPerson: function (e) {

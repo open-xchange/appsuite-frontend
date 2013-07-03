@@ -17,8 +17,9 @@ define('io.ox/contacts/api',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
      'io.ox/core/cache',
+     'io.ox/contacts/util',
      'settings!io.ox/contacts'
-     ], function (ext, http, apiFactory, notifications, cache, settings) {
+     ], function (ext, http, apiFactory, notifications, cache, util, settings) {
 
     'use strict';
 
@@ -415,88 +416,9 @@ define('io.ox/contacts/api',
             });
     };
 
-    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', false);
-
     api.on('refresh.all', function () {
-        autocompleteCache.clear();
         api.caches.get.clear();
     });
-
-    /**
-     * TODO: deprecated/unused?
-     */
-    api.autocomplete = function (query) {
-
-        function process(list, obj, field) {
-            if (obj[field]) {
-                var name, a = obj.last_name, b = obj.first_name, c = obj.display_name;
-                if (a && b) {
-                    // use last_name & first_name
-                    name = a + ', ' + b;
-                } else if (c) {
-                    // use display name
-                    name = c + '';
-                } else {
-                    // use last_name & first_name
-                    name = [];
-                    if (a) { name.push(a); }
-                    if (b) { name.push(b); }
-                    name = name.join(', ');
-                }
-                list.push({
-                    display_name: name,
-                    email: obj[field].toLowerCase(),
-                    contact: obj
-                });
-            }
-        }
-
-        return autocompleteCache.get(query).pipe(function (data) {
-            if (data !== null) {
-                return data;
-            } else {
-                query = String(query || '').toLowerCase();
-                /*  boolean parameter seems to be a hack to set
-                    option 'emailAutoComplete: false' only in contacts api */
-                return api.search(query, true)
-                    .pipe(function (data) {
-                        var tmp = [], hash = {};
-                        // improve response
-                        // 1/2: resolve email addresses
-                        _(data).each(function (obj) {
-                            if (obj.mark_as_distributionlist) {
-                                // distribution list
-                                tmp.push({
-                                    display_name: obj.display_name || '',
-                                    email: 'will not be resolved',
-                                    contact: obj
-                                });
-                            } else {
-                                // email
-                                process(tmp, obj, 'email1');
-                                process(tmp, obj, 'email2');
-                                process(tmp, obj, 'email3');
-                            }
-                        });
-                        // 2/2: filter distribution lists & remove email duplicates
-                        tmp = _(tmp).filter(function (obj) {
-                            var isDistributionList = obj.contact.mark_as_distributionlist === true,
-                                isDuplicate = obj.email in hash;
-                            if (isDistributionList) {
-                                return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
-                            } else {
-                                return isDuplicate ? false : (hash[obj.email] = true);
-                            }
-                        });
-                        hash = null;
-                        return tmp;
-                    })
-                    .done(function (data) {
-                        autocompleteCache.add(query, data);
-                    });
-            }
-        });
-    };
 
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching', true);
@@ -515,62 +437,61 @@ define('io.ox/contacts/api',
     * @return {deferred} returns exactyl one contact object
     */
     api.getByEmailadress = function (address) {
-        address = address || '';
-        return fetchCache.get(address).pipe(function (data) {
-            if (data !== null) {
-                return data;
-            } else if (address === '') {
-                return {};
-            } else {
-                //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
-                return http.PUT({
-                    module: 'contacts',
-                    params: {
-                        action: 'search',
-                        columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
-                        timezone: 'UTC'
-                    },
-                    sort: 609,
-                    data: {
-                        'email1': address,
-                        'email2': address,
-                        'email3': address,
-                        'orSearch': true,
-                        'exactMatch': true
-                    }
-                }).pipe(function (data) {
-                    //TODO: use smarter server request instead
-                    data = data.filter(function (item) {
-                        return !item.mark_as_distributionlist;
-                    });
 
-                    if (data.length) {
-                        // favor contacts with an image
-                        data.sort(function (a, b) {
-                            return !!b.image1_url ? +1 : -1;
-                        });
-                        // favor contacts in global address book
-                        data.sort(function (a, b) {
-                            return b.folder_id === '6' ? +1 : -1;
-                        });
-                        // remove host
-                        if (data[0].image1_url) {
-                            data[0].image1_url = data[0].image1_url
-                                .replace(/^https?\:\/\/[^\/]+/i, '')
-                                .replace(/^\/ajax/, ox.apiRoot);
-                        }
-                        // use first contact
-                        return fetchCache.add(address, {
-                            image1_url: data[0].image1_url,
-                            display_name: data[0].display_name,
-                            internal_userid: data[0].internal_userid
-                        });
-                    } else {
-                        // no data found
-                        return fetchCache.add(address, {});
-                    }
+        address = address || '';
+
+        return fetchCache.get(address).then(function (data) {
+
+            if (data !== null) return data;
+            if (address === '') return {};
+
+            //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
+            return http.PUT({
+                module: 'contacts',
+                params: {
+                    action: 'search',
+                    columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
+                    timezone: 'UTC'
+                },
+                sort: 609,
+                data: {
+                    'email1': address,
+                    'email2': address,
+                    'email3': address,
+                    'orSearch': true,
+                    'exactMatch': true
+                }
+            })
+            .then(function (data) {
+
+                data = data.filter(function (item) {
+                    return !item.mark_as_distributionlist;
                 });
-            }
+
+                if (data.length) {
+                    // favor contacts with an image
+                    data.sort(function (a, b) {
+                        return !!b.image1_url ? +1 : -1;
+                    });
+                    // favor contacts in global address book
+                    data.sort(function (a, b) {
+                        return b.folder_id === '6' ? +1 : -1;
+                    });
+                    // just use the first one
+                    data = data[0];
+                    // remove host
+                    if (data.image1_url) {
+                        data.image1_url = data.image1_url
+                            .replace(/^https?\:\/\/[^\/]+/i, '')
+                            .replace(/^\/ajax/, ox.apiRoot);
+                    }
+                    // use first contact
+                    return fetchCache.add(address, data);
+                } else {
+                    // no data found
+                    return fetchCache.add(address, {});
+                }
+            });
         });
     };
 
@@ -784,55 +705,67 @@ define('io.ox/contacts/api',
     * @param  {object} obj ('display_name' and 'email')
     * @return {object} div node with callbacks
     */
-    api.getDisplayName = function (data) {
+    api.getDisplayName = function (data, options) {
+
+        options = _.extend({
+            halo: true,
+            stringify: 'getDisplayName',
+            tagName: 'a'
+        }, options);
+
         var set, clear, cont,
-            node = $('<a href="#" class="halo-link">'),
+            node = $('<' + options.tagName + '>').text('\u00A0'),
             email = data.email;
-        //set node content
+
+        // set node content
         set = function (name) {
-            if (/\@/.test(data.email)) {
-                node.data({
+            if (options.halo && /\@/.test(data.email)) {
+                node
+                .addClass('halo-link')
+                .attr('href', '#')
+                .data({
                     display_name: name,
                     email1: email
                 });
-            //} else if (data.phone && data.phone !== name) {
-            //    node.addClass('halo-link');
-            //    node.data({
-            //        display_name: name,
-            //        email1: email
-            //    });
-            } else {
-                //disable halo link if unique id (email) is missing
-                node.removeClass('halo-link');
             }
             node.text(_.noI18n(name + '\u00A0'));
         };
+
         // clear vars after call stack has cleared
         clear = function () {
             _.defer(function () { // use defer! otherwise we return null on cache hit
-                node = set = clear = cont = null; // don't leak
+                node = set = clear = cont = options = null; // don't leak
             });
         };
+
         // serverresponse vs. cache
         cont = function (data) {
-            if (_.isArray(data) && data.length > 0)
-                set(_.first(data).display_name);
-            else if (data && data.display_name) {
-                //workaround: email needed as id for msisdn halo links
-                //email = data.email1 || email;
-                set(data.display_name);
+
+            if (_.isArray(data)) data = data[0];
+
+            if (_.isString(data)) return set(data);
+
+            if (data) {
+                set(util[options.stringify](data));
+                clear();
             }
-            else if (_.isString(data))
-                set(data);
         };
-        cont(data.display_name);
-        if (data && (data.contact_id || data.id) && _.isString(data.display_name)) {
+
+        // has full_name?
+        if (data && data.full_name) {
+            cont(data.full_name);
             clear();
-        //} else if (data.phone) {
-        //    api.getByPhone(data.phone).done(cont).always(clear);
-        } else {
-            api.getByEmailadress(data.email).done(cont).always(clear);
         }
+        // looks like a full object?
+        else if (data && (data.last_name || data.first_name)) {
+            cont(data);
+            clear();
+        }
+        // load data
+        else {
+            api.getByEmailadress(data.email).done(cont).fail(clear);
+        }
+
         return node;
     };
 

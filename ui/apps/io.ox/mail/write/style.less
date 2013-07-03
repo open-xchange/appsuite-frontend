@@ -205,17 +205,26 @@
 }
 
 .io-ox-mail-write-contact {
-    height: 3em;
-}
 
-.io-ox-mail-write-contact .contact-image {
-    height: 3 * 14px;
-    width: 3 * 14px;
-    margin-right: 14px;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
+    height: 3em;
+
+    .contact-image {
+        height: 3 * 14px;
+        width: 3 * 14px;
+        margin-right: 14px;
+        display: inline-block;
+        background-size: cover;
+        background-repeat: no-repeat;
+        float: left;
+    }
+
+    .recipient-name {
+        font-weight: 500;
+    }
+
+    .email {
+        color: @linkColor;
+    }
 }
 
 .io-ox-mail-write .section {

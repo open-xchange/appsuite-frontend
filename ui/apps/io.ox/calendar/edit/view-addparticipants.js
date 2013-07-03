@@ -58,6 +58,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                     parentSelector: options.parentSelector,
                     placement: options.placement,
                     api: autocompleteAPI,
+                    name: options.name,
                     // reduce suggestion list
                     reduce: function (data) {
                         var baton = $.data(self.$el, 'baton') || {list: []},
@@ -152,9 +153,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                 })
                 .on('selected', function (e, selected) {
                     if (_.isObject(selected)) {
-                        //console.log(selected.data);
                         self.$('.add-participant').val('');
-                        self.trigger('select', selected.data);
+                        self.trigger('select', selected.contact);
                     } else {
                         self.onClickAdd();
                     }

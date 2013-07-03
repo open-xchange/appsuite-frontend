@@ -159,7 +159,8 @@ define('io.ox/core/cache',
                     return index.set(key, {
                         data: data,
                         timestamp: timestamp
-                    }).pipe(function () {
+                    })
+                    .pipe(function () {
                         return data;
                     });
                 }
