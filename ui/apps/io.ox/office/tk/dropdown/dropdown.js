@@ -58,6 +58,13 @@ define('io.ox/office/tk/dropdown/dropdown',
      *      set to false (or omitted), the drop-down menu will appear below the
      *      group node and will be sized according to the drop-down menu
      *      contents even if the menu exceeds the browser window.
+     *  @param {String} [options.menuAlign='left']
+     *      In automatic layout mode (see option 'options.autoLayout' above),
+     *      specifies the preferred horizontal position of the drop-down menu.
+     *      The value 'left' tries to align the left borders of the drop-down
+     *      menu and the group node, the value 'right' tries to align the right
+     *      borders, and the value 'center' tries to place the drop-down menu
+     *      centered to the group node.
      */
     function DropDown(options) {
 
@@ -72,6 +79,9 @@ define('io.ox/office/tk/dropdown/dropdown',
 
             // automatic position and size of the drop-down menu
             autoLayout = Utils.getBooleanOption(options, 'autoLayout', false),
+
+            // horizontal alignment of the drop-down menu
+            menuAlign = Utils.getStringOption(options, 'menuAlign', 'left'),
 
             // the drop-down button
             menuButton = Utils.createButton((caretMode === 'only') ? {} : options).addClass('dropdown-button'),
@@ -88,166 +98,6 @@ define('io.ox/office/tk/dropdown/dropdown',
         // private methods ----------------------------------------------------
 
         /**
-         * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
-         * or 'menuclose' event at the group.
-         *
-         * @param {Boolean|Null} state
-         *  If set to true, the drop-down menu will be displayed. If set to
-         *  false, the drop-down menu will be hidden. If set to null, the
-         *  drop-down menu will be toggled according to its current visibility.
-         */
-        function toggleMenu(state) {
-
-            var // whether to show or hide the menu
-                show = (state === true) || ((state !== false) && !self.isMenuVisible()),
-                // position and size of the group node
-                groupPosition = self.getNodePosition();
-
-            if (show && !self.isMenuVisible()) {
-                $('body').append(menuNode);
-                groupNode.addClass(OPEN_CLASS);
-                menuNode.css({
-                    top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
-                    left: groupPosition.left
-                });
-                self.trigger('menuopen');
-                // Add a global click handler to close the menu automatically
-                // when clicking somewhere in the page. Listening to the
-                // 'mousedown' event will catch all real mouse clicks and close
-                // the menu immediately ('click' events will not be generated
-                // by the browser when selecting a text range over several text
-                // spans or paragraphs). It is still needed to listen to real
-                // 'click' events which may be triggered indirectly, e.g. after
-                // pressing a button with the keyboard. The event handler will
-                // be attached in a timeout handler, otherwise it would close
-                // the drop-down menu immediately after it has been opened with
-                // a mouse click on the drop-down button while the event
-                // bubbles up to the document root.
-                window.setTimeout(function () {
-                    $(document).on('mousedown click', globalClickHandler);
-                }, 0);
-            } else if (!show && self.isMenuVisible()) {
-                // move focus to drop-down button, if drop-down menu is focused
-                if (Utils.containsFocusedControl(menuNode)) {
-                    menuButton.focus();
-                }
-                self.trigger('menuclose');
-                $(document).off('mousedown click', globalClickHandler);
-                groupNode.removeClass(OPEN_CLASS);
-                menuNode.detach();
-            }
-        }
-
-        /**
-         * Handles click events from the drop-down button, toggles the
-         * drop-down menu.
-         */
-        function menuButtonClickHandler() {
-
-            // do nothing (but the 'cancel' event) if the group is disabled
-            if (self.isEnabled()) {
-
-                // WebKit does not focus the clicked button, which is needed to
-                // get keyboard control in the drop-down menu
-                if (!Utils.isControlFocused(menuButton)) {
-                    menuButton.focus();
-                }
-
-                // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
-                toggleMenu(null);
-            }
-
-            // trigger 'cancel' event, if menu has been closed with mouse click
-            if (!self.isMenuVisible()) {
-                self.trigger('cancel');
-            }
-        }
-
-        /**
-         * Handles mouse clicks everywhere on the page. Closes the drop-down
-         * menu automatically.
-         */
-        function globalClickHandler(event) {
-
-            // Returns whether one of the specified nodes contains the DOM
-            // element in event.target, or if it is the event.target by itself.
-            function isTargetIn(nodes) {
-                return nodes.filter(event.target).length || nodes.has(event.target).length;
-            }
-
-            // Close the menu unless a 'mousedown' event occurred inside the
-            // menu node or on the drop-down button.
-            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode).add(menuToggleControls))) {
-                toggleMenu(false);
-            }
-        }
-
-        /**
-         * Handles keyboard events from any control in the group object.
-         */
-        function groupKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown';
-
-            switch (event.keyCode) {
-            case KeyCodes.DOWN_ARROW:
-                if (keydown) { toggleMenu(true); self.grabMenuFocus(); }
-                return false;
-            case KeyCodes.UP_ARROW:
-                if (keydown) { toggleMenu(false); }
-                return false;
-            }
-        }
-
-        /**
-         * Handles keyboard events in the focused drop-down button.
-         */
-        function menuButtonKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keyup = event.type === 'keyup';
-
-            switch (event.keyCode) {
-            case KeyCodes.SPACE:
-            case KeyCodes.ENTER:
-                if (keyup) {
-                    toggleMenu(true);
-                    self.grabMenuFocus();
-                }
-                return false;
-            }
-        }
-
-        /**
-         * Handles keyboard events inside the open drop-down menu.
-         */
-        function menuKeyHandler(event) {
-            var // MacOS is handled differently
-                macos = _.device('macos'),
-                // distinguish between event types
-                keydown = event.type === 'keydown';
-
-            switch (event.keyCode) {
-            case KeyCodes.TAB:
-                if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
-                    toggleMenu(false);
-                }
-                break;
-            case KeyCodes.F6:
-                if (keydown && (macos || event.ctrlKey)) {
-                    toggleMenu(false);
-                }
-                break;
-            case KeyCodes.ESCAPE:
-                if (event.type === 'keyup') {
-                    self.trigger('cancel');
-                }
-                break;
-            }
-        }
-
-        /**
          * Initializes the size and position of the drop-down menu.
          */
         function windowResizeHandler() {
@@ -262,6 +112,25 @@ define('io.ox/office/tk/dropdown/dropdown',
                 menuNodeProps = { top: '', bottom: '', left: '', right: '' },
                 // the side of the group node preferred for the drop-down menu
                 preferredSide = null, maxRatio = 0;
+
+            // returns the left offset of the drop-down menu according to the preferred alignment
+            function getLeftOffset(width) {
+
+                var offset = 0;
+
+                switch (menuAlign) {
+                case 'right':
+                    offset = groupPosition.left + groupPosition.width - width;
+                    break;
+                case 'center':
+                    offset = groupPosition.left + Math.floor((groupPosition.width - width) / 2);
+                    break;
+                default:
+                    offset = groupPosition.left;
+                }
+
+                return Utils.minMax(offset, DropDown.WINDOW_BORDER_PADDING, window.innerWidth - DropDown.WINDOW_BORDER_PADDING - width);
+            }
 
             // calculate the ratio of the menu node being visible at every side of the group
             _(availableSizes).each(function (size) {
@@ -308,7 +177,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             switch (preferredSide) {
             case 'top':
             case 'bottom':
-                menuNodeProps.left = Math.min(groupPosition.left, window.innerWidth - DropDown.WINDOW_BORDER_PADDING - menuNodeProps.width);
+                menuNodeProps.left = getLeftOffset(menuNodeProps.width);
                 break;
             case 'left':
             case 'right':
@@ -320,28 +189,211 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuNode.css(menuNodeProps);
         }
 
-        function menuOpenHandler() {
+        /**
+         * Shows the drop-down menu, if it is not visible yet. Triggers a
+         * 'menuopen' event at the group.
+         */
+        function showMenu() {
 
-            var // store original min-width and min-height of the menu node
+            var // position and size of the group node
+                groupPosition = self.getNodePosition(),
+                // original min-width and min-height attributes of the menu node
+                menuMinSize = null;
+
+
+            // do nothing if the menu is already open
+            if (self.isMenuVisible()) { return; }
+
+            // initialize DOM
+            $('body').append(menuNode);
+            groupNode.addClass(OPEN_CLASS);
+            menuNode.css({
+                top: groupPosition.top + groupPosition.height + DropDown.GROUP_BORDER_PADDING,
+                left: groupPosition.left
+            });
+
+            // calculate position and size of the menu node
+            if (autoLayout) {
+                // store original min-width and min-height attributes
                 menuMinSize = { minWidth: menuNode.css('min-width'), minHeight: menuNode.css('min-height') };
 
-            // set size of menu node to 'auto' to be able to obtain the effective size
-            menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
-            // Bug 26537: IE9 does not get the correct width, have to set children to inline-block mode...
-            if (Utils.IE9) { menuNode.children().css('display', 'inline-block'); }
-            menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
-            if (Utils.IE9) { menuNode.children().css('display', ''); }
+                // set size of menu node to 'auto' to be able to obtain the effective size
+                menuNode.css({ width: 'auto', minWidth: '', height: 'auto', minHeight: '', top: 0, bottom: '', left: 0, right: '' });
+                // Bug 26537: IE9 does not get the correct width, have to set children to inline-block mode...
+                if (Utils.IE9) { menuNode.children().css('display', 'inline-block'); }
+                menuNodeSize = { width: menuNode.outerWidth(), height: menuNode.outerHeight() };
+                if (Utils.IE9) { menuNode.children().css('display', ''); }
 
-            // restore min-width and min-height of the menu node, and other CSS properties
-            menuNode.css(menuMinSize);
+                // restore min-width and min-height of the menu node, and other CSS properties
+                menuNode.css(menuMinSize);
 
-            // enable window resize handler which recalculates position and size of the menu node
-            $(window).on('resize', windowResizeHandler);
-            windowResizeHandler();
+                // enable window resize handler which recalculates position and size of the menu node
+                $(window).on('resize', windowResizeHandler);
+                windowResizeHandler();
+            }
+
+            // notify all listeners
+            self.trigger('menuopen');
+
+            // Add a global click handler to close the menu automatically when
+            // clicking somewhere in the page. Listening to the 'mousedown'
+            // event will catch all real mouse clicks and close the menu
+            // immediately ('click' events will not be generated by the browser
+            // when selecting a text range over several text spans or
+            // paragraphs). It is still needed to listen to real 'click' events
+            // which may be triggered indirectly, e.g. after pressing a button
+            // with the keyboard. The event handler will be attached in a
+            // timeout handler, otherwise it would close the drop-down menu
+            // immediately after it has been opened with a mouse click on the
+            // drop-down button while the event bubbles up to the document root.
+            window.setTimeout(function () {
+                $(document).on('mousedown click', globalClickHandler);
+            }, 0);
         }
 
-        function menuCloseHandler() {
+        /**
+         * Hides the drop-down menu, if it is currently open. Triggers a
+         * 'menuclose' event at the group.
+         */
+        function hideMenu() {
+
+            // do nothing if the menu is not visible
+            if (!self.isMenuVisible()) { return; }
+
+            // move focus to drop-down button, if drop-down menu is focused
+            if (Utils.containsFocusedControl(menuNode)) {
+                menuButton.focus();
+            }
+
+            // notify all listeners
+            self.trigger('menuclose');
+
+            // initialize DOM
+            $(document).off('mousedown click', globalClickHandler);
+            groupNode.removeClass(OPEN_CLASS);
+            menuNode.detach();
             $(window).off('resize', windowResizeHandler);
+        }
+
+        /**
+         * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
+         * or 'menuclose' event at the group.
+         */
+        function toggleMenu() {
+            if (self.isMenuVisible()) {
+                hideMenu();
+            } else {
+                showMenu();
+            }
+        }
+
+        /**
+         * Handles click events from the drop-down button, toggles the
+         * drop-down menu.
+         */
+        function menuButtonClickHandler() {
+
+            // do nothing (but the 'cancel' event) if the group is disabled
+            if (self.isEnabled()) {
+
+                // WebKit does not focus the clicked button, which is needed to
+                // get keyboard control in the drop-down menu
+                if (!Utils.isControlFocused(menuButton)) {
+                    menuButton.focus();
+                }
+
+                // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
+                toggleMenu(null);
+            }
+
+            // trigger 'cancel' event, if menu has been closed with mouse click
+            if (!self.isMenuVisible()) {
+                self.trigger('cancel');
+            }
+        }
+
+        /**
+         * Handles mouse clicks everywhere on the page. Closes the drop-down
+         * menu automatically.
+         */
+        function globalClickHandler(event) {
+
+            // Returns whether one of the specified nodes contains the DOM
+            // element in event.target, or if it is the event.target by itself.
+            function isTargetIn(nodes) {
+                return nodes.filter(event.target).length || nodes.has(event.target).length;
+            }
+
+            // Close the menu unless a 'mousedown' event occurred inside the
+            // menu node or on the drop-down button.
+            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode).add(menuToggleControls))) {
+                hideMenu();
+            }
+        }
+
+        /**
+         * Handles keyboard events from any control in the group object.
+         */
+        function groupKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown';
+
+            switch (event.keyCode) {
+            case KeyCodes.DOWN_ARROW:
+                if (keydown) { showMenu(); self.grabMenuFocus(); }
+                return false;
+            case KeyCodes.UP_ARROW:
+                if (keydown) { hideMenu(); }
+                return false;
+            }
+        }
+
+        /**
+         * Handles keyboard events in the focused drop-down button.
+         */
+        function menuButtonKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                if (keyup) {
+                    showMenu();
+                    self.grabMenuFocus();
+                }
+                return false;
+            }
+        }
+
+        /**
+         * Handles keyboard events inside the open drop-down menu.
+         */
+        function menuKeyHandler(event) {
+            var // MacOS is handled differently
+                macos = _.device('macos'),
+                // distinguish between event types
+                keydown = event.type === 'keydown';
+
+            switch (event.keyCode) {
+            case KeyCodes.TAB:
+                if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                    hideMenu();
+                }
+                break;
+            case KeyCodes.F6:
+                if (keydown && (macos || event.ctrlKey)) {
+                    hideMenu();
+                }
+                break;
+            case KeyCodes.ESCAPE:
+                if (event.type === 'keyup') {
+                    self.trigger('cancel');
+                }
+                break;
+            }
         }
 
         // methods ------------------------------------------------------------
@@ -407,7 +459,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A reference to this instance.
          */
         this.showMenu = function () {
-            toggleMenu(true);
+            showMenu();
             return this;
         };
 
@@ -418,7 +470,7 @@ define('io.ox/office/tk/dropdown/dropdown',
          *  A reference to this instance.
          */
         this.hideMenu = function () {
-            toggleMenu(false);
+            hideMenu();
             return this;
         };
 
@@ -506,11 +558,11 @@ define('io.ox/office/tk/dropdown/dropdown',
         this.addFocusableControl(menuButton);
 
         // register event handlers
-        this.on('change cancel', function () { toggleMenu(false); })
-            .on('show enable', function (event, state) { if (!state) { toggleMenu(false); } });
+        this.on('change cancel', hideMenu)
+            .on('show enable', function (event, state) { if (!state) { hideMenu(); } });
         groupNode
             .on('keydown keypress keyup', groupKeyHandler)
-            .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
+            .on('blur:key', Group.FOCUSABLE_SELECTOR, hideMenu);
         menuButton
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler);
@@ -519,7 +571,6 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         if (autoLayout) {
             menuNode.css('overflow', 'auto');
-            this.on('menuopen', menuOpenHandler).on('menuclose', menuCloseHandler);
         }
 
     } // class DropDown

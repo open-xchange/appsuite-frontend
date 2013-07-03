@@ -88,6 +88,7 @@ define('io.ox/office/preview/controller',
 
                 'pages/current': {
                     parent: 'document/valid',
+                    enable: function () { return model.getPageCount() > 1; },
                     get: function () { return view.getPage(); },
                     set: function (page) { view.showPage(page); }
                 },

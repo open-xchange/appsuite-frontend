@@ -66,7 +66,7 @@ define('io.ox/office/preview/controls',
 
         // base constructor ---------------------------------------------------
 
-        RadioList.call(this, { icon: 'icon-ellipsis-vertical', tooltip: gt('Select page'), caret: 'none', updateCaptionMode: 'none' });
+        RadioList.call(this, { icon: 'icon-ellipsis-vertical', tooltip: gt('Select page'), caret: 'none', menuAlign: 'center', updateCaptionMode: 'none' });
 
         // initialization -----------------------------------------------------
 
@@ -88,7 +88,7 @@ define('io.ox/office/preview/controls',
 
         // base constructor ---------------------------------------------------
 
-        RadioList.call(this, { icon: 'icon-ellipsis-vertical', tooltip: gt('More zoom settings'), caret: 'none', updateCaptionMode: 'none' });
+        RadioList.call(this, { icon: 'icon-ellipsis-vertical', tooltip: gt('More zoom settings'), caret: 'none', menuAlign: 'center', updateCaptionMode: 'none' });
 
         // initialization -----------------------------------------------------
 
