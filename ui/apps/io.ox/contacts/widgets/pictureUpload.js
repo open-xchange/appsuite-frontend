@@ -24,7 +24,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             tagName: 'div',
             modelEvents: {
-                'change:pictureFile': 'displayPictureFile',
+                'change:pictureFile': 'previewPictureFile',
                 'change:image1_url': 'displayImageURL'
             },
 
@@ -62,23 +62,28 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.imgCon.css('background-image', 'url(' + (url || ox.base + '/apps/themes/default/dummypicture.png') + ')');
             },
 
-            displayPictureFile: function () {
+            previewPictureFile: function () {
                 if (this.oldMode) {
                     this.setImageURL();
                     return;
                 }
 
                 var self = this,
-                    file = this.model.get("pictureFile"),
-                    reader = new FileReader();
+                    file = this.model.get("pictureFile");
 
-                reader.onload = function (e) {
-                    self.closeBtn.show();
-                    self.addImgText.hide();
-                    self.setImageURL(e.target.result);
-                };
-
-                reader.readAsDataURL(file);
+                require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
+                    canvasResize(file, {
+                        width: 300,
+                        height: 0,
+                        crop: false,
+                        quality: 80,
+                        callback: function (data, width, height) {
+                            self.setImageURL(data);
+                            self.addImgText.hide();
+                            self.closeBtn.show();
+                        }
+                    });
+                });
             },
 
             render: function () {
@@ -103,23 +108,20 @@ define('io.ox/contacts/widgets/pictureUpload',
                 }
 
                 this.$el.append(
-                    self.imgCon = $('<div class="picture-uploader thumbnail">').css({
-                        cursor: 'pointer',
-                        position: 'relative'
-                    }).append(
-                        this.closeBtn = $('<div class="close">').css({ zIndex: 2 })
+                    self.imgCon = $('<div class="picture-uploader thumbnail">')
+                        .append(
+                        this.closeBtn = $('<div class="close">')
                             .html('&times;')
                             .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide']()
                     ).append(
                         this.addImgText = $('<div class="add-img-text">')
-                            .css({ zIndex: 2 })
                             .append(
                                 $('<span>').text(gt('Upload Image'))
                             )[hasImage ? 'hide' : 'show']()
                     ),
-                    $('<form>').css({position: 'absolute'}).append(
+                    $('<form>').css('margin', 0).append(
                         self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">')
-                            .css({ height: '110px', width: '110px', cursor: 'pointer', opacity: 0 })
+                            .css({ height: '1px', width: '1px', cursor: 'pointer', opacity: 0 })
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
@@ -131,6 +133,8 @@ define('io.ox/contacts/widgets/pictureUpload',
                             })
                     )
                 );
+
+                self.imgCon.on('click', function () { self.fileInput.trigger('click'); });
 
                 self.setImageURL(dataUrl || imageUrl);
 
