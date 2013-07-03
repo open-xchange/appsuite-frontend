@@ -488,9 +488,10 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         /**
          * Adds a private group into the view component of the drop-down menu.
-         * The events of this group will be forwarded to the listeners of this
-         * group instance. Listeners of the view component embedded in the
-         * drop-down menu will not be notified.
+         * The events triggered by the group will be forwarded to the listeners
+         * of this group instance. Updates of this group instances (calls to
+         * the own 'Group.update()' method) will be forwarded to the specified
+         * private group.
          *
          * @param {Group} group
          *  The group that will be inserted into the drop-down menu.
@@ -506,6 +507,11 @@ define('io.ox/office/tk/dropdown/dropdown',
             // forward events of the group to listeners of this drop-down group
             group.on('change cancel', function (event, value) {
                 self.trigger(event.type, value);
+            });
+
+            // forward updates of this drop-down group to the inserted group
+            this.registerUpdateHandler(function (value) {
+                group.update(value);
             });
 
             return this;

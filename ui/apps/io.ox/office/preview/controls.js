@@ -13,9 +13,10 @@
 
 define('io.ox/office/preview/controls',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, RadioList, gt) {
+    ], function (Utils, TextField, RadioList, gt) {
 
     'use strict';
 
@@ -72,6 +73,8 @@ define('io.ox/office/preview/controls',
 
         this.createOptionButton('first', { label: gt('Show first page') })
             .createOptionButton('last', { label: gt('Show last page') });
+
+        //this.addPrivateMenuGroup(new TextField());
 
     }}); // class PageChooser
 
