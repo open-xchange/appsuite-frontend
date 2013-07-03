@@ -19,8 +19,7 @@ define('io.ox/tasks/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'io.ox/core/config',
-     'io.ox/core/capabilities',
-     'io.ox/office/preview/fileActions'], function (ext, util, links, gt, notifications, print, configApi, capabilities, previewfileactions) {
+     'io.ox/office/framework/app/extensionregistry'], function (ext, util, links, gt, notifications, print, configApi, ExtensionRegistry) {
 
     'use strict';
 
@@ -28,7 +27,7 @@ define('io.ox/tasks/actions',
     var Action = links.Action, Button = links.Button,
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink,
         isPreviewable = function (e) {
-            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+            return e.collection.has('one') && ExtensionRegistry.isViewable(e.context.filename);
         };
 
     new Action('io.ox/tasks/actions/create', {

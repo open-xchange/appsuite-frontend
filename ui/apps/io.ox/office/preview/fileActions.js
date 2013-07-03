@@ -11,35 +11,27 @@
  */
 
 define('io.ox/office/preview/fileActions',
-    ['io.ox/files/api',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/files',
-     'settings!io.ox/files'], function (api, ext, links, capabilities, gt, settings) {
+    ['io.ox/core/extPatterns/links',
+     'io.ox/office/framework/app/extensionregistry'
+    ], function (links, ExtensionRegistry) {
 
     'use strict';
 
-    var Action = links.Action,
-        SUPPORTED_EXT = /\.(doc|docx|odt|xls|xlsx|ods|ppt|pptx|odp|odg|dot|dotx|ott|xlt|xltx|ots|pot|potx|otp|otg|docm|xlsm|pptm|dotm|xltm|potm|xlsb|pdf|rtf)$/i;
-    if (capabilities.has("document_preview")) {
-        new Action('io.ox/files/actions/open', {
-            id: 'officepreview',
-            // we just need to be called before 'default'
-            before: 'default',
-            // pick items you want to take care of (actually this function is called by underscore's "filter")
-            filter: function (obj) {
-                return SUPPORTED_EXT.test(obj.filename);
-            },
-            action: function (baton) {
-                // on Firefox we have to do this check to prevent duplicate actions (default/preview)
-                if (SUPPORTED_EXT.test(baton.data.filename)) {
-                    ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
-                }
-            }
-        });
-    }
-    return {
-        SupportedExtensions: SUPPORTED_EXT
-    };
+    new links.Action('io.ox/files/actions/open', {
+
+        id: 'officepreview',
+
+        // we just need to be called before 'default'
+        before: 'default',
+
+        // pick items you want to take care of (actually this function is called by underscore's "filter")
+        filter: function (data) {
+            return ExtensionRegistry.isViewable(data.filename);
+        },
+
+        action: function (baton) {
+            ox.launch('io.ox/office/preview/main', { action: 'load', file: baton.data });
+        }
+    });
+
 });

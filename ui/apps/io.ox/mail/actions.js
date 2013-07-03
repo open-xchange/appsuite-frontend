@@ -24,10 +24,9 @@ define('io.ox/mail/actions',
      'io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
-     'io.ox/core/capabilities',
-     'io.ox/office/preview/fileActions',
+     'io.ox/office/framework/app/extensionregistry',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, capabilities, previewfileactions, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, settings) {
 
     'use strict';
 
@@ -39,7 +38,7 @@ define('io.ox/mail/actions',
         },
         Action = links.Action,
         isPreviewable = function (e) {
-            return capabilities.has('document_preview') && e.collection.has('one') && previewfileactions.SupportedExtensions.test(e.context.filename);
+            return e.collection.has('one') && ExtensionRegistry.isViewable(e.context.filename);
         };
 
     // actions
@@ -357,7 +356,7 @@ define('io.ox/mail/actions',
         id: 'markunread',
         requires: function (e) {
             var data = e.context;
-                
+
             if (_.isArray(data)) {
                 var read = false;
                 //don't use each here because you cannot cancel it if one read mail was found
@@ -383,7 +382,7 @@ define('io.ox/mail/actions',
         id: 'markread',
         requires: function (e) {
             var data = e.context;
-                
+
             if (_.isArray(data)) {
                 var unRead = false;
                 //don't use each here because you cannot cancel it if one unread mail was found
