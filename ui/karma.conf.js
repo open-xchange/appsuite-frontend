@@ -78,7 +78,8 @@ captureTimeout = 60000;
 singleRun = false;
 
 proxies =  {
-    '/api/': 'http://localhost:8337/appsuite/api/'
+    '/api/': 'http://localhost:8337/appsuite/api/',
+    '/apps/': 'http://localhost:8337/appsuite/apps/'
 }
 
 // plugins to load
