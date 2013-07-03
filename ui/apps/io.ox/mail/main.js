@@ -235,13 +235,12 @@ define('io.ox/mail/main',
             sortSettings.sort = '610';
         }
 
-        // add grid options
-        grid.prop('sort', sortSettings.sort)
-            .prop('order', sortSettings.order)
-            .prop('unread', sortSettings.unread);
-        // temp variable not needed anymore
-        sortSettings = null;
-
+        //set to default sort
+        grid.on('beforechange:prop:folder', function () {
+            grid.prop('sort', sortSettings.sort)
+                .prop('order', sortSettings.order)
+                .prop('unread', sortSettings.unread);
+        });
         // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
         // look into hToolbarOptions function for this
         grid.on('change:prop:unread', function (e, value) {
