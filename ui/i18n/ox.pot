@@ -9,69 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/core/print.js:42
-msgid "Printout"
-msgstr ""
-
-#: apps/io.ox/core/notifications.js:297 apps/io.ox/core/print.js:144
-#: apps/io.ox/core/pubsub/subscriptions.js:102
-msgid "Error"
-msgstr ""
-
-#: apps/io.ox/core/print.js:145
-msgid "Cannot print this item"
-msgid_plural "Cannot print these items"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/office/preview/view.js:43
-msgid "Show first page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:44
-msgid "Show previous page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:45
-msgid "Show next page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:46
-msgid "Show last page"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:47
-msgid "Zoom out"
-msgstr ""
-
-#: apps/io.ox/office/preview/view.js:48
-msgid "Zoom in"
-msgstr ""
-
-#. %1$s is the current page index in office document preview
-#. %2$s is the number of pages in office document preview
-#, c-format
-#: apps/io.ox/office/preview/view.js:247
-msgid "Page %1$s of %2$s"
-msgstr ""
-
-#. %1$d is the current zoom factor, in percent
-#, c-format
-#: apps/io.ox/office/preview/view.js:261
-msgid "Zoom: %1$d%"
-msgstr ""
-
-#: apps/io.ox/office/framework/app/baseapplication.js:308
-#: apps/io.ox/office/preview/view.js:306 apps/io.ox/office/preview/view.js:324
-msgid "Load Error"
-msgstr ""
-
-#. %1$d is the current page number that caused the error
-#, c-format
-#: apps/io.ox/office/preview/view.js:327
-msgid "An error occurred while loading page %1$d."
-msgstr ""
-
 #: apps/moxiecode/tiny_mce/plugins/emoji/categories.js:35
 msgid "Unified"
 msgstr ""
@@ -154,7 +91,7 @@ msgstr ""
 msgid "All Emoji"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js:54 apps/io.ox/core/commons-folderview.js:396
+#: apps/io.ox/core/about/about.js:54 apps/io.ox/core/commons-folderview.js:400
 #: apps/io.ox/core/permissions/permissions.js:394
 #: apps/io.ox/core/tk/dialogs.js:436 apps/io.ox/editor/main.js:135
 #: apps/io.ox/files/actions.js:257 apps/io.ox/files/carousel.js:46
@@ -229,10 +166,10 @@ msgstr ""
 #: apps/io.ox/calendar/week/perspective.js:118 apps/io.ox/contacts/actions.js:52
 #: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:161
 #: apps/io.ox/contacts/edit/main.js:150
-#: apps/io.ox/core/commons-folderview.js:427 apps/io.ox/core/desktop.js:1525
+#: apps/io.ox/core/commons-folderview.js:431 apps/io.ox/core/desktop.js:1525
 #: apps/io.ox/core/export/export.js:71 apps/io.ox/core/import/import.js:115
 #: apps/io.ox/core/main.js:312 apps/io.ox/core/permissions/permissions.js:346
-#: apps/io.ox/core/pubsub/publications.js:92
+#: apps/io.ox/core/print.js:107 apps/io.ox/core/pubsub/publications.js:92
 #: apps/io.ox/core/pubsub/subscriptions.js:47 apps/io.ox/core/relogin.js:57
 #: apps/io.ox/core/tk/attachments.js:298 apps/io.ox/core/tk/folderviews.js:587
 #: apps/io.ox/core/tk/folderviews.js:616 apps/io.ox/core/tk/folderviews.js:665
@@ -243,12 +180,12 @@ msgstr ""
 #: apps/io.ox/files/actions.js:652 apps/io.ox/files/views/create.js:75
 #: apps/io.ox/mail/accounts/settings.js:43
 #: apps/io.ox/mail/accounts/settings.js:259
-#: apps/io.ox/mail/accounts/view-form.js:206 apps/io.ox/mail/actions.js:76
+#: apps/io.ox/mail/accounts/view-form.js:211 apps/io.ox/mail/actions.js:76
 #: apps/io.ox/mail/actions.js:314 apps/io.ox/mail/actions.js:860
 #: apps/io.ox/mail/folderview-extensions.js:115
 #: apps/io.ox/mail/mailfilter/settings/filter.js:51
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:352
-#: apps/io.ox/mail/write/main.js:1210 apps/io.ox/office/preview/main.js:84
+#: apps/io.ox/mail/write/main.js:1210 apps/io.ox/office/preview/main.js:88
 #: apps/io.ox/office/tk/dialogs.js:28 apps/io.ox/portal/settings/pane.js:320
 #: apps/io.ox/settings/accounts/settings/pane.js:40
 #: apps/io.ox/tasks/actions.js:66 apps/io.ox/tasks/actions.js:203
@@ -621,8 +558,9 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js:698 apps/io.ox/core/tk/attachments.js:251
 #: apps/io.ox/files/actions.js:751 apps/io.ox/files/actions.js:870
-#: apps/io.ox/mail/actions.js:1154 apps/io.ox/tasks/actions.js:610
-#: apps/plugins/portal/updater/register.js:35
+#: apps/io.ox/mail/actions.js:1154
+#: apps/io.ox/office/framework/app/toolbaractions.js:123
+#: apps/io.ox/tasks/actions.js:610 apps/plugins/portal/updater/register.js:35
 msgid "Download"
 msgstr ""
 
@@ -782,7 +720,6 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Really delete portal widget - in contrast to "just disable"
@@ -1322,7 +1259,7 @@ msgstr ""
 msgid "Mailfilter created"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:202
+#: apps/io.ox/mail/accounts/view-form.js:207
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:348
 msgid "Select folder"
 msgstr ""
@@ -1536,119 +1473,119 @@ msgstr ""
 msgid "Account added successfully"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:25 apps/io.ox/oauth/settings.js:66
+#: apps/io.ox/mail/accounts/view-form.js:26 apps/io.ox/oauth/settings.js:66
 msgid "Account Settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:26
+#: apps/io.ox/mail/accounts/view-form.js:27
 msgid "Account Name:"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:27
+#: apps/io.ox/mail/accounts/view-form.js:28
 msgid "Your name:"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:28
+#: apps/io.ox/mail/accounts/view-form.js:29
 msgid "E-Mail Address:"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:29
+#: apps/io.ox/mail/accounts/view-form.js:30
 msgid "Use Unified Mail for this account"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:30
+#: apps/io.ox/mail/accounts/view-form.js:31
 msgid "Server Settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:31
-msgid "Server Type:"
-msgstr ""
-
 #: apps/io.ox/mail/accounts/view-form.js:32
-#: apps/io.ox/mail/accounts/view-form.js:41
-msgid "Use SSL connection"
+msgid "Server Type:"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js:33
 #: apps/io.ox/mail/accounts/view-form.js:42
-msgid "Server Name:"
+msgid "Use SSL connection"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js:34
 #: apps/io.ox/mail/accounts/view-form.js:43
-msgid "Server Port:"
+msgid "Server Name:"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js:35
-#: apps/io.ox/mail/accounts/view-form.js:45
+#: apps/io.ox/mail/accounts/view-form.js:44
+msgid "Server Port:"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:36
+#: apps/io.ox/mail/accounts/view-form.js:46
 msgid "Login"
 msgstr ""
 
 #: apps/io.ox/core/login-i18n.js:21 apps/io.ox/core/relogin.js:51
-#: apps/io.ox/mail/accounts/view-form.js:36
-#: apps/io.ox/mail/accounts/view-form.js:46
+#: apps/io.ox/mail/accounts/view-form.js:37
+#: apps/io.ox/mail/accounts/view-form.js:47
 msgid "Password"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:37
+#: apps/io.ox/mail/accounts/view-form.js:38
 msgid "Refresh rate in minutes:"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:38
+#: apps/io.ox/mail/accounts/view-form.js:39
 msgid "Leave messages on server"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:39
+#: apps/io.ox/mail/accounts/view-form.js:40
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:40
+#: apps/io.ox/mail/accounts/view-form.js:41
 msgid "Outgoing Server Settings (SMTP)"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:44
+#: apps/io.ox/mail/accounts/view-form.js:45
 msgid "Use Login and Password"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:47
+#: apps/io.ox/mail/accounts/view-form.js:48
 msgid "Folder Settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:48
+#: apps/io.ox/mail/accounts/view-form.js:49
 msgid "Sent folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:49
+#: apps/io.ox/mail/accounts/view-form.js:50
 msgid "Trash folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:50
+#: apps/io.ox/mail/accounts/view-form.js:51
 msgid "Drafts folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:51
+#: apps/io.ox/mail/accounts/view-form.js:52
 msgid "Spam folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:52
+#: apps/io.ox/mail/accounts/view-form.js:53
 msgid "Select"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:162
+#: apps/io.ox/mail/accounts/view-form.js:167
 msgid "Updating account data. This might take a few seconds."
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:173
+#: apps/io.ox/mail/accounts/view-form.js:178
 msgid "Account updated"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:178
+#: apps/io.ox/mail/accounts/view-form.js:183
 msgid "Login must not be empty."
 msgstr ""
 
 #. %1$s the missing request parameter
 #, c-format
-#: apps/io.ox/mail/accounts/view-form.js:183
+#: apps/io.ox/mail/accounts/view-form.js:188
 msgid "Please enter the following data: %1$s"
 msgstr ""
 
@@ -1660,11 +1597,11 @@ msgstr ""
 msgid "Top 10 you got mail from"
 msgstr ""
 
-#: apps/io.ox/mail/statistics.js:113
+#: apps/io.ox/mail/statistics.js:116
 msgid "Mails per week-day (%)"
 msgstr ""
 
-#: apps/io.ox/mail/statistics.js:155
+#: apps/io.ox/mail/statistics.js:161
 msgid "Mails per hour (%)"
 msgstr ""
 
@@ -1739,7 +1676,11 @@ msgstr ""
 msgid "via"
 msgstr ""
 
-#: apps/io.ox/mail/util.js:336
+#: apps/io.ox/mail/util.js:299
+msgid "No recipients"
+msgstr ""
+
+#: apps/io.ox/mail/util.js:341
 msgid "Primary account"
 msgstr ""
 
@@ -1995,11 +1936,11 @@ msgstr ""
 msgid "The folder has been emptied."
 msgstr ""
 
-#: apps/io.ox/mail/api.js:894
+#: apps/io.ox/mail/api.js:893
 msgid "Moving mails ... This may take a few seconds."
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1573
+#: apps/io.ox/mail/api.js:1572
 msgid "New Mail"
 msgstr ""
 
@@ -2015,14 +1956,16 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js:488 apps/io.ox/calendar/actions.js:527
 #: apps/io.ox/contacts/actions.js:292 apps/io.ox/contacts/actions.js:624
-#: apps/io.ox/mail/actions.js:221 apps/io.ox/mail/actions.js:1079
+#: apps/io.ox/core/print.js:102 apps/io.ox/mail/actions.js:221
+#: apps/io.ox/mail/actions.js:1079
+#: apps/io.ox/office/framework/app/toolbaractions.js:141
 #: apps/io.ox/tasks/actions.js:581
 msgid "Print"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js:342 apps/io.ox/calendar/actions.js:384
 #: apps/io.ox/calendar/actions.js:519 apps/io.ox/contacts/actions.js:189
-#: apps/io.ox/contacts/actions.js:662 apps/io.ox/core/commons-folderview.js:473
+#: apps/io.ox/contacts/actions.js:662 apps/io.ox/core/commons-folderview.js:477
 #: apps/io.ox/files/actions.js:601 apps/io.ox/files/actions.js:801
 #: apps/io.ox/mail/actions.js:353 apps/io.ox/mail/actions.js:1046
 #: apps/io.ox/tasks/actions.js:201 apps/io.ox/tasks/actions.js:202
@@ -2450,7 +2393,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:126
 #: apps/io.ox/calendar/settings/pane.js:97
@@ -2461,7 +2403,6 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
@@ -2510,7 +2451,6 @@ msgstr ""
 msgid "Do you want to edit the whole series or just one appointment within the series?"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. Use singular in this context
@@ -3560,7 +3500,7 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
-#: apps/io.ox/core/commons.js:538 apps/io.ox/core/tk/autocomplete.js:214
+#: apps/io.ox/core/commons.js:547 apps/io.ox/core/tk/autocomplete.js:214
 msgid "Retry"
 msgstr ""
 
@@ -3580,7 +3520,7 @@ msgstr ""
 msgid "vCard"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:306
+#: apps/io.ox/core/commons-folderview.js:309
 #: apps/io.ox/core/import/import.js:114
 msgid "Import"
 msgstr ""
@@ -3603,6 +3543,11 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js:82
 msgid "No notifications"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js:297 apps/io.ox/core/print.js:189
+#: apps/io.ox/core/pubsub/subscriptions.js:102
+msgid "Error"
 msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js:34
@@ -3883,7 +3828,7 @@ msgstr ""
 msgid "Skip this step"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:283 apps/io.ox/core/export/export.js:72
+#: apps/io.ox/core/commons-folderview.js:284 apps/io.ox/core/export/export.js:72
 msgid "Export"
 msgstr ""
 
@@ -3899,16 +3844,20 @@ msgstr ""
 msgid "<b>%1$d</b> elements selected"
 msgstr ""
 
-#: apps/io.ox/core/commons.js:225
+#: apps/io.ox/core/commons.js:96
+msgid "No elements selected"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:234
 msgid "Searched in all folders"
 msgstr ""
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:231
+#: apps/io.ox/core/commons.js:240
 msgid "Searched in"
 msgstr ""
 
-#: apps/io.ox/core/commons.js:418
+#: apps/io.ox/core/commons.js:427
 msgid "Back"
 msgstr ""
 
@@ -4206,6 +4155,16 @@ msgstr ""
 msgid "Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster."
 msgstr ""
 
+#: apps/io.ox/core/print.js:42
+msgid "Printout"
+msgstr ""
+
+#: apps/io.ox/core/print.js:190
+msgid "Cannot print this item"
+msgid_plural "Cannot print these items"
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/core/login-i18n.js:20
 msgid "User name"
 msgstr ""
@@ -4297,6 +4256,7 @@ msgid "%1$s %2$s"
 msgstr ""
 
 #: apps/io.ox/core/desktop.js:1465
+#: apps/io.ox/office/framework/app/toolbaractions.js:105
 msgid "Toggle search"
 msgstr ""
 
@@ -4353,29 +4313,29 @@ msgstr ""
 msgid "Subscription"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:333
+#: apps/io.ox/core/commons-folderview.js:337
 msgid "Permissions"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:351
-#: apps/io.ox/core/commons-folderview.js:406
+#: apps/io.ox/core/commons-folderview.js:355
+#: apps/io.ox/core/commons-folderview.js:410
 msgid "Properties"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:367
+#: apps/io.ox/core/commons-folderview.js:371
 msgid "Folder type"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:382
+#: apps/io.ox/core/commons-folderview.js:386
 msgid "CalDAV URL"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:421
+#: apps/io.ox/core/commons-folderview.js:425
 msgid "Move folder"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:788
-#: apps/io.ox/core/commons-folderview.js:815
+#: apps/io.ox/core/commons-folderview.js:792
+#: apps/io.ox/core/commons-folderview.js:819
 msgid "Toggle folder"
 msgstr ""
 
@@ -4387,27 +4347,95 @@ msgstr ""
 msgid "Click to open."
 msgstr ""
 
-#: apps/io.ox/office/preview/main.js:107
+#. %1$s is the current page index in office document preview
+#. %2$s is the number of pages in office document preview
+#, c-format
+#: apps/io.ox/office/preview/view.js:246
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#. %1$d is the current zoom factor, in percent
+#, c-format
+#: apps/io.ox/office/preview/view.js:260
+msgid "Zoom: %1$d%"
+msgstr ""
+
+#: apps/io.ox/office/framework/app/baseapplication.js:321
+#: apps/io.ox/office/preview/view.js:323
+msgid "Load Error"
+msgstr ""
+
+#. %1$d is the current page number that caused the error
+#, c-format
+#: apps/io.ox/office/preview/view.js:326
+msgid "An error occurred while loading page %1$d."
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:33
+msgid "Show previous page"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:40
+msgid "Show next page"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:47
+msgid "Zoom out"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:54
+msgid "Zoom in"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:69
+msgid "Select page"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:73
+msgid "Show first page"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:74
+msgid "Show last page"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:91
+msgid "More zoom settings"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:95
+msgid "Set zoom factor to 100%"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:96
+msgid "Fit pages to screen width"
+msgstr ""
+
+#: apps/io.ox/office/preview/controls.js:97
+msgid "Fit pages to screen width and height"
+msgstr ""
+
+#: apps/io.ox/office/preview/main.js:111
 msgid "The document is password protected."
 msgstr ""
 
-#: apps/io.ox/office/framework/view/basecontrols.js:31
+#: apps/io.ox/office/framework/view/basecontrols.js:33
 msgid "Close document"
 msgstr ""
 
-#: apps/io.ox/office/framework/view/basecontrols.js:36
+#: apps/io.ox/office/framework/view/basecontrols.js:40
 msgid "Hide side panel"
 msgstr ""
 
-#: apps/io.ox/office/framework/view/basecontrols.js:41
+#: apps/io.ox/office/framework/view/basecontrols.js:47
 msgid "Show side panel"
 msgstr ""
 
-#: apps/io.ox/office/framework/app/baseapplication.js:261
+#: apps/io.ox/office/framework/app/baseapplication.js:274
 msgid "Unnamed"
 msgstr ""
 
-#: apps/io.ox/office/framework/app/baseapplication.js:309
+#: apps/io.ox/office/framework/app/baseapplication.js:322
 msgid "An error occurred while loading the document."
 msgstr ""
 
@@ -5213,8 +5241,6 @@ msgstr ""
 msgid "Other Address"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. section name for contact fields in detail view
 #. #-#-#-#-#-#-#-#-#-#
 #. section name for contact fields in detail view
 #. #-#-#-#-#-#-#-#-#-#
