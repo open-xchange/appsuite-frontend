@@ -152,7 +152,7 @@ http.createServer(function (request, response) {
             return injectManifests(request, response);
         }
     }
-    return proxy(request, response);
+    return loadLocal(request, response) || proxy(request, response);
 }).listen(options.port || 8337);
 
 function load(request, response) {
@@ -362,6 +362,27 @@ function injectManifests(request, response) {
             if (verbose.local) console.log();
         }
     }).end();
+}
+
+function loadLocal(request, response) {
+    var pathname = url.parse(request.url).pathname,
+        filename;
+    pathname = pathname.slice(pathname.indexOf('/apps/') + 6);
+    filename = prefixes.map(function (p) {
+        return p + pathname;
+    })
+    .filter(function (filename) {
+        return (path.existsSync(filename) && fs.statSync(filename).isFile());
+    })[0];
+    if (!filename) return false;
+
+    // set headers
+    if (verbose.local) console.log(filename);
+    response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
+    response.setHeader('Expires', '0');
+    response.write(fs.readFileSync(filename));
+    response.end();
+    return true;
 }
 
 function proxy(request, response) {
