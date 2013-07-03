@@ -157,6 +157,7 @@ define('io.ox/office/preview/main',
 
     ToolBarActions.createDownloadIcon(MODULE_NAME);
     ToolBarActions.createPrintIcon(MODULE_NAME);
+    ToolBarActions.createMailIcon(MODULE_NAME);
 
     // exports ================================================================
 
