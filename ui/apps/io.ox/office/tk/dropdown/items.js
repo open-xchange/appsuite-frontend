@@ -268,7 +268,7 @@ define('io.ox/office/tk/dropdown/items',
         this.grabMenuFocus = function () {
             var // all list items (button elements)
                 buttons = self.getItems(),
-                selectedButtons = buttons.filter('.selected');
+                selectedButtons = Utils.getSelectedButtons(buttons);
             if (selectedButtons.length) {
                 selectedButtons.eq(0).focus();
             } else if (buttons.length) {
