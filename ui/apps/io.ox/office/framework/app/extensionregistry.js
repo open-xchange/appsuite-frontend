@@ -51,14 +51,16 @@ define('io.ox/office/framework/app/extensionregistry',
                 requires: 'spreadsheet',
                 extensions: {
                     xlsx: { format: 'ooxml' },
-                    xlsm: { format: 'ooxml',  macros: true },
-                    xltx: { format: 'ooxml',  template: true },
-                    xltm: { format: 'ooxml',  template: true, macros: true },
-                    ods:  { format: 'odf',    macros: true },
-                    ots:  { format: 'odf',    template: true, macros: true },
-                    xls:  { format: 'odf',    macros: true, convert: true },
-                    xlt:  { format: 'odf',    template: true, macros: true, convert: true },
-                    xlsb: { format: 'odf',    macros: true, convert: true }
+                    xlsm: { format: 'ooxml', macros: true },
+                    xltx: { format: 'ooxml', template: true },
+                    xltm: { format: 'ooxml', template: true, macros: true },
+                    xlam: {                  macros: true }, // add-in
+                    ods:  { format: 'odf',   macros: true },
+                    ots:  { format: 'odf',   template: true, macros: true },
+                    xls:  { format: 'odf',   macros: true, convert: true },
+                    xlt:  { format: 'odf',   template: true, macros: true, convert: true },
+                    xla:  {                  macros: true }, // add-in
+                    xlsb: { format: 'odf',   macros: true, convert: true }
                 }
             },
 
@@ -70,23 +72,30 @@ define('io.ox/office/framework/app/extensionregistry',
                     pptm: { format: 'ooxml', macros: true },
                     potx: { format: 'ooxml', template: true },
                     potm: { format: 'ooxml', template: true, macros: true },
+                    ppsx: {}, // slide show
+                    ppsm: {                  macros: true }, // slide show
+                    ppam: {                  macros: true }, // add-in
                     odp:  { format: 'odf',   macros: true },
                     otp:  { format: 'odf',   template: true, macros: true },
                     ppt:  { format: 'odf',   macros: true, convert: true },
-                    pot:  { format: 'odf',   template: true, macros: true, convert: true }
-                }
-            },
-
-            drawing: {
-                extensions: {
-                    odg:  { format: 'odf', macros: true },
-                    otg:  { format: 'odf', template: true, macros: true }
+                    pot:  { format: 'odf',   template: true, macros: true, convert: true },
+                    pps:  {                  macros: true }, // slide show
+                    ppa:  {                  macros: true } // add-in
                 }
             },
 
             preview: {
                 extensions: {
-                    pdf:  {}
+                    pdf:  {},
+                    odg:  { format: 'odf', macros: true }, // drawing
+                    otg:  { format: 'odf', template: true, macros: true }, // drawing
+                    odi:  { format: 'odf' }, // image
+                    oti:  { format: 'odf', template: true }, // image
+                    odc:  { format: 'odf' }, // chart
+                    otc:  { format: 'odf', template: true }, // chart
+                    odf:  { format: 'odf' }, // formula
+                    otf:  { format: 'odf', template: true }, // formula
+                    odm:  { format: 'odf' } // global text document
                 }
             }
         },
@@ -135,6 +144,22 @@ define('io.ox/office/framework/app/extensionregistry',
 
         // passed module name must match if specified
         return (_.isString(editModule) && (editModule !== module)) ? null : extensionSettings;
+    };
+
+    /**
+     * Returns all extensions that can be viewed with OX Preview as array.
+     *
+     * @returns {Array}
+     *  All extensions supported by OX Preview.
+     */
+    ExtensionRegistry.getViewableExtensions = function () {
+        var extensions = [];
+        _(fileExtensionMap).each(function (settings, extension) {
+            if (settings.viewable) {
+                extensions.push(extension);
+            }
+        });
+        return extensions;
     };
 
     /**
