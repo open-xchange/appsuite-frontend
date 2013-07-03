@@ -164,6 +164,8 @@ define('io.ox/backbone/forms',
         } else {
             this.modelEvents['change:' + options.attribute] = 'updateElement';
         }
+        
+        this.rare = options.rare;
 
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
@@ -457,7 +459,7 @@ define('io.ox/backbone/forms',
                     anyHidden = false,
                     anyVisible = false;
                 this.point().each(function (extension) {
-                    if (extension.metadata('hidden', [self.model])) {
+                    if (extension.metadata('hidden', [self.model]) && !extension.metadata('isRare', [])) {
                         anyHidden = anyHidden || true;
                     } else {
                         anyVisible = anyVisible || true;
@@ -552,7 +554,9 @@ define('io.ox/backbone/forms',
                 }
 
                 this.state = this.initialState;
-                this.nodes.toggleLink.text(gt('Show more'));
+                if (this.nodes.toggleLink) {
+                    this.nodes.toggleLink.text(gt('Show more'));
+                }
             },
 
             /**
