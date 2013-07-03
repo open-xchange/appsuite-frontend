@@ -197,18 +197,8 @@ define('io.ox/office/framework/view/component',
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown';
 
-            switch (event.keyCode) {
-            case KeyCodes.TAB:
-                if (!event.ctrlKey && !event.altKey && !event.metaKey) {
-                    if (keydown) { moveFocus(!event.shiftKey); }
-                    return false;
-                }
-                break;
-            case KeyCodes.LEFT_ARROW:
-                if (keydown) { moveFocus(false); }
-                return false;
-            case KeyCodes.RIGHT_ARROW:
-                if (keydown) { moveFocus(true); }
+            if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                if (keydown) { moveFocus(!event.shiftKey); }
                 return false;
             }
         }

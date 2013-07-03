@@ -223,11 +223,27 @@ define('io.ox/office/tk/dropdown/dropdown',
          * Handles keyboard events inside the open drop-down menu.
          */
         function menuKeyHandler(event) {
-            if ((event.type === 'keydown') && (event.keyCode === KeyCodes.TAB) && !event.ctrlKey && !event.altKey && !event.metaKey) {
-                // move focus to drop-down button, needed for correct
-                // keyboard focus navigation (find next/previous control)
-                menuButton.focus();
-                // always let the TAB key event bubble up to the view component
+            var // MacOS is handled differently
+                macos = _.device('macos'),
+                // distinguish between event types
+                keydown = event.type === 'keydown';
+
+            switch (event.keyCode) {
+            case KeyCodes.TAB:
+                if (keydown && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                    toggleMenu(false);
+                }
+                break;
+            case KeyCodes.F6:
+                if (keydown && (macos || event.ctrlKey)) {
+                    toggleMenu(false);
+                }
+                break;
+            case KeyCodes.ESCAPE:
+                if (event.type === 'keyup') {
+                    self.trigger('cancel');
+                }
+                break;
             }
         }
 

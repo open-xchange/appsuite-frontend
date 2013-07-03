@@ -73,8 +73,13 @@ define('io.ox/office/tk/dropdown/list',
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
-                if (index <= 0) { break; } // let key bubble up to hide the menu
-                if (keydown) { buttons.eq(index - 1).focus(); }
+                if (keydown) {
+                    if (index <= 0) {
+                        self.hideMenu();
+                    } else {
+                        buttons.eq(index - 1).focus();
+                    }
+                }
                 return false;
             case KeyCodes.DOWN_ARROW:
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }

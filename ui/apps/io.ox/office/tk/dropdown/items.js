@@ -258,6 +258,23 @@ define('io.ox/office/tk/dropdown/items',
             return button;
         };
 
+        /**
+         * Sets the focus into the first control element of the grid
+         * element.
+         *
+         * @returns {Items}
+         *  A reference to this instance.
+         */
+        this.grabMenuFocus = function () {
+            var // all list items (button elements)
+                buttons = self.getItems();
+            if (buttons.length > 0) {
+                buttons.eq(0).focus();
+            }
+
+            return this;
+        };
+
         // initialization -----------------------------------------------------
 
         // add the button group control to the drop-down view component

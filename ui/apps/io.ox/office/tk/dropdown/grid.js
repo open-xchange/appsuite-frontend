@@ -101,15 +101,37 @@ define('io.ox/office/tk/dropdown/grid',
                 // all list items (button elements)
                 buttons = self.getItems(),
                 // index of the focused list item
-                index = buttons.index(event.target);
+                index = buttons.index(event.target),
+                // relative index change
+                relIndex = 0;
 
             switch (event.keyCode) {
-            case KeyCodes.UP_ARROW:
-                if (index <= 0) { break; } // let key bubble up to hide the menu
+            case KeyCodes.LEFT_ARROW:
                 if (keydown) { buttons.eq(index - 1).focus(); }
                 return false;
+            case KeyCodes.RIGHT_ARROW:
+                if (keydown) {
+                    if (index + 1 >= buttons.length) { index = -1; }
+                    buttons.eq(index + 1).focus();
+                }
+                return false;
+            case KeyCodes.UP_ARROW:
+                if (keydown) {
+                    if (index <= 0) {
+                        self.hideMenu();
+                    } else {
+                        relIndex = calcRelativeIndex(true);
+                        index = ((index + relIndex) < 0) ? index : (index + relIndex);
+                        buttons.eq(index).focus();
+                    }
+                }
+                return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
+                if (keydown) {
+                    relIndex = calcRelativeIndex(false);
+                    index = ((index + relIndex) >= buttons.length) ? index : (index + relIndex);
+                    buttons.eq(index).focus();
+                }
                 return false;
             case KeyCodes.HOME:
                 if (keydown) { buttons.first().focus(); }
@@ -118,6 +140,17 @@ define('io.ox/office/tk/dropdown/grid',
                 if (keydown) { buttons.last().focus(); }
                 return false;
             }
+        }
+
+        function calcRelativeIndex(up) {
+            var row = $(document.activeElement).parents('tr'), index = 0, cells = 0;
+
+            if (row.length) {
+                cells = row[0].cells.length;
+                index = up ? -cells : cells;
+            }
+
+            return index;
         }
 
         // initialization -----------------------------------------------------
