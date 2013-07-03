@@ -129,7 +129,7 @@ define('io.ox/mail/guidance/main',
 
             var node = $('<section>')
                 .css({
-                    fontFamily: '"Nunito", cursive, sans-serif',
+                    fontFamily: '"Nunito", Arial, sans-serif',
                     fontSize: '24px',
                     lineHeight: '28px',
                     padding: '14px',

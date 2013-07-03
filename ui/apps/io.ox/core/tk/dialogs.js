@@ -215,7 +215,7 @@ define("io.ox/core/tk/dialogs",
             var opt = {
                 label: label,
                 data: { action: action },
-                click: invoke,
+                click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse
@@ -557,9 +557,9 @@ define("io.ox/core/tk/dialogs",
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
-                target: target || my.parents(".window-body, .simple-window, .window-panel, .io-ox-dialog-popup, .notifications-overlay"),
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
+                target: target || my.parents(".window-body, .simple-window, .window-panel, .io-ox-dialog-popup, .notifications-overlay").first(),
                 simple: my.closest('.simple-window')
             };
 

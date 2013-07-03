@@ -186,7 +186,7 @@ define('io.ox/mail/api',
 
             getColorLabel: function (obj) {
                 var cid = getCID(obj);
-                return colorLabel[cid] || 0; // fallback to 0 to avoid undefined
+                return (cid in colorLabel ? colorLabel[cid] : obj.color_label) || 0; // fallback to 0 to avoid undefined
             },
 
             setColorLabel: function (obj) {
@@ -403,7 +403,7 @@ define('io.ox/mail/api',
         // support for from-to
         options = options || {};
         if (options.sort === 'from-to') {
-            options.sort = accountAPI.is('sent', options.folder) ? 604 : 603;
+            options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
@@ -444,7 +444,7 @@ define('io.ox/mail/api',
 
     api.search = function (query, options) {
         if (options.sort === 'from-to') {
-            options.sort = accountAPI.is('sent', options.folder) ? 604 : 603;
+            options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
         return search.call(this, query, options);
     };
@@ -465,7 +465,7 @@ define('io.ox/mail/api',
             sortKey: 'threaded-' + (options.sort || '610'),
             konfetti: true,
             order: options.order || 'desc',
-            includeSent: !accountAPI.is('sent', options.folder),
+            includeSent: !accountAPI.is('sent|drafts', options.folder),
             cache: false, // never use server cache
             max: options.max || 500 // apply internal limit to build threads fast enough
         });
@@ -752,15 +752,14 @@ define('io.ox/mail/api',
 
         label = String(label); // Bugfix: #24730
 
-        return $.when(
-            tracker.update(list, function (obj) {
+        return tracker.update(list, function (obj) {
                 obj.color_label = label;
                 tracker.setColorLabel(obj);
             })
-            .done(function () { api.trigger('refresh.list'); }),
-            local ? DONE : update(list, { color_label: label })
-        );
-
+            .then(function () {
+                return local ? DONE : update(list, { color_label: label });
+            })
+            .done(function () { api.trigger('refresh.list'); });
     };
 
     /**

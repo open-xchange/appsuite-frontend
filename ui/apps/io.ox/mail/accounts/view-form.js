@@ -15,8 +15,9 @@ define('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/notifications',
      'text!io.ox/mail/accounts/account_detail.html',
+      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
-    ], function (View, notifications, tmpl, gt) {
+    ], function (View, notifications, tmpl, settings, gt) {
 
     'use strict';
 
@@ -79,12 +80,16 @@ define('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
             },
             render: function () {
-                var self = this;
-                window.account = self.model; //FIXME: WTF?
+                var self = this,
+                    //convention with backend
+                    hidePrimaryAccountDetails = _.isNull(self.model.attributes.mail_server);
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
-                    optionsRefreshRate: optionsRefreshRatePop
+                    optionsRefreshRate: optionsRefreshRatePop,
+                    settings: {
+                        hideAccountDetails: self.model.attributes.id === 0 && hidePrimaryAccountDetails
+                    }
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
 

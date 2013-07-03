@@ -373,7 +373,10 @@ function proxy(request, response) {
         return;
     }
     var URL = url.resolve(options.server, request.url);
-    if (verbose.proxy) console.log(URL);
+    if (verbose.proxy) {
+        console.log(URL);
+        console.log();
+    }
     var opt = url.parse(URL);
     opt.method = request.method;
     opt.headers = request.headers;

@@ -49,6 +49,8 @@ define('io.ox/office/tk/control/group',
      *      receives the new visibility state.
      * - 'enable': After the control has been enabled or disabled. The event
      *      handler receives the new state.
+     * - 'layout': After child nodes have been inserted into this group using
+     *      the method Group.addChildNodes().
      *
      * @constructor
      *
@@ -86,16 +88,6 @@ define('io.ox/office/tk/control/group',
         Events.extend(this);
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Shows or hides this group.
-         */
-        function showGroup(visible) {
-            if (self.isVisible() !== visible) {
-                groupNode.toggleClass(HIDDEN_CLASS, !visible);
-                self.trigger('show', visible);
-            }
-        }
 
         /**
          * Keyboard handler for the entire group.
@@ -229,7 +221,9 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Inserts the passed DOM elements into this group.
+         * Inserts the passed DOM elements into this group, and triggers a
+         * 'layout' event notifying all listeners about the changed layout of
+         * this group.
          *
          * @param {jQuery} nodes
          *  The nodes to be inserted into this group, as jQuery object.
@@ -239,7 +233,7 @@ define('io.ox/office/tk/control/group',
          */
         this.addChildNodes = function (nodes) {
             groupNode.append(nodes);
-            return this;
+            return this.trigger('layout');
         };
 
         /**
@@ -307,8 +301,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.show = function () {
-            showGroup(true);
-            return this;
+            return this.toggle(true);
         };
 
         /**
@@ -318,8 +311,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.hide = function () {
-            showGroup(false);
-            return this;
+            return this.toggle(false);
         };
 
         /**
@@ -333,7 +325,11 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.toggle = function (state) {
-            showGroup((state === true) || ((state !== false) && this.isVisible()));
+            var visible = (state === true) || ((state !== false) && this.isVisible());
+            if (this.isVisible() !== visible) {
+                groupNode.toggleClass(HIDDEN_CLASS, !visible);
+                this.trigger('show', visible);
+            }
             return this;
         };
 

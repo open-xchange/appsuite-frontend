@@ -16,8 +16,15 @@
 /* ========================================================================= */
 
 .opacity(@opacity) {
-    opacity: @opacity / 100;
+    opacity: (@opacity / 100);
     filter: ~"alpha(opacity=@{opacity})";
+}
+
+.box-shadow-2(@shadow1, @shadow2) {
+    -webkit-box-shadow: @shadow1, @shadow2;
+    -moz-box-shadow: @shadow1, @shadow2;
+    -ms-box-shadow: @shadow1, @shadow2;
+    box-shadow: @shadow1, @shadow2;
 }
 
 /* ========================================================================= */
@@ -26,12 +33,16 @@
 
 .io-ox-office-preview-main {
 
+/* glow effect for focused controls, use as argument for shadow mix-in classes */
+@focus-glow-effect: 0 0 8px 2px fade(@selectedBackground, 60%);
+
 /* thumbnail preview in the side pane */
 .view-pane.side-pane .group.page-preview {
     margin: 8px auto;
 
     a.button {
         position: absolute;
+        overflow: visible;
         .box-sizing(border-box);
         padding: 3px;
         border: 3px solid transparent;
@@ -39,14 +50,29 @@
         color: white;
         text-align: center;
 
+        &:not(.selected) {
+            &:hover:not(:focus) { border-color: fade(white, 5%); }
+            &:active { border-color: fade(white, 10%); }
+        }
+
         &.selected {
+            background-color: fade(@selectedBackground, 15%);
             border-color: @selectedBackground;
+            &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+            &:active { border-color: darken(@selectedBackground, 10%); }
+            &:focus:not(:active) { border-color: darken(@selectedBackground, 10%); }
+        }
+
+        /* add focus glow effect outside of button */
+        &:focus:not(:active) {
+            .box-shadow-2(0 0 0 1px @selectedBackground, @focus-glow-effect);
         }
 
         > .page {
             position: relative;
             margin-left: auto;
             margin-right: auto;
+            padding: 1px;
             background-color: white;
             width: 70px;
             height: 90px;

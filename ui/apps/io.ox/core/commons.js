@@ -79,15 +79,24 @@ define('io.ox/core/commons',
                 // has anything changed?
                 if (flat !== last) {
                     if (len === 1) {
+                        // single selection
                         node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        // multi selection
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
                     } else {
+                        // empty
                         if (draw.cancel) draw.cancel();
-                        node.css('height', '').idle().empty();
+                        node.css('height', '100%').idle().empty().append(
+                            $('<div class="io-ox-center">').append(
+                                $('<div class="io-ox-multi-selection">').append(
+                                    $('<div class="summary">').text(gt('No elements selected'))
+                                )
+                            )
+                        );
                     }
                     // remember current selection
                     last = flat;

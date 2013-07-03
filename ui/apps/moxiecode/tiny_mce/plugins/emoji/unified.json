@@ -1,27 +1,27 @@
 {
   "meta": [
     {
-      "iconClass": "emoji1f60a",
+      "iconClass": "emoji-unified emoji1f60a",
       "title": "People",
       "name": "People"
     },
     {
-      "iconClass": "emoji1f523",
+      "iconClass": "emoji-unified emoji1f523",
       "title": "Symbols",
       "name": "Symbols"
     },
     {
-      "iconClass": "emoji1f338",
+      "iconClass": "emoji-unified emoji1f338",
       "title": "Nature",
       "name": "Nature"
     },
     {
-      "iconClass": "emoji1f514",
+      "iconClass": "emoji-unified emoji1f514",
       "title": "Objects",
       "name": "Objects"
     },
     {
-      "iconClass": "emoji1f697",
+      "iconClass": "emoji-unified emoji1f697",
       "title": "Places",
       "name": "Places"
     }

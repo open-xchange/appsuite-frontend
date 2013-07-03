@@ -836,7 +836,7 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', 'You have been automatically logged out');
+                    feedback('info', $.txt(gt('autologout')));
                 }
 
                 debug('boot.js: Check browser support');
@@ -852,6 +852,7 @@ $(window).load(function () {
                                 gt('You need to use Android %n or higher.',
                                     _.browserSupport.Android));
                         });
+
                     } else if (_.device('ios')) {
                         // special info for not supported iOS
                         feedback('info', function () {
@@ -867,6 +868,7 @@ $(window).load(function () {
                                 .add($.txt(_.noI18n('\xa0')))
                                 .add($('<div>').text(gt('Please update your browser.')));
                         });
+
                     } else {
                         // general warning about browser
                         feedback('info', function () {
@@ -890,6 +892,7 @@ $(window).load(function () {
                     feedback('info', 'Unsupported Preview - Certain ' +
                         'functions disabled and stability not assured until ' +
                         'general release later this year');
+
                 }
 
                 // show login dialog

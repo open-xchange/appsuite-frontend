@@ -280,14 +280,16 @@ define('io.ox/core/commons-folderview',
             id: 'export',
             index: 250,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="export" role="menuitem">').text(gt('Export'));
-                this.append(
-                    $('<li>').append(link)
-                );
-                if (api.can('export', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { baton: baton }, exportData);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                if (_.device('!ios && !android')) {
+                    var link = $('<a href="#" data-action="export">').text(gt('Export'));
+                    this.append(
+                        $('<li>').append(link)
+                    );
+                    if (api.can('export', baton.data)) {
+                        link.attr('tabindex', 1).on('click', { baton: baton }, exportData);
+                    } else {
+                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    }
                 }
             }
         });
@@ -303,14 +305,16 @@ define('io.ox/core/commons-folderview',
             id: 'import',
             index: 245,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="import" role="menuitem">').text(gt('Import'));
-                this.append(
-                    $('<li>').append(link)
-                );
-                if (api.can('import', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { baton: baton }, importData);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                if (_.device('!ios && !android')) {
+                    var link = $('<a href="#" data-action="import">').text(gt('Import'));
+                    this.append(
+                        $('<li>').append(link)
+                    );
+                    if (api.can('import', baton.data)) {
+                        link.attr('tabindex', 1).on('click', { baton: baton }, importData);
+                    } else {
+                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    }
                 }
             }
         });

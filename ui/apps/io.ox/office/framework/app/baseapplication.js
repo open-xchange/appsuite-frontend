@@ -211,14 +211,27 @@ define('io.ox/office/framework/app/baseapplication',
      *  @param {Object} [launchOptions.file]
      *      The descriptor of the file to be imported, as provided and used by
      *      the Files application.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the behavior of the application. The
+     *  following options are supported:
+     *  @param {Function} [options.downloadHandler]
+     *      A function that will be called before the document will be
+     *      downloaded. Will be called in the context of this application. May
+     *      return a Deferred object. In this case, the application will wait
+     *      until this Deferred object has been resolved or rejected. In the
+     *      latter case, the download will be aborted.
      */
-    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, appOptions, launchOptions) {
+    function BaseApplication(ModelClass, ViewClass, ControllerClass, importHandler, appOptions, launchOptions, options) {
 
         var // self reference
             self = this,
 
             // file descriptor of the document edited by this application
             file = Utils.getObjectOption(launchOptions, 'file', null),
+
+            // callback before downloading the document
+            downloadHandler = Utils.getFunctionOption(options, 'downloadHandler', $.noop),
 
             // all registered before-quit handlers
             beforeQuitHandlers = [],
@@ -1351,6 +1364,49 @@ define('io.ox/office/framework/app/baseapplication',
             });
 
             return def.promise();
+        };
+
+        /**
+         * Downloads the document file currently opened by this application.
+         *
+         * @param {String} [format='native']
+         *  The requested file format. The default format 'native' will return
+         *  the document in its native file format.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the
+         *  document file has been downloaded successfully, or rejected
+         *  otherwise.
+         */
+        this.download = function (format) {
+
+            var // call the download handler first
+                downloadHandlerResult = downloadHandler.call(self, format);
+
+            return $.when(downloadHandlerResult).then(function () {
+
+                var // the download URL of the document
+                    documentUrl = self.getFilterModuleUrl({
+                        action: 'getdocument',
+                        documentformat: format || 'native',
+                        filename: self.getFullFileName(),
+                        mimetype: self.getFileDescriptor().file_mimetype || ''
+                    });
+
+                return self.downloadFile(documentUrl);
+            })
+            .promise();
+        };
+
+        /**
+         * Prints the document file currently opened by this application.
+         *
+         * @returns {jQuery.Promise}
+         *  The Promise of a Deferred object that will be resolved if the
+         *  document file has been printed successfully, or rejected otherwise.
+         */
+        this.print = function () {
+            return this.download('pdf');
         };
 
         /**

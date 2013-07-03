@@ -14,7 +14,6 @@
 define('io.ox/office/preview/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/label',
      'io.ox/office/framework/view/baseview',
      'io.ox/office/framework/view/basecontrols',
      'io.ox/office/framework/view/pane',
@@ -22,31 +21,25 @@ define('io.ox/office/preview/view',
      'io.ox/office/framework/view/component',
      'io.ox/office/framework/view/toolbox',
      'io.ox/office/preview/viewutils',
+     'io.ox/office/preview/controls',
      'io.ox/office/preview/pagegroup',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, Button, Label, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, ViewUtils, PageGroup, gt) {
+    ], function (Utils, Button, BaseView, BaseControls, Pane, SidePane, Component, ToolBox, ViewUtils, PreviewControls, PageGroup, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // predefined zoom-out factors
-        ZOOMOUT_FACTORS = [25, 35, 50, 75],
+        // predefined zoom factors
+        ZOOM_FACTORS = [25, 35, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1200, 1600],
 
-        // predefined zoom-in factors
-        ZOOMIN_FACTORS = [150, 200, 300, 400, 600, 800, 1200, 1600],
+        // margins between page and border of application pane
+        CONTENT_MARGIN = { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
 
-        // options for the button and label elements
-        GroupOptions = {
-            FIRST:   { icon: 'docs-first-page',    tooltip: gt('Show first page') },
-            PREV:    { icon: 'docs-previous-page', tooltip: gt('Show previous page') },
-            NEXT:    { icon: 'docs-next-page',     tooltip: gt('Show next page') },
-            LAST:    { icon: 'docs-last-page',     tooltip: gt('Show last page') },
-            ZOOMOUT: { icon: 'docs-zoom-out',      tooltip: gt('Zoom out') },
-            ZOOMIN:  { icon: 'docs-zoom-in',       tooltip: gt('Zoom in') }
-        };
+        // margins between overlay panes and border of application pane
+        OVERLAY_MARGIN = { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT };
 
     // class PreviewView ======================================================
 
@@ -75,11 +68,11 @@ define('io.ox/office/preview/view',
             // tool pane floating over the top of the application pane
             topOverlayPane = null,
 
-            // tool pane floating over the bottom of the application pane
-            bottomOverlayPane = null,
-
-            // the application status label
+            // the status label for the page number and zoom factor
             statusLabel = new BaseControls.StatusLabel(app),
+
+            // the tool box containing page and zoom control groups
+            bottomToolBox = null,
 
             // the page preview control
             pageGroup = null,
@@ -93,8 +86,11 @@ define('io.ox/office/preview/view',
             // current page index (one-based!)
             page = 0,
 
-            // current zoom level (index into the predefined arrays)
-            zoom = 0;
+            // current zoom type (percentage or keyword)
+            zoomType = 100,
+
+            // the current effective zoom factor, in percent
+            zoomFactor = 100;
 
         // base constructor ---------------------------------------------------
 
@@ -102,7 +98,7 @@ define('io.ox/office/preview/view',
             initHandler: initHandler,
             grabFocusHandler: grabFocusHandler,
             scrollable: true,
-            contentMargin: { left: 30, right: 30, top: 52, bottom: 52 + Utils.SCROLLBAR_HEIGHT },
+            contentMargin: CONTENT_MARGIN,
             overlayMargin: { left: 8, right: Utils.SCROLLBAR_WIDTH + 8, bottom: Utils.SCROLLBAR_HEIGHT }
         });
 
@@ -140,13 +136,13 @@ define('io.ox/office/preview/view',
                     .addGroup('pages/current', pageGroup)
                 )
                 .addViewComponent(new ToolBox(app, { fixed: 'bottom' })
-                    .addGroup('pages/first',    new Button(GroupOptions.FIRST))
-                    .addGroup('pages/previous', new Button(GroupOptions.PREV))
-                    .addGroup('pages/next',     new Button(GroupOptions.NEXT))
-                    .addGroup('pages/last',     new Button(GroupOptions.LAST))
+                    .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                    .addGroup('pages/current',  new PreviewControls.PageChooser())
+                    .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS))
                     .addRightTab()
-                    .addGroup('zoom/dec', new Button(GroupOptions.ZOOMOUT))
-                    .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
+                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS))
                 );
 
             // create the top overlay pane
@@ -158,21 +154,19 @@ define('io.ox/office/preview/view',
                 )
             );
 
-            // create the second overlay pane containing the status label
-            self.addPane(new Pane(app, { position: 'top', classes: 'inline right', overlay: true, transparent: true })
-                .addViewComponent(new ToolBox(app, { focusable: false }).addPrivateGroup(statusLabel))
-            );
-
             // create the bottom overlay pane
-            self.addPane(bottomOverlayPane = new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true, hoverEffect: true })
-                .addViewComponent(new ToolBox(app)
-                    .addGroup('pages/first',    new Button(GroupOptions.FIRST))
-                    .addGroup('pages/previous', new Button(GroupOptions.PREV))
-                    .addGroup('pages/next',     new Button(GroupOptions.NEXT))
-                    .addGroup('pages/last',     new Button(GroupOptions.LAST))
+            self.addPane(new Pane(app, { position: 'bottom', classes: 'inline right', overlay: true, transparent: true })
+                .addViewComponent(new ToolBox(app, { focusable: false })
+                    .addPrivateGroup(statusLabel)
+                )
+                .addViewComponent(bottomToolBox = new ToolBox(app, { hoverEffect: true })
+                    .addGroup('pages/previous', new Button(PreviewControls.PREV_OPTIONS))
+                    .addGroup('pages/current',  new PreviewControls.PageChooser())
+                    .addGroup('pages/next',     new Button(PreviewControls.NEXT_OPTIONS))
                     .addGap()
-                    .addGroup('zoom/dec', new Button(GroupOptions.ZOOMOUT))
-                    .addGroup('zoom/inc', new Button(GroupOptions.ZOOMIN))
+                    .addGroup('zoom/dec',  new Button(PreviewControls.ZOOMOUT_OPTIONS))
+                    .addGroup('zoom/type', new PreviewControls.ZoomTypeChooser())
+                    .addGroup('zoom/inc',  new Button(PreviewControls.ZOOMIN_OPTIONS))
                 )
             );
 
@@ -183,7 +177,10 @@ define('io.ox/office/preview/view',
             self.getAppPaneNode().on('keydown', keyHandler);
 
             // set focus to application pane after import
-            app.on('docs:import:after', function () { self.grabFocus(); });
+            app.on('docs:import:after', function () {
+                self.on('refresh:layout', function () { updateZoom(); });
+                self.grabFocus();
+            });
         }
 
         /**
@@ -238,11 +235,32 @@ define('io.ox/office/preview/view',
         }
 
         /**
-         * Shows the status label with the passed caption text.
+         * Updates the status label with the current page number.
          */
-        function showStatusLabel(caption) {
-            statusLabel.update({ caption: caption, type: 'success', fadeOut: true });
+        function updatePageStatus() {
+            statusLabel.update({
+                caption:
+                    //#. %1$s is the current page index in office document preview
+                    //#. %2$s is the number of pages in office document preview
+                    //#, c-format
+                    gt('Page %1$s of %2$s', page, model.getPageCount()),
+                type: 'info'
+            });
         }
+
+        /**
+         * Shows the current zoom factor in the status label for a short time,
+         * then switches back to the display of the current page number.
+         */
+        var updateZoomStatus = app.createDebouncedMethod(function () {
+            statusLabel.update({
+                caption:
+                    //#. %1$d is the current zoom factor, in percent
+                    //#, c-format
+                    gt('Zoom: %1$d%', zoomFactor),
+                type: 'info'
+            });
+        }, updatePageStatus, { delay: 1000 });
 
         /**
          * Fetches the specified page from the preview model and shows it with
@@ -273,11 +291,7 @@ define('io.ox/office/preview/view',
             currentId = (uniqueId += 1);
             page = newPage;
             pageGroup.selectAndShowPage(page);
-            showStatusLabel(
-                //#. %1$s is the current page index in office document preview
-                //#. %2$s is the number of pages in office document preview
-                //#, c-format
-                gt('Page %1$s of %2$s', page, model.getPageCount()));
+            updatePageStatus();
 
             // switch application pane to busy state (this keeps the Close button active)
             self.appPaneBusy();
@@ -317,23 +331,6 @@ define('io.ox/office/preview/view',
         }
 
         /**
-         * Changes the zoom level and refreshes the page view.
-         *
-         * @param {Number} newZoom
-         *  The new zoom level.
-         */
-        function changeZoom(newZoom) {
-            if ((self.getMinZoomLevel() <= newZoom) && (newZoom <= self.getMaxZoomLevel()) && (zoom !== newZoom)) {
-                zoom = newZoom;
-                updateZoom();
-                showStatusLabel(
-                    //#. %1$d is the current zoom factor, in percent
-                    //#, c-format
-                    gt('Zoom: %1$d%', self.getZoomFactor()));
-            }
-        }
-
-        /**
          * Recalculates the CSS zoom and margins, according to the current page
          * size and zoom level.
          *
@@ -345,20 +342,39 @@ define('io.ox/office/preview/view',
          */
         function updateZoom(scrollTo) {
 
-            var // the current zoom factor
-                zoomFactor = self.getZoomFactor() / 100,
-                // the original size of the page
+            var // the original size of the page
                 pageSize = pageNode.data('size'),
                 // the application pane node
-                appPaneNode = self.getAppPaneNode();
+                appPaneNode = self.getAppPaneNode(),
+                // the available width for a page in the application pane
+                availableWidth = appPaneNode[0].clientWidth - CONTENT_MARGIN.left - CONTENT_MARGIN.right,
+                // the available height for a page in the application pane
+                availableHeight = appPaneNode[0].clientHeight - CONTENT_MARGIN.top - CONTENT_MARGIN.bottom;
+
+            // calculate the effective zoom factor
+            if (_.isNumber(zoomType)) {
+                zoomFactor = zoomType;
+            } else if (_.isObject(pageSize)) {
+                switch (zoomType) {
+                case 'width':
+                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), 100);
+                    break;
+                case 'page':
+                    zoomFactor = Math.min(Math.floor(availableWidth / pageSize.width * 100), Math.floor(availableHeight / pageSize.height * 100), 100);
+                    break;
+                default:
+                    Utils.warn('PreviewView.updateZoom(): unsupported zoom type "' + zoomType + '"');
+                    zoomFactor = 100;
+                }
+            } else {
+                zoomFactor = 100;
+            }
+            zoomFactor = Utils.minMax(zoomFactor, self.getMinZoomFactor(), self.getMaxZoomFactor());
 
             // set the current zoom factor to the page (prevent zooming on invalid pages)
             if (_.isObject(pageSize)) {
-                ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor);
+                ViewUtils.setZoomFactor(pageNode, pageSize, zoomFactor / 100);
             }
-
-            // refresh view (scroll bars may have appeared or vanished)
-            self.refreshPaneLayout();
 
             // update scroll position
             switch (scrollTo) {
@@ -395,9 +411,11 @@ define('io.ox/office/preview/view',
          *  A reference to this instance.
          */
         this.toggleSidePane = function (state) {
-            sidePane.toggle(state);
-            topOverlayPane.toggle(!state);
-            bottomOverlayPane.toggle(!state);
+            this.lockPaneLayout(function () {
+                sidePane.toggle(state);
+                topOverlayPane.toggle(!state);
+                bottomToolBox.toggle(!state);
+            });
             return this;
         };
 
@@ -414,128 +432,131 @@ define('io.ox/office/preview/view',
         /**
          * Shows the specified page of the current document.
          *
-         * @param {Number} newPage
-         *  The one-based index of the page to be shown.
+         * @param {Number|String} newPage
+         *  The one-based index of the page to be shown; or one of the keywords
+         *  'first', 'previous', 'next', or 'last'.
          *
          * @returns {PreviewView}
          *  A reference to this instance.
          */
         this.showPage = function (newPage) {
-            showPage(newPage, 'top');
+
+            // fixed page number
+            if (_.isNumber(newPage)) {
+                showPage(newPage, 'top');
+            }
+
+            // page keyword
+            switch (newPage) {
+            case 'first':
+                showPage(1, 'top');
+                break;
+            case 'previous':
+                showPage(page - 1, 'top');
+                break;
+            case 'next':
+                showPage(page + 1, 'top');
+                break;
+            case 'last':
+                showPage(model.getPageCount(), 'bottom');
+                break;
+            }
+
             return this;
         };
 
         /**
-         * Shows the first page of the current document.
+         * Returns the current zoom type.
          *
-         * @returns {PreviewView}
-         *  A reference to this instance.
+         * @returns {Number|String}
+         *  The current zoom type, either as fixed percentage, or as one of the
+         *  keywords 'width' (page width is aligned to width of the visible
+         *  area), or 'page' (page size is aligned to visible area).
          */
-        this.showFirstPage = function () {
-            showPage(1, 'top');
-            return this;
+        this.getZoomType = function () {
+            return zoomType;
         };
 
         /**
-         * Shows the previous page of the current document.
-         *
-         * @param {jQuery.Event} [event]
-         *  The 'keydown' event object, if called from a keyboard shortcut.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.showPreviousPage = function (event) {
-            showPage(page - 1, 'top');
-            return this;
-        };
-
-        /**
-         * Shows the next page of the current document.
-         *
-         * @param {jQuery.Event} [event]
-         *  The 'keydown' event object, if called from a keyboard shortcut.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.showNextPage = function (event) {
-            showPage(page + 1, 'top');
-            return this;
-        };
-
-        /**
-         * Shows the last page of the current document.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.showLastPage = function () {
-            showPage(model.getPageCount(), 'bottom');
-            return this;
-        };
-
-        /**
-         * Returns the current zoom level. The zoom level is a zero-based array
-         * index into the table of predefined zoom factors.
-         *
-         * @returns {Number}
-         *  The current zoom level.
-         */
-        this.getZoomLevel = function () {
-            return zoom;
-        };
-
-        /**
-         * Returns the minimum zoom level.
-         *
-         * @returns {Number}
-         *  The minimum zoom level.
-         */
-        this.getMinZoomLevel = function () {
-            return -ZOOMOUT_FACTORS.length;
-        };
-
-        /**
-         * Returns the maximum zoom level.
-         *
-         * @returns {Number}
-         *  The maximum zoom level.
-         */
-        this.getMaxZoomLevel = function () {
-            return ZOOMIN_FACTORS.length;
-        };
-
-        /**
-         * Decreases the current zoom level by one, and updates the view.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.decreaseZoomLevel = function () {
-            changeZoom(zoom - 1);
-            return this;
-        };
-
-        /**
-         * Increases the current zoom level by one, and updates the view.
-         *
-         * @returns {PreviewView}
-         *  A reference to this instance.
-         */
-        this.increaseZoomLevel = function () {
-            changeZoom(zoom + 1);
-            return this;
-        };
-
-        /**
-         * Returns the current zoom factor in percent.
+         * Returns the current effective zoom factor in percent.
          *
          * @returns {Number}
          *  The current zoom factor in percent.
          */
         this.getZoomFactor = function () {
-            return (zoom === 0) ? 100 : (zoom < 0) ? ZOOMOUT_FACTORS[ZOOMOUT_FACTORS.length + zoom] : ZOOMIN_FACTORS[zoom - 1];
+            return zoomFactor;
+        };
+
+        /**
+         * Returns the minimum zoom factor in percent.
+         *
+         * @returns {Number}
+         *  The minimum zoom factor in percent.
+         */
+        this.getMinZoomFactor = function () {
+            return ZOOM_FACTORS[0];
+        };
+
+        /**
+         * Returns the maximum zoom factor in percent.
+         *
+         * @returns {Number}
+         *  The maximum zoom factor in percent.
+         */
+        this.getMaxZoomFactor = function () {
+            return _.last(ZOOM_FACTORS);
+        };
+
+        /**
+         * Changes the current zoom settings.
+         *
+         * @param {Number|String} newZoomType
+         *  The new zoom type. Either a fixed percentage, or one of the
+         *  keywords 'width' (page width is aligned to width of the visible
+         *  area), or 'page' (page size is aligned to visible area).
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
+        this.setZoomType = function (newZoomType) {
+            if (zoomType !== newZoomType) {
+                zoomType = newZoomType;
+                updateZoom();
+                updateZoomStatus();
+            }
+            return this;
+        };
+
+        /**
+         * Switches to 'fixed' zoom mode, and decreases the current zoom level
+         * by one according to the current effective zoom factor, and updates
+         * the view.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
+        this.decreaseZoomLevel = function () {
+
+            var // find last entry in ZOOM_FACTORS with a factor less than current zoom
+                prevZoomFactor = Utils.findLast(ZOOM_FACTORS, function (factor) { return factor < zoomFactor; });
+
+            return this.setZoomType(_.isNumber(prevZoomFactor) ? prevZoomFactor : this.getMinZoomFactor());
+        };
+
+        /**
+         * Switches to 'fixed' zoom mode, and increases the current zoom level
+         * by one according to the current effective zoom factor, and updates
+         * the view.
+         *
+         * @returns {PreviewView}
+         *  A reference to this instance.
+         */
+        this.increaseZoomLevel = function () {
+
+            var // find first entry in ZOOM_FACTORS with a factor greater than current zoom
+                nextZoomFactor = _(ZOOM_FACTORS).find(function (factor) { return factor > zoomFactor; });
+
+            return this.setZoomType(_.isNumber(nextZoomFactor) ? nextZoomFactor : this.getMaxZoomFactor());
         };
 
         /**
@@ -546,7 +567,7 @@ define('io.ox/office/preview/view',
          *  A save point with all view settings.
          */
         this.getSavePoint = function () {
-            return { page: page, zoom: zoom };
+            return { page: page, zoom: zoomType };
         };
 
         /**
@@ -557,7 +578,16 @@ define('io.ox/office/preview/view',
          *  PreviewView.getSavePoint().
          */
         this.restoreFromSavePoint = function (point) {
-            zoom = Utils.getIntegerOption(point, 'zoom', 0, this.getMinZoomLevel(), this.getMaxZoomLevel());
+
+            // restore zoom type
+            zoomType = Utils.getOption(point, 'zoom');
+            if (_.isNumber(zoomType)) {
+                zoomType = Math.round(zoomType);
+            } else if (!_.isString(zoomType) || (zoomType.length === 0)) {
+                zoomType = 100;
+            }
+
+            // show the last visited page, update GUI
             showPage(Utils.getIntegerOption(point, 'page', 1, 1, model.getPageCount()), 'top');
             app.getController().update();
         };

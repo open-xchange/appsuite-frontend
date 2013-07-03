@@ -59,6 +59,11 @@ define('io.ox/office/framework/view/component',
      *      the chain of focusable nodes reachable with specific global
      *      keyboard shortcuts (usually the F6 key with platform dependent
      *      control keys).
+     *  @param {Boolean} [options.hoverEffect=false]
+     *      If set to true, all control groups in this view component will be
+     *      displayed half-transparent as long as the mouse does not hover the
+     *      view component. Has no effect, if the current device is a touch
+     *      device.
      *  @param {Function} [options.groupInserter]
      *      A function that will implement inserting the root DOM node of a new
      *      group into this view component. The function receives the reference
@@ -94,16 +99,6 @@ define('io.ox/office/framework/view/component',
         // private methods ----------------------------------------------------
 
         /**
-         * Changes the visibility of this view component and triggers a 'show'
-         * event.
-         */
-        function showComponent(state) {
-            if (self.isVisible() !== state) {
-                node.toggleClass(HIDDEN_CLASS, !state);
-            }
-        }
-
-        /**
          * Inserts the passed control group into this view component, either by
          * calling the handler function passed to the constructor, or by
          * appending the root node of the group to the children of the own root
@@ -128,7 +123,7 @@ define('io.ox/office/framework/view/component',
             // update focusability depending on the group's enabled state
             group.on({
                 cancel: function () { self.trigger('cancel'); },
-                enable: updateFocusable
+                'show enable layout': updateFocusable
             });
 
             // make this view component focusable, if it contains any groups
@@ -285,7 +280,7 @@ define('io.ox/office/framework/view/component',
          * Returns whether this view component is visible.
          */
         this.isVisible = function () {
-            return node.is(':visible');
+            return !node.hasClass(HIDDEN_CLASS);
         };
 
         /**
@@ -295,8 +290,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.show = function () {
-            showComponent(true);
-            return this;
+            return this.toggle(true);
         };
 
         /**
@@ -306,8 +300,7 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.hide = function () {
-            showComponent(false);
-            return this;
+            return this.toggle(false);
         };
 
         /**
@@ -322,7 +315,10 @@ define('io.ox/office/framework/view/component',
          *  A reference to this view component.
          */
         this.toggle = function (state) {
-            showComponent((state === true) || ((state !== false) && this.isVisible()));
+            var visible = (state === true) || ((state !== false) && node.hasClass(HIDDEN_CLASS));
+            if (this.isVisible() !== visible) {
+                node.toggleClass(HIDDEN_CLASS, !visible);
+            }
             return this;
         };
 
@@ -369,6 +365,11 @@ define('io.ox/office/framework/view/component',
         };
 
         // initialization -----------------------------------------------------
+
+        // hover effect for view components embedded in the pane (not for touch devices)
+        if (!Modernizr.touch && Utils.getBooleanOption(options, 'hoverEffect', false)) {
+            node.addClass('hover-effect');
+        }
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

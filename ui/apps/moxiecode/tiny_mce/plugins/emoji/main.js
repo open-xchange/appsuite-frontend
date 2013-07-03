@@ -10,22 +10,31 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define('moxiecode/tiny_mce/plugins/emoji/main',
-       ['emoji/emoji',
+       ['3rd.party/emoji/emoji',
        'moxiecode/tiny_mce/plugins/emoji/categories',
+       'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
-       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji_categories.css',
-       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less',
-       'css!moxiecode/tiny_mce/plugins/emoji/softbank/emoji.css',
-       'css!emoji/emoji.css'], function (emoji, categories, settings) {
+       'css!3rd.party/emoji/emoji.css',
+       'less!moxiecode/tiny_mce/plugins/emoji/emoji.less'
+    ], function (emoji, categories, ext, settings) {
 
     "use strict";
+
+    ext.point('3rd.party/emoji/editor_css').extend({
+        id: 'unified/icons',
+        css: '3rd.party/emoji/emoji.css'
+    });
 
     function parseCollections() {
         //TODO: may be, filter the list for collections, we support in the frontend
         var e = settings.get('availableCollections', '');
-        return _(e.split(',')).map(function (collection) {
-            return collection.trim();
-        });
+        return _(e.split(','))
+            .chain()
+            .map(function (collection) {
+                return collection.trim();
+            })
+            .compact()
+            .value();
     }
 
     function parseUnicode(str) {
@@ -52,7 +61,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
     }
 
     // introduce Emoji class
-    function Emoji() {
+    function Emoji(opt) {
+
+        opt = opt || {};
 
         // inherit from emoji
         _.extend(this, emoji);
@@ -65,8 +76,9 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         // make settings accessible, esp. for editor plugin
         this.settings = settings;
 
+        //FIXME: check if default is still valid after icons have been removed
         var defaultCollection = settings.get('defaultCollection', 'japan_carrier');
-        this.currentCollection = settings.get('userCollection', defaultCollection);
+        this.currentCollection = opt.collection || settings.get('userCollection', defaultCollection);
 
         this.createCategoryMap();
     }
@@ -79,7 +91,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 return this.iconInfo([icon, emoji.EMOJI_MAP[icon]]);
 
             if (!icon || !icon[0] || !icon[1] || !icon[1][1] || !icon[1][2])
-                return { invalid: true };
+                return undefined;
 
             return {
                 css: this.cssFor(icon[0]),
@@ -93,11 +105,16 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             var icon = emoji.EMOJI_MAP[unicode];
 
-            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
-                return 'softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            if (!this.category_map[unicode]) {
+                return undefined;
             }
 
-            return 'emoji emoji' + icon[2];
+            //TODO: move this to softbanke emoji app
+            if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
+                return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+            }
+
+            return 'emoji-unified emoji' + icon[2];
         },
 
         // add to "recently used" category
@@ -227,8 +244,8 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
     return {
 
-        getInstance: function () {
-            return new Emoji();
+        getInstance: function (opt) {
+            return new Emoji(opt);
         },
 
         // HTML related API

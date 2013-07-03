@@ -61,28 +61,28 @@ define('io.ox/office/preview/controller',
                 'pages/first': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
-                    set: function () { view.showFirstPage(); },
+                    set: function () { view.showPage('first'); },
                     shortcut: { keyCode: KeyCodes.HOME, altKey: null, ctrlKey: null, metaKey: null }
                 },
 
                 'pages/previous': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() > 1; },
-                    set: function () { view.showPreviousPage(); },
+                    set: function () { view.showPage('previous'); },
                     shortcut: { keyCode: KeyCodes.PAGE_UP, altOrMetaKey: true }
                 },
 
                 'pages/next': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
-                    set: function () { view.showNextPage(); },
+                    set: function () { view.showPage('next'); },
                     shortcut: { keyCode: KeyCodes.PAGE_DOWN, altOrMetaKey: true }
                 },
 
                 'pages/last': {
                     parent: 'document/valid',
                     enable: function () { return view.getPage() < model.getPageCount(); },
-                    set: function () { view.showLastPage(); },
+                    set: function () { view.showPage('last'); },
                     shortcut: { keyCode: KeyCodes.END, altKey: null, ctrlKey: null, metaKey: null }
                 },
 
@@ -96,17 +96,24 @@ define('io.ox/office/preview/controller',
 
                 'zoom/dec': {
                     parent: 'document/valid',
-                    enable: function () { return view.getZoomLevel() > view.getMinZoomLevel(); },
+                    enable: function () { return view.getZoomFactor() > view.getMinZoomFactor(); },
                     set: function () { view.decreaseZoomLevel(); },
                     shortcut: { charCode: '-' }
                 },
 
                 'zoom/inc': {
                     parent: 'document/valid',
-                    enable: function () { return view.getZoomLevel() < view.getMaxZoomLevel(); },
+                    enable: function () { return view.getZoomFactor() < view.getMaxZoomFactor(); },
                     set: function () { view.increaseZoomLevel(); },
                     shortcut: { charCode: '+' }
+                },
+
+                'zoom/type': {
+                    parent: 'document/valid',
+                    get: function () { return view.getZoomType(); },
+                    set: function (zoomType) { view.setZoomType(zoomType); }
                 }
+
             };
 
         // base constructor ---------------------------------------------------

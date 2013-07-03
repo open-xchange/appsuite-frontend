@@ -34,6 +34,8 @@
             </div>
         </div>
     </div>
+
+{{ if (it.settings.hideAccountDetails === false) { }}
     <legend class="sectiontitle">{{=it.strings.SERVER_SETTINGS}}</legend>
     <div class="form-horizontal">
         <div class="control-group">
@@ -201,4 +203,5 @@
             </div>
         </div>
     </div>
+    {{ } }}
 </div>
