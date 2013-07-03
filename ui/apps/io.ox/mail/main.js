@@ -241,14 +241,6 @@ define('io.ox/mail/main',
                 .prop('order', sortSettings.order)
                 .prop('unread', sortSettings.unread);
         });
-        // sort property is special and needs special handling because of the auto toggling if threadview is not uspported
-        // look into hToolbarOptions function for this
-        grid.on('change:prop:unread', function (e, value) {
-            grid.updateSettings('unread', value);
-        });
-        grid.on('change:prop:order', function (e, value) {
-            grid.updateSettings('order', value);
-        });
 
         // remove delete button if needed
         grid.selection.on('change', removeButton);
