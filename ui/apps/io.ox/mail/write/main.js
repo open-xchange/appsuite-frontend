@@ -740,7 +740,7 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
-                    def.resolve();
+                    def.resolve({app: app});
                 })
                 .fail(function (e) {
                     notifications.yell(e);

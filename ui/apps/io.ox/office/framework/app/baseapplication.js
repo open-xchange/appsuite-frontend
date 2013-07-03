@@ -1410,6 +1410,28 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
+         * Creates a new mail message with the current document attached
+         *
+         */
+        this.sendMail = function () {
+            var // call the download handler first
+                downloadHandlerResult = downloadHandler.call(self);
+            $.when(downloadHandlerResult).then(function () {
+
+                var // the file descriptor of the document
+                    fileDescriptor = self.getFileDescriptor();
+                //fileDescriptor.mailFolder, .mailUID
+                require(['io.ox/mail/write/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.compose().done(function (result) {
+                            result.app.addFiles([fileDescriptor]);
+                        });
+                    });
+                });
+
+            });
+        };
+        /**
          * Will be called automatically from the OX core framework to create
          * and return a save point containing the current state of the
          * application.
