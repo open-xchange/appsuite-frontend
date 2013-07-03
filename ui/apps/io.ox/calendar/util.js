@@ -54,22 +54,6 @@ define("io.ox/calendar/util",
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
         firstWeekDay = date.locale.weekStart;
 
-    var zones;
-    $.when.apply($, _.map(
-        ['America/Los_Angeles',
-         'America/New_York',
-         //'America/Sao_Paulo',
-         'Europe/London',
-         'Europe/Berlin',
-         //'Europe/Moscow',
-         //'Asia/Kolkata',
-         //'Asia/Shanghai',
-         'Australia/Sydney'], date.getTimeZone))
-        .done(function () {
-            zones = Array.prototype.slice.call(arguments);
-        });
-
-
     var that = {
 
         MINUTE: MINUTE,
@@ -313,17 +297,26 @@ define("io.ox/calendar/util",
             function getContent() {
                 // hard coded for demo purposes
                 var div = $('<div>');
-                _(zones).each(function (zone) {
-                    // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<div class="clear">').append(
-                        $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
-                        $('<b>').append($('<span>')
-                            .addClass('label label-info')
-                            .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr))),
-                        $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
-                    ));
-                });
-                return '<div class="list">' + div.html() + '</div>';
+                $.when.apply($, _.map(
+                    ['America/Los_Angeles',
+                     'America/New_York',
+                     'Europe/London',
+                     'Europe/Berlin',
+                     'Australia/Sydney'], date.getTimeZone))
+                    .done(function () {
+                        _(Array.prototype.slice.call(arguments)).each(function (zone) {
+                            // must use outer DIV with "clear: both" here for proper layout in firefox
+                            div.append($('<div class="clear">').append(
+                                $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                                $('<b>').append($('<span>')
+                                    .addClass('label label-info')
+                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr))),
+                                $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
+                            ));
+                        });
+                    });
+
+                return $('<div class="list">').append(div);
             }
 
             return parent;
