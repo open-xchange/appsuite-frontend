@@ -221,6 +221,34 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
+         * Registers a private group instance. The events triggered by that
+         * group will be forwarded to the listeners of this group instance.
+         * Updates of this group instance (calls to the own 'Group.update()'
+         * method) will be forwarded to the specified private group. The DOM
+         * root node of the group will not be inserted anywhere!
+         *
+         * @param {Group} group
+         *  The group instance to be be registered.
+         *
+         * @returns {Group}
+         *  A reference to this instance.
+         */
+        this.registerPrivateGroup = function (group) {
+
+            // forward events of the group to listeners of this drop-down group
+            group.on('change cancel', function (event, value) {
+                self.trigger(event.type, value);
+            });
+
+            // forward updates of this drop-down group to the inserted group
+            this.registerUpdateHandler(function (value) {
+                group.update(value);
+            });
+
+            return this;
+        };
+
+        /**
          * Inserts the passed DOM elements into this group, and triggers a
          * 'layout' event notifying all listeners about the changed layout of
          * this group.

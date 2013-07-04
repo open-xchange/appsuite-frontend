@@ -267,6 +267,9 @@ i.docs-caret {
 /* horizontal padding in control elements */
 @control-padding: 8px;
 
+/* horizontal padding in text input elements */
+@input-padding: 4px;
+
 /* space between control caption elements */
 @caption-spacing: 6px;
 
@@ -381,8 +384,8 @@ i.docs-caret {
 
     input {
         width: 150px;
-        padding-left: 4px;
-        padding-right: 4px;
+        padding-left: @input-padding;
+        padding-right: @input-padding;
         line-height: normal;
         cursor: text;
 
@@ -806,7 +809,7 @@ i.docs-caret {
             /* standard height of controls */
             @item-height: 30px;
 
-            .button {
+            label, .button {
                 height: @item-height;
                 border: 1px solid transparent;
                 line-height: (@item-height - 2px);
@@ -816,19 +819,41 @@ i.docs-caret {
                 }
             }
 
-            &:not(.disabled) .button:not(.disabled) {
+            input {
+                height: @item-height;
+                margin: 0 (@control-padding - @input-padding);
+                border: 1px solid @app-pane-fill-color;
+                .border-radius(5px);
+            }
 
-                &:hover { background: fade(black, 5%); }
-                &:active { background: fade(black, 10%); }
+            &:not(.disabled) {
 
-                &:focus:not(:active) {
-                    border-color: @selectedBackground;
-                    .box-shadow(@focus-glow-effect);
+                .button:not(.disabled) {
+
+                    &:hover { background: fade(black, 5%); }
+                    &:active { background: fade(black, 10%); }
+
+                    &:focus:not(:active) {
+                        border-color: @selectedBackground;
+                        .box-shadow(@focus-glow-effect);
+                    }
+
+                    &.selected {
+                        &:hover { background: fade(@selectedBackground, 70%); }
+                        &:active { background: fade(@selectedBackground, 80%); }
+                    }
                 }
 
-                &.selected {
-                    &:hover { background: fade(@selectedBackground, 70%); }
-                    &:active { background: fade(@selectedBackground, 80%); }
+                input:not(.disabled) {
+
+                    &:hover:not(:focus) {
+                        border-color: darken(@app-pane-fill-color, 5%);
+                    }
+
+                    &:focus {
+                        border-color: @selectedBackground;
+                        .box-shadow(@focus-glow-effect);
+                    }
                 }
             }
         }

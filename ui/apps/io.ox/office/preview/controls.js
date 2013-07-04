@@ -91,16 +91,47 @@ define('io.ox/office/preview/controls',
      */
     PreviewControls.PageChooser = RadioList.extend({ constructor: function (app) {
 
+        var // self reference
+            self = this;
+
         // base constructor ---------------------------------------------------
 
         RadioList.call(this, { icon: 'icon-ellipsis-vertical', tooltip: gt('Select page'), caret: 'none', menuAlign: 'center', updateCaptionMode: 'none' });
 
         // initialization -----------------------------------------------------
 
-        this.createOptionButton('first', { label: gt('Show first page') })
-            .createOptionButton('last', { label: gt('Show last page') });
+        this.getMenuNode().addClass('app-preview page-chooser');
 
-        //this.addPrivateMenuGroup(new TextField());
+        // create the first/last list entries
+        this.createOptionButton('first', { label: gt('Show first page') })
+            .createOptionButton('previous', { label: gt('Show previous page') })
+            .createOptionButton('next', { label: gt('Show next page') })
+            .createOptionButton('last', { label: gt('Show last page') })
+            .createSection('pages', { separator: true });
+
+        // enable/disable the list entries dynamically
+        this.getItemGroup().registerUpdateHandler(function (page) {
+            var items = self.getItems();
+            Utils.enableControls(items.filter('[data-value="first"]'), page > 1);
+            Utils.enableControls(items.filter('[data-value="last"]'), page < app.getModel().getPageCount());
+        });
+
+        // create the text input field for the page number, when page count is known
+        app.on('docs:import:success', function () {
+
+            var pageInput = new TextField({
+                    label: gt('Go to page'),
+                    width: 50,
+                    validator: new TextField.NumberValidator({ min: 1, max: app.getModel().getPageCount(), digits: 0 }),
+                    tooltip: gt('Page number')
+                });
+
+            pageInput.getTextFieldNode().css({ float: 'right', textAlign: 'right' });
+            // register the text field to establish automatic event forwarding
+            self.registerPrivateGroup(pageInput);
+            // insert the text field node into the prepared section
+            self.getSectionNode('pages').append(pageInput.getNode());
+        });
 
     }}); // class PageChooser
 
@@ -121,9 +152,16 @@ define('io.ox/office/preview/controls',
 
         // initialization -----------------------------------------------------
 
-        this.createOptionButton(100, { label: gt('Set zoom factor to 100%') })
-            .createOptionButton('width', { label: gt('Fit pages to screen width') })
-            .createOptionButton('page', { label: gt('Fit pages to screen width and height') });
+        this.getMenuNode().addClass('app-preview zoom-chooser');
+
+        this.createOptionButton(50, { label: gt('50%') })
+            .createOptionButton(75, { label: gt('75%') })
+            .createOptionButton(100, { label: gt('100%') })
+            .createOptionButton(150, { label: gt('150%') })
+            .createOptionButton(200, { label: gt('200%') })
+            .createSection('fit', { separator: true })
+            .createOptionButton('width', { sectionId: 'fit', label: gt('Fit to screen width') })
+            .createOptionButton('page', { sectionId: 'fit', label: gt('Fit to screen size') });
 
     }}); // class ZoomTypeChooser
 

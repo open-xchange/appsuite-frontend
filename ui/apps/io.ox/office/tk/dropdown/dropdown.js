@@ -321,12 +321,12 @@ define('io.ox/office/tk/dropdown/dropdown',
             // Returns whether one of the specified nodes contains the DOM
             // element in event.target, or if it is the event.target by itself.
             function isTargetIn(nodes) {
-                return nodes.filter(event.target).length || nodes.has(event.target).length;
+                return (nodes.filter(event.target).length > 0) || (nodes.has(event.target).length > 0);
             }
 
-            // Close the menu unless a 'mousedown' event occurred inside the
-            // menu node or on the drop-down button.
-            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode).add(menuToggleControls))) {
+            // close the menu unless a 'mousedown' event occurred on the drop-down button
+            // (this would lead to reopening the menu immediately with the following click)
+            if (!isTargetIn(menuNode) && !((event.type === 'mousedown') && isTargetIn(menuButton.add(menuToggleControls)))) {
                 hideMenu();
             }
         }
@@ -475,45 +475,26 @@ define('io.ox/office/tk/dropdown/dropdown',
         };
 
         /**
-         * Sets the focus into the first control element of the drop-down menu
-         * element.
+         * Returns the collection of all control nodes in the drop-down menu
+         * that are focusable.
+         *
+         * @returns {jQuery}
+         *  A collection with all focusable (visible and enabled) controls.
+         */
+        this.getFocusableMenuControls = function () {
+            return menuNode.find(Utils.ENABLED_SELECTOR + Utils.VISIBLE_SELECTOR + Group.FOCUSABLE_SELECTOR);
+        };
+
+        /**
+         * Sets the focus into the first focusable control element of the
+         * drop-down menu element. May be overwritten by derived classes to add
+         * more sophisticated focus behavior.
          *
          * @returns {DropDown}
          *  A reference to this instance.
          */
         this.grabMenuFocus = function () {
-            // TODO
-            return this;
-        };
-
-        /**
-         * Adds a private group into the view component of the drop-down menu.
-         * The events triggered by the group will be forwarded to the listeners
-         * of this group instance. Updates of this group instances (calls to
-         * the own 'Group.update()' method) will be forwarded to the specified
-         * private group.
-         *
-         * @param {Group} group
-         *  The group that will be inserted into the drop-down menu.
-         *
-         * @returns {DropDown}
-         *  A reference to this instance.
-         */
-        this.addPrivateMenuGroup = function (group) {
-
-            // insert the node of the passed group into the drop-down menu
-            menuNode.append(group.getNode());
-
-            // forward events of the group to listeners of this drop-down group
-            group.on('change cancel', function (event, value) {
-                self.trigger(event.type, value);
-            });
-
-            // forward updates of this drop-down group to the inserted group
-            this.registerUpdateHandler(function (value) {
-                group.update(value);
-            });
-
+            this.getFocusableMenuControls().first().focus();
             return this;
         };
 

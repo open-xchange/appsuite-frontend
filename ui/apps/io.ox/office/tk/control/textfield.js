@@ -59,6 +59,9 @@ define('io.ox/office/tk/control/textfield',
         var // self reference
             self = this,
 
+            // create the label node for the caption
+            captionLabel = Utils.createLabel(),
+
             // create the text field
             textField = Utils.createTextField(options),
 
@@ -284,6 +287,15 @@ define('io.ox/office/tk/control/textfield',
 
         // initialization -----------------------------------------------------
 
+        // add special marker class used to adjust formatting
+        this.getNode().addClass('text-field');
+
+        // first, insert the caption nodes
+        Utils.setControlCaption(captionLabel, options);
+        if (captionLabel.children().length > 0) {
+            this.addChildNodes(captionLabel);
+        }
+
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
@@ -321,7 +333,7 @@ define('io.ox/office/tk/control/textfield',
          * default implementation returns the passed value, if it is a string,
          * otherwise an empty string.
          *
-         * @param value
+         * @param {Any} value
          *  The value to be converted to a text.
          *
          * @returns {String}
@@ -341,7 +353,7 @@ define('io.ox/office/tk/control/textfield',
          * @param {String} text
          *  The text to be converted to a value.
          *
-         * @returns
+         * @returns {Any}
          *  The value converted from the passed text. The value null indicates
          *  that the text cannot be converted to a valid value.
          */

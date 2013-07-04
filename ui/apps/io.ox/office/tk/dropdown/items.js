@@ -106,17 +106,6 @@ define('io.ox/office/tk/dropdown/items',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the section node with the passed identifier.
-         *
-         * @returns {jQuery}
-         *  The section node with the passed identifier if existing, otherwise
-         *  an empty jQuery collection.
-         */
-        function getSectionNode(sectionId) {
-            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
-        }
-
-        /**
          * Gets or creates the section node with the passed identifier.
          *
          * @returns {jQuery}
@@ -124,7 +113,7 @@ define('io.ox/office/tk/dropdown/items',
          */
         function getOrCreateSectionNode(sectionId, options) {
 
-            var sectionNode = getSectionNode(sectionId),
+            var sectionNode = self.getSectionNode(sectionId),
                 label = Utils.getStringOption(options, 'label', ''),
                 separator = Utils.getBooleanOption(options, 'separator', false);
 
@@ -194,6 +183,20 @@ define('io.ox/office/tk/dropdown/items',
         };
 
         /**
+         * Returns the section node with the passed identifier.
+         *
+         * @param {String} sectionId
+         *  The unique identifier of the section.
+         *
+         * @returns {jQuery}
+         *  The section node with the passed identifier if existing, otherwise
+         *  an empty jQuery collection.
+         */
+        this.getSectionNode = function (sectionId) {
+            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
+        };
+
+        /**
          * Adds a new item to this drop-down menu. If the items are sorted (see
          * the options passed to the constructor), the item will be inserted
          * according to these settings.
@@ -258,27 +261,11 @@ define('io.ox/office/tk/dropdown/items',
             return button;
         };
 
-        /**
-         * Sets the focus into the first control element of the grid
-         * element.
-         *
-         * @returns {Items}
-         *  A reference to this instance.
-         */
-        this.grabMenuFocus = function () {
-            var // all list items (button elements)
-                buttons = self.getItems();
-            if (buttons.length > 0) {
-                buttons.eq(0).focus();
-            }
-
-            return this;
-        };
-
         // initialization -----------------------------------------------------
 
         // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(itemGroup);
+        this.registerPrivateGroup(itemGroup);
+        this.getMenuNode().append(itemGroup.getNode());
 
         // register event handlers
         itemGroup.registerChangeHandler('click', {
