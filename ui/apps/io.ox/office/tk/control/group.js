@@ -288,10 +288,22 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Returns whether this control group is visible.
+         * Returns whether this control group is configured to be visible (via
+         * the methods Group.show(), Group.hide(), or Group.toggle()). Does not
+         * check the effective visibility depending on the visibility of all
+         * parent DOM nodes (see method Group.isReallyVisible() to do that).
          */
         this.isVisible = function () {
             return !groupNode.hasClass(HIDDEN_CLASS);
+        };
+
+        /**
+         * Returns whether this control group is effectively visible (it must
+         * not be hidden by itself, it must be inside the DOM tree, and all its
+         * parent nodes must be visible too).
+         */
+        this.isReallyVisible = function () {
+            return groupNode.is(Utils.VISIBLE_SELECTOR);
         };
 
         /**

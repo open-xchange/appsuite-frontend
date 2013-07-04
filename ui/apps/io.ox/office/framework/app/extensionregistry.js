@@ -117,6 +117,35 @@ define('io.ox/office/framework/app/extensionregistry',
     // methods ----------------------------------------------------------------
 
     /**
+     * Returns the lower-case extension of the passed file name.
+     *
+     * @param {String} fileName
+     *  The file name (case-insensitive).
+     *
+     * @returns {String}
+     *  The lower-case extension of the passed file name.
+     */
+    ExtensionRegistry.getExtension = function (fileName) {
+        var index = fileName.lastIndexOf('.');
+        return (index >= 0) ? fileName.substring(index + 1).toLowerCase() : '';
+    };
+
+    /**
+     * Returns the base name of the passed file name, without file extension.
+     *
+     * @param {String} fileName
+     *  The file name (case-insensitive).
+     *
+     * @returns {String}
+     *  The base name of the passed file name. Character case will be
+     *  preserved.
+     */
+    ExtensionRegistry.getBaseName = function (fileName) {
+        var index = fileName.lastIndexOf('.');
+        return (index > 0) ? fileName.substring(0, index) : index;
+    };
+
+    /**
      * Returns the configuration settings of the file extension contained by
      * the passed file name.
      *
@@ -133,10 +162,8 @@ define('io.ox/office/framework/app/extensionregistry',
      */
     ExtensionRegistry.getExtensionSettings = function (fileName, editModule) {
 
-        var // position of the last period character
-            index = _.isString(fileName) ? fileName.lastIndexOf('.') : -1,
-            // the lower-case extension of the passed file name
-            extension = (index >= 0) ? fileName.substring(index + 1).toLowerCase() : '',
+        var // the lower-case extension of the passed file name
+            extension = ExtensionRegistry.getExtension(fileName),
             // the extension settings object
             extensionSettings = (extension in fileExtensionMap) ? fileExtensionMap[extension] : null,
             // the module name of the edit application for the extension
@@ -299,6 +326,37 @@ define('io.ox/office/framework/app/extensionregistry',
     ExtensionRegistry.isScriptable = function (fileName, editModule) {
         var extensionSettings = ExtensionRegistry.getExtensionSettings(fileName, editModule);
         return Utils.getBooleanOption(extensionSettings, 'macros', false);
+    };
+
+    /**
+     * Returns whether the file with the passed name contains the 'internal
+     * error' extension suffix.
+     *
+     * @param {String} fileName
+     *  The file name (case-insensitive).
+     *
+     * @returns {Boolean}
+     *  Whether the file with the passed name contains the 'internal error'
+     *  extension suffix.
+     */
+    ExtensionRegistry.isError = function (fileName) {
+        var extension = ExtensionRegistry.getExtension(fileName);
+        return extension.indexOf(INTERNAL_ERROR_SUFFIX, extension.length - INTERNAL_ERROR_SUFFIX.length) >= 0;
+    };
+
+    /**
+     * Extends and returns the passed file name with the 'internal error'
+     * extension suffix. If the file name already contains this suffix, it will
+     * be returned as is.
+     *
+     * @param {String} fileName
+     *  The file name (case-insensitive).
+     *
+     * @returns {String}
+     *  The passed passed file name with the 'internal error' extension suffix.
+     */
+    ExtensionRegistry.createErrorFileName = function (fileName) {
+        return ExtensionRegistry.isError(fileName) ? fileName : (fileName + INTERNAL_ERROR_SUFFIX);
     };
 
     // static initialization ==================================================

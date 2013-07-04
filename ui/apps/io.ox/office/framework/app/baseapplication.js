@@ -16,9 +16,10 @@ define('io.ox/office/framework/app/baseapplication',
      'io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/io',
+     'io.ox/office/framework/app/extensionregistry',
      'settings!io.ox/office',
      'gettext!io.ox/office/main'
-    ], function (ext, FilesAPI, Utils, IO, Settings, gt) {
+    ], function (ext, FilesAPI, Utils, IO, ExtensionRegistry, Settings, gt) {
 
     'use strict';
 
@@ -513,15 +514,14 @@ define('io.ox/office/framework/app/baseapplication',
         };
 
         /**
-         * Returns the full file name of the current file (with file
-         * extension).
+         * Returns the full file name of the current file, with file extension.
          *
          * @returns {String|Null}
          *  The file name of the current file descriptor; or null, if no file
          *  descriptor exists.
          */
         this.getFullFileName = function () {
-            return (file && _.isString(file.filename)) ? file.filename : null;
+            return Utils.getStringOption(file, 'filename', null);
         };
 
         /**
@@ -533,13 +533,8 @@ define('io.ox/office/framework/app/baseapplication',
          *  file descriptor exists.
          */
         this.getShortFileName = function () {
-
-            var // the current full file name
-                fileName = this.getFullFileName(),
-                // start position of the extension
-                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
-
-            return (extensionPos > 0) ? fileName.substring(0, extensionPos) : fileName;
+            var fileName = this.getFullFileName();
+            return _.isString(fileName) ? ExtensionRegistry.getBaseName(fileName) : null;
         };
 
         /**
@@ -551,13 +546,8 @@ define('io.ox/office/framework/app/baseapplication',
          *  file descriptor exists.
          */
         this.getFileExtension = function () {
-
-            var // the current full file name
-                fileName = this.getFullFileName(),
-                // start position of the extension
-                extensionPos = _.isString(fileName) ? fileName.lastIndexOf('.') : -1;
-
-            return (extensionPos >= 0) ? fileName.substring(extensionPos + 1) : null;
+            var fileName = this.getFullFileName();
+            return _.isString(fileName) ? ExtensionRegistry.getExtension(fileName) : null;
         };
 
         /**

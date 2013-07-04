@@ -130,6 +130,8 @@ define('io.ox/office/preview/view',
                 .addViewComponent(new ToolBox(app, { fixed: 'top' })
                     .addGroup('app/view/sidepane', new Button(BaseControls.HIDE_SIDEPANE_OPTIONS))
                     .addRightTab()
+//                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+//                    .addGap()
                     .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
                 .addViewComponent(new Component(app)
@@ -150,6 +152,8 @@ define('io.ox/office/preview/view',
                 .addViewComponent(new ToolBox(app)
                     .addGroup('app/view/sidepane', new Button(BaseControls.SHOW_SIDEPANE_OPTIONS))
                     .addGap()
+//                    .addGroup('app/edit', new PreviewControls.EditDocumentButton(app))
+//                    .addGap()
                     .addGroup('app/quit', new Button(BaseControls.QUIT_OPTIONS))
                 )
             );

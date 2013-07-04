@@ -251,7 +251,7 @@ define('io.ox/office/preview/pagegroup',
                 initializeButtons = buttonNodes.length === 0;
 
             // do nothing, if the side pane is not visible, or no pages are available
-            if ((pageCount === 0) || !sidePane.isVisible()) { return; }
+            if ((pageCount === 0) || !self.isReallyVisible()) { return; }
 
             // create empty button nodes for all pages on first call
             if (initializeButtons) {
@@ -292,7 +292,7 @@ define('io.ox/office/preview/pagegroup',
          * Scrolls the scrollable node to the specified button node.
          */
         function scrollToButton(buttonNode) {
-            if (sidePane.isVisible()) {
+            if (self.isReallyVisible()) {
                 Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
             }
         }

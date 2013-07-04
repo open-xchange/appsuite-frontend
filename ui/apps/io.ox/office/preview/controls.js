@@ -13,10 +13,11 @@
 
 define('io.ox/office/preview/controls',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/radiolist',
      'gettext!io.ox/office/main'
-    ], function (Utils, TextField, RadioList, gt) {
+    ], function (Utils, Button, TextField, RadioList, gt) {
 
     'use strict';
 
@@ -53,6 +54,25 @@ define('io.ox/office/preview/controls',
      * @constant
      */
     PreviewControls.ZOOMIN_OPTIONS = { icon: 'docs-zoom-in', tooltip: gt('Zoom in') };
+
+    // class ZoomTypeChooser ==================================================
+
+    /**
+     * The button to start editing the current document.
+     *
+     * @constructor
+     *
+     * @extends Button
+     */
+    PreviewControls.EditDocumentButton = Button.extend({ constructor: function (app) {
+
+        // base constructor ---------------------------------------------------
+
+        Button.call(this, { icon: 'icon-pencil', tooltip: gt('Edit document'), css: { color: 'yellow' } });
+
+        // initialization -----------------------------------------------------
+
+    }}); // class EditDocumentButton
 
     // class PageChooser ======================================================
 

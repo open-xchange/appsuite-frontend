@@ -115,6 +115,13 @@ define.async('io.ox/office/tk/utils',
     Utils.ENABLED_SELECTOR = ':not(.' + Utils.DISABLED_CLASS + ')';
 
     /**
+     * CSS selector for elements that are effectively visible.
+     *
+     * @constant
+     */
+    Utils.VISIBLE_SELECTOR = ':visible';
+
+    /**
      * CSS selector for focused controls.
      *
      * @constant
