@@ -39,94 +39,6 @@ define('io.ox/office/framework/app/baseapplication',
         return moduleName.substr(moduleName.lastIndexOf('/') + 1);
     }
 
-    /**
-     * Tries to find a running application which is working on a file described
-     * in the passed options object.
-     *
-     * @param {String} moduleName
-     *  The application type identifier.
-     *
-     * @param {Object} [launchOptions]
-     *  A map of options that may contain a file descriptor in 'options.file'.
-     *  If existing, compares it with the file descriptors of all running
-     *  applications with the specified module identifier (returned by their
-     *  getFileDescriptor() method).
-     *
-     * @returns {ox.ui.App}
-     *  A running application of the specified type with a matching file
-     *  descriptor.
-     */
-    function getRunningApplication(moduleName, launchOptions) {
-
-        var // get file descriptor from options
-            file = Utils.getObjectOption(launchOptions, 'file', null),
-
-            // find running editor application
-            runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
-
-                var // file descriptor of current running application
-                    appFile = app.getFileDescriptor();
-
-                // TODO: check file version too?
-                if (file.source) { //mail or task attachment
-                    return _.isObject(appFile) &&
-                    (file.source === appFile.source) &&
-                    (file.id === appFile.id) &&
-                    (file.attached === appFile.attached) &&
-                    (file.folder_id === appFile.folder_id);
-                } else {
-                    return _.isObject(appFile) &&
-                    (file.id === appFile.id) &&
-                    (file.folder_id === appFile.folder_id);
-                }
-
-            }) : [];
-        if (runningApps.length > 1) {
-            Utils.warn('ApplicationLauncher.getRunningApplication(): found multiple applications for the same file.');
-        }
-        return (runningApps.length > 0) ? runningApps[0] : null;
-    }
-
-    /**
-     * Creates a new application object of the specified type, and performs
-     * basic initialization steps.
-     *
-     * @param {String} moduleName
-     *  The application type identifier.
-     *
-     * @param {Function} ApplicationClass
-     *  The constructor function of the application mix-in class that will
-     *  extend the core application object. Receives the passed launch options
-     *  as first parameter.
-     *
-     * @param {Object} [appOptions]
-     *  A map of options that control the creation of the ox.ui.App base class.
-     *
-     * @param {Object} [launchOptions]
-     *  A map of options passed to the core launcher (the ox.launch() method)
-     *  that determine the actions to perform during application launch.
-     *
-     * @returns {ox.ui.App}
-     *  The new application object.
-     */
-    function createApplication(moduleName, ApplicationClass, appOptions, launchOptions) {
-
-        var // the icon shown in the top bar launcher
-            icon = Utils.getStringOption(appOptions, 'icon', ''),
-            // the base application object
-            app = ox.ui.createApp({
-                name: moduleName,
-                userContent: icon.length > 0,
-                userContentIcon: icon,
-                userContentClass: getDocumentType(moduleName) + '-launcher'
-            });
-
-        // mix-in constructor for additional application methods
-        ApplicationClass.call(app, appOptions, launchOptions);
-
-        return app;
-    }
-
     // class BaseApplication ==================================================
 
     /**
@@ -1652,16 +1564,44 @@ define('io.ox/office/framework/app/baseapplication',
      */
     BaseApplication.createLauncher = function (moduleName, ApplicationClass, appOptions) {
 
+        var // the icon shown in the top bar launcher
+            icon = Utils.getStringOption(appOptions, 'icon', '');
+
         // executed when a new application will be launched via ox.launch()
         function launchApp(launchOptions) {
 
-            var // try to find a running application
-                app = getRunningApplication(moduleName, launchOptions);
+            var // get file descriptor from options
+                file = Utils.getObjectOption(launchOptions, 'file', null),
+                // find running application for the specified document
+                runningApps = file ? ox.ui.App.get(moduleName).filter(isRunningApplication) : [],
+                // the new application instance
+                app = null;
+
+            // returns whether the passed application instance works on the exact
+            // document file contained in the launch options
+            function isRunningApplication(app) {
+                var appFile = app.getFileDescriptor();
+                return _.isObject(appFile) && Utils.hasEqualAttributes(file, appFile, ['source', 'folder_id', 'id', 'attached']);
+            }
+
+            // return running application if existing
+            if (runningApps.length > 1) {
+                Utils.warn('BaseApplication.launchApp(): found multiple applications for the same file.');
+            }
+            if (runningApps.length > 0) {
+                return runningApps[0];
+            }
 
             // no running application: create and initialize a new application object
-            if (!_.isObject(app)) {
-                app = createApplication(moduleName, ApplicationClass, appOptions, launchOptions);
-            }
+            app = ox.ui.createApp({
+                name: moduleName,
+                userContent: icon.length > 0,
+                userContentIcon: icon,
+                userContentClass: getDocumentType(moduleName) + '-launcher'
+            });
+
+            // call mix-in constructor
+            ApplicationClass.call(app, appOptions, launchOptions);
 
             return app;
         }

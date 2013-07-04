@@ -155,8 +155,8 @@ define('io.ox/office/framework/app/toolbaractions',
     ToolBarActions.createMailIcon = function (moduleName) {
         ToolBarActions.createIcon(moduleName, {
             id: 'send',
-            icon: 'icon-pencil',
-            label: gt('Send'),
+            icon: 'icon-envelope-alt',
+            label: gt('Send as mail'),
             action: function (app) { app.sendMail(); }
         });
     };

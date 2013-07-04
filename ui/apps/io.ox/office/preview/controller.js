@@ -52,6 +52,12 @@ define('io.ox/office/preview/controller',
                     set: function (state) { app.getView().toggleSidePane(state); }
                 },
 
+                // start editing the document
+                'app/edit': {
+                    enable: function () { return app.isDocumentEditable(); },
+                    set: function () { app.editDocument(); }
+                },
+
                 // pages ------------------------------------------------------
 
                 'document/valid': {

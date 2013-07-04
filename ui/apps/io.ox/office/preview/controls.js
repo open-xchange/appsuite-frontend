@@ -66,11 +66,17 @@ define('io.ox/office/preview/controls',
      */
     PreviewControls.EditDocumentButton = Button.extend({ constructor: function (app) {
 
+        var // self reference
+            self = this;
+
         // base constructor ---------------------------------------------------
 
         Button.call(this, { icon: 'icon-pencil', tooltip: gt('Edit document'), css: { color: 'yellow' } });
 
         // initialization -----------------------------------------------------
+
+        // hide the button completely, if it is disabled
+        this.on('enable', function (event, state) { self.toggle(state); });
 
     }}); // class EditDocumentButton
 
