@@ -17,6 +17,15 @@ define([
 
     describe('Emoji support', function () {
         describe('with different collections', function () {
+            beforeEach(function () {
+                //prevent settings from being stored on server
+                this.settingsSpy = sinon.stub(settings, 'save');
+            });
+
+            afterEach(function () {
+                this.settingsSpy.restore();
+            });
+
             it('should have a default collection', function () {
                 settings.set({defaultCollection: 'unified'});
                 this.emoji = emoji.getInstance();
