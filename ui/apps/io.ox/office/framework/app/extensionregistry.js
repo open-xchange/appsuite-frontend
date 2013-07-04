@@ -67,7 +67,7 @@ define('io.ox/office/framework/app/extensionregistry',
             presentation: {
                 module: 'io.ox/office/presentation',
                 requires: 'presentation',
-                extension: {
+                extensions: {
                     pptx: { format: 'ooxml' },
                     pptm: { format: 'ooxml', macros: true },
                     potx: { format: 'ooxml', template: true },
