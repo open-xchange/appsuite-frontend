@@ -18,11 +18,18 @@ define([
     describe('Emoji support', function () {
         describe('provides collections with categories', function () {
             beforeEach(function () {
+                //prevent settings from being stored on server
+                this.settingsSpy = sinon.stub(settings, 'save');
                 settings.set('availableCollections', 'unified,softbank,japan_carrier');
                 settings.set('userCollection', 'unified');
 
                 this.emoji = emoji.getInstance();
             });
+
+            afterEach(function () {
+                this.settingsSpy.restore();
+            });
+
         });
     });
 });
