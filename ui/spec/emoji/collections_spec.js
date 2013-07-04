@@ -66,8 +66,9 @@ define([
             });
 
             it('should be possible to get a custom emoji collection', function () {
-                settings.set({defaultCollection: 'unified'});
-                settings.set({availableCollections: 'unified,softbank,japan_carrier'});
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified,softbank,japan_carrier');
 
                 var softbank = emoji.getInstance({collection: 'softbank'}),
                     defaultCollection = emoji.getInstance();
