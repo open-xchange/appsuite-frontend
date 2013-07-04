@@ -1386,6 +1386,7 @@ define('io.ox/office/framework/app/baseapplication',
 
             // check existence of file descriptor, import the document
             if (this.hasFileDescriptor()) {
+                updateTitle();
                 importDocument(point);
             }
         };
