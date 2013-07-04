@@ -757,8 +757,8 @@ define('io.ox/core/commons-folderview',
 
         loadTree = function (e) {
             toggle();
-            app.showFolderView = fnShow;
-            app.hideFolderView = fnHide;
+            app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
+            app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
             app.toggleFolderView = toggle;
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).pipe(initTree);

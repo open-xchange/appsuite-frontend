@@ -1194,38 +1194,59 @@ define('io.ox/mail/actions',
     });
 
 
-    // Mobile multi select
+    // Mobile multi select extension points
+    // action unread
     ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
         id: 'unread',
         index: 10,
         draw: function (data) {
-            console.log('in ext', arguments);
-            //debugger;
             var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="icon-envelope">').on('click', function (e) {
-                            console.log('click auf envelope');
                             e.preventDefault();
                             e.stopPropagation();
                             actions.invoke('io.ox/mail/actions/markunread', null, baton);
-
                         })
                     )
                 )
             );
         }
     });
-
+    // action delete
     ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
         id: 'delete',
         index: 20,
         draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-trash">')
+                        $('<i class="icon-trash">').on('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            actions.invoke('io.ox/mail/actions/delete', null, baton);
+                        })
+                    )
+                )
+            );
+        }
+    });
+    // action move
+    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="icon-signin">').on('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            actions.invoke('io.ox/mail/actions/move', null, baton);
+                        })
                     )
                 )
             );

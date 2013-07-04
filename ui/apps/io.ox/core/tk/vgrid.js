@@ -199,14 +199,9 @@ define('io.ox/core/tk/vgrid',
         }, options || {});
 
         if (options.settings) {
-            options.editable = options.settings.get('vgrid/editable', true);
-        }
-
-        // mobile
-        if (_.device('small')) {
-            // override options, no toggles and no multiple selection for the moment
-            //options.showToggle = false;
-            //options.multiple = false;
+            // never show selectboxes on startup on mobile.
+            // Selectmode on mobile intercepts cell actions
+            options.editable = _.device('smartphone') ? false : options.settings.get('vgrid/editable', true);
         }
 
         // target node
@@ -221,7 +216,8 @@ define('io.ox/core/tk/vgrid',
             // inner container / added role="presentation" because screen reader runs amok
             scrollpane = $('<div class="abs vgrid-scrollpane f6-target" tabindex="1" aria-label="List">').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
-
+            // mobile select mode
+            mobileSelectMode = false,
             // bottom toolbar
             ignoreCheckbox = false,
 
@@ -232,6 +228,9 @@ define('io.ox/core/tk/vgrid',
                     grid.selection.selectAll();
                 } else {
                     grid.selection.clear();
+                    if (_.device('smartphone')) {
+                        self.selection.trigger('_m_change', []);
+                    }
                 }
             },
 
@@ -247,6 +246,16 @@ define('io.ox/core/tk/vgrid',
                 e.preventDefault();
                 var grid = e.data.grid;
                 grid.setEditable(!grid.getEditable());
+
+                if (_.device('smartphone')) {
+                    // set selectmode On/Off
+                    mobileSelectMode = !mobileSelectMode;
+                    self.selection.setMobileSelectMode(mobileSelectMode);
+                    // clear selection and trigger mobile change on selection
+                    // to remove changed toolbar
+                    grid.selection.clear();
+                    self.selection.trigger('_m_change', []);
+                }
             },
 
             topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
@@ -349,10 +358,6 @@ define('io.ox/core/tk/vgrid',
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
 
-        this.selection.on('change', function () {
-
-        });
-
         // second toolbar
         if (_.device('!small')) {
             // create extension point for second toolbar
@@ -396,7 +401,7 @@ define('io.ox/core/tk/vgrid',
         if (_.device('touch')) {
             if (options.swipeLeftHandler) {
                 $(target).on('swipeleft', '.selectable', function (e) {
-                    if (currentMode !== 'search') {
+                    if (currentMode !== 'search' && !mobileSelectMode) {
                         var node = $(this),
                             key = node.attr('data-obj-id');
 
@@ -406,7 +411,7 @@ define('io.ox/core/tk/vgrid',
             }
             if (options.swipeRightHandler) {
                 $(target).on('swiperight', '.selectable', function (e) {
-                    if (currentMode !== 'search') {
+                    if (currentMode !== 'search' && !mobileSelectMode) {
                         var node = $(this),
                             key = node.attr('data-obj-id');
                         options.swipeRightHandler(e, key, node);
@@ -1088,6 +1093,9 @@ define('io.ox/core/tk/vgrid',
 
         this.getEditable = function () {
             return this.prop('editable');
+        };
+        this.getMobileSelectMode = function () {
+            return mobileSelectMode;
         };
 
         this.setEditable = function (flag, selector) {

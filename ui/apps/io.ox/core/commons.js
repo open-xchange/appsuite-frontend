@@ -71,25 +71,38 @@ define('io.ox/core/commons',
         mobileMultiSelection: (function () {
             var points = {};
 
+            ext.point('io.ox/core/commons/mobile/multiselect').extend({
+                id: 'selectCounter',
+                index: '100',
+                draw: function (data) {
+                    this.append(
+                        $('<div class="toolbar-button select-counter">')
+                            .text(data.count)
+                    );
+                }
+            });
+
             function draw(id, selection, grid) {
-                // inline links
                 var node = $('<div>');
+
+                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selection.length});
+
                 (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
                     .invoke('draw', node, {data: selection, grid: grid});
-
                 return node;
             }
 
             return function (id, node, selection, api, grid) {
-                console.log('mobile multiselect');
                 var buttons = $('.window-toolbar .toolbar-button'),
                     toolbar = $('.window-toolbar'),
                     container = $('<div id="multi-select-toolbar">');
                 if (selection.length > 0) {
+
                     buttons.hide();
                     $('#multi-select-toolbar').remove();
                     toolbar.append(container.append(draw(id, selection, grid)));
                 } else {
+                    // selection empty
                     $('#multi-select-toolbar').remove();
                     buttons.show();
                 }
@@ -99,8 +112,7 @@ define('io.ox/core/commons',
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
             var last = '';
             grid.selection.on('change', function (e, selection) {
-                debugger;
-                console.log('change normal');
+
                 var len = selection.length,
                     // work with reduced string-based set
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
@@ -133,12 +145,7 @@ define('io.ox/core/commons',
                 }
             });
             grid.selection.on('_m_change', function (e, selection) {
-                console.log('_m_change');
-                var len = selection.length,
-                    // work with reduced string-based set
-                    flat = JSON.stringify(_([].concat(selection)).map(function (o) {
-                        return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
-                    }));
+                var len = selection.length;
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
@@ -232,7 +239,6 @@ define('io.ox/core/commons',
             }
 
             function drawFolderInfo(folder_id) {
-
                 if (!folder_id) return;
 
                 var node = getInfoNode();
@@ -261,7 +267,6 @@ define('io.ox/core/commons',
             grid.on('change:prop:folder change:mode', function (e, value) {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
-
                 if (mode === 'all') {
                     // non-search; show foldername
                     drawFolderInfo(folder_id);
@@ -316,6 +321,7 @@ define('io.ox/core/commons',
         wireGridAndRefresh: function (grid, api, win) {
             var refreshAll = function (e) {
                     grid.refresh(true);
+                    if (_.device('smartphone')) grid.selection.retrigger();
                 },
                 refreshList = function () {
                     grid.repaint();
@@ -456,15 +462,12 @@ define('io.ox/core/commons',
                 }, 100);
             };
 
-            var mobileSelect = function (e) {
-                console.log('alter schisss');
-            };
 
             return function (parent, app) {
                 var sides = {};
                 parent.addClass('vsplit').append(
                     // left
-                    sides.left = $('<div class="leftside">').on('select', select).on('mobile_select', mobileSelect),
+                    sides.left = $('<div class="leftside">').on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<a href="#" class="btn" tabindex="-1">').append(

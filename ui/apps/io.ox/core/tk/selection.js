@@ -84,7 +84,8 @@ define('io.ox/core/tk/selection',
             lastIndex = -1, // trick for smooth updates
             lastValidIndex = 0,
             fnKey,
-            hasMultiple;
+            hasMultiple,
+            mobileSelectMode;
 
         isCheckbox = function (e) {
             var closest = $(e.target).closest(editableSelector),
@@ -122,8 +123,8 @@ define('io.ox/core/tk/selection',
                 self.trigger('empty');
             }
         };
+        // mobile action, used on smartphone instead of "changed"
         selectOnly = function () {
-            console.log('selectonly ', self.get());
             var list = self.get();
             self.trigger('_m_change', list);
             if (list.length === 0) {
@@ -131,7 +132,7 @@ define('io.ox/core/tk/selection',
             }
         };
         // apply selection
-        apply = function (id, e, selectonly) {
+        apply = function (id, e, touchstart) {
             // range?
             if (isRange(e)) {
                 // range selection
@@ -145,11 +146,20 @@ define('io.ox/core/tk/selection',
                 last = prev = id;
                 lastValidIndex = getIndex(id);
             }
-            if (!selectonly) {
+            if (!touchstart) {
                 // event
                 changed();
             } else {
-                selectOnly();
+                // check if select mode
+                // check if checkbox tap
+                // else call apply again without touchstart
+                if (isCheckbox(e) || mobileSelectMode) {
+                    e.preventDefault();
+                    selectOnly();
+                } else {
+                    apply(id, e);
+                }
+
             }
         };
 
@@ -239,7 +249,6 @@ define('io.ox/core/tk/selection',
             // we check for isDefaultPrevented because elements inside .selectable
             // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
-                console.log('mousedown');
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
@@ -284,20 +293,14 @@ define('io.ox/core/tk/selection',
 
         touchstartHandler = function (e) {
             var node, key, id;
-            // we check for isDefaultPrevented because elements inside .selectable
-            // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                if (isCheckbox(e)) {
-                    console.log('touchstart on checkbox');
-                    e.preventDefault();
-                    apply(id, e, true);
-
-                } else {
-                    console.log('let go');
-                }
+                //if (isCheckbox(e)) {
+                //e.preventDefault();
+                apply(id, e, true);
+                //}
             }
         };
 
@@ -713,7 +716,11 @@ define('io.ox/core/tk/selection',
                     }
                 }
                 this.update();
-                changed();
+                if (_.device('!smartphone')) {
+                    changed();
+                } else {
+                    selectOnly();
+                }
             }
         };
 
@@ -791,7 +798,11 @@ define('io.ox/core/tk/selection',
                 this.clear();
                 this.set(tmp);
             } else {
-                changed();
+                if (_.device('smartphone')) {
+                    selectOnly();
+                } else {
+                    changed();
+                }
             }
         };
 
@@ -808,7 +819,12 @@ define('io.ox/core/tk/selection',
             container.off('mousedown mouseup contextmenu');
             selectedItems = observedItems = observedItemsIndex = last = null;
         };
-
+        this.setMobileSelectMode = function (state) {
+            mobileSelectMode = state;
+        };
+        this.getMobileSelectMode = function () {
+            return mobileSelectMode;
+        };
         // bind general click handler
         container.on('contextmenu', function (e) { e.preventDefault(); })
             .on('mousedown', '.selectable', mousedownHandler)
