@@ -235,18 +235,25 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
 
-            var validType = /^(info|warning|error|success|busy)$/,
+            var validType = /^(busy|error|info|success|warning)$/,
                 active = false,
                 timer = null,
                 isSmartphone = _.device('smartphone'),
-                TIMEOUT = isSmartphone ? 5000 : 10000,
+
+                durations = {
+                    busy: 10000,
+                    error: 30000,
+                    info: 10000,
+                    success: 4000,
+                    warning: 10000
+                },
 
                 icons = {
-                    success: 'icon-ok',
-                    info: 'icon-exclamation',
-                    warning: 'icon-exclamation',
+                    busy: 'icon-refresh icon-spin',
                     error: 'icon-exclamation',
-                    busy: 'icon-refresh icon-spin'
+                    info: 'icon-exclamation',
+                    success: 'icon-ok',
+                    warning: 'icon-exclamation'
                 },
 
                 remove = function () {
@@ -309,7 +316,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     remove();
 
                     clearTimeout(timer);
-                    timer = setTimeout(remove, (o.type === 'error' ? 2 : 1) * TIMEOUT);
+                    timer = setTimeout(remove, durations[o.type] || 5000);
 
                     var html = _.escape(o.message).replace(/\n/g, '<br>'),
                         node = $('<div class="io-ox-alert" role="alert" tabindex="-1">')

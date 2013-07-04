@@ -505,9 +505,9 @@
     width: 460px;
     background-color: #FFF;
     background-clip: padding-box;
-    border: 3px solid rgba(0, 0, 0, 0.50);
+    border: 1px solid rgba(0, 0, 0, 0.50);
     z-index: 65500;
-    box-shadow: 0px 0px 25px -3px #000;
+    box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.50);
     outline: 0;
     .transition(top 0.20s ease-out);
 
@@ -516,7 +516,7 @@
     }
 
     &.slide-in {
-        top: 10px;
+        top: 15px;
     }
 
     .headline {
@@ -558,7 +558,7 @@
     &.io-ox-alert-info .icon { color: #08c; }
     &.io-ox-alert-error .icon { color: #a00; }
     &.io-ox-alert-warning .icon { color: #fc0; }
-    &.io-ox-alert-success .icon { color: #3CA32E; }
+    &.io-ox-alert-success .icon { color: @greenLight; }
     &.io-ox-alert-busy .icon { color: #555; }
 
     &.io-ox-alert-success { cursor: pointer; }
