@@ -15,6 +15,20 @@ define([
 ], function (emoji, settings) {
     "use strict";
 
+    //FIXME: reload emoji module once reloading is possible
+    //run some initialisation code (run during module loading) again,
+    //to be able to change collections during run-time
+    function parseCollections() {
+        var e = settings.get('availableCollections', '');
+        return _(e.split(','))
+        .chain()
+        .map(function (collection) {
+            return collection.trim();
+        })
+        .compact()
+        .value();
+    }
+
     describe('Emoji support', function () {
         describe('with different collections', function () {
             beforeEach(function () {
@@ -41,19 +55,6 @@ define([
             });
 
             it('should parse the availableCollections setting', function () {
-                //FIXME: reload emoji module once reloading is possible
-                //run some initialisation code (run during module loading) again,
-                //to be able to change collections during run-time
-                function parseCollections() {
-                    var e = settings.get('availableCollections', '');
-                    return _(e.split(','))
-                        .chain()
-                        .map(function (collection) {
-                            return collection.trim();
-                        })
-                        .compact()
-                        .value();
-                }
 
                 function fakeInstance() {
                     var i = emoji.getInstance();
