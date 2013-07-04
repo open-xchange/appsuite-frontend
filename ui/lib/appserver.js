@@ -398,13 +398,10 @@ function proxy(request, response) {
         response.end('No --server specified');
         return;
     }
-    console.log('URL', URL, urlPath);
     if (URL.slice(0, urlPath.length) === urlPath) {
         URL = URL.slice(urlPath.length);
     }
-    console.log('URL2', URL);
     URL = url.resolve(options.server, URL);
-    console.log('URL3', URL);
     if (verbose.proxy) {
         console.log(URL);
         console.log();
