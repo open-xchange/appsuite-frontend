@@ -104,8 +104,6 @@ define('io.ox/office/preview/controls',
 
         // create the first/last list entries
         this.createOptionButton('first', { label: gt('Show first page') })
-            .createOptionButton('previous', { label: gt('Show previous page') })
-            .createOptionButton('next', { label: gt('Show next page') })
             .createOptionButton('last', { label: gt('Show last page') })
             .createSection('pages', { separator: true });
 
