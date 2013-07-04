@@ -86,6 +86,30 @@ define([
                 expect(softbank.getCollection()).toBe('softbank');
                 expect(defaultCollection.getCollection()).not.toBe('softbank');
             });
+
+            it('should set a valid collection', function () {
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified,softbank');
+                var collection = emoji.getInstance();
+                collection.collections = parseCollections();
+
+                expect(collection.getCollection()).toBe('unified');
+                collection.setCollection('softbank');
+                expect(collection.getCollection()).toBe('softbank');
+            });
+
+            it('should not set an invalid collection', function () {
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified');
+                var collection = emoji.getInstance();
+                collection.collections = parseCollections();
+
+                expect(collection.getCollection()).toBe('unified');
+                collection.setCollection('softbank');
+                expect(collection.getCollection()).toBe('unified');
+            });
         });
     });
 });
