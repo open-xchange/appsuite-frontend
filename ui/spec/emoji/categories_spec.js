@@ -105,6 +105,22 @@ define([
 
                     expect(this.emoji.iconsForCategory('recently').length).toBe(40);
                 });
+
+                it('should sort the recently used icons (most used first)', function () {
+                    this.emoji.resetRecents();
+                    this.emoji.recent('\u2600');
+                    this.emoji.recent('\u2600');
+                    this.emoji.recent(pile_unicode);
+                    this.emoji.recent('\u2600');
+
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual(['\u2600', pile_unicode]);
+
+                    this.emoji.recent(pile_unicode);
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual(['\u2600', pile_unicode]);
+
+                    for (var i=0;i<10;i++) this.emoji.recent(pile_unicode);
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual([pile_unicode, '\u2600']);
+                });
             });
         });
     });
