@@ -235,57 +235,58 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
 
-            var validType = /^(info|warning|error|success)$/,
+            var validType = /^(info|warning|error|success|busy)$/,
                 active = false,
-                container = null,
                 timer = null,
-                TIMEOUT = _.device('smartphone') ? 1000 : 10000,
+                isSmartphone = _.device('smartphone'),
+                TIMEOUT = isSmartphone ? 5000 : 10000,
 
-                clear = function () {
-                    if (timer !== null) {
-                        clearTimeout(timer);
-                        timer = null;
-                    }
+                icons = {
+                    success: 'icon-ok',
+                    info: 'icon-exclamation',
+                    warning: 'icon-exclamation',
+                    error: 'icon-exclamation',
+                    busy: 'icon-refresh icon-spin'
                 },
 
-                fader = function () {
-                    clear();
-                    $('body').off('click tap', fader);
-                    active = false;
-                    var node = container.children().first();
-                    if (_.device('smartphone')) {
-                        node.addClass('slideup').removeClass('slidedown');
-                        node.on('transitionEnd webkitTransitionEnd', function () {
-                            container.removeClass('slideup slidedown');
-                            node.remove();
-                            node = null;
-                        });
-                    } else {
-                        node.fadeOut(function () {
-                            node.remove();
-                            node = null;
-                        });
-                    }
+                remove = function () {
 
+                    clearTimeout(timer);
+
+                    $('.io-ox-alert')
+                        .on('transitionEnd webkitTransitionEnd', function () {
+                            $(this).remove();
+                        })
+                        .removeClass('slide-in');
                 },
 
-                documentClick = function (e) {
+                click = function (e) {
+
+                    if (!active) return;
+
+                    if (isSmartphone) return remove();
+
+                    var target = $(e.target), alert = target.closest('.io-ox-alert');
+
                     // click on notification?
-                    if (e && $(e.target).closest('#io-ox-notifications-popups').length) return;
-                    // otherwise: fade out
-                    fader();
+                    if (alert.length) {
+                        // close if clicked on close icon or if clicked on success notifications
+                        if (target.hasClass('close') || alert.hasClass('io-ox-alert-success')) {
+                            e.preventDefault();
+                            remove();
+                        }
+                    } else {
+                        remove();
+                    }
                 };
+
+            $(document).on('click tap', click);
 
             return function (type, message) {
 
-                // we have a container?
-                if (container === null) {
-                    $('#io-ox-core').prepend(
-                        container = $('<div id="io-ox-notifications-popups">')
-                    );
-                }
+                console.log('type', type);
 
-                if (type === 'close') return fader();
+                if (type === 'close') return remove();
 
                 var o = {};
 
@@ -306,26 +307,33 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 // add message
                 if (validType.test(o.type)) {
 
+                    // remove existing alerts
+                    remove();
+
+                    clearTimeout(timer);
+                    timer = setTimeout(remove, (o.type === 'error' ? 2 : 1) * TIMEOUT);
+
+                    var html = _.escape(o.message).replace(/\n/g, '<br>'),
+                        node = $('<div class="io-ox-alert" role="alert" tabindex="-1">')
+                            .addClass('io-ox-alert-' + o.type)
+                            .append(
+                                $('<div class="icon">').append(
+                                    $('<i>').addClass(icons[o.type] || 'icon-none')
+                                ),
+                                $('<div class="message user-select-text">').append(
+                                    o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                                    $('<div>').html(html)
+                                ),
+                                $('<a href="#" class="close" tabindex="1">').html('&times')
+                            );
+
+                    $('body').append(node);
+
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
-                        container.empty().append(
-                            $('<div class="alert alert-' + o.type + ' alert-block user-select-text">')
-                            .append(
-                                $('<a href="#" class="close">&times;</a>').click(fader),
-                                o.headline ? $('<b>').text(o.headline) : $(),
-                                $('<div>').html(_.escape(o.message).replace(/\n/g, '<br>'))
-                            )
-                        );
-                        if (!active) {
-                            $('body').on('click tap', documentClick);
-                        }
                         active = true;
-                        clear();
-                        if (_.device('smartphone')) container.addClass('slidedown');
-                        timer = setTimeout(fader, (o.type === 'error' ? 2 : 1) * TIMEOUT);
-                    }, 100);
-
-
+                        node.addClass('slide-in');
+                    }, 300);
                 }
             };
         }())
