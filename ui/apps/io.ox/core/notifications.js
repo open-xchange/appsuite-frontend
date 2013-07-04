@@ -284,8 +284,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
             return function (type, message) {
 
-                console.log('type', type);
-
                 if (type === 'close') return remove();
 
                 var o = {};
