@@ -681,7 +681,6 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.expunge = function (folder_id) {
-        notifications.yell('info', gt('Cleaning up... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: 'mail',
@@ -699,7 +698,6 @@ define('io.ox/mail/api',
             });
         })
         .done(function () {
-            notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
     };
