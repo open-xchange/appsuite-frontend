@@ -1145,6 +1145,18 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             return def;
         },
 
+        // send server ping
+        ping: function () {
+            var t0 = _.now();
+            return this.GET({
+                module: 'system',
+                params: { action: 'ping' }
+            })
+            .then(function () {
+                return _.now() - t0;
+            });
+        },
+
         /**
          * returns failed calls
          * @return {backbone.collection}

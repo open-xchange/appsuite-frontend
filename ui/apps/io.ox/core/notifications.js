@@ -258,6 +258,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
 
                 remove = function () {
 
+                    active = false;
                     clearTimeout(timer);
 
                     $('.io-ox-alert')
@@ -312,10 +313,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 // add message
                 if (validType.test(o.type)) {
 
+                    active = false;
+                    clearTimeout(timer);
+
                     // remove existing alerts
                     remove();
 
-                    clearTimeout(timer);
                     timer = setTimeout(remove, durations[o.type] || 5000);
 
                     var html = _.escape(o.message).replace(/\n/g, '<br>'),
