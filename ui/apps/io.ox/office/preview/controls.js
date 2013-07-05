@@ -124,7 +124,7 @@ define('io.ox/office/preview/controls',
                     tooltip: gt('Page number')
                 });
 
-            pageInput.getTextFieldNode().css({ float: 'right', textAlign: 'right' });
+            pageInput.getTextFieldNode().css({ textAlign: 'right' });
             // register the text field to establish automatic event forwarding
             self.registerPrivateGroup(pageInput);
             // insert the text field node into the prepared section

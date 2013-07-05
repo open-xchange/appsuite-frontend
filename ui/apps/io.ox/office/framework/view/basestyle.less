@@ -307,7 +307,6 @@ i.docs-caret {
         .border-radius(0);
         .box-shadow(none);
         .transition(none);
-        white-space: nowrap;
         font-size: 13px;
         font-weight: normal;
         color: @textColor;
@@ -324,6 +323,7 @@ i.docs-caret {
     label, .button {
         padding-left: @control-padding;
         padding-right: @control-padding;
+        white-space: nowrap;
 
         span {
             display: inline-block;
@@ -392,6 +392,10 @@ i.docs-caret {
         &.readonly {
             cursor: default;
         }
+    }
+
+    &.text-field {
+        white-space: nowrap;
     }
 
 } /* end of .group */
@@ -798,6 +802,9 @@ i.docs-caret {
 
                     > tbody > tr > td {
                         padding: 0;
+                        /* Hack for IE9: without this attribute, IE9 will clip all
+                           contents of the cells which hides the focus highlighting */
+                        border-collapse: separate;
                     }
                 }
             }
@@ -887,7 +894,7 @@ i.docs-caret {
             &:not(.disabled) .button:not(.disabled) {
 
                 &:not(.selected) {
-                    &:hover:not(:focus) { border-color: fade(black, 10%); }
+                    &:hover { border-color: fade(black, 10%); }
                     &:active { border-color: fade(black, 15%); }
 
                     /* focused but not selected: add focus glow effect outside of button */
@@ -897,7 +904,7 @@ i.docs-caret {
                 }
 
                 &.selected {
-                    &:hover:not(:focus) { border-color: darken(@selectedBackground, 5%); }
+                    &:hover { border-color: darken(@selectedBackground, 5%); }
                     &:active { border-color: darken(@selectedBackground, 10%); }
 
                     /* selected and focused: extend shadow effect with focus glow effect outside of button */
