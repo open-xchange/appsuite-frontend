@@ -58,12 +58,27 @@ define('io.ox/office/tk/dialogs',
                 defaultEnter: Utils.getBooleanOption(options, 'defaultEnter', false)
             }),
             // the title text
-            title = Utils.getStringOption(options, 'title');
+            title = Utils.getStringOption(options, 'title'),
+            // the dummy input to catch the cursor
+            focusCatcher = $('<input>').css({width: '1px', height: '1px'});
 
         // add title
         if (_.isString(title)) {
             dialog.header($('<h4>').text(title));
         }
+
+        // add dummy input to catch the cursor on dialog open
+        dialog.getFooter().append(focusCatcher);
+
+        // set focus to dummy input
+        dialog.getPopup().on('show', function () {
+            focusCatcher.focus();
+        });
+
+        // remove dummy input
+        dialog.getPopup().on('shown', function () {
+            focusCatcher.remove();
+        });
 
         return dialog;
     };
