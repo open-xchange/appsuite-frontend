@@ -977,14 +977,22 @@ define('io.ox/mail/api',
     };
 
     var react = function (action, obj, view) {
+
         // get proper view first
         view = $.trim(view || 'text').toLowerCase();
         view = view === 'text/plain' ? 'text' : view;
         view = view === 'text/html' ? 'html' : view;
+
+        // attach original message on touch devices?
+        var attachOriginalMessage = view === 'text' &&
+            Modernizr.touch &&
+            settings.get('attachOriginalMessage', false) === true;
+
         return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
+                    attachOriginalMessage: attachOriginalMessage,
                     view: view
                 },
                 data: _([].concat(obj)).map(function (obj) {
