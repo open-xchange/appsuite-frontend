@@ -503,20 +503,19 @@
     left: 50%;
     margin-left: -230px;
     width: 460px;
-    background-color: #FFF;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.50);
+    background-color: rgba(255, 255, 255, 0.95);
     z-index: 65500;
-    box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.50);
+    box-shadow: 0px 0px 50px -1px rgba(0, 0, 0, 0.60);
     outline: 0;
+    .border-radius(8px);
     .transition(top 0.20s ease-out);
 
     &:focus {
-        border-color: rgba(0, 0, 0, 0.80);
+        background-color: #fff;
     }
 
     &.slide-in {
-        top: 15px;
+        top: 20px;
     }
 
     .headline {
