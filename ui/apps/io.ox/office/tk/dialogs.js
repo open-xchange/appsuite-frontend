@@ -70,9 +70,11 @@ define('io.ox/office/tk/dialogs',
         // add dummy input to catch the cursor on dialog open
         dialog.getFooter().append(focusCatcher);
 
-        // set focus to dummy input
         dialog.getPopup().on('show', function () {
+            // set focus to dummy input
             focusCatcher.focus();
+            // make buttons reachable by tab key
+            dialog.getFooter().find('button.btn').attr('tabindex', 1);
         });
 
         // remove dummy input
