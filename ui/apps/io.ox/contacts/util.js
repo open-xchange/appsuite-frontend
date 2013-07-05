@@ -29,7 +29,12 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
         return { format: _.noI18n('%' + index + '$s'), params: params };
     }
 
-    return {
+    // vanity fix
+    function getTitle(field) {
+        return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
+    }
+
+    var that = {
 
         getImage: function (obj, options) {
             if (obj.mark_as_distributionlist) {
@@ -63,13 +68,9 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
          * parameters to gettext.format to obtain the full name.
          */
         getFullNameFormat: function (obj) {
-            // vanity fix
-            function fix(field) {
-                return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
-            }
             // combine title, last_name, and first_name
             if (obj.last_name && obj.first_name) {
-                var title = fix(obj.title);
+                var title = getTitle(obj.title);
                 return title ? {
                     format:
                         //#. Name with title
@@ -147,14 +148,16 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
             if (obj.display_name) {
                 return single(4, util.unescapeDisplayName(obj.display_name));
             }
+
             // fallback
             if (obj.last_name) { return single(2, obj.last_name); }
             if (obj.first_name) { return single(1, obj.first_name); }
+
             return { format: _.noI18n(''), params: [] };
         },
 
         getMailFullName: function (obj) {
-            var fmt = this.getMailFullNameFormat(obj);
+            var fmt = that.getMailFullNameFormat(obj);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -228,4 +231,6 @@ define('io.ox/contacts/util', ['io.ox/core/util', 'gettext!io.ox/contacts'], fun
             return field;
         }
     };
+
+    return that;
 });

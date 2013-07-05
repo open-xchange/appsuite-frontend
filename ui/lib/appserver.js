@@ -32,6 +32,7 @@ nopt.invalidHandler = function (key, val) {
 var options = nopt({
     help: Boolean,
     manifests: [path, Array],
+    path: String,
     port: Number,
     server: url,
     verbose: ['local', 'remote', 'proxy', 'all', Array],
@@ -62,6 +63,7 @@ function usage(exitCode) {
         '  -h,      --help           print this help message and exit\n' +
         '  -m PATH, --manifests=PATH add manifests from the specified path (default:\n' +
         '                            the "manifests" subdirectory of every file path)\n' +
+        '           --path=PATH      absolute path of the UI (default: /appsuite)\n' +
         '  -p PORT, --port=PORT      listen on PORT (default: 8337)\n' +
         '  -s URL,  --server=URL     use an existing server as fallback\n' +
         '  -v TYPE, --verbose=TYPE   print more information depending on TYPE:\n' +
@@ -95,6 +97,8 @@ tzPath = [tzPath];
 
 var appsLoadPath = '/api/apps/load/';
 var manifestsPath = '/api/apps/manifests';
+var urlPath = options.path || '/appsuite';
+if (urlPath.slice(-1) !== '/') urlPath += '/';
 
 if (options.server) {
     if (options.server.slice(-1) != '/') options.server += '/';
@@ -104,8 +108,8 @@ if (options.server) {
         usage(1);
     }
     var protocol = server.protocol === 'https:' ? https : http;
-    appsLoadPath = server.pathname + appsLoadPath.slice(1);
-    manifestsPath = server.pathname + manifestsPath.slice(1);
+    appsLoadPath = urlPath + appsLoadPath.slice(1);
+    manifestsPath = urlPath + manifestsPath.slice(1);
 }
 
 var escapes = {
@@ -152,7 +156,7 @@ http.createServer(function (request, response) {
             return injectManifests(request, response);
         }
     }
-    return proxy(request, response);
+    return loadLocal(request, response) || proxy(request, response);
 }).listen(options.port || 8337);
 
 function load(request, response) {
@@ -310,7 +314,7 @@ function injectManifests(request, response) {
         response.end('Manifests require --server');
         return;
     }
-    var URL = url.resolve(options.server, request.url);
+    var URL = url.resolve(options.server, request.url.slice(urlPath.length));
     var opt = url.parse(URL, true);
     opt.headers = request.headers;
     opt.headers.host = opt.host;
@@ -364,15 +368,40 @@ function injectManifests(request, response) {
     }).end();
 }
 
+function loadLocal(request, response) {
+    var pathname = url.parse(request.url).pathname,
+        filename;
+    pathname = pathname.slice(pathname.indexOf('/apps/') + 6);
+    filename = prefixes.map(function (p) {
+        return p + pathname;
+    })
+    .filter(function (filename) {
+        return (path.existsSync(filename) && fs.statSync(filename).isFile());
+    })[0];
+    if (!filename) return false;
+
+    // set headers
+    if (verbose.local) console.log(filename);
+    response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
+    response.setHeader('Expires', '0');
+    response.write(fs.readFileSync(filename));
+    response.end();
+    return true;
+}
+
 function proxy(request, response) {
+    var URL = request.url;
     if (!options.server) {
-        console.log('No --server specified to forward', request.url);
+        console.log('No --server specified to forward', URL);
         response.writeHead(501, 'No --server specified',
             { 'Content-Type': 'text/plain' });
         response.end('No --server specified');
         return;
     }
-    var URL = url.resolve(options.server, request.url);
+    if (URL.slice(0, urlPath.length) === urlPath) {
+        URL = URL.slice(urlPath.length);
+    }
+    URL = url.resolve(options.server, URL);
     if (verbose.proxy) {
         console.log(URL);
         console.log();

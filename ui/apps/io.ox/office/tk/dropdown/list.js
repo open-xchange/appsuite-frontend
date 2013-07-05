@@ -66,10 +66,10 @@ define('io.ox/office/tk/dropdown/list',
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // all list items (button elements)
-                buttons = self.getItems(),
+                // all focusable controls in the list
+                controls = self.getFocusableMenuControls(),
                 // index of the focused list item
-                index = buttons.index(event.target);
+                index = controls.index(event.target);
 
             switch (event.keyCode) {
             case KeyCodes.UP_ARROW:
@@ -77,24 +77,24 @@ define('io.ox/office/tk/dropdown/list',
                     if (index <= 0) {
                         self.hideMenu();
                     } else {
-                        buttons.eq(index - 1).focus();
+                        controls.eq(index - 1).focus();
                     }
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
+                if (keydown && (index >= 0) && (index + 1 < controls.length)) { controls.eq(index + 1).focus(); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
+                if (keydown) { controls.eq(Math.max(0, index - List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + List.PAGE_SIZE)).focus(); }
+                if (keydown) { controls.eq(Math.min(controls.length - 1, index + List.PAGE_SIZE)).focus(); }
                 return false;
             case KeyCodes.HOME:
-                if (keydown) { buttons.first().focus(); }
+                if (keydown) { controls.first().focus(); }
                 return false;
             case KeyCodes.END:
-                if (keydown) { buttons.last().focus(); }
+                if (keydown) { controls.last().focus(); }
                 return false;
             }
         }

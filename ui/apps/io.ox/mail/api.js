@@ -237,7 +237,7 @@ define('io.ox/mail/api',
         requests: {
             all: {
                 folder: 'default0/INBOX',
-                columns: '601,600,611', // + flags
+                columns: '601,600,611,102', // + flags & color_label
                 extendColumns: 'io.ox/mail/api/all',
                 sort: '610', // received_date
                 order: 'desc',
@@ -583,7 +583,6 @@ define('io.ox/mail/api',
     var resetTrashFolders = function () {
         return $.when.apply($,
             _(accountAPI.getFoldersByType('trash')).map(function (folder) {
-                console.log('Remove trash folder', folder);
                 return api.caches.all.grepRemove(folder + DELIM);
             })
         );
@@ -681,7 +680,6 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.expunge = function (folder_id) {
-        notifications.yell('info', gt('Cleaning up... This may take a few seconds.'));
         // new clear
         return http.PUT({
             module: 'mail',
@@ -699,7 +697,6 @@ define('io.ox/mail/api',
             });
         })
         .done(function () {
-            notifications.yell('success', gt('The folder has been cleaned up.'));
             folderAPI.reload(folder_id);
         });
     };

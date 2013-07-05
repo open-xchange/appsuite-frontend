@@ -16,12 +16,13 @@ define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/framework/app/baseapplication',
      'io.ox/office/framework/app/toolbaractions',
+     'io.ox/office/framework/app/extensionregistry',
      'io.ox/office/preview/model',
      'io.ox/office/preview/view',
      'io.ox/office/preview/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.less'
-    ], function (Utils, BaseApplication, ToolBarActions, PreviewModel, PreviewView, PreviewController, gt) {
+    ], function (Utils, BaseApplication, ToolBarActions, ExtensionRegistry, PreviewModel, PreviewView, PreviewController, gt) {
 
     'use strict';
 
@@ -145,6 +146,33 @@ define('io.ox/office/preview/main',
             }, options)) : undefined;
         };
 
+        /**
+         * Returns whether the current document can be edited with one of the
+         * OX Document edit applications.
+         */
+        this.isDocumentEditable = function () {
+            // TODO: edit mail attachments and task attachments
+            return (!('source' in this.getFileDescriptor())) && ExtensionRegistry.isEditable(this.getFullFileName());
+        };
+
+        /**
+         * Launches the appropriate OX Document edit applications for the
+         * current document.
+         */
+        this.editDocument = function () {
+
+            var // the configuration of the file extension of the current document
+                extensionSettings = this.isDocumentEditable() ? ExtensionRegistry.getExtensionSettings(this.getFullFileName()) : null,
+                // the edit application module identifier
+                editModule = Utils.getStringOption(extensionSettings, 'module', '');
+
+            // TODO: edit mail attachments and task attachments
+            if (editModule.length > 0) {
+                ox.launch(editModule + '/main', { action: 'load', file: this.getFileDescriptor() });
+                _.defer(function () { self.quit(); });
+            }
+        };
+
         // initialization -----------------------------------------------------
 
         // fail-save handler returns data needed to restore the application after browser refresh
@@ -157,6 +185,7 @@ define('io.ox/office/preview/main',
 
     ToolBarActions.createDownloadIcon(MODULE_NAME);
     ToolBarActions.createPrintIcon(MODULE_NAME);
+    ToolBarActions.createMailIcon(MODULE_NAME);
 
     // exports ================================================================
 

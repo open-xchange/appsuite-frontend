@@ -15,7 +15,8 @@ define('io.ox/mail/folderview-extensions',
     ['io.ox/core/extensions',
      'io.ox/core/api/folder',
      'io.ox/mail/api',
-     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, gt) {
+     'io.ox/core/notifications',
+     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, gt) {
 
     'use strict';
 
@@ -82,7 +83,10 @@ define('io.ox/mail/folderview-extensions',
         e.preventDefault();
         // get current folder id
         var baton = e.data.baton, id = baton.app.folder.get();
-        mailAPI.expunge(id);
+        notifications.yell('busy', gt('Cleaning up... This may take a few seconds.'));
+        mailAPI.expunge(id).done(function () {
+            notifications.yell('success', gt('The folder has been cleaned up.'));
+        });
     }
 
     ext.point(POINT + '/sidepanel/toolbar/options').extend({

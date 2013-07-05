@@ -450,7 +450,7 @@ define('io.ox/office/framework/app/basecontroller',
          *          the META key must not be pressed. If set to null, the
          *          current state of the META key will be ignored. Has no
          *          effect when evaluating 'keypress' events.
-         *      - {Boolean} [shortcut.altOrMetaKey]
+         *      - {Boolean} [shortcut.altOrMetaKey=false]
          *          Convenience option that if set to true, matches if either
          *          the ALT key, or the META key are pressed. Has the same
          *          effect as defining two separate shortcuts, one with the
@@ -477,7 +477,7 @@ define('io.ox/office/framework/app/basecontroller',
          *          If set to true, the event will propagate up to the DOM root
          *          element, and the browser will execute its default action
          *          (but the setter function called by this shortcut receives
-         *          the event any may decide to cancel propagation manually).
+         *          the event and may decide to cancel propagation manually).
          *          If omitted or set to false, the event will be cancelled
          *          immediately after calling the setter function.
          *  @param {String} [definition.focus='direct']

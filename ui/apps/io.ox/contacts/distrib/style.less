@@ -42,19 +42,24 @@
     }
 
     .item-list {
+
         overflow-x: hidden;
         overflow-y: auto;
         margin-bottom: 20px;
 
         .listed-item {
+
             &:nth-child(odd) { margin-left:0; }
             margin-bottom:2px;
             position: relative;
             float:left;
 
-            .person-selected-mail {
+            .person-name {
+                font-weight: bold;
+            }
+
+            .person-mail {
                 padding-right: 30px;
-                .ellipsis;
             }
 
             .remove {

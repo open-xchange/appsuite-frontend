@@ -16,7 +16,9 @@
 define('io.ox/preview/main',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
-     'gettext!io.ox/preview'], function (ext, capabilities, gt) {
+     'io.ox/office/framework/app/extensionregistry',
+     'gettext!io.ox/preview'
+    ], function (ext, capabilities, ExtensionRegistry, gt) {
 
     'use strict';
 
@@ -188,9 +190,7 @@ define('io.ox/preview/main',
         Renderer.point.extend(new Engine({
             id: 'office',
             index: 10,
-            supports:  ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
-             'xltm', 'xlam', 'xlsb', 'ppt', 'pot', 'pps', 'ppa', 'pptx', 'potx', 'ppsx', 'ppam', 'pptm', 'potm', 'ppsm', 'pdf',
-             'odt', 'ods', 'odp', 'odg', 'odc', 'odf', 'odi', 'odm', 'otg', 'otp', 'ott', 'ots', 'rtf' ],
+            supports: ExtensionRegistry.getViewableExtensions(),
             getUrl: function (file, options) {
                 options = _.extend({ width: 400 }, options);
                 var url = file.dataURL || file.url;

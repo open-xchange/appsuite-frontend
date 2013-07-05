@@ -163,6 +163,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/open', {
         requires: 'some',
         multiple: function (list) {
+            console.log('OX Files: actions/open called for ' + _.size(list) + ' items');
             // loop over list, get full file object and open new window
             _(list).each(function (o) {
                 api.get(o).done(function (file) {

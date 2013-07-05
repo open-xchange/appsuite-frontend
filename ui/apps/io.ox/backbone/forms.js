@@ -164,6 +164,8 @@ define('io.ox/backbone/forms',
         } else {
             this.modelEvents['change:' + options.attribute] = 'updateElement';
         }
+        
+        this.rare = options.rare;
 
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
@@ -254,11 +256,22 @@ define('io.ox/backbone/forms',
             if (!this.nodes.dropelements) return;
 
             var de = this.nodes.dropelements;
+            
             if (valueFromModel) {
                 var d = new date.Local(date.Local.utc(valueFromModel));
                 de.year.val(d.getYear());
                 de.month.val(d.getMonth());
                 de.day.val(d.getDate());
+                //check how many days this month has and hide invalid ones
+                var month = d.getMonth(),
+                    dayNodes = $(this.nodes.dropelements.day).children();
+                d.setDate('31');
+                dayNodes.show();
+                if (month  !== d.getMonth()) {//this month does not have 31 days
+                    var days = d.setDate(0).getDate(),//get number of days of current month
+                        nodesToHide = dayNodes.slice(days + 1, dayNodes.length);
+                    nodesToHide.hide();
+                }
             } else {
                 de.year.val('');
                 de.month.val('');
@@ -267,12 +280,21 @@ define('io.ox/backbone/forms',
         }
 
         function updateModel(clear) {
-            var de = this.nodes.dropelements;
-            this.setValueInModel(clear ? null :
-                date.Local.localTime(new date.Local(
+            var de = this.nodes.dropelements,
+                tempDate = new date.Local(
                     de.year.val()  || new date.Local().getYear(),
                     de.month.val() || 0,
-                    de.day.val()   || 1)));
+                    de.day.val()   || 1);
+            //check if there is a month jump because of the day being invalid for the new month (eg. february 31th)
+            if (tempDate.getMonth() !== parseInt(de.month.val(), 10)) {
+                tempDate.setDate(0);//set to last valid day of last month
+                if (this.model.get(this.attribute) === date.Local.localTime(tempDate)) {//trigger change manually so selectboxes get changed correctly
+                    this.model.trigger('change:' + this.attribute);
+                }
+            }
+            
+            this.setValueInModel(clear ? null :
+                date.Local.localTime(tempDate));
         }
 
     }
@@ -457,7 +479,7 @@ define('io.ox/backbone/forms',
                     anyHidden = false,
                     anyVisible = false;
                 this.point().each(function (extension) {
-                    if (extension.metadata('hidden', [self.model])) {
+                    if (extension.metadata('hidden', [self.model]) && !extension.metadata('isRare', [])) {
                         anyHidden = anyHidden || true;
                     } else {
                         anyVisible = anyVisible || true;
@@ -552,7 +574,9 @@ define('io.ox/backbone/forms',
                 }
 
                 this.state = this.initialState;
-                this.nodes.toggleLink.text(gt('Show more'));
+                if (this.nodes.toggleLink) {
+                    this.nodes.toggleLink.text(gt('Show more'));
+                }
             },
 
             /**

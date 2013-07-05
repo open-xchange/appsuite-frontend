@@ -52,6 +52,12 @@ define('io.ox/office/preview/controller',
                     set: function (state) { app.getView().toggleSidePane(state); }
                 },
 
+                // start editing the document
+                'app/edit': {
+                    enable: function () { return app.isDocumentEditable(); },
+                    set: function () { app.editDocument(); }
+                },
+
                 // pages ------------------------------------------------------
 
                 'document/valid': {
@@ -88,6 +94,7 @@ define('io.ox/office/preview/controller',
 
                 'pages/current': {
                     parent: 'document/valid',
+                    enable: function () { return model.getPageCount() > 1; },
                     get: function () { return view.getPage(); },
                     set: function (page) { view.showPage(page); }
                 },

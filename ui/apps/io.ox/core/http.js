@@ -568,7 +568,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             var isSessionError = (/^SES\-/i).test(response.code),
                 isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
                 isAutoLogin = o.module === "login" && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin && !isServerConfig) {
+            if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.session = '';
                 ox.trigger('relogin:required', o, deferred);
@@ -602,7 +602,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                                     o.data = JSON.parse(o.data);
                                     module = o.data[i].module;
                                 }
-                                
+
                                 // handle errors within multiple
                                 if (response[i].error !== undefined && response[i].category !== 13) {
                                     data.push({ error: response[i], timestamp: timestamp });
@@ -1143,6 +1143,18 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def.resolve([]);
             }
             return def;
+        },
+
+        // send server ping
+        ping: function () {
+            var t0 = _.now();
+            return this.GET({
+                module: 'system',
+                params: { action: 'ping' }
+            })
+            .then(function () {
+                return _.now() - t0;
+            });
         },
 
         /**

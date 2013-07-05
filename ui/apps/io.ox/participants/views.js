@@ -59,8 +59,11 @@ define('io.ox/participants/views',
             });
 
             this.$el.append(
-                this.nodes.$img, this.nodes.$text, this.nodes.$mail,
-                this.nodes.$extra, this.nodes.$removeButton
+                this.nodes.$img,
+                this.nodes.$text,
+                $('<div>').append(this.nodes.$mail),
+                $('<div>').append(this.nodes.$extra),
+                this.nodes.$removeButton
             );
 
             if (this.options.customize) {
@@ -159,8 +162,7 @@ define('io.ox/participants/views',
                     this.nodes.$mail
                         .attr({ href: '#', tabindex: '1' })
                         .data({ email1: mail })
-                        .addClass('halo-link')
-                        .after('<br>');
+                        .addClass('halo-link');
                 }
                 break;
             case 6:

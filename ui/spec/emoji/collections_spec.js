@@ -15,8 +15,31 @@ define([
 ], function (emoji, settings) {
     "use strict";
 
+    //FIXME: reload emoji module once reloading is possible
+    //run some initialisation code (run during module loading) again,
+    //to be able to change collections during run-time
+    function parseCollections() {
+        var e = settings.get('availableCollections', '');
+        return _(e.split(','))
+        .chain()
+        .map(function (collection) {
+            return collection.trim();
+        })
+        .compact()
+        .value();
+    }
+
     describe('Emoji support', function () {
         describe('with different collections', function () {
+            beforeEach(function () {
+                //prevent settings from being stored on server
+                this.settingsSpy = sinon.stub(settings, 'save');
+            });
+
+            afterEach(function () {
+                this.settingsSpy.restore();
+            });
+
             it('should have a default collection', function () {
                 settings.set({defaultCollection: 'unified'});
                 this.emoji = emoji.getInstance();
@@ -32,19 +55,6 @@ define([
             });
 
             it('should parse the availableCollections setting', function () {
-                //FIXME: reload emoji module once reloading is possible
-                //run some initialisation code (run during module loading) again,
-                //to be able to change collections during run-time
-                function parseCollections() {
-                    var e = settings.get('availableCollections', '');
-                    return _(e.split(','))
-                        .chain()
-                        .map(function (collection) {
-                            return collection.trim();
-                        })
-                        .compact()
-                        .value();
-                }
 
                 function fakeInstance() {
                     var i = emoji.getInstance();
@@ -66,14 +76,39 @@ define([
             });
 
             it('should be possible to get a custom emoji collection', function () {
-                settings.set({defaultCollection: 'unified'});
-                settings.set({availableCollections: 'unified,softbank,japan_carrier'});
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified,softbank,japan_carrier');
 
                 var softbank = emoji.getInstance({collection: 'softbank'}),
                     defaultCollection = emoji.getInstance();
 
                 expect(softbank.getCollection()).toBe('softbank');
                 expect(defaultCollection.getCollection()).not.toBe('softbank');
+            });
+
+            it('should set a valid collection', function () {
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified,softbank');
+                var collection = emoji.getInstance();
+                collection.collections = parseCollections();
+
+                expect(collection.getCollection()).toBe('unified');
+                collection.setCollection('softbank');
+                expect(collection.getCollection()).toBe('softbank');
+            });
+
+            it('should not set an invalid collection', function () {
+                settings.set({});
+                settings.set('defaultCollection', 'unified');
+                settings.set('availableCollections', 'unified');
+                var collection = emoji.getInstance();
+                collection.collections = parseCollections();
+
+                expect(collection.getCollection()).toBe('unified');
+                collection.setCollection('softbank');
+                expect(collection.getCollection()).toBe('unified');
             });
         });
     });

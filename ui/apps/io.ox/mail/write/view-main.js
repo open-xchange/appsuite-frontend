@@ -197,12 +197,7 @@ define("io.ox/mail/write/view-main",
                     { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
 
                 return $('<div class="section-item upload">').append(
-                    $('<div data-provides="fileupload" class="fileupload fileupload-new">').append(
-                        $('<span class="btn btn-file">').append(
-                            $('<span class="fileupload-new">').text(gt('Select file')),
-                            $('<input>', inputOptions).on('change', $.proxy(change, this))
-                        )
-                    )
+                    $('<input>', inputOptions).on('change', $.proxy(change, this))
                 );
             };
 
@@ -241,9 +236,9 @@ define("io.ox/mail/write/view-main",
                             return { list: list, hits: data.length };
                         },
                         stringify: function (data) {
-                            return data.display_name ?
-                                '"' + data.display_name + '" <' + data.email + (data.phone || '') + '>' :
-                                data.email;
+                            var name = contactsUtil.getMailFullName(data),
+                                address = data.email || data.phone || '';
+                            return name ? '"' + name + '" <' + address + '>' : address;
                         },
                         draw: function (data, query) {
                             drawAutoCompleteItem.call(null, this, data, query);
@@ -312,7 +307,7 @@ define("io.ox/mail/write/view-main",
                                 result = result.filter(function (elem) {
                                     return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
                                 });
-                                return {list: result.concat(autocomplete_result), hits: result.length};
+                                return { list: result.concat(autocomplete_result), hits: result.length };
                             });
                         });
                     },
@@ -869,12 +864,19 @@ define("io.ox/mail/write/view-main",
     }
 
     function copyRecipients(id, node, e) {
+
         var valBase, list;
 
         //normalize data
         if (e && e.data.distlistarray !== null) {
             //distribution list
-            list = e.data.distlistarray;
+            list = _(e.data.distlistarray).map(function (member) {
+                return {
+                    full_name: member.display_name,
+                    display_name: member.display_name,
+                    email: member.mail
+                };
+            });
         } else if (e && e.data.id) {
             //selected contact list
             list = [ e.data ];
@@ -882,6 +884,7 @@ define("io.ox/mail/write/view-main",
             valBase = node.val();
             list = mailUtil.parseRecipients(valBase);
         }
+
         if (list.length) {
             // add
             this.addRecipients(id, list);
@@ -908,23 +911,31 @@ define("io.ox/mail/write/view-main",
     * @return {array} array with contact object
     */
     function getNormalized(list) {
-        var elem;
+
         return list.map(function (elem) {
 
-            //parsed object?
+            // parsed object?
             if (_.isArray(elem)) {
                 var channel = mailUtil.getChannel ? mailUtil.getChannel(elem[1]) : 'email',
                     custom = {
+                        full_name: elem[0],
                         display_name: elem[0]
                     };
-                //email or phone property?
+                // email or phone property?
                 custom[channel] = elem[1];
                 elem = custom;
             }
 
+            if (!elem.full_name && elem.contact) {
+                elem.full_name = contactsUtil.getMailFullName(elem.contact);
+            }
+
             var obj = {
+                full_name: elem.full_name,
+                first_name: elem.first_name || '',
+                last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.display_name),
-                email: elem.email || '',
+                email: elem.email || elem.mail || '', // distribution lists just have "mail"
                 phone: elem.phone || '',
                 field: elem.field || '',
                 image1_url: elem.image1_url || '',
@@ -966,8 +977,8 @@ define("io.ox/mail/write/view-main",
 
         node.addClass('io-ox-mail-write-contact').append(
             $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
-            $('<div class="person-link ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
-            $('<div class="ellipsis">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
+            $('<div class="ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
+            $('<div class="ellipsis email">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
         );
     }
 
@@ -982,9 +993,16 @@ define("io.ox/mail/write/view-main",
             // hidden field
             $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
             // display name
-            $('<div>').append(contactsAPI.getDisplayName(data)),
+            contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
+                .addClass('recipient-name'),
             // email address
-            $('<div>').text(_.noI18n(String(data.email || '' + data.phone || '').toLowerCase())),
+            $('<div>').append(
+                data.email ?
+                    $('<a href="#" class="halo-link">')
+                    .data({ email1: data.email })
+                    .text(_.noI18n(String(data.email).toLowerCase())) :
+                    $('<span>').text(_.noI18n(data.phone || ''))
+            ),
             // remove
             $('<a href="#" class="remove">')
                 .attr('title', gt('Remove from recipient list'))

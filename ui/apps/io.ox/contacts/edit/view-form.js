@@ -114,7 +114,10 @@ define('io.ox/contacts/edit/view-form', [
                     rare: options.isRare,
                     attribute: options.field
                 }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    isRare: function () {
+                        return options.isRare;
+                    },
+                    hidden: options.isAlwaysVisible ? false : function (model) {
                         return !model.isSet(options.field);
                     }
                 });
@@ -132,7 +135,10 @@ define('io.ox/contacts/edit/view-form', [
                     rare: options.isRare,
                     attribute: options.field
                 }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    isRare: function () {
+                        return options.isRare;
+                    },
+                    hidden: options.isAlwaysVisible ? false : function (model) {
                         return (model.attributes.private_flag === undefined || model.attributes.private_flag === false);
                     }
                 });
@@ -161,7 +167,10 @@ define('io.ox/contacts/edit/view-form', [
                             });
                     }
                 }), {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    isRare: function () {
+                        return options.isRare;
+                    },
+                    hidden: options.isAlwaysVisible ? false : function (model) {
                         return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
                     }
                 });
@@ -205,7 +214,10 @@ define('io.ox/contacts/edit/view-form', [
                         $node.append($('<div>').addClass('contact_attachments_buttons').append($inputWrap));
                     }
                 }, {
-                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    isRare: function () {
+                        return options.isRare;
+                    },
+                    hidden: options.isAlwaysVisible ? false : function (model) {
                         return (model.attributes.number_of_attachments === undefined || model.attributes.number_of_attachments === 0);
                     }
                 });
@@ -243,7 +255,10 @@ define('io.ox/contacts/edit/view-form', [
             inputClassName: 'input-small',
             labelClassName: 'control-label'
         }), {
-            hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+            isRare: function () {
+                return options.isRare;
+            },
+            hidden: options.isAlwaysVisible ? false : function (model) {
                 return !model.isSet(options.field);
             }
         });
@@ -413,7 +428,10 @@ define('io.ox/contacts/edit/view-form', [
                         rare: isRare,
                         attribute: field
                     }), {
-                        hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
+                        isRare: function () {
+                            return isRare;
+                        },
+                        hidden: isAlwaysVisible ? false : function (model) {
                             return !model.isSet(field);
                         }
                     });

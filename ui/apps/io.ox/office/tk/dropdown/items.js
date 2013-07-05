@@ -106,17 +106,6 @@ define('io.ox/office/tk/dropdown/items',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the section node with the passed identifier.
-         *
-         * @returns {jQuery}
-         *  The section node with the passed identifier if existing, otherwise
-         *  an empty jQuery collection.
-         */
-        function getSectionNode(sectionId) {
-            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
-        }
-
-        /**
          * Gets or creates the section node with the passed identifier.
          *
          * @returns {jQuery}
@@ -124,7 +113,7 @@ define('io.ox/office/tk/dropdown/items',
          */
         function getOrCreateSectionNode(sectionId, options) {
 
-            var sectionNode = getSectionNode(sectionId),
+            var sectionNode = self.getSectionNode(sectionId),
                 label = Utils.getStringOption(options, 'label', ''),
                 separator = Utils.getBooleanOption(options, 'separator', false);
 
@@ -191,6 +180,20 @@ define('io.ox/office/tk/dropdown/items',
         this.createSection = function (sectionId, options) {
             getOrCreateSectionNode(sectionId, options);
             return this;
+        };
+
+        /**
+         * Returns the section node with the passed identifier.
+         *
+         * @param {String} sectionId
+         *  The unique identifier of the section.
+         *
+         * @returns {jQuery}
+         *  The section node with the passed identifier if existing, otherwise
+         *  an empty jQuery collection.
+         */
+        this.getSectionNode = function (sectionId) {
+            return itemGroupNode.children('.item-section[data-section="' + sectionId + '"]');
         };
 
         /**
@@ -266,13 +269,13 @@ define('io.ox/office/tk/dropdown/items',
          *  A reference to this instance.
          */
         this.grabMenuFocus = function () {
-            var // all list items (button elements)
-                buttons = self.getItems(),
-                selectedButtons = Utils.getSelectedButtons(buttons);
+            var // all focusable list items
+                items = self.getFocusableMenuControls(),
+                selectedButtons = Utils.getSelectedButtons(items);
             if (selectedButtons.length) {
                 selectedButtons.eq(0).focus();
-            } else if (buttons.length) {
-                buttons.eq(0).focus();
+            } else if (items.length) {
+                items.eq(0).focus();
             }
 
             return this;
@@ -281,7 +284,8 @@ define('io.ox/office/tk/dropdown/items',
         // initialization -----------------------------------------------------
 
         // add the button group control to the drop-down view component
-        this.addPrivateMenuGroup(itemGroup);
+        this.registerPrivateGroup(itemGroup);
+        this.getMenuNode().append(itemGroup.getNode());
 
         // register event handlers
         itemGroup.registerChangeHandler('click', {

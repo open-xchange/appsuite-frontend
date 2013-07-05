@@ -143,6 +143,24 @@ define('io.ox/office/framework/app/toolbaractions',
         });
     };
 
+    /**
+     * Creates a new 'mail' icon in the global window tool bar of the
+     * specified application type. The created action calls the method
+     * 'BaseApplication.sendMail()'. Registration is done globally once per
+     * application type, using the extension framework.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    ToolBarActions.createMailIcon = function (moduleName) {
+        ToolBarActions.createIcon(moduleName, {
+            id: 'send',
+            icon: 'icon-envelope-alt',
+            label: gt('Send as mail'),
+            action: function (app) { app.sendMail(); }
+        });
+    };
+
     // exports ================================================================
 
     return ToolBarActions;

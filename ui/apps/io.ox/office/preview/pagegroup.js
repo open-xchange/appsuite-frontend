@@ -19,7 +19,10 @@ define('io.ox/office/preview/pagegroup',
 
     'use strict';
 
-    var // horizontal margin between group and scroll pane
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes,
+
+        // horizontal margin between group and scroll pane
         HOR_MARGIN = 13,
 
         // fixed total width of a page button (two buttons in default side pane width)
@@ -57,7 +60,8 @@ define('io.ox/office/preview/pagegroup',
          * Highlights the button representing the page with the passed index.
          */
         function updateHandler(page) {
-            Utils.selectOptionButton(self.getNode().find(Utils.BUTTON_SELECTOR), page);
+            var buttonNodes = self.getNode().find(Utils.BUTTON_SELECTOR).attr('tabindex', 0);
+            Utils.selectOptionButton(buttonNodes, page).attr('tabindex', 1);
         }
 
         /**
@@ -242,13 +246,15 @@ define('io.ox/office/preview/pagegroup',
             var // number of pages shown in the document
                 pageCount = app.getModel().getPageCount(),
                 // inner width available for button nodes
-                innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH;
+                innerWidth = scrollableNode.outerWidth() - 2 * HOR_MARGIN - Utils.SCROLLBAR_WIDTH,
+                // initialize button nodes on first call
+                initializeButtons = buttonNodes.length === 0;
 
             // do nothing, if the side pane is not visible, or no pages are available
-            if ((pageCount === 0) || !sidePane.isVisible()) { return; }
+            if ((pageCount === 0) || !self.isReallyVisible()) { return; }
 
             // create empty button nodes for all pages on first call
-            if (buttonNodes.length === 0) {
+            if (initializeButtons) {
                 for (var page = 1; page <= pageCount; page += 1) {
                     buttonNodes[page] = Utils.createButton({ value: page, label: String(page) });
                     self.addFocusableControl(buttonNodes[page]);
@@ -273,6 +279,11 @@ define('io.ox/office/preview/pagegroup',
                 buttonNode.css({ left: col * buttonWidth, top: row * BUTTON_HEIGHT, width: buttonWidth, height: BUTTON_HEIGHT });
             });
 
+            // select active button on first call (after positioning the buttons)
+            if (initializeButtons) {
+                self.selectAndShowPage(app.getView().getPage());
+            }
+
             // update page data for all visible button nodes
             updateVisiblePages();
         }
@@ -281,8 +292,34 @@ define('io.ox/office/preview/pagegroup',
          * Scrolls the scrollable node to the specified button node.
          */
         function scrollToButton(buttonNode) {
-            if (sidePane.isVisible()) {
+            if (self.isReallyVisible()) {
                 Utils.scrollToChildNode(scrollableNode, buttonNode, { padding: 25 });
+            }
+        }
+
+        function keyDownHandler(event) {
+
+            function setButtonFocus(diff) {
+                if (!event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey) {
+                    _(buttonNodes).any(function (button, page) {
+                        if (Utils.isControlFocused(button)) {
+                            buttonNodes[Utils.minMax(page + diff, 1, app.getModel().getPageCount())].focus();
+                            return true;
+                        }
+                    });
+                    return false;
+                }
+            }
+
+            switch (event.keyCode) {
+            case KeyCodes.LEFT_ARROW:
+                return setButtonFocus(-1);
+            case KeyCodes.RIGHT_ARROW:
+                return setButtonFocus(1);
+            case KeyCodes.UP_ARROW:
+                return setButtonFocus(-columns);
+            case KeyCodes.DOWN_ARROW:
+                return setButtonFocus(columns);
             }
         }
 
@@ -322,6 +359,9 @@ define('io.ox/office/preview/pagegroup',
 
         // update pages while scrolling (debounced to skip a few scroll events)
         scrollableNode.on('scroll', app.createDebouncedMethod($.noop, updateVisiblePages, { delay: 50, maxDelay: 200 }));
+
+        // keyboard navigation
+        this.getNode().on('keydown', keyDownHandler);
 
         // keyboard focus traveling: scroll to focused node
         this.getNode().on('focusin', Utils.BUTTON_SELECTOR, function (event) {

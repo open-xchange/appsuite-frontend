@@ -496,6 +496,87 @@
 
 }
 
+.io-ox-alert {
+
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    margin-left: -230px;
+    width: 460px;
+    background-color: #FFF;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    z-index: 65500;
+    box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.50);
+    outline: 0;
+    .transition(top 0.20s ease-out);
+
+    &:focus {
+        border-color: rgba(0, 0, 0, 0.80);
+    }
+
+    &.slide-in {
+        top: 15px;
+    }
+
+    .headline {
+        margin: 0 0 7px 0;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .message {
+        padding: 20px 60px 20px 70px;
+        min-height: 30px;
+    }
+
+    .icon {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        font-size: 30px;
+        color: #aaa;
+        width: 50px;
+        text-align: center;
+    }
+
+    .close {
+        position: absolute;
+        top: 8px;
+        right: 15px;
+        width: 36px;
+        line-height: 40px;
+        text-align: center;
+        display: inline-block;
+        outline: 0;
+    }
+
+    .close:hover, .close:focus {
+        background-color: rgba(0, 0, 0, 0.30);
+    }
+
+    &.io-ox-alert-info .icon { color: #08c; }
+    &.io-ox-alert-error .icon { color: #a00; }
+    &.io-ox-alert-warning .icon { color: #fc0; }
+    &.io-ox-alert-success .icon { color: @greenLight; }
+    &.io-ox-alert-busy .icon { color: #555; }
+
+    &.io-ox-alert-success { cursor: pointer; }
+}
+
+@media (max-width: 480px), (max-device-width: 480px) {
+    .io-ox-alert {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin-left: 0;
+        cursor: pointer;
+        .icon { font-size: 20px; width: 30px; }
+        .message { padding: 20px 20px 20px 50px; }
+        .close { display: none; }
+    }
+}
+
 #io-ox-notifications-popups {
 
     position: absolute;
@@ -508,7 +589,6 @@
         margin-bottom: 0.5em;
         .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
     }
-
 }
 
 
@@ -2607,12 +2687,12 @@ input.flat-input {
     -webkit-transition-duration: 400ms;
     -webkit-animation-timing-function: ease-in;
 }
+
 .slideup {
     -webkit-transform: translateY(-90px);
     -webkit-transition-property: -webkit-transform;
     -webkit-transition-duration: 400ms;
     -webkit-animation-timing-function: ease-in;
-
 }
 
 @-webkit-keyframes slideleft {
