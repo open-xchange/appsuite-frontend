@@ -25,8 +25,9 @@ define('io.ox/mail/actions',
      'io.ox/contacts/api',
      'io.ox/core/api/account',
      'io.ox/office/framework/app/extensionregistry',
+     'io.ox/core/extPatterns/actions',
      'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, settings) {
+    ], function (ext, links, api, util, gt, config, folderAPI, notifications, print, contactAPI, account, ExtensionRegistry, actions, settings) {
 
 
     'use strict';
