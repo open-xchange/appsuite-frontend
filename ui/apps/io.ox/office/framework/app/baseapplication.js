@@ -146,6 +146,9 @@ define('io.ox/office/framework/app/baseapplication',
             // callback before downloading the document
             downloadHandler = Utils.getFunctionOption(options, 'downloadHandler', $.noop),
 
+            // callback to flush the document before sending it as mail
+            flushHandler = Utils.getFunctionOption(options, 'flushHandler', $.noop),
+
             // all registered before-quit handlers
             beforeQuitHandlers = [],
 
@@ -1321,16 +1324,41 @@ define('io.ox/office/framework/app/baseapplication',
             $.when(downloadHandlerResult).then(function () {
 
                 var // the file descriptor of the document
+                    flushHandlerResult = flushHandler.call(self),
                     fileDescriptor = self.getFileDescriptor();
-                //fileDescriptor.mailFolder, .mailUID
-                require(['io.ox/mail/write/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.compose().done(function (result) {
-                            result.app.addFiles([fileDescriptor]);
+
+                $.when(flushHandlerResult).then(function () {
+
+                    function attachFile(composeResult, descriptor)  {
+                            composeResult.app.addFiles(
+                                [{filename: descriptor.filename,
+                                    folder_id: descriptor.folder_id,
+                                    id: descriptor.id,
+                                    size: descriptor.file_size,
+                                    file_size: descriptor.file_size
+                                }]);
+                        }
+                    //fileDescriptor.mailFolder, .mailUID
+                    require(['io.ox/mail/write/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            if (fileDescriptor.mailUID) {
+                                this.replyall({
+                                        id: fileDescriptor.mailUID,
+                                        folder: fileDescriptor.mailFolder
+                                    }).done(function (result) {
+                                        attachFile(result, fileDescriptor);
+                                    });
+
+                            }
+                            else {
+                                this.compose().done(function (result) {
+                                    attachFile(result, fileDescriptor);
+                                });
+                            }
                         });
                     });
-                });
 
+                });
             });
         };
         /**
