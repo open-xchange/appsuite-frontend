@@ -776,7 +776,7 @@ define('io.ox/mail/write/main',
                                 win.idle();
                                 ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                def.resolve();
+                                def.resolve({app: app});
                             });
                         })
                         .fail(function (e) {
