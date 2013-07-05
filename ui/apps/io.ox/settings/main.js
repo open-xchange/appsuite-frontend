@@ -21,6 +21,7 @@ define('io.ox/settings/main',
       'gettext!io.ox/core',
       'settings!io.ox/settings/configjump',
       'io.ox/core/settings/errorlog/settings/pane',
+      'io.ox/core/settings/downloads/pane',
       'less!io.ox/settings/style.less'], function (VGrid, appsApi, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
@@ -262,19 +263,19 @@ define('io.ox/settings/main',
             baton.grid = grid;
 
             var data = baton.data,
-                settingsPath = (data.ref || data.id) + '/settings/pane',
-                extPointPart = (data.ref || data.id) + '/settings';
+                settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
+                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
 
             right.empty().busy();
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function (m) {
                     right.empty().idle(); // again, since require makes this async
-                    ext.point(extPointPart + '/detail').invoke('draw', right, baton);
+                    ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
             } else {
                 right.empty().idle(); // again, since require makes this async
-                ext.point(extPointPart + '/detail').invoke('draw', right, baton);
+                ext.point(extPointPart).invoke('draw', right, baton);
                 updateExpertMode();
             }
         };
