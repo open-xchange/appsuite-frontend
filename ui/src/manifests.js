@@ -1,6 +1,12 @@
 define(function () {
     return [
         {
+            requires: "contacts",
+            path: "io.ox/contacts/edit/main",
+            category: "Basic",
+            refreshable: true
+        },
+        {
             namespace: ['io.ox/settings/main'],
             path: 'io.ox/mail/mailfilter/settings/register',
             requires: 'mailfilter',

@@ -103,7 +103,6 @@ define('io.ox/contacts/edit/main',
                         };
 
                     // create model & view
-
                     if (data.id) {
                         model.factory.realm('edit').retain().get({
                             id: data.id,

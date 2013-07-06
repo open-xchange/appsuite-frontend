@@ -116,7 +116,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                     ).append(
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
-                                $('<span>').text(gt('Upload Image'))
+                                $('<span>').text(gt('Click to upload image'))
                             )[hasImage ? 'hide' : 'show']()
                     ),
                     $('<form>').css('margin', 0).append(

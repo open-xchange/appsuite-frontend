@@ -572,10 +572,10 @@ define('io.ox/core/commons',
             if (index < 0) index = items.length - 1;
             next = items.eq(index);
 
-            if (next.attr('tabindex') === '1') {
+            if (next.attr('tabindex')) {
                 next.focus();
             } else {
-                next.find('[tabindex="1"]').first().focus();
+                next.find('[tabindex]').first().focus();
             }
         }
     });

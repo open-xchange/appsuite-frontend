@@ -19,10 +19,102 @@
 
 .edit-contact {
 
-    max-width: 800px;
+    @step: 60px;
+
+    max-width: 12 * @step;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+
+    .btn.control {
+        float: right;
+        margin-left: 14px;
+    }
+
+    .contact-picture-upload {
+
+        float: left;
+        margin: 0 30px 10px 0;
+
+        .picture-uploader {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    h1 {
+        font-family: @lightFontFamily;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 32px;
+        margin: 0;
+    }
+
+    h2 {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0 0 14px 0;
+        color: #888;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .block {
+        width: @step * 6;
+        margin: 0 0 28px 0;
+        float: left;
+    }
+
+    .block:nth-child(even) {
+        width: @step * 6 - 30;
+    }
+
+    .block:nth-child(odd) {
+        width: @step * 6;
+        margin-right: 30px;
+        clear: both;
+    }
+
+    legend {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 300;
+        margin-bottom: 14px;
+        display: block;
+        border-bottom: 0;
+        color: @linkColor;
+    }
+
+    p.field {
+        display: none;
+        height: 0;
+        overflow: hidden;
+        .transition(height 0.5s linear);
+    }
+
+    p.field.visible {
+        display: block;
+        height: auto;
+        overflow: visible;
+    }
+
+    label {
+        font-size: 12px;
+        color: #aaa;
+    }
+
+    .input-xlarge {
+        width: 315px;
+        margin: 0 0 7px 0;
+    }
+
+    textarea {
+        height: 155px;
+        resize: none;
+    }
 
     .attachment-edit-row {
         margin-bottom: 9px;
@@ -46,20 +138,6 @@
     button[data-action="imagereset"] {
         float: left;
         margin-left: 15px;
-    }
-
-    .clear-title {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-
-        &.job {
-            font-size: 1.25em;
-            color: #888;
-        }
-    }
-    .title.header-pic {
-        float: left;
-        margin-right: 60px;
     }
 
     @media (max-width: 480px), (max-device-width: 480px) {
