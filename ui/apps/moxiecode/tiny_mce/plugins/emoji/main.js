@@ -54,8 +54,6 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         return $('<div>').html(unicode).text();
     }
 
-    var collections = parseCollections();
-
     function escape(s) {
         return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
     }
@@ -70,7 +68,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         // plain data API
         this.icons = [];
-        this.collections = collections;
+        this.collections = parseCollections();
         this.category_map = {};
 
         // make settings accessible, esp. for editor plugin
@@ -111,10 +109,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             //TODO: move this to softbanke emoji app
             if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
-                return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+                return 'emoji-' + this.currentCollection + ' sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }
 
-            return 'emoji-unified emoji' + icon[2];
+            return 'emoji-' + this.currentCollection + ' emoji' + icon[2];
         },
 
         // add to "recently used" category
@@ -265,9 +263,22 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 //parse unicode number
                 var unicode = parseUnicode(_.find($(node).attr('class').split('emoji'), function (item) {
                     return item.trim();
-                }));
+                })),
+                css,
+                defaultCollection = self.getInstance();
+
+                if (!settings.get('overrideUserCollection', false)) {
+                    css = defaultCollection.cssFor(unicode);
+                }
+                css = css || defaultCollection.collections.map(function (c) {
+                    return self.getInstance({collection: c}).cssFor(unicode);
+                })
+                .filter(function (css) {
+                    return _.isString(css);
+                })[0];
+
                 $(node).replaceWith(
-                    $('<img src="apps/themes/login/1x1.gif" class="' + self.getInstance().cssFor(unicode) + '">')
+                    $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
                     .attr('data-emoji-unicode', unicode)
                 );
             });
