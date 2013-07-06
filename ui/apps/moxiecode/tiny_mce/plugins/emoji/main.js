@@ -54,8 +54,6 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
         return $('<div>').html(unicode).text();
     }
 
-    var collections = parseCollections();
-
     function escape(s) {
         return window.escape(s).replace(/%u/g, '\\u').toLowerCase();
     }
@@ -70,7 +68,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
         // plain data API
         this.icons = [];
-        this.collections = collections;
+        this.collections = parseCollections();
         this.category_map = {};
 
         // make settings accessible, esp. for editor plugin
