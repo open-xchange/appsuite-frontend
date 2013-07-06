@@ -263,9 +263,22 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                 //parse unicode number
                 var unicode = parseUnicode(_.find($(node).attr('class').split('emoji'), function (item) {
                     return item.trim();
-                }));
+                })),
+                css,
+                defaultCollection = self.getInstance();
+
+                if (!settings.get('overrideUserCollection', false)) {
+                    css = defaultCollection.cssFor(unicode);
+                }
+                css = css || defaultCollection.collections.map(function (c) {
+                    return self.getInstance({collection: c}).cssFor(unicode);
+                })
+                .filter(function (css) {
+                    return _.isString(css);
+                })[0];
+
                 $(node).replaceWith(
-                    $('<img src="apps/themes/login/1x1.gif" class="' + self.getInstance().cssFor(unicode) + '">')
+                    $('<img src="apps/themes/login/1x1.gif" class="' + css + '">')
                     .attr('data-emoji-unicode', unicode)
                 );
             });
