@@ -109,10 +109,10 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
 
             //TODO: move this to softbanke emoji app
             if (this.currentCollection === 'softbank' || this.currentCollection === 'japan_carrier') {
-                return 'emoji-softbank sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
+                return 'emoji-' + this.currentCollection + ' sprite-emoji-' + icon[5][1].substring(2).toLowerCase();
             }
 
-            return 'emoji-unified emoji' + icon[2];
+            return 'emoji-' + this.currentCollection + ' emoji' + icon[2];
         },
 
         // add to "recently used" category
