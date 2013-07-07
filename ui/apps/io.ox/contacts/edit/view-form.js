@@ -59,12 +59,13 @@ define('io.ox/contacts/edit/view-form', [
             other_address: ['street_other', 'postal_code_other', 'city_other',
                             'state_other', 'country_other'],
 
+            comment: ['note'],
+            private_flag: ['private_flag'],
+
             userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
                         'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
                         'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
                         'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
-            comment: ['note'],
-            misc: ['private_flag'],
             attachments: ['attachments_list', 'attachments_buttons']
         },
 
@@ -90,7 +91,7 @@ define('io.ox/contacts/edit/view-form', [
             'email1', 'email2', 'instant_messenger1',
             'cellular_telephone1', 'telephone_home1',
             'street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home',
-            'note'
+            'private_flag', 'note'
         ],
 
         input_type: {
@@ -109,8 +110,7 @@ define('io.ox/contacts/edit/view-form', [
             job: gt('Job description'),
             comment: gt('Comment'),
             userfields: gt('User fields'),
-            misc: //#. section name for contact inputfields that does not fit somewhere else
-                  gt('Miscellaneous'),
+            private_flag: gt('Private'),
             attachments: gt('Attachments')
         },
 
@@ -288,14 +288,6 @@ define('io.ox/contacts/edit/view-form', [
                 className: 'edit-contact container-fluid default-content-padding'
             });
 
-        // // Actions
-        // point.basicExtend(new links.ButtonGroup(ref + '/edit/view', {
-        //     index: 50,
-        //     id: 'buttons',
-        //     classes: 'row-fluid',
-        //     attributes: {'class': 'controls'}
-        // }));
-
         // Save
         point.basicExtend(new links.Button({
             id: "save",
@@ -393,7 +385,51 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
-        var index = 400;
+        function drawDefault(options) {
+
+            this.append(
+                $('<label class="input">').append(
+                    $.txt(options.label), $('<br>'),
+                    $('<input type="text" class="input-xlarge" tabindex="1">')
+                        .attr({ name: options.field })
+                        .val(options.value)
+                )
+            );
+        }
+
+        function drawTextarea(options) {
+            this.append(
+                $('<label>').append(
+                    $('<textarea class="input-xlarge" tabindex="1">')
+                        .attr({ name: options.field })
+                        .val(options.value)
+                )
+            );
+        }
+
+        function drawDate(options) {
+
+        }
+
+        function drawCheckbox(options) {
+            this.append(
+                $('<label class="checkbox">').append(
+                    $('<input type="checkbox" tabindex="1">')
+                        .attr({ name: options.field })
+                        .prop('checked', !!options.value),
+                    $.txt(' '),
+                    $.txt(options.label)
+                )
+            );
+        }
+
+        var index = 400,
+            draw = {
+                birthday: drawDate,
+                anniversary: drawDate,
+                note: drawTextarea,
+                private_flag: drawCheckbox
+            };
 
         // loop over all sections (personal, messaging, phone etc.)
         // to get list of relevant fields per section
@@ -430,38 +466,30 @@ define('io.ox/contacts/edit/view-form', [
                     index: 100 + index * 100,
                     draw: function (baton) {
 
-                        var value = $.trim(baton.model.get(field)),
-                            label,
+                        var value = baton.model.get(field),
                             isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                             isRare = _(meta.rare).indexOf(field) > -1,
                             isVisible = isAlwaysVisible || !!value,
-                            control;
+                            paragraph,
+                            options = {
+                                index: index,
+                                field: field,
+                                label: model.fields[field],
+                                value: value
+                            };
 
-                        if (field === 'note') {
-                            control = $('<textarea>');
-                            label = '\u00A0';
-                        } else {
-                            control = $('<input type="text">');
-                            label = model.fields[field];
-                        }
-
-                        this.append(
-                            $('<p>')
+                        paragraph = $('<p>')
                             .attr('data-field', field)
                             .addClass(
                                 'field' +
                                 (isVisible ? ' visible' : '') +
                                 (isRare ? ' rare' : '')
-                            )
-                            .append(
-                                $('<label>').append(
-                                    $.txt(label), $('<br>'),
-                                    control.attr({ name: field, tabindex: '1' })
-                                        .addClass('input-xlarge')
-                                        .val(value)
-                                )
-                            )
-                        );
+                            );
+
+                        // call requires "draw" method
+                        (draw[field] || drawDefault).call(paragraph, options);
+
+                        this.append(paragraph);
                     }
                 });
             });
