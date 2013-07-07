@@ -164,7 +164,7 @@ define('io.ox/backbone/forms',
         } else {
             this.modelEvents['change:' + options.attribute] = 'updateElement';
         }
-        
+
         this.rare = options.rare;
 
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
@@ -197,6 +197,54 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
+    function createSelect(name, from, to, setter, format) {
+
+        var node = $('<select tabindex="1">').attr('name', name),
+            i = Math.min(from, to),
+            $i = Math.max(from, to),
+            d = new date.Local(0),
+            options = [];
+
+        for (; i <= $i; i++) {
+            setter.call(d, i);
+            options.push($('<option>').val(i).text(d.format(format)));
+        }
+
+        // revert?
+        if (from > to) {
+            options.reverse();
+        }
+
+        // add empty option
+        options.unshift($('<option>').text(''));
+
+        // append
+        return node.append(options);
+    }
+
+    function buildDateControl() {
+
+        var set = $();
+
+        date.getFormat(date.DATE).replace(
+            /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
+            function (match, y, m, d) {
+                var proto = date.Local.prototype, node;
+                if (y) {
+                    var year = (new date.Local()).getYear();
+                    node = createSelect('year', year, year - 150, proto.setYear, y).addClass('year');
+                } else if (m) {
+                    node = createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month');
+                } else if (d) {
+                    node = createSelect('day', 1, 31, proto.setDate, match).addClass('date');
+                }
+                set = set.add(node);
+            }
+        );
+
+        return set;
+    }
+
     function DateControlGroup(options) {
 
         ControlGroup.call(this, _.extend({
@@ -210,41 +258,14 @@ define('io.ox/backbone/forms',
             var parent = $('<span>');
             this.nodes.dropelements = {};
 
-            function createSelect(name, from, to, setter, format) {
-                var node = self.nodes.dropelements[name] = $('<select tabindex="1" size="1">')
-                        .addClass(self.inputClassName || 'input-medium')
-                        .attr('name', name),
-                    i = Math.min(from, to),
-                    $i = Math.max(from, to),
-                    d = new date.Local(0),
-                    options = [];
-                for (; i <= $i; i++) {
-                    setter.call(d, i);
-                    options.push($('<option>').val(i).text(d.format(format)));
-                }
-                // revert?
-                if (from > to) {
-                    options.reverse();
-                }
-                // add empty option
-                options.unshift($('<option>').text(''));
-                // append
-                parent.append(node.append(options));
-            }
+            parent.append(
+                buildDateControl().each(function () {
+                    var node = $(this), name = node.attr('name');
+                    node.addClass(self.inputClassName || 'input-medium');
+                    self.nodes.dropelements[name] = node;
+                })
+            );
 
-            date.getFormat(date.DATE).replace(
-                /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
-                function (match, y, m, d) {
-                    var proto = date.Local.prototype;
-                    if (y) {
-                        var year = (new date.Local()).getYear();
-                        createSelect('year', year, year - 150, proto.setYear, y);
-                    } else if (m) {
-                        createSelect('month', 0, 11, proto.setMonth, 'MMMM');
-                    } else if (d) {
-                        createSelect('day', 1, 31, proto.setDate, match);
-                    }
-                });
             parent.on('change', 'select', function () {
                 self.updateModel($(this).val() === '');
             });
@@ -256,7 +277,7 @@ define('io.ox/backbone/forms',
             if (!this.nodes.dropelements) return;
 
             var de = this.nodes.dropelements;
-            
+
             if (valueFromModel) {
                 var d = new date.Local(date.Local.utc(valueFromModel));
                 de.year.val(d.getYear());
@@ -292,7 +313,7 @@ define('io.ox/backbone/forms',
                     this.model.trigger('change:' + this.attribute);
                 }
             }
-            
+
             this.setValueInModel(clear ? null :
                 date.Local.localTime(tempDate));
         }
@@ -987,7 +1008,8 @@ define('io.ox/backbone/forms',
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
-        DatePicker: DatePicker
+        DatePicker: DatePicker,
+        buildDateControl: buildDateControl
     };
 
     return forms;

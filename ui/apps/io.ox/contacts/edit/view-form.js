@@ -24,8 +24,9 @@ define('io.ox/contacts/edit/view-form', [
     'gettext!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
+    'io.ox/core/date',
     'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext) {
+], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date) {
 
     "use strict";
 
@@ -285,7 +286,7 @@ define('io.ox/contacts/edit/view-form', [
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact container-fluid default-content-padding'
+                className: 'edit-contact compact container-fluid default-content-padding'
             });
 
         // Save
@@ -319,6 +320,31 @@ define('io.ox/contacts/edit/view-form', [
             }
         }));
 
+        function toggle(e) {
+
+            e.preventDefault();
+
+            var node = $(this).closest('.edit-contact');
+
+            // update "has-content" class
+            node.find('.field input').each(function () {
+                var input = $(this),
+                    field = input.closest('.field'),
+                    hasContent = $.trim(input.val()) !== '';
+                field.toggleClass('has-content', hasContent);
+            });
+
+            node.toggleClass('compact');
+
+            var isCompact = node.hasClass('compact'),
+                label = isCompact ? gt('Extended view') : gt('Compact view'),
+                icon = isCompact ? 'icon-expand-alt' : 'icon-collapse-alt';
+
+            node.find('.toggle-compact')
+                .find('i').attr('class', icon).end()
+                .find('a').text(label);
+        }
+
         point.basicExtend({
             id: 'summary',
             index: 150,
@@ -331,7 +357,30 @@ define('io.ox/contacts/edit/view-form', [
                 h1.text(util.getFullName(data));
                 h2.text(util.getJob(data));
 
-                this.append(h1, h2, $('<div class="clear">'));
+                this.append(
+                    h1,
+                    h2,
+                    $('<nav class="toggle-compact">').append(
+                        $('<a href="#">').click(toggle).text(gt('Extended view')),
+                        $.txt(' '),
+                        $('<i class="icon-expand-alt">')
+                    )
+                    //$('<div class="clear">')
+                );
+            }
+        });
+
+        point.basicExtend({
+            id: 'final',
+            index: 'last',
+            draw: function (baton) {
+                this.append(
+                    $('<nav class="toggle-compact clear">').append(
+                        $('<a href="#">').click(toggle).text(gt('Extended view')),
+                        $.txt(' '),
+                        $('<i class="icon-expand-alt">')
+                    )
+                );
             }
         });
 
@@ -409,6 +458,24 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawDate(options) {
 
+            this.append(
+                $('<label class="input">').append(
+                    $.txt(options.label), $('<br>'),
+                    forms.buildDateControl()
+                )
+            );
+
+            // set initial date
+            if (options.value) {
+                var d = new date.Local(date.Local.utc(options.value));
+                this.find('.year').val(d.getYear());
+                this.find('.month').val(d.getMonth());
+                this.find('.date').val(d.getDate());
+            } else {
+                this.find('.year').val('');
+                this.find('.month').val('');
+                this.find('.date').val('');
+            }
         }
 
         function drawCheckbox(options) {
@@ -451,8 +518,8 @@ define('io.ox/contacts/edit/view-form', [
                     // draw fields inside block
                     ext.point(ref + '/edit/view/' + id).invoke('draw', block, baton);
 
-                    // only add if block contains at least one visible paragraph
-                    if (block.children('p.visible').length > 0) {
+                    // only add if block contains at least one paragraph with content
+                    if (block.children('p.has-content, p.always').length > 0) {
                         this.append(block);
                     }
                 }
@@ -469,7 +536,7 @@ define('io.ox/contacts/edit/view-form', [
                         var value = baton.model.get(field),
                             isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                             isRare = _(meta.rare).indexOf(field) > -1,
-                            isVisible = isAlwaysVisible || !!value,
+                            hasContent = !!value,
                             paragraph,
                             options = {
                                 index: index,
@@ -482,7 +549,8 @@ define('io.ox/contacts/edit/view-form', [
                             .attr('data-field', field)
                             .addClass(
                                 'field' +
-                                (isVisible ? ' visible' : '') +
+                                (isAlwaysVisible ? ' always' : '') +
+                                (hasContent ? ' has-content' : '') +
                                 (isRare ? ' rare' : '')
                             );
 
@@ -493,55 +561,6 @@ define('io.ox/contacts/edit/view-form', [
                     }
                 });
             });
-
-
-            // point.extend(new forms.Section({
-            //     id: id,
-            //     index: index,
-            //     title: meta.i18n[id],
-            //     ref: uid
-            // }));
-
-            // section.point = views.point(uid);
-            // index += 100;
-
-            // var fieldIndex = 100;
-            // _(fields).each(function (field) {
-
-            //     var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
-            //         isRare = _(meta.rare).indexOf(field) > -1,
-            //         input_type = meta.input_type[field] || 'text';
-
-            //     if (meta.special[field]) {
-            //         meta.special[field]({
-            //             point: section.point,
-            //             uid: id,
-            //             field: field,
-            //             index: fieldIndex,
-            //             isAlwaysVisible: isAlwaysVisible,
-            //             isRare: isRare
-            //         });
-            //     } else {
-            //         section.point.extend(new forms.ControlGroup({
-            //             id: field,
-            //             index: fieldIndex,
-            //             label: model.fields[field],
-            //             control: '<input type="' + input_type + '" name="' + field + '" tabindex="1" class="input-xlarge">',
-            //             rare: isRare,
-            //             attribute: field
-            //         }), {
-            //             isRare: function () {
-            //                 return isRare;
-            //             },
-            //             hidden: isAlwaysVisible ? false : function (model) {
-            //                 return !model.isSet(field);
-            //             }
-            //         });
-            //     }
-
-            //     fieldIndex += 100;
-            // });
-
         });
 
         return ContactEditView;

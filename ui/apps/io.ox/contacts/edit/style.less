@@ -58,6 +58,11 @@
         color: #888;
     }
 
+    nav {
+        text-align: right;
+        margin: 28px 0;
+    }
+
     .clear {
         clear: both;
     }
@@ -88,17 +93,20 @@
         color: @linkColor;
     }
 
-    p.field {
+    & p.field.rare {
         display: none;
-        height: 0;
-        overflow: hidden;
-        .transition(height 0.5s linear);
     }
 
-    p.field.visible {
+    &.compact p.field {
+        display: none;
+    }
+
+    & p.field.always {
         display: block;
-        height: auto;
-        overflow: visible;
+    }
+
+    &.compact p.field.has-content {
+        display: block;
     }
 
     label.input {
@@ -123,6 +131,21 @@
     label.private-flag input {
         position: absolute;
         float: none;
+    }
+
+    select.date {
+        width: 70px;
+        margin-right: 10px;
+    }
+
+    select.month {
+        width: 140px;
+        margin-right: 10px;
+    }
+
+    select.year {
+        width: 100px;
+        margin-right: 10px;
     }
 
     .btn-group {
