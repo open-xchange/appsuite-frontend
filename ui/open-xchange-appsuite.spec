@@ -137,7 +137,9 @@ UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
 %dir /opt/open-xchange
 %dir /opt/open-xchange/appsuite
 %dir /opt/open-xchange/appsuite/bin
+%dir /opt/open-xchange/sbin
 /opt/open-xchange/appsuite/bin/update-appsuite
+/opt/open-xchange/sbin/touch-appsuite
 
 %files manifest -f tmp/files
 %defattr(-,root,root)
