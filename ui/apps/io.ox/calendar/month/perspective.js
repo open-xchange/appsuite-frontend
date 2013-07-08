@@ -323,7 +323,9 @@ define('io.ox/calendar/month/perspective',
          */
         restore: function () {
             // goto current date position
-            this.gotoMonth();
+            if (this.folder) {
+                this.gotoMonth();
+            }
         },
 
         /**
